@@ -1,0 +1,229 @@
+body, td, tr {
+	text-decoration: none;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 11px;
+	cursor: default;
+}
+body {
+	margin: 1px;
+	padding: 1px;
+	color: #858585;
+	background-color: #ffffff;
+	background-image: url(/themes/default/bg.png);
+	max-width: 500px;
+	text-align: left;
+	margin: auto;
+	border: 1px solid #cccccc;
+	margin-top: 25px;
+}
+legend {
+	color: #ccc;
+	width: 100%;
+	font-size: 12px;
+	font-weight: bold;
+	border-bottom: solid 1px #F7F7F7;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+fieldset {
+	border: solid 1px #fff;
+	padding-bottom: 10px;
+}
+form {
+	margin: 0px;
+	padding: 0px;
+}
+a:active, a:visited, a:link {
+	color: #999;
+    text-decoration : none; 
+    border-bottom-width : 1px; 
+    border-bottom-style : solid; 
+    border-bottom-color : #d9d0d0; 
+}
+
+a:hover {
+	color: #cccccc;
+	text-decoration: none;
+	padding: 1px;
+}
+a.nav:active, a.nav:visited, a.nav:link {
+	color: #ff7f00;
+	font-weight: bold;
+	text-decoration: none;
+}
+a.nav:hover {
+	font-weight: bold;
+	color: #666;
+	text-decoration: underline;
+}
+input, select {
+	font-size: 8pt;
+}
+textarea {
+	width: 97%;
+	font-size: 9pt;
+	padding: 5px;
+}
+div {
+
+	padding: 5px 5px 5px 5px;
+	background-image: url(/themes/default/f.png);
+}
+table {
+	margin: 1px 0px 1px 0px;
+	padding: 1px 1px 1px 1px;
+	font-size: 13px;
+}
+
+.img {  
+	float:left;
+	padding : 0px; 
+	margin-right : 5px;
+    background: none;
+} 
+
+.imgright {  
+	float:right;
+	margin : 5px; 
+} 
+
+.a {
+	color: #666;
+	background-image: url(/themes/default/aa.gif);
+	background-color: #dddddd;
+	border: 1px solid #cccccc;
+}
+.b {
+	font-size: 13px;
+	color: #888888;
+	background-image: url(/themes/default/bb.gif);
+	border: 1px solid #cccccc;
+	background-color: #dddddd;
+	overflow:hidden;
+}
+.c {
+	color: #aaaaaa;
+	background-image: url(/themes/default/aa.gif);
+	background-color: #dddddd;
+	border: 1px solid #cccccc;
+}
+.d { 
+    background-color : #f1f2f1; 
+    border-style : dotted; 
+    border-width : 1px; 
+    border-color : #b8c1b7; 
+    padding : 10px; 
+    padding-left : 30px; 
+    background-image : url(/images/img/code.gif); 
+    background-repeat : repeat-y; 
+    font-size : 11px; 
+    display : block; 
+    overflow : auto; 
+}
+
+.q {
+    background-image: url(/images/img/closequote.png);
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-color : #fcfeeb;
+    border: 1px solid #e9ebec;
+	border-left: 4px solid #8394b2;
+    color : #878787;
+    font-size : x-small;
+    padding-left : 6px;    
+}
+
+.cs {
+	color: #666;
+    text-align : center;
+	background-image: url(/themes/default/ff.gif);
+	background-color: #dddddd;
+	height:75px;
+}
+
+.lol {
+	color: #ffffff;
+	background-image: url(/themes/default/lol.gif);
+	background-color: #dddddd;
+	border-top: 1px solid #cccccc;
+}
+
+.form {
+	color: #666;
+	padding : 3px; 
+	background-image: url(/themes/default/bp.gif);
+	background-color: #dddddd;
+	border: 1px solid #cccccc;
+}
+
+.login {
+	color: #666;
+	padding : 10px; 
+    margin : 0px 0 10px 0;
+	background-color: #ebf9eb;
+	border: 1px solid #cccccc;
+}
+
+.data {
+     color: #cc00cc; 
+     font-size: x-small;
+}
+
+hr { 
+border : 1px dotted #ccc; 
+}
+
+img { 
+	border : 0; 
+}
+
+.note {
+    color: #777; 
+    background: #eff5fb; 
+    border: 1px solid #81bef7; 
+    padding: 5px; 
+    margin : 5px;
+    text-align: center; 
+    font-weight: bold; 
+}
+
+.right { 
+     text-align: right; 
+     font-size: x-small;
+} 
+
+.hide {
+    color : #465584;
+    background : #eef2f7;
+	border: 1px dotted #81bef7;
+    font-size: x-small;
+    padding: 3px; 
+}
+
+.nav {
+padding : 4px;
+font-size : 10px;
+}
+
+.nav a {
+border : 1px solid #dedede;
+padding : 0px 5px 0px 5px;
+font-size : 9px;
+text-decoration : none;
+}
+
+.nav a:hover {
+background-color : #f7f7f7;
+border : 1px solid #dedede;
+padding : 0px 5px 0px 5px;
+text-decoration : none;
+font-size : 9px;
+}
+
+.navcurrent {
+background-color : #edebeb;
+border : 1px solid #dedede;
+padding : 0px 5px 0px 5px;
+font-weight: bold; 
+text-decoration : none;
+}
