@@ -1,0 +1,12 @@
+includes/connect.php
+local/antidos/
+local/backup/
+local/temp/
+upload/avatars/
+upload/counters
+upload/events
+upload/forum
+upload/news
+upload/photos
+upload/pictures
+upload/thumbnail
