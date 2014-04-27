@@ -1,14 +1,12 @@
 <?php
-#-----------------------------------------------------#
-#          ********* ROTORCMS *********               #
-#              Made by  :  VANTUZ                     #
-#               E-mail  :  visavi.net@mail.ru         #
-#                 Site  :  http://pizdec.ru           #
-#             WAP-Site  :  http://visavi.net          #
-#                  ICQ  :  36-44-66                   #
-#  Вы не имеете право вносить изменения в код скрипта #
-#        для его дальнейшего распространения          #
-#-----------------------------------------------------#
+#---------------------------------------------#
+#      ********* RotorCMS *********           #
+#           Author  :  Vantuz                 #
+#            Email  :  visavi.net@mail.ru     #
+#             Site  :  http://visavi.net      #
+#              ICQ  :  36-44-66               #
+#            Skype  :  vantuzilla             #
+#---------------------------------------------#
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 ini_set('html_errors', true);
@@ -32,15 +30,15 @@ body {
 	}
 
 #main {
-	width: 600px; 
+	width: 600px;
 	padding: 15px;
 	margin-top: 20px;
 	margin-bottom: 20px;
 	margin-right: auto;
-	margin-left: auto; 	
+	margin-left: auto;
 	background: #eff5fb;
 	border: 1px groove #333;
-	text-align:left; 
+	text-align:left;
 	}
 
 .text {
@@ -50,7 +48,7 @@ body {
 	margin-right:20px;
 	line-height:140%;
 	text-align:justify;
-    color: #858585;
+	color: #858585;
 }
 </style>
 </head>
@@ -58,9 +56,9 @@ body {
 <body>
 
 <div id="main">
-    <div align="center"><h1>RotorCMS</h1></div>
+	<div align="center"><h1>RotorCMS</h1></div>
 <div class="text">
-<?php 
+<?php
 // =====================================================================//
 function parsePHPModules() {
 	ob_start();
@@ -85,20 +83,20 @@ function parsePHPModules() {
 					$vModules[$vName][trim($vMat[1])] = array(trim($vMat[2]), trim($vMat[3]));
 				} elseif (preg_match($vPat2, $vOne, $vMat)) {
 					$vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
-				} 
-			} 
-		} 
-	} 
+				}
+			}
+		}
+	}
 	return $vModules;
-} 
+}
 
 function getModuleSetting($pModuleName, $pSetting) {
 	$vModules = parsePHPModules();
 
 	if (!empty($vModules[$pModuleName][$pSetting])) {
 		return $vModules[$pModuleName][$pSetting];
-	} 
-} 
+	}
+}
 // --------------------------------------------------//
 $error_setting = 0;
 echo '<b>Рекомендуемая версия PHP - 5.4.0</b><br /><br />';
@@ -109,7 +107,7 @@ if (version_compare(PHP_VERSION, '5.2.1') > 0) {
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . phpversion() . ')<br />';
 	$error_critical = 1;
-} 
+}
 
 echo 'Расширение PDO-MySQL: ';
 if (extension_loaded('pdo_mysql')) {
@@ -119,13 +117,13 @@ if (extension_loaded('pdo_mysql')) {
 		$pdoversion = getModuleSetting('pdo_mysql', 'PDO Driver for MySQL, client library version');
 	} else {
 		$pdoversion = 'Не определено';
-	} 
+	}
 
 	echo '<b><span style="color:#00cc00">ОК</span></b> (Версия ' . $pdoversion . ')<br />';
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
 	$error_critical = 1;
-} 
+}
 
 echo 'Библиотека GD: ';
 if (extension_loaded('gd')) {
@@ -133,7 +131,7 @@ if (extension_loaded('gd')) {
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Библиотека не загружена)<br />';
 	$error_setting++;
-} 
+}
 
 echo 'Библиотека Zlib: ';
 if (extension_loaded('zlib')) {
@@ -141,7 +139,7 @@ if (extension_loaded('zlib')) {
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Библиотека не загружена)<br />';
 	$error_setting++;
-} 
+}
 
 echo 'Safe Mode: ';
 if (!ini_get('safe_mode')) {
@@ -149,15 +147,7 @@ if (!ini_get('safe_mode')) {
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Включено)<br />';
 	$error_setting++;
-} 
-
-echo 'Буферизация вывода: ';
-if (!ini_get('output_buffering')) {
-	echo '<b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
-} else {
-	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Включено)<br />';
-	$error_setting++;
-} 
+}
 
 echo 'Magic Quotes Runtime: ';
 if (!ini_get('magic_quotes_runtime')) {
@@ -165,7 +155,7 @@ if (!ini_get('magic_quotes_runtime')) {
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Включено)<br />';
 	$error_setting++;
-} 
+}
 
 echo 'Session auto start: ';
 if (!ini_get('session.auto_start')) {
@@ -173,7 +163,7 @@ if (!ini_get('session.auto_start')) {
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Включено)<br />';
 	$error_setting++;
-} 
+}
 
 echo 'Register Globals: ';
 if (!ini_get('register_globals')) {
@@ -181,7 +171,7 @@ if (!ini_get('register_globals')) {
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Включено)<br />';
 	$error_setting++;
-} 
+}
 
 echo 'Загрузка файлов: ';
 if (ini_get('file_uploads')) {
@@ -189,7 +179,7 @@ if (ini_get('file_uploads')) {
 } else {
 	echo '<b><span style="color:#ff0000">Ошибка</span></b> (Выключено)<br />';
 	$error_setting++;
-} 
+}
 
 echo '<br />';
 
@@ -202,11 +192,11 @@ if (empty($error_critical)) {
 		echo '<b><span style="color:#ff0000">У вас имеются ошибки!</span></b> (Всего ошибок: ' . $error_setting . ')<br />';
 		echo 'Данные ошибки не являются критическими, но тем не менее для стабильной и безопасной работы желательно их устранить<br />';
 		echo 'Вы можете установить скрипт на свой сайт, но нет никаких гарантий, что движок будет работать стабильно<br /><br />';
-	} 
+	}
 } else {
 	echo '<b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br />';
 	echo 'Вы не сможете установить движок на свой сайт, так как у вас не установлена библиотека PDO или вы используете устаревшую версию PHP<br /><br />';
-} 
+}
 
 echo '<p style="text-align:center">';
 echo '<a href="http://visavi.net">Powered by RotorCMS</a><br />';

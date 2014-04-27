@@ -1,14 +1,12 @@
 <?php
-#-----------------------------------------------------#
-#          ********* ROTORCMS *********               #
-#              Made by  :  VANTUZ                     #
-#               E-mail  :  visavi.net@mail.ru         #
-#                 Site  :  http://pizdec.ru           #
-#             WAP-Site  :  http://visavi.net          #
-#                  ICQ  :  36-44-66                   #
-#  Вы не имеете право вносить изменения в код скрипта #
-#        для его дальнейшего распространения          #
-#-----------------------------------------------------#
+#---------------------------------------------#
+#      ********* RotorCMS *********           #
+#           Author  :  Vantuz                 #
+#            Email  :  visavi.net@mail.ru     #
+#             Site  :  http://visavi.net      #
+#              ICQ  :  36-44-66               #
+#            Skype  :  vantuzilla             #
+#---------------------------------------------#
 header("Content-type:text/html; charset=utf-8");
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru"><head>';

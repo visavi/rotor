@@ -1,14 +1,12 @@
 <?php
-#-----------------------------------------------------#
-#          ********* ROTORCMS *********               #
-#              Made by  :  VANTUZ                     #
-#               E-mail  :  visavi.net@mail.ru         #
-#                 Site  :  http://pizdec.ru           #
-#             WAP-Site  :  http://visavi.net          #
-#                  ICQ  :  36-44-66                   #
-#  Вы не имеете право вносить изменения в код скрипта #
-#        для его дальнейшего распространения          #
-#-----------------------------------------------------#
+#---------------------------------------------#
+#      ********* RotorCMS *********           #
+#           Author  :  Vantuz                 #
+#            Email  :  visavi.net@mail.ru     #
+#             Site  :  http://visavi.net      #
+#              ICQ  :  36-44-66               #
+#            Skype  :  vantuzilla             #
+#---------------------------------------------#
 require_once ('../includes/start.php');
 require_once ('../includes/functions.php');
 
@@ -43,14 +41,10 @@ echo '<link rel="stylesheet" href="style.css" type="text/css" />';
 echo '<meta name="generator" content="RotorCMS" />';
 echo '</head><body>';
 
-echo '<div class="cs" id="up"><img src="../images/img/logo.png" alt="RotorCMS" /><br />';
+echo '<div class="cs" id="up"><img src="/images/img/logo.png" alt="RotorCMS" /><br />';
 echo 'Система управления мобильным сайтом</div><div>';
 
-if (isset($_GET['act'])) {
-	$act = check($_GET['act']);
-} else {
-	$act = '';
-}
+$act = (isset($_GET['act'])) ? check($_GET['act']) : '';
 
 switch ($act):
 ############################################################################################
@@ -58,7 +52,7 @@ switch ($act):
 ############################################################################################
 	case '0':
 
-		echo '<img src="../images/img/setting.png" alt="img" /> <b>ПРИНЯТИЕ СОГЛАШЕНИЯ</b><br /><br />';
+		echo '<img src="/images/img/setting.png" alt="img" /> <b>ПРИНЯТИЕ СОГЛАШЕНИЯ</b><br /><br />';
 
 		echo '<big><b>Пользовательское соглашение</b></big><br />';
 
@@ -93,7 +87,7 @@ switch ($act):
 
 		echo '<input name="agree" type="checkbox" value="1" /> <b>Я ПРИНИМАЮ УСЛОВИЯ СОГЛАШЕНИЯ</b><br /><br />';
 		echo '<input type="submit" value="Продолжить" /></form><hr />';
-		echo '<img src="../images/img/back.gif" alt="image" /> <a href="index.php">Вернуться</a><br />';
+		echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">Вернуться</a><br />';
 	break;
 
 	############################################################################################
@@ -104,39 +98,39 @@ switch ($act):
 		$agree = (empty($_REQUEST['agree'])) ? 0 : 1;
 
 		if (!empty($agree)) {
-			echo '<img src="../images/img/setting.png" alt="img" /> <b>ОБНОВЛЕНИЕ СИСТЕМЫ</b><br /><br />';
+			echo '<img src="/images/img/setting.png" alt="img" /> <b>ОБНОВЛЕНИЕ СИСТЕМЫ</b><br /><br />';
 
 			if ($config['rotorversion'] != '4.0.0') {
 				if ($config['rotorversion'] >= '3.0.0' && $config['rotorversion'] < '4.0.0') {
 					include_once ('upgrade_4.0.0.dat');
 				} else {
-					echo '<img src="../images/img/error.gif" alt="image" /> <b>Вы не сможете обновить движок</b><br />Ваша версия движка не соответствует нужным требованиям (от 3.0.0 до 4.0.0)<br /><br />';
+					echo '<img src="/images/img/error.gif" alt="image" /> <b>Вы не сможете обновить движок</b><br />Ваша версия движка не соответствует нужным требованиям (от 3.0.0 до 4.0.0)<br /><br />';
 				}
 
 				echo 'Если обновление прошло успешно, то закройте эту страницу и удалите директорию <b>upgrade</b><br /><br />';
 			} else {
-				echo '<img src="../images/img/error.gif" alt="image" /> <b>Ваша система не требует обновлений!</b><br /><br />';
+				echo '<img src="/images/img/error.gif" alt="image" /> <b>Ваша система не требует обновлений!</b><br /><br />';
 			}
 		} else {
-			echo '<img src="../images/img/setting.png" alt="image" /> <b>ОТКАЗ ПРИНЯТИЯ УСЛОВИЙ СОГЛАШЕНИЯ</b><br /><br />';
+			echo '<img src="/images/img/setting.png" alt="image" /> <b>ОТКАЗ ПРИНЯТИЯ УСЛОВИЙ СОГЛАШЕНИЯ</b><br /><br />';
 			echo 'Вы не можете продолжить установку движка так как отказываетесь принимать условия соглашения<br />';
 			echo 'Любое использование нашего движка означает ваше согласие с нашим соглашением<br /><br />';
 		}
 
-		echo '<img src="../images/img/back.gif" alt="image" /> <a href="index.php?act=0">Вернуться</a><br />';
+		echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php?act=0">Вернуться</a><br />';
 	break;
 
 	############################################################################################
 	##                                    Главная страница                                    ##
 	############################################################################################
 	default:
-		echo '<img src="../images/img/setting.png" alt="img" /> <b>Установка скрипта RotorCMS</b><br /><br />';
+		echo '<img src="/images/img/setting.png" alt="img" /> <b>Установка скрипта RotorCMS</b><br /><br />';
 		echo 'Добро пожаловать в мастер обновления RotorCMS<br />
 Данный мастер поможет вам обновить скрипт всего за пару минут<br /><br />
 Прежде чем начать обновление убедитесь, что все файлы дистрибутива загружены на сервер, а также выставлены необходимые права доступа для папок и файлов<br /><br />';
 
 		foreach ($arrfile as $file) {
-			echo '<img src="../images/img/right.gif" alt="image" /> <b>'.$file.'</b> (chmod ';
+			echo '<img src="/images/img/right.gif" alt="image" /> <b>'.$file.'</b> (chmod ';
 			echo (is_file('../'.$file)) ? 666 : 777;
 			echo ')<br />';
 		}
@@ -153,16 +147,16 @@ switch ($act):
 
 		if ($config['rotorversion'] != '4.0.0') {
 			if ($config['rotorversion'] >= '3.0.0' && $config['rotorversion'] < '4.0.0') {
-				echo '<img src="../images/img/open.gif" alt="image" /> <b><a href="index.php?act=0">ПРИСТУПИТЬ К ОБНОВЛЕНИЮ</a></b><br /><br />';
+				echo '<img src="/images/img/open.gif" alt="image" /> <b><a href="index.php?act=0">ПРИСТУПИТЬ К ОБНОВЛЕНИЮ</a></b><br /><br />';
 			} else {
-				echo '<img src="../images/img/error.gif" alt="image" /> <b>Вы не сможете обновить движок</b><br />Ваша версия движка не соответствует нужным требованиям (от 3.0.0 до 4.0.0)<br /><br />';
+				echo '<img src="/images/img/error.gif" alt="image" /> <b>Вы не сможете обновить движок</b><br />Ваша версия движка не соответствует нужным требованиям (от 3.0.0 до 4.0.0)<br /><br />';
 			}
 		} else {
-			echo '<img src="../images/img/error.gif" alt="image" /> <b>Ваша система не требует обновлений!</b><br /><br />';
+			echo '<img src="/images/img/error.gif" alt="image" /> <b>Ваша система не требует обновлений!</b><br /><br />';
 		}
 	endswitch;
 
-echo '<img src="../images/img/homepage.gif" alt="image" /> <a href="../index.php">На главную</a>';
+echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/index.php">На главную</a>';
 
 echo '</div><div class="lol" id="down">';
 echo '<p style="text-align:center">';

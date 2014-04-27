@@ -1,14 +1,12 @@
 <?php
-#-----------------------------------------------------#
-#          ********* ROTORCMS *********               #
-#              Made by  :  VANTUZ                     #
-#               E-mail  :  visavi.net@mail.ru         #
-#                 Site  :  http://pizdec.ru           #
-#             WAP-Site  :  http://visavi.net          #
-#                  ICQ  :  36-44-66                   #
-#  Вы не имеете право вносить изменения в код скрипта #
-#        для его дальнейшего распространения          #
-#-----------------------------------------------------#
+#---------------------------------------------#
+#      ********* RotorCMS *********           #
+#           Author  :  Vantuz                 #
+#            Email  :  visavi.net@mail.ru     #
+#             Site  :  http://visavi.net      #
+#              ICQ  :  36-44-66               #
+#            Skype  :  vantuzilla             #
+#---------------------------------------------#
 function split_sql($sql) {
 	$sql = trim($sql);
 	$sql = preg_replace("|\n#[^\n]*\n|", "\n", $sql);
@@ -20,22 +18,22 @@ function split_sql($sql) {
 			$ret[] = substr($sql, 0, $i);
 			$sql = substr($sql, $i + 1);
 			$i = 0;
-		} 
+		}
 		if ($in_string && ($sql[$i] == $in_string) && $buffer[1] != "\\") {
 			$in_string = false;
 		} elseif (!$in_string && ($sql[$i] == '"' || $sql[$i] == "'") && (!isset ($buffer[0]) || $buffer[0] != "\\")) {
 			$in_string = $sql[$i];
-		} 
+		}
 		if (isset ($buffer[1])) {
 			$buffer[0] = $buffer[1];
-		} 
+		}
 		$buffer[1] = $sql[$i];
-	} 
+	}
 	if (!empty ($sql)) {
 		$ret[] = $sql;
-	} 
+	}
 	return ($ret);
-} 
+}
 // ----------------------------------------------------------------------------//
 function parsePHPModules() {
 	ob_start();
@@ -60,33 +58,33 @@ function parsePHPModules() {
 					$vModules[$vName][trim($vMat[1])] = array(trim($vMat[2]), trim($vMat[3]));
 				} elseif (preg_match($vPat2, $vOne, $vMat)) {
 					$vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
-				} 
-			} 
-		} 
-	} 
+				}
+			}
+		}
+	}
 	return $vModules;
-} 
+}
 // ------------------------------------------------------------------//
 function getModuleSetting($pModuleName, $pSetting) {
 	$vModules = parsePHPModules();
 
 	if (!empty($vModules[$pModuleName][$pSetting])) {
 		return $vModules[$pModuleName][$pSetting];
-	} 
-} 
+	}
+}
 // ------------------ Функция генерирования паролей --------------------//
 function generate_password($length = "") {
 	if (empty($length)) {
 		$length = mt_rand(10, 12);
-	} 
+	}
 	$salt = str_split('aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ0123456789');
 
 	$makepass = "";
 	for ($i = 0; $i < $length; $i++) {
 		$makepass .= $salt[array_rand($salt)];
-	} 
+	}
 	return $makepass;
-} 
+}
 // ------------------ Функция преобразования в нижний регистр для UTF ------------------//
 function utf_lower($str) {
 	if (function_exists('mb_strtolower')) return mb_strtolower($str, 'utf-8');
@@ -95,6 +93,6 @@ function utf_lower($str) {
 		'A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e', 'I' => 'i', 'F' => 'f', 'G' => 'g', 'H' => 'h', 'J' => 'j', 'K' => 'k', 'L' => 'l', 'M' => 'm', 'N' => 'n', 'O' => 'o', 'P' => 'p', 'Q' => 'q', 'R' => 'r', 'S' => 's', 'T' => 't', 'U' => 'u', 'V' => 'v', 'W' => 'w', 'X' => 'x', 'Y' => 'y', 'Z' => 'z');
 
 	return strtr($str, $arraytolower);
-} 
+}
 
 ?>

@@ -1,14 +1,12 @@
 <?php
-#-----------------------------------------------------#
-#          ********* ROTORCMS *********               #
-#              Made by  :  VANTUZ                     #
-#               E-mail  :  visavi.net@mail.ru         #
-#                 Site  :  http://pizdec.ru           #
-#             WAP-Site  :  http://visavi.net          #
-#                  ICQ  :  36-44-66                   #
-#  Вы не имеете право вносить изменения в код скрипта #
-#        для его дальнейшего распространения          #
-#-----------------------------------------------------#
+#---------------------------------------------#
+#      ********* RotorCMS *********           #
+#           Author  :  Vantuz                 #
+#            Email  :  visavi.net@mail.ru     #
+#             Site  :  http://visavi.net      #
+#              ICQ  :  36-44-66               #
+#            Skype  :  vantuzilla             #
+#---------------------------------------------#
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 ini_set('html_errors', true);
@@ -35,7 +33,7 @@ $arrfile = array(
 	'load/loader',
 	'local/antidos',
 	'local/backup',
-	'local/main',
+	//'local/main',
 	'local/temp'
 );
 
@@ -52,11 +50,7 @@ echo '</head><body>';
 echo '<div class="cs" id="up"><img src="../images/img/logo.png" alt="RotorCMS" /><br />';
 echo 'Система управления мобильным сайтом</div><div>';
 
-if (isset($_GET['act'])) {
-	$act = htmlspecialchars($_GET['act']);
-} else {
-	$act = '';
-}
+$act = (isset($_GET['act'])) ? htmlspecialchars($_GET['act']) : 'index';
 
 switch ($act):
 ############################################################################################
@@ -543,7 +537,7 @@ define ('DBPASS', '$dbpass');
 		if (file_exists('../upgrade/index.php')){
 			echo 'Если вам нужно обновить ваш движок, то перейдите к мастеру обновлений движка<br /><br />';
 			echo '<img src="../images/img/circle.gif" alt="image" /> <b><a href="../upgrade/index.php">Мастер обновлений движка</a></b><br />';
-			echo ' Обновление доступно для версий движка RotorCMS 1.4 - 2.6.6<br /><br />';
+			echo ' Обновление доступно для версий движка RotorCMS 3.0.0 - 3.6.5<br /><br />';
 		}
 
 	endswitch;
