@@ -13,6 +13,24 @@ if (!defined('BASEDIR')) {
 
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
+/* Добавление cоставного индекса в posts */
+$queryindex = DB::run() -> query("SHOW INDEX FROM `posts` WHERE `Key_name`='posts_topics_id';");
+if (count($queryindex->fetchAll()) < 2) {
+	DB::run() -> query("DROP INDEX `posts_topics_id` ON `posts`");
+	DB::run() -> query("DROP INDEX `posts_time` ON `posts`");
+	DB::run() -> query("ALTER TABLE `posts` ADD INDEX `posts_topics_id` (`posts_topics_id`,`posts_time`);");
+	echo 'Добавлен составной индекс в таблицу posts<br />';
+}
+
+/* Добавление cоставного индекса в error */
+$queryindex = DB::run() -> query("SHOW INDEX FROM `error` WHERE `Key_name`='error_num';");
+if (count($queryindex->fetchAll()) < 2) {
+	DB::run() -> query("DROP INDEX `error_num` ON `error`");
+	DB::run() -> query("DROP INDEX `error_time` ON `error`");
+	DB::run() -> query("ALTER TABLE `error` ADD INDEX `error_num` (`error_num`,`error_time`);");
+	echo 'Добавлен составной индекс в таблицу error<br />';
+}
+
 /* Удаление настроек вкл. яваскрипта */
 $check = DB::run() -> querySingle("SHOW COLUMNS FROM `users` LIKE 'users_javascript';");
 if (!empty($check)) {
