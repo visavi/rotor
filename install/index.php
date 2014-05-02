@@ -436,12 +436,12 @@ define ('DBPASS', '$dbpass');
 										echo 'Код ошибки: ' . $e -> getMessage() . '<br /><br />';
 									}
 
-									$result = $db -> query("SELECT * FROM `setting` WHERE `setting_name`='nickname' LIMIT 1;");
-									$row = $result -> fetch();
+									$row = $db -> queryFetch("SELECT * FROM `setting` WHERE `setting_name`='nickname' LIMIT 1;");
 									if (empty($row['setting_value'])) {
-										$reglogin = $db -> query("SELECT `users_id` FROM `users` WHERE lower(`users_login`)='" . strtolower($login) . "' LIMIT 1;");
-										$data = $reglogin -> fetch();
+
+										$data = $db -> queryFetch("SELECT `users_id` FROM `users` WHERE lower(`users_login`)='" . strtolower($login) . "' LIMIT 1;");
 										if (empty($data['users_id'])) {
+
 											// -------------- Настройки ---------------//
 											$db -> query("UPDATE `setting` SET `setting_value`='" . $login . "' WHERE `setting_name`='nickname';");
 											$db -> query("UPDATE `setting` SET `setting_value`='" . $mail . "' WHERE `setting_name`='emails';");
@@ -453,11 +453,13 @@ define ('DBPASS', '$dbpass');
 												unlink ('../local/temp/setting.dat');
 											}
 											// -------------- Профиль ---------------//
-											$db -> query("INSERT INTO `users` (`users_login`, `users_pass`, `users_email`, `users_joined`, `users_level`, `users_info`, `users_site`, `users_newprivat`, `users_themes`, `users_postguest`, `users_postnews`, `users_postprivat`, `users_postforum`, `users_themesforum`, `users_postboard`, `users_point`, `users_money`, `users_status`) VALUES ('" . $login . "', '" . md5(md5($password)) . "', '" . $mail . "', '" . time() . "', 101, 'Администратор сайта', '" . $site . "', 1, 'default', 10, 10, 10, 10, 10, 10, 500, 100000, 'Администратор');");
+											$db -> query("INSERT INTO `users` (`users_login`, `users_pass`, `users_email`, `users_joined`, `users_level`, `users_info`, `users_site`, `users_newprivat`, `users_themes`, `users_postguest`, `users_postnews`, `users_postprivat`, `users_postforum`, `users_themesforum`, `users_postboard`, `users_point`, `users_money`, `users_status`) VALUES ('" . $login . "', '" . md5(md5($password)) . "', '" . $mail . "', '" . time() . "', 101, 'Администратор сайта', '" . $site . "', 1, 0, 10, 10, 10, 10, 10, 10, 500, 100000, 'Администратор');");
+
 											// -------------- Приват ---------------//
 											$textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.<br />Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]<br />Рекомендуем приобрести лицензионную версию нашего продукта, помимо расширенных возможностей движка вы будете получать постоянные обновления, которые недоступны для бесплатных версий, а также техническую поддержку по использованию движка RotorCMS';
 
 											$db -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES ('" . $login . "', 'Vantuz', '" . $textpriv . "', '" . time() . "');");
+
 											// -------------- Новость ---------------//
 											$textnews = 'Добро пожаловать на демонстрационную страницу движка RotorCMS<br />RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. RotorCMS является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности<br />Главной особенностью RotorCMS является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.<br />Движок RotorCMS вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
 

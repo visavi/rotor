@@ -13,6 +13,13 @@ if (!defined('BASEDIR')) {
 
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
+/* Удаление настроек цены платного аватара */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('avatarpay'));
+if (!empty($check)) {
+	DB::run() -> query("DELETE FROM `setting` WHERE `setting_name`=? LIMIT 1;", array('avatarpay'));
+	echo 'Удалены настройки avatarpay из таблицы setting<br />';
+}
+
 /* Переименование аватаров */
 $query = DB::run()->query("SELECT `users_id`, `users_avatar` FROM `users` WHERE `users_avatar` LIKE '%images/avatars2/%';");
 $avatars = $query->fetchAll();
@@ -663,8 +670,8 @@ if (file_exists(BASEDIR.'games')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию games</div>';
 }
 
-if (file_exists(ADMINDIR.'headlines.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл '.basename(ADMINDIR).'/headlines.php и '.basename(ADMINDIR).'/links/headlines_102.dat</div>';
+if (file_exists(BASEDIR.'mpanel/headlines.php')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл mpanel/headlines.php и mpanel/links/headlines_102.dat</div>';
 }
 
 if (file_exists(BASEDIR.'images/smiles2')){
