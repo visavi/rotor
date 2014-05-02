@@ -719,8 +719,8 @@ INSERT INTO `blacklist` (`black_id`, `black_type`, `black_value`, `black_user`, 
 --
 TRUNCATE TABLE `smiles`;
 INSERT INTO `smiles` (`smiles_id`, `smiles_cats`, `smiles_name`, `smiles_code`) VALUES
-(1, 1, '(.gif', ':('),
-(2, 1, ').gif', ':)'),
+(1, 1, ').gif', ':)'),
+(2, 1, '(.gif', ':('),
 (3, 1, '4moks.gif', ':4moks'),
 (4, 1, 'D.gif', ':D'),
 (5, 1, 'E.gif', ':E'),
@@ -788,7 +788,7 @@ INSERT INTO `smiles` (`smiles_id`, `smiles_cats`, `smiles_name`, `smiles_code`) 
 (68, 1, 'nono.gif', ':nono'),
 (69, 1, 'nozh.gif', ':nozh'),
 (70, 1, 'nyam.gif', ':nyam'),
-(71, 1, 'nyam2.gif', ':nyam2'),
+(71, 1, 'nyam2.gif', ':icecream'),
 (72, 1, 'obana.gif', ':obana'),
 (73, 1, 'ogogo.gif', ':ogogo'),
 (74, 1, 'oops.gif', ':oops'),
@@ -799,7 +799,7 @@ INSERT INTO `smiles` (`smiles_id`, `smiles_cats`, `smiles_name`, `smiles_code`) 
 (79, 1, 'pirat2.gif', ':pirat2'),
 (80, 1, 'pistolet.gif', ':pistolet'),
 (81, 1, 'pistolet2.gif', ':pistolet2'),
-(82, 1, 'pizdec.gif', ':pizdec'),
+(82, 1, 'pizdec.gif', ':shok3'),
 (83, 1, 'poisk.gif', ':poisk'),
 (84, 1, 'proud.gif', ':proud'),
 (85, 1, 'puls.gif', ':puls'),
@@ -841,10 +841,17 @@ INSERT INTO `smiles` (`smiles_id`, `smiles_cats`, `smiles_name`, `smiles_code`) 
 (121, 1, 'ment.gif', ':ment'),
 (122, 1, 'ment2.gif', ':ment2'),
 (123, 1, 'moder.gif', ':moder'),
-(124, 1, 'nika.gif', ':nika'),
+(124, 1, 'nika.gif', ':girlmoder'),
 (125, 1, 'offtop.gif', ':offtop'),
 (126, 1, 'pravila.gif', ':pravila'),
-(127, 1, 'zona.gif', ':zona');
+(127, 1, 'zona.gif', ':zona'),
+(128, 1, 'zub.gif', ':zub'),
+(129, 1, 'crazy.gif', ':crazy'),
+(130, 1, 'paratrooper.gif', ':moder2'),
+(131, 1, 'bug.gif', ':bug'),
+(132, 1, 'facepalm.gif', ':facepalm'),
+(133, 1, 'wall.gif', ':wall'),
+(134, 1, 'boss.gif', ':boss');
 
 --
 -- Дамп данных таблицы `status`

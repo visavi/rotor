@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Clean-param: rand
+Disallow: /input.php
+Disallow: /pages/login.php
+Disallow: /pages/index.php?act=menu
+Disallow: /pages/index.php?act=partners
+Disallow: /pages/index.php?act=stat
+Disallow: /pages/registration.php
+Disallow: /cgi-bin/
+Disallow: /themes/
+Disallow: /images/
+Disallow: /votes/
+Disallow: /mail/
+Crawl-delay: 1
