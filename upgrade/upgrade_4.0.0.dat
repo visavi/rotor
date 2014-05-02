@@ -13,6 +13,27 @@ if (!defined('BASEDIR')) {
 
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
+/* Переименование аватаров */
+$query = DB::run()->query("SELECT `users_id`, `users_avatar` FROM `users` WHERE `users_avatar` LIKE '%images/avatars2/%';");
+$avatars = $query->fetchAll();
+
+foreach ($avatars as $avatar){
+
+	$name = basename($avatar['users_avatar']);
+
+	$newname = 'images/avatars/'.($name + 300).'.gif';
+	DB::run()->query("UPDATE `users` SET `users_avatar`=? WHERE `users_id`=?;", array($newname, $avatar['users_id']));
+}
+
+/* Изменение категории аватаров */
+$query = DB::run()->query("SELECT * FROM `avatars` WHERE `avatars_cats`=2;");
+$avatars = $query->fetchAll();
+
+foreach ($avatars as $avatar){
+	$name = ($avatar['avatars_name'] + 300).'.gif';
+	DB::run()->query("UPDATE `avatars` SET `avatars_cats`=1, `avatars_name`=? WHERE `avatars_id`=?;", array($name, $avatar['avatars_id']));
+
+}
 /* Добавление cоставного индекса в posts */
 $queryindex = DB::run() -> query("SHOW INDEX FROM `posts` WHERE `Key_name`='posts_topics_id';");
 if (count($queryindex->fetchAll()) < 2) {
