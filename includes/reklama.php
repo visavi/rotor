@@ -7,16 +7,18 @@
 #              ICQ  :  36-44-66               #
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
-require_once ('includes/start.php');
-require_once ('includes/functions.php');
-require_once ('includes/header.php');
-include_once ('themes/header.php');
+if (!defined('BASEDIR')) {
+	header('Location: /index.php');
+	exit;
+}
 
-//include_once (DATADIR.'/main/index_head.dat');
+echo '<div style="text-align:center">';
 
-render ('index');
+include_once (DATADIR.'/main/reklama_head.dat');
 
-//include_once (DATADIR.'/main/index_foot.dat');
+echo show_advertadmin();
+echo show_sponsors();
+echo show_advertuser($config['rekusershow']);
 
-include_once ('themes/footer.php');
+echo '</div>';
 ?>

@@ -678,6 +678,10 @@ if (file_exists(BASEDIR.'images/smiles2')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/smiles2</div>';
 }
 
+if (file_exists(BASEDIR.'images/avatars2')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/avatars2</div>';
+}
+
 if (file_exists(BASEDIR.'images/bandit')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/bandit</div>';
 }

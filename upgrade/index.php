@@ -20,14 +20,13 @@ $arrfile = array(
 	'upload/pictures',
 	'upload/thumbnail',
 	'images/avatars',
-	'images/avatars2',
 	'images/smiles',
 	'load/files',
 	'load/screen',
 	'load/loader',
 	'local/antidos',
 	'local/backup',
-	'local/main',
+	//'local/main',
 	'local/temp'
 );
 

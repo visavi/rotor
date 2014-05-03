@@ -26,7 +26,6 @@ $arrfile = array(
 	'upload/pictures',
 	'upload/thumbnail',
 	'images/avatars',
-	'images/avatars2',
 	'images/smiles',
 	'load/files',
 	'load/screen',
@@ -290,13 +289,14 @@ switch ($act):
 
 				echo '<b><span style="color:#00cc00">Соединение с базой данных произведено успешно!</span></b><br /><br />';
 
-				$dbconfig = "<?php
+$dbconfig = "<?php
 define ('DBHOST', '$dbhost');
 define ('DBPORT', '$dbport');
 define ('DBNAME', '$dbname');
 define ('DBUSER', '$dbuser');
 define ('DBPASS', '$dbpass');
-?>";
+?>
+";
 				file_put_contents('../includes/connect.php', $dbconfig);
 				@chmod('../includes/connect.php', 0664);
 
@@ -436,10 +436,13 @@ define ('DBPASS', '$dbpass');
 										echo 'Код ошибки: ' . $e -> getMessage() . '<br /><br />';
 									}
 
-									$row = $db -> queryFetch("SELECT * FROM `setting` WHERE `setting_name`='nickname' LIMIT 1;");
+									$result = $db -> query("SELECT * FROM `setting` WHERE `setting_name`='nickname' LIMIT 1;");
+ 									$row = $result -> fetch();
+
 									if (empty($row['setting_value'])) {
 
-										$data = $db -> queryFetch("SELECT `users_id` FROM `users` WHERE lower(`users_login`)='" . strtolower($login) . "' LIMIT 1;");
+										$reglogin = $db -> query("SELECT `users_id` FROM `users` WHERE lower(`users_login`)='" . strtolower($login) . "' LIMIT 1;");
+ 										$data = $reglogin -> fetch();
 										if (empty($data['users_id'])) {
 
 											// -------------- Настройки ---------------//
