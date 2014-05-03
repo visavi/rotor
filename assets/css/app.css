@@ -1,0 +1,35 @@
+/* Вывод спойлера */
+.spoiler-wrap {
+	border: 1px solid #ccc;
+	background-color: #e8e8e8;
+	margin: 5px 0;
+}
+
+.open {
+	background: url("/images/img/plus.gif") no-repeat scroll left center transparent;
+	padding-left: 14px;
+	display: block;
+}
+
+.closed {
+	background: url("/images/img/minus.gif") no-repeat scroll left center transparent;
+	display: block;
+	padding-left: 14px;
+}
+
+.spoiler-head {
+	cursor: pointer;
+   color: #343434;
+	line-height: 15px;
+	margin-left: 6px;
+	padding: 1px 14px 3px;
+}
+
+.spoiler-body {
+	display: none;
+	background: none repeat scroll 0 0 #f4f4f4;
+	border-top: 1px solid #ccc;
+	line-height: 17px;
+	padding: 3px 3px 3px 7px;
+color: #343434;
+}
