@@ -1,8 +1,3 @@
-<?php
-if (!empty($config['rekhead'])) {
-	include_once (BASEDIR.'/includes/reklama.php');
-}
-?>
 <?php if (isset($_SESSION['note'])): ?>
 	<div class="note"><?=$_SESSION['note']?></div>
 <?php endif; ?>

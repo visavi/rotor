@@ -1,0 +1,49 @@
+<?php
+if (isset($act) && $act == 'recent') {
+	show_title('Последняя активность');
+}
+
+echo '<div class="b"><img src="/images/img/topics.gif" alt="image" /> <b>Последние темы</b></div>';
+
+recenttopics();
+
+echo '<div class="b"><img src="/images/img/zip.gif" alt="image" /> <b>Последние файлы</b></div>';
+
+recentfiles();
+
+echo '<div class="b"><img src="/images/img/edit.gif" alt="image" /> <b>Последние статьи</b></div>';
+
+recentblogs();
+
+
+/*echo '<div class="b"><img src="/images/img/gallery.gif" alt="image" /> <b>Последние фотографии</b></div>';
+
+$queryphotos = DB::run() -> query("SELECT * FROM `photo` ORDER BY `photo_time` DESC LIMIT 3;");
+$recentphotos = $queryphotos -> fetchAll();
+
+if (count($recentphotos) > 0) {
+	foreach ($recentphotos as $data) {
+		echo '<a href="/gallery/index.php?act=view&amp;gid='.$data['photo_id'].'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], $data['photo_title']).'</a>';
+	}
+
+	echo '<br />';
+} else {
+  show_error('Нет фотографий в галерее!');
+}
+
+echo '<div class="b"><img src="/images/img/cup.gif" alt="image" /> <b>Последние события</b></div>';
+
+$queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `event_time` DESC LIMIT 5;");
+$recentevents = $queryevents -> fetchAll();
+
+if (count($recentevents) > 0) {
+	foreach ($recentevents as $data) {
+		echo '<img src="/images/img/act.png" alt="image" /> <a href="/events/index.php?act=view&amp;id='.$data['event_id'].'">'.$data['event_title'].'</a> ('.$data['event_comments'].')<br />';
+	}
+
+	echo '<br />';
+} else {
+  show_error('Нет статей в событиях!');
+}
+*/
+?>

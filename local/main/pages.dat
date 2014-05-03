@@ -1,0 +1,16 @@
+<?php
+if (isset($act) && $act=='pages'){
+	show_title('Сервисы сайта');
+}
+?>
+<img src="/images/img/act.png" alt="image" /> <a href="/mail">Обратная связь</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/offers.php">Предложения / Проблемы</a> (<?=stats_offers()?>)<br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/index.php?act=partners">Партнеры и друзья</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/avatars.php">Галерея аватаров</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/avatars.php?act=load">Загрузить аватар</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/razban.php">Исправительная</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/rules.php">Правила сайта</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/tags.php">Справка по тегам</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/smiles.php">Галерея cмайлов</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/searchuser.php">Поиск юзера</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/faq.php">FAQ (Чаво)</a><br />

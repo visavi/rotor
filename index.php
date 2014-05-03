@@ -12,11 +12,11 @@ require_once ('includes/functions.php');
 require_once ('includes/header.php');
 include_once ('themes/header.php');
 
-//include_once (DATADIR.'/main/index_head.dat');
+include_once (DATADIR.'/advert/top.dat');
 
 render ('index');
 
-//include_once (DATADIR.'/main/index_foot.dat');
+include_once (DATADIR.'/advert/bottom.dat');
 
 include_once ('themes/footer.php');
 ?>

@@ -1,0 +1,27 @@
+<?php
+if (isset($act) && $act=='menu'){
+	show_title('Мое меню');
+}
+?>
+
+<div class="b"><img src="/images/img/mail.gif" alt="image" /> <b>Почта / Контакты</b></div>
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/private.php">Сообщения</a> (<?=user_mail($log)?>)<br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/private.php?act=submit">Отправить письмо</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/ignore.php">Игнор-лист</a> (<?=user_ignore($log)?>)<br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/contact.php">Контакт-лист</a> (<?=user_contact($log)?>)<br />
+
+<div class="b"><img src="/images/img/account.gif" alt="image" /> <b>Анкета / Настройки</b></div>
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/user.php">Моя анкета</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/profile.php">Мой профиль</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/account.php">Мои данные</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/setting.php">Настройки</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/wall.php">Моя стена</a> (<?=user_wall($log)?>)<br />
+
+<div class="b"><img src="/images/img/address-book.gif" alt="image" /> <b>Активность</b></div>
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/notebook.php">Блокнот</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/rathist.php">Голосования</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/reklama.php">Реклама</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/authlog.php">История авторизаций</a><br />
+
+<div class="b"><img src="/images/img/exit.gif" alt="image" /> <b>Выход</b></div>
+<img src="/images/img/act.png" alt="image" /> <a href="/input.php?act=exit">Выход [Exit]</a><br />

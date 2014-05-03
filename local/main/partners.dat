@@ -1,0 +1,14 @@
+<?php
+if (isset($act) && $act=='partners'){
+	show_title('Партнеры и друзья');
+}
+
+include_once BASEDIR."/includes/link.php";
+?>
+
+<img src="/images/img/act.png" alt="image" /> <a href="/pages/link.php">Добавить сайт</a><br />
+<br />
+<a href="http://pizdec.ru"><img src="/images/img/pizdec.ru.gif" alt="image" /></a><br />
+
+Наш сайт будет благодарен всем за финансовую помощь и поддержку, вы можете перечислить нам на развитие портала, наши кошельки:
+<br /><span style="color:#ff0000">WM #  Z571168380987 - R152942568632</span><br />

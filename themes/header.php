@@ -53,3 +53,11 @@ if (empty($config['themes']) || !file_exists(BASEDIR.'/themes/'.$config['themes'
 
 include_once (BASEDIR.'/themes/'.$config['themes'].'/index.php');
 ?>
+
+<div style="text-align:center">
+	<?php include_once (DATADIR.'/advert/top_all.dat'); ?>
+
+	<?= show_advertadmin(); /* Админска реклама */ ?>
+	<?= show_sponsors(); /* Реклама спонсоров */ ?>
+	<?= show_advertuser(); /* Реклама за игровые деньги */ ?>
+</div>

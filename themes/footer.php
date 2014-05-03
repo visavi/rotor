@@ -14,9 +14,7 @@ if (!defined('BASEDIR')) {
 
 include_once (BASEDIR."/includes/counters.php");
 
-if ($config['rekfoot'] == 1) {
-	include_once (DATADIR.'/main/reklama_foot.dat');
-}
+include_once (DATADIR.'/advert/bottom_all.dat');
 
 // -------- Удаление флеш сообщения ---------//
 if (isset($_SESSION['note'])) {
