@@ -35,8 +35,6 @@ INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES
 ('chatpost', '10'),
 ('maxpostchat', '500'),
 ('bookadds', '1'),
-('rekhead', '1'),
-('rekfoot', '1'),
 ('forumpost', '10'),
 ('forumtem', '10'),
 ('boardspost', '5'),

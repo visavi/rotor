@@ -13,6 +13,20 @@ if (!defined('BASEDIR')) {
 
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
+/* Удаление настроек вывода рекламы*/
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('rekfoot'));
+if (!empty($check)) {
+	DB::run() -> query("DELETE FROM `setting` WHERE `setting_name`=? LIMIT 1;", array('rekfoot'));
+	echo 'Удалены настройки rekfoot из таблицы setting<br />';
+}
+
+/* Удаление настроек вывода рекламы*/
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('rekhead'));
+if (!empty($check)) {
+	DB::run() -> query("DELETE FROM `setting` WHERE `setting_name`=? LIMIT 1;", array('rekhead'));
+	echo 'Удалены настройки rekhead из таблицы setting<br />';
+}
+
 /* Удаление настроек цены платного аватара */
 $check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('avatarpay'));
 if (!empty($check)) {

@@ -1803,8 +1803,10 @@ function save_advertadmin() {
 }
 
 // ------------------ Функция вывода пользовательской рекламы --------------------//
-function show_advertuser($view) {
-	if (!empty($view)) {
+function show_advertuser() {
+	global $config;
+
+	if (!empty($config['rekusershow'])) {
 		if (@filemtime(DATADIR."/temp/rekuser.dat") < time()-1800) {
 			save_advertuser();
 		}
@@ -1813,15 +1815,15 @@ function show_advertuser($view) {
 		$total = count($datafile);
 
 		if ($total > 0) {
-			if ($view > $total) {
-				$view = $total;
+			if ($config['rekusershow'] > $total) {
+				$config['rekusershow'] = $total;
 			}
 
-			$quot_rand = array_rand($datafile, $view);
+			$quot_rand = array_rand($datafile, $config['rekusershow']);
 
-			if ($view > 1) {
+			if ($config['rekusershow'] > 1) {
 				$result = array();
-				for($i = 0;$i < $view;$i++) {
+				for($i = 0; $i < $config['rekusershow']; $i++) {
 					$result[] = $datafile[$quot_rand[$i]];
 				}
 				$result = implode('<br />', $result);
