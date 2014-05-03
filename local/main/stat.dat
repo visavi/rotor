@@ -3,8 +3,6 @@ if (isset($act) && $act=='stat'){
 	show_title('Статистика сайта');
 }
 ?>
-<img src="/images/img/act.png" alt="img" /> <a href="/pages/userlist.php">Список юзеров</a> (<?=stats_users()?>)<br />
-<img src="/images/img/act.png" alt="img" /> <a href="/pages/adminlist.php">Администрация</a> (<?=stats_admins()?>)<br />
 <img src="/images/img/act.png" alt="img" /> <a href="/pages/ratinglist.php">Рейтинг толстосумов</a><br />
 <img src="/images/img/act.png" alt="img" /> <a href="/pages/authoritylist.php">Рейтинг авторитетов</a><br />
 <img src="/images/img/act.png" alt="img" /> <a href="/pages/statusfaq.php">Статусы юзеров</a><br />
