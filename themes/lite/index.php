@@ -1,14 +1,12 @@
 <?php
-#-----------------------------------------------------#
-#          ********* RotorCMS *********               #
-#              Made by  :  VANTUZ                     #
-#               E-mail  :  visavi.net@mail.ru         #
-#                 Site  :  http://pizdec.ru           #
-#             WAP-Site  :  http://visavi.net          #
-#                  ICQ  :  36-44-66                   #
-#  Вы не имеете право вносить изменения в код скрипта #
-#        для его дальнейшего распространения          #
-#-----------------------------------------------------#
+#---------------------------------------------#
+#      ********* RotorCMS *********           #
+#           Author  :  Vantuz                 #
+#            Email  :  visavi.net@mail.ru     #
+#             Site  :  http://visavi.net      #
+#              ICQ  :  36-44-66               #
+#            Skype  :  vantuzilla             #
+#---------------------------------------------#
 header("Content-type:text/html; charset=utf-8");
 
 function amendment($skinxhtml)
