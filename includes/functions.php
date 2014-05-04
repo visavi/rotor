@@ -2276,6 +2276,7 @@ function include_javascript(){
 
 // ------------- Вывод спонсорских сайтов -------------//
 function show_sponsors(){
+	global $config;
 
 	if (@filemtime(DATADIR.'/temp/sponsors.dat') < time()-86400) {
 		if (@copy("http://visavi.net/rotorcms/sponsors.txt", DATADIR."/temp/sponsors.dat")) {
