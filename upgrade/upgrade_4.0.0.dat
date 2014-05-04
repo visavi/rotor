@@ -662,7 +662,6 @@ if (!empty($check)) {
 	echo 'Удалены настройки protectimg и protectdef из таблицы setting<br />';
 }
 
-DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorlicense', 0));
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));
 save_setting();
 
