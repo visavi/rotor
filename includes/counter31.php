@@ -10,7 +10,7 @@
 require_once ('../includes/start.php');
 require_once ('../includes/functions.php');
 
-$imagecache = BASEDIR.'/upload/counters/counter31.gif';
+$imagecache = '/upload/counters/counter31.gif';
 if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != date_fixed(SITETIME, "dmY")){
 
 	$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
@@ -102,7 +102,7 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 		$x2 -= $coll + 2;
 	}
 	//Header("Content-type: image/gif");
-	ImageGIF($img, $imagecache);
+	ImageGIF($img, BASEDIR.$imagecache);
 	ImageDestroy($img);
 }
 

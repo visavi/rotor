@@ -10,7 +10,7 @@
 require_once ('../includes/start.php');
 require_once ('../includes/functions.php');
 
-$imagecache = BASEDIR.'/upload/counters/counter7.gif';
+$imagecache = '/upload/counters/counter7.gif';
 if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != date_fixed(SITETIME, "dmY")){
 
 	$week_day = date("w") - 1;
@@ -95,7 +95,7 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 		$x2 += $collW;
 	}
 	//Header("Content-type: image/gif");
-	ImageGIF($img, $imagecache);
+	ImageGIF($img, BASEDIR.$imagecache);
 	ImageDestroy($img);
 }
 
