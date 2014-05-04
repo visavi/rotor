@@ -723,6 +723,10 @@ if (file_exists(BASEDIR.'includes/skin.php')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/skin.php</div>';
 }
 
+if (file_exists(BASEDIR.'includes/navigation.php')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/navigation.php</div>';
+}
+
 if (file_exists(BASEDIR.'includes/info.php')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/info.php</div>';
 }
