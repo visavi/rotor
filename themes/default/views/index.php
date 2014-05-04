@@ -10,7 +10,7 @@
 <img src="/images/img/act.png" alt="image" /> <a href="/votes">Голосования</a> (<?=stats_votes()?>)<br />
 <img src="/images/img/act.png" alt="image" /> <a href="/pages/offers.php">Предложения / Проблемы</a> (<?=stats_offers()?>)<br />
 
-<div class="b"><img src="/images/img/cup.gif" alt="image" /> <b><a href="/events">Интернет события</a></b> (<?=stats_events()?>)</div>
+<div class="b"><img src="/images/img/cup.gif" alt="image" /> <b><a href="/events">События</a></b> (<?=stats_events()?>)</div>
 <?=show_events()?>
 
 <div class="b"><img src="/images/img/lollipop.gif" alt="image" /> <b><a href="/forum">Форум</a></b> (<?=stats_forum()?>)</div>
