@@ -1,0 +1,271 @@
+body, td, tr {
+    text-decoration: none;
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt;
+    cursor: default;
+    color: #666;
+}
+
+body {
+    background-image: url(../img/f.gif);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+}
+
+legend {
+    color: #3366cc;
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    border-bottom: 1px solid #f7f7f7;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+
+fieldset {
+    border: 1px solid #fff;
+    padding-bottom: 2px;
+}
+
+form {
+    margin: 0;
+    padding: 0;
+}
+
+a:active, a:visited, a:link {
+    color: #446488;
+    text-decoration: none;
+    font-size: 8pt;
+}
+
+a:hover {
+    color: red;
+    text-decoration: none;
+    font-size: 8pt;
+}
+
+a.nav:active, a.nav:visited, a.nav:link {
+    color: #666;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.nav:hover {
+    font-size: 11px;
+    font-weight: bold;
+    color: #666;
+    text-decoration: underline;
+}
+
+.menu {
+    padding: 2px 6px;
+    background-image: url(../img/fonup.gif);
+    border: 1px solid #ccc;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #666;
+    font-weight: bold;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+
+input, select {
+    font-size: 8pt;
+}
+
+textarea {
+    width: 99%;
+    font-size: 9pt;
+    padding: 0;
+}
+
+div {
+    margin: 1px 0 1px 0;
+    padding: 5px 5px 5px 5px;
+}
+
+table {
+    margin: 1px 0 1px 0;
+    padding: 1px 1px 1px 1px;
+    font-size: 13px;
+    width: 500px;
+    border: 3px double #3366cc;
+}
+
+.img {
+    float: left;
+    padding: 0px;
+    margin-right: 5px;
+}
+
+.imgright {
+    float: right;
+    margin: 5px;
+}
+
+img {
+    border: 0;
+}
+
+.a {
+    border-bottom: 1px solid #3366cc;
+    color: #666;
+    background: #d5ddf3;
+    background-image: url(../img/fonup.gif);
+}
+
+.b {
+    border-bottom: 1px solid #3366cc;
+    border-right: 1px solid #3366cc;
+    font-size: 13px;
+    color: #666;
+    background-color: #d5ddf3;
+    padding: 3px;
+    color: #666;
+    background-image: url(../img/font.gif);
+    overflow: hidden;
+}
+
+.c {
+    border-top: 1px solid #3366cc;
+    color: #666;
+    background: #d5ddf3;
+    background-image: url(../img/font.gif);
+}
+
+.d {
+    max-width: 450px;
+    background-color: #f1f2f1;
+    border-style: dotted;
+    border-width: 1px;
+    border-color: #b8c1b7;
+    padding: 2px;
+    padding-left: 30px;
+    background-image: url(../../images/img/code.gif);
+    background-repeat: repeat-y;
+    font-size: 11px;
+    display: block;
+    overflow: auto;
+}
+
+.e {
+    border: 2px dashed #3366cc;
+    color: #666;
+    background: #ebf0ff;
+    background-image: url(../img/fon.gif);
+}
+
+.f {
+    border-bottom: 1px solid #3366cc;
+    color: #666;
+    background: #ebf0ff;
+    background-image: url(../img/fon.gif);
+}
+
+.q {
+    background-image: url(../../images/img/closequote.png);
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-color: #fcfeeb;
+    border: 1px solid #e9ebec;
+    border-left: 4px solid #8394b2;
+    color: #878787;
+    font-size: x-small;
+    padding-left: 6px;
+}
+
+.form {
+    color: #666;
+    padding: 3px;
+    background-color: #ebf9eb;
+    border: 1px dotted #ccc;
+}
+
+.login {
+    color: #666;
+    padding: 10px;
+    margin: 0px 0 10px 0;
+    background-color: #ebf9eb;
+    border: 1px solid #cccccc;
+}
+
+.data {
+    color: #cc00cc;
+    font-size: x-small;
+}
+
+hr {
+    border: 1px dotted #ccc;
+}
+
+.note {
+    color: #777;
+    background: #eff5fb;
+    border: 1px solid #81bef7;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.right {
+    text-align: right;
+    font-size: x-small;
+}
+
+.hide {
+    color: #465584;
+    background: #eef2f7;
+    border: 1px dotted #81bef7;
+    font-size: x-small;
+    padding: 3px;
+}
+
+.info {
+    color: #992a2a;
+    background: #f2dddd;
+    border: 1px solid #e3c0c0;
+    padding: 3px;
+}
+
+.act {
+    color: #888888;
+    background: #e4eaf2;
+    border: 1px solid #c3cfe1;
+    padding: 3px;
+}
+
+.nav {
+    padding: 4px;
+    font-size: 10px;
+}
+
+.nav a {
+    border: 1px solid #bae0ee;
+    padding: 0px 3px 0px 3px;
+    font-size: 9px;
+    text-decoration: none;
+}
+
+.nav a:hover {
+    background-color: #f7f7f7;
+    border: 1px solid #bae0ee;
+    padding: 0px 3px 0px 3px;
+    text-decoration: none;
+    font-size: 9px;
+}
+
+.navcurrent {
+    background-color: #edebeb;
+    border: 1px solid #bae0ee;
+    padding: 0px 3px 0px 3px;
+    font-weight: bold;
+    text-decoration: none;
+}
