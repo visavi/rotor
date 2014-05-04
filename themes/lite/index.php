@@ -13,11 +13,7 @@ header("Content-type:text/html; charset=utf-8");
 
 function amendment($skinxhtml)
 {
-    $skinxhtml = str_replace('images/img/act.gif', 'themes/lite/act.gif', $skinxhtml);
-    $skinxhtml = str_replace('images/img/act1.gif', 'themes/lite/act.gif', $skinxhtml);
-    $skinxhtml = str_replace('images/img/act2.gif', 'themes/lite/act.gif', $skinxhtml);
-    $skinxhtml = str_replace('images/img/act3.gif', 'themes/lite/act.gif', $skinxhtml);
-    $skinxhtml = str_replace('images/img/act_home.gif', 'themes/lite/act.gif', $skinxhtml);
+    $skinxhtml = str_replace('images/img/act.png', 'themes/lite/img/act.gif', $skinxhtml);
     $skinxhtml = str_replace('<hr />', '<br />', $skinxhtml);
     return $skinxhtml;
 }
