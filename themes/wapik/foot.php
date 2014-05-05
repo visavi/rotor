@@ -10,12 +10,12 @@
 ?>
 </div>
 <div class="c" id="down">
-    <a href="<?= $config['home'] ?>"><?= $config['copy'] ?></a><br/>
-    <?= show_counter() ?>
-    <?= show_online() ?>
+	<a href="<?= $config['home'] ?>"><?= $config['copy'] ?></a><br/>
+	<?= show_counter() ?>
+	<?= show_online() ?>
 </div>
 <div style="text-align:center">
-    <?= navigation() ?>
-    <?= perfomance() ?>
+	<?= navigation() ?>
+	<?= perfomance() ?>
 </div>
 </body></html>
