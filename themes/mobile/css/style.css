@@ -1,0 +1,268 @@
+body, td, tr { 
+	text-decoration : none; 
+	font-family : verdana, arial, helvetica, sans-serif; 
+	font-size : 8pt; 
+	cursor : default; 
+	color : #666; 
+}
+
+body { 
+	margin : 5px; 
+	padding : 5px; 
+	background : #f3f3f3; 
+	color : #666; 
+	max-width : 600px; 
+	margin : auto; 
+}
+
+pre {
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+}
+
+legend { 
+	color : #ccc; 
+	width : 100%; 
+	font-size : 12px; 
+	font-weight : bold; 
+	border-bottom : 1px solid #f7f7f7; 
+	padding-bottom : 5px; 
+	margin-bottom : 5px; 
+}
+
+fieldset { 
+	border : 1px solid #fff; 
+	padding-bottom : 10px; 
+}
+
+form { 
+	margin : 0; 
+	padding : 0; 
+}
+
+a:active, a:visited, a:link { 
+	color : #446488; 
+	text-decoration : none; 
+	font-size : 8pt; 
+}
+
+a:hover { 
+	color : #00004f; 
+	text-decoration : none; 
+	font-size : 8pt; 
+}
+
+a.nav:active, a.nav:visited, a.nav:link { 
+	color : #666; 
+	font-size : 10px; 
+	font-weight : bold; 
+	text-decoration : none; 
+}
+
+a.nav:hover { 
+	font-size : 10px; 
+	font-weight : bold; 
+	color : #666; 
+	text-decoration : underline; 
+} 
+
+input, select { 
+	font-size : 8pt; 
+} 
+
+textarea { 
+	width : 98%; 
+	font-size : 9pt; 
+	padding : 5px; 
+} 
+
+div { 
+	margin : 1px 0 1px 0; 
+	padding : 5px 5px 5px 5px; 
+} 
+
+.menu {
+	padding : 2px 6px; 
+	border : 1px solid #ccc; 
+}
+
+.menu a { 
+	text-decoration : none; 
+	color : #999;
+	font-weight : bold; 
+}
+
+.menu a:hover { 
+	text-decoration : underline; 
+	color : #ccc; 
+}
+
+.site {
+	background : #fff; 
+}
+
+.foot {
+	background : #fff;
+	text-align: center; 
+}
+
+table { 
+	margin : 1px 0 1px 0; 
+	padding : 1px 1px 1px 1px; 
+	font-size : 8pt; 
+}
+
+hr { 
+	border : 1px dotted #ccc; 
+}
+.a { 
+	border : 1px solid #ccc; 
+	color : #666; 
+	background : #e9e9e9; 
+}
+
+.img {  
+	background-color: #fff;
+	border: 1px solid #ccc;
+	float: left;
+	padding: 1px;
+	margin : 1px 5px 1px 1px; 
+}
+
+.imgright {  
+	float:right;
+	margin : 5px; 
+}
+
+img { 
+	border : 0; 
+}
+
+.b {
+	font-size : 13px; 
+	color : #666; 
+	background-color : #f3f3f3; 
+	padding : 3px; 
+	color : #666; 
+	border : 1px solid #ccc; 
+	overflow:hidden;
+}
+
+.c { 
+	border : 1px solid #ccc; 
+	color : #666; 
+	background : #e9e9e9; 
+}
+
+.d { 
+	background-color : #f1f2f1; 
+	border-style : dotted; 
+	border-width : 1px; 
+	border-color : #b8c1b7; 
+	padding : 10px; 
+	padding-left : 30px; 
+	background-image : url(../../../images/img/code.gif);
+	background-repeat : repeat-y; 
+	font-size : 11px; 
+	display : block;
+	white-space: pre;
+	overflow : auto; 
+	width : 520px; 
+}
+
+.q {
+	background-image: url(../../../images/img/closequote.png);
+	background-position: top right;
+	background-repeat: no-repeat;
+	background-color : #fcfeeb;
+	border: 1px solid #e9ebec;
+	border-left: 4px solid #8394b2;
+	color : #878787;
+	font-size : x-small;
+	padding-left : 6px;
+}
+
+.form { 
+	color : #666; 
+	padding : 3px; 
+	background-color : #f3f3f3; 
+	border : 1px dotted #ccc; 
+}
+
+.login { 
+	color : #666; 
+	padding : 10px; 
+	margin : 0px 0 10px 0; 
+	background-color : #f3f3f3; 
+	border : 1px dotted #ccc; 
+}
+
+.data { 
+	color : #cc00cc; 
+	font-size : x-small; 
+}
+
+.note {
+	color: #777; 
+	background: #eff5fb; 
+	border: 1px solid #81bef7; 
+	padding: 5px; 
+	margin : 5px;
+	text-align: center; 
+	font-weight: bold; 
+}
+
+.right { 
+	text-align: right; 
+	font-size: x-small;
+}
+
+.hide {
+	color : #465584;
+	background : #eef2f7;
+	border: 1px dotted #81bef7;
+	font-size: x-small;
+	padding: 3px; 
+}
+
+.info {
+	color : #992a2a;
+	background : #f2dddd;
+	border: 1px solid #e3c0c0;
+	padding: 3px; 
+}
+
+.act {
+	color: #888888;
+	background : #e4eaf2;
+	border: 1px solid #c3cfe1;
+	padding: 3px; 
+}
+
+.nav {
+	padding : 4px;
+	font-size : 10px;
+}
+
+.nav a {
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	font-size : 9px;
+	text-decoration : none;
+}
+
+.nav a:hover {
+	background-color : #f7f7f7;
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	text-decoration : none;
+	font-size : 9px;
+}
+
+.navcurrent {
+	background-color : #edebeb;
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	font-weight: bold; 
+	text-decoration : none;
+}
