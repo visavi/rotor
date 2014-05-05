@@ -68,7 +68,6 @@ if (count($queryindex->fetchAll()) < 2) {
 $queryindex = DB::run() -> query("SHOW INDEX FROM `error` WHERE `Key_name`='error_num';");
 if (count($queryindex->fetchAll()) < 2) {
 	DB::run() -> query("DROP INDEX `error_num` ON `error`");
-	DB::run() -> query("DROP INDEX `error_time` ON `error`");
 	DB::run() -> query("ALTER TABLE `error` ADD INDEX `error_num` (`error_num`,`error_time`);");
 	echo 'Добавлен составной индекс в таблицу error<br />';
 }
