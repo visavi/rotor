@@ -33,7 +33,7 @@ if (version_compare(PHP_VERSION, '5.2.1') < 0) {
 	die('Ошибка! Версия PHP должна быть 5.2.1 или выше!');
 }
 
-define('BASEDIR', dirname(__DIR__));
+define('BASEDIR', dirname(dirname(__FILE__)));
 define('DATADIR', BASEDIR.'/local');
 
 // ---------------------------- Класс для работы с базами данных -------------------------------//
