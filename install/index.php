@@ -90,7 +90,9 @@ switch ($act):
 		echo '<form action="index.php?act=1" method="post">';
 		echo '<textarea cols="100" rows="20" name="msg">' . $agreement . '</textarea><br /><br />';
 		echo '<a href="license.php">Полный текст пользовательского соглашения</a><br /><br />';
-		echo '<input name="agree" type="checkbox" value="1" /> <b>Я ПРИНИМАЮ УСЛОВИЯ СОГЛАШЕНИЯ</b><br /><br />';
+
+		echo '<input name="agree" id="agree" type="checkbox" value="1" /> <label for="agree"><b>Я ПРИНИМАЮ УСЛОВИЯ СОГЛАШЕНИЯ</b></label><br /><br />';
+
 		echo '<input type="submit" value="Продолжить" /></form><hr />';
 		echo '<img src="../images/img/back.gif" alt="image" /> <a href="index.php">Вернуться</a>';
 	break;
