@@ -2278,35 +2278,37 @@ function include_javascript(){
 function show_sponsors(){
 	global $config;
 
-	if (@filemtime(DATADIR.'/temp/sponsors.dat') < time()-86400) {
-		if (@copy("http://visavi.net/rotorcms/sponsors.txt", DATADIR."/temp/sponsors.dat")) {
-		} else {
-			$data = curl_connect("http://visavi.net/rotorcms/sponsors.txt", 'Mozilla/5.0', $config['proxy']);
-			file_put_contents(DATADIR."/temp/sponsors.dat", $data);
+	if (empty($config['rotorlicense'])) {
+		if (@filemtime(DATADIR.'/temp/sponsors.dat') < time()-86400) {
+			if (@copy("http://visavi.net/rotorcms/sponsors.txt", DATADIR."/temp/sponsors.dat")) {
+			} else {
+				$data = curl_connect("http://visavi.net/rotorcms/sponsors.txt", 'Mozilla/5.0', $config['proxy']);
+				file_put_contents(DATADIR."/temp/sponsors.dat", $data);
+			}
 		}
-	}
 
-	$advert = file_get_contents(DATADIR."/temp/sponsors.dat");
+		$advert = file_get_contents(DATADIR."/temp/sponsors.dat");
 
-	if (is_serialized($advert)) {
-		$advert = unserialize($advert);
+		if (is_serialized($advert)) {
+			$advert = unserialize($advert);
 
-		if (!empty($advert)){
+			if (!empty($advert)){
 
-			$keys = array();
-			foreach($advert['sponsors'] as $key=>$val) {
+				$keys = array();
+				foreach($advert['sponsors'] as $key=>$val) {
 
-				if (!empty($val['sponsor_url'])){
-					$percent = ceil(100 / ($advert['total'] / $val['sponsor_sort']));
+					if (!empty($val['sponsor_url'])){
+						$percent = ceil(100 / ($advert['total'] / $val['sponsor_sort']));
 
-					for ($i=0; $i<$percent; $i++){
-						$keys[] = $key;
+						for ($i=0; $i<$percent; $i++){
+							$keys[] = $key;
+						}
 					}
 				}
-			}
 
-			$data = $advert['sponsors'][$keys[array_rand($keys)]];
-			return '<b><a href="'.$data['sponsor_url'].'">'.$data['sponsor_title'].'</a></b><br />';
+				$data = $advert['sponsors'][$keys[array_rand($keys)]];
+				return '<b><a href="'.$data['sponsor_url'].'">'.$data['sponsor_title'].'</a></b><br />';
+			}
 		}
 	}
 }
