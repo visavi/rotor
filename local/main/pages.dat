@@ -1,5 +1,5 @@
 <?php
-if (isset($act) && $act=='pages'){
+if (isset($act) && $act=='pages' || $php_self == 'pages/index.php'){
 	show_title('Сервисы сайта');
 }
 ?>

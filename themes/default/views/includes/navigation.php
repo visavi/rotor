@@ -1,5 +1,5 @@
 <?php if ($config['navigation'] == 1): ?>
-	<form method="post" action="/pages/skin.php?act=navigation">
+	<form method="post" action="/pages/index.php">
 		<select name="link">
 			<option value="index.php">Быстрый переход</option>
 
@@ -12,7 +12,7 @@
 <?php endif; ?>
 
 <?php if ($config['navigation'] == 2): ?>
-	<form method="post" action="/pages/skin.php?act=navigation">
+	<form method="post" action="/pages/index.php">
 		<select name="link" onchange="this.form.submit();">
 			<option value="index.php">Быстрый переход</option>
 

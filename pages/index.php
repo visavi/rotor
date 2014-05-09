@@ -12,6 +12,10 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
+if (isset($_POST['link'])) {
+	redirect('/'.check($_POST['link']));
+}
+
 if (!empty($_GET['act'])){
 
 	$act = check($_GET['act']);
