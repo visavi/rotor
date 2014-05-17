@@ -34,12 +34,12 @@ function makestime($time) {
 
 // --------------------------- Функция временного сдвига -----------------------------//
 function date_fixed($timestamp, $format = "d.m.y / H:i") {
-	global $config;
+	global $udata;
 
 	if (!is_numeric($timestamp)) {
 		$timestamp = SITETIME;
 	}
-	$shift = $config['timezone'] * 3600;
+	$shift = $udata['users_timezone'] * 3600;
 	$datestamp = date($format, $timestamp + $shift);
 
 	$today = date("d.m.y", SITETIME + $shift);
@@ -1283,8 +1283,8 @@ function page_strnavigation($link, $posts, $start, $total, $range = 3){
 
 	if ($total > 0) {
 
-	   $pg_cnt = ceil($total / $posts);
-	   $cur_page = ceil(($start + 1) / $posts);
+		$pg_cnt = ceil($total / $posts);
+		$cur_page = ceil(($start + 1) / $posts);
 		$idx_fst = max($cur_page - $range, 1);
 		$idx_lst = min($cur_page + $range, $pg_cnt);
 
@@ -1294,14 +1294,14 @@ function page_strnavigation($link, $posts, $start, $total, $range = 3){
 			$res .='<a href="'.$link.'start='.($cur_page - 2) * $posts.'" title="Назад">&laquo;</a> ';
 		}
 
-	   if (($start - $posts) >= 0) {
-		  if ($cur_page > ($range + 1)) {
-			 $res .= ' <a href="'.$link.'start=0">1</a> ';
-			 if ($cur_page != ($range + 2)) {
-				$res .= ' ... ';
-			 }
-		  }
-	   }
+		if (($start - $posts) >= 0) {
+			if ($cur_page > ($range + 1)) {
+				$res .= ' <a href="'.$link.'start=0">1</a> ';
+				if ($cur_page != ($range + 2)) {
+					$res .= ' ... ';
+				}
+			}
+		}
 
 		for ($i = $idx_fst; $i <= $idx_lst; $i++) {
 			$offset_page = ($i - 1) * $posts;
@@ -1312,14 +1312,14 @@ function page_strnavigation($link, $posts, $start, $total, $range = 3){
 			}
 		}
 
-	   if (($start + $posts) < $total) {
-		  if ($cur_page < ($pg_cnt - $range)) {
-			 if ($cur_page != ($pg_cnt - $range - 1)) {
-				$res .= ' ... ';
-			 }
-			 $res .= ' <a href="'.$link.'start='.($pg_cnt - 1) * $posts.'">'.$pg_cnt.'</a> ';
-		  }
-	   }
+		if (($start + $posts) < $total) {
+			if ($cur_page < ($pg_cnt - $range)) {
+				if ($cur_page != ($pg_cnt - $range - 1)) {
+					$res .= ' ... ';
+				}
+				$res .= ' <a href="'.$link.'start='.($pg_cnt - 1) * $posts.'">'.$pg_cnt.'</a> ';
+			}
+		}
 
 		if ($cur_page != $pg_cnt) {
 			$res .= ' <a href="'.$link.'start='.($cur_page * $posts).'" title="Вперед">&raquo;</a>';
@@ -1328,6 +1328,58 @@ function page_strnavigation($link, $posts, $start, $total, $range = 3){
 		echo '<hr /><div class="nav">'.$res.'</div>';
 	}
 }
+
+// ----------------------- Постраничная навигация ------------------------//
+function pagination($url, $posts, $start, $total, $range = 3){
+
+	if ($total > 0) {
+
+		$pg_cnt = ceil($total / $posts);
+		$cur_page = ceil(($start + 1) / $posts);
+		$idx_fst = max($cur_page - $range, 1);
+		$idx_lst = min($cur_page + $range, $pg_cnt);
+
+		$res = 'Страницы: ';
+
+		if ($cur_page != 1) {
+			$res .='<a href="'.$url.'start='.($cur_page - 2) * $posts.'" title="Назад">&laquo;</a> ';
+		}
+
+		if (($start - $posts) >= 0) {
+			if ($cur_page > ($range + 1)) {
+				$res .= ' <a href="'.$url.'start=0">1</a> ';
+				if ($cur_page != ($range + 2)) {
+					$res .= ' ... ';
+				}
+			}
+		}
+
+		for ($i = $idx_fst; $i <= $idx_lst; $i++) {
+			$offset_page = ($i - 1) * $posts;
+			if ($i == $cur_page) {
+				$res .= ' <span class="navcurrent">'.$i.'</span> ';
+			} else {
+				$res .= ' <a href="'.$url.'start='.$offset_page.'">'.$i.'</a> ';
+			}
+		}
+
+		if (($start + $posts) < $total) {
+			if ($cur_page < ($pg_cnt - $range)) {
+				if ($cur_page != ($pg_cnt - $range - 1)) {
+					$res .= ' ... ';
+				}
+				$res .= ' <a href="'.$url.'start='.($pg_cnt - 1) * $posts.'">'.$pg_cnt.'</a> ';
+			}
+		}
+
+		if ($cur_page != $pg_cnt) {
+			$res .= ' <a href="'.$url.'start='.($cur_page * $posts).'" title="Вперед">&raquo;</a>';
+		}
+
+		render ('includes/pagination', array());
+	}
+}
+
 
 // ----------------------- Вывод страниц в форуме ------------------------//
 function forum_navigation($link, $posts, $total) {

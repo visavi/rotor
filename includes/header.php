@@ -153,7 +153,6 @@ if ($udata = is_user()) {
 	$config['forumpost']  = $udata['users_postforum'];   # Вывод сообщений в форуме
 	$config['forumtem']   = $udata['users_themesforum']; # Вывод тем в форуме
 	$config['boardspost'] = $udata['users_postboard'];   # Вывод объявлений
-	$config['timezone']   = $udata['users_timezone'];    # Временной сдвиг
 	$config['privatpost'] = $udata['users_postprivat'];  # Вывод писем в привате
 	$config['navigation'] = $udata['users_navigation'];  # Быстрый переход
 

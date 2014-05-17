@@ -25,16 +25,14 @@ if ($debugmode) {
 session_name('SID');
 session_start();
 
-date_default_timezone_set('Europe/Moscow');
-
-define('STARTTIME', microtime(1));
-
 if (version_compare(PHP_VERSION, '5.2.1') < 0) {
 	die('Ошибка! Версия PHP должна быть 5.2.1 или выше!');
 }
 
+define('STARTTIME', microtime(1));
 define('BASEDIR', dirname(dirname(__FILE__)));
 define('DATADIR', BASEDIR.'/local');
+define('SITETIME', time());
 
 // ---------------------------- Класс для работы с базами данных -------------------------------//
 class PDO_ extends PDO {
@@ -139,15 +137,14 @@ class DB {
 
 }
 
-if (file_exists(DATADIR.'/temp/setting.dat')) {
-	$config = unserialize(file_get_contents(DATADIR.'/temp/setting.dat'));
-} else {
+if (!file_exists(DATADIR.'/temp/setting.dat')) {
 	$queryset = DB::run() -> query("SELECT `setting_name`, `setting_value` FROM `setting`;");
 	$config = $queryset -> fetchAssoc();
 	file_put_contents(DATADIR.'/temp/setting.dat', serialize($config), LOCK_EX);
 }
+$config = unserialize(file_get_contents(DATADIR.'/temp/setting.dat'));
 
-define('SITETIME', time() + $config['timezone'] * 3600); # Установка временного сдвига сайта
+date_default_timezone_set($config['timezone']);
 
 // -------- Класс валидации данных ---------- //
 require_once (BASEDIR.'/includes/validation.php');

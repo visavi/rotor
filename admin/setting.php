@@ -151,16 +151,7 @@ if (is_admin(array(101))) {
 				echo 'Ключ для паролей:<br /><input name="keypass" maxlength="25" value="'.$setting['keypass'].'" /><br />';
 				echo 'Лимит запросов с IP (0 - Выкл):<br /><input name="doslimit" maxlength="3" value="'.$setting['doslimit'].'" /><br />';
 
-				# ----------------------------------------#
-				$arrtimezone = range(-12, 12);
-
-				echo 'Временной сдвиг:<br />';
-				echo '<select name="timezone">';
-				foreach($arrtimezone as $zone) {
-					$selected = ($setting['timezone'] == $zone) ? ' selected="selected"' : '';
-					echo '<option value="'.$zone.'"'.$selected.'>'.$zone.'</option>';
-				}
-				echo '</select><br />';
+				echo 'Временная зона:<br /><input name="timezone" maxlength="50" value="'.$setting['timezone'].'" /><br />';
 
 				# ----------------------------------------#
 				echo 'Wap-тема по умолчанию:<br />';

@@ -5,7 +5,7 @@ TRUNCATE TABLE `setting`;
 INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES
 ('nickname', ''),
 ('emails', ''),
-('timezone', '0'),
+('timezone', 'Europe/Moscow'),
 ('title', 'Мой сайт'),
 ('logos', 'Сайт на движке RotorCMS'),
 ('copy', '© RotorCMS'),

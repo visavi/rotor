@@ -104,7 +104,7 @@ if (!empty($config['rekusershow'])) {
 
 					if ($uid == $_SESSION['token']) {
 						if (preg_match('|^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', $site)) {
-							if (utf_strlen($site) >= 5 && utf_strlen($site) <= 50) {
+							if (utf_strlen($site) >= 10 && utf_strlen($site) <= 50) {
 								if (utf_strlen($name) >= 5 && utf_strlen($name) <= 35) {
 									if (preg_match('|^#+[A-f0-9]{6}$|', $color) || empty($color)) {
 										DB::run() -> query("DELETE FROM `rekuser` WHERE `rek_time`<?;", array(SITETIME));

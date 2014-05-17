@@ -15,7 +15,6 @@ php_value magic_quotes_gpc Off
 php_value magic_quotes_runtime Off
 php_value magic_quotes_sybase Off
 php_value file_uploads On
-php_value date.timezone "Europe/Moscow"
 
 DirectoryIndex index.php
 AddDefaultCharset UTF-8
