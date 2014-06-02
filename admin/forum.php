@@ -416,6 +416,7 @@ if (is_admin()) {
 			$topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_id` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics_id`=? LIMIT 1;", array($tid));
 
 			if (!empty($topics)) {
+
 				echo '<b><big>Редактирование</big></b><br /><br />';
 
 				echo '<div class="form">';
@@ -426,7 +427,7 @@ if (is_admin()) {
 				echo '<input type="text" name="mod" size="50" maxlength="100" value="'.$topics['topics_mod'].'" /><br />';
 
 				echo 'Объявление:<br />';
-				echo '<textarea id="markItUp" cols="25" rows="5" name="note">'.yes_br($topics['topics_note']).'</textarea><br />';
+				echo '<textarea id="markItUp" cols="25" rows="5" name="note">'.yes_br(nosmiles($topics['topics_note'])).'</textarea><br />';
 
 				echo 'Закрепить тему: ';
 				$checked = ($topics['topics_locked'] == 1) ? ' checked="checked"' : '';
@@ -461,8 +462,7 @@ if (is_admin()) {
 					if (utf_strlen($note) <= 250) {
 
 						$mod = implode(',', preg_split('/[\s]*[,][\s]*/', $mod));
-						$note = no_br($note);
-						$note = smiles($note);
+						$note = smiles(no_br($note));
 
 						DB::run() -> query("UPDATE `topics` SET `topics_title`=?, `topics_closed`=?, `topics_locked`=?, `topics_mod`=?, `topics_note`=? WHERE `topics_id`=?;", array($title, $closed, $locked, $mod, $note, $tid));
 
@@ -908,14 +908,12 @@ if (is_admin()) {
 			$post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($pid));
 			if (!empty($post)) {
 
-				$post['posts_text'] = yes_br(nosmiles($post['posts_text']));
-
 				echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($post['posts_user']).'</b> <small>('.date_fixed($post['posts_time']).')</small><br /><br />';
 
 				echo '<div class="form" id="form">';
 				echo '<form action="forum.php?act=addeditpost&amp;tid='.$post['posts_topics_id'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 				echo 'Редактирование сообщения:<br />';
-				echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$post['posts_text'].'</textarea><br />';
+				echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.yes_br(nosmiles($post['posts_text'])).'</textarea><br />';
 
 				$queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id`=?;", array($pid));
 				$files = $queryfiles->fetchAll();
@@ -956,8 +954,7 @@ if (is_admin()) {
 				if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
 					$post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($pid));
 					if (!empty($post)) {
-						$msg = no_br($msg);
-						$msg = smiles($msg);
+						$msg = smiles(no_br($msg));
 
 						DB::run() -> query("UPDATE `posts` SET `posts_text`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($msg, $log, SITETIME, $pid));
 
