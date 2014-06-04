@@ -1970,6 +1970,8 @@ function license_verification() {
 
 // ----------- Функция определения последней версии RotorCMS ------------//
 function stats_changes() {
+	global $config;
+
 	if (@filemtime(DATADIR."/temp/changes.dat") < time()-86400) {
 		if (@copy("http://visavi.net/rotorcms/rotor.txt", DATADIR."/temp/changes.dat")) {
 		} else {
