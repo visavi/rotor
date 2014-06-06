@@ -30,12 +30,12 @@ class Compressor {
 			if ($check_compress == 'gzip')
 			{
 				header("Content-Encoding: gzip");
-				ob_start("self::compress_output_gzip");
+				ob_start("Compressor::compress_output_gzip");
 			}
 			elseif ($check_compress == 'deflate')
 			{
 				header("Content-Encoding: deflate");
-				ob_start("self::compress_output_deflate");
+				ob_start("Compressor::compress_output_deflate");
 			}
 		}
 

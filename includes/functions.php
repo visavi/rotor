@@ -1713,7 +1713,7 @@ function show_title($header, $subheader = false) {
 	$config['subheader'] = $subheader;
 
 	if (empty($show)) {
-		echo $show = render('includes/title', array(), false);
+		echo $show = render('includes/title', array(), true);
 	}
 
 	return $config;
@@ -2593,25 +2593,24 @@ function perfomance (){
 }
 
 // ------------ Функция подключения шаблонов -----------//
-function render($view, $params = array(), $print = true){
+function render($view, $params = array(), $return = false){
 	global $config, $log, $udata;
 
 	extract($params);
 
-	ob_start();
+	if ($return) {
+		ob_start();
+	}
+
 	if (file_exists(BASEDIR.'/themes/'.$config['themes'].'/views/'.$view.'.php')){
 		include (BASEDIR.'/themes/'.$config['themes'].'/views/'.$view.'.php');
 	} else {
 		include (BASEDIR.'/themes/default/views/'.$view.'.php');
 	}
 
-	$output = ob_get_contents();
-	ob_end_clean();
-
-	if ($print)
-		echo $output;
-	else
-		return $output;
+	if ($return) {
+		return ob_get_clean();
+	}
 }
 
 // ------------ Подготовка массивов -----------//
