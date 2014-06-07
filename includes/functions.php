@@ -1289,7 +1289,7 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 		$idx_fst = max($cur_page - $range, 1);
 		$idx_lst = min($cur_page + $range, $pg_cnt);
 
-		if ( $cur_page != 1 ) {
+		if ($cur_page != 1) {
 			$pages[] = array(
 				'start' => (($cur_page - 2) * $posts),
 				'title' => 'Назад',
