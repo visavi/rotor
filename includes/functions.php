@@ -1279,26 +1279,37 @@ function addmail($mail, $subject, $messages, $sendermail="", $sendername="") {
 }
 
 // ----------------------- Постраничная навигация ------------------------//
-function page_strnavigation($link, $posts, $start, $total, $range = 3){
+function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 
 	if ($total > 0) {
+		$pages = array();
 
 		$pg_cnt = ceil($total / $posts);
 		$cur_page = ceil(($start + 1) / $posts);
 		$idx_fst = max($cur_page - $range, 1);
 		$idx_lst = min($cur_page + $range, $pg_cnt);
 
-		$res = 'Страницы: ';
-
-		if ($cur_page != 1) {
-			$res .='<a href="'.$link.'start='.($cur_page - 2) * $posts.'" title="Назад">&laquo;</a> ';
+		if ( $cur_page != 1 ) {
+			$pages[] = array(
+				'start' => (($cur_page - 2) * $posts),
+				'title' => 'Назад',
+				'name' => '&laquo;'
+			);
 		}
 
 		if (($start - $posts) >= 0) {
 			if ($cur_page > ($range + 1)) {
-				$res .= ' <a href="'.$link.'start=0">1</a> ';
+
+				$pages[] = array(
+					'start' => 0,
+					'title' => '1 страница',
+					'name' => 1
+				);
 				if ($cur_page != ($range + 2)) {
-					$res .= ' ... ';
+					$pages[] = array(
+						'separator' => true,
+						'name' => ' ... '
+					);
 				}
 			}
 		}
@@ -1306,80 +1317,48 @@ function page_strnavigation($link, $posts, $start, $total, $range = 3){
 		for ($i = $idx_fst; $i <= $idx_lst; $i++) {
 			$offset_page = ($i - 1) * $posts;
 			if ($i == $cur_page) {
-				$res .= ' <span class="navcurrent">'.$i.'</span> ';
+
+				$pages[] = array(
+					'current' => true,
+					'name' => $i
+				);
 			} else {
-				$res .= ' <a href="'.$link.'start='.$offset_page.'">'.$i.'</a> ';
+
+				$pages[] = array(
+					'start' => $offset_page,
+					'title' => $i.' страница',
+					'name' => $i
+				);
 			}
 		}
 
 		if (($start + $posts) < $total) {
 			if ($cur_page < ($pg_cnt - $range)) {
 				if ($cur_page != ($pg_cnt - $range - 1)) {
-					$res .= ' ... ';
+					$pages[] = array(
+						'separator' => true,
+						'name' => ' ... '
+					);
 				}
-				$res .= ' <a href="'.$link.'start='.($pg_cnt - 1) * $posts.'">'.$pg_cnt.'</a> ';
+				$pages[] = array(
+					'start' => ($pg_cnt - 1) * $posts,
+					'title' => $pg_cnt . ' страница',
+					'name' => $pg_cnt
+				);
 			}
 		}
 
 		if ($cur_page != $pg_cnt) {
-			$res .= ' <a href="'.$link.'start='.($cur_page * $posts).'" title="Вперед">&raquo;</a>';
+			$pages[] = array(
+				'start' => $cur_page * $posts,
+				'title' => 'Вперед',
+				'name' => '&raquo;'
+			);
 		}
 
-		echo '<hr /><div class="nav">'.$res.'</div>';
+		render('includes/pagination', array('pages' => $pages, 'url' => $url));
 	}
 }
-
-// ----------------------- Постраничная навигация ------------------------//
-function pagination($url, $posts, $start, $total, $range = 3){
-
-	if ($total > 0) {
-
-		$pg_cnt = ceil($total / $posts);
-		$cur_page = ceil(($start + 1) / $posts);
-		$idx_fst = max($cur_page - $range, 1);
-		$idx_lst = min($cur_page + $range, $pg_cnt);
-
-		$res = 'Страницы: ';
-
-		if ($cur_page != 1) {
-			$res .='<a href="'.$url.'start='.($cur_page - 2) * $posts.'" title="Назад">&laquo;</a> ';
-		}
-
-		if (($start - $posts) >= 0) {
-			if ($cur_page > ($range + 1)) {
-				$res .= ' <a href="'.$url.'start=0">1</a> ';
-				if ($cur_page != ($range + 2)) {
-					$res .= ' ... ';
-				}
-			}
-		}
-
-		for ($i = $idx_fst; $i <= $idx_lst; $i++) {
-			$offset_page = ($i - 1) * $posts;
-			if ($i == $cur_page) {
-				$res .= ' <span class="navcurrent">'.$i.'</span> ';
-			} else {
-				$res .= ' <a href="'.$url.'start='.$offset_page.'">'.$i.'</a> ';
-			}
-		}
-
-		if (($start + $posts) < $total) {
-			if ($cur_page < ($pg_cnt - $range)) {
-				if ($cur_page != ($pg_cnt - $range - 1)) {
-					$res .= ' ... ';
-				}
-				$res .= ' <a href="'.$url.'start='.($pg_cnt - 1) * $posts.'">'.$pg_cnt.'</a> ';
-			}
-		}
-
-		if ($cur_page != $pg_cnt) {
-			$res .= ' <a href="'.$url.'start='.($cur_page * $posts).'" title="Вперед">&raquo;</a>';
-		}
-
-		render ('includes/pagination', array());
-	}
-}
-
 
 // ----------------------- Вывод страниц в форуме ------------------------//
 function forum_navigation($link, $posts, $total) {
