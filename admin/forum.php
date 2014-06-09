@@ -551,21 +551,12 @@ if (is_admin()) {
 				$topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
 
 				if (!empty($forums)) {
-					$title = $topics['topics_title'].' (Перемещено)';
-					$msg = 'Тема была перемещена в раздел [b]'.$forums['forums_title'].'[/b] по адресу '.$config['home'].'/forum/topic.php?tid='.$tid;
 
-					DB::run() -> query("INSERT INTO `topics` (`topics_forums_id`, `topics_title`, `topics_author`, `topics_closed`, `topics_posts`, `topics_last_user`, `topics_last_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($topics['topics_forums_id'], $title, $topics['topics_author'], 1, 1, $log, SITETIME));
-
-					$lastid = DB::run() -> lastInsertId();
-
-					DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($lastid, $topics['topics_forums_id'], $log, $msg, SITETIME, $ip, $brow));
 					// Обновление номера раздела
 					DB::run() -> query("UPDATE `topics` SET `topics_forums_id`=? WHERE `topics_id`=?;", array($section, $tid));
 					DB::run() -> query("UPDATE `posts` SET `posts_forums_id`=? WHERE `posts_topics_id`=?;", array($section, $tid));
-					// Обновление счетчиков
-					DB::run() -> query("UPDATE `forums` SET `forums_topics`=`forums_topics`+1, `forums_posts`=`forums_posts`+? WHERE `forums_id`=?;", array($topics['topics_posts'], $section));
-					DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`+1-? WHERE `forums_id`=?;", array($topics['topics_posts'], $topics['topics_forums_id']));
-					// ------------------------------------------------------------//
+
+					// Ищем последние темы в форумах для обновления списка последних тем
 					$oldlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_last_time` DESC LIMIT 1;", array($topics['topics_forums_id']));
 					$newlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_last_time` DESC LIMIT 1;", array($section));
 
