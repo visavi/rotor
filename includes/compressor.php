@@ -23,19 +23,23 @@ class Compressor {
 	/* Установка заголовков и сжатие на лету */
 	public static function start()
 	{
-		if (extension_loaded('zlib') && ini_get('zlib.output_compression') != 'On' && ini_get('output_handler') != 'ob_gzhandler' && ini_get('output_handler') != 'zlib.output_compression')
+		if (extension_loaded('zlib') &&
+			ini_get('zlib.output_compression') != 'On' &&
+			ini_get('output_handler') != 'ob_gzhandler' &&
+			ini_get('output_handler') != 'zlib.output_compression'
+		)
 		{
 			$check_compress = self::check_compress();
 
 			if ($check_compress == 'gzip')
 			{
 				header("Content-Encoding: gzip");
-				ob_start("Compressor::compress_output_gzip");
+				ob_start(array("Compressor", "compress_output_gzip"));
 			}
 			elseif ($check_compress == 'deflate')
 			{
 				header("Content-Encoding: deflate");
-				ob_start("Compressor::compress_output_deflate");
+				ob_start(array("Compressor", "compress_output_deflate"));
 			}
 		}
 
@@ -101,13 +105,13 @@ class Compressor {
 	}
 
 	/* Сжатие gzencode */
-	protected static function compress_output_gzip($output)
+	public static function compress_output_gzip($output)
 	{
 		return gzencode($output, 5);
 	}
 
 	/* Сжатие gzdeflate */
-	protected static function compress_output_deflate($output)
+	public static function compress_output_deflate($output)
 	{
 		return gzdeflate($output, 5);
 	}
