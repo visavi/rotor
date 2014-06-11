@@ -181,11 +181,11 @@ function url_replace($url) {
 	global $config;
 
 	if (!isset($url[4])) {
-		$target = (strpos($url[1], $config['home']) === false) ? ' target="_blank"' : '';
+		$target = (strpos($url[1], $config['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
 		$title = (utf_strlen($url[3]) > 80) ? utf_substr($url[3], 0, 70).'...' : $url[3];
 		return '<a href="'.$url[1].'"'.$target.'>'.check(rawurldecode(html_entity_decode($title, ENT_QUOTES, 'utf-8'))).'</a>';
 	} else {
-		$target = (strpos($url[4], $config['home']) === false) ? ' target="_blank"' : '';
+		$target = (strpos($url[4], $config['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
 		$title = (utf_strlen($url[4]) > 80) ? utf_substr($url[4], 0, 70).'...' : $url[4];
 		return '<a href="'.$url[4].'"'.$target.'>'.check(rawurldecode(html_entity_decode($title, ENT_QUOTES, 'utf-8'))).'</a>';
 	}
@@ -1826,7 +1826,7 @@ function save_advertadmin() {
 				$val['adv_title'] = '<span style="color:'.$val['adv_color'].'">'.$val['adv_title'].'</span>';
 			}
 
-			$arraylink[] = '<b><a href="'.$val['adv_url'].'" target="_blank">'.$val['adv_title'].'</a></b><br />';
+			$arraylink[] = '<b><a href="'.$val['adv_url'].'" target="_blank" rel="nofollow">'.$val['adv_title'].'</a></b><br />';
 		}
 	}
 
@@ -1862,7 +1862,7 @@ function show_advertuser() {
 				$result = $datafile[$quot_rand];
 			}
 
-			return $result.' <small><a href="/pages/reklama.php?act=all">[+]</a></small>';
+			return $result.' <small><a href="/pages/reklama.php?act=all" rel="nofollow">[+]</a></small>';
 		}
 	}
 }
@@ -1879,7 +1879,7 @@ function save_advertuser() {
 			if (!empty($val['rek_color'])) {
 				$val['rek_name'] = '<span style="color:'.$val['rek_color'].'">'.$val['rek_name'].'</span>';
 			}
-			$link = '<a href="'.$val['rek_site'].'" target="_blank">'.$val['rek_name'].'</a>';
+			$link = '<a href="'.$val['rek_site'].'" target="_blank" rel="nofollow">'.$val['rek_name'].'</a>';
 
 			if (!empty($val['rek_bold'])) {
 				$link = '<b>'.$link.'</b>';
@@ -2340,7 +2340,7 @@ function show_sponsors(){
 				}
 
 				$data = $advert['sponsors'][$keys[array_rand($keys)]];
-				return '<b><a href="'.$data['sponsor_url'].'">'.$data['sponsor_title'].'</a></b><br />';
+				return '<b><a href="'.$data['sponsor_url'].'" rel="nofollow">'.$data['sponsor_title'].'</a></b><br />';
 			}
 		}
 	}

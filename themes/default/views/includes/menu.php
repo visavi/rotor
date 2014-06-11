@@ -14,7 +14,7 @@
 	<a href="/pages/index.php?act=menu">Меню</a> &bull;
 	<a href="/input.php?act=exit" onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
 <?php else: ?>
-	<img src="/images/img/closed.gif" alt="closed" /> <a href="/pages/login.php">Авторизация</a> &bull;
-	<a href="/pages/registration.php">Регистрация</a>
+	<img src="/images/img/closed.gif" alt="closed" /> <a href="/pages/login.php" rel="nofollow">Авторизация</a> &bull;
+	<a href="/pages/registration.php" rel="nofollow">Регистрация</a>
 <?php endif; ?>
 </div>
