@@ -672,6 +672,10 @@ save_setting();
 
 echo '<div class="note"><b>RotorCMS автоматически обновлен до версии ' . $version . '</b></div><br />';
 
+if (file_exists(BASEDIR.'/mpanel')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию mpanel</div>';
+}
+
 if (file_exists(BASEDIR.'/pages/stat.php')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл pages/stat.php</div>';
 }
@@ -693,7 +697,7 @@ if (file_exists(BASEDIR.'/games')){
 }
 
 if (file_exists(BASEDIR.'/admin/headlines.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл mpanel/headlines.php и mpanel/links/headlines_102.dat</div>';
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл admin/headlines.php и admin/links/headlines_102.dat</div>';
 }
 
 if (file_exists(BASEDIR.'/images/smiles2')){
