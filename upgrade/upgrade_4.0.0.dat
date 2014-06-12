@@ -692,6 +692,10 @@ if (file_exists(BASEDIR.'/pages/skin.php')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл pages/skin.php</div>';
 }
 
+if (file_exists(BASEDIR.'/pages/link.php')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл pages/link.php</div>';
+}
+
 if (file_exists(BASEDIR.'/games')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию games</div>';
 }
@@ -730,6 +734,26 @@ if (file_exists(BASEDIR.'/images/weapon')){
 
 if (file_exists(BASEDIR.'/includes/onliner.php')){
 	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/onliner.php</div>';
+}
+
+if (file_exists(BASEDIR.'/includes/footer.php')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/footer.php</div>';
+}
+
+if (file_exists(BASEDIR.'/includes/idna_convert.php')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/idna_convert.php</div>';
+}
+
+if (file_exists(BASEDIR.'/includes/link.php')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/link.php</div>';
+}
+
+if (file_exists(BASEDIR.'/includes/note.php')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/note.php</div>';
+}
+
+if (file_exists(BASEDIR.'/includes/reklama.php')){
+	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/reklama.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/skin.php')){
