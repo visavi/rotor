@@ -78,5 +78,3 @@ header('Content-type:text/html; charset=utf-8');
 		<div class="backgr">
 			<div class="bcontent">
 				<div class="mcontentwide">
-
-<?php render('includes/note', array('php_self' => $php_self)); ?>

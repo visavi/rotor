@@ -34,5 +34,3 @@ header("Content-type:text/html; charset=utf-8");
 <?php render('includes/menu'); ?>
 
 <div class="site">
-
-<?php render('includes/note', array('php_self' => $php_self)); ?>

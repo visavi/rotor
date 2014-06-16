@@ -37,10 +37,6 @@ header('Content-type:text/html; charset=utf-8');
 
 			<?php render('includes/menu'); ?>
 
-
-			<?php render('includes/note', array('php_self' => $php_self)); ?>
-
-
 		</td>
 	</tr>
 	<tr>

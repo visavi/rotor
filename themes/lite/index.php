@@ -80,8 +80,5 @@ ob_start('amendment');
 	<div class="a"><a href="/">%TITLE%</a></div>
 
 	<?php render('includes/menu'); ?>
-
-	<?php render('includes/note', array('php_self' => $php_self)); ?>
-
 <div>
 
