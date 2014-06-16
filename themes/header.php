@@ -25,18 +25,19 @@ include_once BASEDIR.'/includes/mobile_detect.php';
 $browser_detect = new Mobile_Detect();
 
 // ------------------------ Автоопределение системы -----------------------------//
-if (empty($config['themes']) && !empty($config['touchthemes'])) {
-	if ($browser_detect->isTablet()) {
-		$config['themes'] = $config['touchthemes'];
+if (!is_user() || empty($config['themes'])) {
+	 if (!empty($config['touchthemes'])) {
+		if ($browser_detect->isTablet()) {
+			$config['themes'] = $config['touchthemes'];
+		}
+	}
+
+	if (!empty($config['webthemes'])) {
+		if (!$browser_detect->isMobile() && !$browser_detect->isTablet()) {
+			$config['themes'] = $config['webthemes'];
+		}
 	}
 }
-
-if (empty($config['themes']) && !empty($config['webthemes'])) {
-	if (!$browser_detect->isMobile() && !$browser_detect->isTablet()) {
-		$config['themes'] = $config['webthemes'];
-	}
-}
-
 
 if ($config['closedsite'] == 2 && !is_admin() && !strsearch($php_self, array('pages/closed.php', 'input.php'))) {
 	redirect($config['home'].'/pages/closed.php');
