@@ -153,14 +153,15 @@ function points($sum) {
 
 // ------------------ Функция подсветки кода -------------------------//
 function highlight_code($code) {
-	$code = nosmiles($code[1]);
+
+	if (is_array($code)) $code = $code[1];
+	$code = nosmiles($code);
 	$code = strtr($code, array('&lt;'=>'<', '&gt;'=>'>', '&amp;'=>'&', '&quot;'=>'"', '&#36;'=>'$', '&#37;'=>'%', '&#39;'=>"'", '&#92;'=>'\\', '&#94;'=>'^', '&#96;'=>'`', '&#124;' => '|', '<br />'=>"\r\n"));
 
 	$code = highlight_string($code, true);
 	$code = strtr($code, array("\r\n"=>'<br />', '://'=>'&#58//', '$'=>'&#36;', "'"=>'&#39;', '%'=>'&#37;', '\\'=>'&#92;', '`'=>'&#96;', '^'=>'&#94;', '|'=>'&#124;'));
 
-	$code = '<div class="d">'.$code.'</div>';
-	return $code;
+	return '<div class="d">'.$code.'</div>';
 }
 
 // ----------------------- Функция скрытого текста ------------------------//
