@@ -63,4 +63,4 @@ include_once (BASEDIR.'/themes/'.$config['themes'].'/index.php');
 	<?= show_advertuser(); /* Реклама за игровые деньги */ ?>
 </div>
 
-<?php render('includes/note', array('php_self' => $php_self)); ?>
+<?php render('includes/note', compact('php_self')); ?>

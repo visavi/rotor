@@ -2558,7 +2558,7 @@ function navigation (){
 		}
 
 		if ($navigation) {
-			render ('includes/navigation', array('navigation' => $navigation));
+			render ('includes/navigation', compact('navigation'));
 		}
 	}
 }
