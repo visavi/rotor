@@ -6,7 +6,7 @@ RewriteRule .* - [F]
    Order allow,deny
     Deny from all
 </Files>
-<Files ~ ".(dat|sfx)$">
+<Files ~ ".(dat|gitignore)$">
    Order allow,deny
    Deny from all
 </Files>

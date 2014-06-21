@@ -893,7 +893,7 @@ function show_online() {
 
 	if ($config['onlines'] == 1) {
 		$online = stats_online();
-		echo '<a href="/pages/online.php">На сайте: '.$online[0].'/'.$online[1].'</a><br />';
+		render('includes/online', compact('online'));
 	}
 }
 
@@ -915,21 +915,7 @@ function show_counter() {
 	if ($config['incount'] > 0) {
 		$count = stats_counter();
 
-		if ($config['incount'] == 1) {
-			echo '<a href="/pages/counter.php">'.$count['count_dayhosts'].' | '.$count['count_allhosts'].'</a><br />';
-		}
-		if ($config['incount'] == 2) {
-			echo '<a href="/pages/counter.php">'.$count['count_dayhits'].' | '.$count['count_allhits'].'</a><br />';
-		}
-		if ($config['incount'] == 3) {
-			echo '<a href="/pages/counter.php">'.$count['count_dayhosts'].' | '.$count['count_dayhits'].'</a><br />';
-		}
-		if ($config['incount'] == 4) {
-			echo '<a href="/pages/counter.php">'.$count['count_allhosts'].' | '.$count['count_allhits'].'</a><br />';
-		}
-		if ($config['incount'] == 5) {
-			echo '<a href="/pages/counter.php"><img src="/upload/counters/counter.png?'.SITETIME.'" alt="counter" /></a><br />';
-		}
+		render('includes/counter', compact('count'));
 	}
 }
 
@@ -1294,7 +1280,7 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 			$pages[] = array(
 				'start' => (($cur_page - 2) * $posts),
 				'title' => 'Назад',
-				'name' => '&laquo;'
+				'name' => '&laquo;',
 			);
 		}
 
@@ -1304,12 +1290,12 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 				$pages[] = array(
 					'start' => 0,
 					'title' => '1 страница',
-					'name' => 1
+					'name' => 1,
 				);
 				if ($cur_page != ($range + 2)) {
 					$pages[] = array(
 						'separator' => true,
-						'name' => ' ... '
+						'name' => ' ... ',
 					);
 				}
 			}
@@ -1321,14 +1307,14 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 
 				$pages[] = array(
 					'current' => true,
-					'name' => $i
+					'name' => $i,
 				);
 			} else {
 
 				$pages[] = array(
 					'start' => $offset_page,
 					'title' => $i.' страница',
-					'name' => $i
+					'name' => $i,
 				);
 			}
 		}
@@ -1338,13 +1324,13 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 				if ($cur_page != ($pg_cnt - $range - 1)) {
 					$pages[] = array(
 						'separator' => true,
-						'name' => ' ... '
+						'name' => ' ... ',
 					);
 				}
 				$pages[] = array(
 					'start' => ($pg_cnt - 1) * $posts,
 					'title' => $pg_cnt . ' страница',
-					'name' => $pg_cnt
+					'name' => $pg_cnt,
 				);
 			}
 		}
@@ -1353,39 +1339,49 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 			$pages[] = array(
 				'start' => $cur_page * $posts,
 				'title' => 'Вперед',
-				'name' => '&raquo;'
+				'name' => '&raquo;',
 			);
 		}
 
-		render('includes/pagination', array('pages' => $pages, 'url' => $url));
+		render('includes/pagination', compact('pages', 'url'));
 	}
 }
 
 // ----------------------- Вывод страниц в форуме ------------------------//
-function forum_navigation($link, $posts, $total) {
+function forum_navigation($url, $posts, $total) {
 	if ($total > 0) {
-		$ba = ceil($total / $posts);
-		$ba2 = $ba * $posts - $posts;
+
+		$pages = array();
+		$last_page = ceil($total / $posts);
+		$last_start = $last_page * $posts - $posts;
 		$max = $posts * 5;
 
 		for($i = 0; $i < $max;) {
 			if ($i < $total && $i >= 0) {
-				$ii = floor(1 + $i / $posts);
-				echo ' <a href="'.$link.'start='.$i.'">'.$ii.'</a> ';
+				$pages[] = array(
+					'start' => $i,
+					'name' => floor(1 + $i / $posts),
+				);
 			}
-
 			$i += $posts;
 		}
 
 		if ($max < $total) {
+
 			if ($max + $posts < $total) {
-				echo ' ... <a href="'.$link.'start='.$ba2.'">'.$ba.'</a>';
-			} else {
-				echo ' <a href="'.$link.'start='.$ba2.'">'.$ba.'</a>';
+				$pages[] = array(
+					'separator' => true,
+					'name' => ' ... ',
+				);
 			}
+
+			$pages[] = array(
+				'start' => $last_start,
+				'name' => $last_page,
+			);
 		}
 
-		echo '<br />';
+		render('includes/pagination_forum', compact('pages', 'url'));
 	}
 }
 
@@ -2585,7 +2581,7 @@ function render($view, $params = array(), $return = false){
 	if (file_exists(BASEDIR.'/themes/'.$config['themes'].'/views/'.$view.'.php')){
 		include (BASEDIR.'/themes/'.$config['themes'].'/views/'.$view.'.php');
 	} else {
-		include (BASEDIR.'/themes/default/views/'.$view.'.php');
+		include (BASEDIR.'/assets/views/'.$view.'.php');
 	}
 
 	if ($return) {
