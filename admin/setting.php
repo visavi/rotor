@@ -106,7 +106,7 @@ if (is_admin(array(101))) {
 
 									save_setting();
 
-									$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+									notice('Настройки сайта успешно изменены!');
 									redirect("setting.php?act=setzero");
 
 								} else {
@@ -310,7 +310,7 @@ if (is_admin(array(101))) {
 
 						save_setting();
 
-						$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+						notice('Настройки сайта успешно изменены!');
 						redirect("setting.php?act=setone");
 
 					} else {
@@ -387,7 +387,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=settwo");
 
 				} else {
@@ -476,7 +476,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=setthree");
 
 				} else {
@@ -548,7 +548,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=setfour");
 
 				} else {
@@ -609,7 +609,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=setfive");
 
 				} else {
@@ -676,7 +676,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=setload");
 
 				} else {
@@ -734,7 +734,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=setblog");
 
 				} else {
@@ -814,7 +814,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=setseven");
 
 				} else {
@@ -888,7 +888,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=seteight");
 
 				} else {
@@ -950,7 +950,7 @@ if (is_admin(array(101))) {
 		*
 		* save_setting();
 		*
-		* $_SESSION['note'] = 'Настройки сайта успешно изменены!';
+		* notice('Настройки сайта успешно изменены!');
 		* redirect("setting.php");
 		*
 		* } else {show_error('Ошибка! Все поля настроек обязательны для заполнения!');}
@@ -1022,7 +1022,7 @@ if (is_admin(array(101))) {
 								$dbr -> execute($captcha_credits, 'captcha_credits');
 								save_setting();
 
-								$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+								notice('Настройки сайта успешно изменены!');
 								redirect("setting.php?act=setten");
 
 							} else {
@@ -1110,7 +1110,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=seteleven");
 
 				} else {
@@ -1164,7 +1164,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=setadv");
 
 				} else {
@@ -1224,7 +1224,7 @@ if (is_admin(array(101))) {
 
 					save_setting();
 
-					$_SESSION['note'] = 'Настройки сайта успешно изменены!';
+					notice('Настройки сайта успешно изменены!');
 					redirect("setting.php?act=setimage");
 
 				} else {
