@@ -70,10 +70,11 @@ case 'index':
 			}
 
 			$ipdpost = implode(',', $ipdpost);
-
-			$queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id` IN (".$ipdpost.");");
-			$files = $queryfiles->fetchAll();
-
+			
+			if (!empty($ipdpost)) {
+				$queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id` IN (".$ipdpost.");");
+				$files = $queryfiles->fetchAll();
+			}
 			if (!empty($files)){
 				$forumfiles = array();
 				foreach ($files as $file){
