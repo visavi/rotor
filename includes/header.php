@@ -168,7 +168,7 @@ if ($udata = is_user()) {
 		}
 	}
 
-	// ---------------------- функция проверки ip и браузера -----------------------//
+	// --------------------- Проверка соответствия ip-адреса ---------------------//
 	if (!empty($udata['users_ipbinding'])) {
 		if ($_SESSION['my_ip'] != $ip) {
 			$_SESSION = array();
@@ -179,7 +179,13 @@ if ($udata = is_user()) {
 		}
 	}
 
-	// ------------------------ Запись текущей страницы для админов -----------------------------//
+	// ---------------------- Получение ежедневного бонуса -----------------------//
+	if ($udata['users_timebonus'] < time() - 86400) {
+		DB::run() -> query("UPDATE `users` SET `users_timebonus`=?, `users_money`=`users_money`+? WHERE `users_login`=? LIMIT 1;", array(SITETIME, $config['bonusmoney'], $log));
+		notice('Получен ежедневный бонус '.moneys($config['bonusmoney']).'!');
+	}
+
+	// ------------------ Запись текущей страницы для админов --------------------//
 	if (strstr($php_self, 'admin/')) {
 		DB::run() -> query("INSERT INTO `admlog` (`admlog_user`, `admlog_request`, `admlog_referer`, `admlog_ip`, `admlog_brow`, `admlog_time`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $request_uri, $http_referer, $ip, $brow, SITETIME));
 

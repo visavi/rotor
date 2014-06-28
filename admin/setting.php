@@ -1072,6 +1072,9 @@ if (is_admin(array(101))) {
 			echo 'Актива для изменения статуса: <br /><input name="editstatuspoint" maxlength="4" value="'.$setting['editstatuspoint'].'" /><br />';
 			echo 'Стоимость изменения статуса: <br /><input name="editstatusmoney" maxlength="9" value="'.$setting['editstatusmoney'].'" /><br /><hr />';
 
+			echo 'Ежедневный бонус: <br /><input name="bonusmoney" maxlength="10" value="'.$setting['bonusmoney'].'" /><br />';
+			echo 'Денег за регистрацию: <br /><input name="registermoney" maxlength="10" value="'.$setting['registermoney'].'" /><br /><hr />';
+
 			echo '<input value="Изменить" type="submit" /></form></div><br />';
 
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
@@ -1086,7 +1089,7 @@ if (is_admin(array(101))) {
 			$editstatus = (empty($_POST['editstatus'])) ? 0 : 1;
 
 			if ($uid == $_SESSION['token']) {
-				if ($_POST['avatarupload'] != "" && $_POST['avatarpoints'] != "" && $_POST['avatarsize'] != "" && $_POST['avatarweight'] != "" && $_POST['editnickpoint'] != "" && $_POST['sendmoneypoint'] != "" && $_POST['editratingpoint'] != "" && $_POST['editforumpoint'] != "" && $_POST['editnickpoint'] != "" && $_POST['editstatuspoint'] != "" && $_POST['editstatusmoney'] != "") {
+				if ($_POST['avatarupload'] != "" && $_POST['avatarpoints'] != "" && $_POST['avatarsize'] != "" && $_POST['avatarweight'] != "" && $_POST['editnickpoint'] != "" && $_POST['sendmoneypoint'] != "" && $_POST['editratingpoint'] != "" && $_POST['editforumpoint'] != "" && $_POST['editnickpoint'] != "" && $_POST['editstatuspoint'] != "" && $_POST['editstatusmoney'] != "" && $_POST['bonusmoney'] != "" && $_POST['registermoney'] != "") {
 
 					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 					$dbr -> execute(intval($_POST['avatarupload']), 'avatarupload');
@@ -1102,6 +1105,8 @@ if (is_admin(array(101))) {
 					$dbr -> execute($editstatus, 'editstatus');
 					$dbr -> execute(intval($_POST['editstatuspoint']), 'editstatuspoint');
 					$dbr -> execute(intval($_POST['editstatusmoney']), 'editstatusmoney');
+					$dbr -> execute(intval($_POST['bonusmoney']), 'bonusmoney');
+					$dbr -> execute(intval($_POST['registermoney']), 'registermoney');
 
 					save_setting();
 
