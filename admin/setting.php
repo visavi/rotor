@@ -1195,6 +1195,7 @@ if (is_admin(array(101))) {
 
 			$checked = ($setting['copyfoto'] == 1) ? ' checked="checked"' : '';
 			echo '<input name="copyfoto" type="checkbox" value="1"'.$checked.' /> Наложение копирайта<br />';
+			echo '<img src="/images/img/watermark.png" alt="watermark" title="'.$config['home'].'/images/img/watermark.png" /><br />';
 
 			echo '<input value="Изменить" type="submit" /></form></div><br />';
 

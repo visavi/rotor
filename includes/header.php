@@ -180,7 +180,7 @@ if ($udata = is_user()) {
 	}
 
 	// ---------------------- Получение ежедневного бонуса -----------------------//
-	if ($udata['users_timebonus'] < time() - 86400) {
+	if ($udata['users_timebonus'] < time() - 82800) {  // Получение бонуса каждые 23 часа
 		DB::run() -> query("UPDATE `users` SET `users_timebonus`=?, `users_money`=`users_money`+? WHERE `users_login`=? LIMIT 1;", array(SITETIME, $config['bonusmoney'], $log));
 		notice('Получен ежедневный бонус '.moneys($config['bonusmoney']).'!');
 	}
