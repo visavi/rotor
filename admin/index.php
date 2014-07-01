@@ -18,11 +18,11 @@ if (is_admin()) {
 ?>
 	<div class="b"><img src="/images/img/panel.gif" alt="image" /> <b>Модератор</b></div>
 	<img src="/images/img/act.png" alt="image" /> <a href="chat.php">Админ-чат</a> (<?=stats_chat()?>)<br />
-	<img src="/images/img/act.png" alt="image" /> <a href="book.php">Управление гостевой</a> (<?=stats_guest()?>)<br />
-	<img src="/images/img/act.png" alt="image" /> <a href="forum.php">Управление форумом</a> (<?=stats_forum()?>)<br />
-	<img src="/images/img/act.png" alt="image" /> <a href="gallery.php">Управление галереей</a> (<?=stats_gallery()?>)<br />
-	<img src="/images/img/act.png" alt="image" /> <a href="blog.php">Управление блогами</a> (<?=stats_blog()?>)<br />
-	<img src="/images/img/act.png" alt="image" /> <a href="events.php">Управление событиями</a> (<?=stats_events()?>)<br />
+	<img src="/images/img/act.png" alt="image" /> <a href="book.php">Гостевая книга</a> (<?=stats_guest()?>)<br />
+	<img src="/images/img/act.png" alt="image" /> <a href="forum.php">Форум</a> (<?=stats_forum()?>)<br />
+	<img src="/images/img/act.png" alt="image" /> <a href="gallery.php">Галерея</a> (<?=stats_gallery()?>)<br />
+	<img src="/images/img/act.png" alt="image" /> <a href="blog.php">Блоги</a> (<?=stats_blog()?>)<br />
+	<img src="/images/img/act.png" alt="image" /> <a href="events.php">События</a> (<?=stats_events()?>)<br />
 	<img src="/images/img/act.png" alt="image" /> <a href="newload.php">Новые публикации</a> (<?=stats_newload()?>)<br />
 	<img src="/images/img/act.png" alt="image" /> <a href="changes.php">Новости RotorCMS</a><br />
 	<?=show_admin_links(105);?>
@@ -34,18 +34,18 @@ if (is_admin()) {
 		<img src="/images/img/act.png" alt="image" /> <a href="spam.php">Список жалоб</a> (<?=stats_spam()?>)<br />
 		<img src="/images/img/act.png" alt="image" /> <a href="adminlist.php">Список старших</a> (<?=stats_admins()?>)<br />
 		<img src="/images/img/act.png" alt="image" /> <a href="reglist.php">Список ожидающих</a> (<?=stats_reglist()?>)<br />
-		<img src="/images/img/act.png" alt="image" /> <a href="votes.php">Управление голосованием</a> (<?=stats_votes()?>)<br />
+		<img src="/images/img/act.png" alt="image" /> <a href="votes.php">Голосования</a> (<?=stats_votes()?>)<br />
 		<?=show_admin_links(103);?>
 	<?php }?>
 
 	<?php if (is_admin(array(101, 102))) {?>
 		<div class="b"><img src="/images/img/panel.gif" alt="image" /> <b>Администратор</b></div>
 		<img src="/images/img/act.png" alt="image" /> <a href="rules.php">Правила сайта</a><br />
-		<img src="/images/img/act.png" alt="image" /> <a href="news.php">Управление новостями</a> (<?=stats_allnews()?>)<br />
-		<img src="/images/img/act.png" alt="image" /> <a href="users.php">Управление юзерами</a> (<?=stats_users()?>)<br />
+		<img src="/images/img/act.png" alt="image" /> <a href="news.php">Новости</a> (<?=stats_allnews()?>)<br />
+		<img src="/images/img/act.png" alt="image" /> <a href="users.php">Пользователи</a> (<?=stats_users()?>)<br />
 		<img src="/images/img/act.png" alt="image" /> <a href="ban.php">IP-бан панель</a> (<?=stats_ipbanned()?>)<br />
 		<img src="/images/img/act.png" alt="image" /> <a href="phpinfo.php">PHP-информация</a> (<?=phpversion()?>)<br />
-		<img src="/images/img/act.png" alt="image" /> <a href="load.php">Управление загрузками</a> (<?=stats_load()?>)<br />
+		<img src="/images/img/act.png" alt="image" /> <a href="load.php">Загруз-центр</a> (<?=stats_load()?>)<br />
 		<?=show_admin_links(102);?>
 	<?php }?>
 
