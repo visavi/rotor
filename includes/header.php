@@ -87,7 +87,6 @@ if (!empty($config['doslimit'])) {
 ##                            Сжатие и буферизация данныx                                 ##
 ############################################################################################
 if (!empty($config['gzip'])) {
-	include_once (BASEDIR.'/includes/compressor.php');
 	Compressor::start();
 }
 

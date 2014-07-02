@@ -10,8 +10,6 @@
 require_once ('../includes/start.php');
 require_once ('../includes/functions.php');
 
-include_once(BASEDIR.'/includes/kcaptcha.php');
-
 $captcha = new KCAPTCHA();
 
 $_SESSION['protect'] = $captcha->getKeyString();

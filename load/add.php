@@ -436,7 +436,7 @@ if (is_user()) {
 															DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
 
 															$_SESSION['note'] = 'Файл успешно загружен!';
-															//redirect("add.php?act=view&id=$id");
+															redirect("add.php?act=view&id=$id");
 
 														} else {
 															show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');

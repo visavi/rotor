@@ -34,7 +34,7 @@ class KCAPTCHA{
 		$allowed_symbols = $config['captcha_symbols']; #alphabet without similar symbols (o=0, 1=l, i=j, t=f)
 
 		# folder with fonts
-		$fontsdir = '../assets/captcha';
+		$fontsdir = '../../assets/captcha';
 
 		# CAPTCHA string length
 		$length = mt_rand(4, $config['captcha_maxlength']); # random 4 or 6

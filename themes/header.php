@@ -20,7 +20,6 @@ if (!empty($config['cache'])){
 	header("Expires: ".date("r"));
 }
 
-include_once BASEDIR.'/includes/mobile_detect.php';
 $browser_detect = new Mobile_Detect();
 
 // ------------------------ Автоопределение системы -----------------------------//

@@ -11,7 +11,6 @@ require_once ('../includes/start.php');
 require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
-require_once ('../includes/pclzip.php');
 
 if (isset($_GET['id'])) {
 	$id = abs(intval($_GET['id']));

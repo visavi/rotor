@@ -2233,8 +2233,6 @@ function resize_image($dir, $name, $size, $alt="") {
 
 		if (!file_exists(BASEDIR.'/upload/thumbnail/'.$prename.$name) || filesize(BASEDIR.'/upload/thumbnail/'.$prename.$name) < 18) {
 
-			include_once (BASEDIR.'/includes/upload.php');
-
 			$handle = new upload(BASEDIR.'/'.$dir.$name);
 
 			if ($handle -> uploaded) {
@@ -2363,8 +2361,6 @@ function copyright_archive($filename){
 	$ext = getExtension($filename);
 
 	if ($ext == 'zip' && file_exists($readme_file)){
-		require_once (BASEDIR.'/includes/pclzip.php');
-
 		$archive = new PclZip($filename);
 		$archive->add($readme_file, PCLZIP_OPT_REMOVE_PATH, dirname($readme_file));
 
@@ -2376,7 +2372,6 @@ function copyright_archive($filename){
 function upload_image($file, $new_name = false){
 
 	global $config;
-	include_once (BASEDIR.'/includes/upload.php');
 
 	$handle = new upload($file);
 
@@ -2409,7 +2404,6 @@ function upload_image($file, $new_name = false){
 function upload_image2($file, $weight, $size, $new_name = false){
 
 	global $config;
-	include_once (BASEDIR.'/includes/upload.php');
 
 	$handle = new FileUpload($file);
 
