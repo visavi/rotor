@@ -6,8 +6,8 @@
 		<?php foreach ($links as $key=>$link): ?>
 			<?php $params = null;
 			if (isset($link['params'])) {
-				foreach ($link['params'] as $key=>$val){
-					$params .= " {$key}=\"{$val}\"";
+				foreach ($link['params'] as $name=>$val){
+					$params .= " {$name}=\"{$val}\"";
 				}
 			} ?>
 			<?php if (!empty($key)) echo '/'; ?>

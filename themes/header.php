@@ -8,8 +8,7 @@
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
 if (!defined('BASEDIR')) {
-	header('Location: /index.php');
-	exit;
+	exit(header('Location: /index.php'));
 }
 
 // ------------------------ Отключение кеширования -----------------------------//
@@ -39,13 +38,13 @@ if (!is_user() || empty($config['themes'])) {
 	}
 }
 
-if ($config['closedsite'] == 2 && !is_admin() && !strsearch($php_self, array('pages/closed.php', 'input.php'))) {
-	redirect($config['home'].'/pages/closed.php');
+if ($config['closedsite'] == 2 && !is_admin() && !strsearch($php_self, array('/pages/closed.php', '/input.php'))) {
+	redirect('/pages/closed.php');
 }
 
-if ($config['closedsite'] == 1 && !is_user() && !strsearch($php_self, array('pages/login.php', 'pages/registration.php', 'mail/lostpassword.php', 'input.php'))) {
+if ($config['closedsite'] == 1 && !is_user() && !strsearch($php_self, array('/pages/login.php', '/pages/registration.php', '/mail/lostpassword.php', '/input.php'))) {
 	notice('Для входа на сайт необходимо авторизоваться!');
-	redirect($config['home'].'/pages/login.php');
+	redirect('/pages/login.php');
 }
 
 if (empty($config['themes']) || !file_exists(BASEDIR.'/themes/'.$config['themes'].'/index.php')) {

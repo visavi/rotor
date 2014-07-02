@@ -71,7 +71,6 @@ case 'exit':
 	$_SESSION = array();
 	setcookie('cookpar', '', time() - 3600, '/', $domain, null, true);
 	setcookie(session_name(), '', time() - 3600, '/', '');
-	session_unset();
 	session_destroy();
 
 	redirect($config['home'].'/index.php');

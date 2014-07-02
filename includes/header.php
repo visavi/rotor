@@ -12,8 +12,8 @@ if (!defined('BASEDIR')) {
 }
 
 $ip = real_ip();
-$php_self = (isset($_SERVER['PHP_SELF'])) ? check(trim($_SERVER['PHP_SELF'], '/')) : '';
-$request_uri = (isset($_SERVER['REQUEST_URI'])) ? check(urldecode(trim($_SERVER['REQUEST_URI'], '/'))) : 'index.php';
+$php_self = (isset($_SERVER['PHP_SELF'])) ? check($_SERVER['PHP_SELF']) : '';
+$request_uri = (isset($_SERVER['REQUEST_URI'])) ? check(urldecode($_SERVER['REQUEST_URI'])) : 'index.php';
 $http_referer = (isset($_SERVER['HTTP_REFERER'])) ? check(urldecode($_SERVER['HTTP_REFERER'])) : 'Не определено';
 $username = (empty($_SESSION['log'])) ? $config['guestsuser'] : $_SESSION['log'];
 $brow = (empty($_SESSION['brow'])) ? $_SESSION['brow'] = get_user_agent() : $_SESSION['brow'];
@@ -39,7 +39,7 @@ if (is_array($arrbanip) && count($arrbanip) > 0) {
 		}
 
 		if ($ipmatch == 4) {
-			redirect($config['home'].'/pages/banip.php');
+			redirect('/pages/banip.php');
 		} //бан по IP
 	}
 }
@@ -157,14 +157,14 @@ if ($udata = is_user()) {
 	$config['navigation'] = $udata['users_navigation'];  # Быстрый переход
 
 	if ($udata['users_ban'] == 1) {
-		if (!strsearch($php_self, array('pages/ban.php', 'pages/rules.php'))) {
-			redirect($config['home'].'/pages/ban.php?log='.$log);
+		if (!strsearch($php_self, array('/pages/ban.php', '/pages/rules.php'))) {
+			redirect('/pages/ban.php?log='.$log);
 		}
 	}
 
 	if ($config['regkeys'] > 0 && $udata['users_confirmreg'] > 0 && empty($udata['users_ban'])) {
-		if (!strsearch($php_self, array('pages/key.php', 'input.php'))) {
-			redirect($config['home'].'/pages/key.php?log='.$log);
+		if (!strsearch($php_self, array('/pages/key.php', '/input.php'))) {
+			redirect('/pages/key.php?log='.$log);
 		}
 	}
 
@@ -173,9 +173,8 @@ if ($udata = is_user()) {
 		if ($_SESSION['my_ip'] != $ip) {
 			$_SESSION = array();
 			setcookie(session_name(), '', 0, '/', '');
-			session_unset();
 			session_destroy();
-			redirect($config['home'].'/'.$request_uri);
+			redirect(html_entity_decode($request_uri));
 		}
 	}
 
@@ -186,7 +185,7 @@ if ($udata = is_user()) {
 	}
 
 	// ------------------ Запись текущей страницы для админов --------------------//
-	if (strstr($php_self, 'admin/')) {
+	if (strstr($php_self, '/admin')) {
 		DB::run() -> query("INSERT INTO `admlog` (`admlog_user`, `admlog_request`, `admlog_referer`, `admlog_ip`, `admlog_brow`, `admlog_time`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $request_uri, $http_referer, $ip, $brow, SITETIME));
 
 		DB::run() -> query("DELETE FROM `admlog` WHERE `admlog_time` < (SELECT MIN(`admlog_time`) FROM (SELECT `admlog_time` FROM `admlog` ORDER BY `admlog_time` DESC LIMIT 500) AS del);");
