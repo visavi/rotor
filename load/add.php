@@ -239,7 +239,7 @@ if (is_user()) {
 
 								echo '<a href="down.php?act=view&amp;id='.$id.'">Обзор файла</a><br /><br />';
 
-								echo '<div class="info"><b>Внимание!</b> Данный файл опубликован, но еще требует модераторской проверки<br />После проверки вы не сможете отредактировать описание и загрузить файл или скриншот</div><br />';
+								echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br />После проверки вы не сможете отредактировать описание и загрузить файл или скриншот</div><br />';
 
 								if (empty($new['downs_link'])) {
 
@@ -436,7 +436,7 @@ if (is_user()) {
 															DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
 
 															$_SESSION['note'] = 'Файл успешно загружен!';
-															redirect("add.php?act=view&id=$id");
+															//redirect("add.php?act=view&id=$id");
 
 														} else {
 															show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');

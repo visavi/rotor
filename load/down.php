@@ -172,7 +172,7 @@ switch ($act):
 				echo '<hr />';
 
 				if (empty($downs['downs_active']) && $downs['downs_user'] == $log){
-					echo '<div class="info"><b>Внимание!</b> Данный файл опубликован, но еще требует модераторской проверки<br />';
+					echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br />';
 					echo '<img src="/images/img/edit.gif" alt="image" /> <a href="add.php?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br />';
 				}
 
