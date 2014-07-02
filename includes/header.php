@@ -13,7 +13,7 @@ if (!defined('BASEDIR')) {
 
 $ip = real_ip();
 $php_self = (isset($_SERVER['PHP_SELF'])) ? check($_SERVER['PHP_SELF']) : '';
-$request_uri = (isset($_SERVER['REQUEST_URI'])) ? check(urldecode($_SERVER['REQUEST_URI'])) : 'index.php';
+$request_uri = (isset($_SERVER['REQUEST_URI'])) ? check(urldecode($_SERVER['REQUEST_URI'])) : '/index.php';
 $http_referer = (isset($_SERVER['HTTP_REFERER'])) ? check(urldecode($_SERVER['HTTP_REFERER'])) : 'Не определено';
 $username = (empty($_SESSION['log'])) ? $config['guestsuser'] : $_SESSION['log'];
 $brow = (empty($_SESSION['brow'])) ? $_SESSION['brow'] = get_user_agent() : $_SESSION['brow'];
