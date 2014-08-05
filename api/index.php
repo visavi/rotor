@@ -21,7 +21,7 @@ foreach ($files as $file){
 	if ($file == 'index.php') {$text = 'Главная страница с описанием интерфейса';}
 	if ($file == 'user.php') {$text = 'Параметры: key, Возвращаемые значения: массив данных из профиля пользователя';}
 	if ($file == 'private.php') {$text = 'Параметры: key, count = 10, Возвращаемые значения: total - кол. сообщений, messages - массив приватных сообщений';}
-	if ($file == 'forum.php') {$text = 'Параметры: key, topic_id, Возвращаемые значения: topic_id - id темы, topic_author - автор темы, topic_title - заголовок темы, messages - массив постов';}
+	if ($file == 'forum.php') {$text = 'Параметры: key, id, Возвращаемые значения: id - id темы, author - автор темы, title - заголовок темы, messages - массив постов';}
 
 	echo '<img src="/images/img/gear.gif" alt="gear" /> <b>'.$file.'</b> - '.$text.'<br />';
 }

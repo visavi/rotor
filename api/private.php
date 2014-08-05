@@ -31,8 +31,7 @@ if (!empty($key)){
 			$messages = array();
 			foreach ($inbox as $data) {
 
-				$data['inbox_text'] = bb_code($data['inbox_text']);
-				$data['inbox_text'] = str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $data['inbox_text']);
+				$data['inbox_text'] = bb_code(str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $data['inbox_text']));
 
 				$messages[] = array(
 					'author' => $data['inbox_author'],
