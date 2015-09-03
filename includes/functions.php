@@ -836,28 +836,6 @@ function user_avatars($login) {
 	return '<a href="/pages/user.php?uz='.$login.'"><img src="/images/avatars/noavatar.gif" alt="" /></a> ';
 }
 
-// --------------- Функция подсчета карт в игре ---------------//
-function cards_score($str) {
-	if ($str > 32) return 11;
-	if ($str > 20) return (int)(($str-1) / 4)-3;
-	return (int)(($str-1) / 4) + 6;
-}
-
-// --------------- Функция подсчета очков в игре ---------------//
-function cards_points($str) {
-	$str = (int)$str;
-
-	$str1 = abs($str) % 100;
-	$str2 = $str % 10;
-
-	if ($str1 == 21) return $str.' <b>очко!!!</b>';
-	if ($str1 > 10 && $str1 < 20) return $str.' очков';
-	if ($str2 > 1 && $str2 < 5) return $str.' очка';
-	if ($str2 == 1) return $str.' очко';
-
-	return $str.' очков';
-}
-
 // --------------- Функция подсчета человек в контакт-листе ---------------//
 function user_contact($login) {
 	return DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `contact_user`=?;", array($login));
