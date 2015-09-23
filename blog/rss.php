@@ -22,9 +22,9 @@ if (!empty($blog)) {
 	$querycomm = DB::run() -> query("SELECT * FROM `commblog` WHERE `commblog_blog`=? ORDER BY `commblog_time` DESC LIMIT 15;", array($id));
 	$comments = $querycomm->fetchAll();
 
-	while (ob_get_level()) {
+	//while (ob_get_level()) {
 		ob_end_clean();
-	}
+	//}
 
 	header("Content-type:application/rss+xml; charset=utf-8");
 	die(render('blog/rss', array('blog' => $blog, 'comments' => $comments)));
