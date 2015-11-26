@@ -1,0 +1,1 @@
+<img src="/images/img/act.png" alt="image" /> <a href="invitations.php">Приглашения</a> (<?=stats_invite()?>)<br />

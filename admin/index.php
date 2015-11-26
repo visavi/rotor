@@ -24,7 +24,7 @@ if (is_admin()) {
 	<img src="/images/img/act.png" alt="image" /> <a href="blog.php">Блоги</a> (<?=stats_blog()?>)<br />
 	<img src="/images/img/act.png" alt="image" /> <a href="events.php">События</a> (<?=stats_events()?>)<br />
 	<img src="/images/img/act.png" alt="image" /> <a href="newload.php">Новые публикации</a> (<?=stats_newload()?>)<br />
-	<img src="/images/img/act.png" alt="image" /> <a href="changes.php">Новости RotorCMS</a><br />
+
 	<?=show_admin_links(105);?>
 
 	<?php if (is_admin(array(101, 102, 103))) {?>

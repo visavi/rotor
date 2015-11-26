@@ -1,0 +1,1 @@
+<img src="/images/img/act.png" alt="image" /> <a href="blacklist.php">Черный список</a> (<?=stats_blacklist()?>)<br />

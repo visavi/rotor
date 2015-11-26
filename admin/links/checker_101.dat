@@ -1,0 +1,1 @@
+<img src="/images/img/act.png" alt="image" /> <a href="checker.php">Сканирование сайта</a> (<?=stats_checker()?>)<br />

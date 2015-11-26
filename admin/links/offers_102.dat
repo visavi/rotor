@@ -1,0 +1,1 @@
+<img src="/images/img/act.png" alt="image" /> <a href="offers.php">Предложения / Проблемы</a> (<?=stats_offers()?>)<br />

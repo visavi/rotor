@@ -136,7 +136,7 @@ if (!isset($_SESSION['token'])) {
 		$_SESSION['token'] = 0;
 	}
 }
-ob_start('mc');
+
 ob_start('ob_processing');
 $_SESSION['timeon'] = maketime(SITETIME - $_SESSION['currs']);
 ############################################################################################

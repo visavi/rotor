@@ -1867,78 +1867,24 @@ function save_advertuser() {
 	file_put_contents(DATADIR."/temp/rekuser.dat", serialize($arraylink), LOCK_EX);
 }
 
-// ----------- Функция проверки лицензии и обновления ------------//
+// ----------- Функция вывода версии и автообновления ------------//
 function site_verification() {
 	global $config;
 
-	if (!empty($config['rotorlicense'])) {
-		echo '<img src="/images/img/key.gif" alt="image" /> <b><a href="changes.php?act=verifi"><span style="color:#00cc00">Лицензионная версия</span></a> (<a href="changes.php?act=reload">'.$config['rotorversion'].'</a>)</b><br /><br />';
-	} else {
-		echo '<img src="/images/img/exit.gif" alt="image" /> <b><a href="changes.php?act=verifi"><span style="color:#ff0000">Бесплатная версия ('.$config['rotorversion'].')</span></a></b><br /><br />';
-	}
+	echo '<img src="/images/img/key.gif" alt="image" /> <b>Версия '.$config['rotorversion'].'</b><br /><br />';
 
-	if (stats_changes() > $config['rotorversion']) {
-		if (file_exists(DATADIR.'/upgrade_'.stats_changes().'.dat')) {
-			include_once (DATADIR.'/upgrade_'.stats_changes().'.dat');
-		} else {
-			echo '<img src="/images/img/custom.gif" alt="image" />  <b><a href="changes.php?"><span style="color:#ff0000">Доступна новая версия '.stats_changes().'</span></a></b><br /><br />';
+	// Новый механизм обновлений
+	$upgrade_sql = glob(DATADIR.'/*.dat');
+
+	if ($upgrade_sql) {
+		natcasesort($upgrade_sql);
+
+		$lastupgrade = basename(end($upgrade_sql));
+		$version = substr(strstr($lastupgrade, '_'), 1, -4);
+
+		if ($version > $config['rotorversion']) {
+			include_once (DATADIR.'/'.$lastupgrade);
 		}
-	}
-}
-
-function license_verification() {
-	global $config;
-
-	$servername = $_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-
-	$geturl = 'http://visavi.net/rotorcms/index.php?act=check&site='.$servername;
-
-	if (@file_get_contents($geturl)) {
-		$data = file_get_contents($geturl);
-	} else {
-		$data = curl_connect($geturl, 'Mozilla/5.0', $config['proxy']);
-	}
-
-	$verification = (stristr($data, '--VERIFICATION--')) ? 1 : 0;
-	$activate = (stristr($data, '--LICENSE_SITE--')) ? 1 : 0;
-	$banned = (stristr($data, '--BANNED_IP--')) ? 1 : 0;
-
-	if (!empty($verification)) {
-		if (!empty($activate)) {
-			echo '<img src="/images/img/key.gif" alt="image" /> <b>Сайт '.$servername.' использует лицензионную версию RotorCMS</b><br /><br />';
-		} else {
-			echo '<img src="/images/img/exit.gif" alt="image" /> <b>На сайт '.$servername.'  не выдавалась лицензия, используется бесплатная версия RotorCMS</b><br /><br />';
-			echo '<img src="/images/img/reload.gif" alt="image" /> <b><a href="http://visavi.net/rotorcms/?act=licensefaq">Подробнее о лицензии</a></b><br /><br />';
-		}
-
-		DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorlicense', $activate));
-		save_setting();
-	} elseif (!empty($banned)) {
-		show_error('Ошибка! IP-адрес вашего сервера забанен на сайте <a href="http://visavi.net">visavi.net</a>!');
-		echo 'Пожалуйста свяжитесь с администратором сайта и сообщите о проблеме<br />';
-	} else {
-		show_error('Ошибка! Не удалось соединиться с сайтом <a href="http://visavi.net">visavi.net</a> для проверки лицензии!');
-		echo 'Попробуйте повторить активацию лицензии через некоторое время<br />';
-	}
-}
-
-// ----------- Функция определения последней версии RotorCMS ------------//
-function stats_changes() {
-	global $config;
-
-	if (@filemtime(DATADIR."/temp/changes.dat") < time()-86400) {
-		if (@copy("http://visavi.net/rotorcms/rotor.txt", DATADIR."/temp/changes.dat")) {
-		} else {
-			$data = curl_connect("http://visavi.net/rotorcms/rotor.txt", 'Mozilla/5.0', $config['proxy']);
-			file_put_contents(DATADIR."/temp/changes.dat", $data);
-		}
-	}
-
-	$data = file_get_contents(DATADIR."/temp/changes.dat");
-
-	if (is_serialized($data)) {
-		$data = unserialize($data);
-		return $data['version'];
 	}
 }
 
@@ -2278,45 +2224,6 @@ function include_javascript(){
 
 	echo '<link rel="stylesheet" type="text/css" href="/assets/markitup/style.css" />'."\r\n";
 	echo '<link rel="stylesheet" type="text/css" href="/assets/css/app.css" />'."\r\n";
-}
-
-// ------------- Вывод спонсорских сайтов -------------//
-function show_sponsors(){
-	global $config;
-
-	if (empty($config['rotorlicense'])) {
-		if (@filemtime(DATADIR.'/temp/sponsors.dat') < time()-86400) {
-			if (@copy("http://visavi.net/rotorcms/sponsors.txt", DATADIR."/temp/sponsors.dat")) {
-			} else {
-				$data = curl_connect("http://visavi.net/rotorcms/sponsors.txt", 'Mozilla/5.0', $config['proxy']);
-				file_put_contents(DATADIR."/temp/sponsors.dat", $data);
-			}
-		}
-
-		$advert = file_get_contents(DATADIR."/temp/sponsors.dat");
-
-		if (is_serialized($advert)) {
-			$advert = unserialize($advert);
-
-			if (!empty($advert)){
-
-				$keys = array();
-				foreach($advert['sponsors'] as $key=>$val) {
-
-					if (!empty($val['sponsor_url'])){
-						$percent = ceil(100 / ($advert['total'] / $val['sponsor_sort']));
-
-						for ($i=0; $i<$percent; $i++){
-							$keys[] = $key;
-						}
-					}
-				}
-
-				$data = $advert['sponsors'][$keys[array_rand($keys)]];
-				return '<b><a href="'.$data['sponsor_url'].'" rel="nofollow">'.$data['sponsor_title'].'</a></b><br />';
-			}
-		}
-	}
 }
 
 // ------------- Прогресс бар -------------//

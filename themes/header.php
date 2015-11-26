@@ -57,7 +57,6 @@ include_once (BASEDIR.'/themes/'.$config['themes'].'/index.php');
 	<?php include_once (DATADIR.'/advert/top_all.dat'); ?>
 
 	<?= show_advertadmin(); /* Админска реклама */ ?>
-	<?= show_sponsors(); /* Реклама спонсоров */ ?>
 	<?= show_advertuser(); /* Реклама за игровые деньги */ ?>
 </div>
 
