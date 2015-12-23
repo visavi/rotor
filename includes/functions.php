@@ -1045,16 +1045,6 @@ function chmode ($path = ".") {
 		closedir($handle);
 	}
 }
-function mc($str) {
-	global $config;
-	if (empty($config['rotorlicense'])) {
-		return preg_replace('#</body>#i',
-			'<div style="text-align:center"><a href="http://'.str_rot13('ivfniv.arg').'"><small>'.str_rot13('Cbjrerq ol EbgbePZF').'</small></a></div></body>',
-			$str, 1);
-	} else {
-		return $str;
-	}
-}
 
 // --------------- Функция определение онлайн-статуса ---------------//
 function user_online($login) {
@@ -1801,7 +1791,7 @@ function save_advertadmin() {
 				$val['adv_title'] = '<span style="color:'.$val['adv_color'].'">'.$val['adv_title'].'</span>';
 			}
 
-			$arraylink[] = '<b><a href="'.$val['adv_url'].'" target="_blank" rel="nofollow">'.$val['adv_title'].'</a></b><br />';
+			$arraylink[] = '<b><a href="'.$val['adv_url'].'" target="_blank">'.$val['adv_title'].'</a></b><br />';
 		}
 	}
 
