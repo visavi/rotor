@@ -9,6 +9,8 @@
 <img src="/images/img/act.png" alt="image" /> <a href="/gallery/">Фотогалерея</a> (<?=stats_gallery()?>)<br />
 <img src="/images/img/act.png" alt="image" /> <a href="/votes/">Голосования</a> (<?=stats_votes()?>)<br />
 <img src="/images/img/act.png" alt="image" /> <a href="/pages/offers.php">Предложения / Проблемы</a> (<?=stats_offers()?>)<br />
+<img src="/images/img/act.png" alt="image" /> <a href="/chat/">Мини-чат</a> (<?= stats_minichat() ?>)<br />
+
 
 <div class="b"><img src="/images/img/cup.gif" alt="image" /> <b><a href="/events/">События</a></b> (<?=stats_events()?>)</div>
 <?=show_events()?>
@@ -24,6 +26,7 @@
 
 <div class="b"><img src="/images/img/fruit.gif" alt="image" /> <b><a href="/pages/index.php">Сервисы сайта</a></b></div>
 <img src="/images/img/act.png" alt="image" /> <a href="/mail/">Обратная связь</a><br />
+<img src="/images/img/act.png" alt="image" /> <a href="/board/">Доска объявлений</a> (<?= stats_board() ?>)<br />
 <img src="/images/img/act.png" alt="image" /> <a href="/pages/userlist.php">Список юзеров</a> (<?=stats_users()?>)<br />
 <img src="/images/img/act.png" alt="image" /> <a href="/pages/adminlist.php">Администрация</a> (<?=stats_admins()?>)<br />
 <img src="/images/img/act.png" alt="image" /> <a href="/pages/index.php?act=stat">Информация</a><br />

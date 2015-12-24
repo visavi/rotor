@@ -14,7 +14,7 @@ include_once ('../themes/header.php');
 
 if (is_admin()) {
 	show_title('Панель управления');
-	site_verification();
+	site_version();
 ?>
 	<div class="b"><img src="/images/img/panel.gif" alt="image" /> <b>Модератор</b></div>
 	<img src="/images/img/act.png" alt="image" /> <a href="chat.php">Админ-чат</a> (<?=stats_chat()?>)<br />

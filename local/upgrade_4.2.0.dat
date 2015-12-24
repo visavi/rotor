@@ -35,7 +35,7 @@ if (empty($check)) {
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));
-save_setting();
+clearCache();
 
 echo '<div class="note"><b>RotorCMS автоматически обновлен до версии ' . $version . '</b></div><br />';
 ?>

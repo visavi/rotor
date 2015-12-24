@@ -91,19 +91,7 @@ if (is_admin(array(101))) {
 
 		if ($uid == $_SESSION['token']) {
 
-			$cachefiles = glob(DATADIR.'/temp/*.dat');
-			$cachefiles = array_diff($cachefiles, array(DATADIR.'/temp/checker.dat', DATADIR.'/temp/counter7.dat'));
-
-			if (is_array($cachefiles) && count($cachefiles)>0){
-				foreach ($cachefiles as $file) {
-
-					unlink ($file);
-				}
-			}
-
-			// Авто-кэширование данных
-			save_navigation();
-			save_ipban();
+			clearCache();
 
 			$_SESSION['note'] = 'Кэш-файлы успешно удалены!';
 			redirect("cache.php");
