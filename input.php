@@ -55,13 +55,13 @@ case 'index':
 				}
 
 				notice('Вы успешно авторизованы!');
-				redirect($config['home'].'/index.php');
+				redirect('/index.php');
 			}
 		}
 	}
 
 	notice('Ошибка авторизации. Неправильный логин или пароль!');
-	redirect($config['home'].'/pages/login.php');
+	redirect('/pages/login.php');
 break;
 ############################################################################################
 ##                                           Выход                                        ##
@@ -73,10 +73,10 @@ case 'exit':
 	setcookie(session_name(), '', time() - 3600, '/', '');
 	session_destroy();
 
-	redirect($config['home'].'/index.php');
+	redirect('/index.php');
 break;
 
 default:
-	redirect($config['home'].'/index.php');
+	redirect('/index.php');
 endswitch;
 ?>

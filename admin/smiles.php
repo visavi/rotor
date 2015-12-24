@@ -12,8 +12,6 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-include_once ('../includes/upload.php');
-
 $smilemaxsize = 10240; // Максимальный вес смайла, byte
 $smilemaxweight = 100; // Максимальный размер смайла, px
 $smileminweight = 16; // Минимальный размер смайла, px

@@ -34,7 +34,7 @@ if (!is_user()){
 	echo '<span style="color:#ff0000">'.$config['home'].'/input.php?login=ВАШ_ЛОГИН&amp;pass=ВАШ_ПАРОЛЬ</span><br /><br />';
 
 } else {
-	redirect($config['home'].'/index.php');
+	redirect('/index.php');
 }
 
 include_once ('../themes/footer.php');

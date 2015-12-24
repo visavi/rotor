@@ -42,5 +42,5 @@ if (!empty($config['errorlog'])){
 	endswitch;
 }
 
-redirect($config['home'].'/index.php');
+redirect('/index.php');
 ?>

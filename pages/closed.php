@@ -18,7 +18,7 @@ if ($config['closedsite'] == 2) {
 	echo 'Администрация сайта приносит вам свои извинения за возможные неудобства.<br />';
 	echo 'Работа сайта возможно возобновится в ближайшее время.<br /><br />';
 } else {
-	redirect($config['home'].'/index.php');
+	redirect('/index.php');
 }
 
 include_once ('../themes/footer.php');

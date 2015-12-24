@@ -39,11 +39,11 @@ header('Content-type:text/html; charset=utf-8');
 				</div>
 
 				<div class="menu">
-					<a href="/forum">Форум</a>
-					<a href="/book">Гостевая</a>
-					<a href="/news">Новости</a>
-					<a href="/load">Скрипты</a>
-					<a href="/blog">Блоги</a>
+					<a href="/forum/">Форум</a>
+					<a href="/book/">Гостевая</a>
+					<a href="/news/">Новости</a>
+					<a href="/load/">Скрипты</a>
+					<a href="/blog/">Блоги</a>
 
 					<span class="mright">
 
