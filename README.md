@@ -1,4 +1,4 @@
-RotorCMS 4.1
+RotorCMS 4.2
 =========
 
 Добро пожаловать!
@@ -30,6 +30,7 @@ RotorCMS 4.1
  * **local/backup (chmod 777)**
  * **local/main (chmod 777)**
  * **local/temp (chmod 777)**
+ * **local/board (chmod 777)**
  * **А также всем файлам внутри папки local/main (chmod 666)**
 
 

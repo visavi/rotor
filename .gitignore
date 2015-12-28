@@ -11,3 +11,5 @@ upload/photos
 upload/pictures
 upload/thumbnail
 includes/connect.php
+composer.phar
+composer.lock

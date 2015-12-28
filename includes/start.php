@@ -35,10 +35,15 @@ include_once (BASEDIR.'/includes/connect.php');
 
 // -------- Автозагрузка классов ---------- //
 function autoloader($class) {
+	$class = str_replace('\\', '/', $class);
 	include_once BASEDIR.'/includes/classes/'.$class.'.php';
 }
 
 spl_autoload_register('autoloader');
+
+if (file_exists(BASEDIR.'/includes/vendor/autoload.php')) {
+	include_once BASEDIR.'/includes/vendor/autoload.php';
+}
 
 if (!file_exists(DATADIR.'/temp/setting.dat')) {
 	$queryset = DB::run() -> query("SELECT `setting_name`, `setting_value` FROM `setting`;");
