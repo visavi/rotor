@@ -1,7 +1,8 @@
 local/antidos/
 local/backup/
-local/temp/
 local/board/
+local/cache/
+local/temp/
 upload/avatars/
 upload/counters
 upload/events
