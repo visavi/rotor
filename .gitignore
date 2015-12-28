@@ -11,5 +11,6 @@ upload/photos
 upload/pictures
 upload/thumbnail
 includes/connect.php
+includes/vendor
 composer.phar
 composer.lock
