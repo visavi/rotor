@@ -3,6 +3,8 @@ local/backup/
 local/board/
 local/cache/
 local/temp/
+load/files/
+load/screen/
 upload/avatars/
 upload/counters
 upload/events
