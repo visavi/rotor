@@ -31,7 +31,15 @@ define('PCLZIP_TEMPORARY_DIR', BASEDIR.'/local/temp/');
 session_name('SID');
 session_start();
 
-include_once (BASEDIR.'/includes/connect.php');
+if (file_exists(BASEDIR.'/includes/connect.php')) {
+	include_once (BASEDIR.'/includes/connect.php');
+} else {
+	die('Переименуйте файл connect.example.php в connect.php в директории include!');
+}
+
+if (file_exists(BASEDIR.'/includes/vendor/autoload.php')) {
+	include_once BASEDIR.'/includes/vendor/autoload.php';
+}
 
 // -------- Автозагрузка классов ---------- //
 function autoloader($class) {
@@ -40,10 +48,6 @@ function autoloader($class) {
 }
 
 spl_autoload_register('autoloader');
-
-if (file_exists(BASEDIR.'/includes/vendor/autoload.php')) {
-	include_once BASEDIR.'/includes/vendor/autoload.php';
-}
 
 if (!file_exists(DATADIR.'/temp/setting.dat')) {
 	$queryset = DB::run() -> query("SELECT `setting_name`, `setting_value` FROM `setting`;");
