@@ -26,10 +26,10 @@ $arrfile = array(
 	'load/loader',
 	'local/antidos',
 	'local/backup',
-	//'local/main',
+	'local/board',
+	'local/main',
 	'local/temp'
 );
-
 
 header("Content-type:text/html; charset=utf-8");
 echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';

@@ -13,7 +13,16 @@ ini_set('html_errors', true);
 ini_set('error_reporting', E_ALL);
 
 include_once ('func.php');
-include_once ('../includes/connect.php');
+
+if (file_exists('../includes/connect.php')) {
+	include_once ('../includes/connect.php');
+} else {
+	copy('../includes/connect.example.php', '../includes/connect.php');
+
+	if (! file_exists('../includes/connect.php')) {
+		die('Переименуйте файл connect.example.php в connect.php в директории include!');
+	}
+}
 
 $arrfile = array(
 	'includes/connect.php',
@@ -32,7 +41,8 @@ $arrfile = array(
 	'load/loader',
 	'local/antidos',
 	'local/backup',
-	//'local/main',
+	'local/board',
+	'local/main',
 	'local/temp'
 );
 
@@ -109,30 +119,23 @@ switch ($act):
 
 			$error_setting = 0;
 
-			if (version_compare(PHP_VERSION, '5.2.1') > 0) {
-				echo '<img src="../images/img/plus.gif" alt="image" /> Версия PHP 5.2.1 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . phpversion() . ')<br />';
+			if (version_compare(PHP_VERSION, '5.2.4') > 0) {
+				echo '<img src="../images/img/plus.gif" alt="image" /> Версия PHP 5.2.4 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br />';
 			} else {
-				echo '<img src="../images/img/minus.gif" alt="image" /> Версия PHP 5.2.1 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . phpversion() . ')<br />';
+				echo '<img src="../images/img/minus.gif" alt="image" /> Версия PHP 5.2.4 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br />';
 				$error_critical = 1;
 			}
 
 			if (extension_loaded('pdo_mysql')) {
-				if (getModuleSetting('pdo_mysql', 'Client API version') != "") {
-					$pdoversion = strtok(getModuleSetting('pdo_mysql', 'Client API version'), '-');
-				} elseif (getModuleSetting('pdo_mysql', 'PDO Driver for MySQL, client library version') != "") {
-					$pdoversion = getModuleSetting('pdo_mysql', 'PDO Driver for MySQL, client library version');
-				} else {
-					$pdoversion = 'Не определено';
-				}
 
-				echo '<img src="../images/img/plus.gif" alt="image" /> Расширение PDO-MySQL: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . $pdoversion . ')<br />';
+				echo '<img src="../images/img/plus.gif" alt="image" /> Расширение PDO-MySQL: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(getModuleSetting('pdo_mysql', array('Client API version', 'PDO Driver for MySQL, client library version')), '-') . ')<br />';
 			} else {
 				echo '<img src="../images/img/minus.gif" alt="image" /> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
 				$error_critical = 1;
 			}
 
 			if (extension_loaded('gd')) {
-				echo '<img src="../images/img/plus.gif" alt="image" /> Библиотека GD: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . getModuleSetting('gd', 'GD Version') . ')<br />';
+				echo '<img src="../images/img/plus.gif" alt="image" /> Библиотека GD: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . getModuleSetting('gd', array('GD Version', 'GD library Version', 'GD headers Version')) . ')<br />';
 			} else {
 				echo '<img src="../images/img/minus.gif" alt="image" /> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
 				$error_setting++;
@@ -149,13 +152,6 @@ switch ($act):
 				echo '<img src="../images/img/plus.gif" alt="image" /> Safe Mode: <b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
 			} else {
 				echo '<img src="../images/img/minus.gif" alt="image" /> Safe Mode: <b><span style="color:#ffa500">Предупреждение</span></b> (Включено)<br />';
-				$error_setting++;
-			}
-
-			if (!ini_get('magic_quotes_runtime')) {
-				echo '<img src="../images/img/plus.gif" alt="image" /> Magic Quotes Runtime: <b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
-			} else {
-				echo '<img src="../images/img/minus.gif" alt="image" /> Magic Quotes Runtime: <b><span style="color:#ffa500">Предупреждение</span></b> (Включено)<br />';
 				$error_setting++;
 			}
 
@@ -212,7 +208,7 @@ switch ($act):
 				echo '<img src="../images/img/right.gif" alt="image" /> '.$file . ' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br />';
 			}
 
-			echo '<br />Если какой-то пункт выделен красным, необходимо зайти по фтп и выставить CHMOD разрешающую запись<br />';
+			echo '<br />Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br />';
 			echo 'Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br /><br />';
 
 			if (empty($error_critical) && empty($not_found_errors) && empty($chmod_errors)) {
@@ -425,7 +421,7 @@ define ('DBPASS', '$dbpass');
 					if (preg_match('|^[a-z0-9\-]+$|i', $password)) {
 						if ($password == $password2) {
 							if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mail)) {
-								if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
+								if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
 									try {
 										$db = new PDO('mysql:host=' . DBHOST . ';port=' . DBPORT . ';dbname=' . DBNAME, DBUSER, DBPASS);
 										$db -> setAttribute(PDO :: ATTR_ERRMODE, PDO :: ERRMODE_EXCEPTION);

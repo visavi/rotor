@@ -65,12 +65,22 @@ function parsePHPModules() {
 	return $vModules;
 }
 // ------------------------------------------------------------------//
-function getModuleSetting($pModuleName, $pSetting) {
+function getModuleSetting($pModuleName, $pSettings) {
 	$vModules = parsePHPModules();
 
-	if (!empty($vModules[$pModuleName][$pSetting])) {
-		return $vModules[$pModuleName][$pSetting];
+	if (is_array($pSettings)) {
+		foreach ($pSettings as $pSetting) {
+			if (isset($vModules[$pModuleName][$pSetting])) {
+				return $vModules[$pModuleName][$pSetting];
+			}
+		}
+	} else {
+
+		if (isset($vModules[$pModuleName][$pSettings])) {
+			return $vModules[$pModuleName][$pSettings];
+		}
 	}
+	return 'Не определено';
 }
 // ------------------ Функция генерирования паролей --------------------//
 function generate_password($length = "") {
@@ -94,5 +104,3 @@ function utf_lower($str) {
 
 	return strtr($str, $arraytolower);
 }
-
-?>
