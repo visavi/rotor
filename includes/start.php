@@ -27,7 +27,6 @@ define('DATADIR', BASEDIR.'/local');
 define('SITETIME', time());
 define('PCLZIP_TEMPORARY_DIR', BASEDIR.'/local/temp/');
 
-//@ini_set('session.save_path', dirname(BASEDIR).'/tmp');
 session_name('SID');
 session_start();
 
@@ -57,4 +56,3 @@ if (!file_exists(DATADIR.'/temp/setting.dat')) {
 $config = unserialize(file_get_contents(DATADIR.'/temp/setting.dat'));
 
 date_default_timezone_set($config['timezone']);
-?>

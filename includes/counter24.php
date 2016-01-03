@@ -109,5 +109,5 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmYH") != 
 	ImageDestroy($img);
 }
 
-echo '<img src="'.$imagecache.'" alt="Сутки" /><br /><br />';
+echo '<img src="'.$imagecache.'?'.date_fixed(SITETIME, "dmYH").'" alt="Сутки" /><br /><br />';
 ?>
