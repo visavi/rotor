@@ -23,7 +23,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-	$total = DB::run()->querySingle("SELECT count(*) FROM `guest`;");
+	$total = DBM::run()->count('guest');
 
 	if ($total > 0 && $start >= $total) {
 		$start = last_page($total, $config['bookpost']);
@@ -32,8 +32,7 @@ case 'index':
 	$page = floor(1 + $start / $config['bookpost']);
 	$config['newtitle'] = 'Гостевая книга (Стр. '.$page.')';
 
-	$queryguest = DB::run()->query("SELECT * FROM `guest` ORDER BY `guest_time` DESC LIMIT ".$start.", ".$config['bookpost'].";");
-	$posts = $queryguest->fetchAll();
+	$posts = DBM::run()->select('guest', null, $config['bookpost'], $start, array('guest_time'=>'DESC'));
 
 	render('book/index', array('posts' => $posts, 'start' => $start, 'total' => $total));
 
@@ -53,19 +52,29 @@ case 'add':
 				if (is_quarantine($log) || $config['bookadds'] == 1) {
 					if (is_flood($log)) {
 
-						$msg = no_br($msg);
-						$msg = antimat($msg);
-						$msg = smiles($msg);
+						$msg = smiles(antimat(no_br($msg)));
 
 						$bookscores = ($config['bookscores']) ? 1 : 0;
 
-						DB::run()->query("UPDATE `users` SET `users_allguest`=`users_allguest`+1, `users_point`=`users_point`+?, `users_money`=`users_money`+5 WHERE `users_login`=?;", array($bookscores, $log));
+						$user = DBM::run()->update('users', array(
+							'users_allguest' => array(1),
+							'users_point'    => array($bookscores),
+							'users_money'    => array(5),
+						), array(
+							'users_login' => $log
+						));
 
-						DB::run()->query("INSERT INTO `guest` (`guest_user`, `guest_text`, `guest_ip`, `guest_brow`, `guest_time`) VALUES (?, ?, ?, ?, ?);", array($log, $msg, $ip, $brow, SITETIME));
+						$guest = DBM::run()->insert('guest', array(
+							'guest_user' => $log,
+							'guest_text' => $msg,
+							'guest_ip'   => $ip,
+							'guest_brow' => $brow,
+							'guest_time' => SITETIME,
+						));
 
-						DB::run()->query("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT ".$config['maxpostbook'].") AS del);");
+						DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array(':limit' => intval($config['maxpostbook'])));
 
-						$_SESSION['note'] = 'Сообщение успешно добавлено!';
+						notice('Сообщение успешно добавлено!');
 						redirect("index.php");
 
 					} else {
@@ -91,15 +100,19 @@ case 'add':
 				if (utf_strlen($msg) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
 					if (is_flood($log)) {
 
-						$msg = no_br($msg);
-						$msg = antimat($msg);
-						$msg = smiles($msg);
+						$msg = smiles(antimat(no_br($msg)));
 
-						DB::run()->query("INSERT INTO `guest` (`guest_user`, `guest_text`, `guest_ip`, `guest_brow`, `guest_time`) VALUES (?, ?, ?, ?, ?);", array($config['guestsuser'], $msg, $ip, $brow, SITETIME));
+						$guest = DBM::run()->insert('guest', array(
+							'guest_user' => $config['guestsuser'],
+							'guest_text' => $msg,
+							'guest_ip'   => $ip,
+							'guest_brow' => $brow,
+							'guest_time' => SITETIME,
+						));
 
-						DB::run()->query("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT ".$config['maxpostbook'].") AS del);");
+						DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array(':limit' => intval($config['maxpostbook'])));
 
-						$_SESSION['note'] = 'Сообщение успешно добавлено!';
+						notice('Сообщение успешно добавлено!');
 						redirect("index.php");
 
 					} else {
@@ -131,16 +144,27 @@ case 'spam':
 
 	if (is_user()) {
 		if ($uid == $_SESSION['token']) {
-			$data = DB::run()->queryFetch("SELECT * FROM `guest` WHERE `guest_id`=? LIMIT 1;", array($id));
+			$data = DBM::run()->selectFirst('guest', array('guest_id' => $id));
 
-			if (!empty($data)) {
-				$queryspam = DB::run()->querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(2, $id));
+			if (! empty($data)) {
 
-				if (empty($queryspam)) {
+				$spam = DBM::run()->selectFirst('spam', array('spam_key' => 2, 'spam_idnum' => $id));
+
+				if (empty($spam)) {
 					if (is_flood($log)) {
-						DB::run()->query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(2, $data['guest_id'], $log, $data['guest_user'], $data['guest_text'], $data['guest_time'], SITETIME, $config['home'].'/book/index.php?start='.$start));
 
-						$_SESSION['note'] = 'Жалоба успешно отправлена!';
+						$spam = DBM::run()->insert('spam', array(
+							'spam_key'     => 2,
+							'spam_idnum'   => $data['guest_id'],
+							'spam_user'    => $log,
+							'spam_login'   => $data['guest_user'],
+							'spam_text'    => $data['guest_text'],
+							'spam_time'    => $data['guest_time'],
+							'spam_addtime' => SITETIME,
+							'spam_link'    => '/book/index.php?start='.$start,
+						));
+
+						notice('Жалоба успешно отправлена!');
 						redirect("index.php?start=$start");
 
 					} else {
@@ -170,9 +194,8 @@ case 'reply':
 	$id = abs(intval($_GET['id']));
 
 	if (is_user()) {
-		$post = DB::run()->queryFetch("SELECT * FROM `guest` WHERE `guest_id`=? LIMIT 1;", array($id));
-
-		if (!empty($post)) {
+		$post = DBM::run()->selectFirst('guest', array('guest_id' => $id));
+		if (! empty($post)) {
 
 			render ('book/reply', array('post' => $post));
 
@@ -194,7 +217,7 @@ case 'quote':
 	$id = abs(intval($_GET['id']));
 
 	if (is_user()) {
-		$post = DB::run()->queryFetch("SELECT * FROM `guest` WHERE `guest_id`=? LIMIT 1;", array($id));
+		$post = DBM::run()->selectFirst('guest', array('guest_id' => $id));
 
 		if (!empty($post)) {
 			$post['guest_text'] = preg_replace('|\[q\](.*?)\[/q\](<br />)?|', '', $post['guest_text']);
@@ -220,9 +243,10 @@ case 'edit':
 	$id = abs(intval($_GET['id']));
 
 	if (is_user()) {
-		$post = DB::run()->queryFetch("SELECT * FROM `guest` WHERE `guest_id`=? AND `guest_user`=? LIMIT 1;", array($id, $log));
 
-		if (!empty($post)) {
+		$post = DBM::run()->selectFirst('guest', array('guest_id' => $id, 'guest_user' =>$log));
+
+		if (! empty($post)) {
 			if ($post['guest_time'] + 600 > SITETIME) {
 
 				$post['guest_text'] = yes_br(nosmiles($post['guest_text']));
@@ -254,17 +278,21 @@ case 'editpost':
 	if (is_user()) {
 		if ($uid == $_SESSION['token']) {
 			if (utf_strlen($msg) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
-				$post = DB::run()->queryFetch("SELECT * FROM `guest` WHERE `guest_id`=? AND `guest_user`=? LIMIT 1;", array($id, $log));
 
-				if (!empty($post)) {
+				$post = DBM::run()->selectFirst('guest', array('guest_id' => $id, 'guest_user' =>$log));
+				if (! empty($post)) {
 					if ($post['guest_time'] + 600 > SITETIME) {
-						$msg = no_br($msg);
-						$msg = antimat($msg);
-						$msg = smiles($msg);
+						$msg = smiles(antimat(no_br($msg)));
 
-						DB::run()->query("UPDATE `guest` SET `guest_text`=?, `guest_edit`=?, `guest_edit_time`=? WHERE `guest_id`=?;", array($msg, $log, SITETIME, $id));
+						$guest = DBM::run()->update('guest', array(
+							'guest_text'      => $msg,
+							'guest_edit'      => $log,
+							'guest_edit_time' => SITETIME,
+						), array(
+							'guest_id' => $id
+						));
 
-						$_SESSION['note'] = 'Сообщение успешно отредактировано!';
+						notice('Сообщение успешно отредактировано!');
 						redirect("index.php?start=$start");
 
 					} else {

@@ -48,6 +48,8 @@ function autoloader($class) {
 
 spl_autoload_register('autoloader');
 
+DBM::run()->config(DBHOST, DBNAME, DBUSER, DBPASS, DBPORT);
+
 if (!file_exists(DATADIR.'/temp/setting.dat')) {
 	$queryset = DB::run() -> query("SELECT `setting_name`, `setting_value` FROM `setting`;");
 	$config = $queryset -> fetchAssoc();

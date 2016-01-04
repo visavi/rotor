@@ -5,9 +5,9 @@ class PDO_ extends PDO {
 
 	function __construct($dsn, $username, $password) {
 		parent::__construct($dsn, $username, $password);
-		$this -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$this -> setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-		$this -> setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+		$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 	}
 
 	function prepare($sql, $params = array()) {
@@ -19,19 +19,19 @@ class PDO_ extends PDO {
 
 	function query($sql, $params = array()) {
 		self::$counter++;
-		$stmt = $this -> prepare($sql);
-		$stmt -> execute($params);
+		$stmt = $this->prepare($sql);
+		$stmt->execute($params);
 		return $stmt;
 	}
 
 	function querySingle($sql, $params = array()) {
-		$stmt = $this -> query($sql, $params);
-		return $stmt -> fetchColumn(0);
+		$stmt = $this->query($sql, $params);
+		return $stmt->fetchColumn(0);
 	}
 
 	function queryFetch($sql, $params = array()) {
-		$stmt = $this -> query($sql, $params);
-		return $stmt -> fetch();
+		$stmt = $this->query($sql, $params);
+		return $stmt->fetch();
 	}
 
 	function queryCounter() {
@@ -46,7 +46,7 @@ class PDOStatement_ extends PDOStatement {
 		} else {
 			$params = func_get_args();
 		}
-		if (!is_array($params)) {
+		if (! is_array($params)) {
 			$params = array($params);
 		}
 		parent::execute($params);
@@ -54,13 +54,13 @@ class PDOStatement_ extends PDOStatement {
 	}
 
 	function fetchSingle() {
-		return $this -> fetchColumn(0);
+		return $this->fetchColumn(0);
 	}
 
 	function fetchAssoc() {
-		$this -> setFetchMode(PDO::FETCH_NUM);
+		$this->setFetchMode(PDO::FETCH_NUM);
 		$data = array();
-		while ($row = $this -> fetch()) {
+		while ($row = $this->fetch()) {
 			$data[$row[0]] = $row[1];
 		}
 		return $data;
@@ -75,12 +75,12 @@ class DB {
 
 	public static function run() {
 
-		if (!isset(self::$instance)) {
+		if (! isset(self::$instance)) {
 
 			try {
 				self::$instance = new PDO_('mysql:host='.DBHOST.';port='.DBPORT.';dbname='.DBNAME, DBUSER, DBPASS);
-				self::$instance -> exec('SET CHARACTER SET utf8');
-				self::$instance -> exec('SET NAMES utf8');
+				self::$instance->exec('SET CHARACTER SET utf8');
+				self::$instance->exec('SET NAMES utf8');
 			}
 
 			catch (PDOException $e) {
@@ -88,7 +88,7 @@ class DB {
 					header ('Location: /install/index.php');
 					exit;
 				}
-				die('Connection failed: '.$e -> getMessage());
+				die('Connection failed: '.$e->getMessage());
 			}
 		}
 		return self::$instance;
@@ -97,6 +97,4 @@ class DB {
 	final public function __destruct() {
 		self::$instance = null;
 	}
-
 }
-?>
