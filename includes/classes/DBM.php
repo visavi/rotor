@@ -635,7 +635,7 @@ class DBM {
 
 			// bind each parameter in the array
 			foreach ((array)$params as $key=>$val) {
-				$pstmt->bindValue($key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
+				$pstmt->bindValue(':'.$key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
 			}
 
 			// execute the query
@@ -669,7 +669,7 @@ class DBM {
 
 			// bind each parameter in the array
 			foreach ((array)$params as $key=>$val) {
-				$pstmt->bindValue($key, $val);
+				$pstmt->bindValue(':'.$key, $val, is_int($val) ? PDO::PARAM_INT : PDO::PARAM_STR);
 			}
 
 			// execute the query
@@ -715,6 +715,15 @@ class DBM {
 			return $this->pdo_exception->getMessage();
 		else
 			return 'Database temporarily unavailable';
+	}
+
+	/**
+	 * Проверяет является ли массив ассоциативным
+	 * @param  array   $array массив
+	 * @return boolean        результат
+	 */
+	private function isAssoc($array) {
+		return array_values($array) !== $array;
 	}
 
 	/**

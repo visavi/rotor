@@ -18,9 +18,9 @@ $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 show_title('Гостевая книга', 'Общение без ограничений');
 
 switch ($act):
-############################################################################################
-##                                    Главная страница                                    ##
-############################################################################################
+/**
+ * Главная страница
+ */
 case 'index':
 
 	$total = DBM::run()->count('guest');
@@ -38,9 +38,9 @@ case 'index':
 
 break;
 
-############################################################################################
-##                                    Добавление сообщения                                ##
-############################################################################################
+/**
+ * Добавление сообщения
+ */
 case 'add':
 
 	$msg = check($_POST['msg']);
@@ -72,7 +72,7 @@ case 'add':
 							'guest_time' => SITETIME,
 						));
 
-						DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array(':limit' => intval($config['maxpostbook'])));
+						DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array('limit' => intval($config['maxpostbook'])));
 
 						notice('Сообщение успешно добавлено!');
 						redirect("index.php");
@@ -89,9 +89,10 @@ case 'add':
 		} else {
 			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 		}
-		############################################################################################
-		##                                   Добавление для гостей                                ##
-		############################################################################################
+
+		/**
+		 * Добавление для гостей
+		 */
 	} elseif ($config['bookadds'] == 1) {
 		$provkod = check(strtolower($_POST['provkod']));
 
@@ -110,7 +111,7 @@ case 'add':
 							'guest_time' => SITETIME,
 						));
 
-						DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array(':limit' => intval($config['maxpostbook'])));
+						DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array('limit' => intval($config['maxpostbook'])));
 
 						notice('Сообщение успешно добавлено!');
 						redirect("index.php");
@@ -134,9 +135,9 @@ case 'add':
 	render('includes/back', array('link' => 'index.php', 'title' => 'Вернуться'));
 break;
 
-############################################################################################
-##                                    Жалоба на спам                                      ##
-############################################################################################
+/**
+ * Жалоба на спам
+ */
 case 'spam':
 
 	$uid = check($_GET['uid']);
@@ -186,9 +187,9 @@ case 'spam':
 	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'Вернуться'));
 break;
 
-############################################################################################
-##                                   Ответ на сообщение                                   ##
-############################################################################################
+/**
+ * Ответ на сообщение
+ */
 case 'reply':
 
 	$id = abs(intval($_GET['id']));
@@ -209,9 +210,9 @@ case 'reply':
 	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'Вернуться'));
 break;
 
-############################################################################################
-##                                   Цитирование сообщения                                ##
-############################################################################################
+/**
+ * Цитирование сообщения
+ */
 case 'quote':
 
 	$id = abs(intval($_GET['id']));
@@ -235,9 +236,9 @@ case 'quote':
 	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'Вернуться'));
 break;
 
-############################################################################################
-##                                   Подготовка к редактированию                          ##
-############################################################################################
+/**
+ * Подготовка к редактированию
+ */
 case 'edit':
 
 	$id = abs(intval($_GET['id']));
@@ -266,9 +267,9 @@ case 'edit':
 	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'Вернуться'));
 break;
 
-############################################################################################
-##                                    Редактирование сообщения                            ##
-############################################################################################
+/**
+ * Редактирование сообщения
+ */
 case 'editpost':
 
 	$uid = check($_GET['uid']);

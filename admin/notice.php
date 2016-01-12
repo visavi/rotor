@@ -15,178 +15,191 @@ include_once ('../themes/header.php');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
-if (is_admin(array(101))) {
-	show_title('Шаблоны писем');
+if (! is_admin(array(101))) redirect('/admin/');
 
-	switch ($act):
-	############################################################################################
-	##                                    Главная страница                                    ##
-	############################################################################################
-		case "index":
+show_title('Шаблоны писем');
 
-			$total = DB::run() -> querySingle("SELECT count(*) FROM `notice`;");
+switch ($act):
 
-			if ($total > 0) {
+/**
+ * Главная страница
+ */
+case 'index':
 
-				$querynotice = DB::run() -> query("SELECT * FROM `notice` ORDER BY `notice_id`;");
+	$total = DBM::run()->count('notice');
 
-				foreach ($querynotice as $notice) {
+	if ($total > 0) {
 
-					echo '<div class="b">';
+		$notices = DBM::run()->select('notice', null, null, null, array('notice_id'=>'ASC'));
 
-					echo '<img src="/images/img/mail.gif" alt="image" /> <b><a href="notice.php?act=edit&amp;id='.$notice['notice_id'].'">'.$notice['notice_name'].'</a></b>';
-					if (empty($notice['notice_protect'])) {
-						echo ' (<a href="notice.php?act=del&amp;id='.$notice['notice_id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>)';
-					} else {
-						echo ' (Системный шаблон)';
-					}
-					echo '</div>';
+		foreach ($notices as $notice) {
 
-					echo '<div>Изменено: ';
+			echo '<div class="b">';
 
-					if (!empty($notice['notice_user'])){
-						echo profile($notice['notice_user']);
-					}
-
-					echo ' ('.date_fixed($notice['notice_time']).')';
-
-					echo '</div>';
-				}
-
-				echo '<br />Всего шаблонов: '.$total.'<br /><br />';
-
+			echo '<img src="/images/img/mail.gif" alt="image" /> <b><a href="notice.php?act=edit&amp;id='.$notice['notice_id'].'">'.$notice['notice_name'].'</a></b>';
+			if (empty($notice['notice_protect'])) {
+				echo ' (<a href="notice.php?act=del&amp;id='.$notice['notice_id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>)';
 			} else {
-				show_error('Шаблонов еще нет!');
+				echo ' (Системный шаблон)';
 			}
-			echo '<img src="/images/img/open.gif" alt="image" /> <a href="notice.php?act=new">Добавить</a><br />';
-		break;
+			echo '</div>';
 
-		############################################################################################
-		##                                Coздание шаблона                                        ##
-		############################################################################################
-		case "new":
-			show_title('Новый шаблон');
+			echo '<div>Изменено: ';
 
-			echo '<div class="form">';
-			echo '<form action="notice.php?act=save&amp;uid='.$_SESSION['token'].'" method="post">';
-
-			echo 'Название: <br />';
-			echo '<input type="text" name="name" maxlength="100" size="50" /><br />';
-			echo '<textarea id="markItUp" cols="35" rows="20" name="text"></textarea><br />';
-			echo '<input type="submit" value="Сохранить" /></form></div><br />';
-
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="notice.php">Вернуться</a><br />';
-		break;
-
-		############################################################################################
-		##                              Редактирование шаблона                                    ##
-		############################################################################################
-		case "edit":
-			$notice = DB::run() -> queryFetch("SELECT * FROM `notice` WHERE `notice_id`=? LIMIT 1;", array($id));
-
-			if (!empty($notice)) {
-
-				if (!empty($notice['notice_protect'])) {
-					echo '<div class="info"><img src="/images/img/warning.gif" alt="image" /> <b>Вы редактируете системный шаблон</b></div><br />';
-				}
-
-				echo '<div class="form">';
-				echo '<form action="notice.php?act=save&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-
-				$notice['notice_text'] = yes_br(nosmiles($notice['notice_text']));
-
-				echo 'Название: <br />';
-				echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['notice_name'].'" /><br />';
-				echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['notice_text'].'</textarea><br />';
-				echo '<input type="submit" value="Изменить" /></form></div><br />';
-
-			} else {
-				show_error('Ошибка! Шаблона для редактирования не существует!');
+			if (!empty($notice['notice_user'])){
+				echo profile($notice['notice_user']);
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="notice.php">Вернуться</a><br />';
-		break;
+			echo ' ('.date_fixed($notice['notice_time']).')';
 
-		############################################################################################
-		##                                  Сохранение шаблона                                    ##
-		############################################################################################
-		case "save":
+			echo '</div>';
+		}
 
-			$uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
-			$name = (isset($_POST['name'])) ? check($_POST['name']) : '';
-			$text = (isset($_POST['text'])) ? check($_POST['text']) : '';
+		echo '<br />Всего шаблонов: '.$total.'<br /><br />';
 
-			$validation = new Validation;
+	} else {
+		show_error('Шаблонов еще нет!');
+	}
+	echo '<img src="/images/img/open.gif" alt="image" /> <a href="notice.php?act=new">Добавить</a><br />';
+break;
 
-			$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-				-> addRule('string', $name, 'Слишком длинный или короткий заголовок шаблона!', true, 5, 100)
-				-> addRule('string', $text, 'Слишком длинный или короткий текст шаблона!', true, 10, 65000);
+/**
+ * Coздание шаблона
+ */
+case 'new':
+	show_title('Новый шаблон');
 
-			if ($validation->run()) {
+	echo '<div class="form">';
+	echo '<form action="notice.php?act=save&amp;uid='.$_SESSION['token'].'" method="post">';
 
-				$text = no_br(str_replace('&#37;', '%', $text));
+	echo 'Название: <br />';
+	echo '<input type="text" name="name" maxlength="100" size="50" /><br />';
+	echo '<textarea id="markItUp" cols="35" rows="20" name="text"></textarea><br />';
+	echo '<input name="protect" id="protect" type="checkbox" value="1" /> <label for="protect">Системный шаблон</label><br />';
 
-				$notice = DB::run() -> queryFetch("SELECT * FROM `notice` WHERE `notice_id`=? LIMIT 1;", array($id));
+	echo '<input type="submit" value="Сохранить" /></form></div><br />';
 
-				if (empty($notice)) {
+	render('includes/back', array('link' => 'notice.php', 'title' => 'Вернуться'));
+break;
 
-					DB::run() -> query("INSERT INTO `notice` (`notice_name`, `notice_text`, `notice_user`, `notice_time`) VALUES (?, ?, ?, ?);", array($name, $text, $log, SITETIME));
-						$id = DB::run() -> lastInsertId();
+/**
+ * Редактирование шаблона
+ */
+case 'edit':
+	$notice = DBM::run()->selectFirst('notice', array('notice_id' => $id));
 
-				} else {
+	if (! empty($notice)) {
 
-					DB::run() -> query("UPDATE `notice` SET `notice_name`=?, `notice_text`=?, `notice_user`=?, `notice_time`=? WHERE `notice_id`=?", array($name, $text, $log, SITETIME, $id));
-				}
+		if (! empty($notice['notice_protect'])) {
+			echo '<div class="info"><img src="/images/img/warning.gif" alt="image" /> <b>Вы редактируете системный шаблон</b></div><br />';
+		}
 
-				$_SESSION['note'] = 'Шаблон успешно сохранен!';
-				redirect("notice.php?act=edit&id=$id");
+		echo '<div class="form">';
+		echo '<form action="notice.php?act=save&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-			} else {
-				show_error($validation->errors);
-			}
+		$notice['notice_text'] = yes_br(nosmiles($notice['notice_text']));
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="notice.php?act=edit&amp;id='.$id.'">Вернуться</a><br />';
-		break;
+		echo 'Название: <br />';
+		echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['notice_name'].'" /><br />';
+		echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['notice_text'].'</textarea><br />';
 
-		############################################################################################
-		##                                  Удаление шаблона                                      ##
-		############################################################################################
-		case 'del':
+		$checked = $notice['notice_protect'] ? ' checked="checked"' : '';
 
-			$uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
+		echo '<input name="protect" id="protect" type="checkbox" value="1" '.$checked.' /> <label for="protect">Системный шаблон</label><br />';
 
-			$notice = DB::run() -> queryFetch("SELECT * FROM `notice` WHERE `notice_id`=? LIMIT 1;", array($id));
+		echo '<input type="submit" value="Изменить" /></form></div><br />';
 
-			$validation = new Validation;
+	} else {
+		show_error('Ошибка! Шаблона для редактирования не существует!');
+	}
 
-			$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-				-> addRule('not_empty', $notice, 'Не найден шаблон для удаления!')
-				-> addRule('empty', $notice['notice_protect'], 'Запрещено удалять защищенный шаблон!');
+	render('includes/back', array('link' => 'notice.php', 'title' => 'Вернуться'));
+break;
 
-			if ($validation->run()) {
+/**
+ * Сохранение шаблона
+ */
+case "save":
 
-				DB::run() -> query("DELETE FROM `notice` WHERE `notice_id`=? LIMIT 1;", array($id));
+	$uid = ! empty($_GET['uid']) ? check($_GET['uid']) : 0;
+	$name = isset($_POST['name']) ? check($_POST['name']) : '';
+	$text = isset($_POST['text']) ? check($_POST['text']) : '';
+	$protect = ! empty($_POST['protect']) ? 1 : 0;
 
-				$_SESSION['note'] = 'Выбранный шаблон успешно удален!';
-				redirect("notice.php");
+	$validation = new Validation;
 
-			} else {
-				show_error($validation->errors);
-			}
+	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+		-> addRule('string', $name, 'Слишком длинный или короткий заголовок шаблона!', true, 5, 100)
+		-> addRule('string', $text, 'Слишком длинный или короткий текст шаблона!', true, 10, 65000);
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="notice.php">Вернуться</a><br />';
-		break;
+	if ($validation->run()) {
 
+		$notice = DBM::run()->selectFirst('notice', array('notice_id' => $id));
 
-	default:
+		$note = array(
+			'notice_name'    => $name,
+			'notice_text'    => no_br(str_replace('&#37;', '%', $text)),
+			'notice_user'    => $log,
+			'notice_protect' => $protect,
+			'notice_time'    => SITETIME,
+		);
+
+		if (empty($notice)) {
+
+			$id = DBM::run()->insert('notice', $note);
+
+		} else {
+
+			$note = DBM::run()->update('notice', $note,
+				array('notice_id' => $id)
+			);
+		}
+
+		notice('Шаблон успешно сохранен!');
+		redirect("notice.php?act=edit&id=$id");
+
+	} else {
+		show_error($validation->errors);
+	}
+
+	render('includes/back', array('link' => 'notice.php?act=edit&amp;id='.$id, 'title' => 'Вернуться'));
+break;
+
+/**
+ * Удаление шаблона
+ */
+case 'del':
+
+	$uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
+
+	$notice = DBM::run()->selectFirst('notice', array('notice_id' => $id));
+
+	$validation = new Validation;
+
+	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+		-> addRule('not_empty', $notice, 'Не найден шаблон для удаления!')
+		-> addRule('empty', $notice['notice_protect'], 'Запрещено удалять защищенный шаблон!');
+
+	if ($validation->run()) {
+
+		$delete = DBM::run()->delete('notice', array('notice_id' => $id));
+
+		notice('Выбранный шаблон успешно удален!');
 		redirect("notice.php");
-	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	} else {
+		show_error($validation->errors);
+	}
 
-} else {
-	redirect('/index.php');
-}
+	render('includes/back', array('link' => 'notice.php', 'title' => 'Вернуться'));
+break;
+
+
+default:
+	redirect("notice.php");
+endswitch;
+
+render('includes/back', array('link' => '/admin/', 'title' => 'В админку', 'icon' => 'panel.gif'));
 
 include_once ('../themes/footer.php');
 ?>

@@ -360,7 +360,7 @@ function yes_br($msg) {
 function smiles($str) {
 	global $config;
 
-	$query = DB::run()->query("SELECT `smiles_name`, `smiles_code` FROM `smiles` ORDER BY LENGTH(`smiles_code`) DESC;");
+	$query = DB::run()->query("SELECT `smiles_name`, `smiles_code` FROM `smiles` ORDER BY CHAR_LENGTH(`smiles_code`) DESC;");
 	$smiles = $query->fetchAll();
 
 	$count = 0;
@@ -442,7 +442,7 @@ function formattime($file_time, $round = 1) {
 
 // ------------------ Функция антимата --------------------//
 function antimat($str) {
-	$querymat = DB::run() -> query("SELECT `mat_string` FROM `antimat` ORDER BY LENGTH(`mat_string`) DESC;");
+	$querymat = DB::run() -> query("SELECT `mat_string` FROM `antimat` ORDER BY CHAR_LENGTH(`mat_string`) DESC;");
 	$arrmat = $querymat -> fetchAll(PDO::FETCH_COLUMN);
 
 	if (count($arrmat) > 0) {
