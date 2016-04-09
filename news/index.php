@@ -255,10 +255,10 @@ case 'add':
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
-			-> addRule('equal', array(is_flood($log), true), 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
-			-> addRule('not_empty', $data, 'Выбранного события не существует, возможно оно было удалено!')
+			-> addRule('equal', array(is_flood($log), true), 'Антифлуд! Разрешается комментировать раз в '.flood_period().' сек!')
+			-> addRule('not_empty', $data, 'Выбранной новости не существует, возможно она было удалена!')
 			-> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
-			-> addRule('empty', $data['event_closed'], 'Комментирование данного события запрещено!');
+			-> addRule('empty', $data['news_closed'], 'Комментирование данной новости запрещено!');
 
 		if ($validation->run(3)) {
 
