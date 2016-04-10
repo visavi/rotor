@@ -2501,8 +2501,8 @@ function real_ip()
 				$ip = trim($ip);
 
 				//filter the ip with filter functions
-				if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
-					return $ip;
+				if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) !== false) {
+					return $ip == '::1' ? '127.0.0.1' : $ip;
 				}
 			}
 		}

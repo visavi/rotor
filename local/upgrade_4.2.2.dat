@@ -32,6 +32,14 @@ if (empty($check)) {
 	echo 'Добавлены настройки количества денег при регистрации в таблицу setting<br />';
 }
 
+
+/* Добавление нового поля в таблицу категорий загрузки для указания директории */
+$check = DB::run() -> querySingle("SHOW COLUMNS FROM `cats` LIKE 'folder';");
+if (empty($check)) {
+	DB::run() -> query("ALTER TABLE `cats` ADD `folder` varchar(50) NOT NULL DEFAULT '';");
+	echo 'Добавлено поле folder в таблицу cats<br />';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));

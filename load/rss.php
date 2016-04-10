@@ -12,11 +12,7 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-if (isset($_GET['id'])) {
-	$id = abs(intval($_GET['id']));
-} else {
-	$id = 0;
-}
+$id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 
 show_title('Комментарии');
 

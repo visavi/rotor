@@ -12,16 +12,8 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-if (isset($_GET['start'])) {
-	$start = abs(intval($_GET['start']));
-} else {
-	$start = 0;
-}
-if (isset($_GET['sort'])) {
-	$sort = check($_GET['sort']);
-} else {
-	$sort = 'load';
-}
+$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$sort = isset($_GET['sort']) ? check($_GET['sort']) : 'load';
 
 switch ($sort) {
 	case 'rated': $order = 'downs_rated';
@@ -65,10 +57,12 @@ if ($total > 0) {
 		$start = 0;
 	}
 
-	$querydown = DB::run() -> query("SELECT `downs`.*, `cats_id`, `cats_name` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", array(1));
+	$querydown = DB::run() -> query("SELECT `downs`.*, `cats_id`, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", array(1));
 
 	while ($data = $querydown -> fetch()) {
-		$filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/load/files/'.$data['downs_link']) : 0;
+		$folder = $data['folder'] ? $data['folder'].'/' : '';
+
+		$filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/load/files/'.$folder.$data['downs_link']) : 0;
 
 		echo '<div class="b"><img src="/images/img/zip.gif" alt="image" /> ';
 		echo '<b><a href="down.php?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';

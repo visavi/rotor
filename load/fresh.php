@@ -12,11 +12,7 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-if (isset($_GET['start'])) {
-	$start = abs(intval($_GET['start']));
-} else {
-	$start = 0;
-}
+$start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0;
 
 show_title('Список свежих загрузок');
 
@@ -27,10 +23,12 @@ if ($total > 0) {
 		$start = 0;
 	}
 
-	$querydown = DB::run() -> query("SELECT `downs`.*, `cats_name` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_active`=? AND `downs_time`>? ORDER BY `downs_time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, SITETIME-3600 * 120));
+	$querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_active`=? AND `downs_time`>? ORDER BY `downs_time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, SITETIME-3600 * 120));
 
 	while ($data = $querydown -> fetch()) {
-		$filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/load/files/'.$data['downs_link']) : 0;
+		$folder = $data['folder'] ? $data['folder'].'/' : '';
+
+		$filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/load/files/'.$folder.$data['downs_link']) : 0;
 
 		echo '<div class="b">';
 
