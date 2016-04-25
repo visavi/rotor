@@ -91,7 +91,6 @@ case 'edit':
 	$datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `news_id`=? LIMIT 1;", array($id));
 
 	if (!empty($datanews)) {
-		$datanews['news_text'] = yes_br(nosmiles($datanews['news_text']));
 
 		echo '<b><big>Редактирование</big></b><br /><br />';
 
@@ -146,8 +145,6 @@ case 'change':
 		-> addRule('string', $msg, 'Слишком длинный или короткий текст новости!', true, 5, 10000);
 
 	if ($validation->run(1)) {
-
-		$msg = smiles(no_br($msg));
 
 		DB::run() -> query("UPDATE `news` SET `news_title`=?, `news_text`=?, `news_closed`=?, `news_top`=? WHERE `news_id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
 
@@ -227,8 +224,6 @@ case 'addnews':
 		-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
 	if ($validation->run()) {
-
-		$msg = smiles(no_br($msg));
 
 		DB::run() -> query("INSERT INTO `news` (`news_title`, `news_text`, `news_author`, `news_time`, `news_comments`, `news_closed`, `news_top`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($title, $msg, $log, SITETIME, 0, $closed, $top));
 

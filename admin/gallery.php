@@ -92,8 +92,6 @@ if (is_admin()) {
 
 			if (!empty($photo)) {
 
-				$photo['photo_text'] = yes_br(nosmiles($photo['photo_text']));
-
 				echo '<div class="form">';
 				echo '<form action="gallery.php?act=change&amp;gid='.$gid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 				echo 'Название: <br /><input type="text" name="title" value="'.$photo['photo_title'].'" /><br />';
@@ -128,9 +126,8 @@ if (is_admin()) {
 				if (!empty($photo)) {
 					if (utf_strlen($title) >= 5 && utf_strlen($title) < 50) {
 						if (utf_strlen($text) <= 1000) {
-							$text = no_br($text);
+
 							$text = antimat($text);
-							$text = smiles($text);
 
 							DB::run() -> query("UPDATE `photo` SET `photo_title`=?, `photo_text`=?, `photo_closed`=? WHERE `photo_id`=?;", array($title, $text, $closed, $gid));
 

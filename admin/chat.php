@@ -103,10 +103,6 @@ if (is_admin()) {
 
 			if ($uid == $_SESSION['token']) {
 				if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1500) {
-
-					$msg = no_br($msg);
-					$msg = smiles($msg);
-
 					$post = DB::run() -> queryFetch("SELECT * FROM `chat` ORDER BY `chat_id` DESC LIMIT 1;");
 
 					if ($log == $post['chat_user'] && $post['chat_time'] + 1800 > SITETIME && (utf_strlen($msg) + utf_strlen($post['chat_text']) <= 1500)) {
@@ -174,9 +170,8 @@ if (is_admin()) {
 			$post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `chat_id`=? LIMIT 1;", array($id));
 
 			if (!empty($post)) {
-				$post['chat_text'] = nosmiles($post['chat_text']);
+
 				$post['chat_text'] = preg_replace('|\[q\](.*?)\[/q\](<br />)?|', '', $post['chat_text']);
-				$post['chat_text'] = yes_br($post['chat_text']);
 
 				echo '<div class="form">';
 				echo '<form action="chat.php?act=add&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -200,8 +195,6 @@ if (is_admin()) {
 
 			if (!empty($post)) {
 				if ($post['chat_time'] + 600 > SITETIME) {
-					$post['chat_text'] = nosmiles($post['chat_text']);
-					$post['chat_text'] = yes_br($post['chat_text']);
 
 					echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($post['chat_user']).'</b> <small>('.date_fixed($post['chat_time']).')</small><br /><br />';
 
@@ -234,8 +227,6 @@ if (is_admin()) {
 
 					if (!empty($post)) {
 						if ($post['chat_time'] + 600 > SITETIME) {
-							$msg = no_br($msg);
-							$msg = smiles($msg);
 
 							DB::run() -> query("UPDATE `chat` SET `chat_text`=?, `chat_edit`=?, `chat_edit_time`=? WHERE `chat_id`=? LIMIT 1;", array($msg, $log, SITETIME, $id));
 

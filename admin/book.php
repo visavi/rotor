@@ -108,8 +108,6 @@ if (is_admin()) {
 			$data = DB::run() -> queryFetch("SELECT * FROM guest WHERE guest_id=? LIMIT 1;", array($id));
 
 			if (!empty($data)) {
-				$data['guest_reply'] = yes_br(nosmiles($data['guest_reply']));
-
 				echo '<b><big>Добавление ответа</big></b><br /><br />';
 
 				echo '<div class="b"><img src="/images/img/edit.gif" alt="image" /> <b>'.profile($data['guest_user']).'</b> '.user_title($data['guest_user']) . user_online($data['guest_user']).' <small>('.date_fixed($data['guest_time']).')</small></div>';
@@ -139,8 +137,6 @@ if (is_admin()) {
 				if (utf_strlen($reply) >= 5 && utf_strlen($reply) < $config['guesttextlength']) {
 					$queryguest = DB::run() -> querySingle("SELECT guest_id FROM guest WHERE guest_id=? LIMIT 1;", array($id));
 					if (!empty($queryguest)) {
-						$reply = no_br($reply);
-						$reply = smiles($reply);
 
 						DB::run() -> query("UPDATE guest SET guest_reply=? WHERE guest_id=?", array($reply, $id));
 
@@ -168,7 +164,6 @@ if (is_admin()) {
 			$data = DB::run() -> queryFetch("SELECT * FROM guest WHERE guest_id=? LIMIT 1;", array($id));
 
 			if (!empty($data)) {
-				$data['guest_text'] = yes_br(nosmiles($data['guest_text']));
 
 				echo '<b><big>Редактирование сообщения</big></b><br /><br />';
 
@@ -198,8 +193,6 @@ if (is_admin()) {
 				if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
 					$queryguest = DB::run() -> querySingle("SELECT guest_id FROM guest WHERE guest_id=? LIMIT 1;", array($id));
 					if (!empty($queryguest)) {
-						$msg = no_br($msg);
-						$msg = smiles($msg);
 
 						DB::run() -> query("UPDATE guest SET guest_text=?, guest_edit=?, guest_edit_time=? WHERE guest_id=?", array($msg, $log, SITETIME, $id));
 

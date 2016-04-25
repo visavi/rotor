@@ -262,7 +262,7 @@ case 'add':
 
 		if ($validation->run(3)) {
 
-			$msg = smiles(antimat(no_br($msg)));
+			$msg = antimat($msg);
 
 			DB::run() -> query("INSERT INTO `commnews` (`commnews_news_id`, `commnews_text`, `commnews_author`, `commnews_time`, `commnews_ip`, `commnews_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, $ip, $brow));
 

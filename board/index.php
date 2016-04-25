@@ -208,7 +208,7 @@ if ($act == "add"){
 
 					$deltime = SITETIME + ($days * 86400);
 
-					$msg = no_br($msg,'<br />');
+					$msg = no_br($msg);
 
 					$unifile = unifile(DATADIR."/board/$id.dat", 5);
 

@@ -157,9 +157,6 @@ if (is_admin()) {
 							$new['downs_site'] = 'http://';
 						}
 
-						$new['downs_text'] =yes_br($new['downs_text']);
-						$new['downs_notice'] = yes_br($new['downs_notice']);
-
 						echo 'Название*:<br />';
 						echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['downs_title'].'" /><br />';
 						echo 'Описание*:<br />';
@@ -225,9 +222,6 @@ if (is_admin()) {
 
 														$newtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
 														if (empty($newtitle)) {
-
-															$text = no_br($text);
-															$notice = no_br($notice);
 
 															if (!empty($link) && $link != $new['downs_link'] && file_exists(BASEDIR.'/load/files/'.$new['downs_link'])) {
 

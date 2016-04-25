@@ -486,9 +486,7 @@ case 'add':
 						if (is_quarantine($log)) {
 							if (is_flood($log)) {
 
-								$msg = no_br($msg);
 								$msg = antimat($msg);
-								$msg = smiles($msg);
 
 								DB::run() -> query("INSERT INTO `commload` (`commload_cats`, `commload_down`, `commload_text`, `commload_author`, `commload_time`, `commload_ip`, `commload_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($downs['downs_cats_id'], $id, $msg, $log, SITETIME, $ip, $brow));
 
@@ -607,9 +605,7 @@ case 'quote':
 		$post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? LIMIT 1;", array($pid));
 
 		if (!empty($post)) {
-			$post['commload_text'] = nosmiles($post['commload_text']);
 			$post['commload_text'] = preg_replace('|\[q\](.*?)\[/q\](<br />)?|', '', $post['commload_text']);
-			$post['commload_text'] = str_replace('<br />', "\r\n", $post['commload_text']);
 
 			echo '<div class="form">';
 			echo '<form action="down.php?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -640,8 +636,6 @@ case 'edit':
 
 		if (!empty($post)) {
 			if ($post['commload_time'] + 600 > SITETIME) {
-				$post['commload_text'] = nosmiles($post['commload_text']);
-				$post['commload_text'] = str_replace('<br />', "\r\n", $post['commload_text']);
 
 				echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($post['commload_author']).'</b> <small>('.date_fixed($post['commload_time']).')</small><br /><br />';
 
@@ -679,9 +673,8 @@ case 'editpost':
 
 				if (!empty($post)) {
 					if ($post['commload_time'] + 600 > SITETIME) {
-						$msg = no_br($msg);
+
 						$msg = antimat($msg);
-						$msg = smiles($msg);
 
 						DB::run() -> query("UPDATE `commload` SET `commload_text`=? WHERE `commload_id`=?", array($msg, $pid));
 

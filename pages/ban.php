@@ -66,9 +66,8 @@ if (is_user()) {
 							if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
 								$queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($udata['users_loginsendban']));
 								if (!empty($queryuser)) {
-									$msg = no_br($msg);
+
 									$msg = antimat($msg);
-									$msg = smiles($msg);
 
 									$textpriv = 'Объяснение нарушения: '.$msg;
 

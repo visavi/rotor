@@ -306,9 +306,6 @@ if (is_admin()) {
 			$blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
 
 			if (!empty($blogs)) {
-				$blogs['blogs_text'] = nosmiles($blogs['blogs_text']);
-				$blogs['blogs_text'] = yes_br($blogs['blogs_text']);
-
 				echo '<b><big>Редактирование</big></b><br /><br />';
 
 				echo '<div class="form">';
@@ -350,8 +347,6 @@ if (is_admin()) {
 							if (preg_match('|^[a-z0-9\-]+$|i', $user)) {
 								$queryblog = DB::run() -> querySingle("SELECT `blogs_id` FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
 								if (!empty($queryblog)) {
-									$text = no_br($text);
-									$text = smiles($text);
 
 									DB::run() -> query("UPDATE `blogs` SET `blogs_title`=?, `blogs_text`=?, `blogs_user`=?, `blogs_tags`=? WHERE `blogs_id`=?;", array($title, $text, $user, $tags, $id));
 

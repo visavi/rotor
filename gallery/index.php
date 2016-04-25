@@ -160,9 +160,8 @@ break;
 									if ($photosize[0] <= $config['fileupfoto'] && $photosize[1] <= $config['fileupfoto'] && $photosize[0] >= 100 && $photosize[1] >= 100) {
 										if (is_quarantine($log)) {
 											if (is_flood($log)) {
-												$text = no_br($text);
+
 												$text = antimat($text);
-												$text = smiles($text);
 
 												DB::run() -> query("INSERT INTO `photo` (`photo_user`, `photo_title`, `photo_text`, `photo_link`, `photo_time`, `photo_closed`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $title, $text, '', SITETIME, $closed));
 
@@ -231,8 +230,6 @@ break;
 
 			if (!empty($photo)) {
 
-				$photo['photo_text'] = yes_br(nosmiles($photo['photo_text']));
-
 				echo '<div class="form">';
 				echo '<form action="index.php?act=change&amp;gid='.$gid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 				echo 'Название: <br /><input type="text" name="title" value="'.$photo['photo_title'].'" /><br />';
@@ -271,9 +268,8 @@ break;
 				if (!empty($photo)) {
 					if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
 						if (utf_strlen($text) <= 1000) {
-							$text = no_br($text);
+
 							$text = antimat($text);
-							$text = smiles($text);
 
 							DB::run() -> query("UPDATE `photo` SET `photo_title`=?, `photo_text`=?, `photo_closed`=? WHERE `photo_id`=?;", array($title, $text, $closed, $gid));
 
@@ -409,9 +405,7 @@ break;
 						if (empty($data['photo_closed'])) {
 							if (is_quarantine($log)) {
 								if (is_flood($log)) {
-									$msg = no_br($msg);
 									$msg = antimat($msg);
-									$msg = smiles($msg);
 
 									DB::run() -> query("INSERT INTO `commphoto` (`commphoto_gid`, `commphoto_text`, `commphoto_user`, `commphoto_time`, `commphoto_ip`, `commphoto_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($gid, $msg, $log, SITETIME, $ip, $brow));
 
@@ -463,8 +457,6 @@ break;
 				if (empty($comm['photo_closed'])) {
 					if ($comm['commphoto_time'] + 600 > SITETIME) {
 
-						$comm['commphoto_text'] = yes_br(nosmiles($comm['commphoto_text']));
-
 						echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($comm['commphoto_user']).'</b> <small>('.date_fixed($comm['commphoto_time']).')</small><br /><br />';
 
 						echo '<div class="form">';
@@ -505,9 +497,8 @@ break;
 					if (!empty($comm)) {
 						if (empty($comm['photo_closed'])) {
 							if ($comm['commphoto_time'] + 600 > SITETIME) {
-								$msg = no_br($msg);
+
 								$msg = antimat($msg);
-								$msg = smiles($msg);
 
 								DB::run() -> query("UPDATE `commphoto` SET `commphoto_text`=? WHERE `commphoto_id`=?;", array($msg, $cid));
 

@@ -52,7 +52,7 @@ case 'add':
 				if (is_quarantine($log) || $config['bookadds'] == 1) {
 					if (is_flood($log)) {
 
-						$msg = smiles(antimat(no_br($msg)));
+						$msg = antimat($msg);
 
 						$bookscores = ($config['bookscores']) ? 1 : 0;
 
@@ -101,7 +101,7 @@ case 'add':
 				if (utf_strlen($msg) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
 					if (is_flood($log)) {
 
-						$msg = smiles(antimat(no_br($msg)));
+						$msg = antimat($msg);
 
 						$guest = DBM::run()->insert('guest', array(
 							'guest_user' => $config['guestsuser'],
@@ -222,7 +222,6 @@ case 'quote':
 
 		if (!empty($post)) {
 			$post['guest_text'] = preg_replace('|\[q\](.*?)\[/q\](<br />)?|', '', $post['guest_text']);
-			$post['guest_text'] = yes_br(nosmiles($post['guest_text']));
 
 			render ('book/quote', array('post' => $post));
 
@@ -249,8 +248,6 @@ case 'edit':
 
 		if (! empty($post)) {
 			if ($post['guest_time'] + 600 > SITETIME) {
-
-				$post['guest_text'] = yes_br(nosmiles($post['guest_text']));
 
 				render('book/edit', array('post' => $post, 'id' => $id, 'start' => $start));
 
@@ -283,7 +280,7 @@ case 'editpost':
 				$post = DBM::run()->selectFirst('guest', array('guest_id' => $id, 'guest_user' =>$log));
 				if (! empty($post)) {
 					if ($post['guest_time'] + 600 > SITETIME) {
-						$msg = smiles(antimat(no_br($msg)));
+						$msg = antimat($msg);
 
 						$guest = DBM::run()->update('guest', array(
 							'guest_text'      => $msg,

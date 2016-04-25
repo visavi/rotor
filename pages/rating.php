@@ -74,9 +74,8 @@ if (is_user()) {
 										##                                Увеличение авторитета                                   ##
 										############################################################################################
 										if ($vote == 1) {
-											$text = no_br($text);
+
 											$text = antimat($text);
-											$text = smiles($text);
 
 											DB::run() -> query("INSERT INTO `rating` (`rating_user`, `rating_login`, `rating_text`, `rating_vote`, `rating_time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 1, SITETIME));
 											DB::run() -> query("DELETE FROM `rating` WHERE `rating_user`=? AND `rating_time` < (SELECT MIN(`rating_time`) FROM (SELECT `rating_time` FROM `rating` WHERE `rating_user`=? ORDER BY `rating_time` DESC LIMIT 20) AS del);", array($log, $log));
@@ -109,9 +108,7 @@ if (is_user()) {
 												$revertRating = DB::run() -> querySingle("SELECT `rating_id` FROM `rating` WHERE `rating_user`=? AND `rating_login`=? AND `rating_vote`=? ORDER BY `rating_time` DESC LIMIT 1;", array($uz, $log, 0));
 												if (empty($revertRating)) {
 
-													$text = no_br($text);
 													$text = antimat($text);
-													$text = smiles($text);
 
 													DB::run() -> query("INSERT INTO `rating` (`rating_user`, `rating_login`, `rating_text`, `rating_vote`, `rating_time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 0, SITETIME));
 													DB::run() -> query("DELETE FROM `rating` WHERE `rating_user`=? AND `rating_time` < (SELECT MIN(`rating_time`) FROM (SELECT `rating_time` FROM `rating` WHERE `rating_user`=? ORDER BY `rating_time` DESC LIMIT 20) AS del);", array($log, $log));

@@ -299,9 +299,7 @@ if (is_user()) {
 											if (empty($ignorstr)) {
 												if (is_flood($log)) {
 
-													$msg = no_br($msg);
 													$msg = antimat($msg);
-													$msg = smiles($msg);
 
 													DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;", array($uz));
 													DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));

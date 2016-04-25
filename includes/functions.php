@@ -155,11 +155,11 @@ function points($sum) {
 function highlight_code($code) {
 
 	if (is_array($code)) $code = $code[1];
-	$code = nosmiles($code);
-	$code = strtr($code, array('&lt;'=>'<', '&gt;'=>'>', '&amp;'=>'&', '&quot;'=>'"', '&#36;'=>'$', '&#37;'=>'%', '&#39;'=>"'", '&#92;'=>'\\', '&#94;'=>'^', '&#96;'=>'`', '&#124;' => '|', '<br />'=>"\r\n"));
+
+	$code = strtr($code, array('&lt;'=>'<', '&gt;'=>'>', '&amp;'=>'&', '&quot;'=>'"', '&#36;'=>'$', '&#37;'=>'%', '&#39;'=>"'", '&#92;'=>'\\', '&#94;'=>'^', '&#96;'=>'`', '&#124;' => '|', '<br />'=>""));
 
 	$code = highlight_string($code, true);
-	$code = strtr($code, array("\r\n"=>'<br />', '://'=>'&#58//', '$'=>'&#36;', "'"=>'&#39;', '%'=>'&#37;', '\\'=>'&#92;', '`'=>'&#96;', '^'=>'&#94;', '|'=>'&#124;'));
+	$code = strtr($code, array('://'=>'&#58//', '$'=>'&#36;', "'"=>'&#39;', '%'=>'&#37;', '\\'=>'&#92;', '`'=>'&#96;', '^'=>'&#94;', '|'=>'&#124;'));
 
 	return '<div class="d">'.$code.'</div>';
 }
@@ -211,9 +211,10 @@ function spoiler_text($match) {
 
 // ------------------ Функция вставки BB-кода --------------------//
 function bb_code($msg) {
+	$msg = nl2br($msg);
 
-	$msg = preg_replace_callback('#\[code\](.*?)\[/code\]#i', 'highlight_code', $msg);
-	$msg = preg_replace_callback('#\[hide\](.*?)\[/hide\]#i', 'hidden_text', $msg);
+	$msg = preg_replace_callback('#\[code\](.*?)\[/code\]#si', 'highlight_code', $msg);
+	$msg = preg_replace_callback('#\[hide\](.*?)\[/hide\]#si', 'hidden_text', $msg);
 
 	$msg = preg_replace_callback('#\[spoiler=(.*?)\](.*?)\[/spoiler\]#si', 'spoiler_text',$msg);
 	$msg = preg_replace_callback('#\[spoiler\](.*?)\[/spoiler\]#si', 'spoiler_text',$msg);
@@ -230,7 +231,38 @@ function bb_code($msg) {
 	$msg = preg_replace('#\[blue\](.*?)\[/blue\]#si', '<span style="color:#0000ff">\1</span>', $msg);
 	$msg = preg_replace('#\[q\](.*?)\[/q\]#si', '<div class="q">\1</div>', $msg);
 	$msg = preg_replace('#\[del\](.*?)\[/del\]#si', '<del>\1</del>', $msg);
-	return $msg;
+
+	return smiles($msg);
+}
+
+/**
+ * Обработка смайлов
+ * @param  string $source текст сообщения
+ * @return string         обработанный текст сообщения
+ */
+function smiles($source)
+{
+	global $config;
+	static $list_smiles;
+	if (empty($list_smiles)) {
+		if (! file_exists(DATADIR.'/temp/smiles.dat')) {
+
+			$query = DB::run()->query("SELECT `smiles_name`, `smiles_code` FROM `smiles` ORDER BY CHAR_LENGTH(`smiles_code`) DESC;");
+			$smiles = $query->fetchAll();
+
+			file_put_contents(DATADIR.'/temp/smiles.dat', serialize($smiles));
+
+		}
+		$list_smiles = unserialize(file_get_contents(DATADIR."/temp/smiles.dat"));
+	}
+
+	$count = 0;
+	foreach($list_smiles as $smile) {
+		$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_code'].'" /> ', $source, $config['resmiles'] - $count, $cnt);
+		$count += $cnt;
+		if ($count >= $config['resmiles']) break;
+	}
+	return $source;
 }
 
 // ------------------ Функция перекодировки из UTF в WIN --------------------//
@@ -341,45 +373,6 @@ function get_user_agent() {
 // ----------------------- Функция обрезки строки с условием -------------------------//
 function subtok($string, $chr, $pos, $len = null) {
 	return implode($chr, array_slice(explode($chr, $string), $pos, $len));
-}
-
-// ----------------------- Функция вырезания переноса строки -------------------------//
-function no_br($msg) {
-	$msg = nl2br($msg);
-	$msg = preg_replace('|[\r\n]+|si', '', $msg);
-	return $msg;
-}
-
-// ----------------------- Функция добавления переноса строки -------------------------//
-function yes_br($msg) {
-	$msg = preg_replace('|<br */?>|i', "\r\n", $msg);
-	return $msg;
-}
-
-// ------------------------ Функция замены и вывода смайлов --------------------------//
-function smiles($str) {
-	global $config;
-
-	$query = DB::run()->query("SELECT `smiles_name`, `smiles_code` FROM `smiles` ORDER BY CHAR_LENGTH(`smiles_code`) DESC;");
-	$smiles = $query->fetchAll();
-
-	$count = 0;
-	foreach($smiles as $smile) {
-		$str = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="smile" /> ', $str, $config['resmiles'] - $count, $cnt);
-		$count += $cnt;
-		if ($count >= $config['resmiles']) {
-			break;
-		}
-	}
-
-	return $str;
-}
-
-// --------------- Функция обратной замены смайлов -------------------//
-function nosmiles($string) {
-
-	$string = preg_replace('|<img src="/images/smiles/(.*?).(\w+)" alt="smile" /> |', ':$1', $string);
-	return $string;
 }
 
 // --------------- Функция правильного вывода веса файла -------------------//
@@ -1760,7 +1753,6 @@ function shuffle_assoc(&$array) {
 
 // --------------- Функция обрезки слов -------------------//
 function strip_str($str, $words = 20) {
-	$str = str_replace('<br />', ' ', $str);
 	return implode(' ', array_slice(explode(' ', strip_tags($str)), 0, $words));
 }
 
@@ -2498,11 +2490,11 @@ function real_ip()
 	foreach ($header_checks as $key) {
 		if (array_key_exists($key, $_SERVER) === true) {
 			foreach (explode(',', $_SERVER[$key]) as $ip) {
-				$ip = trim($ip);
+				$ip = ($ip == '::1')  ? '127.0.0.1' : trim($ip);
 
 				//filter the ip with filter functions
-				if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) !== false) {
-					return $ip == '::1' ? '127.0.0.1' : $ip;
+				if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
+					return $ip;
 				}
 			}
 		}

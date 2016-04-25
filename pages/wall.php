@@ -129,9 +129,8 @@ if (!empty($queryuser)) {
 							if (empty($ignorstr)) {
 								if (is_quarantine($log)) {
 									if (is_flood($log)) {
-										$msg = no_br($msg);
+
 										$msg = antimat($msg);
-										$msg = smiles($msg);
 
 										if ($uz != $log) {
 											DB::run() -> query("UPDATE `users` SET `users_newwall`=`users_newwall`+1 WHERE `users_login`=?", array($uz));

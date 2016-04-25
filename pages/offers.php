@@ -264,7 +264,6 @@ switch ($act):
 			$queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `offers_id`=? AND `offers_user`=? LIMIT 1;", array($id, $log));
 			if (!empty($queryoff)) {
 				if ($queryoff['offers_status'] <= 1) {
-					$queryoff['offers_text'] = yes_br($queryoff['offers_text']);
 
 					echo '<div class="form">';
 					echo '<form action="offers.php?act=change&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -311,7 +310,7 @@ switch ($act):
 					if ($queryoff['offers_status'] <= 1) {
 						if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
 							if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
-								$text = no_br($text);
+
 								$title = antimat($title);
 								$text = antimat($text);
 
@@ -444,9 +443,8 @@ switch ($act):
 						if (empty($queryoff['offers_closed'])) {
 							if (is_quarantine($log)) {
 								if (is_flood($log)) {
-									$msg = no_br($msg);
+
 									$msg = antimat($msg);
-									$msg = smiles($msg);
 
 									DB::run() -> query("INSERT INTO `commoffers` (`comm_offers`, `comm_text`, `comm_user`, `comm_time`, `comm_ip`, `comm_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, $ip, $brow));
 
@@ -568,7 +566,7 @@ switch ($act):
 				if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
 					if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
 						if (is_flood($log)) {
-							$text = no_br($text);
+
 							$title = antimat($title);
 							$text = antimat($text);
 

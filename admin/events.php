@@ -91,7 +91,6 @@ case 'edit':
 	$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `event_id`=? LIMIT 1;", array($id));
 
 	if (!empty($dataevent)) {
-		$dataevent['event_text'] = yes_br(nosmiles($dataevent['event_text']));
 
 		echo '<b><big>Редактирование</big></b><br /><br />';
 
@@ -145,8 +144,6 @@ case 'change':
 		-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
 	if ($validation->run(1)) {
-
-		$msg = smiles(no_br($msg));
 
 		DB::run() -> query("UPDATE `events` SET `event_title`=?, `event_text`=?, `event_closed`=?, `event_top`=? WHERE `event_id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
 

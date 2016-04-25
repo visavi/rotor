@@ -122,7 +122,7 @@ case 'add':
 		if ($validation->run(1)) {
 
 			$title = antimat($title);
-			$msg = smiles(antimat(no_br($msg)));
+			$msg = antimat($msg);
 
 			DB::run() -> query("UPDATE `users` SET `users_allforum`=`users_allforum`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 

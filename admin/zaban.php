@@ -84,7 +84,7 @@ if (is_admin(array(101, 102, 103))) {
 							$usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `note_user`=? LIMIT 1;", array($uz));
 
 							echo '<b>Заметка:</b><br />';
-							echo '<textarea cols="25" rows="5" name="note">'.yes_br($usernote['note_text']).'</textarea><br />';
+							echo '<textarea cols="25" rows="5" name="note">'.$usernote['note_text'].'</textarea><br />';
 
 							echo '<input value="Забанить" type="submit" /></form></div><br />';
 
@@ -156,7 +156,7 @@ if (is_admin(array(101, 102, 103))) {
 						echo '<input name="bantype" type="radio" value="sut"'.$checked.' /> Суток<br />';
 
 						echo 'Причина бана:<br />';
-						echo '<textarea name="reasonban" cols="25" rows="5">'.yes_br($user['users_reasonban']).'</textarea><br />';
+						echo '<textarea name="reasonban" cols="25" rows="5">'.$user['users_reasonban'].'</textarea><br />';
 
 						echo '<input value="Изменить" type="submit" /></form></div><br />';
 					} else {
@@ -203,8 +203,6 @@ if (is_admin(array(101, 102, 103))) {
 								if ($bantotaltime <= $config['maxbantime']) {
 									if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
 										if (utf_strlen($note) <= 1000) {
-											$note = no_br($note);
-											$reasonban = no_br($reasonban);
 
 											DB::run() -> query("UPDATE `users` SET `users_ban`=?, `users_timeban`=?, `users_reasonban`=?, `users_loginsendban`=? WHERE `users_login`=? LIMIT 1;", array(1, SITETIME + ($bantotaltime * 60), $reasonban, $log, $uz));
 
@@ -271,8 +269,6 @@ if (is_admin(array(101, 102, 103))) {
 								if ($bantotaltime <= $config['maxbantime']) {
 									if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
 										if (utf_strlen($note) <= 1000) {
-											$note = no_br($note);
-											$reasonban = no_br($reasonban);
 
 											if ($bantotaltime > 720) {
 												$bancount = 1;

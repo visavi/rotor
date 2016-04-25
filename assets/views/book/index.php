@@ -46,7 +46,7 @@
 			<?php endif; ?>
 
 			<?php if (!empty($data['guest_reply'])): ?>
-				<br /><span style="color:#ff0000">Ответ: <?=$data['guest_reply']?></span>
+				<br /><span style="color:#ff0000">Ответ: <?=bb_code($data['guest_reply'])?></span>
 			<?php endif; ?>
 
 		</div>

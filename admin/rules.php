@@ -57,8 +57,6 @@ if (is_admin(array(101, 102))) {
 			echo '<div class="form">';
 			echo '<form action="rules.php?act=change&amp;uid='.$_SESSION['token'].'" method="post">';
 
-			$rules['rules_text'] = yes_br(nosmiles($rules['rules_text']));
-
 			echo '<textarea id="markItUp" cols="35" rows="20" name="msg">'.$rules['rules_text'].'</textarea><br />';
 			echo '<input type="submit" value="Изменить" /></form></div><br />';
 
@@ -79,7 +77,6 @@ if (is_admin(array(101, 102))) {
 
 			if ($uid == $_SESSION['token']) {
 				if (utf_strlen($msg) > 0) {
-					$msg = no_br($msg);
 					$msg = str_replace('&#37;', '%', $msg);
 
 					DB::run() -> query("REPLACE INTO `rules` (`rules_id`, `rules_text`, `rules_time`) VALUES (?,?,?);", array(1, $msg, SITETIME));

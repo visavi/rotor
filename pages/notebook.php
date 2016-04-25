@@ -49,9 +49,6 @@ if (is_user()) {
 
 			$note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `note_user`=? LIMIT 1;", array($log));
 
-			$note['note_text'] = nosmiles($note['note_text']);
-			$note['note_text'] = str_replace('<br />', "\r\n", $note['note_text']);
-
 			echo '<div class="form">';
 			echo '<form action="notebook.php?act=change&amp;uid='.$_SESSION['token'].'" method="post">';
 			echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$note['note_text'].'</textarea><br />';
@@ -72,8 +69,6 @@ if (is_user()) {
 
 			if ($uid == $_SESSION['token']) {
 				if (utf_strlen($msg) < 10000) {
-					$msg = no_br($msg);
-					$msg = smiles($msg);
 
 					$querynote = DB::run() -> querySingle("SELECT `note_id` FROM `notebook` WHERE `note_user`=? LIMIT 1;", array($log));
 					if (!empty($querynote)) {

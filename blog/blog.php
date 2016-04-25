@@ -130,8 +130,6 @@ case 'editblog':
 				$querycats = DB::run() -> query("SELECT `cats_id`, `cats_name` FROM `catsblog` ORDER BY `cats_order` ASC;");
 				$cats = $querycats -> fetchAll();
 
-				$blogs['blogs_text'] = yes_br(nosmiles($blogs['blogs_text']));
-
 				render('blog/blog_editblog', array('blogs' => $blogs, 'cats' => $cats));
 
 			} else {
@@ -171,8 +169,6 @@ case 'changeblog':
 
 							if (!empty($blogs)) {
 								if ($blogs['blogs_user'] == $log) {
-
-									$text = smiles(no_br($text));
 
 									// Обновление счетчиков
 									if ($blogs['blogs_cats_id'] != $cats) {
@@ -293,7 +289,7 @@ case 'addblog':
 								if (is_quarantine($log)) {
 									if (is_flood($log)) {
 
-										$text = smiles(antimat(no_br($text)));
+										$text = antimat($text);
 
 										DB::run() -> query("INSERT INTO `blogs` (`blogs_cats_id`, `blogs_user`, `blogs_title`, `blogs_text`, `blogs_tags`, `blogs_time`) VALUES (?, ?, ?, ?, ?, ?);", array($cid, $log, $title, $text, $tags, SITETIME));
 										$lastid = DB::run() -> lastInsertId();
@@ -449,9 +445,8 @@ case 'add':
 				if (!empty($queryblog)) {
 					if (is_quarantine($log)) {
 						if (is_flood($log)) {
-							$msg = no_br($msg);
+
 							$msg = antimat($msg);
-							$msg = smiles($msg);
 
 							DB::run() -> query("INSERT INTO `commblog` (`commblog_cats`, `commblog_blog`, `commblog_text`, `commblog_author`, `commblog_time`, `commblog_ip`, `commblog_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($queryblog, $id, $msg, $log, SITETIME, $ip, $brow));
 
@@ -561,9 +556,7 @@ case 'quote':
 		$post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `commblog_id`=? LIMIT 1;", array($pid));
 
 		if (!empty($post)) {
-			$post['commblog_text'] = nosmiles($post['commblog_text']);
 			$post['commblog_text'] = preg_replace('|\[q\](.*?)\[/q\](<br />)?|', '', $post['commblog_text']);
-			$post['commblog_text'] = str_replace('<br />', "\r\n", $post['commblog_text']);
 
 			render('blog/blog_quote', array('post' => $post, 'id' => $id));
 		} else {
@@ -590,7 +583,6 @@ case 'edit':
 
 		if (!empty($post)) {
 			if ($post['commblog_time'] + 600 > SITETIME) {
-				$post['commblog_text'] = yes_br(nosmiles($post['commblog_text']));
 
 				render('blog/blog_edit', array('post' => $post, 'pid' => $pid, 'start' => $start));
 			} else {
@@ -622,7 +614,7 @@ case 'editpost':
 
 				if (!empty($post)) {
 					if ($post['commblog_time'] + 600 > SITETIME) {
-						$msg = smiles(antimat(no_br($msg)));
+						$msg = antimat($msg);
 
 						DB::run() -> query("UPDATE `commblog` SET `commblog_text`=? WHERE `commblog_id`=?", array($msg, $pid));
 

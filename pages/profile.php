@@ -64,7 +64,7 @@ case 'index':
 	echo '</select><br />';
 
 	echo 'О себе:<br />';
-	echo '<textarea id="markItUp" cols="25" rows="5" name="info">'.yes_br($udata['users_info']).'</textarea><br />';
+	echo '<textarea id="markItUp" cols="25" rows="5" name="info">'.$udata['users_info'].'</textarea><br />';
 
 	echo '<input value="Изменить" type="submit" /></form></div><br />';
 break;
@@ -102,7 +102,6 @@ case 'edit':
 		$name = utf_substr($name, 0, 20);
 		$country = utf_substr($country, 0, 30);
 		$city = utf_substr($city, 0, 50);
-		$info = no_br($info);
 
 		DB::run() -> query("UPDATE `users` SET `users_name`=?, `users_country`=?, `users_city`=?, `users_icq`=?, `users_skype`=?, `users_jabber`=?, `users_site`=?, `users_birthday`=?, `users_gender`=?, `users_info`=? WHERE `users_login`=? LIMIT 1;", array($name, $country, $city, $icq, $skype, $jabber, $site, $birthday, $gender, $info, $log));
 

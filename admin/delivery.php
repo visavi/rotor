@@ -53,9 +53,6 @@ if (is_admin(array(101))) {
 				if ($rec>=1 && $rec<=4){
 					if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
 
-						$msg = no_br($msg);
-						$msg = smiles($msg);
-
 						// Рассылка пользователям, которые в онлайне
 						if ($rec==1){
 							$query = DB::run() -> query("SELECT `visit_user` FROM `visit` WHERE `visit_nowtime`>?;", array(SITETIME-600));

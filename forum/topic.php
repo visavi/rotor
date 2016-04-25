@@ -70,7 +70,7 @@ case 'index':
 			}
 
 			$ipdpost = implode(',', $ipdpost);
-			
+
 			if (!empty($ipdpost)) {
 				$queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id` IN (".$ipdpost.");");
 				$files = $queryfiles->fetchAll();
@@ -140,7 +140,7 @@ case 'add':
 
 		if ($validation->run(1)) {
 
-			$msg = smiles(antimat(no_br($msg)));
+			$msg = antimat($msg);
 
 			if ($log == $post['posts_user'] && $post['posts_time'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['posts_text']) <= $config['forumtextlength'])) {
 				$newpost = $post['posts_text'].'<br /><br />[i][small]Добавлено через '.maketime(SITETIME - $post['posts_time']).' сек.[/small][/i]<br />'.$msg;
@@ -416,9 +416,7 @@ case 'quote':
 		if (!empty($post)) {
 			if (empty($post['topics_closed'])) {
 
-				$post['posts_text'] = nosmiles($post['posts_text']);
 				$post['posts_text'] = preg_replace('|\[q\](.*?)\[/q\](<br />)?|', '', $post['posts_text']);
-				$post['posts_text'] = yes_br($post['posts_text']);
 
 				render('forum/topic_quote', array('post' => $post, 'start' => $start));
 
@@ -450,7 +448,6 @@ case 'edittopic':
 						$post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY posts_id ASC LIMIT 1;", array($tid));
 						if (!empty($post)) {
 
-							$post['posts_text'] = yes_br(nosmiles($post['posts_text']));
 							render('forum/topic_edittopic', array('post' => $post, 'topics' => $topics));
 
 						} else {
@@ -497,9 +494,8 @@ case 'changetopic':
 								if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
 									if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
 										$title = antimat($title);
-										$msg = no_br($msg);
+
 										$msg = antimat($msg);
-										$msg = smiles($msg);
 
 										DB::run() -> query("UPDATE `topics` SET `topics_title`=? WHERE topics_id=?;", array($title, $tid));
 										DB::run() -> query("UPDATE `posts` SET `posts_user`=?, `posts_text`=?, `posts_ip`=?, `posts_brow`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($log, $msg, $ip, $brow, $log, SITETIME, $minposts));
@@ -553,7 +549,6 @@ case 'modedit':
 					$topic_mod = explode(',', $post['topics_mod']);
 					if (in_array($log, $topic_mod)) {
 
-						$post['posts_text'] = yes_br(nosmiles($post['posts_text']));
 						render('forum/topic_modedit', array('post' => $post, 'pid' => $pid, 'start' => $start));
 
 					} else {
@@ -595,9 +590,7 @@ case 'modeditpost':
 							$topic_mod = explode(',', $post['topics_mod']);
 							if (in_array($log, $topic_mod)) {
 
-								$msg = no_br($msg);
 								$msg = antimat($msg);
-								$msg = smiles($msg);
 
 								DB::run() -> query("UPDATE `posts` SET `posts_text`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($msg, $log, SITETIME, $pid));
 
@@ -642,8 +635,6 @@ case 'edit':
 		if (!empty($post)) {
 			if (empty($post['topics_closed'])) {
 				if ($post['posts_time'] + 600 > SITETIME) {
-
-					$post['posts_text'] = yes_br(nosmiles($post['posts_text']));
 
 					$queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id`=?;", array($pid));
 					$files = $queryfiles->fetchAll();
@@ -690,9 +681,7 @@ case 'editpost':
 					if (empty($post['topics_closed'])) {
 						if ($post['posts_time'] + 600 > SITETIME) {
 
-							$msg = no_br($msg);
 							$msg = antimat($msg);
-							$msg = smiles($msg);
 
 							DB::run() -> query("UPDATE `posts` SET `posts_text`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($msg, $log, SITETIME, $pid));
 

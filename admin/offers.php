@@ -169,7 +169,6 @@ if (is_admin(array(101, 102))) {
 
 			$queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `offers_id`=? LIMIT 1;", array($id));
 			if (!empty($queryoff)) {
-				$queryoff['offers_text_reply'] = yes_br($queryoff['offers_text_reply']);
 
 				echo '<div class="form">';
 				echo '<form action="offers.php?act=answer&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -215,7 +214,7 @@ if (is_admin(array(101, 102))) {
 				if (!empty($queryoff)) {
 					if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
 						if ($status >= 0 && $status <= 3) {
-							$text = no_br($text);
+
 							$text = antimat($text);
 
 							DB::run() -> query("UPDATE `offers` SET `offers_status`=?, `offers_closed`=?, `offers_text_reply`=?, `offers_user_reply`=?, `offers_time_reply`=? WHERE `offers_id`=?;", array($status, $closed, $text, $log, SITETIME, $id));
@@ -249,7 +248,6 @@ if (is_admin(array(101, 102))) {
 
 			$queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `offers_id`=? LIMIT 1;", array($id));
 			if (!empty($queryoff)) {
-				$queryoff['offers_text'] = yes_br($queryoff['offers_text']);
 
 				echo '<div class="form">';
 				echo '<form action="offers.php?act=change&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -293,7 +291,7 @@ if (is_admin(array(101, 102))) {
 				if (!empty($queryoff)) {
 					if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
 						if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
-							$text = no_br($text);
+
 							$title = antimat($title);
 							$text = antimat($text);
 

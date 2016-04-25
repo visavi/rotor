@@ -334,7 +334,6 @@ case 'addfile':
 								if (!empty($downs)) {
 									$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
 									if (empty($downtitle)) {
-										$text = no_br($text);
 
 										DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cid));
 										DB::run() -> query("INSERT INTO `downs` (`downs_cats_id`, `downs_title`, `downs_text`, `downs_link`, `downs_user`, `downs_author`, `downs_site`, `downs_screen`, `downs_time`, `downs_active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", array($cid, $title, $text, '', $log, $author, $site, '', SITETIME, 1));
@@ -815,8 +814,6 @@ case 'editdown':
 		echo '<div class="form">';
 		echo '<form action="load.php?act=changedown&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-		$new['downs_text'] = yes_br(nosmiles($new['downs_text']));
-
 		echo 'Название*:<br />';
 		echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['downs_title'].'" /><br />';
 		echo 'Описание*:<br />';
@@ -868,8 +865,6 @@ case 'changedown':
 
 											$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
 											if (empty($downtitle)) {
-
-												$text = no_br($text);
 
 												if (!empty($loadfile) && $loadfile != $new['downs_link'] && file_exists(BASEDIR.'/load/files/'.$folder.$new['downs_link'])) {
 

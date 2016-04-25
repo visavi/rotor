@@ -192,7 +192,7 @@ case 'addevent':
 
 		if ($validation->run()) {
 
-			$msg = smiles(antimat(no_br($msg)));
+			$msg = antimat($msg);
 
 			DB::run() -> query("INSERT INTO `events` (`event_title`, `event_text`, `event_author`, `event_time`, `event_comments`, `event_closed`, `event_top`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($title, $msg, $log, SITETIME, 0, $closed, $top));
 
@@ -245,8 +245,6 @@ case 'editevent':
 			-> addRule('max', array(($dataevent['event_time'] + 3600), SITETIME), 'Изменение невозможно, прошло более 1 часа!');
 
 		if ($validation->run(1)) {
-
-			$dataevent['event_text'] = yes_br(nosmiles($dataevent['event_text']));
 
 			echo '<b><big>Редактирование</big></b><br /><br />';
 
@@ -310,7 +308,7 @@ case 'changeevent':
 
 		if ($validation->run(1)) {
 
-			$msg = smiles(antimat(no_br($msg)));
+			$msg = antimat($msg);
 
 			DB::run() -> query("UPDATE `events` SET `event_title`=?, `event_text`=?, `event_closed`=?, `event_top`=? WHERE `event_id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
 
@@ -459,7 +457,7 @@ case 'addcomment':
 
 		if ($validation->run(3)) {
 
-			$msg = smiles(antimat(no_br($msg)));
+			$msg = antimat($msg);
 
 			DB::run() -> query("INSERT INTO `commevents` (`commevent_event_id`, `commevent_text`, `commevent_author`, `commevent_time`, `commevent_ip`, `commevent_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, $ip, $brow));
 

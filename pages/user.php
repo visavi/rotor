@@ -184,7 +184,6 @@ case 'note':
 
 			echo '<div class="form">';
 			echo '<form action="user.php?act=editnote&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
-			$usernote['note_text'] = yes_br(nosmiles($usernote['note_text']));
 			echo '<textarea id="markItUp" cols="25" rows="5" name="note">'.$usernote['note_text'].'</textarea><br />';
 			echo '<input value="Сохранить" type="submit" /></form></div><br />';
 		} else {
@@ -213,8 +212,6 @@ case 'editnote':
 			-> addRule('string', $note, 'Слишком большая заметка, не более 1000 символов!', true, 0, 1000);
 
 		if ($validation->run()) {
-
-				$note = smiles(no_br($note));
 
 				DB::run() -> query("INSERT INTO `note` (`note_user`, `note_text`, `note_edit`, `note_time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `note_text`=?, `note_edit`=?, `note_time`=?;", array($uz, $note, $log, SITETIME, $note, $log, SITETIME));
 

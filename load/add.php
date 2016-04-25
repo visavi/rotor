@@ -164,7 +164,6 @@ case 'add':
 								if (!empty($downs)) {
 									$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
 									if (empty($downtitle)) {
-										$text = no_br($text);
 
 										//DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cid));
 										DB::run() -> query("INSERT INTO `downs` (`downs_cats_id`, `downs_title`, `downs_text`, `downs_link`, `downs_user`, `downs_author`, `downs_site`, `downs_screen`, `downs_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", array($cid, $title, $text, '', $log, $author, $site, '', SITETIME));
@@ -299,8 +298,6 @@ case 'view':
 
 					echo '</select><br />';
 
-					$new['downs_text'] = yes_br(nosmiles($new['downs_text']));
-
 					echo 'Название*:<br />';
 					echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['downs_title'].'" /><br />';
 					echo 'Описание*:<br />';
@@ -358,8 +355,6 @@ case 'edit':
 
 											$newtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
 											if (empty($newtitle)) {
-
-												$text = no_br($text);
 
 												DB::run() -> query("UPDATE `downs` SET `downs_cats_id`=?, `downs_title`=?, `downs_text`=?, `downs_author`=?, `downs_site`=?, `downs_time`=? WHERE `downs_id`=?;", array($cid, $title, $text, $author, $site, $new['downs_time'], $id));
 

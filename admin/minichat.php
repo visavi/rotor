@@ -165,7 +165,7 @@ if (is_admin()) {
 			if (isset($file[$id])) {
 				$data = explode("|", $file[$id]);
 
-				$data[0] = yes_br(nosmiles($data[0]));
+				$data[0] = yes_br($data[0]);
 
 				$config['header'] = 'Редактирование сообщения';
 
@@ -198,8 +198,7 @@ if (is_admin()) {
 					if (isset($file[$id])) {
 						$data = explode("|", $file[$id]);
 
-						$msg = no_br($msg, ' <br /> ');
-						$msg = smiles($msg);
+						$msg = no_br($msg);
 
 						$text = no_br($msg . '|' . $data[1] . '|' . $data[2] . '|' . $data[3] . '|' . $data[4] . '|' . $data[5] . '|' . $data[6] . '|' . $data[7] . '|' . $data[8] . '|');
 

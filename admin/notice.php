@@ -97,8 +97,6 @@ case 'edit':
 		echo '<div class="form">';
 		echo '<form action="notice.php?act=save&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-		$notice['notice_text'] = yes_br(nosmiles($notice['notice_text']));
-
 		echo 'Название: <br />';
 		echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['notice_name'].'" /><br />';
 		echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['notice_text'].'</textarea><br />';
@@ -138,7 +136,7 @@ case "save":
 
 		$note = array(
 			'notice_name'    => $name,
-			'notice_text'    => no_br(str_replace('&#37;', '%', $text)),
+			'notice_text'    => str_replace('&#37;', '%', $text),
 			'notice_user'    => $log,
 			'notice_protect' => $protect,
 			'notice_time'    => SITETIME,

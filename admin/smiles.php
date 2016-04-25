@@ -107,8 +107,10 @@ case 'load':
 
 			if ($handle -> uploaded) {
 
-				$handle -> file_new_name_body = substr($code, 1);
-				$handle -> file_overwrite = true;
+				if (! preg_match('/[А-Яа-яЁё]/u', $code)) {
+					$handle -> file_new_name_body = substr($code, 1);
+				}
+				//$handle -> file_overwrite = true;
 
 				$handle -> ext_check = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
 				$handle -> file_max_size = $smilemaxsize;  // byte
@@ -116,7 +118,6 @@ case 'load':
 				$handle -> image_max_height = $smilemaxweight; // px
 				$handle -> image_min_width = $smileminweight;   // px
 				$handle -> image_min_height = $smileminweight;  // px
-
 				$handle -> process(BASEDIR.'/images/smiles/');
 
 				if ($handle -> processed) {
@@ -128,6 +129,7 @@ case 'load':
 					));
 
 					$handle -> clean();
+					clearCache();
 
 					notice('Смайл успешно загружен!');
 					redirect("smiles.php");
@@ -208,6 +210,7 @@ case 'change':
 			), array(
 				'smiles_id' => $id
 			));
+			clearCache();
 
 			notice('Смайл успешно отредактирован!');
 			redirect("smiles.php?start=$start");
@@ -245,6 +248,7 @@ case 'del':
 					}
 				}
 				DBM::run()->execute("DELETE FROM `smiles` WHERE `smiles_id` IN (".$del.");");
+				clearCache();
 
 				notice('Выбранные смайлы успешно удалены!');
 				redirect("smiles.php?act=$ref&start=$start");

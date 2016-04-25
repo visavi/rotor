@@ -211,7 +211,6 @@ if (is_admin(array(101, 102))) {
 					echo '</select><br />';
 
 					echo 'О себе:<br />';
-					$user['users_info'] = yes_br($user['users_info']);
 					echo '<textarea cols="25" rows="5" name="info">'.$user['users_info'].'</textarea><br />';
 
 					echo '<input value="Изменить" type="submit" /></form></div><br />';
@@ -316,7 +315,6 @@ if (is_admin(array(101, 102))) {
 														$name = utf_substr($name, 0, 20);
 														$country = utf_substr($country, 0, 30);
 														$city = utf_substr($city, 0, 50);
-														$info = no_br($info);
 														$rating = $posrating - $negrating;
 
 														DB::run() -> query("UPDATE `users` SET `users_pass`=?, `users_email`=?, `users_joined`=?, `users_level`=?, `users_name`=?, `users_nickname`=?, `users_country`=?, `users_city`=?, `users_info`=?, `users_site`=?, `users_icq`=?, `users_jabber`=?, `users_gender`=?, `users_birthday`=?, `users_themes`=?, `users_point`=?, `users_money`=?, `users_status`=?, `users_avatar`=?, `users_rating`=?, `users_posrating`=?, `users_negrating`=? WHERE `users_login`=? LIMIT 1;", array($mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $jabber, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz));

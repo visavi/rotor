@@ -186,7 +186,7 @@ if ($act == 'add') {
 			if (is_quarantine($log)) {
 				if (is_flood($log)) {
 
-					$msg = smiles(antimat(no_br($msg)));
+					$msg = antimat($msg);
 
 					$file = file(DATADIR . "/temp/chat.dat");
 					$data = explode("|", end($file));
