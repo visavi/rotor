@@ -200,7 +200,11 @@ case 'change':
 
 	if ($validation->run()) {
 
-		$newname = rename_file($smile['smiles_name'], substr($code, 1));
+		if (! preg_match('/[А-Яа-яЁё]/u', $code)) {
+			$newname = rename_file($smile['smiles_name'], substr($code, 1));
+		} else {
+			$newname = $smile['smiles_name'];
+		}
 
 		if (rename(BASEDIR.'/images/smiles/'.$smile['smiles_name'], BASEDIR.'/images/smiles/'.$newname)){
 
