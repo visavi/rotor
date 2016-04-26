@@ -107,7 +107,7 @@ if (is_admin()) {
 
 					if ($log == $post['chat_user'] && $post['chat_time'] + 1800 > SITETIME && (utf_strlen($msg) + utf_strlen($post['chat_text']) <= 1500)) {
 
-						$newpost = $post['chat_text'].'<br /><br />[i][small]Добавлено через '.maketime(SITETIME - $post['chat_time']).' сек.[/small][/i]<br />'.$msg;
+						$newpost = $post['chat_text']."\n\n".'[i][small]Добавлено через '.maketime(SITETIME - $post['chat_time']).' сек.[/small][/i]'."\n".$msg;
 						DB::run() -> query("UPDATE `chat` SET `chat_text`=? WHERE `chat_id`=? LIMIT 1;", array($newpost, $post['chat_id']));
 
 					} else {
