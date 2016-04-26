@@ -258,7 +258,7 @@ function smiles($source)
 
 	$count = 0;
 	foreach($list_smiles as $smile) {
-		$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_code'].'" /> ', $source, $config['resmiles'] - $count, $cnt);
+		$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_name'].'" /> ', $source, $config['resmiles'] - $count, $cnt);
 		$count += $cnt;
 		if ($count >= $config['resmiles']) break;
 	}
