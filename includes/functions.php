@@ -1004,11 +1004,6 @@ function stats_checker() {
 	}
 }
 
-// --------------- Функция вывода количества рекламы ----------------//
-function stats_advert() {
-	return DB::run() -> querySingle("SELECT count(*) FROM `reklama`;");
-}
-
 // --------------- Функция вывода количества приглашений --------------//
 function stats_invite() {
 	$invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", array(0));
