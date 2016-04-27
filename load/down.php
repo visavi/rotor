@@ -605,7 +605,7 @@ case 'quote':
 		$post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? LIMIT 1;", array($pid));
 
 		if (!empty($post)) {
-			$post['commload_text'] = preg_replace('|\[q\](.*?)\[/q\](<br />)?|', '', $post['commload_text']);
+			$post['commload_text'] = preg_replace('|\[q\](.*?)\[/q\]|s', '', $post['commload_text']);
 
 			echo '<div class="form">';
 			echo '<form action="down.php?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';

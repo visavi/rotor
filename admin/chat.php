@@ -171,7 +171,7 @@ if (is_admin()) {
 
 			if (!empty($post)) {
 
-				$post['chat_text'] = preg_replace('|\[q\](.*?)\[/q\](<br />)?|', '', $post['chat_text']);
+				$post['chat_text'] = preg_replace('|\[q\](.*?)\[/q\]|s', '', $post['chat_text']);
 
 				echo '<div class="form">';
 				echo '<form action="chat.php?act=add&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
