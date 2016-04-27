@@ -31,6 +31,7 @@ inbox inbox_text
 news news_text
 note note_text
 notebook note_text
+notice notice_text
 offers offers_text offers_text_reply
 outbox outbox_text
 photo photo_text
@@ -111,6 +112,10 @@ DB::run()->exec("UPDATE `note` SET `note_text`= REPLACE(`note_text`, '.gif\" alt
 DB::run()->exec("UPDATE `notebook` SET `note_text`= REPLACE(`note_text`, '<br />', '\n');");
 DB::run()->exec("UPDATE `notebook` SET `note_text`= REPLACE(`note_text`, '<img src=\"/images/smiles/', ':');");
 DB::run()->exec("UPDATE `notebook` SET `note_text`= REPLACE(`note_text`, '.gif\" alt=\"smile\" />', '');");
+
+DB::run()->exec("UPDATE `notice` SET `notice_text`= REPLACE(`notice_text`, '<br />', '\n');");
+DB::run()->exec("UPDATE `notice` SET `notice_text`= REPLACE(`notice_text`, '<img src=\"/images/smiles/', ':');");
+DB::run()->exec("UPDATE `notice` SET `notice_text`= REPLACE(`notice_text`, '.gif\" alt=\"smile\" />', '');");
 
 DB::run()->exec("UPDATE `offers` SET `offers_text`= REPLACE(`offers_text`, '<br />', '\n');");
 DB::run()->exec("UPDATE `offers` SET `offers_text`= REPLACE(`offers_text`, '<img src=\"/images/smiles/', ':');");
