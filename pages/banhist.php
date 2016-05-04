@@ -12,8 +12,6 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-$config['listbanhist'] = 10;
-
 if (empty($_GET['uz'])) {
 	$uz = check($log);
 } else {

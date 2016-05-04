@@ -121,7 +121,6 @@ INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES
 ('rekuserpost', '10'),
 ('photogroup', '10'),
 ('photoexprated', '72'),
-('postchanges', '10'),
 ('forumtextlength', '3000'),
 ('guesttextlength', '1000'),
 ('doslimit', '0'),

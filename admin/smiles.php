@@ -12,10 +12,6 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-$smilemaxsize = 10240; // Максимальный вес смайла, byte
-$smilemaxweight = 100; // Максимальный размер смайла, px
-$smileminweight = 16; // Минимальный размер смайла, px
-
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
@@ -54,7 +50,6 @@ case 'index':
 
 	//show_error('Смайлы еще не загружены!');
 
-
 	echo '<img src="/images/img/download.gif" alt="image" /> <a href="smiles.php?act=add&amp;start='.$start.'">Загрузить</a><br />';
 break;
 
@@ -74,7 +69,7 @@ case 'add':
 	echo '<input type="submit" value="Загрузить" /></form></div><br />';
 
 	echo 'Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png, bmp<br />';
-	echo 'Весом не более '.formatsize($smilemaxsize).' и размером до '.$smilemaxweight.' px<br /><br />';
+	echo 'Весом не более '.formatsize($config['smilemaxsize']).' и размером до '.$config['smilemaxweight'].' px<br /><br />';
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="smiles.php?start='.$start.'">Вернуться</a><br />';
 break;
@@ -98,7 +93,7 @@ case 'load':
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('empty', $smile, 'Смайл с данным кодом уже имеется в списке!')
 			-> addRule('string', $code, 'Слишком длинный или короткий код смайла!', true, 2, 20)
-			-> addRule('regex', array($code, '|^:+[a-яa-z0-9_\-/]+$|i'), 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
+			-> addRule('regex', array($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i'), 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
 
 
 		if ($validation->run()) {
@@ -113,11 +108,11 @@ case 'load':
 				//$handle -> file_overwrite = true;
 
 				$handle -> ext_check = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
-				$handle -> file_max_size = $smilemaxsize;  // byte
-				$handle -> image_max_width = $smilemaxweight;  // px
-				$handle -> image_max_height = $smilemaxweight; // px
-				$handle -> image_min_width = $smileminweight;   // px
-				$handle -> image_min_height = $smileminweight;  // px
+				$handle -> file_max_size = $config['smilemaxsize'];  // byte
+				$handle -> image_max_width = $config['smilemaxweight'];  // px
+				$handle -> image_max_height = $config['smilemaxweight']; // px
+				$handle -> image_min_width = $config['smileminweight'];   // px
+				$handle -> image_min_height = $config['smileminweight'];  // px
 				$handle -> process(BASEDIR.'/images/smiles/');
 
 				if ($handle -> processed) {
@@ -196,7 +191,7 @@ case 'change':
 		-> addRule('not_empty', $smile, 'Не найден смайл для редактирования!')
 		-> addRule('empty', $checkcode, 'Смайл с данным кодом уже имеется в списке!')
 		-> addRule('string', $code, 'Слишком длинный или короткий код смайла!', true, 1, 20)
-		-> addRule('regex', array($code, '|^:+[a-яa-z0-9_\-/]+$|i'), 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
+		-> addRule('regex', array($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i'), 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
 
 	if ($validation->run()) {
 

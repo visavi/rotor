@@ -1,0 +1,129 @@
+<?php
+#---------------------------------------------#
+#      ********* RotorCMS *********           #
+#           Author  :  Vantuz                 #
+#            Email  :  visavi.net@mail.ru     #
+#             Site  :  http://visavi.net      #
+#              ICQ  :  36-44-66               #
+#            Skype  :  vantuzilla             #
+#---------------------------------------------#
+if (!defined('BASEDIR')) {
+	exit(header('Location:../index.php'));
+}
+
+/* Добавление нового поля в таблицу пользователей для хранения времени получения бонуса */
+$check = DB::run() -> querySingle("SHOW COLUMNS FROM `users` LIKE 'users_timebonus';");
+if (empty($check)) {
+	DB::run() -> query("ALTER TABLE `users` ADD `users_timebonus` int(11) NOT NULL DEFAULT '0' AFTER `users_timelastlogin`;");
+	echo 'Добавлено поле users_timebonus в таблицу users<br />';
+}
+
+/* Добавление настроек количества ежедневгого бонуса в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('bonusmoney'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('bonusmoney', 500));
+	echo 'Добавлены настройки количества ежедневгого бонуса в таблицу setting<br />';
+}
+
+/* Добавление настроек количества денег при регистрации в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('registermoney'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('registermoney', 1000));
+	echo 'Добавлены настройки количества денег при регистрации в таблицу setting<br />';
+}
+
+
+/* Добавление нового поля в таблицу категорий загрузки для указания директории */
+$check = DB::run() -> querySingle("SHOW COLUMNS FROM `cats` LIKE 'folder';");
+if (empty($check)) {
+	DB::run() -> query("ALTER TABLE `cats` ADD `folder` varchar(50) NOT NULL DEFAULT '';");
+	echo 'Добавлено поле folder в таблицу cats<br />';
+}
+
+/* Добавление настроек веса смайлов в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('smilemaxsize'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('smilemaxsize', 10240));
+	echo 'Добавлены настройки веса смайлов в таблицу setting<br />';
+}
+
+/* Добавление настроек макс. размера смайлов в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('smilemaxweight'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('smilemaxweight', 100));
+	echo 'Добавлены настройки макс. размера смайлов в таблицу setting<br />';
+}
+
+/* Добавление настроек мин. размера смайлов в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('smileminweight'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('smileminweight', 16));
+	echo 'Добавлены настройки мин. размера смайлов в таблицу setting<br />';
+}
+
+/* Добавление настроек постраничной навигации событий в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('postevents'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('postevents', 10));
+	echo 'Добавлены настройки постраничной навигации событий в таблицу setting<br />';
+}
+
+/* Добавление настроек кол. комментарий событий в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('maxkommevents'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('maxkommevents', 500));
+	echo 'Добавлены настройки кол. комментарий событий в таблицу setting<br />';
+}
+
+/* Добавление настроек кол. баллов для публикации событий в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('eventpoint'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('eventpoint', 50));
+	echo 'Добавлены настройки кол. баллов для публикации событий в таблицу setting<br />';
+}
+
+/* Добавление настроек постраничной навигации истории банов в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('listbanhist'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('listbanhist', 10));
+	echo 'Добавлены настройки постраничной навигации истории банов в таблицу setting<br />';
+}
+
+/* Добавление настроек постраничной навигации инвайтов в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('listinvite'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('listinvite', 20));
+	echo 'Добавлены настройки постраничной навигации инвайтов в таблицу setting<br />';
+}
+
+/* Добавление настроек постраничной навигации предложения и проблемы в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('postoffers'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('postoffers', 10));
+	echo 'Добавлены настройки постраничной навигации предложения и проблемы в таблицу setting<br />';
+}
+
+/* Добавление настроек постраничной навигации комментариев предложения и проблемы в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('postcommoffers'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('postcommoffers', 10));
+	echo 'Добавлены настройки постраничной навигации комментариев предложения и проблемы в таблицу setting<br />';
+}
+
+/* Добавление настроек кол. комментариев предложения и проблемы в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('maxpostoffers'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('maxpostoffers', 300));
+	echo 'Добавлены настройки кол. комментариев предложения и проблемы в таблицу setting<br />';
+}
+
+
+
+
+$version = substr(strstr(basename(__FILE__), '_'), 1, -4);
+
+DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));
+clearCache();
+
+echo '<div class="note"><b>RotorCMS автоматически обновлен до версии ' . $version . '</b></div><br />';
+?>

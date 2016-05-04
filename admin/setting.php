@@ -12,11 +12,7 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-if (isset($_GET['act'])) {
-	$act = check($_GET['act']);
-} else {
-	$act = 'index';
-}
+$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 if (is_admin(array(101))) {
 	show_title('Настройки сайта');
@@ -40,14 +36,18 @@ if (is_admin(array(101))) {
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setthree">Гостевая / Новости</a><br />';
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setfour">Форум / Галерея / Объявления</a><br />';
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setfive">Закладки / Голосования / Приват</a><br />';
-			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setload">Загруз-центр</a> / <a href="setting.php?act=setblog">Блоги</a><br />';
+			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setload">Загруз-центр</a> <br />';
+			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setblog">Блоги</a><br />';
+			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setevent">События</a><br />';
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setseven">Постраничная навигация</a><br />';
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=seteight">Прочее / Другое</a><br />';
 			// echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setnine">Кэширование</a><br />';
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setten">Защита / Безопасность</a><br />';
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=seteleven">Стоимость и цены</a><br />';
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setadv">Реклама на сайте</a><br />';
-			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setimage">Загрузка изображений</a><br /><br />';
+			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setimage">Загрузка изображений</a><br />';
+			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setsmile">Смайлы</a><br />';
+			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setoffer">Предложения и проблемы</a><br /><br />';
 		break;
 
 		############################################################################################
@@ -748,6 +748,55 @@ if (is_admin(array(101))) {
 		break;
 
 		############################################################################################
+		##                                   Форма изменения событий                              ##
+		############################################################################################
+		case 'setevent':
+
+			echo '<b>Настройки событий</b><br /><hr />';
+
+			echo '<div class="form">';
+			echo '<form method="post" action="setting.php?act=editevent&amp;uid='.$_SESSION['token'].'">';
+
+			echo 'Событий на страницу:<br /><input name="postevents" maxlength="2" value="'.$setting['postevents'].'" /><br />';
+			echo 'Кол. комментарий сохраняется:<br /><input name="maxkommevents" maxlength="5" value="'.$setting['maxkommevents'].'" /><br />';
+			echo 'Кол. баллов для публикации событий:<br /><input name="eventpoint" maxlength="3" value="'.$setting['eventpoint'].'" /><br />';
+
+			echo '<input value="Изменить" type="submit" /></form></div><br />';
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
+		break;
+
+		############################################################################################
+		##                                   Изменение в событиях                                 ##
+		############################################################################################
+		case 'editevent':
+
+			$uid = check($_GET['uid']);
+
+			if ($uid == $_SESSION['token']) {
+				if ($_POST['postevents'] != "" && $_POST['maxkommevents'] != "" && $_POST['eventpoint'] != "" ) {
+
+					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+
+					$dbr -> execute(intval($_POST['postevents']), 'postevents');
+					$dbr -> execute(intval($_POST['maxkommevents']), 'maxkommevents');
+					$dbr -> execute(intval($_POST['eventpoint']), 'eventpoint');
+
+					save_setting();
+
+					notice('Настройки сайта успешно изменены!');
+					redirect("setting.php?act=setevent");
+
+				} else {
+					show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+				}
+			} else {
+				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+			}
+
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setevent">Вернуться</a><br />';
+		break;
+
+		############################################################################################
 		##                           Форма изменения постраничной навигации                       ##
 		############################################################################################
 		case 'setseven':
@@ -768,6 +817,7 @@ if (is_admin(array(101))) {
 			echo 'Юзеров в рейтинге авторитетов на стр.:<br /><input name="avtorlist" maxlength="2" value="'.$setting['avtorlist'].'" /><br />';
 			echo 'Юзеров в рейтинге долгожителей:<br /><input name="lifelist" maxlength="2" value="'.$setting['lifelist'].'" /><br />';
 			echo 'Юзеров в списке забаненных:<br /><input name="banlist" maxlength="2" value="'.$setting['banlist'].'" /><br />';
+			echo 'Листинг истории банов пользователя:<br /><input name="listbanhist" maxlength="2" value="'.$setting['listbanhist'].'" /><br />';
 			echo 'Листинг в IP-бан панеле:<br /><input name="ipbanlist" maxlength="2" value="'.$setting['ipbanlist'].'" /><br />';
 			echo 'Заголовков на страницу:<br /><input name="headlines" maxlength="2" value="'.$setting['headlines'].'" /><br />';
 			echo 'Аватаров на страницу:<br /><input name="avlist" maxlength="2" value="'.$setting['avlist'].'" /><br />';
@@ -775,7 +825,7 @@ if (is_admin(array(101))) {
 			echo 'Просмотр логов на страницу:<br /><input name="loglist" maxlength="2" value="'.$setting['loglist'].'" /><br />';
 			echo 'Данных на страницу в черном списке:<br /><input name="blacklist" maxlength="2" value="'.$setting['blacklist'].'" /><br />';
 			echo 'Пользователей в списке ожидающих:<br /><input name="reglist" maxlength="2" value="'.$setting['reglist'].'" /><br />';
-			echo 'Листинг в списке обновлений:<br /><input name="postchanges" maxlength="2" value="'.$setting['postchanges'].'" /><br />';
+			echo 'Инвайтов в приглашениях:<br /><input name="listinvite" maxlength="2" value="'.$setting['listinvite'].'" /><br />';
 
 			echo '<input value="Изменить" type="submit" /></form></div><br />';
 
@@ -790,7 +840,8 @@ if (is_admin(array(101))) {
 			$uid = check($_GET['uid']);
 
 			if ($uid == $_SESSION['token']) {
-				if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['showref'] != "" && $_POST['referer'] != "" && $_POST['showlink'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['ipbanlist'] != "" && $_POST['headlines'] != "" && $_POST['avlist'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['postchanges'] != "") {
+				if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['showref'] != "" && $_POST['referer'] != "" && $_POST['showlink'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['ipbanlist'] != "" && $_POST['headlines'] != "" && $_POST['avlist'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "") {
+
 					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 					$dbr -> execute(intval($_POST['userlist']), 'userlist');
 					$dbr -> execute(intval($_POST['showuser']), 'showuser');
@@ -803,6 +854,7 @@ if (is_admin(array(101))) {
 					$dbr -> execute(intval($_POST['avtorlist']), 'avtorlist');
 					$dbr -> execute(intval($_POST['lifelist']), 'lifelist');
 					$dbr -> execute(intval($_POST['banlist']), 'banlist');
+					$dbr -> execute(intval($_POST['listbanhist']), 'listbanhist');
 					$dbr -> execute(intval($_POST['ipbanlist']), 'ipbanlist');
 					$dbr -> execute(intval($_POST['headlines']), 'headlines');
 					$dbr -> execute(intval($_POST['avlist']), 'avlist');
@@ -810,7 +862,7 @@ if (is_admin(array(101))) {
 					$dbr -> execute(intval($_POST['loglist']), 'loglist');
 					$dbr -> execute(intval($_POST['blacklist']), 'blacklist');
 					$dbr -> execute(intval($_POST['reglist']), 'reglist');
-					$dbr -> execute(intval($_POST['postchanges']), 'postchanges');
+					$dbr -> execute(intval($_POST['listinvite']), 'listinvite');
 
 					save_setting();
 
@@ -1062,9 +1114,9 @@ if (is_admin(array(101))) {
 			echo 'Актива для перечисления денег: <br /><input name="sendmoneypoint" maxlength="4" value="'.$setting['sendmoneypoint'].'" /><br />';
 			echo 'Актива для изменения авторитета: <br /><input name="editratingpoint" maxlength="4" value="'.$setting['editratingpoint'].'" /><br />';
 			echo 'Актива для изменения тем форума: <br /><input name="editforumpoint" maxlength="4" value="'.$setting['editforumpoint'].'" /><br />';
-			echo 'Актива для скрытия рекламы: <br /><input name="advertpoint" maxlength="4" value="'.$setting['advertpoint'].'" /><br />';
+			echo 'Актива для скрытия рекламы: <br /><input name="advertpoint" maxlength="4" value="'.$setting['advertpoint'].'" /><br /><hr />';
 
-			echo 'Актива для создания предложения или проблемы: <br /><input name="addofferspoint" maxlength="4" value="'.$setting['addofferspoint'].'" /><br /><hr />';
+
 
 			$checked = ($setting['editstatus'] == 1) ? ' checked="checked"' : '';
 			echo '<input name="editstatus" type="checkbox" value="1"'.$checked.' /> Разрешить менять статус<br />';
@@ -1101,7 +1153,6 @@ if (is_admin(array(101))) {
 					$dbr -> execute(intval($_POST['editratingpoint']), 'editratingpoint');
 					$dbr -> execute(intval($_POST['editforumpoint']), 'editforumpoint');
 					$dbr -> execute(intval($_POST['advertpoint']), 'advertpoint');
-					$dbr -> execute(intval($_POST['addofferspoint']), 'addofferspoint');
 					$dbr -> execute($editstatus, 'editstatus');
 					$dbr -> execute(intval($_POST['editstatuspoint']), 'editstatuspoint');
 					$dbr -> execute(intval($_POST['editstatusmoney']), 'editstatusmoney');
@@ -1202,6 +1253,8 @@ if (is_admin(array(101))) {
 			echo 'Не устанавливайте слишком большие размеры веса и размера изображений, так как может не хватить процессорного времени для обработки<br />';
 			echo 'При изменении размера скриншота, необходимо вручную очистить кэш изображений<br /><br />';
 
+
+
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
 		break;
 
@@ -1215,6 +1268,7 @@ if (is_admin(array(101))) {
 
 			if ($uid == $_SESSION['token']) {
 				if ($_POST['filesize'] != "" && $_POST['fileupfoto'] != "" && $_POST['screensize'] != "" && $_POST['previewsize'] != "") {
+
 					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 
 					$dbr -> execute(intval($_POST['filesize'] * 1024), 'filesize');
@@ -1222,7 +1276,6 @@ if (is_admin(array(101))) {
 					$dbr -> execute(intval($_POST['screensize']), 'screensize');
 					$dbr -> execute(intval($_POST['previewsize']), 'previewsize');
 					$dbr -> execute($copyfoto, 'copyfoto');
-
 					save_setting();
 
 					notice('Настройки сайта успешно изменены!');
@@ -1237,6 +1290,107 @@ if (is_admin(array(101))) {
 
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setimage">Вернуться</a><br />';
 		break;
+
+
+		############################################################################################
+		##                         Форма изменения настройки смайлов                              ##
+		############################################################################################
+		case 'setsmile':
+
+			echo '<div class="form">';
+			echo '<form method="post" action="setting.php?act=editsmile&amp;uid='.$_SESSION['token'].'">';
+
+			echo '<b>Смайлы</b><br />';
+			echo 'Максимальный вес смайла (kb):<br /><input name="smilemaxsize" maxlength="3" value="'.round($setting['smilemaxsize'] / 1024).'" /><br />';
+			echo 'Максимальный размер смайла (px):<br /><input name="smilemaxweight" maxlength="3" value="'.$setting['smilemaxweight'].'" /><br />';
+			echo 'Минимальный размер смайла (px):<br /><input name="smileminweight" maxlength="3" value="'.$setting['smileminweight'].'" /><br />';
+
+			echo '<input value="Изменить" type="submit" /></form></div><br />';
+
+
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
+		break;
+
+		############################################################################################
+		##                             Изменение настроек смайлов                                 ##
+		############################################################################################
+		case 'editsmile':
+
+			$uid = check($_GET['uid']);
+
+			if ($uid == $_SESSION['token']) {
+				if ($_POST['smilemaxsize'] != "" && $_POST['smilemaxweight'] != "" && $_POST['smileminweight'] != "") {
+
+					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+
+					$dbr -> execute(intval($_POST['smilemaxsize'] * 1024), 'smilemaxsize');
+					$dbr -> execute(intval($_POST['smilemaxweight']), 'smilemaxweight');
+					$dbr -> execute(intval($_POST['smileminweight']), 'smileminweight');
+					save_setting();
+
+					notice('Настройки сайта успешно изменены!');
+					redirect("setting.php?act=setsmile");
+
+				} else {
+					show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+				}
+			} else {
+				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+			}
+
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setsmile">Вернуться</a><br />';
+		break;
+
+		############################################################################################
+		##                       Форма изменения предложения и проблемы                           ##
+		############################################################################################
+		case 'setoffer':
+
+			echo '<div class="form">';
+			echo '<form method="post" action="setting.php?act=editoffer&amp;uid='.$_SESSION['token'].'">';
+
+			echo '<b>Предложения и проблемы </b><br />';
+			echo 'Предложений на страницу:<br /><input name="postoffers" maxlength="2" value="'.$setting['postoffers'].'" /><br />';
+			echo 'Комментариев на страницу:<br /><input name="postcommoffers" maxlength="2" value="'.$setting['postcommoffers'].'" /><br />';
+			echo 'Кол. комментариев сохраняется:<br /><input name="maxpostoffers" maxlength="3" value="'.$setting['maxpostoffers'].'" /><br />';
+			echo 'Актива для создания предложения или проблемы: <br /><input name="addofferspoint" maxlength="4" value="'.$setting['addofferspoint'].'" /><br />';
+			echo '<input value="Изменить" type="submit" /></form></div><br />';
+
+
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
+		break;
+
+		############################################################################################
+		##                   Изменение настроек предложения и проблемы                            ##
+		############################################################################################
+		case 'editoffer':
+
+			$uid = check($_GET['uid']);
+
+			if ($uid == $_SESSION['token']) {
+				if ($_POST['postoffers'] != "" && $_POST['postcommoffers'] != "" && $_POST['maxpostoffers'] != "" && $_POST['addofferspoint'] != "") {
+
+					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+
+					$dbr -> execute(intval($_POST['postoffers']), 'postoffers');
+					$dbr -> execute(intval($_POST['postcommoffers']), 'postcommoffers');
+					$dbr -> execute(intval($_POST['maxpostoffers']), 'maxpostoffers');
+					$dbr -> execute(intval($_POST['addofferspoint']), 'addofferspoint');
+					save_setting();
+
+					notice('Настройки сайта успешно изменены!');
+					redirect("setting.php?act=setoffer");
+
+				} else {
+					show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+				}
+			} else {
+				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+			}
+
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setoffer">Вернуться</a><br />';
+		break;
+
 
 	default:
 		redirect("setting.php");

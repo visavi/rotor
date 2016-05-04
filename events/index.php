@@ -12,10 +12,6 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-$config['postevents'] = 10;    // Событий на страницу
-$config['maxkommevents'] = 500; // Комментариев сохраняется
-$config['eventpoint'] = 50;    // Кол. баллов для публикации
-
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
