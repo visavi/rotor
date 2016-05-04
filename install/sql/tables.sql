@@ -1111,7 +1111,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `users_site` varchar(50) NOT NULL DEFAULT '',
   `users_icq` varchar(10) NOT NULL DEFAULT '',
   `users_skype` varchar(32) NOT NULL DEFAULT '',
-  `users_jabber` varchar(50) NOT NULL DEFAULT '',
   `users_gender` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `users_birthday` varchar(10) NOT NULL DEFAULT '',
   `users_visits` int(11) unsigned NOT NULL DEFAULT '0',

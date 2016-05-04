@@ -71,13 +71,10 @@ case 'index':
 			echo 'Дата рождения: '.$data['users_birthday'].'<br />';
 		}
 		if (!empty($data['users_icq'])) {
-			echo '<img src="http://web.icq.com/whitepages/online?icq='.$data['users_icq'].'&amp;img=27" alt="icq" /> ICQ: '.$data['users_icq'].' <br />';
+			echo 'ICQ: '.$data['users_icq'].' <br />';
 		}
 		if (!empty($data['users_skype'])) {
-			echo '<img src="http://mystatus.skype.com/smallicon/'.$data['users_skype'].'" alt="skype" /> Skype: '.$data['users_skype'].' <br />';
-		}
-		if (!empty($data['users_jabber'])) {
-			echo 'Jabber: '.$data['users_jabber'].' <br />';
+			echo 'Skype: '.$data['users_skype'].' <br />';
 		}
 
 		echo 'Всего посeщений: '.$data['users_visits'].'<br />';

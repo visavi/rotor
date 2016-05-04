@@ -145,6 +145,13 @@ if (empty($check)) {
 	echo 'Добавлены настройки постраничной навигации в истории авторизаций в таблицу setting<br />';
 }
 
+/* Удаление поля jabber у пользователей */
+$check = DB::run() -> querySingle("SHOW COLUMNS FROM `users` LIKE 'users_jabber';");
+if (!empty($check)) {
+	DB::run() -> query("ALTER TABLE `users` DROP COLUMN `users_jabber`;");
+	echo 'Удалено поле users_jabber из таблицы users<br />';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));

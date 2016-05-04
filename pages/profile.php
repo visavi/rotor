@@ -48,7 +48,6 @@ case 'index':
 	echo 'Откуда:<br /><input name="city" maxlength="50" value="'.$udata['users_city'].'" /><br />';
 	echo 'ICQ:<br /><input name="icq" maxlength="10" value="'.$udata['users_icq'].'" /><br />';
 	echo 'Skype:<br /><input name="skype" maxlength="32" value="'.$udata['users_skype'].'" /><br />';
-	echo 'Jabber:<br /><input name="jabber" maxlength="50" value="'.$udata['users_jabber'].'" /><br />';
 	echo 'Сайт:<br /><input name="site" maxlength="50" value="'.$udata['users_site'].'" /><br />';
 	echo 'Дата рождения (дд.мм.гггг):<br /><input name="birthday" maxlength="10" value="'.$udata['users_birthday'].'" /><br />';
 
@@ -80,7 +79,6 @@ case 'edit':
 	$city = (isset($_POST['city'])) ? check($_POST['city']) : '';
 	$icq = (!empty($_POST['icq'])) ? check(str_replace('-', '', $_POST['icq'])) : '';
 	$skype = (isset($_POST['skype'])) ? check(strtolower($_POST['skype'])) : '';
-	$jabber = (isset($_POST['jabber'])) ? check(strtolower($_POST['jabber'])) : '';
 	$site = (isset($_POST['site'])) ? check($_POST['site']) : '';
 	$birthday = (isset($_POST['birthday'])) ? check($_POST['birthday']) : '';
 	$gender = (isset($_POST['gender'])) ? intval($_POST['gender']) : 0;
@@ -93,7 +91,6 @@ case 'edit':
 		-> addRule('regex', array($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#'), 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!', false)
 		-> addRule('regex', array($icq, '#^[0-9]{5,10}$#'), 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!', false)
 		-> addRule('regex', array($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#'), 'Недопустимый формат Skype, только латинские символы от 6 до 32!', false)
-		-> addRule('regex', array($jabber, '#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#'), 'Недопустимый формат Jabber, необходим формат name@site.domen!', false)
 		-> addRule('numeric', $gender, 'Вы не указали ваш пол!', true, 1, 2)
 		-> addRule('string', $info, 'Слишком большая информация о себе, не более 1000 символов!',  true, 0, 1000);
 
@@ -103,7 +100,7 @@ case 'edit':
 		$country = utf_substr($country, 0, 30);
 		$city = utf_substr($city, 0, 50);
 
-		DB::run() -> query("UPDATE `users` SET `users_name`=?, `users_country`=?, `users_city`=?, `users_icq`=?, `users_skype`=?, `users_jabber`=?, `users_site`=?, `users_birthday`=?, `users_gender`=?, `users_info`=? WHERE `users_login`=? LIMIT 1;", array($name, $country, $city, $icq, $skype, $jabber, $site, $birthday, $gender, $info, $log));
+		DB::run() -> query("UPDATE `users` SET `users_name`=?, `users_country`=?, `users_city`=?, `users_icq`=?, `users_skype`=?, `users_site`=?, `users_birthday`=?, `users_gender`=?, `users_info`=? WHERE `users_login`=? LIMIT 1;", array($name, $country, $city, $icq, $skype, $site, $birthday, $gender, $info, $log));
 
 		notice('Ваш профиль успешно изменен!');
 		redirect("profile.php");

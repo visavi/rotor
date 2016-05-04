@@ -179,8 +179,6 @@ if (is_admin(array(101, 102))) {
 					echo '<input type="text" name="birthday" maxlength="10" value="'.$user['users_birthday'].'" /><br />';
 					echo 'ICQ:<br />';
 					echo '<input type="text" name="icq" maxlength="10" value="'.$user['users_icq'].'" /><br />';
-					echo 'Jabber:<br />';
-					echo '<input type="text" name="jabber" maxlength="50" value="'.$user['users_jabber'].'" /><br />';
 					echo 'Имя пользователя:<br />';
 					echo '<input type="text" name="name" maxlength="20" value="'.$user['users_name'].'" /><br />';
 					echo 'Ник пользователя:<br />';
@@ -269,7 +267,6 @@ if (is_admin(array(101, 102))) {
 			$info = check($_POST['info']);
 			$site = check($_POST['site']);
 			$icq = intval($_POST['icq']);
-			$jabber = check($_POST['jabber']);
 			$gender = intval($_POST['gender']);
 			$birthday = check($_POST['birthday']);
 			$themes = check($_POST['themes']);
@@ -287,58 +284,54 @@ if (is_admin(array(101, 102))) {
 					if ($log == $config['nickname'] || $log == $user['users_login'] || ($user['users_level'] < 101 || $user['users_level'] > 105)) {
 						if (empty($pass) || preg_match('|^[a-z0-9\-]+$|i', $pass)) {
 							if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
-								if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $jabber) || empty($jabber)) {
-									if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
-										if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $joined)) {
-											if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
-												if ($gender == 1 || $gender == 2) {
-													if (utf_strlen($info) <= 1000) {
-														if ($log == $config['nickname']) {
-															$access = $level;
-														} else {
-															$access = $user['users_level'];
-														}
-
-														if (!empty($pass)) {
-															echo '<b><span style="color:#ff0000">Внимание! Вы изменили пароль пользователя!</span></b><br />';
-															echo 'Не забудьте ему напомнить его новый пароль: <b>'.$pass.'</b><br /><br />';
-															$mdpass = md5(md5($pass));
-														} else {
-															$mdpass = $user['users_pass'];
-														}
-
-														list($uday, $umonth, $uyear) = explode(".", $joined);
-														$joined = mktime('0', '0', '0', $umonth, $uday, $uyear);
-
-														$name = utf_substr($name, 0, 20);
-														$country = utf_substr($country, 0, 30);
-														$city = utf_substr($city, 0, 50);
-														$rating = $posrating - $negrating;
-
-														DB::run() -> query("UPDATE `users` SET `users_pass`=?, `users_email`=?, `users_joined`=?, `users_level`=?, `users_name`=?, `users_nickname`=?, `users_country`=?, `users_city`=?, `users_info`=?, `users_site`=?, `users_icq`=?, `users_jabber`=?, `users_gender`=?, `users_birthday`=?, `users_themes`=?, `users_point`=?, `users_money`=?, `users_status`=?, `users_avatar`=?, `users_rating`=?, `users_posrating`=?, `users_negrating`=? WHERE `users_login`=? LIMIT 1;", array($mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $jabber, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz));
-
-														save_title();
-														save_nickname();
-														save_money();
-
-														echo '<img src="/images/img/open.gif" alt="image" /> <b>Данные пользователя успешно изменены!</b><br /><br />';
+								if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
+									if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $joined)) {
+										if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
+											if ($gender == 1 || $gender == 2) {
+												if (utf_strlen($info) <= 1000) {
+													if ($log == $config['nickname']) {
+														$access = $level;
 													} else {
-														show_error('Ошибка! Слишком большая информация в графе о себе, не более 1000 символов!');
+														$access = $user['users_level'];
 													}
+
+													if (!empty($pass)) {
+														echo '<b><span style="color:#ff0000">Внимание! Вы изменили пароль пользователя!</span></b><br />';
+														echo 'Не забудьте ему напомнить его новый пароль: <b>'.$pass.'</b><br /><br />';
+														$mdpass = md5(md5($pass));
+													} else {
+														$mdpass = $user['users_pass'];
+													}
+
+													list($uday, $umonth, $uyear) = explode(".", $joined);
+													$joined = mktime('0', '0', '0', $umonth, $uday, $uyear);
+
+													$name = utf_substr($name, 0, 20);
+													$country = utf_substr($country, 0, 30);
+													$city = utf_substr($city, 0, 50);
+													$rating = $posrating - $negrating;
+
+													DB::run() -> query("UPDATE `users` SET `users_pass`=?, `users_email`=?, `users_joined`=?, `users_level`=?, `users_name`=?, `users_nickname`=?, `users_country`=?, `users_city`=?, `users_info`=?, `users_site`=?, `users_icq`=?, `users_gender`=?, `users_birthday`=?, `users_themes`=?, `users_point`=?, `users_money`=?, `users_status`=?, `users_avatar`=?, `users_rating`=?, `users_posrating`=?, `users_negrating`=? WHERE `users_login`=? LIMIT 1;", array($mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz));
+
+													save_title();
+													save_nickname();
+													save_money();
+
+													echo '<img src="/images/img/open.gif" alt="image" /> <b>Данные пользователя успешно изменены!</b><br /><br />';
 												} else {
-													show_error('Ошибка! Вы не указали пол пользователя!');
+													show_error('Ошибка! Слишком большая информация в графе о себе, не более 1000 символов!');
 												}
 											} else {
-												show_error('Ошибка! Недопустимая дата дня рождения, необходим формат (дд.мм.гггг)!');
+												show_error('Ошибка! Вы не указали пол пользователя!');
 											}
 										} else {
-											show_error('Ошибка! Недопустимая дата регистрации, необходим формат (дд.мм.гггг)!');
+											show_error('Ошибка! Недопустимая дата дня рождения, необходим формат (дд.мм.гггг)!');
 										}
 									} else {
-										show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+										show_error('Ошибка! Недопустимая дата регистрации, необходим формат (дд.мм.гггг)!');
 									}
 								} else {
-									show_error('Ошибка! Недопустимый формат Jabber, необходим формат name@site.domen!');
+									show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
 								}
 							} else {
 								show_error('Ошибка! Вы ввели неверный адрес e-mail, необходим формат name@site.domen!');

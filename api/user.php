@@ -30,7 +30,7 @@ if (!empty($key)){
 			'city'      => $user['users_city'],
 			'site'      => $user['users_site'],
 			'icq'       => $user['users_icq'],
-			'jabber'    => $user['users_jabber'],
+			'skype'     => $user['users_skype'],
 			'gender'    => $user['users_gender'],
 			'birthday'  => $user['users_birthday'],
 			'newwall'   => $user['users_newwall'],
