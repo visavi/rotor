@@ -818,6 +818,7 @@ if (is_admin(array(101))) {
 			echo 'Юзеров в рейтинге долгожителей:<br /><input name="lifelist" maxlength="2" value="'.$setting['lifelist'].'" /><br />';
 			echo 'Юзеров в списке забаненных:<br /><input name="banlist" maxlength="2" value="'.$setting['banlist'].'" /><br />';
 			echo 'Листинг истории банов пользователя:<br /><input name="listbanhist" maxlength="2" value="'.$setting['listbanhist'].'" /><br />';
+			echo 'Юзеров в поиске пользователей:<br /><input name="usersearch" maxlength="2" value="'.$setting['usersearch'].'" /><br />';
 			echo 'Листинг в IP-бан панеле:<br /><input name="ipbanlist" maxlength="2" value="'.$setting['ipbanlist'].'" /><br />';
 			echo 'Заголовков на страницу:<br /><input name="headlines" maxlength="2" value="'.$setting['headlines'].'" /><br />';
 			echo 'Аватаров на страницу:<br /><input name="avlist" maxlength="2" value="'.$setting['avlist'].'" /><br />';
@@ -826,6 +827,9 @@ if (is_admin(array(101))) {
 			echo 'Данных на страницу в черном списке:<br /><input name="blacklist" maxlength="2" value="'.$setting['blacklist'].'" /><br />';
 			echo 'Пользователей в списке ожидающих:<br /><input name="reglist" maxlength="2" value="'.$setting['reglist'].'" /><br />';
 			echo 'Инвайтов в приглашениях:<br /><input name="listinvite" maxlength="2" value="'.$setting['listinvite'].'" /><br />';
+			echo 'Постов на стене сообщений:<br /><input name="wallpost" maxlength="2" value="'.$setting['wallpost'].'" /><br />';
+			echo 'Сохраняется постов на стене сообщений:<br /><input name="wallmaxpost" maxlength="3" value="'.$setting['wallmaxpost'].'" /><br />';
+			echo 'История авторизаций:<br /><input name="loginauthlist" maxlength="3" value="'.$setting['loginauthlist'].'" /><br />';
 
 			echo '<input value="Изменить" type="submit" /></form></div><br />';
 
@@ -840,7 +844,7 @@ if (is_admin(array(101))) {
 			$uid = check($_GET['uid']);
 
 			if ($uid == $_SESSION['token']) {
-				if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['showref'] != "" && $_POST['referer'] != "" && $_POST['showlink'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['ipbanlist'] != "" && $_POST['headlines'] != "" && $_POST['avlist'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "") {
+				if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['showref'] != "" && $_POST['referer'] != "" && $_POST['showlink'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['headlines'] != "" && $_POST['avlist'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "") {
 
 					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 					$dbr -> execute(intval($_POST['userlist']), 'userlist');
@@ -855,6 +859,7 @@ if (is_admin(array(101))) {
 					$dbr -> execute(intval($_POST['lifelist']), 'lifelist');
 					$dbr -> execute(intval($_POST['banlist']), 'banlist');
 					$dbr -> execute(intval($_POST['listbanhist']), 'listbanhist');
+					$dbr -> execute(intval($_POST['usersearch']), 'usersearch');
 					$dbr -> execute(intval($_POST['ipbanlist']), 'ipbanlist');
 					$dbr -> execute(intval($_POST['headlines']), 'headlines');
 					$dbr -> execute(intval($_POST['avlist']), 'avlist');
@@ -863,6 +868,9 @@ if (is_admin(array(101))) {
 					$dbr -> execute(intval($_POST['blacklist']), 'blacklist');
 					$dbr -> execute(intval($_POST['reglist']), 'reglist');
 					$dbr -> execute(intval($_POST['listinvite']), 'listinvite');
+					$dbr -> execute(intval($_POST['wallpost']), 'wallpost');
+					$dbr -> execute(intval($_POST['wallmaxpost']), 'wallmaxpost');
+					$dbr -> execute(intval($_POST['loginauthlist']), 'loginauthlist');
 
 					save_setting();
 

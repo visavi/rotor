@@ -12,8 +12,6 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-$config['usersearch'] = 30;
-
 if (isset($_GET['act'])) {
 	$act = check($_GET['act']);
 } else {

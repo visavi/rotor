@@ -117,8 +117,33 @@ if (empty($check)) {
 	echo 'Добавлены настройки кол. комментариев предложения и проблемы в таблицу setting<br />';
 }
 
+/* Добавление настроек постраничной навигации в поиске пользователей в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('usersearch'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('usersearch', 30));
+	echo 'Добавлены настройки постраничной навигации в поиске пользователей в таблицу setting<br />';
+}
 
+/* Добавление настроек постраничной навигации стены сообщений в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('wallpost'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('wallpost', 10));
+	echo 'Добавлены настройки постраничной навигации в поиске пользователей в таблицу setting<br />';
+}
 
+/* Добавление настроек кол. постов стены сообщений в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('wallmaxpost'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('wallmaxpost', 100));
+	echo 'Добавлены настройки постраничной навигации в поиске пользователей в таблицу setting<br />';
+}
+
+/* Добавление настроек истории авторизаций в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('loginauthlist'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('loginauthlist', 10));
+	echo 'Добавлены настройки постраничной навигации в истории авторизаций в таблицу setting<br />';
+}
 
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 

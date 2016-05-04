@@ -23,8 +23,6 @@ if (isset($_GET['start'])) {
 	$start = 0;
 }
 
-$config['login_list'] = 10;
-
 show_title('История моих авторизаций');
 
 if (is_user()) {
@@ -37,7 +35,7 @@ if (is_user()) {
 			$start = 0;
 		}
 
-		$querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `login_user`=? ORDER BY `login_time` DESC LIMIT ".$start.", ".$config['login_list'].";", array($log));
+		$querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `login_user`=? ORDER BY `login_time` DESC LIMIT ".$start.", ".$config['loginauthlist'].";", array($log));
 		while ($data = $querylogin -> fetch()) {
 			echo '<div class="b">';
 			echo' <img src="/images/img/clock.gif" alt="clock" /> ';
@@ -57,7 +55,7 @@ if (is_user()) {
 			echo '</span></div>';
 		}
 
-		page_strnavigation('authlog.php?', $config['login_list'], $start, $total);
+		page_strnavigation('authlog.php?', $config['loginauthlist'], $start, $total);
 	} else {
 		show_error('История авторизаций отсутствует');
 	}
