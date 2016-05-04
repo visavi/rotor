@@ -233,7 +233,7 @@ break;
  * Удаление смайлов
  */
 case 'del':
-	$uid = check($_GET['uid']);
+	$uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
 	$del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
 
 	if ($uid == $_SESSION['token']) {
@@ -255,7 +255,7 @@ case 'del':
 				clearCache();
 
 				notice('Выбранные смайлы успешно удалены!');
-				redirect("smiles.php?act=$ref&start=$start");
+				redirect("smiles.php?start=$start");
 
 			} else {
 				show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
@@ -267,7 +267,7 @@ case 'del':
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	render('includes/back', array('link' => 'smiles.php?act='.$ref.'&amp;start='.$start, 'title' => 'Вернуться'));
+	render('includes/back', array('link' => 'smiles.php?start='.$start, 'title' => 'Вернуться'));
 break;
 
 default:
