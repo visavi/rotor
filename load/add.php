@@ -16,13 +16,9 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
-if (! is_user()) {
-	show_login('Вы не авторизованы, для добавления файла, необходимо');
-}
+if (is_user()) {
 
-if (! is_admin() || (! is_admin() && $config['downupload'] == 1)) {
-	show_error('Возможность добавление файлов запрещена администрацией сайта');
-}
+if (is_admin() || (is_admin() && $config['downupload'] == 1)) {
 
 switch ($act):
 /**
@@ -670,6 +666,14 @@ break;
 default:
 	redirect("add.php");
 endswitch;
+
+} else {
+	show_error('Возможность добавление файлов запрещена администрацией сайта');
+}
+
+} else {
+	show_login('Вы не авторизованы, для добавления файла, необходимо');
+}
 
 render('includes/back', array('link' => '/load/', 'title' => 'Категории', 'icon' => 'reload.gif'));
 
