@@ -17,8 +17,7 @@ $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
 if (is_user()) {
-
-if (is_admin() || (is_admin() && $config['downupload'] == 1)) {
+if (is_admin() || $config['downupload'] == 1) {
 
 switch ($act):
 /**
