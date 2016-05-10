@@ -152,6 +152,19 @@ if (!empty($check)) {
 	echo 'Удалено поле users_jabber из таблицы users<br />';
 }
 
+$check = DB::run() -> querySingle("SHOW COLUMNS FROM `users` LIKE 'users_sendprivatmail';");
+if (empty($check)) {
+	DB::run() -> query("ALTER TABLE `users` ADD `users_sendprivatmail` tinyint(1) unsigned NOT NULL DEFAULT '0' AFTER `users_timelastlogin`;");
+	echo 'Добавлено новое поле users_sendprivatmail в таблицу users<br />';
+}
+
+/* Добавление настроек кол. дней перед отправкой уведомления о привате на email в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('sendprivatmailday'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('sendprivatmailday', 3));
+	echo 'Добавлены настройки кол. дней перед отправкой уведомления о привате на email в таблицу setting<br />';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));

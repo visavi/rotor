@@ -12,23 +12,9 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-if (isset($_GET['act'])) {
-	$act = check($_GET['act']);
-} else {
-	$act = 'index';
-}
-if (isset($_GET['start'])) {
-	$start = abs(intval($_GET['start']));
-} else {
-	$start = 0;
-}
-if (isset($_GET['uz'])) {
-	$uz = check($_GET['uz']);
-} elseif (isset($_POST['uz'])) {
-	$uz = check($_POST['uz']);
-} else {
-	$uz = '';
-}
+$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
+$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$uz = (isset($_REQUEST['uz'])) ? check($_REQUEST['uz']) : '';
 
 show_title('Приватные сообщения');
 
@@ -50,7 +36,7 @@ if (is_user()) {
 
 			if ($udata['users_newprivat'] > 0) {
 				echo '<div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: '.(int)$udata['users_newprivat'].'</span></b></div>';
-				DB::run() -> query("UPDATE `users` SET `users_newprivat`=? WHERE `users_login`=? LIMIT 1;", array(0, $log));
+				DB::run() -> query("UPDATE `users` SET `users_newprivat`=?, `users_sendprivatmail`=? WHERE `users_login`=? LIMIT 1;", array(0, 0, $log));
 			}
 
 			if ($total >= ($config['limitmail'] - ($config['limitmail'] / 10)) && $total < $config['limitmail']) {
@@ -309,7 +295,20 @@ if (is_user()) {
 													DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_author`=? AND `outbox_time` < (SELECT MIN(`outbox_time`) FROM (SELECT `outbox_time` FROM `outbox` WHERE `outbox_author`=? ORDER BY `outbox_time` DESC LIMIT ".$config['limitoutmail'].") AS del);", array($log, $log));
 													save_usermail(60);
 
-													$_SESSION['note'] = 'Ваше письмо успешно отправлено!';
+													// Рассылка писем пользователям которые не заходили на сайте и есть приват
+													$deliveryUsers = DBM::run()->query("SELECT * FROM `users` WHERE `users_newprivat`>0 AND `users_sendprivatmail`=0 AND `users_timelastlogin`<:lasttime ORDER BY `users_timelastlogin` ASC LIMIT :limit;", array('lasttime' => (SITETIME - 86400 * $config['sendprivatmailday']), 'limit' => 5));
+
+													foreach ($deliveryUsers as $user) {
+														addmail($user['users_email'], $user['users_newprivat']." непрочитанных сообщений (".$config['title'].")", "Здравствуйте! \nУ вас имеются непрочитанные сообщения (".$user['users_newprivat'].")шт. на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages/private.php");
+
+														$user = DBM::run()->update('users', array(
+															'users_sendprivatmail' => 1,
+														), array(
+															'users_login' => $user['users_login'],
+														));
+													}
+
+													notice('Ваше письмо успешно отправлено!');
 													redirect("private.php");
 
 												} else {

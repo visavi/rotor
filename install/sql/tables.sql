@@ -1145,6 +1145,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `users_keypasswd` varchar(20) NOT NULL DEFAULT '',
   `users_timepasswd` int(11) unsigned NOT NULL DEFAULT '0',
   `users_timelastlogin` int(11) unsigned NOT NULL DEFAULT '0',
+  `users_sendprivatmail` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `users_confirmreg` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `users_confirmregkey` varchar(30) NOT NULL DEFAULT '',
   `users_secquest` varchar(50) NOT NULL DEFAULT '',
