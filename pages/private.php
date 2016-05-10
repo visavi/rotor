@@ -299,7 +299,7 @@ if (is_user()) {
 													$deliveryUsers = DBM::run()->query("SELECT * FROM `users` WHERE `users_newprivat`>0 AND `users_sendprivatmail`=0 AND `users_timelastlogin`<:lasttime ORDER BY `users_timelastlogin` ASC LIMIT :limit;", array('lasttime' => (SITETIME - 86400 * $config['sendprivatmailday']), 'limit' => 5));
 
 													foreach ($deliveryUsers as $user) {
-														addmail($user['users_email'], $user['users_newprivat']." непрочитанных сообщений (".$config['title'].")", "Здравствуйте! \nУ вас имеются непрочитанные сообщения (".$user['users_newprivat'].")шт. на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages/private.php");
+														addmail($user['users_email'], $user['users_newprivat']." непрочитанных сообщений (".$config['title'].")", "Здравствуйте ".nickname($user['users_login'])."! \nУ вас имеются непрочитанные сообщения (".$user['users_newprivat']." шт.) на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages/private.php");
 
 														$user = DBM::run()->update('users', array(
 															'users_sendprivatmail' => 1,
