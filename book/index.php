@@ -57,9 +57,9 @@ case 'add':
 						$bookscores = ($config['bookscores']) ? 1 : 0;
 
 						$user = DBM::run()->update('users', array(
-							'users_allguest' => array(1),
-							'users_point'    => array($bookscores),
-							'users_money'    => array(5),
+							'users_allguest' => array('+', 1),
+							'users_point'    => array('+', $bookscores),
+							'users_money'    => array('+', 5),
 						), array(
 							'users_login' => $log
 						));

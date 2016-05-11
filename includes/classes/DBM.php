@@ -37,7 +37,6 @@ class DBM {
 	 */
 	protected static $instance = null;
 
-
 	/**
 	 * method instance.
 	 * 	- static, for singleton, for creating a global instance of this object
@@ -50,7 +49,6 @@ class DBM {
 		}
 		return self::$instance;
 	}
-
 
 	/**
 	 * Constructor.
@@ -198,7 +196,11 @@ class DBM {
 			}
 
 			// append clause item
-			$sql_str .= "$key = :$key";
+			if (is_array($val)) {
+				$sql_str .= $key.current($val).":$key";
+			} else {
+				$sql_str .= "$key = :$key";
+			}
 		}
 
 		// now we attempt to retrieve the row using the sql string
@@ -208,6 +210,9 @@ class DBM {
 
 			// bind each parameter in the array
 			foreach ($params as $key=>$val) {
+				if (is_array($val)) {
+					$val = end($val);
+				}
 				$pstmt->bindValue(':'.$key, $val);
 			}
 
@@ -256,7 +261,11 @@ class DBM {
 			}
 
 			// append clause item
-			$sql_str .= "$key = :$key";
+			if (is_array($val)) {
+				$sql_str .= $key.current($val).":$key";
+			} else {
+				$sql_str .= "$key=:$key";
+			}
 		}
 
 		// add the order by clause if we have one
@@ -291,6 +300,9 @@ class DBM {
 
 			// bind each parameter in the array
 			foreach ($params as $key=>$val) {
+				if (is_array($val)) {
+					$val = end($val);
+				}
 				$pstmt->bindValue(':'.$key, $val);
 			}
 
@@ -351,7 +363,11 @@ class DBM {
 			}
 
 			// append clause item
-			$sql_str .= "$key = :$key";
+			if (is_array($val)) {
+				$sql_str .= "$key".current($val).":$key";
+			} else {
+				$sql_str .= "$key=:$key";
+			}
 		}
 
 		// now we attempt to retrieve the row using the sql string
@@ -360,6 +376,9 @@ class DBM {
 
 			// bind each parameter in the array
 			foreach ($params as $key=>$val) {
+				if (is_array($val)) {
+					$val = end($val);
+				}
 				$pstmt->bindValue(':'.$key, $val);
 			}
 
@@ -386,7 +405,7 @@ class DBM {
 	 * @param string $table - the name of the db table we are adding row to
 	 * @param array $params - associative array representing the columns and their respective values to update
 	 * @param array $wheres (Optional) - the where clause of the query
-	 * @param bool $timestamp_this (Optional) - if true we set date_created and date_modified values to now
+	 * @param bool $timestamp_this (Optional) - if true we set created and modified values to now
 	 * @return int|bool - the amount of rows updated, false on failure
 	 */
 	public function update($table, $params, $wheres=array(), $timestamp_this=null) {
@@ -407,7 +426,7 @@ class DBM {
 
 			// now append the parameter
 			if (is_array($val)) {
-				$set_string .= "$key=$key+$val[0]";
+				$set_string .= "$key=$key".implode($val);
 			} else {
 				$set_string .= "$key=:param_$key";
 			}
@@ -415,7 +434,7 @@ class DBM {
 
 		// add the timestamp columns if neccessary
 		if ($timestamp_this === true) {
-			$set_string .= ($add_comma ? ', ' : '') . 'date_modified='.time();
+			$set_string .= ($add_comma ? ', ' : '') . 'modified='.time();
 		}
 
 		// lets add our where clause if we have one
@@ -424,7 +443,13 @@ class DBM {
 			// load each key value pair, and implode them with an AND
 			$where_array = array();
 			foreach($wheres as $key => $val) {
-				$where_array[] = "$key=:where_$key";
+
+				// append clause item
+				if (is_array($val)) {
+					$where_array[] = $key.current($val).":where_$key";
+				} else {
+					$where_array[] = "$key=:where_$key";
+				}
 			}
 			// build the final where string
 			$where_string = 'WHERE '.implode(' AND ', $where_array);
@@ -445,6 +470,9 @@ class DBM {
 
 			// bind each where item in the array
 			foreach ($wheres as $key=>$val) {
+				if (is_array($val)) {
+					$val = end($val);
+				}
 				$pstmt->bindValue(':where_'.$key, $val);
 			}
 
@@ -470,7 +498,7 @@ class DBM {
 	 *
 	 * @param string $table - the name of the db table we are adding row to
 	 * @param array $params - associative array representing the columns and their respective values
-	 * @param bool $timestamp_this (Optional), if true we set date_created and date_modified values to now
+	 * @param bool $timestamp_this (Optional), if true we set created and modified values to now
 	 * @return mixed - new primary key of inserted table, false on failure
 	 */
 	public function insert($table, $params = array(), $timestamp_this = null) {
@@ -500,7 +528,7 @@ class DBM {
 
 		// add the timestamp columns if neccessary
 		if ($timestamp_this === true) {
-			$columns_str .= ($add_comma ? ', ' : '') . 'date_created, date_modified';
+			$columns_str .= ($add_comma ? ', ' : '') . 'created, modified';
 			$values_str .= ($add_comma ? ', ' : '') . time().', '.time();
 		}
 
@@ -542,7 +570,7 @@ class DBM {
 	 *
 	 * @param string $table - the name of the db table we are adding row to
 	 * @param array $columns - contains the column names
-	 * @param bool $timestamp_these (Optional), if true we set date_created and date_modified values to NOW() for each row
+	 * @param bool $timestamp_these (Optional), if true we set created and modified values to NOW() for each row
 	 * @return mixed - new primary key of inserted table, false on failure
 	 */
 	public function insertMultiple($table, $columns = array(), $rows = array(), $timestamp_these = null) {
@@ -553,8 +581,8 @@ class DBM {
 		// generate the columns portion of the insert statment
 		// adding the timestamp fields if needs be
 		if ($timestamp_these) {
-			$columns[] = 'date_created';
-			$columns[] = 'date_modified';
+			$columns[] = 'created';
+			$columns[] = 'modified';
 		}
 		$columns_str = '(' . implode(',', $columns) . ') ';
 
@@ -715,15 +743,6 @@ class DBM {
 			return $this->pdo_exception->getMessage();
 		else
 			return 'Database temporarily unavailable';
-	}
-
-	/**
-	 * Проверяет является ли массив ассоциативным
-	 * @param  array   $array массив
-	 * @return boolean        результат
-	 */
-	private function isAssoc($array) {
-		return array_values($array) !== $array;
 	}
 
 	/**

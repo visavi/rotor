@@ -12,11 +12,7 @@ require_once ('../includes/functions.php');
 require_once ('../includes/header.php');
 include_once ('../themes/header.php');
 
-if (isset($_GET['act'])) {
-	$act = check($_GET['act']);
-} else {
-	$act = 'index';
-}
+$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 show_title('Письмо Администратору');
 
@@ -55,19 +51,10 @@ switch ($act):
 	############################################################################################
 	case 'send':
 
-		$body = check($_POST['body']);
-		$provkod = check(strtolower($_POST['provkod']));
-
-		if (isset($_POST['name'])) {
-			$name = check($_POST['name']);
-		} else {
-			$name = '';
-		}
-		if (isset($_POST['umail'])) {
-			$umail = check($_POST['umail']);
-		} else {
-			$umail = '';
-		}
+		$body = isset($_POST['body']) ? check($_POST['body']) : '';
+		$name = isset($_POST['name']) ? check($_POST['name']) : '';
+		$umail = isset($_POST['umail']) ? check($_POST['umail']) : '';
+		$provkod = isset($_POST['provkod']) ? check(strtolower($_POST['provkod'])) : '';
 
 		if (is_user()) {
 			$name = $log;
@@ -94,7 +81,7 @@ switch ($act):
 							}
 						}
 
-						$_SESSION['note'] = 'Ваше письмо успешно отправлено!';
+						notice('Ваше письмо успешно отправлено!');
 						redirect("index.php");
 
 					} else {
