@@ -10,13 +10,8 @@ mySettings = {
 		{name:'Strike', className:"strike", key:'D', openWith:'[del]', closeWith:'[/del]'},
 		{separator:'---------------' },
 		{name:'Link', className:"link", key:'L', openWith:'[url=[![Ссылка:!:http://]!]]', closeWith:'[/url]', placeHolder:'Текст ссылки...'},
+		{name:'Picture', className:"picture", openWith:'[img][![URL изображения:!:http://]!]', closeWith:'[/img]'},
 		{name:'Video', className:"youtube", openWith:'[youtube][![Код видео с youtube]!]', closeWith:'[/youtube]'},
-		{name:'Colors', className:"colors",
-		dropMenu: [
-			{name:'Red', openWith:'[red]', closeWith:'[/red]', className:"col1-1" },
-			{name:'Green', openWith:'[green]', closeWith:'[/green]', className:"col1-2" },
-			{name:'Blue', openWith:'[blue]', closeWith:'[/blue]', className:"col1-3" }
-		]},
 		{separator:'---------------' },
 		{name:'Small', className:"small", openWith:'[small]', closeWith:'[/small]' },
 		{name:'Big', className:"big", openWith:'[big]', closeWith:'[/big]' },
@@ -37,6 +32,12 @@ mySettings = {
 			{name:':infat', openWith:' :infat ', className:"col3-1" },
 			{name:':klass', openWith:' :klass ', className:"col3-2" },
 			{name:':krut', openWith:' :krut ', className:"col3-3" }
+		]},
+		{name:'Colors', className:"colors",
+		dropMenu: [
+			{name:'Red', openWith:'[red]', closeWith:'[/red]', className:"col1-1" },
+			{name:'Green', openWith:'[green]', closeWith:'[/green]', className:"col1-2" },
+			{name:'Blue', openWith:'[blue]', closeWith:'[/blue]', className:"col1-3" }
 		]},
 		{name:'Nextpage', className:"nextpage", openWith:'[nextpage]'},
 		{name:'Cutpage', className:"cutpage", openWith:'[cut]'}

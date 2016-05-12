@@ -209,6 +209,14 @@ function spoiler_text($match) {
 	</div>';
 }
 
+function img_replace($match) {
+	if (preg_match('/[\w\-]+\.(jpg|png|gif|jpeg)/', $match[1])) {
+		return '<img src="'.$match[1].'" class="img-responsive img-message" alt="image">';
+	} else {
+		return $match[1];
+	}
+}
+
 // ------------------ Функция вставки BB-кода --------------------//
 function bb_code($msg) {
 	$msg = nl2br($msg);
@@ -218,6 +226,7 @@ function bb_code($msg) {
 
 	$msg = preg_replace_callback('#\[spoiler=(.*?)\](.*?)\[/spoiler\]#si', 'spoiler_text',$msg);
 	$msg = preg_replace_callback('#\[spoiler\](.*?)\[/spoiler\]#si', 'spoiler_text',$msg);
+	//$msg = preg_replace_callback('#\[img\](.*?)\[/img\]#si', 'img_replace',$msg);
 
 	$msg = preg_replace_callback('~\[url=((https?|ftp)://.+?)\](.+?)\[/url\]|((https?|ftp)://[0-9a-zа-яё/.;?=\(\)\_\-&%#]+)~ui', 'url_replace', $msg);
 	$msg = preg_replace('#\[youtube\](.*?)\[/youtube\]#si', '<iframe width="280" height="210" src="//www.youtube.com/embed/\1" frameborder="0"></iframe>', $msg);
