@@ -577,6 +577,7 @@ if (is_admin(array(101))) {
 			echo 'Писем в привате на стр.:<br /><input name="privatpost" maxlength="2" value="'.$setting['privatpost'].'" /><br />';
 			echo 'Порог выключения защитной картинки:<br /><input name="privatprotect" maxlength="4" value="'.$setting['privatprotect'].'" /><br />';
 			echo 'Кол. дней перед отправкой уведомления о привате на email:<br /><input name="sendprivatmailday" maxlength="2" value="'.$setting['sendprivatmailday'].'" /><br />';
+			echo 'Рассылка писем на email за одну операцию:<br /><input name="sendmailpacket" maxlength="3" value="'.$setting['sendmailpacket'].'" /><br />';
 			echo 'Листинг в контакт-листе:<br /><input name="contactlist" maxlength="2" value="'.$setting['contactlist'].'" /><br />';
 			echo 'Листинг в игнор-листе:<br /><input name="ignorlist" maxlength="2" value="'.$setting['ignorlist'].'" /><br />';
 			echo 'Максимальное кол. в контакт-листе:<br /><input name="limitcontact" maxlength="2" value="'.$setting['limitcontact'].'" /><br />';
@@ -595,13 +596,14 @@ if (is_admin(array(101))) {
 			$uid = check($_GET['uid']);
 
 			if ($uid == $_SESSION['token']) {
-				if ($_POST['limitmail'] != "" && $_POST['limitoutmail'] != "" && $_POST['expiresmail'] != "" && $_POST['privatpost'] != "" && $_POST['sendprivatmailday'] != "" && $_POST['privatprotect'] != "" && $_POST['contactlist'] != "" && $_POST['ignorlist'] != "" && $_POST['limitcontact'] != "" && $_POST['limitignore'] != "" && $_POST['allvotes'] != "") {
+				if ($_POST['limitmail'] != "" && $_POST['limitoutmail'] != "" && $_POST['expiresmail'] != "" && $_POST['privatpost'] != "" && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "" && $_POST['privatprotect'] != "" && $_POST['contactlist'] != "" && $_POST['ignorlist'] != "" && $_POST['limitcontact'] != "" && $_POST['limitignore'] != "" && $_POST['allvotes'] != "") {
 					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 					$dbr -> execute(intval($_POST['limitmail']), 'limitmail');
 					$dbr -> execute(intval($_POST['limitoutmail']), 'limitoutmail');
 					$dbr -> execute(intval($_POST['expiresmail']), 'expiresmail');
 					$dbr -> execute(intval($_POST['privatpost']), 'privatpost');
 					$dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
+					$dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
 					$dbr -> execute(intval($_POST['privatprotect']), 'privatprotect');
 					$dbr -> execute(intval($_POST['contactlist']), 'contactlist');
 					$dbr -> execute(intval($_POST['ignorlist']), 'ignorlist');

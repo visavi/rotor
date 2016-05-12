@@ -165,6 +165,13 @@ if (empty($check)) {
 	echo 'Добавлены настройки кол. дней перед отправкой уведомления о привате на email в таблицу setting<br />';
 }
 
+/* Добавление настроек рассылки писем за одну операцию в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('sendmailpacket'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('sendmailpacket', 20));
+	echo 'Добавлены настройки рассылки писем за одну операцию в таблицу setting<br />';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));

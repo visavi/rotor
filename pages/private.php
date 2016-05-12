@@ -261,14 +261,10 @@ if (is_user()) {
 		############################################################################################
 		case 'send':
 
-			$uid = check($_GET['uid']);
-			$msg = check($_POST['msg']);
-			if (!empty($_POST['uzcon'])) {
-				$uz = check($_POST['uzcon']);
-			}
-			if (isset($_POST['provkod'])) {
-				$provkod = check(strtolower($_POST['provkod']));
-			}
+			$uid = !empty($_GET['uid']) ? check($_GET['uid']) : 0;
+			$msg = isset($_POST['msg']) ? check($_POST['msg']) : '';
+			$uz = isset($_POST['uzcon']) ? check($_POST['uzcon']) : $uz;
+			$provkod = isset($_POST['provkod']) ? check(strtolower($_POST['provkod'])) : '';
 
 			if ($uid == $_SESSION['token']) {
 				if (!empty($uz)) {
@@ -295,8 +291,11 @@ if (is_user()) {
 													DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_author`=? AND `outbox_time` < (SELECT MIN(`outbox_time`) FROM (SELECT `outbox_time` FROM `outbox` WHERE `outbox_author`=? ORDER BY `outbox_time` DESC LIMIT ".$config['limitoutmail'].") AS del);", array($log, $log));
 													save_usermail(60);
 
-													// Рассылка писем пользователям которые не заходили на сайте и есть приват
-													$deliveryUsers = DBM::run()->query("SELECT * FROM `users` WHERE `users_newprivat`>0 AND `users_sendprivatmail`=0 AND `users_timelastlogin`<:lasttime ORDER BY `users_timelastlogin` ASC LIMIT :limit;", array('lasttime' => (SITETIME - 86400 * $config['sendprivatmailday']), 'limit' => 5));
+													$deliveryUsers = DBM::run()->select('users', array(
+															'users_newprivat' => array('>', 0),
+															'users_sendprivatmail' => 0,
+															'users_timelastlogin' => array('<', SITETIME - 86400 * $config['sendprivatmailday']),
+													), $config['sendmailpacket'], null, array('users_timelastlogin'=>'ASC'));
 
 													foreach ($deliveryUsers as $user) {
 														addmail($user['users_email'], $user['users_newprivat']." непрочитанных сообщений (".$config['title'].")", "Здравствуйте ".nickname($user['users_login'])."! \nУ вас имеются непрочитанные сообщения (".$user['users_newprivat']." шт.) на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages/private.php");
@@ -307,7 +306,6 @@ if (is_user()) {
 															'users_login' => $user['users_login'],
 														));
 													}
-
 													notice('Ваше письмо успешно отправлено!');
 													redirect("private.php");
 
