@@ -126,11 +126,9 @@ class DBM {
 			$new_connection = new PDO($connection_string, $user, $password);
 
 			// set the error mode
-
 			$new_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$new_connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 			$new_connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-
 
 			$new_connection->exec('SET CHARACTER SET utf8');
 			$new_connection->exec('SET NAMES utf8');
@@ -739,10 +737,9 @@ class DBM {
 	 * 	- returns the last error message caught
 	 */
 	public function getErrorMessage() {
-		if ($this->pdo_exception)
+		if ($this->pdo_exception) {
 			return $this->pdo_exception->getMessage();
-		else
-			return 'Database temporarily unavailable';
+		}
 	}
 
 	/**
