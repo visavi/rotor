@@ -1211,7 +1211,7 @@ function addmail($mail, $subject, $messages, $sendermail="", $sendername="") {
 
 	$adds = "From: =?UTF-8?B?".base64_encode($sendername)."?= <".$sendermail.">\n";
 	$adds .= "X-sender: =?UTF-8?B?".base64_encode($sendername)."?= <".$sendermail.">\n";
-	$adds .= "List-Unsubscribe: <http://".$config['home']."/pages/account.php>\n";
+	$adds .= "List-Unsubscribe: <".$config['home']."/pages/account.php>\n";
 	$adds .= "Content-Type: text/plain; charset=utf-8\n";
 	$adds .= "MIME-Version: 1.0\n";
 	$adds .= "Content-Transfer-Encoding: 8bit\n";
