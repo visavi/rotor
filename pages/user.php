@@ -21,8 +21,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-	$data = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
-	if (!empty($data)) {
+	if ($data = user($uz)) {
 
 		show_title(user_avatars($uz).nickname($uz), user_visit($uz));
 		$config['newtitle'] = 'Анкета пользователя '.nickname($data['users_login']);

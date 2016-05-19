@@ -76,6 +76,9 @@ case 'index':
 	$checked = ($udata['users_privacy'] == 1) ? ' checked="checked"' : '';
 	echo '<input name="privacy" id="privacy" type="checkbox" value="1"'.$checked.' title="Писать в приват и на стену смогут только пользователи из контактов" /> <label for="privacy">Режим приватности</label><br />';
 
+	$checked = (! empty($udata['users_subscribe'])) ? ' checked="checked"' : '';
+	echo '<input name="subscribe" id="subscribe" type="checkbox" value="1"'.$checked.' title="Получение уведомлений с сайта на email" /> <label for="subscribe">Получать информационные письма</label><br />';
+
 	echo '<input value="Изменить" type="submit" /></form></div><br />';
 
 	echo '* Значение всех полей (max.50)<br /><br />';
@@ -98,6 +101,7 @@ case 'edit':
 	$timezone = (isset($_POST['timezone'])) ? check($_POST['timezone']) : 0;
 	$ipbinding = (empty($_POST['ipbinding'])) ? 0 : 1;
 	$privacy = (empty($_POST['privacy'])) ? 0 : 1;
+	$subscribe = (! empty($_POST['subscribe'])) ? generate_password(32) : '';
 
 	$validation = new Validation;
 
@@ -115,14 +119,25 @@ case 'edit':
 	if ($validation->run()) {
 		if (file_exists(BASEDIR."/themes/$themes/index.php") || $themes==0) {
 
-		DB::run() -> query("UPDATE `users` SET `users_themes`=?, `users_postguest`=?, `users_postnews`=?, `users_postprivat`=?, `users_postforum`=?, `users_themesforum`=?, `users_postboard`=?, `users_timezone`=?, `users_ipbinding`=?, `users_navigation`=?, `users_privacy`=? WHERE users_login=?", array($themes, $postguest, $postnews, $postprivat, $postforum, $themesforum, $postboard, $timezone, $ipbinding, $navigation, $privacy, $log));
+			$user = DBM::run()->update('users', array(
+				'users_themes'      => $themes,
+				'users_postguest'   => $postguest,
+				'users_postnews'    => $postnews,
+				'users_postprivat'  => $postprivat,
+				'users_postforum'   => $postforum,
+				'users_themesforum' => $themesforum,
+				'users_postboard'   => $postboard,
+				'users_timezone'    => $timezone,
+				'users_ipbinding'   => $ipbinding,
+				'users_navigation'  => $navigation,
+				'users_privacy'     => $privacy,
+				'users_subscribe'   => $subscribe,
+			), array(
+				'users_login' => $log
+			));
 
-		if (!empty($_SESSION['my_themes'])) {
-			unset($_SESSION['my_themes']);
-		}
-
-		notice('Настройки успешно изменены!');
-		redirect("setting.php");
+			notice('Настройки успешно изменены!');
+			redirect("setting.php");
 
 		} else {
 			show_error('Ошибка! Данный скин не установлен на сайте!');

@@ -16,7 +16,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 show_title('Восстановление пароля');
 
-if (!is_user()) {
+if (! is_user()) {
 switch ($act):
 ############################################################################################
 ##                                    Главная страница                                    ##
@@ -108,7 +108,7 @@ case 'send':
 	$provkod = check($_POST['provkod']);
 
 	$user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
-	if (!empty($user)) {
+	if (! empty($user)) {
 
 		$validation = new Validation;
 
@@ -146,8 +146,8 @@ break;
 ############################################################################################
 case 'restore':
 
-	$uz = check($_GET['uz']);
-	$key = check($_GET['key']);
+	$uz = isset($_GET['uz']) ? check($_GET['uz']) : '';
+	$key = isset($_GET['key']) ? check($_GET['key']) : '';
 
 	$user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
 	if (!empty($user)) {

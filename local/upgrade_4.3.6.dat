@@ -172,6 +172,17 @@ if (empty($check)) {
 	echo 'Добавлены настройки рассылки писем за одну операцию в таблицу setting<br />';
 }
 
+/* Добавление нового поля в таблицу пользователей для отписки рассылки */
+$check = DB::run() -> querySingle("SHOW COLUMNS FROM `users` LIKE 'users_subscribe';");
+if (empty($check)) {
+	DB::run() -> query("ALTER TABLE `users` ADD `users_subscribe` varchar(32) NOT NULL DEFAULT '';");
+
+	// Заносим всем пользователям случайный хеш
+	DB::run() -> exec("UPDATE `users` SET `users_subscribe` = MD5(UUID());");
+
+	echo 'Добавлено поле users_subscribe в таблицу users<br />';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));

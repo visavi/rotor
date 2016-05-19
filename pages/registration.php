@@ -162,6 +162,7 @@ if ($config['openreg'] == 1) {
 
 						if ($config['regkeys'] == 1) {
 							$registration_key = generate_password();
+							$unsubscribe_key = generate_password(32);
 
 							echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br />';
 							echo 'Мастер-ключ был выслан вам на почтовый ящик: '.$meil.'</span></b><br /><br />';
@@ -180,8 +181,28 @@ if ($config['openreg'] == 1) {
 							DB::run() -> query("UPDATE `invite` SET `used`=?, `invited`=? WHERE `key`=? LIMIT 1;", array(1, $logs, $invite));
 						}
 
-						// ----------------------------------------------------------------------------------//
-						DB::run() -> query("INSERT INTO `users` (`users_login`, `users_pass`, `users_email`, `users_joined`, `users_level`, `users_gender`, `users_themes`, `users_postguest`, `users_postnews`, `users_postprivat`, `users_postforum`, `users_themesforum`, `users_postboard`, `users_point`, `users_money`, `users_timelastlogin`, `users_confirmreg`, `users_confirmregkey`, `users_navigation`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", array($logs, md5(md5($pars)), $meil, SITETIME, 107, $gender, 0, $config['bookpost'], $config['postnews'], $config['privatpost'], $config['forumpost'], $config['forumtem'], $config['boardspost'], 0, $config['registermoney'], SITETIME, $config['regkeys'], $registration_key, $config['navigation']));
+						$registration = DBM::run()->insert('users', array(
+							'users_login'         => $logs,
+							'users_pass'          => md5(md5($pars)),
+							'users_email'         => $meil,
+							'users_joined'        => SITETIME,
+							'users_level'         => 107,
+							'users_gender'        => $gender,
+							'users_themes'        => 0,
+							'users_postguest'     => $config['bookpost'],
+							'users_postnews'      => $config['postnews'],
+							'users_postprivat'    => $config['privatpost'],
+							'users_postforum'     => $config['forumpost'],
+							'users_themesforum'   => $config['forumtem'],
+							'users_postboard'     => $config['boardspost'],
+							'users_point'         => 0,
+							'users_money'         => $config['registermoney'],
+							'users_timelastlogin' => SITETIME,
+							'users_confirmreg'    => $config['regkeys'],
+							'users_confirmregkey' => $registration_key,
+							'users_navigation'    => $config['navigation'],
+							'users_subscribe'     => $unsubscribe_key,
+						));
 
 						// ------------------------------ Уведомление в приват ----------------------------------//
 						$textpriv = text_private(1, array('%USERNAME%'=>$logs, '%SITENAME%'=>$config['home']));

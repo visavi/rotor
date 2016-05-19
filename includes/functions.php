@@ -1208,7 +1208,7 @@ function is_utf($str) {
 }
 
 // ----------------------- Функция отправки письма по e-mail ------------------------//
-function addmail($mail, $subject, $messages, $sendermail="", $sendername="") {
+function addmail($mail, $subject, $messages, $sendermail='', $sendername='', $unsubkey = '') {
 	global $config;
 
 	if (empty($sendermail)) {
@@ -1220,12 +1220,16 @@ function addmail($mail, $subject, $messages, $sendermail="", $sendername="") {
 
 	$adds = "From: =?UTF-8?B?".base64_encode($sendername)."?= <".$sendermail.">\n";
 	$adds .= "X-sender: =?UTF-8?B?".base64_encode($sendername)."?= <".$sendermail.">\n";
-	$adds .= "List-Unsubscribe: <".$config['home']."/pages/account.php>\n";
 	$adds .= "Content-Type: text/plain; charset=utf-8\n";
 	$adds .= "MIME-Version: 1.0\n";
 	$adds .= "Content-Transfer-Encoding: 8bit\n";
 	$adds .= "X-Mailer: PHP v.".phpversion()."\n";
 	$adds .= "Date: ".date("r")."\n";
+
+	if (! empty($unsubkey)) {
+		$messages .= "\n\nЕсли вы не хотите получать эти эл. письма, пожалуйста, откажитесь от подписки. ".$config['home']."/mail/unsubscribe.php?key=".$unsubkey;
+		$adds .= "List-Unsubscribe: <".$config['home']."/mail/unsubscribe.php?key=".$unsubkey.">\n";
+	}
 
 	return mail($mail, $subject, $messages, $adds);
 }
@@ -1597,6 +1601,17 @@ function show_events() {
 	}
 }
 
+// --------------------- Функция получения данных аккаунта  --------------------//
+function user($login) {
+	if (! empty($login)) {
+		return DBM::run()->selectFirst('users', array('users_login'=>$login));
+	}
+	return false;
+}
+
+/**
+ * !! WARNING - DEPRECATED !!
+ */
 // ------------------------- Функция проверки аккаунта  ------------------------//
 function check_user($login) {
 	if (!empty($login)) {

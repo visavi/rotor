@@ -156,12 +156,11 @@ case 'send':
 				$listkeys[] = $key;
 			}
 
-			$text = 'Вы получили пригласительные ключи в количестве '.count($listkeys).'шт.<br />Список ключей: '.implode(', ', $listkeys);
+			$text = 'Вы получили пригласительные ключи в количестве '.count($listkeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listkeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на этот сайт!';
 			send_private($user, $log, $text);
 
 			notice('Ключи успешно отправлены!');
 			redirect("invitations.php");
-
 
 		} else {
 			show_error('Ошибка! Не найден пользователь с заданным логином!');
@@ -192,7 +191,7 @@ case 'mailing':
 			// Рассылка сообщений с подготовкой запросов
 			if ($total>0){
 
-				$text = 'Поздравляем! Вы получили пригласительный ключ <br />Ваш ключ: %s';
+				$text = 'Поздравляем! Вы получили пригласительный ключ'.PHP_EOL.'Ваш ключ: %s'.PHP_EOL.'С помощью этого ключа вы можете пригласить вашего друга на этот сайт!';
 
 				$updateusers = DB::run() -> prepare("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;");
 				$insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);");

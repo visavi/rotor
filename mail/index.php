@@ -25,7 +25,7 @@ switch ($act):
 		echo '<div class="form">';
 		echo '<form method="post" action="index.php?act=send">';
 
-		if (!is_user()) {
+		if (! is_user()) {
 			echo 'Ваше имя:<br /><input name="name" maxlength="20" /><br />';
 			echo 'Ваш E-mail:<br /><input name="umail" maxlength="50" /><br />';
 		} else {
@@ -72,7 +72,7 @@ switch ($act):
 						if (empty($config['sendmail'])) {
 							addmail($config['emails'], "Письмо с сайта ".$config['title'], html_entity_decode($body, ENT_QUOTES)."\n\nIp: $ip \nБраузер: $brow \nОтправлено: ".date('j.m.Y / H:i', SITETIME), $umail, $name);
 						} else {
-							if (check_user($config['nickname'])) {
+							if (user($config['nickname'])) {
 								$textpriv = 'Письмо от пользователя [b]'.$name.'[/b]!<br />E-mail: '.$umail.'<br />Сообщение: '.$body;
 								DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($config['nickname'], $config['nickname'], $textpriv, SITETIME));
 								DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?;", array($config['nickname']));
