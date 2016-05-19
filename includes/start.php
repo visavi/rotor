@@ -42,8 +42,13 @@ if (file_exists(BASEDIR.'/includes/vendor/autoload.php')) {
 
 // -------- Автозагрузка классов ---------- //
 function autoloader($class) {
+
 	$class = str_replace('\\', '/', $class);
-	include_once BASEDIR.'/includes/classes/'.$class.'.php';
+	if (file_exists(BASEDIR.'/includes/classes/'.$class.'.php')) {
+		include_once BASEDIR.'/includes/classes/'.$class.'.php';
+	}
+
+	include_once BASEDIR.'/includes/classes/swiftmailer/swift_required.php';
 }
 
 spl_autoload_register('autoloader');
