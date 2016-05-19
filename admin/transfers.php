@@ -73,7 +73,7 @@ if (is_admin(array(101, 102, 103))) {
 
 			$uz = (isset($_GET['uz'])) ? check($_GET['uz']) : '';
 
-			if (check_user($uz)) {
+			if (user($uz)) {
 
 				$total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `trans_user`=?;", array($uz));
 

@@ -61,13 +61,11 @@ if (is_admin()) {
 		<?php }?>
 	<?php }?>
 
-	<?php if (check_user($config['nickname'])) {?>
-		<?php $adminlevel = DB::run() -> querySingle("SELECT `users_level` FROM `users` WHERE `users_login`=? LIMIT 1;", array($config['nickname']));?>
-
-		<?php if ($adminlevel != 101) {?>
+	<?php if ($admin = user($config['nickname'])) {?>
+		<?php if ($admin['users_level'] != 101) {?>
 
 			<br /><div class="b"><b><span style="color:#ff0000">Внимание!!! Cуперадминистратор не имеет достаточных прав!</span></b><br />
-			Профилю назначен уровень доступа <b><?=$adminlevel?> - <?=user_status($adminlevel)?></b></div>
+			Профилю назначен уровень доступа <b><?=$admin['users_level']?> - <?=user_status($admin['users_level'])?></b></div>
 
 		<?php }?>
 

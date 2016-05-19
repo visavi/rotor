@@ -143,7 +143,7 @@ case 'send':
 	$user = (isset($_REQUEST['user'])) ? check($_REQUEST['user']) : '';
 
 	if ($uid == $_SESSION['token']) {
-		if (check_user($user)) {
+		if (user($user)) {
 
 
 			$dbr = DB::run() -> prepare("INSERT INTO `invite` (`key`, `user`, `time`) VALUES (?, ?, ?);");

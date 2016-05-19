@@ -245,7 +245,7 @@ if (is_admin()) {
 
 															if (!empty($notice) && $notice != $new['downs_notice']) {
 																// ------------------------Уведомление по привату------------------------//
-																if (check_user($new['downs_user'])) {
+																if (user($new['downs_user'])) {
 																	$textpriv = 'Уведомеление о проверке файла.<br />Ваш файл [b]'.$new['downs_title'].'[/b] не прошел проверку на добавление<br />Причина: '.$notice.'<br />Отредактировать описание файла вы можете на [url='.$config['home'].'/load/add.php?act=view&amp;id='.$id.']этой[/url] странице';
 
 																	DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($new['downs_user'], $log, $textpriv, SITETIME));
@@ -256,7 +256,7 @@ if (is_admin()) {
 
 															DB::run() -> query("UPDATE `downs` SET `downs_cats_id`=?, `downs_title`=?, `downs_text`=?, `downs_author`=?, `downs_site`=?, `downs_notice`=?, `downs_time`=?, `downs_app`=? WHERE `downs_id`=?;", array($cid, $title, $text, $author, $site, $notice, $new['downs_time'], $app, $id));
 
-															$_SESSION['note'] = 'Данные успешно изменены!';
+															notice('Данные успешно изменены!');
 															redirect("newload.php?act=view&id=$id");
 
 														} else {
@@ -319,7 +319,7 @@ if (is_admin()) {
 
 								DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($new['downs_cats_id']));
 
-								if (check_user($new['downs_user'])) {
+								if (user($new['downs_user'])) {
 									$textpriv = 'Уведомеление о проверке файла.<br />Ваш файл [b]'.$new['downs_title'].'[/b] успешно прошел проверку и добавлен в архив файлов<br />Просмотреть свой файл вы можете на [url='.$config['home'].'/load/down.php?act=view&amp;id='.$id.']этой[/url] странице';
 
 									DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($new['downs_user'], $log, $textpriv, SITETIME));

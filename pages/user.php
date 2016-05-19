@@ -175,7 +175,7 @@ case 'note':
 	show_title('Заметка для пользователя '.nickname($uz));
 
 	if (is_admin()) {
-		if (check_user($uz)) {
+		if (user($uz)) {
 			$usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `note_user`=? LIMIT 1;", array($uz));
 
 			echo '<div class="form">';
@@ -204,7 +204,7 @@ case 'editnote':
 
 		$validation = new Validation;
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('equal', array(check_user($uz), true), 'Пользователя с данным логином не существует!')
+			-> addRule('not_empty', user($uz), 'Пользователя с данным логином не существует!')
 			-> addRule('string', $note, 'Слишком большая заметка, не более 1000 символов!', true, 0, 1000);
 
 		if ($validation->run()) {

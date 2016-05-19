@@ -1609,20 +1609,6 @@ function user($login) {
 	return false;
 }
 
-/**
- * !! WARNING - DEPRECATED !!
- */
-// ------------------------- Функция проверки аккаунта  ------------------------//
-function check_user($login) {
-	if (!empty($login)) {
-		$user = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($login));
-		if (!empty($user)) {
-			return true;
-		}
-	}
-	return false;
-}
-
 // ------------------------- Функция проверки авторизации  ------------------------//
 function is_user() {
 	global $config;
@@ -2340,7 +2326,7 @@ function rename_file($filename, $newname){
 // ----- Функция определения входит ли пользователь в контакты -----//
 function is_contact($login, $contact){
 
-	if (check_user($contact)) {
+	if (user($contact)) {
 		$check_contact = DB::run() -> queryFetch("SELECT * FROM `contact` WHERE `contact_user`=? AND `contact_name`=? LIMIT 1;", array($login, $contact));
 
 		if (!empty($check_contact)){
@@ -2353,7 +2339,7 @@ function is_contact($login, $contact){
 // ----- Функция определения входит ли пользователь в игнор -----//
 function is_ignore($login, $ignore){
 
-	if (check_user($ignore)) {
+	if (user($ignore)) {
 		$check_ignore = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($login, $ignore));
 
 		if (!empty($check_ignore)){
@@ -2383,7 +2369,7 @@ function removeDir($dir){
 
 // ----- Функция отправки приватного сообщения -----//
 function send_private($login, $sender, $text, $time = SITETIME){
-	if (check_user($login)) {
+	if (user($login)) {
 
 		DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);",
 		array($login, $sender, $text, $time));

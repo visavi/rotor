@@ -88,7 +88,7 @@ if (is_admin(array(101, 102, 103))) {
 		case 'view':
 			$uz = (isset($_GET['uz'])) ? check($_GET['uz']) : '';
 
-			if (check_user($uz)) {
+			if (user($uz)) {
 				$total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `ban_user`=?;", array($uz));
 
 				if ($total > 0) {
