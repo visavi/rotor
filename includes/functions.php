@@ -1234,6 +1234,43 @@ function addmail($mail, $subject, $messages, $sendermail='', $sendername='', $un
 	return mail($mail, $subject, $messages, $adds);
 }
 
+/**
+ * Отправка уведомления на email
+ * @param  mixed   $to      Получатель
+ * @param  string  $subject Тема письма
+ * @param  string  $body    Текст сообщения
+ * @param  array   $params Дополнительные параметры
+ * @return boolean  Результат отправки
+ */
+function sendMail($to, $subject, $body, $params = array()) {
+	global $config;
+
+	if (empty($params['from'])) $params['from'] = array($config['emails'] => $config['nickname']);
+
+	if (isset($params['unsubkey'])) {
+		$message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$config['emails'].'>, <'.$config['home'].'/mail/unsubscribe.php?key='.$params['unsubkey'].'>');
+		$body .= '<br />Если вы не хотите получать эти эл. письма, пожалуйста, <a href="'.$config['home'].'/mail/unsubscribe.php?key='.$params['unsubkey'].'">откажитесь от подписки</a>';
+	}
+
+	$message = Swift_Message::newInstance()
+		->setTo($to)
+		->setSubject($subject)
+		->setBody($body, 'text/html')
+		->setFrom($params['from'])
+		->setReturnPath($config['emails']);
+
+	if ($config['maildriver'] == 'smtp') {
+		$transport = Swift_SmtpTransport::newInstance($config['mailhost'], $config['mailport'], $config['mailsecurity'])
+			->setUsername($config['mailusername'])
+			->setPassword($config['mailpassword']);
+	} else {
+		$transport = new Swift_MailTransport();
+	}
+
+	$mailer = new Swift_Mailer($transport);
+	return $mailer->send($message);
+}
+
 // ----------------------- Постраничная навигация ------------------------//
 function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 

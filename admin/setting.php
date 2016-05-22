@@ -30,6 +30,7 @@ if (is_admin(array(101))) {
 			  	echo'<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setzero">Администраторская</a><br />';
 
 				echo'<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=setone">Основные настройки</a><br />';
+				echo'<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=mail">Почта / Рассылка</a><br />';
 			}
 
 			echo '<img src="/images/img/edit.gif" alt="image" /> <a href="setting.php?act=settwo">Вывод информации</a><br />';
@@ -401,6 +402,98 @@ if (is_admin(array(101))) {
 		break;
 
 		############################################################################################
+		##                          Форма изменения почты и рассылок                              ##
+		############################################################################################
+		case 'mail':
+
+			echo '<b>Настройки почты и рассылок</b><br /><hr />';
+
+			echo '<div class="form">';
+			echo '<form method="post" action="setting.php?act=editmail&amp;uid='.$_SESSION['token'].'">';
+
+
+			echo '<b>Почта</b><br />';
+			echo 'Способ отправки почты: <br />';
+
+			$maildrivers = array('sendmail' => 'Отправка средставами PHP', 'smtp' => 'Протокол SMTP');
+			echo '<select name="maildriver">';
+
+			foreach ($maildrivers as $k => $v) {
+				$selected = ($k == $setting['maildriver']) ? ' selected="selected"' : '';
+
+				echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
+			}
+			echo '</select><br />';
+
+			echo 'SMTP-сервер:<br /><input name="mailhost" maxlength="100" value="'.$setting['mailhost'].'" title="Адрес сервера SMTP" /><br />';
+
+			echo 'SMTP-порт:<br /><input name="mailport" maxlength="6" value="'.$setting['mailport'].'" title="Номер порта SMTP" /><br />';
+
+			echo 'Протокол шифрования: <br />';
+
+			$maildrivers = array('' => 'Без протокола', 'ssl' => 'SSL шифрование', 'tls' => 'TLS шифрование');
+			echo '<select name="mailsecurity">';
+
+			foreach ($maildrivers as $k => $v) {
+				$selected = ($k == $setting['mailsecurity']) ? ' selected="selected"' : '';
+
+				echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
+			}
+			echo '</select><br />';
+
+			echo 'Имя пользователя:<br /><input name="mailusername" maxlength="100" value="'.$setting['mailusername'].'" title="Имя пользователя SMTP" /><br />';
+
+			echo 'Пароль пользователя:<br /><input name="mailpassword" type="password" maxlength="100" value="" title="Пароль пользователя SMTP" / placeholder="Пароль скрыт"><br />';
+
+			echo 'Кол. дней перед отправкой уведомления о привате на email:<br /><input name="sendprivatmailday" maxlength="2" value="'.$setting['sendprivatmailday'].'" /><br />';
+			echo 'Рассылка писем на email за одну операцию:<br /><input name="sendmailpacket" maxlength="3" value="'.$setting['sendmailpacket'].'" /><br />';
+
+			echo '<input value="Изменить" type="submit" /></form></div><br />';
+
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
+		break;
+
+		############################################################################################
+		##                           Изменение в гостевой и новостях                              ##
+		############################################################################################
+		case 'editmail':
+
+			$uid = check($_GET['uid']);
+
+			if ($uid == $_SESSION['token']) {
+				if ($_POST['maildriver'] != "" && $_POST['mailhost'] != "" && $_POST['mailport'] != "" && $_POST['mailsecurity'] && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
+
+					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+					$dbr -> execute(check($_POST['maildriver']), 'maildriver');
+					$dbr -> execute(check($_POST['mailhost']), 'mailhost');
+					$dbr -> execute(intval($_POST['mailport']), 'mailport');
+					$dbr -> execute(check($_POST['mailsecurity']), 'mailsecurity');
+					$dbr -> execute(check($_POST['mailusername']), 'mailusername');
+
+					if (! empty($_POST['mailpassword'])) {
+						$dbr -> execute(check($_POST['mailpassword']), 'mailpassword');
+					}
+
+					$dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
+					$dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
+
+					save_setting();
+
+					notice('Настройки сайта успешно изменены!');
+					redirect("setting.php?act=mail");
+
+				} else {
+					show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+				}
+			} else {
+				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+			}
+
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setmail">Вернуться</a><br />';
+		break;
+
+
+		############################################################################################
 		##                          Форма изменения гостевой и новостей                           ##
 		############################################################################################
 		case 'setthree':
@@ -576,8 +669,6 @@ if (is_admin(array(101))) {
 			echo 'Срок хранения удаленных писем:<br /><input name="expiresmail" maxlength="2" value="'.$setting['expiresmail'].'" /><br />';
 			echo 'Писем в привате на стр.:<br /><input name="privatpost" maxlength="2" value="'.$setting['privatpost'].'" /><br />';
 			echo 'Порог выключения защитной картинки:<br /><input name="privatprotect" maxlength="4" value="'.$setting['privatprotect'].'" /><br />';
-			echo 'Кол. дней перед отправкой уведомления о привате на email:<br /><input name="sendprivatmailday" maxlength="2" value="'.$setting['sendprivatmailday'].'" /><br />';
-			echo 'Рассылка писем на email за одну операцию:<br /><input name="sendmailpacket" maxlength="3" value="'.$setting['sendmailpacket'].'" /><br />';
 			echo 'Листинг в контакт-листе:<br /><input name="contactlist" maxlength="2" value="'.$setting['contactlist'].'" /><br />';
 			echo 'Листинг в игнор-листе:<br /><input name="ignorlist" maxlength="2" value="'.$setting['ignorlist'].'" /><br />';
 			echo 'Максимальное кол. в контакт-листе:<br /><input name="limitcontact" maxlength="2" value="'.$setting['limitcontact'].'" /><br />';
@@ -596,14 +687,12 @@ if (is_admin(array(101))) {
 			$uid = check($_GET['uid']);
 
 			if ($uid == $_SESSION['token']) {
-				if ($_POST['limitmail'] != "" && $_POST['limitoutmail'] != "" && $_POST['expiresmail'] != "" && $_POST['privatpost'] != "" && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "" && $_POST['privatprotect'] != "" && $_POST['contactlist'] != "" && $_POST['ignorlist'] != "" && $_POST['limitcontact'] != "" && $_POST['limitignore'] != "" && $_POST['allvotes'] != "") {
+				if ($_POST['limitmail'] != "" && $_POST['limitoutmail'] != "" && $_POST['expiresmail'] != "" && $_POST['privatpost'] != "" && $_POST['privatprotect'] != "" && $_POST['contactlist'] != "" && $_POST['ignorlist'] != "" && $_POST['limitcontact'] != "" && $_POST['limitignore'] != "" && $_POST['allvotes'] != "") {
 					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 					$dbr -> execute(intval($_POST['limitmail']), 'limitmail');
 					$dbr -> execute(intval($_POST['limitoutmail']), 'limitoutmail');
 					$dbr -> execute(intval($_POST['expiresmail']), 'expiresmail');
 					$dbr -> execute(intval($_POST['privatpost']), 'privatpost');
-					$dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
-					$dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
 					$dbr -> execute(intval($_POST['privatprotect']), 'privatprotect');
 					$dbr -> execute(intval($_POST['contactlist']), 'contactlist');
 					$dbr -> execute(intval($_POST['ignorlist']), 'ignorlist');

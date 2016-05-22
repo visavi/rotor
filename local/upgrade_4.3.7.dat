@@ -183,6 +183,48 @@ if (empty($check)) {
 	echo 'Добавлено поле users_subscribe в таблицу users<br />';
 }
 
+/* Добавление настроек драйвера отправки писем в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('maildriver'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('maildriver', 'sendmail'));
+	echo 'Добавлены настройки драйвера отправки писем в таблицу setting<br />';
+}
+
+/* Добавление настроек smtp хоста отправки писем в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('mailhost'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('mailhost', 'smtp.yandex.ru'));
+	echo 'Добавлены настройки smtp хоста отправки писем в таблицу setting<br />';
+}
+
+/* Добавление настроек smtp порта отправки писем в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('mailport'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('mailport', 465));
+	echo 'Добавлены настройки smtp порта отправки писем в таблицу setting<br />';
+}
+
+/* Добавление настроек smtp пользователя отправки писем в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('mailusername'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('mailusername', ''));
+	echo 'Добавлены настройки smtp пользователя отправки писем в таблицу setting<br />';
+}
+
+/* Добавление настроек smtp пароля отправки писем в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('mailpassword'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('mailpassword', ''));
+	echo 'Добавлены настройки smtp пароля отправки писем в таблицу setting<br />';
+}
+
+/* Добавление настроек smtp шифрования отправки писем в таблицу setting */
+$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('mailsecurity'));
+if (empty($check)) {
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('mailsecurity', 'ssl'));
+	echo 'Добавлены настройки smtp шифрования отправки писем в таблицу setting<br />';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));
