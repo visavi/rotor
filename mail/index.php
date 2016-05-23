@@ -69,21 +69,14 @@ switch ($act):
 				if (utf_strlen($body) >= 5 && utf_strlen($body) <= 5000) {
 					if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $umail)) {
 
-						if (empty($config['sendmail'])) {
-							addmail($config['emails'], "Письмо с сайта ".$config['title'], html_entity_decode($body, ENT_QUOTES)."\n\nIp: $ip \nБраузер: $brow \nОтправлено: ".date('j.m.Y / H:i', SITETIME), $umail, $name);
+						if (sendMail($config['emails'], 'Письмо с сайта '.$config['title'], html_entity_decode($body, ENT_QUOTES)."\n\nIp: $ip \nБраузер: $brow \nОтправлено: ".date_fixed(SITETIME), array('from' => array($umail => $name)))) {
+
+							notice('Ваше письмо успешно отправлено!');
+							redirect("index.php");
+
 						} else {
-							if (user($config['nickname'])) {
-								$textpriv = 'Письмо от пользователя [b]'.$name.'[/b]!<br />E-mail: '.$umail.'<br />Сообщение: '.$body;
-								DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($config['nickname'], $config['nickname'], $textpriv, SITETIME));
-								DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?;", array($config['nickname']));
-							} else {
-								show_error('Ошибка! Не удалось отправить письмо администратору так как его профиля не существует!');
-							}
+							show_error('Ошибка! Не удалось отправить письмо администратору!');
 						}
-
-						notice('Ваше письмо успешно отправлено!');
-						redirect("index.php");
-
 					} else {
 						show_error('Вы ввели неверный адрес e-mail, необходим формат name@site.domen!');
 					}

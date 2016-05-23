@@ -204,13 +204,6 @@ if (empty($check)) {
 	echo 'Добавлены настройки smtp порта отправки писем в таблицу setting<br />';
 }
 
-/* Добавление настроек smtp пользователя отправки писем в таблицу setting */
-$check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('mailusername'));
-if (empty($check)) {
-	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('mailusername', ''));
-	echo 'Добавлены настройки smtp пользователя отправки писем в таблицу setting<br />';
-}
-
 /* Добавление настроек smtp пароля отправки писем в таблицу setting */
 $check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('mailpassword'));
 if (empty($check)) {

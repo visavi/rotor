@@ -1260,8 +1260,9 @@ function sendMail($to, $subject, $body, $params = array()) {
 		->setReturnPath($config['emails']);
 
 	if ($config['maildriver'] == 'smtp') {
-		$transport = Swift_SmtpTransport::newInstance($config['mailhost'], $config['mailport'], $config['mailsecurity'])
-			->setUsername($config['mailusername'])
+		$mailsecurity = ! empty($config['mailsecurity']) ? $config['mailsecurity'] : null;
+		$transport = Swift_SmtpTransport::newInstance($config['mailhost'], $config['mailport'], $mailsecurity)
+			->setUsername($config['emails'])
 			->setPassword($config['mailpassword']);
 	} else {
 		$transport = new Swift_MailTransport();

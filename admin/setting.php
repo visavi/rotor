@@ -71,7 +71,7 @@ if (is_admin(array(101))) {
 		  		echo 'Будет произведена проверка нового пользователя и назначены ему все администраторские права<br /><br />';
 
 		  	} else {
-				show_error('Ошибка! Данные настройки доступны только старшему суперадминистратору!');
+				show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
 			}
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
 		break;
@@ -126,7 +126,7 @@ if (is_admin(array(101))) {
 					show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 				}
 			} else {
-				show_error('Ошибка! Данные настройки доступны только старшему суперадминистратору!');
+				show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
 			}
 
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setzero">Вернуться</a><br />';
@@ -240,9 +240,6 @@ if (is_admin(array(101))) {
 				$checked = ($setting['regmail'] == 1) ? ' checked="checked"' : '';
 				echo '<input name="regmail" type="checkbox" value="1"'.$checked.' /> Запрос email при регистрации<br />';
 
-				$checked = ($setting['sendmail'] == 1) ? ' checked="checked"' : '';
-				echo '<input name="sendmail" type="checkbox" value="1"'.$checked.' /> Связь с админом в приват<br />';
-
 				$checked = ($setting['cache'] == 1) ? ' checked="checked"' : '';
 				echo '<input name="cache" type="checkbox" value="1"'.$checked.' /> Включить кэширование страниц<br />';
 
@@ -257,7 +254,7 @@ if (is_admin(array(101))) {
 
 				echo '<input value="Изменить" type="submit" /></form></div><br />';
 			} else {
-				show_error('Ошибка! Основные настройки доступны только старшему суперадминистратору!');
+				show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
 			}
 
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
@@ -271,7 +268,6 @@ if (is_admin(array(101))) {
 			$uid = check($_GET['uid']);
 			$regmail = (empty($_POST['regmail'])) ? 0 : 1;
 			$invite = (empty($_POST['invite'])) ? 0 : 1;
-			$sendmail = (empty($_POST['sendmail'])) ? 0 : 1;
 			$cache = (empty($_POST['cache'])) ? 0 : 1;
 			$openreg = (empty($_POST['openreg'])) ? 0 : 1;
 			$gzip = (empty($_POST['gzip'])) ? 0 : 1;
@@ -301,7 +297,6 @@ if (is_admin(array(101))) {
 						$dbr -> execute($regkeys, 'regkeys');
 						$dbr -> execute($regmail, 'regmail');
 						$dbr -> execute($invite, 'invite');
-						$dbr -> execute($sendmail, 'sendmail');
 						$dbr -> execute($cache, 'cache');
 						$dbr -> execute($openreg, 'openreg');
 						$dbr -> execute($gzip, 'gzip');
@@ -321,10 +316,108 @@ if (is_admin(array(101))) {
 					show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 				}
 			} else {
-				show_error('Ошибка! Основные настройки доступны только старшему суперадминистратору!');
+				show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
 			}
 
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setone">Вернуться</a><br />';
+		break;
+
+		############################################################################################
+		##                          Форма изменения почты и рассылок                              ##
+		############################################################################################
+		case 'mail':
+
+			echo '<b>Настройки почты и рассылок</b><br /><hr />';
+
+			if ($log == $config['nickname']) {
+				echo '<div class="form">';
+				echo '<form method="post" action="setting.php?act=editmail&amp;uid='.$_SESSION['token'].'">';
+
+
+				echo '<b>Почта</b><br />';
+				echo 'Способ отправки почты: <br />';
+
+				$maildrivers = array('sendmail' => 'Отправка средставами PHP', 'smtp' => 'Протокол SMTP');
+				echo '<select name="maildriver">';
+
+				foreach ($maildrivers as $k => $v) {
+					$selected = ($k == $setting['maildriver']) ? ' selected="selected"' : '';
+
+					echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
+				}
+				echo '</select><br />';
+
+				echo 'SMTP-сервер:<br /><input name="mailhost" maxlength="100" value="'.$setting['mailhost'].'" title="Адрес сервера SMTP" /><br />';
+
+				echo 'SMTP-порт:<br /><input name="mailport" maxlength="6" value="'.$setting['mailport'].'" title="Номер порта SMTP" /><br />';
+
+				echo 'Протокол шифрования: <br />';
+
+				$maildrivers = array('' => 'Без протокола', 'ssl' => 'SSL шифрование', 'tls' => 'TLS шифрование');
+				echo '<select name="mailsecurity">';
+
+				foreach ($maildrivers as $k => $v) {
+					$selected = ($k == $setting['mailsecurity']) ? ' selected="selected"' : '';
+
+					echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
+				}
+				echo '</select><br />';
+
+				echo 'Имя пользователя (Данные из основных настроек):<br /><input name="emails" maxlength="100" value="'.$setting['emails'].'" title="Имя пользователя SMTP" /><br />';
+
+				$mailpassword = ! empty($setting['mailpassword']) ? 'Пароль скрыт' : 'Пароль не установлен';
+				echo 'Пароль пользователя:<br /><input name="mailpassword" type="password" maxlength="100" value="" title="Пароль пользователя SMTP" / placeholder="'.$mailpassword.'"><br />';
+
+				echo 'Кол. дней перед отправкой уведомления о привате на email:<br /><input name="sendprivatmailday" maxlength="2" value="'.$setting['sendprivatmailday'].'" /><br />';
+				echo 'Рассылка писем на email за одну операцию:<br /><input name="sendmailpacket" maxlength="3" value="'.$setting['sendmailpacket'].'" /><br />';
+
+				echo '<input value="Изменить" type="submit" /></form></div><br />';
+			} else {
+				show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
+			}
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
+		break;
+
+		############################################################################################
+		##                           Изменение в гостевой и новостях                              ##
+		############################################################################################
+		case 'editmail':
+
+			$uid = check($_GET['uid']);
+
+			if ($log == $config['nickname']) {
+				if ($uid == $_SESSION['token']) {
+					if ($_POST['maildriver'] != "" && $_POST['mailhost'] != "" && $_POST['mailport'] != "" && $_POST['mailsecurity'] && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
+
+						$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+						$dbr -> execute(check($_POST['maildriver']), 'maildriver');
+						$dbr -> execute(check($_POST['mailhost']), 'mailhost');
+						$dbr -> execute(intval($_POST['mailport']), 'mailport');
+						$dbr -> execute(check($_POST['mailsecurity']), 'mailsecurity');
+						$dbr -> execute(check($_POST['emails']), 'emails');
+
+						if (! empty($_POST['mailpassword'])) {
+							$dbr -> execute(check($_POST['mailpassword']), 'mailpassword');
+						}
+
+						$dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
+						$dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
+
+						save_setting();
+
+						notice('Настройки сайта успешно изменены!');
+						redirect("setting.php?act=mail");
+
+					} else {
+						show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+					}
+				} else {
+					show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+				}
+			} else {
+				show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
+			}
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setmail">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -400,98 +493,6 @@ if (is_admin(array(101))) {
 
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=settwo">Вернуться</a><br />';
 		break;
-
-		############################################################################################
-		##                          Форма изменения почты и рассылок                              ##
-		############################################################################################
-		case 'mail':
-
-			echo '<b>Настройки почты и рассылок</b><br /><hr />';
-
-			echo '<div class="form">';
-			echo '<form method="post" action="setting.php?act=editmail&amp;uid='.$_SESSION['token'].'">';
-
-
-			echo '<b>Почта</b><br />';
-			echo 'Способ отправки почты: <br />';
-
-			$maildrivers = array('sendmail' => 'Отправка средставами PHP', 'smtp' => 'Протокол SMTP');
-			echo '<select name="maildriver">';
-
-			foreach ($maildrivers as $k => $v) {
-				$selected = ($k == $setting['maildriver']) ? ' selected="selected"' : '';
-
-				echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
-			}
-			echo '</select><br />';
-
-			echo 'SMTP-сервер:<br /><input name="mailhost" maxlength="100" value="'.$setting['mailhost'].'" title="Адрес сервера SMTP" /><br />';
-
-			echo 'SMTP-порт:<br /><input name="mailport" maxlength="6" value="'.$setting['mailport'].'" title="Номер порта SMTP" /><br />';
-
-			echo 'Протокол шифрования: <br />';
-
-			$maildrivers = array('' => 'Без протокола', 'ssl' => 'SSL шифрование', 'tls' => 'TLS шифрование');
-			echo '<select name="mailsecurity">';
-
-			foreach ($maildrivers as $k => $v) {
-				$selected = ($k == $setting['mailsecurity']) ? ' selected="selected"' : '';
-
-				echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
-			}
-			echo '</select><br />';
-
-			echo 'Имя пользователя:<br /><input name="mailusername" maxlength="100" value="'.$setting['mailusername'].'" title="Имя пользователя SMTP" /><br />';
-
-			echo 'Пароль пользователя:<br /><input name="mailpassword" type="password" maxlength="100" value="" title="Пароль пользователя SMTP" / placeholder="Пароль скрыт"><br />';
-
-			echo 'Кол. дней перед отправкой уведомления о привате на email:<br /><input name="sendprivatmailday" maxlength="2" value="'.$setting['sendprivatmailday'].'" /><br />';
-			echo 'Рассылка писем на email за одну операцию:<br /><input name="sendmailpacket" maxlength="3" value="'.$setting['sendmailpacket'].'" /><br />';
-
-			echo '<input value="Изменить" type="submit" /></form></div><br />';
-
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
-		break;
-
-		############################################################################################
-		##                           Изменение в гостевой и новостях                              ##
-		############################################################################################
-		case 'editmail':
-
-			$uid = check($_GET['uid']);
-
-			if ($uid == $_SESSION['token']) {
-				if ($_POST['maildriver'] != "" && $_POST['mailhost'] != "" && $_POST['mailport'] != "" && $_POST['mailsecurity'] && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
-
-					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
-					$dbr -> execute(check($_POST['maildriver']), 'maildriver');
-					$dbr -> execute(check($_POST['mailhost']), 'mailhost');
-					$dbr -> execute(intval($_POST['mailport']), 'mailport');
-					$dbr -> execute(check($_POST['mailsecurity']), 'mailsecurity');
-					$dbr -> execute(check($_POST['mailusername']), 'mailusername');
-
-					if (! empty($_POST['mailpassword'])) {
-						$dbr -> execute(check($_POST['mailpassword']), 'mailpassword');
-					}
-
-					$dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
-					$dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
-
-					save_setting();
-
-					notice('Настройки сайта успешно изменены!');
-					redirect("setting.php?act=mail");
-
-				} else {
-					show_error('Ошибка! Все поля настроек обязательны для заполнения!');
-				}
-			} else {
-				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-			}
-
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setmail">Вернуться</a><br />';
-		break;
-
 
 		############################################################################################
 		##                          Форма изменения гостевой и новостей                           ##
