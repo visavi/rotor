@@ -66,10 +66,14 @@ switch ($act):
 
 		if ($_SESSION['protect'] == $provkod) {
 			if (utf_strlen($name) >= 3 && utf_strlen($name) <= 50) {
-				if (utf_strlen($body) >= 5 && utf_strlen($body) <= 5000) {
+				if (utf_strlen($body) >= 5 && utf_strlen($body) <= 10000) {
 					if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $umail)) {
 
-						if (sendMail($config['emails'], 'Письмо с сайта '.$config['title'], html_entity_decode($body, ENT_QUOTES)."\n\nIp: $ip \nБраузер: $brow \nОтправлено: ".date_fixed(SITETIME), array('from' => array($umail => $name)))) {
+						if (sendMail($config['emails'],
+								'Письмо с сайта '.$config['title'],
+								nl2br(html_entity_decode($body, ENT_QUOTES)).'<br /><br />IP: '.$ip.'<br />Браузер: '.$brow.'<br />Отправлено: '.date_fixed(SITETIME, 'j.m.Y / H:i'),
+								array('from' => array($umail => $name))
+							)) {
 
 							notice('Ваше письмо успешно отправлено!');
 							redirect("index.php");

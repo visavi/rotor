@@ -417,7 +417,7 @@ if (is_admin(array(101))) {
 			} else {
 				show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
 			}
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=setmail">Вернуться</a><br />';
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php?act=mail">Вернуться</a><br />';
 		break;
 
 		############################################################################################
