@@ -103,7 +103,6 @@ if (is_admin(array(101))) {
 									$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 									$dbr -> execute($login, 'nickname');
 									$dbr -> execute($mail, 'emails');
-									$dbr -> execute($pass, 'pass');
 
 									save_setting();
 
@@ -395,7 +394,6 @@ if (is_admin(array(101))) {
 							$dbr -> execute(check($_POST['mailhost']), 'mailhost');
 							$dbr -> execute(intval($_POST['mailport']), 'mailport');
 							$dbr -> execute(check($_POST['mailsecurity']), 'mailsecurity');
-							$dbr -> execute(check($_POST['emails']), 'emails');
 							$dbr -> execute(check($_POST['mailusername']), 'mailusername');
 
 							if (! empty($_POST['mailpassword'])) {

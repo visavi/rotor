@@ -228,7 +228,7 @@ if (empty($check)) {
 /* Добавление настроек времени подсчета онлайн в таблицу setting */
 $check = DB::run() -> querySingle("SELECT `setting_name` FROM `setting` WHERE `setting_name`=?;", array('timeonline'));
 if (empty($check)) {
-	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('timeonline', 10));
+	DB::run() -> query("INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('timeonline', 600));
 	echo 'Добавлены настройки времени подсчета онлайн в таблицу setting<br />';
 }
 
