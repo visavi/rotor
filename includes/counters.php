@@ -8,14 +8,13 @@
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
 if (!defined('BASEDIR')) {
-	header('Location: /index.php');
-	exit;
+	exit(header('Location: /index.php'));
 }
 
 $days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 $hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
 
-DB::run() -> query("DELETE FROM `online` WHERE `online_time`<?;", array(SITETIME-600));
+DB::run() -> query("DELETE FROM `online` WHERE `online_time`<?;", array(SITETIME-$config['timeonline']));
 
 $online = stats_online();
 if ($online[1] < 150 || is_user()) {

@@ -363,10 +363,10 @@ if (is_admin(array(101))) {
 				}
 				echo '</select><br />';
 
-				echo 'Имя пользователя (Данные из основных настроек):<br /><input name="emails" maxlength="100" value="'.$setting['emails'].'" title="Имя пользователя SMTP" /><br />';
+				echo 'Имя пользователя SMTP:<br /><input name="mailusername" maxlength="100" value="'.$setting['mailusername'].'" title="Имя пользователя SMTP" /><br />';
 
 				$mailpassword = ! empty($setting['mailpassword']) ? 'Пароль скрыт' : 'Пароль не установлен';
-				echo 'Пароль пользователя:<br /><input name="mailpassword" type="password" maxlength="100" value="" title="Пароль пользователя SMTP" / placeholder="'.$mailpassword.'"><br />';
+				echo 'Пароль пользователя SMTP:<br /><input name="mailpassword" type="password" maxlength="100" value="" title="Пароль пользователя SMTP" / placeholder="'.$mailpassword.'"><br />';
 
 				echo 'Кол. дней перед отправкой уведомления о привате на email:<br /><input name="sendprivatmailday" maxlength="2" value="'.$setting['sendprivatmailday'].'" /><br />';
 				echo 'Рассылка писем на email за одну операцию:<br /><input name="sendmailpacket" maxlength="3" value="'.$setting['sendmailpacket'].'" /><br />';
@@ -384,32 +384,37 @@ if (is_admin(array(101))) {
 		case 'editmail':
 
 			$uid = check($_GET['uid']);
-
+			$mailusername = ! empty($_POST['mailsecurity']) ? check($_POST['mailusername']) : '';
 			if ($log == $config['nickname']) {
 				if ($uid == $_SESSION['token']) {
-					if ($_POST['maildriver'] != "" && $_POST['mailhost'] != "" && $_POST['mailport'] != "" && $_POST['mailsecurity'] && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
+					if (empty($mailusername ) || preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mailusername)) {
+						if ($_POST['maildriver'] != "" && $_POST['mailhost'] != "" && $_POST['mailport'] != "" && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
 
-						$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
-						$dbr -> execute(check($_POST['maildriver']), 'maildriver');
-						$dbr -> execute(check($_POST['mailhost']), 'mailhost');
-						$dbr -> execute(intval($_POST['mailport']), 'mailport');
-						$dbr -> execute(check($_POST['mailsecurity']), 'mailsecurity');
-						$dbr -> execute(check($_POST['emails']), 'emails');
+							$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+							$dbr -> execute(check($_POST['maildriver']), 'maildriver');
+							$dbr -> execute(check($_POST['mailhost']), 'mailhost');
+							$dbr -> execute(intval($_POST['mailport']), 'mailport');
+							$dbr -> execute(check($_POST['mailsecurity']), 'mailsecurity');
+							$dbr -> execute(check($_POST['emails']), 'emails');
+							$dbr -> execute(check($_POST['mailusername']), 'mailusername');
 
-						if (! empty($_POST['mailpassword'])) {
-							$dbr -> execute(check($_POST['mailpassword']), 'mailpassword');
+							if (! empty($_POST['mailpassword'])) {
+								$dbr -> execute(check($_POST['mailpassword']), 'mailpassword');
+							}
+
+							$dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
+							$dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
+
+							save_setting();
+
+							notice('Настройки сайта успешно изменены!');
+							redirect("setting.php?act=mail");
+
+						} else {
+							show_error('Ошибка! Все поля настроек обязательны для заполнения!');
 						}
-
-						$dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
-						$dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
-
-						save_setting();
-
-						notice('Настройки сайта успешно изменены!');
-						redirect("setting.php?act=mail");
-
 					} else {
-						show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+						show_error('Неправильный адрес e-mail, необходим формат name@site.domen!');
 					}
 				} else {
 					show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -458,6 +463,8 @@ if (is_admin(array(101))) {
 			$checked = ($setting['onlines'] == 1) ? ' checked="checked"' : '';
 			echo '<input name="onlines" type="checkbox" value="1"'.$checked.' /> Онлайн<br />';
 
+			echo 'Время подсчета онлайн (минут):<br /><input name="timeonline" maxlength="5" value="'.round($setting['timeonline'] / 60).'" title="На сколько минут запоминать IP пользователя" /><br />';
+
 			echo '<input value="Изменить" type="submit" /></form></div><br />';
 			echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';
 		break;
@@ -472,12 +479,13 @@ if (is_admin(array(101))) {
 			$onlines = (empty($_POST['onlines'])) ? 0 : 1;
 
 			if ($uid == $_SESSION['token']) {
-				if ($_POST['incount'] != "" && $_POST['navigation'] != "") {
+				if ($_POST['incount'] != "" && $_POST['navigation'] != "" && $_POST['timeonline'] != "") {
 					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 					$dbr -> execute(intval($_POST['incount']), 'incount');
 					$dbr -> execute(intval($_POST['navigation']), 'navigation');
 					$dbr -> execute($performance, 'performance');
 					$dbr -> execute($onlines, 'onlines');
+					$dbr -> execute(intval($_POST['timeonline'] * 60), 'timeonline');
 
 					save_setting();
 
