@@ -367,6 +367,7 @@ if (is_admin(array(101))) {
 				$mailpassword = ! empty($setting['mailpassword']) ? 'Пароль скрыт' : 'Пароль не установлен';
 				echo 'Пароль пользователя SMTP:<br /><input name="mailpassword" type="password" maxlength="100" value="" title="Пароль пользователя SMTP" / placeholder="'.$mailpassword.'"><br />';
 
+				echo '<hr /><b>Рассылка</b><br />';
 				echo 'Кол. дней перед отправкой уведомления о привате на email:<br /><input name="sendprivatmailday" maxlength="2" value="'.$setting['sendprivatmailday'].'" /><br />';
 				echo 'Рассылка писем на email за одну операцию:<br /><input name="sendmailpacket" maxlength="3" value="'.$setting['sendmailpacket'].'" /><br />';
 

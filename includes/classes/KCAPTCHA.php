@@ -1,10 +1,10 @@
 <?php
 
-# KCAPTCHA PROJECT VERSION 2.0
+# KCAPTCHA PROJECT VERSION 2.1
 
 # Automatic test to tell computers and humans apart
 
-# Copyright by Kruglov Sergei, 2006, 2007, 2008, 2011
+# Copyright by Kruglov Sergei, 2006, 2007, 2008, 2011, 2016
 # www.captcha.ru, www.kruglov.ru
 
 # System requirements: PHP 4.0.6+ w/ GD
@@ -17,9 +17,10 @@
 # See kcaptcha_config.php for customization
 
 class KCAPTCHA{
-
 	// generates keystring and image
-	function KCAPTCHA(){
+	
+	//function KCAPTCHA(){ // old PHP declaration
+	function __construct(){ // new PHP declaration
 		global $config;
 
 		$alphabet = "0123456789abcdefghijklmnopqrstuvwxyz"; # do not change without changing font files!
@@ -130,8 +131,6 @@ class KCAPTCHA{
 			if($odd==0) $odd=-1;
 			for($i=0;$i<$length;$i++){
 				$m=$font_metrics[$this->keystring{$i}];
-
-
 
 				$y=(($i%2)*$fluctuation_amplitude - $fluctuation_amplitude/2)*$odd
 					+ mt_rand(-round($fluctuation_amplitude/3), round($fluctuation_amplitude/3))
