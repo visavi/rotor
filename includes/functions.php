@@ -1207,33 +1207,6 @@ function is_utf($str) {
 	return true;
 }
 
-// ----------------------- Функция отправки письма по e-mail ------------------------//
-function addmail($mail, $subject, $messages, $sendermail='', $sendername='', $unsubkey = '') {
-	global $config;
-
-	if (empty($sendermail)) {
-		$sendermail = $config['emails'];
-		$sendername = $config['nickname'];
-	}
-
-	$subject = '=?UTF-8?B?'.base64_encode($subject).'?=';
-
-	$adds = "From: =?UTF-8?B?".base64_encode($sendername)."?= <".$sendermail.">\n";
-	$adds .= "X-sender: =?UTF-8?B?".base64_encode($sendername)."?= <".$sendermail.">\n";
-	$adds .= "Content-Type: text/plain; charset=utf-8\n";
-	$adds .= "MIME-Version: 1.0\n";
-	$adds .= "Content-Transfer-Encoding: 8bit\n";
-	$adds .= "X-Mailer: PHP v.".phpversion()."\n";
-	$adds .= "Date: ".date("r")."\n";
-
-	if (! empty($unsubkey)) {
-		$messages .= "\n\nЕсли вы не хотите получать эти эл. письма, пожалуйста, откажитесь от подписки. ".$config['home']."/mail/unsubscribe.php?key=".$unsubkey;
-		$adds .= "List-Unsubscribe: <".$config['home']."/mail/unsubscribe.php?key=".$unsubkey.">\n";
-	}
-
-	return mail($mail, $subject, $messages, $adds);
-}
-
 /**
  * Отправка уведомления на email
  * @param  mixed   $to      Получатель

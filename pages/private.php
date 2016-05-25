@@ -299,7 +299,12 @@ if (is_user()) {
 													), $config['sendmailpacket'], null, array('users_timelastlogin'=>'ASC'));
 
 													foreach ($deliveryUsers as $user) {
-														addmail($user['users_email'], $user['users_newprivat']." непрочитанных сообщений (".$config['title'].")", "Здравствуйте ".nickname($user['users_login'])."! \nУ вас имеются непрочитанные сообщения (".$user['users_newprivat']." шт.) на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages/private.php", null, null, $user['users_subscribe']);
+														sendMail($user['users_email'],
+															$user['users_newprivat'].' непрочитанных сообщений ('.$config['title'].')',
+															nl2br("Здравствуйте ".nickname($user['users_login'])."! \nУ вас имеются непрочитанные сообщения (".$user['users_newprivat']." шт.) на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages/private.php"),
+															array('unsubkey' => $user['users_subscribe'])
+														);
+
 														$user = DBM::run()->update('users', array(
 															'users_sendprivatmail' => 1,
 														), array(

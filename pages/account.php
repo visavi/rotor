@@ -146,7 +146,10 @@ case 'changemail':
 
 		$genkey = generate_password(rand(15,20));
 
-		addmail($meil, "Изменение адреса электронной почты на сайте ".$config['title'], "Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".$config['home']."/pages/account.php?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течении суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо");
+		sendMail($meil,
+			'Изменение адреса электронной почты на сайте '.$config['title'],
+			nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".$config['home']."/pages/account.php?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течении суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо")
+		);
 
 		DB::run() -> query("INSERT INTO `changemail` (`change_user`, `change_mail`, `change_key`, `change_time`) VALUES (?, ?, ?, ?);", array($log, $meil, $genkey, SITETIME + 86400));
 
@@ -343,12 +346,14 @@ case 'editpass':
 
 		DB::run() -> query("UPDATE `users` SET `users_pass`=? WHERE `users_login`=? LIMIT 1;", array(md5(md5($newpass)), $log));
 
-		if (!empty($udata['users_email'])){
-			addmail($udata['users_email'], "Изменение пароля на сайте ".$config['title'], "Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению пароля \n\nВаш новый пароль: ".$newpass." \nСохраните его в надежном месте \n\nДанные инициализации: \nIP: ".$ip." \nБраузер: ".$brow." \nВремя: ".date('j.m.y / H:i', SITETIME));
+		if (! empty($udata['users_email'])){
+			sendMail($udata['users_email'],
+				'Изменение пароля на сайте '.$config['title'],
+				nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению пароля \n\nВаш новый пароль: ".$newpass." \nСохраните его в надежном месте \n\nДанные инициализации: \nIP: ".$ip." \nБраузер: ".$brow." \nВремя: ".date('j.m.y / H:i', SITETIME))
+			);
 		}
 
-		unset($_SESSION['log']);
-		unset($_SESSION['par']);
+		unset($_SESSION['log'], $_SESSION['par']);
 
 		notice('Пароль успешно изменен!');
 		redirect("login.php");

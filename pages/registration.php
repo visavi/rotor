@@ -209,7 +209,7 @@ if ($config['openreg'] == 1) {
 						send_private($logs, $config['nickname'], $textpriv);
 
 						if (!empty($config['regmail'])) {
-							addmail($meil, 'Регистрация на сайте '.$config['title'], $regmessage);
+							sendMail($meil, 'Регистрация на сайте '.$config['title'], nl2br($regmessage));
 						}
 
 						// ----------------------------------------------------------------------------------------//

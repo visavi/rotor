@@ -124,7 +124,10 @@ case 'send':
 
 			DB::run() -> query("UPDATE `users` SET `users_keypasswd`=?, `users_timepasswd`=? WHERE `users_login`=?;", array($restkey, SITETIME + 43200, $uz));
 			// ---------------- Инструкция по восстановлению пароля на E-mail --------------------------//
-			addmail($user['users_email'], "Подтверждение восстановления пароля на сайте ".$config['title'], "Здравствуйте, ".nickname($user['users_login'])." \nВами была произведена операция по восстановлению пароля на сайте ".$config['home']." \n\nДанные отправителя: \nIp: $ip \nБраузер: $brow \nОтправлено: ".date('j.m.Y / H:i', SITETIME)."\n\nДля того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n".$config['home']."/mail/lostpassword.php?act=restore&uz=".$user['users_login']."&key=".$restkey." \n\nЕсли это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его");
+			sendMail($user['users_email'],
+				'Подтверждение восстановления пароля на сайте '.$config['title'],
+				nl2br("Здравствуйте, ".nickname($user['users_login'])." \nВами была произведена операция по восстановлению пароля на сайте ".$config['home']." \n\nДанные отправителя: \nIp: $ip \nБраузер: $brow \nОтправлено: ".date('j.m.Y / H:i', SITETIME)."\n\nДля того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n".$config['home']."/mail/lostpassword.php?act=restore&uz=".$user['users_login']."&key=".$restkey." \n\nЕсли это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его")
+			);
 
 			echo '<img src="/images/img/open.gif" alt="image" /> <b>Восстановление пароля инициализировано!</b><br /><br />';
 			echo 'Письмо с инструкцией по восстановлению пароля успешно выслано на E-mail указанный в профиле<br />';
@@ -180,7 +183,10 @@ case 'restore':
 			echo 'Пароль вы сможете поменять в своем профиле<br /><br />';
 
 			// --------------------------- Восстановлению пароля на E-mail --------------------------//
-			addmail($user['users_email'], "Восстановление пароля на сайте ".$config['title'], "Здравствуйте, ".nickname($user['users_login'])." \nВаши новые данные для входа на на сайт ".$config['home']." \nЛогин: ".$user['users_login']." \nПароль: ".$newpass." \n\nЗапомните и постарайтесь больше не забывать данные, а лучше сделайте сразу закладку на наш сайт \n".$config['home']."/input.php?login=".$user['users_login']."&pass=".$newpass." \nПароль вы сможете поменять в своем профиле \nВсего наилучшего!");
+			sendMail($user['users_email'],
+				'Восстановление пароля на сайте '.$config['title'],
+				nl2br("Здравствуйте, ".nickname($user['users_login'])." \nВаши новые данные для входа на на сайт ".$config['home']." \nЛогин: ".$user['users_login']." \nПароль: ".$newpass." \n\nЗапомните и постарайтесь больше не забывать данные, а лучше сделайте сразу закладку на наш сайт \n".$config['home']."/input.php?login=".$user['users_login']."&pass=".$newpass." \nПароль вы сможете поменять в своем профиле \nВсего наилучшего!")
+			);
 
 		} else {
 			show_error($validation->errors);
