@@ -232,6 +232,45 @@ if (empty($check)) {
 	echo 'Добавлены настройки времени подсчета онлайн в таблицу setting<br />';
 }
 
+
+if ($config['rotorversion'] < '4.3.9') {
+	DB::run() -> query("ALTER TABLE `banhist` MODIFY `ban_reason` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `blogs` MODIFY `blogs_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `chat` MODIFY `chat_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `commblog` MODIFY `commblog_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `commevents` MODIFY `commevent_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `commload` MODIFY `commload_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `commnews` MODIFY `commnews_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `commoffers` MODIFY `comm_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `commphoto` MODIFY `commphoto_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `contact` MODIFY `contact_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `downs` MODIFY `downs_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `downs` MODIFY `downs_notice` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `events` MODIFY `event_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `guest` MODIFY `guest_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `guest` MODIFY `guest_reply` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `ignore` MODIFY `ignore_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `inbox` MODIFY `inbox_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `news` MODIFY `news_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `note` MODIFY `note_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `notebook` MODIFY `note_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `notice` MODIFY `notice_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `offers` MODIFY `offers_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `offers` MODIFY `offers_text_reply` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `outbox` MODIFY `outbox_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `photo` MODIFY `photo_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `posts` MODIFY `posts_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `rating` MODIFY `rating_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `rules` MODIFY `rules_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `spam` MODIFY `spam_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `transfers` MODIFY `trans_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `trash` MODIFY `trash_text` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `users` MODIFY `users_info` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `users` MODIFY `users_reasonban` text DEFAULT NULL;");
+	DB::run() -> query("ALTER TABLE `wall` MODIFY `wall_text` text DEFAULT NULL;");
+	echo 'Обновлена структура БД для совместимости с MySQL 5.7<br />';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));
