@@ -296,6 +296,7 @@ if (is_user()) {
 															'users_sendprivatmail' => 0,
 															'users_timelastlogin' => array('<', SITETIME - 86400 * $config['sendprivatmailday']),
 															'users_subscribe' => array('<>', ''),
+															'users_confirmreg' => 0,
 													), $config['sendmailpacket'], null, array('users_timelastlogin'=>'ASC'));
 
 													foreach ($deliveryUsers as $user) {
