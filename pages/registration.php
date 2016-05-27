@@ -162,7 +162,6 @@ if ($config['openreg'] == 1) {
 
 						if ($config['regkeys'] == 1) {
 							$registration_key = generate_password();
-							$unsubscribe_key = generate_password(32);
 
 							echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br />';
 							echo 'Мастер-ключ был выслан вам на почтовый ящик: '.$meil.'</span></b><br /><br />';
@@ -201,7 +200,7 @@ if ($config['openreg'] == 1) {
 							'users_confirmreg'    => $config['regkeys'],
 							'users_confirmregkey' => $registration_key,
 							'users_navigation'    => $config['navigation'],
-							'users_subscribe'     => $unsubscribe_key,
+							'users_subscribe'     => generate_password(32),
 						));
 
 						// ------------------------------ Уведомление в приват ----------------------------------//
