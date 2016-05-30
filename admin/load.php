@@ -96,7 +96,7 @@ case 'newimport':
 
 	if (is_admin(array(101))) {
 		if (file_exists(BASEDIR.'/load/loader')) {
-			$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` ORDER BY `cats_order` ASC;");
+			$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;");
 			$downs = $querydown -> fetchAll();
 
 			if (count($downs) > 0) {
@@ -255,7 +255,7 @@ break;
 case 'newfile':
 	$config['newtitle'] = 'Публикация нового файла';
 
-	$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` ORDER BY `cats_order` ASC;");
+	$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;");
 	$downs = $querydown -> fetchAll();
 
 	if (count($downs) > 0) {
@@ -330,20 +330,24 @@ case 'addfile':
 					if (utf_strlen($author) <= 50) {
 						if (utf_strlen($site) <= 50) {
 							if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
-								$downs = DB::run() -> querySingle("SELECT `cats_id` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
+								$downs = DB::run() -> querySingle("SELECT * FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
 								if (!empty($downs)) {
-									$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
-									if (empty($downtitle)) {
+									if (empty($downs['closed'])) {
+										$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
+										if (empty($downtitle)) {
 
-										DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cid));
-										DB::run() -> query("INSERT INTO `downs` (`downs_cats_id`, `downs_title`, `downs_text`, `downs_link`, `downs_user`, `downs_author`, `downs_site`, `downs_screen`, `downs_time`, `downs_active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", array($cid, $title, $text, '', $log, $author, $site, '', SITETIME, 1));
+											DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cid));
+											DB::run() -> query("INSERT INTO `downs` (`downs_cats_id`, `downs_title`, `downs_text`, `downs_link`, `downs_user`, `downs_author`, `downs_site`, `downs_screen`, `downs_time`, `downs_active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", array($cid, $title, $text, '', $log, $author, $site, '', SITETIME, 1));
 
-										$lastid = DB::run() -> lastInsertId();
+											$lastid = DB::run() -> lastInsertId();
 
-										$_SESSION['note'] = 'Данные успешно добавлены!';
-										redirect("load.php?act=editdown&id=$lastid");
+											$_SESSION['note'] = 'Данные успешно добавлены!';
+											redirect("load.php?act=editdown&id=$lastid");
+										} else {
+											show_error('Ошибка! Название '.$title.' уже имеется в файлах!');
+										}
 									} else {
-										show_error('Ошибка! Название '.$title.' уже имеется в файлах!');
+										show_error('Ошибка! В данный раздел запрещена загрузка файлов!');
 									}
 								} else {
 									show_error('Ошибка! Выбранный вами раздел не существует!');
@@ -464,6 +468,10 @@ case 'editcats':
 
 			echo 'При создании директории, загруженные ранее файлы будут автоматически перемещены<br /><br />';
 
+			echo 'Закрыть раздел: ';
+			$checked = ($downs['closed'] == 1) ? ' checked="checked"' : '';
+			echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
+
 			echo '<input type="submit" value="Изменить" /></form></div><br />';
 		} else {
 			show_error('Ошибка! Данного раздела не существует!');
@@ -485,6 +493,7 @@ case 'addeditcats':
 	$parent = abs(intval($_POST['parent']));
 	$order = abs(intval($_POST['order']));
 	$folder = strtolower(check($_POST['folder']));
+	$closed = (empty($_POST['closed'])) ? 0 : 1;
 
 	if (is_admin(array(101))) {
 		if ($uid == $_SESSION['token']) {
@@ -495,7 +504,7 @@ case 'addeditcats':
 					$catParent = DB::run() -> queryFetch("SELECT `cats_id` FROM `cats` WHERE `cats_parent`=? LIMIT 1;", array($cid));
 
 					if (empty($catParent) || $parent == 0) {
-						DB::run() -> query("UPDATE `cats` SET `cats_order`=?, `cats_parent`=?, `cats_name`=? WHERE `cats_id`=?;", array($order, $parent, $name, $cid));
+						DB::run() -> query("UPDATE `cats` SET `cats_order`=?, `cats_parent`=?, `cats_name`=?, `closed`=? WHERE `cats_id`=?;", array($order, $parent, $name, $closed, $cid));
 
 						$cat = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
 
@@ -671,15 +680,18 @@ case 'down':
 
 	$cats = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
 
-	echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="load.php">Категории</a> / ';
+	echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="load.php">Категории</a>';
 
 	if (!empty($cats['cats_parent'])) {
 		$podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cats['cats_parent']));
-		echo '<a href="load.php?act=down&amp;cid='.$podcats['cats_id'].'">'.$podcats['cats_name'].'</a> / ';
+		echo ' / <a href="load.php?act=down&amp;cid='.$podcats['cats_id'].'">'.$podcats['cats_name'].'</a>';
 	}
 
-	echo '<a href="load.php?act=newfile&amp;cid='.$cid.'">Загрузить файл</a><br /><br />';
+	if (empty($cats['closed'])) {
+		echo ' / <a href="load.php?act=newfile&amp;cid='.$cid.'">Загрузить файл</a>';
+	}
 
+	echo '<br /><br />';
 	if ($cats > 0) {
 		$config['newtitle'] = $cats['cats_name'];
 
@@ -745,13 +757,20 @@ case 'down':
 
 			page_strnavigation('load.php?act=down&amp;cid='.$cid.'&amp;', $config['downlist'], $start, $total);
 		} else {
-			show_error('В данном разделе еще нет файлов!');
+			if (empty($cats['closed'])) {
+				show_error('В данном разделе еще нет файлов!');
+			}
 		}
+		if (!empty($cats['closed'])) {
+			show_error('В данном разделе запрещена загрузка файлов!');
+		}
+
 	} else {
 		show_error('Ошибка! Данного раздела не существует!');
 	}
-
-	echo '<img src="/images/img/open.gif" alt="image" /> <a href="load.php?act=newfile&amp;cid='.$cid.'">Добавить</a><br />';
+	if (empty($cats['closed'])) {
+		echo '<img src="/images/img/open.gif" alt="image" /> <a href="load.php?act=newfile&amp;cid='.$cid.'">Добавить</a><br />';
+	}
 	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="load.php">Категории</a><br />';
 break;
 
@@ -1185,7 +1204,7 @@ case 'movedown':
 
 		echo '<img src="/images/img/download.gif" alt="image" /> <b>'.$downs['downs_title'].'</b> ('.read_file(BASEDIR.'/load/files/'.$folder.$downs['downs_link']).')<br /><br />';
 
-		$querycats = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` ORDER BY `cats_order` ASC;");
+		$querycats = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;");
 		$cats = $querycats -> fetchAll();
 
 		if (count($cats) > 0) {

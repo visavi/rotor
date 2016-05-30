@@ -271,6 +271,13 @@ if ($config['rotorversion'] < '4.3.9') {
 	echo 'Обновлена структура БД для совместимости с MySQL 5.7<br />';
 }
 
+/* Добавление нового поля в категории загрузок для закрытия разделов */
+$check = DB::run() -> querySingle("SHOW COLUMNS FROM `cats` LIKE 'closed';");
+if (empty($check)) {
+	DB::run() -> query("ALTER TABLE `cats` ADD `closed` tinyint(1) unsigned NOT NULL default '0';");
+	echo 'Добавлено поле в категории загрузок для закрытия разделов<br />';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));

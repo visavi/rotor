@@ -32,16 +32,19 @@ case 'index':
 		if (!empty($cats)) {
 			$config['newtitle'] = $cats['cats_name'];
 
-			echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="index.php">Категории</a> / ';
+			echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="index.php">Категории</a>';
 
 			if (!empty($cats['cats_parent'])) {
 				$podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cats['cats_parent']));
 
-				echo '<a href="down.php?cid='.$podcats['cats_id'].'">'.$podcats['cats_name'].'</a> / ';
+				echo ' / <a href="down.php?cid='.$podcats['cats_id'].'">'.$podcats['cats_name'].'</a>';
 			}
 
-			echo '<a href="add.php?cid='.$cid.'">Добавить файл</a><br /><br />';
+			if (empty($cats['closed'])) {
+				echo ' / <a href="add.php?cid='.$cid.'">Добавить файл</a>';
+			}
 
+			echo '<br /><br />';
 			echo '<img src="/images/img/open_dir.gif" alt="image" /> <b>'.$cats['cats_name'].'</b> (Файлов: '.$cats['cats_count'].')';
 
 			if (is_admin(array(101, 102))) {
@@ -128,16 +131,27 @@ case 'index':
 
 				page_strnavigation('down.php?cid='.$cid.'&amp;sort='.$sort.'&amp;', $config['downlist'], $start, $total);
 			} else {
-				show_error('В данном разделе еще нет файлов!');
+				if (empty($cats['closed'])) {
+					show_error('В данном разделе еще нет файлов!');
+				}
 			}
+
+			if (!empty($cats['closed'])) {
+				show_error('В данном разделе запрещена загрузка файлов!');
+			}
+
 		} else {
 			show_error('Ошибка! Данного раздела не существует!');
 		}
 
 		echo '<a href="#up"><img src="/images/img/ups.gif" alt="up" /></a> ';
 		echo '<a href="top.php">Топ файлов</a> / ';
-		echo '<a href="search.php">Поиск</a> / ';
-		echo '<a href="add.php?cid='.$cid.'">Добавить файл</a><br />';
+		echo '<a href="search.php">Поиск</a>';
+
+		if (empty($cats['closed'])) {
+			echo ' / <a href="add.php?cid='.$cid.'">Добавить файл</a>';
+		}
+		echo '<br />';
 	} else {
 		redirect("index.php");
 	}

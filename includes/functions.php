@@ -400,7 +400,7 @@ function formatsize($file_size) {
 
 // --------------- Функция форматированного вывода размера файла -------------------//
 function read_file($file) {
-	if (file_exists($file)) {
+	if (file_exists($file) && is_file($file)) {
 		return formatsize(filesize($file));
 	} else {
 		return 0;

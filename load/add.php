@@ -37,7 +37,7 @@ case 'index':
 		echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br />';
 	}
 
-	$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` ORDER BY `cats_order` ASC;");
+	$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;");
 	$downs = $querydown -> fetchAll();
 
 	if (count($downs) > 0) {
@@ -155,21 +155,25 @@ case 'add':
 					if (utf_strlen($author) <= 50) {
 						if (utf_strlen($site) <= 50) {
 							if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
-								$downs = DB::run() -> querySingle("SELECT `cats_id` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
+								$downs = DB::run() -> querySingle("SELECT * FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
 								if (!empty($downs)) {
-									$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
-									if (empty($downtitle)) {
+									if (empty($downs['closed'])) {
+										$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
+										if (empty($downtitle)) {
 
-										//DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cid));
-										DB::run() -> query("INSERT INTO `downs` (`downs_cats_id`, `downs_title`, `downs_text`, `downs_link`, `downs_user`, `downs_author`, `downs_site`, `downs_screen`, `downs_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", array($cid, $title, $text, '', $log, $author, $site, '', SITETIME));
+											//DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cid));
+											DB::run() -> query("INSERT INTO `downs` (`downs_cats_id`, `downs_title`, `downs_text`, `downs_link`, `downs_user`, `downs_author`, `downs_site`, `downs_screen`, `downs_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", array($cid, $title, $text, '', $log, $author, $site, '', SITETIME));
 
-										$lastid = DB::run() -> lastInsertId();
+											$lastid = DB::run() -> lastInsertId();
 
-										$_SESSION['note'] = 'Данные успешно добавлены!';
-										redirect("add.php?act=view&id=$lastid");
+											$_SESSION['note'] = 'Данные успешно добавлены!';
+											redirect("add.php?act=view&id=$lastid");
 
+										} else {
+											show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+										}
 									} else {
-										show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+										show_error('Ошибка! В данный раздел запрещена загрузка файлов!');
 									}
 								} else {
 									show_error('Ошибка! Выбранный вами раздел не существует!');
@@ -213,7 +217,7 @@ case 'view':
 	$new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
 	if (!empty($new)) {
-		$downs = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` ORDER BY `cats_order` ASC;") -> fetchAll();
+		$downs = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;") -> fetchAll();
 		if (count($downs) > 0) {
 			if ($new['downs_user'] == $log) {
 				if (empty($new['downs_active'])) {
@@ -342,31 +346,35 @@ case 'edit':
 						if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
 							$new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
 							if (!empty($new)) {
-								if ($new['downs_user'] == $log) {
-									if (empty($new['downs_active'])) {
+								if (empty($downs['closed'])) {
+									if ($new['downs_user'] == $log) {
+										if (empty($new['downs_active'])) {
 
-										$categories = DB::run() -> querySingle("SELECT `cats_id` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
-										if (!empty($categories)) {
+											$categories = DB::run() -> querySingle("SELECT `cats_id` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
+											if (!empty($categories)) {
 
-											$newtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
-											if (empty($newtitle)) {
+												$newtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
+												if (empty($newtitle)) {
 
-												DB::run() -> query("UPDATE `downs` SET `downs_cats_id`=?, `downs_title`=?, `downs_text`=?, `downs_author`=?, `downs_site`=?, `downs_time`=? WHERE `downs_id`=?;", array($cid, $title, $text, $author, $site, $new['downs_time'], $id));
+													DB::run() -> query("UPDATE `downs` SET `downs_cats_id`=?, `downs_title`=?, `downs_text`=?, `downs_author`=?, `downs_site`=?, `downs_time`=? WHERE `downs_id`=?;", array($cid, $title, $text, $author, $site, $new['downs_time'], $id));
 
-												notice('Данные успешно изменены!');
-												redirect("add.php?act=view&id=$id");
+													notice('Данные успешно изменены!');
+													redirect("add.php?act=view&id=$id");
 
+												} else {
+													show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+												}
 											} else {
-												show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+												show_error('Ошибка! Выбранный вами раздел не существует!');
 											}
 										} else {
-											show_error('Ошибка! Выбранный вами раздел не существует!');
+											show_error('Ошибка! Данный файл уже проверен модератором!');
 										}
 									} else {
-										show_error('Ошибка! Данный файл уже проверен модератором!');
+										show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
 									}
 								} else {
-									show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
+									show_error('Ошибка! В данный раздел запрещена загрузка файлов!');
 								}
 							} else {
 								show_error('Данного файла не существует!');
