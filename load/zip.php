@@ -94,11 +94,11 @@ break;
 ############################################################################################
 case 'preview':
 
-	$view = abs(intval($_GET['view']));
+	$view = isset($_GET['view']) ? abs(intval($_GET['view'])) : '';
 
 	$downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
 
-	if (!empty($downs)) {
+	if (! empty($downs) && ! empty($view)) {
 		if (!empty($downs['downs_active'])) {
 			$zip = new PclZip('files/'.$downs['downs_link']);
 
