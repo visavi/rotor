@@ -25,6 +25,7 @@ if (!empty($blog)) {
 	}
 	$blog['blogs_text'] = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog['blogs_text']);
 
+	header("Content-Encoding: none");
 	header('Content-type:text/html; charset=utf-8');
 	die(render('blog/print', array('blog' => $blog)));
 

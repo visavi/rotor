@@ -130,10 +130,9 @@ case 'preview':
 						while (ob_get_level()) {
 							ob_end_clean();
 						}
-						header($_SERVER["SERVER_PROTOCOL"].' 200 OK');
+						header("Content-Encoding: none");
 						header("Content-type: image/$ext");
 						header("Content-Length: ".strlen($filecontent));
-						header('Connection: close');
 						header('Content-Disposition: inline; filename="'.$filename.'";');
 						die($filecontent);
 					}

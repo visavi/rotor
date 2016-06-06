@@ -26,7 +26,7 @@ if (!empty($topic)) {
 	while (ob_get_level()) {
 		ob_end_clean();
 	}
-
+	header("Content-Encoding: none");
 	die(render('forum/print', array('topic' => $topic, 'posts' => $posts)));
 
 } else {

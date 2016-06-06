@@ -22,10 +22,11 @@ if (!empty($topic)) {
 	$querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_time` DESC LIMIT 15;", array($tid));
 	$posts = $querypost->fetchAll();
 
-	//while (ob_get_level()) {
+	while (ob_get_level()) {
 		ob_end_clean();
-	//}
+	}
 
+	header("Content-Encoding: none");
 	header("Content-type:application/rss+xml; charset=utf-8");
 	die(render('forum/rss', array('topic' => $topic, 'posts' => $posts)));
 

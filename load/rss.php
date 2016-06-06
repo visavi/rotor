@@ -20,9 +20,10 @@ $down = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 
 
 if (!empty($down)) {
 	if (!empty($down['downs_active'])) {
-		ob_implicit_flush();
-		ob_end_clean();
-		ob_clean();
+		while (ob_get_level()) {
+			ob_end_clean();
+		}
+		header("Content-Encoding: none");
 		header("Content-type:application/rss+xml; charset=utf-8");
 		echo '<?xml version="1.0" encoding="utf-8"?>';
 		echo '<rss version="2.0"><channel>';
@@ -51,7 +52,6 @@ if (!empty($down)) {
 		}
 
 		echo '</channel></rss>';
-		ob_end_flush();
 		exit;
 	} else {
 		show_error('Ошибка! Данный файл еще не проверен модератором!');
