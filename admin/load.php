@@ -96,7 +96,7 @@ case 'newimport':
 
 	if (is_admin(array(101))) {
 		if (file_exists(BASEDIR.'/load/loader')) {
-			$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;");
+			$querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `cats_order` ASC;");
 			$downs = $querydown -> fetchAll();
 
 			if (count($downs) > 0) {
@@ -122,11 +122,13 @@ case 'newimport':
 					echo '<option value="0">Выберите категорию</option>';
 
 					foreach ($output[0] as $key => $data) {
-						echo '<option value="'.$data['cats_id'].'">'.$data['cats_name'].'</option>';
+						$disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+						echo '<option value="'.$data['cats_id'].'"'.$disabled.'>'.$data['cats_name'].'</option>';
 
 						if (isset($output[$key])) {
 							foreach($output[$key] as $datasub) {
-								echo '<option value="'.$datasub['cats_id'].'">– '.$datasub['cats_name'].'</option>';
+								$disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+								echo '<option value="'.$datasub['cats_id'].'"'.$disabled.'>– '.$datasub['cats_name'].'</option>';
 							}
 						}
 					}
@@ -255,7 +257,7 @@ break;
 case 'newfile':
 	$config['newtitle'] = 'Публикация нового файла';
 
-	$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;");
+	$querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `cats_order` ASC;");
 	$downs = $querydown -> fetchAll();
 
 	if (count($downs) > 0) {
@@ -275,13 +277,15 @@ case 'newfile':
 		echo '<option value="0">Выберите категорию</option>';
 
 		foreach ($output[0] as $key => $data) {
-			$selected = ($cid == $data['cats_id']) ? ' selected="selected"' : '';
-			echo '<option value="'.$data['cats_id'].'"'.$selected.'>'.$data['cats_name'].'</option>';
+			$selected = $cid == $data['cats_id'] ? ' selected="selected"' : '';
+			$disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+			echo '<option value="'.$data['cats_id'].'"'.$selected.$disabled.'>'.$data['cats_name'].'</option>';
 
 			if (isset($output[$key])) {
 				foreach($output[$key] as $datasub) {
-					$selected = ($cid == $datasub['cats_id']) ? ' selected="selected"' : '';
-					echo '<option value="'.$datasub['cats_id'].'"'.$selected.'>– '.$datasub['cats_name'].'</option>';
+					$selected = $cid == $datasub['cats_id'] ? ' selected="selected"' : '';
+					$disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+					echo '<option value="'.$datasub['cats_id'].'"'.$selected.$disabled.'>– '.$datasub['cats_name'].'</option>';
 				}
 			}
 		}
@@ -1204,7 +1208,7 @@ case 'movedown':
 
 		echo '<img src="/images/img/download.gif" alt="image" /> <b>'.$downs['downs_title'].'</b> ('.read_file(BASEDIR.'/load/files/'.$folder.$downs['downs_link']).')<br /><br />';
 
-		$querycats = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;");
+		$querycats = DB::run() -> query("SELECT * FROM `cats` ORDER BY `cats_order` ASC;");
 		$cats = $querycats -> fetchAll();
 
 		if (count($cats) > 0) {
@@ -1223,13 +1227,15 @@ case 'movedown':
 
 			foreach ($output[0] as $key => $data) {
 				if ($downs['downs_cats_id'] != $data['cats_id']) {
-					echo '<option value="'.$data['cats_id'].'">'.$data['cats_name'].'</option>';
+					$disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+					echo '<option value="'.$data['cats_id'].'"'.$disabled.'>'.$data['cats_name'].'</option>';
 				}
 
 				if (isset($output[$key])) {
 					foreach($output[$key] as $datasub) {
 						if ($downs['downs_cats_id'] != $datasub['cats_id']) {
-							echo '<option value="'.$datasub['cats_id'].'">– '.$datasub['cats_name'].'</option>';
+							$disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+							echo '<option value="'.$datasub['cats_id'].'"'.$disabled.'>– '.$datasub['cats_name'].'</option>';
 						}
 					}
 				}
