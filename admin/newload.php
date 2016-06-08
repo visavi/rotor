@@ -95,7 +95,7 @@ if (is_admin()) {
 			if (!empty($new)) {
 				if (empty($new['downs_active'])) {
 
-					$querydown = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` ORDER BY `cats_order` ASC;");
+					$querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `cats_order` ASC;");
 					$downs = $querydown -> fetchAll();
 
 					if (count($downs) > 0) {
@@ -140,13 +140,15 @@ if (is_admin()) {
 						echo '<select name="cid">';
 
 						foreach ($output[0] as $key => $data) {
-							$selected = ($new['downs_cats_id'] == $data['cats_id']) ? ' selected="selected"' : '';
-							echo '<option value="'.$data['cats_id'].'"'.$selected.'>'.$data['cats_name'].'</option>';
+							$selected = $new['downs_cats_id'] == $data['cats_id'] ? ' selected="selected"' : '';
+							$disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+							echo '<option value="'.$data['cats_id'].'"'.$selected.$disabled.'>'.$data['cats_name'].'</option>';
 
 							if (isset($output[$key])) {
 								foreach($output[$key] as $datasub) {
 									$selected = ($new['downs_cats_id'] == $datasub['cats_id']) ? ' selected="selected"' : '';
-									echo '<option value="'.$datasub['cats_id'].'"'.$selected.'>– '.$datasub['cats_name'].'</option>';
+									$disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+									echo '<option value="'.$datasub['cats_id'].'"'.$selected.$disabled.'>– '.$datasub['cats_name'].'</option>';
 								}
 							}
 						}

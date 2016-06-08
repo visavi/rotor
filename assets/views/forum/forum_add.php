@@ -7,12 +7,14 @@
 
 			<?php foreach ($forums[0] as $key => $data): ?>
 				<?php $selected = ($fid == $data['forums_id']) ? ' selected="selected"' : ''; ?>
-				<option value="<?=$data['forums_id']?>"<?=$selected?>><?=$data['forums_title']?></option>
+				<?php $disabled = ! empty($data['forums_closed']) ? ' disabled="disabled"' : ''; ?>
+				<option value="<?=$data['forums_id']?>"<?=$selected?><?=$disabled?>><?=$data['forums_title']?></option>
 
 				<?php if (isset($forums[$key])): ?>
 					<?php foreach($forums[$key] as $datasub): ?>
-						<?php $selected = ($fid == $datasub['forums_id']) ? ' selected="selected"' : ''; ?>
-						<option value="<?=$datasub['forums_id']?>"<?=$selected?>>– <?=$datasub['forums_title']?></option>
+						<?php $selected = $fid == $datasub['forums_id'] ? ' selected="selected"' : ''; ?>
+						<?php $disabled = ! empty($datasub['forums_closed']) ? ' disabled="disabled"' : ''; ?>
+						<option value="<?=$datasub['forums_id']?>"<?=$selected?><?=$disabled?>>– <?=$datasub['forums_title']?></option>
 					<?php endforeach; ?>
 				<?php endif; ?>
 			<?php endforeach; ?>

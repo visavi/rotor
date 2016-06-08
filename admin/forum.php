@@ -494,7 +494,7 @@ if (is_admin()) {
 			if (!empty($topics)) {
 				echo '<img src="/images/img/topics.gif" alt="image" /> <b>'.$topics['topics_title'].'</b> (Автор темы: '.nickname($topics['topics_author']).')<br /><br />';
 
-				$queryforum = DB::run() -> query("SELECT `forums_id`, `forums_parent`, `forums_title` FROM `forums` ORDER BY `forums_order` ASC;");
+				$queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY `forums_order` ASC;");
 				$forums = $queryforum -> fetchAll();
 
 				if (count($forums) > 0) {
@@ -512,13 +512,15 @@ if (is_admin()) {
 
 					foreach ($output[0] as $key => $data) {
 						if ($topics['topics_forums_id'] != $data['forums_id']) {
-							echo '<option value="'.$data['forums_id'].'">'.$data['forums_title'].'</option>';
+							$disabled = ! empty($data['forums_closed']) ? ' disabled="disabled"' : '';
+							echo '<option value="'.$data['forums_id'].'"'.$disabled.'>'.$data['forums_title'].'</option>';
 						}
 
 						if (isset($output[$key])) {
 							foreach($output[$key] as $datasub) {
 								if ($topics['topics_forums_id'] != $datasub['forums_id']) {
-									echo '<option value="'.$datasub['forums_id'].'">– '.$datasub['forums_title'].'</option>';
+									$disabled = ! empty($datasub['forums_closed']) ? ' disabled="disabled"' : '';
+									echo '<option value="'.$datasub['forums_id'].'"'.$disabled.'>– '.$datasub['forums_title'].'</option>';
 								}
 							}
 						}
@@ -550,24 +552,27 @@ if (is_admin()) {
 				$topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
 
 				if (!empty($forums)) {
+					if (empty($forums['forums_closed'])) {
+						// Обновление номера раздела
+						DB::run() -> query("UPDATE `topics` SET `topics_forums_id`=? WHERE `topics_id`=?;", array($section, $tid));
+						DB::run() -> query("UPDATE `posts` SET `posts_forums_id`=? WHERE `posts_topics_id`=?;", array($section, $tid));
 
-					// Обновление номера раздела
-					DB::run() -> query("UPDATE `topics` SET `topics_forums_id`=? WHERE `topics_id`=?;", array($section, $tid));
-					DB::run() -> query("UPDATE `posts` SET `posts_forums_id`=? WHERE `posts_topics_id`=?;", array($section, $tid));
+						// Ищем последние темы в форумах для обновления списка последних тем
+						$oldlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_last_time` DESC LIMIT 1;", array($topics['topics_forums_id']));
+						$newlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_last_time` DESC LIMIT 1;", array($section));
 
-					// Ищем последние темы в форумах для обновления списка последних тем
-					$oldlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_last_time` DESC LIMIT 1;", array($topics['topics_forums_id']));
-					$newlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_last_time` DESC LIMIT 1;", array($section));
+						DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($oldlast['topics_id'], $oldlast['topics_title'], $oldlast['topics_last_user'], $oldlast['topics_last_time'], $oldlast['topics_forums_id']));
 
-					DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($oldlast['topics_id'], $oldlast['topics_title'], $oldlast['topics_last_user'], $oldlast['topics_last_time'], $oldlast['topics_forums_id']));
+						DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($newlast['topics_id'], $newlast['topics_title'], $newlast['topics_last_user'], $newlast['topics_last_time'], $newlast['topics_forums_id']));
+						// Обновление закладок
+						DB::run() -> query("UPDATE `bookmarks` SET `book_forum`=? WHERE `book_topic`=?;", array($section, $tid));
 
-					DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($newlast['topics_id'], $newlast['topics_title'], $newlast['topics_last_user'], $newlast['topics_last_time'], $newlast['topics_forums_id']));
-					// Обновление закладок
-					DB::run() -> query("UPDATE `bookmarks` SET `book_forum`=? WHERE `book_topic`=?;", array($section, $tid));
+						$_SESSION['note'] = 'Тема успешно перемещена!';
+						redirect("forum.php?act=forum&fid=$section");
 
-					$_SESSION['note'] = 'Тема успешно перемещена!';
-					redirect("forum.php?act=forum&fid=$section");
-
+					} else {
+						show_error('Ошибка! В закрытый раздел запрещено перемещать темы!');
+					}
 				} else {
 					show_error('Ошибка! Выбранного раздела не существует!');
 				}
@@ -584,7 +589,7 @@ if (is_admin()) {
 		############################################################################################
 		case 'deltopics':
 
-			$uid = check($_GET['uid']);
+			$uid = isset($_GET['uid']) ? check($_GET['uid']) : '';
 			if (isset($_POST['del'])) {
 				$del = intar($_POST['del']);
 			} elseif (isset($_GET['del'])) {

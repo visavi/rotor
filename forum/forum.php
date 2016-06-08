@@ -68,7 +68,7 @@ case 'addtheme':
 	$config['newtitle'] = 'Создание новой темы';
 
 	if (is_user()) {
-		$queryforum = DB::run() -> query("SELECT `forums_id`, `forums_parent`, `forums_title` FROM `forums` WHERE `forums_closed`=? ORDER BY `forums_order` ASC;", array(0));
+		$queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY `forums_order` ASC;");
 		$forums = $queryforum -> fetchAll();
 
 		if (count($forums) > 0) {
