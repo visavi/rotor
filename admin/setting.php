@@ -362,7 +362,7 @@ if (is_admin(array(101))) {
 				}
 				echo '</select><br />';
 
-				echo 'Имя пользователя SMTP:<br /><input name="mailusername" maxlength="100" value="'.$setting['mailusername'].'" title="Имя пользователя SMTP" /><br />';
+				echo 'Имя пользователя SMTP (user@domain.name):<br /><input name="mailusername" maxlength="100" value="'.$setting['mailusername'].'" title="Имя пользователя SMTP" /><br />';
 
 				$mailpassword = ! empty($setting['mailpassword']) ? 'Пароль скрыт' : 'Пароль не установлен';
 				echo 'Пароль пользователя SMTP:<br /><input name="mailpassword" type="password" maxlength="100" value="" title="Пароль пользователя SMTP" / placeholder="'.$mailpassword.'"><br />';

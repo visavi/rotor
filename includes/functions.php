@@ -1925,9 +1925,8 @@ function recenttopics($show = 5) {
 
 	$topics = unserialize(file_get_contents(DATADIR."/temp/recenttopics.dat"));
 
-	if (count($topics) > 0) {
+	if (is_array($topics) && count($topics) > 0) {
 		foreach ($topics as $topic) {
-			//echo '<img src="/images/img/act.png" alt="image" /> <a href="/blog/blog.php?act=view&amp;id='.$topic['blogs_id'].'">'.$topic['blogs_title'].'</a> ('.$topic['blogs_comments'].')<br />';
 			echo '<img src="/images/img/act.png" alt="image" /> <a href="/forum/topic.php?tid='.$topic['topics_id'].'">'.$topic['topics_title'].'</a> ('.$topic['topics_posts'].')';
 			echo '<a href="/forum/topic.php?act=end&amp;tid='.$topic['topics_id'].'">&raquo;</a><br />';
 		}
@@ -1947,7 +1946,7 @@ function recentfiles($show = 5) {
 
 	$files = unserialize(file_get_contents(DATADIR."/temp/recentfiles.dat"));
 
-	if (count($files) > 0) {
+	if (is_array($files) && count($files) > 0) {
 		foreach ($files as $file){
 
 			$filesize = (!empty($file['downs_link'])) ? read_file(BASEDIR.'/load/files/'.$file['downs_link']) : 0;
@@ -1968,7 +1967,7 @@ function recentblogs() {
 
 	$blogs = unserialize(file_get_contents(DATADIR."/temp/recentblog.dat"));
 
-	if (count($blogs) > 0) {
+	if (is_array($blogs) && count($blogs) > 0) {
 		foreach ($blogs as $blog) {
 			echo '<img src="/images/img/act.png" alt="image" /> <a href="/blog/blog.php?act=view&amp;id='.$blog['blogs_id'].'">'.$blog['blogs_title'].'</a> ('.$blog['blogs_comments'].')<br />';
 		}
