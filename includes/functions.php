@@ -225,9 +225,9 @@ function bb_code($msg) {
 
 	$msg = preg_replace_callback('#\[spoiler=(.*?)\](.*?)\[/spoiler\]#si', 'spoiler_text',$msg);
 	$msg = preg_replace_callback('#\[spoiler\](.*?)\[/spoiler\]#si', 'spoiler_text',$msg);
+	$msg = preg_replace_callback('~\[url=(https?://.+?)\](.+?)\[/url\]|(?<!])(https?://[0-9a-zа-яё/.;?=\(\)\_\-&%#]+)~ui', 'url_replace', $msg);
 	$msg = preg_replace_callback('#\[img\](.*?)\[/img\]#si', 'img_replace',$msg);
 
-	$msg = preg_replace_callback('~\[url=(https?://.+?)\](.+?)\[/url\]|(?<!src=")(https?://[0-9a-zа-яё/.;?=\(\)\_\-&%#]+)~ui', 'url_replace', $msg);
 	$msg = preg_replace('#\[youtube\](.*?)\[/youtube\]#si', '<iframe width="280" height="210" src="//www.youtube.com/embed/\1" frameborder="0"></iframe>', $msg);
 	$msg = preg_replace('#\[big\](.*?)\[/big\]#si', '<big>\1</big>', $msg);
 	$msg = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $msg);
@@ -242,6 +242,24 @@ function bb_code($msg) {
 
 	return smiles($msg);
 }
+
+	/**
+	 * Обработка BB-кодов
+	 * @param  string  $text  Необработанный текст
+	 * @param  boolean $parse Обрабатывать или вырезать код
+	 * @return string         Обработанный текст
+	 */
+	function bbCode($text, $parse = true)
+	{
+		$bbcode = new BBCodeParser();
+
+		if ( ! $parse) return $bbcode->clear($text);
+
+		$text = $bbcode->parse($text);
+		$text = $bbcode->parseSmiles($text);
+
+		return $text;
+	}
 
 /**
  * Обработка смайлов
