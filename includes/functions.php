@@ -2212,6 +2212,7 @@ function format_num($num = 0){
 
 // ------------- Подключение стилей -------------//
 function include_style(){
+	echo '<link rel="stylesheet" href="/assets/css/bootstrap.min.css" type="text/css" />'."\r\n";
 	echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css" type="text/css" />'."\r\n";
 	echo '<link rel="stylesheet" type="text/css" href="/assets/markitup/style.css" />'."\r\n";
 	echo '<link rel="stylesheet" type="text/css" href="/assets/css/app.css" />'."\r\n";
@@ -2220,7 +2221,8 @@ function include_style(){
 // ------------- Подключение javascript -------------//
 function include_javascript(){
 
-	echo '<script type="text/javascript" src="/assets/jquery-2.1.0.min.js"></script>'."\r\n";
+	echo '<script type="text/javascript" src="/assets/js/jquery-1.12.4.min.js"></script>'."\r\n";
+	echo '<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/markitup/jquery.markitup.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/markitup/markitup.set.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/js/app.js"></script>'."\r\n";
