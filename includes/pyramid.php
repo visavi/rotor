@@ -16,7 +16,7 @@ $links = $querylink -> fetchAll();
 
 if (count($links) > 0) {
 	foreach ($links as $data) {
-		echo '<img src="/images/img/act.png" alt="image" /> <a href="'.$data['pyramid_link'].'">'.$data['pyramid_name'].'</a><br />';
+		echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="'.$data['pyramid_link'].'">'.$data['pyramid_name'].'</a><br />';
 	}
 } else {
 	show_error('В списке еще никого нет, будь первым!');

@@ -1,7 +1,5 @@
 <?php $config['newtitle'] = 'Главная страница'; ?>
 
-<?php include_once(BASEDIR.'/includes/calendar.php') ?>
-
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/">Новости сайта</a> (<?=stats_news()?>)<br /> <?=last_news()?>
 
 <div class="b">
@@ -15,7 +13,7 @@
 
 
 <div class="b">
-	<i class="fa fa-calendar fa-lg text-muted"></i>
+	<i class="fa fa-hashtag fa-lg text-muted"></i>
 	<b><a href="/events/">События</a></b> (<?=stats_events()?>)
 </div>
 <?=show_events()?>
@@ -48,5 +46,12 @@
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/index.php?act=stat">Информация</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/index.php?act=partners">Партнеры и друзья</a><br />
 
-<div class="b"><i class="fa fa-comment fa-lg text-muted"></i> <b>Курсы валют</b></div>
+<div class="b">
+	<i class="fa fa-comment fa-lg text-muted"></i> <b>Курсы валют</b>
+</div>
 <?php include_once(BASEDIR.'/includes/courses.php') ?>
+
+<div class="b">
+	<i class="fa fa-calendar fa-lg text-muted"></i> <b>Календарь</b>
+</div>
+<?php include_once(BASEDIR.'/includes/calendar.php') ?>
