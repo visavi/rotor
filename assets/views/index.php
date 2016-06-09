@@ -1,5 +1,7 @@
 <?php $config['newtitle'] = 'Главная страница'; ?>
 
+<?php include_once(BASEDIR.'/includes/calendar.php') ?>
+
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/">Новости сайта</a> (<?=stats_news()?>)<br /> <?=last_news()?>
 
 <div class="b">

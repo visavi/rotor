@@ -248,7 +248,7 @@ if (is_admin()) {
 															if (!empty($notice) && $notice != $new['downs_notice']) {
 																// ------------------------Уведомление по привату------------------------//
 																if (user($new['downs_user'])) {
-																	$textpriv = 'Уведомеление о проверке файла.<br />Ваш файл [b]'.$new['downs_title'].'[/b] не прошел проверку на добавление<br />Причина: '.$notice.'<br />Отредактировать описание файла вы можете на [url='.$config['home'].'/load/add.php?act=view&amp;id='.$id.']этой[/url] странице';
+																	$textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['downs_title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.$config['home'].'/load/add.php?act=view&amp;id='.$id.']этой[/url] странице';
 
 																	DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($new['downs_user'], $log, $textpriv, SITETIME));
 
@@ -322,7 +322,7 @@ if (is_admin()) {
 								DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($new['downs_cats_id']));
 
 								if (user($new['downs_user'])) {
-									$textpriv = 'Уведомеление о проверке файла.<br />Ваш файл [b]'.$new['downs_title'].'[/b] успешно прошел проверку и добавлен в архив файлов<br />Просмотреть свой файл вы можете на [url='.$config['home'].'/load/down.php?act=view&amp;id='.$id.']этой[/url] странице';
+									$textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['downs_title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.$config['home'].'/load/down.php?act=view&amp;id='.$id.']этой[/url] странице';
 
 									DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($new['downs_user'], $log, $textpriv, SITETIME));
 									DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($new['downs_user']));

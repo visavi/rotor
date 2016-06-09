@@ -84,7 +84,7 @@ if (is_user()) {
 
 											$uzdata = DB::run() -> queryFetch("SELECT `users_rating`, `users_posrating`, `users_negrating` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
 											// ------------------------------Уведомление по привату------------------------//
-											$textpriv = '<img src="/images/img/thumb-up.gif" alt="plus" /> Пользователь [b]'.nickname($log).'[/b] поставил вам плюс! (Ваш рейтинг: '.$uzdata['users_rating'].')<br />Комментарий: '.$text;
+											$textpriv = '<img src="/images/img/thumb-up.gif" alt="plus" /> Пользователь [b]'.nickname($log).'[/b] поставил вам плюс! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
 											DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
 
@@ -117,7 +117,7 @@ if (is_user()) {
 
 													$uzdata = DB::run() -> queryFetch("SELECT `users_rating`, `users_posrating`, `users_negrating` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
 													// ------------------------------Уведомление по привату------------------------//
-													$textpriv = '<img src="/images/img/thumb-down.gif" alt="minus" /> Пользователь [b]'.nickname($log).'[/b] поставил вам минус! (Ваш рейтинг: '.$uzdata['users_rating'].')<br />Комментарий: '.$text;
+													$textpriv = '<img src="/images/img/thumb-down.gif" alt="minus" /> Пользователь [b]'.nickname($log).'[/b] поставил вам минус! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
 													DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
 

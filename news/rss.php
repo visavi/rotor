@@ -32,10 +32,9 @@ while ($data = $querynews -> fetch()) {
 
 	$data['news_text'] = bb_code($data['news_text']);
 	$data['news_text'] = str_replace(array('/images/smiles', '[cut]'), array($config['home'].'/images/smiles', ''), $data['news_text']);
-	$data['news_text'] = htmlspecialchars($data['news_text']);
 
-	echo '<item><title>'.$data['news_title'].'</title><link>'.$config['home'].'/news/index.php?act=read&amp;id='.$data['news_id'].'</link>';
-	echo '<description>'.$data['news_text'].' </description><author>'.nickname($data['news_author']).'</author>';
+	echo '<item><title>'.htmlspecialchars($data['news_title']).'</title><link>'.$config['home'].'/news/index.php?act=read&amp;id='.$data['news_id'].'</link>';
+	echo '<description>'.htmlspecialchars($data['news_text']).' </description><author>'.nickname($data['news_author']).'</author>';
 	echo '<pubDate>'.date("r", $data['news_time']).'</pubDate><category>Новости</category><guid>'.$config['home'].'/news/index.php?act=read&amp;id='.$data['news_id'].'</guid></item>';
 }
 
