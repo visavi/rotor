@@ -179,15 +179,16 @@ function hidden_text($str) {
 // ------------------ Вспомогательная функция для bb-кода --------------------//
 function url_replace($url) {
 	global $config;
+	var_dump($url);
 
-	if (!isset($url[4])) {
-		$target = (strpos($url[1], $config['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
+	if (isset($url[3])) {
+		$target = (strpos($url[3], $config['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
 		$title = (utf_strlen($url[3]) > 80) ? utf_substr($url[3], 0, 70).'...' : $url[3];
-		return '<a href="'.$url[1].'"'.$target.'>'.check(rawurldecode(html_entity_decode($title, ENT_QUOTES, 'utf-8'))).'</a>';
+		return '<a href="'.$url[3].'"'.$target.'>'.check(rawurldecode(html_entity_decode($title, ENT_QUOTES, 'utf-8'))).'</a>';
 	} else {
-		$target = (strpos($url[4], $config['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
-		$title = (utf_strlen($url[4]) > 80) ? utf_substr($url[4], 0, 70).'...' : $url[4];
-		return '<a href="'.$url[4].'"'.$target.'>'.check(rawurldecode(html_entity_decode($title, ENT_QUOTES, 'utf-8'))).'</a>';
+		$target = (strpos($url[1], $config['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
+		$title = (utf_strlen($url[2]) > 80) ? utf_substr($url[2], 0, 70).'...' : $url[2];
+		return '<a href="'.$url[2].'"'.$target.'>'.check(rawurldecode(html_entity_decode($title, ENT_QUOTES, 'utf-8'))).'</a>';
 	}
 }
 
@@ -225,9 +226,9 @@ function bb_code($msg) {
 
 	$msg = preg_replace_callback('#\[spoiler=(.*?)\](.*?)\[/spoiler\]#si', 'spoiler_text',$msg);
 	$msg = preg_replace_callback('#\[spoiler\](.*?)\[/spoiler\]#si', 'spoiler_text',$msg);
-	//$msg = preg_replace_callback('#\[img\](.*?)\[/img\]#si', 'img_replace',$msg);
+	$msg = preg_replace_callback('#\[img\](.*?)\[/img\]#si', 'img_replace',$msg);
 
-	$msg = preg_replace_callback('~\[url=((https?|ftp)://.+?)\](.+?)\[/url\]|((https?|ftp)://[0-9a-zа-яё/.;?=\(\)\_\-&%#]+)~ui', 'url_replace', $msg);
+	$msg = preg_replace_callback('~\[url=(https?://.+?)\](.+?)\[/url\]|(?<!src=")(https?://[0-9a-zа-яё/.;?=\(\)\_\-&%#]+)~ui', 'url_replace', $msg);
 	$msg = preg_replace('#\[youtube\](.*?)\[/youtube\]#si', '<iframe width="280" height="210" src="//www.youtube.com/embed/\1" frameborder="0"></iframe>', $msg);
 	$msg = preg_replace('#\[big\](.*?)\[/big\]#si', '<big>\1</big>', $msg);
 	$msg = preg_replace('#\[b\](.*?)\[/b\]#si', '<b>\1</b>', $msg);
