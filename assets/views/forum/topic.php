@@ -98,7 +98,7 @@
 
 		<?php if (!empty($topics['posts_files'])): ?>
 			<?php if (isset($topics['posts_files'][$data['posts_id']])): ?>
-				<div class="hide"><img src="/images/img/paper-clip.gif" alt="attach" /> <b>Прикрепленные файлы:</b><br />
+				<div class="secret"><img src="/images/img/paper-clip.gif" alt="attach" /> <b>Прикрепленные файлы:</b><br />
 				<?php foreach ($topics['posts_files'][$data['posts_id']] as $file): ?>
 					<?php $ext = getExtension($file['file_hash']); ?>
 					<img src="/images/icons/<?=icons($ext)?>" alt="image" />

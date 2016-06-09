@@ -1,4 +1,4 @@
-<div class="hide" style="text-align: left;"><b>Статистика производительности</b><br />
+<div class="secret" style="text-align: left;"><b>Статистика производительности</b><br />
 
 MySQL запросов: <?= DB::run() -> queryCounter() ?><br />
 

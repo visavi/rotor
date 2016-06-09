@@ -35,10 +35,10 @@ form {
 }
 a:active, a:visited, a:link {
 	color: #999;
-    text-decoration : none; 
-    border-bottom-width : 1px; 
-    border-bottom-style : solid; 
-    border-bottom-color : #d9d0d0; 
+    text-decoration : none;
+    border-bottom-width : 1px;
+    border-bottom-style : solid;
+    border-bottom-color : #d9d0d0;
 }
 
 a:hover {
@@ -75,17 +75,17 @@ table {
 	font-size: 13px;
 }
 
-.img {  
+.img {
 	float:left;
-	padding : 0px; 
+	padding : 0px;
 	margin-right : 5px;
     background: none;
-} 
+}
 
-.imgright {  
+.imgright {
 	float:right;
-	margin : 5px; 
-} 
+	margin : 5px;
+}
 
 .a {
 	color: #666;
@@ -107,18 +107,18 @@ table {
 	background-color: #dddddd;
 	border: 1px solid #cccccc;
 }
-.d { 
-    background-color : #f1f2f1; 
-    border-style : dotted; 
-    border-width : 1px; 
-    border-color : #b8c1b7; 
-    padding : 10px; 
-    padding-left : 30px; 
-    background-image : url(/images/img/code.gif); 
-    background-repeat : repeat-y; 
-    font-size : 11px; 
-    display : block; 
-    overflow : auto; 
+.d {
+    background-color : #f1f2f1;
+    border-style : dotted;
+    border-width : 1px;
+    border-color : #b8c1b7;
+    padding : 10px;
+    padding-left : 30px;
+    background-image : url(/images/img/code.gif);
+    background-repeat : repeat-y;
+    font-size : 11px;
+    display : block;
+    overflow : auto;
 }
 
 .q {
@@ -130,7 +130,7 @@ table {
 	border-left: 4px solid #8394b2;
     color : #878787;
     font-size : x-small;
-    padding-left : 6px;    
+    padding-left : 6px;
 }
 
 .cs {
@@ -150,7 +150,7 @@ table {
 
 .form {
 	color: #666;
-	padding : 3px; 
+	padding : 3px;
 	background-image: url(/themes/default/bp.gif);
 	background-color: #dddddd;
 	border: 1px solid #cccccc;
@@ -158,46 +158,46 @@ table {
 
 .login {
 	color: #666;
-	padding : 10px; 
+	padding : 10px;
     margin : 0px 0 10px 0;
 	background-color: #ebf9eb;
 	border: 1px solid #cccccc;
 }
 
 .data {
-     color: #cc00cc; 
+     color: #cc00cc;
      font-size: x-small;
 }
 
-hr { 
-border : 1px dotted #ccc; 
+hr {
+border : 1px dotted #ccc;
 }
 
-img { 
-	border : 0; 
+img {
+	border : 0;
 }
 
 .note {
-    color: #777; 
-    background: #eff5fb; 
-    border: 1px solid #81bef7; 
-    padding: 5px; 
+    color: #777;
+    background: #eff5fb;
+    border: 1px solid #81bef7;
+    padding: 5px;
     margin : 5px;
-    text-align: center; 
-    font-weight: bold; 
+    text-align: center;
+    font-weight: bold;
 }
 
-.right { 
-     text-align: right; 
+.right {
+     text-align: right;
      font-size: x-small;
-} 
+}
 
-.hide {
+.secret {
     color : #465584;
     background : #eef2f7;
 	border: 1px dotted #81bef7;
     font-size: x-small;
-    padding: 3px; 
+    padding: 3px;
 }
 
 .nav {
@@ -224,6 +224,6 @@ font-size : 9px;
 background-color : #edebeb;
 border : 1px solid #dedede;
 padding : 0px 5px 0px 5px;
-font-weight: bold; 
+font-weight: bold;
 text-decoration : none;
 }

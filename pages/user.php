@@ -110,7 +110,7 @@ case 'index':
 		echo '<b><a href="/gallery/album.php?act=photo&amp;uz='.$uz.'">Галерея</a></b> (<a href="/gallery/comments.php?act=comments&amp;uz='.$uz.'">комм.</a>)<br />';
 
 		if (!empty($data['users_info'])) {
-			echo '<div class="hide"><b>О себе</b>:<br />'.bb_code($data['users_info']).'</div>';
+			echo '<div class="secret"><b>О себе</b>:<br />'.bb_code($data['users_info']).'</div>';
 		}
 
 		if (is_admin()) {

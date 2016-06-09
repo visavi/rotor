@@ -168,9 +168,9 @@ function hidden_text($str) {
 
 	if ($str[1]=='') $str[1] = 'Текст отсутствует';
 	if (is_user()) {
-		$text = '<div class="hide"><b>Скрытый текст:</b> '.$str[1].'</div>';
+		$text = '<div class="secret"><b>Скрытый текст:</b> '.$str[1].'</div>';
 	} else {
-		$text = '<div class="hide"><b>Скрытый текст.</b> Для просмотра необходимо авторизоваться!</div>';
+		$text = '<div class="secret"><b>Скрытый текст.</b> Для просмотра необходимо авторизоваться!</div>';
 	}
 
 	return $text;
@@ -179,7 +179,6 @@ function hidden_text($str) {
 // ------------------ Вспомогательная функция для bb-кода --------------------//
 function url_replace($url) {
 	global $config;
-	var_dump($url);
 
 	if (isset($url[3])) {
 		$target = (strpos($url[3], $config['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
