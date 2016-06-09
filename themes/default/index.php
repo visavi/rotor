@@ -16,6 +16,7 @@ header("Content-type:text/html; charset=utf-8");
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	<link rel="image_src" href="/images/img/icon.png" />
+	<?= include_style() ?>
 	<link rel="stylesheet" href="/themes/default/css/style.css" type="text/css" />
 	<link rel="alternate" href="/news/rss.php" title="RSS News" type="application/rss+xml" />
 	<?= include_javascript() ?>

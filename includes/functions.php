@@ -8,8 +8,7 @@
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
 if (!defined('BASEDIR')) {
-	header("Location: /index.php");
-	exit;
+	exit(header('Location: /index.php'));
 }
 
 // --------------------------- Функция перевода секунд во время -----------------------------//
@@ -1566,7 +1565,7 @@ function last_news() {
 		if ($total > 0) {
 			foreach ($news as $data) {
 				$data['news_text'] = str_replace('[cut]', '', $data['news_text']);
-				echo '<img src="/images/img/act.png" alt="Новость" /> <a href="/news/index.php?act=read&amp;id='.$data['news_id'].'">'.$data['news_title'].'</a> ('.$data['news_comments'].') <img class="news-title" src="/images/img/downs.gif" alt="Открыть" /><br />';
+				echo '<i class="fa fa-circle-o fa-lg"></i> <a href="/news/index.php?act=read&amp;id='.$data['news_id'].'">'.$data['news_title'].'</a> ('.$data['news_comments'].') <img class="news-title" src="/images/img/downs.gif" alt="Открыть" /><br />';
 
 				echo '<div class="news-text">'.bb_code($data['news_text']).'<br />';
 				echo '<a href="/news/index.php?act=comments&amp;id='.$data['news_id'].'">Комментарии</a> ';
@@ -1605,7 +1604,7 @@ function show_events() {
 
 		if ($total > 0) {
 			foreach ($events as $data) {
-				echo '<img src="/images/img/act.png" alt="Событие" /> ';
+				echo '<i class="fa fa-circle-o fa-lg"></i> ';
 				echo '<a href="/events/?act=read&amp;id='.$data['event_id'].'">'.$data['event_title'].'</a> ('.$data['event_comments'].')<br />';
 			}
 		}
@@ -1927,7 +1926,7 @@ function recenttopics($show = 5) {
 
 	if (is_array($topics) && count($topics) > 0) {
 		foreach ($topics as $topic) {
-			echo '<img src="/images/img/act.png" alt="image" /> <a href="/forum/topic.php?tid='.$topic['topics_id'].'">'.$topic['topics_title'].'</a> ('.$topic['topics_posts'].')';
+			echo '<i class="fa fa-circle-o fa-lg"></i>  <a href="/forum/topic.php?tid='.$topic['topics_id'].'">'.$topic['topics_title'].'</a> ('.$topic['topics_posts'].')';
 			echo '<a href="/forum/topic.php?act=end&amp;tid='.$topic['topics_id'].'">&raquo;</a><br />';
 		}
 	}
@@ -1950,7 +1949,7 @@ function recentfiles($show = 5) {
 		foreach ($files as $file){
 
 			$filesize = (!empty($file['downs_link'])) ? read_file(BASEDIR.'/load/files/'.$file['downs_link']) : 0;
-			echo '<img src="/images/img/act.png" alt="image" /> <a href="/load/down.php?act=view&amp;id='.$file['downs_id'].'">'.$file['downs_title'].'</a> ('.$filesize.')<br />';
+			echo '<i class="fa fa-circle-o fa-lg"></i>  <a href="/load/down.php?act=view&amp;id='.$file['downs_id'].'">'.$file['downs_title'].'</a> ('.$filesize.')<br />';
 		}
 	}
 
@@ -1969,7 +1968,7 @@ function recentblogs() {
 
 	if (is_array($blogs) && count($blogs) > 0) {
 		foreach ($blogs as $blog) {
-			echo '<img src="/images/img/act.png" alt="image" /> <a href="/blog/blog.php?act=view&amp;id='.$blog['blogs_id'].'">'.$blog['blogs_title'].'</a> ('.$blog['blogs_comments'].')<br />';
+			echo '<i class="fa fa-circle-o fa-lg"></i> <a href="/blog/blog.php?act=view&amp;id='.$blog['blogs_id'].'">'.$blog['blogs_title'].'</a> ('.$blog['blogs_comments'].')<br />';
 		}
 	}
 }
@@ -2211,6 +2210,13 @@ function format_num($num = 0){
    }
 }
 
+// ------------- Подключение стилей -------------//
+function include_style(){
+	echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css" type="text/css" />'."\r\n";
+	echo '<link rel="stylesheet" type="text/css" href="/assets/markitup/style.css" />'."\r\n";
+	echo '<link rel="stylesheet" type="text/css" href="/assets/css/app.css" />'."\r\n";
+}
+
 // ------------- Подключение javascript -------------//
 function include_javascript(){
 
@@ -2218,9 +2224,6 @@ function include_javascript(){
 	echo '<script type="text/javascript" src="/assets/markitup/jquery.markitup.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/markitup/markitup.set.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/js/app.js"></script>'."\r\n";
-
-	echo '<link rel="stylesheet" type="text/css" href="/assets/markitup/style.css" />'."\r\n";
-	echo '<link rel="stylesheet" type="text/css" href="/assets/css/app.css" />'."\r\n";
 }
 
 // ------------- Прогресс бар -------------//
@@ -2547,4 +2550,3 @@ if (!empty($functions)) {
 		}
 	}
 }
-?>

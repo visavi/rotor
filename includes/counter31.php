@@ -107,4 +107,3 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 }
 
 echo '<img src="'.$imagecache.'?'.date_fixed(SITETIME, "dmY").'" alt="Месяц" /><br /><br />';
-?>

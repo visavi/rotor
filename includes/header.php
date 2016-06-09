@@ -192,4 +192,3 @@ if ($udata = is_user()) {
 	// -------------------------- Дайджест ------------------------------------//
 	DB::run() -> query("INSERT INTO `visit` (`visit_user`, `visit_self`, `visit_ip`, `visit_nowtime`)  VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `visit_self`=?, `visit_ip`=?, `visit_count`=?, `visit_nowtime`=?;", array($log, $php_self, $ip, SITETIME, $php_self, $ip, $_SESSION['counton'], SITETIME));
 }
-?>

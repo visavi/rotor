@@ -11,7 +11,7 @@ if (!defined('BASEDIR')) {
 	exit(header('Location: /index.php'));
 }
 // -------------------- Вывод статистики ------------------------------//
-$week_day = date("w");
+$week_day = date('w');
 $arr_week = array('вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб');
 
 $count = stats_counter();
@@ -74,6 +74,7 @@ imageTTFtext($img, 6, 0, 13, 23, $color2, BASEDIR.'/assets/fonts/font4.ttf', $co
 imageTTFtext($img, 6, 0, 13, 29, $color2, BASEDIR.'/assets/fonts/font4.ttf', $count['count_dayhits']);
 imageTTFtext($img, 12, 0, $pos, 29, $color2, BASEDIR.'/assets/fonts/font7.ttf', $online[1]);
 
-ImagePNG($img, BASEDIR.'/upload/counters/counter.png');
+ImagePNG($img, BASEDIR.'/upload/counters/counter_new.png');
 ImageDestroy($img);
-?>
+
+rename(BASEDIR.'/upload/counters/counter_new.png', BASEDIR.'/upload/counters/counter.png');

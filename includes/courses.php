@@ -8,8 +8,7 @@
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
 if (!defined('BASEDIR')) {
-	header('Location: /index.php');
-	exit;
+	exit(header('Location: /index.php'));
 }
 
 // libxml_use_internal_errors(true);
@@ -44,4 +43,3 @@ if (!empty($courses)){
 } else {
 	show_error('Ошибка! Не удалось загрузить последние курсы валют!');
 }
-?>

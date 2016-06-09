@@ -16,6 +16,7 @@ header("Content-type:text/html; charset=utf-8");
 	<title>%TITLE%</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+	<?= include_style() ?>
 	<link rel="stylesheet" href="/themes/toonel/css/style.css" type="text/css"/>
 	<link rel="alternate" href="/news/rss.php" title="RSS News" type="application/rss+xml"/>
 	<?= include_javascript() ?>

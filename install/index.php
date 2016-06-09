@@ -293,7 +293,6 @@ define ('DBPORT', '$dbport');
 define ('DBNAME', '$dbname');
 define ('DBUSER', '$dbuser');
 define ('DBPASS', '$dbpass');
-?>
 ";
 				file_put_contents('../includes/connect.php', $dbconfig);
 				@chmod('../includes/connect.php', 0664);

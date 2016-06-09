@@ -13,6 +13,7 @@ echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru"><head>'
 echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
 echo '<title>%TITLE%</title>';
 echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />';
+include_style();
 echo '<link rel="stylesheet" href="/themes/sky/css/style.css" type="text/css" media="screen" />';
 echo '<link rel="alternate" href="/news/rss.php" title="RSS News" type="application/rss+xml" />';
 include_javascript();

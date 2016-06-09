@@ -8,8 +8,7 @@
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
 if (!defined('BASEDIR')) {
-	header('Location: /index.php');
-	exit;
+	exit(header('Location: /index.php'));
 }
 
 $cal_den = date_fixed(SITETIME, "j");
@@ -58,5 +57,3 @@ foreach ($calend as $valned) {
 	echo '</tr>';
 }
 echo '</tbody></table>';
-
-?>

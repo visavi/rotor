@@ -8,8 +8,7 @@
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
 if (!defined('BASEDIR')) {
-	header('Location: /index.php');
-	exit;
+	exit(header('Location: /index.php'));
 }
 
 $querylink = DB::run() -> query("SELECT * FROM `pyramid` ORDER BY `pyramid_id` DESC;");
@@ -22,4 +21,3 @@ if (count($links) > 0) {
 } else {
 	show_error('В списке еще никого нет, будь первым!');
 }
-?>

@@ -68,5 +68,3 @@ if ($online[1] < 150 || is_user()) {
 		DB::run() -> query("UPDATE `counter` SET `count_allhits`=`count_allhits`+1, `count_dayhits`=`count_dayhits`+1, `count_hits24`=`count_hits24`+1;");
 	}
 }
-
-?>
