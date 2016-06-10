@@ -52,20 +52,6 @@ a:hover {
 	font-size : 8pt;
 }
 
-a.nav:active, a.nav:visited, a.nav:link {
-	color : #666;
-	font-size : 10px;
-	font-weight : bold;
-	text-decoration : none;
-}
-
-a.nav:hover {
-	font-size : 10px;
-	font-weight : bold;
-	color : #666;
-	text-decoration : underline;
-}
-
 input, select {
 	font-size : 8pt;
 }
@@ -203,32 +189,4 @@ img {
 	background : #e4eaf2;
 	border: 1px solid #c3cfe1;
 	padding: 3px;
-}
-
-.nav {
-	padding : 4px;
-	font-size : 10px;
-}
-
-.nav a {
-	border : 1px solid #dedede;
-	padding : 0px 5px 0px 5px;
-	font-size : 9px;
-	text-decoration : none;
-}
-
-.nav a:hover {
-	background-color : #f7f7f7;
-	border : 1px solid #dedede;
-	padding : 0px 5px 0px 5px;
-	text-decoration : none;
-	font-size : 9px;
-}
-
-.navcurrent {
-	background-color : #edebeb;
-	border : 1px solid #dedede;
-	padding : 0px 5px 0px 5px;
-	font-weight: bold;
-	text-decoration : none;
 }

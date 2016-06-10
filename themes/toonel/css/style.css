@@ -308,31 +308,3 @@ input[type="submit"] {
 	padding: 3px;
 	margin: 1px 0 1px 0;
 }
-
-.nav {
-	padding: 4px;
-	font-size: 10px;
-}
-
-.nav a {
-	border: 1px solid #dedede;
-	padding: 0px 5px 0px 5px;
-	font-size: 9px;
-	text-decoration: none;
-}
-
-.nav a:hover {
-	background-color: #f7f7f7;
-	border: 1px solid #dedede;
-	padding: 0px 5px 0px 5px;
-	text-decoration: none;
-	font-size: 9px;
-}
-
-.navcurrent {
-	background-color: #edebeb;
-	border: 1px solid #dedede;
-	padding: 0px 5px 0px 5px;
-	font-weight: bold;
-	text-decoration: none;
-}

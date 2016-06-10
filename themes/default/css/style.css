@@ -51,16 +51,7 @@ a:hover {
 	color: #aeaeae;
 	text-decoration: none;
 }
-a.nav:active, a.nav:visited, a.nav:link {
-	color: #ff7f00;
-	font-weight: bold;
-	text-decoration: none;
-}
-a.nav:hover {
-	font-weight: bold;
-	color: #666;
-	text-decoration: underline;
-}
+
 .site {
 	padding: 5px 5px 5px 5px;
 	background-image: url(../img/f.png);
@@ -225,33 +216,4 @@ img {
 	background : #e4eaf2;
 	border: 1px solid #c3cfe1;
 	padding: 3px;
-}
-
-.nav {
-	padding : 4px;
-	font-size : 11px;
-	margin: 8px 0;
-}
-
-.nav a {
-	border : 1px solid #dedede;
-	padding : 2px 8px;
-	font-size : 11px;
-	text-decoration : none;
-}
-
-.nav a:hover {
-	background-color : #f7f7f7;
-	border : 1px solid #dedede;
-	padding : 2px 8px;
-	text-decoration : none;
-	font-size : 11px;
-}
-
-.navcurrent {
-	background-color : #edebeb;
-	border : 1px solid #dedede;
-	padding : 2px 8px;
-	font-weight: bold;
-	text-decoration : none;
 }

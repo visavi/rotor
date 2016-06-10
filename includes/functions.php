@@ -1854,6 +1854,27 @@ function recentevents($show = 5) {
 	}
 }
 
+// --------------------------- Функция показа фотографий ---------------------------//
+function recentphotos($show = 5) {
+	global $config;
+	if (@filemtime(DATADIR."/temp/recentphotos.dat") < time()-1800) {
+		$recent = DBM::run()->query("SELECT * FROM `photo` ORDER BY `photo_time` DESC LIMIT ".$show.";");
+		file_put_contents(DATADIR."/temp/recentphotos.dat", serialize($recent), LOCK_EX);
+	}
+
+	$photos = unserialize(file_get_contents(DATADIR."/temp/recentphotos.dat"));
+
+	if (is_array($photos) && count($photos) > 0) {
+		foreach ($photos as $data) {
+			echo '<a href="/gallery/index.php?act=view&amp;gid='.$data['photo_id'].'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], $data['photo_title']).'</a>';
+		}
+
+		echo '<br />';
+	}
+}
+
+
+
 // --------------- Функция кэширования последних тем форума -------------------//
 function recenttopics($show = 5) {
 	if (@filemtime(DATADIR."/temp/recenttopics.dat") < time()-180) {

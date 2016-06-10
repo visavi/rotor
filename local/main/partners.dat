@@ -6,7 +6,7 @@ if (isset($act) && $act=='partners'){
 include_once BASEDIR."/includes/pyramid.php";
 ?>
 
-<img src="/images/img/act.png" alt="image" /> <a href="/pages/pyramid.php">Добавить сайт</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/pyramid.php">Добавить сайт</a><br />
 <br />
 <a href="http://pizdec.ru"><img src="/images/img/pizdec.ru.gif" alt="image" /></a><br />
 
