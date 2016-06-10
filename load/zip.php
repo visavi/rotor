@@ -116,9 +116,9 @@ case 'preview':
 				if (!preg_match("/\.(gif|png|bmp|wbmp|jpg|jpeg)$/", $filename)) {
 					if ($content[0]['size'] > 0) {
 						if (is_utf($filecontent)) {
-							echo '<div class="d">'.highlight_string($filecontent, 1).'</div><br />';
+							echo '<pre class="prettyprint linenums">'.htmlspecialchars($filecontent).'</pre><br />';
 						} else {
-							echo '<div class="d">'.highlight_string(win_to_utf($filecontent), 1).'</div><br />';
+							echo '<pre class="prettyprint linenums">'.win_to_utf(htmlspecialchars($filecontent)).'</pre><br />';
 						}
 					} else {
 						show_error('Данный файл пустой!');
