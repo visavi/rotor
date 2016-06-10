@@ -1597,11 +1597,11 @@ function show_error($errors) {
 	if (is_array($errors)){
 		echo '<div class="info">';
 		foreach ($errors as $error) {
-			echo '<img src="/images/img/error.gif" alt="Ошибка" /> <b>'.$error.'</b><br />';
+			echo '<i class="fa fa-exclamation-circle fa-lg text-danger"></i> <b>'.$error.'</b><br />';
 		}
 		echo '</div><br />';
 	} else {
-		echo '<div class="info"><img src="/images/img/error.gif" alt="Ошибка" /> <b>'.$errors.'</b></div><br />';
+		echo '<div class="info"><i class="fa fa-exclamation-circle fa-lg text-danger"></i> <b>'.$errors.'</b></div><br />';
 	}
 }
 
@@ -1789,7 +1789,7 @@ function save_advertuser() {
 function site_version() {
 	global $config;
 
-	echo '<img src="/images/img/key.gif" alt="image" /> <b>Версия '.$config['rotorversion'].'</b><br /><br />';
+	echo '<i class="fa fa-key fa-lg"></i> <b>Версия '.$config['rotorversion'].'</b><br /><br />';
 
 	// Новый механизм обновлений
 	$upgrade_sql = glob(DATADIR.'/*.dat');
