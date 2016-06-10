@@ -16,7 +16,7 @@
 	<i class="fa fa-hashtag fa-lg text-muted"></i>
 	<b><a href="/events/">События</a></b> (<?=stats_events()?>)
 </div>
-<?=show_events()?>
+<?=recentevents()?>
 
 <div class="b">
 	<i class="fa fa-forumbee fa-lg text-muted"></i>

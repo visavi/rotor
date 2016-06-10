@@ -1611,24 +1611,6 @@ function stats_events() {
 	return file_get_contents(DATADIR."/temp/statevents.dat");
 }
 
-// --------------------------- Функция показа событий---------------------------//
-function show_events() {
-	$config['showevents'] = 5;
-
-	if ($config['showevents'] > 0) {
-		$query = DB::run()->query("SELECT * FROM `events` WHERE `event_top`=? ORDER BY `event_time` DESC LIMIT ".$config['showevents'].";", array(1));
-		$events = $query->fetchAll();
-		$total = count($events);
-
-		if ($total > 0) {
-			foreach ($events as $data) {
-				echo '<i class="fa fa-circle-o fa-lg text-muted"></i> ';
-				echo '<a href="/events/?act=read&amp;id='.$data['event_id'].'">'.$data['event_title'].'</a> ('.$data['event_comments'].')<br />';
-			}
-		}
-	}
-}
-
 // --------------------- Функция получения данных аккаунта  --------------------//
 function user($login) {
 	if (! empty($login)) {
@@ -1931,6 +1913,26 @@ function curl_connect($url, $user_agent = 'Mozilla/5.0', $proxy = null) {
 	}
 }
 
+// --------------------------- Функция показа событий---------------------------//
+function recentevents($show = 5) {
+
+	if (@filemtime(DATADIR."/temp/recentevents.dat") < time()-600) {
+		$query = DB::run()->query("SELECT * FROM `events` WHERE `event_top`=? ORDER BY `event_time` DESC LIMIT ".$show.";", array(1));
+		$events = $query->fetchAll();
+
+		file_put_contents(DATADIR."/temp/recentevents.dat", serialize($events), LOCK_EX);
+	}
+
+	$events = unserialize(file_get_contents(DATADIR."/temp/recentevents.dat"));
+
+	if (is_array($events) && count($events) > 0) {
+		foreach ($events as $data) {
+			echo '<i class="fa fa-circle-o fa-lg text-muted"></i> ';
+			echo '<a href="/events/?act=read&amp;id='.$data['event_id'].'">'.$data['event_title'].'</a> ('.$data['event_comments'].')<br />';
+		}
+	}
+}
+
 // --------------- Функция кэширования последних тем форума -------------------//
 function recenttopics($show = 5) {
 	if (@filemtime(DATADIR."/temp/recenttopics.dat") < time()-180) {
@@ -1948,8 +1950,6 @@ function recenttopics($show = 5) {
 			echo '<a href="/forum/topic.php?act=end&amp;tid='.$topic['topics_id'].'">&raquo;</a><br />';
 		}
 	}
-
-
 }
 
 // ------------- Функция кэширования последних файлов в загрузках -----------------//
@@ -1970,7 +1970,6 @@ function recentfiles($show = 5) {
 			echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down.php?act=view&amp;id='.$file['downs_id'].'">'.$file['downs_title'].'</a> ('.$filesize.')<br />';
 		}
 	}
-
 }
 
 // ------------- Функция кэширования последних статей в блогах -----------------//
