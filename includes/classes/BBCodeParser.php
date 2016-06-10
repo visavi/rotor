@@ -2,6 +2,8 @@
 
 class BBCodeParser {
 
+	public $setting;
+
 	public $parsers = [
 		'code' => [
 			'pattern' => '/\[code\](.*?)\[\/code\]/s',
@@ -95,6 +97,15 @@ class BBCodeParser {
 	];
 
 	/**
+	 * Конструктор
+	 * @param string $setting настройки
+	 */
+	public function __construct($setting)
+	{
+		$this->setting = $setting;
+	}
+
+	/**
 	 * Метод парсинга BBCode
 	 * @param  string $source текст содержаший BBCode
 	 * @return string распарсенный текст
@@ -184,7 +195,6 @@ class BBCodeParser {
 	 */
 	public function parseSmiles($source)
 	{
-		global $config;
 		static $list_smiles;
 
 		if (empty($list_smiles)) {
@@ -199,9 +209,9 @@ class BBCodeParser {
 
 		$count = 0;
 		foreach($list_smiles as $smile) {
-			$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_name'].'" /> ', $source, $config['resmiles'] - $count, $cnt);
+			$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_name'].'" /> ', $source, $this->setting['resmiles'] - $count, $cnt);
 			$count += $cnt;
-			if ($count >= $config['resmiles']) break;
+			if ($count >= $this->setting['resmiles']) break;
 		}
 		return $source;
 	}

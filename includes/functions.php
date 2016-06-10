@@ -243,23 +243,24 @@ function bb_code($msg) {
 	return smiles($msg);
 }
 
-	/**
-	 * Обработка BB-кодов
-	 * @param  string  $text  Необработанный текст
-	 * @param  boolean $parse Обрабатывать или вырезать код
-	 * @return string         Обработанный текст
-	 */
-	function bbCode($text, $parse = true)
-	{
-		$bbcode = new BBCodeParser();
+/**
+ * Обработка BB-кодов
+ * @param  string  $text  Необработанный текст
+ * @param  boolean $parse Обрабатывать или вырезать код
+ * @return string         Обработанный текст
+ */
+function bbCode($text, $parse = true)
+{
+	global $config;
+	$bbcode = new BBCodeParser($config);
 
-		if ( ! $parse) return $bbcode->clear($text);
+	if ( ! $parse) return $bbcode->clear($text);
 
-		$text = $bbcode->parse($text);
-		$text = $bbcode->parseSmiles($text);
+	$text = $bbcode->parse($text);
+	$text = $bbcode->parseSmiles($text);
 
-		return $text;
-	}
+	return $text;
+}
 
 /**
  * Обработка смайлов
@@ -2231,15 +2232,16 @@ function format_num($num = 0){
 function include_style(){
 	echo '<link rel="stylesheet" href="/assets/css/bootstrap.min.css" type="text/css" />'."\r\n";
 	echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css" type="text/css" />'."\r\n";
+	echo '<link rel="stylesheet" href="/assets/css/prettify.css" type="text/css" />'."\r\n";
 	echo '<link rel="stylesheet" type="text/css" href="/assets/markitup/style.css" />'."\r\n";
 	echo '<link rel="stylesheet" type="text/css" href="/assets/css/app.css" />'."\r\n";
 }
 
 // ------------- Подключение javascript -------------//
 function include_javascript(){
-
 	echo '<script type="text/javascript" src="/assets/js/jquery-1.12.4.min.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>'."\r\n";
+	echo '<script type="text/javascript" src="/assets/js/prettify.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/markitup/jquery.markitup.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/markitup/markitup.set.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/js/app.js"></script>'."\r\n";

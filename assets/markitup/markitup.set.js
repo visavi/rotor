@@ -71,11 +71,6 @@ mySettings = {
 	]
 }
 
-
-$(document).ready(function()	{
-	$('#markItUp').markItUp(mySettings);
-});
-
 // ----------------------------------------------------------------------------
 // markItUp Html setting!
 // ----------------------------------------------------------------------------
@@ -106,7 +101,3 @@ myHtmlSettings = {
 		{name:'Clean', className:'clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } }
 	]
 }
-
-$(document).ready(function()	{
-	$('#markItUpHtml').markItUp(myHtmlSettings);
-});
