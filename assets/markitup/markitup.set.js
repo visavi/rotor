@@ -67,6 +67,8 @@ mySettings = {
 			{name:':klass', openWith:' :klass ', className:"col3-2" },
 			{name:':krut', openWith:' :krut ', className:"col3-3" }
 		]},
+		{title:'Разделение страниц', name:'<i class="fa fa-exchange"></i>', className:"bb-nextpage", openWith:'[nextpage]'},
+		{title:'Обрезка страницы', name:'<i class="fa fa-scissors"></i>', className:"bb-cutpage", openWith:'[cut]'},
 		//{title:'Просмотр', name:'<i class="fa fa-check-square-o"></i>', className:'bb-preview',  call:'preview'},
 	]
 }

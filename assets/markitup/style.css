@@ -218,3 +218,17 @@
 .markItUp .bb-smile .col3-3 a {
 	background-image:url('/images/smiles/krut.gif');
 }
+
+.markItUp .bb-nextpage a	{
+	display: none;
+}
+.next .bb-nextpage a {
+	display: block;
+}
+
+.markItUp .bb-cutpage a	{;
+	display: none;
+}
+.cut .bb-cutpage a {
+	display: block;
+}
