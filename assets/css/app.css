@@ -1,35 +1,59 @@
-/* Вывод спойлера */
-.spoiler-wrap {
-  border: 1px solid #ccc;
-  background-color: #e8e8e8;
-  margin: 5px 0;
+blockquote:before {
+  content: "\f10d";
+  font-family: FontAwesome;
+  float: left;
+  margin-right: 10px;
 }
 
-.open {
-  background: url("/images/img/plus.gif") no-repeat scroll left center transparent;
-  padding-left: 14px;
-  display: block;
+blockquote {
+  font-size: 13px;
+  background-color: #eff;
+  border: 1px dotted #ddd;
+  border-left: 5px solid #ddd;
+  margin: 0 0 10px;
 }
 
-.closed {
-  background: url("/images/img/minus.gif") no-repeat scroll left center transparent;
-  display: block;
-  padding-left: 14px;
+.spoiler {
+  margin-bottom: 5px;
 }
 
-.spoiler-head {
+.spoiler:before {
+  content: "\f0da";
+  font-family: FontAwesome;
+  font-size: 17px;
+  color: #bbb;
+  margin: 0 5px 0 2px;
+}
+
+.spoiler.spoiler-open:before {
+  content: "\f0d7";
+  font-family: FontAwesome;
+  font-size: 17px;
+  color: #bbb;
+  margin: 0 5px 0 2px;
+}
+
+.spoiler-title {
+  border-bottom: 1px dashed;
+  color: #6da3bd;
   cursor: pointer;
-   color: #343434;
-  line-height: 15px;
-  margin-left: 6px;
-  padding: 1px 14px 3px;
+  font-weight: normal;
 }
 
-.spoiler-body {
-  display: none;
-  background: none repeat scroll 0 0 #f4f4f4;
-  border-top: 1px solid #ccc;
-  line-height: 17px;
-  padding: 3px 3px 3px 7px;
-  color: #343434;
+.spoiler-text {
+  padding: 9px 14px;
+  margin: 5px 0;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 4px;
+}
+
+.hiding {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+  border-left-color: #d9534f;
+  background-color: #f8f8f8;
 }

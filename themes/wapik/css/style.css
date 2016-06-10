@@ -104,27 +104,6 @@ img {
 	color: #6e6e6e;
 }
 
-.d {
-	background-color: #d9dadc;
-	border-style: dotted;
-	border-width: 1px;
-	border-color: #b8c1b7;
-	padding: 10px;
-	padding-left: 10px;
-	font-size: 11px;
-	display: block;
-	overflow: auto;
-}
-
-.q {
-	background-color: #333;
-	border: 1px solid #737573;
-	border-left: 4px solid #b8c1b7;
-	color: #878787;
-	font-size: x-small;
-	padding-left: 6px;
-}
-
 textarea {
 	width: 99%;
 	font-size: 9pt;
@@ -172,14 +151,6 @@ hr {
 .right {
 	text-align: right;
 	font-size: x-small;
-}
-
-.secret {
-	color: #000;
-	background: #b2afaf;
-	border: 1px dotted #eae9e9;
-	font-size: x-small;
-	padding: 3px;
 }
 
 .info {

@@ -107,31 +107,6 @@ table {
 	background-color: #dddddd;
 	border: 1px solid #cccccc;
 }
-.d {
-    background-color : #f1f2f1;
-    border-style : dotted;
-    border-width : 1px;
-    border-color : #b8c1b7;
-    padding : 10px;
-    padding-left : 30px;
-    background-image : url(/images/img/code.gif);
-    background-repeat : repeat-y;
-    font-size : 11px;
-    display : block;
-    overflow : auto;
-}
-
-.q {
-    background-image: url(/images/img/closequote.png);
-    background-position: top right;
-    background-repeat: no-repeat;
-    background-color : #fcfeeb;
-    border: 1px solid #e9ebec;
-	border-left: 4px solid #8394b2;
-    color : #878787;
-    font-size : x-small;
-    padding-left : 6px;
-}
 
 .cs {
 	color: #666;
@@ -192,38 +167,30 @@ img {
      font-size: x-small;
 }
 
-.secret {
-    color : #465584;
-    background : #eef2f7;
-	border: 1px dotted #81bef7;
-    font-size: x-small;
-    padding: 3px;
-}
-
 .nav {
-padding : 4px;
-font-size : 10px;
+	padding : 4px;
+	font-size : 10px;
 }
 
 .nav a {
-border : 1px solid #dedede;
-padding : 0px 5px 0px 5px;
-font-size : 9px;
-text-decoration : none;
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	font-size : 9px;
+	text-decoration : none;
 }
 
 .nav a:hover {
-background-color : #f7f7f7;
-border : 1px solid #dedede;
-padding : 0px 5px 0px 5px;
-text-decoration : none;
-font-size : 9px;
+	background-color : #f7f7f7;
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	text-decoration : none;
+	font-size : 9px;
 }
 
 .navcurrent {
-background-color : #edebeb;
-border : 1px solid #dedede;
-padding : 0px 5px 0px 5px;
-font-weight: bold;
-text-decoration : none;
+	background-color : #edebeb;
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	font-weight: bold;
+	text-decoration : none;
 }

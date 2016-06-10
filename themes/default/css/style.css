@@ -152,31 +152,6 @@ table {
 	background-color: #ddd;
 	border: 1px solid #ccc;
 }
-.d {
-	background-color : #f1f2f1;
-	border-style : dotted;
-	border-width : 1px;
-	border-color : #b8c1b7;
-	padding : 10px;
-	padding-left : 30px;
-	background-image : url(../../../images/img/code.gif);
-	background-repeat : repeat-y;
-	font-size : 11px;
-	display : block;
-	overflow : auto;
-}
-
-.q {
-	background-image: url(../../../images/img/closequote.png);
-	background-position: top right;
-	background-repeat: no-repeat;
-	background-color : #fcfeeb;
-	border: 1px solid #e9ebec;
-	border-left: 4px solid #8394b2;
-	color : #878787;
-	font-size : x-small;
-	padding-left : 6px;
-}
 
 .cs {
 	color: #666;
@@ -236,14 +211,6 @@ img {
 .right {
 	text-align: right;
 	font-size: x-small;
-}
-
-.secret {
-	color : #465584;
-	background : #eef2f7;
-	border: 1px dotted #81bef7;
-	font-size: x-small;
-	padding: 3px;
 }
 
 .info {

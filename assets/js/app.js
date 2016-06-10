@@ -23,18 +23,8 @@ $(document).ready(function(){
 		spoiler.toggleClass('spoiler-open');
 		spoiler.find('.spoiler-text:first').slideToggle();
 	});
-});
 
-/* Вывод спойлера */
-$(document).ready(function(){
-	$(".spoiler-body").hide();
-	$(".spoiler-head").click(function(){
-		$(this).toggleClass("open").toggleClass("closed").next().slideToggle();
-	});
-});
-
-/* Показ новостей на главной */
-$(document).ready(function(){
+	/* Показ новостей на главной */
 	$(".news-text").hide();
 	$(".news-title").click(function () {
 		$(this).nextAll("div.news-text:first").slideToggle();

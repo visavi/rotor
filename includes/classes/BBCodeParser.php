@@ -184,7 +184,7 @@ class BBCodeParser {
 		if (empty($match[1])) $match[1] = 'Текст отсутствует';
 
 		return '<div class="hiding">
-				<span class="strong">Скрытый контент:</span> '.(User::check() ? $match[1] : 'Для просмотра необходимо авторизоваться!').
+				<span class="strong">Скрытый контент:</span> '.(is_user() ? $match[1] : 'Для просмотра необходимо авторизоваться!').
 				'</div>';
 	}
 

@@ -91,7 +91,7 @@ form {
 }
 
 .mright {
-    float : right;
+	float : right;
 }
 
 .bcontent a {
@@ -206,36 +206,10 @@ input {
 	color : #333;
 	background-color : #ebf9eb;
 	padding : 3px;
-  margin : 3px 0 3px 0;
- 	overflow:hidden;
-  border:1px solid #eee;
-  border-radius: 5px;
-}
-.d {
-	background-color : #f1f2f1;
-	border-style : dotted;
-	border-width : 1px;
-	border-color : #b8c1b7;
-	padding : 3px 3px 3px 30px;
 	margin : 3px 0 3px 0;
-	background-image : url(../../../images/img/code.gif);
-	background-repeat : repeat-y;
-	font-size : 9pt;
-	display: block;
-	overflow: auto;
-}
-
-.q {
-    background-image: url(../../../images/img/closequote.png);
-    background-position: top right;
-    background-repeat: no-repeat;
-    background-color : #fcfeeb;
-    border: 1px solid #e9ebec;
-	border-left: 4px solid #8394b2;
-    color : #878787;
-    font-size : x-small;
-    padding-left : 6px;
-	margin-top : 5px;
+	overflow:hidden;
+	border:1px solid #eee;
+	border-radius: 5px;
 }
 
 hr {
@@ -243,13 +217,13 @@ hr {
 }
 
 textarea {
-    background-color: #fff;
+	background-color: #fff;
 	width : 98%;
 	font-size : 10pt;
 	padding : 5px;
-    color:#666;
-    border:1px solid #ccc;
-    border-radius: 5px;
+	color:#666;
+	border:1px solid #ccc;
+	border-radius: 5px;
 }
 
 .small {
@@ -264,87 +238,79 @@ textarea {
 	background-image: url(../img/bp.gif);
 	background-color: #dddddd;
 	border: 1px solid #cccccc;
-    border-radius:5px;
+	border-radius:5px;
 }
 
 .login {
 	color: #666;
 	padding : 10px;
-    margin : 0px 0 10px 0;
+	margin : 0px 0 10px 0;
 	background-color: #ebf9eb;
 	border: 1px solid #cccccc;
 }
 
 .data {
-     color: #cc00cc;
-     font-size: x-small;
+	 color: #cc00cc;
+	 font-size: x-small;
 }
 
 .note {
-    color: #777;
-    background: #eff5fb;
-    border: 1px solid #81bef7;
-    padding: 5px;
-    margin : 5px;
-    text-align: center;
-    font-weight: bold;
-    border-radius:9px;
+	color: #777;
+	background: #eff5fb;
+	border: 1px solid #81bef7;
+	padding: 5px;
+	margin : 5px;
+	text-align: center;
+	font-weight: bold;
+	border-radius:9px;
 }
 
 .right {
-     text-align: right;
-     font-size: x-small;
-}
-
-.secret {
-    color : #465584;
-    background : #eef2f7;
-	border: 1px dotted #81bef7;
-    font-size: x-small;
-    padding: 3px;
+	 text-align: right;
+	 font-size: x-small;
 }
 
 .info {
-    color : #992a2a;
-    background : #f2dddd;
+	color : #992a2a;
+	background : #f2dddd;
 	border: 1px solid #e3c0c0;
-    padding: 3px;
-    border-radius:5px;
+	padding: 3px;
+	border-radius:5px;
 }
 
 .act {
 	color: #888888;
-    background : #e4eaf2;
+	background : #e4eaf2;
 	border: 1px solid #c3cfe1;
-    padding: 3px;
+	padding: 3px;
 	margin :  1px 0 1px 0;
-    border-radius:5px;
+	border-radius:5px;
 }
 
 .nav {
-padding : 4px;
-font-size : 10px;
+	padding : 4px;
+	font-size : 10px;
 }
 
 .nav a {
-border : 1px solid #dedede;
-padding : 0px 5px 0px 5px;
-font-size : 9px;
-text-decoration : none;
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	font-size : 9px;
+	text-decoration : none;
 }
 
 .nav a:hover {
-background-color : #f5f4f4;
-border : 1px solid #dedede;
-padding : 0px 5px 0px 5px;
-text-decoration : none;
-font-size : 9px;
+	background-color : #f5f4f4;
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	text-decoration : none;
+	font-size : 9px;
 }
 
 .navcurrent {
-background-color : #edebeb;
-border : 1px solid #dedede;
-padding : 0px 5px 0px 5px;
-font-weight: bold;
-text-decoration : none;
+	background-color : #edebeb;
+	border : 1px solid #dedede;
+	padding : 0px 5px 0px 5px;
+	font-weight: bold;
+	text-decoration : none;
 }
