@@ -150,34 +150,8 @@ function points($sum) {
 	return $sum.' '.$score[0];
 }
 
-// ------------------ Функция подсветки кода -------------------------//
-function highlight_code($code) {
-
-	if (is_array($code)) $code = $code[1];
-
-	$code = strtr($code, array('&lt;'=>'<', '&gt;'=>'>', '&amp;'=>'&', '&quot;'=>'"', '&#36;'=>'$', '&#37;'=>'%', '&#39;'=>"'", '&#92;'=>'\\', '&#94;'=>'^', '&#96;'=>'`', '&#124;' => '|', '<br />'=>""));
-
-	$code = highlight_string($code, true);
-	$code = strtr($code, array('://'=>'&#58//', '$'=>'&#36;', "'"=>'&#39;', '%'=>'&#37;', '\\'=>'&#92;', '`'=>'&#96;', '^'=>'&#94;', '|'=>'&#124;'));
-
-	return '<div class="d">'.$code.'</div>';
-}
-
-// ----------------------- Функция скрытого текста ------------------------//
-function hidden_text($str) {
-
-	if ($str[1]=='') $str[1] = 'Текст отсутствует';
-	if (is_user()) {
-		$text = '<div class="secret"><b>Скрытый текст:</b> '.$str[1].'</div>';
-	} else {
-		$text = '<div class="secret"><b>Скрытый текст.</b> Для просмотра необходимо авторизоваться!</div>';
-	}
-
-	return $text;
-}
-
 // ------------------ Вспомогательная функция для bb-кода --------------------//
-function url_replace($url) {
+/*function url_replace($url) {
 	global $config;
 
 	if (isset($url[3])) {
@@ -190,34 +164,10 @@ function url_replace($url) {
 		return '<a href="'.$url[2].'"'.$target.'>'.check(rawurldecode(html_entity_decode($title, ENT_QUOTES, 'utf-8'))).'</a>';
 	}
 }
-
-// ----------------------- Функция вывода спойлера ------------------------//
-function spoiler_text($match) {
-
-	$title = (empty($match[1])) ? 'Спойлер' : $match[1];
-	$text = (empty($match[2])) ? 'Текста нет' : $match[2];
-
-	if (!isset($match[2])) {
-		$title = 'Спойлер';
-		$text = $match[1];
-	}
-
-	return '<div class="spoiler-wrap">
-		<div class="spoiler-head open">'.$title.'</div>
-		<div class="spoiler-body">'.$text.'</div>
-	</div>';
-}
-
-function img_replace($match) {
-	if (preg_match('/[\w\-]+\.(jpg|png|gif|jpeg)/', $match[1])) {
-		return '<img src="'.$match[1].'" class="img-responsive img-message" alt="image">';
-	} else {
-		return $match[1];
-	}
-}
+*/
 
 // ------------------ Функция вставки BB-кода --------------------//
-function bb_code($msg) {
+/*function bb_code($msg) {
 	$msg = nl2br($msg);
 
 	$msg = preg_replace_callback('#\[code\](.*?)\[/code\]#si', 'highlight_code', $msg);
@@ -241,7 +191,7 @@ function bb_code($msg) {
 	$msg = preg_replace('#\[del\](.*?)\[/del\]#si', '<del>\1</del>', $msg);
 
 	return smiles($msg);
-}
+}*/
 
 /**
  * Обработка BB-кодов
@@ -249,7 +199,7 @@ function bb_code($msg) {
  * @param  boolean $parse Обрабатывать или вырезать код
  * @return string         Обработанный текст
  */
-function bbCode($text, $parse = true)
+function bb_code($text, $parse = true)
 {
 	global $config;
 	$bbcode = new BBCodeParser($config);
@@ -260,36 +210,6 @@ function bbCode($text, $parse = true)
 	$text = $bbcode->parseSmiles($text);
 
 	return $text;
-}
-
-/**
- * Обработка смайлов
- * @param  string $source текст сообщения
- * @return string         обработанный текст сообщения
- */
-function smiles($source)
-{
-	global $config;
-	static $list_smiles;
-	if (empty($list_smiles)) {
-		if (! file_exists(DATADIR.'/temp/smiles.dat')) {
-
-			$query = DB::run()->query("SELECT `smiles_name`, `smiles_code` FROM `smiles` ORDER BY CHAR_LENGTH(`smiles_code`) DESC;");
-			$smiles = $query->fetchAll();
-
-			file_put_contents(DATADIR.'/temp/smiles.dat', serialize($smiles));
-
-		}
-		$list_smiles = unserialize(file_get_contents(DATADIR."/temp/smiles.dat"));
-	}
-
-	$count = 0;
-	foreach($list_smiles as $smile) {
-		$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_name'].'" /> ', $source, $config['resmiles'] - $count, $cnt);
-		$count += $cnt;
-		if ($count >= $config['resmiles']) break;
-	}
-	return $source;
 }
 
 // ------------------ Функция перекодировки из UTF в WIN --------------------//

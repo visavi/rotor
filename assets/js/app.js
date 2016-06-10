@@ -27,7 +27,7 @@ $(document).ready(function(){
 	/* Показ новостей на главной */
 	$(".news-text").hide();
 	$(".news-title").click(function () {
-		$(this).nextAll("div.news-text:first").slideToggle();
+		$(this).nextAll(".news-text:first").slideToggle();
  		//$(this).attr('src', '/images/img/ups.gif');
 	});
 });

@@ -101,7 +101,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 
 					echo 'Строк: '.(int)$count.'<br /><br />';
 
-					echo highlight_code(check($opis)).'<br /><br />';
+					echo '<pre class="prettyprint linenums">'.check($opis).'</pre><br />';
 
 					echo '<img src="/images/img/edit.gif" alt="image" /> <a href="files.php?act=edit&amp;file='.$file.'">Редактировать</a><br />';
 					echo '<img src="/images/img/error.gif" alt="image" /> <a href="files.php?act=poddel&amp;file='.$file.'">Удалить</a><br />';
