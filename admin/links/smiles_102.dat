@@ -1,1 +1,1 @@
-<img src="/images/img/act.png" alt="image" /> <a href="smiles.php">Управление смайлами</a> (<?=stats_smiles()?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="smiles.php">Управление смайлами</a> (<?=stats_smiles()?>)<br />

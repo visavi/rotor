@@ -1,1 +1,1 @@
-<img src="/images/img/act.png" alt="image" /> <a href="offers.php">Предложения / Проблемы</a> (<?=stats_offers()?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="offers.php">Предложения / Проблемы</a> (<?=stats_offers()?>)<br />

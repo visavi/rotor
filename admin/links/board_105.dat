@@ -1,1 +1,1 @@
-<img src="/images/img/act.png" alt="image" /> <a href="board.php">Доска объявлений</a> (<?= stats_board() ?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="board.php">Доска объявлений</a> (<?= stats_board() ?>)<br />
