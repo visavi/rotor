@@ -516,42 +516,22 @@ function is_flood($log, $period = 0) {
 	return false;
 }
 
-// ------------------ Функция выводящая картинку в загрузках --------------------//
-function raiting_vote($str) {
-	if (empty($str)) {
-		$str = '<img src="/images/img/rating0.gif" alt="0" />';
-	}
-	if ($str > '0' && $str <= '0.5') {
-		$str = '<img src="/images/img/rating1.gif" alt="0.5" />';
-	}
-	if ($str > '0.5' && $str <= '1') {
-		$str = '<img src="/images/img/rating2.gif" alt="1" />';
-	}
-	if ($str > '1' && $str <= '1.5') {
-		$str = '<img src="/images/img/rating3.gif" alt="1.5" />';
-	}
-	if ($str > '1.5' && $str <= '2') {
-		$str = '<img src="/images/img/rating4.gif" alt="2" />';
-	}
-	if ($str > '2' && $str <= '2.5') {
-		$str = '<img src="/images/img/rating5.gif" alt="2.5" />';
-	}
-	if ($str > '2.5' && $str <= '3') {
-		$str = '<img src="/images/img/rating6.gif" alt="3" />';
-	}
-	if ($str > '3' && $str <= '3.5') {
-		$str = '<img src="/images/img/rating7.gif" alt="3.5" />';
-	}
-	if ($str > '3.5' && $str <= '4') {
-		$str = '<img src="/images/img/rating8.gif" alt="4" />';
-	}
-	if ($str > '4' && $str <= '4.5') {
-		$str = '<img src="/images/img/rating9.gif" alt="4.5" />';
-	}
-	if ($str > '4.5' && $str <= '5') {
-		$str = '<img src="/images/img/rating10.gif" alt="5" />';
-	}
-	return $str;
+// ------------------ Функция вывода рейтинга --------------------//
+function raiting_vote($rating) {
+
+	$rating = round($rating / 0.5) * 0.5;
+
+	$full_stars = floor($rating);
+	$half_stars = ceil($rating - $full_stars);
+	$empty_stars = 5 - $full_stars - $half_stars;
+
+	$output = '<div class="star-rating fa-lg text-danger">';
+	$output .= str_repeat('<i class="fa fa-star"></i>', $full_stars);
+	$output .= str_repeat('<i class="fa fa-star-half-o"></i>', $half_stars);
+	$output .= str_repeat('<i class="fa fa-star-o"></i>', $empty_stars);
+	$output .= '</div>';
+
+	return $output;
 }
 
 // ------------------ Функция для обработки base64 --------------------//
@@ -2146,15 +2126,16 @@ function include_javascript(){
 }
 
 // ------------- Прогресс бар -------------//
-function progress_bar($percent, $title = ''){
+function progress_bar($percent, $title = false){
 
-	if ($title === ''){
+	if (! $title){
 		$title = $percent.'%';
 	}
 
-	echo '<div style="background:#eee; height:10px; width:200px; padding:0; margin:5px 0; border: 1px solid #ccc; border-radius:5px;">
-		<span style="float:right; color:#000; font-size:85%; line-height:10px; margin-right:5px;">'.$title.'</span>
-		<div style="background:#00dd00; height:10px; width:'.$percent.'%; border-radius:4px;"></div>
+	echo '<div class="progress" style="width: 250px;">
+		<div class="progress-bar progress-bar-success" style="width: '.$percent.'%;">
+		</div>
+			<span style="float:right; color:#000; margin-right:5px;">'.$title.'</span>
 	</div>';
 }
 
