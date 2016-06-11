@@ -119,10 +119,10 @@ switch ($act):
 
 			$error_setting = 0;
 
-			if (version_compare(PHP_VERSION, '5.2.4') > 0) {
-				echo '<img src="../images/img/plus.gif" alt="image" /> Версия PHP 5.2.4 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br />';
+			if (version_compare(PHP_VERSION, '5.4.0') > 0) {
+				echo '<img src="../images/img/plus.gif" alt="image" /> Версия PHP 5.4.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br />';
 			} else {
-				echo '<img src="../images/img/minus.gif" alt="image" /> Версия PHP 5.2.4 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br />';
+				echo '<img src="../images/img/minus.gif" alt="image" /> Версия PHP 5.4.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br />';
 				$error_critical = 1;
 			}
 
