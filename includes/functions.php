@@ -942,7 +942,7 @@ function chmode ($path = ".") {
 function user_online($login) {
 	static $arrvisit;
 
-	$statwho = '<img src="/images/img/off.gif" alt="image" />';
+	$statwho = '<i class="fa fa-asterisk text-danger"></i>';
 
 	if (empty($arrvisit)) {
 		if (@filemtime(DATADIR."/temp/visit.dat") < time()-10) {
@@ -955,7 +955,7 @@ function user_online($login) {
 	}
 
 	if (is_array($arrvisit) && in_array($login, $arrvisit)) {
-		$statwho = '<img src="/images/img/on.gif" alt="image" />';
+		$statwho = '<i class="fa fa-asterisk fa-spin text-success"></i>';
 	}
 
 	return $statwho;
@@ -965,7 +965,7 @@ function user_online($login) {
 function user_gender($login) {
 	static $arrgender;
 
-	$gender = 'user.gif';
+	$gender = 'male';
 
 	if (empty($arrgender)) {
 		if (@filemtime(DATADIR."/temp/gender.dat") < time()-600) {
@@ -977,10 +977,10 @@ function user_gender($login) {
 	}
 
 	if (in_array($login, $arrgender)) {
-		$gender = 'female.gif';
+		$gender = 'female';
 	}
 
-	return '<img src="/images/img/'.$gender.'" alt="image" /> ';
+	return '<i class="fa fa-'.$gender.' fa-lg"></i>';
 }
 
 // --------------- Функция вывода пользователей онлайн ---------------//

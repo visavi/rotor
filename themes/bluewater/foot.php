@@ -3,7 +3,7 @@
 	</div>
 
 	<!--footer starts here-->
-	<div id="footer">';
+	<div id="footer">
 
 		<a href="/"><?= $config['copy'] ?></a><br />
 		<?php

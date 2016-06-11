@@ -1,3 +1,17 @@
+.logotype {
+  font-size: 28px;
+  color: #666;
+  text-indent: 0px;
+  display: inline-block;
+  font-weight: bold;
+  line-height:normal;
+}
+
+.logotype:first-letter {
+  font-size: 40px;
+  color: orange;
+}
+
 blockquote:before {
   content: "\f10d";
   font-family: FontAwesome;
