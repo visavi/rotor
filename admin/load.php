@@ -1093,45 +1093,26 @@ case 'loadscreen':
 	if (!empty($down)) {
 		if (empty($down['downs_screen'])) {
 			if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
-				$screenname = check(strtolower($_FILES['screen']['name']));
-				$screensize = GetImageSize($_FILES['screen']['tmp_name']);
-				$ext = getExtension($screenname);
 
-				if (in_array($ext, array('jpg', 'jpeg', 'gif', 'png'))) {
-					if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $screenname)) {
-						if ($_FILES['screen']['size'] > 0 && $_FILES['screen']['size'] <= $config['screenupload']) {
-							if ($screensize[0] <= $config['screenupsize'] && $screensize[1] <= $config['screenupsize'] && $screensize[0] >= 100 && $screensize[1] >= 100) {
-								// ------------------------------------------------------//
-								$handle = upload_image($_FILES['screen'], $down['downs_link']);
-								if ($handle) {
-									$folder = $down['folder'] ? $down['folder'].'/' : '';
+				// ------------------------------------------------------//
+				$handle = upload_image($_FILES['screen'], $config['screenupload'], $config['screenupsize'], $down['downs_link']);
+				if ($handle) {
+					$folder = $down['folder'] ? $down['folder'].'/' : '';
 
-									$handle -> process(BASEDIR.'/load/screen/'.$folder);
-									if ($handle -> processed) {
+					$handle -> process(BASEDIR.'/load/screen/'.$folder);
+					if ($handle -> processed) {
 
-										DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array($handle -> file_dst_name, $id));
+						DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array($handle -> file_dst_name, $id));
 
-										$handle -> clean();
+						$handle -> clean();
 
-										$_SESSION['note'] = 'Скриншот успешно загружен!';
-										redirect("load.php?act=editdown&id=$id");
-									} else {
-										show_error('Ошибка! '.$handle -> error);
-									}
-								} else {
-									show_error('Ошибка! Не удалось загрузить скриншот!');
-								}
-							} else {
-								show_error('Ошибка! Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px');
-							}
-						} else {
-							show_error('Ошибка! Максимальный размер загружаемого скриншота '.formatsize($config['screenupload']).'!');
-						}
+						$_SESSION['note'] = 'Скриншот успешно загружен!';
+						redirect("load.php?act=editdown&id=$id");
 					} else {
-						show_error('Ошибка! В названии скриншота присутствуют недопустимые расширения!');
+						show_error($handle -> error);
 					}
 				} else {
-					show_error('Ошибка! Разрешается загружать скриншоты с расширением jpg, jpeg, gif и png!');
+					show_error('Ошибка! Не удалось загрузить скриншот!');
 				}
 			} else {
 				show_error('Ошибка! Вы не загрузили скриншот!');

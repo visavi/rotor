@@ -151,56 +151,40 @@ break;
 				if (is_uploaded_file($_FILES['photo']['tmp_name'])) {
 					if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
 						if (utf_strlen($text) <= 1000) {
+							if (is_quarantine($log)) {
+								if (is_flood($log)) {
 
-							$photosize = getimagesize($_FILES['photo']['tmp_name']);
-							$ext = strtolower(substr(strrchr($_FILES['photo']['name'], '.'), 1));
+									$text = antimat($text);
 
-							if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'png') {
-								if ($_FILES['photo']['size'] > 0 && $_FILES['photo']['size'] <= $config['filesize']) {
-									if ($photosize[0] <= $config['fileupfoto'] && $photosize[1] <= $config['fileupfoto'] && $photosize[0] >= 100 && $photosize[1] >= 100) {
-										if (is_quarantine($log)) {
-											if (is_flood($log)) {
+									DB::run() -> query("INSERT INTO `photo` (`photo_user`, `photo_title`, `photo_text`, `photo_link`, `photo_time`, `photo_closed`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $title, $text, '', SITETIME, $closed));
 
-												$text = antimat($text);
+									$lastid = DB::run() -> lastInsertId();
 
-												DB::run() -> query("INSERT INTO `photo` (`photo_user`, `photo_title`, `photo_text`, `photo_link`, `photo_time`, `photo_closed`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $title, $text, '', SITETIME, $closed));
+									// ------------------------------------------------------//
+									$handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $lastid);
+									if ($handle) {
 
-												$lastid = DB::run() -> lastInsertId();
+										$handle -> process(BASEDIR.'/upload/pictures/');
+										if ($handle -> processed) {
 
-												// ------------------------------------------------------//
-												$handle = upload_image($_FILES['photo'], $lastid);
-												if ($handle) {
+											DB::run() -> query("UPDATE `photo` SET `photo_link`=? WHERE `photo_id`=?;", array($handle -> file_dst_name, $lastid));
 
-													$handle -> process(BASEDIR.'/upload/pictures/');
-													if ($handle -> processed) {
+											$handle -> clean();
 
-														DB::run() -> query("UPDATE `photo` SET `photo_link`=? WHERE `photo_id`=?;", array($handle -> file_dst_name, $lastid));
+											notice('Фотография успешно загружена!');
+											redirect("index.php");
 
-														$handle -> clean();
-
-														$_SESSION['note'] = 'Фотография успешно загружена!';
-														redirect("index.php");
-
-													} else {
-														show_error('Ошибка! '.$handle -> error);
-													}
-												} else {
-													show_error('Ошибка! Не удалось загрузить изображение!');
-												}
-											} else {
-												show_error('Антифлуд! Вы слишком часто добавляете фотографии!');
-											}
 										} else {
-											show_error('Карантин! Вы не можете добавлять фото в течении '.round($config['karantin'] / 3600).' часов!');
+											show_error($handle -> error);
 										}
 									} else {
-										show_error('Ошибка! Размер изображения должен быть от 100 до '.$config['fileupfoto'].' px');
+										show_error('Ошибка! Не удалось загрузить изображение!');
 									}
 								} else {
-									show_error('Ошибка! Вес изображения должен быть не более '.formatsize($config['filesize']));
+									show_error('Антифлуд! Вы слишком часто добавляете фотографии!');
 								}
 							} else {
-								show_error('Ошибка! Недопустимое расширение (Разрешено jpg, jpeg, gif и png)!');
+								show_error('Карантин! Вы не можете добавлять фото в течении '.round($config['karantin'] / 3600).' часов!');
 							}
 						} else {
 							show_error('Слишком длинное описание (Необходимо до 1000 символов)!');

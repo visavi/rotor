@@ -196,7 +196,7 @@ case 'addevent':
 
 			// ---------------------------- Загрузка изображения -------------------------------//
 			if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-				$handle = upload_image2($_FILES['image'], $config['filesize'], $config['fileupfoto'], $lastid);
+				$handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $lastid);
 				if ($handle) {
 
 					$handle -> process(BASEDIR.'/upload/events/');
@@ -310,7 +310,7 @@ case 'changeevent':
 
 			// ---------------------------- Загрузка изображения -------------------------------//
 			if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-				$handle = upload_image2($_FILES['image'], $config['filesize'], $config['fileupfoto'], $id);
+				$handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $id);
 				if ($handle) {
 
 					// Удаление старой картинки

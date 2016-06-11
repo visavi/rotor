@@ -27,7 +27,7 @@ header("Content-type:text/html; charset=utf-8");
 <body>
 <!--Themes by Vavan-->
 <div class="a" id="up">
-	<a href="/"><img src="<?= $config['logotip'] ?>" alt="<?= $config['title'] ?>"/></a><br/>
+	<a href="/"><span class="logotype"><?= $config['title'] ?></span></a><br />
 	<?= $config['logos'] ?>
 </div>
 

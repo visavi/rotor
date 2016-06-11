@@ -423,29 +423,25 @@ case 'loadfile':
 								$ext = getExtension($filename);
 
 								if (in_array($ext, $arrext) && $ext != 'php') {
-									if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $filename)) {
-										if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
-											$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
-											if (empty($downlink)) {
+									if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
+										$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
+										if (empty($downlink)) {
 
-												move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$filename);
-												@chmod(BASEDIR.'/load/files/'.$filename, 0666);
+											move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$filename);
+											@chmod(BASEDIR.'/load/files/'.$filename, 0666);
 
-												copyright_archive(BASEDIR.'/load/files/'.$filename);
+											copyright_archive(BASEDIR.'/load/files/'.$filename);
 
-												DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
+											DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
 
-												notice('Файл успешно загружен!');
-												redirect("add.php?act=view&id=$id");
+											notice('Файл успешно загружен!');
+											redirect("add.php?act=view&id=$id");
 
-											} else {
-												show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
-											}
 										} else {
-											show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize($config['fileupload']).'!');
+											show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
 										}
 									} else {
-										show_error('Ошибка! В названии файла присутствуют недопустимые расширения!');
+										show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize($config['fileupload']).'!');
 									}
 								} else {
 									show_error('Ошибка! Недопустимое расширение файла!');
@@ -487,46 +483,25 @@ case 'loadscreen':
 			if (empty($down['downs_active'])) {
 				if (empty($down['downs_screen'])) {
 					if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
-						$screenname = check(strtolower($_FILES['screen']['name']));
-						$screensize = GetImageSize($_FILES['screen']['tmp_name']);
-						$ext = getExtension($screenname);
 
-						if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'png') {
-							if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $screenname)) {
-								if ($_FILES['screen']['size'] > 0 && $_FILES['screen']['size'] <= $config['screenupload']) {
-									if ($screensize[0] <= $config['screenupsize'] && $screensize[1] <= $config['screenupsize'] && $screensize[0] >= 100 && $screensize[1] >= 100) {
+						// ------------------------------------------------------//
+						$handle = upload_image($_FILES['screen'], $config['screenupload'], $config['screenupsize'],  $down['downs_link']);
+						if ($handle) {
 
-										// ------------------------------------------------------//
-										$handle = upload_image($_FILES['screen'], $down['downs_link']);
-										if ($handle) {
+							$handle -> process(BASEDIR.'/load/screen/');
+							if ($handle -> processed) {
 
-											$handle -> process(BASEDIR.'/load/screen/');
-											if ($handle -> processed) {
+								DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array($handle -> file_dst_name, $id));
+								$handle -> clean();
 
-												DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array($handle -> file_dst_name, $id));
-												$handle -> clean();
+								notice('Скриншот успешно загружен!');
+								redirect("add.php?act=view&id=$id");
 
-												$_SESSION['note'] = 'Скриншот успешно загружен!';
-												redirect("add.php?act=view&id=$id");
-
-											} else {
-												show_error('Ошибка! '.$handle -> error);
-											}
-										} else {
-											show_error('Ошибка! Не удалось загрузить изображение!');
-										}
-
-									} else {
-										show_error('Ошибка! Требуемый размер скриншота: от 100 до '.$config['screensize'].' px');
-									}
-								} else {
-									show_error('Ошибка! Максимальный размер загружаемого скриншота '.formatsize($config['screenupload']).'!');
-								}
 							} else {
-								show_error('Ошибка! В названии скриншота присутствуют недопустимые расширения!');
+								show_error($handle -> error);
 							}
 						} else {
-							show_error('Ошибка! Разрешается загружать скриншоты с расширением jpg, jpeg, gif и png!');
+							show_error('Ошибка! Не удалось загрузить изображение!');
 						}
 					} else {
 						show_error('Ошибка! Вы не загрузили скриншот!');

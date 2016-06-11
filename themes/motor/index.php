@@ -36,7 +36,7 @@ header('Content-type:text/html; charset=utf-8');
 		<div class="backgr_top">
 			<div class="content">
 				<div class="logo">
-					<a href="/"><span class="logotype">RotorCMS</span></a>
+					<a href="/"><span class="logotype"><?= $config['title'] ?></span></a>
 				</div>
 
 				<div class="menu">

@@ -48,59 +48,43 @@ if (is_user()) {
 
 			if ($uid == $_SESSION['token']) {
 				if (is_uploaded_file($_FILES['photo']['tmp_name'])) {
-					$photoname = check(strtolower($_FILES['photo']['name']));
-					$photosize = getimagesize($_FILES['photo']['tmp_name']);
-					$ext = strtolower(substr(strrchr($photoname, '.'), 1));
+					if (is_quarantine($log)) {
+						if (is_flood($log)) {
 
-					if ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'gif' || $ext == 'png') {
-						if ($_FILES['photo']['size'] > 0 && $_FILES['photo']['size'] <= $config['filesize']) {
-							if ($photosize[0] <= $config['fileupfoto'] && $photosize[1] <= $config['fileupfoto'] && $photosize[0] >= 100 && $photosize[1] >= 100) {
-								if (is_quarantine($log)) {
-									if (is_flood($log)) {
+							// ------------------------------------------------------//
+							$handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $log);
+							if ($handle) {
 
-										// ------------------------------------------------------//
-										$handle = upload_image($_FILES['photo'], $log);
-										if ($handle) {
+								//-------- Удаляем старую фотку ----------//
+								$userpic = DB::run() -> querySingle("SELECT `users_picture` FROM `users` WHERE `users_login`=? LIMIT 1;", array($log));
 
-											//-------- Удаляем старую фотку ----------//
-											$userpic = DB::run() -> querySingle("SELECT `users_picture` FROM `users` WHERE `users_login`=? LIMIT 1;", array($log));
+								if (!empty($userpic)){
+									unlink_image('upload/photos/', $userpic);
+									DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?;", array('', $log));
+								}
+								//-------- Удаляем старую фотку ----------//
 
-											if (!empty($userpic)){
-												unlink_image('upload/photos/', $userpic);
-												DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?;", array('', $log));
-											}
-											//-------- Удаляем старую фотку ----------//
+								$handle -> process(BASEDIR.'/upload/photos/');
 
-											$handle -> process(BASEDIR.'/upload/photos/');
+								if ($handle -> processed) {
+									DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?;", array($handle -> file_dst_name, $log));
 
-											if ($handle -> processed) {
-												DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?;", array($handle -> file_dst_name, $log));
+									$handle -> clean();
 
-												$handle -> clean();
+									notice('Фотография успешно загружена!');
+									redirect("profile.php");
 
-												$_SESSION['note'] = 'Фотография успешно загружена!';
-												redirect("profile.php");
-
-											} else {
-												show_error('Ошибка! '.$handle -> error);
-											}
-										} else {
-											show_error('Ошибка! Не удалось загрузить изображение!');
-										}
-									} else {
-										show_error('Антифлуд! Вы слишком часто добавляете фотографии!');
-									}
 								} else {
-									show_error('Карантин! Вы не можете добавлять фото в течении '.round($config['karantin'] / 3600).' часов!');
+									show_error($handle -> error);
 								}
 							} else {
-								show_error('Ошибка! Размер изображение должен быть от 100 до '.$config['fileupfoto'].'px');
+								show_error('Ошибка! Не удалось загрузить изображение!');
 							}
 						} else {
-							show_error('Ошибка! Вес изображения должен быть не более '.formatsize($config['filesize']));
+							show_error('Антифлуд! Вы слишком часто добавляете фотографии!');
 						}
 					} else {
-						show_error('Ошибка! Недопустимое расширение (Разрешено jpg, jpeg, gif и png)!');
+						show_error('Карантин! Вы не можете добавлять фото в течении '.round($config['karantin'] / 3600).' часов!');
 					}
 				} else {
 					show_error('Ошибка! Не удалось загрузить фотографию!');

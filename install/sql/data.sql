@@ -6,7 +6,7 @@ INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES
 ('nickname', ''),
 ('emails', ''),
 ('timezone', 'Europe/Moscow'),
-('title', 'Мой сайт'),
+('title', 'RotorCMS'),
 ('logos', 'Сайт на движке RotorCMS'),
 ('copy', '© RotorCMS'),
 ('home', ''),

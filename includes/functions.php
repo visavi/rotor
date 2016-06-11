@@ -2037,7 +2037,7 @@ function show_admin_links($level = 0) {
 // ------------- Функция кэширования уменьшенных изображений -------------//
 function resize_image($dir, $name, $size, $alt="") {
 
-	if (file_exists(BASEDIR.'/'.$dir.$name)){
+	if (!empty($name) && file_exists(BASEDIR.'/'.$dir.$name)){
 
 		$sign = (!empty($alt)) ? $alt : $name;
 		$prename = str_replace('/', '_' ,$dir);
@@ -2133,9 +2133,8 @@ function progress_bar($percent, $title = false){
 	}
 
 	echo '<div class="progress" style="width: 250px;">
-		<div class="progress-bar progress-bar-success" style="width: '.$percent.'%;">
-		</div>
-			<span style="float:right; color:#000; margin-right:5px;">'.$title.'</span>
+		<div class="progress-bar progress-bar-success" style="width: '.$percent.'%;"></div>
+		<span style="float:right; color:#000; margin-right:5px;">'.$title.'</span>
 	</div>';
 }
 
@@ -2154,39 +2153,7 @@ function copyright_archive($filename){
 }
 
 // ------------- Функция загрузки и обработки изображений -------------//
-function upload_image($file, $new_name = false){
-
-	global $config;
-
-	$handle = new upload($file);
-
-	if ($handle -> uploaded) {
-		$handle -> image_resize = true;
-		$handle -> image_ratio = true;
-		$handle -> image_ratio_no_zoom_in = true;
-		$handle -> image_y = $config['screensize'];
-		$handle -> image_x = $config['screensize'];
-		$handle -> file_overwrite = true;
-
-		if ($handle->file_src_name_ext == 'png'){
-			$handle->image_convert = 'jpg';
-		}
-		if (!empty($new_name)) {
-			$handle -> file_new_name_body = $new_name;
-		}
-		if (!empty($config['copyfoto'])) {
-			$handle -> image_watermark = BASEDIR.'/images/img/watermark.png';
-			$handle -> image_watermark_position = 'BR';
-		}
-
-		return $handle;
-	}
-
-	return false;
-}
-
-// ------------- Функция загрузки и обработки изображений -------------//
-function upload_image2($file, $weight, $size, $new_name = false){
+function upload_image($file, $weight, $size, $new_name = false){
 
 	global $config;
 
@@ -2216,8 +2183,8 @@ function upload_image2($file, $weight, $size, $new_name = false){
 		$handle -> file_max_size = $weight;  // byte
 		$handle -> image_max_width = $size;  // px
 		$handle -> image_max_height = $size; // px
-		$handle -> image_min_width = 32;     // px
-		$handle -> image_min_height = 32;    // px
+		$handle -> image_min_width = 100;     // px
+		$handle -> image_min_height = 100;    // px
 
 		return $handle;
 	}
