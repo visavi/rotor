@@ -28,7 +28,8 @@ header("Content-type:text/html; charset=utf-8");
 <body>
 
 <div class="cs" id="up">
-	<a href="/"><span class="logotype"><?= $config['title'] ?></span></a><br />
+	<!-- <a href="/"><span class="logotype"><?= $config['title'] ?></span></a><br /> -->
+	<a href="/"><img src="/images/img/logo.png" alt="<?=$config['title']?>" /></a><br />
 	<?= $config['logos'] ?>
 </div>
 
