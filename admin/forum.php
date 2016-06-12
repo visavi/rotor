@@ -796,7 +796,7 @@ if (is_admin()) {
 							// -- Прикрепленные файлы -- //
 							if (!empty($forumfiles)) {
 								if (isset($forumfiles[$data['posts_id']])){
-									echo '<div class="secret"><img src="/images/img/paper-clip.gif" alt="attach" /> <b>Прикрепленные файлы:</b><br />';
+									echo '<div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />';
 									foreach ($forumfiles[$data['posts_id']] as $file){
 										$ext = getExtension($file['file_hash']);
 										echo '<img src="/images/icons/'.icons($ext).'" alt="image" /> ';
