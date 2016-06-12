@@ -92,7 +92,7 @@ class BBCodeParser {
 		),
 		'youtube' => array(
 			'pattern' => '/\[youtube\](.*?)\[\/youtube\]/s',
-			'replace' => '<iframe width="320" height="240" src="//www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>',
+			'replace' => '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$1"></iframe></div>',
 		),
 	);
 
