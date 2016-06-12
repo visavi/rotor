@@ -144,7 +144,7 @@ case 'add':
 
 			if ($log == $post['posts_user'] && $post['posts_time'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['posts_text']) <= $config['forumtextlength'])) {
 
-				$newpost = $post['posts_text']."\n\n".'[i][small]Добавлено через '.maketime(SITETIME - $post['posts_time']).' сек.[/small][/i]'."\n".$msg;
+				$newpost = $post['posts_text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['posts_time']).' сек.[/size][/i]'."\n".$msg;
 
 				DB::run() -> query("UPDATE `posts` SET `posts_text`=? WHERE `posts_id`=? LIMIT 1;", array($newpost, $post['posts_id']));
 				$lastid = $post['posts_id'];

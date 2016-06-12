@@ -2,7 +2,7 @@
 // markItUp bb-code setting!
 // ----------------------------------------------------------------------------
 mySettings = {
-	previewParserPath:	'', // path to your BBCode parser
+	previewParserPath:	 '/ajax/bbcode.php', // path to your BBCode parser
 	markupSet: [
 		{title:'Жирный текст', name:'<i class="fa fa-bold"></i>', className:"bb-bold", key:'B', openWith:'[b]', closeWith:'[/b]'},
 		{title:'Наклонный текст', name:'<i class="fa fa-italic"></i>', className:"bb-italic", key:'I', openWith:'[i]', closeWith:'[/i]'},
@@ -85,7 +85,7 @@ mySettings = {
 		]},
 		{title:'Разделение страниц', name:'<i class="fa fa-exchange"></i>', className:"bb-nextpage", openWith:'[nextpage]'},
 		{title:'Обрезка страницы', name:'<i class="fa fa-scissors"></i>', className:"bb-cutpage", openWith:'[cut]'},
-		//{title:'Просмотр', name:'<i class="fa fa-check-square-o"></i>', className:'bb-preview',  call:'preview'},
+		{title:'Просмотр', name:'<i class="fa fa-check-square-o"></i>', className:'bb-preview',  call:'preview'},
 	]
 }
 

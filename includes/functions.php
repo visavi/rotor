@@ -2386,6 +2386,21 @@ function real_ip()
 	}
 }
 
+/**
+ * Проверка является ли запрос AJAX
+ * @return boolean результат проверки
+ */
+function isAjaxRequest()
+{
+	return (
+		!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+		&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+}
+
+/**
+ * Очистка кеш-файлов
+ * @return boolean результат выполнения
+ */
 function clearCache()
 {
 	$cachefiles = glob(DATADIR.'/temp/*.dat');

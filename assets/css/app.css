@@ -14,20 +14,24 @@
 
 blockquote:before {
   content: "\f10d";
-  font-size: 18px;
+  font-size: 150%;
   font-family: FontAwesome;
   float: left;
   margin-right: 10px;
 }
 
 blockquote {
-  font-size: 13px;
+  font-size: 100%;
   background-color: #eff;
   border: 1px dotted #ddd;
   border-left: 5px solid #ddd;
   margin: 0 0 10px;
   font-style:italic;
   color:#a2a2a2;
+}
+
+.prettyprint {
+  font-size: 100%;
 }
 
 .spoiler {
