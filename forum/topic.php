@@ -417,8 +417,6 @@ case 'quote':
 		if (!empty($post)) {
 			if (empty($post['topics_closed'])) {
 
-				$post['posts_text'] = preg_replace('|\[q\](.*?)\[/q\]|s', '', $post['posts_text']);
-
 				render('forum/topic_quote', array('post' => $post, 'start' => $start));
 
 			} else {

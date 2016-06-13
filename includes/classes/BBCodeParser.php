@@ -32,7 +32,7 @@ class BBCodeParser {
 		'fontColor' => array(
 			'pattern' => '/\[color\=(#[A-f0-9]{6}|#[A-f0-9]{3})\](.*?)\[\/color\]/s',
 			'replace' => '<font color="$1">$2</font>',
-			'iterate' => 1,
+			'iterate' => 5,
 		),
 		'center' => array(
 			'pattern' => '/\[center\](.*?)\[\/center\]/s',
@@ -64,18 +64,14 @@ class BBCodeParser {
 			'pattern' => '/\[img\](.*?)\[\/img\]/s',
 			'callback' => 'imgReplace',
 		),
-	/*	'orderedList' => array(
+		'orderedList' => array(
 			'pattern' => '/\[list=1\](.*?)\[\/list\]/s',
-			'replace' => '<ol>$1</ol>',
+			'callback' => 'listReplace',
 		),
 		'unorderedList' => array(
 			'pattern' => '/\[list\](.*?)\[\/list\]/s',
-			'replace' => '<ul>$1</ul>',
+			'callback' => 'listReplace',
 		),
-		'listItem' => array(
-			'pattern' => '/\[\*\](.*)/',
-			'replace' => '<li>$1</li>',
-		),*/
 		'spoiler' => array(
 			'pattern' => '/\[spoiler\](.*?)\[\/spoiler\]/s',
 			'callback' => 'spoilerText',
@@ -160,6 +156,26 @@ class BBCodeParser {
 		$target = (strpos($match[1], $this->setting['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
 
 		return '<a href="'.$match[1].'"'.$target.'>'.rawurldecode($title).'</a>';
+	}
+
+	/**
+	 * Обработка списков
+	 * @param  array $match список
+	 * @return string обработанный список
+	 */
+	public function listReplace($match)
+	{
+		$li = preg_split('/<br[^>]*>\R/', $match[1], -1, PREG_SPLIT_NO_EMPTY);
+		if (empty($li)) return $match[0];
+
+		$list = [];
+		foreach($li as $l){
+			$list[] = '<li>'.$l.'</li>';
+		}
+
+		$tag  = strpos($match[0], '[list]') === false ? 'ol' : 'ul';
+
+		return '<'.$tag.'>'.implode($list).'</'.$tag.'>';
 	}
 
 	/**

@@ -2,7 +2,7 @@
 
 <div class="form">
 	<form action="topic.php?act=add&amp;tid=<?=$params['post']['posts_topics_id']?>&amp;start=<?=$params['start']?>&amp;uid=<?=$_SESSION['token']?>" method="post" enctype="multipart/form-data">
-		<textarea id="markItUp" cols="25" rows="5" name="msg">[q][b]<?=nickname($params['post']['posts_user'])?>[/b] (<?=date_fixed($params['post']['posts_time'], 'j F Y / H:i')?>)<?=PHP_EOL?><?=$params['post']['posts_text']?>[/q]<?=PHP_EOL?></textarea><br />
+		<textarea id="markItUp" cols="25" rows="5" name="msg">[quote][b]<?=nickname($params['post']['posts_user'])?>[/b] (<?=date_fixed($params['post']['posts_time'], 'j F Y / H:i')?>)<?=PHP_EOL?><?=$params['post']['posts_text']?>[/quote]<?=PHP_EOL?></textarea><br />
 
 		<?php if ($udata['users_point'] >= $config['forumloadpoints']): ?>
 			Прикрепить файл:<br /><input type="file" name="file" /><br />

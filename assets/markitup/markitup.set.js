@@ -43,10 +43,9 @@ mySettings = {
 		{title:'По центру', name:'<i class="fa fa-align-center"></i>', className:"bb-center", openWith:'[center]', closeWith:'[/center]'},
 		{title:'Спойлер', name:'<i class="fa fa-text-height"></i>', className:"bb-spoiler", openWith:'[spoiler=[![Заголовок спойлера]!]]', closeWith:'[/spoiler]', placeHolder:'Текст спойлера...'},
 
-		//{separator:'---------------' },
-		//{name:'OrderedList', className:"bb-orderedlist", openWith:'[*]', multiline:true, openBlockWith:'[list=1]\n', closeBlockWith:'\n[/list]'},
-		//{name:'UnorderedList', className:"bb-unorderedlist", openWith:'[*]', multiline:true, openBlockWith:'[list]\n', closeBlockWith:'\n[/list]'},
-		//{name:'ListItem', className:"bb-listitem", openWith:'[*]'},
+		{separator:'---------------' },
+		{title:'Маркированный список', name:'<i class="fa fa-list-ul"></i>', className:"bb-unorderedlist", multiline:true, openBlockWith:'[list]\n', closeBlockWith:'\n[/list]', placeHolder:'Элемент списка'},
+		{title:'Нумерованный список', name:'<i class="fa fa-list-ol"></i>', className:"bb-orderedlist", multiline:true, openBlockWith:'[list=1]\n', closeBlockWith:'\n[/list]', placeHolder:'Элемент списка'},
 
 		{separator:'---------------' },
 		{title:'Скрытый контент', name:'<i class="fa fa-eye-slash"></i>', className:"bb-hide", openWith:'[hide]', closeWith:'[/hide]'},

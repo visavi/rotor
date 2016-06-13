@@ -39,6 +39,8 @@ echo '<i class="fa fa-image"></i> [img]Ссылка на изображение[
 echo '<i class="fa fa-youtube-play"></i> [youtube]Код видео с youtube[/youtube]<br />'.bb_code('[youtube]yf_YWiqqv34[/youtube]').'<br />';
 
 echo '<i class="fa fa-align-center"></i> [center]Текст по центру[/center]'.bb_code('[center]Текст по центру[/center]').'<br />';
+echo '<i class="fa fa-list-ul"></i> [list]Элементы списка[/list]'.bb_code('[list]Элементы списка[/list]').'<br />';
+echo '<i class="fa fa-list-ol"></i> [list=1]Элементы нумерованного списка[/list]'.bb_code('[list=1]Элементы списка[/list]').'<br />';
 
 echo '<i class="fa fa-text-height"></i> [spoiler]Выпадающий текст[/spoiler]'.bb_code('[spoiler]Текст который показывается при нажатии[/spoiler]').'<br />';
 echo '<i class="fa fa-text-height"></i> [spoiler=Заголовок спойлера]Выпадающий текст[/spoiler]'.bb_code('[spoiler=Заголовок спойлера]Текст который показывается при нажатии[/spoiler]').'<br />';

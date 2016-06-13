@@ -556,8 +556,6 @@ case 'quote':
 		$post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `commblog_id`=? LIMIT 1;", array($pid));
 
 		if (!empty($post)) {
-			$post['commblog_text'] = preg_replace('|\[q\](.*?)\[/q\]|s', '', $post['commblog_text']);
-
 			render('blog/blog_quote', array('post' => $post, 'id' => $id));
 		} else {
 			show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');

@@ -619,12 +619,10 @@ case 'quote':
 		$post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? LIMIT 1;", array($pid));
 
 		if (!empty($post)) {
-			$post['commload_text'] = preg_replace('|\[q\](.*?)\[/q\]|s', '', $post['commload_text']);
-
 			echo '<div class="form">';
 			echo '<form action="down.php?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 			echo 'Сообщение:<br />';
-			echo '<textarea cols="25" rows="5" name="msg" id="msg">[q][b]'.nickname($post['commload_author']).'[/b] ('.date_fixed($post['commload_time']).')'."\r\n".$post['commload_text'].'[/q]'."\r\n".'</textarea><br />';
+			echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['commload_author']).'[/b] ('.date_fixed($post['commload_time']).')'."\r\n".$post['commload_text'].'[/quote]'."\r\n".'</textarea><br />';
 			echo '<input type="submit" value="Цитировать" /></form></div><br />';
 		} else {
 			show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');

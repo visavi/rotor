@@ -221,7 +221,6 @@ case 'quote':
 		$post = DBM::run()->selectFirst('guest', array('guest_id' => $id));
 
 		if (!empty($post)) {
-			$post['guest_text'] = preg_replace('|\[q\](.*?)\[/q\]|s', '', $post['guest_text']);
 
 			render ('book/quote', array('post' => $post));
 

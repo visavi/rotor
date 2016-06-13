@@ -170,12 +170,9 @@ if (is_admin()) {
 			$post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `chat_id`=? LIMIT 1;", array($id));
 
 			if (!empty($post)) {
-
-				$post['chat_text'] = preg_replace('|\[q\](.*?)\[/q\]|s', '', $post['chat_text']);
-
 				echo '<div class="form">';
 				echo '<form action="chat.php?act=add&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
-				echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[q][b]'.nickname($post['chat_user']).'[/b] ('.date_fixed($post['chat_time']).')'."\r\n".$post['chat_text'].'[/q]'."\r\n".'</textarea><br />';
+				echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['chat_user']).'[/b] ('.date_fixed($post['chat_time']).')'."\r\n".$post['chat_text'].'[/quote]'."\r\n".'</textarea><br />';
 				echo '<input type="submit" value="Ответить" /></form></div><br />';
 			} else {
 				show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
