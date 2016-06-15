@@ -8,7 +8,7 @@
 <a href="topic.php?tid=<?=$tid?>&amp;start=<?=$start?>&amp;rand=<?=mt_rand(1000, 9999)?>">Обновить</a> /
 <a href="print.php?tid=<?=$tid?>">Скачать</a> / <a href="rss.php?tid=<?=$tid?>">RSS-лента</a><br /><br />
 
-<img src="/images/img/themes.gif" alt="image" /> <b><?=$topics['topics_title']?></b>
+<i class="fa fa-forumbee fa-lg text-muted"></i> <b><?=$topics['topics_title']?></b>
 
 
 <?php if (is_user()): ?>

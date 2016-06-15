@@ -12,7 +12,7 @@
 
 <br /><br />
 
-<b><img src="/images/img/themes.gif" alt="image" /> <?=$forums['forums_title']?></b>
+<b><i class="fa fa-forumbee fa-lg text-muted"></i> <?=$forums['forums_title']?></b>
 
 <?php if (is_admin()): ?>
 	(<a href="/admin/forum.php?act=forum&amp;fid=<?=$fid?>&amp;start=<?=$start?>">Управление</a>)
@@ -24,7 +24,7 @@
 	<div class="act">
 
 	<?php foreach ($forums['subforums'] as $subforum): ?>
-		<div class="b"><img src="/images/img/forums.gif" alt="image" />
+		<div class="b"><i class="fa fa-file-text-o fa-lg text-muted"></i>
 		<b><a href="forum.php?fid=<?=$subforum['forums_id']?>"><?=$subforum['forums_title']?></a></b> (<?=$subforum['forums_topics']?>/<?=$subforum['forums_posts']?>)</div>
 
 		<?php if ($subforum['forums_last_id'] > 0): ?>
@@ -46,15 +46,15 @@
 
 			<?php
 			if ($topic['topics_locked']) {
-				$icon = 'lock.gif';
+				$icon = 'fa-thumb-tack';
 			} elseif ($topic['topics_closed']) {
-				$icon = 'closed.gif';
+				$icon = 'fa-lock';
 			} else {
-				$icon = 'topics.gif';
+				$icon = 'fa-folder-open';
 			}
 			?>
 
-			<img src="/images/img/<?=$icon?>" alt="image" />
+			<i class="fa <?=$icon?> text-muted"></i>
 			<b><a href="topic.php?tid=<?=$topic['topics_id']?>"><?=$topic['topics_title']?></a></b> (<?=$topic['topics_posts']?>)
 		</div>
 		<div>

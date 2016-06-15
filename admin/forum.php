@@ -349,7 +349,7 @@ if (is_admin()) {
 				echo '<a href="forum.php">Форум</a> / ';
 				echo '<a href="/forum/forum.php?fid='.$fid.'&amp;start='.$start.'">Обзор раздела</a><br /><br />';
 
-				echo '<img src="/images/img/themes.gif" alt="image" /> <b>'.$forums['forums_title'].'</b><hr />';
+				echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$forums['forums_title'].'</b><hr />';
 
 				$total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `topics_forums_id`=?;", array($fid));
 
@@ -710,7 +710,7 @@ if (is_admin()) {
 					echo '<a href="forum.php?act=forum&amp;fid='.$topic['forums_id'].'">'.$topic['forums_title'].'</a> / ';
 					echo '<a href="/forum/topic.php?tid='.$tid.'&amp;start='.$start.'">Обзор темы</a><br /><br />';
 
-					echo '<img src="/images/img/themes.gif" alt="image" /> <b>'.$topic['topics_title'].'</b>';
+					echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$topic['topics_title'].'</b>';
 
 					if (!empty($topic['topics_mod'])) {
 						$topics_mod = explode(',', $topic['topics_mod']);

@@ -6,7 +6,7 @@
 
 <br /><br />
 
-<img src="/images/img/themes.gif" alt="Статья" /> <b><?=$blogs['blogs_title']?></b> (Оценка: <?=format_num($blogs['blogs_rating'])?>)
+<i class="fa fa-file-text-o fa-lg text-muted"></i> <b><?=$blogs['blogs_title']?></b> (Оценка: <?=format_num($blogs['blogs_rating'])?>)
 
 <?php if (is_admin()): ?>
 	<br /> <a href="/admin/blog.php?act=editblog&amp;cid=<?=$blogs['cats_id']?>&amp;id=<?=$blogs['blogs_id']?>">Редактировать</a> /

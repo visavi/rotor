@@ -6,7 +6,7 @@
 
 <?php foreach($forums[0] as $key => $data): ?>
 	<div class="b">
-		<img src="/images/img/forums.gif" alt="image" />
+		<i class="fa fa-file-text-o fa-lg text-muted"></i>
 		<b><a href="forum.php?fid=<?=$data['forums_id']?>"><?=$data['forums_title']?></a></b> (<?=$data['forums_topics']?>/<?=$data['forums_posts']?>)
 
 	<?php if (!empty($data['forums_desc'])): ?>
@@ -18,7 +18,7 @@
 	<div>
 	<?php if (isset($forums[$key])): ?>
 		<?php foreach($forums[$key] as $datasub): ?>
-			<img src="/images/img/topics-small.gif" alt="image" /> <b><a href="forum.php?fid=<?=$datasub['forums_id']?>"><?=$datasub['forums_title']?></a></b> (<?=$datasub['forums_topics']?>/<?=$datasub['forums_posts']?>)<br />
+			<i class="fa fa-files-o text-muted"></i> <b><a href="forum.php?fid=<?=$datasub['forums_id']?>"><?=$datasub['forums_title']?></a></b> (<?=$datasub['forums_topics']?>/<?=$datasub['forums_posts']?>)<br />
 		<?php endforeach; ?>
 	<?php endif; ?>
 
