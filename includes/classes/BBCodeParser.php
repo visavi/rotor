@@ -168,7 +168,7 @@ class BBCodeParser {
 		$li = preg_split('/<br[^>]*>\R/', $match[1], -1, PREG_SPLIT_NO_EMPTY);
 		if (empty($li)) return $match[0];
 
-		$list = [];
+		$list = array();
 		foreach($li as $l){
 			$list[] = '<li>'.$l.'</li>';
 		}
