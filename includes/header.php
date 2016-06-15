@@ -129,6 +129,9 @@ if (empty($_SESSION['counton'])) {
 if (empty($_SESSION['currs'])) {
 	$_SESSION['currs'] = SITETIME;
 }
+if (empty($_SESSION['protect'])) {
+	$_SESSION['protect'] = rand(1000, 9999);
+}
 if (!isset($_SESSION['token'])) {
 	if (!empty($config['session'])){
 		$_SESSION['token'] = generate_password(6);
@@ -136,6 +139,7 @@ if (!isset($_SESSION['token'])) {
 		$_SESSION['token'] = 0;
 	}
 }
+
 
 ob_start('ob_processing');
 $_SESSION['timeon'] = maketime(SITETIME - $_SESSION['currs']);

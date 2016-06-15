@@ -27,6 +27,6 @@
 
 Рейтинг: <a href="blog.php?act=vote&amp;id=<?=$blogs['blogs_id']?>&amp;vote=down&amp;uid=<?=$_SESSION['token']?>"><img src="/images/img/thumb-down.gif" alt="Минус" /></a> <big><b><?=format_num($blogs['blogs_rating'])?></b></big> <a href="blog.php?act=vote&amp;id=<?=$blogs['blogs_id']?>&amp;vote=up&amp;uid=<?=$_SESSION['token']?>"><img src="/images/img/thumb-up.gif" alt="Плюс" /></a><br /><br />
 
-<img src="/images/img/eye.gif" alt="Просмотры" /> Просмотров: <?=$blogs['blogs_read']?><br />
+<i class="fa fa-eye"></i> Просмотров: <?=$blogs['blogs_read']?><br />
 <img src="/images/img/balloon.gif" alt="Комментарии" /> <a href="blog.php?act=comments&amp;id=<?=$blogs['blogs_id']?>">Комментарии</a> (<?=$blogs['blogs_comments']?>)
 <a href="blog.php?act=end&amp;id=<?=$blogs['blogs_id']?>">&raquo;</a><br /><br />
