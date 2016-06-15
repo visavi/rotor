@@ -334,7 +334,7 @@ case 'addfile':
 					if (utf_strlen($author) <= 50) {
 						if (utf_strlen($site) <= 50) {
 							if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
-								$downs = DB::run() -> querySingle("SELECT * FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
+								$downs = DBM::run()->selectFirst('cats', array('cats_id' => $cid));
 								if (!empty($downs)) {
 									if (empty($downs['closed'])) {
 										$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
@@ -345,7 +345,7 @@ case 'addfile':
 
 											$lastid = DB::run() -> lastInsertId();
 
-											$_SESSION['note'] = 'Данные успешно добавлены!';
+											notice('Данные успешно добавлены!');
 											redirect("load.php?act=editdown&id=$lastid");
 										} else {
 											show_error('Ошибка! Название '.$title.' уже имеется в файлах!');
