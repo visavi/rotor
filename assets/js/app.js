@@ -31,3 +31,8 @@ $(document).ready(function(){
  		//$(this).attr('src', '/images/img/ups.gif');
 	});
 });
+
+function showAttachForm(){
+	$('.js-attach-button').hide();
+	$('.js-attach-form').slideDown();
+}

@@ -140,14 +140,21 @@
 			<form action="topic.php?act=add&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" method="post">
 			<textarea name="msg" cols="25" rows="5" id="markItUp"></textarea><br />
 
+			<?php if ($udata['users_point'] >= $config['forumloadpoints']): ?>
+				<div class="js-attach-form" style="display: none;">
+					Прикрепить файл:<br /><input type="file" name="file" /><br />
+					<div class="info">
+						Максимальный вес файла: <b><?=round($config['forumloadsize']/1024)?></b> Kb<br />
+						Допустимые расширения: <?=str_replace(',', ', ', $config['forumextload'])?>
+					</div><br />
+				</div>
+
+				<span class="imgright js-attach-button">
+					<a href="#" onclick="return showAttachForm();">Загрузить файл</a>
+				</span>
+			<?php endif; ?>
+
 			<input type="submit" value="Написать" />
-
-		<?php if ($udata['users_point'] >= $config['forumloadpoints']): ?>
-			<span class="imgright">
-				<a href="topic.php?act=addfile&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Загрузить файл</a>
-			</span>
-		<?php endif; ?>
-
 			</form>
 		</div><br />
 

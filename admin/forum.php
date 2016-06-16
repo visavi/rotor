@@ -827,10 +827,18 @@ if (is_admin()) {
 						echo '<form action="/forum/topic.php?act=add&amp;tid='.$tid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 						echo 'Сообщение:<br />';
 						echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
+
+						echo '<div class="js-attach-form" style="display: none;">
+							Прикрепить файл:<br /><input type="file" name="file" /><br />
+							<div class="info">
+								Максимальный вес файла: <b>'.round($config['forumloadsize']/1024).'</b> Kb<br />
+								Допустимые расширения: '.str_replace(',', ', ', $config['forumextload']).'
+							</div><br />
+						</div>';
+
+						echo '<span class="imgright js-attach-button"><a href="#" onclick="return showAttachForm();">Загрузить файл</a></span>';
+
 						echo '<input type="submit" value="Написать" />';
-
-						echo '<span class="imgright"><a href="/forum/topic.php?act=addfile&amp;tid='.$tid.'&amp;start='.$start.'">Загрузить файл</a></span>';
-
 						echo '</form></div><br />';
 
 					} else {
