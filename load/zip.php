@@ -98,7 +98,7 @@ case 'preview':
 
 	$downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
 
-	if (! empty($downs) && ! empty($view)) {
+	if (! empty($downs) && $view !== '') {
 		if (!empty($downs['downs_active'])) {
 			$zip = new PclZip('files/'.$downs['downs_link']);
 
