@@ -35,4 +35,6 @@ $(document).ready(function(){
 function showAttachForm(){
 	$('.js-attach-button').hide();
 	$('.js-attach-form').slideDown();
+
+	return false;
 }
