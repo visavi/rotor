@@ -14,20 +14,25 @@
 
 blockquote:before {
   content: "\f10d";
-  font-size: 150%;
+  line-height: 1.0em;
+  font-size: 130%;
   font-family: FontAwesome;
   float: left;
   margin-right: 10px;
+  color: #c73401;
 }
 
 blockquote {
-  font-size: 100%;
-  background-color: #eff;
-  border: 1px dotted #ddd;
+  font-size: 95%;
+  background:#f2f1f6;
+  border: 1px solid #ddd;
   border-left: 5px solid #ddd;
   margin: 0 0 10px;
   font-style:italic;
-  color:#a2a2a2;
+  color:#543;
+  -moz-box-shadow: 2px 2px 15px #ccc;
+  -webkit-box-shadow: 2px 2px 15px #ccc;
+  box-shadow: 2px 2px 15px #ccc;
 }
 
 .prettyprint {
