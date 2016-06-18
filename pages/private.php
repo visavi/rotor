@@ -211,8 +211,7 @@ if (is_user()) {
 					echo '</select><br />';
 				}
 
-				echo 'Сообщение:<br />';
-				echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
+				echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
 
 				if ($udata['users_point'] < $config['privatprotect']) {
 					echo 'Проверочный код:<br />';
@@ -237,8 +236,8 @@ if (is_user()) {
 
 					echo '<div class="form">';
 					echo '<form action="private.php?act=send&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
-					echo 'Сообщение:<br />';
-					echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
+
+					echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
 
 					if ($udata['users_point'] < $config['privatprotect']) {
 						echo 'Проверочный код:<br />';
