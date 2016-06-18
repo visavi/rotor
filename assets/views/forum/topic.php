@@ -137,7 +137,7 @@
 <?php if (is_user()): ?>
 	<?php if (empty($topics['topics_closed'])): ?>
 		<div class="form">
-			<form action="topic.php?act=add&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" method="post">
+			<form action="topic.php?act=add&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" method="post" enctype="multipart/form-data">
 			<textarea name="msg" cols="25" rows="5" id="markItUp"></textarea><br />
 
 			<?php if ($udata['users_point'] >= $config['forumloadpoints']): ?>
