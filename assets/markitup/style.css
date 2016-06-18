@@ -119,7 +119,10 @@
     cursor: pointer;
     color: #333;
 }
-
+.markItUpContainer ul {
+    height: 20px;
+    overflow-y: hidden;
+}
 .markItUp .bb-color ul {
 	width:80px;
 	padding:1px;

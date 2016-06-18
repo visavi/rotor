@@ -1,15 +1,16 @@
 body, td, tr {
 	text-decoration: none;
 	font-family: verdana, arial, helvetica, sans-serif;
-	font-size: 11px;
+	font-size: 13px;
 	cursor: default;
 }
+
 body {
 	padding: 1px;
 	color: #858585;
 	background-color: #fff;
 	background-image: url(../img/bg.png);
-	max-width: 600px;
+	max-width: 768px;
 	text-align: left;
 	margin: auto;
 	border: 1px solid #ccc;
@@ -17,9 +18,8 @@ body {
 	margin-bottom: 5px;
 }
 
-
 h1 {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 h1 small {
@@ -53,12 +53,13 @@ a:hover {
 }
 
 .site {
-	padding: 5px 5px 5px 5px;
+	padding: 5px;
 	background-image: url(../img/f.png);
 }
 
 .site a {
 	padding : 1px;
+	line-height: 20px;
 	border-bottom-width : 1px;
 	border-bottom-style : solid;
 	border-bottom-color : #e6e5e5;
@@ -78,7 +79,7 @@ a:hover {
 legend {
 	color: #ccc;
 	width: 100%;
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: bold;
 	border-bottom: solid 1px #f7f7f7;
 	padding-bottom: 5px;
@@ -93,19 +94,16 @@ form {
 	padding: 0px;
 }
 
-input, select {
-	font-size: 8pt;
-}
 textarea {
-	width: 97%;
-	font-size: 9pt;
+	width: 100%;
+	font-size: 13px;
 	padding: 5px;
 }
 
 table {
-	margin: 1px 0px 1px 0px;
-	padding: 1px 1px 1px 1px;
-	font-size: 13px;
+	margin: 1px 0;
+	padding: 1px
+	font-size: 14px;
 }
 
 .img {
@@ -128,7 +126,7 @@ table {
 	border: 1px solid #ccc;
 }
 .b {
-	font-size: 13px;
+	font-size: 14px;
 	color: #888888;
 	background-image: url(../img/bb.gif);
 	border: 1px solid #ccc;
@@ -183,6 +181,7 @@ table {
 
 hr {
 	border : 1px dotted #ccc;
+	margin: 10px 0;
 }
 
 img {

@@ -44,13 +44,13 @@ mySettings = {
 		{title:'Спойлер', name:'<i class="fa fa-text-height"></i>', className:"bb-spoiler", openWith:'[spoiler=[![Заголовок спойлера]!]]', closeWith:'[/spoiler]', placeHolder:'Текст спойлера...'},
 
 		{separator:'---------------' },
-		{title:'Маркированный список', name:'<i class="fa fa-list-ul"></i>', className:"bb-unorderedlist", multiline:true, openBlockWith:'[list]\n', closeBlockWith:'\n[/list]', placeHolder:'Элемент списка'},
-		{title:'Нумерованный список', name:'<i class="fa fa-list-ol"></i>', className:"bb-orderedlist", multiline:true, openBlockWith:'[list=1]\n', closeBlockWith:'\n[/list]', placeHolder:'Элемент списка'},
-
-		{separator:'---------------' },
 		{title:'Скрытый контент', name:'<i class="fa fa-eye-slash"></i>', className:"bb-hide", openWith:'[hide]', closeWith:'[/hide]'},
 		{title:'Цитата', name:'<i class="fa fa-quote-right"></i>', className:"bb-quote", openWith:'[quote]', closeWith:'[/quote]'},
 		{title:'Исходный код', name:'<i class="fa fa-code"></i>', className:"bb-code", openWith:'[code]', closeWith:'[/code]'},
+
+		{separator:'---------------' },
+		{title:'Маркированный список', name:'<i class="fa fa-list-ul"></i>', className:"bb-unorderedlist", multiline:true, openBlockWith:'[list]\n', closeBlockWith:'\n[/list]', placeHolder:'Элемент списка'},
+		{title:'Нумерованный список', name:'<i class="fa fa-list-ol"></i>', className:"bb-orderedlist", multiline:true, openBlockWith:'[list=1]\n', closeBlockWith:'\n[/list]', placeHolder:'Элемент списка'},
 
 		{separator:'---------------' },
 		{title:'Очистка BB-кода', name:'<i class="fa fa-eraser"></i>', className:"bb-clean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
