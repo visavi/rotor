@@ -42,6 +42,7 @@ $arrfile = array(
 	'local/antidos',
 	'local/backup',
 	'local/board',
+	'local/cache',
 	'local/main',
 	'local/temp'
 );
