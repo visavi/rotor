@@ -49,7 +49,7 @@ class BBCodeParser {
 			'iterate' => 3,
 		),
 		'http' => array(
-			'pattern' => '%\b((?<!(=|]))([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))%s',
+			'pattern' => '%\b((?<!(=|]))[\w-]+://?[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))%s',
 			'callback' => 'urlReplace',
 		),
 		'link' => array(
