@@ -49,15 +49,15 @@ class BBCodeParser {
 			'iterate' => 3,
 		),
 		'http' => array(
-			'pattern' => '%\b((?<!(=|]))[\w-]+://?[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))%s',
+			'pattern' => '%\b((?<!(=|]))[\w-]+://[^\s()<>\[\]]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))%s',
 			'callback' => 'urlReplace',
 		),
 		'link' => array(
-			'pattern' => '/\[url\]((.*?))\[\/url\]/s',
+			'pattern' => '%\[url\](\b([\w-]+://[^\s()<>\[\]]+))\[\/url\]%s',
 			'callback' => 'urlReplace',
 		),
 		'namedLink' => array(
-			'pattern' => '/\[url\=(.*?)\](.*?)\[\/url\]/s',
+			'pattern' => '%\[url\=\b([\w-]+://[^\s()<>\[\]]+)\](.*?)\[\/url\]%s',
 			'callback' => 'urlReplace',
 		),
 		'image' => array(
