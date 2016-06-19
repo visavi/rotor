@@ -188,53 +188,6 @@ case 'spam':
 break;
 
 /**
- * Ответ на сообщение
- */
-case 'reply':
-
-	$id = abs(intval($_GET['id']));
-
-	if (is_user()) {
-		$post = DBM::run()->selectFirst('guest', array('guest_id' => $id));
-		if (! empty($post)) {
-
-			render ('book/reply', array('post' => $post));
-
-		} else {
-			show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
-	}
-
-	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'Вернуться'));
-break;
-
-/**
- * Цитирование сообщения
- */
-case 'quote':
-
-	$id = abs(intval($_GET['id']));
-
-	if (is_user()) {
-		$post = DBM::run()->selectFirst('guest', array('guest_id' => $id));
-
-		if (!empty($post)) {
-
-			render ('book/quote', array('post' => $post));
-
-		} else {
-			show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
-	}
-
-	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'Вернуться'));
-break;
-
-/**
  * Подготовка к редактированию
  */
 case 'edit':

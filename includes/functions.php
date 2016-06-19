@@ -1093,7 +1093,10 @@ function is_utf($str) {
 function sendMail($to, $subject, $body, $params = array()) {
 	global $config;
 
-	if (empty($params['from'])) $params['from'] = array($config['mailusername'] => $config['nickname']);
+	if (empty($params['from'])) {
+		$config['mailusername'] = !empty($config['mailusername']) ? $config['mailusername'] : $config['emails'];
+		$params['from'] = array($config['mailusername'] => $config['nickname']);
+	}
 
 	$message = Swift_Message::newInstance()
 		->setTo($to)

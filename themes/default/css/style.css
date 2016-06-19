@@ -70,7 +70,9 @@ a:hover {
 	background-image: url(../img/bp.gif);
 	border-top : 1px solid #ccc;
 	border-bottom : 1px solid #ccc;
+	line-height: 30px;
 }
+
 .menu a {
 	text-decoration : none;
 	font-weight : bold;

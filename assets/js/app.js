@@ -32,9 +32,43 @@ $(document).ready(function(){
 	});
 });
 
+/* Показ формы загрузки файла */
 function showAttachForm(){
 	$('.js-attach-button').hide();
 	$('.js-attach-form').slideDown();
+
+	return false;
+}
+
+/* Переход к форме ввода */
+function postJump() {
+
+	$('html, body').animate({
+		scrollTop: ($('.form').offset().top)
+	}, 500);
+}
+
+/* Ответ на сообщение */
+function postReply(name){
+
+	postJump();
+
+	$('#markItUp').focus().val('[b]' + name + '[/b], ');
+
+	return false;
+}
+
+/* Цитирование сообщения  */
+function postQuote(el){
+
+	postJump();
+
+	var post = $(el).closest('.post');
+	var author = post.find('b').text();
+	var date = post.find('small').text();
+	var message = post.find('.message').text();
+
+	$('#markItUp').focus().val('[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
 
 	return false;
 }

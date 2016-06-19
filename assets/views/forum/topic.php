@@ -65,36 +65,41 @@
 <?php endif; ?>
 
 <?php if ($params['total'] > 0): ?>
-<?php foreach ($params['topics']['posts'] as $key=>$data): ?>
-	<?php $num = ($params['start'] + $key + 1); ?>
+	<?php foreach ($params['topics']['posts'] as $key=>$data): ?>
+		<?php $num = ($params['start'] + $key + 1); ?>
+		<div class="post">
+		<div class="b" id="post_<?=$data['posts_id']?>">
 
-	<div class="b" id="post_<?=$data['posts_id']?>">
-		<div class="img"><?=user_avatars($data['posts_user'])?></div>
+			<?php if (!empty($log) && $log != $data['posts_user']): ?>
+				<div class="pull-right">
+					<a href="#" onclick="return postReply('<?= nickname($data['posts_user']) ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
-		<?php if (!empty($topics['is_moder'])): ?>
-			<span class="imgright">
-				<a href="topic.php?act=modedit&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>">Ред.</a> <input type="checkbox" name="del[]" value="<?=$data['posts_id']?>" />
-			</span>
-		<?php endif; ?>
+					<a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-		<?=$num?>. <b><?=profile($data['posts_user'])?></b> <small>(<?=date_fixed($data['posts_time'])?>)</small><br />
-		<?=user_title($data['posts_user'])?> <?=user_online($data['posts_user'])?></div>
+					<noindex><a href="topic.php?act=spam&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы подтверждаете факт спама?')" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
+				</div>
+			<?php endif; ?>
 
-		<?php if (!empty($log) && $log != $data['posts_user']): ?>
-			<div class="right">
-				<a href="topic.php?act=reply&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>&amp;num=<?=$num?>">Отв</a> /
-				<a href="topic.php?act=quote&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>">Цит</a> /
-				<noindex><a href="topic.php?act=spam&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы подтверждаете факт спама?')" rel="nofollow">Спам</a></noindex>
-			</div>
-		<?php endif; ?>
+			<?php if ($log == $data['posts_user'] && $data['posts_time'] + 600 > SITETIME): ?>
+				<div class="pull-right">
+					<a href="topic.php?act=edit&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+				</div>
+			<?php endif; ?>
 
-		<?php if ($log == $data['posts_user'] && $data['posts_time'] + 600 > SITETIME): ?>
-			<div class="right">
-				<a href="topic.php?act=edit&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>">Редактировать</a>
-			</div>
-		<?php endif; ?>
+			<div class="img"><?=user_avatars($data['posts_user'])?></div>
 
-		<div><?=bb_code($data['posts_text'])?><br />
+			<?php if (!empty($topics['is_moder'])): ?>
+				<span class="imgright">
+					<a href="topic.php?act=modedit&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>">Ред.</a> <input type="checkbox" name="del[]" value="<?=$data['posts_id']?>" />
+				</span>
+			<?php endif; ?>
+
+			<?=$num?>. <b><?=profile($data['posts_user'])?></b> <small>(<?=date_fixed($data['posts_time'])?>)</small><br />
+			<?=user_title($data['posts_user'])?> <?=user_online($data['posts_user'])?>
+		</div>
+
+
+		<div class="message"><?=bb_code($data['posts_text'])?></div>
 
 		<?php if (!empty($topics['posts_files'])): ?>
 			<?php if (isset($topics['posts_files'][$data['posts_id']])): ?>
@@ -138,7 +143,7 @@
 	<?php if (empty($topics['topics_closed'])): ?>
 		<div class="form">
 			<form action="topic.php?act=add&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" method="post" enctype="multipart/form-data">
-			<textarea name="msg" cols="25" rows="5" id="markItUp"></textarea><br />
+			<textarea name="msg" cols="25" rows="5" id="markItUp"></textarea>
 
 			<?php if ($udata['users_point'] >= $config['forumloadpoints']): ?>
 				<div class="js-attach-form" style="display: none;">
@@ -154,7 +159,7 @@
 				</span>
 			<?php endif; ?>
 
-			<input type="submit" value="Написать" />
+			<input class="btn btn-primary" type="submit" value="Написать" />
 			</form>
 		</div><br />
 
