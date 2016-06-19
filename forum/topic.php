@@ -183,16 +183,16 @@ case 'add':
 								DB::run() -> query("INSERT INTO `files_forum` (`file_topics_id`, `file_posts_id`, `file_hash`, `file_name`, `file_size`, `file_user`, `file_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($topics['topics_id'], $lastid, $hash, $filename, $filesize, $log, SITETIME));
 
 							} else {
-								notice('Файл не загружен! Недопустимое расширение!', '#ff0000');
+								notice('Файл не загружен! Недопустимое расширение!', 'danger');
 							}
 						} else {
-							notice('Файл не загружен! Максимальный размер '.formatsize($config['forumloadsize']).'!', '#ff0000');
+							notice('Файл не загружен! Максимальный размер '.formatsize($config['forumloadsize']).'!', 'danger');
 						}
 					} else {
-						notice('Ошибка! Не удалось загрузить файл!', '#ff0000');
+						notice('Ошибка! Не удалось загрузить файл!', 'danger');
 					}
 				} else {
-					notice('Ошибка! У вас недостаточно актива для загрузки файлов!', '#ff0000');
+					notice('Ошибка! У вас недостаточно актива для загрузки файлов!', 'danger');
 				}
 			}
 			// -- Загрузка файла -- //

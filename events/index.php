@@ -206,7 +206,7 @@ case 'addevent':
 						$handle -> clean();
 
 					} else {
-						notice($handle->error, '#ff0000');
+						notice($handle->error, 'danger');
 						redirect("index.php?act=editevent&id=$lastid");
 					}
 				}
@@ -325,7 +325,7 @@ case 'changeevent':
 						$handle -> clean();
 
 					} else {
-						notice($handle->error, '#ff0000');
+						notice($handle->error, 'danger');
 					}
 				}
 			}

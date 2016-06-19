@@ -1,5 +1,17 @@
 <?php if (isset($_SESSION['note'])): ?>
-	<div class="note"><?=$_SESSION['note']?></div>
+	<?php if (! is_array($_SESSION['note'])) {
+		$_SESSION['note'] = array('success' => $_SESSION['note']);
+	}?>
+
+	<?php foreach ($_SESSION['note'] as $status => $messages): ?>
+		<?php if (is_array($messages)): ?>
+			<?php $messages = implode('</div><div>', $messages); ?>
+		<?php endif; ?>
+		<div class="alert alert-<?= $status ?> alert-block">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div><?= $messages ?></div>
+		</div>
+	<?php endforeach ?>
 <?php endif; ?>
 
 <?php if (is_user()): ?>

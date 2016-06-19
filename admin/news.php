@@ -166,7 +166,7 @@ case 'change':
 					$handle -> clean();
 
 				} else {
-					notice($handle->error, '#ff0000');
+					notice($handle->error, 'danger');
 				}
 			}
 		}
@@ -247,7 +247,7 @@ case 'addnews':
 					$handle -> clean();
 
 				} else {
-					notice($handle->error, '#ff0000');
+					notice($handle->error, 'danger');
 					redirect("news.php?act=edit&id=$lastid");
 				}
 			}

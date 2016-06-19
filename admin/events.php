@@ -163,7 +163,7 @@ case 'change':
 					$handle -> clean();
 
 				} else {
-					notice($handle->error, '#ff0000');
+					notice($handle->error, 'danger');
 				}
 			}
 		}

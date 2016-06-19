@@ -1531,20 +1531,12 @@ function show_title($header, $subheader = false) {
 
 // ------------------------- Функция вывода ошибок ------------------------//
 function show_error($errors) {
-	if (is_array($errors)){
-		echo '<div class="info">';
-		foreach ($errors as $error) {
-			echo '<i class="fa fa-exclamation-circle fa-lg text-danger"></i> <b>'.$error.'</b><br />';
-		}
-		echo '</div><br />';
-	} else {
-		echo '<div class="info"><i class="fa fa-exclamation-circle fa-lg text-danger"></i> <b>'.$errors.'</b></div><br />';
-	}
+	render ('includes/error', compact('errors'));
 }
 
 // ------------------------- Функция вывода предупреждения ------------------------//
 function show_login($notice) {
-	render ('includes/login', array('notice' => $notice));
+	render ('includes/login', compact('notice'));
 }
 
 // ------------------------- Функция замены заголовков ------------------------//
@@ -2278,13 +2270,8 @@ function text_private($id, $replace = array()){
 }
 
 // ------------ Функция записи flash уведомлений -----------//
-function notice($message, $color = false){
-
-	if (!empty($color)){
-		$message = '<span style="color:'.$color.'">'.$message.'</span>';
-	}
-
-	$_SESSION['note'] = (isset($_SESSION['note'])) ? $message.'<br />'.$_SESSION['note'] : $message;
+function notice($message, $status = 'success'){
+	$_SESSION['note'][$status][] = $message;
 }
 
 // ------------ Функция вывода навигации -----------//
