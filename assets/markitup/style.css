@@ -119,10 +119,6 @@
     cursor: pointer;
     color: #333;
 }
-.markItUpContainer ul {
-    height: 20px;
-    overflow-y: hidden;
-}
 .markItUp .bb-color ul {
 	width:80px;
 	padding:1px;
@@ -281,4 +277,11 @@
 }
 .cut .bb-cutpage a {
 	display: block;
+}
+
+@media (max-width: 480px) {
+	.markItUpContainer ul {
+	    height: 20px;
+	    overflow-y: hidden;
+	}
 }

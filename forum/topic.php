@@ -354,66 +354,6 @@ case 'closed':
 break;
 
 ############################################################################################
-##                                   Ответ на сообщение                                   ##
-############################################################################################
-case 'reply':
-
-	show_title('Ответ на сообщение');
-
-	$pid = (isset($_GET['pid'])) ? abs(intval($_GET['pid'])) : 0;
-	$num = (isset($_GET['num'])) ? abs(intval($_GET['num'])) : 0;
-
-	if (is_user()) {
-		$post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? LIMIT 1;", array($pid));
-
-		if (!empty($post)) {
-			if (empty($post['topics_closed'])) {
-
-				render('forum/topic_reply', array('post' => $post, 'start' => $start, 'num' => $num));
-
-			} else {
-				show_error('Данная тема закрыта для обсуждения!');
-			}
-		} else {
-			show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
-	}
-
-	render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
-break;
-
-############################################################################################
-##                                   Цитирование сообщения                                ##
-############################################################################################
-case 'quote':
-
-	$pid = (isset($_GET['pid'])) ? abs(intval($_GET['pid'])) : 0;
-
-
-	if (is_user()) {
-		$post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? LIMIT 1;", array($pid));
-
-		if (!empty($post)) {
-			if (empty($post['topics_closed'])) {
-
-				render('forum/topic_quote', array('post' => $post, 'start' => $start));
-
-			} else {
-				show_error('Данная тема закрыта для обсуждения!');
-			}
-		} else {
-			show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
-	}
-
-	render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
-break;
-
-############################################################################################
 ##                                   Подготовка к изменению                               ##
 ############################################################################################
 case 'edittopic':
