@@ -27,7 +27,7 @@ mySettings = {
 
 			{name:'Magenta', openWith:'[color=#ff00ff]', closeWith:'[/color]', className:"col3-1" },
 			{name:'Gray', openWith:'[color=#808080]', closeWith:'[/color]', className:"col3-2" },
-			{name:'Black', openWith:'[color=#00ffff]', closeWith:'[/color]', className:"col3-3" },
+			{name:'Cyan', openWith:'[color=#00ffff]', closeWith:'[/color]', className:"col3-3" },
 		]},
 
 		{separator:'---------------' },
