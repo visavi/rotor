@@ -70,8 +70,8 @@
 	<div class="form">
 		<form action="index.php?act=add&amp;uid=<?=$_SESSION['token']?>" method="post">
 
-		<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />
-		<input type="submit" value="Написать" /></form>
+		<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea>
+		<input class="btn btn-primary" type="submit" value="Написать" /></form>
 	</div><br />
 
 <?php elseif ($config['bookadds'] == 1): ?>
@@ -83,9 +83,9 @@
 
 		Проверочный код:<br />
 		<img src="/gallery/protect.php" alt="" /><br />
-		<input name="provkod" size="6" maxlength="6" /><br />
+		<input name="provkod" size="6" maxlength="6" />
 
-		<input type="submit" value="Написать" /></form>
+		<input class="btn btn-primary" type="submit" value="Написать" /></form>
 	</div><br />
 
 <?php else: ?>
