@@ -2112,7 +2112,7 @@ function include_style(){
 
 // ------------- Подключение javascript -------------//
 function include_javascript(){
-	echo '<script type="text/javascript" src="/assets/js/jquery-1.12.4.min.js"></script>'."\r\n";
+	echo '<script type="text/javascript" src="/assets/js/jquery-2.2.4.min.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/js/prettify.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/markitup/jquery.markitup.js"></script>'."\r\n";

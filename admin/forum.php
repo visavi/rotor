@@ -118,7 +118,7 @@ if (is_admin()) {
 				if ($uid == $_SESSION['token']) {
 					restatement('forum');
 
-					$_SESSION['note'] = 'Все данные успешно пересчитаны!';
+					notice('Все данные успешно пересчитаны!');
 					redirect("forum.php");
 
 				} else {
@@ -145,7 +145,7 @@ if (is_admin()) {
 						$maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`forums_order`),0)+1 FROM `forums`;");
 						DB::run() -> query("INSERT INTO `forums` (`forums_order`, `forums_title`) VALUES (?, ?);", array($maxorder, $title));
 
-						$_SESSION['note'] = 'Новый раздел успешно добавлен!';
+						notice('Новый раздел успешно добавлен!');
 						redirect("forum.php");
 
 					} else {
@@ -234,7 +234,7 @@ if (is_admin()) {
 								if (empty($forums) || empty($parent)) {
 									DB::run() -> query("UPDATE `forums` SET `forums_order`=?, `forums_parent`=?, `forums_title`=?, `forums_desc`=?, `forums_closed`=? WHERE `forums_id`=?;", array($order, $parent, $title, $desc, $closed, $fid));
 
-									$_SESSION['note'] = 'Раздел успешно отредактирован!';
+									notice('Раздел успешно отредактирован!');
 									redirect("forum.php");
 
 								} else {
@@ -318,7 +318,7 @@ if (is_admin()) {
 							DB::run() -> query("DELETE FROM `forums` WHERE `forums_id`=?;", array($fid));
 							DB::run() -> query("DELETE FROM `bookmarks` WHERE `book_forum`=?;", array($fid));
 
-							$_SESSION['note'] = 'Раздел успешно удален!';
+							notice('Раздел успешно удален!');
 							redirect("forum.php");
 
 						} else {
@@ -468,7 +468,7 @@ if (is_admin()) {
 						if ($locked == 1) {
 							$start = 0;
 						}
-						$_SESSION['note'] = 'Тема успешно отредактирована!';
+						notice('Тема успешно отредактирована!');
 						redirect("forum.php?act=forum&fid=$fid&start=$start");
 
 					} else {
@@ -567,7 +567,7 @@ if (is_admin()) {
 						// Обновление закладок
 						DB::run() -> query("UPDATE `bookmarks` SET `book_forum`=? WHERE `book_topic`=?;", array($section, $tid));
 
-						$_SESSION['note'] = 'Тема успешно перемещена!';
+						notice('Тема успешно перемещена!');
 						redirect("forum.php?act=forum&fid=$section");
 
 					} else {
@@ -628,7 +628,7 @@ if (is_admin()) {
 						DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($oldlast['topics_id'], $oldlast['topics_title'], $oldlast['topics_last_user'], $oldlast['topics_last_time'], $oldlast['forums_parent']));
 					}
 
-					$_SESSION['note'] = 'Выбранные темы успешно удалены!';
+					notice('Выбранные темы успешно удалены!');
 					redirect("forum.php?act=forum&fid=$fid&start=$start");
 
 				} else {
@@ -656,25 +656,25 @@ if (is_admin()) {
 					switch ($do):
 						case 'closed':
 							DB::run() -> query("UPDATE `topics` SET `topics_closed`=? WHERE `topics_id`=?;", array(1, $tid));
-							$_SESSION['note'] = 'Тема успешно закрыта!';
+							notice('Тема успешно закрыта!');
 							redirect("forum.php?act=topic&tid=$tid&start=$start");
 							break;
 
 						case 'open':
 							DB::run() -> query("UPDATE `topics` SET `topics_closed`=? WHERE `topics_id`=?;", array(0, $tid));
-							$_SESSION['note'] = 'Тема успешно открыта!';
+							notice('Тема успешно открыта!');
 							redirect("forum.php?act=topic&tid=$tid&start=$start");
 							break;
 
 						case 'locked':
 							DB::run() -> query("UPDATE `topics` SET `topics_locked`=? WHERE `topics_id`=?;", array(1, $tid));
-							$_SESSION['note'] = 'Тема успешно закреплена!';
+							notice('Тема успешно закреплена!');
 							redirect("forum.php?act=topic&tid=$tid&start=$start");
 							break;
 
 						case 'unlocked':
 							DB::run() -> query("UPDATE `topics` SET `topics_locked`=? WHERE `topics_id`=?;", array(0, $tid));
-							$_SESSION['note'] = 'Тема успешно откреплена!';
+							notice('Тема успешно откреплена!');
 							redirect("forum.php?act=topic&tid=$tid&start=$start");
 							break;
 
@@ -809,7 +809,7 @@ if (is_admin()) {
 							// --------------------------//
 
 							if (!empty($data['posts_edit'])) {
-								echo '<img src="/images/img/exclamation_small.gif" alt="image" /> <small>Отредактировано: '.nickname($data['posts_edit']).' ('.date_fixed($data['posts_edit_time']).')</small><br />';
+								echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.nickname($data['posts_edit']).' ('.date_fixed($data['posts_edit_time']).')</small><br />';
 							}
 
 							echo '<span class="data">('.$data['posts_brow'].', '.$data['posts_ip'].')</span></div>';
@@ -888,7 +888,7 @@ if (is_admin()) {
 					DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`-? WHERE `topics_id`=?;", array($delposts, $tid));
 					DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`-? WHERE `forums_id`=?;", array($delposts, $topics['topics_forums_id']));
 
-					$_SESSION['note'] = 'Выбранные сообщения успешно удалены!';
+					notice('Выбранные сообщения успешно удалены!');
 					redirect("forum.php?act=topic&tid=$tid&start=$start");
 
 				} else {
@@ -979,7 +979,7 @@ if (is_admin()) {
 						// ------ Удаление загруженных файлов -------//
 
 
-						$_SESSION['note'] = 'Сообщение успешно отредактировано!';
+						notice('Сообщение успешно отредактировано!');
 						redirect("forum.php?act=topic&tid=$tid&start=$start");
 
 					} else {

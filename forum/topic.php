@@ -514,7 +514,7 @@ case 'modeditpost':
 
 								DB::run() -> query("UPDATE `posts` SET `posts_text`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($msg, $log, SITETIME, $pid));
 
-								$_SESSION['note'] = 'Сообщение успешно отредактировано!';
+								notice('Сообщение успешно отредактировано!');
 								redirect("topic.php?tid=$tid&start=$start");
 
 							} else {
@@ -623,7 +623,7 @@ case 'editpost':
 							}
 							// ------ Удаление загруженных файлов -------//
 
-							$_SESSION['note'] = 'Сообщение успешно отредактировано!';
+							notice('Сообщение успешно отредактировано!');
 							redirect("topic.php?tid=$tid&start=$start");
 
 						} else {

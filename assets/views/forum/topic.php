@@ -115,7 +115,7 @@
 		<?php endif; ?>
 
 		<?php if (!empty($data['posts_edit'])): ?>
-			<img src="/images/img/exclamation_small.gif" alt="image" /> <small>Отредактировано: <?=nickname($data['posts_edit'])?> (<?=date_fixed($data['posts_edit_time'])?>)</small><br />
+			<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['posts_edit'])?> (<?=date_fixed($data['posts_edit_time'])?>)</small><br />
 		<?php endif; ?>
 
 		<?php if (is_admin() || empty($config['anonymity'])): ?>

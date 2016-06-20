@@ -53,16 +53,16 @@ class BBCodeParser {
 			'callback' => 'urlReplace',
 		),
 		'link' => array(
-			'pattern' => '%\[url\](\b([\w-]+://[^\s()<>\[\]]+))\[\/url\]%s',
+			'pattern' => '%\[url\](\b([\w-]+://[^\s()<>\[\]]+))\[/url\]%s',
 			'callback' => 'urlReplace',
 		),
 		'namedLink' => array(
-			'pattern' => '%\[url\=\b([\w-]+://[^\s()<>\[\]]+)\](.*?)\[\/url\]%s',
+			'pattern' => '%\[url\=\b([\w-]+://[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
 			'callback' => 'urlReplace',
 		),
 		'image' => array(
-			'pattern' => '/\[img\](.*?)\[\/img\]/s',
-			'callback' => 'imgReplace',
+			'pattern' => '%\[img\]\b([\w-]+://[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
+			'replace' => '<img src="$1" class="img-responsive" alt="image">',
 		),
 		'orderedList' => array(
 			'pattern' => '/\[list=1\](.*?)\[\/list\]/s',
@@ -87,7 +87,7 @@ class BBCodeParser {
 			'callback' => 'hiddenText',
 		),
 		'youtube' => array(
-			'pattern' => '/\[youtube\](.*?)\[\/youtube\]/s',
+			'pattern' => '/\[youtube\]([\w-]{11})\[\/youtube\]/s',
 			'replace' => '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$1"></iframe></div>',
 		),
 	);
@@ -128,20 +128,6 @@ class BBCodeParser {
 	public function clear($source)
 	{
 		return $source = preg_replace('/\[(.*?)\]/', '', $source);
-	}
-
-	/**
-	 * Обработка изображений
-	 * @param  array $match ссылка на изображение
-	 * @return string картинка
-	 */
-	public function imgReplace($match)
-	{
-		if (preg_match('/[\w\-]+\.(jpg|png|gif|jpeg)/', $match[1])) {
-			return '<img src="'.$match[1].'" class="img-responsive img-message" alt="image">';
-		} else {
-			return $match[1];
-		}
 	}
 
 	/**

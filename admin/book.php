@@ -75,7 +75,7 @@ if (is_admin()) {
 					echo '<div>'.bb_code($data['guest_text']).'<br />';
 
 					if (!empty($data['guest_edit'])) {
-						echo '<img src="/images/img/exclamation_small.gif" alt="image" /> <small>Отредактировано: '.nickname($data['guest_edit']).' ('.date_fixed($data['guest_edit_time']).')</small><br />';
+						echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.nickname($data['guest_edit']).' ('.date_fixed($data['guest_edit_time']).')</small><br />';
 					}
 
 					echo '<span class="data">('.$data['guest_brow'].', '.$data['guest_ip'].')</span>';

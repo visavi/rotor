@@ -45,7 +45,7 @@
 			<div class="message"><?=bb_code($data['guest_text'])?></div>
 
 			<?php if (!empty($data['guest_edit'])): ?>
-				<img src="/images/img/exclamation_small.gif" alt="image" /> <small>Отредактировано: <?=nickname($data['guest_edit'])?> (<?=date_fixed($data['guest_edit_time'])?>)</small><br />
+				<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['guest_edit'])?> (<?=date_fixed($data['guest_edit_time'])?>)</small><br />
 			<?php endif; ?>
 
 			<?php if (is_admin() || empty($config['anonymity'])): ?>
