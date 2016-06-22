@@ -282,6 +282,10 @@ if ($config['rotorversion'] < '4.5.0') {
 	echo 'Необходимо выполнить <a href="/upgrade/upgrade_bbcodes.php">апгрейд тегов</a><br />';
 }
 
+if (file_exists(BASEDIR.'/assets/fonts/.htaccess')){
+	echo '<i class="fa fa-exclamation-circle"></i> Необходимо удалить файл assets/fonts/.htaccess</div>';
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));
