@@ -1444,9 +1444,9 @@ function last_news() {
 		if ($total > 0) {
 			foreach ($news as $data) {
 				$data['news_text'] = str_replace('[cut]', '', $data['news_text']);
-				echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/index.php?act=read&amp;id='.$data['news_id'].'">'.$data['news_title'].'</a> ('.$data['news_comments'].') <img class="news-title" src="/images/img/downs.gif" alt="Открыть" /><br />';
+				echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/index.php?act=read&amp;id='.$data['news_id'].'">'.$data['news_title'].'</a> ('.$data['news_comments'].') <i class="fa fa-caret-down news-title"></i><br />';
 
-				echo '<div class="news-text">'.bb_code($data['news_text']).'<br />';
+				echo '<div class="news-text" style="display: none;">'.bb_code($data['news_text']).'<br />';
 				echo '<a href="/news/index.php?act=comments&amp;id='.$data['news_id'].'">Комментарии</a> ';
 				echo '<a href="/news/index.php?act=end&amp;id='.$data['news_id'].'">&raquo;</a></div>';
 			}

@@ -212,6 +212,11 @@ input {
 	border-radius: 5px;
 }
 
+.b .pull-right i {
+    color: #9d9d9d;
+    font-size: 13px;
+}
+
 hr {
 	border : 1px dotted #ccc;
 }

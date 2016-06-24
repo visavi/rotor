@@ -25,10 +25,9 @@ $(document).ready(function(){
 	});
 
 	/* Показ новостей на главной */
-	$(".news-text").hide();
-	$(".news-title").click(function () {
+	$(".news-title").click(function() {
+		$(this).toggleClass('fa-caret-up');
 		$(this).nextAll(".news-text:first").slideToggle();
- 		//$(this).attr('src', '/images/img/ups.gif');
 	});
 });
 
