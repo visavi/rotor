@@ -286,6 +286,70 @@ if (file_exists(BASEDIR.'/assets/fonts/.htaccess')){
 	echo '<i class="fa fa-exclamation-circle"></i> Необходимо удалить файл assets/fonts/.htaccess</div>';
 }
 
+/* Если установлен модуль игры */
+if (file_exists(BASEDIR.'/games')) {
+
+	$check = DB::run() -> querySingle("SHOW TABLES LIKE 'lotinfo';");
+	if (empty($check)) {
+		DB::run() -> exec("
+		CREATE TABLE IF NOT EXISTS `lotinfo` (
+		  `lot_id` int(11) unsigned NOT NULL auto_increment,
+		  `lot_date` smallint(4) unsigned NOT NULL,
+		  `lot_sum` int(11) unsigned NOT NULL default '0',
+		  `lot_newnum` smallint(4) unsigned NOT NULL default '0',
+		  `lot_oldnum` smallint(4) unsigned NOT NULL default '0',
+		  `lot_winners` varchar(255) NOT NULL default '',
+		  PRIMARY KEY  (`lot_id`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+		");
+		echo 'Добавлена таблица lotinfo<br />';
+	}
+
+	$check = DB::run() -> querySingle("SHOW TABLES LIKE 'lotusers';");
+	if (empty($check)) {
+		DB::run() -> exec("
+		CREATE TABLE IF NOT EXISTS `lotusers` (
+		  `lot_id` int(11) unsigned NOT NULL auto_increment,
+		  `lot_user` varchar(20) NOT NULL,
+		  `lot_num` smallint(4) unsigned NOT NULL default '0',
+		  `lot_time` int(11) unsigned NOT NULL default '0',
+		  PRIMARY KEY  (`lot_id`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+		");
+		echo 'Добавлена таблица lotusers<br />';
+	}
+
+	$check = DB::run() -> querySingle("SHOW TABLES LIKE 'bank';");
+	if (empty($check)) {
+		DB::run() -> exec("
+		CREATE TABLE IF NOT EXISTS `bank` (
+		  `bank_id` int(11) unsigned NOT NULL auto_increment,
+		  `bank_user` varchar(20) NOT NULL,
+		  `bank_sum` int(11) unsigned NOT NULL default '0',
+		  `bank_oper` int(11) unsigned NOT NULL default '0',
+		  `bank_time` int(11) unsigned NOT NULL default '0',
+		  PRIMARY KEY  (`bank_id`),
+		  UNIQUE KEY `bank_user` (`bank_user`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+		");
+		echo 'Добавлена таблица bank<br />';
+	}
+
+	/* Добавление нового поля в таблицу пользователей для хранения суммы кредита */
+	$check = DB::run() -> querySingle("SHOW COLUMNS FROM `users` LIKE 'users_sumcredit';");
+	if (empty($check)) {
+		DB::run() -> query("ALTER TABLE `users` ADD `users_sumcredit` int(11) unsigned NOT NULL DEFAULT '0';");
+		echo 'Добавлено поле users_sumcredit в таблицу users<br />';
+	}
+
+	/* Добавление нового поля в таблицу пользователей для хранения времени получения кредита */
+	$check = DB::run() -> querySingle("SHOW COLUMNS FROM `users` LIKE 'users_timecredit';");
+	if (empty($check)) {
+		DB::run() -> query("ALTER TABLE `users` ADD `users_timecredit` int(11) unsigned NOT NULL DEFAULT '0';");
+		echo 'Добавлено поле users_timecredit в таблицу users<br />';
+	}
+}
+
 $version = substr(strstr(basename(__FILE__), '_'), 1, -4);
 
 DB::run() -> query("REPLACE INTO `setting` (`setting_name`, `setting_value`) VALUES (?, ?);", array('rotorversion', $version));

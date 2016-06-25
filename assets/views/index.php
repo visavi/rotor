@@ -10,7 +10,7 @@
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes/">Голосования</a> (<?=stats_votes()?>)<br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/offers.php">Предложения / Проблемы</a> (<?=stats_offers()?>)<br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/chat/">Мини-чат</a> (<?= stats_minichat() ?>)<br />
-
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/">Игры и развлечения</a><br />
 
 <div class="b">
 	<i class="fa fa-hashtag fa-lg text-muted"></i>

@@ -1,0 +1,17 @@
+<?php
+show_title('Игры и развлечения');
+?>
+
+<div class="b"><i class="fa fa-university fa-lg text-muted"></i> <b>Банк</b></div>
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/bank.php">Вклады</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/kredit.php">Кредит</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/perevod.php">Перевод</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/livebank.php">Статистика вкладов</a><br />
+
+<div class="b"><i class="fa fa-money fa-lg text-muted"></i> <b>Казино</b></div>
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/loterea.php">Лотерея</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/21.php">21 (Очко)</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/hi.php">Угадай число</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/bandit.php">Однорукий бандит</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/kosti.php">Кости</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/naperstki.php">Наперстки</a><br />
