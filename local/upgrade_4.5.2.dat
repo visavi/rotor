@@ -283,7 +283,7 @@ if ($config['rotorversion'] < '4.5.0') {
 }
 
 if (file_exists(BASEDIR.'/assets/fonts/.htaccess')){
-	echo '<i class="fa fa-exclamation-circle"></i> Необходимо удалить файл assets/fonts/.htaccess</div>';
+	echo '<i class="fa fa-exclamation-circle"></i> Необходимо удалить файл assets/fonts/.htaccess<br />';
 }
 
 /* Если установлен модуль игры */
