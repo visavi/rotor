@@ -13,7 +13,7 @@
 	?>
 
 	<div>
-		<a href="/upload/pictures/<?= $photo['photo_link'] ?>"><img src="/upload/pictures/<?= $photo['photo_link'] ?>" alt="image" /></a><br />
+		<a href="/upload/pictures/<?= $photo['photo_link'] ?>"><img  class="img-responsive" src="/upload/pictures/<?= $photo['photo_link'] ?>" alt="image" /></a><br />
 
 		<?php if (!empty($photo['photo_text'])): ?>
 			<?= bb_code($photo['photo_text']) ?><br />
