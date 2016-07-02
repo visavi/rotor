@@ -886,7 +886,6 @@ if (is_admin()) {
 					if (!empty($files)){
 						foreach ($files as $file){
 							if (file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file)){
-								unlink(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file);
 								unlink_image('upload/forum/', $topics['topics_id'].'/'.$file);
 							}
 						}
@@ -980,7 +979,6 @@ if (is_admin()) {
 							if (!empty($files)){
 								foreach ($files as $file){
 									if (file_exists(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
-										unlink(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash']);
 										unlink_image('upload/forum/', $file['file_topics_id'].'/'.$file['file_hash']);
 									}
 								}
