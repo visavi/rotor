@@ -90,7 +90,7 @@ if (is_admin()) {
 		############################################################################################
 		case 'view':
 
-			$new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=?;", array($id));
+			$new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
 			if (!empty($new)) {
 				if (empty($new['downs_active'])) {
@@ -114,8 +114,9 @@ if (is_admin()) {
 						}
 
 						if (!empty($new['downs_screen'])) {
+							$folder = $new['folder'] ? $new['folder'].'/' : '';
 							echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/load/screen/'.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/load/screen/'.$new['downs_screen']).') (<a href="newload.php?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-							echo resize_image('load/screen/', $new['downs_screen'], $config['previewsize']).'<br />';
+							echo resize_image('load/screen/',$folder, $new['downs_screen'], $config['previewsize']).'<br />';
 						} else {
 							echo '<img src="/images/img/gallery.gif" alt="image" /> <b>Не загружен</b><br />';
 						}
@@ -328,7 +329,7 @@ if (is_admin()) {
 									DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($new['downs_user']));
 								}
 
-								$_SESSION['note'] = 'Файл успешно опубликован!';
+								notice('Файл успешно опубликован!');
 								redirect("newload.php");
 
 							} else {
@@ -368,7 +369,7 @@ if (is_admin()) {
 
 					DB::run() -> query("UPDATE `downs` SET `downs_link`=?, `downs_screen`=? WHERE `downs_id`=?;", array('', '', $id));
 
-					$_SESSION['note'] = 'Файл успешно удален!';
+					notice('Файл успешно удален!');
 					redirect("newload.php?act=view&id=$id");
 
 				} else {
@@ -394,7 +395,7 @@ if (is_admin()) {
 
 					DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array('', $id));
 
-					$_SESSION['note'] = 'Скриншот успешно удален!';
+					notice('Скриншот успешно удален!');
 					redirect("newload.php?act=view&id=$id");
 
 				} else {
@@ -439,7 +440,7 @@ if (is_admin()) {
 						unlink_image('load/screen/', $delfile['downs_screen']);
 					}
 
-					$_SESSION['note'] = 'Выбранные файлы успешно удалены!';
+					notice('Выбранные файлы успешно удалены!');
 					redirect("newload.php?start=$start");
 
 				} else {

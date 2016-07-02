@@ -308,6 +308,7 @@ if (is_admin()) {
 
 								foreach($topics as $delDir){
 									removeDir(BASEDIR.'/upload/forum/'.$delDir);
+									array_map('unlink', glob(BASEDIR.'/upload/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
 								}
 								DB::run() -> query("DELETE FROM `files_forum` WHERE `file_topics_id` IN (".$delId.");");
 							}
@@ -605,6 +606,7 @@ if (is_admin()) {
 					// ------ Удаление загруженных файлов -------//
 					foreach($del as $delDir){
 						removeDir(BASEDIR.'/upload/forum/'.$delDir);
+						array_map('unlink', glob(BASEDIR.'/upload/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
 					}
 					DB::run() -> query("DELETE FROM `files_forum` WHERE `file_topics_id` IN (".$delId.");");
 					// ------ Удаление загруженных файлов -------//
@@ -620,6 +622,13 @@ if (is_admin()) {
 
 					// ------------------------------------------------------------//
 					$oldlast = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics`.`topics_forums_id`=? ORDER BY `topics`.`topics_last_time` DESC LIMIT 1;", array($fid));
+
+					if (empty($oldlast['topics_id'])) {
+						$oldlast['topics_id'] = 0;
+						$oldlast['topics_title'] = '';
+						$oldlast['topics_last_user'] = '';
+						$oldlast['topics_last_time'] = 0;
+					}
 
 					DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($oldlast['topics_id'], $oldlast['topics_title'], $oldlast['topics_last_user'], $oldlast['topics_last_time'], $fid));
 
@@ -878,6 +887,7 @@ if (is_admin()) {
 						foreach ($files as $file){
 							if (file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file)){
 								unlink(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file);
+								unlink_image('upload/forum/', $topics['topics_id'].'/'.$file);
 							}
 						}
 						DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id` IN (".$del.");");
@@ -971,6 +981,7 @@ if (is_admin()) {
 								foreach ($files as $file){
 									if (file_exists(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
 										unlink(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash']);
+										unlink_image('upload/forum/', $file['file_topics_id'].'/'.$file['file_hash']);
 									}
 								}
 								DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id`=? AND `file_id` IN (".$del.");", array($pid));

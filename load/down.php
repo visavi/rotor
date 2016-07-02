@@ -198,7 +198,7 @@ case 'view':
 			$ext = getExtension($downs['downs_link']);
 
 			if (in_array($ext, array('jpg', 'jpeg', 'gif', 'png'))) {
-				echo '<a href="/load/files/'.$folder.$downs['downs_link'].'">'.resize_image('load/files/', $downs['downs_link'], $config['previewsize'], $downs['downs_title']).'</a><br />';
+				echo '<a href="/load/files/'.$folder.$downs['downs_link'].'">'.resize_image('load/files/'.$folder, $downs['downs_link'], $config['previewsize'], $downs['downs_title']).'</a><br />';
 			}
 
 			echo bb_code($downs['downs_text']).'<br /><br />';

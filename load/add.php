@@ -224,6 +224,8 @@ case 'view':
 			if ($new['downs_user'] == $log) {
 				if (empty($new['downs_active'])) {
 
+					$folder = $new['folder'] ? $new['folder'].'/' : '';
+
 					echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="index.php">Категории</a> / ';
 
 					if (!empty($new['cats_parent'])) {
@@ -247,7 +249,7 @@ case 'view':
 
 					} else {
 
-						echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/load/files/'.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(BASEDIR.'/load/files/'.$new['downs_link']).') (<a href="add.php?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+						echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/load/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(BASEDIR.'/load/files/'.$folder.$new['downs_link']).') (<a href="add.php?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
 
 						$ext = getExtension($new['downs_link']);
 						if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
@@ -262,8 +264,8 @@ case 'view':
 								echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px</div><br /><br />';
 
 							} else {
-								echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/load/screen/'.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/load/screen/'.$new['downs_screen']).') (<a href="add.php?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-								echo resize_image('load/screen/', $new['downs_screen'], $config['previewsize']).'<br />';
+								echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/load/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/load/screen/'.$folder.$new['downs_screen']).') (<a href="add.php?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+								echo resize_image('load/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
 							}
 						}
 					}
@@ -409,7 +411,8 @@ break;
 case 'loadfile':
 	show_title('Загрузка файла');
 
-	$down = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+	$down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+
 	if (!empty($down)) {
 		if ($down['downs_user'] == $log) {
 			if (empty($down['downs_active'])) {
@@ -426,11 +429,12 @@ case 'loadfile':
 									if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
 										$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
 										if (empty($downlink)) {
+											$folder = $down['folder'] ? $down['folder'].'/' : '';
 
-											move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$filename);
-											@chmod(BASEDIR.'/load/files/'.$filename, 0666);
+											move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$folder.$filename);
+											@chmod(BASEDIR.'/load/files/'.$folder.$filename, 0666);
 
-											copyright_archive(BASEDIR.'/load/files/'.$filename);
+											copyright_archive(BASEDIR.'/load/files/'.$folder.$filename);
 
 											DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
 
@@ -477,7 +481,8 @@ break;
 case 'loadscreen':
 	show_title('Загрузка скриншота');
 
-	$down = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+	$down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+
 	if (!empty($down)) {
 		if ($down['downs_user'] == $log) {
 			if (empty($down['downs_active'])) {
@@ -487,8 +492,9 @@ case 'loadscreen':
 						// ------------------------------------------------------//
 						$handle = upload_image($_FILES['screen'], $config['screenupload'], $config['screenupsize'],  $down['downs_link']);
 						if ($handle) {
+							$folder = $down['folder'] ? $down['folder'].'/' : '';
 
-							$handle -> process(BASEDIR.'/load/screen/');
+							$handle -> process(BASEDIR.'/load/screen/'.$folder);
 							if ($handle -> processed) {
 
 								DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array($handle -> file_dst_name, $id));
@@ -527,20 +533,23 @@ break;
  */
 case 'delfile':
 
-	$link = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+	$link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+
 	if (!empty($link)) {
 		if ($link['downs_user'] == $log) {
 			if (empty($link['downs_active'])) {
+				$folder = $link['folder'] ? $link['folder'].'/' : '';
 
-				if (!empty($link['downs_link']) && file_exists(BASEDIR.'/load/files/'.$link['downs_link'])) {
-					unlink(BASEDIR.'/load/files/'.$link['downs_link']);
+				if (!empty($link['downs_link']) && file_exists(BASEDIR.'/load/files/'.$folder.$link['downs_link'])) {
+					unlink(BASEDIR.'/load/files/'.$folder.$link['downs_link']);
 				}
 
-				unlink_image('load/screen/', $link['downs_screen']);
+				unlink_image('load/files/'.$folder, $link['downs_link']);
+				unlink_image('load/screen/'.$folder, $link['downs_screen']);
 
 				DB::run() -> query("UPDATE `downs` SET `downs_link`=?, `downs_screen`=? WHERE `downs_id`=?;", array('', '', $id));
 
-				$_SESSION['note'] = 'Файл успешно удален!';
+				notice('Файл успешно удален!');
 				redirect("add.php?act=view&id=$id");
 
 			} else {
@@ -561,16 +570,18 @@ break;
  */
 case 'delscreen':
 
-	$screen = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+	$screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+
 	if (!empty($screen)) {
 		if ($screen['downs_user'] == $log) {
 			if (empty($screen['downs_active'])) {
+				$folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
-				unlink_image('load/screen/', $screen['downs_screen']);
+				unlink_image('load/screen/'.$folder, $screen['downs_screen']);
 
 				DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array('', $id));
 
-				$_SESSION['note'] = 'Скриншот успешно удален!';
+				notice('Скриншот успешно удален!');
 				redirect("add.php?act=view&id=$id");
 
 			} else {

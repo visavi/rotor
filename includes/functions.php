@@ -56,16 +56,15 @@ function date_fixed($timestamp, $format = "d.m.y / H:i") {
 
 // --------------- Функция удаление картинки с проверкой -------------------//
 function unlink_image($dir, $image) {
-
 	if (!empty($image)) {
-		$prename = str_replace('/', '_' ,$dir);
+		$prename = str_replace('/', '_' ,$dir.$image);
 
 		if (file_exists(BASEDIR.'/'.$dir.$image)) {
 			unlink(BASEDIR.'/'.$dir.$image);
 		}
 
-		if (file_exists(BASEDIR.'/upload/thumbnail/'.$prename . $image)) {
-			unlink(BASEDIR.'/upload/thumbnail/'.$prename . $image);
+		if (file_exists(BASEDIR.'/upload/thumbnail/'.$prename)) {
+			unlink(BASEDIR.'/upload/thumbnail/'.$prename);
 		}
 	}
 }
@@ -2035,19 +2034,19 @@ function resize_image($dir, $name, $size, $alt="") {
 	if (!empty($name) && file_exists(BASEDIR.'/'.$dir.$name)){
 
 		$sign = (!empty($alt)) ? $alt : $name;
-		$prename = str_replace('/', '_' ,$dir);
+		$prename = str_replace('/', '_' ,$dir.$name);
+		$newname = substr($prename, 0, strrpos($prename, '.'));
 		$imgsize = getimagesize(BASEDIR.'/'.$dir.$name);
 
 		if ($imgsize[0] <= $size && $imgsize[1] <= $size) {
 			return '<img src="/'.$dir.$name.'" alt="'.$sign.'" />';
 		}
-
 		if (!file_exists(BASEDIR.'/upload/thumbnail/'.$prename.$name) || filesize(BASEDIR.'/upload/thumbnail/'.$prename.$name) < 18) {
 
 			$handle = new upload(BASEDIR.'/'.$dir.$name);
 
 			if ($handle -> uploaded) {
-				$handle -> file_name_body_pre = $prename;
+				$handle -> file_new_name_body = $newname;
 				$handle -> image_resize = true;
 				$handle -> image_ratio = true;
 				$handle -> image_ratio_no_zoom_in = true;
@@ -2057,7 +2056,7 @@ function resize_image($dir, $name, $size, $alt="") {
 				$handle -> process(BASEDIR.'/upload/thumbnail/');
 			}
 		}
-		return '<img src="/upload/thumbnail/'.$prename.$name.'" alt="'.$sign.'" />';
+		return '<img src="/upload/thumbnail/'.$prename.'" alt="'.$sign.'" />';
 	}
 	$param = ($size<100) ? ' height="'.$size.'" width="'.$size.'"' : '';
 	return '<img src="/images/img/photo.jpg" alt="nophoto"'.$param.' />';

@@ -106,9 +106,13 @@
 				<div class="hiding"><i class="fa fa-paperclip" aria-hidden="true"></i> <b>Прикрепленные файлы:</b><br />
 				<?php foreach ($topics['posts_files'][$data['posts_id']] as $file): ?>
 					<?php $ext = getExtension($file['file_hash']); ?>
-					<img src="/images/icons/<?=icons($ext)?>" alt="image" />
 
+
+					<img src="/images/icons/<?=icons($ext)?>" alt="image" />
 					<a href="/upload/forum/<?=$topics['topics_id']?>/<?=$file['file_hash']?>"><?=$file['file_name']?></a> (<?=formatsize($file['file_size'])?>)<br />
+					<?php if (in_array($ext, array('jpg', 'jpeg', 'gif', 'png'))): ?>
+						<a href="/upload/forum/<?=$topics['topics_id']?>/<?=$file['file_hash']?>"><?= resize_image('upload/forum/', $topics['topics_id'].'/'.$file['file_hash'], $config['previewsize'], $file['file_name']) ?></a><br />
+					<?php endif; ?>
 				<?php endforeach; ?>
 				</div>
 			<?php endif; ?>
