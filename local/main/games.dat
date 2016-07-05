@@ -7,6 +7,7 @@ show_title('Игры и развлечения');
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/kredit.php">Кредит</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/perevod.php">Перевод</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/livebank.php">Статистика вкладов</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/safe.php">Взлом сейфа</a><br />
 
 <div class="b"><i class="fa fa-money fa-lg text-muted"></i> <b>Казино</b></div>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games/loterea.php">Лотерея</a><br />
