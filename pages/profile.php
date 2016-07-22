@@ -33,15 +33,16 @@ case 'index':
 	echo '<div class="form">';
 	echo '<form method="post" action="profile.php?act=edit&amp;uid='.$_SESSION['token'].'">';
 
+	echo '<div class="pull-right">';
 	if (!empty($udata['users_picture']) && file_exists(BASEDIR.'/upload/photos/'.$udata['users_picture'])) {
-		echo '<div class="imgright"><a href="/upload/photos/'.$udata['users_picture'].'">';
-		echo resize_image('upload/photos/', $udata['users_picture'], $config['previewsize'], nickname($udata['users_login'])).'</a><br />';
-		echo '<a href="pictures.php">Изменить</a>/<a href="pictures.php?act=del&amp;uid='.$_SESSION['token'].'">Удалить</a></div>';
+		echo '<a href="/upload/photos/'.$udata['users_picture'].'">';
+		echo resize_image('upload/photos/', $udata['users_picture'], $config['previewsize'], array('alt' => nickname($udata['users_login']), 'class' => 'img-responsive img-rounded')).'</a>';
+		echo '<a href="pictures.php">Изменить</a> / <a href="pictures.php?act=del&amp;uid='.$_SESSION['token'].'">Удалить</a>';
 	} else {
-		echo '<div class="imgright">';
-		echo '<img src="/images/img/photo.jpg" alt="Фото" />';
-		echo '<br /><a href="pictures.php">Загрузить фото</a></div>';
+		echo '<img class="img-responsive img-rounded" src="/images/img/photo.jpg" alt="Фото" />';
+		echo '<a href="pictures.php">Загрузить фото</a>';
 	}
+	echo '</div>';
 
 	echo 'Имя:<br /><input name="name" maxlength="20" value="'.$udata['users_name'].'" /><br />';
 	echo 'Страна:<br /><input name="country" maxlength="30" value="'.$udata['users_country'].'" /><br />';

@@ -48,7 +48,7 @@ case 'index':
 			echo '<a href="events.php?act=edit&amp;id='.$data['event_id'].'&amp;start='.$start.'">Редактировать</a></div>';
 
 			if (!empty($data['event_image'])) {
-				echo '<div class="img"><a href="/upload/events/'.$data['event_image'].'">'.resize_image('upload/events/', $data['event_image'], 75, $data['event_title']).'</a></div>';
+				echo '<div class="img"><a href="/upload/events/'.$data['event_image'].'">'.resize_image('upload/events/', $data['event_image'], 75, array('alt' => $data['event_title'])).'</a></div>';
 			}
 
 			if (!empty($data['event_top'])){
@@ -100,7 +100,7 @@ case 'edit':
 
 		if (!empty($dataevent['event_image']) && file_exists(BASEDIR.'/upload/events/'.$dataevent['event_image'])){
 
-			echo '<a href="/upload/events/'.$dataevent['event_image'].'">'.resize_image('upload/events/', $dataevent['event_image'], 75, $dataevent['event_title']).'</a><br />';
+			echo '<a href="/upload/events/'.$dataevent['event_image'].'">'.resize_image('upload/events/', $dataevent['event_image'], 75, array('alt' => $dataevent['event_title'])).'</a><br />';
 			echo '<b>'.$dataevent['event_image'].'</b> ('.read_file(BASEDIR.'/upload/events/'.$dataevent['event_image']).')<br /><br />';
 		}
 

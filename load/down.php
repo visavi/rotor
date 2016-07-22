@@ -198,7 +198,7 @@ case 'view':
 			$ext = getExtension($downs['downs_link']);
 
 			if (in_array($ext, array('jpg', 'jpeg', 'gif', 'png'))) {
-				echo '<a href="/load/files/'.$folder.$downs['downs_link'].'">'.resize_image('load/files/'.$folder, $downs['downs_link'], $config['previewsize'], $downs['downs_title']).'</a><br />';
+				echo '<a href="/load/files/'.$folder.$downs['downs_link'].'">'.resize_image('load/files/'.$folder, $downs['downs_link'], $config['previewsize'], array('alt' => $downs['downs_title'])).'</a><br />';
 			}
 
 			echo bb_code($downs['downs_text']).'<br /><br />';
@@ -206,7 +206,7 @@ case 'view':
 			if (!empty($downs['downs_screen']) && file_exists(BASEDIR.'/load/screen/'.$folder.$downs['downs_screen'])) {
 				echo 'Скриншот:<br />';
 
-				echo '<a href="screen/'.$folder.$downs['downs_screen'].'">'.resize_image('load/screen/'.$folder, $downs['downs_screen'], $config['previewsize'], $downs['downs_title']).'</a><br /><br />';
+				echo '<a href="screen/'.$folder.$downs['downs_screen'].'">'.resize_image('load/screen/'.$folder, $downs['downs_screen'], $config['previewsize'], array('alt' => $downs['downs_title'])).'</a><br /><br />';
 			}
 
 			if (!empty($downs['downs_author'])) {

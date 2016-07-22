@@ -50,7 +50,7 @@ case 'index':
 			echo '<a href="news.php?act=edit&amp;id='.$data['news_id'].'&amp;start='.$start.'">Редактировать</a></div>';
 
 			if (!empty($data['news_image'])) {
-				echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, $data['news_title']).'</a></div>';
+				echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, array('alt' => $data['news_title'])).'</a></div>';
 			}
 
 			if (!empty($data['news_top'])){
@@ -102,7 +102,7 @@ case 'edit':
 
 		if (!empty($datanews['news_image']) && file_exists(BASEDIR.'/upload/news/'.$datanews['news_image'])){
 
-			echo '<a href="/upload/news/'.$datanews['news_image'].'">'.resize_image('upload/news/', $datanews['news_image'], 75, $datanews['news_title']).'</a><br />';
+			echo '<a href="/upload/news/'.$datanews['news_image'].'">'.resize_image('upload/news/', $datanews['news_image'], 75, array('alt' => $datanews['news_title'])).'</a><br />';
 			echo '<b>'.$datanews['news_image'].'</b> ('.read_file(BASEDIR.'/upload/news/'.$datanews['news_image']).')<br /><br />';
 		}
 

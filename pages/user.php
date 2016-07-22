@@ -42,10 +42,10 @@ case 'index':
 		}
 
 		if (!empty($data['users_picture']) && file_exists(BASEDIR.'/upload/photos/'.$data['users_picture'])) {
-			echo '<div class="imgright"><a href="/upload/photos/'.$data['users_picture'].'">';
-			echo resize_image('upload/photos/', $data['users_picture'], $config['previewsize'], nickname($data['users_login'])).'</a></div>';
+			echo '<a class="pull-right" href="/upload/photos/'.$data['users_picture'].'">';
+			echo resize_image('upload/photos/', $data['users_picture'], $config['previewsize'], array('alt' => nickname($data['users_login']), 'class' => 'img-responsive img-rounded')).'</a>';
 		} else {
-			echo '<div class="imgright"><img src="/images/img/photo.jpg" alt="Фото" /></div>';
+			echo '<img src="/images/img/photo.jpg" alt="Фото" class="pull-right img-responsive img-rounded" />';
 		}
 
 		echo 'Cтатус: <b><a href="statusfaq.php">'.user_title($data['users_login']).'</a></b><br />';

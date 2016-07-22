@@ -1803,7 +1803,7 @@ function recentphotos($show = 5) {
 
 	if (is_array($photos) && count($photos) > 0) {
 		foreach ($photos as $data) {
-			echo '<a href="/gallery/index.php?act=view&amp;gid='.$data['photo_id'].'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], $data['photo_title']).'</a>';
+			echo '<a href="/gallery/index.php?act=view&amp;gid='.$data['photo_id'].'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;')).'</a>';
 		}
 
 		echo '<br />';
@@ -2035,18 +2035,27 @@ function show_admin_links($level = 0) {
 }
 
 // ------------- Функция кэширования уменьшенных изображений -------------//
-function resize_image($dir, $name, $size, $alt="") {
+function resize_image($dir, $name, $size, $params = array()) {
 
 	if (!empty($name) && file_exists(BASEDIR.'/'.$dir.$name)){
 
-		$sign = (!empty($alt)) ? $alt : $name;
 		$prename = str_replace('/', '_' ,$dir.$name);
 		$newname = substr($prename, 0, strrpos($prename, '.'));
 		$imgsize = getimagesize(BASEDIR.'/'.$dir.$name);
 
-		if ($imgsize[0] <= $size && $imgsize[1] <= $size) {
-			return '<img src="/'.$dir.$name.'" alt="'.$sign.'" />';
+		if (empty($params['alt'])) $params['alt'] = $name;
+
+		$strParams = array();
+		foreach ($params as $key => $param) {
+			$strParams[] = $key.'="'.$param.'"';
 		}
+
+		$strParams = implode(' ', $strParams);
+
+		if ($imgsize[0] <= $size && $imgsize[1] <= $size) {
+			return '<img src="/'.$dir.$name.'"'.$strParams.' />';
+		}
+
 		if (!file_exists(BASEDIR.'/upload/thumbnail/'.$prename.$name) || filesize(BASEDIR.'/upload/thumbnail/'.$prename.$name) < 18) {
 
 			$handle = new upload(BASEDIR.'/'.$dir.$name);
@@ -2062,10 +2071,10 @@ function resize_image($dir, $name, $size, $alt="") {
 				$handle -> process(BASEDIR.'/upload/thumbnail/');
 			}
 		}
-		return '<img src="/upload/thumbnail/'.$prename.'" alt="'.$sign.'" />';
+		return '<img src="/upload/thumbnail/'.$prename.'"'.$strParams.' />';
 	}
-	$param = ($size<100) ? ' height="'.$size.'" width="'.$size.'"' : '';
-	return '<img src="/images/img/photo.jpg" alt="nophoto"'.$param.' />';
+
+	return '<img src="/images/img/photo.jpg" alt="nophoto" />';
 }
 
 // ------------- Функция переадресации -------------//

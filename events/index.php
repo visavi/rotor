@@ -251,7 +251,7 @@ case 'editevent':
 			echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['event_text'].'</textarea><br />';
 
 			if (!empty($dataevent['event_image']) && file_exists(BASEDIR.'/upload/events/'.$dataevent['event_image'])){
-				echo '<a href="/upload/events/'.$dataevent['event_image'].'">'.resize_image('upload/events/', $dataevent['event_image'], 75, $dataevent['event_title']).'</a><br />';
+				echo '<a href="/upload/events/'.$dataevent['event_image'].'">'.resize_image('upload/events/', $dataevent['event_image'], 75, array('alt' => $dataevent['event_title'])).'</a><br />';
 				echo '<b>'.$dataevent['event_image'].'</b> ('.read_file(BASEDIR.'/upload/events/'.$dataevent['event_image']).')<br /><br />';
 			}
 

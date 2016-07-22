@@ -93,7 +93,7 @@ switch ($act):
 				}
 
 				echo '</div><div>';
-				echo '<a href="index.php?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], $data['photo_title']).'</a><br />';
+				echo '<a href="index.php?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'])).'</a><br />';
 
 				if (!empty($data['photo_text'])){
 					echo bb_code($data['photo_text']).'<br />';

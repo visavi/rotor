@@ -46,7 +46,7 @@ case 'index':
 			echo '<b><a href="index.php?act=read&amp;id='.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small></div>';
 
 			if (!empty($data['news_image'])) {
-				echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, $data['news_title']).'</a></div>';
+				echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, array('alt' => $data['news_title'])).'</a></div>';
 			}
 
 			if(stristr($data['news_text'], '[cut]')) {
@@ -90,7 +90,7 @@ case 'read':
 
 		if (!empty($data['news_image'])) {
 
-			echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, $data['news_title']).'</a></div>';
+			echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, array('alt' => $data['news_title'])).'</a></div>';
 		}
 
 		$data['news_text'] = str_replace('[cut]', '', $data['news_text']);
