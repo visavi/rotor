@@ -214,11 +214,17 @@ function check($msg) {
 		}
 	} else {
 		$msg = htmlspecialchars($msg);
-		$search = array('|', '\'', '$', '\\', '^', '%', '`', "\0", "\x00", "\x1A", chr(226) . chr(128) . chr(174));
-		$replace = array('&#124;', '&#39;', '&#36;', '&#92;', '&#94;', '&#37;', '&#96;', '', '', '', '');
+		$search = array('|', '\'', '$', '\\', "\0", "\x00", "\x1A", chr(226) . chr(128) . chr(174));
+		$replace = array('&#124;', '&#39;', '&#36;', '&#92;', '', '', '', '');
 
 		$msg = str_replace($search, $replace, $msg);
 		$msg = stripslashes(trim($msg));
+
+		$msg = preg_replace('%(?:
+			\xF0[\x90-\xBF][\x80-\xBF]{2} |
+			[\xF1-\xF3][\x80-\xBF]{3} |
+			\xF4[\x80-\x8F][\x80-\xBF]{2}
+			)%xs', '', $msg);
 	}
 
 	return $msg;
