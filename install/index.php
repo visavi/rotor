@@ -43,6 +43,7 @@ $arrfile = array(
 	'local/backup',
 	'local/board',
 	'local/cache',
+	'local/chat',
 	'local/main',
 	'local/temp'
 );

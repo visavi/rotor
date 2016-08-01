@@ -278,6 +278,10 @@ if (empty($check)) {
 	echo 'Добавлено поле в категории загрузок для закрытия разделов<br />';
 }
 
+if ($config['rotorversion'] < '4.3.0') {
+	echo 'Необходимо выполнить <a href="/upgrade/upgrade_smiles2.php">апгрейд смайлов</a><br />';
+}
+
 if ($config['rotorversion'] < '4.5.0') {
 	echo 'Необходимо выполнить <a href="/upgrade/upgrade_bbcodes.php">апгрейд тегов</a><br />';
 }
