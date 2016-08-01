@@ -2,6 +2,7 @@ local/antidos/
 local/backup/
 local/board/
 local/cache/
+local/chat/
 local/temp/
 load/files/
 load/screen/

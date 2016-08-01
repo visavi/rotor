@@ -15,9 +15,9 @@ if (!defined('BASEDIR')) {
 }
 // ------------------- Функция подсчета объявлений --------------------//
 function stats_minichat() {
-  if (file_exists(DATADIR."/temp/chat.dat")) {
+  if (file_exists(DATADIR."/chat/chat.dat")) {
 
-    $files = file(DATADIR."/temp/chat.dat");
+    $files = file(DATADIR."/chat/chat.dat");
     $data = explode("|", end($files));
 
     if (isset($data[9])) {
