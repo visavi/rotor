@@ -51,8 +51,8 @@ function postJump() {
 function postReply(name){
 
 	postJump();
-
-	$('#markItUp').focus().val('[b]' + name + '[/b], ');
+	separator = $("#markItUp").val().length ? '\n' : '';
+	$('#markItUp').focus().val($('#markItUp').val() + separator + '[b]' + name + '[/b], ');
 
 	return false;
 }
@@ -67,7 +67,8 @@ function postQuote(el){
 	var date = post.find('small').text();
 	var message = post.find('.message').text();
 
-	$('#markItUp').focus().val('[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
+	separator = $("#markItUp").val().length ? '\n' : '';
+	$('#markItUp').focus().val($('#markItUp').val() + separator + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
 
 	return false;
 }
