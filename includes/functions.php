@@ -2045,12 +2045,20 @@ function resize_image($dir, $name, $size, $params = array()) {
 
 		if (empty($params['alt'])) $params['alt'] = $name;
 
+		if (isset($params['class'])) {
+			$params['class'] .= ' img-responsive';
+		} else {
+			$params['class'] = 'img-responsive';
+		}
+
 		$strParams = array();
 		foreach ($params as $key => $param) {
 			$strParams[] = $key.'="'.$param.'"';
 		}
 
+
 		$strParams = implode(' ', $strParams);
+
 
 		if ($imgsize[0] <= $size && $imgsize[1] <= $size) {
 			return '<img src="/'.$dir.$name.'"'.$strParams.' />';
