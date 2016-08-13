@@ -25,7 +25,7 @@ if (!empty($config['errorlog'])){
 
 		DB::run()->query("DELETE FROM `error` WHERE `error_num`=? AND `error_time` < (SELECT MIN(`error_time`) FROM (SELECT `error_time` FROM `error` WHERE `error_num`=? ORDER BY `error_time` DESC LIMIT ".$config['maxlogdat'].") AS del);", array(403, 403));
 
-		$_SESSION['note'] = 'ERROR 403. Недопустимый запрос!';
+		notice('ERROR 403. Недопустимый запрос!');
 	break;
 
 	############################################################################################
@@ -36,7 +36,7 @@ if (!empty($config['errorlog'])){
 
 		DB::run()->query("DELETE FROM `error` WHERE `error_num`=? AND `error_time` < (SELECT MIN(`error_time`) FROM (SELECT `error_time` FROM `error` WHERE `error_num`=? ORDER BY `error_time` DESC LIMIT ".$config['maxlogdat'].") AS del);", array(404, 404));
 
-		$_SESSION['note'] = 'ERROR 404. Извините, но такой страницы не существует!';
+		notice('ERROR 404. Извините, но такой страницы не существует!');
 	break;
 
 	endswitch;

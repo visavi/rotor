@@ -17,13 +17,6 @@ class DBM {
 	protected $config;
 
 	/**
-	 * We will cache any PDO errors in case we want to get out them externally
-	 *
-	 * @var PDOException - for keeping track of any exceptions in PDO
-	 */
-	protected $pdo_exception;
-
-	/**
 	 * The PDO objects for the connection
 	 *
 	 * @var PDO - the Pear Data Object
@@ -139,12 +132,10 @@ class DBM {
 
 		// handle any exceptions by catching them and returning false
 		catch (PDOException $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 	}
 
@@ -219,12 +210,10 @@ class DBM {
 			return $pstmt->fetchColumn(0);
 		}
 		catch(PDOException $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 	}
 
@@ -314,12 +303,10 @@ class DBM {
 			}
 		}
 		catch(PDOException $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 	}
 
@@ -387,12 +374,10 @@ class DBM {
 			return ($successful_delete == true) ? $pstmt->rowCount() : false;
 		}
 		catch(PDOException $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 	}
 
@@ -406,8 +391,8 @@ class DBM {
 	 * @param bool $timestamp_this (Optional) - if true we set created and modified values to now
 	 * @return int|bool - the amount of rows updated, false on failure
 	 */
-	public function update($table, $params, $wheres=array(), $timestamp_this=null) {
-		if (is_null($timestamp_this)) {
+	public function update($table, $params, $wheres = array(), $timestamp_this = false) {
+		if (! $timestamp_this) {
 			$timestamp_this = self::$timestamp_writes;
 		}
 		// build the set part of the update query by
@@ -431,7 +416,7 @@ class DBM {
 		}
 
 		// add the timestamp columns if neccessary
-		if ($timestamp_this === true) {
+		if ($timestamp_this) {
 			$set_string .= ($add_comma ? ', ' : '') . 'modified='.time();
 		}
 
@@ -481,12 +466,10 @@ class DBM {
 			return ($successful_update == true) ? $pstmt->rowCount() : false;
 		}
 		catch(PDOException $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 	}
 
@@ -499,8 +482,8 @@ class DBM {
 	 * @param bool $timestamp_this (Optional), if true we set created and modified values to now
 	 * @return mixed - new primary key of inserted table, false on failure
 	 */
-	public function insert($table, $params = array(), $timestamp_this = null) {
-		if (is_null($timestamp_this)) {
+	public function insert($table, $params = array(), $timestamp_this = false) {
+		if (! $timestamp_this) {
 			$timestamp_this = self::$timestamp_writes;
 		}
 
@@ -525,7 +508,7 @@ class DBM {
 		}
 
 		// add the timestamp columns if neccessary
-		if ($timestamp_this === true) {
+		if ($timestamp_this) {
 			$columns_str .= ($add_comma ? ', ' : '') . 'created, modified';
 			$values_str .= ($add_comma ? ', ' : '') . time().', '.time();
 		}
@@ -553,12 +536,10 @@ class DBM {
 			return $newID;
 		}
 		catch(PDOException $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 	}
 
@@ -571,8 +552,8 @@ class DBM {
 	 * @param bool $timestamp_these (Optional), if true we set created and modified values to NOW() for each row
 	 * @return mixed - new primary key of inserted table, false on failure
 	 */
-	public function insertMultiple($table, $columns = array(), $rows = array(), $timestamp_these = null) {
-		if (is_null($timestamp_these)) {
+	public function insertMultiple($table, $columns = array(), $rows = array(), $timestamp_these = false) {
+		if (! $timestamp_these) {
 			$timestamp_these = self::$timestamp_writes;
 		}
 
@@ -636,14 +617,12 @@ class DBM {
 			return true;
 		}
 		catch(PDOException $e) {
-			$this->pdo_exception = $e;
 			$this->get()->rollback();
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
 			$this->get()->rollback();
-			return false;
+			throw $e;
 		}
 	}
 
@@ -654,7 +633,7 @@ class DBM {
 	 * @param string $query - the SQL query we are executing
 	 * @return mixed - the affected rows, false on failure
 	 */
-	public function execute($query, $params=array()) {
+	public function execute($query, $params = array()) {
 		try {
 			// prepare the statement
 			$pstmt = $this->get()->prepare($query);
@@ -671,12 +650,10 @@ class DBM {
 			return ($result == true) ? $pstmt->rowCount() : false;
 		}
 		catch(PDOException $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 	}
 
@@ -688,7 +665,7 @@ class DBM {
 	 * @param array $params - a list of bind parameters
 	 * @return mixed - the affected rows, false on failure
 	 */
-	public function query($query, $params=array()) {
+	public function query($query, $params = array()) {
 		try {
 
 			$pstmt = $this->get()->prepare($query);
@@ -705,12 +682,10 @@ class DBM {
 			return $pstmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		catch(PDOException $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 		catch(Exception $e) {
-			$this->pdo_exception = $e;
-			return false;
+			throw $e;
 		}
 	}
 
@@ -722,23 +697,13 @@ class DBM {
 	 * @param array $params - a list of bind parameters
 	 * @return mixed - the affected rows, false on failure
 	 */
-	public function queryFirst($query, $params=array()) {
+	public function queryFirst($query, $params = array()) {
 		$result = $this->query($query, $params);
 		if (empty($result)) {
 			return false;
 		}
 		else {
 			return $result[0];
-		}
-	}
-
-	/**
-	 * method getErrorMessage.
-	 * 	- returns the last error message caught
-	 */
-	public function getErrorMessage() {
-		if ($this->pdo_exception) {
-			return $this->pdo_exception->getMessage();
 		}
 	}
 

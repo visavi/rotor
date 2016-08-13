@@ -127,31 +127,33 @@ if ($act == 'index') {
 		$end = $start + $config['chatpost'];
 		}
 		for ($i = $start; $i < $end; $i++) {
-		$data = explode("|", $file[$i]);
+			$data = explode("|", $file[$i]);
 
-		$useronline = user_online($data[1]);
-		$useravatars = user_avatars($data[1]);
+			$useronline = user_online($data[1]);
+			$useravatars = user_avatars($data[1]);
 
-		if ($data[1] == 'Вундер-киндер') {
-			$useravatars = '<img src="img/mag.gif" alt="image" /> ';
-			$useronline = '<img src="/images/img/on.gif" alt="image">';
-		}
-		if ($data[1] == 'Настюха') {
-			$useravatars = '<img src="img/bot.gif" alt="image" /> ';
-			$useronline = '<img src="/images/img/on.gif" alt="image">';
-		}
-		if ($data[1] == 'Весельчак') {
-			$useravatars = '<img src="img/shut.gif" alt="image" /> ';
-			$useronline = '<img src="/images/img/on.gif" alt="image">';
-		}
+			if ($data[1] == 'Вундер-киндер') {
+				$useravatars = '<img src="img/mag.gif" alt="image" /> ';
+				$useronline = '<img src="/images/img/on.gif" alt="image">';
+			}
+			if ($data[1] == 'Настюха') {
+				$useravatars = '<img src="img/bot.gif" alt="image" /> ';
+				$useronline = '<img src="/images/img/on.gif" alt="image">';
+			}
+			if ($data[1] == 'Весельчак') {
+				$useravatars = '<img src="img/shut.gif" alt="image" /> ';
+				$useronline = '<img src="/images/img/on.gif" alt="image">';
+			}
 
-		echo '<div class="b">';
-		echo '<div class="img">' . $useravatars . '</div>';
+			echo '<div class="b">';
+			echo '<div class="img">' . $useravatars . '</div>';
 
-		echo '<b><a href="index.php?name=' . nickname($data[1]) . '#form">' . nickname($data[1]) . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
-		echo user_title($data[1]) . ' ' . $useronline . '</div>';
-		echo '<div>' . bb_code($data[0]) . '<br />';
-		echo '<span class="data">(' . $data[4] . ', ' . $data[5] . ')</span></div>';
+			echo '<b><a href="index.php?name=' . nickname($data[1]) . '#form">' . nickname($data[1]) . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
+			echo user_title($data[1]) . ' ' . $useronline . '</div>';
+			echo '<div>' . bb_code($data[0]) . '<br />';
+			if (is_admin() || empty($config['anonymity'])){
+				echo '<span class="data">(' . $data[4] . ', ' . $data[5] . ')</span></div>';
+			}
 		}
 
 		page_strnavigation('index.php?', $config['chatpost'], $start, $total);
