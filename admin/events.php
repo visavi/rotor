@@ -134,14 +134,14 @@ case 'change':
 
 	$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `event_id`=? LIMIT 1;", array($id));
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('not_empty', $dataevent, 'Выбранного события не существует, возможно оно было удалено!')
 		-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 		-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
-	if ($validation->run(1)) {
+	if ($validation->run()) {
 
 		DB::run() -> query("UPDATE `events` SET `event_title`=?, `event_text`=?, `event_closed`=?, `event_top`=? WHERE `event_id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
 
@@ -173,7 +173,7 @@ case 'change':
 		redirect("events.php?act=edit&id=$id");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="events.php?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';

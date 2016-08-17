@@ -202,7 +202,7 @@ case 'editnote':
 
 	if (is_admin()) {
 
-		$validation = new Validation;
+		$validation = new Validation();
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('not_empty', user($uz), 'Пользователя с данным логином не существует!')
 			-> addRule('string', $note, 'Слишком большая заметка, не более 1000 символов!', true, 0, 1000);
@@ -215,7 +215,7 @@ case 'editnote':
 				redirect("user.php?uz=$uz");
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_error('Ошибка! Данная страница доступна только администрации!');

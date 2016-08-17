@@ -137,14 +137,14 @@ case 'change':
 
 	$datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `news_id`=? LIMIT 1;", array($id));
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('not_empty', $datanews, 'Выбранной новости не существует, возможно она была удалена!')
 		-> addRule('string', $title, 'Слишком длинный или короткий заголовок новости!', true, 5, 50)
 		-> addRule('string', $msg, 'Слишком длинный или короткий текст новости!', true, 5, 10000);
 
-	if ($validation->run(1)) {
+	if ($validation->run()) {
 
 		DB::run() -> query("UPDATE `news` SET `news_title`=?, `news_text`=?, `news_closed`=?, `news_top`=? WHERE `news_id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
 
@@ -176,7 +176,7 @@ case 'change':
 		redirect("news.php?start=$start");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="news.php?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
@@ -217,7 +217,7 @@ case 'addnews':
 	$closed = (empty($_POST['closed'])) ? 0 : 1;
 
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
@@ -258,7 +258,7 @@ case 'addnews':
 		redirect("news.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="news.php?act=add">Вернуться</a><br />';

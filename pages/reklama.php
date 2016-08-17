@@ -102,7 +102,7 @@ case 'add':
 		$bold = (empty($_POST['bold'])) ? 0 : 1;
 		$provkod = isset($_POST['provkod']) ? check(strtolower($_POST['provkod'])) : '';
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('max', array($udata['users_point'], 50), 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
@@ -165,7 +165,7 @@ case 'add':
 				show_error('Ошибка! В данный момент нет свободных мест для размещения рекламы!');
 			}
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_login('Вы не авторизованы, для покупки рекламы, необходимо');

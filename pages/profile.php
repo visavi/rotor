@@ -85,7 +85,7 @@ case 'edit':
 	$gender = (isset($_POST['gender'])) ? intval($_POST['gender']) : 0;
 	$info = (isset($_POST['info'])) ? check($_POST['info']) : '';
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('regex', array($site, '#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u'), 'Недопустимый адрес сайта, необходим формата http://my_site.domen!', false)
@@ -107,7 +107,7 @@ case 'edit':
 		redirect("profile.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo'<img src="/images/img/back.gif" alt="image" /> <a href="profile.php">Вернуться</a><br />';

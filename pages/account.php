@@ -124,7 +124,7 @@ case 'changemail':
 	$meil = (isset($_POST['meil'])) ? strtolower(check($_POST['meil'])) : '';
 	$provpass = (isset($_POST['provpass'])) ? check($_POST['provpass']) : '';
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('not_equal', array($meil, $udata['users_email']), 'Новый адрес email должен отличаться от текущего!')
@@ -142,7 +142,7 @@ case 'changemail':
 	$changemail = DB::run() -> querySingle("SELECT `change_id` FROM `changemail` WHERE `change_user`=? LIMIT 1;", array($log));
 	$validation -> addRule('empty', $changemail, 'Вы уже отправили код подтверждения на новый адрес почты!');
 
-	if ($validation->run(1)) {
+	if ($validation->run()) {
 
 		$genkey = generate_password(rand(15,20));
 
@@ -157,7 +157,7 @@ case 'changemail':
 		redirect("account.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
@@ -173,7 +173,7 @@ case 'editmail':
 	DB::run() -> query("DELETE FROM `changemail` WHERE `change_time`<?;", array(SITETIME));
 	$armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE `change_key`=? AND `change_user`=? LIMIT 1;", array($key, $log));
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('not_empty', $key, 'Вы не ввели код изменения электронной почты!')
 		-> addRule('not_empty', $armail, 'Данный код изменения электронной почты не найден в списке!')
@@ -186,7 +186,7 @@ case 'editmail':
 	$blackmail = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(1, $armail['change_mail']));
 	$validation -> addRule('empty', $blackmail, 'Указанный вами адрес e-mail занесен в черный список!');
 
-	if ($validation->run(1)) {
+	if ($validation->run()) {
 
 		DB::run() -> query("UPDATE `users` SET `users_email`=? WHERE `users_login`=? LIMIT 1;", array($armail['change_mail'], $log));
 		DB::run() -> query("DELETE FROM `changemail` WHERE `change_key`=? AND `change_user`=? LIMIT 1;", array($key, $log));
@@ -195,7 +195,7 @@ case 'editmail':
 		redirect("account.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
@@ -209,7 +209,7 @@ case 'editstatus':
 	$status = (isset($_POST['status'])) ? check($_POST['status']) : '';
 	$cost = (!empty($status)) ? $config['editstatusmoney'] : 0;
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('not_empty', $config['editstatus'], 'Изменение статуса запрещено администрацией сайта!')
@@ -224,7 +224,7 @@ case 'editstatus':
 		$validation -> addRule('empty', $checkstatus, 'Выбранный вами статус уже используется на сайте!');
 	}
 
-	if ($validation->run(1)) {
+	if ($validation->run()) {
 
 		DB::run() -> query("UPDATE `users` SET `users_status`=?, `users_money`=`users_money`-? WHERE `users_login`=? LIMIT 1;", array($status, $cost, $log));
 		save_title();
@@ -233,7 +233,7 @@ case 'editstatus':
 		redirect("account.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
@@ -246,7 +246,7 @@ case 'editnick':
 	$uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
 	$nickname = (isset($_POST['nickname'])) ? check($_POST['nickname']) : '';
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('max', array($udata['users_point'], $config['editnickpoint']), 'У вас недостаточно актива для изменения ника!')
@@ -266,7 +266,7 @@ case 'editnick':
 		$validation -> addRule('empty', $blacklogin, 'Выбранный вами ник занесен в черный список!');
 	}
 
-	if ($validation->run(1)) {
+	if ($validation->run()) {
 
 		DB::run() -> query("UPDATE `users` SET `users_nickname`=?, `users_timenickname`=? WHERE `users_login`=? LIMIT 1;", array($nickname, SITETIME + 86400, $log));
 		save_nickname();
@@ -275,7 +275,7 @@ case 'editnick':
 		redirect("account.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
@@ -291,7 +291,7 @@ case 'editsec':
 	$secanswer = (isset($_POST['secanswer'])) ? check($_POST['secanswer']) : '';
 	$provpass = (isset($_POST['provpass'])) ? check($_POST['provpass']) : '';
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('equal', array(md5(md5($provpass)), $udata['users_pass']), 'Введенный пароль не совпадает с данными в профиле!')
@@ -305,7 +305,7 @@ case 'editsec':
 		$secanswer = '';
 	}
 
-	if ($validation->run(1)) {
+	if ($validation->run()) {
 
 		DB::run() -> query("UPDATE `users` SET `users_secquest`=?, `users_secanswer`=? WHERE `users_login`=? LIMIT 1;", array($secquest, $secanswer, $log));
 
@@ -313,7 +313,7 @@ case 'editsec':
 		redirect("account.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
@@ -329,7 +329,7 @@ case 'editpass':
 	$newpass2 = (isset($_POST['newpass2'])) ? check($_POST['newpass2']) : '';
 	$oldpass = (isset($_POST['oldpass'])) ? check($_POST['oldpass']) : '';
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('equal', array(md5(md5($oldpass)), $udata['users_pass']), 'Введенный пароль не совпадает с данными в профиле!')
@@ -342,7 +342,7 @@ case 'editpass':
 		$validation -> addError('Запрещен пароль состоящий только из цифр, используйте буквы!');
 	}
 
-	if ($validation->run(1)) {
+	if ($validation->run()) {
 
 		DB::run() -> query("UPDATE `users` SET `users_pass`=? WHERE `users_login`=? LIMIT 1;", array(md5(md5($newpass)), $log));
 
@@ -359,7 +359,7 @@ case 'editpass':
 		redirect("login.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';

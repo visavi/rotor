@@ -251,7 +251,7 @@ case 'add':
 
 		$data = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `news_id`=? LIMIT 1;", array($id));
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
@@ -260,7 +260,7 @@ case 'add':
 			-> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
 			-> addRule('empty', $data['news_closed'], 'Комментирование данной новости запрещено!');
 
-		if ($validation->run(3)) {
+		if ($validation->run()) {
 
 			$msg = antimat($msg);
 
@@ -280,7 +280,7 @@ case 'add':
 			redirect("index.php?act=end&id=$id");
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');

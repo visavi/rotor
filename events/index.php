@@ -177,7 +177,7 @@ case 'addevent':
 
 	if (is_user()) {
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
@@ -217,7 +217,7 @@ case 'addevent':
 			redirect("index.php");
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_login('Вы не авторизованы, для создания события, необходимо');
@@ -234,13 +234,13 @@ case 'editevent':
 	if (is_user()) {
 		$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `event_id`=? LIMIT 1;", array($id));
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('not_empty', $dataevent, 'Выбранного события не существует, возможно оно было удалено!')
 			-> addRule('equal', array($log, $dataevent['event_author']), 'Изменение невозможно, вы не автор данного события!')
 			-> addRule('max', array(($dataevent['event_time'] + 3600), SITETIME), 'Изменение невозможно, прошло более 1 часа!');
 
-		if ($validation->run(1)) {
+		if ($validation->run()) {
 
 			echo '<b><big>Редактирование</big></b><br /><br />';
 
@@ -269,7 +269,7 @@ case 'editevent':
 			echo '<input type="submit" value="Изменить" /></form></div><br />';
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_login('Вы не авторизованы, для редактирования события, необходимо');
@@ -293,7 +293,7 @@ case 'changeevent':
 	if (is_user()) {
 		$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `event_id`=? LIMIT 1;", array($id));
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('not_empty', $dataevent, 'Выбранного события не существует, возможно оно было удалено!')
@@ -302,7 +302,7 @@ case 'changeevent':
 			-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 			-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
-		if ($validation->run(1)) {
+		if ($validation->run()) {
 
 			$msg = antimat($msg);
 
@@ -335,7 +335,7 @@ case 'changeevent':
 			redirect("index.php?act=editevent&id=$id");
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_login('Вы не авторизованы, для редактирования события, необходимо');
@@ -442,7 +442,7 @@ case 'addcomment':
 	if (is_user()) {
 		$data = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `event_id`=? LIMIT 1;", array($id));
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
@@ -451,7 +451,7 @@ case 'addcomment':
 			-> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
 			-> addRule('empty', $data['event_closed'], 'Комментирование данного события запрещено!');
 
-		if ($validation->run(3)) {
+		if ($validation->run()) {
 
 			$msg = antimat($msg);
 
@@ -471,7 +471,7 @@ case 'addcomment':
 			redirect("index.php?act=end&id=$id");
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');

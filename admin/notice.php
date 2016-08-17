@@ -124,7 +124,7 @@ case "save":
 	$text = isset($_POST['text']) ? check($_POST['text']) : '';
 	$protect = ! empty($_POST['protect']) ? 1 : 0;
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('string', $name, 'Слишком длинный или короткий заголовок шаблона!', true, 5, 100)
@@ -157,7 +157,7 @@ case "save":
 		redirect("notice.php?act=edit&id=$id");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	render('includes/back', array('link' => 'notice.php?act=edit&amp;id='.$id, 'title' => 'Вернуться'));
@@ -172,7 +172,7 @@ case 'del':
 
 	$notice = DBM::run()->selectFirst('notice', array('notice_id' => $id));
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('not_empty', $notice, 'Не найден шаблон для удаления!')
@@ -186,7 +186,7 @@ case 'del':
 		redirect("notice.php");
 
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	render('includes/back', array('link' => 'notice.php', 'title' => 'Вернуться'));

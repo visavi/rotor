@@ -100,7 +100,7 @@ if ($config['openreg'] == 1) {
 					$_SESSION['regmeil'] = $meil;
 					$_SESSION['gender'] = $gender;
 
-					$validation = new Validation;
+					$validation = new Validation();
 
 					$validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
 						-> addRule('regex', array($logs, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!', true)
@@ -151,7 +151,7 @@ if ($config['openreg'] == 1) {
 					}
 
 					// Регистрация аккаунта
-					if ($validation->run(3)){
+					if ($validation->run()){
 
 						if ($config['regkeys'] == 1 && empty($config['regmail'])) {
 							$config['regkeys'] = 0;
@@ -230,7 +230,7 @@ if ($config['openreg'] == 1) {
 
 
 					} else {
-						show_error($validation->errors);
+						show_error($validation->getErrors());
 					}
 
 					echo '<img src="/images/img/back.gif" alt="image" /> <a href="registration.php">Вернуться</a><br />';

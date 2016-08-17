@@ -103,7 +103,7 @@ case 'edit':
 	$privacy = (empty($_POST['privacy'])) ? 0 : 1;
 	$subscribe = (! empty($_POST['subscribe'])) ? generate_password(32) : '';
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('regex', array($themes, '|^[a-z0-9_\-]+$|i'), 'Недопустимое название темы!', true)
@@ -143,7 +143,7 @@ case 'edit':
 			show_error('Ошибка! Данный скин не установлен на сайте!');
 		}
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="setting.php">Вернуться</a><br />';

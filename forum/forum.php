@@ -107,7 +107,7 @@ case 'add':
 
 		$forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($fid));
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('not_empty', $forums, 'Раздела для новой темы не существует!')
@@ -119,7 +119,7 @@ case 'add':
 
 		/* Сделать проверку поиска похожей темы */
 
-		if ($validation->run(1)) {
+		if ($validation->run()) {
 
 			$title = antimat($title);
 			$msg = antimat($msg);
@@ -142,7 +142,7 @@ case 'add':
 			redirect("topic.php?tid=$lastid");
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_login('Вы не авторизованы, для создания новой темы, необходимо');

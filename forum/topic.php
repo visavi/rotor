@@ -106,7 +106,7 @@ case 'add':
 
 	$topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics`.`topics_id`=? LIMIT 1;", array($tid));
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('not_empty', $topics, 'Выбранная вами тема не существует, возможно она была удалена!')
@@ -119,7 +119,7 @@ case 'add':
 			$post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_id` DESC LIMIT 1;", array($tid));
 			$validation -> addRule('not_equal', array($msg, $post['posts_text']), 'Ваше сообщение повторяет предыдущий пост!');
 
-		if ($validation->run(1)) {
+		if ($validation->run()) {
 
 			$msg = antimat($msg);
 
@@ -200,7 +200,7 @@ case 'add':
 			notice('Сообщение успешно добавлено!');
 			redirect("topic.php?act=end&tid=$tid");
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');

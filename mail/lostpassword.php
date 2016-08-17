@@ -110,7 +110,7 @@ case 'send':
 	$user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
 	if (! empty($user)) {
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
 			-> addRule('not_empty', $email, 'Не введен адрес почтового ящика для восстановления!')
@@ -118,7 +118,7 @@ case 'send':
 			-> addRule('equal', array($email, $user['users_email']), 'Введенный адрес email не совпадает с адресом в профиле!')
 			-> addRule('min', array($user['users_timepasswd'], SITETIME), 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
 
-		if ($validation->run(1)) {
+		if ($validation->run()) {
 
 			$restkey = generate_password();
 
@@ -135,7 +135,7 @@ case 'send':
 			echo 'Восстанавливать пароль можно не чаще чем раз в 12 часов<br /><br />';
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_error('Ошибка! Пользователь с данным логином не найден!');
@@ -155,14 +155,14 @@ case 'restore':
 	$user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
 	if (!empty($user)) {
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('not_empty', $key, 'Отсутствует секретный код в ссылке для восстановления пароля!')
 			-> addRule('not_empty', $user['users_keypasswd'], 'Данный пользователь не запрашивал восстановление пароля!')
 			-> addRule('equal', array($key, $user['users_keypasswd']), 'Секретный код в ссылке не совпадает с данными в профиле!')
 			-> addRule('max', array($user['users_timepasswd'], SITETIME), 'Секретный ключ для восстановления уже устарел!');
 
-		if ($validation->run(1)) {
+		if ($validation->run()) {
 
 			$newpass = generate_password();
 			$mdnewpas = md5(md5($newpass));
@@ -189,7 +189,7 @@ case 'restore':
 			);
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_error('Ошибка! Пользователь с данным логином не найден!');
@@ -209,14 +209,14 @@ case 'answer':
 	$user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
 	if (!empty($user)) {
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
 			-> addRule('not_empty', $answer, 'Не введен ответ на секретный вопрос для восстановления!')
 			-> addRule('not_empty', $user['users_secquest'], 'У данного пользователя не установлен секретный вопрос!')
 			-> addRule('equal', array(md5(md5($answer)), $user['users_secanswer']), 'Ответ на секретный вопрос не совпадает с данными в профиле!');
 
-		if ($validation->run(1)) {
+		if ($validation->run()) {
 
 			$newpass = generate_password();
 			$mdnewpas = md5(md5($newpass));
@@ -237,7 +237,7 @@ case 'answer':
 			echo 'Пароль вы сможете поменять в своем профиле<br /><br />';
 
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_error('Ошибка! Пользователь с данным логином не найден!');

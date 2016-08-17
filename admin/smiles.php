@@ -88,7 +88,7 @@ case 'load':
 
 		$smile = DBM::run()->selectFirst('smiles', array('smiles_code' => $code));
 
-		$validation = new Validation;
+		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('empty', $smile, 'Смайл с данным кодом уже имеется в списке!')
@@ -136,7 +136,7 @@ case 'load':
 				show_error($handle->error);
 			}
 		} else {
-			show_error($validation->errors);
+			show_error($validation->getErrors());
 		}
 	} else {
 		show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
@@ -185,7 +185,7 @@ case 'change':
 	));
 	$checkcode = DBM::run()->queryFirst("SELECT `smiles_id` FROM `smiles` WHERE `smiles_code`=:code AND `smiles_id`<>:id LIMIT 1;", compact('code', 'id'));
 
-	$validation = new Validation;
+	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('not_empty', $smile, 'Не найден смайл для редактирования!')
@@ -218,7 +218,7 @@ case 'change':
 			show_error('Ошибка! Не удалось переименовать файл смайла!');
 		}
 	} else {
-		show_error($validation->errors);
+		show_error($validation->getErrors());
 	}
 
 	render('includes/back', array('link' => 'smiles.php?act=edit&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться'));
