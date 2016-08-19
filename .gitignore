@@ -18,3 +18,4 @@ includes/connect.php
 includes/vendor
 composer.phar
 composer.lock
+.idea/
