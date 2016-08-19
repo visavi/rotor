@@ -2,7 +2,8 @@
 // markItUp bb-code setting!
 // ----------------------------------------------------------------------------
 mySettings = {
-	previewParserPath:	 '/ajax/bbcode.php', // path to your BBCode parser
+	previewParserPath:  '/ajax/bbcode.php', // path to your BBCode parser
+	previewAutoRefresh: false,
 	markupSet: [
 		{title:'Жирный текст', name:'<i class="fa fa-bold"></i>', className:"bb-bold", key:'B', openWith:'[b]', closeWith:'[/b]'},
 		{title:'Наклонный текст', name:'<i class="fa fa-italic"></i>', className:"bb-italic", key:'I', openWith:'[i]', closeWith:'[/i]'},
