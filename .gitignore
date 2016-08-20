@@ -4,7 +4,8 @@ local/board/
 local/cache/
 local/chat/
 local/temp/
-
+load/files/
+load/screen/
 upload/avatars/
 upload/counters
 upload/events
