@@ -422,10 +422,10 @@ case 'loadfile':
 
 						if (strlen($filename) <= 50) {
 							if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
-								$arrext = explode(',', $config['allowextload']);
+
 								$ext = getExtension($filename);
 
-								if (in_array($ext, $arrext) && $ext != 'php') {
+								if (in_array($ext, explode(',', $config['allowextload']), true)) {
 									if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
 										$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
 										if (empty($downlink)) {

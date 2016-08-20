@@ -177,7 +177,6 @@ case 'addimport':
 				if ($total > 0) {
 					$downs = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
 					if (!empty($downs)) {
-						$arrext = explode(',', $config['allowextload']);
 
 						$count = 0;
 						foreach ($files as $file) {
@@ -185,7 +184,7 @@ case 'addimport':
 							if (strlen($filename) <= 50) {
 								if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
 									$ext = getExtension($filename);
-									if (in_array($ext, $arrext) && $ext != 'php') {
+									if (in_array($ext, explode(',', $config['allowextload']), true)) {
 										if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $filename)) {
 											if (filesize(BASEDIR.'/load/loader/'.$file) > 0 && filesize(BASEDIR.'/load/loader/'.$file) <= $config['fileupload']) {
 
@@ -969,30 +968,27 @@ case 'copyfile':
 
 				if (strlen($filename) <= 50) {
 					if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
-						$arrext = explode(',', $config['allowextload']);
+
 						$ext = getExtension($filename);
 
-						if (in_array($ext, $arrext) && $ext != 'php') {
-							if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $filename)) {
-								$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
-								if (empty($downlink)) {
-									if (@copy($loadfile, BASEDIR.'/load/files/'.$folder.$filename)) {
-										@chmod(BASEDIR.'/load/files/'.$folder.$filename, 0666);
+						if (in_array($ext, explode(',', $config['allowextload']), true)) {
 
-										copyright_archive(BASEDIR.'/load/files/'.$folder.$filename);
+							$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
+							if (empty($downlink)) {
+								if (@copy($loadfile, BASEDIR.'/load/files/'.$folder.$filename)) {
+									@chmod(BASEDIR.'/load/files/'.$folder.$filename, 0666);
 
-										DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
+									copyright_archive(BASEDIR.'/load/files/'.$folder.$filename);
 
-										notice('Файл успешно импортирован!');
-										redirect("load.php?act=editdown&id=$id");
-									} else {
-										show_error('Ошибка! Не удалось импортировать файл!');
-									}
+									DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
+
+									notice('Файл успешно импортирован!');
+									redirect("load.php?act=editdown&id=$id");
 								} else {
-									show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
+									show_error('Ошибка! Не удалось импортировать файл!');
 								}
 							} else {
-								show_error('Ошибка! В названии файла присутствуют недопустимые расширения!');
+								show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
 							}
 						} else {
 							show_error('Ошибка! Недопустимое расширение файла!');
@@ -1033,32 +1029,28 @@ case 'loadfile':
 
 				if (strlen($filename) <= 50) {
 					if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
-						$arrext = explode(',', $config['allowextload']);
+
 						$ext = getExtension($filename);
 
-						if (in_array($ext, $arrext) && $ext != 'php') {
-							if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $filename)) {
-								if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
-									$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
-									if (empty($downlink)) {
+						if (in_array($ext, explode(',', $config['allowextload']), true)) {
+							if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
+								$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
+								if (empty($downlink)) {
 
-										move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$folder.$filename);
-										@chmod(BASEDIR.'/load/files/'.$folder.$filename, 0666);
+									move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$folder.$filename);
+									@chmod(BASEDIR.'/load/files/'.$folder.$filename, 0666);
 
-										copyright_archive(BASEDIR.'/load/files/'.$folder.$filename);
+									copyright_archive(BASEDIR.'/load/files/'.$folder.$filename);
 
-										DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
+									DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
 
-										notice('Файл успешно загружен!');
-										redirect("load.php?act=editdown&id=$id");
-									} else {
-										show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
-									}
+									notice('Файл успешно загружен!');
+									redirect("load.php?act=editdown&id=$id");
 								} else {
-									show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize($config['fileupload']).'!');
+									show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
 								}
 							} else {
-								show_error('Ошибка! В названии файла присутствуют недопустимые расширения!');
+								show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize($config['fileupload']).'!');
 							}
 						} else {
 							show_error('Ошибка! Недопустимое расширение файла!');

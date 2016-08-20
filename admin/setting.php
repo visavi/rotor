@@ -604,7 +604,7 @@ if (is_admin(array(101))) {
 			echo 'Тем в форуме на стр.:<br /><input name="forumtem" maxlength="2" value="'.$setting['forumtem'].'" /><br />';
 			echo 'Символов в сообщении форума:<br /><input name="forumtextlength" maxlength="5" value="'.$setting['forumtextlength'].'" /><br />';
 
-			echo 'Максимальный вес файла (Kb): <br /><input name="forumloadsize" maxlength="6" value="'.round($setting['forumloadsize'] / 1024).'" /><br />';
+			echo 'Максимальный вес файла (Mb): <br /><input name="forumloadsize" maxlength="6" value="'.round($setting['forumloadsize'] / 1024 / 1024).'" /><br />';
 			echo 'Допустимые расширения файлов:<br /><textarea cols="25" rows="5" name="forumextload">'.$setting['forumextload'].'</textarea><br />';
 			echo 'Актива для загрузки файлов: <br /><input name="forumloadpoints" maxlength="4" value="'.$setting['forumloadpoints'].'" /><br /><hr />';
 
@@ -636,7 +636,7 @@ if (is_admin(array(101))) {
 					$dbr -> execute(intval($_POST['forumpost']), 'forumpost');
 					$dbr -> execute(intval($_POST['forumtem']), 'forumtem');
 					$dbr -> execute(intval($_POST['forumtextlength']), 'forumtextlength');
-					$dbr -> execute(intval($_POST['forumloadsize'] * 1024), 'forumloadsize');
+					$dbr -> execute(intval($_POST['forumloadsize'] * 1024 * 1024), 'forumloadsize');
 					$dbr -> execute(check($_POST['forumextload']), 'forumextload');
 					$dbr -> execute(intval($_POST['forumloadpoints']), 'forumloadpoints');
 					$dbr -> execute(intval($_POST['boardspost']), 'boardspost');
@@ -739,9 +739,9 @@ if (is_admin(array(101))) {
 			echo 'Хранение скачиваний (часов):<br /><input name="expiresloads" maxlength="3" value="'.$setting['expiresloads'].'" /><br />';
 			echo 'Хранение голосований (часов):<br /><input name="expiresrated" maxlength="3" value="'.$setting['expiresrated'].'" /><br />';
 			echo 'Просмотр архивов на стр.:<br /><input name="ziplist" maxlength="2" value="'.$setting['ziplist'].'" /><br />';
-			echo 'Максимальный вес файла (Kb):<br /><input name="fileupload" maxlength="6" value="'.round($setting['fileupload'] / 1024).'" /><br />';
+			echo 'Максимальный вес файла (Mb):<br /><input name="fileupload" maxlength="6" value="'.round($setting['fileupload'] / 1024 / 1024).'" /><br />';
 
-			echo 'Максимальный вес скриншота (Kb) (Ограничение: '.ini_get('upload_max_filesize').'):<br /><input name="screenupload" maxlength="6" value="'.round($setting['screenupload'] / 1024).'" /><br />';
+			echo 'Максимальный вес скриншота (Mb) (Ограничение: '.ini_get('upload_max_filesize').'):<br /><input name="screenupload" maxlength="6" value="'.round($setting['screenupload'] / 1024 / 1024).'" /><br />';
 			echo 'Максимальный размер скриншота (px):<br /><input name="screenupsize" maxlength="6" value="'.$setting['screenupsize'].'" /><br />';
 			echo 'Допустимые расширения файлов:<br /><textarea cols="25" rows="5" name="allowextload">'.$setting['allowextload'].'</textarea><br />';
 
@@ -769,8 +769,8 @@ if (is_admin(array(101))) {
 					$dbr -> execute(intval($_POST['expiresloads']), 'expiresloads');
 					$dbr -> execute(intval($_POST['expiresrated']), 'expiresrated');
 					$dbr -> execute(intval($_POST['ziplist']), 'ziplist');
-					$dbr -> execute(intval($_POST['fileupload'] * 1024), 'fileupload');
-					$dbr -> execute(intval($_POST['screenupload'] * 1024), 'screenupload');
+					$dbr -> execute(intval($_POST['fileupload'] * 1024 * 1024), 'fileupload');
+					$dbr -> execute(intval($_POST['screenupload'] * 1024 * 1024), 'screenupload');
 					$dbr -> execute(intval($_POST['screenupsize']), 'screenupsize');
 					$dbr -> execute(check($_POST['allowextload']), 'allowextload');
 					$dbr -> execute($downupload, 'downupload');
@@ -1347,7 +1347,7 @@ if (is_admin(array(101))) {
 			echo '<div class="form">';
 			echo '<form method="post" action="setting.php?act=editimage&amp;uid='.$_SESSION['token'].'">';
 
-			echo 'Максимальный вес фото (kb) (Ограничение: '.ini_get('upload_max_filesize').'):<br /><input name="filesize" maxlength="6" value="'.round($setting['filesize'] / 1024).'" /><br />';
+			echo 'Максимальный вес фото (Mb) (Ограничение: '.ini_get('upload_max_filesize').'):<br /><input name="filesize" maxlength="6" value="'.round($setting['filesize'] / 1024 / 1024).'" /><br />';
 			echo 'Максимальный размер фото (px):<br /><input name="fileupfoto" maxlength="6" value="'.$setting['fileupfoto'].'" /><br />';
 			echo 'Уменьшение фото при загрузке (px):<br /><input name="screensize" maxlength="4" value="'.$setting['screensize'].'" /><br />';
 
@@ -1380,7 +1380,7 @@ if (is_admin(array(101))) {
 
 					$dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
 
-					$dbr -> execute(intval($_POST['filesize'] * 1024), 'filesize');
+					$dbr -> execute(intval($_POST['filesize'] * 1024 * 1024), 'filesize');
 					$dbr -> execute(intval($_POST['fileupfoto']), 'fileupfoto');
 					$dbr -> execute(intval($_POST['screensize']), 'screensize');
 					$dbr -> execute(intval($_POST['previewsize']), 'previewsize');
