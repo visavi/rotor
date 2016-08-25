@@ -1,0 +1,28 @@
+<?php show_title('Функция redirect'); ?>
+
+Перенаправляет пользователя на другую страницу, при обработке функции автоматически вызывается функция exit (Доступно с версии 2.6.5)<br /><br />
+
+<pre class="d">
+<b>redirect</b>(
+	string url,
+	boolean permanent = false
+);
+</pre><br />
+
+<b>Параметры функции</b><br />
+
+<b>url</b> - Ссылка на страницу, может быть указан как абсолютный так и относительный путь<br />
+<b>permanent</b> - Устанавливает постоянное перенаправление, если передать true, то перед перенаправлением будет вызван заголовок header('HTTP/1.1 301 Moved Permanently');<br /><br />
+
+
+<b>Примеры использования</b><br />
+
+<?php
+echo bb_code(check('[code]<?php
+redirect("index.php"); /* Перенаправляет на страницу index.php */
+redirect("index.php", true); /* Устанавливает постоянное перенаправление на страницу index.php */
+?>[/code]'));
+?>
+
+<br />
+<img src="/images/img/back.gif" alt="image" /> <a href="index.php?page=docs">Вернуться</a><br />
