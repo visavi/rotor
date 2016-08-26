@@ -116,7 +116,7 @@ if (is_admin()) {
 						if (!empty($new['downs_screen'])) {
 							$folder = $new['folder'] ? $new['folder'].'/' : '';
 							echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/load/screen/'.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/load/screen/'.$new['downs_screen']).') (<a href="newload.php?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-							echo resize_image('load/screen/',$folder, $new['downs_screen'], $config['previewsize']).'<br />';
+							echo resize_image('load/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
 						} else {
 							echo '<img src="/images/img/gallery.gif" alt="image" /> <b>Не загружен</b><br />';
 						}
