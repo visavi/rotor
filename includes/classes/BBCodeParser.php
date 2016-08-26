@@ -1,10 +1,21 @@
 <?php
-
+/**
+ * Класс обработки BB-кодов
+ * @license Code and contributions have MIT License
+ * @link    http://visavi.net
+ * @author  Alexander Grigorev <visavi.net@mail.ru>
+ */
 class BBCodeParser {
 
-	public $setting;
+	/**
+	 * @var array
+	 */
+	protected $setting;
 
-	public $parsers = array(
+	/**
+	 * @var array
+	 */
+	protected $parsers = array(
 		'code' => array(
 			'pattern' => '/\[code\](.*?)\[\/code\]/s',
 			'callback' => 'highlightCode'
@@ -102,9 +113,9 @@ class BBCodeParser {
 	}
 
 	/**
-	 * Метод парсинга BBCode
+	 * Обрабатывает текст
 	 * @param  string $source текст содержаший BBCode
-	 * @return string распарсенный текст
+	 * @return string         распарсенный текст
 	 */
 	public function parse($source)
 	{
@@ -112,9 +123,9 @@ class BBCodeParser {
 
 		foreach ($this->parsers as $parser) {
 
-			$iterate = isset($parser['iterate']) ? $parser['iterate'] : 0;
+			$iterate = isset($parser['iterate']) ? $parser['iterate'] : 1;
 
-			for ($i = 0; $i <= $iterate; $i++) {
+			for ($i = 0; $i < $iterate; $i++) {
 				if (isset($parser['callback'])) {
 					$source = preg_replace_callback($parser['pattern'], array($this, $parser['callback']), $source);
 				} else {
@@ -125,6 +136,11 @@ class BBCodeParser {
 		return $source;
 	}
 
+	/**
+	 * Очищает текст от BB-кодов
+	 * @param  string $source неочищенный текст
+	 * @return string         очищенный текст
+	 */
 	public function clear($source)
 	{
 		return $source = preg_replace('/\[(.*?)\]/', '', $source);
@@ -132,12 +148,12 @@ class BBCodeParser {
 
 	/**
 	 * Обработка ссылок
-	 * @param  array $match ссылка
-	 * @return string обработанная ссылка
+	 * @param  array  $match ссылка
+	 * @return string        обработанная ссылка
 	 */
 	public function urlReplace($match)
 	{
-		$name = isset($match[3]) ? $match[1] : $match[2];
+		$name   = isset($match[3]) ? $match[1] : $match[2];
 		$target = (strpos($match[1], $this->setting['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
 
 		return '<a href="'.$match[1].'"'.$target.'>'.rawurldecode($name).'</a>';
@@ -145,7 +161,7 @@ class BBCodeParser {
 
 	/**
 	 * Обработка списков
-	 * @param  array $match список
+	 * @param  array  $match список
 	 * @return string обработанный список
 	 */
 	public function listReplace($match)
@@ -165,8 +181,8 @@ class BBCodeParser {
 
 	/**
 	 * Подсветка кода
-	 * @param callable $match массив элементов
-	 * @return string текст с подсветкой
+	 * @param  callable $match массив элементов
+	 * @return string          текст с подсветкой
 	 */
 	public function highlightCode($match)
 	{
@@ -178,8 +194,8 @@ class BBCodeParser {
 
 	/**
 	 * Скрытие текста под спойлер
-	 * @param callable $match массив элементов
-	 * @return string код спойлера
+	 * @param  callable $match массив элементов
+	 * @return string          код спойлера
 	 */
 	public function spoilerText($match)
 	{
@@ -194,8 +210,8 @@ class BBCodeParser {
 
 	/**
 	 * Скрытие текста от неавторизованных пользователей
-	 * @param callable $match массив элементов
-	 * @return string  скрытый код
+	 * @param  callable $match массив элементов
+	 * @return string          скрытый код
 	 */
 	public function hiddenText($match)
 	{
@@ -208,8 +224,8 @@ class BBCodeParser {
 
 	/**
 	 * Обработка смайлов
-	 * @param  string  $text  Необработанный текст
-	 * @return string         Обработанный текст
+	 * @param  string $text Необработанный текст
+	 * @return string       Обработанный текст
 	 */
 	public function parseSmiles($source)
 	{
@@ -236,11 +252,11 @@ class BBCodeParser {
 	}
 
 	/**
-	 * Sets the parser pattern and replace.
-	 * This can be used for new parsers or overwriting existing ones.
-	 * @param string $name Parser name
-	 * @param string $pattern Pattern
-	 * @param string $replace Replace pattern
+	 * Добавляет или переопределяет парсер.
+	 * @param  string $name    Parser name
+	 * @param  string $pattern Pattern
+	 * @param  string $replace Replace pattern
+	 * @return void
 	 */
 	public function setParser($name, $pattern, $replace)
 	{
@@ -251,8 +267,8 @@ class BBCodeParser {
 	}
 
 	/**
-	 * Limits the parsers to only those you specify
-	 * @param  mixed $only parsers
+	 * Устанавливает список доступных парсеров
+	 * @param  mixed  $only parsers
 	 * @return object BBCodeParser object
 	 */
 	public function only($only = null)
@@ -263,8 +279,8 @@ class BBCodeParser {
 	}
 
 	/**
-	 * Removes the parsers you want to exclude
-	 * @param  mixed $except parsers
+	 * Исключает парсеры из набора
+	 * @param  mixed  $except parsers
 	 * @return object BBCodeParser object
 	 */
 	public function except($except = null)
@@ -275,16 +291,7 @@ class BBCodeParser {
 	}
 
 	/**
-	 * List of all available parsers
-	 * @return array array of available parsers
-	 */
-	public function getAvailableParsers()
-	{
-		return $this->availableParsers;
-	}
-
-	/**
-	 * List of chosen parsers
+	 * Возвращает список всех парсеров
 	 * @return array array of parsers
 	 */
 	public function getParsers()
@@ -297,9 +304,9 @@ class BBCodeParser {
 	 * @param  array $only chosen parsers
 	 * @return array parsers
 	 */
-	private function arrayOnly($only)
+	private function arrayOnly(array $only)
 	{
-		return array_intersect_key($this->parsers, array_flip((array) $only));
+		return array_intersect_key($this->parsers, array_flip($only));
 	}
 
 	/**
@@ -307,9 +314,8 @@ class BBCodeParser {
 	 * @param  array $except parsers to exclude
 	 * @return array parsers
 	 */
-	private function arrayExcept($excepts)
+	private function arrayExcept(array $excepts)
 	{
-		return array_diff_key($this->parsers, array_flip((array) $excepts));
+		return array_diff_key($this->parsers, array_flip($excepts));
 	}
-
 }
