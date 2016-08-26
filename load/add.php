@@ -413,10 +413,13 @@ case 'loadfile':
 
 	$down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
+	$folder = $down['folder'] ? $down['folder'].'/' : '';
+
 	if (!empty($down)) {
 		if ($down['downs_user'] == $log) {
 			if (empty($down['downs_active'])) {
 				if (empty($down['downs_link'])) {
+					if (is_writeable(BASEDIR.'/load/files/'.$folder)) {
 					if (is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
 						$filename = check(strtolower($_FILES['loadfile']['name']));
 
@@ -429,7 +432,6 @@ case 'loadfile':
 									if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
 										$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
 										if (empty($downlink)) {
-											$folder = $down['folder'] ? $down['folder'].'/' : '';
 
 											move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$folder.$filename);
 											@chmod(BASEDIR.'/load/files/'.$folder.$filename, 0666);
@@ -458,6 +460,9 @@ case 'loadfile':
 						}
 					} else {
 						show_error('Ошибка! Не удалось загрузить файл!');
+					}
+					} else {
+						show_error('Ошибка! Директория для файлов недоступна для записи!');
 					}
 				} else {
 					show_error('Ошибка! Файл уже загружен!');

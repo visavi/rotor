@@ -99,7 +99,6 @@ if (is_admin()) {
 					$downs = $querydown -> fetchAll();
 
 					if (count($downs) > 0) {
-						echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> ';
 
 						if (is_admin(array(101)) && $log == $config['nickname']) {
 							echo '<a href="newload.php?act=allow&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете публикацию файла?\')">Опубликовать</a> / ';
@@ -107,15 +106,16 @@ if (is_admin()) {
 
 						echo '<a href="newload.php?act=deldown&amp;del='.$new['downs_id'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете удаление файла?\')">Удалить файл</a><hr />';
 
+						$folder = $new['folder'] ? $new['folder'].'/' : '';
+
 						if (!empty($new['downs_link'])) {
-							echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/load/files/'.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(BASEDIR.'/load/files/'.$new['downs_link']).')  (<a href="newload.php?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+							echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/load/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(BASEDIR.'/load/files/'.$folder.$new['downs_link']).')  (<a href="newload.php?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
 						} else {
 							echo '<img src="/images/img/download.gif" alt="image" /> <b>Не загружен</b><br />';
 						}
 
 						if (!empty($new['downs_screen'])) {
-							$folder = $new['folder'] ? $new['folder'].'/' : '';
-							echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/load/screen/'.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/load/screen/'.$new['downs_screen']).') (<a href="newload.php?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+							echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/load/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/load/screen/'.$folder.$new['downs_screen']).') (<a href="newload.php?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
 							echo resize_image('load/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
 						} else {
 							echo '<img src="/images/img/gallery.gif" alt="image" /> <b>Не загружен</b><br />';
@@ -215,7 +215,10 @@ if (is_admin()) {
 								if (strlen($link) <= 50) {
 									if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $link)) {
 
-										$new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=?;", array($id));
+										$new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+
+										$folder = $new['folder'] ? $new['folder'].'/' : '';
+
 										if (!empty($new)) {
 											if (empty($new['downs_active'])) {
 												$downs = DB::run() -> querySingle("SELECT `cats_id` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
@@ -226,7 +229,7 @@ if (is_admin()) {
 														$newtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
 														if (empty($newtitle)) {
 
-															if (!empty($link) && $link != $new['downs_link'] && file_exists(BASEDIR.'/load/files/'.$new['downs_link'])) {
+															if (!empty($link) && $link != $new['downs_link'] && file_exists(BASEDIR.'/load/files/'.$folder.$new['downs_link'])) {
 
 																$oldext = getExtension($new['downs_link']);
 																$newext = getExtension($link);
@@ -234,13 +237,13 @@ if (is_admin()) {
 																if ($oldext == $newext) {
 
 																	$screen = $new['downs_screen'];
-																	rename(BASEDIR.'/load/files/'.$new['downs_link'], BASEDIR.'/load/files/'.$link);
+																	rename(BASEDIR.'/load/files/'.$folder.$new['downs_link'], BASEDIR.'/load/files/'.$folder.$link);
 
-																	if (!empty($new['downs_screen']) && file_exists(BASEDIR.'/load/screen/'.$new['downs_screen'])) {
+																	if (!empty($new['downs_screen']) && file_exists(BASEDIR.'/load/screen/'.$folder.$new['downs_screen'])) {
 
 																		$screen = $link.'.'.getExtension($new['downs_screen']);
-																		rename(BASEDIR.'/load/screen/'.$new['downs_screen'], BASEDIR.'/load/screen/'.$screen);
-																		unlink_image('load/screen/', $new['downs_screen']);
+																		rename(BASEDIR.'/load/screen/'.$folder.$new['downs_screen'], BASEDIR.'/load/screen/'.$screen);
+																		unlink_image('load/screen/'.$folder, $new['downs_screen']);
 																	}
 																	DB::run() -> query("UPDATE `downs` SET `downs_link`=?, `downs_screen`=? WHERE `downs_id`=?;", array($link, $screen, $id));
 																}
@@ -356,16 +359,18 @@ if (is_admin()) {
 		############################################################################################
 		case 'delfile':
 
-			$link = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=?;", array($id));
+			$link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+
+			$folder = $link['folder'] ? $link['folder'].'/' : '';
 
 			if (!empty($link)) {
 				if (empty($link['downs_active'])) {
 
-					if (!empty($link['downs_link']) && file_exists(BASEDIR.'/load/files/'.$link['downs_link'])) {
-						unlink(BASEDIR.'/load/files/'.$link['downs_link']);
+					if (!empty($link['downs_link']) && file_exists(BASEDIR.'/load/files/'.$folder.$link['downs_link'])) {
+						unlink(BASEDIR.'/load/files/'.$folder.$link['downs_link']);
 					}
 
-					unlink_image('load/screen/', $link['downs_screen']);
+					unlink_image('load/screen/'.$folder, $link['downs_screen']);
 
 					DB::run() -> query("UPDATE `downs` SET `downs_link`=?, `downs_screen`=? WHERE `downs_id`=?;", array('', '', $id));
 
@@ -387,11 +392,14 @@ if (is_admin()) {
 		############################################################################################
 		case 'delscreen':
 
-			$screen = DB::run() -> queryFetch("SELECT `downs_screen` FROM `downs` WHERE `downs_id`=?;", array($id));
+			$screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+
+			$folder = $screen['folder'] ? $screen['folder'].'/' : '';
+
 			if (!empty($screen)) {
 				if (empty($screen['downs_active'])) {
 
-					unlink_image('load/screen/', $screen['downs_screen']);
+					unlink_image('load/screen/'.$folder, $screen['downs_screen']);
 
 					DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array('', $id));
 
@@ -426,18 +434,20 @@ if (is_admin()) {
 				if (!empty($del)) {
 					$del = implode(',', $del);
 
-					$querydel = DB::run() -> query("SELECT `downs_link`, `downs_screen` FROM `downs` WHERE `downs_id` IN (".$del.");");
+
+					$querydel = DB::run() -> query("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id` IN (".$del.");");
 					$arr_files = $querydel -> fetchAll();
 
 					DB::run() -> query("DELETE FROM `downs` WHERE `downs_id` IN (".$del.");");
 
 					foreach ($arr_files as $delfile) {
+						$folder = $delfile['folder'] ? $delfile['folder'].'/' : '';
 
-						if (!empty($delfile['downs_link']) && file_exists(BASEDIR.'/load/files/'.$delfile['downs_link'])) {
-							unlink(BASEDIR.'/load/files/'.$delfile['downs_link']);
+						if (!empty($delfile['downs_link']) && file_exists(BASEDIR.'/load/files/'.$folder.$delfile['downs_link'])) {
+							unlink(BASEDIR.'/load/files/'.$folder.$delfile['downs_link']);
 						}
 
-						unlink_image('load/screen/', $delfile['downs_screen']);
+						unlink_image('load/screen/'.$folder, $delfile['downs_screen']);
 					}
 
 					notice('Выбранные файлы успешно удалены!');
