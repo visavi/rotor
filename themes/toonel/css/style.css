@@ -116,7 +116,7 @@ table {
 	width: 120px;
 	height: 6px;
 	background-image: url(../img/fottopright.gif);
-	background-position: right 0%;
+	background-position: right 0;
 	background-repeat: no-repeat;
 }
 
@@ -131,7 +131,7 @@ table {
 	width: 120px;
 	height: 27px;
 	background-image: url(../img/footer_right.gif);
-	background-position: right 0%;
+	background-position: right 0;
 	background-repeat: no-repeat;
 }
 
@@ -155,7 +155,7 @@ table {
 	width: 7px;
 	height: 27px;
 	background-image: url(../img/cortopright.gif);
-	background-position: right 0%;
+	background-position: right 0;
 	background-repeat: no-repeat;
 }
 
@@ -185,7 +185,7 @@ table {
 	width: 7px;
 	height: 6px;
 	background-image: url(../img/corbotleft.gif);
-	background-position: right 0%;
+	background-position: right 0;
 	background-repeat: no-repeat;
 }
 
@@ -268,7 +268,7 @@ input[type="submit"] {
 .login {
 	color: #666;
 	padding: 10px;
-	margin: 0px 0 10px 0;
+	margin: 0 0 10px 0;
 	background-color: #f3f3f3;
 	border: 1px dotted #ccc;
 }
@@ -307,4 +307,10 @@ input[type="submit"] {
 	border: 1px solid #c3cfe1;
 	padding: 3px;
 	margin: 1px 0 1px 0;
+}
+
+.message {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

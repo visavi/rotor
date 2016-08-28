@@ -59,7 +59,7 @@ table {
 
 .img {
 	float: left;
-	padding: 0px;
+	padding: 0;
 	margin-right: 5px;
 }
 
@@ -123,7 +123,7 @@ textarea {
 .login {
 	color: #666;
 	padding: 10px;
-	margin: 0px 0 10px 0;
+	margin: 0 0 10px 0;
 	background-color: #0d0d0f;
 	border: 1px dotted #ccc;
 }
@@ -165,4 +165,10 @@ hr {
 	background: #1f1f1f;
 	border: 1px solid #c3cfe1;
 	padding: 3px;
+}
+
+.message {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

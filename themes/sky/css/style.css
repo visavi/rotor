@@ -1242,7 +1242,7 @@ textarea {
 	z-index:0;
 	overflow:hidden;
 	width: 982px;
-	margin: 5px auto 0px auto;
+	margin: 5px auto 0 auto;
 }
 
 .art-Footer .art-Footer-inner
@@ -1401,4 +1401,10 @@ textarea {
 	float: left;
 	overflow: hidden;
 	width: 220px;
+}
+
+.message {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

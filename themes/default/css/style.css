@@ -8,14 +8,11 @@ body, td, tr {
 body {
 	padding: 1px;
 	color: #858585;
-	background-color: #fff;
-	background-image: url(../img/bg.png);
+	background: #fff url(../img/bg.png);
 	max-width: 768px;
 	text-align: left;
-	margin: auto;
 	border: 1px solid #ccc;
-	margin-top: 5px;
-	margin-bottom: 5px;
+	margin: 5px auto;
 }
 
 h1 {
@@ -38,8 +35,8 @@ h1 small {
 }
 
 pre {
+	tab-size: 16;
 	-moz-tab-size: 4;
-	-o-tab-size: 4;
 }
 
 a:active, a:visited, a:link {
@@ -60,9 +57,7 @@ a:hover {
 .site a {
 	padding : 1px;
 	line-height: 20px;
-	border-bottom-width : 1px;
-	border-bottom-style : solid;
-	border-bottom-color : #e6e5e5;
+	border-bottom: 1px solid #e6e5e5;
 }
 
 .menu {
@@ -92,8 +87,8 @@ fieldset {
 	padding-bottom: 10px;
 }
 form {
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 
 textarea {
@@ -104,7 +99,7 @@ textarea {
 
 table {
 	margin: 1px 0;
-	padding: 1px
+	padding: 1px;
 	font-size: 14px;
 }
 
@@ -123,16 +118,14 @@ table {
 
 .a {
 	color: #666;
-	background-image: url(../img/aa.gif);
-	background-color: #ddd;
+	background: #ddd url(../img/aa.gif);
 	border: 1px solid #ccc;
 }
 .b {
 	font-size: 14px;
 	color: #888888;
-	background-image: url(../img/bb.gif);
 	border: 1px solid #ccc;
-	background-color: #eee;
+	background: #eee url(../img/bb.gif);
 	overflow:hidden;
 	margin: 6px 0 6px 0;
 	padding: 2px;
@@ -145,22 +138,19 @@ table {
 
 .c {
 	color: #aaa;
-	background-image: url(../img/aa.gif);
-	background-color: #ddd;
+	background: #ddd url(../img/aa.gif);
 	border: 1px solid #ccc;
 }
 
 .cs {
 	color: #666;
 	text-align : center;
-	background-image: url(../img/ff.gif);
-	background-color: #eee;
+	background: #eee url(../img/ff.gif);
 }
 
 .lol {
 	color: #fff;
-	background-image: url(../img/lol.gif);
-	background-color: #eee;
+	background: #eee url(../img/lol.gif);
 	border-top: 1px solid #ccc;
 	text-align:center;
 	padding: 6px 0 6px 0;
@@ -169,15 +159,14 @@ table {
 .form {
 	color: #666;
 	padding : 3px;
-	background-image: url(../img/bp.gif);
-	background-color: #ddd;
+	background: #ddd url(../img/bp.gif);
 	border: 1px solid #ccc;
 }
 
 .login {
 	color: #666;
 	padding : 10px;
-	margin : 0px 0 10px 0;
+	margin : 0 0 10px 0;
 	background-color: #ebf9eb;
 	border: 1px solid #ccc;
 }
@@ -223,4 +212,10 @@ img {
 	background : #e4eaf2;
 	border: 1px solid #c3cfe1;
 	padding: 3px;
+}
+
+.message {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

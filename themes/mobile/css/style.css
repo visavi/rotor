@@ -16,8 +16,8 @@ body {
 }
 
 pre {
+	tab-size: 16;
 	-moz-tab-size: 4;
-	-o-tab-size: 4;
 }
 
 legend {
@@ -152,7 +152,7 @@ img {
 .login {
 	color : #666;
 	padding : 10px;
-	margin : 0px 0 10px 0;
+	margin : 0 0 10px 0;
 	background-color : #f3f3f3;
 	border : 1px dotted #ccc;
 }
@@ -189,4 +189,10 @@ img {
 	background : #e4eaf2;
 	border: 1px solid #c3cfe1;
 	padding: 3px;
+}
+
+.message {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

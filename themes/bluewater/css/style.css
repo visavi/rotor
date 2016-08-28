@@ -453,3 +453,9 @@ img {
 	border: 1px solid #c3cfe1;
 	padding: 3px;
 }
+
+.message {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
