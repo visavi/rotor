@@ -223,6 +223,21 @@ case 'view':
 			}
 
 			echo 'Добавлено: '.profile($downs['downs_user']).' ('.date_fixed($downs['downs_time']).')<hr />';
+
+			if ($ext == 'mp3') {?>
+
+				<script src="/assets/audiojs/audio.min.js"></script>
+
+				<script>
+					audiojs.events.ready(function() {
+						audiojs.createAll();
+					});
+				</script>
+
+				<audio src="/load/files/<?= $folder.$downs['downs_link']?>" preload="auto"></audio><br />
+				<?php
+			}
+
 			// -----------------------------------------------------------//
 			if (!empty($downs['downs_link']) && file_exists(BASEDIR.'/load/files/'.$folder.$downs['downs_link'])) {
 				if (is_user()) {
