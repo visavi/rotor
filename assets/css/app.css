@@ -1,7 +1,7 @@
 .logotype {
   font-size: 28px;
   color: #666;
-  text-indent: 0px;
+  text-indent: 0;
   display: inline-block;
   font-weight: bold;
   line-height:normal;
@@ -82,4 +82,9 @@ blockquote {
   border-radius: 3px;
   border-left-color: #d9534f;
   background-color: #f8f8f8;
+}
+
+/* Fix audiojs */
+.audiojs .play-pause {
+  width: auto;
 }

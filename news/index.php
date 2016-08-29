@@ -125,12 +125,15 @@ case 'read':
 				echo '<div class="act"><b><a href="index.php?act=comments&amp;id='.$data['news_id'].'">Все комментарии</a></b> ('.$data['news_comments'].') ';
 				echo '<a href="index.php?act=end&amp;id='.$data['news_id'].'">&raquo;</a></div><br />';
 			}
-		} else {
-			show_error('Комментариев еще нет!');
 		}
 
-		if (is_user()) {
-			if (empty($data['news_closed'])) {
+		if (empty($data['news_closed'])) {
+
+			if (empty($data['news_comments'])){
+				show_error('Комментариев еще нет!');
+			}
+
+			if (is_user()) {
 				echo '<div class="form"><form action="index.php?act=add&amp;id='.$id.'&amp;read=1&amp;uid='.$_SESSION['token'].'" method="post">';
 				echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
 				echo '<input type="submit" value="Написать" /></form></div>';
@@ -140,10 +143,10 @@ case 'read':
 				echo '<a href="/pages/smiles.php">Смайлы</a> / ';
 				echo '<a href="/pages/tags.php">Теги</a><br /><br />';
 			} else {
-				show_error('Комментирование данной новости закрыто!');
+				show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
 			}
 		} else {
-			show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+			show_error('Комментирование данной новости закрыто!');
 		}
 	} else {
 		show_error('Ошибка! Выбранная вами новость не существует, возможно она была удалена!');
@@ -211,13 +214,15 @@ case 'comments':
 			}
 
 			page_strnavigation('index.php?act=comments&amp;id='.$id.'&amp;', $config['postnews'], $start, $total);
-
-		} else {
-			show_error('Комментариев еще нет!');
 		}
 
-		if (is_user()) {
-			if (empty($datanews['news_closed'])) {
+		if (empty($datanews['news_closed'])) {
+
+			if ($total) {
+				show_error('Комментариев еще нет!');
+			}
+
+			if (is_user()) {
 				echo '<div class="form"><form action="index.php?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 				echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
 				echo '<input type="submit" value="Написать" /></form></div>';
@@ -227,10 +232,10 @@ case 'comments':
 				echo '<a href="/pages/smiles.php">Смайлы</a> / ';
 				echo '<a href="/pages/tags.php">Теги</a><br /><br />';
 			} else {
-				show_error('Комментирование данной новости закрыто!');
+				show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
 			}
 		} else {
-			show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+			show_error('Комментирование данной новости закрыто!');
 		}
 	} else {
 		show_error('Ошибка! Выбранная новость не существует, возможно она была удалена!');

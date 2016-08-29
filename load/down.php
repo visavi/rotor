@@ -224,22 +224,27 @@ case 'view':
 
 			echo 'Добавлено: '.profile($downs['downs_user']).' ('.date_fixed($downs['downs_time']).')<hr />';
 
-			if ($ext == 'mp3') {?>
-
-				<script src="/assets/audiojs/audio.min.js"></script>
-
-				<script>
-					audiojs.events.ready(function() {
-						audiojs.createAll();
-					});
-				</script>
-
-				<audio src="/load/files/<?= $folder.$downs['downs_link']?>" preload="auto"></audio><br />
-				<?php
-			}
-
 			// -----------------------------------------------------------//
 			if (!empty($downs['downs_link']) && file_exists(BASEDIR.'/load/files/'.$folder.$downs['downs_link'])) {
+
+				if ($ext == 'mp3') {?>
+
+					<script src="/assets/audiojs/audio.min.js"></script>
+
+					<script>
+						audiojs.events.ready(function() {
+							audiojs.createAll();
+						});
+					</script>
+
+					<audio src="/load/files/<?= $folder.$downs['downs_link']?>" preload="auto"></audio><br />
+					<?php
+				}
+
+				if ($ext == 'zip') {
+					echo '<img src="/images/img/zip.gif" alt="image" /> <b><a href="zip.php?id='.$id.'">Просмотреть архив</a></b><br />';
+				}
+
 				if (is_user()) {
 					echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="down.php?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br />';
 				} else {
@@ -251,10 +256,6 @@ case 'view':
 					echo '<input name="provkod" size="6" maxlength="6" />';
 					echo '<input type="submit" value="Скачать" /></form>';
 					echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/pages/registration.php">зарегистрироваться</a></em></div><br />';
-				}
-
-				if ($ext == 'zip') {
-					echo '<img src="/images/img/zip.gif" alt="image" /> <b><a href="zip.php?id='.$id.'">Просмотреть архив</a></b><br />';
 				}
 
 				echo '<img src="/images/img/balloon.gif" alt="image" /> <b><a href="down.php?act=comments&amp;id='.$id.'">Комментарии</a></b> ('.$downs['downs_comments'].') ';

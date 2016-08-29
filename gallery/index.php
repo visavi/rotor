@@ -339,12 +339,15 @@ break;
 				}
 
 				page_strnavigation('index.php?act=comments&amp;gid='.$gid.'&amp;', $config['postgallery'], $start, $total);
-			} else {
-				show_error('Комментариев еще нет!');
 			}
 
-			if (is_user()) {
-				if (empty($photo['photo_closed'])) {
+			if (empty($photo['photo_closed'])) {
+
+				if (empty($total)) {
+					show_error('Комментариев еще нет!');
+				}
+
+				if (is_user()) {
 					echo '<div class="form">';
 					echo '<form action="index.php?act=addcomm&amp;gid='.$gid.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -356,10 +359,10 @@ break;
 					echo '<a href="/pages/smiles.php">Смайлы</a> / ';
 					echo '<a href="/pages/tags.php">Теги</a><br /><br />';
 				} else {
-					show_error('Комментирование данной фотографии закрыто!');
+					show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
 				}
 			} else {
-				show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
+				show_error('Комментирование данной фотографии закрыто!');
 			}
 
 			echo '<img src="/images/img/reload.gif" alt="image" /> <a href="album.php?act=photo&amp;uz='.$photo['photo_user'].'">Альбом</a><br />';
