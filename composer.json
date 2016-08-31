@@ -1,7 +1,7 @@
 {
 	"name": "visavi/rotorcms4",
 	"description": "RotorCMS",
-	"keywords": ["cms", "rotor"],
+	"keywords": ["cms", "wap", "rotor"],
 	"homepage": "http://visavi.net",
 	"license": "GPL-3.0",
 	"authors": [
@@ -12,7 +12,10 @@
 		}
 	],
 	"require": {
-		"php": ">=5.2.4"
+		"php": ">=5.5.9",
+		"altorouter/altorouter": "~1.2",
+		"php-ffmpeg/php-ffmpeg": "~0.6",
+		"philo/laravel-blade": "~3.0"
 	},
 	"config": {
 		"vendor-dir": "includes/vendor"

@@ -148,7 +148,9 @@ $_SESSION['timeon'] = maketime(SITETIME - $_SESSION['currs']);
 ############################################################################################
 if ($udata = is_user()) {
 
-	$log = $udata['users_login'];
+    Registry::set('user', $udata);
+
+    $log = $udata['users_login'];
 	// ---------------------- Переопределение глобальных настроек -------------------------//
 	$config['themes']     = $udata['users_themes'];      # Скин/тема по умолчанию
 	$config['bookpost']   = $udata['users_postguest'];   # Вывод сообщений в гостевой

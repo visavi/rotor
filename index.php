@@ -10,13 +10,22 @@
 require_once ('includes/start.php');
 require_once ('includes/functions.php');
 require_once ('includes/header.php');
-include_once ('themes/header.php');
 
-include_once (DATADIR.'/advert/top.dat');
+$params = App::router('params');
 
-render ('index');
+if (App::router('target') && is_callable(App::router('target'))) {
 
-include_once (DATADIR.'/advert/bottom.dat');
+    call_user_func_array(App::router('target'), $params);
 
-include_once ('themes/footer.php');
-?>
+} elseif (App::router('target')) {
+
+    $act = isset($params['action']) ? $params['action'] : 'index';
+    include_once (BASEDIR.App::router('target'));
+
+} else {
+    App::abort(404);
+}
+if (isset($_SESSION['input'])) unset($_SESSION['input']);
+
+
+// Удалить карантин с сайта

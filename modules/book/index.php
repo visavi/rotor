@@ -1,21 +1,6 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
-
-show_title('Гостевая книга', 'Общение без ограничений');
 
 switch ($act):
 /**
@@ -34,8 +19,8 @@ case 'index':
 
 	$posts = DBM::run()->select('guest', null, $config['bookpost'], $start, array('guest_time'=>'DESC'));
 
-	render('book/index', array('posts' => $posts, 'start' => $start, 'total' => $total));
 
+	App::view('book/index', compact('posts', 'start', 'total'));
 break;
 
 /**
@@ -46,91 +31,56 @@ case 'add':
 	$msg = check($_POST['msg']);
 	$uid = check($_GET['uid']);
 
-	if (is_user()) {
-		if ($uid == $_SESSION['token']) {
-			if (utf_strlen($msg) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
-				if (is_quarantine($log) || $config['bookadds'] == 1) {
-					if (is_flood($log)) {
+    $validation = new Validation();
 
-						$msg = antimat($msg);
+    $validation->addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+        ->addRule('string', $msg, 'Ошибка! Слишком длинное или короткое сообщение!', true, 5, $config['guesttextlength'])
+        ->addRule('bool', is_user(), 'Для добавления сообщения необходимо авторизоваться')
+        ->addRule('bool', is_flood($log), 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
 
-						$bookscores = ($config['bookscores']) ? 1 : 0;
+    /* Проерка для гостей */
+    if (! is_user() && $config['bookadds']) {
+        $provkod = check(strtolower($_POST['provkod']));
 
-						$user = DBM::run()->update('users', array(
-							'users_allguest' => array('+', 1),
-							'users_point'    => array('+', $bookscores),
-							'users_money'    => array('+', 5),
-						), array(
-							'users_login' => $log
-						));
+        $validation->addRule('bool', is_user(), 'Для добавления сообщения необходимо авторизоваться');
+        $validation->addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!');
+    }
 
-						$guest = DBM::run()->insert('guest', array(
-							'guest_user' => $log,
-							'guest_text' => $msg,
-							'guest_ip'   => $ip,
-							'guest_brow' => $brow,
-							'guest_time' => SITETIME,
-						));
+    if ($validation->run()) {
 
-						DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array('limit' => intval($config['maxpostbook'])));
+        $msg = antimat($msg);
 
-						notice('Сообщение успешно добавлено!');
-						redirect("index.php");
+        if (is_user()) {
+            $bookscores = ($config['bookscores']) ? 1 : 0;
 
-					} else {
-						show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
-					}
-				} else {
-					show_error('Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!');
-				}
-			} else {
-				show_error('Ошибка! Слишком длинное или короткое сообщение!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
+            $user = DBM::run()->update('users', array(
+                'users_allguest' => array('+', 1),
+                'users_point' => array('+', $bookscores),
+                'users_money' => array('+', 5),
+            ), array(
+                'users_login' => $log
+            ));
+        }
 
-		/**
-		 * Добавление для гостей
-		 */
-	} elseif ($config['bookadds'] == 1) {
-		$provkod = check(strtolower($_POST['provkod']));
+        $username = is_user() ? $log : $config['guestsuser'];
 
-		if ($uid == $_SESSION['token']) {
-			if ($provkod == $_SESSION['protect']) {
-				if (utf_strlen($msg) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
-					if (is_flood($log)) {
+        $guest = DBM::run()->insert('guest', array(
+            'guest_user' => $username,
+            'guest_text' => $msg,
+            'guest_ip'   => $ip,
+            'guest_brow' => $brow,
+            'guest_time' => SITETIME,
+        ));
 
-						$msg = antimat($msg);
+        DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array('limit' => intval($config['maxpostbook'])));
 
-						$guest = DBM::run()->insert('guest', array(
-							'guest_user' => $config['guestsuser'],
-							'guest_text' => $msg,
-							'guest_ip'   => $ip,
-							'guest_brow' => $brow,
-							'guest_time' => SITETIME,
-						));
+        App::setFlash('success', 'Сообщение успешно добавлено!');
+    } else {
+        App::setInput($_POST);
+        App::setFlash('danger', $validation->getErrors());
+    }
 
-						DBM::run()->execute("DELETE FROM `guest` WHERE `guest_time` < (SELECT MIN(`guest_time`) FROM (SELECT `guest_time` FROM `guest` ORDER BY `guest_time` DESC LIMIT :limit) AS del);", array('limit' => intval($config['maxpostbook'])));
-
-						notice('Сообщение успешно добавлено!');
-						redirect("index.php");
-
-					} else {
-						show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
-					}
-				} else {
-					show_error('Ошибка! Слишком длинное или короткое сообщение!');
-				}
-			} else {
-				show_error('Ошибка! Проверочное число не совпало с данными на картинке!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-	}
+    App::redirect("/book");
 
 	render('includes/back', array('link' => 'index.php', 'title' => 'Вернуться'));
 break;
@@ -152,7 +102,6 @@ case 'spam':
 				$spam = DBM::run()->selectFirst('spam', array('spam_key' => 2, 'spam_idnum' => $id));
 
 				if (empty($spam)) {
-					if (is_flood($log)) {
 
 						$spam = DBM::run()->insert('spam', array(
 							'spam_key'     => 2,
@@ -168,9 +117,7 @@ case 'spam':
 						notice('Жалоба успешно отправлена!');
 						redirect("index.php?start=$start");
 
-					} else {
-						show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
-					}
+
 				} else {
 					show_error('Ошибка! Жалоба на данное сообщение уже отправлена!');
 				}
@@ -264,10 +211,4 @@ case 'editpost':
 	render('includes/back', array('link' => 'index.php?act=edit&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться'));
 	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'В гостевую', 'icon' => 'reload.gif'));
 break;
-
-default:
-	redirect("index.php");
 endswitch;
-
-include_once ('../themes/footer.php');
-?>
