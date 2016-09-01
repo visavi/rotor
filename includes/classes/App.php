@@ -37,7 +37,7 @@ class App
 
         $params +=compact('config', 'log');
 
-        $blade = new Philo\Blade\Blade(BASEDIR.'/assets/views', DATADIR.'/cache');
+        $blade = new Philo\Blade\Blade([BASEDIR.'/assets/views', BASEDIR.'/themes'], DATADIR.'/cache');
 
         if ($return) {
             return $blade->view()->make($template, $params)->render();
@@ -275,7 +275,7 @@ class App
      * Определение браузера
      * @return string браузер и версия браузера
      */
-/*    public static function getUserAgent($userAgent = null)
+    public static function getUserAgent($userAgent = null)
     {
         $browser = new Browser();
         if ($userAgent) $browser->setUserAgent($userAgent);
@@ -283,7 +283,7 @@ class App
         $brow = $browser->getBrowser();
         $version = implode('.', array_slice(explode('.', $browser->getVersion()), 0, 2));
         return $version == 'unknown' ? $brow : $brow.' '.$version;
-    }*/
+    }
 
     /**
      * Определение IP пользователя
@@ -293,6 +293,16 @@ class App
     {
         $ip = Request::ip();
         return $ip == '::1' ? '127.0.0.1' : $ip;
+    }
+
+    public static function server($key = null, $default = null)
+    {
+        return check(urldecode(Request::server($key, $default)));
+    }
+
+    public static function getUsername()
+    {
+        return isset($_SESSION['log']) ? check($_SESSION['log']) : Registry::get('config')['guestsuser'];
     }
 
     /**

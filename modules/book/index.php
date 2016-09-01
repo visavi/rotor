@@ -67,8 +67,8 @@ case 'add':
         $guest = DBM::run()->insert('guest', array(
             'guest_user' => $username,
             'guest_text' => $msg,
-            'guest_ip'   => $ip,
-            'guest_brow' => $brow,
+            'guest_ip'   => App::getClientIp(),
+            'guest_brow' => App::getUserAgent(),
             'guest_time' => SITETIME,
         ));
 

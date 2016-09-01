@@ -14,8 +14,15 @@
 	"require": {
 		"php": ">=5.5.9",
 		"altorouter/altorouter": "~1.2",
+		"cbschuld/browser.php": "dev-master",
+		"gregwar/captcha": "dev-master",
+		"illuminate/http": "~5.3",
+		"mobiledetect/mobiledetectlib": "dev-master",
+		"pclzip/pclzip": "dev-master",
 		"php-ffmpeg/php-ffmpeg": "~0.6",
-		"philo/laravel-blade": "~3.0"
+		"philo/laravel-blade": "~3.0",
+		"swiftmailer/swiftmailer": "~5.4",
+		"visavi/compressor": "~1.1"
 	},
 	"config": {
 		"vendor-dir": "includes/vendor"

@@ -11,12 +11,6 @@ if (!defined('BASEDIR')) {
 	exit(header('Location: /index.php'));
 }
 
-$ip = real_ip();
-$php_self = (isset($_SERVER['PHP_SELF'])) ? check($_SERVER['PHP_SELF']) : '';
-$request_uri = (isset($_SERVER['REQUEST_URI'])) ? check(urldecode($_SERVER['REQUEST_URI'])) : '/index.php';
-$http_referer = (isset($_SERVER['HTTP_REFERER'])) ? check(urldecode($_SERVER['HTTP_REFERER'])) : 'Не определено';
-$username = (empty($_SESSION['log'])) ? $config['guestsuser'] : $_SESSION['log'];
-$brow = (empty($_SESSION['brow'])) ? $_SESSION['brow'] = get_user_agent() : $_SESSION['brow'];
 ############################################################################################
 ##                                 Проверка на ip-бан                                     ##
 ############################################################################################
@@ -29,7 +23,7 @@ if (file_exists(DATADIR.'/temp/ipban.dat')) {
 if (is_array($arrbanip) && count($arrbanip) > 0) {
 	foreach($arrbanip as $ipdata) {
 		$ipmatch = 0;
-		$ipsplit = explode('.', $ip);
+		$ipsplit = explode('.', App::getClientIp());
 		$dbsplit = explode('.', $ipdata);
 
 		for($i = 0; $i < 4; $i++) {
@@ -56,30 +50,30 @@ if (!empty($config['doslimit'])) {
 			}
 		}
 		// -------------------------- Проверка на время -----------------------------//
-		if (file_exists(DATADIR.'/antidos/'.$ip.'.dat')) {
-			$file_dos = file(DATADIR.'/antidos/'.$ip.'.dat');
+		if (file_exists(DATADIR.'/antidos/'.App::getClientIp().'.dat')) {
+			$file_dos = file(DATADIR.'/antidos/'.App::getClientIp().'.dat');
 			$file_str = explode('|', $file_dos[0]);
 			if ($file_str[0] < (time() - 60)) {
-				@unlink(DATADIR.'/antidos/'.$ip.'.dat');
+				@unlink(DATADIR.'/antidos/'.App::getClientIp().'.dat');
 			}
 		}
 		// ------------------------------ Запись логов -------------------------------//
-		$write = time().'|'.$request_uri.'|'.$http_referer.'|'.$brow.'|'.$username.'|';
-		write_files(DATADIR.'/antidos/'.$ip.'.dat', $write."\r\n", 0, 0666);
+		$write = time().'|'.App::server('REQUEST_URI').'|'.App::server('HTTP_REFERER').'|'.App::getUserAgent().'|'.App::getUsername().'|';
+		write_files(DATADIR.'/antidos/'.App::getClientIp().'.dat', $write."\r\n", 0, 0666);
 		// ----------------------- Автоматическая блокировка ------------------------//
-		if (counter_string(DATADIR.'/antidos/'.$ip.'.dat') > $config['doslimit']) {
+		if (counter_string(DATADIR.'/antidos/'.App::getClientIp().'.dat') > $config['doslimit']) {
 
 			if (!empty($config['errorlog'])){
-				$banip = DB::run() -> querySingle("SELECT `ban_id` FROM `ban` WHERE `ban_ip`=? LIMIT 1;", array($ip));
+				$banip = DB::run() -> querySingle("SELECT `ban_id` FROM `ban` WHERE `ban_ip`=? LIMIT 1;", array(App::getClientIp()));
 				if (empty($banip)) {
-					DB::run() -> query("INSERT INTO `error` (`error_num`, `error_request`, `error_referer`, `error_username`, `error_ip`, `error_brow`, `error_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array(666, $request_uri, $http_referer, $username, $ip, $brow, SITETIME));
+					DB::run() -> query("INSERT INTO `error` (`error_num`, `error_request`, `error_referer`, `error_username`, `error_ip`, `error_brow`, `error_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array(666, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getUsername(), App::getClientIp(), App::getUserAgent(), SITETIME));
 
-					DB::run() -> query("INSERT IGNORE INTO ban (`ban_ip`, `ban_time`) VALUES (?, ?);", array($ip, SITETIME));
+					DB::run() -> query("INSERT IGNORE INTO ban (`ban_ip`, `ban_time`) VALUES (?, ?);", array(App::getClientIp(), SITETIME));
 					save_ipban();
 				}
 			}
 
-			unlink(DATADIR.'/antidos/'.$ip.'.dat');
+			unlink(DATADIR.'/antidos/'.App::getClientIp().'.dat');
 		}
 	}
 }
@@ -104,14 +98,14 @@ if (empty($_SESSION['log']) && empty($_SESSION['par'])) {
 			if ($unlog == $checkuser['users_login'] && $unpar == md5($checkuser['users_pass'].$config['keypass'])) {
 				session_regenerate_id(1);
 
-				$_SESSION['my_ip'] = $ip;
+				$_SESSION['my_ip'] = App::getClientIp();
 				$_SESSION['log'] = $unlog;
 				$_SESSION['par'] = md5($config['keypass'].$checkuser['users_pass']);
 
 				$authorization = DB::run() -> querySingle("SELECT `login_id` FROM `login` WHERE `login_user`=? AND `login_time`>? LIMIT 1;", array($unlog, SITETIME-30));
 
 				if (empty($authorization)) {
-					DB::run() -> query("INSERT INTO `login` (`login_user`, `login_ip`, `login_brow`, `login_time`) VALUES (?, ?, ?, ?);", array($unlog, $ip, $brow, SITETIME));
+					DB::run() -> query("INSERT INTO `login` (`login_user`, `login_ip`, `login_brow`, `login_time`) VALUES (?, ?, ?, ?);", array($unlog, App::getClientIp(), App::getUserAgent(), SITETIME));
 					DB::run() -> query("DELETE FROM `login` WHERE `login_user`=? AND `login_time` < (SELECT MIN(`login_time`) FROM (SELECT `login_time` FROM `login` WHERE `login_user`=? ORDER BY `login_time` DESC LIMIT 50) AS del);", array($unlog, $unlog));
 				}
 
@@ -162,24 +156,24 @@ if ($udata = is_user()) {
 	$config['navigation'] = $udata['users_navigation'];  # Быстрый переход
 
 	if ($udata['users_ban'] == 1) {
-		if (!strsearch($php_self, array('/pages/ban.php', '/pages/rules.php'))) {
+		if (!strsearch(App::server('PHP_SELF'), array('/pages/ban.php', '/pages/rules.php'))) {
 			redirect('/pages/ban.php?log='.$log);
 		}
 	}
 
 	if ($config['regkeys'] > 0 && $udata['users_confirmreg'] > 0 && empty($udata['users_ban'])) {
-		if (!strsearch($php_self, array('/pages/key.php', '/input.php'))) {
+		if (!strsearch(App::server('PHP_SELF'), array('/pages/key.php', '/input.php'))) {
 			redirect('/pages/key.php?log='.$log);
 		}
 	}
 
 	// --------------------- Проверка соответствия ip-адреса ---------------------//
 	if (!empty($udata['users_ipbinding'])) {
-		if ($_SESSION['my_ip'] != $ip) {
+		if ($_SESSION['my_ip'] != App::getClientIp()) {
 			$_SESSION = array();
 			setcookie(session_name(), '', 0, '/', '');
 			session_destroy();
-			redirect(html_entity_decode($request_uri));
+			redirect(html_entity_decode(App::server('REQUEST_URI')));
 		}
 	}
 
@@ -190,11 +184,11 @@ if ($udata = is_user()) {
 	}
 
 	// ------------------ Запись текущей страницы для админов --------------------//
-	if (strstr($php_self, '/admin')) {
-		DB::run() -> query("INSERT INTO `admlog` (`admlog_user`, `admlog_request`, `admlog_referer`, `admlog_ip`, `admlog_brow`, `admlog_time`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $request_uri, $http_referer, $ip, $brow, SITETIME));
+	if (strstr(App::server('PHP_SELF'), '/admin')) {
+		DB::run() -> query("INSERT INTO `admlog` (`admlog_user`, `admlog_request`, `admlog_referer`, `admlog_ip`, `admlog_brow`, `admlog_time`) VALUES (?, ?, ?, ?, ?, ?);", array($log, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME));
 
 		DB::run() -> query("DELETE FROM `admlog` WHERE `admlog_time` < (SELECT MIN(`admlog_time`) FROM (SELECT `admlog_time` FROM `admlog` ORDER BY `admlog_time` DESC LIMIT 500) AS del);");
 	}
 	// -------------------------- Дайджест ------------------------------------//
-	DB::run() -> query("INSERT INTO `visit` (`visit_user`, `visit_self`, `visit_ip`, `visit_nowtime`)  VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `visit_self`=?, `visit_ip`=?, `visit_count`=?, `visit_nowtime`=?;", array($log, $php_self, $ip, SITETIME, $php_self, $ip, $_SESSION['counton'], SITETIME));
+	DB::run() -> query("INSERT INTO `visit` (`visit_user`, `visit_self`, `visit_ip`, `visit_nowtime`)  VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `visit_self`=?, `visit_ip`=?, `visit_count`=?, `visit_nowtime`=?;", array($log, App::server('PHP_SELF'), App::getClientIp(), SITETIME, App::server('PHP_SELF'), App::getClientIp(), $_SESSION['counton'], SITETIME));
 }

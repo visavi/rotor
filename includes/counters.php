@@ -21,20 +21,20 @@ if ($online[1] < 150 || is_user()) {
 	$newhost = 0;
 
 	if (is_user()) {
-		$queryonline = DB::run() -> querySingle("SELECT `online_id` FROM `online` WHERE `online_ip`=? OR `online_user`=? LIMIT 1;", array($ip, $log));
+		$queryonline = DB::run() -> querySingle("SELECT `online_id` FROM `online` WHERE `online_ip`=? OR `online_user`=? LIMIT 1;", array(App::getClientIp(), $log));
 		if (empty($queryonline)) {
-			DB::run() -> query("INSERT INTO `online` (`online_ip`, `online_brow`, `online_time`, `online_user`) VALUES (?, ?, ?, ?);", array($ip, $brow, SITETIME, $log));
+			DB::run() -> query("INSERT INTO `online` (`online_ip`, `online_brow`, `online_time`, `online_user`) VALUES (?, ?, ?, ?);", array(App::getClientIp(), App::getUserAgent(), SITETIME, $log));
 			$newhost = 1;
 		} else {
-			DB::run() -> query("UPDATE `online` SET `online_ip`=?, `online_brow`=?, `online_time`=?, `online_user`=? WHERE `online_id`=? LIMIT 1;", array($ip, $brow, SITETIME, $log, $queryonline));
+			DB::run() -> query("UPDATE `online` SET `online_ip`=?, `online_brow`=?, `online_time`=?, `online_user`=? WHERE `online_id`=? LIMIT 1;", array(App::getClientIp(), App::getUserAgent(), SITETIME, $log, $queryonline));
 		}
 	} else {
-		$queryonline = DB::run() -> querySingle("SELECT `online_id` FROM `online` WHERE `online_ip`=? LIMIT 1;", array($ip));
+		$queryonline = DB::run() -> querySingle("SELECT `online_id` FROM `online` WHERE `online_ip`=? LIMIT 1;", array(App::getClientIp()));
 		if (empty($queryonline)) {
-			DB::run() -> query("INSERT INTO `online` (`online_ip`, `online_brow`, `online_time`) VALUES (?, ?, ?);", array($ip, $brow, SITETIME));
+			DB::run() -> query("INSERT INTO `online` (`online_ip`, `online_brow`, `online_time`) VALUES (?, ?, ?);", array(App::getClientIp(), App::getUserAgent(), SITETIME));
 			$newhost = 1;
 		} else {
-			DB::run() -> query("UPDATE `online` SET `online_brow`=?, `online_time`=?, `online_user`=? WHERE `online_id`=? LIMIT 1;", array($brow, SITETIME, '', $queryonline));
+			DB::run() -> query("UPDATE `online` SET `online_brow`=?, `online_time`=?, `online_user`=? WHERE `online_id`=? LIMIT 1;", array(App::getUserAgent(), SITETIME, '', $queryonline));
 		}
 	}
 	// -----------------------------------------------------------//
