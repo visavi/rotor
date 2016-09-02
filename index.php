@@ -19,7 +19,6 @@ if (App::router('target') && is_callable(App::router('target'))) {
 
 } elseif (App::router('target')) {
 
-    $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
     $act = isset($params['action']) ? check($params['action']) : 'index';
 
     include_once (BASEDIR.App::router('target'));

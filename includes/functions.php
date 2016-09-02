@@ -2091,6 +2091,7 @@ function include_style(){
 	echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css" type="text/css" />'."\r\n";
 	echo '<link rel="stylesheet" href="/assets/css/prettify.css" type="text/css" />'."\r\n";
 	echo '<link rel="stylesheet" type="text/css" href="/assets/markitup/style.css" />'."\r\n";
+	echo '<link rel="stylesheet" type="text/css" href="/assets/css/toastr.min.css" />'."\r\n";
 	echo '<link rel="stylesheet" type="text/css" href="/assets/css/app.css" />'."\r\n";
 }
 
@@ -2101,6 +2102,8 @@ function include_javascript(){
 	echo '<script type="text/javascript" src="/assets/js/prettify.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/markitup/jquery.markitup.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/markitup/markitup.set.js"></script>'."\r\n";
+    echo '<script type="text/javascript" src="/assets/js/bootbox.min.js"></script>'."\r\n";
+    echo '<script type="text/javascript" src="/assets/js/toastr.min.js"></script>'."\r\n";
 	echo '<script type="text/javascript" src="/assets/js/app.js"></script>'."\r\n";
 }
 

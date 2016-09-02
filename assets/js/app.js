@@ -2,6 +2,13 @@ $(document).ready(function(){
 
     prettyPrint();
 
+    bootbox.setDefaults({ locale: 'ru' });
+
+    toastr.options = {
+        "progressBar": true,
+        "positionClass": "toast-top-full-width",
+    };
+
     $('#markItUp').markItUp(mySettings);
     $('#markItUpHtml').markItUp(myHtmlSettings);
 
@@ -30,6 +37,11 @@ $(document).ready(function(){
         $(this).nextAll(".news-text:first").slideToggle();
     });
 });
+
+/* Вывод уведомлений */
+function notify(type, title, message, optionsOverride) {
+    return toastr[type](message, title, optionsOverride);
+}
 
 /* Показ формы загрузки файла */
 function showAttachForm(){
@@ -75,31 +87,27 @@ function postQuote(el){
 
 /* Отправка жалобы на спам */
 function sendComplaint(el) {
-	bootbox.confirm('Вы действительно хотите отправить жалобу?', function(result){
-		if (result) {
+    bootbox.confirm('Вы действительно хотите отправить жалобу?', function(result){
+        if (result) {
 
-			$.ajax({
-				dataType: 'JSON', type: 'POST', url: '/complaint',
-				data: {id: $(el).data('id'), type: $(el).data('type'), token: $(el).data('token')},
-				success: function(data) {
-					if (data.status == 'error'){
-						notify('error', 'Ошибка отправки жалобы!');
-						return false;
-					}
+            $.ajax({
+                data: {id: $(el).data('id'), type: $(el).data('type'), token: $(el).data('token')},
+                dataType: 'JSON', type: 'POST', url: $(el).data('type') + '/complaint',
+                success: function(data) {
 
-					if (data.status == 'added'){
-						notify('success', 'Жалоба успешно отправлена!');
-						$(el).replaceWith('<span class="fa fa-bell-slash-o"></span>');
-					}
+                    $(el).replaceWith('<span class="fa fa-bell-slash-o"></span>');
 
-					if (data.status == 'exists'){
-						notify('warning', 'Жалоба уже была отправлена!');
-						$(el).replaceWith('<span class="fa fa-bell-slash-o"></span>');
+                    if (data.status == 'error'){
+                        notify('error', data.message);
+                        return false;
+                    }
 
-					}
-				}
-			});
-		}
-	});
-	return false;
+                    if (data.status == 'success'){
+                        notify('success', 'Жалоба успешно отправлена!');
+                    }
+                }
+            });
+        }
+    });
+    return false;
 }

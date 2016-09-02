@@ -80,14 +80,13 @@ case 'add':
     }
 
     App::redirect("/book");
-
-	render('includes/back', array('link' => 'index.php', 'title' => 'Вернуться'));
 break;
 
 /**
  * Подготовка к редактированию
  */
 case 'edit':
+    $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
 
     if (! is_user()) App::abort(403);
 
@@ -134,13 +133,14 @@ case 'edit':
 break;
 
 /**
- * Жалоба на спам
+ * Жалоба
  */
-case 'spam':
+case 'complaint':
+    $id = abs(intval(Request::input('id')));
 
     if (! Request::ajax()) App::redirect('/');
 
-    $uid = check(Request::input('uid'));
+    $uid = check(Request::input('token'));
 
     $validation = new Validation();
     $validation->addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -165,9 +165,9 @@ case 'spam':
             'spam_link'    => '/book/index.php?start='.$start,
         ));
 
-        exit(json_encode(['status' => 'added']));
+        exit(json_encode(['status' => 'success']));
     } else {
-        exit(json_encode(['status' => 'added', 'message' => current($validation->getErrors())]));
+        exit(json_encode(['status' => 'error', 'message' => current($validation->getErrors())]));
     }
     break;
 endswitch;
