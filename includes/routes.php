@@ -9,7 +9,7 @@ $router->map( 'GET', '/', function() {
 });
 
 $router->map('GET', '/book', '/modules/book/index.php', 'book');
-$router->map('POST', '/book/[add:action]', '/modules/book/index.php');
+$router->map('POST', '/book/[spam|add:action]', '/modules/book/index.php');
 $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php');
 
 Registry::set('router', $router->match());

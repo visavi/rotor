@@ -8,19 +8,19 @@ switch ($act):
  */
 case 'index':
 
-	$total = DBM::run()->count('guest');
+    $total = DBM::run()->count('guest');
 
-	if ($total > 0 && $start >= $total) {
-		$start = last_page($total, $config['bookpost']);
-	}
+    if ($total > 0 && $start >= $total) {
+        $start = last_page($total, $config['bookpost']);
+    }
 
-	$page = floor(1 + $start / $config['bookpost']);
-	$config['newtitle'] = 'Гостевая книга (Стр. '.$page.')';
+    $page = floor(1 + $start / $config['bookpost']);
+    $config['newtitle'] = 'Гостевая книга (Стр. '.$page.')';
 
-	$posts = DBM::run()->select('guest', null, $config['bookpost'], $start, array('guest_time'=>'DESC'));
+    $posts = DBM::run()->select('guest', null, $config['bookpost'], $start, array('guest_time'=>'DESC'));
 
 
-	App::view('book/index', compact('posts', 'start', 'total'));
+    App::view('book/index', compact('posts', 'start', 'total'));
 break;
 
 /**
@@ -32,7 +32,6 @@ case 'add':
     $uid = check(Request::input('uid'));
 
     $validation = new Validation();
-
     $validation->addRule('equal', [$uid, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
         ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, $config['guesttextlength'])
         ->addRule('bool', is_user(), ['msg' => 'Для добавления сообщения необходимо авторизоваться'])
@@ -86,55 +85,6 @@ case 'add':
 break;
 
 /**
- * Жалоба на спам
- */
-case 'spam':
-
-	$uid = check($_GET['uid']);
-	$id = abs(intval($_GET['id']));
-
-	if (is_user()) {
-		if ($uid == $_SESSION['token']) {
-			$data = DBM::run()->selectFirst('guest', array('guest_id' => $id));
-
-			if (! empty($data)) {
-
-				$spam = DBM::run()->selectFirst('spam', array('spam_key' => 2, 'spam_idnum' => $id));
-
-				if (empty($spam)) {
-
-						$spam = DBM::run()->insert('spam', array(
-							'spam_key'     => 2,
-							'spam_idnum'   => $data['guest_id'],
-							'spam_user'    => $log,
-							'spam_login'   => $data['guest_user'],
-							'spam_text'    => $data['guest_text'],
-							'spam_time'    => $data['guest_time'],
-							'spam_addtime' => SITETIME,
-							'spam_link'    => '/book/index.php?start='.$start,
-						));
-
-						notice('Жалоба успешно отправлена!');
-						redirect("index.php?start=$start");
-
-
-				} else {
-					show_error('Ошибка! Жалоба на данное сообщение уже отправлена!');
-				}
-			} else {
-				show_error('Ошибка! Выбранное вами сообщение для жалобы не существует!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
-	}
-
-	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'Вернуться'));
-break;
-
-/**
  * Подготовка к редактированию
  */
 case 'edit':
@@ -182,4 +132,42 @@ case 'edit':
 
     App::view('book/edit', compact('post', 'id'));
 break;
+
+/**
+ * Жалоба на спам
+ */
+case 'spam':
+
+    if (! Request::ajax()) App::redirect('/');
+
+    $uid = check(Request::input('uid'));
+
+    $validation = new Validation();
+    $validation->addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+        ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
+
+    $data = DBM::run()->selectFirst('guest', array('guest_id' => $id));
+    $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
+
+
+    $spam = DBM::run()->selectFirst('spam', array('spam_key' => 2, 'spam_idnum' => $id));
+    $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
+
+    if ($validation->run()) {
+        $spam = DBM::run()->insert('spam', array(
+            'spam_key'     => 2,
+            'spam_idnum'   => $data['guest_id'],
+            'spam_user'    => $log,
+            'spam_login'   => $data['guest_user'],
+            'spam_text'    => $data['guest_text'],
+            'spam_time'    => $data['guest_time'],
+            'spam_addtime' => SITETIME,
+            'spam_link'    => '/book/index.php?start='.$start,
+        ));
+
+        exit(json_encode(['status' => 'added']));
+    } else {
+        exit(json_encode(['status' => 'added', 'message' => current($validation->getErrors())]));
+    }
+    break;
 endswitch;

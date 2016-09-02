@@ -26,7 +26,7 @@
 
 							<a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-							<noindex><a href="index.php?act=spam&amp;id=<?=$data['guest_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы подтверждаете факт спама?')" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
+							<noindex><a href="#" onclick="return postComplaint(this)" href="index.php?act=spam&amp;id=<?=$data['guest_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы подтверждаете факт спама?')" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
 						</div>
 
 					<?php endif; ?>
@@ -64,7 +64,7 @@
 			</div>
 		<?php endforeach; ?>
 
-		<?php page_strnavigation('index.php?', $config['bookpost'], $start, $total); ?>
+		<?php page_strnavigation('/book?', $config['bookpost'], $start, $total); ?>
 
 	<?php else: ?>
 		<?php show_error('Сообщений нет, будь первым!'); ?>
