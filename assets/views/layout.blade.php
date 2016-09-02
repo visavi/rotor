@@ -37,8 +37,8 @@ if ($config['closedsite'] == 1 && !is_user() && !strsearch($php_self, array('/pa
 if (empty($config['themes']) || !file_exists(BASEDIR.'/themes/'.$config['themes'].'/index.php')) {
     $config['themes'] = 'default';
 }
-
 ?>
+
 @include($config['themes'].'.index' )
 
 <div style="text-align:center">
@@ -50,10 +50,7 @@ if (empty($config['themes']) || !file_exists(BASEDIR.'/themes/'.$config['themes'
 
 <?php render('includes/note', compact('php_self')); ?>
 
-
-
     {{ App::getFlash() }}
-
 
     @yield('content')
 
@@ -70,7 +67,3 @@ $_SESSION['counton']++;
 if (is_user() && !empty($config['newtitle'])){
     DB::run()->query("UPDATE `visit` SET `visit_page`=? WHERE `visit_user`=? LIMIT 1;", array($config['newtitle'], $log));
 }
-?>
-
-<?php
-ob_end_flush();

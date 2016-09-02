@@ -28,15 +28,15 @@ break;
  */
 case 'add':
 
-	$msg = check($_POST['msg']);
-	$uid = check($_GET['uid']);
+    $msg = check(Request::input('msg'));
+    $uid = check(Request::input('uid'));
 
     $validation = new Validation();
 
-    $validation->addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        ->addRule('string', $msg, 'Ошибка! Слишком длинное или короткое сообщение!', true, 5, $config['guesttextlength'])
-        ->addRule('bool', is_user(), 'Для добавления сообщения необходимо авторизоваться')
-        ->addRule('bool', is_flood($log), 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
+    $validation->addRule('equal', [$uid, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+        ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, $config['guesttextlength'])
+        ->addRule('bool', is_user(), ['msg' => 'Для добавления сообщения необходимо авторизоваться'])
+        ->addRule('bool', is_flood($log), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!']);
 
     /* Проерка для гостей */
     if (! is_user() && $config['bookadds']) {
@@ -76,7 +76,7 @@ case 'add':
 
         App::setFlash('success', 'Сообщение успешно добавлено!');
     } else {
-        App::setInput($_POST);
+        App::setInput(Request::all());
         App::setFlash('danger', $validation->getErrors());
     }
 
@@ -139,76 +139,47 @@ break;
  */
 case 'edit':
 
-	$id = abs(intval($_GET['id']));
+    if (! is_user()) App::abort(403);
 
-	if (is_user()) {
+    $post = DBM::run()->selectFirst('guest', array('guest_id' => $id, 'guest_user' =>$log));
 
-		$post = DBM::run()->selectFirst('guest', array('guest_id' => $id, 'guest_user' =>$log));
+    if (! $post) {
+        App::abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+    }
 
-		if (! empty($post)) {
-			if ($post['guest_time'] + 600 > SITETIME) {
+    if ($post['guest_time'] + 600 < SITETIME) {
+        App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+    }
 
-				render('book/edit', array('post' => $post, 'id' => $id, 'start' => $start));
+    if (Request::isMethod('post')) {
 
-			} else {
-				show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
-			}
-		} else {
-			show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
-	}
+        $msg = check(Request::input('msg'));
+        $uid = check(Request::input('uid'));
 
-	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'Вернуться'));
-break;
+        $validation = new Validation();
+        $validation->addRule('equal', [$uid, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, $config['guesttextlength']);
 
-/**
- * Редактирование сообщения
- */
-case 'editpost':
+        if ($validation->run()) {
 
-	$uid = check($_GET['uid']);
-	$id = abs(intval($_GET['id']));
-	$msg = check($_POST['msg']);
+            $msg = antimat($msg);
 
-	if (is_user()) {
-		if ($uid == $_SESSION['token']) {
-			if (utf_strlen($msg) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
+            $guest = DBM::run()->update('guest', array(
+                'guest_text'      => $msg,
+                'guest_edit'      => $log,
+                'guest_edit_time' => SITETIME,
+            ), array(
+                'guest_id' => $id
+            ));
 
-				$post = DBM::run()->selectFirst('guest', array('guest_id' => $id, 'guest_user' =>$log));
-				if (! empty($post)) {
-					if ($post['guest_time'] + 600 > SITETIME) {
-						$msg = antimat($msg);
+            App::setFlash('success', 'Сообщение успешно отредактировано!');
+            App::redirect("/book");
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
+        }
+    }
 
-						$guest = DBM::run()->update('guest', array(
-							'guest_text'      => $msg,
-							'guest_edit'      => $log,
-							'guest_edit_time' => SITETIME,
-						), array(
-							'guest_id' => $id
-						));
-
-						notice('Сообщение успешно отредактировано!');
-						redirect("index.php?start=$start");
-
-					} else {
-						show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
-					}
-				} else {
-					show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
-				}
-			} else {
-				show_error('Ошибка! Слишком длинное или короткое сообщение!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
-	}
-
-	render('includes/back', array('link' => 'index.php?act=edit&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться'));
-	render('includes/back', array('link' => 'index.php?start='.$start, 'title' => 'В гостевую', 'icon' => 'reload.gif'));
+    App::view('book/edit', compact('post', 'id'));
 break;
 endswitch;

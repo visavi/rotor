@@ -11,12 +11,12 @@ class Validation
     /**
      * @var array validation errors
      */
-    private $errors = array();
+    private $errors = [];
 
     /**
      * @var array validation rules
      */
-    private $validation_rules = array();
+    private $validation_rules = [];
 
     /**
      * the constructor, duh!
@@ -27,8 +27,7 @@ class Validation
 
     /**
      * run the validation rules
-     *
-     * return bool;
+     * @return bool;
      */
     public function run()
     {
@@ -87,7 +86,7 @@ class Validation
                     break;
 
                 case 'bool':
-                    $this->validateBool($opt['var'], $opt['label'], $opt['required']);
+                    $this->validateBool($opt['var'], $opt['label']);
                     break;
 
                 case 'custom':
@@ -108,13 +107,12 @@ class Validation
 
     /**
      * add a rule to the validation rules array
-     *
-     * @param string $type     The type of variable
-     * @param string $var      The variable
-     * @param string $label    The label of variable
-     * @param bool   $required If the field is required
-     * @param int    $min      The minimum length or range
-     * @param int    $max      The maximum length or range
+     * @param string $type The type of variable
+     * @param string $var The variable
+     * @param mixed $label The label of variable
+     * @param bool $required If the field is required
+     * @param int $min The minimum length or range
+     * @param int $max The maximum length or range
      */
     public function addRule($type, $var, $label, $required = false, $min = 0, $max = 0)
     {
@@ -124,17 +122,27 @@ class Validation
 
     /**
      * displays an error
-     *
      * @param string $error The error text
      */
-    public function addError($error)
+    public function addError($error, $description = null)
     {
-        $this->errors[] = $error;
+        $key = 0;
+
+        if (is_array($error)) {
+            $key   = key($error);
+            $error = current($error);
+        }
+
+        if (isset($this->errors[$key])) {
+            $this->errors[] = $error.$description;
+        } else {
+            $this->errors[$key] = $error.$description;
+        }
+
     }
 
     /**
      * Возвращает список ошибок
-     *
      * @return array
      */
     public function getErrors()
@@ -144,12 +152,11 @@ class Validation
 
     /**
      * validate a string
-     *
-     * @param string $var      The variable
-     * @param string $label    The label of variable
-     * @param int    $min      The minimum string length
-     * @param int    $max      The maximum string length
-     * @param bool   $required
+     * @param string $var The variable
+     * @param mixed $label The label of variable
+     * @param int $min The minimum string length
+     * @param int $max The maximum string length
+     * @param bool $required
      */
     private function validateString($var, $label, $min = 0, $max = 0, $required = false)
     {
@@ -157,20 +164,17 @@ class Validation
             return true;
         }
 
-        if (isset($var)) {
-            if (mb_strlen($var, 'utf-8') < $min) {
-                $this->addError($label . ' (Не менее ' . $min . ' симв.)');
-            } elseif (mb_strlen($var, 'utf-8') > $max) {
-                $this->addError($label . ' (Не более ' . $max . ' симв.)');
-            }
+        if (mb_strlen($var, 'utf-8') < $min) {
+            $this->addError($label, ' (Не менее ' . $min . ' симв.)');
+        } elseif (mb_strlen($var, 'utf-8') > $max) {
+            $this->addError($label, ' (Не более ' . $max . ' симв.)');
         }
     }
 
     /**
      * Checks whether numeric input has a minimum value
-     *
-     * @param  float|int
-     * @param  string
+     * @param  array $var   The variable
+     * @param  mixed $label The label of variable
      * @return bool
      */
     private function validateMin($var, $label)
@@ -184,9 +188,8 @@ class Validation
 
     /**
      * Checks whether numeric input has a maximum value
-     *
-     * @param  float|int
-     * @param  string
+     * @param  array $var   The variable
+     * @param  mixed $label The label of variable
      * @return bool
      */
     private function validateMax($var, $label)
@@ -200,12 +203,11 @@ class Validation
 
     /**
      * validate an number
-     *
-     * @param string $var      The variable
-     * @param string $label    The label of variable
-     * @param int    $min      The minimum number range
-     * @param int    $max      The maximum number range
-     * @param bool   $required
+     * @param int $var The variable
+     * @param mixed $label The label of variable
+     * @param int $min The minimum number range
+     * @param int $max The maximum number range
+     * @param bool $required
      *
      */
     private function validateNumeric($var, $label, $min = 0, $max = 0, $required = false)
@@ -214,16 +216,15 @@ class Validation
             return true;
         }
 
-        if (filter_var($var, FILTER_VALIDATE_INT, array('options' => array('min_range' => $min, 'max_range' => $max))) === false) {
+        if (filter_var($var, FILTER_VALIDATE_INT, ['options' => ['min_range' => $min, 'max_range' => $max]]) === false) {
             $this->addError($label);
         }
     }
 
     /**
-     * @validate a equality
-     *
-     * @param array  $var   List of variables
-     * @param string $label The label of variable
+     * validate a equality
+     * @param array $var List of variables
+     * @param mixed $label The label of variable
      */
     private function validateEqual($var, $label)
     {
@@ -235,10 +236,9 @@ class Validation
     }
 
     /**
-     * @validate the inequality
-     *
-     * @param array  $var   List of variables
-     * @param string $label The label of variable
+     * validate the inequality
+     * @param array $var List of variables
+     * @param mixed $label The label of variable
      */
     private function validateNotEqual($var, $label)
     {
@@ -250,23 +250,21 @@ class Validation
     }
 
     /**
-     * @validate is empty
-     *
-     * @param string $var   The variable
-     * @param string $label The label of variable
+     * validate is empty
+     * @param string $var The variable
+     * @param mixed $label The label of variable
      */
     private function validateEmpty($var, $label)
     {
-        if (! empty($var)) {
+        if (!empty($var)) {
             $this->addError($label);
         }
     }
 
     /**
      * validate is not empty
-     *
-     * @param string $var   The variable
-     * @param string $label The label of variable
+     * @param string $var The variable
+     * @param mixed $label The label of variable
      */
     private function validateNotEmpty($var, $label)
     {
@@ -277,9 +275,8 @@ class Validation
 
     /**
      * validate is InArray
-     *
-     * @param array  $var   List of variables
-     * @param string $label The label of variable
+     * @param array $var List of variables
+     * @param mixed $label The label of variable
      */
     private function validateIn($var, $label)
     {
@@ -291,11 +288,10 @@ class Validation
     }
 
     /**
-     * @validate on a regular expression
-     *
-     * @param string $var      The variable
-     * @param string $label    The label of variable
-     * @param bool   $required
+     * validate on a regular expression
+     * @param string $var The variable
+     * @param mixed $label The label of variable
+     * @param bool $required
      */
     private function validateRegex($var, $label, $required = false)
     {
@@ -303,17 +299,16 @@ class Validation
             return true;
         }
 
-        if (! preg_match($var[1], $var[0])) {
+        if (!preg_match($var[1], $var[0])) {
             $this->addError($label);
         }
     }
 
     /**
-     * @validate a floating point number
-     *
-     * @param $var             The variable
-     * @param string $label    The label of variable
-     * @param bool   $required
+     * validate a floating point number
+     * @param string $var The variable
+     * @param mixed $label The label of variable
+     * @param bool $required
      */
 
     private function validateFloat($var, $label, $required = false)
@@ -328,11 +323,10 @@ class Validation
     }
 
     /**
-     * @validate a url
-     *
-     * @param string $var      The variable
-     * @param string $label    The label of variable
-     * @param bool   $required
+     * validate a url
+     * @param string $var The variable
+     * @param mixed $label The label of variable
+     * @param bool $required
      */
     private function validateUrl($var, $label, $required = false)
     {
@@ -346,11 +340,10 @@ class Validation
     }
 
     /**
-     * @validate a email address
-     *
-     * @param string $var      The variable
-     * @param string $label    The label of variable
-     * @param bool   $required
+     * validate a email address
+     * @param string $var The variable
+     * @param mixed $label The label of variable
+     * @param bool $required
      */
     private function validateEmail($var, $label, $required = false)
     {
@@ -358,17 +351,16 @@ class Validation
             return true;
         }
 
-        if (! preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $var)) {
+        if (!preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $var)) {
             $this->addError($label);
         }
     }
 
     /**
-     * @validate a boolean
-     *
-     * @param string $var      The variable
-     * @param string $label    The label of variable
-     * @param bool   $required
+     * validate a boolean
+     * @param string $var The variable
+     * @param mixed $label The label of variable
+     * @param bool $required
      */
     private function validateBool($var, $label)
     {
@@ -378,14 +370,13 @@ class Validation
     }
 
     /**
-     * @validate custom
-     *
+     * validate custom
      * @param string $condition The condition
-     * @param string $label     The label of variable
+     * @param mixed $label The label of variable
      */
     private function validateCustom($condition, $label)
     {
-        if (! $condition) {
+        if (!$condition) {
             $this->addError($label);
         }
     }

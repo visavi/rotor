@@ -33,7 +33,7 @@
 
 					<?php if ($log == $data['guest_user'] && $data['guest_time'] + 600 > SITETIME): ?>
 						<div class="pull-right">
-							<a href="index.php?act=edit&amp;id=<?=$data['guest_id']?>&amp;start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+							<a href="/book/edit/<?=$data['guest_id']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
 						</div>
 					<?php endif; ?>
 
@@ -73,24 +73,32 @@
 
 	<?php if (is_user()): ?>
 		<div class="form">
-			<form action="book/add?uid=<?=$_SESSION['token']?>" method="post">
+			<form action="book/add" method="post">
+				<input type="hidden" name="uid" value="<?= $_SESSION['token'] ?>" />
+				<div class="form-group{{ App::hasError('msg') }}">
+					<label for="inputText">Сообщение:</label>
+					<textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg') }}</textarea>
+					{!! App::textError('msg') !!}
+				</div>
 
-			<textarea id="markItUp" cols="25" rows="5" name="msg">{{ App::getInput('msg') }}</textarea>
-			<input class="btn btn-primary" type="submit" value="Написать" /></form>
+				<button type="submit" class="btn btn-primary">Написать</button>
+			</form>
 		</div><br />
 
 	<?php elseif ($config['bookadds'] == 1): ?>
 
 		<div class="form">
-			<form action="index.php?act=add&amp;uid=<?=$_SESSION['token']?>" method="post">
-			Сообщение:<br />
-			<textarea cols="25" rows="5" name="msg">{{ App::getInput('msg') }}</textarea><br />
+			<form action="book/add" method="post">
+				<input type="hidden" name="uid" value="<?= $_SESSION['token'] ?>" />
+				Сообщение:<br />
+				<textarea cols="25" rows="5" name="msg">{{ App::getInput('msg') }}</textarea><br />
 
-			Проверочный код:<br />
-			<img src="/gallery/protect.php" alt="" /><br />
-			<input name="provkod" size="6" maxlength="6" />
+				Проверочный код:<br />
+				<img src="/modules/gallery/protect.php" alt="" /><br />
+				<input name="provkod" size="6" maxlength="6" />
 
-			<input class="btn btn-primary" type="submit" value="Написать" /></form>
+				<input class="btn btn-primary" type="submit" value="Написать" />
+			</form>
 		</div><br />
 
 	<?php else: ?>
