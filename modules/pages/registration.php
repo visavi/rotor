@@ -1,20 +1,4 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
-
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-
-show_title('Регистрация');
 
 if ($config['openreg'] == 1) {
 	if (!is_user()) {
@@ -71,7 +55,7 @@ if ($config['openreg'] == 1) {
 					echo '</select><br />';
 
 					echo 'Проверочный код:<br /> ';
-					echo '<img src="/gallery/protect.php" alt="" /><br />';
+					echo '<img src="/captcha" alt="" /><br />';
 					echo '<input name="provkod" size="6" maxlength="6" /><br />';
 
 					echo '<br /><input value="Регистрация" type="submit" /></form></div><br />';
@@ -249,6 +233,3 @@ if ($config['openreg'] == 1) {
 } else {
 	show_error('Регистрация временно приостановлена, пожалуйста зайдите позже!');
 }
-
-include_once ('../themes/footer.php');
-?>

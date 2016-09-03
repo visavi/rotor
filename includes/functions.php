@@ -2065,9 +2065,9 @@ function profile($login, $color = false, $nickname = true){
 	if (!empty($login)){
 		$nickname = ($nickname) ? nickname($login) : $login;
 		if ($color){
-			return '<a href="/pages/user.php?uz='.$login.'"><span style="color:'.$color.'">'.$nickname.'</span></a>';
+			return '<a href="/user/'.$login.'"><span style="color:'.$color.'">'.$nickname.'</span></a>';
 		} else {
-			return '<a href="/pages/user.php?uz='.$login.'">'.$nickname.'</a>';
+			return '<a href="/user/'.$login.'">'.$nickname.'</a>';
 		}
 	}
 	return $config['guestsuser'];

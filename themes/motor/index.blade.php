@@ -67,8 +67,8 @@ header('Content-type:text/html; charset=utf-8');
 	<a href="/input.php?act=exit" onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
 
 <?php else: ?>
-	<a href="/pages/login.php">Авторизация</a>/
-	<a href="/pages/registration.php">Регистрация</a>
+	<a href="/login">Авторизация</a>/
+	<a href="/register">Регистрация</a>
 <?php endif; ?>
 
 					</span>

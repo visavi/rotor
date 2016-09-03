@@ -34,7 +34,7 @@ if ($config['closedsite'] == 1 && !is_user() && !strsearch($php_self, array('/pa
     redirect('/pages/login.php');
 }
 
-if (empty($config['themes']) || !file_exists(BASEDIR.'/themes/'.$config['themes'].'/index.php')) {
+if (empty($config['themes']) || !file_exists(BASEDIR.'/themes/'.$config['themes'].'/index.blade.php')) {
     $config['themes'] = 'default';
 }
 ?>

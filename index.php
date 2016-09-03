@@ -19,9 +19,10 @@ if (App::router('target') && is_callable(App::router('target'))) {
 
 } elseif (App::router('target')) {
 
-    $act = isset($params['action']) ? check($params['action']) : 'index';
+    $target = explode('@', App::router('target'));
+    $act = isset($params['action']) ? $params['action'] : isset($target[1]) ? $target[1] : 'index';
 
-    include_once (BASEDIR.App::router('target'));
+    include_once (BASEDIR.$target[0]);
 
 } else {
     App::abort(404);

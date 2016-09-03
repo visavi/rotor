@@ -1,41 +1,67 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
 
-$cooklog = (isset($_COOKIE['cooklog'])) ? check($_COOKIE['cooklog']): '';
+$domain = check_string($config['home']);
 
-show_title('Авторизация');
+switch ($act):
+############################################################################################
+##                                       Авторизация                                      ##
+############################################################################################
+case 'index':
 
-if (!is_user()){
+    $cooklog = (isset($_COOKIE['cooklog'])) ? check($_COOKIE['cooklog']): '';
 
-	echo '<div class="form">';
-	echo '<form method="post" action="/input.php">';
-	echo 'Логин или ник:<br /><input name="login" value="'.$cooklog.'" maxlength="20" /><br />';
-	echo 'Пароль:<br /><input name="pass" type="password" maxlength="20" /><br />';
-	echo 'Запомнить меня:';
-	echo '<input name="cookietrue" type="checkbox" value="1" checked="checked" /><br />';
+    if (Request::isMethod('post')) {
 
-	echo '<input value="Войти" type="submit" /></form></div><br />';
+        $login      = check(utf_lower(Request::input('login')));
+        $pass       = md5(md5(trim(Request::input('pass'))));
+        $cookietrue = Request::input('cookietrue');
 
-	echo '<a href="registration.php">Регистрация</a><br />';
-	echo '<a href="/mail/lostpassword.php">Забыли пароль?</a><br /><br />';
+        if (!empty($login) && !empty($pass)) {
 
-	echo 'Вы можете сделать закладку для быстрого входа, она будет иметь вид:<br />';
-	echo '<span style="color:#ff0000">'.$config['home'].'/input.php?login=ВАШ_ЛОГИН&amp;pass=ВАШ_ПАРОЛЬ</span><br /><br />';
+            $user = DB::run() -> queryFetch("SELECT `users_login`, `users_pass` FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", [$login, $login]);
 
-} else {
-	redirect('/index.php');
-}
+            if (!empty($user)) {
+                if ($pass == $user['users_pass']) {
 
-include_once ('../themes/footer.php');
-?>
+                    if (!empty($cookietrue)) {
+                        setcookie('cooklog', $user['users_login'], time() + 3600 * 24 * 365, '/', $domain);
+                        setcookie('cookpar', md5($pass.$config['keypass']), time() + 3600 * 24 * 365, '/', $domain, null, true);
+                    }
+
+                    $_SESSION['log'] = $user['users_login'];
+                    $_SESSION['par'] = md5($config['keypass'].$pass);
+                    $_SESSION['my_ip'] = App::getClientIp();
+
+                    DB::run() -> query("UPDATE `users` SET `users_visits`=`users_visits`+1, `users_timelastlogin`=? WHERE `users_login`=?", [SITETIME, $user['users_login']]);
+
+                    $authorization = DB::run() -> querySingle("SELECT `login_id` FROM `login` WHERE `login_user`=? AND `login_time`>? LIMIT 1;", [$user['users_login'], SITETIME-30]);
+
+                    if (empty($authorization)) {
+                        DB::run() -> query("INSERT INTO `login` (`login_user`, `login_ip`, `login_brow`, `login_time`, `login_type`) VALUES (?, ?, ?, ?, ?);", [$user['users_login'], App::getClientIp(), App::getUserAgent(), SITETIME, 1]);
+                        DB::run() -> query("DELETE FROM `login` WHERE `login_user`=? AND `login_time` < (SELECT MIN(`login_time`) FROM (SELECT `login_time` FROM `login` WHERE `login_user`=? ORDER BY `login_time` DESC LIMIT 50) AS del);", [$user['users_login'], $user['users_login']]);
+                    }
+
+                    App::setFlash('success', 'Вы успешно авторизованы!');
+                    App::redirect('/');
+                }
+            }
+        }
+        App::setFlash('danger', 'Ошибка авторизации. Неправильный логин или пароль!');
+    }
+
+    App::view('pages/login', compact('cooklog'));
+break;
+############################################################################################
+##                                           Выход                                        ##
+############################################################################################
+case 'logout':
+
+    $_SESSION = [];
+    setcookie('cookpar', '', time() - 3600, '/', $domain, null, true);
+    setcookie(session_name(), '', time() - 3600, '/', '');
+    session_destroy();
+
+    App::redirect('/');
+break;
+
+endswitch;

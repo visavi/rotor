@@ -23,10 +23,6 @@ header("Content-type:text/html; charset=utf-8");
 </head>
 <body>
 
-@if (1==1)
-
-@endif
-
 <div class="cs" id="up">
 	<!-- <a href="/"><span class="logotype"><?= $config['title'] ?></span></a><br /> -->
 	<a href="/"><img src="<?= $config['logotip'] ?>" alt="<?= $config['title'] ?>" /></a><br />
