@@ -122,7 +122,7 @@ case 'edit':
             ));
 
             App::setFlash('success', 'Сообщение успешно отредактировано!');
-            App::redirect("/book");
+            App::redirect('/book');
         } else {
             App::setInput(Request::all());
             App::setFlash('danger', $validation->getErrors());
