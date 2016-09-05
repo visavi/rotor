@@ -7,12 +7,20 @@
     <h1>Авторизация</h1>
     <div class="form">
         <form method="post" action="/login">
-            Логин или ник:<br /><input name="login" value="{{ $cooklog }}" maxlength="20" /><br />
-            Пароль:<br />
-            <input name="pass" type="password" maxlength="20" /><br />
-            Запомнить меня:
-            <input name="cookietrue" type="checkbox" value="1" checked="checked" /><br />
-            <input value="Войти" type="submit" />
+
+
+            <div class="form-group">
+                <label for="inputLogin">Логин или ник:</label>
+                <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ App::getInput('login') }}" required>
+
+                <label for="inputPassword">Пароль:</label>
+                <input class="form-control" name="pass" type="password" id="inputPassword" maxlength="20" required>
+                <label>
+                    <input name="remember" type="checkbox" value="1" checked="checked" /> Запомнить меня
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Войти</button>
         </form>
     </div>
     <br />

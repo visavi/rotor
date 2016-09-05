@@ -30,14 +30,14 @@
 
             <div class="form-group{{ App::hasError('pars') }}">
                 <label for="inputPassword">Пароль:</label>
-                <input class="form-control" name="pars" id="inputPassword" maxlength="20" required>
+                <input class="form-control" name="pars" type="password" id="inputPassword" maxlength="20" required>
                 {!! App::textError('pars') !!}
                 <span class="help-block">Минимальная длина пароля 6 символов</span>
             </div>
 
             <div class="form-group{{ App::hasError('pars2') }}">
                 <label for="inputPassword2">Повтор пароля:</label>
-                <input class="form-control" name="pars2" id="inputPassword2" maxlength="20" required>
+                <input class="form-control" name="pars2" type="password" id="inputPassword2" maxlength="20" required>
                 {!! App::textError('pars2') !!}
             </div>
 
@@ -68,20 +68,18 @@
                 {!! App::textError('gender') !!}
             </div>
 
-            <div class="row">
-                <div class="form-group col-lg-3{{ App::hasError('provkod') }}">
-                    <label for="inputProvkod">Проверочный код:</label>
-                    <img src="/captcha" alt="" /><br />
-                    <input class="form-control" name="invite" id="inputProvkod" maxlength="6" value="{{ App::getInput('provkod') }}" required>
-                    {!! App::textError('provkod') !!}
-                </div>
+            <div class="form-group{{ App::hasError('protect') }}">
+                <label for="inputProtect">Проверочный код:</label>
+                <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;">
+                <input class="form-control" name="protect" id="inputProtect" maxlength="6" value="{{ App::getInput('protect') }}" required>
+                {!! App::textError('protect') !!}
             </div>
+
             <button type="submit" class="btn btn-primary">Регистрация</button>
         </form>
     </div>
     <br />
-
-    Обновите страницу если вы не видите проверочный код!<br />
+    
     Все поля обязательны для заполнения, более полную информацию о себе вы можете добавить в своем профиле после регистрации<br />
     Указывайте верный е-мэйл, на него будут высланы регистрационные данные<br /><br />
 @stop

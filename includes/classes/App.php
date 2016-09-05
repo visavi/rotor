@@ -370,4 +370,47 @@ class App
             return isset(Registry::get('user')[$key]) ? Registry::get('user')[$key] : '';
         }
     }
+
+    /**
+     * Авторизация пользователя
+     * @param  string  $login    Логин или никнэйм
+     * @param  string  $password Пароль пользователя
+     * @param  boolean $remember Запомнить пароль
+     * @return boolean           Результат авторизации
+     */
+    public static function login($login, $password, $remember = true)
+    {
+        $domain = check_string(Registry::get('config')['home']);
+
+        if (!empty($login) && !empty($password)) {
+
+            $user = DB::run()->queryFetch("SELECT `users_login`, `users_pass` FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", [$login, $login]);
+
+            if (!empty($user)) {
+                if ($password == $user['users_pass']) {
+
+                    if ($remember) {
+                        setcookie('cooklog', $user['users_login'], time() + 3600 * 24 * 365, '/', $domain);
+                        setcookie('cookpar', md5($password . Registry::get('config')['keypass']), time() + 3600 * 24 * 365, '/', $domain, null, true);
+                    }
+
+                    $_SESSION['log'] = $user['users_login'];
+                    $_SESSION['par'] = md5(Registry::get('config')['keypass'] . $password);
+                    $_SESSION['my_ip'] = App::getClientIp();
+
+                    DB::run()->query("UPDATE `users` SET `users_visits`=`users_visits`+1, `users_timelastlogin`=? WHERE `users_login`=?", [SITETIME, $user['users_login']]);
+
+                    $authorization = DB::run()->querySingle("SELECT `login_id` FROM `login` WHERE `login_user`=? AND `login_time`>? LIMIT 1;", [$user['users_login'], SITETIME - 30]);
+
+                    if (empty($authorization)) {
+                        DB::run()->query("INSERT INTO `login` (`login_user`, `login_ip`, `login_brow`, `login_time`, `login_type`) VALUES (?, ?, ?, ?, ?);", [$user['users_login'], App::getClientIp(), App::getUserAgent(), SITETIME, 1]);
+                        DB::run()->query("DELETE FROM `login` WHERE `login_user`=? AND `login_time` < (SELECT MIN(`login_time`) FROM (SELECT `login_time` FROM `login` WHERE `login_user`=? ORDER BY `login_time` DESC LIMIT 50) AS del);", [$user['users_login'], $user['users_login']]);
+                    }
+
+                    return $user;
+                }
+            }
+        }
+        return false;
+    }
 }

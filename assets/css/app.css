@@ -1,3 +1,11 @@
+.form-group {
+  margin-bottom: 5px;
+}
+
+.form-group input.form-control {
+  width: 250px;
+}
+
 .logotype {
   font-size: 28px;
   color: #666;

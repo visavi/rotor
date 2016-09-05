@@ -13,7 +13,7 @@ if (Request::isMethod('post')) {
     $logs    = check(Request::input('logs'));
     $pars    = check(Request::input('pars'));
     $pars2   = check(Request::input('pars2'));
-    $provkod = check(strtolower(Request::input('provkod')));
+    $protect = check(strtolower(Request::input('protect')));
     $invite  = (!empty($config['invite'])) ? check(Request::input('invite')) : '';
     $meil    = (!empty($config['regmail'])) ? strtolower(check(Request::input('meil'))) : '';
     $domain  = (!empty($config['regmail'])) ? utf_substr(strrchr($meil, '@'), 1) : '';
@@ -21,8 +21,7 @@ if (Request::isMethod('post')) {
     $registration_key = '';
 
     $validation = new Validation();
-
-    $validation -> addRule('equal', [$provkod, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+    $validation -> addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
         -> addRule('regex', [$logs, '|^[a-z0-9\-]+$|i'], ['logs' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'], true)
         -> addRule('regex', [$pars, '|^[a-z0-9\-]+$|i'], ['pars' => 'Недопустимые символы в пароле. Разрешены знаки латинского алфавита, цифры и дефис!'], true)
         -> addRule('email', $meil, ['meil' => 'Вы ввели неверный адрес e-mail, необходим формат name@site.domen!'], $config['regmail'])
@@ -130,6 +129,9 @@ if (Request::isMethod('post')) {
             sendMail($meil, 'Регистрация на сайте '.$config['title'], nl2br($regmessage));
         }
         // ----------------------------------------------------------------------------------------//
+
+        $user = App::login($logs, md5(md5($pars)));
+
         App::setFlash('success', 'Вы успешно зарегистрированы!');
         App::redirect('/');
 

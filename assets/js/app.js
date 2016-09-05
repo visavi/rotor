@@ -69,7 +69,7 @@ function postReply(name){
     return false;
 }
 
-/* Цитирование сообщения  */
+/* Цитирование сообщения */
 function postQuote(el){
 
     postJump();
