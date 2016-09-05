@@ -1,14 +1,7 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
+
 if (!defined('BASEDIR')) {
-	exit(header('Location: /index.php'));
+	exit(header('Location: /'));
 }
 
 ############################################################################################
@@ -117,9 +110,6 @@ if (empty($_SESSION['log']) && empty($_SESSION['par'])) {
 
 // ---------------------- Установка сессионных переменных -----------------------//
 $log = '';
-if (empty($_SESSION['currs'])) {
-	$_SESSION['currs'] = SITETIME;
-}
 if (empty($_SESSION['protect'])) {
 	$_SESSION['protect'] = rand(1000, 9999);
 }
@@ -131,9 +121,6 @@ if (!isset($_SESSION['token'])) {
 	}
 }
 
-
-ob_start('ob_processing');
-$_SESSION['timeon'] = maketime(SITETIME - $_SESSION['currs']);
 ############################################################################################
 ##                                     Авторизация                                        ##
 ############################################################################################
@@ -187,3 +174,33 @@ if ($udata = is_user()) {
 		DB::run() -> query("DELETE FROM `admlog` WHERE `admlog_time` < (SELECT MIN(`admlog_time`) FROM (SELECT `admlog_time` FROM `admlog` ORDER BY `admlog_time` DESC LIMIT 500) AS del);");
 	}
 }
+
+$browser_detect = new Mobile_Detect();
+
+// ------------------------ Автоопределение системы -----------------------------//
+if (!is_user() || empty($config['themes'])) {
+    if (!empty($config['touchthemes'])) {
+        if ($browser_detect->isTablet()) {
+            $config['themes'] = $config['touchthemes'];
+        }
+    }
+
+    if (!empty($config['webthemes'])) {
+        if (!$browser_detect->isMobile() && !$browser_detect->isTablet()) {
+            $config['themes'] = $config['webthemes'];
+        }
+    }
+}
+
+if (empty($config['themes'])) {
+    $config['themes'] = 'default';
+}
+
+/*if ($config['closedsite'] == 2 && !is_admin() && !strsearch($php_self, array('/pages/closed.php', '/input.php'))) {
+    redirect('/pages/closed.php');
+}
+
+if ($config['closedsite'] == 1 && !is_user() && !strsearch($php_self, array('/pages/login.php', '/pages/registration.php', '/mail/lostpassword.php', '/input.php'))) {
+    notice('Для входа на сайт необходимо авторизоваться!');
+    redirect('/login');
+}*/

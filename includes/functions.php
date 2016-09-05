@@ -1,14 +1,7 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
+
 if (!defined('BASEDIR')) {
-    exit(header('Location: /index.php'));
+    exit(header('Location: /'));
 }
 
 // --------------------------- Функция перевода секунд во время -----------------------------//
@@ -1506,24 +1499,6 @@ function show_error($errors) {
 // ------------------------- Функция вывода предупреждения ------------------------//
 function show_login($notice) {
     render ('includes/login', compact('notice'));
-}
-
-// ------------------------- Функция замены заголовков ------------------------//
-function ob_processing($str) {
-    global $config;
-    if (isset($config['newtitle'])) {
-        $str = str_replace('%TITLE%', $config['newtitle'].' - '.$config['title'], $str);
-    } else {
-        $str = str_replace('%TITLE%', $config['logos'].' - '.$config['title'], $str);
-    }
-
-    $str = str_replace('%KEYWORDS%', $config['keywords'], $str);
-    $str = str_replace('%DESCRIPTION%', $config['description'], $str);
-
-    $str = str_replace('%HEADER%',  isset($config['header']) ? $config['header'] : '', $str);
-    $str = str_replace('%SUBHEADER%', isset($config['subheader']) ? $config['subheader'] : '', $str);
-
-    return $str;
 }
 
 // ------------------ Функция вывода иконки расширения --------------------//

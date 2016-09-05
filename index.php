@@ -11,36 +11,6 @@ require_once ('includes/start.php');
 require_once ('includes/functions.php');
 require_once ('includes/header.php');
 
-$browser_detect = new Mobile_Detect();
-
-// ------------------------ Автоопределение системы -----------------------------//
-if (!is_user() || empty($config['themes'])) {
-    if (!empty($config['touchthemes'])) {
-        if ($browser_detect->isTablet()) {
-            $config['themes'] = $config['touchthemes'];
-        }
-    }
-
-    if (!empty($config['webthemes'])) {
-        if (!$browser_detect->isMobile() && !$browser_detect->isTablet()) {
-            $config['themes'] = $config['webthemes'];
-        }
-    }
-}
-
-if (empty($config['themes'])) {
-    $config['themes'] = 'default';
-}
-
-/*if ($config['closedsite'] == 2 && !is_admin() && !strsearch($php_self, array('/pages/closed.php', '/input.php'))) {
-    redirect('/pages/closed.php');
-}
-
-if ($config['closedsite'] == 1 && !is_user() && !strsearch($php_self, array('/pages/login.php', '/pages/registration.php', '/mail/lostpassword.php', '/input.php'))) {
-    notice('Для входа на сайт необходимо авторизоваться!');
-    redirect('/login');
-}*/
-
 $params = App::router('params');
 $target = App::router('target');
 
