@@ -71,7 +71,7 @@
             <div class="form-group{{ App::hasError('protect') }}">
                 <label for="inputProtect">Проверочный код:</label>
                 <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;">
-                <input class="form-control" name="protect" id="inputProtect" maxlength="6" value="{{ App::getInput('protect') }}" required>
+                <input class="form-control" name="protect" id="inputProtect" maxlength="6" required>
                 {!! App::textError('protect') !!}
             </div>
 
@@ -79,7 +79,7 @@
         </form>
     </div>
     <br />
-    
+
     Все поля обязательны для заполнения, более полную информацию о себе вы можете добавить в своем профиле после регистрации<br />
     Указывайте верный е-мэйл, на него будут высланы регистрационные данные<br /><br />
 @stop

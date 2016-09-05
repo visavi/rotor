@@ -15,6 +15,7 @@ $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php'
 $router->map('GET|POST', '/login', '/modules/pages/login.php', 'login');
 $router->map('GET|POST', '/register', '/modules/pages/registration.php', 'register');
 $router->map('GET', '/logout', '/modules/pages/login.php@logout', 'logout');
+$router->map('GET', '/user/[user:login]', '/modules/pages/user.php', 'profile');
 
 $router->map('GET', '/captcha', '/modules/gallery/protect.php', 'captcha');
 

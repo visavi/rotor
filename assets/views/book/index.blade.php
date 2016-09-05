@@ -76,7 +76,7 @@
             <form action="book/add" method="post">
                 <input type="hidden" name="uid" value="<?= $_SESSION['token'] ?>" />
                 <div class="form-group{{ App::hasError('msg') }}">
-                    <label for="inputText">Сообщение:</label>
+                    <label for="markItUp">Сообщение:</label>
                     <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg') }}</textarea>
                     {!! App::textError('msg') !!}
                 </div>
@@ -90,14 +90,21 @@
         <div class="form">
             <form action="book/add" method="post">
                 <input type="hidden" name="uid" value="<?= $_SESSION['token'] ?>" />
-                Сообщение:<br />
-                <textarea cols="25" rows="5" name="msg">{{ App::getInput('msg') }}</textarea><br />
 
-                Проверочный код:<br />
-                <img src="/modules/gallery/protect.php" alt="" /><br />
-                <input name="provkod" size="6" maxlength="6" />
+                <div class="form-group{{ App::hasError('msg') }}">
+                    <label for="inputText">Сообщение:</label>
+                    <textarea class="form-control" id="inputText" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg') }}</textarea>
+                    {!! App::textError('msg') !!}
+                </div>
 
-                <input class="btn btn-primary" type="submit" value="Написать" />
+                <div class="form-group{{ App::hasError('protect') }}">
+                    <label for="inputProtect">Проверочный код:</label>
+                    <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;">
+                    <input class="form-control" name="protect" id="inputProtect" maxlength="6" required>
+                    {!! App::textError('protect') !!}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Написать</button>
             </form>
         </div><br />
 

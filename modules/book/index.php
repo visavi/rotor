@@ -34,15 +34,14 @@ case 'add':
     $validation = new Validation();
     $validation->addRule('equal', [$uid, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
         ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, $config['guesttextlength'])
-        ->addRule('bool', is_user(), ['msg' => 'Для добавления сообщения необходимо авторизоваться'])
         ->addRule('bool', is_flood($log), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!']);
 
     /* Проерка для гостей */
     if (! is_user() && $config['bookadds']) {
-        $provkod = check(strtolower($_POST['provkod']));
-
-        $validation->addRule('bool', is_user(), 'Для добавления сообщения необходимо авторизоваться');
-        $validation->addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!');
+        $protect = check(Request::input('protect'));
+        $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
+    } else {
+        $validation->addRule('bool', is_user(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
     }
 
     if ($validation->run()) {

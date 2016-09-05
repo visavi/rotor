@@ -117,9 +117,6 @@ if (empty($_SESSION['log']) && empty($_SESSION['par'])) {
 
 // ---------------------- Установка сессионных переменных -----------------------//
 $log = '';
-if (empty($_SESSION['counton'])) {
-	$_SESSION['counton'] = 0;
-}
 if (empty($_SESSION['currs'])) {
 	$_SESSION['currs'] = SITETIME;
 }
@@ -189,6 +186,4 @@ if ($udata = is_user()) {
 
 		DB::run() -> query("DELETE FROM `admlog` WHERE `admlog_time` < (SELECT MIN(`admlog_time`) FROM (SELECT `admlog_time` FROM `admlog` ORDER BY `admlog_time` DESC LIMIT 500) AS del);");
 	}
-	// -------------------------- Дайджест ------------------------------------//
-	DB::run() -> query("INSERT INTO `visit` (`visit_user`, `visit_self`, `visit_ip`, `visit_nowtime`)  VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `visit_self`=?, `visit_ip`=?, `visit_count`=?, `visit_nowtime`=?;", array($log, App::server('PHP_SELF'), App::getClientIp(), SITETIME, App::server('PHP_SELF'), App::getClientIp(), $_SESSION['counton'], SITETIME));
 }
