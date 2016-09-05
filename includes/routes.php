@@ -18,5 +18,4 @@ $router->map('GET', '/logout', '/modules/pages/login.php@logout', 'logout');
 
 $router->map('GET', '/captcha', '/modules/gallery/protect.php', 'captcha');
 
-
 Registry::set('router', $router->match());

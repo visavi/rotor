@@ -297,7 +297,12 @@ class App
 
     public static function server($key = null, $default = null)
     {
-        return check(urldecode(Request::server($key, $default)));
+        $server = Request::server($key, $default);
+
+        if ($key == 'REQUEST_URI') $server = urldecode($server);
+        if ($key == 'PHP_SELF') $server = current(explode('?', static::server('REQUEST_URI')));
+
+        return check($server);
     }
 
     public static function getUsername()
