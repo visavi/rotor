@@ -23,4 +23,4 @@ delete_users("Vantuz"); /* Полностью удаляет пользоват�
 ?>
 
 <br />
-<img src="/images/img/back.gif" alt="image" /> <a href="index.php?page=docs">Вернуться</a><br />
+<i class="fa fa-arrow-circle-left"></i> <a href="?page=docs">Вернуться</a><br />

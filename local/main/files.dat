@@ -32,4 +32,4 @@ show_title('Собственные страницы сайта');
 </pre>
 </div>
 
-Посмотрите пример страниц в виде <a href="/files/?page=docs">документации RotorCMS</a><br />
+Посмотрите пример страниц в виде <a href="/files?page=docs">документации RotorCMS</a><br />
