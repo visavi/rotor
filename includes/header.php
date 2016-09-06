@@ -196,6 +196,9 @@ if (empty($config['themes'])) {
     $config['themes'] = 'default';
 }
 
+Registry::set('config', $config);
+
+
 /*if ($config['closedsite'] == 2 && !is_admin() && !strsearch($php_self, array('/pages/closed.php', '/input.php'))) {
     redirect('/pages/closed.php');
 }

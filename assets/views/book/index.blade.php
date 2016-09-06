@@ -3,7 +3,6 @@
 @section('title', 'Гостевая книга - @parent')
 
 @section('content')
-
     <a href="/pages/rules.php">Правила</a> /
     <a href="/pages/smiles.php">Смайлы</a> /
     <a href="/pages/tags.php">Теги</a>

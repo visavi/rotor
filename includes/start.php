@@ -64,6 +64,4 @@ if (!file_exists(DATADIR.'/temp/setting.dat')) {
 }
 $config = unserialize(file_get_contents(DATADIR.'/temp/setting.dat'));
 
-Registry::set('config', $config);
-Registry::set('log', 1);
 date_default_timezone_set($config['timezone']);

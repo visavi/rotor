@@ -39,11 +39,11 @@ header('Content-type:text/html; charset=utf-8');
                 </div>
 
                 <div class="menu">
-                    <a href="/forum/">Форум</a>
-                    <a href="/book/">Гостевая</a>
-                    <a href="/news/">Новости</a>
-                    <a href="/load/">Скрипты</a>
-                    <a href="/blog/">Блоги</a>
+                    <a href="/forum">Форум</a>
+                    <a href="/book">Гостевая</a>
+                    <a href="/news">Новости</a>
+                    <a href="/load">Скрипты</a>
+                    <a href="/blog">Блоги</a>
 
                     <span class="mright">
 
@@ -51,18 +51,18 @@ header('Content-type:text/html; charset=utf-8');
     <?php if (is_admin()): ?>
 
         <?php if (stats_spam()>0): ?>
-            <a href="/admin/spam.php"><span style="color:#ff0000">Спам!</span></a>
+            <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
         <?php endif; ?>
 
-        <?php if ($udata['users_newchat']<stats_newchat()): ?>
-            <a href="/admin/chat.php"><span style="color:#ff0000">Чат</span></a>
+        <?php if (App::user('users_newchat') < stats_newchat()): ?>
+            <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
         <?php endif; ?>
 
-            <a href="/admin/">Панель</a>
+            <a href="/admin">Панель</a>
     <?php endif; ?>
 
-    <a href="/pages/index.php?act=menu">Меню</a>
-    <a href="/input.php?act=exit" onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
+    <a href="/menu">Меню</a>
+    <a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
 
 <?php else: ?>
     <a href="/login">Авторизация</a>/

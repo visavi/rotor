@@ -19,7 +19,6 @@ case 'index':
 
     $posts = DBM::run()->select('guest', null, $config['bookpost'], $start, array('guest_time'=>'DESC'));
 
-
     App::view('book/index', compact('posts', 'start', 'total'));
 break;
 

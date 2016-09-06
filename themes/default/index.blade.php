@@ -29,7 +29,7 @@ header("Content-type:text/html; charset=utf-8");
 <div class="cs" id="up">
     <!-- <a href="/"><span class="logotype">{{ App::setting('title') }}</span></a><br /> -->
     <a href="/"><img src="{{ App::setting('logotip') }}" alt="{{ App::setting('title') }}" /></a><br />
-    <?= {{ App::setting('logos') }} ?>
+    {{ App::setting('logos') }}
 </div>
 
 <?php render('includes/menu'); ?>

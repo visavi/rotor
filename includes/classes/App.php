@@ -369,9 +369,11 @@ class App
      * @param  string $key ключ массива
      * @return string      данные
      */
-    public static function user($key)
+    public static function user($key = null)
     {
         if (Registry::has('user')) {
+            if (empty($key)) return Registry::get('user');
+
             return isset(Registry::get('user')[$key]) ? Registry::get('user')[$key] : '';
         }
     }
@@ -381,11 +383,13 @@ class App
      * @param  string $key ключ массива
      * @return string      данные
      */
-    public static function setting($key = '')
+    public static function setting($key = null)
     {
-        if (empty($key)) return Registry::get('config');
+        if (Registry::has('config')) {
+            if (empty($key)) return Registry::get('config');
 
-        return isset(Registry::get('config')[$key]) ? Registry::get('config')[$key] : '';
+            return isset(Registry::get('config')[$key]) ? Registry::get('config')[$key] : '';
+        }
     }
 
     /**

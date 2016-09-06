@@ -1,4 +1,4 @@
-@include($config['themes'].'.index' )
+@include(App::setting('themes').'.index' )
 
 <div style="text-align:center">
     <?php include_once (DATADIR.'/advert/top_all.dat'); ?>
@@ -13,4 +13,4 @@
 
     @yield('content')
 
-@include($config['themes'].'.foot')
+@include(App::setting('themes').'.foot')
