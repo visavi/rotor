@@ -1,6 +1,10 @@
-RewriteEngine On
-RewriteCond %{REQUEST_METHOD} ^TRACE
-RewriteRule .* - [F]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
 
 <Files ~ "includes|local">
    Order allow,deny
@@ -90,7 +94,7 @@ AddType audio/x-pn-realaudio .ram .rm
 AddType video/mpeg .mpeg .mpg .mpe
 AddType video/quicktime .qt .mov
 AddType video/x-msvideo .avi
-Addtype application/vnd.sonyericsson.mms-template tpl
+Addtype application/vnd.sonyericsson.mms-template .tpl
 Addtype application/vnd.wap.wmlc .wmlc
 Addtype application/vnd.wap.wmlscriptc .wmlsc
 Addtype application/vnd.eri.thm .thm
