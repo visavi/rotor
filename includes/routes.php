@@ -19,4 +19,6 @@ $router->map('GET', '/user/[user:login]', '/modules/pages/user.php', 'profile');
 
 $router->map('GET', '/captcha', '/modules/gallery/protect.php', 'captcha');
 
+$router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
+
 Registry::set('router', $router->match());

@@ -1501,6 +1501,30 @@ function show_login($notice) {
     render ('includes/login', compact('notice'));
 }
 
+// ------------------------- Функция замены заголовков ------------------------//
+/**
+ * @deprecated
+ * Используется только для совместимости со старыми страницами
+ */
+function ob_processing($str)
+{
+    global $config;
+
+    if (isset($config['newtitle'])) {
+        $str = str_replace('<title>', '<title>'.$config['newtitle'].' - ', $str);
+    } else {
+        $str = str_replace('<title>', '<title>'.$config['logos'].' - ', $str);
+    }
+
+    $str = str_replace('%KEYWORDS%', $config['keywords'], $str);
+    $str = str_replace('%DESCRIPTION%', $config['description'], $str);
+
+    $str = str_replace('%HEADER%',  isset($config['header']) ? $config['header'] : '', $str);
+    $str = str_replace('%SUBHEADER%', isset($config['subheader']) ? $config['subheader'] : '', $str);
+
+    return $str;
+}
+
 // ------------------ Функция вывода иконки расширения --------------------//
 function icons($ext) {
     switch ($ext) {

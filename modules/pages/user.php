@@ -1,4 +1,5 @@
 <?php
+App::view($config['themes'].'/index', compact('udata'));
 
 $uz = isset($params['login']) ? check($params['login']) : check($log);
 
@@ -212,3 +213,5 @@ case 'editnote':
 break;
 
 endswitch;
+
+App::view($config['themes'].'/foot');

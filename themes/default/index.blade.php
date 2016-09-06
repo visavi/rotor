@@ -6,7 +6,7 @@ header("Content-type:text/html; charset=utf-8");
 <head>
 	<title>
 		@section('title')
-			RotorCMS
+			{{ $config['title'] }}
 		@show
 	</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
