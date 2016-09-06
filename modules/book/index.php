@@ -1,6 +1,6 @@
 <?php
 
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$start = abs(intval(Request::input('start', 0)));
 
 switch ($act):
 /**

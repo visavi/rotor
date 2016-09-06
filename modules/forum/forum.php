@@ -1,20 +1,7 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$fid = (isset($_GET['fid'])) ? abs(intval($_GET['fid'])) : 0;
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$start = abs(intval(Request::input('start', 0)));
+$fid  = isset($params['fid']) ? abs(intval($params['fid'])) : 0;
 
 show_title('Форум '.$config['title']);
 
@@ -49,7 +36,7 @@ case 'index':
 			$querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_locked` DESC, `topics_last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($fid));
 			$forums['topics'] = $querytopic->fetchAll();
 
-			render('forum/forum', array('forums' => $forums, 'fid' => $fid, 'start' => $start, 'total' => $total));
+            App::view('forum/forum', compact('forums', 'fid', 'start', 'total'));
 
 		} else {
 			show_error('Ошибка! Данного раздела не существует!');
@@ -157,5 +144,3 @@ endswitch;
 
 render('includes/back', array('link' => 'index.php', 'title' => 'К форумам', 'icon' => 'reload.gif'));
 
-include_once ('../themes/footer.php');
-?>
