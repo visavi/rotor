@@ -89,14 +89,6 @@ form {
 	float : right;
 }
 
-.bcontent a {
-	color : #006699;
-}
-
-.bcontent a:hover {
-	color : #009999;
-}
-
 .mcontent {
 	float : left;
 	width : 550px;

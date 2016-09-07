@@ -15,3 +15,4 @@
             <div class="lead">Доступ запрещен!</div>
         </div>
     </div>
+@stop

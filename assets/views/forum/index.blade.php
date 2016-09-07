@@ -1,9 +1,10 @@
 @extends('layout')
 
-@section('title', 'Гостевая книга - @parent')
+@section('title', 'Форум - @parent')
 
 @section('content')
 
+    <h1>Форум {{ App::setting('title') }}</h1>
     @if (is_user())
         Мои: <a href="/forum/active/themes">темы</a>, <a href="/forum/active/posts">сообщения</a>, <a href="/forum/bookmark">закладки</a> /
     @endif

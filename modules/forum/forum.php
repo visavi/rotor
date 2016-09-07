@@ -3,8 +3,6 @@
 $start = abs(intval(Request::input('start', 0)));
 $fid  = isset($params['fid']) ? abs(intval($params['fid'])) : 0;
 
-show_title('Форум '.$config['title']);
-
 switch ($act):
 ############################################################################################
 ##                                    Главная страница                                    ##
@@ -50,97 +48,74 @@ break;
 ############################################################################################
 ##                               Подготовка к созданию темы                               ##
 ############################################################################################
-case 'addtheme':
+case 'create':
 
 	$config['newtitle'] = 'Создание новой темы';
 
-	if (is_user()) {
-		$queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY `forums_order` ASC;");
-		$forums = $queryforum -> fetchAll();
+    $fid = abs(intval(Request::input('fid')));
 
-		if (count($forums) > 0) {
+    if (! is_user()) App::abort(403);
 
-			$output = array();
+    $forums = DBM::run()->select('forums', null, null, null, ['forums_order'=>'ASC']);
 
-			foreach ($forums as $row) {
-				$i = $row['forums_id'];
-				$p = $row['forums_parent'];
-				$output[$p][$i] = $row;
-			}
+    if (empty(count($forums))) {
+        App::abort('default', 'Разделы форума еще не созданы!');
+    }
 
-			render('forum/forum_add', array('forums' => $output, 'fid' => $fid));
+    if (Request::isMethod('post')) {
 
-		} else {
-			show_error('Разделы форума еще не созданы!');
-		}
-	} else {
-		show_login('Вы не авторизованы, для создания новой темы, необходимо');
-	}
+        $title = check(Request::input('title'));
+        $msg = check(Request::input('msg'));
+        $token = check(Request::input('token'));
 
-	render('includes/back', array('link' => 'forum.php?fid='.$fid, 'title' => 'Вернуться'));
-break;
+        $forum = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($fid));
 
-############################################################################################
-##                                     Cоздание темы                                      ##
-############################################################################################
-case 'add':
+        $validation = new Validation();
+        $validation -> addRule('equal', array($token, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+            -> addRule('not_empty', $forum, 'Раздела для новой темы не существует!')
+            -> addRule('empty', $forum['forums_closed'], 'В данном разделе запрещено создавать темы!')
+            -> addRule('equal', [is_flood($log), true], 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!')
+            -> addRule('string', $title, 'Слишком длинное или короткое название темы!', true, 5, 50)
+            -> addRule('string', $msg, 'Слишком длинный или короткий текст сообщения!', true, 5, $config['forumtextlength']);
 
-	$uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
-	$fid = (isset($_POST['fid'])) ? abs(intval($_POST['fid'])) : 0;
-	$title = (isset($_POST['title'])) ? check($_POST['title']) : '';
-	$msg = (isset($_POST['msg'])) ? check($_POST['msg']) : '';
+        /* Сделать проверку поиска похожей темы */
 
-	if (is_user()) {
+        if ($validation->run()) {
 
-		$forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($fid));
+            $title = antimat($title);
+            $msg = antimat($msg);
 
-		$validation = new Validation();
+            DB::run() -> query("UPDATE `users` SET `users_allforum`=`users_allforum`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
-		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('not_empty', $forums, 'Раздела для новой темы не существует!')
-			-> addRule('empty', $forums['forums_closed'], 'В данном разделе запрещено создавать темы!')
-			-> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
-			-> addRule('equal', array(is_flood($log), true), 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!')
-			-> addRule('string', $title, 'Слишком длинный или короткий заголовок темы!', true, 5, 50)
-			-> addRule('string', $msg, 'Слишком длинное или короткое сообщение!', true, 5, $config['forumtextlength']);
+            DB::run() -> query("INSERT INTO `topics` (`topics_forums_id`, `topics_title`, `topics_author`, `topics_posts`, `topics_last_user`, `topics_last_time`) VALUES (?, ?, ?, ?, ?, ?);", array($fid, $title, $log, 1, $log, SITETIME));
 
-		/* Сделать проверку поиска похожей темы */
+            $lastid = DB::run() -> lastInsertId();
 
-		if ($validation->run()) {
+            DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($lastid, $fid, $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-			$title = antimat($title);
-			$msg = antimat($msg);
+            DB::run() -> query("UPDATE `forums` SET `forums_topics`=`forums_topics`+1, `forums_posts`=`forums_posts`+1, `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?", array($lastid, $title, $log, SITETIME, $fid));
+            // Обновление родительского форума
+            if ($forum['forums_parent'] > 0) {
+                DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?", array($lastid, $title, $log, SITETIME, $forum['forums_parent']));
+            }
 
-			DB::run() -> query("UPDATE `users` SET `users_allforum`=`users_allforum`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+            App::setFlash('success', 'Новая тема успешно создана!');
+            App::redirect('/topic/'.$lastid);
 
-			DB::run() -> query("INSERT INTO `topics` (`topics_forums_id`, `topics_title`, `topics_author`, `topics_posts`, `topics_last_user`, `topics_last_time`) VALUES (?, ?, ?, ?, ?, ?);", array($fid, $title, $log, 1, $log, SITETIME));
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
+        }
+    }
 
-			$lastid = DB::run() -> lastInsertId();
+    $output = array();
 
-			DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($lastid, $fid, $log, $msg, SITETIME, $ip, $brow));
+    foreach ($forums as $row) {
+        $i = $row['forums_id'];
+        $p = $row['forums_parent'];
+        $output[$p][$i] = $row;
+    }
+    App::view('forum/forum_create', ['forums' => $output, 'fid' => $fid]);
+    break;
 
-			DB::run() -> query("UPDATE `forums` SET `forums_topics`=`forums_topics`+1, `forums_posts`=`forums_posts`+1, `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?", array($lastid, $title, $log, SITETIME, $fid));
-			// Обновление родительского форума
-			if ($forums['forums_parent'] > 0) {
-				DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?", array($lastid, $title, $log, SITETIME, $forums['forums_parent']));
-			}
-
-			notice('Новая тема успешно создана!');
-			redirect("topic.php?tid=$lastid");
-
-		} else {
-			show_error($validation->getErrors());
-		}
-	} else {
-		show_login('Вы не авторизованы, для создания новой темы, необходимо');
-	}
-
-	render('includes/back', array('link' => 'forum.php?fid='.$fid, 'title' => 'К темам'));
-break;
-
-default:
-	redirect("index.php");
 endswitch;
-
-render('includes/back', array('link' => 'index.php', 'title' => 'К форумам', 'icon' => 'reload.gif'));
-
