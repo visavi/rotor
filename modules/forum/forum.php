@@ -9,40 +9,34 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-	if (!empty($fid)) {
-		$forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($fid));
+		$forums = DBM::run()->selectFirst('forums', ['forums_id' => $fid]);
 
-		if (!empty($forums)) {
+		if (!$forums) {
+            App::abort('default', 'Данного раздела не существует!');
+        }
 
-			$page = floor(1 + $start / $config['forumtem']);
-			$config['header'] = $forums['forums_title'];
-			$config['newtitle'] = $forums['forums_title'].' (Стр. '.$page.')';
+        $page = floor(1 + $start / $config['forumtem']);
+        $config['header'] = $forums['forums_title'];
+        $config['newtitle'] = $forums['forums_title'].' (Стр. '.$page.')';
 
-			if (!empty($forums['forums_parent'])) {
-				$forums['subparent'] = DB::run() -> queryFetch("SELECT `forums_id`, `forums_title` FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($forums['forums_parent']));
-			}
+        if (!empty($forums['forums_parent'])) {
+            $forums['subparent'] = DB::run() -> queryFetch("SELECT `forums_id`, `forums_title` FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($forums['forums_parent']));
+        }
 
-			$querysub = DB::run() -> query("SELECT * FROM `forums` WHERE `forums_parent`=? ORDER BY `forums_order` ASC;", array($fid));
-			$forums['subforums'] = $querysub -> fetchAll();
+        $querysub = DB::run() -> query("SELECT * FROM `forums` WHERE `forums_parent`=? ORDER BY `forums_order` ASC;", array($fid));
+        $forums['subforums'] = $querysub -> fetchAll();
 
-			$total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `topics_forums_id`=?;", array($fid));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `topics_forums_id`=?;", array($fid));
 
-			if ($total > 0 && $start >= $total) {
-				$start = last_page($total, $config['forumtem']);
-			}
+        if ($total > 0 && $start >= $total) {
+            $start = last_page($total, $config['forumtem']);
+        }
 
-			$querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_locked` DESC, `topics_last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($fid));
-			$forums['topics'] = $querytopic->fetchAll();
+        $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_locked` DESC, `topics_last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($fid));
+        $forums['topics'] = $querytopic->fetchAll();
 
-            App::view('forum/forum', compact('forums', 'fid', 'start', 'total'));
+        App::view('forum/forum', compact('forums', 'fid', 'start', 'total'));
 
-		} else {
-			show_error('Ошибка! Данного раздела не существует!');
-		}
-	} else {
-		redirect("index.php");
-
-	}
 break;
 
 ############################################################################################
@@ -71,12 +65,12 @@ case 'create':
         $forum = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($fid));
 
         $validation = new Validation();
-        $validation -> addRule('equal', array($token, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-            -> addRule('not_empty', $forum, 'Раздела для новой темы не существует!')
-            -> addRule('empty', $forum['forums_closed'], 'В данном разделе запрещено создавать темы!')
-            -> addRule('equal', [is_flood($log), true], 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!')
-            -> addRule('string', $title, 'Слишком длинное или короткое название темы!', true, 5, 50)
-            -> addRule('string', $msg, 'Слишком длинный или короткий текст сообщения!', true, 5, $config['forumtextlength']);
+        $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            -> addRule('not_empty', $forum, ['fid' => 'Раздела для новой темы не существует!'])
+            -> addRule('empty', $forum['forums_closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
+            -> addRule('equal', [is_flood($log), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!'])
+            -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50)
+            -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, $config['forumtextlength']);
 
         /* Сделать проверку поиска похожей темы */
 

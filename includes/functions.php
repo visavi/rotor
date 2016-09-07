@@ -1785,8 +1785,8 @@ function recenttopics($show = 5) {
 
     if (is_array($topics) && count($topics) > 0) {
         foreach ($topics as $topic) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/forum/topic.php?tid='.$topic['topics_id'].'">'.$topic['topics_title'].'</a> ('.$topic['topics_posts'].')';
-            echo '<a href="/forum/topic.php?act=end&amp;tid='.$topic['topics_id'].'">&raquo;</a><br />';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['topics_id'].'">'.$topic['topics_title'].'</a> ('.$topic['topics_posts'].')';
+            echo '<a href="/topic/'.$topic['topics_id'].'?act=end">&raquo;</a><br />';
         }
     }
 }

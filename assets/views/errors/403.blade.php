@@ -10,9 +10,13 @@
         <div class="col-md-4 text-right">
             <img src="/images/errors/{{ basename($images[array_rand($images)]) }}" alt="error 403" />
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
             <h3>Ошибка 403!</h3>
             <div class="lead">Доступ запрещен!</div>
+
+            @if ($message)
+                <div class="lead">{{ $message }}</div>
+            @endif
         </div>
     </div>
 @stop

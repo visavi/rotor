@@ -1,22 +1,7 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$tid = (isset($_GET['tid'])) ? abs(intval($_GET['tid'])) : 0;
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
-
-show_title('Форум '.$config['title']);
+$start = abs(intval(Request::input('start', 0)));
+$tid  = isset($params['tid']) ? abs(intval($params['tid'])) : 0;
 
 switch ($act):
 ############################################################################################
@@ -90,7 +75,7 @@ case 'index':
 		}
 
 	} else {
-		redirect("index.php");
+		//redirect("index.php");
 	}
 break;
 
@@ -683,10 +668,4 @@ case 'end':
 	}
 break;
 
-default:
-	redirect("index.php");
 endswitch;
-
-render('includes/back', array('link' => 'index.php', 'title' => 'К форумам', 'icon' => 'reload.gif'));
-include_once ('../themes/footer.php');
-?>

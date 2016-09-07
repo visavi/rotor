@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index', compact('udata'));
+App::view($config['themes'].'/index');
 
 if (!empty($_GET['page'])){
 

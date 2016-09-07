@@ -28,10 +28,10 @@ break;
 case 'add':
 
     $msg = check(Request::input('msg'));
-    $uid = check(Request::input('uid'));
+    $token = check(Request::input('token'));
 
     $validation = new Validation();
-    $validation->addRule('equal', [$uid, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+    $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
         ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, $config['guesttextlength'])
         ->addRule('bool', is_flood($log), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!']);
 
@@ -101,10 +101,10 @@ case 'edit':
     if (Request::isMethod('post')) {
 
         $msg = check(Request::input('msg'));
-        $uid = check(Request::input('uid'));
+        $token = check(Request::input('token'));
 
         $validation = new Validation();
-        $validation->addRule('equal', [$uid, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+        $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
             ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, $config['guesttextlength']);
 
         if ($validation->run()) {

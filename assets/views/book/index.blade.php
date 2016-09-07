@@ -73,7 +73,7 @@
     <?php if (is_user()): ?>
         <div class="form">
             <form action="book/add" method="post">
-                <input type="hidden" name="uid" value="<?= $_SESSION['token'] ?>" />
+                <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
                 <div class="form-group{{ App::hasError('msg') }}">
                     <label for="markItUp">Сообщение:</label>
                     <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg') }}</textarea>

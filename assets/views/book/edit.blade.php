@@ -8,7 +8,7 @@
 
     <div class="form">
         <form action="/book/edit/<?= $id ?>" method="post">
-            <input type="hidden" name="uid" value="<?= $_SESSION['token'] ?>" />
+            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
 
             <div class="form-group{{ App::hasError('msg') }}">
                 <label for="inputText">Сообщение:</label>
