@@ -15,6 +15,8 @@ $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php'
 $router->map('GET', '/forum', '/modules/forum/index.php', 'forum');
 $router->map('GET', '/forum/[i:fid]', '/modules/forum/forum.php');
 $router->map('GET', '/topic/[i:tid]', '/modules/forum/topic.php');
+$router->map('GET', '/topic/[i:tid]/[i:id]', '/modules/forum/topic.php@viewpost');
+$router->map('GET', '/topic/[i:tid]/[end:action]', '/modules/forum/topic.php');
 $router->map('POST', '/topic/[i:tid]/[create:action]', '/modules/forum/topic.php');
 $router->map('GET', '/forum/new/[posts|themes:action]', '/modules/forum/new.php');
 $router->map('GET', '/forum/active/[posts|themes:action]', '/modules/forum/active.php');
@@ -28,7 +30,9 @@ $router->map('GET', '/logout', '/modules/pages/login.php@logout', 'logout');
 $router->map('GET', '/user/[user:login]', '/modules/pages/user.php', 'profile');
 $router->map('GET|POST', '/user/[user:login]/[note:action]', '/modules/pages/user.php', 'note');
 
-$router->map('GET', '/rules', '/modules/pages/rules.php', 'rules');
+$router->map('GET', '/tags', '/modules/pages/tags.php', 'tags');
+$router->map('GET', '/rules', '/modules/pages/rules.php', 'smiles');
+$router->map('GET', '/smiles', '/modules/pages/smiles.php', 'rules');
 $router->map('GET', '/captcha', '/modules/gallery/protect.php', 'captcha');
 
 $router->map('GET|POST', '/files', '/modules/files/index.php', 'files');

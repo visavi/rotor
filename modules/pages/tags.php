@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 show_title('Справка по тегам');
 
@@ -57,5 +46,4 @@ echo '<i class="fa fa-eraser"></i> Очистка выделенного тек�
 echo '<i class="fa fa-smile-o"></i> Вставка смайла из готового набора<br />';
 echo '<i class="fa fa-check-square-o"></i> Предварительный просмотр обработанного текста<br /><br /><br />';
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');

@@ -60,10 +60,10 @@
             <label for="inputGender">Пол:</label>
             <div class="form-group{{ App::hasError('gender') }}">
 
-                <input type="radio" name="gender" id="inputGenderMale" value="1"{{ (App::getInput('gender') == 1 ? ' checked="checked"' : '') }}>
+                <input type="radio" name="gender" id="inputGenderMale" value="1"{{ (!App::getInput('gender') || App::getInput('gender') == 1 ? ' checked' : '') }}>
                 <label for="inputGenderMale">Мужской</label>
 
-                <input type="radio" name="gender" id="inputGenderFemale" value="2"{{ (App::getInput('gender') == 2 ? ' checked="checked"' : '') }}>
+                <input type="radio" name="gender" id="inputGenderFemale" value="2"{{ (App::getInput('gender') == 2 ? ' checked' : '') }}>
                 <label for="inputGenderFemale">Женский</label>
                 {!! App::textError('gender') !!}
             </div>

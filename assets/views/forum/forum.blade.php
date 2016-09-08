@@ -34,7 +34,7 @@
 			<b><a href="/forum/<?=$subforum['forums_id']?>"><?=$subforum['forums_title']?></a></b> (<?=$subforum['forums_topics']?>/<?=$subforum['forums_posts']?>)</div>
 
 			<?php if ($subforum['forums_last_id'] > 0): ?>
-				<div>Тема: <a href="/topic/<?=$subforum['forums_last_id']?>?act=end"><?=$subforum['forums_last_themes']?></a><br />
+				<div>Тема: <a href="/topic/<?=$subforum['forums_last_id']?>/end"><?=$subforum['forums_last_themes']?></a><br />
 				Сообщение: <?=nickname($subforum['forums_last_user'])?> (<?=date_fixed($subforum['forums_last_time'])?>)</div>
 			<?php else: ?>
 				<div>Темы еще не созданы!</div>

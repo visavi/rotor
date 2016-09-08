@@ -34,7 +34,7 @@
             @endif
 
             @if ($data['forums_last_id'] > 0)
-                Тема: <a href="/topic/{{ $data['forums_last_id'] }}?act=end">{{ $data['forums_last_themes'] }}</a>
+                Тема: <a href="/topic/{{ $data['forums_last_id'] }}/end">{{ $data['forums_last_themes'] }}</a>
                 <br/>
                 Сообщение: {{ nickname($data['forums_last_user']) }} ({{ date_fixed($data['forums_last_time']) }})
             @else

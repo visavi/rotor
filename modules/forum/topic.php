@@ -633,17 +633,16 @@ break;
 ############################################################################################
 case 'viewpost':
 
-	$id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
+    $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
 
 	$querytopic = DB::run() -> querySingle("SELECT COUNT(*) FROM `posts` WHERE `posts_id`<=? AND `posts_topics_id`=? ORDER BY `posts_time` ASC LIMIT 1;", array($id, $tid));
-	if (!empty($querytopic)) {
-		$end = floor(($querytopic - 1) / $config['forumpost']) * $config['forumpost'];
 
-		redirect("topic.php?tid=$tid&start=$end");
+	if (empty($querytopic)) {
+	    App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+    }
 
-	} else {
-		show_error('Ошибка! Выбранная вами тема не существует, возможно она была удалена!');
-	}
+    $end = floor(($querytopic - 1) / $config['forumpost']) * $config['forumpost'];
+    App::redirect('/topic/'.$tid.'?start='.$end.'#post_'.$id);
 break;
 
 ############################################################################################
@@ -651,16 +650,14 @@ break;
 ############################################################################################
 case 'end':
 
-	$querytopic = DB::run() -> querySingle("SELECT `topics_posts` FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+	$topic = DBM::run()->selectFirst('topics', ['topics_id' => $tid]);
 
-	if (!empty($querytopic)) {
-		$end = floor(($querytopic - 1) / $config['forumpost']) * $config['forumpost'];
+    if (empty($topic)) {
+        App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+    }
 
-		redirect("topic.php?tid=$tid&start=$end");
-
-	} else {
-		show_error('Ошибка! Выбранная вами тема не существует, возможно она была удалена!');
-	}
+    $end = floor(($topic['topics_posts'] - 1) / $config['forumpost']) * $config['forumpost'];
+    App::redirect('/topic/'.$tid.'?start='.$end);
 break;
 
 endswitch;

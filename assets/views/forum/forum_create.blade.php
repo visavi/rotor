@@ -9,7 +9,6 @@
 		<form action="/forum/create" method="post">
 			<input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-
 			<div class="form-group{{ App::hasError('fid') }}">
 				<label for="inputForum">Форум</label>
 				<select class="form-control" id="inputForum" name="fid">

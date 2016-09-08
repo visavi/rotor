@@ -2,8 +2,12 @@
   margin-bottom: 5px;
 }
 
-.form-group input.form-control {
-  width: 250px;
+select.form-control, input.form-control {
+  width: 300px;
+}
+
+textarea.form-control {
+  resize: vertical;
 }
 
 .logotype {
