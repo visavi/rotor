@@ -9,189 +9,184 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-	if (!empty($tid)) {
-		$topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_id`, `forums`.`forums_title`, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics_id`=? LIMIT 1;", array($tid));
+    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_id`, `forums`.`forums_title`, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics_id`=? LIMIT 1;", array($tid));
 
-		if (!empty($topics)) {
-			$config['header'] = $topics['topics_title'];
+    if (empty($topics)) {
+        App::abort('default', 'Данной темы не существует!');
+    }
+        $config['header'] = $topics['topics_title'];
 
-			if (!empty($topics['forums_parent'])) {
-				$topics['subparent'] = DB::run() -> queryFetch("SELECT `forums_id`, `forums_title` FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($topics['forums_parent']));
-			}
+        if (!empty($topics['forums_parent'])) {
+            $topics['subparent'] = DB::run() -> queryFetch("SELECT `forums_id`, `forums_title` FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($topics['forums_parent']));
+        }
 
-			if (is_user()) {
-				$topics['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `book_topic`=? AND `book_user`=? LIMIT 1;", array($tid, $log));
+        if (is_user()) {
+            $topics['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `book_topic`=? AND `book_user`=? LIMIT 1;", array($tid, $log));
 
-				if (!empty($topics['bookmark']) && $topics['topics_posts'] > $topics['bookmark']['book_posts']) {
-					DB::run() -> query("UPDATE `bookmarks` SET `book_posts`=? WHERE `book_topic`=? AND `book_user`=? LIMIT 1;", array($topics['topics_posts'], $tid, $log));
-				}
-			}
+            if (!empty($topics['bookmark']) && $topics['topics_posts'] > $topics['bookmark']['book_posts']) {
+                DB::run() -> query("UPDATE `bookmarks` SET `book_posts`=? WHERE `book_topic`=? AND `book_user`=? LIMIT 1;", array($topics['topics_posts'], $tid, $log));
+            }
+        }
 
-			// --------------------------------------------------------------//
-			if (!empty($topics['topics_mod'])) {
-				$topics['curator'] = explode(',', $topics['topics_mod']);
-				$topics['is_moder'] = (in_array($log, $topics['curator'])) ? 1 : 0;
-			}
+        // --------------------------------------------------------------//
+        if (!empty($topics['topics_mod'])) {
+            $topics['curator'] = explode(',', $topics['topics_mod']);
+            $topics['is_moder'] = (in_array($log, $topics['curator'])) ? 1 : 0;
+        }
 
-			$total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `posts_topics_id`=?;", array($tid));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `posts_topics_id`=?;", array($tid));
 
-			if ($total > 0 && $start >= $total) {
-				$start = last_page($total, $config['forumpost']);
-			}
+        if ($total > 0 && $start >= $total) {
+            $start = last_page($total, $config['forumpost']);
+        }
 
-			$page = floor(1 + $start / $config['forumpost']);
-			$config['newtitle'] = $topics['topics_title'].' (Стр. '.$page.')';
-			$config['description'] = 'Обсуждение темы: '.$topics['topics_title'].' (Стр. '.$page.')';
+        $page = floor(1 + $start / $config['forumpost']);
+        $config['newtitle'] = $topics['topics_title'].' (Стр. '.$page.')';
+        $config['description'] = 'Обсуждение темы: '.$topics['topics_title'].' (Стр. '.$page.')';
 
 
-			$querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_time` ASC LIMIT ".$start.", ".$config['forumpost'].";", array($tid));
+        $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_time` ASC LIMIT ".$start.", ".$config['forumpost'].";", array($tid));
 
-			$topics['posts'] = $querypost->fetchAll();
+        $topics['posts'] = $querypost->fetchAll();
 
-			// ----- Получение массива файлов ----- //
-			$ipdpost = array();
-			foreach ($topics['posts'] as $val) {
-				$ipdpost[] = $val['posts_id'];
-			}
+        // ----- Получение массива файлов ----- //
+        $ipdpost = array();
+        foreach ($topics['posts'] as $val) {
+            $ipdpost[] = $val['posts_id'];
+        }
 
-			$ipdpost = implode(',', $ipdpost);
+        $ipdpost = implode(',', $ipdpost);
 
-			if (!empty($ipdpost)) {
-				$queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id` IN (".$ipdpost.");");
-				$files = $queryfiles->fetchAll();
-			}
-			if (!empty($files)){
-				$forumfiles = array();
-				foreach ($files as $file){
-					$topics['posts_files'][$file['file_posts_id']][] = $file;
-				}
-			}
-			// ------------------------------------- //
+        if (!empty($ipdpost)) {
+            $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id` IN (".$ipdpost.");");
+            $files = $queryfiles->fetchAll();
+        }
+        if (!empty($files)){
+            $forumfiles = array();
+            foreach ($files as $file){
+                $topics['posts_files'][$file['file_posts_id']][] = $file;
+            }
+        }
+        // ------------------------------------- //
+        App::view('forum/topic', compact('topics', 'tid', 'start', 'total'));
 
-			render('forum/topic', array('topics' => $topics, 'tid' => $tid, 'start' => $start, 'total' => $total));
 
-		} else {
-			show_error('Ошибка! Данной темы не существует!');
-		}
 
-	} else {
-		//redirect("index.php");
-	}
 break;
 
 ############################################################################################
 ##                                   Добавление сообщения                                 ##
 ############################################################################################
-case 'add':
+case 'create':
 
-	$uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
-	$msg = (isset($_POST['msg'])) ? check($_POST['msg']) : '';
+    $msg = check(Request::input('msg'));
+    $token = check(Request::input('token'));
 
-	if (is_user()) {
+    if (! is_user()) App::abort(403, 'Авторизуйтесь для добавления сообщения!');
 
 	$topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics`.`topics_id`=? LIMIT 1;", array($tid));
 
-		$validation = new Validation();
+    $validation = new Validation();
+    $validation -> addRule('equal', array($token, $_SESSION['token']), ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+        -> addRule('not_empty', $topics, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
+        -> addRule('empty', $topics['topics_closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
+        -> addRule('equal', [is_flood($log), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!'])
+        -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, $config['forumtextlength']);
 
-		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('not_empty', $topics, 'Выбранная вами тема не существует, возможно она была удалена!')
-			-> addRule('empty', $topics['topics_closed'], 'Запрещено писать в закрытую тему!')
-			-> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
-			-> addRule('equal', array(is_flood($log), true), 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!')
-			-> addRule('string', $msg, 'Слишком длинное или короткое сообщение!', true, 5, $config['forumtextlength']);
+        // Проверка сообщения на схожесть
+        $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_id` DESC LIMIT 1;", array($tid));
+        $validation -> addRule('not_equal', [$msg, $post['posts_text']], 'Ваше сообщение повторяет предыдущий пост!');
 
-			// Проверка сообщения на схожесть
-			$post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_id` DESC LIMIT 1;", array($tid));
-			$validation -> addRule('not_equal', array($msg, $post['posts_text']), 'Ваше сообщение повторяет предыдущий пост!');
+    if ($validation->run()) {
 
-		if ($validation->run()) {
+        $msg = antimat($msg);
 
-			$msg = antimat($msg);
+        if ($log == $post['posts_user'] && $post['posts_time'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['posts_text']) <= $config['forumtextlength'])) {
 
-			if ($log == $post['posts_user'] && $post['posts_time'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['posts_text']) <= $config['forumtextlength'])) {
+            $newpost = $post['posts_text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['posts_time']).' сек.[/size][/i]'."\n".$msg;
 
-				$newpost = $post['posts_text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['posts_time']).' сек.[/size][/i]'."\n".$msg;
+            DB::run() -> query("UPDATE `posts` SET `posts_text`=? WHERE `posts_id`=? LIMIT 1;", array($newpost, $post['posts_id']));
+            $lastid = $post['posts_id'];
 
-				DB::run() -> query("UPDATE `posts` SET `posts_text`=? WHERE `posts_id`=? LIMIT 1;", array($newpost, $post['posts_id']));
-				$lastid = $post['posts_id'];
+        } else {
 
-			} else {
+            DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($tid, $topics['topics_forums_id'], $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()));
+            $lastid = DB::run() -> lastInsertId();
 
-				DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($tid, $topics['topics_forums_id'], $log, $msg, SITETIME, $ip, $brow));
-				$lastid = DB::run() -> lastInsertId();
+            DB::run() -> query("UPDATE `users` SET `users_allforum`=`users_allforum`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=? LIMIT 1;", array($log));
 
-				DB::run() -> query("UPDATE `users` SET `users_allforum`=`users_allforum`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=? LIMIT 1;", array($log));
+            DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`+1, `topics_last_user`=?, `topics_last_time`=? WHERE `topics_id`=?;", array($log, SITETIME, $tid));
 
-				DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`+1, `topics_last_user`=?, `topics_last_time`=? WHERE `topics_id`=?;", array($log, SITETIME, $tid));
+            DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`+1, `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($tid, $topics['topics_title'], $log, SITETIME, $topics['topics_forums_id']));
+            // Обновление родительского форума
+            if ($topics['forums_parent'] > 0) {
+                DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($tid, $topics['topics_title'], $log, SITETIME, $topics['forums_parent']));
+            }
+        }
 
-				DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`+1, `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($tid, $topics['topics_title'], $log, SITETIME, $topics['topics_forums_id']));
-				// Обновление родительского форума
-				if ($topics['forums_parent'] > 0) {
-					DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($tid, $topics['topics_title'], $log, SITETIME, $topics['forums_parent']));
-				}
-			}
+        // -- Загрузка файла -- //
+        if (!empty($_FILES['file']['name']) && !empty($lastid)) {
+            if ($udata['users_point'] >= $config['forumloadpoints']){
+                if (is_uploaded_file($_FILES['file']['tmp_name'])) {
 
-			// -- Загрузка файла -- //
-			if (!empty($_FILES['file']['name']) && !empty($lastid)) {
-				if ($udata['users_point'] >= $config['forumloadpoints']){
-					if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+                    $filename = check($_FILES['file']['name']);
+                    $filename = (!is_utf($filename)) ? utf_lower(win_to_utf($filename)) : utf_lower($filename);
+                    $filesize = $_FILES['file']['size'];
 
-						$filename = check($_FILES['file']['name']);
-						$filename = (!is_utf($filename)) ? utf_lower(win_to_utf($filename)) : utf_lower($filename);
-						$filesize = $_FILES['file']['size'];
+                    if ($filesize > 0 && $filesize <= $config['forumloadsize']) {
+                        $arrext = explode(',', $config['forumextload']);
+                        $ext = getExtension($filename);
 
-						if ($filesize > 0 && $filesize <= $config['forumloadsize']) {
-							$arrext = explode(',', $config['forumextload']);
-							$ext = getExtension($filename);
+                        if (in_array($ext, $arrext, true)) {
 
-							if (in_array($ext, $arrext) && $ext != 'php') {
+                            if (utf_strlen($filename) > 50) {
+                                $filename = utf_substr($filename, 0, 45).'.'.$ext;
+                            }
 
-								if (utf_strlen($filename) > 50) {
-									$filename = utf_substr($filename, 0, 45).'.'.$ext;
-								}
+                            if (!file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'])){
+                                $old = umask(0);
+                                mkdir(BASEDIR.'/upload/forum/'.$topics['topics_id'], 0777, true);
+                                umask($old);
+                            }
 
-								if (!file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'])){
-									$old = umask(0);
-									mkdir(BASEDIR.'/upload/forum/'.$topics['topics_id'], 0777, true);
-									umask($old);
-								}
+                            $num = 0;
+                            $hash = $lastid.'.'.$ext;
+                            while(file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$hash)){
+                                $num++;
+                                $hash = $lastid.'_'.$num.'.'.$ext;
+                            }
 
-								$num = 0;
-								$hash = $lastid.'.'.$ext;
-								while(file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$hash)){
-									$num++;
-									$hash = $lastid.'_'.$num.'.'.$ext;
-								}
+                            move_uploaded_file($_FILES['file']['tmp_name'], BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$hash);
 
-								move_uploaded_file($_FILES['file']['tmp_name'], BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$hash);
+                            DB::run() -> query("INSERT INTO `files_forum` (`file_topics_id`, `file_posts_id`, `file_hash`, `file_name`, `file_size`, `file_user`, `file_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($topics['topics_id'], $lastid, $hash, $filename, $filesize, $log, SITETIME));
 
-								DB::run() -> query("INSERT INTO `files_forum` (`file_topics_id`, `file_posts_id`, `file_hash`, `file_name`, `file_size`, `file_user`, `file_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($topics['topics_id'], $lastid, $hash, $filename, $filesize, $log, SITETIME));
+                        } else {
+                            $fileError = 'Файл не загружен! Недопустимое расширение!';
+                        }
+                    } else {
+                        $fileError = 'Файл не загружен! Максимальный размер '.formatsize($config['forumloadsize']).'!';
+                    }
+                } else {
+                    $fileError = 'Ошибка! Не удалось загрузить файл!';
+                }
+            } else {
+                $fileError = 'Ошибка! У вас недостаточно актива для загрузки файлов!';
+            }
 
-							} else {
-								notice('Файл не загружен! Недопустимое расширение!', 'danger');
-							}
-						} else {
-							notice('Файл не загружен! Максимальный размер '.formatsize($config['forumloadsize']).'!', 'danger');
-						}
-					} else {
-						notice('Ошибка! Не удалось загрузить файл!', 'danger');
-					}
-				} else {
-					notice('Ошибка! У вас недостаточно актива для загрузки файлов!', 'danger');
-				}
-			}
-			// -- Загрузка файла -- //
+            if (isset($fileError)) {
+                App::setFlash('danger', $fileError);
+            }
+        }
+        // -- Загрузка файла -- //
 
-			notice('Сообщение успешно добавлено!');
-			redirect("topic.php?act=end&tid=$tid");
-		} else {
-			show_error($validation->getErrors());
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-	}
+        App::setFlash('success', 'Сообщение успешно добавлено!');
 
-	render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
+    } else {
+        App::setInput(Request::all());
+        App::setFlash('danger', $validation->getErrors());
+    }
+
+    App::redirect('/topic/'.$tid);
 break;
 
 ############################################################################################
@@ -403,7 +398,7 @@ case 'changetopic':
 										$msg = antimat($msg);
 
 										DB::run() -> query("UPDATE `topics` SET `topics_title`=? WHERE topics_id=?;", array($title, $tid));
-										DB::run() -> query("UPDATE `posts` SET `posts_user`=?, `posts_text`=?, `posts_ip`=?, `posts_brow`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($log, $msg, $ip, $brow, $log, SITETIME, $minposts));
+										DB::run() -> query("UPDATE `posts` SET `posts_user`=?, `posts_text`=?, `posts_ip`=?, `posts_brow`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($log, $msg, App::getClientIp(), App::getUserAgent(), $log, SITETIME, $minposts));
 
 										$_SESSION['note'] = 'Тема успешно изменена!';
 										redirect("topic.php?tid=$tid");

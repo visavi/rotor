@@ -15,6 +15,7 @@ $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php'
 $router->map('GET', '/forum', '/modules/forum/index.php', 'forum');
 $router->map('GET', '/forum/[i:fid]', '/modules/forum/forum.php');
 $router->map('GET', '/topic/[i:tid]', '/modules/forum/topic.php');
+$router->map('POST', '/topic/[i:tid]/[create:action]', '/modules/forum/topic.php');
 $router->map('GET', '/forum/new/[posts|themes:action]', '/modules/forum/new.php');
 $router->map('GET', '/forum/active/[posts|themes:action]', '/modules/forum/active.php');
 $router->map('GET', '/forum/top/themes', '/modules/forum/top.php');

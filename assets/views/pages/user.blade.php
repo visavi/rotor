@@ -1,10 +1,10 @@
 @extends('layout')
 
-@section('title', 'Анкета пользователя '.e($uz).'. - @parent')
+@section('title', 'Анкета пользователя '.e($user['users_login']).'. - @parent')
 
 @section('content')
 
-    <h1>{!! user_avatars($uz).nickname($uz) !!}<small>{{ user_visit($uz) }}</small></h1>
+    <h1>{!! user_avatars($user['users_login']).nickname($user['users_login']) !!}<small>{{ user_visit($user['users_login']) }}</small></h1>
 
 <?php
     if ($user['users_confirmreg'] == 1) {
@@ -69,36 +69,36 @@
     }
     echo 'Дата регистрации: '.date_fixed($user['users_joined'], 'j F Y').'<br />';
 
-    $invite = DB::run() -> queryFetch("SELECT * FROM `invite` WHERE `invited`=?;", array($uz));
+    $invite = DB::run() -> queryFetch("SELECT * FROM `invite` WHERE `invited`=?;", array($user['users_login']));
     if (!empty($invite)){
     echo 'Зарегистрирован по приглашению: '.profile($invite['user']).'<br />';
     }
 
     echo 'Последняя авторизация: '.date_fixed($user['users_timelastlogin']).'<br />';
 
-    echo '<a href="banhist.php?uz='.$uz.'">Строгих нарушений: '.$user['users_totalban'].'</a><br />';
+    echo '<a href="banhist.php?uz='.$user['users_login'].'">Строгих нарушений: '.$user['users_totalban'].'</a><br />';
 
-    echo '<a href="rathist.php?uz='.$uz.'">Авторитет: <b>'.format_num($user['users_rating']).'</b> (+'.$user['users_posrating'].'/-'.$user['users_negrating'].')</a><br />';
+    echo '<a href="rathist.php?uz='.$user['users_login'].'">Авторитет: <b>'.format_num($user['users_rating']).'</b> (+'.$user['users_posrating'].'/-'.$user['users_negrating'].')</a><br />';
 
-    if (is_user() && $log != $uz) {
-    echo '[ <a href="rating.php?uz='.$uz.'&amp;vote=1"><img src="/images/img/plus.gif" alt="Плюс" /><span style="color:#0099cc"> Плюс</span></a> / ';
-    echo '<a href="rating.php?uz='.$uz.'&amp;vote=0"><span style="color:#ff0000">Минус</span> <img src="/images/img/minus.gif" alt="Минус" /></a> ]<br />';
+    if (is_user() && $log != $user['users_login']) {
+    echo '[ <a href="rating.php?uz='.$user['users_login'].'&amp;vote=1"><img src="/images/img/plus.gif" alt="Плюс" /><span style="color:#0099cc"> Плюс</span></a> / ';
+    echo '<a href="rating.php?uz='.$user['users_login'].'&amp;vote=0"><span style="color:#ff0000">Минус</span> <img src="/images/img/minus.gif" alt="Минус" /></a> ]<br />';
     }
 
-    echo '<b><a href="/forum/active.php?act=themes&amp;uz='.$uz.'">Форум</a></b> (<a href="/forum/active.php?act=posts&amp;uz='.$uz.'">Сообщ.</a>) / ';
-    echo '<b><a href="/load/active.php?act=files&amp;uz='.$uz.'">Загрузки</a></b> (<a href="/load/active.php?act=comments&amp;uz='.$uz.'">комм.</a>) / ';
-    echo '<b><a href="/blog/active.php?act=blogs&amp;uz='.$uz.'">Блоги</a></b> (<a href="/blog/active.php?act=comments&amp;uz='.$uz.'">комм.</a>) / ';
-    echo '<b><a href="/gallery/album.php?act=photo&amp;uz='.$uz.'">Галерея</a></b> (<a href="/gallery/comments.php?act=comments&amp;uz='.$uz.'">комм.</a>)<br />';
+    echo '<b><a href="/forum/active.php?act=themes&amp;uz='.$user['users_login'].'">Форум</a></b> (<a href="/forum/active.php?act=posts&amp;uz='.$user['users_login'].'">Сообщ.</a>) / ';
+    echo '<b><a href="/load/active.php?act=files&amp;uz='.$user['users_login'].'">Загрузки</a></b> (<a href="/load/active.php?act=comments&amp;uz='.$user['users_login'].'">комм.</a>) / ';
+    echo '<b><a href="/blog/active.php?act=blogs&amp;uz='.$user['users_login'].'">Блоги</a></b> (<a href="/blog/active.php?act=comments&amp;uz='.$user['users_login'].'">комм.</a>) / ';
+    echo '<b><a href="/gallery/album.php?act=photo&amp;uz='.$user['users_login'].'">Галерея</a></b> (<a href="/gallery/comments.php?act=comments&amp;uz='.$user['users_login'].'">комм.</a>)<br />';
 
     if (!empty($user['users_info'])) {
     echo '<div class="hiding"><b>О себе</b>:<br />'.bb_code($user['users_info']).'</div>';
     }
 
     if (is_admin()) {
-    $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `note_user`=? LIMIT 1;", array($uz));
+    $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `note_user`=? LIMIT 1;", array($user['users_login']));
 
     echo '<div class="form">';
-        echo '<img src="/images/img/pin.gif" alt="Заметка" /> <b>Заметка:</b> (<a href="/user/'.$uz.'/note">Изменить</a>)<br />';
+        echo '<img src="/images/img/pin.gif" alt="Заметка" /> <b>Заметка:</b> (<a href="/user/'.$user['users_login'].'/note">Изменить</a>)<br />';
 
         if (!empty($usernote['note_text'])) {
         echo bb_code($usernote['note_text']).'<br />';
@@ -111,29 +111,29 @@
     }
 
     echo '<div class="act">';
-        echo '<img src="/images/img/wall.gif" alt="Стена" /> <a href="wall.php?uz='.$uz.'">Стена сообщений</a> ('.user_wall($uz).')<br />';
+        echo '<img src="/images/img/wall.gif" alt="Стена" /> <a href="wall.php?uz='.$user['users_login'].'">Стена сообщений</a> ('.user_wall($user['users_login']).')<br />';
 
-        if ($uz != $log) {
+        if ($user['users_login'] != $log) {
         echo '<img src="/images/img/users.gif" alt="Добавить" /> Добавить в ';
-        echo '<a href="contact.php?act=add&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">контакт</a> / ';
-        echo '<a href="ignore.php?act=add&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">игнор</a><br />';
-        echo '<img src="/images/img/mail.gif" alt="Отправить" /> <a href="private.php?act=submit&amp;uz='.$uz.'">Отправить сообщение</a><br />';
+        echo '<a href="contact.php?act=add&amp;uz='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">контакт</a> / ';
+        echo '<a href="ignore.php?act=add&amp;uz='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">игнор</a><br />';
+        echo '<img src="/images/img/mail.gif" alt="Отправить" /> <a href="private.php?act=submit&amp;uz='.$user['users_login'].'">Отправить сообщение</a><br />';
 
-        echo '<img src="/images/img/money.gif" alt="Перечислить" /> <a href="/pages/perevod.php?uz='.$uz.'">Перечислить денег</a><br />';
+        echo '<img src="/images/img/money.gif" alt="Перечислить" /> <a href="/pages/perevod.php?uz='.$user['users_login'].'">Перечислить денег</a><br />';
 
         if (!empty($user['users_site'])) {
-        echo '<img src="/images/img/homepage.gif" alt="Перейти" /> <a href="'.$user['users_site'].'">Перейти на сайт '.$uz.'</a><br />';
+        echo '<img src="/images/img/homepage.gif" alt="Перейти" /> <a href="'.$user['users_site'].'">Перейти на сайт '.$user['users_login'].'</a><br />';
         }
 
         if (is_admin(array(101, 102, 103))) {
         if (!empty($config['invite'])) {
-        echo '<img src="/images/img/error.gif" alt="Бан" /> <a href="/admin/invitations.php?act=send&amp;user='.$uz.'&amp;uid='.$_SESSION['token'].'">Отправить инвайт</a><br />';
+        echo '<img src="/images/img/error.gif" alt="Бан" /> <a href="/admin/invitations.php?act=send&amp;user='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">Отправить инвайт</a><br />';
         }
-        echo '<img src="/images/img/error.gif" alt="Бан" /> <a href="/admin/zaban.php?act=edit&amp;uz='.$uz.'">Бан / Разбан</a><br />';
+        echo '<img src="/images/img/error.gif" alt="Бан" /> <a href="/admin/zaban.php?act=edit&amp;uz='.$user['users_login'].'">Бан / Разбан</a><br />';
         }
 
         if (is_admin(array(101, 102))) {
-        echo '<img src="/images/img/panel.gif" alt="Редактировать" /> <a href="/admin/users.php?act=edit&amp;uz='.$uz.'">Редактировать</a><br />';
+        echo '<img src="/images/img/panel.gif" alt="Редактировать" /> <a href="/admin/users.php?act=edit&amp;uz='.$user['users_login'].'">Редактировать</a><br />';
         }
         } else {
         echo '<img src="/images/img/user.gif" alt="Профиль" /> <a href="profile.php">Мой профиль</a><br />';
