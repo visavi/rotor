@@ -1,14 +1,14 @@
 @extends('layout')
 
-@section('title', 'Гостевая книга - @parent')
+@section('title', 'Гостевая книга (Стр. '.$page.') - @parent')
 
 @section('content')
-    <a href="/pages/rules.php">Правила</a> /
-    <a href="/pages/smiles.php">Смайлы</a> /
-    <a href="/pages/tags.php">Теги</a>
+    <a href="/rules">Правила</a> /
+    <a href="/smiles">Смайлы</a> /
+    <a href="/tags">Теги</a>
 
     <?php if (is_admin()):?>
-        / <a href="/admin/book.php?start=<?=$start?>">Управление</a>
+        / <a href="/admin/book?start=<?=$start?>">Управление</a>
     <?php endif;?>
     <hr />
 
@@ -25,7 +25,7 @@
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <noindex><a href="#" onclick="return sendComplaint(this)" data-type="/book" data-id="{{ $data['guest_id'] }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
+                            <noindex><a href="#" onclick="return sendComplaint(this)" data-type="/book" data-id="{{ $data['guest_id'] }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
                         </div>
 
                     <?php endif; ?>

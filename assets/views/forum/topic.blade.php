@@ -20,13 +20,8 @@
            / <a href="topic.php?act=edittopic&amp;tid=<?=$tid?>">Изменить</a>
         <?php endif; ?>
 
-        <?php if (empty($topics['bookmark'])): ?>
-            / <a href="bookmark.php?act=add&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">В закладки</a>
-        <?php else: ?>
-            / <a href="bookmark.php?act=remove&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Из закладок</a>
-        <?php endif; ?>
-
-        <br />
+        <?php $bookmark = $topics['bookmark'] ? 'Из закладок' : 'В закладки'; ?>
+        / <a href="#" onclick="return bookmark(this)" data-tid="{{ $tid }}" data-token="{{ $_SESSION['token'] }}" >{{ $bookmark }}</a>
     <?php endif; ?>
 
     <?php if (!empty($topics['curator'])): ?>

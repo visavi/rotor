@@ -15,11 +15,10 @@ case 'index':
     }
 
     $page = floor(1 + $start / $config['bookpost']);
-    $config['newtitle'] = 'Гостевая книга (Стр. '.$page.')';
 
     $posts = DBM::run()->select('guest', null, $config['bookpost'], $start, array('guest_time'=>'DESC'));
 
-    App::view('book/index', compact('posts', 'start', 'total'));
+    App::view('book/index', compact('posts', 'start', 'total', 'page'));
 break;
 
 /**
@@ -134,14 +133,13 @@ break;
  * Жалоба
  */
 case 'complaint':
-    $id = abs(intval(Request::input('id')));
-
     if (! Request::ajax()) App::redirect('/');
 
-    $uid = check(Request::input('token'));
+    $token = check(Request::input('token'));
+    $id = abs(intval(Request::input('id')));
 
     $validation = new Validation();
-    $validation->addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+    $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
 
     $data = DBM::run()->selectFirst('guest', array('guest_id' => $id));

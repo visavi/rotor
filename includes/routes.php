@@ -23,6 +23,8 @@ $router->map('GET', '/forum/active/[posts|themes:action]', '/modules/forum/activ
 $router->map('GET', '/forum/top/themes', '/modules/forum/top.php');
 $router->map('GET', '/forum/search', '/modules/forum/search.php');
 $router->map('GET|POST', '/forum/[create:action]', '/modules/forum/forum.php');
+$router->map('GET', '/forum/bookmark', '/modules/forum/bookmark.php');
+$router->map('POST', '/forum/bookmark/[perform:action]', '/modules/forum/bookmark.php');
 
 $router->map('GET|POST', '/login', '/modules/pages/login.php', 'login');
 $router->map('GET|POST', '/register', '/modules/pages/registration.php', 'register');

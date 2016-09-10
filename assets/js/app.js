@@ -111,3 +111,30 @@ function sendComplaint(el) {
     });
     return false;
 }
+
+/* Добавление или удаление закладок */
+function bookmark(el) {
+
+    $.ajax({
+        data: {tid: $(el).data('tid'), token: $(el).data('token')},
+        dataType: 'JSON', type: 'POST', url: '/forum/bookmark/perform',
+        success: function(data) {
+
+            if (data.status == 'error'){
+                notify('error', data.message);
+                return false;
+            }
+
+            if (data.status == 'added'){
+                notify('success', data.message);
+                $(el).text('Из закладок');
+            }
+
+            if (data.status == 'deleted'){
+                notify('success', data.message);
+                $(el).text('В закладки');
+            }
+        }
+    });
+    return false;
+}
