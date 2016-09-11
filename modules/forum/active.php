@@ -46,34 +46,30 @@ break;
 ############################################################################################
 ##                                    Удаление сообщений                                  ##
 ############################################################################################
-case 'del':
+case 'delete':
 
-    $uid = check($_GET['uid']);
-    $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
+    if (! Request::ajax()) App::redirect('/');
+    if (! is_admin()) App::abort(403, 'Удалять сообщения могут только модераторы!');
 
-    if (is_admin()) {
-        if ($uid == $_SESSION['token']) {
-            $topics = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($id));
+    $token = check(Request::input('token'));
+    $tid = abs(intval(Request::input('tid')));
 
-            if (!empty($topics)) {
-                DB::run() -> query("DELETE FROM `posts` WHERE `posts_id`=? AND `posts_topics_id`=?;", array($id, $topics['posts_topics_id']));
-                DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`-? WHERE `topics_id`=?;", array(1, $topics['posts_topics_id']));
-                DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`-? WHERE `forums_id`=?;", array(1, $topics['posts_forums_id']));
+    $validation = new Validation();
+    $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
 
-                notice('Сообщение успешно удалено!');
-                redirect("active.php?act=posts&uz=$uz&start=$start");
+    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($tid));
+    $validation->addRule('custom', $post, 'Ошибка! Данного сообщения не существует!');
 
-            } else {
-                show_error('Ошибка! Данного сообщения не существует!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
+    if ($validation->run()) {
+
+        DB::run() -> query("DELETE FROM `posts` WHERE `posts_id`=? AND `posts_topics_id`=?;", array($tid, $post['posts_topics_id']));
+        DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`-? WHERE `topics_id`=?;", array(1, $post['posts_topics_id']));
+        DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`-? WHERE `forums_id`=?;", array(1, $post['posts_forums_id']));
+
+        exit(json_encode(['status' => 'success']));
     } else {
-        show_error('Ошибка! Удалять сообщения могут только модераторы!');
+        exit(json_encode(['status' => 'error', 'message' => current($validation->getErrors())]));
     }
-
-    render('includes/back', array('link' => 'active.php?act=posts&amp;uz='.$uz.'&amp;start='.$start, 'title' => 'Вернуться'));
 break;
 
 endswitch;

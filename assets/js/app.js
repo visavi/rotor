@@ -138,3 +138,27 @@ function bookmark(el) {
     });
     return false;
 }
+
+/* Удаление сообщения в форуме */
+function deletePost(el) {
+
+    $.ajax({
+        data: {tid: $(el).data('tid'), token: $(el).data('token')},
+        dataType: 'JSON', type: 'POST', url: '/forum/active/delete',
+        success: function(data) {
+
+            if (data.status == 'error'){
+                notify('error', data.message);
+                return false;
+            }
+
+            if (data.status == 'success'){
+                notify('success', 'Сообщение успешно удалено');
+
+                $(el).closest('.post').hide('slow');
+            }
+        }
+    });
+
+    return false;
+}

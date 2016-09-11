@@ -21,7 +21,7 @@
         <?php endif; ?>
 
         <?php $bookmark = $topics['bookmark'] ? 'Из закладок' : 'В закладки'; ?>
-        / <a href="#" onclick="return bookmark(this)" data-tid="{{ $tid }}" data-token="{{ $_SESSION['token'] }}" >{{ $bookmark }}</a>
+        / <a href="#" onclick="return bookmark(this)" data-tid="{{ $tid }}" data-token="{{ $_SESSION['token'] }}">{{ $bookmark }}</a>
     <?php endif; ?>
 
     <?php if (!empty($topics['curator'])): ?>

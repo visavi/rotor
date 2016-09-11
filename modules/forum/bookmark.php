@@ -38,7 +38,6 @@ case 'perform':
     $tid = abs(intval(Request::input('tid')));
 
     $validation = new Validation();
-
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
 
     $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
@@ -65,26 +64,26 @@ break;
 ############################################################################################
 ##                                 Удаление закладок                                      ##
 ############################################################################################
-case 'del':
+case 'delete':
 
-    $uid = check($_GET['uid']);
-    $del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
+    $token = check(Request::input('token'));
+    $topicIds = intar(Request::input('del'));
 
-    if ($uid == $_SESSION['token']) {
-        if (!empty($del)) {
-            $del = implode(',', $del);
+    $validation = new Validation();
+    $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+        ->addRule('not_empty', $topicIds, 'Ошибка! Отсутствуют выбранные закладки!');
 
-            DB::run() -> query("DELETE FROM `bookmarks` WHERE `book_id` IN (".$del.") AND `book_user`=?;", array($log));
+    if ($validation->run()) {
+        $topicIds = implode(',', $topicIds);
 
-            notice('Выбранные темы успешно удалены из закладок!');
-            redirect("bookmark.php?start=$start");
+        DB::run()->query("DELETE FROM `bookmarks` WHERE `book_id` IN (".$topicIds.") AND `book_user`=?;", array($log));
 
-        } else {
-            show_error('Ошибка! Отсутствуют выбранные закладки!');
-        }
+        App::setFlash('success', 'Выбранные темы успешно удалены из закладок!');
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::setFlash('danger', $validation->getErrors());
     }
+
+    App::redirect('/forum/bookmark?start='.$start);
 
     render('includes/back', array('link' => 'bookmark.php?start='.$start, 'title' => 'Вернуться'));
 break;
