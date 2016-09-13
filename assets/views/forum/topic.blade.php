@@ -12,7 +12,7 @@
     <?php endif; ?>
 
     <a href="/forum/<?=$topics['forums_id']?>"><?=$topics['forums_title']?></a> /
-    <a href="/topic/<?=$tid?>/print">Скачать</a> / <a href="/topic/<?=$tid?>/rss">RSS-лента</a>
+    <a href="/topic/<?=$tid?>/print">Печать</a> / <a href="/topic/<?=$tid?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
         <?php if ($topics['topics_author'] == $log && empty($topics['topics_closed']) && App::user('users_point') >= $config['editforumpoint']): ?>

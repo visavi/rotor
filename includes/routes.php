@@ -16,6 +16,8 @@ $router->map('GET', '/forum', '/modules/forum/index.php', 'forum');
 $router->map('GET', '/forum/[i:fid]', '/modules/forum/forum.php');
 $router->map('GET', '/topic/[i:tid]', '/modules/forum/topic.php');
 $router->map('GET', '/topic/[i:tid]/[i:id]', '/modules/forum/topic.php@viewpost');
+$router->map('GET', '/topic/[i:tid]/rss', '/modules/forum/rss.php');
+$router->map('GET', '/topic/[i:tid]/print', '/modules/forum/print.php');
 $router->map('GET', '/topic/[i:tid]/[end:action]', '/modules/forum/topic.php');
 $router->map('POST', '/topic/[i:tid]/[create:action]', '/modules/forum/topic.php');
 $router->map('GET', '/forum/new/[posts|themes:action]', '/modules/forum/new.php');

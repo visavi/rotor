@@ -678,10 +678,10 @@ function user_avatars($login) {
     }
 
     if (isset($arravat[$login]) && file_exists(BASEDIR.'/'.$arravat[$login])) {
-        return '<a href="/pages/user.php?uz='.$login.'"><img src="/'.$arravat[$login].'" alt="" /></a> ';
+        return '<a href="/user/'.$login.'"><img src="/'.$arravat[$login].'" alt="" /></a> ';
     }
 
-    return '<a href="/pages/user.php?uz='.$login.'"><img src="/images/avatars/noavatar.gif" alt="" /></a> ';
+    return '<a href="/user/'.$login.'"><img src="/images/avatars/noavatar.gif" alt="" /></a> ';
 }
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
