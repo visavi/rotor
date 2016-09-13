@@ -42,7 +42,6 @@ case 'perform':
 
     $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
     $validation->addRule('custom', $topic, 'Ошибка! Данной темы не существует!');
-    $validation->addRule('empty', $topic['topics_closed'], 'Ошибка! Нельзя добавлять в закладки закрытую тему!');
 
     if ($validation->run()) {
 

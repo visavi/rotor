@@ -293,44 +293,31 @@ break;
 ############################################################################################
 ##                                       Закрытие темы                                    ##
 ############################################################################################
-case 'closed':
+case 'close':
 
-	$uid = check($_GET['uid']);
+    $token = check(Request::input('token'));
 
-	if ($uid == $_SESSION['token']) {
-		if (is_user()) {
-			if ($udata['users_point'] >= $config['editforumpoint']) {
-				$topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
 
-				if (!empty($topics)) {
-					if ($topics['topics_author'] == $log) {
-						if (empty($topics['topics_closed'])) {
-							DB::run() -> query("UPDATE `topics` SET `topics_closed`=? WHERE `topics_id`=?;", array(1, $tid));
+    $validation = new Validation();
+    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+         -> addRule('bool', is_user(), 'Для закрытия тем необходимо авторизоваться')
+         -> addRule('max', [App::user('users_point'), App::setting('editforumpoint')], 'Для закрытия тем вам необходимо набрать '.points(App::setting('editforumpoint')).'!')
+        -> addRule('not_empty', $topic, 'Выбранная вами тема не существует, возможно она была удалена!')
+        -> addRule('equal', [$topic['topics_author'], $log], 'Вы не автор данной темы!')
+        -> addRule('empty', $topic['topics_closed'], 'Данная тема уже закрыта!');
 
-							$_SESSION['note'] = 'Тема успешно закрыта!';
-							redirect("topic.php?tid=$tid&start=$start");
+        if ($validation->run()) {
 
-						} else {
-							show_error('Ошибка! Данная тема уже закрыта!');
-						}
-					} else {
-						show_error('Ошибка! Вы не автор данной темы!');
-					}
-				} else {
-					show_error('Ошибка! Выбранная вами тема не существует, возможно она была удалена!');
-				}
-			} else {
-				show_error('Ошибка! У вас недостаточно актива для закрытия тем!');
-			}
-		} else {
-			show_login('Вы не авторизованы, чтобы закрывать темы, необходимо');
-		}
-	} else {
-		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-	}
+            DB::run() -> query("UPDATE `topics` SET `topics_closed`=? WHERE `topics_id`=?;", array(1, $tid));
 
-	render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
-break;
+            App::setFlash('success', 'Тема успешно закрыта!');
+        } else {
+            App::setFlash('danger', $validation->getErrors());
+        }
+
+        App::redirect('/topic/'.$tid);
+    break;
 
 ############################################################################################
 ##                                   Подготовка к изменению                               ##

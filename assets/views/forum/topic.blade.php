@@ -16,8 +16,8 @@
 
     <?php if (is_user()): ?>
         <?php if ($topics['topics_author'] == $log && empty($topics['topics_closed']) && App::user('users_point') >= $config['editforumpoint']): ?>
-           / <a href="topic.php?act=closed&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a>
-           / <a href="topic.php?act=edittopic&amp;tid=<?=$tid?>">Изменить</a>
+           / <a href="/topic/<?= $tid ?>/close?token=<?=$_SESSION['token']?>">Закрыть</a>
+           / <a href="/topic/<?= $tid ?>/edit">Изменить</a>
         <?php endif; ?>
 
         <?php $bookmark = $topics['bookmark'] ? 'Из закладок' : 'В закладки'; ?>
