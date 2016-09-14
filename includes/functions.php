@@ -1965,7 +1965,7 @@ function cache_functions($cache=10800) {
 // ------------- Функция кэширования админских ссылок -------------//
 function cache_admin_links($cache=10800) {
     if (@filemtime(DATADIR.'/temp/adminlinks.dat') < time()-$cache) {
-        $files = array_diff(scandir(BASEDIR.'/admin/links'), array('.', '..', '.htaccess'));
+        $files = array_diff(scandir(BASEDIR.'/modules/admin/links'), array('.', '..', '.htaccess'));
 
         $links = array();
 

@@ -46,4 +46,6 @@ $router->map('GET', '/online/[all:action]', '/modules/pages/online.php', 'online
 
 $router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
 
+$router->map('GET', '/admin', '/modules/admin/index.php', 'admin');
+
 Registry::set('router', $router->match());
