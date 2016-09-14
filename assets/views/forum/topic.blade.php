@@ -79,7 +79,7 @@
 
                 <?php if ($log == $data['posts_user'] && $data['posts_time'] + 600 > SITETIME): ?>
                     <div class="pull-right">
-                        <a href="topic.php?act=edit&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                        <a href="/topic/<?=$tid?>/<?=$data['posts_id']?>/edit?start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                     </div>
                 <?php endif; ?>
 
@@ -100,7 +100,7 @@
 
             <?php if (!empty($topics['posts_files'])): ?>
                 <?php if (isset($topics['posts_files'][$data['posts_id']])): ?>
-                    <div class="hiding"><i class="fa fa-paperclip" aria-hidden="true"></i> <b>Прикрепленные файлы:</b><br />
+                    <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />
                     <?php foreach ($topics['posts_files'][$data['posts_id']] as $file): ?>
                         <?php $ext = getExtension($file['file_hash']); ?>
 
@@ -143,8 +143,6 @@
         <?php if (empty($topics['topics_closed'])): ?>
             <div class="form">
                 <form action="/topic/<?=$tid?>/create" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
-
                     <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
 
                     <div class="form-group{{ App::hasError('msg') }}">

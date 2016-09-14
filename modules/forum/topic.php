@@ -83,7 +83,7 @@ case 'create':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для добавления сообщения!');
 
-	$topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics`.`topics_id`=? LIMIT 1;", array($tid));
+    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics`.`topics_id`=? LIMIT 1;", array($tid));
 
     $validation = new Validation();
     $validation -> addRule('equal', array($token, $_SESSION['token']), ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -193,101 +193,101 @@ break;
 ############################################################################################
 case 'spam':
 
-	$uid = check($_GET['uid']);
-	$pid = abs(intval($_GET['pid']));
+    $uid = check($_GET['uid']);
+    $pid = abs(intval($_GET['pid']));
 
-	if (is_user()) {
-		if ($uid == $_SESSION['token']) {
-			$data = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($pid));
-			if (!empty($data)) {
-				$queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(1, $pid));
+    if (is_user()) {
+        if ($uid == $_SESSION['token']) {
+            $data = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($pid));
+            if (!empty($data)) {
+                $queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(1, $pid));
 
-				if (empty($queryspam)) {
-					if (is_flood($log)) {
-						DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(1, $data['posts_id'], $log, $data['posts_user'], $data['posts_text'], $data['posts_time'], SITETIME, $config['home'].'/forum/topic.php?tid='.$tid.'&amp;start='.$start));
+                if (empty($queryspam)) {
+                    if (is_flood($log)) {
+                        DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(1, $data['posts_id'], $log, $data['posts_user'], $data['posts_text'], $data['posts_time'], SITETIME, $config['home'].'/forum/topic.php?tid='.$tid.'&amp;start='.$start));
 
-						$_SESSION['note'] = 'Жалоба успешно отправлена!';
-						redirect("topic.php?tid=$tid&start=$start");
+                        $_SESSION['note'] = 'Жалоба успешно отправлена!';
+                        redirect("topic.php?tid=$tid&start=$start");
 
-					} else {
-						show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
-					}
-				} else {
-					show_error('Ошибка! Жалоба на данное сообщение уже отправлена!');
-				}
-			} else {
-				show_error('Ошибка! Выбранное вами сообщение для жалобы не существует!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
-	}
+                    } else {
+                        show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
+                    }
+                } else {
+                    show_error('Ошибка! Жалоба на данное сообщение уже отправлена!');
+                }
+            } else {
+                show_error('Ошибка! Выбранное вами сообщение для жалобы не существует!');
+            }
+        } else {
+            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+    } else {
+        show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
+    }
 
-	render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
 break;
 
 ############################################################################################
 ##                                    Удаление сообщений                                  ##
 ############################################################################################
 case 'del':
-	$uid = check($_GET['uid']);
-	$del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
+    $uid = check($_GET['uid']);
+    $del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
 
-	if (is_user()) {
-		if ($uid == $_SESSION['token']) {
-			if (!empty($del)) {
-				$topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
-				$minposts = DB::run() -> querySingle("SELECT min(`posts_id`) FROM `posts` WHERE `posts_topics_id`=?;", array($tid));
+    if (is_user()) {
+        if ($uid == $_SESSION['token']) {
+            if (!empty($del)) {
+                $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+                $minposts = DB::run() -> querySingle("SELECT min(`posts_id`) FROM `posts` WHERE `posts_topics_id`=?;", array($tid));
 
-				if (!empty($topics['topics_mod'])) {
-					$topics_mod = explode(',', $topics['topics_mod']);
-					if (in_array($log, $topics_mod)) {
-						if (!in_array($minposts, $del)) {
-							$del = implode(',', $del);
+                if (!empty($topics['topics_mod'])) {
+                    $topics_mod = explode(',', $topics['topics_mod']);
+                    if (in_array($log, $topics_mod)) {
+                        if (!in_array($minposts, $del)) {
+                            $del = implode(',', $del);
 
-							// ------ Удаление загруженных файлов -------//
-							$queryfiles = DB::run() -> query("SELECT `file_hash` FROM `files_forum` WHERE `file_posts_id` IN (".$del.");");
-							$files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
+                            // ------ Удаление загруженных файлов -------//
+                            $queryfiles = DB::run() -> query("SELECT `file_hash` FROM `files_forum` WHERE `file_posts_id` IN (".$del.");");
+                            $files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
 
-							if (!empty($files)){
-								foreach ($files as $file){
-									if (file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file)){
-										unlink(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file);
-									}
-								}
-								DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id` IN (".$del.");");
-							}
-							// ------ Удаление загруженных файлов -------//
+                            if (!empty($files)){
+                                foreach ($files as $file){
+                                    if (file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file)){
+                                        unlink(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file);
+                                    }
+                                }
+                                DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id` IN (".$del.");");
+                            }
+                            // ------ Удаление загруженных файлов -------//
 
-							$delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `posts_id` IN (".$del.") AND `posts_topics_id`=".$tid.";");
-							DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`-? WHERE `topics_id`=?;", array($delposts, $tid));
-							DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`-? WHERE `forums_id`=?;", array($delposts, $topics['topics_forums_id']));
+                            $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `posts_id` IN (".$del.") AND `posts_topics_id`=".$tid.";");
+                            DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`-? WHERE `topics_id`=?;", array($delposts, $tid));
+                            DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`-? WHERE `forums_id`=?;", array($delposts, $topics['topics_forums_id']));
 
-							$_SESSION['note'] = 'Выбранные сообщения успешно удалены!';
-							redirect("topic.php?tid=$tid&start=$start");
+                            $_SESSION['note'] = 'Выбранные сообщения успешно удалены!';
+                            redirect("topic.php?tid=$tid&start=$start");
 
-						} else {
-							show_error('Ошибка! Первое сообщение в теме удалять запрещено!');
-						}
-					} else {
-						show_error('Ошибка! Удалять сообщения могут только кураторы темы!');
-					}
-				} else {
-					show_error('Ошибка! В данной теме отсутствуют кураторы!');
-				}
-			} else {
-				show_error('Ошибка! Отстутствуют выбранные сообщения для удаления!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-	}
+                        } else {
+                            show_error('Ошибка! Первое сообщение в теме удалять запрещено!');
+                        }
+                    } else {
+                        show_error('Ошибка! Удалять сообщения могут только кураторы темы!');
+                    }
+                } else {
+                    show_error('Ошибка! В данной теме отсутствуют кураторы!');
+                }
+            } else {
+                show_error('Ошибка! Отстутствуют выбранные сообщения для удаления!');
+            }
+        } else {
+            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+    } else {
+        show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+    }
 
-	render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
 break;
 
 ############################################################################################
@@ -322,138 +322,101 @@ case 'close':
 ############################################################################################
 ##                                   Подготовка к изменению                               ##
 ############################################################################################
-case 'edittopic':
+case 'edit':
 
-	if (is_user()) {
-		if ($udata['users_point'] >= $config['editforumpoint']) {
-			$topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+    if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения темы!');
 
-			if (!empty($topics)) {
-				if ($topics['topics_author'] == $log) {
-					if (empty($topics['topics_closed'])) {
-						$post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY posts_id ASC LIMIT 1;", array($tid));
-						if (!empty($post)) {
+    if ($udata['users_point'] < $config['editforumpoint']) {
+        App::abort('default', 'У вас недостаточно актива для изменения темы!');
+    }
 
-							render('forum/topic_edittopic', array('post' => $post, 'topics' => $topics));
+    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+    if (empty($topic)) {
+        App::abort('default', 'Выбранная вами тема не существует, возможно она была удалена!');
+    }
 
-						} else {
-							show_error('Ошибка! Первого сообщения в теме не существует!');
-						}
-					} else {
-						show_error('Ошибка! Изменение невозможно, данная тема закрыта!');
-					}
-				} else {
-					show_error('Ошибка! Изменение невозможно, вы не автор данной темы!');
-				}
-			} else {
-				show_error('Ошибка! Выбранная вами тема не существует, возможно она была удалена!');
-			}
-		} else {
-			show_error('Ошибка! У вас недостаточно актива для изменения темы!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы изменять темы, необходимо');
-	}
+    if ($topic['topics_author'] !== $log) {
+        App::abort('default', 'Изменение невозможно, вы не автор данной темы!');
+    }
 
-	render('includes/back', array('link' => 'topic.php?tid='.$tid, 'title' => 'Вернуться'));
-break;
+    if ($topic['topics_closed']) {
+        App::abort('default', ' Изменение невозможно, данная тема закрыта!');
+    }
 
-############################################################################################
-##                                  Изменение темы и сообщения                            ##
-############################################################################################
-case 'changetopic':
+    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY posts_id ASC LIMIT 1;", array($tid));
 
-	$uid = check($_GET['uid']);
-	$title = check($_POST['title']);
-	$msg = check($_POST['msg']);
+    if (Request::isMethod('post')) {
 
-	if (is_user()) {
-		if ($uid == $_SESSION['token']) {
-			if ($udata['users_point'] >= $config['editforumpoint']) {
-				$topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+        $token = check(Request::input('token'));
+        $title = check(Request::input('title'));
+        $msg   = check(Request::input('msg'));
 
-				if (!empty($topics)) {
-					if ($topics['topics_author'] == $log) {
-						if (empty($topics['topics_closed'])) {
-							$minposts = DB::run() -> querySingle("SELECT MIN(`posts_id`) FROM `posts` WHERE `posts_topics_id`=?;", array($tid));
-							if (!empty($minposts)) {
-								if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-									if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
-										$title = antimat($title);
 
-										$msg = antimat($msg);
+        $validation = new Validation();
+        $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50);
 
-										DB::run() -> query("UPDATE `topics` SET `topics_title`=? WHERE topics_id=?;", array($title, $tid));
-										DB::run() -> query("UPDATE `posts` SET `posts_user`=?, `posts_text`=?, `posts_ip`=?, `posts_brow`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($log, $msg, App::getClientIp(), App::getUserAgent(), $log, SITETIME, $minposts));
+        if ($post) {
+            $validation->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, $config['forumtextlength']);
+        }
+        if ($validation->run()) {
 
-										$_SESSION['note'] = 'Тема успешно изменена!';
-										redirect("topic.php?tid=$tid");
+            $title = antimat($title);
+            $msg   = antimat($msg);
 
-									} else {
-										show_error('Ошибка! Слишком длинное или короткое сообщение!');
-									}
-								} else {
-									show_error('Ошибка! Слишком длинный или короткий заголовок темы!');
-								}
-							} else {
-								show_error('Ошибка! Первого сообщения в теме не существует!');
-							}
-						} else {
-							show_error('Ошибка! Изменение невозможно, данная тема закрыта!');
-						}
-					} else {
-						show_error('Ошибка! Изменение невозможно, вы не автор данной темы!');
-					}
-				} else {
-					show_error('Ошибка! Выбранная вами тема не существует, возможно она была удалена!');
-				}
-			} else {
-				show_error('Ошибка! У вас недостаточно актива для изменения темы!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
-	}
+            DB::run() -> query("UPDATE `topics` SET `topics_title`=? WHERE topics_id=?;", array($title, $tid));
 
-	render('includes/back', array('link' => 'topic.php?act=edittopic&amp;tid='.$tid, 'title' => 'Вернуться'));
+            if ($post) {
+                DB::run()->query("UPDATE `posts` SET `posts_user`=?, `posts_text`=?, `posts_ip`=?, `posts_brow`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($log, $msg, App::getClientIp(), App::getUserAgent(), $log, SITETIME, $post['posts_id']));
+            }
+
+            App::setFlash('success', 'Тема успешно изменена!');
+            App::redirect('/topic/'.$tid);
+
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
+        }
+    }
+
+    App::view('forum/topic_edit', compact('post', 'topic'));
+
 break;
 
 ############################################################################################
 ##                          Подготовка к редактированию куратором                         ##
 ############################################################################################
 case 'modedit':
-	$pid = abs(intval($_GET['pid']));
+    $pid = abs(intval($_GET['pid']));
 
-	if (is_user()) {
-		$post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed`, `topics`.`topics_mod` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? LIMIT 1;", array($pid));
+    if (is_user()) {
+        $post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed`, `topics`.`topics_mod` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? LIMIT 1;", array($pid));
 
-		if (!empty($post)) {
-			if (empty($post['topics_closed'])) {
-				if (!empty($post['topics_mod'])) {
-					$topic_mod = explode(',', $post['topics_mod']);
-					if (in_array($log, $topic_mod)) {
+        if (!empty($post)) {
+            if (empty($post['topics_closed'])) {
+                if (!empty($post['topics_mod'])) {
+                    $topic_mod = explode(',', $post['topics_mod']);
+                    if (in_array($log, $topic_mod)) {
 
-						render('forum/topic_modedit', array('post' => $post, 'pid' => $pid, 'start' => $start));
+                        render('forum/topic_modedit', array('post' => $post, 'pid' => $pid, 'start' => $start));
 
-					} else {
-						show_error('Ошибка! Редактировать сообщения могут только кураторы темы!');
-					}
-				} else {
-					show_error('Ошибка! В данной теме отсутствуют кураторы!');
-				}
-			} else {
-				show_error('Ошибка! Редактирование невозможно, данная тема закрыта!');
-			}
-		} else {
-			show_error('Ошибка! Данного сообщения не существует!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
-	}
+                    } else {
+                        show_error('Ошибка! Редактировать сообщения могут только кураторы темы!');
+                    }
+                } else {
+                    show_error('Ошибка! В данной теме отсутствуют кураторы!');
+                }
+            } else {
+                show_error('Ошибка! Редактирование невозможно, данная тема закрыта!');
+            }
+        } else {
+            show_error('Ошибка! Данного сообщения не существует!');
+        }
+    } else {
+        show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
+    }
 
-	render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
 break;
 
 ############################################################################################
@@ -461,158 +424,123 @@ break;
 ############################################################################################
 case 'modeditpost':
 
-	$uid = check($_GET['uid']);
-	$pid = abs(intval($_GET['pid']));
-	$msg = check($_POST['msg']);
+    $uid = check($_GET['uid']);
+    $pid = abs(intval($_GET['pid']));
+    $msg = check($_POST['msg']);
 
-	if (is_user()) {
-		if ($uid == $_SESSION['token']) {
-			if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
-				$post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed`, `topics`.`topics_mod` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? LIMIT 1;", array($pid));
+    if (is_user()) {
+        if ($uid == $_SESSION['token']) {
+            if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
+                $post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed`, `topics`.`topics_mod` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? LIMIT 1;", array($pid));
 
-				if (!empty($post)) {
-					if (empty($post['topics_closed'])) {
-						if (!empty($post['topics_mod'])) {
-							$topic_mod = explode(',', $post['topics_mod']);
-							if (in_array($log, $topic_mod)) {
+                if (!empty($post)) {
+                    if (empty($post['topics_closed'])) {
+                        if (!empty($post['topics_mod'])) {
+                            $topic_mod = explode(',', $post['topics_mod']);
+                            if (in_array($log, $topic_mod)) {
 
-								$msg = antimat($msg);
+                                $msg = antimat($msg);
 
-								DB::run() -> query("UPDATE `posts` SET `posts_text`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($msg, $log, SITETIME, $pid));
+                                DB::run() -> query("UPDATE `posts` SET `posts_text`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($msg, $log, SITETIME, $pid));
 
-								notice('Сообщение успешно отредактировано!');
-								redirect("topic.php?tid=$tid&start=$start");
+                                notice('Сообщение успешно отредактировано!');
+                                redirect("topic.php?tid=$tid&start=$start");
 
-							} else {
-								show_error('Ошибка! Редактировать сообщения могут только кураторы темы!');
-							}
-						} else {
-							show_error('Ошибка! В данной теме отсутствуют кураторы!');
-						}
-					} else {
-						show_error('Ошибка! Редактирование невозможно, данная тема закрыта!');
-					}
-				} else {
-					show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
-				}
-			} else {
-				show_error('Ошибка! Слишком длинное или короткое сообщение!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
-	}
+                            } else {
+                                show_error('Ошибка! Редактировать сообщения могут только кураторы темы!');
+                            }
+                        } else {
+                            show_error('Ошибка! В данной теме отсутствуют кураторы!');
+                        }
+                    } else {
+                        show_error('Ошибка! Редактирование невозможно, данная тема закрыта!');
+                    }
+                } else {
+                    show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+                }
+            } else {
+                show_error('Ошибка! Слишком длинное или короткое сообщение!');
+            }
+        } else {
+            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+    } else {
+        show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
+    }
 
-	render('includes/back', array('link' => 'topic.php?act=modedit&amp;tid='.$tid.'&amp;pid='.$pid.'&amp;start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', array('link' => 'topic.php?act=modedit&amp;tid='.$tid.'&amp;pid='.$pid.'&amp;start='.$start, 'title' => 'Вернуться'));
 break;
 
 ############################################################################################
 ##                                Подготовка к редактированию                             ##
 ############################################################################################
-case 'edit':
-
-	$pid = abs(intval($_GET['pid']));
-
-	if (is_user()) {
-		$post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? AND `posts_user`=? LIMIT 1;", array($pid, $log));
-
-		if (!empty($post)) {
-			if (empty($post['topics_closed'])) {
-				if ($post['posts_time'] + 600 > SITETIME) {
-
-					$queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id`=?;", array($pid));
-					$files = $queryfiles->fetchAll();
-
-					render('forum/topic_edit', array('post' => $post, 'files' => $files, 'pid' => $pid, 'start' => $start));
-
-				} else {
-					show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
-				}
-			} else {
-				show_error('Ошибка! Редактирование невозможно, данная тема закрыта!');
-			}
-		} else {
-			show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
-	}
-
-	render('includes/back', array('link' => 'topic.php?tid='.$tid.'&amp;start='.$start, 'title' => 'Вернуться'));
-break;
-
-############################################################################################
-##                                    Редактирование сообщения                            ##
-############################################################################################
 case 'editpost':
+    $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
 
-	$uid = check($_GET['uid']);
-	$pid = abs(intval($_GET['pid']));
-	$msg = check($_POST['msg']);
+    if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения сообщения!');
 
-	if (isset($_POST['delfile'])) {
-		$del = intar($_POST['delfile']);
-	} else {
-		$del = 0;
-	}
+    $post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? AND `posts_user`=? LIMIT 1;", array($id, $log));
+    if (empty($post)) {
+        App::abort('default', 'Сообщение удалено или вы не автор этого сообщения!');
+    }
 
-	if (is_user()) {
-		if ($uid == $_SESSION['token']) {
-			if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
-				$post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.`topics_closed` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? AND `posts_user`=? LIMIT 1;", array($pid, $log));
+    if ($post['topics_closed']) {
+        App::abort('default', 'Редактирование невозможно, данная тема закрыта!');
+    }
 
-				if (!empty($post)) {
-					if (empty($post['topics_closed'])) {
-						if ($post['posts_time'] + 600 > SITETIME) {
+    if ($post['posts_time'] + 600 < SITETIME) {
+        App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+    }
 
-							$msg = antimat($msg);
+    if (Request::isMethod('post')) {
 
-							DB::run() -> query("UPDATE `posts` SET `posts_text`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($msg, $log, SITETIME, $pid));
+        $token   = check(Request::input('token'));
+        $msg     = check(Request::input('msg'));
+        $delfile = intar(Request::input('delfile'));
 
-							// ------ Удаление загруженных файлов -------//
-							if (!empty($del)) {
-								$del = implode(',', $del);
+        $validation = new Validation();
+        $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, $config['forumtextlength']);
 
-								$queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id`=? AND `file_id` IN (".$del.");", array($pid));
-								$files = $queryfiles->fetchAll();
+        if ($validation->run()) {
 
-								if (!empty($files)){
-									foreach ($files as $file){
-										if (file_exists(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
-											unlink(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash']);
-										}
-									}
-									DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id`=? AND `file_id` IN (".$del.");", array($pid));
-								}
-							}
-							// ------ Удаление загруженных файлов -------//
+            $msg = antimat($msg);
 
-							notice('Сообщение успешно отредактировано!');
-							redirect("topic.php?tid=$tid&start=$start");
+            DB::run() -> query("UPDATE `posts` SET `posts_text`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($msg, $log, SITETIME, $id));
 
-						} else {
-							show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!');
-						}
-					} else {
-						show_error('Ошибка! Редактирование невозможно, данная тема закрыта!');
-					}
-				} else {
-					show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
-				}
-			} else {
-				show_error('Ошибка! Слишком длинное или короткое сообщение!');
-			}
-		} else {
-			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
-	}
+            // ------ Удаление загруженных файлов -------//
+            if ($delfile) {
+                $del = implode(',', $delfile);
 
-	render('includes/back', array('link' => 'topic.php?act=edit&amp;tid='.$tid.'&amp;pid='.$pid.'&amp;start='.$start, 'title' => 'Вернуться'));
+                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id`=? AND `file_id` IN (".$del.");", array($id));
+                $files = $queryfiles->fetchAll();
+
+                if (!empty($files)){
+                    foreach ($files as $file){
+                        if (file_exists(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
+                            unlink(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash']);
+                        }
+                    }
+                    DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id`=? AND `file_id` IN (".$del.");", array($id));
+                }
+            }
+
+            App::setFlash('success', 'Сообщение успешно отредактировано!');
+            App::redirect('/topic/'.$tid.'?start='.$start);
+
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
+        }
+    }
+
+    $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id`=?;", array($id));
+    $files = $queryfiles->fetchAll();
+
+    App::view('forum/topic_edit_post', compact('post', 'files', 'id', 'start'));
+
 break;
+
 
 ############################################################################################
 ##                                     Переход к сообщению                                ##
@@ -621,10 +549,10 @@ case 'viewpost':
 
     $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
 
-	$querytopic = DB::run() -> querySingle("SELECT COUNT(*) FROM `posts` WHERE `posts_id`<=? AND `posts_topics_id`=? ORDER BY `posts_time` ASC LIMIT 1;", array($id, $tid));
+    $querytopic = DB::run() -> querySingle("SELECT COUNT(*) FROM `posts` WHERE `posts_id`<=? AND `posts_topics_id`=? ORDER BY `posts_time` ASC LIMIT 1;", array($id, $tid));
 
-	if (empty($querytopic)) {
-	    App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
+    if (empty($querytopic)) {
+        App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
     $end = floor(($querytopic - 1) / $config['forumpost']) * $config['forumpost'];
@@ -636,7 +564,7 @@ break;
 ############################################################################################
 case 'end':
 
-	$topic = DBM::run()->selectFirst('topics', ['topics_id' => $tid]);
+    $topic = DBM::run()->selectFirst('topics', ['topics_id' => $tid]);
 
     if (empty($topic)) {
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
