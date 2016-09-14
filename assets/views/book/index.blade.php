@@ -3,6 +3,9 @@
 @section('title', 'Гостевая книга (Стр. '.$page.') - @parent')
 
 @section('content')
+
+    <h1>Гостевая книга</h1>
+
     <a href="/rules">Правила</a> /
     <a href="/smiles">Смайлы</a> /
     <a href="/tags">Теги</a>
