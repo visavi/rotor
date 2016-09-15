@@ -158,7 +158,7 @@ case 'complaint':
             'spam_text'    => $data['guest_text'],
             'spam_time'    => $data['guest_time'],
             'spam_addtime' => SITETIME,
-            'spam_link'    => '/book/index.php?start='.$start,
+            'spam_link'    => '/book?start='.$start,
         ));
 
         exit(json_encode(['status' => 'success']));

@@ -9,46 +9,46 @@ show_title('Панель управления');
 site_version();
 ?>
     <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="chat.php">Админ-чат</a> (<?=stats_chat()?>)<br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="book.php">Гостевая книга</a> (<?=stats_guest()?>)<br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="forum.php">Форум</a> (<?=stats_forum()?>)<br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="gallery.php">Галерея</a> (<?=stats_gallery()?>)<br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="blog.php">Блоги</a> (<?=stats_blog()?>)<br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="events.php">События</a> (<?=stats_events()?>)<br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="newload.php">Новые публикации</a> (<?=stats_newload()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/chat">Админ-чат</a> (<?=stats_chat()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/book">Гостевая книга</a> (<?=stats_guest()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/forum">Форум</a> (<?=stats_forum()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/gallery">Галерея</a> (<?=stats_gallery()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/blog">Блоги</a> (<?=stats_blog()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/events">События</a> (<?=stats_events()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/newload">Новые публикации</a> (<?=stats_newload()?>)<br />
 
     <?=show_admin_links(105);?>
 
     <?php if (is_admin(array(101, 102, 103))) {?>
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Старший модер</b></div>
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="zaban.php">Бан / Разбан</a><br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="banlist.php">Список забаненых</a> (<?=stats_banned()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="spam.php">Список жалоб</a> (<?=stats_spam()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="adminlist.php">Список старших</a> (<?=stats_admins()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="reglist.php">Список ожидающих</a> (<?=stats_reglist()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="votes.php">Голосования</a> (<?=stats_votes()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/zaban">Бан / Разбан</a><br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/banlist">Список забаненых</a> (<?=stats_banned()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/spam">Список жалоб</a> (<?=stats_spam()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> (<?=stats_admins()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/reglist">Список ожидающих</a> (<?=stats_reglist()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> (<?=stats_votes()?>)<br />
         <?=show_admin_links(103);?>
     <?php }?>
 
     <?php if (is_admin(array(101, 102))) {?>
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Администратор</b></div>
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="rules.php">Правила сайта</a><br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="news.php">Новости</a> (<?=stats_allnews()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="users.php">Пользователи</a> (<?=stats_users()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="ban.php">IP-бан панель</a> (<?=stats_ipbanned()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="phpinfo.php">PHP-информация</a> (<?=phpversion()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="load.php">Загруз-центр</a> (<?=stats_load()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/rules">Правила сайта</a><br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/news">Новости</a> (<?=stats_allnews()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> (<?=stats_users()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/ban">IP-бан панель</a> (<?=stats_ipbanned()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> (<?=phpversion()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> (<?=stats_load()?>)<br />
         <?=show_admin_links(102);?>
     <?php }?>
 
     <?php if (is_admin(array(101))) {?>
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Суперадмин</b></div>
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="setting.php">Настройки сайта</a><br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="cache.php">Очистка кэша</a><br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/setting">Настройки сайта</a><br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br />
         <?=show_admin_links(101);?>
 
         <?php if ($log == $config['nickname']) {?>
-            <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="files.php">Редактирование файлов</a><br />
+            <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br />
             <?php show_admin_links();?>
         <?php }?>
     <?php }?>

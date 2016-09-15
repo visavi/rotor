@@ -1,20 +1,8 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$start = abs(intval(Request::input('start', 0)));
 
 show_title('Новости сайта');
 
@@ -43,14 +31,14 @@ case 'index':
 		while ($data = $querynews -> fetch()) {
 			echo '<div class="b">';
 			echo $data['news_closed'] == 0 ? '<img src="/images/img/document_plus.gif" alt="image" /> ' : '<img src="/images/img/document_minus.gif" alt="image" /> ';
-			echo '<b><a href="index.php?act=read&amp;id='.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small></div>';
+			echo '<b><a href="/news/'.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small></div>';
 
 			if (!empty($data['news_image'])) {
 				echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, array('alt' => $data['news_title'])).'</a></div>';
 			}
 
 			if(stristr($data['news_text'], '[cut]')) {
-				$data['news_text'] = current(explode('[cut]', $data['news_text'])).' <a href="index.php?act=read&amp;id='.$data['news_id'].'">Читать далее &raquo;</a>';
+				$data['news_text'] = current(explode('[cut]', $data['news_text'])).' <a href="/news/'.$data['news_id'].'">Читать далее &raquo;</a>';
 			}
 
 			echo '<div>'.bb_code($data['news_text']).'</div>';
@@ -59,7 +47,7 @@ case 'index':
 			echo '<a href="index.php?act=end&amp;id='.$data['news_id'].'">&raquo;</a></div>';
 		}
 
-		page_strnavigation('index.php?', $config['postnews'], $start, $total);
+		page_strnavigation('/news?', $config['postnews'], $start, $total);
 	} else {
 		show_error('Новостей еще нет!');
 	}
@@ -71,7 +59,7 @@ break;
 ############################################################################################
 ##                                     Чтение новости                                     ##
 ############################################################################################
-case 'read':
+case 'view':
 
 	$data = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `news_id`=? LIMIT 1;", array($id));
 
@@ -349,9 +337,6 @@ case 'end':
 	echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">К новостям</a><br />';
 break;
 
-default:
-	redirect("index.php");
 endswitch;
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');

@@ -8,7 +8,7 @@
     <i class="fa fa-pencil"></i> <b><?=nickname($post['posts_user'])?></b> <small>(<?=date_fixed($post['posts_time'])?>)</small><br /><br />
 
     <div class="form">
-        <form action="/topic/<?= $post['posts_topics_id'] ?>/<?= $id ?>/edit?start=<?= $start ?>" method="post">
+        <form action="/topic/<?= $post['posts_topics_id'] ?>/<?= $post['posts_id'] ?>/edit?start=<?= $start ?>" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ App::hasError('msg') }}">

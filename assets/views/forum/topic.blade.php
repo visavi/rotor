@@ -25,11 +25,15 @@
     <?php endif; ?>
 
     <?php if (!empty($topics['curator'])): ?>
-        Кураторы темы:
-        <?php foreach ($topics['curator'] as $key => $curator): ?>
-            <?php $comma = (empty($key)) ? '' : ', '; ?>
-            <?=$comma?><?=profile($curator)?>
-        <?php endforeach; ?>
+       <div>
+            <span class="label label-info">
+                <i class="fa fa-wrench"></i> Кураторы темы:
+                <?php foreach ($topics['curator'] as $key => $curator): ?>
+                    <?php $comma = (empty($key)) ? '' : ', '; ?>
+                    <?=$comma?><?=profile($curator)?>
+                <?php endforeach; ?>
+            </span>
+        </div>
     <?php endif; ?>
 
     <?php if (!empty($topics['topics_note'])): ?>
@@ -40,25 +44,26 @@
 
     <?php if (is_admin()): ?>
         <?php if (empty($topics['topics_closed'])): ?>
-            <a href="/admin/forum.php?act=acttopic&amp;do=closed&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a> /
         <?php else: ?>
-            <a href="/admin/forum.php?act=acttopic&amp;do=open&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Открыть</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Открыть</a> /
         <?php endif; ?>
 
         <?php if (empty($topics['topics_locked'])): ?>
-            <a href="/admin/forum.php?act=acttopic&amp;do=locked&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрепить</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрепить</a> /
         <?php else: ?>
-            <a href="/admin/forum.php?act=acttopic&amp;do=unlocked&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Открепить</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Открепить</a> /
         <?php endif; ?>
 
-        <a href="/admin/forum.php?act=edittopic&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Изменить</a> /
-        <a href="/admin/forum.php?act=movetopic&amp;tid=<?=$tid?>">Переместить</a> /
-        <a href="/admin/forum.php?act=deltopics&amp;fid=<?=$topics['forums_id']?>&amp;del=<?=$tid?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
-        <a href="/admin/forum.php?act=topic&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Управление</a><br />
+        <a href="/admin/forum?act=edittopic&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Изменить</a> /
+        <a href="/admin/forum?act=movetopic&amp;tid=<?=$tid?>">Переместить</a> /
+        <a href="/admin/forum?act=deltopics&amp;fid=<?=$topics['forums_id']?>&amp;del=<?=$tid?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
+        <a href="/admin/forum?act=topic&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Управление</a><br />
     <?php endif; ?>
 
     <?php if (!empty($topics['is_moder'])): ?>
-        <form action="topic.php?act=del&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" method="post">
+        <form action="/topic/<?=$tid?>/delete?start=<?=$start?>" method="post">
+            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
     <?php endif; ?>
 
     <?php if ($total > 0): ?>
@@ -67,34 +72,32 @@
             <div class="post">
             <div class="b" id="post_<?=$data['posts_id']?>">
 
-                <?php if (!empty($log) && $log != $data['posts_user']): ?>
-                    <div class="pull-right">
+                <div class="pull-right">
+                    <?php if (!empty($log) && $log != $data['posts_user']): ?>
+
                         <a href="#" onclick="return postReply('<?= nickname($data['posts_user']) ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                         <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                        <noindex><a href="topic.php?act=spam&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы подтверждаете факт спама?')" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
-                    </div>
-                <?php endif; ?>
+                        <noindex>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="/topic" data-id="{{ $data['posts_id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $start }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                        </noindex>
 
-                <?php if ($log == $data['posts_user'] && $data['posts_time'] + 600 > SITETIME): ?>
-                    <div class="pull-right">
+                    <?php endif; ?>
+
+                    <?php if (($log == $data['posts_user'] && $data['posts_time'] + 600 > SITETIME) || isset($topics['is_moder'])): ?>
                         <a href="/topic/<?=$tid?>/<?=$data['posts_id']?>/edit?start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
-                    </div>
-                <?php endif; ?>
+                        <?php if (isset($topics['is_moder'])): ?>
+                        <input type="checkbox" name="del[]" value="<?=$data['posts_id']?>" />
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
 
                 <div class="img"><?=user_avatars($data['posts_user'])?></div>
-
-                <?php if (!empty($topics['is_moder'])): ?>
-                    <span class="imgright">
-                        <a href="topic.php?act=modedit&amp;tid=<?=$tid?>&amp;pid=<?=$data['posts_id']?>&amp;start=<?=$start?>">Ред.</a> <input type="checkbox" name="del[]" value="<?=$data['posts_id']?>" />
-                    </span>
-                <?php endif; ?>
 
                 <?=$num?>. <b><?=profile($data['posts_user'])?></b> <small>(<?=date_fixed($data['posts_time'])?>)</small><br />
                 <?=user_title($data['posts_user'])?> <?=user_online($data['posts_user'])?>
             </div>
-
 
             <div class="message"><?=bb_code($data['posts_text'])?></div>
 
@@ -131,8 +134,8 @@
     <?php endif; ?>
 
     <?php if (!empty($topics['is_moder'])): ?>
-        <span class="imgright">
-            <input type="submit" value="Удалить выбранное" />
+        <span class="pull-right">
+            <button type="submit" class="btn btn-danger">Удалить выбранное</button>
         </span>
         </form>
     <?php endif; ?>

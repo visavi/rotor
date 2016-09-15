@@ -1345,6 +1345,8 @@ function crypt_mail($mail) {
 
 // ------------------- Функция обработки массива (int) --------------------//
 function intar($string) {
+    if (empty($string)) return false;
+
     if (is_array($string)) {
         $newstring = array_map('intval', $string);
     } else {
@@ -1966,14 +1968,12 @@ function cache_functions($cache=10800) {
 function cache_admin_links($cache=10800) {
     if (@filemtime(DATADIR.'/temp/adminlinks.dat') < time()-$cache) {
         $files = array_diff(scandir(BASEDIR.'/modules/admin/links'), array('.', '..', '.htaccess'));
-
         $links = array();
 
         foreach ($files as $file){
             $access = intval(preg_replace('/[^\d]+/', '', $file));
             $links[$access][] = $file;
         }
-
         file_put_contents(DATADIR.'/temp/adminlinks.dat', serialize($links), LOCK_EX);
     }
 
@@ -1987,8 +1987,8 @@ function show_admin_links($level = 0) {
 
     if (!empty($links[$level])){
         foreach ($links[$level] as $link){
-            if (file_exists(BASEDIR.'/admin/links/'.$link)){
-                include_once(BASEDIR.'/admin/links/'.$link);
+            if (file_exists(BASEDIR.'/modules/admin/links/'.$link)){
+                include_once(BASEDIR.'/modules/admin/links/'.$link);
             }
         }
     }
@@ -2286,6 +2286,9 @@ function perfomance (){
     }
 }
 
+/**
+ * @deprecated нужно использовать App::view($view, $params = array(), $return = false)
+ */
 // ------------ Функция подключения шаблонов -----------//
 function render($view, $params = array(), $return = false){
     global $config, $log, $udata;

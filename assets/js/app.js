@@ -91,7 +91,7 @@ function sendComplaint(el) {
         if (result) {
 
             $.ajax({
-                data: {id: $(el).data('id'), type: $(el).data('type'), token: $(el).data('token')},
+                data: {id: $(el).data('id'), page: $(el).data('page'), token: $(el).data('token')},
                 dataType: 'JSON', type: 'POST', url: $(el).data('type') + '/complaint',
                 success: function(data) {
 
