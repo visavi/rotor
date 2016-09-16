@@ -53,3 +53,4 @@ header('Content-type:text/html; charset=utf-8');
 
                     <div id="main">
                         <div class="inner">
+<?= render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

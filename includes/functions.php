@@ -735,7 +735,15 @@ function stats_counter() {
 }
 
 // ------------------ Функция вывода счетчика посещений -----------------//
-function show_counter() {
+function show_counter()
+{
+    /*
+     * @TODO Временно, убрать после вывода в шаблоны
+     */
+    if (isset($_SESSION['note'])) {
+        unset($_SESSION['note']);
+    }
+
     global $config;
 
     if ($config['incount'] > 0) {
@@ -744,7 +752,6 @@ function show_counter() {
         render('includes/counter', compact('count'));
     }
 }
-
 
 // --------------- Функция вывода количества зарегистрированных ---------------//
 function stats_users() {
@@ -2291,7 +2298,6 @@ function perfomance (){
  */
 // ------------ Функция подключения шаблонов -----------//
 function render($view, $params = array(), $return = false){
-    global $config, $log, $udata;
 
     extract($params);
 
@@ -2299,8 +2305,8 @@ function render($view, $params = array(), $return = false){
         ob_start();
     }
 
-    if (file_exists(BASEDIR.'/themes/'.$config['themes'].'/views/'.$view.'.php')){
-        include (BASEDIR.'/themes/'.$config['themes'].'/views/'.$view.'.php');
+    if (file_exists(BASEDIR.'/themes/'.App::setting('themes').'/views/'.$view.'.php')){
+        include (BASEDIR.'/themes/'.App::setting('themes').'/views/'.$view.'.php');
     } else {
         include (BASEDIR.'/assets/views/'.$view.'.php');
     }

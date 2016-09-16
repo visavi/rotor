@@ -14,6 +14,11 @@ $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php'
 
 $router->map('GET', '/news', '/modules/news/index.php', 'news');
 $router->map('GET', '/news/[i:id]', '/modules/news/index.php@view');
+$router->map('GET|POST', '/news/[i:id]/[delete|comments|end:action]', '/modules/news/index.php');
+$router->map('POST', '/news/[i:id]/[create:action]', '/modules/news/index.php');
+$router->map('GET', '/news/allcomments', '/modules/news/comments.php');
+$router->map('GET', '/news/allcomments/[i:nid]/[i:id]', '/modules/news/comments.php@viewcomm');
+$router->map('GET', '/news/rss', '/modules/news/rss.php', 'news_rss');
 
 $router->map('GET', '/forum', '/modules/forum/index.php', 'forum');
 $router->map('GET', '/forum/[i:fid]', '/modules/forum/forum.php');
@@ -54,5 +59,6 @@ $router->map('GET', '/admin', '/modules/admin/index.php', 'admin');
 $router->map('GET', '/admin/cache', '/modules/admin/cache.php');
 $router->map('GET', '/admin/cache/[image|clear|clearimage:action]', '/modules/admin/cache.php');
 $router->map('GET|POST', '/admin/forum', '/modules/admin/forum.php');
+$router->map('GET|POST', '/admin/news', '/modules/admin/news.php');
 
 Registry::set('router', $router->match());

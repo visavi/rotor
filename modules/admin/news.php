@@ -1,20 +1,10 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+
+$act   = check(Request::input('act', 'index'));
+$id    = abs(intval(Request::input('id', 0)));
+$start = abs(intval(Request::input('start', 0)));
 
 if (is_admin(array(101, 102))) {
 	show_title('Управление новостями');
@@ -25,7 +15,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-	echo '<div class="form"><a href="/news/index.php">Обзор новостей</a></div>';
+	echo '<div class="form"><a href="/news">Обзор новостей</a></div>';
 
 	$total = DB::run() -> querySingle("SELECT count(*) FROM `news`;");
 
@@ -36,7 +26,7 @@ case 'index':
 
 		$querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `news_time` DESC LIMIT ".$start.", ".$config['postnews'].";");
 
-		echo '<form action="news.php?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+		echo '<form action="/admin/news?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
 		while ($data = $querynews -> fetch()) {
 
@@ -45,9 +35,9 @@ case 'index':
 			$icon = (empty($data['news_closed'])) ? 'document_plus.gif' : 'document_minus.gif';
 			echo '<img src="/images/img/'.$icon.'" alt="image" /> ';
 
-			echo '<b><a href="/news/index.php?act=read&amp;id='.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small><br />';
+			echo '<b><a href="/news/'.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small><br />';
 			echo '<input type="checkbox" name="del[]" value="'.$data['news_id'].'" /> ';
-			echo '<a href="news.php?act=edit&amp;id='.$data['news_id'].'&amp;start='.$start.'">Редактировать</a></div>';
+			echo '<a href="/admin/news?act=edit&amp;id='.$data['news_id'].'&amp;start='.$start.'">Редактировать</a></div>';
 
 			if (!empty($data['news_image'])) {
 				echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, array('alt' => $data['news_title'])).'</a></div>';
@@ -58,29 +48,29 @@ case 'index':
 			}
 
 			if(stristr($data['news_text'], '[cut]')) {
-				$data['news_text'] = current(explode('[cut]', $data['news_text'])).' <a href="/news/index.php?act=read&amp;id='.$data['news_id'].'">Читать далее &raquo;</a>';
+				$data['news_text'] = current(explode('[cut]', $data['news_text'])).' <a href="/news/'.$data['news_id'].'">Читать далее &raquo;</a>';
 			}
 
 			echo '<div>'.bb_code($data['news_text']).'</div>';
 
 			echo '<div style="clear:both;">Добавлено: '.profile($data['news_author']).'<br />';
-			echo '<a href="/news/index.php?act=comments&amp;id='.$data['news_id'].'">Комментарии</a> ('.$data['news_comments'].') ';
-			echo '<a href="/news/index.php?act=end&amp;id='.$data['news_id'].'">&raquo;</a></div>';
+			echo '<a href="/news/'.$data['news_id'].'/comments">Комментарии</a> ('.$data['news_comments'].') ';
+			echo '<a href="/news/'.$data['news_id'].'/end">&raquo;</a></div>';
 		}
 
 		echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-		page_strnavigation('news.php?', $config['postnews'], $start, $total);
+		page_strnavigation('/admin/news?', $config['postnews'], $start, $total);
 
 		echo 'Всего новостей: <b>'.(int)$total.'</b><br /><br />';
 	} else {
 		show_error('Новостей еще нет!');
 	}
 
-	echo '<img src="/images/img/open.gif" alt="image" /> <a href="news.php?act=add">Добавить</a><br />';
+	echo '<img src="/images/img/open.gif" alt="image" /> <a href="/admin/news?act=add">Добавить</a><br />';
 
 	if (is_admin(array(101))) {
-		echo '<img src="/images/img/reload.gif" alt="image" /> <a href="news.php?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+		echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/news?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
 	}
 break;
 
@@ -95,7 +85,7 @@ case 'edit':
 		echo '<b><big>Редактирование</big></b><br /><br />';
 
 		echo '<div class="form cut">';
-		echo '<form action="news.php?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+		echo '<form action="/admin/news?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
 		echo 'Заголовок:<br />';
 		echo '<input type="text" name="title" size="50" maxlength="50" value="'.$datanews['news_title'].'" /><br />';
 		echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$datanews['news_text'].'</textarea><br />';
@@ -121,7 +111,7 @@ case 'edit':
 		show_error('Ошибка! Выбранная новость не существует, возможно она была удалена!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="news.php?start='.$start.'">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news?start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -173,14 +163,14 @@ case 'change':
 		// ---------------------------------------------------------------------------------//
 
 		notice('Новость успешно отредактирована!');
-		redirect("news.php?start=$start");
+		redirect("/admin/news?start=$start");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="news.php?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="news.php?start='.$start.'">К новостям</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/news?start='.$start.'">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -191,7 +181,7 @@ case 'add':
 	echo '<b><big>Создание новости</big></b><br /><br />';
 
 	echo '<div class="form cut">';
-	echo '<form action="news.php?act=addnews&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+	echo '<form action="/admin/news?act=addnews&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
 	echo 'Заголовок:<br />';
 	echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
 	echo '<textarea id="markItUp" cols="50" rows="10" name="msg"></textarea><br />';
@@ -202,7 +192,7 @@ case 'add':
 
 	echo '<br /><input type="submit" value="Добавить" /></form></div><br />';
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="news.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -248,21 +238,21 @@ case 'addnews':
 
 				} else {
 					notice($handle->error, 'danger');
-					redirect("news.php?act=edit&id=$lastid");
+					redirect("/admin/news?act=edit&id=$lastid");
 				}
 			}
 		}
 		// ---------------------------------------------------------------------------------//
 
 		notice('Новость успешно добавлена!');
-		redirect("news.php");
+		redirect("/admin/news");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="news.php?act=add">Вернуться</a><br />';
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="news.php">К новостям</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news?act=add">Вернуться</a><br />';
+	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/news">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -277,7 +267,7 @@ case 'restatement':
 			restatement('news');
 
 			notice('Комментарии успешно пересчитаны!');
-			redirect("news.php");
+			redirect("/admin/news");
 
 		} else {
 			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -286,7 +276,7 @@ case 'restatement':
 		show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="news.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -316,7 +306,7 @@ case 'del':
 				DB::run() -> query("DELETE FROM `commnews` WHERE `commnews_news_id` IN (".$del.");");
 
 				notice('Выбранные новости успешно удалены!');
-				redirect("news.php?start=$start");
+				redirect("/admin/news?start=$start");
 
 			} else {
 				show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с изображениями!');
@@ -328,18 +318,15 @@ case 'del':
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="news.php?start='.$start.'">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news?start='.$start.'">Вернуться</a><br />';
 break;
 
-default:
-	redirect("news.php");
 endswitch;
 
-echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
 
 } else {
-	redirect('/index.php');
+	redirect('/');
 }
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');

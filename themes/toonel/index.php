@@ -77,3 +77,4 @@ header("Content-type:text/html; charset=utf-8");
 				</div>
 			<?php endif; ?>
 			<div>
+<?= render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

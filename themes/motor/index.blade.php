@@ -78,3 +78,4 @@ header('Content-type:text/html; charset=utf-8');
         <div class="backgr">
             <div class="bcontent">
                 <div class="mcontentwide">
+<?= render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

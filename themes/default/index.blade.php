@@ -35,3 +35,4 @@ header("Content-type:text/html; charset=utf-8");
 <?php render('includes/menu'); ?>
 
 <div class="site">
+<?= render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

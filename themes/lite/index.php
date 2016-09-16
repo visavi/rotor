@@ -82,3 +82,4 @@ ob_start('amendment');
 	<?php render('includes/menu'); ?>
 <div>
 
+<?= render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

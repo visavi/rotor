@@ -7,8 +7,6 @@
     <?= show_advertuser(); /* Реклама за игровые деньги */ ?>
 </div>
 
-<?php render('includes/note'); ?>
-
     {{ App::getFlash() }}
 
     @yield('content')

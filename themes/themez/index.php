@@ -44,4 +44,4 @@ header('Content-type:text/html; charset=utf-8');
 	<tr>
 		<td class="main">
 			<div>
-
+<?= render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
