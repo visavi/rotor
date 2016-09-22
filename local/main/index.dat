@@ -1,7 +1,5 @@
 <?php
-if (isset($act) && $act=='pages' || $php_self == '/pages/index.php'){
-	show_title('Сервисы сайта');
-}
+show_title('Сервисы сайта');
 ?>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/avatars.php">Галерея аватаров</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/avatars.php?act=load">Загрузить аватар</a><br />

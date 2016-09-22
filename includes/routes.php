@@ -20,6 +20,11 @@ $router->map('GET', '/news/allcomments', '/modules/news/comments.php');
 $router->map('GET', '/news/allcomments/[i:nid]/[i:id]', '/modules/news/comments.php@viewcomm');
 $router->map('GET', '/news/rss', '/modules/news/rss.php', 'news_rss');
 
+$router->map('GET|POST', '/gallery', '/modules/gallery/index.php', 'gallery');
+$router->map('GET|POST', '/gallery/album', '/modules/gallery/album.php');
+$router->map('GET|POST', '/gallery/comments', '/modules/gallery/comments.php');
+$router->map('GET|POST', '/gallery/top', '/modules/gallery/top.php');
+
 $router->map('GET', '/forum', '/modules/forum/index.php', 'forum');
 $router->map('GET', '/forum/[i:fid]', '/modules/forum/forum.php');
 $router->map('GET', '/forum/new/[posts|themes:action]', '/modules/forum/new.php');
@@ -46,6 +51,7 @@ $router->map('GET|POST', '/login', '/modules/pages/login.php', 'login');
 $router->map('GET|POST', '/register', '/modules/pages/registration.php', 'register');
 $router->map('GET|POST', '/user/[user:login]/[note:action]', '/modules/pages/user.php', 'note');
 
+$router->map('GET', '/page/[recent:action]?', '/modules/pages/index.php');
 $router->map('GET', '/tags', '/modules/pages/tags.php', 'tags');
 $router->map('GET', '/rules', '/modules/pages/rules.php', 'smiles');
 $router->map('GET', '/smiles', '/modules/pages/smiles.php', 'rules');
@@ -60,5 +66,6 @@ $router->map('GET', '/admin/cache', '/modules/admin/cache.php');
 $router->map('GET', '/admin/cache/[image|clear|clearimage:action]', '/modules/admin/cache.php');
 $router->map('GET|POST', '/admin/forum', '/modules/admin/forum.php');
 $router->map('GET|POST', '/admin/news', '/modules/admin/news.php');
+$router->map('GET|POST', '/admin/gallery', '/modules/admin/gallery.php');
 
 Registry::set('router', $router->match());

@@ -1,125 +1,110 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 if (empty($_GET['uz'])) {
-	$uz = check($log);
+    $uz = check($log);
 } else {
-	$uz = check($_GET['uz']);
+    $uz = check($_GET['uz']);
 }
 if (isset($_GET['start'])) {
-	$start = abs(intval($_GET['start']));
+    $start = abs(intval($_GET['start']));
 } else {
-	$start = 0;
+    $start = 0;
 }
 if (isset($_GET['act'])) {
-	$act = check($_GET['act']);
+    $act = check($_GET['act']);
 } else {
-	$act = 'index';
+    $act = 'index';
 }
 
 switch ($act):
 ############################################################################################
 ##                                  Вывод комментариев                                    ##
 ############################################################################################
-	case 'index':
-		show_title('Альбомы пользователей');
+    case 'index':
+        show_title('Альбомы пользователей');
 
-		$total = DB::run() -> querySingle("select COUNT(DISTINCT `photo_user`) from `photo`");
+        $total = DB::run() -> querySingle("select COUNT(DISTINCT `photo_user`) from `photo`");
 
-		if ($total > 0) {
-			if ($start >= $total) {
-				$start = last_page($total, $config['photogroup']);
-			}
+        if ($total > 0) {
+            if ($start >= $total) {
+                $start = last_page($total, $config['photogroup']);
+            }
 
-			$page = floor(1 + $start / $config['photogroup']);
-			$config['newtitle'] = 'Альбомы пользователей (Стр. '.$page.')';
+            $page = floor(1 + $start / $config['photogroup']);
+            $config['newtitle'] = 'Альбомы пользователей (Стр. '.$page.')';
 
-			$queryphoto = DB::run() -> query("SELECT COUNT(*) AS cnt, SUM(`photo_comments`) AS comments, `photo_user` FROM `photo` GROUP BY `photo_user` ORDER BY cnt DESC LIMIT ".$start.", ".$config['photogroup'].";");
+            $queryphoto = DB::run() -> query("SELECT COUNT(*) AS cnt, SUM(`photo_comments`) AS comments, `photo_user` FROM `photo` GROUP BY `photo_user` ORDER BY cnt DESC LIMIT ".$start.", ".$config['photogroup'].";");
 
-			while ($data = $queryphoto -> fetch()) {
+            while ($data = $queryphoto -> fetch()) {
 
-				echo '<img src="/images/img/gallery.gif" alt="image" /> ';
-				echo '<b><a href="album.php?act=photo&amp;uz='.$data['photo_user'].'">'.nickname($data['photo_user']).'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
-			}
+                echo '<img src="/images/img/gallery.gif" alt="image" /> ';
+                echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data['photo_user'].'">'.nickname($data['photo_user']).'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
+            }
 
-			page_strnavigation('album.php?', $config['photogroup'], $start, $total);
+            page_strnavigation('/gallery/album?', $config['photogroup'], $start, $total);
 
-			echo 'Всего альбомов: <b>'.$total.'</b><br /><br />';
+            echo 'Всего альбомов: <b>'.$total.'</b><br /><br />';
 
-		} else {
-			show_error('Альбомов еще нет!');
-		}
-	break;
+        } else {
+            show_error('Альбомов еще нет!');
+        }
+    break;
 
-	############################################################################################
-	##                               Просмотр по пользователям                                ##
-	############################################################################################
-	case 'photo':
+    ############################################################################################
+    ##                               Просмотр по пользователям                                ##
+    ############################################################################################
+    case 'photo':
 
-		show_title('Список всех фотографий '.nickname($uz));
+        show_title('Список всех фотографий '.nickname($uz));
 
-		$total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `photo_user`=?;", array($uz));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `photo_user`=?;", array($uz));
 
-		if ($total > 0) {
-			if ($start >= $total) {
-				$start = last_page($total, $config['fotolist']);
-			}
+        if ($total > 0) {
+            if ($start >= $total) {
+                $start = last_page($total, $config['fotolist']);
+            }
 
-			$page = floor(1 + $start / $config['fotolist']);
-			$config['newtitle'] = 'Список всех фотографий '.nickname($uz).' (Стр. '.$page.')';
+            $page = floor(1 + $start / $config['fotolist']);
+            $config['newtitle'] = 'Список всех фотографий '.nickname($uz).' (Стр. '.$page.')';
 
-			$queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `photo_user`=? ORDER BY `photo_time` DESC LIMIT ".$start.", ".$config['fotolist'].";", array($uz));
+            $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `photo_user`=? ORDER BY `photo_time` DESC LIMIT ".$start.", ".$config['fotolist'].";", array($uz));
 
-			$moder = ($log == $uz) ? 1 : 0;
+            $moder = ($log == $uz) ? 1 : 0;
 
-			while ($data = $queryphoto -> fetch()) {
-				echo '<div class="b"><img src="/images/img/gallery.gif" alt="image" /> ';
-				echo '<b><a href="index.php?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(BASEDIR.'/upload/pictures/'.$data['photo_link']).')<br />';
+            while ($data = $queryphoto -> fetch()) {
+                echo '<div class="b"><img src="/images/img/gallery.gif" alt="image" /> ';
+                echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(BASEDIR.'/upload/pictures/'.$data['photo_link']).')<br />';
 
-				if (!empty($moder)) {
-					echo '<a href="index.php?act=edit&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">Редактировать</a> / ';
-					echo '<a href="index.php?act=delphoto&amp;gid='.$data['photo_id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
-				}
+                if (!empty($moder)) {
+                    echo '<a href="/gallery?act=edit&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">Редактировать</a> / ';
+                    echo '<a href="/gallery?act=delphoto&amp;gid='.$data['photo_id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+                }
 
-				echo '</div><div>';
-				echo '<a href="index.php?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'])).'</a><br />';
+                echo '</div><div>';
+                echo '<a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'])).'</a><br />';
 
-				if (!empty($data['photo_text'])){
-					echo bb_code($data['photo_text']).'<br />';
-				}
+                if (!empty($data['photo_text'])){
+                    echo bb_code($data['photo_text']).'<br />';
+                }
 
-				echo 'Добавлено: '.profile($data['photo_user']).' ('.date_fixed($data['photo_time']).')<br />';
-				echo '<a href="index.php?act=comments&amp;gid='.$data['photo_id'].'">Комментарии</a> ('.$data['photo_comments'].')';
-				echo '</div>';
-			}
+                echo 'Добавлено: '.profile($data['photo_user']).' ('.date_fixed($data['photo_time']).')<br />';
+                echo '<a href="/gallery?act=comments&amp;gid='.$data['photo_id'].'">Комментарии</a> ('.$data['photo_comments'].')';
+                echo '</div>';
+            }
 
-			page_strnavigation('album.php?act=photo&amp;uz='.$uz.'&amp;', $config['fotolist'], $start, $total);
+            page_strnavigation('/gallery/album?act=photo&amp;uz='.$uz.'&amp;', $config['fotolist'], $start, $total);
 
-			echo 'Всего фотографий: <b>'.$total.'</b><br /><br />';
-		} else {
-			show_error('Фотографий в альбоме еще нет!');
-		}
+            echo 'Всего фотографий: <b>'.$total.'</b><br /><br />';
+        } else {
+            show_error('Фотографий в альбоме еще нет!');
+        }
 
-		echo '<img src="/images/img/reload.gif" alt="image" /> <a href="album.php">Альбомы</a><br />';
-	break;
+        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/gallery/album">Альбомы</a><br />';
+    break;
 
-
-default:
-	redirect("album.php");
 endswitch;
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">В галерею</a><br />';
+echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery">В галерею</a><br />';
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');
