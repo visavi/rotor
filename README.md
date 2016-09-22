@@ -33,10 +33,9 @@ try_files $uri $uri/ =404
 
 на
 
-try_files $uri $uri/ /index.php?$query_string;
+try_files $uri /index.php?$query_string;
 ```
-
-
+#### Установка
 Прежде чем начать установку убедитесь, что все файлы дистрибутива загружены на сервер, а также выставлены необходимые права доступа для папок и файлов
 
  * **includes/connect.php (chmod 666)**
