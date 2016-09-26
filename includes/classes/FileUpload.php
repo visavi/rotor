@@ -6,7 +6,8 @@
  */
 class FileUpload extends upload {
 
-    function translate($str, $tokens = array()) {
+    function translate($str, $tokens = array())
+    {
 
         // sets default language
         $this->translation = array();
@@ -62,12 +63,14 @@ class FileUpload extends upload {
         return $str;
     }
 
-    function init() {
+    function init()
+    {
         parent::init(); // Array list of allowed extensions
         $this->ext_check = array();
     }
 
-    function process($server_path = null) {
+    function process($server_path = null)
+    {
         $this->error     = '';
         $this->processed = true;
 
@@ -126,15 +129,24 @@ class FileUpload extends upload {
         }
     }
 
-    function clean() {
+    /**
+     * Удаляет временное изображение
+     */
+    function clean()
+    {
+        $fieldName = array_search(
+            $this->file_src_pathname,
+            array_map(
+                function($data) {
+                    return $data['tmp_name'];
+                }, $_FILES
+            )
+        );
 
-        $files = Request::allFiles();
-        foreach ($files as $key => $file) {
-            unset($_FILES[$key]);
+        if (isset($_FILES[$fieldName])) {
+            unset($_FILES[$fieldName]);
         }
 
         parent::clean();
     }
 }
-
-?>
