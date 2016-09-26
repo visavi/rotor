@@ -125,6 +125,16 @@ class FileUpload extends upload {
             parent::process($server_path);
         }
     }
+
+    function clean() {
+
+        $files = Request::allFiles();
+        foreach ($files as $key => $file) {
+            unset($_FILES[$key]);
+        }
+
+        parent::clean();
+    }
 }
 
 ?>
