@@ -56,8 +56,9 @@ $router->map('GET', '/tags', '/modules/pages/tags.php', 'tags');
 $router->map('GET', '/rules', '/modules/pages/rules.php', 'smiles');
 $router->map('GET', '/smiles', '/modules/pages/smiles.php', 'rules');
 $router->map('GET', '/captcha', '/modules/gallery/protect.php', 'captcha');
-$router->map('GET', '/online', '/modules/pages/online.php', 'online');
-$router->map('GET', '/online/[all:action]', '/modules/pages/online.php', 'online_all');
+$router->map('GET', '/online/[all:action]?', '/modules/pages/online.php', 'online');
+$router->map('GET|POST', '/wall', '/modules/pages/wall.php', 'wall');
+
 
 $router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
 
