@@ -51,6 +51,7 @@ $router->map('GET|POST', '/login', '/modules/pages/login.php', 'login');
 $router->map('GET|POST', '/register', '/modules/pages/registration.php', 'register');
 $router->map('GET|POST', '/user/[user:login]/[note:action]', '/modules/pages/user.php', 'note');
 
+$router->map('GET', '/menu', '/modules/pages/index.php@menu');
 $router->map('GET', '/page/[recent:action]?', '/modules/pages/index.php');
 $router->map('GET', '/tags', '/modules/pages/tags.php', 'tags');
 $router->map('GET', '/rules', '/modules/pages/rules.php', 'smiles');
@@ -58,7 +59,7 @@ $router->map('GET', '/smiles', '/modules/pages/smiles.php', 'rules');
 $router->map('GET', '/captcha', '/modules/gallery/protect.php', 'captcha');
 $router->map('GET', '/online/[all:action]?', '/modules/pages/online.php', 'online');
 $router->map('GET|POST', '/wall', '/modules/pages/wall.php', 'wall');
-
+$router->map('GET|POST', '/setting', '/modules/pages/setting.php');
 
 $router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
 
