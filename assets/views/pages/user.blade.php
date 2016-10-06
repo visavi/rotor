@@ -117,7 +117,7 @@
         echo '<img src="/images/img/users.gif" alt="Добавить" /> Добавить в ';
         echo '<a href="contact.php?act=add&amp;uz='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">контакт</a> / ';
         echo '<a href="ignore.php?act=add&amp;uz='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">игнор</a><br />';
-        echo '<img src="/images/img/mail.gif" alt="Отправить" /> <a href="private.php?act=submit&amp;uz='.$user['users_login'].'">Отправить сообщение</a><br />';
+        echo '<img src="/images/img/mail.gif" alt="Отправить" /> <a href="/private?act=submit&amp;uz='.$user['users_login'].'">Отправить сообщение</a><br />';
 
         echo '<img src="/images/img/money.gif" alt="Перечислить" /> <a href="/pages/perevod.php?uz='.$user['users_login'].'">Перечислить денег</a><br />';
 

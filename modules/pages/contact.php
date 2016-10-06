@@ -56,9 +56,9 @@ if (is_user()) {
 					}
 
 					echo '<input type="checkbox" name="del[]" value="'.$data['contact_id'].'" /> ';
-					echo '<a href="/pages/private.php?act=submit&amp;uz='.$data['contact_name'].'">Написать</a> | ';
-					echo '<a href="/pages/perevod.php?uz='.$data['contact_name'].'">Перевод</a> | ';
-					echo '<a href="/pages/contact.php?act=note&amp;id='.$data['contact_id'].'">Заметка</a>';
+					echo '<a href="/private?act=submit&amp;uz='.$data['contact_name'].'">Написать</a> | ';
+					echo '<a href="/perevod?uz='.$data['contact_name'].'">Перевод</a> | ';
+					echo '<a href="/contact?act=note&amp;id='.$data['contact_id'].'">Заметка</a>';
 					echo '</div>';
 				}
 
@@ -236,8 +236,8 @@ if (is_user()) {
 	show_login('Вы не авторизованы, для просмотра контакт-листа, необходимо');
 }
 
-echo '<img src="/images/img/ignor.gif" alt="image" /> <a href="ignore.php">Игнор-лист</a><br />';
-echo '<img src="/images/img/mail.gif" alt="image" /> <a href="private.php">Сообщения</a><br />';
+echo '<img src="/images/img/ignor.gif" alt="image" /> <a href="/ignore">Игнор-лист</a><br />';
+echo '<img src="/images/img/mail.gif" alt="image" /> <a href="/private">Сообщения</a><br />';
 
 include_once ('../themes/footer.php');
 ?>

@@ -5,8 +5,8 @@ if (isset($act) && $act=='menu'){
 ?>
 
 <div class="b"><i class="fa fa-envelope fa-lg text-muted"></i> <b>Почта / Контакты</b></div>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/private.php">Сообщения</a> (<?=user_mail(App::getUsername())?>)<br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/private.php?act=submit">Отправить письмо</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/private">Сообщения</a> (<?=user_mail(App::getUsername())?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/private?act=submit">Отправить письмо</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/ignore.php">Игнор-лист</a> (<?=user_ignore(App::getUsername())?>)<br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/contact.php">Контакт-лист</a> (<?=user_contact(App::getUsername())?>)<br />
 

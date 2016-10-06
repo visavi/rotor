@@ -56,8 +56,8 @@ if (is_user()) {
 					}
 
 					echo '<input type="checkbox" name="del[]" value="'.$data['ignore_id'].'" /> ';
-					echo '<a href="private.php?act=submit&amp;uz='.$data['ignore_name'].'">Написать</a> | ';
-					echo '<a href="ignore.php?act=note&amp;id='.$data['ignore_id'].'">Заметка</a>';
+					echo '<a href="/private?act=submit&amp;uz='.$data['ignore_name'].'">Написать</a> | ';
+					echo '<a href="/ignore?act=note&amp;id='.$data['ignore_id'].'">Заметка</a>';
 					echo '</div>';
 				}
 
@@ -240,8 +240,8 @@ if (is_user()) {
 	show_login('Вы не авторизованы, для просмотра игнор-листа, необходимо');
 }
 
-echo '<img src="/images/img/users.gif" alt="image" /> <a href="contact.php">Контакт-лист</a><br />';
-echo '<img src="/images/img/mail.gif" alt="image" /> <a href="private.php">Сообщения</a><br />';
+echo '<img src="/images/img/users.gif" alt="image" /> <a href="/contact">Контакт-лист</a><br />';
+echo '<img src="/images/img/mail.gif" alt="image" /> <a href="/private">Сообщения</a><br />';
 
 include_once ('../themes/footer.php');
 ?>
