@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $key = isset($_GET['key']) ? check($_GET['key']) : '';
 
@@ -38,5 +27,5 @@ if (! empty($key)) {
 } else {
 	show_error('Ошибка! Отсутствует ключ для отписки от рассылки!');
 }
-include_once ('../themes/footer.php');
-?>
+
+App::view($config['themes'].'/foot');

@@ -85,9 +85,9 @@
 
                     <?php endif; ?>
 
-                    <?php if (($log == $data['posts_user'] && $data['posts_time'] + 600 > SITETIME) || isset($topics['is_moder'])): ?>
+                    <?php if (($log == $data['posts_user'] && $data['posts_time'] + 600 > SITETIME) || !empty($topics['is_moder'])): ?>
                         <a href="/topic/<?=$tid?>/<?=$data['posts_id']?>/edit?start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
-                        <?php if (isset($topics['is_moder'])): ?>
+                        <?php if (!empty($topics['is_moder'])): ?>
                         <input type="checkbox" name="del[]" value="<?=$data['posts_id']?>" />
                         <?php endif; ?>
                     <?php endif; ?>

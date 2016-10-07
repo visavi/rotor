@@ -7,15 +7,15 @@ if (isset($act) && $act=='menu'){
 <div class="b"><i class="fa fa-envelope fa-lg text-muted"></i> <b>Почта / Контакты</b></div>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/private">Сообщения</a> (<?=user_mail(App::getUsername())?>)<br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/private?act=submit">Отправить письмо</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/ignore.php">Игнор-лист</a> (<?=user_ignore(App::getUsername())?>)<br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/contact.php">Контакт-лист</a> (<?=user_contact(App::getUsername())?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/ignore">Игнор-лист</a> (<?=user_ignore(App::getUsername())?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/contact">Контакт-лист</a> (<?=user_contact(App::getUsername())?>)<br />
 
 <div class="b"><i class="fa fa-wrench fa-lg text-muted"></i> <b>Анкета / Настройки</b></div>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/user.php">Моя анкета</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/profile.php">Мой профиль</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/account.php">Мои данные</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/user/<?= App::getUsername() ?>">Моя анкета</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/profile">Мой профиль</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/account">Мои данные</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/setting">Настройки</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/wall.php">Моя стена</a> (<?=user_wall(App::getUsername())?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/wall">Моя стена</a> (<?=user_wall(App::getUsername())?>)<br />
 
 <div class="b"><i class="fa fa-star fa-lg text-muted"></i> <b>Активность</b></div>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/notebook.php">Блокнот</a><br />

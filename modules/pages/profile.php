@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
@@ -25,22 +14,22 @@ switch ($act):
 case 'index':
 
 	echo '<img src="/images/img/document.gif" alt="image" /> ';
-	echo '<a href="user.php">Моя анкета</a> / ';
+	echo '<a href="/user/'.App::getUsername().'">Моя анкета</a> / ';
 	echo '<b>Мой профиль</b> / ';
-	echo '<a href="account.php">Мои данные</a> / ';
-	echo '<a href="setting.php">Настройки</a><hr />';
+	echo '<a href="/account">Мои данные</a> / ';
+	echo '<a href="/setting">Настройки</a><hr />';
 
 	echo '<div class="form">';
-	echo '<form method="post" action="profile.php?act=edit&amp;uid='.$_SESSION['token'].'">';
+	echo '<form method="post" action="/profile?act=edit&amp;uid='.$_SESSION['token'].'">';
 
 	echo '<div class="pull-right">';
 	if (!empty($udata['users_picture']) && file_exists(BASEDIR.'/upload/photos/'.$udata['users_picture'])) {
 		echo '<a href="/upload/photos/'.$udata['users_picture'].'">';
 		echo resize_image('upload/photos/', $udata['users_picture'], $config['previewsize'], array('alt' => nickname($udata['users_login']), 'class' => 'img-responsive img-rounded')).'</a>';
-		echo '<a href="pictures.php">Изменить</a> / <a href="pictures.php?act=del&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+		echo '<a href="/pictures">Изменить</a> / <a href="/pictures?act=del&amp;uid='.$_SESSION['token'].'">Удалить</a>';
 	} else {
 		echo '<img class="img-responsive img-rounded" src="/images/img/photo.jpg" alt="Фото" />';
-		echo '<a href="pictures.php">Загрузить фото</a>';
+		echo '<a href="/pictures">Загрузить фото</a>';
 	}
 	echo '</div>';
 
@@ -51,10 +40,7 @@ case 'index':
 	echo 'Skype:<br /><input name="skype" maxlength="32" value="'.$udata['users_skype'].'" /><br />';
 	echo 'Сайт:<br /><input name="site" maxlength="50" value="'.$udata['users_site'].'" /><br />';
 	echo 'Дата рождения (дд.мм.гггг):<br /><input name="birthday" maxlength="10" value="'.$udata['users_birthday'].'" /><br />';
-
-	echo 'Аватар: '.user_avatars($log).'<br />';
-	echo '<a href="avatars.php">Выбрать</a> или <a href="avatars.php?act=load">Загрузить</a><br />';
-
+	
 	echo 'Пол:<br />';
 	echo '<select name="gender">';
 	$selected = ($udata['users_gender'] == 1) ? ' selected="selected"' : '';
@@ -104,22 +90,19 @@ case 'edit':
 		DB::run() -> query("UPDATE `users` SET `users_name`=?, `users_country`=?, `users_city`=?, `users_icq`=?, `users_skype`=?, `users_site`=?, `users_birthday`=?, `users_gender`=?, `users_info`=? WHERE `users_login`=? LIMIT 1;", array($name, $country, $city, $icq, $skype, $site, $birthday, $gender, $info, $log));
 
 		notice('Ваш профиль успешно изменен!');
-		redirect("profile.php");
+		redirect("/profile");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo'<img src="/images/img/back.gif" alt="image" /> <a href="profile.php">Вернуться</a><br />';
+	echo'<img src="/images/img/back.gif" alt="image" /> <a href="/profile">Вернуться</a><br />';
 break;
 
-default:
-	redirect("profile.php");
 endswitch;
 
 } else {
 	show_login('Вы не авторизованы, чтобы изменять свои данные, необходимо');
 }
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');

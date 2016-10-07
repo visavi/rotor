@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -24,14 +13,14 @@ switch ($act):
 case 'index':
 
 	echo '<img src="/images/img/document.gif" alt="image" /> ';
-	echo '<a href="user.php">Моя анкета</a> / ';
-	echo '<a href="profile.php">Мой профиль</a> / ';
+	echo '<a href="user/'.App::getUsername().'">Моя анкета</a> / ';
+	echo '<a href="/profile">Мой профиль</a> / ';
 	echo '<b>Мои данные</b> / ';
-	echo '<a href="setting.php">Настройки</a><hr />';
+	echo '<a href="/setting">Настройки</a><hr />';
 
 	echo '<b><big>Изменение E-mail</big></b><br />';
 	echo '<div class="form">';
-	echo '<form method="post" action="account.php?act=changemail&amp;uid='.$_SESSION['token'].'">';
+	echo '<form method="post" action="/account?act=changemail&amp;uid='.$_SESSION['token'].'">';
 	echo 'Е-mail:<br />';
 	echo '<input name="meil" maxlength="50" value="'.$udata['users_email'].'" /><br />';
 	echo 'Текущий пароль:<br />';
@@ -45,7 +34,7 @@ case 'index':
 
 	if ($udata['users_point'] >= $config['editnickpoint']) {
 		echo '<div class="form">';
-		echo '<form method="post" action="account.php?act=editnick&amp;uid='.$_SESSION['token'].'">';
+		echo '<form method="post" action="/account?act=editnick&amp;uid='.$_SESSION['token'].'">';
 		echo 'Ваш ник:<br />';
 		echo '<input name="nickname" maxlength="20" value="'.$udata['users_nickname'].'" />';
 		echo '<input value="Изменить" type="submit" /></form></div><br />';
@@ -60,7 +49,7 @@ case 'index':
 
 		if ($udata['users_point'] >= $config['editstatuspoint']) {
 			echo '<div class="form">';
-			echo '<form method="post" action="account.php?act=editstatus&amp;uid='.$_SESSION['token'].'">';
+			echo '<form method="post" action="/account?act=editstatus&amp;uid='.$_SESSION['token'].'">';
 			echo 'Персональный статус:<br />';
 			echo '<input name="status" maxlength="20" value="'.$udata['users_status'].'" />';
 			echo '<input value="Изменить" type="submit" /></form>';
@@ -79,7 +68,7 @@ case 'index':
 	############################################################################################
 	echo '<b><big>Секретный вопрос</big></b><br />';
 	echo '<div class="form">';
-	echo '<form method="post" action="account.php?act=editsec&amp;uid='.$_SESSION['token'].'">';
+	echo '<form method="post" action="/account?act=editsec&amp;uid='.$_SESSION['token'].'">';
 	echo 'Секретный вопрос:<br />';
 	echo '<input name="secquest" maxlength="50" value="'.$udata['users_secquest'].'" /><br />';
 	echo 'Ответ на вопрос:<br /><input name="secanswer" maxlength="30" /><br />';
@@ -92,7 +81,7 @@ case 'index':
 	echo '<b><big>Изменение пароля</big></b><br />';
 
 	echo '<div class="form">';
-	echo '<form method="post" action="account.php?act=editpass&amp;uid='.$_SESSION['token'].'">';
+	echo '<form method="post" action="/account?act=editpass&amp;uid='.$_SESSION['token'].'">';
 	echo 'Новый пароль:<br /><input name="newpass" maxlength="20" /><br />';
 	echo 'Повторите пароль:<br /><input name="newpass2" maxlength="20" /><br />';
 	echo 'Текущий пароль:<br /><input name="oldpass" type="password" maxlength="20" /><br />';
@@ -105,11 +94,11 @@ case 'index':
 
 	if(empty($udata['users_apikey'])) {
 		echo '<div class="form">';
-		echo '<form method="post" action="account.php?act=apikey&amp;uid='.$_SESSION['token'].'">';
+		echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
 		echo '<input value="Получить ключ" type="submit" /></form></div><br />';
 	} else {
 		echo '<div class="form">';
-		echo '<form method="post" action="account.php?act=apikey&amp;uid='.$_SESSION['token'].'">';
+		echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
 		echo 'Ключ: <strong>'.$udata['users_apikey'].'</strong><br />';
 		echo '<input value="Изменить ключ" type="submit" /></form></div><br />';
 	}
@@ -148,19 +137,19 @@ case 'changemail':
 
 		sendMail($meil,
 			'Изменение адреса электронной почты на сайте '.$config['title'],
-			nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".$config['home']."/pages/account.php?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течении суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо")
+			nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".$config['home']."/pages//account?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течении суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо")
 		);
 
 		DB::run() -> query("INSERT INTO `changemail` (`change_user`, `change_mail`, `change_key`, `change_time`) VALUES (?, ?, ?, ?);", array($log, $meil, $genkey, SITETIME + 86400));
 
 		notice('На новый адрес почты отправлено письмо для подтверждения!');
-		redirect("account.php");
+		redirect("/account");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -192,13 +181,13 @@ case 'editmail':
 		DB::run() -> query("DELETE FROM `changemail` WHERE `change_key`=? AND `change_user`=? LIMIT 1;", array($key, $log));
 
 		notice('Адрес электронной почты успешно изменен!');
-		redirect("account.php");
+		redirect("/account");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -230,13 +219,13 @@ case 'editstatus':
 		save_title();
 
 		notice('Ваш статус успешно изменен!');
-		redirect("account.php");
+		redirect("/account");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -272,13 +261,13 @@ case 'editnick':
 		save_nickname();
 
 		notice('Ваш ник успешно изменен!');
-		redirect("account.php");
+		redirect("/account");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -310,13 +299,13 @@ case 'editsec':
 		DB::run() -> query("UPDATE `users` SET `users_secquest`=?, `users_secanswer`=? WHERE `users_login`=? LIMIT 1;", array($secquest, $secanswer, $log));
 
 		notice('Секретный вопрос и ответ успешно изменены!');
-		redirect("account.php");
+		redirect("/account");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -349,20 +338,20 @@ case 'editpass':
 		if (! empty($udata['users_email'])){
 			sendMail($udata['users_email'],
 				'Изменение пароля на сайте '.$config['title'],
-				nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению пароля \n\nВаш новый пароль: ".$newpass." \nСохраните его в надежном месте \n\nДанные инициализации: \nIP: ".$ip." \nБраузер: ".$brow." \nВремя: ".date('j.m.y / H:i', SITETIME))
+				nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению пароля \n\nВаш новый пароль: ".$newpass." \nСохраните его в надежном месте \n\nДанные инициализации: \nIP: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nВремя: ".date('j.m.y / H:i', SITETIME))
 			);
 		}
 
 		unset($_SESSION['log'], $_SESSION['par']);
 
 		notice('Пароль успешно изменен!');
-		redirect("login.php");
+		redirect("/login");
 
 	} else {
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -378,21 +367,18 @@ case 'apikey':
 		DB::run() -> query("UPDATE `users` SET `users_apikey`=? WHERE `users_login`=?;", array(md5($log.$key), $log));
 
 		notice('Новый ключ успешно сгенерирован!');
-		redirect("account.php");
+		redirect("/account");
 	} else {
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="account.php">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
 break;
 
-default:
-	redirect("account.php");
 endswitch;
 
 } else {
 	show_login('Вы не авторизованы, чтобы изменять свои данные, необходимо');
 }
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');

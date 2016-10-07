@@ -24,6 +24,6 @@
         </form>
     </div>
     <br />
-    <a href="register">Регистрация</a><br />
-    <a href="/mail/lostpassword.php">Забыли пароль?</a><br /><br />
+    <a href="/register">Регистрация</a><br />
+    <a href="/lostpassword">Забыли пароль?</a><br /><br />
 @stop

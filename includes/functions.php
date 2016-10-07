@@ -1502,12 +1502,12 @@ function show_title($header, $subheader = false) {
 
 // ------------------------- Функция вывода ошибок ------------------------//
 function show_error($errors) {
-    render ('includes/error', compact('errors'));
+    App::view('includes/error', compact('errors'));
 }
 
 // ------------------------- Функция вывода предупреждения ------------------------//
 function show_login($notice) {
-    render ('includes/login', compact('notice'));
+    App::view('includes/login', compact('notice'));
 }
 
 // ------------------------- Функция замены заголовков ------------------------//

@@ -46,10 +46,14 @@ $router->map('GET|POST', '/topic/[i:tid]/[i:id]/edit', '/modules/forum/topic.php
 $router->map('GET|POST', '/topic/[i:tid]/[edit:action]', '/modules/forum/topic.php');
 
 $router->map('GET', '/logout', '/modules/pages/login.php@logout', 'logout');
-$router->map('GET', '/user/[user:login]', '/modules/pages/user.php', 'profile');
+$router->map('GET', '/user/[user:login]', '/modules/pages/user.php');
 $router->map('GET|POST', '/login', '/modules/pages/login.php', 'login');
 $router->map('GET|POST', '/register', '/modules/pages/registration.php', 'register');
 $router->map('GET|POST', '/user/[user:login]/[note:action]', '/modules/pages/user.php', 'note');
+
+$router->map('GET|POST', '/mail', '/modules/mail/index.php', 'mail');
+$router->map('GET|POST', '/lostpassword', '/modules/mail/lostpassword.php', 'lostpassword');
+$router->map('GET|POST', '/unsubscribe', '/modules/mail/unsubscribe.php', 'unsubscribe');
 
 $router->map('GET', '/menu', '/modules/pages/index.php@menu');
 $router->map('GET', '/page/[recent:action]?', '/modules/pages/index.php');
@@ -61,7 +65,12 @@ $router->map('GET', '/online/[all:action]?', '/modules/pages/online.php', 'onlin
 $router->map('GET|POST', '/wall', '/modules/pages/wall.php', 'wall');
 $router->map('GET|POST', '/setting', '/modules/pages/setting.php');
 $router->map('GET|POST', '/private', '/modules/pages/private.php');
-
+$router->map('GET|POST', '/ignore', '/modules/pages/ignore.php');
+$router->map('GET|POST', '/contact', '/modules/pages/contact.php');
+$router->map('GET|POST', '/perevod', '/modules/pages/perevod.php');
+$router->map('GET|POST', '/profile', '/modules/pages/profile.php');
+$router->map('GET|POST', '/account', '/modules/pages/account.php');
+$router->map('GET|POST', '/pictures', '/modules/pages/pictures.php');
 
 $router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
 

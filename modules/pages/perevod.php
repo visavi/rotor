@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 if (isset($_GET['act'])) {
 	$act = check($_GET['act']);
@@ -40,7 +29,7 @@ if (is_user()) {
 			if ($udata['users_point'] >= $config['sendmoneypoint']) {
 				if (empty($uz)) {
 					echo '<div class="form">';
-					echo '<form action="perevod.php?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
+					echo '<form action="/perevod?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
 					echo 'Логин юзера:<br />';
 					echo '<input type="text" name="uz" maxlength="20" /><br />';
 					echo 'Кол-во денег:<br />';
@@ -51,7 +40,7 @@ if (is_user()) {
 				} else {
 					echo '<div class="form">';
 					echo 'Перевод для <b>'.$uz.'</b>:<br /><br />';
-					echo '<form action="perevod.php?act=send&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
+					echo '<form action="/perevod?act=send&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
 					echo 'Кол-во денег:<br />';
 					echo '<input type="text" name="money" /><br />';
 					echo 'Примечание:<br />';
@@ -96,7 +85,7 @@ if (is_user()) {
 											DB::run() -> query("DELETE FROM `transfers` WHERE `trans_time` < (SELECT MIN(`trans_time`) FROM (SELECT `trans_time` FROM `transfers` ORDER BY `trans_time` DESC LIMIT 1000) AS del);");
 
 											$_SESSION['note'] = 'Перевод успешно завершен! Пользователь уведомлен о переводе';
-											redirect("perevod.php");
+											redirect("/perevod");
 
 										} else {
 											show_error('Ошибка! Вы внесены в игнор-лист получателя!');
@@ -123,16 +112,13 @@ if (is_user()) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="perevod.php">Вернуться</a><br />';
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="/perevod">Вернуться</a><br />';
 		break;
 
-	default:
-		redirect("perevod.php");
 	endswitch;
 
 } else {
 	show_login('Вы не авторизованы, чтобы совершать операции, необходимо');
 }
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');
