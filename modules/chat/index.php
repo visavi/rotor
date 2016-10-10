@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $config['chatpost'] = 10;
 $config['shutnik'] = 1; // Шутник включен
@@ -26,10 +15,10 @@ show_title('Мини-чат');
 if ($act == 'index') {
 
 	echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
-	echo '<a href="#form">Написать</a> / ';
-	echo '<a href="index.php?rand=' . mt_rand(100, 999) . '">Обновить</a>';
+	echo '<a href="#form">Написать</a>';
+
 	if (is_admin()) {
-		echo ' / <a href="/admin/minichat.php?start=' . $start . '">Управление</a>';
+		echo ' / <a href="/admin/minichat?start=' . $start . '">Управление</a>';
 	}
 	echo '<hr />';
 
@@ -47,7 +36,7 @@ if ($act == 'index') {
 		if (is_user()) {
 			// --------------------------генерация анекдота------------------------------------------------//
 			if ($config['shutnik'] == 1) {
-				$anfi = file("bots/chat_shut.php");
+				$anfi = file("modules/chat/bots/chat_shut.php");
 				$an_rand = array_rand($anfi);
 				$anshow = trim($anfi[$an_rand]);
 
@@ -73,7 +62,7 @@ if ($act == 'index') {
 				write_files(DATADIR . "/chat/chat.dat", "$magtext\r\n");
 			}
 			// ------------------------------  Новый вопрос  -------------------------------//
-			$magfi = file("bots/chat_mag.php");
+			$magfi = file("modules/chat/bots/chat_mag.php");
 			$mag_rand = array_rand($magfi);
 			$magshow = $magfi[$mag_rand];
 			$magstr = explode("|", $magshow);
@@ -133,22 +122,22 @@ if ($act == 'index') {
 			$useravatars = user_avatars($data[1]);
 
 			if ($data[1] == 'Вундер-киндер') {
-				$useravatars = '<img src="img/mag.gif" alt="image" /> ';
+				$useravatars = '<img src="modules/chat/img/mag.gif" alt="image" /> ';
 				$useronline = '<img src="/images/img/on.gif" alt="image">';
 			}
 			if ($data[1] == 'Настюха') {
-				$useravatars = '<img src="img/bot.gif" alt="image" /> ';
+				$useravatars = '<img src="modules/chat/img/bot.gif" alt="image" /> ';
 				$useronline = '<img src="/images/img/on.gif" alt="image">';
 			}
 			if ($data[1] == 'Весельчак') {
-				$useravatars = '<img src="img/shut.gif" alt="image" /> ';
+				$useravatars = '<img src="modules/chat/img/shut.gif" alt="image" /> ';
 				$useronline = '<img src="/images/img/on.gif" alt="image">';
 			}
 
 			echo '<div class="b">';
 			echo '<div class="img">' . $useravatars . '</div>';
 
-			echo '<b><a href="index.php?name=' . nickname($data[1]) . '#form">' . nickname($data[1]) . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
+			echo '<b><a href="/chat?name=' . nickname($data[1]) . '#form">' . nickname($data[1]) . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
 			echo user_title($data[1]) . ' ' . $useronline . '</div>';
 			echo '<div>' . bb_code($data[0]) . '<br />';
 			if (is_admin() || empty($config['anonymity'])){
@@ -156,7 +145,7 @@ if ($act == 'index') {
 			}
 		}
 
-		page_strnavigation('index.php?', $config['chatpost'], $start, $total);
+		page_strnavigation('/chat?', $config['chatpost'], $start, $total);
 
 	} else {
 		show_error('Сообщений нет, будь первым!');
@@ -164,7 +153,7 @@ if ($act == 'index') {
 
 	if (is_user()) {
 		echo '<div class="form" id="form">';
-		echo '<form action="index.php?act=add" method="post">';
+		echo '<form action="/chat?act=add" method="post">';
 		echo '<b>Сообщение:</b><br />';
 		echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $name . '</textarea><br />';
 		echo '<input type="submit" value="Добавить" /></form></div>';
@@ -198,7 +187,7 @@ if ($act == 'add') {
 					if (!isset($data[7])) $data[7] = '';
 					if (!isset($data[8])) $data[8] = '';
 
-					$text = no_br($msg . '|' . $log . '||' . SITETIME . '|' . $brow . '|' . $ip . '|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
+					$text = no_br($msg . '|' . $log . '||' . SITETIME . '|' . App::getUserAgent() . '|' . App::getClientIp() . '|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
 
 					write_files(DATADIR . "/chat/chat.dat", "$text\r\n");
 
@@ -211,7 +200,7 @@ if ($act == 'add') {
 
 					// --------------------------------------------------------------------------//
 					if ($config['botnik'] == 1) {
-						include_once "bots/chat_bot.php";
+						include_once "modules/chat/bots/chat_bot.php";
 
 						if ($mssg != "") {
 							$unifile = unifile(DATADIR . "/chat/chat.dat", 9);
@@ -231,7 +220,7 @@ if ($act == 'add') {
 					}
 
 					notice('Сообщение успешно добавлено!');
-					redirect("index.php");
+					redirect("/chat");
 
 				} else {
 					show_error('Антифлуд! Разрешается отправлять сообщения раз в ' . flood_period() . ' секунд!');
@@ -246,15 +235,14 @@ if ($act == 'add') {
 		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
 	}
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">Вернуться</a><br /><br />';
+echo '<img src="/images/img/back.gif" alt="image" /> <a href="/chat">Вернуться</a><br /><br />';
 
 }
 
-echo '<a href="#up"><img src="/images/img/ups.gif" alt="image" /></a> ';
-echo '<a href="/pages/rules.php">Правила</a> / ';
-echo '<a href="/pages/smiles.php">Смайлы</a> / ';
-echo '<a href="/pages/tags.php">Теги</a><br /><br />';
+echo '<a href="/rules">Правила</a> / ';
+echo '<a href="/smiles">Смайлы</a> / ';
+echo '<a href="/tags">Теги</a><br /><br />';
 
-echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/index.php">На главную</a>';
+echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/">На главную</a>';
 
-include_once ("../themes/footer.php");
+App::view($config['themes'].'/foot');

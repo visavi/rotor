@@ -71,8 +71,18 @@ $router->map('GET|POST', '/perevod', '/modules/pages/perevod.php');
 $router->map('GET|POST', '/profile', '/modules/pages/profile.php');
 $router->map('GET|POST', '/account', '/modules/pages/account.php');
 $router->map('GET|POST', '/pictures', '/modules/pages/pictures.php');
+$router->map('GET|POST', '/offers', '/modules/pages/offers.php');
+
+$router->map('GET|POST', '/events', '/modules/events/index.php', 'events');
 
 $router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
+
+$router->map('GET|POST', '/chat', '/modules/chat/index.php', 'chat');
+
+$router->map('GET|POST', '/votes', '/modules/votes/index.php');
+$router->map('GET|POST', '/votes/history', '/modules/votes/history.php');
+
+
 
 $router->map('GET', '/admin', '/modules/admin/index.php', 'admin');
 $router->map('GET', '/admin/cache', '/modules/admin/cache.php');

@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
@@ -41,7 +30,7 @@ case 'index':
 
 		render('events/index', array('events' => $events));
 
-		page_strnavigation('index.php?', $config['postevents'], $start, $total);
+		page_strnavigation('/events?', $config['postevents'], $start, $total);
 	} else {
 		show_error('Событий еще нет!');
 	}
@@ -56,8 +45,8 @@ case 'read':
 	if (!empty($data)) {
 
 		if (is_admin()){
-			echo '<div class="form"><a href="/admin/events.php?act=edit&amp;id='.$id.'">Редактировать</a> / ';
-			echo '<a href="/admin/events.php?act=del&amp;del='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данное событие?\')">Удалить</a></div>';
+			echo '<div class="form"><a href="/admin/events?act=edit&amp;id='.$id.'">Редактировать</a> / ';
+			echo '<a href="/admin/events?act=del&amp;del='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данное событие?\')">Удалить</a></div>';
 		}
 
 		$config['newtitle'] = $data['event_title'];
@@ -101,8 +90,8 @@ case 'read':
 			}
 
 			if ($data['event_comments'] > 5) {
-				echo '<div class="act"><b><a href="index.php?act=comments&amp;id='.$data['event_id'].'">Все комментарии</a></b> ('.$data['event_comments'].') ';
-				echo '<a href="index.php?act=end&amp;id='.$data['event_id'].'">&raquo;</a></div><br />';
+				echo '<div class="act"><b><a href="/events?act=comments&amp;id='.$data['event_id'].'">Все комментарии</a></b> ('.$data['event_comments'].') ';
+				echo '<a href="/events?act=end&amp;id='.$data['event_id'].'">&raquo;</a></div><br />';
 			}
 
 		} else {
@@ -111,14 +100,14 @@ case 'read':
 
 		if (is_user()) {
 			if (empty($data['event_closed'])) {
-				echo '<div class="form"><form action="index.php?act=addcomment&amp;id='.$id.'&amp;read=1&amp;uid='.$_SESSION['token'].'" method="post">';
+				echo '<div class="form"><form action="/events?act=addcomment&amp;id='.$id.'&amp;read=1&amp;uid='.$_SESSION['token'].'" method="post">';
 				echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
 				echo '<input type="submit" value="Написать" /></form></div>';
 
-				echo '<br /><a href="#up"><img src="/images/img/ups.gif" alt="image" /></a> ';
-				echo '<a href="/pages/rules.php">Правила</a> / ';
-				echo '<a href="/pages/smiles.php">Смайлы</a> / ';
-				echo '<a href="/pages/tags.php">Теги</a><br /><br />';
+				echo '<br />';
+				echo '<a href="/rules">Правила</a> / ';
+				echo '<a href="/smiles">Смайлы</a> / ';
+				echo '<a href="/tags">Теги</a><br /><br />';
 			} else {
 				show_error('Комментирование данного события закрыто!');
 			}
@@ -129,7 +118,7 @@ case 'read':
 		show_error('Ошибка! Выбранного вами события не существует, возможно оно было удалено!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">К событиям</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -141,7 +130,7 @@ case 'new':
 			echo '<b><big>Добавление события</big></b><br /><br />';
 
 			echo '<div class="form cut">';
-			echo '<form action="index.php?act=addevent&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+			echo '<form action="/events?act=addevent&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
 			echo 'Заголовок:<br />';
 			echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
 			echo '<textarea id="markItUp" cols="50" rows="10" name="msg"></textarea><br />';
@@ -161,7 +150,7 @@ case 'new':
 	} else {
 		show_login('Вы не авторизованы, для создания события, необходимо');
 	}
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">Вернуться</a><br />';
+			echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -180,8 +169,7 @@ case 'addevent':
 		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
-			-> addRule('equal', array(is_flood($log), true), 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
+			-> addRule('equal', array(is_flood(App::getUsername()), true), 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
 			-> addRule('max', array($udata['users_point'], $config['eventpoint']), 'У вас недостаточно актива для создания события!')
 			-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 			-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
@@ -190,7 +178,7 @@ case 'addevent':
 
 			$msg = antimat($msg);
 
-			DB::run() -> query("INSERT INTO `events` (`event_title`, `event_text`, `event_author`, `event_time`, `event_comments`, `event_closed`, `event_top`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($title, $msg, $log, SITETIME, 0, $closed, $top));
+			DB::run() -> query("INSERT INTO `events` (`event_title`, `event_text`, `event_author`, `event_time`, `event_comments`, `event_closed`, `event_top`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($title, $msg, App::getUsername(), SITETIME, 0, $closed, $top));
 
 			$lastid = DB::run() -> lastInsertId();
 
@@ -207,14 +195,14 @@ case 'addevent':
 
 					} else {
 						notice($handle->error, 'danger');
-						redirect("index.php?act=editevent&id=$lastid");
+						redirect("/events?act=editevent&id=$lastid");
 					}
 				}
 			}
 			// ---------------------------------------------------------------------------------//
 
 			notice('Событие успешно добавленo!');
-			redirect("index.php");
+			redirect("/events");
 
 		} else {
 			show_error($validation->getErrors());
@@ -223,8 +211,8 @@ case 'addevent':
 		show_login('Вы не авторизованы, для создания события, необходимо');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php?act=new">Вернуться</a><br />';
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="index.php">К событиям</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events?act=new">Вернуться</a><br />';
+	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -237,7 +225,7 @@ case 'editevent':
 		$validation = new Validation();
 
 		$validation -> addRule('not_empty', $dataevent, 'Выбранного события не существует, возможно оно было удалено!')
-			-> addRule('equal', array($log, $dataevent['event_author']), 'Изменение невозможно, вы не автор данного события!')
+			-> addRule('equal', array(App::getUsername(), $dataevent['event_author']), 'Изменение невозможно, вы не автор данного события!')
 			-> addRule('max', array(($dataevent['event_time'] + 3600), SITETIME), 'Изменение невозможно, прошло более 1 часа!');
 
 		if ($validation->run()) {
@@ -245,7 +233,7 @@ case 'editevent':
 			echo '<b><big>Редактирование</big></b><br /><br />';
 
 			echo '<div class="form cut">';
-			echo '<form action="index.php?act=changeevent&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+			echo '<form action="/events?act=changeevent&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
 			echo 'Заголовок:<br />';
 			echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['event_title'].'" /><br />';
 			echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['event_text'].'</textarea><br />';
@@ -275,7 +263,7 @@ case 'editevent':
 		show_login('Вы не авторизованы, для редактирования события, необходимо');
 	}
 
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="index.php">К событиям</a><br />';
+	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -297,7 +285,7 @@ case 'changeevent':
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('not_empty', $dataevent, 'Выбранного события не существует, возможно оно было удалено!')
-			-> addRule('equal', array($log, $dataevent['event_author']), 'Изменение невозможно, вы не автор данного события!')
+			-> addRule('equal', array(App::getUsername(), $dataevent['event_author']), 'Изменение невозможно, вы не автор данного события!')
 			-> addRule('max', array(($dataevent['event_time'] + 3600), SITETIME), 'Изменение невозможно, прошло более 1 часа!')
 			-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 			-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
@@ -332,7 +320,7 @@ case 'changeevent':
 			// ---------------------------------------------------------------------------------//
 
 			notice('Событие успешно отредактировано!');
-			redirect("index.php?act=editevent&id=$id");
+			redirect("/events?act=editevent&id=$id");
 
 		} else {
 			show_error($validation->getErrors());
@@ -340,8 +328,8 @@ case 'changeevent':
 	} else {
 		show_login('Вы не авторизованы, для редактирования события, необходимо');
 	}
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="index.php?act=editevent&amp;id='.$id.'">Вернуться</a><br />';
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">К событиям</a><br />';
+	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events?act=editevent&amp;id='.$id.'">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -357,10 +345,10 @@ case 'comments':
 		$page = floor(1 + $start / $config['postevents']);
 		$config['description'] = 'Комментарии - '.$dataevent['event_title'].' (Стр. '.$page.')';
 
-		echo '<img src="/images/img/files.gif" alt="image" /> <b><a href="index.php?act=read&amp;id='.$dataevent['event_id'].'">'.$dataevent['event_title'].'</a></b><br /><br />';
+		echo '<img src="/images/img/files.gif" alt="image" /> <b><a href="/events?act=read&amp;id='.$dataevent['event_id'].'">'.$dataevent['event_title'].'</a></b><br /><br />';
 
 		echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
-		echo '<a href="index.php?act=end&amp;id='.$id.'">Обновить</a><hr />';
+		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
 		$total = DB::run() -> querySingle("SELECT count(*) FROM `commevents` WHERE `commevent_event_id`=?;", array($id));
 
@@ -371,7 +359,7 @@ case 'comments':
 
 			$is_admin = is_admin();
 			if ($is_admin) {
-				echo '<form action="index.php?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+				echo '<form action="/events?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 			}
 
 			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `commevent_event_id`=? ORDER BY `commevent_time` ASC LIMIT ".$start.", ".$config['postevents'].";", array($id));
@@ -402,7 +390,7 @@ case 'comments':
 				echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
 			}
 
-			page_strnavigation('index.php?act=comments&amp;id='.$id.'&amp;', $config['postevents'], $start, $total);
+			page_strnavigation('/events?act=comments&amp;id='.$id.'&amp;', $config['postevents'], $start, $total);
 
 		} else {
 			show_error('Комментариев еще нет!');
@@ -410,14 +398,14 @@ case 'comments':
 
 		if (is_user()) {
 			if (empty($dataevent['event_closed'])) {
-				echo '<div class="form"><form action="index.php?act=addcomment&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
+				echo '<div class="form"><form action="/events?act=addcomment&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 				echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
 				echo '<input type="submit" value="Написать" /></form></div>';
 
-				echo '<br /><a href="#up"><img src="/images/img/ups.gif" alt="image" /></a> ';
-				echo '<a href="/pages/rules.php">Правила</a> / ';
-				echo '<a href="/pages/smiles.php">Смайлы</a> / ';
-				echo '<a href="/pages/tags.php">Теги</a><br /><br />';
+				echo '<br />';
+				echo '<a href="/rules">Правила</a> / ';
+				echo '<a href="/smiles">Смайлы</a> / ';
+				echo '<a href="/tags">Теги</a><br /><br />';
 			} else {
 				show_error('Комментирование данного события закрыто!');
 			}
@@ -428,7 +416,7 @@ case 'comments':
 		show_error('Ошибка! Выбранного события не существует, возможно оно было удалено!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">К событиям</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -445,8 +433,7 @@ case 'addcomment':
 		$validation = new Validation();
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
-			-> addRule('equal', array(is_flood($log), true), 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
+			-> addRule('equal', array(is_flood(App::getUsername()), true), 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
 			-> addRule('not_empty', $data, 'Выбранного события не существует, возможно оно было удалено!')
 			-> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
 			-> addRule('empty', $data['event_closed'], 'Комментирование данного события запрещено!');
@@ -455,20 +442,20 @@ case 'addcomment':
 
 			$msg = antimat($msg);
 
-			DB::run() -> query("INSERT INTO `commevents` (`commevent_event_id`, `commevent_text`, `commevent_author`, `commevent_time`, `commevent_ip`, `commevent_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, $ip, $brow));
+			DB::run() -> query("INSERT INTO `commevents` (`commevent_event_id`, `commevent_text`, `commevent_author`, `commevent_time`, `commevent_ip`, `commevent_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()));
 
 			DB::run() -> query("DELETE FROM `commevents` WHERE `commevent_event_id`=? AND `commevent_time` < (SELECT MIN(`commevent_time`) FROM (SELECT `commevent_time` FROM `commevents` WHERE `commevent_event_id`=? ORDER BY `commevent_time` DESC LIMIT ".$config['maxkommevents'].") AS del);", array($id, $id));
 
 			DB::run() -> query("UPDATE `events` SET `event_comments`=`event_comments`+1 WHERE `event_id`=?;", array($id));
-			DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+			DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array(App::getUsername()));
 
 			notice('Комментарий успешно добавлен!');
 
 			if (isset($_GET['read'])) {
-				redirect("index.php?act=read&id=$id");
+				redirect("/events?act=read&id=$id");
 			}
 
-			redirect("index.php?act=end&id=$id");
+			redirect("/events?act=end&id=$id");
 
 		} else {
 			show_error($validation->getErrors());
@@ -477,8 +464,8 @@ case 'addcomment':
 		show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
 	}
 
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="index.php?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">К событиям</a><br />';
+	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -499,7 +486,7 @@ case 'del':
 				DB::run() -> query("UPDATE `events` SET `event_comments`=`event_comments`-? WHERE `event_id`=?;", array($delcomments, $id));
 
 				notice('Выбранные комментарии успешно удалены!');
-				redirect("index.php?act=comments&id=$id&start=$start");
+				redirect("/events?act=comments&id=$id&start=$start");
 
 			} else {
 				show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
@@ -511,8 +498,8 @@ case 'del':
 		show_error('Ошибка! Удалять комментарии могут только модераторы!');
 	}
 
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="index.php?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">К событиям</a><br />';
+	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -526,18 +513,15 @@ case 'end':
 		$total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
 		$end = last_page($total_comments, $config['postevents']);
 
-		redirect("index.php?act=comments&id=$id&start=$end");
+		redirect("/events?act=comments&id=$id&start=$end");
 
 	} else {
 		show_error('Ошибка! Данного события не существует!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">К событиям</a><br />';
+	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
 break;
 
-default:
-	redirect("index.php");
 endswitch;
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');
