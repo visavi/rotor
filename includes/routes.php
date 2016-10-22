@@ -79,16 +79,28 @@ $router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
 
 $router->map('GET|POST', '/chat', '/modules/chat/index.php', 'chat');
 
-$router->map('GET|POST', '/votes', '/modules/votes/index.php');
+$router->map('GET|POST', '/games',           '/modules/games/index.php');
+$router->map('GET|POST', '/games/bank',      '/modules/games/bank.php');
+$router->map('GET|POST', '/games/credit',    '/modules/games/credit.php');
+$router->map('GET|POST', '/games/transfer',  '/modules/games/transfer.php');
+$router->map('GET|POST', '/games/livebank',  '/modules/games/livebank.php');
+$router->map('GET|POST', '/games/livebank',  '/modules/games/livebank.php');
+$router->map('GET|POST', '/games/safe',      '/modules/games/safe.php');
+$router->map('GET|POST', '/games/loterea',   '/modules/games/loterea.php');
+$router->map('GET|POST', '/games/21',        '/modules/games/21.php');
+$router->map('GET|POST', '/games/hi',        '/modules/games/hi.php');
+$router->map('GET|POST', '/games/bandit',    '/modules/games/bandit.php');
+$router->map('GET|POST', '/games/kosti',     '/modules/games/kosti.php');
+$router->map('GET|POST', '/games/naperstki', '/modules/games/naperstki.php');
+
+$router->map('GET|POST', '/votes',         '/modules/votes/index.php');
 $router->map('GET|POST', '/votes/history', '/modules/votes/history.php');
 
-
-
-$router->map('GET', '/admin', '/modules/admin/index.php', 'admin');
-$router->map('GET', '/admin/cache', '/modules/admin/cache.php');
+$router->map('GET', '/admin',              '/modules/admin/index.php', 'admin');
+$router->map('GET', '/admin/cache',        '/modules/admin/cache.php');
 $router->map('GET', '/admin/cache/[image|clear|clearimage:action]', '/modules/admin/cache.php');
-$router->map('GET|POST', '/admin/forum', '/modules/admin/forum.php');
-$router->map('GET|POST', '/admin/news', '/modules/admin/news.php');
+$router->map('GET|POST', '/admin/forum',   '/modules/admin/forum.php');
+$router->map('GET|POST', '/admin/news',    '/modules/admin/news.php');
 $router->map('GET|POST', '/admin/gallery', '/modules/admin/gallery.php');
 
 Registry::set('router', $router->match());

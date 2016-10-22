@@ -1,18 +1,5 @@
 <?php
-#-----------------------------------------------------#
-#          ********* ROTORCMS *********               #
-#              Made by  :  VANTUZ                     #
-#               E-mail  :  visavi.net@mail.ru         #
-#                 Site  :  http://pizdec.ru           #
-#             WAP-Site  :  http://visavi.net          #
-#                  ICQ  :  36-44-66                   #
-#  Вы не имеете право вносить изменения в код скрипта #
-#        для его дальнейшего распространения          #
-#-----------------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $rand = mt_rand(100, 999);
 
@@ -28,9 +15,9 @@ if (is_user()) {
     case "index":
 
         echo '<img src="/images/naperstki/1.gif" alt="image" /><br /><br />';
-        echo '<b><a href="/games/naperstki.php?act=choice">Играть</a></b><br /><br />';
+        echo '<b><a href="/games/naperstki?act=choice">Играть</a></b><br /><br />';
         echo 'В наличии: ' . moneys($udata['users_money']) . '<br /><br />';
-        echo '<img src="/images/img/faq.gif" alt="image" /> <a href="/games/naperstki.php?act=faq">Правила</a><br />';
+        echo '<img src="/images/img/faq.gif" alt="image" /> <a href="/games/naperstki?act=faq">Правила</a><br />';
         break;
     # ###########################################################################################
     # #                                     Выбор наперстка                                    ##
@@ -41,15 +28,15 @@ if (is_user()) {
             unset($_SESSION['naperstki']);
         }
 
-        echo '<a href="/games/naperstki.php?act=go&amp;thimble=1&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a> ';
-        echo '<a href="/games/naperstki.php?act=go&amp;thimble=2&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a> ';
-        echo '<a href="/games/naperstki.php?act=go&amp;thimble=3&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a><br /><br />';
+        echo '<a href="/games/naperstki?act=go&amp;thimble=1&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a> ';
+        echo '<a href="/games/naperstki?act=go&amp;thimble=2&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a> ';
+        echo '<a href="/games/naperstki?act=go&amp;thimble=3&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a><br /><br />';
 
         echo 'Выберите наперсток в котором может находится шарик<br />';
 
         echo 'В наличии: ' . moneys($udata['users_money']) . '<br /><br />';
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki.php">Вернуться</a><br />';
+        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki">Вернуться</a><br />';
         break;
     # ###########################################################################################
     # #                                        Результат                                       ##
@@ -98,12 +85,12 @@ if (is_user()) {
                 show_error('Необходимо выбрать один из наперстков');
             }
 
-            echo '<br /><b><a href="/games/naperstki.php?act=choice&amp;rand=' . $rand . '">К выбору</a></b><br /><br />';
+            echo '<br /><b><a href="/games/naperstki?act=choice&amp;rand=' . $rand . '">К выбору</a></b><br /><br />';
 
             $allmoney = DB::run()->querySingle("SELECT users_money FROM users WHERE users_login=?;", array($log));
             echo 'У вас в наличии: ' . moneys($allmoney) . '<br /><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki.php">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki">Вернуться</a><br />';
         } else {
             show_error('Вы не можете играть, т.к. на вашем счету недостаточно средств');
         }
@@ -119,18 +106,14 @@ if (is_user()) {
         echo 'Шанс банкира на выигрыш немного больше, чем у вас<br />';
         echo 'Итак дерзайте!<br /><br />';
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki.php">Вернуться</a><br />';
+        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki">Вернуться</a><br />';
         break;
 
-    default:
-        header("location: /games/naperstki.php");
-        exit;
         endswitch;
     } else {
     show_login('Вы не авторизованы, чтобы начать игру, необходимо');
 }
 
-echo '<img src="/images/img/games.gif" alt="image" /> <a href="/games/">Развлечения</a><br />';
+echo '<img src="/images/img/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');
