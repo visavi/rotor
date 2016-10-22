@@ -46,7 +46,7 @@ if (is_user()) {
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['contact_id'].'" /> ';
                     echo '<a href="/private?act=submit&amp;uz='.$data['contact_name'].'">Написать</a> | ';
-                    echo '<a href="/perevod?uz='.$data['contact_name'].'">Перевод</a> | ';
+                    echo '<a href="/games/transfer?uz='.$data['contact_name'].'">Перевод</a> | ';
                     echo '<a href="/contact?act=note&amp;id='.$data['contact_id'].'">Заметка</a>';
                     echo '</div>';
                 }

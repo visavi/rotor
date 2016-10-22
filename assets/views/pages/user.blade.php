@@ -119,7 +119,7 @@
         echo '<a href="/ignore?act=add&amp;uz='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">игнор</a><br />';
         echo '<img src="/images/img/mail.gif" alt="Отправить" /> <a href="/private?act=submit&amp;uz='.$user['users_login'].'">Отправить сообщение</a><br />';
 
-        echo '<img src="/images/img/money.gif" alt="Перечислить" /> <a href="/perevod?uz='.$user['users_login'].'">Перечислить денег</a><br />';
+        echo '<img src="/images/img/money.gif" alt="Перечислить" /> <a href="/games/transfer?uz='.$user['users_login'].'">Перечислить денег</a><br />';
 
         if (!empty($user['users_site'])) {
         echo '<img src="/images/img/homepage.gif" alt="Перейти" /> <a href="'.$user['users_site'].'">Перейти на сайт '.$user['users_login'].'</a><br />';

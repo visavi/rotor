@@ -67,7 +67,6 @@ $router->map('GET|POST', '/setting', '/modules/pages/setting.php');
 $router->map('GET|POST', '/private', '/modules/pages/private.php');
 $router->map('GET|POST', '/ignore', '/modules/pages/ignore.php');
 $router->map('GET|POST', '/contact', '/modules/pages/contact.php');
-$router->map('GET|POST', '/perevod', '/modules/pages/perevod.php');
 $router->map('GET|POST', '/profile', '/modules/pages/profile.php');
 $router->map('GET|POST', '/account', '/modules/pages/account.php');
 $router->map('GET|POST', '/pictures', '/modules/pages/pictures.php');
