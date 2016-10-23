@@ -81,11 +81,15 @@ $router->map('GET|POST', '/profile',  '/modules/pages/profile.php');
 $router->map('GET|POST', '/account',  '/modules/pages/account.php');
 $router->map('GET|POST', '/pictures', '/modules/pages/pictures.php');
 $router->map('GET|POST', '/offers',   '/modules/pages/offers.php');
-$router->map('GET|POST', '/notebook',   '/modules/pages/notebook.php');
+$router->map('GET|POST', '/notebook',  '/modules/pages/notebook.php');
 $router->map('GET|POST', '/rathist',   '/modules/pages/rathist.php');
 $router->map('GET|POST', '/reklama',   '/modules/pages/reklama.php');
 $router->map('GET|POST', '/authlog',   '/modules/pages/authlog.php');
-
+$router->map('GET|POST', '/userlist',  '/modules/pages/userlist.php');
+$router->map('GET|POST', '/onlinewho',  '/modules/pages/onlinewho.php');
+$router->map('GET|POST', '/who',  '/modules/pages/who.php');
+$router->map('GET|POST', '/adminlist',  '/modules/pages/adminlist.php');
+$router->map('GET|POST', '/searchuser',  '/modules/pages/searchuser.php');
 
 $router->map('GET|POST', '/events', '/modules/events/index.php', 'events');
 
@@ -93,11 +97,12 @@ $router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
 
 $router->map('GET|POST', '/chat', '/modules/chat/index.php', 'chat');
 
+$router->map('GET|POST', '/board', '/modules/board/index.php', 'board');
+
 $router->map('GET|POST', '/games',           '/modules/games/index.php');
 $router->map('GET|POST', '/games/bank',      '/modules/games/bank.php');
 $router->map('GET|POST', '/games/credit',    '/modules/games/credit.php');
 $router->map('GET|POST', '/games/transfer',  '/modules/games/transfer.php');
-$router->map('GET|POST', '/games/livebank',  '/modules/games/livebank.php');
 $router->map('GET|POST', '/games/livebank',  '/modules/games/livebank.php');
 $router->map('GET|POST', '/games/safe',      '/modules/games/safe.php');
 $router->map('GET|POST', '/games/loterea',   '/modules/games/loterea.php');

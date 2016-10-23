@@ -6,7 +6,7 @@
 
     <?php include_once (DATADIR.'/advert/top.dat'); ?>
 
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/">Новости сайта</a> (<?=stats_news()?>)<br /> <?=last_news()?>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> (<?=stats_news()?>)<br /> <?=last_news()?>
 
     <div class="b">
         <i class="fa fa-comment fa-lg text-muted"></i> <b><a href="/page/recent">Общение</a></b>
@@ -45,11 +45,11 @@
         <i class="fa fa-cog fa-lg text-muted"></i>
         <b><a href="/pages/index.php">Сервисы сайта</a></b>
     </div>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/files/?page=docs">Документация RotorCMS</a><br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/mail/">Обратная связь</a><br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/board/">Доска объявлений</a> (<?= stats_board() ?>)<br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/userlist.php">Список юзеров</a> (<?=stats_users()?>)<br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/adminlist.php">Администрация</a> (<?=stats_admins()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/files?page=docs">Документация RotorCMS</a><br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/mail">Обратная связь</a><br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/board">Доска объявлений</a> (<?= stats_board() ?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> (<?=stats_users()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> (<?=stats_admins()?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/index.php?act=stat">Информация</a><br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/index.php?act=partners">Партнеры и друзья</a><br />
 

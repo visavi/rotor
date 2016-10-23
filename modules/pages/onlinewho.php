@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 show_title('Онлайн пользователей');
 
@@ -23,14 +12,14 @@ $allonline = allonline();
 $total = count($allonline);
 
 if ($total > 0) {
-	foreach($allonline as $key => $value) {
-		$comma = (empty($key)) ? '' : ', ';
-		echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
-	}
+    foreach($allonline as $key => $value) {
+        $comma = (empty($key)) ? '' : ', ';
+        echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
+    }
 
-	echo '<br />Всего пользователей: '.$total.' чел.<br /><br />';
+    echo '<br />Всего пользователей: '.$total.' чел.<br /><br />';
 } else {
-	show_error('Зарегистированных пользователей нет!');
+    show_error('Зарегистированных пользователей нет!');
 }
 
 echo '<div class="b"><b>Поздравляем именинников:</b></div>';
@@ -40,14 +29,14 @@ $arrhappy = $queryuser -> fetchAll(PDO::FETCH_COLUMN);
 $total = count($arrhappy);
 
 if ($total > 0) {
-	foreach($arrhappy as $key => $value) {
-		$comma = (empty($key)) ? '' : ', ';
-		echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
-	}
+    foreach($arrhappy as $key => $value) {
+        $comma = (empty($key)) ? '' : ', ';
+        echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
+    }
 
-	echo '<br />Всего именниников: '.$total.' чел.<br /><br />';
+    echo '<br />Всего именниников: '.$total.' чел.<br /><br />';
 } else {
-	show_error('Сегодня именинников нет!');
+    show_error('Сегодня именинников нет!');
 }
 // ---------------------------------------------------------------------------------//
 echo '<div class="b"><b>Приветствуем новичков:</b></div>';
@@ -57,17 +46,16 @@ $arrnovice = $queryuser -> fetchAll(PDO::FETCH_COLUMN);
 $total = count($arrnovice);
 
 if ($total > 0) {
-	foreach($arrnovice as $key => $value) {
-		$comma = (empty($key)) ? '' : ', ';
-		echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
-	}
+    foreach($arrnovice as $key => $value) {
+        $comma = (empty($key)) ? '' : ', ';
+        echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
+    }
 
-	echo '<br />Всего новичков: '.$total.' чел.<br /><br />';
+    echo '<br />Всего новичков: '.$total.' чел.<br /><br />';
 } else {
-	show_error('Новичков пока нет!');
+    show_error('Новичков пока нет!');
 }
 
-echo '<img src="/images/img/users.gif" alt="image" /> <a href="who.php">Kто-где?</a><br />';
+echo '<img src="/images/img/users.gif" alt="image" /> <a href="/who">Kто-где?</a><br />';
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');
