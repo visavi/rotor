@@ -1,9 +1,9 @@
-<img src="/images/img/edit.gif" alt="Статья" /> <b><a href="blog.php?act=view&amp;id=<?=$blogs['blogs_id']?>"><?=$blogs['blogs_title']?></a></b><br /><br />
+<img src="/images/img/edit.gif" alt="Статья" /> <b><a href="/blog/blog?act=view&amp;id=<?=$blogs['blogs_id']?>"><?=$blogs['blogs_title']?></a></b><br /><br />
 
-<a href="blog.php?act=comments&amp;id=<?=$blogs['blogs_id']?>&amp;rand=<?=mt_rand(100, 999)?>">Обновить</a> / <a href="rss.php?id=<?=$blogs['blogs_id']?>">RSS-лента</a><hr />
+<a href="/blog/blog?act=comments&amp;id=<?=$blogs['blogs_id']?>&amp;rand=<?=mt_rand(100, 999)?>">Обновить</a> / <a href="/blog/rss?id=<?=$blogs['blogs_id']?>">RSS-лента</a><hr />
 
 <?php if ($is_admin): ?>
-	<form action="blog.php?act=del&amp;id=<?=$blogs['blogs_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" method="post">
+	<form action="/blog/blog?act=del&amp;id=<?=$blogs['blogs_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" method="post">
 <?php endif; ?>
 
 <?php foreach ($comments as $data): ?>
@@ -21,15 +21,15 @@
 
 		<?php if (!empty($log) && $log != $data['commblog_author']): ?>
 			<div class="right">
-				<a href="blog.php?act=reply&amp;id=<?=$blogs['blogs_id']?>&amp;pid=<?=$data['commblog_id']?>&amp;start=<?=$start?>">Отв</a> /
-				<a href="blog.php?act=quote&amp;id=<?=$blogs['blogs_id']?>&amp;pid=<?=$data['commblog_id']?>&amp;start=<?=$start?>">Цит</a> /
-				<noindex><a href="blog.php?act=spam&amp;id=<?=$blogs['blogs_id']?>&amp;pid=<?=$data['commblog_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы подтверждаете факт спама?')" rel="nofollow">Спам</a></noindex>
+				<a href="/blog/blog?act=reply&amp;id=<?=$blogs['blogs_id']?>&amp;pid=<?=$data['commblog_id']?>&amp;start=<?=$start?>">Отв</a> /
+				<a href="/blog/blog?act=quote&amp;id=<?=$blogs['blogs_id']?>&amp;pid=<?=$data['commblog_id']?>&amp;start=<?=$start?>">Цит</a> /
+				<noindex><a href="/blog/blog?act=spam&amp;id=<?=$blogs['blogs_id']?>&amp;pid=<?=$data['commblog_id']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы подтверждаете факт спама?')" rel="nofollow">Спам</a></noindex>
 			</div>
 		<?php endif; ?>
 
 		<?php if ($log == $data['commblog_author'] && $data['commblog_time'] + 600 > SITETIME): ?>
 			<div class="right">
-				<a href="blog.php?act=edit&amp;id=<?=$blogs['blogs_id']?>&amp;pid=<?=$data['commblog_id']?>&amp;start=<?=$start?>">Редактировать</a>
+				<a href="/blog/blog?act=edit&amp;id=<?=$blogs['blogs_id']?>&amp;pid=<?=$data['commblog_id']?>&amp;start=<?=$start?>">Редактировать</a>
 			</div>
 		<?php endif; ?>
 

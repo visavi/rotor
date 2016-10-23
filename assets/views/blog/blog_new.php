@@ -1,10 +1,10 @@
 <a href="/blog">Блоги</a> /
-<a href="/blog/search.php">Поиск</a> /
-<a href="/blog/blog.php?act=blogs">Все статьи</a><hr />
+<a href="/blog/search">Поиск</a> /
+<a href="/blog/blog?act=blogs">Все статьи</a><hr />
 
 
 <div class="form next">
-	<form action="blog.php?act=addblog&amp;uid=<?=$_SESSION['token']?>" method="post">
+	<form action="/blog/blog?act=addblog&amp;uid=<?=$_SESSION['token']?>" method="post">
 
 		Категория*:<br />
 		<select name="cid">
@@ -31,6 +31,6 @@
 Рекомендация! Для разбивки статьи по страницам используйте тег [nextpage]<br />
 Метки статьи должны быть от 2 до 20 символов с общей длиной не более 50 символов<br /><br />
 
-<a href="/pages/rules.php">Правила</a> /
-<a href="/pages/smiles.php">Смайлы</a> /
-<a href="/pages/tags.php">Теги</a><br /><br />
+<a href="/rules">Правила</a> /
+<a href="/smiles">Смайлы</a> /
+<a href="/tags">Теги</a><br /><br />

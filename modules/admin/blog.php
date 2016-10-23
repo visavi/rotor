@@ -37,11 +37,11 @@ if (is_admin()) {
             if (count($blogs) > 0) {
                 foreach($blogs as $data) {
                     echo '<img src="/images/img/dir.gif" alt="image" /> ';
-                    echo '<b>'.$data['cats_order'].'. <a href="blog.php?act=blog&amp;cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ('.$data['cats_count'].')<br />';
+                    echo '<b>'.$data['cats_order'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ('.$data['cats_count'].')<br />';
 
                     if (is_admin(array(101))) {
-                        echo '<a href="blog.php?act=editcats&amp;cid='.$data['cats_id'].'">Редактировать</a> / ';
-                        echo '<a href="blog.php?act=prodelcats&amp;cid='.$data['cats_id'].'">Удалить</a>';
+                        echo '<a href="/admin/blog?act=editcats&amp;cid='.$data['cats_id'].'">Редактировать</a> / ';
+                        echo '<a href="/admin/blog?act=prodelcats&amp;cid='.$data['cats_id'].'">Удалить</a>';
                     }
                     echo '<br />';
                 }
@@ -51,12 +51,12 @@ if (is_admin()) {
 
             if (is_admin(array(101))) {
                 echo '<br /><div class="form">';
-                echo '<form action="blog.php?act=addcats&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/blog?act=addcats&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<b>Заголовок:</b><br />';
                 echo '<input type="text" name="name" maxlength="50" />';
                 echo '<input type="submit" value="Создать раздел" /></form></div><br />';
 
-                echo '<img src="/images/img/reload.gif" alt="image" /> <a href="blog.php?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+                echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
             }
         break;
 
@@ -72,7 +72,7 @@ if (is_admin()) {
                     restatement('blog');
 
                     $_SESSION['note'] = 'Все данные успешно пересчитаны!';
-                    redirect("blog.php");
+                    redirect("/admin/blog");
 
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -81,7 +81,7 @@ if (is_admin()) {
                 show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -99,7 +99,7 @@ if (is_admin()) {
                         DB::run() -> query("INSERT INTO `catsblog` (`cats_order`, `cats_name`) VALUES (?, ?);", array($maxorder, $name));
 
                         $_SESSION['note'] = 'Новый раздел успешно добавлен!';
-                        redirect("blog.php");
+                        redirect("/admin/blog");
 
                     } else {
                         show_error('Ошибка! Слишком длинное или короткое название раздела!');
@@ -111,7 +111,7 @@ if (is_admin()) {
                 show_error('Ошибка! Добавлять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -126,7 +126,7 @@ if (is_admin()) {
                     echo '<b><big>Редактирование</big></b><br /><br />';
 
                     echo '<div class="form">';
-                    echo '<form action="blog.php?act=changecats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/admin/blog?act=changecats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo 'Заголовок:<br />';
                     echo '<input type="text" name="name" maxlength="50" value="'.$blogs['cats_name'].'" /><br />';
                     echo 'Положение:<br />';
@@ -140,7 +140,7 @@ if (is_admin()) {
                 show_error('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -161,7 +161,7 @@ if (is_admin()) {
                             DB::run() -> query("UPDATE `catsblog` SET `cats_order`=?, `cats_name`=? WHERE `cats_id`=?;", array($order, $name, $cid));
 
                             $_SESSION['note'] = 'Раздел успешно отредактирован!';
-                            redirect("blog.php");
+                            redirect("/admin/blog");
 
                         } else {
                             show_error('Ошибка! Данного раздела не существует!');
@@ -176,8 +176,8 @@ if (is_admin()) {
                 show_error('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="blog.php?act=editcats&amp;cid='.$cid.'">Вернуться</a><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php">Категории</a><br />';
+            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog?act=editcats&amp;cid='.$cid.'">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Категории</a><br />';
         break;
 
         ############################################################################################
@@ -190,7 +190,7 @@ if (is_admin()) {
 
                 if (!empty($blogs)) {
                     echo 'Вы уверены что хотите удалить раздел <b>'.$blogs['cats_name'].'</b> в блогах?<br />';
-                    echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="blog.php?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+                    echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="/admin/blog?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
                 } else {
                     show_error('Ошибка! Данного раздела не существует!');
                 }
@@ -198,7 +198,7 @@ if (is_admin()) {
                 show_error('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -218,7 +218,7 @@ if (is_admin()) {
                         DB::run() -> query("DELETE FROM `catsblog` WHERE `cats_id`=?;", array($cid));
 
                         $_SESSION['note'] = 'Раздел успешно удален!';
-                        redirect("blog.php");
+                        redirect("/admin/blog");
 
                     } else {
                         show_error('Ошибка! Данного раздела не существует!');
@@ -230,7 +230,7 @@ if (is_admin()) {
                 show_error('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -244,7 +244,7 @@ if (is_admin()) {
                 $config['newtitle'] = $cats['cats_name'];
 
                 echo '<img src="/images/img/open_dir.gif" alt="image" /> <b>'.$cats['cats_name'].'</b> (Статей: '.$cats['cats_count'].')';
-                echo ' (<a href="/blog/blog.php?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
+                echo ' (<a href="/blog/blog?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
                 echo '<hr />';
 
                 $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `blogs_cats_id`=?;", array($cid));
@@ -256,27 +256,27 @@ if (is_admin()) {
 
                     $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `blogs_cats_id`=? ORDER BY `blogs_time` DESC LIMIT ".$start.", ".$config['blogpost'].";", array($cid));
 
-                    echo '<form action="blog.php?act=delblog&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                     while ($data = $queryblog -> fetch()) {
 
                         echo '<div class="b"><img src="/images/img/edit.gif" alt="image" /> ';
-                        echo '<b><a href="/blog/blog.php?act=view&amp;id='.$data['blogs_id'].'">'.$data['blogs_title'].'</a></b> ('.format_num($data['blogs_rating']).')<br />';
+                        echo '<b><a href="/blog/blog?act=view&amp;id='.$data['blogs_id'].'">'.$data['blogs_title'].'</a></b> ('.format_num($data['blogs_rating']).')<br />';
 
                         echo '<input type="checkbox" name="del[]" value="'.$data['blogs_id'].'" /> ';
 
-                        echo '<a href="blog.php?act=editblog&amp;cid='.$cid.'&amp;id='.$data['blogs_id'].'&amp;start='.$start.'">Редактировать</a> / ';
-                        echo '<a href="blog.php?act=moveblog&amp;cid='.$cid.'&amp;id='.$data['blogs_id'].'&amp;start='.$start.'">Переместить</a></div>';
+                        echo '<a href="/admin/blog?act=editblog&amp;cid='.$cid.'&amp;id='.$data['blogs_id'].'&amp;start='.$start.'">Редактировать</a> / ';
+                        echo '<a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$data['blogs_id'].'&amp;start='.$start.'">Переместить</a></div>';
 
                         echo '<div>Автор: '.profile($data['blogs_user']).' ('.date_fixed($data['blogs_time']).')<br />';
                         echo 'Просмотров: '.$data['blogs_read'].'<br />';
-                        echo '<a href="/blog/blog.php?act=comments&amp;id='.$data['blogs_id'].'">Комментарии</a> ('.$data['blogs_comments'].')<br />';
+                        echo '<a href="/blog/blog?act=comments&amp;id='.$data['blogs_id'].'">Комментарии</a> ('.$data['blogs_comments'].')<br />';
                         echo '</div>';
                     }
 
                     echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                    page_strnavigation('blog.php?act=blog&amp;cid='.$cid.'&amp;', $config['blogpost'], $start, $total);
+                    page_strnavigation('/admin/blog?act=blog&amp;cid='.$cid.'&amp;', $config['blogpost'], $start, $total);
                 } else {
                     show_error('В данном разделе еще нет статей!');
                 }
@@ -284,7 +284,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данного раздела не существует!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="blog.php">Категории</a><br />';
+            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog">Категории</a><br />';
         break;
 
         ############################################################################################
@@ -298,7 +298,7 @@ if (is_admin()) {
                 echo '<b><big>Редактирование</big></b><br /><br />';
 
                 echo '<div class="form">';
-                echo '<form action="blog.php?act=addeditblog&amp;cid='.$cid.'&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/blog?act=addeditblog&amp;cid='.$cid.'&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 echo 'Заголовок:<br />';
                 echo '<input type="text" name="title" size="50" maxlength="50" value="'.$blogs['blogs_title'].'" /><br />';
@@ -314,8 +314,8 @@ if (is_admin()) {
                 show_error('Ошибка! Данной статьи не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="blog.php">Категории</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog">Категории</a><br />';
         break;
 
         ############################################################################################
@@ -340,7 +340,7 @@ if (is_admin()) {
                                     DB::run() -> query("UPDATE `blogs` SET `blogs_title`=?, `blogs_text`=?, `blogs_user`=?, `blogs_tags`=? WHERE `blogs_id`=?;", array($title, $text, $user, $tags, $id));
 
                                     $_SESSION['note'] = 'Статья успешно отредактирована!';
-                                    redirect("blog.php?act=blog&cid=$cid&start=$start");
+                                    redirect("/admin/blog?act=blog&cid=$cid&start=$start");
 
                                 } else {
                                     show_error('Ошибка! Данной статьи не существует!');
@@ -361,8 +361,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php?act=editblog&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="blog.php?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">В раздел</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=editblog&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">В раздел</a><br />';
         break;
 
         ############################################################################################
@@ -380,7 +380,7 @@ if (is_admin()) {
 
                 if (count($cats) > 0) {
                     echo '<div class="form">';
-                    echo '<form action="blog.php?act=addmoveblog&amp;cid='.$blogs['blogs_cats_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/admin/blog?act=addmoveblog&amp;cid='.$blogs['blogs_cats_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                     echo 'Выберите раздел для перемещения:<br />';
                     echo '<select name="section">';
@@ -401,7 +401,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной статьи не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -424,7 +424,7 @@ if (is_admin()) {
                         DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`-1 WHERE `cats_id`=?", array($cid));
 
                         $_SESSION['note'] = 'Статья успешно перемещена!';
-                        redirect("blog.php?act=blog&cid=$section");
+                        redirect("/admin/blog?act=blog&cid=$section");
 
                     } else {
                         show_error('Ошибка! Статьи для перемещения не существует!');
@@ -436,8 +436,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php?act=moveblog&amp;cid='.$cid.'&amp;id='.$id.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="blog.php?act=blog&amp;cid='.$cid.'">К блогам</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'">К блогам</a><br />';
         break;
 
         ############################################################################################
@@ -464,7 +464,7 @@ if (is_admin()) {
                     DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`-? WHERE `cats_id`=?", array($delblogs, $cid));
 
                     $_SESSION['note'] = 'Выбранные статьи успешно удалены!';
-                    redirect("blog.php?act=blog&cid=$cid&start=$start");
+                    redirect("/admin/blog?act=blog&cid=$cid&start=$start");
 
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные статьи для удаления!');
@@ -473,12 +473,12 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="blog.php?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
     endswitch;
 
-    echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+    echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
 
 } else {
     redirect('/');

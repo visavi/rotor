@@ -1,5 +1,5 @@
 <div class="form">
-	<form action="search.php?act=search" method="get">
+	<form action="/blog/search?act=search" method="get">
 		<input type="hidden" name="act" value="search" />
 
 		Запрос:<br />

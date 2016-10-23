@@ -1,7 +1,7 @@
 <?php foreach ($comments as $data): ?>
 
 	<div class="b">
-		<img src="/images/img/balloon.gif" alt="image" /> <b><a href="blog.php?act=comments&amp;id=<?=$data['commblog_blog']?>"><?=$data['blogs_title']?></a></b> (<?=$data['blogs_comments']?>)
+		<img src="/images/img/balloon.gif" alt="image" /> <b><a href="/blog/blog?act=comments&amp;id=<?=$data['commblog_blog']?>"><?=$data['blogs_title']?></a></b> (<?=$data['blogs_comments']?>)
 	</div>
 
 	<div>

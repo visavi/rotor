@@ -22,11 +22,11 @@
 
 			<item>
 				<title><?=$blog['blogs_title']?></title>
-				<link><?=$config['home']?>/blog/blog.php?act=comments&amp;id=<?=$blog['blogs_id']?></link>
+				<link><?=$config['home']?>/blog/blog?act=comments&amp;id=<?=$blog['blogs_id']?></link>
 				<description><?=$data['commblog_text']?> </description><author><?=nickname($data['commblog_author'])?></author>
 				<pubDate><?=date("r", $data['commblog_time'])?></pubDate>
 				<category>Комментарии</category>
-				<guid><?=$config['home']?>/blog/blog.php?act=comments&amp;id=<?=$blog['blogs_id']?>&amp;pid=<?=$data['commblog_id']?></guid>
+				<guid><?=$config['home']?>/blog/blog?act=comments&amp;id=<?=$blog['blogs_id']?>&amp;pid=<?=$data['commblog_id']?></guid>
 			</item>
 		<?php endforeach; ?>
 

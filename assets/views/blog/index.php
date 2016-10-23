@@ -1,11 +1,11 @@
 <?php if (is_user()): ?>
-	Мои: <a href="active.php?act=blogs">статьи</a>, <a href="active.php?act=comments">комментарии</a> /
+	Мои: <a href="/blog/active?act=blogs">статьи</a>, <a href="/blog/active?act=comments">комментарии</a> /
 <?php endif; ?>
 
-Новые: <a href="new.php?act=blogs">статьи</a>, <a href="new.php?act=comments">комментарии</a><hr />
+Новые: <a href="/blog/new?act=blogs">статьи</a>, <a href="/blog/new?act=comments">комментарии</a><hr />
 
 <?php foreach($blogs as $key => $data): ?>
-	<img src="/images/img/dir.gif" alt="image" /> <b><a href="blog.php?cid=<?=$data['cats_id']?>"><?=$data['cats_name']?></a></b>
+	<img src="/images/img/dir.gif" alt="image" /> <b><a href="/blog/blog?cid=<?=$data['cats_id']?>"><?=$data['cats_name']?></a></b>
 
 	<?php if (empty($data['new'])): ?>
 		(<?=$data['cats_count']?>)<br />
@@ -15,8 +15,8 @@
 <?php endforeach; ?>
 
 <br />
-<a href="top.php">Топ статей</a> /
-<a href="tags.php">Облако тегов</a> /
-<a href="search.php">Поиск</a> /
-<a href="blog.php?act=blogs">Все статьи</a> /
-<a href="blog.php?act=new">Написать</a><br />
+<a href="/blog/top">Топ статей</a> /
+<a href="/blog/tags">Облако тегов</a> /
+<a href="/blog/search">Поиск</a> /
+<a href="/blog/blog?act=blogs">Все статьи</a> /
+<a href="/blog/blog?act=new">Написать</a><br />

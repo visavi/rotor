@@ -8,7 +8,7 @@
 </div><hr />
 
 <div class="form">
-	<form action="blog.php?act=add&amp;id=<?=$id?>&amp;uid=<?=$_SESSION['token']?>" method="post">
+	<form action="/blog/blog?act=add&amp;id=<?=$id?>&amp;uid=<?=$_SESSION['token']?>" method="post">
 		<textarea id="markItUp" cols="25" rows="5" name="msg">[b]<?=nickname($post['commblog_author'])?>[/b], </textarea><br />
 		<input type="submit" value="Ответить" />
 	</form>

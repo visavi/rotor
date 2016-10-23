@@ -9,6 +9,6 @@
 
 	<?=bb_code($blog['blogs_text'])?><br /><br />
 
-	URL: <a href="<?=$config['home']?>/blog/blog.php?act=view&amp;id=<?=$blog['blogs_id']?>"><?=$config['home']?>/blog/blog.php?act=view&amp;id=<?=$blog['blogs_id']?></a>
+	URL: <a href="<?=$config['home']?>/blog/blog?act=view&amp;id=<?=$blog['blogs_id']?>"><?=$config['home']?>/blog/blog?act=view&amp;id=<?=$blog['blogs_id']?></a>
 </body>
 </html>

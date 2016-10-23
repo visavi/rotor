@@ -1,11 +1,11 @@
 <a href="/blog">Блоги</a> /
-<a href="/blog/search.php">Поиск</a> /
-<a href="/blog/blog.php?act=blogs">Все статьи</a><hr />
+<a href="/blog/search">Поиск</a> /
+<a href="/blog/blog?act=blogs">Все статьи</a><hr />
 
 <b><big>Редактирование</big></b><br /><br />
 
 <div class="form">
-	<form action="blog.php?act=changeblog&amp;id=<?=$blogs['blogs_id']?>&amp;uid=<?=$_SESSION['token']?>" method="post">
+	<form action="/blog/blog?act=changeblog&amp;id=<?=$blogs['blogs_id']?>&amp;uid=<?=$_SESSION['token']?>" method="post">
 
 		Раздел:<br />
 		<select name="cats">
@@ -28,6 +28,6 @@
 	</form>
 </div><br />
 
-<a href="/pages/rules.php">Правила</a> /
-<a href="/pages/smiles.php">Смайлы</a> /
-<a href="/pages/tags.php">Теги</a><br /><br />
+<a href="/rules">Правила</a> /
+<a href="/smiles">Смайлы</a> /
+<a href="/tags">Теги</a><br /><br />
