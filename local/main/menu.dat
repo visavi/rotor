@@ -1,6 +1,6 @@
 <?php
 if (isset($act) && $act=='menu'){
-	show_title('Мое меню');
+    show_title('Мое меню');
 }
 ?>
 
@@ -18,10 +18,10 @@ if (isset($act) && $act=='menu'){
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/wall">Моя стена</a> (<?=user_wall(App::getUsername())?>)<br />
 
 <div class="b"><i class="fa fa-star fa-lg text-muted"></i> <b>Активность</b></div>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/notebook.php">Блокнот</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/rathist.php">Голосования</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/reklama.php">Реклама</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/authlog.php">История авторизаций</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/notebook">Блокнот</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/rathist">Голосования</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/reklama">Реклама</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/authlog">История авторизаций</a><br />
 
 <div class="b"><i class="fa fa-sign-out fa-lg text-muted"></i> <b>Выход</b></div>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/input.php?act=exit">Выход [Exit]</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/logout">Выход [Exit]</a><br />

@@ -12,6 +12,15 @@ $router->map('GET', '/book', '/modules/book/index.php', 'book');
 $router->map('POST', '/book/[complaint|add:action]', '/modules/book/index.php');
 $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php');
 
+$router->map('GET',      '/blog',        '/modules/blog/index.php', 'blog');
+$router->map('GET|POST', '/blog/active', '/modules/blog/active.php');
+$router->map('GET|POST', '/blog/blog',   '/modules/blog/blog.php');
+$router->map('GET|POST', '/blog/print',  '/modules/blog/print.php');
+$router->map('GET|POST', '/blog/rss',    '/modules/blog/rss.php');
+$router->map('GET|POST', '/blog/search', '/modules/blog/search.php');
+$router->map('GET|POST', '/blog/tags',   '/modules/blog/tags.php');
+$router->map('GET|POST', '/blog/top',    '/modules/blog/top.php');
+
 $router->map('GET', '/news', '/modules/news/index.php', 'news');
 $router->map('GET', '/news/[i:id]', '/modules/news/index.php@view');
 $router->map('GET|POST', '/news/[i:id]/[delete|comments|end:action]', '/modules/news/index.php');
@@ -62,15 +71,21 @@ $router->map('GET', '/rules', '/modules/pages/rules.php', 'smiles');
 $router->map('GET', '/smiles', '/modules/pages/smiles.php', 'rules');
 $router->map('GET', '/captcha', '/modules/gallery/protect.php', 'captcha');
 $router->map('GET', '/online/[all:action]?', '/modules/pages/online.php', 'online');
-$router->map('GET|POST', '/wall', '/modules/pages/wall.php', 'wall');
-$router->map('GET|POST', '/setting', '/modules/pages/setting.php');
-$router->map('GET|POST', '/private', '/modules/pages/private.php');
-$router->map('GET|POST', '/ignore', '/modules/pages/ignore.php');
-$router->map('GET|POST', '/contact', '/modules/pages/contact.php');
-$router->map('GET|POST', '/profile', '/modules/pages/profile.php');
-$router->map('GET|POST', '/account', '/modules/pages/account.php');
+
+$router->map('GET|POST', '/wall',     '/modules/pages/wall.php', 'wall');
+$router->map('GET|POST', '/setting',  '/modules/pages/setting.php');
+$router->map('GET|POST', '/private',  '/modules/pages/private.php');
+$router->map('GET|POST', '/ignore',   '/modules/pages/ignore.php');
+$router->map('GET|POST', '/contact',  '/modules/pages/contact.php');
+$router->map('GET|POST', '/profile',  '/modules/pages/profile.php');
+$router->map('GET|POST', '/account',  '/modules/pages/account.php');
 $router->map('GET|POST', '/pictures', '/modules/pages/pictures.php');
-$router->map('GET|POST', '/offers', '/modules/pages/offers.php');
+$router->map('GET|POST', '/offers',   '/modules/pages/offers.php');
+$router->map('GET|POST', '/notebook',   '/modules/pages/notebook.php');
+$router->map('GET|POST', '/rathist',   '/modules/pages/rathist.php');
+$router->map('GET|POST', '/reklama',   '/modules/pages/reklama.php');
+$router->map('GET|POST', '/authlog',   '/modules/pages/authlog.php');
+
 
 $router->map('GET|POST', '/events', '/modules/events/index.php', 'events');
 
@@ -96,6 +111,7 @@ $router->map('GET|POST', '/votes',         '/modules/votes/index.php');
 $router->map('GET|POST', '/votes/history', '/modules/votes/history.php');
 
 $router->map('GET', '/admin',              '/modules/admin/index.php', 'admin');
+$router->map('GET|POST', '/admin/blog',    '/modules/admin/blog.php');
 $router->map('GET', '/admin/cache',        '/modules/admin/cache.php');
 $router->map('GET', '/admin/cache/[image|clear|clearimage:action]', '/modules/admin/cache.php');
 $router->map('GET|POST', '/admin/forum',   '/modules/admin/forum.php');
