@@ -1,7 +1,7 @@
 <?php show_title('Функция show_admin_links'); ?>
 
 Функция выводит ссылки на дополнительные админские страницы <br />
-Является основной для функции кэширования ссылок <a href="index.php?page=docs/cache_admin_links">cache_admin_links</a>
+Является основной для функции кэширования ссылок <a href="/files/docs/cache_admin_links">cache_admin_links</a>
 <br /><br />
 
 <pre class="d">
@@ -28,4 +28,4 @@ $links = cache_admin_links();
 ?>
 
 <br />
-<i class="fa fa-arrow-circle-left"></i> <a href="?page=docs">Вернуться</a><br />
+<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br />

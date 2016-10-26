@@ -29,4 +29,4 @@ echo addmail(\'nobody@example.com\', \'Это тема\', \'Это текст с
 ?>
 
 <br />
-<i class="fa fa-arrow-circle-left"></i> <a href="?page=docs">Вернуться</a><br />
+<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br />

@@ -1,7 +1,7 @@
 <?php show_title('Функция bb_code'); ?>
 
 Функция преобразовывает bb-коды в html-теги, между открывающим и закрывающим тегов могу быть переводы строк, неправильная вложенность тегов игнорируется<br />
-Данная функция использует другие функции: <a href="index.php?page=docs/hidden_text">hidden_text</a>, <a href="index.php?page=docs/url_replace">url_replace</a>, <a href="index.php?page=docs/highlight_code">highlight_code</a><br /><br />
+Данная функция использует другие функции: <a href="/files/docs/hidden_text">hidden_text</a>, <a href="/files/docs/url_replace">url_replace</a>, <a href="/files/docs/highlight_code">highlight_code</a><br /><br />
 
 <pre class="d">
 <b>bb_code</b>(
@@ -25,5 +25,5 @@ echo bb_code('Текст сообщения [url=http://visavi.net]Visavi[/url]'
 ?>
 
 <br />
-<i class="fa fa-arrow-circle-left"></i> <a href="?page=docs">Вернуться</a><br />
+<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br />
 

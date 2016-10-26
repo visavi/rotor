@@ -1,7 +1,7 @@
 <?php show_title('Функция delete_album'); ?>
 
 Полностью удаляет фотоальбом пользователя, удаляются все фотографии в галерее, а также аватар и персональное фото в анктете, при этом сам профиль пользователя и остальные данные не затрагиваются<br />
-Является вспомогательной для функции <a href="index.php?page=docs/delete_users">delete_users</a>
+Является вспомогательной для функции <a href="/files/docs/delete_users">delete_users</a>
 <br /><br />
 
 <pre class="d">
@@ -24,4 +24,4 @@ delete_album("Vantuz");
 ?>
 
 <br />
-<i class="fa fa-arrow-circle-left"></i> <a href="?page=docs">Вернуться</a><br />
+<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br />

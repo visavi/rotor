@@ -1,6 +1,6 @@
 <?php show_title('Функция makestime'); ?>
 
-Функция переводит количество секунд в удобный формат времени, для вывода времени до 1 дня можно использовать функцию <a href="index.php?page=docs/maketime">maketime</a><br /><br />
+Функция переводит количество секунд в удобный формат времени, для вывода времени до 1 дня можно использовать функцию <a href="/files/docs/maketime">maketime</a><br /><br />
 
 <pre class="d">
 <b>makestime</b>(
@@ -22,4 +22,4 @@ echo makestime (86400); /* 1 дн. 00:00:00 */
 ?>
 
 <br />
-<i class="fa fa-arrow-circle-left"></i> <a href="?page=docs">Вернуться</a><br />
+<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br />

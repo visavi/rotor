@@ -1,19 +1,19 @@
 <?php show_title('Документация RotorCMS'); ?>
 
 <div class="b"><b>Стандартные функции</b></div>
-- <a href="?page=docs/maketime">maketime</a><br />
-- <a href="?page=docs/makestime">makestime</a><br />
-- <a href="?page=docs/date_fixed">date_fixed</a><br />
-- <a href="?page=docs/unlink_image">unlink_image</a><br />
-- <a href="?page=docs/delete_users">delete_users</a><br />
-- <a href="?page=docs/delete_album">delete_album</a><br />
-- <a href="?page=docs/moneys">moneys</a><br />
-- <a href="?page=docs/points">points</a><br />
-- <a href="?page=docs/bb_code">bb_code</a><br />
+- <a href="/files/docs/maketime">maketime</a><br />
+- <a href="/files/docs/makestime">makestime</a><br />
+- <a href="/files/docs/date_fixed">date_fixed</a><br />
+- <a href="/files/docs/unlink_image">unlink_image</a><br />
+- <a href="/files/docs/delete_users">delete_users</a><br />
+- <a href="/files/docs/delete_album">delete_album</a><br />
+- <a href="/files/docs/moneys">moneys</a><br />
+- <a href="/files/docs/points">points</a><br />
+- <a href="/files/docs/bb_code">bb_code</a><br />
 - utf_to_win<br />
 - win_to_utf<br />
 - utf_lower<br />
-- <a href="?page=docs/check">check</a><br />
+- <a href="/files/docs/check">check</a><br />
 - get_user_agent<br />
 - subtok<br />
 - no_br<br />
@@ -74,9 +74,9 @@
 - stats_avatars<br />
 - stats_checker<br />
 - stats_advert<br />
-- <a href="?page=docs/user_position">user_position</a><br />
-- <a href="?page=docs/chmode">chmode</a><br />
-- <a href="?page=docs/user_online">user_online</a><br />
+- <a href="/files/docs/user_position">user_position</a><br />
+- <a href="/files/docs/chmode">chmode</a><br />
+- <a href="/files/docs/user_online">user_online</a><br />
 - allonline<br />
 - user_visit<br />
 - compress_output_gzip<br />
@@ -86,9 +86,9 @@
 - utf_strlen<br />
 - utf_wordwrap<br />
 - is_utf<br />
-- <a href="?page=docs/addmail">addmail</a><br />
-- <a href="?page=docs/page_jumpnavigation">page_jumpnavigation</a><br />
-- <a href="?page=docs/page_strnavigation">page_strnavigation</a><br />
+- <a href="/files/docs/addmail">addmail</a><br />
+- <a href="/files/docs/page_jumpnavigation">page_jumpnavigation</a><br />
+- <a href="/files/docs/page_strnavigation">page_strnavigation</a><br />
 - forum_navigation<br />
 - stats_blog<br />
 - stats_forum<br />
@@ -106,7 +106,7 @@
 - quicksmiles<br />
 - quickpaste<br />
 - check_user<br />
-- <a href="?page=docs/is_user">is_user</a><br />
+- <a href="/files/docs/is_user">is_user</a><br />
 - is_admin<br />
 - show_title<br />
 - show_error<br />
@@ -134,22 +134,22 @@
 - counter_string<br />
 - strsearch<br />
 
-- <a href="?page=docs/last_page">last_page</a><br />
-- <a href="?page=docs/cache_functions">cache_functions</a><br />
-- <a href="?page=docs/cache_admin_links">cache_admin_links</a><br />
-- <a href="?page=docs/show_admin_links">show_admin_links</a><br />
-- <a href="?page=docs/resize_image">resize_image</a><br />
-- <a href="?page=docs/redirect">redirect</a><br />
-- <a href="?page=docs/profile">profile</a><br />
-- <a href="?page=docs/format_num">format_num</a><br />
-- <a href="?page=docs/include_javascript">include_javascript</a><br />
-- <a href="?page=docs/progress_bar">progress_bar</a><br />
+- <a href="/files/docs/last_page">last_page</a><br />
+- <a href="/files/docs/cache_functions">cache_functions</a><br />
+- <a href="/files/docs/cache_admin_links">cache_admin_links</a><br />
+- <a href="/files/docs/show_admin_links">show_admin_links</a><br />
+- <a href="/files/docs/resize_image">resize_image</a><br />
+- <a href="/files/docs/redirect">redirect</a><br />
+- <a href="/files/docs/profile">profile</a><br />
+- <a href="/files/docs/format_num">format_num</a><br />
+- <a href="/files/docs/include_javascript">include_javascript</a><br />
+- <a href="/files/docs/progress_bar">progress_bar</a><br />
 <br />
 
 <div class="b"><b>Стандартные классы</b></div>
-<a href="?page=docs/class_dbm">DBM</a><br />
-<a href="?page=docs/class_validation">Validation</a><br />
-<a href="?page=docs/class_bbcodeparser">BBCodeParser</a><br />
+<a href="/files/docs/class_dbm">DBM</a><br />
+<a href="/files/docs/class_validation">Validation</a><br />
+<a href="/files/docs/class_bbcodeparser">BBCodeParser</a><br />
 <br />
 
 <div class="b"><b>Константы</b></div>

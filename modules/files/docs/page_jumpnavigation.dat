@@ -1,7 +1,7 @@
 <?php show_title('Функция page_jumpnavigation'); ?>
 
 Функция постраничной навигации, выводит ссылки Назад и Далее (<span style="color:#ff0000">Удалено с версии 3.0.0</span>)<br />
-Данная функция заменена на более расширенную <a href="index.php?page=docs/page_strnavigation">page_strnavigation</a>, которая выводит эти ссылки а также номера страниц<br /><br />
+Данная функция заменена на более расширенную <a href="/files/docs/page_strnavigation">page_strnavigation</a>, которая выводит эти ссылки а также номера страниц<br /><br />
 
 <pre class="d">
 <b>page_jumpnavigation</b>(
@@ -32,4 +32,4 @@ page_jumpnavigation(\'chat/index.php?\', 10, $start, $total); /* <-Назад | 
 ?>
 
 <br />
-<i class="fa fa-arrow-circle-left"></i> <a href="?page=docs">Вернуться</a><br />
+<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br />

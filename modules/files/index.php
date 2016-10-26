@@ -1,9 +1,9 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (!empty($_GET['page'])){
+if (!empty($params['page'])){
 
-    $page = check($_GET['page']);
+    $page = check($params['page']);
 
     if (! preg_match('|^[a-z0-9_\-/]+$|i', $page)) {
         App::abort('default', 'Недопустимое название страницы!');

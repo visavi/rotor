@@ -65,7 +65,7 @@ $router->map('GET|POST', '/lostpassword', '/modules/mail/lostpassword.php', 'los
 $router->map('GET|POST', '/unsubscribe', '/modules/mail/unsubscribe.php', 'unsubscribe');
 
 $router->map('GET', '/menu', '/modules/pages/index.php@menu');
-$router->map('GET', '/page/[recent:action]?', '/modules/pages/index.php');
+$router->map('GET', '/page/[a:action]?', '/modules/pages/index.php');
 $router->map('GET', '/tags', '/modules/pages/tags.php', 'tags');
 $router->map('GET', '/rules', '/modules/pages/rules.php', 'smiles');
 $router->map('GET', '/smiles', '/modules/pages/smiles.php', 'rules');
@@ -93,7 +93,7 @@ $router->map('GET|POST', '/searchuser',  '/modules/pages/searchuser.php');
 
 $router->map('GET|POST', '/events', '/modules/events/index.php', 'events');
 
-$router->map('GET|POST', '/files', '/modules/files/index.php', 'files');
+$router->map('GET|POST', '/files/[*:page]?', '/modules/files/index.php', 'files');
 
 $router->map('GET|POST', '/chat', '/modules/chat/index.php', 'chat');
 
