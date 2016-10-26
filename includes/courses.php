@@ -1,16 +1,4 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-if (!defined('BASEDIR')) {
-	exit(header('Location: /index.php'));
-}
-
 // libxml_use_internal_errors(true);
 
 if (@filemtime(DATADIR."/temp/courses.dat") < time()-3600 || @filesize(DATADIR."/temp/courses.dat") == 0) {
@@ -20,11 +8,15 @@ if (@filemtime(DATADIR."/temp/courses.dat") < time()-3600 || @filesize(DATADIR."
 
 		$xml = new SimpleXMLElement($xml_str);
 
-		$courses = array();
+		$courses = [];
 		$courses['Date'] = strval($xml->attributes()->Date);
+		foreach ($xml->Valute as $item) {
 
-		foreach($xml->Valute as $item){
-			$courses[strval($item->CharCode)] =  array('name' => strval($item->Name), 'value' => strval($item->Value), 'nominal' => strval($item->Nominal));
+			$courses[strval($item->CharCode)] = [
+			    'name' => strval($item->Name),
+                'value' => strval($item->Value),
+                'nominal' => strval($item->Nominal)
+            ];
 		}
 
 		file_put_contents(DATADIR."/temp/courses.dat", serialize($courses), LOCK_EX);
@@ -33,7 +25,7 @@ if (@filemtime(DATADIR."/temp/courses.dat") < time()-3600 || @filesize(DATADIR."
 
 $courses = @unserialize(file_get_contents(DATADIR."/temp/courses.dat"));
 
-if (!empty($courses)){
+if (!empty($courses['USD'])){
 
 	echo '<b>Курсы валют</b> ('.$courses['Date'].')<br />';
 	echo '<b>'.$courses['USD']['nominal'].' '.$courses['USD']['name'].'</b> - '.$courses['USD']['value'].'<br />';

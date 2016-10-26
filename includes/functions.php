@@ -1661,7 +1661,7 @@ function show_advertuser() {
                 $result = $datafile[$quot_rand];
             }
 
-            return $result.' <small><a href="/pages/reklama.php?act=all" rel="nofollow">[+]</a></small>';
+            return $result.' <small><a href="/pages/reklama?act=all" rel="nofollow">[+]</a></small>';
         }
     }
 }
@@ -1772,7 +1772,7 @@ function recentphotos($show = 5) {
 
     if (is_array($photos) && count($photos) > 0) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/index.php?act=view&amp;gid='.$data['photo_id'].'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;')).'</a>';
+            echo '<a href="/gallery?act=view&amp;gid='.$data['photo_id'].'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;')).'</a>';
         }
 
         echo '<br />';
@@ -1814,8 +1814,8 @@ function recentfiles($show = 5) {
     if (is_array($files) && count($files) > 0) {
         foreach ($files as $file){
 
-            $filesize = (!empty($file['downs_link'])) ? read_file(BASEDIR.'/load/files/'.$file['downs_link']) : 0;
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down.php?act=view&amp;id='.$file['downs_id'].'">'.$file['downs_title'].'</a> ('.$filesize.')<br />';
+            $filesize = (!empty($file['downs_link'])) ? read_file(BASEDIR.'/upload/files/'.$file['downs_link']) : 0;
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['downs_id'].'">'.$file['downs_title'].'</a> ('.$filesize.')<br />';
         }
     }
 }
@@ -1833,7 +1833,7 @@ function recentblogs() {
 
     if (is_array($blogs) && count($blogs) > 0) {
         foreach ($blogs as $blog) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/blog/blog.php?act=view&amp;id='.$blog['blogs_id'].'">'.$blog['blogs_title'].'</a> ('.$blog['blogs_comments'].')<br />';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/blog/blog?act=view&amp;id='.$blog['blogs_id'].'">'.$blog['blogs_title'].'</a> ('.$blog['blogs_comments'].')<br />';
         }
     }
 }

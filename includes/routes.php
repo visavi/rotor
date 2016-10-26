@@ -112,6 +112,17 @@ $router->map('GET|POST', '/games/bandit',    '/modules/games/bandit.php');
 $router->map('GET|POST', '/games/kosti',     '/modules/games/kosti.php');
 $router->map('GET|POST', '/games/naperstki', '/modules/games/naperstki.php');
 
+$router->map('GET|POST', '/load',        '/modules/load/index.php');
+$router->map('GET|POST', '/load/active', '/modules/load/active.php');
+$router->map('GET|POST', '/load/add',    '/modules/load/add.php');
+$router->map('GET|POST', '/load/down',   '/modules/load/down.php');
+$router->map('GET|POST', '/load/fresh',  '/modules/load/fresh.php');
+$router->map('GET|POST', '/load/new',    '/modules/load/new.php');
+$router->map('GET|POST', '/load/rss',    '/modules/load/rss.php');
+$router->map('GET|POST', '/load/search', '/modules/load/search.php');
+$router->map('GET|POST', '/load/top',    '/modules/load/top.php');
+$router->map('GET|POST', '/load/zip',    '/modules/load/zip.php');
+
 $router->map('GET|POST', '/votes',         '/modules/votes/index.php');
 $router->map('GET|POST', '/votes/history', '/modules/votes/history.php');
 
@@ -122,5 +133,7 @@ $router->map('GET', '/admin/cache/[image|clear|clearimage:action]', '/modules/ad
 $router->map('GET|POST', '/admin/forum',   '/modules/admin/forum.php');
 $router->map('GET|POST', '/admin/news',    '/modules/admin/news.php');
 $router->map('GET|POST', '/admin/gallery', '/modules/admin/gallery.php');
+$router->map('GET|POST', '/admin/load',    '/modules/admin/load.php');
+$router->map('GET|POST', '/admin/newload',    '/modules/admin/newload.php');
 
 Registry::set('router', $router->match());

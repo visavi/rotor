@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
@@ -25,70 +14,70 @@ switch ($act):
  */
 case 'index':
 
-	show_title('Публикация нового файла');
+    show_title('Публикация нового файла');
 
-	echo '<img src="/images/img/document.gif" alt="image" /> <b>Публикация</b> / ';
-	echo '<a href="add.php?act=waiting">Ожидающие</a> / ';
-	echo '<a href="active.php">Проверенные</a><hr />';
+    echo '<img src="/images/img/document.gif" alt="image" /> <b>Публикация</b> / ';
+    echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
+    echo '<a href="/load/active">Проверенные</a><hr />';
 
-	if ($config['home'] == 'http://visavi.net') {
-		echo '<div class="info">';
-		echo '<img src="/images/img/faq.gif" alt="image" /> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="add.php?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
-		echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br />';
-	}
+    if ($config['home'] == 'http://visavi.net') {
+        echo '<div class="info">';
+        echo '<img src="/images/img/faq.gif" alt="image" /> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
+        echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br />';
+    }
 
-	$querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `cats_order` ASC;");
-	$downs = $querydown -> fetchAll();
+    $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `cats_order` ASC;");
+    $downs = $querydown -> fetchAll();
 
-	if (count($downs) > 0) {
-		echo '<div class="form">';
-		echo '<form action="add.php?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
-		echo 'Категория*:<br />';
+    if (count($downs) > 0) {
+        echo '<div class="form">';
+        echo '<form action="/load/add?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
+        echo 'Категория*:<br />';
 
-		$output = array();
+        $output = array();
 
-		foreach ($downs as $row) {
-			$i = $row['cats_id'];
-			$p = $row['cats_parent'];
-			$output[$p][$i] = $row;
-		}
+        foreach ($downs as $row) {
+            $i = $row['cats_id'];
+            $p = $row['cats_parent'];
+            $output[$p][$i] = $row;
+        }
 
-		echo '<select name="cid">';
-		echo '<option value="0">Выберите категорию</option>';
+        echo '<select name="cid">';
+        echo '<option value="0">Выберите категорию</option>';
 
-		foreach ($output[0] as $key => $data) {
-			$selected = $cid == $data['cats_id'] ? ' selected="selected"' : '';
-			$disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
-			echo '<option value="'.$data['cats_id'].'"'.$selected.$disabled.'>'.$data['cats_name'].'</option>';
+        foreach ($output[0] as $key => $data) {
+            $selected = $cid == $data['cats_id'] ? ' selected="selected"' : '';
+            $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+            echo '<option value="'.$data['cats_id'].'"'.$selected.$disabled.'>'.$data['cats_name'].'</option>';
 
-			if (isset($output[$key])) {
-				foreach($output[$key] as $datasub) {
-					$selected = ($cid == $datasub['cats_id']) ? ' selected="selected"' : '';
-					$disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
-					echo '<option value="'.$datasub['cats_id'].'"'.$selected.$disabled.'>– '.$datasub['cats_name'].'</option>';
-				}
-			}
-		}
+            if (isset($output[$key])) {
+                foreach($output[$key] as $datasub) {
+                    $selected = ($cid == $datasub['cats_id']) ? ' selected="selected"' : '';
+                    $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+                    echo '<option value="'.$datasub['cats_id'].'"'.$selected.$disabled.'>– '.$datasub['cats_name'].'</option>';
+                }
+            }
+        }
 
-		echo '</select><br />';
+        echo '</select><br />';
 
-		echo 'Название*:<br />';
-		echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
-		echo 'Описание*:<br />';
-		echo '<textarea cols="25" rows="10" name="text"></textarea><br />';
-		echo 'Автор файла:<br />';
-		echo '<input type="text" name="author" maxlength="50" /><br />';
-		echo 'Сайт автора:<br />';
-		echo '<input type="text" name="site" maxlength="50" value="http://" /><br />';
+        echo 'Название*:<br />';
+        echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
+        echo 'Описание*:<br />';
+        echo '<textarea cols="25" rows="10" name="text"></textarea><br />';
+        echo 'Автор файла:<br />';
+        echo '<input type="text" name="author" maxlength="50" /><br />';
+        echo 'Сайт автора:<br />';
+        echo '<input type="text" name="site" maxlength="50" value="http://" /><br />';
 
-		echo '<input value="Продолжить" type="submit" /></form></div><br />';
+        echo '<input value="Продолжить" type="submit" /></form></div><br />';
 
-		echo 'Все поля отмеченные знаком *, обязательны для заполнения<br />';
-		echo 'Файл и скриншот вы сможете загрузить после добавления описания<br />';
-		echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br /><br />';
-	} else {
-		show_error('Категории файлов еще не созданы!');
-	}
+        echo 'Все поля отмеченные знаком *, обязательны для заполнения<br />';
+        echo 'Файл и скриншот вы сможете загрузить после добавления описания<br />';
+        echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br /><br />';
+    } else {
+        show_error('Категории файлов еще не созданы!');
+    }
 break;
 
 /**
@@ -96,44 +85,44 @@ break;
  */
 case 'waiting':
 
-	show_title('Список ожидающих модерации файлов');
+    show_title('Список ожидающих модерации файлов');
 
-	echo '<img src="/images/img/document.gif" alt="image" /> <a href="add.php">Публикация</a> / ';
-	echo '<b>Ожидающие</b> / ';
-	echo '<a href="active.php">Проверенные</a><hr />';
+    echo '<img src="/images/img/document.gif" alt="image" /> <a href="/load/add">Публикация</a> / ';
+    echo '<b>Ожидающие</b> / ';
+    echo '<a href="/load/active">Проверенные</a><hr />';
 
-	$total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=? AND `downs_user`=?;", array(0, $log));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=? AND `downs_user`=?;", array(0, $log));
 
-	if ($total > 0) {
-		$querynew = DB::run() -> query("SELECT `downs`.*, `cats_name` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_active`=? AND `downs_user`=? ORDER BY `downs_time` DESC;", array(0, $log));
+    if ($total > 0) {
+        $querynew = DB::run() -> query("SELECT `downs`.*, `cats_name` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_active`=? AND `downs_user`=? ORDER BY `downs_time` DESC;", array(0, $log));
 
-		while ($data = $querynew -> fetch()) {
-			echo '<div class="b">';
+        while ($data = $querynew -> fetch()) {
+            echo '<div class="b">';
 
-			echo '<img src="/images/img/download.gif" alt="image" /> ';
+            echo '<img src="/images/img/download.gif" alt="image" /> ';
 
-			echo '<b><a href="add.php?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.date_fixed($data['downs_time']).')</div>';
-			echo '<div>';
-			echo 'Категория: '.$data['cats_name'].'<br />';
-			if (!empty($data['downs_link'])) {
-				echo 'Файл: '.$data['downs_link'].' ('.read_file(BASEDIR.'/load/files/'.$data['downs_link']).')<br />';
-			} else {
-				echo 'Файл: <span style="color:#ff0000">Не загружен</span><br />';
-			}
-			if (!empty($data['downs_screen'])) {
-				echo 'Скрин: '.$data['downs_screen'].' ('.read_file(BASEDIR.'/load/files/'.$data['downs_screen']).')<br />';
-			} else {
-				echo 'Скрин: <span style="color:#ff0000">Не загружен</span><br />';
-			}
-			echo '</div>';
-		}
+            echo '<b><a href="/load/add?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.date_fixed($data['downs_time']).')</div>';
+            echo '<div>';
+            echo 'Категория: '.$data['cats_name'].'<br />';
+            if (!empty($data['downs_link'])) {
+                echo 'Файл: '.$data['downs_link'].' ('.read_file(BASEDIR.'/upload/files/'.$data['downs_link']).')<br />';
+            } else {
+                echo 'Файл: <span style="color:#ff0000">Не загружен</span><br />';
+            }
+            if (!empty($data['downs_screen'])) {
+                echo 'Скрин: '.$data['downs_screen'].' ('.read_file(BASEDIR.'/upload/files/'.$data['downs_screen']).')<br />';
+            } else {
+                echo 'Скрин: <span style="color:#ff0000">Не загружен</span><br />';
+            }
+            echo '</div>';
+        }
 
-		echo '<br />';
-	} else {
-		show_error('Ожидающих модерации файлов еще нет!');
-	}
+        echo '<br />';
+    } else {
+        show_error('Ожидающих модерации файлов еще нет!');
+    }
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="add.php">Вернуться</a><br />';
+    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add">Вернуться</a><br />';
 break;
 
 /**
@@ -141,68 +130,68 @@ break;
  */
 case 'add':
 
-	show_title('Публикация нового файла');
+    show_title('Публикация нового файла');
 
-	$uid = check($_GET['uid']);
-	$cid = abs(intval($_POST['cid']));
-	$title = check($_POST['title']);
-	$text = check($_POST['text']);
-	$author = (!empty($_POST['author'])) ? check($_POST['author']) : '';
-	$site = ($_POST['site'] != 'http://') ? check($_POST['site']) : '';
+    $uid = check($_GET['uid']);
+    $cid = abs(intval($_POST['cid']));
+    $title = check($_POST['title']);
+    $text = check($_POST['text']);
+    $author = (!empty($_POST['author'])) ? check($_POST['author']) : '';
+    $site = ($_POST['site'] != 'http://') ? check($_POST['site']) : '';
 
-	if ($uid == $_SESSION['token']) {
-		if (!empty($cid)) {
-			if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-				if (utf_strlen($text) >= 50 && utf_strlen($text) <= 5000) {
-					if (utf_strlen($author) <= 50) {
-						if (utf_strlen($site) <= 50) {
-							if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
-								$downs = DBM::run()->selectFirst('cats', array('cats_id' => $cid));
-								if (!empty($downs)) {
-									if (empty($downs['closed'])) {
-										$downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
-										if (empty($downtitle)) {
+    if ($uid == $_SESSION['token']) {
+        if (!empty($cid)) {
+            if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
+                if (utf_strlen($text) >= 50 && utf_strlen($text) <= 5000) {
+                    if (utf_strlen($author) <= 50) {
+                        if (utf_strlen($site) <= 50) {
+                            if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
+                                $downs = DBM::run()->selectFirst('cats', array('cats_id' => $cid));
+                                if (!empty($downs)) {
+                                    if (empty($downs['closed'])) {
+                                        $downtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? LIMIT 1;", array($title));
+                                        if (empty($downtitle)) {
 
-											//DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cid));
-											DB::run() -> query("INSERT INTO `downs` (`downs_cats_id`, `downs_title`, `downs_text`, `downs_link`, `downs_user`, `downs_author`, `downs_site`, `downs_screen`, `downs_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", array($cid, $title, $text, '', $log, $author, $site, '', SITETIME));
+                                            //DB::run() -> query("UPDATE `cats` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cid));
+                                            DB::run() -> query("INSERT INTO `downs` (`downs_cats_id`, `downs_title`, `downs_text`, `downs_link`, `downs_user`, `downs_author`, `downs_site`, `downs_screen`, `downs_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", array($cid, $title, $text, '', $log, $author, $site, '', SITETIME));
 
-											$lastid = DB::run() -> lastInsertId();
+                                            $lastid = DB::run() -> lastInsertId();
 
-											notice('Данные успешно добавлены!');
-											redirect("add.php?act=view&id=$lastid");
+                                            notice('Данные успешно добавлены!');
+                                            redirect("/load/add?act=view&id=$lastid");
 
-										} else {
-											show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
-										}
-									} else {
-										show_error('Ошибка! В данный раздел запрещена загрузка файлов!');
-									}
-								} else {
-									show_error('Ошибка! Выбранный вами раздел не существует!');
-								}
-							} else {
-								show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
-							}
-						} else {
-							show_error('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
-						}
-					} else {
-						show_error('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
-					}
-				} else {
-					show_error('Ошибка! Слишком длинный или короткий текст описания (от 50 до 5000 символов)!');
-				}
-			} else {
-				show_error('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
-			}
-		} else {
-			show_error('Ошибка! Вы не выбрали категорию для добавления файла!');
-		}
-	} else {
-		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-	}
+                                        } else {
+                                            show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+                                        }
+                                    } else {
+                                        show_error('Ошибка! В данный раздел запрещена загрузка файлов!');
+                                    }
+                                } else {
+                                    show_error('Ошибка! Выбранный вами раздел не существует!');
+                                }
+                            } else {
+                                show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                            }
+                        } else {
+                            show_error('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
+                        }
+                    } else {
+                        show_error('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
+                    }
+                } else {
+                    show_error('Ошибка! Слишком длинный или короткий текст описания (от 50 до 5000 символов)!');
+                }
+            } else {
+                show_error('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
+            }
+        } else {
+            show_error('Ошибка! Вы не выбрали категорию для добавления файла!');
+        }
+    } else {
+        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+    }
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="add.php?act=newfile&amp;cid='.$cid.'">Вернуться</a><br />';
+    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=newfile&amp;cid='.$cid.'">Вернуться</a><br />';
 break;
 
 /**
@@ -210,121 +199,121 @@ break;
  */
 case 'view':
 
-	show_title('Редактирование ожидающего файла');
+    show_title('Редактирование ожидающего файла');
 
-	echo '<img src="/images/img/document.gif" alt="image" /> <a href="add.php">Публикация</a> / ';
-	echo '<b><a href="add.php?act=waiting">Ожидающие</a></b> / ';
-	echo '<a href="active.php?act=files">Проверенные</a><hr />';
+    echo '<img src="/images/img/document.gif" alt="image" /> <a href="/load/add">Публикация</a> / ';
+    echo '<b><a href="/load/add?act=waiting">Ожидающие</a></b> / ';
+    echo '<a href="/load/active?act=files">Проверенные</a><hr />';
 
-	$new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
-	if (!empty($new)) {
-		$downs = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;") -> fetchAll();
-		if (count($downs) > 0) {
-			if ($new['downs_user'] == $log) {
-				if (empty($new['downs_active'])) {
+    if (!empty($new)) {
+        $downs = DB::run() -> query("SELECT `cats_id`, `cats_parent`, `cats_name` FROM `cats` WHERE `closed`=0 ORDER BY `cats_order` ASC;") -> fetchAll();
+        if (count($downs) > 0) {
+            if ($new['downs_user'] == $log) {
+                if (empty($new['downs_active'])) {
 
-					$folder = $new['folder'] ? $new['folder'].'/' : '';
+                    $folder = $new['folder'] ? $new['folder'].'/' : '';
 
-					echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="index.php">Категории</a> / ';
+                    echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="/load">Категории</a> / ';
 
-					if (!empty($new['cats_parent'])) {
-						$podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($new['cats_parent']));
-						echo '<a href="down.php?cid='.$podcats['cats_id'].'">'.$podcats['cats_name'].'</a> / ';
-					}
+                    if (!empty($new['cats_parent'])) {
+                        $podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($new['cats_parent']));
+                        echo '<a href="/load/down?cid='.$podcats['cats_id'].'">'.$podcats['cats_name'].'</a> / ';
+                    }
 
-					echo '<a href="down.php?act=view&amp;id='.$id.'">Обзор файла</a><br /><br />';
+                    echo '<a href="/load/down?act=view&amp;id='.$id.'">Обзор файла</a><br /><br />';
 
-					echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br />После проверки вы не сможете отредактировать описание и загрузить файл или скриншот</div><br />';
+                    echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br />После проверки вы не сможете отредактировать описание и загрузить файл или скриншот</div><br />';
 
-					if (empty($new['downs_link'])) {
+                    if (empty($new['downs_link'])) {
 
-						echo '<b><big>Загрузка файла</big></b><br /><br />';
-						echo '<div class="info">';
-						echo '<form action="add.php?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-						echo 'Прикрепить файл* ('.$config['allowextload'].'):<br /><input type="file" name="loadfile" /><br />';
-						echo '<input value="Загрузить" type="submit" /></form><br />';
+                        echo '<b><big>Загрузка файла</big></b><br /><br />';
+                        echo '<div class="info">';
+                        echo '<form action="/load/add?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+                        echo 'Прикрепить файл* ('.$config['allowextload'].'):<br /><input type="file" name="loadfile" /><br />';
+                        echo '<input value="Загрузить" type="submit" /></form><br />';
 
-						echo 'Максимальный вес архива: '.formatsize($config['fileupload']).'</div><br />';
+                        echo 'Максимальный вес архива: '.formatsize($config['fileupload']).'</div><br />';
 
-					} else {
+                    } else {
 
-						echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/load/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(BASEDIR.'/load/files/'.$folder.$new['downs_link']).') (<a href="add.php?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+                        echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(BASEDIR.'/upload/files/'.$folder.$new['downs_link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
 
-						$ext = getExtension($new['downs_link']);
-						if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
-							if (empty($new['downs_screen'])) {
-								echo '<br /><b><big>Загрузка скриншота</big></b><br /><br />';
-								echo '<div class="info">';
-								echo '<form action="add.php?act=loadscreen&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-								echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br /><input type="file" name="screen" /><br />';
-								echo '<input value="Загрузить" type="submit" /></form><br />';
+                        $ext = getExtension($new['downs_link']);
+                        if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
+                            if (empty($new['downs_screen'])) {
+                                echo '<br /><b><big>Загрузка скриншота</big></b><br /><br />';
+                                echo '<div class="info">';
+                                echo '<form action="/load/add?act=loadscreen&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+                                echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br /><input type="file" name="screen" /><br />';
+                                echo '<input value="Загрузить" type="submit" /></form><br />';
 
-								echo 'Максимальный вес скриншота: '.formatsize($config['screenupload']).'<br />';
-								echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px</div><br /><br />';
+                                echo 'Максимальный вес скриншота: '.formatsize($config['screenupload']).'<br />';
+                                echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px</div><br /><br />';
 
-							} else {
-								echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/load/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/load/screen/'.$folder.$new['downs_screen']).') (<a href="add.php?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-								echo resize_image('load/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
-							}
-						}
-					}
+                            } else {
+                                echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+                                echo resize_image('upload/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
+                            }
+                        }
+                    }
 
-					echo '<br />';
-					echo '<b><big>Редактирование</big></b><br /><br />';
-					echo '<div class="form">';
-					echo '<form action="add.php?act=edit&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<br />';
+                    echo '<b><big>Редактирование</big></b><br /><br />';
+                    echo '<div class="form">';
+                    echo '<form action="/load/add?act=edit&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-					echo 'Категория*:<br />';
+                    echo 'Категория*:<br />';
 
-					$output = array();
+                    $output = array();
 
-					foreach ($downs as $row) {
-						$i = $row['cats_id'];
-						$p = $row['cats_parent'];
-						$output[$p][$i] = $row;
-					}
+                    foreach ($downs as $row) {
+                        $i = $row['cats_id'];
+                        $p = $row['cats_parent'];
+                        $output[$p][$i] = $row;
+                    }
 
-					echo '<select name="cid">';
+                    echo '<select name="cid">';
 
-					foreach ($output[0] as $key => $data) {
-						$selected = ($new['cats_id'] == $data['cats_id']) ? ' selected="selected"' : '';
-						echo '<option value="'.$data['cats_id'].'"'.$selected.'>'.$data['cats_name'].'</option>';
+                    foreach ($output[0] as $key => $data) {
+                        $selected = ($new['cats_id'] == $data['cats_id']) ? ' selected="selected"' : '';
+                        echo '<option value="'.$data['cats_id'].'"'.$selected.'>'.$data['cats_name'].'</option>';
 
-						if (isset($output[$key])) {
-							foreach($output[$key] as $datasub) {
-								$selected = ($new['cats_id'] == $datasub['cats_id']) ? ' selected="selected"' : '';
-								echo '<option value="'.$datasub['cats_id'].'"'.$selected.'>– '.$datasub['cats_name'].'</option>';
-							}
-						}
-					}
+                        if (isset($output[$key])) {
+                            foreach($output[$key] as $datasub) {
+                                $selected = ($new['cats_id'] == $datasub['cats_id']) ? ' selected="selected"' : '';
+                                echo '<option value="'.$datasub['cats_id'].'"'.$selected.'>– '.$datasub['cats_name'].'</option>';
+                            }
+                        }
+                    }
 
-					echo '</select><br />';
+                    echo '</select><br />';
 
-					echo 'Название*:<br />';
-					echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['downs_title'].'" /><br />';
-					echo 'Описание*:<br />';
-					echo '<textarea cols="25" rows="5" name="text">'.$new['downs_text'].'</textarea><br />';
-					echo 'Автор файла:<br />';
-					echo '<input type="text" name="author" maxlength="50" value="'.$new['downs_author'].'" /><br />';
-					echo 'Сайт автора:<br />';
-					echo '<input type="text" name="site" maxlength="50" value="'.$new['downs_site'].'" /><br />';
+                    echo 'Название*:<br />';
+                    echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['downs_title'].'" /><br />';
+                    echo 'Описание*:<br />';
+                    echo '<textarea cols="25" rows="5" name="text">'.$new['downs_text'].'</textarea><br />';
+                    echo 'Автор файла:<br />';
+                    echo '<input type="text" name="author" maxlength="50" value="'.$new['downs_author'].'" /><br />';
+                    echo 'Сайт автора:<br />';
+                    echo '<input type="text" name="site" maxlength="50" value="'.$new['downs_site'].'" /><br />';
 
-					echo '<input value="Изменить" type="submit" /></form></div><br />';
-					echo 'Все поля отмеченные знаком *, обязательны для заполнения<br /><br />';
+                    echo '<input value="Изменить" type="submit" /></form></div><br />';
+                    echo 'Все поля отмеченные знаком *, обязательны для заполнения<br /><br />';
 
-				} else {
-					show_error('Ошибка! Данный файл уже проверен модератором!');
-				}
-			} else {
-				show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
-			}
-		} else {
-			show_error('Категории файлов еще не созданы!');
-		}
-	} else {
-		show_error('Данного файла не существует!');
-	}
+                } else {
+                    show_error('Ошибка! Данный файл уже проверен модератором!');
+                }
+            } else {
+                show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
+            }
+        } else {
+            show_error('Категории файлов еще не созданы!');
+        }
+    } else {
+        show_error('Данного файла не существует!');
+    }
 
 break;
 
@@ -333,204 +322,204 @@ break;
  */
 case 'edit':
 
-	show_title('Редактирование ожидающего файла');
+    show_title('Редактирование ожидающего файла');
 
-	$uid = check($_GET['uid']);
-	$cid = abs(intval($_POST['cid']));
-	$title = check($_POST['title']);
-	$text = check($_POST['text']);
-	$author = (!empty($_POST['author'])) ? check($_POST['author']) : '';
-	$site = ($_POST['site'] != 'http://') ? check($_POST['site']) : '';
+    $uid = check($_GET['uid']);
+    $cid = abs(intval($_POST['cid']));
+    $title = check($_POST['title']);
+    $text = check($_POST['text']);
+    $author = (!empty($_POST['author'])) ? check($_POST['author']) : '';
+    $site = ($_POST['site'] != 'http://') ? check($_POST['site']) : '';
 
-	if ($uid == $_SESSION['token']) {
-		if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-			if (utf_strlen($text) >= 50 && utf_strlen($text) <= 5000) {
-				if (utf_strlen($author) <= 50) {
-					if (utf_strlen($site) <= 50) {
-						if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
-							$new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
-							if (!empty($new)) {
-								if (empty($downs['closed'])) {
-									if ($new['downs_user'] == $log) {
-										if (empty($new['downs_active'])) {
+    if ($uid == $_SESSION['token']) {
+        if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
+            if (utf_strlen($text) >= 50 && utf_strlen($text) <= 5000) {
+                if (utf_strlen($author) <= 50) {
+                    if (utf_strlen($site) <= 50) {
+                        if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
+                            $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+                            if (!empty($new)) {
+                                if (empty($downs['closed'])) {
+                                    if ($new['downs_user'] == $log) {
+                                        if (empty($new['downs_active'])) {
 
-											$categories = DB::run() -> querySingle("SELECT `cats_id` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
-											if (!empty($categories)) {
+                                            $categories = DB::run() -> querySingle("SELECT `cats_id` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
+                                            if (!empty($categories)) {
 
-												$newtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
-												if (empty($newtitle)) {
+                                                $newtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
+                                                if (empty($newtitle)) {
 
-													DB::run() -> query("UPDATE `downs` SET `downs_cats_id`=?, `downs_title`=?, `downs_text`=?, `downs_author`=?, `downs_site`=?, `downs_time`=? WHERE `downs_id`=?;", array($cid, $title, $text, $author, $site, $new['downs_time'], $id));
+                                                    DB::run() -> query("UPDATE `downs` SET `downs_cats_id`=?, `downs_title`=?, `downs_text`=?, `downs_author`=?, `downs_site`=?, `downs_time`=? WHERE `downs_id`=?;", array($cid, $title, $text, $author, $site, $new['downs_time'], $id));
 
-													notice('Данные успешно изменены!');
-													redirect("add.php?act=view&id=$id");
+                                                    notice('Данные успешно изменены!');
+                                                    redirect("/load/add?act=view&id=$id");
 
-												} else {
-													show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
-												}
-											} else {
-												show_error('Ошибка! Выбранный вами раздел не существует!');
-											}
-										} else {
-											show_error('Ошибка! Данный файл уже проверен модератором!');
-										}
-									} else {
-										show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
-									}
-								} else {
-									show_error('Ошибка! В данный раздел запрещена загрузка файлов!');
-								}
-							} else {
-								show_error('Данного файла не существует!');
-							}
-						} else {
-							show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
-						}
-					} else {
-						show_error('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
-					}
-				} else {
-					show_error('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
-				}
-			} else {
-				show_error('Ошибка! Слишком длинный или короткий текст описания (от 50 до 5000 символов)!');
-			}
-		} else {
-			show_error('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
-		}
-	} else {
-		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-	}
+                                                } else {
+                                                    show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+                                                }
+                                            } else {
+                                                show_error('Ошибка! Выбранный вами раздел не существует!');
+                                            }
+                                        } else {
+                                            show_error('Ошибка! Данный файл уже проверен модератором!');
+                                        }
+                                    } else {
+                                        show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
+                                    }
+                                } else {
+                                    show_error('Ошибка! В данный раздел запрещена загрузка файлов!');
+                                }
+                            } else {
+                                show_error('Данного файла не существует!');
+                            }
+                        } else {
+                            show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                        }
+                    } else {
+                        show_error('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
+                    }
+                } else {
+                    show_error('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
+                }
+            } else {
+                show_error('Ошибка! Слишком длинный или короткий текст описания (от 50 до 5000 символов)!');
+            }
+        } else {
+            show_error('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
+        }
+    } else {
+        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+    }
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="add.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
  * Загрузка файла
  */
 case 'loadfile':
-	show_title('Загрузка файла');
+    show_title('Загрузка файла');
 
-	$down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
-	$folder = $down['folder'] ? $down['folder'].'/' : '';
+    $folder = $down['folder'] ? $down['folder'].'/' : '';
 
-	if (!empty($down)) {
-		if ($down['downs_user'] == $log) {
-			if (empty($down['downs_active'])) {
-				if (empty($down['downs_link'])) {
-					if (is_writeable(BASEDIR.'/load/files/'.$folder)) {
-					if (is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
-						$filename = check(strtolower($_FILES['loadfile']['name']));
+    if (!empty($down)) {
+        if ($down['downs_user'] == $log) {
+            if (empty($down['downs_active'])) {
+                if (empty($down['downs_link'])) {
+                    if (is_writeable(BASEDIR.'/upload/files/'.$folder)) {
+                    if (is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
+                        $filename = check(strtolower($_FILES['loadfile']['name']));
 
-						if (strlen($filename) <= 50) {
-							if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
+                        if (strlen($filename) <= 50) {
+                            if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
 
-								$ext = getExtension($filename);
+                                $ext = getExtension($filename);
 
-								if (in_array($ext, explode(',', $config['allowextload']), true)) {
-									if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
-										$downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
-										if (empty($downlink)) {
+                                if (in_array($ext, explode(',', $config['allowextload']), true)) {
+                                    if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
+                                        $downlink = DB::run() -> querySingle("SELECT `downs_link` FROM `downs` WHERE `downs_link`=? LIMIT 1;", array($filename));
+                                        if (empty($downlink)) {
 
-											move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$folder.$filename);
-											@chmod(BASEDIR.'/load/files/'.$folder.$filename, 0666);
+                                            move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$folder.$filename);
+                                            @chmod(BASEDIR.'/upload/files/'.$folder.$filename, 0666);
 
-											copyright_archive(BASEDIR.'/load/files/'.$folder.$filename);
+                                            copyright_archive(BASEDIR.'/upload/files/'.$folder.$filename);
 
-											DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
+                                            DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
 
-											notice('Файл успешно загружен!');
-											redirect("add.php?act=view&id=$id");
+                                            notice('Файл успешно загружен!');
+                                            redirect("/load/add?act=view&id=$id");
 
-										} else {
-											show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
-										}
-									} else {
-										show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize($config['fileupload']).'!');
-									}
-								} else {
-									show_error('Ошибка! Недопустимое расширение файла!');
-								}
-							} else {
-								show_error('Ошибка! В названии файла присутствуют недопустимые символы!');
-							}
-						} else {
-							show_error('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
-						}
-					} else {
-						show_error('Ошибка! Не удалось загрузить файл!');
-					}
-					} else {
-						show_error('Ошибка! Директория для файлов недоступна для записи!');
-					}
-				} else {
-					show_error('Ошибка! Файл уже загружен!');
-				}
-			} else {
-				show_error('Ошибка! Данный файл уже проверен модератором!');
-			}
-		} else {
-			show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
-		}
-	} else {
-		show_error('Данного файла не существует!');
-	}
+                                        } else {
+                                            show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
+                                        }
+                                    } else {
+                                        show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize($config['fileupload']).'!');
+                                    }
+                                } else {
+                                    show_error('Ошибка! Недопустимое расширение файла!');
+                                }
+                            } else {
+                                show_error('Ошибка! В названии файла присутствуют недопустимые символы!');
+                            }
+                        } else {
+                            show_error('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
+                        }
+                    } else {
+                        show_error('Ошибка! Не удалось загрузить файл!');
+                    }
+                    } else {
+                        show_error('Ошибка! Директория для файлов недоступна для записи!');
+                    }
+                } else {
+                    show_error('Ошибка! Файл уже загружен!');
+                }
+            } else {
+                show_error('Ошибка! Данный файл уже проверен модератором!');
+            }
+        } else {
+            show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
+        }
+    } else {
+        show_error('Данного файла не существует!');
+    }
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="add.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
  * Загрузка скриншота
  */
 case 'loadscreen':
-	show_title('Загрузка скриншота');
+    show_title('Загрузка скриншота');
 
-	$down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
-	if (!empty($down)) {
-		if ($down['downs_user'] == $log) {
-			if (empty($down['downs_active'])) {
-				if (empty($down['downs_screen'])) {
-					if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
+    if (!empty($down)) {
+        if ($down['downs_user'] == $log) {
+            if (empty($down['downs_active'])) {
+                if (empty($down['downs_screen'])) {
+                    if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
-						// ------------------------------------------------------//
-						$handle = upload_image($_FILES['screen'], $config['screenupload'], $config['screenupsize'],  $down['downs_link']);
-						if ($handle) {
-							$folder = $down['folder'] ? $down['folder'].'/' : '';
+                        // ------------------------------------------------------//
+                        $handle = upload_image($_FILES['screen'], $config['screenupload'], $config['screenupsize'],  $down['downs_link']);
+                        if ($handle) {
+                            $folder = $down['folder'] ? $down['folder'].'/' : '';
 
-							$handle -> process(BASEDIR.'/load/screen/'.$folder);
-							if ($handle -> processed) {
+                            $handle -> process(BASEDIR.'/upload/screen/'.$folder);
+                            if ($handle -> processed) {
 
-								DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array($handle -> file_dst_name, $id));
-								$handle -> clean();
+                                DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array($handle -> file_dst_name, $id));
+                                $handle -> clean();
 
-								notice('Скриншот успешно загружен!');
-								redirect("add.php?act=view&id=$id");
+                                notice('Скриншот успешно загружен!');
+                                redirect("/load/add?act=view&id=$id");
 
-							} else {
-								show_error($handle -> error);
-							}
-						} else {
-							show_error('Ошибка! Не удалось загрузить изображение!');
-						}
-					} else {
-						show_error('Ошибка! Вы не загрузили скриншот!');
-					}
-				} else {
-					show_error('Ошибка! Скриншот уже загружен!');
-				}
-			} else {
-				show_error('Ошибка! Данный файл уже проверен модератором!');
-			}
-		} else {
-			show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
-		}
-	} else {
-		show_error('Данного файла не существует!');
-	}
+                            } else {
+                                show_error($handle -> error);
+                            }
+                        } else {
+                            show_error('Ошибка! Не удалось загрузить изображение!');
+                        }
+                    } else {
+                        show_error('Ошибка! Вы не загрузили скриншот!');
+                    }
+                } else {
+                    show_error('Ошибка! Скриншот уже загружен!');
+                }
+            } else {
+                show_error('Ошибка! Данный файл уже проверен модератором!');
+            }
+        } else {
+            show_error('Ошибка! Изменение невозможно, вы не автор данного файла!');
+        }
+    } else {
+        show_error('Данного файла не существует!');
+    }
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="add.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
@@ -538,36 +527,36 @@ break;
  */
 case 'delfile':
 
-	$link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
-	if (!empty($link)) {
-		if ($link['downs_user'] == $log) {
-			if (empty($link['downs_active'])) {
-				$folder = $link['folder'] ? $link['folder'].'/' : '';
+    if (!empty($link)) {
+        if ($link['downs_user'] == $log) {
+            if (empty($link['downs_active'])) {
+                $folder = $link['folder'] ? $link['folder'].'/' : '';
 
-				if (!empty($link['downs_link']) && file_exists(BASEDIR.'/load/files/'.$folder.$link['downs_link'])) {
-					unlink(BASEDIR.'/load/files/'.$folder.$link['downs_link']);
-				}
+                if (!empty($link['downs_link']) && file_exists(BASEDIR.'/upload/files/'.$folder.$link['downs_link'])) {
+                    unlink(BASEDIR.'/upload/files/'.$folder.$link['downs_link']);
+                }
 
-				unlink_image('load/files/'.$folder, $link['downs_link']);
-				unlink_image('load/screen/'.$folder, $link['downs_screen']);
+                unlink_image('upload/files/'.$folder, $link['downs_link']);
+                unlink_image('upload/screen/'.$folder, $link['downs_screen']);
 
-				DB::run() -> query("UPDATE `downs` SET `downs_link`=?, `downs_screen`=? WHERE `downs_id`=?;", array('', '', $id));
+                DB::run() -> query("UPDATE `downs` SET `downs_link`=?, `downs_screen`=? WHERE `downs_id`=?;", array('', '', $id));
 
-				notice('Файл успешно удален!');
-				redirect("add.php?act=view&id=$id");
+                notice('Файл успешно удален!');
+                redirect("/load/add?act=view&id=$id");
 
-			} else {
-				show_error('Ошибка! Данный файл уже проверен модератором!');
-			}
-		} else {
-			show_error('Ошибка! Удаление невозможно, вы не автор данного файла!');
-		}
-	} else {
-		show_error('Ошибка! Данного файла не существует!');
-	}
+            } else {
+                show_error('Ошибка! Данный файл уже проверен модератором!');
+            }
+        } else {
+            show_error('Ошибка! Удаление невозможно, вы не автор данного файла!');
+        }
+    } else {
+        show_error('Ошибка! Данного файла не существует!');
+    }
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="add.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
@@ -575,67 +564,67 @@ break;
  */
 case 'delscreen':
 
-	$screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
-	if (!empty($screen)) {
-		if ($screen['downs_user'] == $log) {
-			if (empty($screen['downs_active'])) {
-				$folder = $screen['folder'] ? $screen['folder'].'/' : '';
+    if (!empty($screen)) {
+        if ($screen['downs_user'] == $log) {
+            if (empty($screen['downs_active'])) {
+                $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
-				unlink_image('load/screen/'.$folder, $screen['downs_screen']);
+                unlink_image('upload/screen/'.$folder, $screen['downs_screen']);
 
-				DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array('', $id));
+                DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array('', $id));
 
-				notice('Скриншот успешно удален!');
-				redirect("add.php?act=view&id=$id");
+                notice('Скриншот успешно удален!');
+                redirect("/load/add?act=view&id=$id");
 
-			} else {
-				show_error('Ошибка! Данный файл уже проверен модератором!');
-			}
-		} else {
-			show_error('Ошибка! Удаление невозможно, вы не автор данного файла!');
-		}
-	} else {
-		show_error('Ошибка! Данного файла не существует!');
-	}
+            } else {
+                show_error('Ошибка! Данный файл уже проверен модератором!');
+            }
+        } else {
+            show_error('Ошибка! Удаление невозможно, вы не автор данного файла!');
+        }
+    } else {
+        show_error('Ошибка! Данного файла не существует!');
+    }
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="add.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
  * Правила
  */
 case 'rules':
-	if ($config['home'] == 'http://visavi.net') {
+    if ($config['home'] == 'http://visavi.net') {
 
-		show_title('Правила оформления скриптов');
+        show_title('Правила оформления скриптов');
 
-		echo '<b><span style="color:#ff0000">Внимание! Запрещено выкладывать платные скрипты или скрипты не предназначенные для свободного распространения.<br />
+        echo '<b><span style="color:#ff0000">Внимание! Запрещено выкладывать платные скрипты или скрипты не предназначенные для свободного распространения.<br />
 Запрещено размещать скрипты накрутчиков, скрипты для спама, взлома или любые вредоносные скрипты</span></b><br /><br />';
 
-		echo 'Чтобы не превращать архив скриптов в свалку мусора, все скрипты на нашем сайте проходят ручную обработку<br />';
-		echo 'Если вы хотите добавить скрипт, НЕ обязательно быть его автором, но вы обязательно должны указать данные и контакты автора скрипта<br />';
-		echo 'Также если вы автор модификации или небольшой переделки, то можете указать и свои данные в описании к скрипту<br /><br />';
+        echo 'Чтобы не превращать архив скриптов в свалку мусора, все скрипты на нашем сайте проходят ручную обработку<br />';
+        echo 'Если вы хотите добавить скрипт, НЕ обязательно быть его автором, но вы обязательно должны указать данные и контакты автора скрипта<br />';
+        echo 'Также если вы автор модификации или небольшой переделки, то можете указать и свои данные в описании к скрипту<br /><br />';
 
-		echo '<b>Авторские права</b><br />';
-		echo 'Для размещения скрипта в нашем архиве вы должны быть автором этого скрипта, у вас должны быть эсклюзивные права для размещения этого скрипта или лицензия на распространения скрипта<br />';
-		echo 'Не рекомендуется публиковать скрипт если вы не уверены, что он распространяется свободно или автор не против этого<br />';
-		echo 'Все скрипты размещенные у нас не могут быть удалены с нашего сайта, исключением является публикация скрипта без согласия автора или выложенных с нарушением текущих правил и только по требованию автора<br />';
-		echo 'Размещая скрипт у нас вы автоматически соглашаетесь со всеми правилами<br /><br />';
+        echo '<b>Авторские права</b><br />';
+        echo 'Для размещения скрипта в нашем архиве вы должны быть автором этого скрипта, у вас должны быть эсклюзивные права для размещения этого скрипта или лицензия на распространения скрипта<br />';
+        echo 'Не рекомендуется публиковать скрипт если вы не уверены, что он распространяется свободно или автор не против этого<br />';
+        echo 'Все скрипты размещенные у нас не могут быть удалены с нашего сайта, исключением является публикация скрипта без согласия автора или выложенных с нарушением текущих правил и только по требованию автора<br />';
+        echo 'Размещая скрипт у нас вы автоматически соглашаетесь со всеми правилами<br /><br />';
 
-		echo '<b>В архиве со скриптом должны быть следующие, обязательные файлы:</b><br />';
+        echo '<b>В архиве со скриптом должны быть следующие, обязательные файлы:</b><br />';
 
-		echo '<b>1.</b> Сам скрипт. Все файлы необходимые для нормальной работы<br />';
-		echo '<b>2.</b> Инструкция по установке. Как правильно установить скрипт<br />';
-		echo '<b>3.</b> Полное описание скрипта. Какие функции имеются в этом скрипте, возможности и т.д.<br />';
-		echo '<b>4.</b> Требования для работы. (К примеру PHP4, HTML, библиотека ICONV)<br />';
-		echo '<b>5.</b> Автор скрипта и(или) автор модификации<br />';
-		echo '<b>6.</b> Контакты авторов (адрес сайта)<br />';
-		echo '<b>7.</b> Красивое и уникальное название архива и скрипта<br /><br />';
+        echo '<b>1.</b> Сам скрипт. Все файлы необходимые для нормальной работы<br />';
+        echo '<b>2.</b> Инструкция по установке. Как правильно установить скрипт<br />';
+        echo '<b>3.</b> Полное описание скрипта. Какие функции имеются в этом скрипте, возможности и т.д.<br />';
+        echo '<b>4.</b> Требования для работы. (К примеру PHP4, HTML, библиотека ICONV)<br />';
+        echo '<b>5.</b> Автор скрипта и(или) автор модификации<br />';
+        echo '<b>6.</b> Контакты авторов (адрес сайта)<br />';
+        echo '<b>7.</b> Красивое и уникальное название архива и скрипта<br /><br />';
 
-		echo '<b>Примеры описания скриптов</b><br />';
-		echo 'Название: <b>cat_skor</b><br />';
-		echo 'Каталог мобильных сайтов в трех версиях: wml xhtml и html.<br />
+        echo '<b>Примеры описания скриптов</b><br />';
+        echo 'Название: <b>cat_skor</b><br />';
+        echo 'Каталог мобильных сайтов в трех версиях: wml xhtml и html.<br />
 Возможности<br />
 - Полная статистика каталога: переходы по дням, по месяцам и за все время.<br />
 - Полная статистика по каждому сайту: переходы по дням, месяцам, переходы за все время, описание.<br />
@@ -646,36 +635,34 @@ case 'rules':
 Автор cкрипта: skor<br />
 Сайт автора http://xwap.org<br /><br />';
 
-		echo '<b>Ограничения:</b><br />';
-		echo 'К загрузке допускаются архивы в формате zip, скриншоты можно загружать в форматах jpg, jpeg, gif и png<br />';
-		echo 'Максимальный вес архива: '.formatsize($config['fileupload']).'<br />';
-		echo 'Максимальный вес скриншота: '.formatsize($config['screenupload']).'<br />';
-		echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px<br /><br />';
+        echo '<b>Ограничения:</b><br />';
+        echo 'К загрузке допускаются архивы в формате zip, скриншоты можно загружать в форматах jpg, jpeg, gif и png<br />';
+        echo 'Максимальный вес архива: '.formatsize($config['fileupload']).'<br />';
+        echo 'Максимальный вес скриншота: '.formatsize($config['screenupload']).'<br />';
+        echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px<br /><br />';
 
-		echo '<b>Рекомендации:</b><br />';
-		echo 'Чем лучше вы оформите скрипт при публикации, тем быстрее он будет проверен и размещен в архиве<br />';
-		echo 'Рекомендуем самостоятельно подготовить хорошее и граммотное описание скрипта, а не просто скопировать и вставить текст<br />';
-		echo 'Важным моментом является выбор названия и имени архива со скриптом, они должны быть уникальными, нельзя добавлять к примеру gb.zip, forum.zip и т.д. так как эти названия не уникальные и подходят под большинство скриптов выбранной категории<br />';
-		echo 'Название и имя архива не должны быть слишком короткими или длинными, не должны быть чересчур информативными<br /><br />';
+        echo '<b>Рекомендации:</b><br />';
+        echo 'Чем лучше вы оформите скрипт при публикации, тем быстрее он будет проверен и размещен в архиве<br />';
+        echo 'Рекомендуем самостоятельно подготовить хорошее и граммотное описание скрипта, а не просто скопировать и вставить текст<br />';
+        echo 'Важным моментом является выбор названия и имени архива со скриптом, они должны быть уникальными, нельзя добавлять к примеру gb.zip, forum.zip и т.д. так как эти названия не уникальные и подходят под большинство скриптов выбранной категории<br />';
+        echo 'Название и имя архива не должны быть слишком короткими или длинными, не должны быть чересчур информативными<br /><br />';
 
-		echo 'После проверки ваш скрипт будет размещен в нашем архиве и станет доступным для скачивания, добавления оценок и комментариев<br /><br />';
+        echo 'После проверки ваш скрипт будет размещен в нашем архиве и станет доступным для скачивания, добавления оценок и комментариев<br /><br />';
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="add.php?cid='.$cid.'">Вернуться</a><br />';
-	}
+        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?cid='.$cid.'">Вернуться</a><br />';
+    }
 break;
-default:
-	redirect("add.php");
+
 endswitch;
 
 } else {
-	show_error('Возможность добавление файлов запрещена администрацией сайта');
+    show_error('Возможность добавление файлов запрещена администрацией сайта');
 }
 
 } else {
-	show_login('Вы не авторизованы, для добавления файла, необходимо');
+    show_login('Вы не авторизованы, для добавления файла, необходимо');
 }
 
 render('includes/back', array('link' => '/load/', 'title' => 'Категории', 'icon' => 'reload.gif'));
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');
