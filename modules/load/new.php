@@ -111,6 +111,6 @@ break;
 
 endswitch;
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
 App::view($config['themes'].'/foot');

@@ -74,7 +74,7 @@ if (is_admin(array(101))) {
 			echo 'Сканирование системы позволяет узнать какие файлы или папки менялись в течении определенного времени<br />';
 			echo 'Внимание сервис не учитывает некоторые расширения файлов: '.$config['nocheck'].'<br /><br />';
 
-			echo '<img src="/images/img/reload.gif" alt="image" /> <a href="checker.php?act=skan&amp;uid='.$_SESSION['token'].'">Сканировать</a><br />';
+			echo '<i class="fa fa-arrow-circle-up"></i> <a href="checker.php?act=skan&amp;uid='.$_SESSION['token'].'">Сканировать</a><br />';
 		break;
 
 		############################################################################################
@@ -100,14 +100,14 @@ if (is_admin(array(101))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="checker.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="checker.php">Вернуться</a><br />';
 		break;
 
 	default:
 		redirect("checker.php");
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

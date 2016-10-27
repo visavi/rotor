@@ -138,7 +138,7 @@ if (is_user()) {
                     show_error('Ошибка! Удалять голосования могут только модераторы!');
                 }
 
-                echo '<img src="/images/img/back.gif" alt="image" /> <a href="/rathist?uz='.$uz.'">Вернуться</a><br />';
+                echo '<i class="fa fa-arrow-circle-left"></i> <a href="/rathist?uz='.$uz.'">Вернуться</a><br />';
             break;
 
         endswitch;
@@ -150,6 +150,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы просматривать историю, необходимо');
 }
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/user/'.$uz.'">В анкету</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/user/'.$uz.'">В анкету</a><br />';
 
 App::view($config['themes'].'/foot');

@@ -62,7 +62,7 @@ if (is_admin(array(101))) {
             } else {
                 show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
             }
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -117,7 +117,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setzero">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setzero">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -245,7 +245,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -307,7 +307,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setone">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setone">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -364,7 +364,7 @@ if (is_admin(array(101))) {
             } else {
                 show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
             }
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -410,7 +410,7 @@ if (is_admin(array(101))) {
             } else {
                 show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
             }
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=mail">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=mail">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -454,7 +454,7 @@ if (is_admin(array(101))) {
             echo 'Время подсчета онлайн (минут):<br /><input name="timeonline" maxlength="5" value="'.round($setting['timeonline'] / 60).'" title="На сколько минут запоминать IP пользователя" /><br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -487,7 +487,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=settwo">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=settwo">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -537,7 +537,7 @@ if (is_admin(array(101))) {
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -576,7 +576,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setthree">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setthree">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -609,7 +609,7 @@ if (is_admin(array(101))) {
             echo 'Группы в галереях:<br /><input name="photogroup" maxlength="2" value="'.$setting['photogroup'].'" /><br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -648,7 +648,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setfour">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setfour">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -673,7 +673,7 @@ if (is_admin(array(101))) {
             echo 'Кол-во голосований на стр.:<br /><input name="allvotes" maxlength="2" value="'.$setting['allvotes'].'" /><br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -709,7 +709,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setfive">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setfive">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -738,7 +738,7 @@ if (is_admin(array(101))) {
             echo '<input name="downupload" type="checkbox" value="1"'.$checked.' /> Разрешать загружать файлы пользователям<br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -776,7 +776,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setload">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setload">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -800,7 +800,7 @@ if (is_admin(array(101))) {
             echo 'Актива для голосования за статьи: <br /><input name="blogvotepoint" maxlength="3" value="'.$setting['blogvotepoint'].'" /><br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -834,7 +834,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setblog">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setblog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -852,7 +852,7 @@ if (is_admin(array(101))) {
             echo 'Кол. баллов для публикации событий:<br /><input name="eventpoint" maxlength="3" value="'.$setting['eventpoint'].'" /><br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -883,7 +883,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setevent">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setevent">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -922,7 +922,7 @@ if (is_admin(array(101))) {
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -972,7 +972,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setseven">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setseven">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1006,7 +1006,7 @@ if (is_admin(array(101))) {
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1046,7 +1046,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=seteight">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=seteight">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1073,7 +1073,7 @@ if (is_admin(array(101))) {
         * echo '<br /><input value="Изменить" type="submit" /></form></div>';
         *
         * echo '<br />* Все настройки измеряются в часах<br />';
-        * echo '<br /><img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+        * echo '<br /><i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         * break;
         *
         * ############################################################################################
@@ -1104,7 +1104,7 @@ if (is_admin(array(101))) {
         * } else {show_error('Ошибка! Все поля настроек обязательны для заполнения!');}
         * } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
         *
-        * echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setnine">Вернуться</a><br />';
+        * echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setnine">Вернуться</a><br />';
         * break;
         */
 
@@ -1138,7 +1138,7 @@ if (is_admin(array(101))) {
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1189,7 +1189,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setten">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setten">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1221,7 +1221,7 @@ if (is_admin(array(101))) {
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1259,7 +1259,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=seteleven">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=seteleven">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1281,7 +1281,7 @@ if (is_admin(array(101))) {
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1313,7 +1313,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setadv">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setadv">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1343,7 +1343,7 @@ if (is_admin(array(101))) {
 
 
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1376,7 +1376,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setimage">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setimage">Вернуться</a><br />';
         break;
 
 
@@ -1396,7 +1396,7 @@ if (is_admin(array(101))) {
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1426,7 +1426,7 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setsmile">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setsmile">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1445,7 +1445,7 @@ if (is_admin(array(101))) {
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -1476,12 +1476,12 @@ if (is_admin(array(101))) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/setting?act=setoffer">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setoffer">Вернуться</a><br />';
         break;
 
     endswitch;
 
-    echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
     redirect('/');

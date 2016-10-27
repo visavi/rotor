@@ -138,7 +138,7 @@ if (!empty($queryuser)) {
                 show_login('Вы не авторизованы, чтобы написать на стене, необходимо');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/wall?uz='.$uz.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -178,7 +178,7 @@ if (!empty($queryuser)) {
                 show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -212,7 +212,7 @@ if (!empty($queryuser)) {
                 show_error('Ошибка! Нельзя удалять записи на чужой стене!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -246,7 +246,7 @@ if (!empty($queryuser)) {
                 show_error('Ошибка! Удалять записи могут только модераторы!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
     endswitch;

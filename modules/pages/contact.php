@@ -118,7 +118,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/contact?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/contact?start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -150,7 +150,7 @@ if (is_user()) {
                 show_error('Ошибка! Не выбран пользователь для добавления заметки!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/contact?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/contact?start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -183,8 +183,8 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/contact?act=note&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/contact?start='.$start.'">К спискам</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/contact?act=note&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/contact?start='.$start.'">К спискам</a><br />';
         break;
 
         ############################################################################################
@@ -214,7 +214,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/contact?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/contact?start='.$start.'">Вернуться</a><br />';
         break;
 
     endswitch;

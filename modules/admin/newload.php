@@ -178,7 +178,7 @@ if (is_admin()) {
                 show_error('Данного файла не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/newload">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -292,7 +292,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -340,7 +340,7 @@ if (is_admin()) {
                 show_error('Ошибка! Опубликовывать файлы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -373,7 +373,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данного файла не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -402,7 +402,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данного файла не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -449,12 +449,12 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/newload?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?start='.$start.'">Вернуться</a><br />';
         break;
 
     endswitch;
 
-    echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
     redirect('/');

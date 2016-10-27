@@ -97,7 +97,7 @@ if (is_user()) {
                 show_error('Вы не можете играть, т.к. на вашем счету недостаточно средств!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/games/hi?newgame">Начать заново</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/games/hi?newgame">Начать заново</a><br />';
         break;
 
         ############################################################################################
@@ -111,7 +111,7 @@ if (is_user()) {
             echo 'При выигрыше вы получаете на счет '.moneys($config['hiprize']).'<br />';
             echo 'Итак дерзайте!<br /><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/hi">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/hi">Вернуться</a><br />';
         break;
 
     endswitch;

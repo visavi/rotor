@@ -107,7 +107,7 @@ switch ($act):
 			show_error('Ошибка! Вы не ввели логин или ник пользователя');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="ratinglist.php?start='.$start.'">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="ratinglist.php?start='.$start.'">Вернуться</a><br />';
 	break;
 
 default:

@@ -118,7 +118,7 @@ case 'read':
 		show_error('Ошибка! Выбранного вами события не существует, возможно оно было удалено!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -150,7 +150,7 @@ case 'new':
 	} else {
 		show_login('Вы не авторизованы, для создания события, необходимо');
 	}
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -211,8 +211,8 @@ case 'addevent':
 		show_login('Вы не авторизованы, для создания события, необходимо');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events?act=new">Вернуться</a><br />';
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events?act=new">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -263,7 +263,7 @@ case 'editevent':
 		show_login('Вы не авторизованы, для редактирования события, необходимо');
 	}
 
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -328,8 +328,8 @@ case 'changeevent':
 	} else {
 		show_login('Вы не авторизованы, для редактирования события, необходимо');
 	}
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events?act=editevent&amp;id='.$id.'">Вернуться</a><br />';
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=editevent&amp;id='.$id.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -416,7 +416,7 @@ case 'comments':
 		show_error('Ошибка! Выбранного события не существует, возможно оно было удалено!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -464,8 +464,8 @@ case 'addcomment':
 		show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
 	}
 
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -498,8 +498,8 @@ case 'del':
 		show_error('Ошибка! Удалять комментарии могут только модераторы!');
 	}
 
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/events?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -519,7 +519,7 @@ case 'end':
 		show_error('Ошибка! Данного события не существует!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
 break;
 
 endswitch;

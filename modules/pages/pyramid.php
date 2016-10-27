@@ -81,7 +81,7 @@ if (is_user()) {
 				show_error('Ошибка! Слишком длинный или короткий адрес ссылки. Не менее 10 и не более 50 символов!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="pyramid.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="pyramid.php">Вернуться</a><br />';
 		break;
 
 	default:

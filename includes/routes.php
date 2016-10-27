@@ -129,6 +129,7 @@ $router->map('GET|POST', '/votes/history', '/modules/votes/history.php');
 
 $router->map('GET', '/admin',              '/modules/admin/index.php', 'admin');
 $router->map('GET|POST', '/admin/blog',    '/modules/admin/blog.php');
+$router->map('GET|POST', '/admin/chat',    '/modules/admin/chat.php');
 $router->map('GET', '/admin/cache',        '/modules/admin/cache.php');
 $router->map('GET', '/admin/cache/[image|clear|clearimage:action]', '/modules/admin/cache.php');
 $router->map('GET|POST', '/admin/forum',   '/modules/admin/forum.php');

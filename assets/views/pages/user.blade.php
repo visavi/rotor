@@ -138,7 +138,7 @@
         } else {
         echo '<img src="/images/img/user.gif" alt="Профиль" /> <a href="/profile">Мой профиль</a><br />';
         echo '<img src="/images/img/account.gif" alt="Данные" /> <a href="/account">Мои данные</a><br />';
-        echo '<img src="/images/img/panel.gif" alt="Настройки" /> <a href="/setting">Настройки</a><br />';
+        echo '<i class="fa fa-wrench"></i> <a href="/setting">Настройки</a><br />';
         }
 
         echo '</div>';

@@ -93,7 +93,7 @@ break;
             show_login('Вы не авторизованы, для голосования за фотографии, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?act=view&amp;gid='.$gid.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=view&amp;gid='.$gid.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -120,7 +120,7 @@ break;
             show_login('Вы не авторизованы, чтобы добавить фотографию, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?start='.$start.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -191,7 +191,7 @@ break;
             show_login('Вы не авторизованы, чтобы добавить фотографию, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?act=addphoto">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=addphoto">Вернуться</a><br />';
         break;
     ############################################################################################
     ##                                 Редактирование фото                                    ##
@@ -220,8 +220,8 @@ break;
             show_login('Вы не авторизованы, чтобы редактировать фотографию, необходимо');
         }
 
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/gallery/album?act=photo&amp;uz='.$uz.'&amp;start='.$start.'">Альбом</a><br />';
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery">Галерея</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;uz='.$uz.'&amp;start='.$start.'">Альбом</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br />';
     break;
 
     ############################################################################################
@@ -265,8 +265,8 @@ break;
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/gallery?act=edit&amp;gid='.$gid.'&amp;start='.$start.'">Вернуться</a><br />';
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery">Галерея</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery?act=edit&amp;gid='.$gid.'&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br />';
     break;
 
     ############################################################################################
@@ -353,12 +353,12 @@ break;
                 show_error('Комментирование данной фотографии закрыто!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/gallery?act=photo&amp;uz='.$photo['photo_user'].'">Альбом</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery?act=photo&amp;uz='.$photo['photo_user'].'">Альбом</a><br />';
         } else {
             show_error('Ошибка! Данного изображение не существует!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery">Галерея</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br />';
     break;
 
     ############################################################################################
@@ -414,8 +414,8 @@ break;
             show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?act=comments&amp;gid='.$gid.'">Вернуться</a><br />';
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/gallery">В галерею</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=comments&amp;gid='.$gid.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery">В галерею</a><br />';
     break;
 
     ############################################################################################
@@ -452,7 +452,7 @@ break;
             show_login('Вы не авторизованы, чтобы редактировать комментарии, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?act=comments&amp;gid='.$gid.'&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=comments&amp;gid='.$gid.'&amp;start='.$start.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -499,7 +499,7 @@ break;
             show_login('Вы не авторизованы, чтобы редактировать комментарии, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -535,7 +535,7 @@ break;
             show_error('Ошибка! Удалять комментарии могут только модераторы!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?act=comments&amp;gid='.$gid.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=comments&amp;gid='.$gid.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -575,7 +575,7 @@ break;
             show_login('Вы не авторизованы, чтобы удалять фотографии, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?act=photo&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=photo&amp;start='.$start.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -596,7 +596,7 @@ break;
             show_error('Ошибка! Комментарий к данному изображению не существует!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery">В галерею</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
     break;
 
     ############################################################################################
@@ -635,7 +635,7 @@ break;
     * } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
     * } else {show_login('Вы не авторизованы, чтобы удалять фотографии, необходимо');}
     *
-    * echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery?act=album&amp;start='.$start.'">Вернуться</a><br />';
+    * echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=album&amp;start='.$start.'">Вернуться</a><br />';
     * break;
     */
 

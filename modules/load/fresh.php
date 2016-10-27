@@ -49,6 +49,6 @@ if ($total > 0) {
     show_error('За последние 5 дней загрузок еще нет!');
 }
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
 App::view($config['themes'].'/foot');

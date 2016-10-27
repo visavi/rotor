@@ -17,8 +17,6 @@ if (count($downs) > 0) {
         $output[$fp][$id] = $row;
     }
 
-    echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> ';
-
     if (is_user()) {
         echo 'Мои: <a href="/load/active?act=files">файлы</a>, <a href="/load/active?act=comments">комментарии</a> / ';
     }

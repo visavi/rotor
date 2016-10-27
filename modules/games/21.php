@@ -75,7 +75,7 @@ if (is_user()) {
                 show_error('Вы не указали ставку, необходимо поставить от 1 до '.$config['ochkostavka'].'!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/21">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -205,7 +205,7 @@ if (is_user()) {
                         echo '<br />'.cards_points($_SESSION['bscore']).'<br /><br />';
                     }
 
-                    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/games/21?act=ini&amp;rand='.$randgame.'&amp;mn='.$_SESSION['stavka'].'">Повторить ставку</a><br />';
+                    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/games/21?act=ini&amp;rand='.$randgame.'&amp;mn='.$_SESSION['stavka'].'">Повторить ставку</a><br />';
 
                     unset($_SESSION['arrcard']);
                     unset($_SESSION['cards']);
@@ -223,7 +223,7 @@ if (is_user()) {
             }
 
             if (empty($_SESSION['stavka'])) {
-                echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/21">Новая ставка</a><br />';
+                echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">Новая ставка</a><br />';
             }
             break;
         // -------------------------- Правила игры -------------------------------------//
@@ -251,7 +251,7 @@ if (is_user()) {
 
             echo 'Взяв необходимое количество карт, Вы нажимаете кнопку <b>Открыться</b>, и Банкир открывает свои карты (если Вы набираете 20, 21 или 22 (2 туза) очка то Банкир открывается автоматически). Выигрывает тот, у кого больше очков. Победитель забирает кон размером в 2 ставки. При равном количестве очков выигрывает банкир!<br /><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/21">В игру</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">В игру</a><br />';
         break;
 
     endswitch;

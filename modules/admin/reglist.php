@@ -151,14 +151,14 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="reglist.php?start='.$start.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="reglist.php?start='.$start.'">Вернуться</a><br />';
 		break;
 
 	default:
 		redirect("reglist.php");
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

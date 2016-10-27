@@ -101,7 +101,7 @@ if (is_admin(array(101))) {
 				show_error('Нет таблиц для бэкапа!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="backup.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="backup.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -189,7 +189,7 @@ if (is_admin(array(101))) {
 				show_error('Ошибка! Директория backup недоступна для записи!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="backup.php?act=choice">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="backup.php?act=choice">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -222,14 +222,14 @@ if (is_admin(array(101))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="backup.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="backup.php">Вернуться</a><br />';
 		break;
 
 	default:
 		redirect("backup.php");
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

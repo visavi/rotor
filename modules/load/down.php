@@ -21,7 +21,7 @@ case 'index':
         if (!empty($cats)) {
             $config['newtitle'] = $cats['cats_name'];
 
-            echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="/load">Категории</a>';
+            echo '<a href="/load">Категории</a>';
 
             if (!empty($cats['cats_parent'])) {
                 $podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cats['cats_parent']));
@@ -161,7 +161,7 @@ case 'view':
 
             $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
-            echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="/load">Категории</a> / ';
+            echo '<a href="/load">Категории</a> / ';
 
             if (!empty($downs['cats_parent'])) {
                 $podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($downs['cats_parent']));
@@ -281,7 +281,7 @@ case 'view':
                 show_error('Файл еще не загружен!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?cid='.$downs['cats_id'].'">'.$downs['cats_name'].'</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['cats_id'].'">'.$downs['cats_name'].'</a><br />';
 
         } else {
             show_error('Ошибка! Данный файл еще не проверен модератором!');
@@ -333,7 +333,7 @@ case 'load':
         show_error('Ошибка! Проверочное число не совпало с данными на картинке!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -390,7 +390,7 @@ case 'vote':
         show_login('Вы не авторизованы, для голосования за файлы, необходимо');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -406,7 +406,6 @@ case 'comments':
 
             echo '<img src="/images/img/zip.gif" alt="image" /> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['downs_title'].'</a></b><br /><br />';
 
-            echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> ';
             echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `commload_down`=?;", array($id));
@@ -482,7 +481,7 @@ case 'comments':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -537,7 +536,7 @@ case 'add':
         show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=comments&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -577,7 +576,7 @@ case 'spam':
         show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -608,7 +607,7 @@ case 'reply':
         show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -635,7 +634,7 @@ case 'quote':
         show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -670,7 +669,7 @@ case 'edit':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -712,7 +711,7 @@ case 'editpost':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -747,7 +746,7 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -771,6 +770,6 @@ break;
 
 endswitch;
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
 App::view($config['themes'].'/foot');

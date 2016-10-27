@@ -48,7 +48,7 @@ if (is_admin(array(101, 102, 103))) {
 		show_error('Пользователей еще нет!');
 	}
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

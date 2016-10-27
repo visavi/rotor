@@ -69,7 +69,7 @@ if (is_user()) {
 							show_error('Ошибка! Вы не ввели мастер-код, пожалуйста повторите!');
 						}
 
-						echo '<img src="/images/img/back.gif" alt="image" /> <a href="key.php">Вернуться</a><br />';
+						echo '<i class="fa fa-arrow-circle-left"></i> <a href="key.php">Вернуться</a><br />';
 					break;
 
 				default:

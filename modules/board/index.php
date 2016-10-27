@@ -174,7 +174,7 @@ if ($act == "new"){
         } else {show_error('Ошибка! Данного раздела не существует!');}
     } else {show_login('Вы не авторизованы, чтобы добавить объявление, необходимо');}
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/board?act=board&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=board&amp;id='.$id.'">Вернуться</a><br />';
 }
 
 ############################################################################################
@@ -214,7 +214,7 @@ if ($act == "add"){
     } else {show_error('Ошибка! Данной рубрики не существует!');}
 } else {show_login('Вы не авторизованы, чтобы добавить объявление, необходимо');}
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="/board?act=new&amp;id='.$id.'">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=new&amp;id='.$id.'">Вернуться</a><br />';
 }
 
 echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/">На главную</a><br />';

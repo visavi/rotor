@@ -116,7 +116,7 @@ if (is_user()) {
                 show_error('Ошибка! Не выбрана операция!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/credit">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/credit">Вернуться</a><br />';
         break;
 
     endswitch;

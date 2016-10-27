@@ -83,7 +83,7 @@ switch ($act):
             show_error('Проверочное число не совпало с данными на картинке!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="mail">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="mail">Вернуться</a><br />';
     break;
 
 endswitch;

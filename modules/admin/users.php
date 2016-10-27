@@ -128,7 +128,7 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Не выбраны критерии поиска пользователей!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="users.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="users.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -243,7 +243,7 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Пользователя с данным логином не существует!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="users.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="users.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -349,8 +349,8 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="users.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
-			echo '<img src="/images/img/reload.gif" alt="image" /> <a href="users.php">Выбор юзера</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="users.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-up"></i> <a href="users.php">Выбор юзера</a><br />';
 		break;
 
 		############################################################################################
@@ -378,8 +378,8 @@ if (is_admin(array(101, 102))) {
 
 			echo '<input type="submit" value="Удалить профиль" /></form></div><br />';
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="users.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
-			echo '<img src="/images/img/reload.gif" alt="image" /> <a href="users.php">Выбор юзера</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="users.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-up"></i> <a href="users.php">Выбор юзера</a><br />';
 			break;
 		############################################################################################
 		##                                   Удаление профиля                                     ##
@@ -501,14 +501,14 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="users.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="users.php">Вернуться</a><br />';
 		break;
 
 	default:
 		redirect("users.php");
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

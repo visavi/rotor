@@ -140,7 +140,7 @@ case 'view':
         show_error('Ошибка! Выбранная вами новость не существует, возможно она была удалена!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/news">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -227,7 +227,7 @@ case 'comments':
         show_error('Ошибка! Выбранная новость не существует, возможно она была удалена!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/news">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -277,8 +277,8 @@ case 'create':
         show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
     }
 
-    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/news/'.$id.'/comments?start='.$start.'">Вернуться</a><br />';
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/news">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/'.$id.'/comments?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -311,8 +311,8 @@ case 'delete':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/news/'.$id.'/comments?start='.$start.'">Вернуться</a><br />';
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/news">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/'.$id.'/comments?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -332,7 +332,7 @@ case 'end':
         show_error('Ошибка! Данной новости не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/news">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
 break;
 
 endswitch;

@@ -126,7 +126,7 @@ if ($act=="board")  {
 		} else {show_error('Ошибка! Данной рубрики не существует!');}
 	} else {show_error('Ошибка! Не выбрана рубрика для просмотра!');}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="board.php">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуться</a><br />';
 }
 
 ############################################################################################
@@ -146,7 +146,7 @@ if ($act=="add") {
 
 	} else {show_error('Ошибка! Добавлять рубрики могут только администраторы!');}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="board.php">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуться</a><br />';
 }
 
 ############################################################################################
@@ -177,8 +177,8 @@ if ($act=="addrub") {
 		} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 	} else {show_error('Ошибка! Добавлять рубрики могут только администраторы!');}
 
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="board.php?act=add">Вернуться</a><br />';
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="board.php">К объявлениям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="board.php?act=add">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">К объявлениям</a><br />';
 }
 
 
@@ -207,7 +207,7 @@ if ($act=="edit") {
 		} else {show_error('Ошибка! Не выбрана рубрика для редактирования!');}
 	} else {show_error('Ошибка! Редактировать рубрики могут только администраторы!');}
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="board.php?">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php?">Вернуться</a><br />';
 }
 
 
@@ -244,8 +244,8 @@ if (is_admin(array(101,102))){
 	} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 } else {show_error('Ошибка! Редактировать рубрики могут только администраторы!');}
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="board.php?act=add">Вернуться</a><br />';
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="board.php">К объявлениям</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="board.php?act=add">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">К объявлениям</a><br />';
 }
 
 ############################################################################################
@@ -271,7 +271,7 @@ if ($act=="move"){
 		} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 	} else {show_error('Ошибка! Двигать рубрики могут только администраторы!');}
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="board.php">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуться</a><br />';
 }
 
 
@@ -305,7 +305,7 @@ if ($act=="delrub") {
 		} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 	} else {show_error('Ошибка! Удалять рубрики могут только администраторы!');}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="board.php">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуться</a><br />';
 }
 
 
@@ -330,11 +330,11 @@ if ($act=="deltop") {
 		} else {show_error('Ошибка! Не выбрана рубрика для удаления!');}
 	} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="board.php?act=board&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php?act=board&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 }
 
 //----------------------- Концовка -------------------------//
-echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/index.php">На главную</a><br />';
 
 } else {

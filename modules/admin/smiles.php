@@ -71,7 +71,7 @@ case 'add':
 	echo 'Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png, bmp<br />';
 	echo 'Весом не более '.formatsize($config['smilemaxsize']).' и размером до '.$config['smilemaxweight'].' px<br /><br />';
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="smiles.php?start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="smiles.php?start='.$start.'">Вернуться</a><br />';
 break;
 
 /**

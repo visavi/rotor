@@ -237,7 +237,7 @@ switch ($act):
             show_error('Ошибка! Данного предложения или проблемы не существует!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers?type='.$type.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?type='.$type.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -275,7 +275,7 @@ switch ($act):
             show_login('Вы не авторизованы, чтобы редактировать предложение, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -322,7 +322,7 @@ switch ($act):
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers?act=edit&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=edit&amp;id='.$id.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -403,7 +403,7 @@ switch ($act):
                 show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers?act=view&amp;id='.$queryoff['offers_id'].'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$queryoff['offers_id'].'">Вернуться</a><br />';
         } else {
             show_error('Ошибка! Данного предложения или проблемы не существует!');
         }
@@ -460,7 +460,7 @@ switch ($act):
             show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -505,7 +505,7 @@ switch ($act):
             show_login('Вы не авторизованы, для голосования за предложения и проблемы, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -532,7 +532,7 @@ switch ($act):
             show_error('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.points($config['addofferspoint']).'!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -577,7 +577,7 @@ switch ($act):
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers?act=new">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=new">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -612,7 +612,7 @@ switch ($act):
             show_error('Ошибка! Удалять комментарии могут только модераторы!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -631,7 +631,7 @@ switch ($act):
             show_error('Ошибка! Данного предложения или проблемы не существует!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/offers">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br />';
     break;
 
 endswitch;

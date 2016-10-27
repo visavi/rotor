@@ -71,7 +71,7 @@ case 'index':
         echo '<input type="submit" value="Создать раздел" /></form></div><br />';
 
         echo '<img src="/images/img/circle.gif" alt="image" /> <a href="/admin/load?act=newimport">FTP-импорт</a><br />';
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
     }
 
     echo '<img src="/images/img/open.gif" alt="image" /> <a href="/admin/load?act=newfile">Добавить</a><br />';
@@ -147,7 +147,7 @@ case 'newimport':
         show_error('Импортировать файлы могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -236,7 +236,7 @@ case 'addimport':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=newimport">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=newimport">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -298,7 +298,7 @@ case 'newfile':
         show_error('Категории файлов еще не созданы!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -366,7 +366,7 @@ case 'addfile':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -389,7 +389,7 @@ case 'restatement':
         show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -418,7 +418,7 @@ case 'addcats':
         show_error('Ошибка! Добавлять разделы могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -472,7 +472,7 @@ case 'editcats':
         show_error('Ошибка! Изменять разделы могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -579,8 +579,8 @@ case 'addeditcats':
         show_error('Ошибка! Изменять разделы могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/load?act=editcats&amp;cid='.$cid.'">Вернуться</a><br />';
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load">Категории</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=editcats&amp;cid='.$cid.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Категории</a><br />';
 break;
 
 ############################################################################################
@@ -605,7 +605,7 @@ case 'prodelcats':
         show_error('Ошибка! Удалять разделы могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -662,7 +662,7 @@ case 'delcats':
         show_error('Ошибка! Удалять разделы могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -672,7 +672,7 @@ case 'down':
 
     $cats = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
 
-    echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="/admin/load">Категории</a>';
+    echo '<a href="/admin/load">Категории</a>';
 
     if (!empty($cats['cats_parent'])) {
         $podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cats['cats_parent']));
@@ -763,7 +763,7 @@ case 'down':
     if (empty($cats['closed'])) {
         echo '<img src="/images/img/open.gif" alt="image" /> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Добавить</a><br />';
     }
-    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/load">Категории</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load">Категории</a><br />';
 break;
 
 ############################################################################################
@@ -776,7 +776,7 @@ case 'editdown':
     $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
 
     if (! empty($new)) {
-        echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="/admin/load">Категории</a> / ';
+        echo '<a href="/admin/load">Категории</a> / ';
 
         if (! empty($new['cats_parent'])) {
             $podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($new['cats_parent']));
@@ -841,7 +841,7 @@ case 'editdown':
         show_error('Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/load">Категории</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load">Категории</a><br />';
 break;
 
 ############################################################################################
@@ -936,7 +936,7 @@ case 'changedown':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -998,7 +998,7 @@ case 'copyfile':
         show_error('Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -1060,7 +1060,7 @@ case 'loadfile':
         show_error('Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -1105,7 +1105,7 @@ case 'loadscreen':
         show_error('Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -1132,7 +1132,7 @@ case 'delfile':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -1155,7 +1155,7 @@ case 'delscreen':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -1213,7 +1213,7 @@ case 'movedown':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -1256,8 +1256,8 @@ case 'addmovedown':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=movedown&amp;id='.$id.'">Вернуться</a><br />';
-    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/load?act=down&amp;cid='.$cid.'">К разделам</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=movedown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'">К разделам</a><br />';
 break;
 
 ############################################################################################
@@ -1307,12 +1307,12 @@ case 'deldown':
         show_error('Ошибка! Удалять файлы могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 endswitch;
 
-echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
     redirect('/');

@@ -96,7 +96,7 @@ switch ($act):
             show_error('Ошибка! Данного голосования не существует!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/votes/history?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes/history?start='.$start.'">Вернуться</a><br />';
     break;
 
 endswitch;

@@ -122,7 +122,7 @@ case 'waiting':
         show_error('Ожидающих модерации файлов еще нет!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add">Вернуться</a><br />';
 break;
 
 /**
@@ -191,7 +191,7 @@ case 'add':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=newfile&amp;cid='.$cid.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=newfile&amp;cid='.$cid.'">Вернуться</a><br />';
 break;
 
 /**
@@ -215,7 +215,7 @@ case 'view':
 
                     $folder = $new['folder'] ? $new['folder'].'/' : '';
 
-                    echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> <a href="/load">Категории</a> / ';
+                    echo '<a href="/load">Категории</a> / ';
 
                     if (!empty($new['cats_parent'])) {
                         $podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($new['cats_parent']));
@@ -391,7 +391,7 @@ case 'edit':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
@@ -466,7 +466,7 @@ case 'loadfile':
         show_error('Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
@@ -519,7 +519,7 @@ case 'loadscreen':
         show_error('Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
@@ -556,7 +556,7 @@ case 'delfile':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
@@ -588,7 +588,7 @@ case 'delscreen':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
 break;
 
 /**
@@ -649,7 +649,7 @@ case 'rules':
 
         echo 'После проверки ваш скрипт будет размещен в нашем архиве и станет доступным для скачивания, добавления оценок и комментариев<br /><br />';
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/add?cid='.$cid.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?cid='.$cid.'">Вернуться</a><br />';
     }
 break;
 

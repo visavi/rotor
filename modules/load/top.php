@@ -16,7 +16,6 @@ switch ($sort) {
 ############################################################################################
 show_title('Топ популярных файлов');
 
-echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> ';
 echo 'Сортировать: ';
 
 if ($order == 'downs_load') {
@@ -70,6 +69,6 @@ if ($total > 0) {
     show_error('Опубликованных файлов еще нет!');
 }
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
 App::view($config['themes'].'/foot');

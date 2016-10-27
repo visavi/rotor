@@ -65,7 +65,7 @@ if (is_admin(array(101, 102, 103))) {
 			echo '<img src="/images/img/luggage.gif" alt="image" /> <a href="votes.php?act=history">История голосований</a><br />';
 
 			if (is_admin(array(101))) {
-				echo '<img src="/images/img/reload.gif" alt="image" /> <a href="votes.php?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+				echo '<i class="fa fa-arrow-circle-up"></i> <a href="votes.php?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
 			}
 
 		break;
@@ -92,7 +92,7 @@ if (is_admin(array(101, 102, 103))) {
 			echo 'Ответ 10:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
 			echo '<input type="submit" value="Создать" /></form></div><br />';
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="votes.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="votes.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -130,7 +130,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="votes.php?act=new">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="votes.php?act=new">Вернуться</a><br />';
 			echo '<img src="/images/img/stat.gif" alt="image" /> <a href="votes.php">К голосованиям</a><br />';
 		break;
 
@@ -166,7 +166,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Данного голосования не существует!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="votes.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="votes.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -216,7 +216,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="votes.php?act=edit&amp;id='.$id.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="votes.php?act=edit&amp;id='.$id.'">Вернуться</a><br />';
 			echo '<img src="/images/img/stat.gif" alt="image" /> <a href="votes.php">К голосованиям</a><br />';
 		break;
 
@@ -254,7 +254,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="votes.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="votes.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -284,7 +284,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="votes.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="votes.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -305,7 +305,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="votes.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="votes.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -349,7 +349,7 @@ if (is_admin(array(101, 102, 103))) {
 		redirect("votes.php");
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

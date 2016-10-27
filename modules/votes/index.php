@@ -113,7 +113,7 @@ switch ($act):
             show_error('Ошибка! Данного голосования не существует!');
         }
 
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/votes">К голосованиям</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br />';
     break;
 
     ############################################################################################
@@ -171,8 +171,8 @@ switch ($act):
             show_login('Вы не авторизованы, чтобы участвовать в голосованиях, необходимо');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/votes?act=poll&amp;id='.$id.'">Вернуться</a><br />';
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/votes">К голосованиям</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes?act=poll&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br />';
     break;
 
     ############################################################################################
@@ -201,8 +201,8 @@ switch ($act):
             show_error('Ошибка! Данного голосования не существует!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/votes?act=poll&amp;id='.$id.'">Вернуться</a><br />';
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/votes">К голосованиям</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes?act=poll&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br />';
     break;
 
 endswitch;

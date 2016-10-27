@@ -113,7 +113,7 @@ case 'new':
 		echo '<input type="submit" value="Разослать" /></form></div><br />';
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="invitations.php">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="invitations.php">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -130,7 +130,7 @@ case 'list':
 	} else {
 		show_error('Ошибка! Нет ваших пригласительных ключей!');
 	}
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="invitations.php">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="invitations.php">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -169,7 +169,7 @@ case 'send':
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="invitations.php?act=new">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="invitations.php?act=new">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -217,7 +217,7 @@ case 'mailing':
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="invitations.php?act=new">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="invitations.php?act=new">Вернуться</a><br />';
 break;
 ############################################################################################
 ##                                    Генерация ключей                                    ##
@@ -247,7 +247,7 @@ case 'generate':
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="invitations.php?act=new">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="invitations.php?act=new">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -275,14 +275,14 @@ case 'del':
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="invitations.php">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="invitations.php">Вернуться</a><br />';
 break;
 
 default:
 	redirect("invitations.php");
 endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

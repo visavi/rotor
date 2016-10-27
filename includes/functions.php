@@ -1280,7 +1280,7 @@ function stats_chat() {
 
 // ------------------ Функция вывода времени последнего сообщения --------------------//
 function stats_newchat() {
-    return DB::run() -> querySingle("SELECT MAX(`chat_time`) FROM `chat`;");
+    return intval(DB::run() -> querySingle("SELECT MAX(`chat_time`) FROM `chat`;"));
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//

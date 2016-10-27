@@ -69,7 +69,7 @@ case 'index':
     echo '<img src="/images/img/open.gif" alt="image" /> <a href="/admin/news?act=add">Добавить</a><br />';
 
     if (is_admin(array(101))) {
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/news?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
     }
 break;
 
@@ -110,7 +110,7 @@ case 'edit':
         show_error('Ошибка! Выбранная новость не существует, возможно она была удалена!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -168,8 +168,8 @@ case 'change':
         show_error($validation->getErrors());
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/news?start='.$start.'">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?start='.$start.'">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -191,7 +191,7 @@ case 'add':
 
     echo '<br /><input type="submit" value="Добавить" /></form></div><br />';
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -250,8 +250,8 @@ case 'addnews':
         show_error($validation->getErrors());
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news?act=add">Вернуться</a><br />';
-    echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/news">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=add">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -275,7 +275,7 @@ case 'restatement':
         show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -317,12 +317,12 @@ case 'del':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/news?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?start='.$start.'">Вернуться</a><br />';
 break;
 
 endswitch;
 
-echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
     redirect('/');

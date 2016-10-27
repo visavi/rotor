@@ -149,7 +149,7 @@ case 'changemail':
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -187,7 +187,7 @@ case 'editmail':
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -225,7 +225,7 @@ case 'editstatus':
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -267,7 +267,7 @@ case 'editnick':
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -305,7 +305,7 @@ case 'editsec':
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -351,7 +351,7 @@ case 'editpass':
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -372,7 +372,7 @@ case 'apikey':
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="/account">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
 endswitch;

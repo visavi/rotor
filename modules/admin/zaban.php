@@ -102,7 +102,7 @@ if (is_admin(array(101, 102, 103))) {
 						echo 'До окончания бана: '.formattime($user['users_timeban'] - SITETIME).'<br /><br />';
 
 						echo '<img src="/images/img/edit.gif" alt="image" /> <a href="zaban.php?act=editban&amp;uz='.$uz.'">Изменить</a><br />';
-						echo '<img src="/images/img/reload.gif" alt="image" /> <a href="zaban.php?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr />';
+						echo '<i class="fa fa-arrow-circle-up"></i> <a href="zaban.php?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr />';
 					}
 				} else {
 					show_error('Ошибка! Запрещено банить админов и модеров сайта!');
@@ -111,7 +111,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Пользователя с данным логином не существует!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="zaban.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="zaban.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -169,7 +169,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Пользователя с данным логином не существует!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="zaban.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="zaban.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -235,7 +235,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="zaban.php?act=editban&amp;uz='.$uz.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="zaban.php?act=editban&amp;uz='.$uz.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -309,7 +309,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="zaban.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="zaban.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -346,7 +346,7 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="zaban.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="zaban.php?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -391,14 +391,14 @@ if (is_admin(array(101, 102, 103))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo'<img src="/images/img/back.gif" alt="image" /> <a href="zaban.php">Вернуться</a><br />';
+			echo'<i class="fa fa-arrow-circle-left"></i> <a href="zaban.php">Вернуться</a><br />';
 		break;
 
 	default:
 		redirect("zaban.php");
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

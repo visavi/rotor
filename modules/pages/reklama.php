@@ -160,7 +160,7 @@ case 'add':
         show_login('Вы не авторизованы, для покупки рекламы, необходимо');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/reklama">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/reklama">Вернуться</a><br />';
 break;
 
 ############################################################################################

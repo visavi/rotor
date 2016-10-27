@@ -67,6 +67,6 @@ switch ($act):
 
 endswitch;
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/news">К новостям</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br />';
 
 App::view($config['themes'].'/foot');

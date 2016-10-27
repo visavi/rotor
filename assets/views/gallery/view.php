@@ -42,10 +42,10 @@
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <img src="/images/img/reload.gif" alt="image" /> <a href="/gallery/album?act=photo&amp;uz=<?= $photo['photo_user'] ?>">В альбом</a><br />
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;uz=<?= $photo['photo_user'] ?>">В альбом</a><br />
 
 <?php else: ?>
     <?= show_error('Ошибка! Данного изображения нет в базе'); ?>
 <?php endif; ?>
 
-<img src="/images/img/back.gif" alt="image" /> <a href="/gallery">В галерею</a><br />
+<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />

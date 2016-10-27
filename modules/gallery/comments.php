@@ -164,11 +164,11 @@ switch ($act):
             show_error('Ошибка! Удалять комментарии могут только модераторы!');
         }
 
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/gallery/comments?act=comments&amp;uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/comments?act=comments&amp;uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
     break;
 
 endswitch;
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery">В галерею</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
 
 App::view($config['themes'].'/foot');

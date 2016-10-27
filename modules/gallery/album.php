@@ -100,11 +100,11 @@ switch ($act):
             show_error('Фотографий в альбоме еще нет!');
         }
 
-        echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/gallery/album">Альбомы</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album">Альбомы</a><br />';
     break;
 
 endswitch;
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="/gallery">В галерею</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
 
 App::view($config['themes'].'/foot');

@@ -116,7 +116,7 @@ if (is_admin()) {
 				show_error('Ошибка! Данной ссылки не существует!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="rekuser.php?start='.$start.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="rekuser.php?start='.$start.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -163,7 +163,7 @@ if (is_admin()) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="rekuser.php?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="rekuser.php?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -194,14 +194,14 @@ if (is_admin()) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="rekuser.php?start='.$start.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="rekuser.php?start='.$start.'">Вернуться</a><br />';
 		break;
 
 	default:
 		redirect("rekuser.php");
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

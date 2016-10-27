@@ -69,7 +69,7 @@ if (is_user()) {
 	show_login('Вы не авторизованы, чтобы просматривать историю, необходимо');
 }
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="user.php?uz='.$uz.'">В анкету</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="user.php?uz='.$uz.'">В анкету</a><br />';
 
 include_once ('../themes/footer.php');
 ?>

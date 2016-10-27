@@ -60,7 +60,7 @@ case 'index':
 
                         page_strnavigation('/load/zip?id='.$id.'&amp;', $config['ziplist'], $start, $total);
 
-                        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/down?cid='.$downs['cats_id'].'">'.$downs['cats_name'].'</a><br />';
+                        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['cats_id'].'">'.$downs['cats_name'].'</a><br />';
                     } else {
                         show_error('Ошибка! В данном архиве нет файлов!');
                     }
@@ -138,11 +138,11 @@ case 'preview':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/zip?id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/zip?id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 break;
 
 endswitch;
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
 App::view($config['themes'].'/foot');

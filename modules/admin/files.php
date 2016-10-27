@@ -112,7 +112,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 				show_error('Ошибка! Недопустимое название страницы!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="files.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="files.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -146,7 +146,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 				show_error('Ошибка! Недопустимое название страницы!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="files.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="files.php">Вернуться</a><br />';
 			echo '<img src="/images/img/online.gif" alt="image" /> <a href="/pages/index.php?act='.$filename.'">Просмотр</a><br />';
 		break;
 
@@ -185,7 +185,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="files.php?act=edit&amp;file='.$file.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="files.php?act=edit&amp;file='.$file.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -205,7 +205,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 				show_error('Директория недоступна для создания файлов!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="files.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="files.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -240,7 +240,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="files.php?act=new">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="files.php?act=new">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -259,7 +259,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 				show_error('Ошибка! Недопустимое название страницы!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="files.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="files.php">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -293,14 +293,14 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="files.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="files.php">Вернуться</a><br />';
 		break;
 
 	default:
 		redirect ('files.php');
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect ('/index.php');

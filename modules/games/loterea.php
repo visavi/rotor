@@ -115,7 +115,7 @@ if (is_user()) {
                 show_error('Неверный ввод данных! Введите число от 1 до 100 включительно!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/loterea">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/loterea">Вернуться</a><br />';
             echo '<img src="/images/img/users.gif" alt="image" /> <a href="/games/loterea?act=show">Участники</a><br />';
         break;
 
@@ -142,7 +142,7 @@ if (is_user()) {
                 show_error('Еще нет ни одного участника!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/loterea">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/loterea">Вернуться</a><br />';
         break;
 
     endswitch;

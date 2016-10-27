@@ -86,7 +86,7 @@ switch ($act):
 
 		echo '<input name="agree" type="checkbox" value="1" /> <b>Я ПРИНИМАЮ УСЛОВИЯ СОГЛАШЕНИЯ</b><br /><br />';
 		echo '<input type="submit" value="Продолжить" /></form><hr />';
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="index.php">Вернуться</a><br />';
 	break;
 
 	############################################################################################
@@ -116,7 +116,7 @@ switch ($act):
 			echo 'Любое использование нашего движка означает ваше согласие с нашим соглашением<br /><br />';
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="index.php?act=0">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="index.php?act=0">Вернуться</a><br />';
 	break;
 
 	############################################################################################

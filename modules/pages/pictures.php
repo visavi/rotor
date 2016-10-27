@@ -25,7 +25,7 @@ if (is_user()) {
             echo 'Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br />';
             echo 'Весом не более '.formatsize($config['filesize']).' и размером от 100 до '.(int)$config['fileupfoto'].' px<br /><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/profile">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -82,7 +82,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/pictures">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/pictures">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -110,7 +110,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/profile">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br />';
         break;
 
     endswitch;

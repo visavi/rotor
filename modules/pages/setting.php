@@ -135,7 +135,7 @@ case 'edit':
         show_error($validation->getErrors());
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/setting">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/setting">Вернуться</a><br />';
 break;
 
 endswitch;

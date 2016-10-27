@@ -56,7 +56,7 @@ if (is_admin()) {
                 echo '<input type="text" name="name" maxlength="50" />';
                 echo '<input type="submit" value="Создать раздел" /></form></div><br />';
 
-                echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
             }
         break;
 
@@ -81,7 +81,7 @@ if (is_admin()) {
                 show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -111,7 +111,7 @@ if (is_admin()) {
                 show_error('Ошибка! Добавлять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -140,7 +140,7 @@ if (is_admin()) {
                 show_error('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -176,8 +176,8 @@ if (is_admin()) {
                 show_error('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog?act=editcats&amp;cid='.$cid.'">Вернуться</a><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Категории</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog?act=editcats&amp;cid='.$cid.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Категории</a><br />';
         break;
 
         ############################################################################################
@@ -198,7 +198,7 @@ if (is_admin()) {
                 show_error('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -230,7 +230,7 @@ if (is_admin()) {
                 show_error('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -284,7 +284,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данного раздела не существует!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog">Категории</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog">Категории</a><br />';
         break;
 
         ############################################################################################
@@ -314,8 +314,8 @@ if (is_admin()) {
                 show_error('Ошибка! Данной статьи не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog">Категории</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog">Категории</a><br />';
         break;
 
         ############################################################################################
@@ -361,8 +361,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=editblog&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">В раздел</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=editblog&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">В раздел</a><br />';
         break;
 
         ############################################################################################
@@ -401,7 +401,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной статьи не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -436,8 +436,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$id.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'">К блогам</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'">К блогам</a><br />';
         break;
 
         ############################################################################################
@@ -473,12 +473,12 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
     endswitch;
 
-    echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
     redirect('/');

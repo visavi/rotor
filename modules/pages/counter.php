@@ -10,7 +10,7 @@ switch ($act):
 ############################################################################################
 	case 'index':
 
-		echo '<img src="/images/img/site.png" alt="image" /> <b>Количество посещений</b><br /><br />';
+		echo '<h1>Количество посещений</h1>';
 
 		$online = stats_online();
 		$count = stats_counter();
@@ -55,7 +55,7 @@ switch ($act):
 	############################################################################################
 	case '24':
 
-		echo '<img src="/images/img/site.png" alt="image" /> <b>Статистика по часам</b><br /><br />';
+		echo '<h1>Статистика по часам</h1>';
 
 		echo 'Динамика за сутки<br />';
 		include_once(BASEDIR.'/includes/counter24.php');
@@ -103,7 +103,7 @@ switch ($act):
 			show_error('Статистика за текущие сутки еще не обновилась!');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="/counter">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="/counter">Вернуться</a><br />';
 	break;
 
 	############################################################################################
@@ -111,7 +111,7 @@ switch ($act):
 	############################################################################################
 	case '31':
 
-		echo '<img src="/images/img/site.png" alt="image" /> <b>Статистика по дням</b><br /><br />';
+		echo '<h1>Статистика по дням</h1>';
 
 		echo 'Динамика за месяц<br />';
 		include_once(BASEDIR.'/includes/counter31.php');
@@ -159,7 +159,7 @@ switch ($act):
 			show_error('Статистика за текущий месяц еще не обновилась!');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="/counter">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="/counter">Вернуться</a><br />';
 	break;
 
 endswitch;

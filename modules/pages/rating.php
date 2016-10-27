@@ -146,7 +146,7 @@ if (is_user()) {
 								}
 
 								if (!empty($error)) {
-									echo '<img src="/images/img/back.gif" alt="image" /> <a href="rating.php?uz='.$uz.'&amp;vote='.$vote.'">Вернуться</a><br />';
+									echo '<i class="fa fa-arrow-circle-left"></i> <a href="rating.php?uz='.$uz.'&amp;vote='.$vote.'">Вернуться</a><br />';
 								}
 							break;
 
@@ -173,7 +173,7 @@ if (is_user()) {
 }
 
 echo '<img src="/images/img/luggage.gif" alt="image" /> <a href="rathist.php?uz='.$uz.'">История</a><br />';
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="user.php?uz='.$uz.'">В анкету</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="user.php?uz='.$uz.'">В анкету</a><br />';
 
 include_once ('../themes/footer.php');
 ?>

@@ -66,7 +66,7 @@ if (is_admin()) {
             }
 
             if (is_admin(array(101))) {
-                echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/gallery?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
             }
         break;
 
@@ -95,7 +95,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной фотографии не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/gallery?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -136,8 +136,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/gallery?act=edit&amp;gid='.$gid.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/gallery">Галерея</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=edit&amp;gid='.$gid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery">Галерея</a><br />';
         break;
 
         ############################################################################################
@@ -187,7 +187,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/gallery?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -211,14 +211,14 @@ if (is_admin()) {
                 show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/gallery">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery">Вернуться</a><br />';
         break;
 
     default:
         redirect("/admin/gallery");
     endswitch;
 
-    echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
     redirect('/');

@@ -36,7 +36,7 @@ if (is_user()) {
 
         echo 'В наличии: ' . moneys($udata['users_money']) . '<br /><br />';
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/naperstki">Вернуться</a><br />';
         break;
     # ###########################################################################################
     # #                                        Результат                                       ##
@@ -90,7 +90,7 @@ if (is_user()) {
             $allmoney = DB::run()->querySingle("SELECT users_money FROM users WHERE users_login=?;", array($log));
             echo 'У вас в наличии: ' . moneys($allmoney) . '<br /><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/naperstki">Вернуться</a><br />';
         } else {
             show_error('Вы не можете играть, т.к. на вашем счету недостаточно средств');
         }
@@ -106,7 +106,7 @@ if (is_user()) {
         echo 'Шанс банкира на выигрыш немного больше, чем у вас<br />';
         echo 'Итак дерзайте!<br /><br />';
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/naperstki">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/naperstki">Вернуться</a><br />';
         break;
 
         endswitch;

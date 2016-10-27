@@ -169,7 +169,7 @@ case "search":
         show_error('Ошибка! Запрос должен содержать от 3 до 50 символов!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/load/search">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/search">Вернуться</a><br />';
 break;
 
 endswitch;
@@ -178,6 +178,6 @@ endswitch;
     show_login('Вы не авторизованы, чтобы использовать поиск, необходимо');
 }
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
 App::view($config['themes'].'/foot');

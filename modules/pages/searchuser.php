@@ -76,7 +76,7 @@ switch ($act):
             show_error('Ошибка! Не выбраны критерии поиска пользователей!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/searchuser">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -111,7 +111,7 @@ switch ($act):
             show_error('Ошибка! Слишком короткий или длинный запрос, от 3 до 20 символов!');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/searchuser">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br />';
     break;
 
 endswitch;

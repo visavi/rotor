@@ -371,7 +371,7 @@ if (is_user()) {
             echo '<img src="/images/bandit/7.gif" alt="image" /> * 3 777 = ' . moneys(250) . ' по диагонали<br />';
             echo '<img src="/images/bandit/7.gif" alt="image" /> * 3 777 = ' . moneys(777) . ' средний ряд  (177 - нижний или верхний ряд)<br /><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="bandit">В игру</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="bandit">В игру</a><br />';
             break;
 
     endswitch;

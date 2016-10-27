@@ -40,7 +40,7 @@ case 'index':
 	echo 'Skype:<br /><input name="skype" maxlength="32" value="'.$udata['users_skype'].'" /><br />';
 	echo 'Сайт:<br /><input name="site" maxlength="50" value="'.$udata['users_site'].'" /><br />';
 	echo 'Дата рождения (дд.мм.гггг):<br /><input name="birthday" maxlength="10" value="'.$udata['users_birthday'].'" /><br />';
-	
+
 	echo 'Пол:<br />';
 	echo '<select name="gender">';
 	$selected = ($udata['users_gender'] == 1) ? ' selected="selected"' : '';
@@ -96,7 +96,7 @@ case 'edit':
 		show_error($validation->getErrors());
 	}
 
-	echo'<img src="/images/img/back.gif" alt="image" /> <a href="/profile">Вернуться</a><br />';
+	echo'<i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br />';
 break;
 
 endswitch;

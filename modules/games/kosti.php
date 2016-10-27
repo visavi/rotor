@@ -81,7 +81,7 @@ if (is_user()) {
             echo 'Шанс банкира на выигрыш немного больше, чем у вас<br />';
             echo 'Итак дерзайте!<br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/kosti">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/kosti">Вернуться</a><br />';
             break;
 
     endswitch;

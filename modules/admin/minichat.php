@@ -107,7 +107,7 @@ if (is_admin()) {
 
 		echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="minichat.php?act=alldel&amp;uid=' . $_SESSION['token'] . '">Да уверен!</a></b><br /><br />';
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="minichat.php">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="minichat.php">Вернуться</a><br />';
 	}
 	# ###########################################################################################
 	# #                                   Очистка мини-чата                                    ##
@@ -129,7 +129,7 @@ if (is_admin()) {
 			show_error('Ошибка! Очищать мини-чат могут только суперадмины!');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="minichat.php">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="minichat.php">Вернуться</a><br />';
 	}
 
 	############################################################################################
@@ -153,7 +153,7 @@ if (is_admin()) {
 			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="minichat.php?start=' . $start . '">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="minichat.php?start=' . $start . '">Вернуться</a><br />';
 	}
 
 	############################################################################################
@@ -182,7 +182,7 @@ if (is_admin()) {
 			show_error('Ошибка! Не выбрано сообщение для редактирования!');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="minichat.php?start=' . $start . '">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="minichat.php?start=' . $start . '">Вернуться</a><br />';
 	}
 	# ###########################################################################################
 	# #                                 Изменение сообщения                                    ##
@@ -220,10 +220,10 @@ if (is_admin()) {
 			show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="minichat.php?act=edit&amp;id=' . $id . '&amp;start=' . $start . '">Вернуться</a><br />';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="minichat.php?act=edit&amp;id=' . $id . '&amp;start=' . $start . '">Вернуться</a><br />';
 	}
 	// -------------------------------- КОНЦОВКА ----------------------------------//
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 	echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/index.php">На главную</a><br />';
 
 } else {

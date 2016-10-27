@@ -85,7 +85,7 @@ switch ($act):
             show_error('Ошибка! Вы не ввели логин или ник пользователя');
         }
 
-        echo '<img src="/images/img/back.gif" alt="image" /> <a href="/games/livebank?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/livebank?start='.$start.'">Вернуться</a><br />';
     break;
 
 endswitch;

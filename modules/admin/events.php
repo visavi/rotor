@@ -78,7 +78,7 @@ case 'index':
 	echo '<img src="/images/img/open.gif" alt="image" /> <a href="/events/index.php?act=new">Добавить событие</a><br />';
 
 	if (is_admin(array(101))) {
-		echo '<img src="/images/img/reload.gif" alt="image" /> <a href="events.php?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+		echo '<i class="fa fa-arrow-circle-up"></i> <a href="events.php?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
 	}
 break;
 
@@ -118,7 +118,7 @@ case 'edit':
 		show_error('Ошибка! Выбранного события не существует, возможно оно было удалено!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="events.php?start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="events.php?start='.$start.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -176,8 +176,8 @@ case 'change':
 		show_error($validation->getErrors());
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="events.php?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-	echo '<img src="/images/img/reload.gif" alt="image" /> <a href="events.php?start='.$start.'">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="events.php?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="events.php?start='.$start.'">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -201,7 +201,7 @@ case 'restatement':
 		show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="events.php">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="events.php">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -243,14 +243,14 @@ case 'del':
 		show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 	}
 
-	echo '<img src="/images/img/back.gif" alt="image" /> <a href="events.php?start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="events.php?start='.$start.'">Вернуться</a><br />';
 break;
 
 default:
 	redirect("events.php");
 endswitch;
 
-echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect(BASEDIR.'/index.php');

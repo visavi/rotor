@@ -43,7 +43,6 @@ if (is_admin()) {
                     $output[$fp][$id] = $row;
                 }
 
-                echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> ';
                 echo '<a href="/forum">Обзор форума</a><hr />';
 
                 foreach($output[0] as $key => $data) {
@@ -91,7 +90,7 @@ if (is_admin()) {
                 echo '<input type="text" name="title" maxlength="50" />';
                 echo '<input type="submit" value="Создать раздел" /></form><hr />';
 
-                echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/forum?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
             }
 
         break;
@@ -117,7 +116,7 @@ if (is_admin()) {
                 show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -147,7 +146,7 @@ if (is_admin()) {
                 show_error('Ошибка! Добавлять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -198,7 +197,7 @@ if (is_admin()) {
                 show_error('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -245,8 +244,8 @@ if (is_admin()) {
                 show_error('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/forum?act=editforum&amp;fid='.$fid.'">Вернуться</a><br />';
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum">В Форум</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=editforum&amp;fid='.$fid.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">В Форум</a><br />';
         break;
 
         ############################################################################################
@@ -271,7 +270,7 @@ if (is_admin()) {
                 show_error('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -324,7 +323,7 @@ if (is_admin()) {
                 show_error('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -335,7 +334,6 @@ if (is_admin()) {
             $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($fid));
 
             if (!empty($forums)) {
-                echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> ';
                 echo '<a href="/admin/forum">Форум</a> / ';
                 echo '<a href="/forum/'.$fid.'?start='.$start.'">Обзор раздела</a><br /><br />';
 
@@ -395,7 +393,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данного раздела не существует!');
             }
 
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/forum">К форумам</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br />';
         break;
 
         ############################################################################################
@@ -432,7 +430,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной темы не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum?act=forum&amp;fid='.$topics['forums_id'].'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topics['forums_id'].'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -471,8 +469,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum?act=edittopic&amp;tid='.$tid.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;start='.$start.'">К темам</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=edittopic&amp;tid='.$tid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;start='.$start.'">К темам</a><br />';
         break;
 
         ############################################################################################
@@ -526,7 +524,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной темы не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum?act=forum&amp;fid='.$topics['topics_forums_id'].'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topics['topics_forums_id'].'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -570,8 +568,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum?act=movetopic&amp;tid='.$tid.'">Вернуться</a><br />';
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/forum?act=forum&amp;fid='.$fid.'">К темам</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=movetopic&amp;tid='.$tid.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'">К темам</a><br />';
         break;
 
         ############################################################################################
@@ -636,7 +634,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -686,7 +684,7 @@ if (is_admin()) {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
 
-                echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/forum">К форумам</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br />';
             break;
 
         ############################################################################################
@@ -697,7 +695,6 @@ if (is_admin()) {
                 $topic = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_id`, `forums`.`forums_title`, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics_id`=? LIMIT 1;", array($tid));
 
                 if (!empty($topic)) {
-                    echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> ';
                     echo '<a href="/admin/forum">Форум</a> / ';
 
                     if (!empty($topic['forums_parent'])) {
@@ -850,7 +847,7 @@ if (is_admin()) {
             } else {
                 show_error('Ошибка! Не выбрана тема!');
             }
-            echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/admin/forum">К форумам</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br />';
         break;
 
         ############################################################################################
@@ -898,7 +895,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -935,7 +932,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данного сообщения не существует!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -992,12 +989,12 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$pid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$pid.'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
     endswitch;
 
-    echo '<img src="/images/img/panel.gif" alt="image" /> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
     redirect('/');

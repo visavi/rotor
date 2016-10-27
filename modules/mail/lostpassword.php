@@ -84,7 +84,7 @@ case 'remind':
         show_error('Ошибка! Вы не ввели логин или email пользователя для восстановления!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/lostpassword">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/lostpassword">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -130,7 +130,7 @@ case 'send':
         show_error('Ошибка! Пользователь с данным логином не найден!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/lostpassword?act=remind&amp;uz='.$uz.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/lostpassword?act=remind&amp;uz='.$uz.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -180,7 +180,7 @@ case 'restore':
     } else {
         show_error('Ошибка! Пользователь с данным логином не найден!');
     }
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/lostpassword">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/lostpassword">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -226,7 +226,7 @@ case 'answer':
         show_error('Ошибка! Пользователь с данным логином не найден!');
     }
 
-    echo '<img src="/images/img/back.gif" alt="image" /> <a href="/lostpassword?act=remind&amp;uz='.$uz.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/lostpassword?act=remind&amp;uz='.$uz.'">Вернуться</a><br />';
 break;
 
 endswitch;

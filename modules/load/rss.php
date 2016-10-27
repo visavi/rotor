@@ -49,6 +49,6 @@ if (!empty($down)) {
     show_error('Ошибка! Выбранный вами файл не существует, возможно он был удален!');
 }
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/load">Категории</a>';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a>';
 
 App::view($config['themes'].'/foot');

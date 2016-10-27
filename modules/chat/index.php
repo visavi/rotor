@@ -235,7 +235,7 @@ if ($act == 'add') {
 		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
 	}
 
-echo '<img src="/images/img/back.gif" alt="image" /> <a href="/chat">Вернуться</a><br /><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/chat">Вернуться</a><br /><br />';
 
 }
 

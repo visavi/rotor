@@ -45,7 +45,7 @@ if (is_user()) {
 
             echo '* Доступ к личной записи не имеет никто кроме вас<br /><br />';
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/notebook">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/notebook">Вернуться</a><br />';
             break;
 
         ############################################################################################
@@ -75,7 +75,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<img src="/images/img/back.gif" alt="image" /> <a href="/notebook?act=edit">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/notebook?act=edit">Вернуться</a><br />';
             break;
 
     endswitch;

@@ -101,7 +101,7 @@ if (is_admin(array(101, 102))) {
 			}
 
 			if (is_admin(array(101))) {
-				echo '<img src="/images/img/reload.gif" alt="image" /> <a href="offers.php?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+				echo '<i class="fa fa-arrow-circle-up"></i> <a href="offers.php?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
 			}
 		break;
 
@@ -155,7 +155,7 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Данного предложения или проблемы не существует!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="offers.php?type='.$type.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="offers.php?type='.$type.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -192,7 +192,7 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Данного предложения или проблемы не существует!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="offers.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="offers.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -234,7 +234,7 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="offers.php?act=reply&amp;id='.$id.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="offers.php?act=reply&amp;id='.$id.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -268,7 +268,7 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Данного предложения или проблемы не существует!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="offers.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="offers.php?act=view&amp;id='.$id.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -308,7 +308,7 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="offers.php?act=edit&amp;id='.$id.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="offers.php?act=edit&amp;id='.$id.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -340,7 +340,7 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="offers.php?start='.$start.'">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="offers.php?start='.$start.'">Вернуться</a><br />';
 		break;
 
 		############################################################################################
@@ -363,14 +363,14 @@ if (is_admin(array(101, 102))) {
 				show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
 			}
 
-			echo '<img src="/images/img/back.gif" alt="image" /> <a href="offers.php">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="offers.php">Вернуться</a><br />';
 			break;
 
 	default:
 		redirect("offers.php");
 	endswitch;
 
-	echo '<img src="/images/img/panel.gif" alt="image" /> <a href="index.php">В админку</a><br />';
+	echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
 
 } else {
 	redirect('/index.php');

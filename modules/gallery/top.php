@@ -24,7 +24,6 @@ switch ($sort) {
 ############################################################################################
 show_title('Топ популярных фотографий');
 
-echo '<a href="#down"><img src="/images/img/downs.gif" alt="Вниз" /></a> ';
 echo 'Сортировать: ';
 
 if ($order == 'photo_rating') {
@@ -70,6 +69,6 @@ if ($total > 0) {
     show_error('Загруженных фотографий еще нет!');
 }
 
-echo '<img src="/images/img/reload.gif" alt="image" /> <a href="/gallery">Галерея</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery">Галерея</a><br />';
 
 App::view($config['themes'].'/foot');
