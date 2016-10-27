@@ -47,7 +47,6 @@ try_files $uri /index.php?$query_string;
  * **upload/photos (chmod 777)**
  * **upload/pictures (chmod 777)**
  * **upload/thumbnail (chmod 777)**
- * **images/avatars (chmod 777)**
  * **images/smiles (chmod 777)**
  * **upload/files (chmod 777)**
  * **upload/screen (chmod 777)**

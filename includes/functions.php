@@ -68,7 +68,7 @@ function delete_users($user) {
         $userpic = DB::run() -> querySingle("SELECT `users_picture` FROM `users` WHERE `users_login`=? LIMIT 1;", array($user));
 
         unlink_image('upload/photos/', $userpic);
-        unlink_image('upload/avatars/', $user.'.gif');
+        unlink_image('upload/avatars/', $user.'.gif'); // TODO: перенос аватаров
 
         DB::run() -> query("DELETE FROM `inbox` WHERE `inbox_user`=?;", array($user));
         DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_author`=?;", array($user));
@@ -655,7 +655,7 @@ function user_mail($login) {
 }
 
 // --------------- Функция кэширования аватаров -------------------//
-function save_avatar($time = 0) {
+function save_avatar($time = 0) { // TODO: save_photos и хранить только имя файла, а не путь
     if (empty($time) || @filemtime(DATADIR."/temp/avatars.dat") < time() - $time) {
         $queryavat = DB::run() -> query("SELECT `users_login`, `users_avatar` FROM `users` WHERE `users_avatar`<>?;", array(''));
         $allavat = $queryavat -> fetchAssoc();
@@ -669,7 +669,7 @@ function user_avatars($login) {
     static $arravat;
 
     if ($login == $config['guestsuser']) {
-        return '<img src="/images/avatars/guest.gif" alt="" /> ';
+        return '<img src="/images/img/avatar_guest.gif" alt="" /> ';
     }
 
     if (empty($arravat)) {
@@ -681,7 +681,7 @@ function user_avatars($login) {
         return '<a href="/user/'.$login.'"><img src="/'.$arravat[$login].'" alt="" /></a> ';
     }
 
-    return '<a href="/user/'.$login.'"><img src="/images/avatars/noavatar.gif" alt="" /></a> ';
+    return '<a href="/user/'.$login.'"><img src="/images/img/avatar_default.gif" alt="" /></a> ';
 }
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
@@ -850,11 +850,6 @@ function stats_antimat() {
 // --------------- Функция вывода количества смайлов ----------------//
 function stats_smiles() {
     return DB::run() -> querySingle("SELECT count(*) FROM `smiles`;");
-}
-
-// --------------- Функция вывода количества аватаров ----------------//
-function stats_avatars() {
-    return DB::run() -> querySingle("SELECT count(*) FROM `avatars`;");
 }
 
 // ----------- Функция вывода даты последнего сканирования -------------//

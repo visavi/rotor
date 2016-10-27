@@ -1,8 +1,6 @@
 <?php
 show_title('Сервисы сайта');
 ?>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/avatars.php">Галерея аватаров</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/avatars.php?act=load">Загрузить аватар</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/razban.php">Исправительная</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/rules.php">Правила сайта</a><br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/tags.php">Справка по тегам</a><br />

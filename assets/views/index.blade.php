@@ -43,7 +43,7 @@
 
     <div class="b">
         <i class="fa fa-cog fa-lg text-muted"></i>
-        <b><a href="/pages/index.php">Сервисы сайта</a></b>
+        <b><a href="/page">Сервисы сайта</a></b>
     </div>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/files/docs">Документация RotorCMS</a><br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/mail">Обратная связь</a><br />

@@ -1,1 +1,0 @@
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="avatars.php">Управление аватарами</a> (<?=stats_avatars()?>)<br />

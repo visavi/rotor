@@ -41,3 +41,4 @@ if (isset($_SESSION['input'])) unset($_SESSION['input']);
 // Удалить $config['cache']
 // Удалить выбор и загрузку аватара, сделать генерацию аватара из фото в профиле
 // Удалить быстрый переход
+// Удалить таблицу аватаров, настройки итд avatarupload avatarpoints avatarsize avatarweight avlist

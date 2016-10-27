@@ -90,6 +90,7 @@ $router->map('GET|POST', '/onlinewho',  '/modules/pages/onlinewho.php');
 $router->map('GET|POST', '/who',  '/modules/pages/who.php');
 $router->map('GET|POST', '/adminlist',  '/modules/pages/adminlist.php');
 $router->map('GET|POST', '/searchuser',  '/modules/pages/searchuser.php');
+$router->map('GET', '/counter/[24|31:action]?',  '/modules/pages/counter.php');
 
 $router->map('GET|POST', '/events', '/modules/events/index.php', 'events');
 
@@ -135,5 +136,6 @@ $router->map('GET|POST', '/admin/news',    '/modules/admin/news.php');
 $router->map('GET|POST', '/admin/gallery', '/modules/admin/gallery.php');
 $router->map('GET|POST', '/admin/load',    '/modules/admin/load.php');
 $router->map('GET|POST', '/admin/newload',    '/modules/admin/newload.php');
+$router->map('GET|POST', '/admin/setting',    '/modules/admin/setting.php');
 
 Registry::set('router', $router->match());

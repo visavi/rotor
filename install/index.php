@@ -34,7 +34,6 @@ $arrfile = array(
 	'upload/photos',
 	'upload/pictures',
 	'upload/thumbnail',
-	'images/avatars',
 	'images/smiles',
 	'upload/files',
 	'upload/screen',

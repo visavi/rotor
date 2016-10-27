@@ -1,25 +1,8 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $currhour = date("G", SITETIME);
 $currday = date("j", SITETIME);
-
-if (isset($_GET['act'])) {
-	$act = check($_GET['act']);
-} else {
-	$act = 'index';
-}
 
 switch ($act):
 ############################################################################################
@@ -63,14 +46,14 @@ switch ($act):
 		echo 'Динамика за месяц<br />';
 		include_once(BASEDIR.'/includes/counter31.php');
 
-		echo '<a href="counter.php?act=count24">Статистика по часам</a><br />';
-		echo '<a href="counter.php?act=count31">Статистика по дням </a><br /><br />';
+		echo '<a href="/counter/24">Статистика по часам</a><br />';
+		echo '<a href="/counter/31">Статистика по дням </a><br /><br />';
 	break;
 
 	############################################################################################
 	##                                Статистика за 24 часа                                   ##
 	############################################################################################
-	case 'count24':
+	case '24':
 
 		echo '<img src="/images/img/site.png" alt="image" /> <b>Статистика по часам</b><br /><br />';
 
@@ -120,13 +103,13 @@ switch ($act):
 			show_error('Статистика за текущие сутки еще не обновилась!');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="counter.php">Вернуться</a><br />';
+		echo '<img src="/images/img/back.gif" alt="image" /> <a href="/counter">Вернуться</a><br />';
 	break;
 
 	############################################################################################
 	##                                  Статистика за месяц                                   ##
 	############################################################################################
-	case 'count31':
+	case '31':
 
 		echo '<img src="/images/img/site.png" alt="image" /> <b>Статистика по дням</b><br /><br />';
 
@@ -176,12 +159,9 @@ switch ($act):
 			show_error('Статистика за текущий месяц еще не обновилась!');
 		}
 
-		echo '<img src="/images/img/back.gif" alt="image" /> <a href="counter.php">Вернуться</a><br />';
+		echo '<img src="/images/img/back.gif" alt="image" /> <a href="/counter">Вернуться</a><br />';
 	break;
 
-default:
-	redirect("counter.php");
 endswitch;
 
-include_once ('../themes/footer.php');
-?>
+App::view($config['themes'].'/foot');
