@@ -1593,40 +1593,6 @@ function strip_str($str, $words = 20) {
     return implode(' ', array_slice(explode(' ', strip_tags($str)), 0, $words));
 }
 
-// ------------------ Функция вывода админской рекламы --------------------//
-function show_advertadmin() {
-    if (@filemtime(DATADIR."/temp/rekadmin.dat") < time()-1800) {
-        save_advertadmin();
-    }
-
-    $datafile = unserialize(file_get_contents(DATADIR."/temp/rekadmin.dat"));
-
-    if (!empty($datafile)) {
-        $quot_rand = array_rand($datafile);
-        return $datafile[$quot_rand];
-    }
-}
-
-// --------------- Функция кэширования админской рекламы -------------------//
-function save_advertadmin() {
-    $queryadv = DB::run() -> query("SELECT * FROM `advert`;");
-    $data = $queryadv -> fetchAll();
-
-    $arraylink = array();
-
-    if (count($data) > 0) {
-        foreach ($data as $val) {
-            if (!empty($val['adv_color'])) {
-                $val['adv_title'] = '<span style="color:'.$val['adv_color'].'">'.$val['adv_title'].'</span>';
-            }
-
-            $arraylink[] = '<b><a href="'.$val['adv_url'].'" target="_blank">'.$val['adv_title'].'</a></b><br />';
-        }
-    }
-
-    file_put_contents(DATADIR."/temp/rekadmin.dat", serialize($arraylink), LOCK_EX);
-}
-
 // ------------------ Функция вывода пользовательской рекламы --------------------//
 function show_advertuser() {
     global $config;

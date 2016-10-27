@@ -281,7 +281,6 @@ break;
 
             echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/gallery?act=view&amp;gid='.$photo['photo_id'].'">'.$photo['photo_title'].'</a></b><br /><br />';
 
-            echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
             echo '<a href="/gallery?act=comments&amp;gid='.$gid.'&amp;rand='.mt_rand(100, 999).'">Обновить</a><hr />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `commphoto` WHERE `commphoto_gid`=?;", array($gid));

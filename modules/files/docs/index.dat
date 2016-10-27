@@ -115,8 +115,6 @@
 - icons<br />
 - shuffle_assoc<br />
 - strip_str<br />
-- show_advertadmin<br />
-- save_advertadmin<br />
 - show_advertuser<br />
 - save_advertuser<br />
 - stats_changes<br />
@@ -163,7 +161,6 @@
 
 <div class="b"><b>Таблицы базы данных</b></div>
  - <b>admlog</b> (Записи логов админки)<br />
- - <b>advert</b> (Админская реклама)<br />
  - <b>antimat</b> (Антимат)<br />
  - <b>avatars</b> (Аватары)<br />
  - <b>ban</b> (Хранение забаненых IP адресов)<br />

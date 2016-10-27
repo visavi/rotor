@@ -21,7 +21,6 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
             echo '<a href="gallery?start='.$start.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / ';
             echo '<a href="/gallery?act=addphoto">Добавить фото</a> / ';
             echo '<a href="/gallery?start='.$start.'">Обзор</a><hr />';

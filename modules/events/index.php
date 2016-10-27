@@ -347,7 +347,6 @@ case 'comments':
 
 		echo '<img src="/images/img/files.gif" alt="image" /> <b><a href="/events?act=read&amp;id='.$dataevent['event_id'].'">'.$dataevent['event_title'].'</a></b><br /><br />';
 
-		echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
 		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
 		$total = DB::run() -> querySingle("SELECT count(*) FROM `commevents` WHERE `commevent_event_id`=?;", array($id));

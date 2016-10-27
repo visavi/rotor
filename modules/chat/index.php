@@ -14,7 +14,6 @@ show_title('Мини-чат');
 
 if ($act == 'index') {
 
-	echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
 	echo '<a href="#form">Написать</a>';
 
 	if (is_admin()) {

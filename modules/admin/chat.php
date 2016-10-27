@@ -21,7 +21,6 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
             echo '<a href="/admin/chat?rand='.mt_rand(100, 999).'">Обновить</a> / ';
             echo '<a href="/smiles">Смайлы</a> / ';
             echo '<a href="/tags">Теги</a><hr />';

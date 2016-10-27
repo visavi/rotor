@@ -60,7 +60,6 @@ if ($act == "board"){
         $config['header'] = $string[0];
         $config['subheader'] = $string[1];
 
-        echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
         echo '<a href="/board">Объявления</a> / ';
         echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a>';
 
@@ -132,7 +131,6 @@ if($act == "view"){
 
                 $config['header'] = $bstr[0];
 
-                echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
                 echo '<a href="/board">Объявления</a> / ';
                 echo '<a href="/board?act=board&amp;id='.$id.'">'.$string[0].'</a> / ';
                 echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a><hr />';

@@ -336,7 +336,6 @@ switch ($act):
 
             echo '<img src="/images/img/balloon.gif" alt="image" /> <b><a href="/offers?act=view&amp;id='.$queryoff['offers_id'].'">'.$queryoff['offers_title'].'</a></b><br /><br />';
 
-            echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
             echo '<a href="/offers?type=0">Предложения</a> / ';
             echo '<a href="/offers?type=1">Проблемы</a> / ';
             echo '<a href="/offers?act=end&amp;id='.$id.'">Обновить</a><hr />';

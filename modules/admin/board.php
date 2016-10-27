@@ -1,16 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-require_once ('../includes/start.php');
-require_once ('../includes/functions.php');
-require_once ('../includes/header.php');
-include_once ('../themes/header.php');
+App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
@@ -24,45 +13,45 @@ show_title('Доска объявлений');
 ############################################################################################
 if ($act == 'index') {
 
-	$is_admin = is_admin(array(101,102));
+    $is_admin = is_admin(array(101,102));
 
-	if (file_exists(DATADIR."/board/database.dat")) {
-		$lines = file(DATADIR."/board/database.dat");
-		$total = count($lines);
+    if (file_exists(DATADIR."/board/database.dat")) {
+        $lines = file(DATADIR."/board/database.dat");
+        $total = count($lines);
 
-		if ($total>0) {
+        if ($total>0) {
 
-			if ($is_admin) {echo '<form action="board.php?act=delrub&amp;uid='.$_SESSION['token'].'" method="post">';}
+            if ($is_admin) {echo '<form action="/admin/board?act=delrub&amp;uid='.$_SESSION['token'].'" method="post">';}
 
-			foreach($lines as $key=>$boardval){
-				$data = explode("|", $boardval);
+            foreach($lines as $key=>$boardval){
+                $data = explode("|", $boardval);
 
-				$totalboard = counter_string(DATADIR."/board/$data[2].dat");
+                $totalboard = counter_string(DATADIR."/board/$data[2].dat");
 
-				echo '<div class="b"><img src="/images/img/forums.gif" alt="image" /> ';
-				echo '<b><a href="board.php?act=board&amp;id='.$data[2].'">'.$data[0].'</a></b> ('.(int)$totalboard.')';
+                echo '<div class="b"><img src="/images/img/forums.gif" alt="image" /> ';
+                echo '<b><a href="/admin/board?act=board&amp;id='.$data[2].'">'.$data[0].'</a></b> ('.(int)$totalboard.')';
 
-				if ($is_admin){
-					echo '<br /><input type="checkbox" name="del[]" value="'.$key.'" /> ';
+                if ($is_admin){
+                    echo '<br /><input type="checkbox" name="del[]" value="'.$key.'" /> ';
 
-					if ($key != 0){echo '<a href="board.php?act=move&amp;id='.$key.'&amp;where=0&amp;uid='.$_SESSION['token'].'">Вверх</a> / ';} else {echo 'Вверх / ';}
-					if ($total > ($key+1)){echo '<a href="board.php?act=move&amp;id='.$key.'&amp;where=1&amp;uid='.$_SESSION['token'].'">Вниз</a>';} else {echo 'Вниз';}
-					echo ' / <a href="board.php?act=edit&amp;id='.$key.'">Редактировать</a>';
-				}
+                    if ($key != 0){echo '<a href="/admin/board?act=move&amp;id='.$key.'&amp;where=0&amp;uid='.$_SESSION['token'].'">Вверх</a> / ';} else {echo 'Вверх / ';}
+                    if ($total > ($key+1)){echo '<a href="/admin/board?act=move&amp;id='.$key.'&amp;where=1&amp;uid='.$_SESSION['token'].'">Вниз</a>';} else {echo 'Вниз';}
+                    echo ' / <a href="/admin/board?act=edit&amp;id='.$key.'">Редактировать</a>';
+                }
 
-				echo '</div>';
+                echo '</div>';
 
-				echo '<div>'.$data[1].'</div>';
-			}
+                echo '<div>'.$data[1].'</div>';
+            }
 
-			if ($is_admin) {echo '<br /><input type="submit" value="Удалить выбранное" /></form>';}
+            if ($is_admin) {echo '<br /><input type="submit" value="Удалить выбранное" /></form>';}
 
-			echo '<p>Всего рубрик: <b>'.(int)$total.'</b></p>';
+            echo '<p>Всего рубрик: <b>'.(int)$total.'</b></p>';
 
-		} else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
-	} else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
+        } else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
+    } else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
 
-	if ($is_admin) {echo '<img src="/images/img/edit.gif" alt="image" /> <a href="board.php?act=add">Добавить</a><br />';}
+    if ($is_admin) {echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/board?act=add">Добавить</a><br />';}
 }
 
 ############################################################################################
@@ -70,63 +59,62 @@ if ($act == 'index') {
 ############################################################################################
 if ($act=="board")  {
 
-	if ($id!=""){
+    if ($id!=""){
 
-		$string = search_string(DATADIR."/board/database.dat", $id, 2);
-		if ($string) {
+        $string = search_string(DATADIR."/board/database.dat", $id, 2);
+        if ($string) {
 
-			$config['header'] = $string[0];
-			$config['subheader'] = $string[1];
+            $config['header'] = $string[0];
+            $config['subheader'] = $string[1];
 
-			echo '<a href="#down"><img src="/images/img/downs.gif" alt="image" /></a> ';
-			echo '<a href="board.php">Объявления</a> / ';
-			echo '<a href="/board/index.php?act=new&amp;id='.$id.'">Добавить</a> / ';
-			echo '<a href="/board/index.php?act=board&amp;id='.$id.'">Обзор</a><br /><hr />';
+            echo '<a href="/admin/board">Объявления</a> / ';
+            echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a> / ';
+            echo '<a href="/board?act=board&amp;id='.$id.'">Обзор</a><br /><hr />';
 
-			if (file_exists(DATADIR."/board/$id.dat")){
-				$lines = file(DATADIR."/board/$id.dat");
-				$lines = array_reverse($lines);
-				$total = count($lines);
+            if (file_exists(DATADIR."/board/$id.dat")){
+                $lines = file(DATADIR."/board/$id.dat");
+                $lines = array_reverse($lines);
+                $total = count($lines);
 
-				if ($total>0) {
-					echo '<form action="board.php?act=deltop&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                if ($total>0) {
+                    echo '<form action="/admin/board?act=deltop&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-					if ($start < 0 || $start > $total){$start = 0;}
-					if ($total < $start + $config['boardspost']){ $end = $total; }
-					else {$end = $start + $config['boardspost']; }
-					for ($i = $start; $i < $end; $i++){
+                    if ($start < 0 || $start > $total){$start = 0;}
+                    if ($total < $start + $config['boardspost']){ $end = $total; }
+                    else {$end = $start + $config['boardspost']; }
+                    for ($i = $start; $i < $end; $i++){
 
-					$data = explode("|",$lines[$i]);
+                    $data = explode("|",$lines[$i]);
 
-					$num = $total - $i - 1;
+                    $num = $total - $i - 1;
 
-					if (utf_strlen($data[2])>100) {
-					$data[2] = utf_substr($data[2],0,100); $data[2].="...";
-					}
+                    if (utf_strlen($data[2])>100) {
+                    $data[2] = utf_substr($data[2],0,100); $data[2].="...";
+                    }
 
-					echo '<div class="b">';
+                    echo '<div class="b">';
 
-					echo '<input type="checkbox" name="del[]" value="'.$num.'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$num.'" /> ';
 
-					echo '<img src="/images/img/forums.gif" alt="image" /> '.($i+1).'. ';
-					echo '<b><a href="/board/index.php?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;start='.$start.'">'.$data[0].'</a></b> ';
-					echo '(<small>'.date_fixed($data[3]).'</small>)</div>';
-					echo '<div>Текст объявления: '.$data[2].'<br />';
-					echo 'Автор объявления: '.profile($data[1]).'</div>';
+                    echo '<img src="/images/img/forums.gif" alt="image" /> '.($i+1).'. ';
+                    echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;start='.$start.'">'.$data[0].'</a></b> ';
+                    echo '(<small>'.date_fixed($data[3]).'</small>)</div>';
+                    echo '<div>Текст объявления: '.$data[2].'<br />';
+                    echo 'Автор объявления: '.profile($data[1]).'</div>';
 
-					}
-					echo '<br /><input type="submit" value="Удалить выбранное" /></form><br />';
+                    }
+                    echo '<br /><input type="submit" value="Удалить выбранное" /></form><br />';
 
-					page_strnavigation('board.php?act=board&amp;id='.$id.'&amp;', $config['boardspost'], $start, $total);
+                    page_strnavigation('/admin/board?act=board&amp;id='.$id.'&amp;', $config['boardspost'], $start, $total);
 
-					echo '<p>Всего объявлений: <b>'.(int)$total.'</b></p>';
+                    echo '<p>Всего объявлений: <b>'.(int)$total.'</b></p>';
 
-				} else {show_error('Объявлений еще нет!');}
-			} else {show_error('Объявлений еще нет!');}
-		} else {show_error('Ошибка! Данной рубрики не существует!');}
-	} else {show_error('Ошибка! Не выбрана рубрика для просмотра!');}
+                } else {show_error('Объявлений еще нет!');}
+            } else {show_error('Объявлений еще нет!');}
+        } else {show_error('Ошибка! Данной рубрики не существует!');}
+    } else {show_error('Ошибка! Не выбрана рубрика для просмотра!');}
 
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br />';
 }
 
 ############################################################################################
@@ -134,19 +122,19 @@ if ($act=="board")  {
 ############################################################################################
 if ($act=="add") {
 
-	if (is_admin(array(101,102))){
+    if (is_admin(array(101,102))){
 
-		echo '<b><big>Добавление рубрики</big></b><br /><br />';
+        echo '<b><big>Добавление рубрики</big></b><br /><br />';
 
-		echo '<div class="form">';
-		echo '<form action="board.php?act=addrub&amp;uid='.$_SESSION['token'].'" method="post">';
-		echo 'Название: <br /><input type="text" name="zag" /><br />';
-		echo 'Описание: <br /><input type="text" name="msg" /><br />';
-		echo '<input type="submit" value="Добавить" /></form></div><br />';
+        echo '<div class="form">';
+        echo '<form action="/admin/board?act=addrub&amp;uid='.$_SESSION['token'].'" method="post">';
+        echo 'Название: <br /><input type="text" name="zag" /><br />';
+        echo 'Описание: <br /><input type="text" name="msg" /><br />';
+        echo '<input type="submit" value="Добавить" /></form></div><br />';
 
-	} else {show_error('Ошибка! Добавлять рубрики могут только администраторы!');}
+    } else {show_error('Ошибка! Добавлять рубрики могут только администраторы!');}
 
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br />';
 }
 
 ############################################################################################
@@ -154,31 +142,31 @@ if ($act=="add") {
 ############################################################################################
 if ($act=="addrub") {
 
-	$uid = check($_GET['uid']);
-	$zag = check($_POST['zag']);
-	$msg = check($_POST['msg']);
+    $uid = check($_GET['uid']);
+    $zag = check($_POST['zag']);
+    $msg = check($_POST['msg']);
 
-	if (is_admin(array(101,102))){
-		if ($uid==$_SESSION['token']){
-			if (utf_strlen(trim($zag))>=3 && utf_strlen($zag)<50){
-				if (utf_strlen(trim($msg))>=5 && utf_strlen($msg)<50){
+    if (is_admin(array(101,102))){
+        if ($uid==$_SESSION['token']){
+            if (utf_strlen(trim($zag))>=3 && utf_strlen($zag)<50){
+                if (utf_strlen(trim($msg))>=5 && utf_strlen($msg)<50){
 
-					$unifile = unifile(DATADIR."/board/database.dat", 2);
+                    $unifile = unifile(DATADIR."/board/database.dat", 2);
 
-					$text = no_br($zag.'|'.$msg.'|'.$unifile.'|');
+                    $text = no_br($zag.'|'.$msg.'|'.$unifile.'|');
 
-					write_files(DATADIR."/board/database.dat", "$text\r\n", 0, 0666);
+                    write_files(DATADIR."/board/database.dat", "$text\r\n", 0, 0666);
 
-					notice('Новый раздел успешно создан!');
-					redirect("board.php");
+                    notice('Новый раздел успешно создан!');
+                    redirect("/admin/board");
 
-				} else {show_error('Ошибка! Слишком длинное или короткое описание рубрики!');}
-			} else {show_error('Ошибка! Слишком длинное или короткое название рубрики!');}
-		} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
-	} else {show_error('Ошибка! Добавлять рубрики могут только администраторы!');}
+                } else {show_error('Ошибка! Слишком длинное или короткое описание рубрики!');}
+            } else {show_error('Ошибка! Слишком длинное или короткое название рубрики!');}
+        } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
+    } else {show_error('Ошибка! Добавлять рубрики могут только администраторы!');}
 
-	echo '<i class="fa fa-arrow-circle-up"></i> <a href="board.php?act=add">Вернуться</a><br />';
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">К объявлениям</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/board?act=add">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">К объявлениям</a><br />';
 }
 
 
@@ -187,27 +175,27 @@ if ($act=="addrub") {
 ############################################################################################
 if ($act=="edit") {
 
-	if (is_admin(array(101,102))){
-		if ($id!==""){
+    if (is_admin(array(101,102))){
+        if ($id!==""){
 
-			$file = file(DATADIR."/board/database.dat");
-			if (isset($file[$id])){
-			$data = explode("|", $file[$id]);
+            $file = file(DATADIR."/board/database.dat");
+            if (isset($file[$id])){
+            $data = explode("|", $file[$id]);
 
-			echo '<b><big>Редактирование рубрики</big></b><br /><br />';
+            echo '<b><big>Редактирование рубрики</big></b><br /><br />';
 
-			echo '<div class="form"><form action="board.php?id='.$id.'&amp;act=addedit&amp;uid='.$_SESSION['token'].'" method="post">';
+            echo '<div class="form"><form action="/admin/board?id='.$id.'&amp;act=addedit&amp;uid='.$_SESSION['token'].'" method="post">';
 
-			echo 'Название: <br /><input type="text" name="zag" value="'.$data[0].'" /><br />';
-			echo 'Описание: <br /><input type="text" name="msg" value="'.$data[1].'" /><br />';
+            echo 'Название: <br /><input type="text" name="zag" value="'.$data[0].'" /><br />';
+            echo 'Описание: <br /><input type="text" name="msg" value="'.$data[1].'" /><br />';
 
-			echo '<input type="submit" value="Изменить" /></form></div><br />';
+            echo '<input type="submit" value="Изменить" /></form></div><br />';
 
-			} else {show_error('Ошибка! Данной рубрики не существует!');}
-		} else {show_error('Ошибка! Не выбрана рубрика для редактирования!');}
-	} else {show_error('Ошибка! Редактировать рубрики могут только администраторы!');}
+            } else {show_error('Ошибка! Данной рубрики не существует!');}
+        } else {show_error('Ошибка! Не выбрана рубрика для редактирования!');}
+    } else {show_error('Ошибка! Редактировать рубрики могут только администраторы!');}
 
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php?">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board?">Вернуться</a><br />';
 }
 
 
@@ -221,31 +209,31 @@ $zag = check($_POST['zag']);
 $msg = check($_POST['msg']);
 
 if (is_admin(array(101,102))){
-	if ($uid==$_SESSION['token']){
-		if ($id!==""){
-			if (utf_strlen(trim($zag))>=3 && utf_strlen($zag)<50){
-				if (utf_strlen(trim($msg))>=5 && utf_strlen($msg)<50){
+    if ($uid==$_SESSION['token']){
+        if ($id!==""){
+            if (utf_strlen(trim($zag))>=3 && utf_strlen($zag)<50){
+                if (utf_strlen(trim($msg))>=5 && utf_strlen($msg)<50){
 
-					$file = file(DATADIR."/board/database.dat");
-					if (isset($file[$id])){
-						$data = explode("|", $file[$id]);
+                    $file = file(DATADIR."/board/database.dat");
+                    if (isset($file[$id])){
+                        $data = explode("|", $file[$id]);
 
-						$text = no_br($zag.'|'.$msg.'|'.$data[2].'|');
+                        $text = no_br($zag.'|'.$msg.'|'.$data[2].'|');
 
-						replace_lines(DATADIR."/board/database.dat", $id, $text);
+                        replace_lines(DATADIR."/board/database.dat", $id, $text);
 
-						notice('Раздел успешно изменен!');
-						redirect("board.php");
+                        notice('Раздел успешно изменен!');
+                        redirect("/admin/board");
 
-					} else {show_error('Ошибка! Рубрики для редактирования не существует!');}
-				} else {show_error('Ошибка! Слишком длинное или короткое описание рубрики!');}
-			} else {show_error('Ошибка! Слишком длинное или короткое название рубрики!');}
-		} else {show_error('Ошибка! Не выбрана рубрика для редактирования!');}
-	} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
+                    } else {show_error('Ошибка! Рубрики для редактирования не существует!');}
+                } else {show_error('Ошибка! Слишком длинное или короткое описание рубрики!');}
+            } else {show_error('Ошибка! Слишком длинное или короткое название рубрики!');}
+        } else {show_error('Ошибка! Не выбрана рубрика для редактирования!');}
+    } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 } else {show_error('Ошибка! Редактировать рубрики могут только администраторы!');}
 
-echo '<i class="fa fa-arrow-circle-up"></i> <a href="board.php?act=add">Вернуться</a><br />';
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">К объявлениям</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/board?act=add">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">К объявлениям</a><br />';
 }
 
 ############################################################################################
@@ -253,25 +241,25 @@ echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">К объяв�
 ############################################################################################
 if ($act=="move"){
 
-	$uid = check($_GET['uid']);
-	$where = (isset($_REQUEST['where'])) ? abs(intval($_REQUEST['where'])) : "";
+    $uid = check($_GET['uid']);
+    $where = (isset($_REQUEST['where'])) ? abs(intval($_REQUEST['where'])) : "";
 
-	if (is_admin(array(101,102))){
-		if ($uid==$_SESSION['token']){
-			if ($id!==""){
-				if ($where!==""){
+    if (is_admin(array(101,102))){
+        if ($uid==$_SESSION['token']){
+            if ($id!==""){
+                if ($where!==""){
 
-					move_lines(DATADIR."/board/database.dat", $id, $where);
+                    move_lines(DATADIR."/board/database.dat", $id, $where);
 
-					notice('Раздел успешно перемещен!');
-					redirect("board.php");
+                    notice('Раздел успешно перемещен!');
+                    redirect("/admin/board");
 
-				} else {show_error('Ошибка! Не выбрано действие для сдвига!');}
-			} else {show_error('Ошибка! Не выбрана строка для сдвига!');}
-		} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
-	} else {show_error('Ошибка! Двигать рубрики могут только администраторы!');}
+                } else {show_error('Ошибка! Не выбрано действие для сдвига!');}
+            } else {show_error('Ошибка! Не выбрана строка для сдвига!');}
+        } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
+    } else {show_error('Ошибка! Двигать рубрики могут только администраторы!');}
 
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br />';
 }
 
 
@@ -280,32 +268,32 @@ echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуть
 ############################################################################################
 if ($act=="delrub") {
 
-	$uid = check($_GET['uid']);
-	$del = (isset($_REQUEST['del'])) ? intar($_REQUEST['del']) : "";
+    $uid = check($_GET['uid']);
+    $del = (isset($_REQUEST['del'])) ? intar($_REQUEST['del']) : "";
 
-	if (is_admin(array(101,102))){
-		if ($uid==$_SESSION['token']){
-			if ($del!==""){
+    if (is_admin(array(101,102))){
+        if ($uid==$_SESSION['token']){
+            if ($del!==""){
 
-				$file = file(DATADIR."/board/database.dat");
+                $file = file(DATADIR."/board/database.dat");
 
-				foreach($del as $val){
-				$data = explode("|", $file[$val]);
+                foreach($del as $val){
+                $data = explode("|", $file[$val]);
 
-				if(file_exists(DATADIR."/board/$data[2].dat")){
-				unlink (DATADIR."/board/$data[2].dat");
-				}}
+                if(file_exists(DATADIR."/board/$data[2].dat")){
+                unlink (DATADIR."/board/$data[2].dat");
+                }}
 
-				delete_lines(DATADIR."/board/database.dat", $del);
+                delete_lines(DATADIR."/board/database.dat", $del);
 
-				notice('Раздел успешно удален!');
-				redirect("board.php");
+                notice('Раздел успешно удален!');
+                redirect("/admin/board");
 
-			} else {show_error('Ошибка удаления! Отсутствуют выбранные рубрики!');}
-		} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
-	} else {show_error('Ошибка! Удалять рубрики могут только администраторы!');}
+            } else {show_error('Ошибка удаления! Отсутствуют выбранные рубрики!');}
+        } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
+    } else {show_error('Ошибка! Удалять рубрики могут только администраторы!');}
 
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br />';
 }
 
 
@@ -314,32 +302,30 @@ if ($act=="delrub") {
 ############################################################################################
 if ($act=="deltop") {
 
-	$uid = check($_GET['uid']);
-	$del = (isset($_REQUEST['del'])) ? intar($_REQUEST['del']) : "";
+    $uid = check($_GET['uid']);
+    $del = (isset($_REQUEST['del'])) ? intar($_REQUEST['del']) : "";
 
-	if ($uid==$_SESSION['token']){
-		if ($id!=""){
-			if ($del!==""){
+    if ($uid==$_SESSION['token']){
+        if ($id!=""){
+            if ($del!==""){
 
-			delete_lines(DATADIR."/board/$id.dat", $del);
+            delete_lines(DATADIR."/board/$id.dat", $del);
 
-			notice('Объявление успешно удалено!');
-			redirect("board.php?act=board&id=$id&start=$start");
+            notice('Объявление успешно удалено!');
+            redirect("/admin/board?act=board&id=$id&start=$start");
 
-			} else {show_error('Ошибка! Отсутствуют выбранные объявления!');}
-		} else {show_error('Ошибка! Не выбрана рубрика для удаления!');}
-	} else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
+            } else {show_error('Ошибка! Отсутствуют выбранные объявления!');}
+        } else {show_error('Ошибка! Не выбрана рубрика для удаления!');}
+    } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="board.php?act=board&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board?act=board&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
 }
 
 //----------------------- Концовка -------------------------//
-echo '<i class="fa fa-wrench"></i> <a href="index.php">В админку</a><br />';
-echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/index.php">На главную</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-	redirect('/index.php');
+    redirect('/');
 }
 
-include_once ("../themes/footer.php");
-?>
+App::view($config['themes'].'/foot');

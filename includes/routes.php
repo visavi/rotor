@@ -128,15 +128,21 @@ $router->map('GET|POST', '/votes',         '/modules/votes/index.php');
 $router->map('GET|POST', '/votes/history', '/modules/votes/history.php');
 
 $router->map('GET', '/admin',              '/modules/admin/index.php', 'admin');
+$router->map('GET|POST', '/admin/board',    '/modules/admin/board.php');
+$router->map('GET|POST', '/admin/book',    '/modules/admin/book.php');
 $router->map('GET|POST', '/admin/blog',    '/modules/admin/blog.php');
 $router->map('GET|POST', '/admin/chat',    '/modules/admin/chat.php');
 $router->map('GET', '/admin/cache',        '/modules/admin/cache.php');
 $router->map('GET', '/admin/cache/[image|clear|clearimage:action]', '/modules/admin/cache.php');
+$router->map('GET|POST', '/admin/events',    '/modules/admin/events.php');
 $router->map('GET|POST', '/admin/forum',   '/modules/admin/forum.php');
+$router->map('GET|POST', '/admin/minichat',    '/modules/admin/minichat.php');
 $router->map('GET|POST', '/admin/news',    '/modules/admin/news.php');
 $router->map('GET|POST', '/admin/gallery', '/modules/admin/gallery.php');
 $router->map('GET|POST', '/admin/load',    '/modules/admin/load.php');
 $router->map('GET|POST', '/admin/newload',    '/modules/admin/newload.php');
 $router->map('GET|POST', '/admin/setting',    '/modules/admin/setting.php');
+$router->map('GET|POST', '/admin/pyramid',    '/modules/admin/pyramid.php');
+$router->map('GET|POST', '/admin/rekuser',    '/modules/admin/rekuser.php');
 
 Registry::set('router', $router->match());

@@ -1,1 +1,1 @@
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="minichat.php">Мини-чат</a> (<?= stats_minichat() ?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/minichat">Мини-чат</a> (<?= stats_minichat() ?>)<br />
