@@ -129,7 +129,7 @@
         if (!empty($config['invite'])) {
         echo '<img src="/images/img/error.gif" alt="Бан" /> <a href="/admin/invitations?act=send&amp;user='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">Отправить инвайт</a><br />';
         }
-        echo '<img src="/images/img/error.gif" alt="Бан" /> <a href="/admin/zaban?act=edit&amp;uz='.$user['users_login'].'">Бан / Разбан</a><br />';
+        echo '<img src="/images/img/error.gif" alt="Бан" /> <a href="/admin/ban?act=edit&amp;uz='.$user['users_login'].'">Бан / Разбан</a><br />';
         }
 
         if (is_admin(array(101, 102))) {

@@ -43,3 +43,4 @@ if (isset($_SESSION['input'])) unset($_SESSION['input']);
 // Удалить быстрый переход
 // Удалить таблицу аватаров, настройки итд avatarupload avatarpoints avatarsize avatarweight avlist
 // Удалить админску рекламу таблица advert (сделано)
+// Удалить пирамиду таблица pyramid $config['showlink']

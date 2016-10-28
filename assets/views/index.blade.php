@@ -51,7 +51,6 @@
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> (<?=stats_users()?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> (<?=stats_admins()?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/page/stat">Информация</a><br />
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/page/partners">Партнеры и друзья</a><br />
 
     <div class="b">
         <i class="fa fa-comment fa-lg text-muted"></i> <b>Курсы валют</b>

@@ -92,6 +92,16 @@ $router->map('GET|POST', '/who',  '/modules/pages/who.php');
 $router->map('GET|POST', '/adminlist',  '/modules/pages/adminlist.php');
 $router->map('GET|POST', '/searchuser',  '/modules/pages/searchuser.php');
 $router->map('GET', '/counter/[24|31:action]?',  '/modules/pages/counter.php');
+$router->map('GET|POST', '/authoritylist',  '/modules/pages/authoritylist.php');
+$router->map('GET|POST', '/ban',  '/modules/pages/ban.php');
+$router->map('GET|POST', '/razban',  '/modules/pages/razban.php');
+$router->map('GET|POST', '/banhist',  '/modules/pages/banhist.php');
+$router->map('GET|POST', '/statusfaq',  '/modules/pages/statusfaq.php');
+$router->map('GET|POST', '/rating',  '/modules/pages/rating.php');
+$router->map('GET|POST', '/ratinglist',  '/modules/pages/ratinglist.php');
+$router->map('GET|POST', '/key',  '/modules/pages/key.php');
+$router->map('GET|POST', '/faq',  '/modules/pages/faq.php');
+$router->map('GET|POST', '/closed',  '/modules/pages/closed.php');
 
 $router->map('GET|POST', '/events', '/modules/events/index.php', 'events');
 
@@ -147,7 +157,6 @@ $router->map('GET|POST', '/admin/gallery', '/modules/admin/gallery.php');
 $router->map('GET|POST', '/admin/load',    '/modules/admin/load.php');
 $router->map('GET|POST', '/admin/newload',    '/modules/admin/newload.php');
 $router->map('GET|POST', '/admin/setting',    '/modules/admin/setting.php');
-$router->map('GET|POST', '/admin/pyramid',    '/modules/admin/pyramid.php');
 $router->map('GET|POST', '/admin/reklama',    '/modules/admin/reklama.php');
 $router->map('GET|POST', '/admin/ban',    '/modules/admin/ban.php');
 $router->map('GET|POST', '/admin/banhist',    '/modules/admin/banhist.php');

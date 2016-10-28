@@ -3,8 +3,8 @@ if (isset($act) && $act=='stat'){
 	show_title('Статистика сайта');
 }
 ?>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/ratinglist.php">Рейтинг толстосумов</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/authoritylist.php">Рейтинг авторитетов</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/statusfaq.php">Статусы юзеров</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/who.php">Кто-где</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/onlinewho.php">Кто онлайн</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/ratinglist">Рейтинг толстосумов</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/authoritylist">Рейтинг авторитетов</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/statusfaq">Статусы юзеров</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/who">Кто-где</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/onlinewho">Кто онлайн</a><br />

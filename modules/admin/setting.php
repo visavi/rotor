@@ -901,7 +901,6 @@ if (is_admin(array(101))) {
             echo 'Сохраняется истории в кто-где:<br /><input name="lastusers" maxlength="3" value="'.$setting['lastusers'].'" /><br />';
             echo 'Сайтов в кто-откуда<br /><input name="showref" maxlength="3" value="'.$setting['showref'].'" /><br />';
             echo 'Сохраняется истории в кто-откуда:<br /><input name="referer" maxlength="3" value="'.$setting['referer'].'" /><br />';
-            echo 'Ссылок пирамиды на главной:<br /><input name="showlink" maxlength="2" value="'.$setting['showlink'].'" /><br />';
             echo 'Пользователей в онлайне:<br /><input name="onlinelist" maxlength="2" value="'.$setting['onlinelist'].'" /><br />';
             echo 'Смайлов на стр.:<br /><input name="smilelist" maxlength="2" value="'.$setting['smilelist'].'" /><br />';
             echo 'Юзеров в рейтинге авторитетов на стр.:<br /><input name="avtorlist" maxlength="2" value="'.$setting['avtorlist'].'" /><br />';
@@ -933,7 +932,7 @@ if (is_admin(array(101))) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['showref'] != "" && $_POST['referer'] != "" && $_POST['showlink'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['headlines'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "") {
+                if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['showref'] != "" && $_POST['referer'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['headlines'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "") {
 
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
                     $dbr -> execute(intval($_POST['userlist']), 'userlist');
@@ -941,7 +940,6 @@ if (is_admin(array(101))) {
                     $dbr -> execute(intval($_POST['lastusers']), 'lastusers');
                     $dbr -> execute(intval($_POST['showref']), 'showref');
                     $dbr -> execute(intval($_POST['referer']), 'referer');
-                    $dbr -> execute(intval($_POST['showlink']), 'showlink');
                     $dbr -> execute(intval($_POST['onlinelist']), 'onlinelist');
                     $dbr -> execute(intval($_POST['smilelist']), 'smilelist');
                     $dbr -> execute(intval($_POST['avtorlist']), 'avtorlist');

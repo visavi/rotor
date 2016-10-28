@@ -816,20 +816,6 @@ CREATE TABLE IF NOT EXISTS `posts` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `pyramid`
---
-
-CREATE TABLE IF NOT EXISTS `pyramid` (
-  `pyramid_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `pyramid_link` varchar(50) NOT NULL,
-  `pyramid_name` varchar(50) NOT NULL,
-  `pyramid_user` varchar(20) NOT NULL,
-  PRIMARY KEY (`pyramid_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `ratedblog`
 --
 
