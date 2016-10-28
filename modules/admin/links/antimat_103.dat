@@ -1,1 +1,1 @@
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="antimat.php">Управление антиматом</a> (<?=stats_antimat()?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/antimat">Управление антиматом</a> (<?=stats_antimat()?>)<br />

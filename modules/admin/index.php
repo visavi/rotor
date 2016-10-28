@@ -21,7 +21,7 @@ site_version();
 
     <?php if (is_admin(array(101, 102, 103))) {?>
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Старший модер</b></div>
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/zaban">Бан / Разбан</a><br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/ban">Бан / Разбан</a><br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/banlist">Список забаненых</a> (<?=stats_banned()?>)<br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/spam">Список жалоб</a> (<?=stats_spam()?>)<br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> (<?=stats_admins()?>)<br />
@@ -35,7 +35,7 @@ site_version();
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/rules">Правила сайта</a><br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/news">Новости</a> (<?=stats_allnews()?>)<br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> (<?=stats_users()?>)<br />
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/ban">IP-бан панель</a> (<?=stats_ipbanned()?>)<br />
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/ipban">IP-бан панель</a> (<?=stats_ipbanned()?>)<br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> (<?=phpversion()?>)<br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> (<?=stats_load()?>)<br />
         <?=show_admin_links(102);?>

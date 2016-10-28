@@ -1622,7 +1622,7 @@ function show_advertuser() {
                 $result = $datafile[$quot_rand];
             }
 
-            return $result.' <small><a href="/pages/reklama?act=all" rel="nofollow">[+]</a></small>';
+            return $result.' <small><a href="/reklama" rel="nofollow">[+]</a></small>';
         }
     }
 }

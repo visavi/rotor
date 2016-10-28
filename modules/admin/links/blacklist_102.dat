@@ -1,1 +1,1 @@
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="blacklist.php">Черный список</a> (<?=stats_blacklist()?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/blacklist">Черный список</a> (<?=stats_blacklist()?>)<br />
