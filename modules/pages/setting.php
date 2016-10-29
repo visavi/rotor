@@ -38,17 +38,6 @@ case 'index':
     echo 'Тем в форуме:<br /><input name="themesforum" value="'.$udata['users_themesforum'].'" /><br />';
     echo 'Объявлений на стр.:<br /><input name="postboard" value="'.$udata['users_postboard'].'" /><br />';
 
-    echo 'Быстрый переход:<br /><select name="navigation">';
-    $arrnav = array('Выключить', 'Обычный список', 'Список без кнопки');
-
-    echo '<option value="'.$udata['users_navigation'].'">'.$arrnav[$udata['users_navigation']].'</option>';
-    foreach($arrnav as $k => $v) {
-        if ($k != $udata['users_navigation']) {
-            echo '<option value="'.$k.'">'.$v.'</option>';
-        }
-    }
-    echo '</select><br />';
-
     $arrtimezone = range(-12, 12);
 
     echo 'Временной сдвиг:<br />';
@@ -86,7 +75,6 @@ case 'edit':
     $postforum = (isset($_POST['postforum'])) ? abs(intval($_POST['postforum'])) : 0;
     $themesforum = (isset($_POST['themesforum'])) ? abs(intval($_POST['themesforum'])) : 0;
     $postboard = (isset($_POST['postboard'])) ? abs(intval($_POST['postboard'])) : 0;
-    $navigation = (isset($_POST['navigation'])) ? abs(intval($_POST['navigation'])) : 0;
     $timezone = (isset($_POST['timezone'])) ? check($_POST['timezone']) : 0;
     $ipbinding = (empty($_POST['ipbinding'])) ? 0 : 1;
     $privacy = (empty($_POST['privacy'])) ? 0 : 1;
@@ -102,7 +90,6 @@ case 'edit':
         -> addRule('numeric', $postforum, 'Количество сообщения в форуме. (Допустимое значение от 3 до 50)!', true, 3, 50)
         -> addRule('numeric', $themesforum, 'Количество тем в форуме. (Допустимое значение от 3 до 50)!', true, 3, 50)
         -> addRule('numeric', $postboard, 'Количество объявлений на страницу. (Допустимое значение от 3 до 50)!', true, 3, 50)
-        -> addRule('numeric', $navigation, 'Недопустимое значение данных быстрого перехода!', true, 0, 2)
         -> addRule('regex', array($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|'), 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!', true);
 
     if ($validation->run()) {
@@ -118,7 +105,6 @@ case 'edit':
                 'users_postboard'   => $postboard,
                 'users_timezone'    => $timezone,
                 'users_ipbinding'   => $ipbinding,
-                'users_navigation'  => $navigation,
                 'users_privacy'     => $privacy,
                 'users_subscribe'   => $subscribe,
             ), array(

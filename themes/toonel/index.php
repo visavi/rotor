@@ -18,7 +18,7 @@ header("Content-type:text/html; charset=utf-8");
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 	<?= include_style() ?>
 	<link rel="stylesheet" href="/themes/toonel/css/style.css" type="text/css"/>
-	<link rel="alternate" href="/news/rss.php" title="RSS News" type="application/rss+xml"/>
+	<link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml"/>
 	<?= include_javascript() ?>
 	<meta name="keywords" content="%KEYWORDS%"/>
 	<meta name="description" content="%DESCRIPTION%"/>
@@ -35,17 +35,17 @@ header("Content-type:text/html; charset=utf-8");
 		</td>
 		<td class="t2"></td>
 		<td class="t3">
-			<a title="Центр общения" class="menu" href="/forum/?">Форум</a> |
-			<a title="Гостевая комната" class="menu" href="/book/?">Гостевая</a> |
-			<a title="Скрипты для wap-мастеров" class="menu" href="/load/?">Скрипты</a> |
+			<a title="Центр общения" class="menu" href="/forum">Форум</a> |
+			<a title="Гостевая комната" class="menu" href="/book">Гостевая</a> |
+			<a title="Скрипты для wap-мастеров" class="menu" href="/load">Скрипты</a> |
 			<?php if (is_user()): ?>
-				<a title="Управление настройками" class="menu" href="/pages/?act=menu">Мое меню</a> |
-				<a title="Выход" class="menu" href="/input.php?act=exit"
+				<a title="Управление настройками" class="menu" href="/menu">Мое меню</a> |
+				<a title="Выход" class="menu" href="/logout"
 				   onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
 			<?php else: ?>
-				<a title="Страница авторизации" class="menu" href="/pages/login.php?">Вход</a> |
+				<a title="Страница авторизации" class="menu" href="/login">Вход</a> |
 				<a title="Страница регистрации" class="menu"
-				   href="/pages/registration.php?">Регистрация</a>
+				   href="/register">Регистрация</a>
 			<?php endif ?>
 		</td>
 		<td class="t4"></td>
@@ -65,14 +65,14 @@ header("Content-type:text/html; charset=utf-8");
 			<?php if (is_admin()): ?>
 				<div class="nmenu">
 					<img src="/images/img/panel.gif" alt="panel"/> <a
-						href="/admin/index.php?">Панель</a>
+						href="/admin">Панель</a>
 
 					<?php if (stats_spam() > 0): ?>
-						&bull; <a href="/admin/spam.php?"><span style="color:#ff0000">Спам!</span></a>
+						&bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
 					<?php endif; ?>
 
 					<?php if ($udata['users_newchat'] < stats_newchat()): ?>
-						&bull; <a href="/admin/chat.php?"><span style="color:#ff0000">Чат</span></a>
+						&bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>

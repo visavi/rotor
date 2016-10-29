@@ -245,7 +245,6 @@ case 'create':
         $validation = new Validation();
 
         $validation -> addRule('equal', array($token, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-            -> addRule('equal', array(is_quarantine($log), true), 'Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!')
             -> addRule('equal', array(is_flood($log), true), 'Антифлуд! Разрешается комментировать раз в '.flood_period().' сек!')
             -> addRule('not_empty', $data, 'Выбранной новости не существует, возможно она было удалена!')
             -> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)

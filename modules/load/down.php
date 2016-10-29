@@ -500,25 +500,21 @@ case 'add':
 
                 if (!empty($downs)) {
                     if (!empty($downs['downs_active'])) {
-                        if (is_quarantine($log)) {
-                            if (is_flood($log)) {
+                        if (is_flood($log)) {
 
-                                $msg = antimat($msg);
+                            $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `commload` (`commload_cats`, `commload_down`, `commload_text`, `commload_author`, `commload_time`, `commload_ip`, `commload_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($downs['downs_cats_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                            DB::run() -> query("INSERT INTO `commload` (`commload_cats`, `commload_down`, `commload_text`, `commload_author`, `commload_time`, `commload_ip`, `commload_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($downs['downs_cats_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-                                DB::run() -> query("DELETE FROM `commload` WHERE `commload_down`=? AND `commload_time` < (SELECT MIN(`commload_time`) FROM (SELECT `commload_time` FROM `commload` WHERE `commload_down`=? ORDER BY `commload_time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", array($id, $id));
+                            DB::run() -> query("DELETE FROM `commload` WHERE `commload_down`=? AND `commload_time` < (SELECT MIN(`commload_time`) FROM (SELECT `commload_time` FROM `commload` WHERE `commload_down`=? ORDER BY `commload_time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", array($id, $id));
 
-                                DB::run() -> query("UPDATE `downs` SET `downs_comments`=`downs_comments`+1 WHERE `downs_id`=?;", array($id));
-                                DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+                            DB::run() -> query("UPDATE `downs` SET `downs_comments`=`downs_comments`+1 WHERE `downs_id`=?;", array($id));
+                            DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
-                                $_SESSION['note'] = 'Сообщение успешно добавлено!';
-                                redirect("/load/down?act=end&id=$id");
-                            } else {
-                                show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
-                            }
+                            $_SESSION['note'] = 'Сообщение успешно добавлено!';
+                            redirect("/load/down?act=end&id=$id");
                         } else {
-                            show_error('Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!');
+                            show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
                         }
                     } else {
                         show_error('Ошибка! Данный файл еще не проверен модератором!');

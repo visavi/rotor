@@ -140,40 +140,36 @@ break;
                 if (is_uploaded_file($_FILES['photo']['tmp_name'])) {
                     if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                         if (utf_strlen($text) <= 1000) {
-                            if (is_quarantine($log)) {
-                                if (is_flood($log)) {
+                            if (is_flood($log)) {
 
-                                    $text = antimat($text);
+                                $text = antimat($text);
 
-                                    DB::run() -> query("INSERT INTO `photo` (`photo_user`, `photo_title`, `photo_text`, `photo_link`, `photo_time`, `photo_closed`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $title, $text, '', SITETIME, $closed));
+                                DB::run() -> query("INSERT INTO `photo` (`photo_user`, `photo_title`, `photo_text`, `photo_link`, `photo_time`, `photo_closed`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $title, $text, '', SITETIME, $closed));
 
-                                    $lastid = DB::run() -> lastInsertId();
+                                $lastid = DB::run() -> lastInsertId();
 
-                                    // ------------------------------------------------------//
-                                    $handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $lastid);
-                                    if ($handle) {
+                                // ------------------------------------------------------//
+                                $handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $lastid);
+                                if ($handle) {
 
-                                        $handle -> process(BASEDIR.'/upload/pictures/');
-                                        if ($handle -> processed) {
+                                    $handle -> process(BASEDIR.'/upload/pictures/');
+                                    if ($handle -> processed) {
 
-                                            DB::run() -> query("UPDATE `photo` SET `photo_link`=? WHERE `photo_id`=?;", array($handle -> file_dst_name, $lastid));
+                                        DB::run() -> query("UPDATE `photo` SET `photo_link`=? WHERE `photo_id`=?;", array($handle -> file_dst_name, $lastid));
 
-                                            $handle -> clean();
+                                        $handle -> clean();
 
-                                            notice('Фотография успешно загружена!');
-                                            redirect("/gallery");
+                                        notice('Фотография успешно загружена!');
+                                        redirect("/gallery");
 
-                                        } else {
-                                            show_error($handle -> error);
-                                        }
                                     } else {
-                                        show_error('Ошибка! Не удалось загрузить изображение!');
+                                        show_error($handle -> error);
                                     }
                                 } else {
-                                    show_error('Антифлуд! Вы слишком часто добавляете фотографии!');
+                                    show_error('Ошибка! Не удалось загрузить изображение!');
                                 }
                             } else {
-                                show_error('Карантин! Вы не можете добавлять фото в течении '.round($config['karantin'] / 3600).' часов!');
+                                show_error('Антифлуд! Вы слишком часто добавляете фотографии!');
                             }
                         } else {
                             show_error('Слишком длинное описание (Необходимо до 1000 символов)!');
@@ -377,25 +373,21 @@ break;
 
                     if (!empty($data)) {
                         if (empty($data['photo_closed'])) {
-                            if (is_quarantine($log)) {
-                                if (is_flood($log)) {
-                                    $msg = antimat($msg);
+                            if (is_flood($log)) {
+                                $msg = antimat($msg);
 
-                                    DB::run() -> query("INSERT INTO `commphoto` (`commphoto_gid`, `commphoto_text`, `commphoto_user`, `commphoto_time`, `commphoto_ip`, `commphoto_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($gid, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                                DB::run() -> query("INSERT INTO `commphoto` (`commphoto_gid`, `commphoto_text`, `commphoto_user`, `commphoto_time`, `commphoto_ip`, `commphoto_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($gid, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-                                    DB::run() -> query("DELETE FROM `commphoto` WHERE `commphoto_gid`=? AND `commphoto_time` < (SELECT MIN(`commphoto_time`) FROM (SELECT `commphoto_time` FROM `commphoto` WHERE `commphoto_gid`=? ORDER BY `commphoto_time` DESC LIMIT ".$config['maxpostgallery'].") AS del);", array($gid, $gid));
+                                DB::run() -> query("DELETE FROM `commphoto` WHERE `commphoto_gid`=? AND `commphoto_time` < (SELECT MIN(`commphoto_time`) FROM (SELECT `commphoto_time` FROM `commphoto` WHERE `commphoto_gid`=? ORDER BY `commphoto_time` DESC LIMIT ".$config['maxpostgallery'].") AS del);", array($gid, $gid));
 
-                                    DB::run() -> query("UPDATE `photo` SET `photo_comments`=`photo_comments`+1 WHERE `photo_id`=?;", array($gid));
-                                    DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+                                DB::run() -> query("UPDATE `photo` SET `photo_comments`=`photo_comments`+1 WHERE `photo_id`=?;", array($gid));
+                                DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
-                                    $_SESSION['note'] = 'Комментарий успешно добавлен!';
-                                    redirect("/gallery?act=end&gid=$gid");
+                                $_SESSION['note'] = 'Комментарий успешно добавлен!';
+                                redirect("/gallery?act=end&gid=$gid");
 
-                                } else {
-                                    show_error('Антифлуд! Разрешается отправлять комментарии раз в '.flood_period().' секунд!');
-                                }
                             } else {
-                                show_error('Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!');
+                                show_error('Антифлуд! Разрешается отправлять комментарии раз в '.flood_period().' секунд!');
                             }
                         } else {
                             show_error('Ошибка! Комментирование данной фотографии запрещено!');

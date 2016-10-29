@@ -33,7 +33,6 @@
 - save_setting<br />
 - save_navigation<br />
 - save_ipban<br />
-- is_quarantine<br />
 - flood_period<br />
 - is_flood<br />
 - raiting_vote<br />

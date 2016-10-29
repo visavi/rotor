@@ -18,7 +18,7 @@ header("Content-type:text/html; charset=utf-8");
 	<link rel="image_src" href="/images/img/icon.png" />
 	<?= include_style() ?>
 	<link rel="stylesheet" href="/themes/bluewater/css/style.css" type="text/css" />
-	<link rel="alternate" href="/news/rss.php" title="RSS News" type="application/rss+xml" />
+	<link rel="alternate" href="/news/rsss" title="RSS News" type="application/rss+xml" />
 	<?= include_javascript() ?>
 	<meta name="keywords" content="%KEYWORDS%" />
 	<meta name="description" content="%DESCRIPTION%" />
@@ -41,20 +41,20 @@ if (is_user()){
 	echo user_gender($log).profile($log);
 	if (is_admin()){
 
-		echo ' | <a href="/admin/index.php">Админ-панель</a>';
+		echo ' | <a href="/admin">Админ-панель</a>';
 		if (stats_spam()>0){
-		echo ' | <a href="/admin/spam.php"><span style="color:#ff0000">Спам!</span></a>';
+		echo ' | <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>';
 		}
 
 		if ($udata['users_newchat']<stats_newchat()){
-		echo ' | <a href="/admin/chat.php"><span style="color:#ff0000">Чат</span></a>';
+		echo ' | <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>';
 		}
 
 	}
 
 } else {
-	echo '<a href="/pages/login.php">Авторизация</a> | ';
-	echo '<a href="/pages/registration.php">Регистрация</a>';
+	echo '<a href="/login">Авторизация</a> | ';
+	echo '<a href="/register">Регистрация</a>';
 }
 ?>
 			</p>

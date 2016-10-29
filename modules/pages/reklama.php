@@ -160,8 +160,8 @@ case 'create':
 
                     echo 'Код цвета:';
 
-                    if (file_exists(BASEDIR.'/services/colors.php')) {
-                        echo ' <a href="/services/colors.php">(?)</a>';
+                    if (file_exists(BASEDIR.'/modules/services/colors.php')) {
+                        echo ' <a href="/services/colors">(?)</a>';
                     }
                     echo '<br />';
                     echo '<input name="color" type="text" maxlength="7" /><br />';

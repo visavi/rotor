@@ -26,7 +26,7 @@ if (is_array($arrbanip) && count($arrbanip) > 0) {
 		}
 
 		if ($ipmatch == 4) {
-			redirect('/pages/banip.php');
+			redirect('/banip');
 		} //бан по IP
 	}
 }
@@ -137,17 +137,16 @@ if ($udata = is_user()) {
 	$config['forumtem']   = $udata['users_themesforum']; # Вывод тем в форуме
 	$config['boardspost'] = $udata['users_postboard'];   # Вывод объявлений
 	$config['privatpost'] = $udata['users_postprivat'];  # Вывод писем в привате
-	$config['navigation'] = $udata['users_navigation'];  # Быстрый переход
 
 	if ($udata['users_ban'] == 1) {
-		if (!strsearch(App::server('PHP_SELF'), array('/pages/ban.php', '/pages/rules.php'))) {
-			redirect('/pages/ban.php?log='.$log);
+		if (!strsearch(App::server('PHP_SELF'), array('/ban', '/rules'))) {
+			redirect('/ban?log='.$log);
 		}
 	}
 
 	if ($config['regkeys'] > 0 && $udata['users_confirmreg'] > 0 && empty($udata['users_ban'])) {
-		if (!strsearch(App::server('PHP_SELF'), array('/pages/key.php', '/input.php'))) {
-			redirect('/pages/key.php?log='.$log);
+		if (!strsearch(App::server('PHP_SELF'), array('/key', '/login'))) {
+			redirect('/key?log='.$log);
 		}
 	}
 

@@ -27,7 +27,7 @@
 
 <?php
 echo bb_code(check('[code]<?php
-page_jumpnavigation(\'chat/index.php?\', 10, $start, $total); /* <-Назад | Далее-> */
+page_jumpnavigation(\'/chat?\', 10, $start, $total); /* <-Назад | Далее-> */
 ?>[/code]'));
 ?>
 

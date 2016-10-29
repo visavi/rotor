@@ -15,7 +15,6 @@
 	<?= show_online() ?>
 </div>
 <div style="text-align:center">
-	<?= navigation() ?>
 	<?= perfomance() ?>
 </div></div></body></html>
 

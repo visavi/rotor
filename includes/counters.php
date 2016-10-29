@@ -1,15 +1,4 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-if (!defined('BASEDIR')) {
-	exit(header('Location: /index.php'));
-}
 
 $days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 $hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
@@ -21,12 +10,12 @@ if ($online[1] < 150 || is_user()) {
 	$newhost = 0;
 
 	if (is_user()) {
-		$queryonline = DB::run() -> querySingle("SELECT `online_id` FROM `online` WHERE `online_ip`=? OR `online_user`=? LIMIT 1;", array(App::getClientIp(), $log));
+		$queryonline = DB::run() -> querySingle("SELECT `online_id` FROM `online` WHERE `online_ip`=? OR `online_user`=? LIMIT 1;", array(App::getClientIp(), App::getUsername()));
 		if (empty($queryonline)) {
-			DB::run() -> query("INSERT INTO `online` (`online_ip`, `online_brow`, `online_time`, `online_user`) VALUES (?, ?, ?, ?);", array(App::getClientIp(), App::getUserAgent(), SITETIME, $log));
+			DB::run() -> query("INSERT INTO `online` (`online_ip`, `online_brow`, `online_time`, `online_user`) VALUES (?, ?, ?, ?);", array(App::getClientIp(), App::getUserAgent(), SITETIME, App::getUsername()));
 			$newhost = 1;
 		} else {
-			DB::run() -> query("UPDATE `online` SET `online_ip`=?, `online_brow`=?, `online_time`=?, `online_user`=? WHERE `online_id`=? LIMIT 1;", array(App::getClientIp(), App::getUserAgent(), SITETIME, $log, $queryonline));
+			DB::run() -> query("UPDATE `online` SET `online_ip`=?, `online_brow`=?, `online_time`=?, `online_user`=? WHERE `online_id`=? LIMIT 1;", array(App::getClientIp(), App::getUserAgent(), SITETIME, App::getUsername(), $queryonline));
 		}
 	} else {
 		$queryonline = DB::run() -> querySingle("SELECT `online_id` FROM `online` WHERE `online_ip`=? LIMIT 1;", array(App::getClientIp()));

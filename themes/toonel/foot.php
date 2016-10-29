@@ -47,7 +47,6 @@
 	<tr>
 		<td align="center">
 
-			<?= navigation() ?>
 			<?= perfomance() ?>
 
 		</td>

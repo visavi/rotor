@@ -7,7 +7,6 @@
                                 <h2>Информация</h2>
                                 <?= show_counter() ?>
                                 <?= show_online() ?>
-                                <?= navigation() ?>
 
                             </section>
 <!-- 							<section>

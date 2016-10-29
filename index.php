@@ -36,11 +36,11 @@ if ($target && is_callable($target)) {
 if (isset($_SESSION['input'])) unset($_SESSION['input']);
 
 
-// Удалить карантин с сайта
+// Удалить карантин с сайта $config['karantin'], setting karantin, is_quarantine (сделано)
 // Удалить дайджест (таблица visit)
-// Удалить $config['cache']
+// Удалить $config['cache']поле setting cache (сделано)
 // Удалить выбор и загрузку аватара, сделать генерацию аватара из фото в профиле
-// Удалить быстрый переход
+// Удалить быстрый переход $config['navigation'] users_navigation (сделано)
 // Удалить таблицу аватаров, настройки итд avatarupload avatarpoints avatarsize avatarweight avlist
 // Удалить админску рекламу таблица advert (сделано)
-// Удалить пирамиду таблица pyramid $config['showlink']
+// Удалить пирамиду таблица pyramid $config['showlink'] (сделано)

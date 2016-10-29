@@ -84,7 +84,7 @@ case 'delete':
 
     App::redirect('/forum/bookmark?start='.$start);
 
-    render('includes/back', array('link' => 'bookmark.php?start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', array('link' => '/bookmark?start='.$start, 'title' => 'Вернуться'));
 break;
 
 endswitch;

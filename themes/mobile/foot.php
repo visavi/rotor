@@ -5,7 +5,6 @@
     <?= show_online() ?>
 </div>
 <div class="foot">
-    <?= navigation() ?>
     <?= perfomance() ?>
 </div>
 

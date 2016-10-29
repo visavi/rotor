@@ -18,7 +18,7 @@ header('Content-type:text/html; charset=utf-8');
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
 	<?= include_style() ?>
 	<link rel="stylesheet" href="/themes/themez/css/style.css" type="text/css"/>
-	<link rel="alternate" href="/news/rss.php" title="RSS News" type="application/rss+xml"/>
+	<link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml"/>
 	<?= include_javascript() ?>
 	<meta name="keywords" content="%KEYWORDS%"/>
 	<meta name="description" content="%DESCRIPTION%"/>

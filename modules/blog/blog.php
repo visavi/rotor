@@ -275,26 +275,23 @@ case 'addblog':
                         if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
                             $blogs = DB::run() -> querySingle("SELECT `cats_id` FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cid));
                             if (!empty($blogs)) {
-                                if (is_quarantine($log)) {
-                                    if (is_flood($log)) {
 
-                                        $text = antimat($text);
+                                if (is_flood($log)) {
 
-                                        DB::run() -> query("INSERT INTO `blogs` (`blogs_cats_id`, `blogs_user`, `blogs_title`, `blogs_text`, `blogs_tags`, `blogs_time`) VALUES (?, ?, ?, ?, ?, ?);", array($cid, $log, $title, $text, $tags, SITETIME));
-                                        $lastid = DB::run() -> lastInsertId();
+                                    $text = antimat($text);
 
-                                        DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?;", array($cid));
+                                    DB::run() -> query("INSERT INTO `blogs` (`blogs_cats_id`, `blogs_user`, `blogs_title`, `blogs_text`, `blogs_tags`, `blogs_time`) VALUES (?, ?, ?, ?, ?, ?);", array($cid, $log, $title, $text, $tags, SITETIME));
+                                    $lastid = DB::run() -> lastInsertId();
 
-                                        DB::run() -> query("UPDATE `users` SET `users_point`=`users_point`+5, `users_money`=`users_money`+100 WHERE `users_login`=? LIMIT 1;", array($log));
+                                    DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?;", array($cid));
 
-                                        notice('Статья успешно опубликована!');
-                                        redirect("/blog/blog?act=view&id=$lastid");
+                                    DB::run() -> query("UPDATE `users` SET `users_point`=`users_point`+5, `users_money`=`users_money`+100 WHERE `users_login`=? LIMIT 1;", array($log));
 
-                                    } else {
-                                        show_error('Антифлуд! Вы слишком часто добавляете статьи!');
-                                    }
+                                    notice('Статья успешно опубликована!');
+                                    redirect("/blog/blog?act=view&id=$lastid");
+
                                 } else {
-                                    show_error('Карантин! Вы не можете добавлять статьи в течении '.round($config['karantin'] / 3600).' часов!');
+                                    show_error('Антифлуд! Вы слишком часто добавляете статьи!');
                                 }
                             } else {
                                 show_error('Ошибка! Выбранный вами раздел не существует!');
@@ -432,26 +429,22 @@ case 'add':
                 $queryblog = DB::run() -> querySingle("SELECT `blogs_cats_id` FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
 
                 if (!empty($queryblog)) {
-                    if (is_quarantine($log)) {
-                        if (is_flood($log)) {
+                    if (is_flood($log)) {
 
-                            $msg = antimat($msg);
+                        $msg = antimat($msg);
 
-                            DB::run() -> query("INSERT INTO `commblog` (`commblog_cats`, `commblog_blog`, `commblog_text`, `commblog_author`, `commblog_time`, `commblog_ip`, `commblog_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($queryblog, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                        DB::run() -> query("INSERT INTO `commblog` (`commblog_cats`, `commblog_blog`, `commblog_text`, `commblog_author`, `commblog_time`, `commblog_ip`, `commblog_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($queryblog, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-                            DB::run() -> query("DELETE FROM `commblog` WHERE `commblog_blog`=? AND `commblog_time` < (SELECT MIN(`commblog_time`) FROM (SELECT `commblog_time` FROM `commblog` WHERE `commblog_blog`=? ORDER BY `commblog_time` DESC LIMIT ".$config['maxblogcomm'].") AS del);", array($id, $id));
+                        DB::run() -> query("DELETE FROM `commblog` WHERE `commblog_blog`=? AND `commblog_time` < (SELECT MIN(`commblog_time`) FROM (SELECT `commblog_time` FROM `commblog` WHERE `commblog_blog`=? ORDER BY `commblog_time` DESC LIMIT ".$config['maxblogcomm'].") AS del);", array($id, $id));
 
-                            DB::run() -> query("UPDATE `blogs` SET `blogs_comments`=`blogs_comments`+1 WHERE `blogs_id`=?;", array($id));
-                            DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+                        DB::run() -> query("UPDATE `blogs` SET `blogs_comments`=`blogs_comments`+1 WHERE `blogs_id`=?;", array($id));
+                        DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
-                            notice('Сообщение успешно добавлено!');
-                            redirect("/blog/blog?act=end&id=$id");
+                        notice('Сообщение успешно добавлено!');
+                        redirect("/blog/blog?act=end&id=$id");
 
-                        } else {
-                            show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
-                        }
                     } else {
-                        show_error('Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!');
+                        show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
                     }
                 } else {
                     show_error('Ошибка! Данной статьи не существует!');

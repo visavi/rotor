@@ -1121,7 +1121,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `users_secanswer` varchar(40) NOT NULL DEFAULT '',
   `users_timenickname` int(11) unsigned NOT NULL DEFAULT '0',
   `users_ipbinding` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `users_navigation` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `users_newchat` int(11) unsigned NOT NULL DEFAULT '0',
   `users_privacy` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `users_apikey` varchar(32) NOT NULL DEFAULT '',

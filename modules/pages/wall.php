@@ -101,26 +101,22 @@ if (!empty($queryuser)) {
                         if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
                             $ignorstr = DB::run() -> querySingle("SELECT `ignore_id` FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($uz, $log));
                             if (empty($ignorstr)) {
-                                if (is_quarantine($log)) {
-                                    if (is_flood($log)) {
+                                if (is_flood($log)) {
 
-                                        $msg = antimat($msg);
+                                    $msg = antimat($msg);
 
-                                        if ($uz != $log) {
-                                            DB::run() -> query("UPDATE `users` SET `users_newwall`=`users_newwall`+1 WHERE `users_login`=?", array($uz));
-                                        }
-
-                                        DB::run() -> query("INSERT INTO `wall` (`wall_user`, `wall_login`, `wall_text`, `wall_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
-
-                                        DB::run() -> query("DELETE FROM `wall` WHERE `wall_user`=? AND `wall_time` < (SELECT MIN(`wall_time`) FROM (SELECT `wall_time` FROM `wall` WHERE `wall_user`=? ORDER BY `wall_time` DESC LIMIT ".$config['wallmaxpost'].") AS del);", array($uz, $uz));
-
-                                        $_SESSION['note'] = 'Запись успешно добавлена!';
-                                        redirect("/wall?uz=$uz");
-                                    } else {
-                                        show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
+                                    if ($uz != $log) {
+                                        DB::run() -> query("UPDATE `users` SET `users_newwall`=`users_newwall`+1 WHERE `users_login`=?", array($uz));
                                     }
+
+                                    DB::run() -> query("INSERT INTO `wall` (`wall_user`, `wall_login`, `wall_text`, `wall_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
+
+                                    DB::run() -> query("DELETE FROM `wall` WHERE `wall_user`=? AND `wall_time` < (SELECT MIN(`wall_time`) FROM (SELECT `wall_time` FROM `wall` WHERE `wall_user`=? ORDER BY `wall_time` DESC LIMIT ".$config['wallmaxpost'].") AS del);", array($uz, $uz));
+
+                                    $_SESSION['note'] = 'Запись успешно добавлена!';
+                                    redirect("/wall?uz=$uz");
                                 } else {
-                                    show_error('Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!');
+                                    show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
                                 }
                             } else {
                                 show_error('Ошибка! Вы внесены в игнор-лист пользователя!');

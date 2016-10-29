@@ -14,151 +14,151 @@ show_title('Мини-чат');
 
 if ($act == 'index') {
 
-	echo '<a href="#form">Написать</a>';
+    echo '<a href="#form">Написать</a>';
 
-	if (is_admin()) {
-		echo ' / <a href="/admin/minichat?start=' . $start . '">Управление</a>';
-	}
-	echo '<hr />';
+    if (is_admin()) {
+        echo ' / <a href="/admin/minichat?start=' . $start . '">Управление</a>';
+    }
+    echo '<hr />';
 
-	// ---------------------------------------------------------------//
-	if (! file_exists(DATADIR . "/chat/chat.dat")){
-		touch(DATADIR . "/chat/chat.dat");
-	}
+    // ---------------------------------------------------------------//
+    if (! file_exists(DATADIR . "/chat/chat.dat")){
+        touch(DATADIR . "/chat/chat.dat");
+    }
 
-	$file = file(DATADIR . "/chat/chat.dat");
-	$file = array_reverse($file);
-	$total = count($file);
+    $file = file(DATADIR . "/chat/chat.dat");
+    $file = array_reverse($file);
+    $total = count($file);
 
-	if ($total > 0) {
+    if ($total > 0) {
 
-		if (is_user()) {
-			// --------------------------генерация анекдота------------------------------------------------//
-			if ($config['shutnik'] == 1) {
-				$anfi = file("modules/chat/bots/chat_shut.php");
-				$an_rand = array_rand($anfi);
-				$anshow = trim($anfi[$an_rand]);
+        if (is_user()) {
+            // --------------------------генерация анекдота------------------------------------------------//
+            if ($config['shutnik'] == 1) {
+                $anfi = file("modules/chat/bots/chat_shut.php");
+                $an_rand = array_rand($anfi);
+                $anshow = trim($anfi[$an_rand]);
 
-				$tifi = file(DATADIR . "/chat/chat.dat");
-				$tidw = explode("|", end($tifi));
+                $tifi = file(DATADIR . "/chat/chat.dat");
+                $tidw = explode("|", end($tifi));
 
-				if (SITETIME > ($tidw[3] + 180) && empty($tidw[6])) {
-					$unifile = unifile(DATADIR . "/chat/chat.dat", 9);
-					$antext = no_br($anshow . '|Весельчак||' . SITETIME . '|Opera|127.0.0.2|1|' . $tidw[7] . '|' . $tidw[8] . '|' . $unifile . '|');
+                if (SITETIME > ($tidw[3] + 180) && empty($tidw[6])) {
+                    $unifile = unifile(DATADIR . "/chat/chat.dat", 9);
+                    $antext = no_br($anshow . '|Весельчак||' . SITETIME . '|Opera|127.0.0.2|1|' . $tidw[7] . '|' . $tidw[8] . '|' . $unifile . '|');
 
-					write_files(DATADIR . "/chat/chat.dat", "$antext\r\n");
-				}
-			}
-			// ------------------------------- Ответ на вопрос ----------------------------------//
-			if ($config['magnik'] == 1) {
-			$mmagfi = file(DATADIR . "/chat/chat.dat");
-			$mmagshow = explode("|", end($mmagfi));
+                    write_files(DATADIR . "/chat/chat.dat", "$antext\r\n");
+                }
+            }
+            // ------------------------------- Ответ на вопрос ----------------------------------//
+            if ($config['magnik'] == 1) {
+            $mmagfi = file(DATADIR . "/chat/chat.dat");
+            $mmagshow = explode("|", end($mmagfi));
 
-			if ($mmagshow[8] != "" && SITETIME > $mmagshow[7]) {
-				$unifile = unifile(DATADIR . "/chat/chat.dat", 9);
-				$magtext = no_br('На вопрос никто не ответил, правильный ответ был: [b]' . $mmagshow[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
+            if ($mmagshow[8] != "" && SITETIME > $mmagshow[7]) {
+                $unifile = unifile(DATADIR . "/chat/chat.dat", 9);
+                $magtext = no_br('На вопрос никто не ответил, правильный ответ был: [b]' . $mmagshow[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
 
-				write_files(DATADIR . "/chat/chat.dat", "$magtext\r\n");
-			}
-			// ------------------------------  Новый вопрос  -------------------------------//
-			$magfi = file("modules/chat/bots/chat_mag.php");
-			$mag_rand = array_rand($magfi);
-			$magshow = $magfi[$mag_rand];
-			$magstr = explode("|", $magshow);
+                write_files(DATADIR . "/chat/chat.dat", "$magtext\r\n");
+            }
+            // ------------------------------  Новый вопрос  -------------------------------//
+            $magfi = file("modules/chat/bots/chat_mag.php");
+            $mag_rand = array_rand($magfi);
+            $magshow = $magfi[$mag_rand];
+            $magstr = explode("|", $magshow);
 
-			if (empty($mmagshow[8]) && SITETIME > $mmagshow[7] && $magstr[0] != "") {
-				$strlent = utf_strlen($magstr[1]);
+            if (empty($mmagshow[8]) && SITETIME > $mmagshow[7] && $magstr[0] != "") {
+                $strlent = utf_strlen($magstr[1]);
 
-				if ($strlent > 1 && $strlent < 5) {
-				$podskazka = "$strlent буквы";
-				} else {
-				$podskazka = "$strlent букв";
-				}
+                if ($strlent > 1 && $strlent < 5) {
+                $podskazka = "$strlent буквы";
+                } else {
+                $podskazka = "$strlent букв";
+                }
 
-				$unifile = unifile(DATADIR . "/chat/chat.dat", 9);
-				$magtext = no_br('Вопрос всем: ' . $magstr[0] . ' - (' . $podskazka . ')|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 600) . '|' . $magstr[1] . '|' . $unifile . '|');
+                $unifile = unifile(DATADIR . "/chat/chat.dat", 9);
+                $magtext = no_br('Вопрос всем: ' . $magstr[0] . ' - (' . $podskazka . ')|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 600) . '|' . $magstr[1] . '|' . $unifile . '|');
 
-				write_files(DATADIR . "/chat/chat.dat", "$magtext\r\n");
-			}
-			}
-			// ----------------------------  Подключение бота  -----------------------------------------//
-			if ($config['botnik'] == 1) {
-			if (empty($_SESSION['botochat'])) {
-				$hellobots = array('Приветик', 'Здравствуй', 'Хай', 'Добро пожаловать', 'Салют', 'Hello', 'Здарова');
-				$hellobots_rand = array_rand($hellobots);
-				$hellobots_well = $hellobots[$hellobots_rand];
+                write_files(DATADIR . "/chat/chat.dat", "$magtext\r\n");
+            }
+            }
+            // ----------------------------  Подключение бота  -----------------------------------------//
+            if ($config['botnik'] == 1) {
+            if (empty($_SESSION['botochat'])) {
+                $hellobots = array('Приветик', 'Здравствуй', 'Хай', 'Добро пожаловать', 'Салют', 'Hello', 'Здарова');
+                $hellobots_rand = array_rand($hellobots);
+                $hellobots_well = $hellobots[$hellobots_rand];
 
-				$mmagfi = file(DATADIR . "/chat/chat.dat");
-				$mmagshow = explode("|", end($mmagfi));
+                $mmagfi = file(DATADIR . "/chat/chat.dat");
+                $mmagshow = explode("|", end($mmagfi));
 
-				$unifile = unifile(DATADIR . "/chat/chat.dat", 9);
-				$weltext = no_br($hellobots_well . ', ' . nickname($log) . '!|Настюха||' . SITETIME . '|SIE-S65|127.0.0.2|0|' . $mmagshow[7] . '|' . $mmagshow[8] . '|' . $unifile . '|');
+                $unifile = unifile(DATADIR . "/chat/chat.dat", 9);
+                $weltext = no_br($hellobots_well . ', ' . nickname($log) . '!|Настюха||' . SITETIME . '|SIE-S65|127.0.0.2|0|' . $mmagshow[7] . '|' . $mmagshow[8] . '|' . $unifile . '|');
 
-				write_files(DATADIR . "/chat/chat.dat", "$weltext\r\n");
+                write_files(DATADIR . "/chat/chat.dat", "$weltext\r\n");
 
-				$_SESSION['botochat'] = 1;
-			}
-			}
+                $_SESSION['botochat'] = 1;
+            }
+            }
 
-			$countstr = counter_string(DATADIR . "/chat/chat.dat");
-			if ($countstr >= $config['maxpostchat']) {
-			delete_lines(DATADIR . "/chat/chat.dat", array(0, 1, 2, 3, 4));
-			}
-		}
+            $countstr = counter_string(DATADIR . "/chat/chat.dat");
+            if ($countstr >= $config['maxpostchat']) {
+            delete_lines(DATADIR . "/chat/chat.dat", array(0, 1, 2, 3, 4));
+            }
+        }
 
-		if ($start < 0 || $start >= $total) {
-		$start = 0;
-		}
-		if ($total < $start + $config['chatpost']) {
-		$end = $total;
-		} else {
-		$end = $start + $config['chatpost'];
-		}
-		for ($i = $start; $i < $end; $i++) {
-			$data = explode("|", $file[$i]);
+        if ($start < 0 || $start >= $total) {
+        $start = 0;
+        }
+        if ($total < $start + $config['chatpost']) {
+        $end = $total;
+        } else {
+        $end = $start + $config['chatpost'];
+        }
+        for ($i = $start; $i < $end; $i++) {
+            $data = explode("|", $file[$i]);
 
-			$useronline = user_online($data[1]);
-			$useravatars = user_avatars($data[1]);
+            $useronline = user_online($data[1]);
+            $useravatars = user_avatars($data[1]);
 
-			if ($data[1] == 'Вундер-киндер') {
-				$useravatars = '<img src="modules/chat/img/mag.gif" alt="image" /> ';
-				$useronline = '<img src="/images/img/on.gif" alt="image">';
-			}
-			if ($data[1] == 'Настюха') {
-				$useravatars = '<img src="modules/chat/img/bot.gif" alt="image" /> ';
-				$useronline = '<img src="/images/img/on.gif" alt="image">';
-			}
-			if ($data[1] == 'Весельчак') {
-				$useravatars = '<img src="modules/chat/img/shut.gif" alt="image" /> ';
-				$useronline = '<img src="/images/img/on.gif" alt="image">';
-			}
+            if ($data[1] == 'Вундер-киндер') {
+                $useravatars = '<img src="modules/chat/img/mag.gif" alt="image" /> ';
+                $useronline = '<img src="/images/img/on.gif" alt="image">';
+            }
+            if ($data[1] == 'Настюха') {
+                $useravatars = '<img src="modules/chat/img/bot.gif" alt="image" /> ';
+                $useronline = '<img src="/images/img/on.gif" alt="image">';
+            }
+            if ($data[1] == 'Весельчак') {
+                $useravatars = '<img src="modules/chat/img/shut.gif" alt="image" /> ';
+                $useronline = '<img src="/images/img/on.gif" alt="image">';
+            }
 
-			echo '<div class="b">';
-			echo '<div class="img">' . $useravatars . '</div>';
+            echo '<div class="b">';
+            echo '<div class="img">' . $useravatars . '</div>';
 
-			echo '<b><a href="/chat?name=' . nickname($data[1]) . '#form">' . nickname($data[1]) . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
-			echo user_title($data[1]) . ' ' . $useronline . '</div>';
-			echo '<div>' . bb_code($data[0]) . '<br />';
-			if (is_admin() || empty($config['anonymity'])){
-				echo '<span class="data">(' . $data[4] . ', ' . $data[5] . ')</span></div>';
-			}
-		}
+            echo '<b><a href="/chat?name=' . nickname($data[1]) . '#form">' . nickname($data[1]) . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
+            echo user_title($data[1]) . ' ' . $useronline . '</div>';
+            echo '<div>' . bb_code($data[0]) . '<br />';
+            if (is_admin() || empty($config['anonymity'])){
+                echo '<span class="data">(' . $data[4] . ', ' . $data[5] . ')</span></div>';
+            }
+        }
 
-		page_strnavigation('/chat?', $config['chatpost'], $start, $total);
+        page_strnavigation('/chat?', $config['chatpost'], $start, $total);
 
-	} else {
-		show_error('Сообщений нет, будь первым!');
-	}
+    } else {
+        show_error('Сообщений нет, будь первым!');
+    }
 
-	if (is_user()) {
-		echo '<div class="form" id="form">';
-		echo '<form action="/chat?act=add" method="post">';
-		echo '<b>Сообщение:</b><br />';
-		echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $name . '</textarea><br />';
-		echo '<input type="submit" value="Добавить" /></form></div>';
-	} else {
-		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-	}
+    if (is_user()) {
+        echo '<div class="form" id="form">';
+        echo '<form action="/chat?act=add" method="post">';
+        echo '<b>Сообщение:</b><br />';
+        echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $name . '</textarea><br />';
+        echo '<input type="submit" value="Добавить" /></form></div>';
+    } else {
+        show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+    }
 }
 
 ############################################################################################
@@ -166,73 +166,70 @@ if ($act == 'index') {
 ############################################################################################
 if ($act == 'add') {
 
-	$msg = check($_POST['msg']);
+    $msg = check($_POST['msg']);
 
-	$config['header'] = 'Добавление сообщения';
-	$config['newtitle'] = 'Мини-чат - Добавление сообщения';
+    $config['header'] = 'Добавление сообщения';
+    $config['newtitle'] = 'Мини-чат - Добавление сообщения';
 
-	if (is_user()) {
-		if (utf_strlen($msg) > 3 && utf_strlen($msg) < 1000) {
-			if (is_quarantine($log)) {
-				if (is_flood($log)) {
+    if (is_user()) {
+        if (utf_strlen($msg) > 3 && utf_strlen($msg) < 1000) {
 
-					$msg = antimat($msg);
+            if (is_flood($log)) {
 
-					$file = file(DATADIR . "/chat/chat.dat");
-					$data = explode("|", end($file));
+                $msg = antimat($msg);
 
-					$unifile = unifile(DATADIR . "/chat/chat.dat", 9);
+                $file = file(DATADIR . "/chat/chat.dat");
+                $data = explode("|", end($file));
 
-					if (!isset($data[7])) $data[7] = '';
-					if (!isset($data[8])) $data[8] = '';
+                $unifile = unifile(DATADIR . "/chat/chat.dat", 9);
 
-					$text = no_br($msg . '|' . $log . '||' . SITETIME . '|' . App::getUserAgent() . '|' . App::getClientIp() . '|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
+                if (!isset($data[7])) $data[7] = '';
+                if (!isset($data[8])) $data[8] = '';
 
-					write_files(DATADIR . "/chat/chat.dat", "$text\r\n");
+                $text = no_br($msg . '|' . $log . '||' . SITETIME . '|' . App::getUserAgent() . '|' . App::getClientIp() . '|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
 
-					$countstr = counter_string(DATADIR . "/chat/chat.dat");
-					if ($countstr >= $config['maxpostchat']) {
-						delete_lines(DATADIR . "/chat/chat.dat", array(0, 1, 2, 3, 4));
-					}
+                write_files(DATADIR . "/chat/chat.dat", "$text\r\n");
 
-					DB::run() -> query("UPDATE `users` SET `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+                $countstr = counter_string(DATADIR . "/chat/chat.dat");
+                if ($countstr >= $config['maxpostchat']) {
+                    delete_lines(DATADIR . "/chat/chat.dat", array(0, 1, 2, 3, 4));
+                }
 
-					// --------------------------------------------------------------------------//
-					if ($config['botnik'] == 1) {
-						include_once "modules/chat/bots/chat_bot.php";
+                DB::run() -> query("UPDATE `users` SET `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
-						if ($mssg != "") {
-							$unifile = unifile(DATADIR . "/chat/chat.dat", 9);
-							$text = no_br($mssg . '|' . $namebots . '||' . SITETIME . '|MOT-V3|L-O-V-E|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
+                // --------------------------------------------------------------------------//
+                if ($config['botnik'] == 1) {
+                    include_once "modules/chat/bots/chat_bot.php";
 
-							write_files(DATADIR . "/chat/chat.dat", "$text\r\n");
-						}
-					}
-					// --------------------------------------------------------------------------//
-					if ($config['magnik'] == 1) {
-						if (!empty($data[8]) && stristr($msg, $data[8])) {
-							$unifile = unifile(DATADIR . "/chat/chat.dat", 9);
-							$text = no_br('Молодец ' . nickname($log) . '! Правильный ответ [b]' . $data[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
+                    if ($mssg != "") {
+                        $unifile = unifile(DATADIR . "/chat/chat.dat", 9);
+                        $text = no_br($mssg . '|' . $namebots . '||' . SITETIME . '|MOT-V3|L-O-V-E|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
 
-							write_files(DATADIR . "/chat/chat.dat", "$text\r\n");
-						}
-					}
+                        write_files(DATADIR . "/chat/chat.dat", "$text\r\n");
+                    }
+                }
+                // --------------------------------------------------------------------------//
+                if ($config['magnik'] == 1) {
+                    if (!empty($data[8]) && stristr($msg, $data[8])) {
+                        $unifile = unifile(DATADIR . "/chat/chat.dat", 9);
+                        $text = no_br('Молодец ' . nickname($log) . '! Правильный ответ [b]' . $data[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
 
-					notice('Сообщение успешно добавлено!');
-					redirect("/chat");
+                        write_files(DATADIR . "/chat/chat.dat", "$text\r\n");
+                    }
+                }
 
-				} else {
-					show_error('Антифлуд! Разрешается отправлять сообщения раз в ' . flood_period() . ' секунд!');
-				}
-			} else {
-			show_error('Карантин! Вы не можете писать в течении ' . round($config['karantin'] / 3600) . ' часов!');
-			}
-		} else {
-			show_error('Ошибка, слишком длинное или короткое сообщение!');
-		}
-	} else {
-		show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-	}
+                notice('Сообщение успешно добавлено!');
+                redirect("/chat");
+
+            } else {
+                show_error('Антифлуд! Разрешается отправлять сообщения раз в ' . flood_period() . ' секунд!');
+            }
+        } else {
+            show_error('Ошибка, слишком длинное или короткое сообщение!');
+        }
+    } else {
+        show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+    }
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/chat">Вернуться</a><br /><br />';
 

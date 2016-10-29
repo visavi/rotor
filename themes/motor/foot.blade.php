@@ -1,7 +1,6 @@
     <div class="small" id="down">
                         <?= show_counter() ?>
                         <?= show_online() ?>
-                        <?= navigation() ?>
                         <?= perfomance() ?>
                     </div>
                 </div>

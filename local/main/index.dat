@@ -1,9 +1,9 @@
 <?php
 show_title('Сервисы сайта');
 ?>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/razban.php">Исправительная</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/rules.php">Правила сайта</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/tags.php">Справка по тегам</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/smiles.php">Галерея cмайлов</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/searchuser.php">Поиск юзера</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/pages/faq.php">FAQ (Чаво)</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/razban">Исправительная</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/rules">Правила сайта</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/tags">Справка по тегам</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/smiles">Галерея cмайлов</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/searchuser">Поиск юзера</a><br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/faq">FAQ (Чаво)</a><br />

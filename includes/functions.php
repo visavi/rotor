@@ -436,33 +436,12 @@ function save_setting() {
     file_put_contents(DATADIR."/temp/setting.dat", serialize($config), LOCK_EX);
 }
 
-// --------------- Функция кэширования навигации -------------------//
-function save_navigation() {
-    $querynav = DB::run() -> query("SELECT `nav_url`, `nav_title` FROM `navigation` ORDER BY `nav_order` ASC;");
-    $arrnav = $querynav -> fetchAll();
-    file_put_contents(DATADIR."/temp/navigation.dat", serialize($arrnav), LOCK_EX);
-}
-
 // --------------- Функция кэширования забаненных IP -------------------//
 function save_ipban() {
     $querybanip = DB::run() -> query("SELECT `ban_ip` FROM `ban`;");
     $arrbanip = $querybanip -> fetchAll(PDO::FETCH_COLUMN);
     file_put_contents(DATADIR."/temp/ipban.dat", serialize($arrbanip), LOCK_EX);
     return $arrbanip;
-}
-
-// ------------------------- Функция карантина ------------------------------//
-function is_quarantine($log) {
-    global $config;
-
-    if (!empty($config['karantin'])) {
-        $queryuser = DB::run() -> querySingle("SELECT `users_joined` FROM users WHERE `users_login`=? LIMIT 1;", array($log));
-
-        if ($queryuser + $config['karantin'] > SITETIME) {
-            return false;
-        }
-    }
-    return true;
 }
 
 // ------------------------- Функция времени антифлуда ------------------------------//
@@ -737,6 +716,8 @@ function stats_counter() {
 // ------------------ Функция вывода счетчика посещений -----------------//
 function show_counter()
 {
+    global $config;
+
     /*
      * @TODO Временно, убрать после вывода в шаблоны
      */
@@ -744,7 +725,7 @@ function show_counter()
         unset($_SESSION['note']);
     }
 
-    global $config;
+    include_once (BASEDIR."/includes/counters.php");
 
     if ($config['incount'] > 0) {
         $count = stats_counter();
@@ -835,11 +816,6 @@ function stats_blacklist() {
     $blacklist = $query -> fetchAssoc();
     $list = $blacklist + array_fill(1, 3, 0);
     return $list[1].'/'.$list[2].'/'.$list[3];
-}
-
-// --------------- Функция вывода количества заголовков ----------------//
-function stats_navigation() {
-    return DB::run() -> querySingle("SELECT count(*) FROM `navigation`;");
 }
 
 // --------------- Функция вывода количества заголовков ----------------//
@@ -2227,26 +2203,8 @@ function notice($message, $status = 'success'){
     $_SESSION['note'][$status][] = $message;
 }
 
-// ------------ Функция вывода навигации -----------//
-function navigation (){
-    global $config;
-
-    if (!empty($config['navigation'])) {
-        if (file_exists(DATADIR."/temp/navigation.dat")) {
-            $navigation = unserialize(file_get_contents(DATADIR."/temp/navigation.dat"));
-        } else {
-            $querynav = DB::run() -> query("SELECT `nav_url`, `nav_title` FROM `navigation` ORDER BY `nav_order` ASC;");
-            $navigation = $querynav -> fetchAll();
-        }
-
-        if ($navigation) {
-            render ('includes/navigation', compact('navigation'));
-        }
-    }
-}
-
 // ------------ Функция статистики производительности -----------//
-function perfomance (){
+function perfomance(){
     global $config;
 
     if (is_admin() && !empty($config['performance'])){
@@ -2358,7 +2316,6 @@ function clearCache()
     }
 
     // Авто-кэширование данных
-    save_navigation();
     save_ipban();
 
     return true;

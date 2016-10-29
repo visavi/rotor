@@ -76,12 +76,11 @@ echo '</div>';
 echo '</div>
                 <div class="cleared"></div><div class="art-Footer">
                     <div class="art-Footer-inner">
-                        <a href="/news/rss.php" class="art-rss-tag-icon" title="RSS"></a>
+                        <a href="/news/rss" class="art-rss-tag-icon" title="RSS"></a>
                         <div class="art-Footer-text">';
 echo '<a href="'.$config['home'].'">'.$config['copy'].'</a><br />';
     show_online();
     show_counter();
-    navigation();
 echo '</div>';
 
     perfomance();
@@ -92,9 +91,9 @@ echo '</div><div class="art-Footer-background"></div>
     </div>
 
 <div style="text-align:center"><small>
-<a href="/pages/faq.php">FAQ (Чаво)</a> |
-<a href="/pages/rules.php">Правила</a> |
-<a href="/mail/index.php">Поддержка</a>
+<a href="/faq">FAQ (Чаво)</a> |
+<a href="/rules">Правила</a> |
+<a href="/mail">Поддержка</a>
 </small></div>';
 echo '</body></html>';
 ?>

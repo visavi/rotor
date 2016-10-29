@@ -15,7 +15,7 @@ echo '<title>%TITLE%</title>';
 echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />';
 include_style();
 echo '<link rel="stylesheet" href="/themes/sky/css/style.css" type="text/css" media="screen" />';
-echo '<link rel="alternate" href="/news/rss.php" title="RSS News" type="application/rss+xml" />';
+echo '<link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />';
 include_javascript();
 echo '<meta name="keywords" content="%KEYWORDS%" />';
 echo '<meta name="description" content="%DESCRIPTION%" />';
@@ -61,8 +61,8 @@ echo '<div id="art-page-background-simple-gradient">
                 		<li><a href="/"><span class="l"></span><span class="r"></span><span class="t">Главная</span></a></li>
                 		<li><a href="/forum"><span class="l"></span><span class="r"></span><span class="t">Форум</span></a>
                            <ul>
-                                 <li><a href="/forum/new.php?act=themes">Новые темы</a></li>
-                                 <li><a href="/forum/new.php?act=posts">Новые сообщения</a></li>
+                                 <li><a href="/forum/new/themes">Новые темы</a></li>
+                                 <li><a href="/forum/new/posts">Новые сообщения</a></li>
                 		   </ul></li>
 
 
@@ -71,34 +71,34 @@ echo '<div id="art-page-background-simple-gradient">
 
                         <li><a href="/load"><span class="l"></span><span class="r"></span><span class="t">Файлы</span></a>
                            <ul>
-                                 <li><a href="/load/new.php?act=files">Новые файлы</a></li>
-                                 <li><a href="/load/new.php?act=comments">Новые комментарии</a></li>
+                                 <li><a href="/load/new?act=files">Новые файлы</a></li>
+                                 <li><a href="/load/new?act=comments">Новые комментарии</a></li>
                 		   </ul></li>
 
                         <li><a href="/blog"><span class="l"></span><span class="r"></span><span class="t">Блоги</span></a>
                            <ul>
-                                 <li><a href="/blog/new.php?act=blogs">Новые статьи</a></li>
-                                 <li><a href="/blog/new.php?act=comments">Новые комментарии</a></li>
+                                 <li><a href="/blog/new?act=blogs">Новые статьи</a></li>
+                                 <li><a href="/blog/new?act=comments">Новые комментарии</a></li>
                 		   </ul></li>
 
 
                         <li><a href="/gallery"><span class="l"></span><span class="r"></span><span class="t">Галерея</span></a>
                            <ul>
-                                 <li><a href="/gallery/top.php">Топ фото</a></li>
-                                 <li><a href="/gallery/album.php">Все альбомы</a></li>
-											<li><a href="/gallery/comments.php">Все комментарии</a></li>
+                                 <li><a href="/gallery/top">Топ фото</a></li>
+                                 <li><a href="/gallery/album">Все альбомы</a></li>
+											<li><a href="/gallery/comments">Все комментарии</a></li>
                 		   </ul></li>
 
 
                 		<li><a href="#"><span class="l"></span><span class="r"></span><span class="t">Актив сайта</span></a>
                            <ul>
-                                 <li><a href="/pages/adminlist.php">Администрация</a></li>
-                                 <li><a href="/pages/userlist.php">Пользователи</a></li>
+                                 <li><a href="/adminlist">Администрация</a></li>
+                                 <li><a href="/userlist">Пользователи</a></li>
                 		   </ul> </li>';
 if (!is_user()) {
-  echo'<li><a href="/pages/registration.php" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>';
+  echo'<li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>';
  } else {
-  echo '<li><a href="/input.php?act=exit" onclick="return confirm(\'Вы действительно хотите выйти?\')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>';
+  echo '<li><a href="/logout" onclick="return confirm(\'Вы действительно хотите выйти?\')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>';
 }
 
 echo '</ul></div>';
@@ -124,14 +124,14 @@ if (is_user()) {
 
 if (is_admin()){
 echo '<div class="nmenu">';
-echo '<img src="/images/img/panel.gif" alt="Панель" /> <a href="/admin/index.php">Панель</a>';
+echo '<img src="/images/img/panel.gif" alt="Панель" /> <a href="/admin">Панель</a>';
 
 if (stats_spam()>0){
-echo ' &bull; <a href="/admin/spam.php"><span style="color:#ff0000">Спам!</span></a>';
+echo ' &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>';
 }
 
 if ($udata['users_newchat']<stats_newchat()){
-echo ' &bull; <a href="/admin/chat.php"><span style="color:#ff0000">Чат</span></a>';
+echo ' &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>';
 }
 
 echo '</div>';
@@ -145,7 +145,7 @@ $cooklog = (isset($_COOKIE['cooklog'])) ? check($_COOKIE['cooklog']): '';
 
 echo '<div class="divb">Авторизация</div>';
 
-echo'<form method="post" action="/input.php">';
+echo'<form method="post" action="/login">';
 echo 'Логин:<br /><input name="login" value="'.$cooklog.'" /><br />';
 echo 'Пароль:<br /><input name="pass" type="password" /><br />';
 echo 'Запомнить меня:';
@@ -153,8 +153,8 @@ echo '<input name="cookietrue" type="checkbox" value="1" checked="checked" /><br
 
 echo '<input value="Войти" type="submit" /></form>';
 
-echo '<a href="/pages/registration.php">Регистрация</a><br />';
-echo '<a href="/mail/lostpassword.php">Забыли пароль?</a>';
+echo '<a href="/register">Регистрация</a><br />';
+echo '<a href="/mail/lostpassword">Забыли пароль?</a>';
 }
 
 

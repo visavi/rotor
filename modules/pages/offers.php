@@ -424,24 +424,20 @@ switch ($act):
                     $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `offers_id`=? LIMIT 1;", array($id));
                     if (!empty($queryoff)) {
                         if (empty($queryoff['offers_closed'])) {
-                            if (is_quarantine($log)) {
-                                if (is_flood($log)) {
+                            if (is_flood($log)) {
 
-                                    $msg = antimat($msg);
+                                $msg = antimat($msg);
 
-                                    DB::run() -> query("INSERT INTO `commoffers` (`comm_offers`, `comm_text`, `comm_user`, `comm_time`, `comm_ip`, `comm_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                                DB::run() -> query("INSERT INTO `commoffers` (`comm_offers`, `comm_text`, `comm_user`, `comm_time`, `comm_ip`, `comm_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-                                    DB::run() -> query("DELETE FROM `commoffers` WHERE `comm_offers`=? AND `comm_time` < (SELECT MIN(`comm_time`) FROM (SELECT `comm_time` FROM `commoffers` WHERE `comm_id`=? ORDER BY `comm_time` DESC LIMIT ".$config['maxpostoffers'].") AS del);", array($id, $id));
+                                DB::run() -> query("DELETE FROM `commoffers` WHERE `comm_offers`=? AND `comm_time` < (SELECT MIN(`comm_time`) FROM (SELECT `comm_time` FROM `commoffers` WHERE `comm_id`=? ORDER BY `comm_time` DESC LIMIT ".$config['maxpostoffers'].") AS del);", array($id, $id));
 
-                                    DB::run() -> query("UPDATE `offers` SET `offers_comments`=`offers_comments`+1 WHERE `offers_id`=?;", array($id));
+                                DB::run() -> query("UPDATE `offers` SET `offers_comments`=`offers_comments`+1 WHERE `offers_id`=?;", array($id));
 
-                                    $_SESSION['note'] = 'Комментарий успешно добавлен!';
-                                    redirect("/offers?act=end&id=$id");
-                                } else {
-                                    show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
-                                }
+                                $_SESSION['note'] = 'Комментарий успешно добавлен!';
+                                redirect("/offers?act=end&id=$id");
                             } else {
-                                show_error('Карантин! Вы не можете писать в течении '.round($config['karantin'] / 3600).' часов!');
+                                show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
                             }
                         } else {
                             show_error('Комментирование данного предложения или проблемы закрыто!');

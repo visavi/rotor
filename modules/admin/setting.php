@@ -185,18 +185,6 @@ if (is_admin(array(101))) {
                 }
                 echo '</select><br />';
 
-                # ----------------------------------------#
-                echo 'Время карантина:<br />';
-                echo '<select name="karantin">';
-                $karantin = array(0 => 'Выключить', 21600 => '6 часов', 43200 => '12 часов', 86400 => '24 часа', 129600 => '36 часов', 172800 => '48 часов');
-
-                foreach($karantin as $k => $v) {
-                    $selected = ($k == $setting['karantin']) ? ' selected="selected"' : '';
-
-                    echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
-                }
-                echo '</select><br />';
-
                 echo 'Подтверждение регистрации:<br />';
                 echo '<select name="regkeys">';
                 $regist = array(0 => 'Выключить', 1 => 'Автоматически', 2 => 'Вручную');
@@ -228,9 +216,6 @@ if (is_admin(array(101))) {
                 $checked = ($setting['regmail'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="regmail" type="checkbox" value="1"'.$checked.' /> Запрос email при регистрации<br />';
 
-                $checked = ($setting['cache'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="cache" type="checkbox" value="1"'.$checked.' /> Включить кэширование страниц<br />';
-
                 $checked = ($setting['gzip'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="gzip" type="checkbox" value="1"'.$checked.' /> Включить сжатие GZIP<br />';
 
@@ -256,7 +241,6 @@ if (is_admin(array(101))) {
             $uid = check($_GET['uid']);
             $regmail = (empty($_POST['regmail'])) ? 0 : 1;
             $invite = (empty($_POST['invite'])) ? 0 : 1;
-            $cache = (empty($_POST['cache'])) ? 0 : 1;
             $openreg = (empty($_POST['openreg'])) ? 0 : 1;
             $gzip = (empty($_POST['gzip'])) ? 0 : 1;
             $anonymity = (empty($_POST['anonymity'])) ? 0 : 1;
@@ -266,7 +250,7 @@ if (is_admin(array(101))) {
 
             if ($log == $config['nickname']) {
                 if ($uid == $_SESSION['token']) {
-                    if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['keypass'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "" && $_POST['karantin'] != "") {
+                    if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['keypass'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
 
                         $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
                         $dbr -> execute(check($_POST['title']), 'title');
@@ -281,11 +265,9 @@ if (is_admin(array(101))) {
                         $dbr -> execute(check($_POST['themes']), 'themes');
                         $dbr -> execute(check($_POST['webthemes']), 'webthemes');
                         $dbr -> execute(check($_POST['touchthemes']), 'touchthemes');
-                        $dbr -> execute(intval($_POST['karantin']), 'karantin');
                         $dbr -> execute($regkeys, 'regkeys');
                         $dbr -> execute($regmail, 'regmail');
                         $dbr -> execute($invite, 'invite');
-                        $dbr -> execute($cache, 'cache');
                         $dbr -> execute($openreg, 'openreg');
                         $dbr -> execute($gzip, 'gzip');
                         $dbr -> execute($anonymity, 'anonymity');
@@ -434,17 +416,6 @@ if (is_admin(array(101))) {
             }
             echo '</select><br />';
 
-            echo 'Быстрый переход:<br /><select name="navigation">';
-
-            $innav = array('Выключить', 'Обычный список', 'Список без кнопки');
-
-            foreach($innav as $k => $v) {
-                $selected = ($k == $setting['navigation']) ? ' selected="selected"' : '';
-
-                echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
-            }
-            echo '</select><br />';
-
             $checked = ($setting['performance'] == 1) ? ' checked="checked"' : '';
             echo '<input name="performance" type="checkbox" value="1"'.$checked.' /> Производительность<br />';
 
@@ -467,10 +438,9 @@ if (is_admin(array(101))) {
             $onlines = (empty($_POST['onlines'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['incount'] != "" && $_POST['navigation'] != "" && $_POST['timeonline'] != "") {
+                if ($_POST['incount'] != "" && $_POST['timeonline'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
                     $dbr -> execute(intval($_POST['incount']), 'incount');
-                    $dbr -> execute(intval($_POST['navigation']), 'navigation');
                     $dbr -> execute($performance, 'performance');
                     $dbr -> execute($onlines, 'onlines');
                     $dbr -> execute(intval($_POST['timeonline'] * 60), 'timeonline');

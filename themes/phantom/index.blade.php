@@ -12,7 +12,7 @@ header('Content-type:text/html; charset=utf-8');
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="image_src" href="/images/img/icon.png" />
-        <link rel="alternate" href="/news/rss.php" title="RSS News" type="application/rss+xml" />
+        <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="keywords" content="@yield('keywords', App::setting('keywords'))" />
         <meta name="description" content="@yield('description', App::setting('description'))" />

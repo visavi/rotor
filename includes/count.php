@@ -1,15 +1,5 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-if (!defined('BASEDIR')) {
-	exit(header('Location: /index.php'));
-}
+
 // -------------------- Вывод статистики ------------------------------//
 $week_day = date('w');
 $arr_week = array('вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб');

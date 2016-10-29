@@ -9,7 +9,6 @@
 		<?php
 		show_online();
 		show_counter();
-		navigation();
 		perfomance();
 		?>
 	</div>

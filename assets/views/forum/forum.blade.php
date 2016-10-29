@@ -15,7 +15,7 @@
 	/ {{ $forums['forums_title'] }}
 
 	@if (is_admin())
-		/ <a href="/admin/forum.php?act=forum&amp;fid=<?=$fid?>&amp;start=<?=$start?>">Управление</a>
+		/ <a href="/admin/forum?act=forum&amp;fid=<?=$fid?>&amp;start=<?=$start?>">Управление</a>
 	@endif
 
 	@if (is_user() && empty($forums['forums_closed']))
@@ -77,7 +77,7 @@
 	<?php endif; ?>
 
 
-	<a href="/pages/rules.php">Правила</a> /
-	<a href="top.php?act=themes">Топ тем</a> /
-	<a href="search.php?fid=<?=$fid?>">Поиск</a><br />
+	<a href="/rules">Правила</a> /
+	<a href="/forum/top/themes">Топ тем</a> /
+	<a href="/forum/search?fid=<?=$fid?>">Поиск</a><br />
 @stop

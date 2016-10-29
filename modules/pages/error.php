@@ -42,5 +42,4 @@ if (!empty($config['errorlog'])){
 	endswitch;
 }
 
-redirect('/index.php');
-?>
+redirect('/');

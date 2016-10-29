@@ -43,7 +43,7 @@ foreach ($calend as $valned) {
 		}
 
 		if (in_array($valday, $array_news)) {
-			echo '<td><a href="/news/index.php?act=read&amp;id='.$array_komm[$valday].'"><span style="color:#ff0000">'.$valday.'</span></a></td>';
+			echo '<td><a href="/news/'.$array_komm[$valday].'"><span style="color:#ff0000">'.$valday.'</span></a></td>';
 			continue;
 		}
 
