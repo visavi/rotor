@@ -44,7 +44,7 @@ function notify(type, title, message, optionsOverride) {
 }
 
 /* Показ формы загрузки файла */
-function showAttachForm(){
+function showAttachForm() {
     $('.js-attach-button').hide();
     $('.js-attach-form').slideDown();
 
@@ -60,7 +60,7 @@ function postJump() {
 }
 
 /* Ответ на сообщение */
-function postReply(name){
+function postReply(name) {
 
     postJump();
     separator = $("#markItUp").val().length ? '\n' : '';
@@ -70,7 +70,7 @@ function postReply(name){
 }
 
 /* Цитирование сообщения */
-function postQuote(el){
+function postQuote(el) {
 
     postJump();
 
@@ -83,6 +83,17 @@ function postQuote(el){
     $('#markItUp').focus().val($('#markItUp').val() + separator + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
 
     return false;
+}
+
+/* Выход с сайта */
+function logout(el) {
+    if (bootbox.confirm('Вы уверены, что хотите выйти?', function(result){
+            if (result) {
+                window.location = $(el).attr("href");
+            }
+        }))
+
+        return false;
 }
 
 /* Отправка жалобы на спам */

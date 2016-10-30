@@ -12,7 +12,7 @@
 		<?php endif; ?>
 	<?php endif; ?>
 		<a href="/menu">Меню</a> &bull;
-		<a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
+		<a href="/logout" onclick="return logout(this)">Выход</a>
 <?php else: ?>
 	<i class="fa fa-lock fa-lg"></i> <a href="/login" rel="nofollow">Авторизация</a> &bull;
 	<a href="/register" rel="nofollow">Регистрация</a>

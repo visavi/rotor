@@ -15,7 +15,7 @@ if ($debugmode) {
 
 define('STARTTIME', microtime(1));
 define('BASEDIR', dirname(dirname(__FILE__)));
-define('DATADIR', BASEDIR.'/local');
+define('DATADIR', BASEDIR.'/storage');
 define('HOME', BASEDIR.'/public');
 define('SITETIME', time());
 define('PCLZIP_TEMPORARY_DIR', BASEDIR.'/local/temp/');
@@ -29,9 +29,7 @@ if (file_exists(BASEDIR.'/includes/connect.php')) {
 	die('Переименуйте файл connect.example.php в connect.php в директории include!');
 }
 
-if (file_exists(BASEDIR.'/includes/vendor/autoload.php')) {
-	include_once BASEDIR.'/includes/vendor/autoload.php';
-}
+include_once BASEDIR.'/vendor/autoload.php';
 
 // -------- Автозагрузка классов ---------- //
 function autoloader($class) {
@@ -40,8 +38,6 @@ function autoloader($class) {
 	if (file_exists(BASEDIR.'/includes/classes/'.$class.'.php')) {
 		include_once BASEDIR.'/includes/classes/'.$class.'.php';
 	}
-
-	include_once BASEDIR.'/includes/classes/swiftmailer/swift_required.php';
 }
 
 spl_autoload_register('autoloader');

@@ -23,8 +23,5 @@
 		"philo/laravel-blade": "~3.0",
 		"swiftmailer/swiftmailer": "~5.4",
 		"visavi/compressor": "~1.1"
-	},
-	"config": {
-		"vendor-dir": "includes/vendor"
 	}
 }
