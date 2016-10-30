@@ -8,8 +8,6 @@
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
 include_once __DIR__.'/../includes/start.php';
-include_once __DIR__.'/../includes/functions.php';
-include_once __DIR__.'/../includes/header.php';
 
 $params = App::router('params');
 $target = App::router('target');

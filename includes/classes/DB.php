@@ -78,16 +78,12 @@ class DB {
 		if (! isset(self::$instance)) {
 
 			try {
-				self::$instance = new PDO_('mysql:host='.DBHOST.';port='.DBPORT.';dbname='.DBNAME, DBUSER, DBPASS);
+				self::$instance = new PDO_('mysql:host='.env('DB_HOST').';port='.env('DB_PORT').';dbname='.env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
 				self::$instance->exec('SET CHARACTER SET utf8');
 				self::$instance->exec('SET NAMES utf8');
 			}
 
 			catch (PDOException $e) {
-				if (file_exists(BASEDIR.'/install/index.php')) {
-					header ('Location: /install/index.php');
-					exit;
-				}
 				die('Connection failed: '.$e->getMessage());
 			}
 		}

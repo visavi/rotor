@@ -1,27 +1,36 @@
 {
-	"name": "visavi/rotorcms4",
-	"description": "RotorCMS",
-	"keywords": ["cms", "wap", "rotor"],
-	"homepage": "http://visavi.net",
-	"license": "GPL-3.0",
-	"authors": [
-		{
-			"name": "Alexander Grigorev",
-			"email": "visavi.net@mail.ru",
-			"homepage": "http://pizdec.ru"
-		}
-	],
-	"require": {
-		"php": ">=5.5.9",
-		"altorouter/altorouter": "~1.2",
-		"cbschuld/browser.php": "dev-master",
-		"gregwar/captcha": "dev-master",
-		"illuminate/http": "~5.3",
-		"mobiledetect/mobiledetectlib": "dev-master",
-		"pclzip/pclzip": "dev-master",
-		"php-ffmpeg/php-ffmpeg": "~0.6",
-		"philo/laravel-blade": "~3.0",
-		"swiftmailer/swiftmailer": "~5.4",
-		"visavi/compressor": "~1.1"
-	}
+    "name": "visavi/rotorcms4",
+    "description": "RotorCMS",
+    "keywords": ["cms", "wap", "rotor"],
+    "homepage": "http://visavi.net",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Alexander Grigorev",
+            "email": "visavi.net@mail.ru",
+            "homepage": "http://pizdec.ru"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "altorouter/altorouter": "~1.2",
+        "cbschuld/browser.php": "dev-master",
+        "gregwar/captcha": "dev-master",
+        "illuminate/http": "~5.3",
+        "mobiledetect/mobiledetectlib": "dev-master",
+        "pclzip/pclzip": "dev-master",
+        "php-ffmpeg/php-ffmpeg": "~0.6",
+        "philo/laravel-blade": "^3.1",
+        "swiftmailer/swiftmailer": "~5.4",
+        "visavi/compressor": "~1.3",
+        "vlucas/phpdotenv": "^2.4"
+    },
+    "require-dev": {
+        "filp/whoops": "^2.1"
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "php -r \"copy('.env.example', '.env');\""
+        ]
+    }
 }
