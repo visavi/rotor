@@ -180,8 +180,8 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы совершать операции, необходимо');
 }
 
-echo '<img src="/images/img/chart.gif" alt="image" /> <a href="/games/ivebank">Статистика вкладов</a><br />';
-echo '<img src="/images/img/money.gif" alt="image" /> <a href="/games/credit">Выдача кредитов</a><br />';
-echo '<img src="/images/img/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<img src="/assets/img/images/chart.gif" alt="image" /> <a href="/games/ivebank">Статистика вкладов</a><br />';
+echo '<img src="/assets/img/images/money.gif" alt="image" /> <a href="/games/credit">Выдача кредитов</a><br />';
+echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

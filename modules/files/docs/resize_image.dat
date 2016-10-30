@@ -25,8 +25,8 @@
 
 <?php
 echo bb_code(check('[code]<?php
-echo resize_image(\'upload/pictures/\', $data[\'photo_link\'], $config[\'previewsize\'], $data[\'photo_title\']);
- /* Функция вернет уменьшенную картинку <img src="../upload/thumbnail/upload_pictures_1350.jpg" alt="Название"/> */
+echo resize_image(\'/upload/pictures/\', $data[\'photo_link\'], $config[\'previewsize\'], $data[\'photo_title\']);
+ /* Функция вернет уменьшенную картинку <img src="/upload/thumbnail/upload_pictures_1350.jpg" alt="Название"/> */
 ?>[/code]'));
 ?>
 

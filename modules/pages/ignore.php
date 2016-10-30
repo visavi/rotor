@@ -96,7 +96,7 @@ if (is_user()) {
                                     if (empty($ignorstr)) {
                                         DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($uz));
                                         // ------------------------------Уведомление по привату------------------------//
-                                        $textpriv = '<img src="/images/img/custom.gif" alt="custom" /> Пользователь [b]'.nickname($log).'[/b] добавил вас в свой игнор-лист!';
+                                        $textpriv = '<img src="/assets/img/images/custom.gif" alt="custom" /> Пользователь [b]'.nickname($log).'[/b] добавил вас в свой игнор-лист!';
                                         DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                     }
 
@@ -140,7 +140,7 @@ if (is_user()) {
                 $data = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `ignore_id`=? AND `ignore_user`=? LIMIT 1;", array($id, $log));
 
                 if (!empty($data)) {
-                    echo '<img src="/images/img/edit.gif" alt="image" /> Заметка для пользователя <b>'.nickname($data['ignore_name']).'</b> '.user_online($data['ignore_name']).':<br /><br />';
+                    echo '<img src="/assets/img/images/edit.gif" alt="image" /> Заметка для пользователя <b>'.nickname($data['ignore_name']).'</b> '.user_online($data['ignore_name']).':<br /><br />';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/ignore?act=editnote&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">';
@@ -227,7 +227,7 @@ if (is_user()) {
     show_login('Вы не авторизованы, для просмотра игнор-листа, необходимо');
 }
 
-echo '<img src="/images/img/users.gif" alt="image" /> <a href="/contact">Контакт-лист</a><br />';
-echo '<img src="/images/img/mail.gif" alt="image" /> <a href="/private">Сообщения</a><br />';
+echo '<img src="/assets/img/images/users.gif" alt="image" /> <a href="/contact">Контакт-лист</a><br />';
+echo '<img src="/assets/img/images/mail.gif" alt="image" /> <a href="/private">Сообщения</a><br />';
 
 App::view($config['themes'].'/foot');

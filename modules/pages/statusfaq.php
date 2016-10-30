@@ -15,7 +15,7 @@ $total = count($status);
 if ($total>0){
     foreach ($status as $statval){
 
-        echo '<img src="/images/img/user.gif" alt="image" /> ';
+        echo '<img src="/assets/img/images/user.gif" alt="image" /> ';
 
         if (empty($statval['status_color'])){
             echo '<b>'.$statval['status_name'].'</b> — '.points($statval['status_topoint']).'<br />';

@@ -52,7 +52,7 @@ case 'read':
 		$config['newtitle'] = $data['event_title'];
 		$config['description'] = strip_str($data['event_text']);
 
-		echo '<div class="b"><img src="/images/img/files.gif" alt="image" /> ';
+		echo '<div class="b"><img src="/assets/img/images/files.gif" alt="image" /> ';
 		echo '<b>'.$data['event_title'].'</b><small> ('.date_fixed($data['event_time']).')</small></div>';
 
 		if (!empty($data['event_image'])) {
@@ -66,7 +66,7 @@ case 'read':
 		echo '<div style="clear:both;">Добавлено: '.profile($data['event_author']).'</div><br />';
 
 		if ($data['event_comments'] > 0) {
-		echo '<div class="act"><img src="/images/img/balloon.gif" alt="image" /> <b>Последние комментарии</b></div>';
+		echo '<div class="act"><img src="/assets/img/images/balloon.gif" alt="image" /> <b>Последние комментарии</b></div>';
 
 			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `commevent_event_id`=? ORDER BY `commevent_time` DESC LIMIT 5;", array($id));
 			$comments = $querycomm -> fetchAll();
@@ -187,7 +187,7 @@ case 'addevent':
 				$handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $lastid);
 				if ($handle) {
 
-					$handle -> process(BASEDIR.'/upload/events/');
+					$handle -> process(HOME.'/upload/events/');
 
 					if ($handle -> processed) {
 						DB::run() -> query("UPDATE `events` SET `event_image`=? WHERE `event_id`=? LIMIT 1;", array($handle -> file_dst_name, $lastid));
@@ -238,9 +238,9 @@ case 'editevent':
 			echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['event_title'].'" /><br />';
 			echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['event_text'].'</textarea><br />';
 
-			if (!empty($dataevent['event_image']) && file_exists(BASEDIR.'/upload/events/'.$dataevent['event_image'])){
+			if (!empty($dataevent['event_image']) && file_exists(HOME.'/upload/events/'.$dataevent['event_image'])){
 				echo '<a href="/upload/events/'.$dataevent['event_image'].'">'.resize_image('upload/events/', $dataevent['event_image'], 75, array('alt' => $dataevent['event_title'])).'</a><br />';
-				echo '<b>'.$dataevent['event_image'].'</b> ('.read_file(BASEDIR.'/upload/events/'.$dataevent['event_image']).')<br /><br />';
+				echo '<b>'.$dataevent['event_image'].'</b> ('.read_file(HOME.'/upload/events/'.$dataevent['event_image']).')<br /><br />';
 			}
 
 			echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
@@ -306,7 +306,7 @@ case 'changeevent':
 						unlink_image('upload/events/', $dataevent['event_image']);
 					}
 
-					$handle -> process(BASEDIR.'/upload/events/');
+					$handle -> process(HOME.'/upload/events/');
 
 					if ($handle -> processed) {
 						DB::run() -> query("UPDATE `events` SET `event_image`=? WHERE `event_id`=? LIMIT 1;", array($handle -> file_dst_name, $id));
@@ -345,7 +345,7 @@ case 'comments':
 		$page = floor(1 + $start / $config['postevents']);
 		$config['description'] = 'Комментарии - '.$dataevent['event_title'].' (Стр. '.$page.')';
 
-		echo '<img src="/images/img/files.gif" alt="image" /> <b><a href="/events?act=read&amp;id='.$dataevent['event_id'].'">'.$dataevent['event_title'].'</a></b><br /><br />';
+		echo '<img src="/assets/img/images/files.gif" alt="image" /> <b><a href="/events?act=read&amp;id='.$dataevent['event_id'].'">'.$dataevent['event_title'].'</a></b><br /><br />';
 
 		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
 

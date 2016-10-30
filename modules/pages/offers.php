@@ -39,7 +39,7 @@ switch ($act):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array($type));
         $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array($type2));
 
-        echo '<img src="/images/img/document.gif" alt="image" /> ';
+        echo '<img src="/assets/img/images/document.gif" alt="image" /> ';
 
         if (empty($type)) {
             echo '<b>Предложения</b> ('.$total.') / <a href="/offers?type=1">Проблемы</a> ('.$total2.')';
@@ -98,17 +98,17 @@ switch ($act):
 
             while ($data = $queryoffers -> fetch()) {
                 echo '<div class="b">';
-                echo '<img src="/images/img/files.gif" alt="image" /> ';
+                echo '<img src="/assets/img/images/files.gif" alt="image" /> ';
                 echo '<b><a href="/offers?act=view&amp;type='.$type.'&amp;id='.$data['offers_id'].'">'.$data['offers_title'].'</a></b> (Голосов: '.$data['offers_votes'].')<br />';
 
                 switch ($data['offers_status']) {
-                    case '1': echo '<img src="/images/img/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
+                    case '1': echo '<img src="/assets/img/images/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
                         break;
-                    case '2': echo '<img src="/images/img/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
+                    case '2': echo '<img src="/assets/img/images/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
                         break;
-                    case '3': echo '<img src="/images/img/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
+                    case '3': echo '<img src="/assets/img/images/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
                         break;
-                    default: echo '<img src="/images/img/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
+                    default: echo '<img src="/assets/img/images/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
                 }
 
                 echo '</div>';
@@ -125,7 +125,7 @@ switch ($act):
             show_error('Записей еще нет!');
         }
 
-        echo '<img src="/images/img/open.gif" alt="image" /> <a href="/offers?act=new">Добавить</a><br />';
+        echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/offers?act=new">Добавить</a><br />';
     break;
 
     ############################################################################################
@@ -136,7 +136,7 @@ switch ($act):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(0));
         $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(1));
 
-        echo '<img src="/images/img/document.gif" alt="image" /> <a href="/offers?type=0">Предложения</a>  ('.$total.') / ';
+        echo '<img src="/assets/img/images/document.gif" alt="image" /> <a href="/offers?type=0">Предложения</a>  ('.$total.') / ';
         echo '<a href="/offers?type=1">Проблемы</a> ('.$total2.')';
 
         if (is_admin(array(101, 102))) {
@@ -149,17 +149,17 @@ switch ($act):
             $config['newtitle'] = $queryoff['offers_title'];
 
             echo '<div class="b">';
-            echo '<img src="/images/img/files.gif" alt="image" /> ';
+            echo '<img src="/assets/img/images/files.gif" alt="image" /> ';
             echo '<b>'.$queryoff['offers_title'].'</b> (Голосов: '.$queryoff['offers_votes'].')<br />';
 
             switch ($queryoff['offers_status']) {
-                case '1': echo '<img src="/images/img/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
+                case '1': echo '<img src="/assets/img/images/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
                     break;
-                case '2': echo '<img src="/images/img/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
+                case '2': echo '<img src="/assets/img/images/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
                     break;
-                case '3': echo '<img src="/images/img/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
+                case '3': echo '<img src="/assets/img/images/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
                     break;
-                default: echo '<img src="/images/img/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
+                default: echo '<img src="/assets/img/images/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
             }
 
             echo '</div>';
@@ -175,9 +175,9 @@ switch ($act):
                 $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `ratedoffers` WHERE `rated_offers`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
 
                 if (empty($queryrated)) {
-                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><img src="/images/img/thumb-up.gif" alt="Согласен" /> Согласен</a></b><br />';
+                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><img src="/assets/img/images/thumb-up.gif" alt="Согласен" /> Согласен</a></b><br />';
                 } else {
-                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><img src="/images/img/thumb-down.gif" alt="Против" /> Передумал</a></b><br />';
+                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><img src="/assets/img/images/thumb-down.gif" alt="Против" /> Передумал</a></b><br />';
                 }
             }
 
@@ -190,7 +190,7 @@ switch ($act):
                 echo profile($queryoff['offers_user_reply']).' ('.date_fixed($queryoff['offers_time_reply']).')</div><br />';
             }
             // ------------------------------------------------//
-            echo '<div class="b"><img src="/images/img/balloon.gif" alt="image" /> <b>Последние комментарии</b></div><br />';
+            echo '<div class="b"><img src="/assets/img/images/balloon.gif" alt="image" /> <b>Последние комментарии</b></div><br />';
 
             if ($queryoff['offers_comments'] > 0) {
                 $querycomm = DB::run() -> query("SELECT * FROM `commoffers` WHERE `comm_offers`=? ORDER BY `comm_time` DESC LIMIT 5;", array($id));
@@ -334,7 +334,7 @@ switch ($act):
         if (!empty($queryoff)) {
             $config['newtitle'] = 'Комментарии - '.$queryoff['offers_title'];
 
-            echo '<img src="/images/img/balloon.gif" alt="image" /> <b><a href="/offers?act=view&amp;id='.$queryoff['offers_id'].'">'.$queryoff['offers_title'].'</a></b><br /><br />';
+            echo '<img src="/assets/img/images/balloon.gif" alt="image" /> <b><a href="/offers?act=view&amp;id='.$queryoff['offers_id'].'">'.$queryoff['offers_title'].'</a></b><br /><br />';
 
             echo '<a href="/offers?type=0">Предложения</a> / ';
             echo '<a href="/offers?type=1">Проблемы</a> / ';

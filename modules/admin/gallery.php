@@ -38,8 +38,8 @@ if (is_admin()) {
 
                 while ($data = $queryphoto -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/images/img/gallery.gif" alt="image" /> ';
-                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(BASEDIR.'/upload/pictures/'.$data['photo_link']).')<br />';
+                    echo '<img src="/assets/img/images/gallery.gif" alt="image" /> ';
+                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['photo_link']).')<br />';
                     echo '<input type="checkbox" name="del[]" value="'.$data['photo_id'].'" /> <a href="/admin/gallery?act=edit&amp;start='.$start.'&amp;gid='.$data['photo_id'].'">Редактировать</a>';
                     echo '</div>';
 
@@ -158,7 +158,7 @@ if (is_admin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    if (is_writeable(BASEDIR.'/upload/pictures')) {
+                    if (is_writeable(HOME.'/upload/pictures')) {
                         $querydel = DB::run() -> query("SELECT `photo_id`, `photo_link` FROM `photo` WHERE `photo_id` IN (".$del.");");
                         $arr_photo = $querydel -> fetchAll();
 

@@ -50,9 +50,9 @@ if ($total > 0) {
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-        $filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/upload/files/'.$folder.$data['downs_link']) : 0;
+        $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
 
-        echo '<div class="b"><img src="/images/img/zip.gif" alt="image" /> ';
+        echo '<div class="b"><img src="/assets/img/images/zip.gif" alt="image" /> ';
         echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
 
         echo '<div>Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a><br />';

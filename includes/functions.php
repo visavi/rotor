@@ -1,9 +1,5 @@
 <?php
 
-if (!defined('BASEDIR')) {
-    exit(header('Location: /'));
-}
-
 // --------------------------- Функция перевода секунд во время -----------------------------//
 function maketime($time) {
     if ($time < 3600) {
@@ -52,12 +48,12 @@ function unlink_image($dir, $image) {
     if (!empty($image)) {
         $prename = str_replace('/', '_' ,$dir.$image);
 
-        if (file_exists(BASEDIR.'/'.$dir.$image)) {
-            unlink(BASEDIR.'/'.$dir.$image);
+        if (file_exists(HOME.'/'.$dir.$image)) {
+            unlink(HOME.'/'.$dir.$image);
         }
 
-        if (file_exists(BASEDIR.'/upload/thumbnail/'.$prename)) {
-            unlink(BASEDIR.'/upload/thumbnail/'.$prename);
+        if (file_exists(HOME.'/upload/thumbnail/'.$prename)) {
+            unlink(HOME.'/upload/thumbnail/'.$prename);
         }
     }
 }
@@ -648,7 +644,7 @@ function user_avatars($login) {
     static $arravat;
 
     if ($login == $config['guestsuser']) {
-        return '<img src="/images/img/avatar_guest.gif" alt="" /> ';
+        return '<img src="/assets/img/images/avatar_guest.gif" alt="" /> ';
     }
 
     if (empty($arravat)) {
@@ -656,11 +652,11 @@ function user_avatars($login) {
         $arravat = unserialize(file_get_contents(DATADIR."/temp/avatars.dat"));
     }
 
-    if (isset($arravat[$login]) && file_exists(BASEDIR.'/'.$arravat[$login])) {
+    if (isset($arravat[$login]) && file_exists(HOME.'/'.$arravat[$login])) {
         return '<a href="/user/'.$login.'"><img src="/'.$arravat[$login].'" alt="" /></a> ';
     }
 
-    return '<a href="/user/'.$login.'"><img src="/images/img/avatar_default.gif" alt="" /></a> ';
+    return '<a href="/user/'.$login.'"><img src="/assets/img/images/avatar_default.gif" alt="" /></a> ';
 }
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
@@ -1751,7 +1747,7 @@ function recentfiles($show = 5) {
     if (is_array($files) && count($files) > 0) {
         foreach ($files as $file){
 
-            $filesize = (!empty($file['downs_link'])) ? read_file(BASEDIR.'/upload/files/'.$file['downs_link']) : 0;
+            $filesize = (!empty($file['downs_link'])) ? read_file(HOME.'/upload/files/'.$file['downs_link']) : 0;
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['downs_id'].'">'.$file['downs_title'].'</a> ('.$filesize.')<br />';
         }
     }
@@ -1941,11 +1937,11 @@ function show_admin_links($level = 0) {
 // ------------- Функция кэширования уменьшенных изображений -------------//
 function resize_image($dir, $name, $size, $params = array()) {
 
-    if (!empty($name) && file_exists(BASEDIR.'/'.$dir.$name)){
+    if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
 
         $prename = str_replace('/', '_' ,$dir.$name);
         $newname = substr($prename, 0, strrpos($prename, '.'));
-        $imgsize = getimagesize(BASEDIR.'/'.$dir.$name);
+        $imgsize = getimagesize(HOME.'/'.$dir.$name);
 
         if (empty($params['alt'])) $params['alt'] = $name;
 
@@ -1966,9 +1962,9 @@ function resize_image($dir, $name, $size, $params = array()) {
             return '<img src="/'.$dir.$name.'"'.$strParams.' />';
         }
 
-        if (!file_exists(BASEDIR.'/upload/thumbnail/'.$prename.$name) || filesize(BASEDIR.'/upload/thumbnail/'.$prename.$name) < 18) {
+        if (!file_exists(HOME.'/upload/thumbnail/'.$prename.$name) || filesize(HOME.'/upload/thumbnail/'.$prename.$name) < 18) {
 
-            $handle = new upload(BASEDIR.'/'.$dir.$name);
+            $handle = new upload(HOME.'/'.$dir.$name);
 
             if ($handle -> uploaded) {
                 $handle -> file_new_name_body = $newname;
@@ -1978,13 +1974,13 @@ function resize_image($dir, $name, $size, $params = array()) {
                 $handle -> image_y = $size;
                 $handle -> image_x = $size;
                 $handle -> file_overwrite = true;
-                $handle -> process(BASEDIR.'/upload/thumbnail/');
+                $handle -> process(HOME.'/upload/thumbnail/');
             }
         }
         return '<img src="/upload/thumbnail/'.$prename.'"'.$strParams.' />';
     }
 
-    return '<img src="/images/img/photo.jpg" alt="nophoto" />';
+    return '<img src="/assets/img/images/photo.jpg" alt="nophoto" />';
 }
 
 // ------------- Функция переадресации -------------//
@@ -2062,7 +2058,7 @@ function progress_bar($percent, $title = false){
 // ------------- Добавление пользовательского файла в ZIP-архив -------------//
 function copyright_archive($filename){
 
-    $readme_file = BASEDIR.'/assets/Visavi_Readme.txt';
+    $readme_file = HOME.'/assets/Visavi_Readme.txt';
     $ext = getExtension($filename);
 
     if ($ext == 'zip' && file_exists($readme_file)){
@@ -2096,7 +2092,7 @@ function upload_image($file, $weight, $size, $new_name = false){
             $handle -> file_new_name_body = $new_name;
         }
         if (!empty($config['copyfoto'])) {
-            $handle -> image_watermark = BASEDIR.'/images/img/watermark.png';
+            $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
             $handle -> image_watermark_position = 'BR';
         }
 
@@ -2227,7 +2223,7 @@ function render($view, $params = array(), $return = false){
     if (file_exists(BASEDIR.'/themes/'.App::setting('themes').'/views/'.$view.'.php')){
         include (BASEDIR.'/themes/'.App::setting('themes').'/views/'.$view.'.php');
     } else {
-        include (BASEDIR.'/assets/views/'.$view.'.php');
+        include (BASEDIR.'/views/'.$view.'.php');
     }
 
     if ($return) {

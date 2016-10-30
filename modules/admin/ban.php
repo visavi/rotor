@@ -54,7 +54,7 @@ if (is_admin(array(101, 102, 103))) {
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `ban_user`=?;", array($uz));
 
                 echo 'Строгих нарушений: <b>'.$user['users_totalban'].'</b><br />';
-                echo '<img src="/images/img/history.gif" alt="image" /> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br /><br />';
+                echo '<img src="/assets/img/images/history.gif" alt="image" /> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br /><br />';
 
                 if ($user['users_level'] < 101 || $user['users_level'] > 105) {
                     if (empty($user['users_ban']) || $user['users_timeban'] < SITETIME) {
@@ -84,13 +84,13 @@ if (is_admin(array(101, 102, 103))) {
                         } else {
                             echo '<b><span style="color:#ff0000">Внимание! Пользователь превысил лимит банов</span></b><br />';
                             echo 'Вы можете удалить этот профиль!<br /><br />';
-                            echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="/admin/ban?act=deluser&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Удалить профиль</a></b><br /><br />';
+                            echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/ban?act=deluser&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Удалить профиль</a></b><br /><br />';
                         }
                     } else {
                         echo '<b><span style="color:#ff0000">Внимание, данный аккаунт заблокирован!</span></b><br />';
                         echo 'До окончания бана: '.formattime($user['users_timeban'] - SITETIME).'<br /><br />';
 
-                        echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Изменить</a><br />';
+                        echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Изменить</a><br />';
                         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/ban?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr />';
                     }
                 } else {
@@ -366,7 +366,7 @@ if (is_admin(array(101, 102, 103))) {
                             delete_users($uz);
 
                             echo 'Данные занесены в черный список!<br />';
-                            echo '<img src="/images/img/open.gif" alt="image" /> <b>Профиль пользователя успешно удален!</b><br /><br />';
+                            echo '<img src="/assets/img/images/open.gif" alt="image" /> <b>Профиль пользователя успешно удален!</b><br /><br />';
                         } else {
                             show_error('Ошибка! Запрещено банить админов и модеров сайта!');
                         }

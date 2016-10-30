@@ -73,11 +73,11 @@ if (is_user()) {
 
                                             $uzdata = DB::run() -> queryFetch("SELECT `users_rating`, `users_posrating`, `users_negrating` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
                                             // ------------------------------Уведомление по привату------------------------//
-                                            $textpriv = '<img src="/images/img/thumb-up.gif" alt="plus" /> Пользователь [b]'.nickname($log).'[/b] поставил вам плюс! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
+                                            $textpriv = '<img src="/assets/img/images/thumb-up.gif" alt="plus" /> Пользователь [b]'.nickname($log).'[/b] поставил вам плюс! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
                                             DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
 
-                                            echo '<img src="/images/img/open.gif" alt="Плюс" /> Ваш положительный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
+                                            echo '<img src="/assets/img/images/open.gif" alt="Плюс" /> Ваш положительный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
                                             echo 'В данный момент его авторитет: '.$uzdata['users_rating'].'<br />';
                                             echo 'Всего положительных голосов: '.$uzdata['users_posrating'].'<br />';
                                             echo 'Всего отрицательных голосов: '.$uzdata['users_negrating'].'<br /><br />';
@@ -106,11 +106,11 @@ if (is_user()) {
 
                                                     $uzdata = DB::run() -> queryFetch("SELECT `users_rating`, `users_posrating`, `users_negrating` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
                                                     // ------------------------------Уведомление по привату------------------------//
-                                                    $textpriv = '<img src="/images/img/thumb-down.gif" alt="minus" /> Пользователь [b]'.nickname($log).'[/b] поставил вам минус! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
+                                                    $textpriv = '<img src="/assets/img/images/thumb-down.gif" alt="minus" /> Пользователь [b]'.nickname($log).'[/b] поставил вам минус! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
                                                     DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
 
-                                                    echo '<img src="/images/img/error.gif" alt="Минус" /> Ваш отрицательный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
+                                                    echo '<img src="/assets/img/images/error.gif" alt="Минус" /> Ваш отрицательный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
                                                     echo 'В данный момент его авторитет: '.$uzdata['users_rating'].'<br />';
                                                     echo 'Всего положительных голосов: '.$uzdata['users_posrating'].'<br />';
                                                     echo 'Всего отрицательных голосов: '.$uzdata['users_negrating'].'<br /><br />';
@@ -159,7 +159,7 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы изменять авторитет, необходимо');
 }
 
-echo '<img src="/images/img/luggage.gif" alt="image" /> <a href="/rathist?uz='.$uz.'">История</a><br />';
+echo '<img src="/assets/img/images/luggage.gif" alt="image" /> <a href="/rathist?uz='.$uz.'">История</a><br />';
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/user/'.$uz.'">В анкету</a><br />';
 
 App::view($config['themes'].'/foot');

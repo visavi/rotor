@@ -194,6 +194,6 @@ break;
 
 endswitch;
 
-echo '<img src="/images/img/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

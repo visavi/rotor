@@ -37,7 +37,7 @@ if (is_user()) {
                 echo '<b><a href="/games/21?act=game&amp;case=go&amp;rand='.$randgame.'">Вернитесь в игру</a></b><br /><br />';
             }
 
-            echo '<img src="/images/img/faq.gif" alt="image" /> <a href="/games/21?act=rules">Правила игры</a><br />';
+            echo '<img src="/assets/img/images/faq.gif" alt="image" /> <a href="/games/21?act=rules">Правила игры</a><br />';
         break;
 
         ############################################################################################
@@ -260,6 +260,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы начать игру, необходимо');
 }
 
-echo '<img src="/images/img/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

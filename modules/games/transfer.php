@@ -76,7 +76,7 @@ if (is_user()) {
 
                                             $comment = (!empty($msg)) ? $msg : 'Не указано';
                                             // ------------------------Уведомление по привату------------------------//
-                                            $textpriv = '<img src="/images/img/money.gif" alt="money" /> Пользователь [b]'.nickname($log).'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
+                                            $textpriv = '<img src="/assets/img/images/money.gif" alt="money" /> Пользователь [b]'.nickname($log).'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
 
                                             DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                             // ------------------------ Запись логов ------------------------//

@@ -27,7 +27,7 @@ if (is_admin(array(101))) {
                 arsort($globfiles);
 
                 foreach($globfiles as $value) {
-                    echo '<img src="/images/img/zip.gif" alt="image" /> <b>'.basename($value).'</b> ('.read_file($value).') (<a href="/admin/backup?act=del&amp;backup='.basename($value).'&amp;uid='.$_SESSION['token'].'">Удалить</a>)<br />';
+                    echo '<img src="/assets/img/images/zip.gif" alt="image" /> <b>'.basename($value).'</b> ('.read_file($value).') (<a href="/admin/backup?act=del&amp;backup='.basename($value).'&amp;uid='.$_SESSION['token'].'">Удалить</a>)<br />';
                 }
 
                 echo '<br />Всего бэкапов: <b>'.$total.'</b><br /><br />';
@@ -35,7 +35,7 @@ if (is_admin(array(101))) {
                 show_error('Бэкапов еще нет!');
             }
 
-            echo '<img src="/images/img/open.gif" alt="image" /> <a href="/admin/backup?act=choice">Новый бэкап</a><br />';
+            echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/backup?act=choice">Новый бэкап</a><br />';
         break;
 
         ############################################################################################
@@ -57,7 +57,7 @@ if (is_admin(array(101))) {
 
                 foreach ($tables as $data) {
                     echo '<input type="checkbox" name="tables[]" value="'.$data['Name'].'" /> ';
-                    echo '<img src="/images/img/database.gif" alt="db" /> <b>'.$data['Name'].'</b> (Записей: '.$data['Rows'].' / Размер: '.formatsize($data['Data_length']).')<br />';
+                    echo '<img src="/assets/img/images/database.gif" alt="db" /> <b>'.$data['Name'].'</b> (Записей: '.$data['Rows'].' / Размер: '.formatsize($data['Data_length']).')<br />';
                 }
 
                 echo '<br />Метод сжатия:<br />';

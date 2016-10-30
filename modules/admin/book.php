@@ -80,7 +80,7 @@ if (is_admin()) {
                 echo 'Всего сообщений: <b>'.(int)$total.'</b><br /><br />';
 
                 if (is_admin(array(101))) {
-                    echo '<img src="/images/img/error.gif" alt="image" /> <a href="/admin/book?act=prodel">Очистить</a><br />';
+                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/book?act=prodel">Очистить</a><br />';
                 }
             } else {
                 show_error('Сообщений еще нет!');
@@ -97,7 +97,7 @@ if (is_admin()) {
             if (!empty($data)) {
                 echo '<b><big>Добавление ответа</big></b><br /><br />';
 
-                echo '<div class="b"><img src="/images/img/edit.gif" alt="image" /> <b>'.profile($data['guest_user']).'</b> '.user_title($data['guest_user']) . user_online($data['guest_user']).' <small>('.date_fixed($data['guest_time']).')</small></div>';
+                echo '<div class="b"><img src="/assets/img/images/edit.gif" alt="image" /> <b>'.profile($data['guest_user']).'</b> '.user_title($data['guest_user']) . user_online($data['guest_user']).' <small>('.date_fixed($data['guest_time']).')</small></div>';
                 echo '<div>Сообщение: '.bb_code($data['guest_text']).'</div><hr />';
 
                 echo '<div class="form">';
@@ -154,7 +154,7 @@ if (is_admin()) {
 
                 echo '<b><big>Редактирование сообщения</big></b><br /><br />';
 
-                echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($data['guest_user']).'</b> <small>('.date_fixed($data['guest_time']).')</small><br /><br />';
+                echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.nickname($data['guest_user']).'</b> <small>('.date_fixed($data['guest_time']).')</small><br /><br />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?act=addedit&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -233,7 +233,7 @@ if (is_admin()) {
         ############################################################################################
         case 'prodel':
             echo 'Вы уверены что хотите удалить все сообщения в гостевой?<br />';
-            echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="/admin/book?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+            echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/book?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book">Вернуться</a><br />';
         break;

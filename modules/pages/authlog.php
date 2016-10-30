@@ -27,7 +27,7 @@ if (is_user()) {
         $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `login_user`=? ORDER BY `login_time` DESC LIMIT ".$start.", ".$config['loginauthlist'].";", array($log));
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
-            echo' <img src="/images/img/clock.gif" alt="clock" /> ';
+            echo' <img src="/assets/img/images/clock.gif" alt="clock" /> ';
 
             if (empty($data['login_type'])) {
                 echo '<b>Автовход</b>';
@@ -52,6 +52,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, для просмотра истории, необходимо');
 }
 
-echo '<img src="/images/img/back.gif" alt="" /> <a href="/menu">Вернуться</a><br />';
+echo '<img src="/assets/img/images/back.gif" alt="" /> <a href="/menu">Вернуться</a><br />';
 
 App::view($config['themes'].'/foot');

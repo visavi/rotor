@@ -16,13 +16,13 @@ case 'index':
 
     show_title('Публикация нового файла');
 
-    echo '<img src="/images/img/document.gif" alt="image" /> <b>Публикация</b> / ';
+    echo '<img src="/assets/img/images/document.gif" alt="image" /> <b>Публикация</b> / ';
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<a href="/load/active">Проверенные</a><hr />';
 
     if ($config['home'] == 'http://visavi.net') {
         echo '<div class="info">';
-        echo '<img src="/images/img/faq.gif" alt="image" /> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
+        echo '<img src="/assets/img/images/faq.gif" alt="image" /> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
         echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br />';
     }
 
@@ -87,7 +87,7 @@ case 'waiting':
 
     show_title('Список ожидающих модерации файлов');
 
-    echo '<img src="/images/img/document.gif" alt="image" /> <a href="/load/add">Публикация</a> / ';
+    echo '<img src="/assets/img/images/document.gif" alt="image" /> <a href="/load/add">Публикация</a> / ';
     echo '<b>Ожидающие</b> / ';
     echo '<a href="/load/active">Проверенные</a><hr />';
 
@@ -99,18 +99,18 @@ case 'waiting':
         while ($data = $querynew -> fetch()) {
             echo '<div class="b">';
 
-            echo '<img src="/images/img/download.gif" alt="image" /> ';
+            echo '<img src="/assets/img/images/download.gif" alt="image" /> ';
 
             echo '<b><a href="/load/add?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.date_fixed($data['downs_time']).')</div>';
             echo '<div>';
             echo 'Категория: '.$data['cats_name'].'<br />';
             if (!empty($data['downs_link'])) {
-                echo 'Файл: '.$data['downs_link'].' ('.read_file(BASEDIR.'/upload/files/'.$data['downs_link']).')<br />';
+                echo 'Файл: '.$data['downs_link'].' ('.read_file(HOME.'/upload/files/'.$data['downs_link']).')<br />';
             } else {
                 echo 'Файл: <span style="color:#ff0000">Не загружен</span><br />';
             }
             if (!empty($data['downs_screen'])) {
-                echo 'Скрин: '.$data['downs_screen'].' ('.read_file(BASEDIR.'/upload/files/'.$data['downs_screen']).')<br />';
+                echo 'Скрин: '.$data['downs_screen'].' ('.read_file(HOME.'/upload/files/'.$data['downs_screen']).')<br />';
             } else {
                 echo 'Скрин: <span style="color:#ff0000">Не загружен</span><br />';
             }
@@ -201,7 +201,7 @@ case 'view':
 
     show_title('Редактирование ожидающего файла');
 
-    echo '<img src="/images/img/document.gif" alt="image" /> <a href="/load/add">Публикация</a> / ';
+    echo '<img src="/assets/img/images/document.gif" alt="image" /> <a href="/load/add">Публикация</a> / ';
     echo '<b><a href="/load/add?act=waiting">Ожидающие</a></b> / ';
     echo '<a href="/load/active?act=files">Проверенные</a><hr />';
 
@@ -238,7 +238,7 @@ case 'view':
 
                     } else {
 
-                        echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(BASEDIR.'/upload/files/'.$folder.$new['downs_link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+                        echo '<img src="/assets/img/images/download.gif" alt="image" /> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['downs_link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
 
                         $ext = getExtension($new['downs_link']);
                         if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
@@ -253,7 +253,7 @@ case 'view':
                                 echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px</div><br /><br />';
 
                             } else {
-                                echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+                                echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
                                 echo resize_image('upload/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
                             }
                         }
@@ -408,7 +408,7 @@ case 'loadfile':
         if ($down['downs_user'] == $log) {
             if (empty($down['downs_active'])) {
                 if (empty($down['downs_link'])) {
-                    if (is_writeable(BASEDIR.'/upload/files/'.$folder)) {
+                    if (is_writeable(HOME.'/upload/files/'.$folder)) {
                     if (is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
                         $filename = check(strtolower($_FILES['loadfile']['name']));
 
@@ -423,9 +423,9 @@ case 'loadfile':
                                         if (empty($downlink)) {
 
                                             move_uploaded_file($_FILES['loadfile']['tmp_name'], BASEDIR.'/load/files/'.$folder.$filename);
-                                            @chmod(BASEDIR.'/upload/files/'.$folder.$filename, 0666);
+                                            @chmod(HOME.'/upload/files/'.$folder.$filename, 0666);
 
-                                            copyright_archive(BASEDIR.'/upload/files/'.$folder.$filename);
+                                            copyright_archive(HOME.'/upload/files/'.$folder.$filename);
 
                                             DB::run() -> query("UPDATE `downs` SET `downs_link`=? WHERE `downs_id`=?;", array($filename, $id));
 
@@ -488,7 +488,7 @@ case 'loadscreen':
                         if ($handle) {
                             $folder = $down['folder'] ? $down['folder'].'/' : '';
 
-                            $handle -> process(BASEDIR.'/upload/screen/'.$folder);
+                            $handle -> process(HOME.'/upload/screen/'.$folder);
                             if ($handle -> processed) {
 
                                 DB::run() -> query("UPDATE `downs` SET `downs_screen`=? WHERE `downs_id`=?;", array($handle -> file_dst_name, $id));
@@ -534,8 +534,8 @@ case 'delfile':
             if (empty($link['downs_active'])) {
                 $folder = $link['folder'] ? $link['folder'].'/' : '';
 
-                if (!empty($link['downs_link']) && file_exists(BASEDIR.'/upload/files/'.$folder.$link['downs_link'])) {
-                    unlink(BASEDIR.'/upload/files/'.$folder.$link['downs_link']);
+                if (!empty($link['downs_link']) && file_exists(HOME.'/upload/files/'.$folder.$link['downs_link'])) {
+                    unlink(HOME.'/upload/files/'.$folder.$link['downs_link']);
                 }
 
                 unlink_image('upload/files/'.$folder, $link['downs_link']);

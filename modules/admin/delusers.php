@@ -68,7 +68,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 
                     echo '<br /><br />Будет удалено пользователей: <b>'.$total.'</b><br /><br />';
 
-                    echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="/admin/delusers?act=del&amp;deldate='.$deldate.'&amp;point='.$point.'&amp;uid='.$_SESSION['token'].'">Удалить пользователей</a></b><br /><br />';
+                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/delusers?act=del&amp;deldate='.$deldate.'&amp;point='.$point.'&amp;uid='.$_SESSION['token'].'">Удалить пользователей</a></b><br /><br />';
                 } else {
                     show_error('Пользователи для удаления отсутсвуют!');
                 }

@@ -46,17 +46,17 @@ if (is_admin()) {
 
                 if ($data[1] == 'Вундер-киндер') {
                     $useravatars = '<img src="/modules/chat/img/mag.gif" alt="image" /> ';
-                    $useronline = '<img src="/images/img/on.gif" alt="image">';
+                    $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
                     $anketa = 'Вундер-киндер';
                 }
                 if ($data[1] == 'Настюха') {
                     $useravatars = '<img src="/modules/chat/img/bot.gif" alt="image" /> ';
-                    $useronline = '<img src="/images/img/on.gif" alt="image">';
+                    $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
                     $anketa = 'Настюха';
                 }
                 if ($data[1] == 'Весельчак') {
                     $useravatars = '<img src="/modules/chat/img/shut.gif" alt="image" /> ';
-                    $useronline = '<img src="/images/img/on.gif" alt="image">';
+                    $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
                     $anketa = 'Весельчак';
                 }
 
@@ -79,7 +79,7 @@ if (is_admin()) {
             echo '<p>Всего сообщений: <b>' . (int)$total . '</b></p>';
 
             if (is_admin(array(101))) {
-                echo '<img src="/images/img/error.gif" alt="image" /> <a href="/admin/minichat?act=prodel">Очистить</a><br />';
+                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/minichat?act=prodel">Очистить</a><br />';
             }
         } else {
             show_error('Сообщений еще нет!');
@@ -91,7 +91,7 @@ if (is_admin()) {
     if ($act == "prodel") {
         echo '<br />Вы уверены что хотите удалить все сообщения в мини-чате?<br />';
 
-        echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="/admin/minichat?act=alldel&amp;uid=' . $_SESSION['token'] . '">Да уверен!</a></b><br /><br />';
+        echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/minichat?act=alldel&amp;uid=' . $_SESSION['token'] . '">Да уверен!</a></b><br /><br />';
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat">Вернуться</a><br />';
     }
@@ -157,7 +157,7 @@ if (is_admin()) {
 
                 echo '<div class="form"><form action="/admin/minichat?act=addedit&amp;id=' . $id . '&amp;start=' . $start . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
 
-                echo '<img src="/images/img/edit.gif" alt="image" /> <b>' . nickname($data[1]) . '</b> <small>(' . date_fixed($data[3]) . ')</small><br />';
+                echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>' . nickname($data[1]) . '</b> <small>(' . date_fixed($data[3]) . ')</small><br />';
 
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $data[0] . '</textarea><br/>';
                 echo '<input type="submit" value="Изменить" /></form></div><br />';

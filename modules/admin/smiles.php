@@ -39,7 +39,7 @@ case 'index':
 
     //show_error('Смайлы еще не загружены!');
 
-    echo '<img src="/images/img/download.gif" alt="image" /> <a href="/admin/smiles?act=add&amp;start='.$start.'">Загрузить</a><br />';
+    echo '<img src="/assets/img/images/download.gif" alt="image" /> <a href="/admin/smiles?act=add&amp;start='.$start.'">Загрузить</a><br />';
 break;
 
 /**

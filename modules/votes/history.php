@@ -36,7 +36,7 @@ switch ($act):
 
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
-                echo '<img src="/images/img/luggage.gif" alt="image" /> <b><a href="/votes/history?act=result&amp;id='.$data['vote_id'].'&amp;start='.$start.'">'.$data['vote_title'].'</a></b></div>';
+                echo '<img src="/assets/img/images/luggage.gif" alt="image" /> <b><a href="/votes/history?act=result&amp;id='.$data['vote_id'].'&amp;start='.$start.'">'.$data['vote_title'].'</a></b></div>';
                 echo '<div>Создано: '.date_fixed($data['vote_time']).'<br />';
                 echo 'Всего голосов: '.$data['vote_count'].'</div>';
             }
@@ -59,7 +59,7 @@ switch ($act):
             if (!empty($votes['vote_closed'])) {
                 $config['newtitle'] = $votes['vote_title'];
 
-                echo '<img src="/images/img/luggage.gif" alt="image" /> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
+                echo '<img src="/assets/img/images/luggage.gif" alt="image" /> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
 
                 $queryanswer = DB::run() -> query("SELECT `answer_option`, `answer_result` FROM `voteanswer` WHERE `answer_vote_id`=? ORDER BY `answer_result` DESC;", array($id));
                 $answer = $queryanswer -> fetchAssoc();
@@ -101,6 +101,6 @@ switch ($act):
 
 endswitch;
 
-echo '<img src="/images/img/stat.gif" alt="image" /> <a href="/votes">Список голосований</a><br />';
+echo '<img src="/assets/img/images/stat.gif" alt="image" /> <a href="/votes">Список голосований</a><br />';
 
 App::view($config['themes'].'/foot');

@@ -12,7 +12,7 @@ switch ($act):
 case 'files':
     show_title('Список всех файлов');
 
-    echo '<img src="/images/img/document.gif" alt="image" /> ';
+    echo '<img src="/assets/img/images/document.gif" alt="image" /> ';
     echo '<a href="/load/add">Публикация</a> / ';
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<b>Проверенные</b><hr />';
@@ -29,9 +29,9 @@ case 'files':
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-            $filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/upload/files/'.$folder.$data['downs_link']) : 0;
+            $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
 
-            echo '<div class="b"><img src="/images/img/zip.gif" alt="image" /> ';
+            echo '<div class="b"><img src="/assets/img/images/zip.gif" alt="image" /> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
 
             echo '<div>Категория: <a href="/load/down?cid='.$data['downs_cats_id'].'">'.$data['cats_name'].'</a><br />';
@@ -66,7 +66,7 @@ case 'comments':
         while ($data = $querypost -> fetch()) {
             echo '<div class="b">';
 
-            echo '<img src="/images/img/balloon.gif" alt="image" /> <b><a href="/load/active?act=viewcomm&amp;id='.$data['commload_down'].'&amp;cid='.$data['commload_id'].'">'.$data['downs_title'].'</a></b> ('.$data['downs_comments'].')';
+            echo '<img src="/assets/img/images/balloon.gif" alt="image" /> <b><a href="/load/active?act=viewcomm&amp;id='.$data['commload_down'].'&amp;cid='.$data['commload_id'].'">'.$data['downs_title'].'</a></b> ('.$data['downs_comments'].')';
 
             if ($is_admin) {
                 echo ' — <a href="/load/active?act=del&amp;id='.$data['commload_id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';

@@ -46,7 +46,7 @@ if (is_admin()) {
                 echo '<a href="/forum">Обзор форума</a><hr />';
 
                 foreach($output[0] as $key => $data) {
-                    echo '<div class="b"><img src="/images/img/forums.gif" alt="image" /> ';
+                    echo '<div class="b"><img src="/assets/img/images/forums.gif" alt="image" /> ';
                     echo '<b>'.$data['forums_order'].'. <a href="/admin/forum?act=forum&amp;fid='.$data['forums_id'].'">'.$data['forums_title'].'</a></b> ('.$data['forums_topics'].'/'.$data['forums_posts'].')';
 
                     if (!empty($data['forums_desc'])) {
@@ -62,7 +62,7 @@ if (is_admin()) {
                     // ----------------------------------------------------//
                     if (isset($output[$key])) {
                         foreach($output[$key] as $datasub) {
-                            echo '<img src="/images/img/topics-small.gif" alt="image" /> ';
+                            echo '<img src="/assets/img/images/topics-small.gif" alt="image" /> ';
                             echo '<b>'.$datasub['forums_order'].'. <a href="/admin/forum?act=forum&amp;fid='.$datasub['forums_id'].'">'.$datasub['forums_title'].'</a></b>  ('.$datasub['forums_topics'].'/'.$datasub['forums_posts'].') ';
                             if (is_admin(array(101))) {
                                 echo '(<a href="/admin/forum?act=editforum&amp;fid='.$datasub['forums_id'].'">Редактировать</a> / ';
@@ -259,7 +259,7 @@ if (is_admin()) {
                 if (!empty($forums['forums_id'])) {
                     if (empty($forums['subcnt'])) {
                         echo 'Вы уверены что хотите удалить раздел <b>'.$forums['forums_title'].'</b> в форуме?<br />';
-                        echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="/admin/forum?act=delforum&amp;fid='.$fid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+                        echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/forum?act=delforum&amp;fid='.$fid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
                     } else {
                         show_error('Ошибка! Данный раздел имеет подфорумы!');
                     }
@@ -295,8 +295,8 @@ if (is_admin()) {
                                 $delId = implode(',', $topics);
 
                                 foreach($topics as $delDir){
-                                    removeDir(BASEDIR.'/upload/forum/'.$delDir);
-                                    array_map('unlink', glob(BASEDIR.'/upload/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                                    removeDir(HOME.'/upload/forum/'.$delDir);
+                                    array_map('unlink', glob(HOME.'/upload/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
                                 }
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `file_topics_id` IN (".$delId.");");
                             }
@@ -358,11 +358,11 @@ if (is_admin()) {
                         echo '<div class="b">';
 
                         if ($data['topics_locked'] == 1) {
-                            echo '<img src="/images/img/lock.gif" alt="image" /> ';
+                            echo '<img src="/assets/img/images/lock.gif" alt="image" /> ';
                         } elseif ($data['topics_closed'] == 1) {
-                            echo '<img src="/images/img/closed.gif" alt="image" /> ';
+                            echo '<img src="/assets/img/images/closed.gif" alt="image" /> ';
                         } else {
-                            echo '<img src="/images/img/topics.gif" alt="image" /> ';
+                            echo '<img src="/assets/img/images/topics.gif" alt="image" /> ';
                         }
 
                         echo '<b><a href="/admin/forum?act=topic&amp;tid='.$data['topics_id'].'">'.$data['topics_title'].'</a></b> ('.$data['topics_posts'].')<br />';
@@ -480,7 +480,7 @@ if (is_admin()) {
 
             $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
             if (!empty($topics)) {
-                echo '<img src="/images/img/topics.gif" alt="image" /> <b>'.$topics['topics_title'].'</b> (Автор темы: '.nickname($topics['topics_author']).')<br /><br />';
+                echo '<img src="/assets/img/images/topics.gif" alt="image" /> <b>'.$topics['topics_title'].'</b> (Автор темы: '.nickname($topics['topics_author']).')<br /><br />';
 
                 $queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY `forums_order` ASC;");
                 $forums = $queryforum -> fetchAll();
@@ -592,8 +592,8 @@ if (is_admin()) {
 
                     // ------ Удаление загруженных файлов -------//
                     foreach($del as $delDir){
-                        removeDir(BASEDIR.'/upload/forum/'.$delDir);
-                        array_map('unlink', glob(BASEDIR.'/upload/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                        removeDir(HOME.'/upload/forum/'.$delDir);
+                        array_map('unlink', glob(HOME.'/upload/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
                     }
                     DB::run() -> query("DELETE FROM `files_forum` WHERE `file_topics_id` IN (".$delId.");");
                     // ------ Удаление загруженных файлов -------//
@@ -873,7 +873,7 @@ if (is_admin()) {
 
                     if (!empty($files)){
                         foreach ($files as $file){
-                            if (file_exists(BASEDIR.'/upload/forum/'.$topics['topics_id'].'/'.$file)){
+                            if (file_exists(HOME.'/upload/forum/'.$topics['topics_id'].'/'.$file)){
                                 unlink_image('upload/forum/', $topics['topics_id'].'/'.$file);
                             }
                         }
@@ -908,7 +908,7 @@ if (is_admin()) {
             $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($pid));
             if (!empty($post)) {
 
-                echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($post['posts_user']).'</b> <small>('.date_fixed($post['posts_time']).')</small><br /><br />';
+                echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.nickname($post['posts_user']).'</b> <small>('.date_fixed($post['posts_time']).')</small><br /><br />';
 
                 echo '<div class="form" id="form">';
                 echo '<form action="/admin/forum?act=addeditpost&amp;tid='.$post['posts_topics_id'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -919,7 +919,7 @@ if (is_admin()) {
                 $files = $queryfiles->fetchAll();
 
                 if (!empty($files)){
-                    echo '<img src="/images/img/paper-clip.gif" alt="attach" /> <b>Удаление файлов:</b><br />';
+                    echo '<img src="/assets/img/images/paper-clip.gif" alt="attach" /> <b>Удаление файлов:</b><br />';
                     foreach ($files as $file){
                         echo '<input type="checkbox" name="delfile[]" value="'.$file['file_id'].'" /> ';
                         echo '<a href="/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'].'" target="_blank">'.$file['file_name'].'</a> ('.formatsize($file['file_size']).')<br />';
@@ -966,7 +966,7 @@ if (is_admin()) {
 
                             if (!empty($files)){
                                 foreach ($files as $file){
-                                    if (file_exists(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
+                                    if (file_exists(HOME.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
                                         unlink_image('upload/forum/', $file['file_topics_id'].'/'.$file['file_hash']);
                                     }
                                 }

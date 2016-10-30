@@ -31,7 +31,7 @@ if (is_user()) {
 
             echo 'У вас в наличии: '.moneys($udata['users_money']).'<br /><br />';
 
-            echo '<img src="/images/img/faq.gif" alt="image" /> <a href="/games/hi?act=faq">Правила</a><br />';
+            echo '<img src="/assets/img/images/faq.gif" alt="image" /> <a href="/games/hi?act=faq">Правила</a><br />';
         break;
 
         ############################################################################################
@@ -52,10 +52,10 @@ if (is_user()) {
                             echo '<b>Попыток: '.(int)$_SESSION['hi_count'].'</b><br />';
 
                             if ($guess > $_SESSION['hill']) {
-                                echo $guess.' — это большое число<br /><img src="/images/img/minus.gif" alt="image" /> Введите меньше<br /><br />';
+                                echo $guess.' — это большое число<br /><img src="/assets/img/images/minus.gif" alt="image" /> Введите меньше<br /><br />';
                             }
                             if ($guess < $_SESSION['hill']) {
-                                echo $guess.' — это маленькое число<br /><img src="/images/img/plus.gif" alt="image" /> Введите больше<br /><br />';
+                                echo $guess.' — это маленькое число<br /><img src="/assets/img/images/plus.gif" alt="image" /> Введите больше<br /><br />';
                             }
 
                             echo '<div class="form">';
@@ -75,7 +75,7 @@ if (is_user()) {
 
                             echo 'У вас в наличии: '.moneys($allmoney).'<br /><br />';
                         } else {
-                            echo '<img src="/images/img/error.gif" alt="image" /> <b>Вы проигали потому что, не отгадали число за '.(int)$config['hipopytka'].' попыток</b><br />';
+                            echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Вы проигали потому что, не отгадали число за '.(int)$config['hipopytka'].' попыток</b><br />';
                             echo 'Было загадано число: '.$_SESSION['hill'].'<br /><br />';
 
                             unset($_SESSION['hill']);
@@ -120,6 +120,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы начать игру, необходимо');
 }
 
-echo '<img src="/images/img/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

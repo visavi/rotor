@@ -26,9 +26,9 @@ case 'files':
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-            $filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/upload/files/'.$folder.$data['downs_link']) : 0;
+            $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
 
-            echo '<div class="b"><img src="/images/img/zip.gif" alt="image" /> ';
+            echo '<div class="b"><img src="/assets/img/images/zip.gif" alt="image" /> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
 
             echo '<div>Категория: <a href="/load/down?cid='.$data['downs_cats_id'].'">'.$data['cats_name'].'</a><br />';
@@ -63,7 +63,7 @@ case 'comments':
         while ($data = $querydown -> fetch()) {
             echo '<div class="b">';
 
-            echo '<img src="/images/img/balloon.gif" alt="image" /> <b><a href="/load/new?act=viewcomm&amp;id='.$data['commload_down'].'&amp;cid='.$data['commload_id'].'">'.$data['downs_title'].'</a></b> ('.$data['downs_comments'].')</div>';
+            echo '<img src="/assets/img/images/balloon.gif" alt="image" /> <b><a href="/load/new?act=viewcomm&amp;id='.$data['commload_down'].'&amp;cid='.$data['commload_id'].'">'.$data['downs_title'].'</a></b> ('.$data['downs_comments'].')</div>';
 
             echo '<div>'.bb_code($data['commload_text']).'<br />';
 

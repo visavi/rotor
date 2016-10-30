@@ -24,7 +24,7 @@ if (is_admin(array(101, 102))) {
                 echo '<b>Статус</b>  — <b>Актив</b><br />';
                 foreach ($status as $statval) {
                     echo '<div class="b">';
-                    echo '<img src="/images/img/user.gif" alt="image" /> ';
+                    echo '<img src="/assets/img/images/user.gif" alt="image" /> ';
 
                     if (empty($statval['status_color'])) {
                         echo '<b>'.$statval['status_name'].'</b> <small>('.$statval['status_topoint'].'-'.$statval['status_point'].')</small><br />';
@@ -40,7 +40,7 @@ if (is_admin(array(101, 102))) {
                 show_error('Статусы еще не назначены!');
             }
 
-            echo '<img src="/images/img/open.gif" alt="image" /> <a href="/admin/status?act=add">Создать</a><br />';
+            echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/status?act=add">Создать</a><br />';
         break;
 
         ############################################################################################

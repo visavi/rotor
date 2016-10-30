@@ -1,12 +1,4 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
 $debugmode = 1;
 
 if ($debugmode) {
@@ -24,6 +16,7 @@ if ($debugmode) {
 define('STARTTIME', microtime(1));
 define('BASEDIR', dirname(dirname(__FILE__)));
 define('DATADIR', BASEDIR.'/local');
+define('HOME', BASEDIR.'/public');
 define('SITETIME', time());
 define('PCLZIP_TEMPORARY_DIR', BASEDIR.'/local/temp/');
 

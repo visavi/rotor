@@ -52,7 +52,7 @@ if (is_user()) {
                             }
                             //-------- Удаляем старую фотку ----------//
 
-                            $handle -> process(BASEDIR.'/upload/photos/');
+                            $handle -> process(HOME.'/upload/photos/');
 
                             if ($handle -> processed) {
                                 DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?;", array($handle -> file_dst_name, $log));

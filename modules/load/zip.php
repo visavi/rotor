@@ -27,7 +27,7 @@ case 'index':
                     sort($list);
 
                     if ($total > 0) {
-                        echo '<img src="/images/img/zip.gif" alt="image" /> <b>'.$downs['downs_title'].'</b><br /><br />';
+                        echo '<img src="/assets/img/images/zip.gif" alt="image" /> <b>'.$downs['downs_title'].'</b><br /><br />';
                         echo 'Всего файлов: '.$total.'<hr />';
 
                         $arrext = array('xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg');
@@ -98,7 +98,7 @@ case 'preview':
 
                 $config['newtitle'] = 'Просмотр файла - '.$filename;
 
-                echo '<img src="/images/img/zip.gif" alt="image" /> <b>'.$downs['downs_title'].'</b><br /><br />';
+                echo '<img src="/assets/img/images/zip.gif" alt="image" /> <b>'.$downs['downs_title'].'</b><br /><br />';
 
                 echo '<b>'.$filename.'</b> ('.formatsize($content[0]['size']).')<hr />';
 

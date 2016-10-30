@@ -122,15 +122,15 @@ if ($act == 'index') {
 
             if ($data[1] == 'Вундер-киндер') {
                 $useravatars = '<img src="modules/chat/img/mag.gif" alt="image" /> ';
-                $useronline = '<img src="/images/img/on.gif" alt="image">';
+                $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
             }
             if ($data[1] == 'Настюха') {
                 $useravatars = '<img src="modules/chat/img/bot.gif" alt="image" /> ';
-                $useronline = '<img src="/images/img/on.gif" alt="image">';
+                $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
             }
             if ($data[1] == 'Весельчак') {
                 $useravatars = '<img src="modules/chat/img/shut.gif" alt="image" /> ';
-                $useronline = '<img src="/images/img/on.gif" alt="image">';
+                $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
             }
 
             echo '<div class="b">';
@@ -239,6 +239,6 @@ echo '<a href="/rules">Правила</a> / ';
 echo '<a href="/smiles">Смайлы</a> / ';
 echo '<a href="/tags">Теги</a><br /><br />';
 
-echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/">На главную</a>';
+echo '<img src="/assets/img/images/homepage.gif" alt="image" /> <a href="/">На главную</a>';
 
 App::view($config['themes'].'/foot');

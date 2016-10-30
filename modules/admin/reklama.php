@@ -34,7 +34,7 @@ if (is_admin()) {
 
                 while ($data = $queryrek -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/images/img/online.gif" alt="image" /> ';
+                    echo '<img src="/assets/img/images/online.gif" alt="image" /> ';
                     echo '<b><a href="'.$data['rek_site'].'">'.$data['rek_name'].'</a></b> ('.profile($data['rek_user']).')<br />';
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['rek_id'].'" /> ';

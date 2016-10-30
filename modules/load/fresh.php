@@ -17,16 +17,16 @@ if ($total > 0) {
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-        $filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/upload/files/'.$folder.$data['downs_link']) : 0;
+        $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
 
         echo '<div class="b">';
 
         if ($data['downs_time'] >= (SITETIME-3600 * 24)) {
-            echo '<img src="/images/img/new.gif" alt="image" /> ';
+            echo '<img src="/assets/img/images/new.gif" alt="image" /> ';
         } elseif ($data['downs_time'] >= (SITETIME-3600 * 72)) {
-            echo '<img src="/images/img/new1.gif" alt="image" /> ';
+            echo '<img src="/assets/img/images/new1.gif" alt="image" /> ';
         } else {
-            echo '<img src="/images/img/new2.gif" alt="image" /> ';
+            echo '<img src="/assets/img/images/new2.gif" alt="image" /> ';
         }
 
         echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
@@ -40,9 +40,9 @@ if ($total > 0) {
 
     page_strnavigation('/load/fresh?', $config['downlist'], $start, $total);
 
-    echo '<img src="/images/img/new.gif" alt="image" /> - Самая свежая загрузка<br />';
-    echo '<img src="/images/img/new1.gif" alt="image" /> - Более дня назад<br />';
-    echo '<img src="/images/img/new2.gif" alt="image" /> - Более 3 дней назад<br /><br />';
+    echo '<img src="/assets/img/images/new.gif" alt="image" /> - Самая свежая загрузка<br />';
+    echo '<img src="/assets/img/images/new1.gif" alt="image" /> - Более дня назад<br />';
+    echo '<img src="/assets/img/images/new2.gif" alt="image" /> - Более 3 дней назад<br /><br />';
 
     echo 'Всего файлов: <b>'.$total.'</b><br /><br />';
 } else {

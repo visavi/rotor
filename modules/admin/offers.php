@@ -35,7 +35,7 @@ if (is_admin(array(101, 102))) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array($type));
             $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array($type2));
 
-            echo '<img src="/images/img/document.gif" alt="image" /> ';
+            echo '<img src="/assets/img/images/document.gif" alt="image" /> ';
 
             if (empty($type)) {
                 echo '<b>Предложения</b> ('.$total.') / <a href="/admin/offers?type=1">Проблемы</a> ('.$total2.')';
@@ -56,17 +56,17 @@ if (is_admin(array(101, 102))) {
 
                 while ($data = $queryoffers -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/images/img/files.gif" alt="image" /> ';
+                    echo '<img src="/assets/img/images/files.gif" alt="image" /> ';
                     echo '<b><a href="/admin/offers?act=view&amp;type='.$type.'&amp;id='.$data['offers_id'].'">'.$data['offers_title'].'</a></b> (Голосов: '.$data['offers_votes'].')<br />';
 
                     switch ($data['offers_status']) {
-                        case '1': echo '<img src="/images/img/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b><br />';
+                        case '1': echo '<img src="/assets/img/images/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b><br />';
                             break;
-                        case '2': echo '<img src="/images/img/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b><br />';
+                        case '2': echo '<img src="/assets/img/images/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b><br />';
                             break;
-                        case '3': echo '<img src="/images/img/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b><br />';
+                        case '3': echo '<img src="/assets/img/images/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b><br />';
                             break;
-                        default: echo '<img src="/images/img/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b><br />';
+                        default: echo '<img src="/assets/img/images/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b><br />';
                     }
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['offers_id'].'" /> ';
@@ -101,7 +101,7 @@ if (is_admin(array(101, 102))) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(0));
             $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(1));
 
-            echo '<img src="/images/img/document.gif" alt="image" /> <a href="/admin/offers?type=0">Предложения</a>  ('.$total.') / ';
+            echo '<img src="/assets/img/images/document.gif" alt="image" /> <a href="/admin/offers?type=0">Предложения</a>  ('.$total.') / ';
             echo '<a href="/admin/offers?type=1">Проблемы</a> ('.$total2.') / ';
             echo '<a href="/pages//admin/offers?act=view&amp;type='.$type.'&amp;id='.$id.'">Обзор</a><hr />';
 
@@ -110,17 +110,17 @@ if (is_admin(array(101, 102))) {
                 $config['newtitle'] = $queryoff['offers_title'];
 
                 echo '<div class="b">';
-                echo '<img src="/images/img/files.gif" alt="image" /> ';
+                echo '<img src="/assets/img/images/files.gif" alt="image" /> ';
                 echo '<b>'.$queryoff['offers_title'].'</b> (Голосов: '.$queryoff['offers_votes'].')<br />';
 
                 switch ($queryoff['offers_status']) {
-                    case '1': echo '<img src="/images/img/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
+                    case '1': echo '<img src="/assets/img/images/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
                         break;
-                    case '2': echo '<img src="/images/img/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
+                    case '2': echo '<img src="/assets/img/images/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
                         break;
-                    case '3': echo '<img src="/images/img/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
+                    case '3': echo '<img src="/assets/img/images/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
                         break;
-                    default: echo '<img src="/images/img/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
+                    default: echo '<img src="/assets/img/images/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
                 }
 
                 echo '</div>';

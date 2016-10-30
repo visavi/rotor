@@ -29,7 +29,7 @@ case 'index':
 
         while ($data = $querynews -> fetch()) {
             echo '<div class="b">';
-            echo $data['news_closed'] == 0 ? '<img src="/images/img/document_plus.gif" alt="image" /> ' : '<img src="/images/img/document_minus.gif" alt="image" /> ';
+            echo $data['news_closed'] == 0 ? '<img src="/assets/img/images/document_plus.gif" alt="image" /> ' : '<img src="/assets/img/images/document_minus.gif" alt="image" /> ';
             echo '<b><a href="/news/'.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small></div>';
 
             if (!empty($data['news_image'])) {
@@ -51,8 +51,8 @@ case 'index':
         show_error('Новостей еще нет!');
     }
 
-    echo '<img src="/images/img/rss.gif" alt="image" /> <a href="/news/rss">RSS подписка</a><br />';
-    echo '<img src="/images/img/balloon.gif" alt="image" /> <a href="/news/allcomments">Комментарии</a><br />';
+    echo '<img src="/assets/img/images/rss.gif" alt="image" /> <a href="/news/rss">RSS подписка</a><br />';
+    echo '<img src="/assets/img/images/balloon.gif" alt="image" /> <a href="/news/allcomments">Комментарии</a><br />';
 break;
 
 ############################################################################################
@@ -72,7 +72,7 @@ case 'view':
         $config['newtitle'] = $data['news_title'];
         $config['description'] = strip_str($data['news_text']);
 
-        echo '<div class="b"><img src="/images/img/files.gif" alt="image" /> ';
+        echo '<div class="b"><img src="/assets/img/images/files.gif" alt="image" /> ';
         echo '<b>'.$data['news_title'].'</b><small> ('.date_fixed($data['news_time']).')</small></div>';
 
         if (!empty($data['news_image'])) {
@@ -85,7 +85,7 @@ case 'view':
         echo '<div style="clear:both;">Добавлено: '.profile($data['news_author']).'</div><br />';
 
         if ($data['news_comments'] > 0) {
-            echo '<div class="act"><img src="/images/img/balloon.gif" alt="image" /> <b>Последние комментарии</b></div>';
+            echo '<div class="act"><img src="/assets/img/images/balloon.gif" alt="image" /> <b>Последние комментарии</b></div>';
 
             $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `commnews_news_id`=? ORDER BY `commnews_time` DESC LIMIT 5;", array($id));
             $comments = $querycomm -> fetchAll();
@@ -213,7 +213,7 @@ case 'comments':
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
                 echo '<input type="submit" value="Написать" /></form></div>';
 
-                echo '<br /><a href="#up"><img src="/images/img/ups.gif" alt="image" /></a> ';
+                echo '<br /><a href="#up"><img src="/assets/img/images/ups.gif" alt="image" /></a> ';
                 echo '<a href="/rules">Правила</a> / ';
                 echo '<a href="/smiles">Смайлы</a> / ';
                 echo '<a href="/tags">Теги</a><br /><br />';

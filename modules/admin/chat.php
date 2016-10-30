@@ -58,7 +58,7 @@ if (is_admin()) {
                     echo '<div>'.bb_code($data['chat_text']).'<br />';
 
                     if (!empty($data['chat_edit'])) {
-                        echo '<img src="/images/img/exclamation_small.gif" alt="image" /> <small>Отредактировано: '.nickname($data['chat_edit']).' ('.date_fixed($data['chat_edit_time']).')</small><br />';
+                        echo '<img src="/assets/img/images/exclamation_small.gif" alt="image" /> <small>Отредактировано: '.nickname($data['chat_edit']).' ('.date_fixed($data['chat_edit_time']).')</small><br />';
                     }
 
                     echo '<span class="data">('.$data['chat_brow'].', '.$data['chat_ip'].')</span>';
@@ -77,7 +77,7 @@ if (is_admin()) {
             echo '<input type="submit" value="Написать" /></form></div><br />';
 
             if (is_admin(array(101)) && $total > 0) {
-                echo '<img src="/images/img/error.gif" alt="image" /> <a href="/admin/chat?act=prodel">Очистить чат</a><br />';
+                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/chat?act=prodel">Очистить чат</a><br />';
             }
         break;
 
@@ -132,7 +132,7 @@ if (is_admin()) {
             $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `chat_id`=? LIMIT 1;", array($id));
 
             if (!empty($post)) {
-                echo '<div class="b"><img src="/images/img/edit.gif" alt="image" /> <b>'.profile($post['chat_user']).'</b> '.user_online($post['chat_user']).' <small>('.date_fixed($post['chat_time']).')</small></div>';
+                echo '<div class="b"><img src="/assets/img/images/edit.gif" alt="image" /> <b>'.profile($post['chat_user']).'</b> '.user_online($post['chat_user']).' <small>('.date_fixed($post['chat_time']).')</small></div>';
                 echo '<div>Сообщение: '.bb_code($post['chat_text']).'</div><hr />';
 
                 echo '<div class="form">';
@@ -181,7 +181,7 @@ if (is_admin()) {
             if (!empty($post)) {
                 if ($post['chat_time'] + 600 > SITETIME) {
 
-                    echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($post['chat_user']).'</b> <small>('.date_fixed($post['chat_time']).')</small><br /><br />';
+                    echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.nickname($post['chat_user']).'</b> <small>('.date_fixed($post['chat_time']).')</small><br /><br />';
 
                     echo '<div class="form">';
                     echo '<form action="/admin/chat?act=editpost&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -240,7 +240,7 @@ if (is_admin()) {
         ############################################################################################
         case 'prodel':
             echo 'Вы уверены что хотите удалить все сообщения в админ-чате?<br />';
-            echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="/admin/chat?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+            echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/chat?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br />';
         break;

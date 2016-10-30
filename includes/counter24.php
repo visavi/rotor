@@ -54,7 +54,7 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmYH") != 
 	foreach ($host_data as $value) {
 		$per_host[] = $value * 2.90 / $maxhit;
 	}
-	$img = @imageCreateFromGIF(BASEDIR.'/images/img/counter24.gif');
+	$img = @imageCreateFromGIF(HOME.'/assets/img/images/counter24.gif');
 	// линейный
 	$color1 = imageColorAllocate($img, 44, 191, 228);
 	$color2 = imageColorAllocate($img, 0, 0, 120);
@@ -81,7 +81,7 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmYH") != 
 		imageLine($img, $x1 + 1, $y1_host, $x2, $y2_host, $color2);
 
 		if ($hits_data[$i] != 0 && $i == $max_index) {
-			imageTTFtext($img, 6, 0, 40, $y2_hits-3, $color_red, BASEDIR.'/assets/fonts/font.ttf', 'max. '.$maxhost.' / '.$maxhit);
+			imageTTFtext($img, 6, 0, 40, $y2_hits-3, $color_red, HOME.'/assets/fonts/font.ttf', 'max. '.$maxhost.' / '.$maxhit);
 			/**
 			* ImageString($img, 1, $x2-17,  $y2_hits-10, "max", $color_red);
 			* ImageString($img, 1, $x2+2,  $y2_hits-10, $hits_data[$i], $color2);

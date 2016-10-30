@@ -25,10 +25,10 @@ if (count($downs) > 0) {
 
     $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=? AND `downs_time`>?;", array (1, SITETIME-3600 * 120));
 
-    echo '<img src="/images/img/top_dir.gif" alt="image" /> <b><a href="/load/fresh">Свежие загрузки</a></b> ('.$totalnew.')<br />';
+    echo '<img src="/assets/img/images/top_dir.gif" alt="image" /> <b><a href="/load/fresh">Свежие загрузки</a></b> ('.$totalnew.')<br />';
 
     foreach($output[0] as $key => $data) {
-        echo '<img src="/images/img/dir.gif" alt="image" /> ';
+        echo '<img src="/assets/img/images/dir.gif" alt="image" /> ';
         echo '<b><a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
 
         $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
@@ -54,14 +54,14 @@ if (count($downs) > 0) {
                 $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
                 $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
 
-                echo '<img src="/images/img/right.gif" alt="image" /> <b><a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
+                echo '<img src="/assets/img/images/right.gif" alt="image" /> <b><a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
                 echo '('.$data['cats_count'] . $subcnt . $new.')<br />';
             }
         }
         // ----------------------------------------------------//
     }
 
-    echo '<br /><a href="#up"><img src="/images/img/ups.gif" alt="Вверх" /></a> ';
+    echo '<br /><a href="#up"><img src="/assets/img/images/ups.gif" alt="Вверх" /></a> ';
     echo '<a href="/load/top">Топ файлов</a> / ';
     echo '<a href="/load/search">Поиск</a> / ';
     echo '<a href="/load/add">Добавить файл</a><br />';

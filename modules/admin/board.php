@@ -28,7 +28,7 @@ if ($act == 'index') {
 
                 $totalboard = counter_string(DATADIR."/board/$data[2].dat");
 
-                echo '<div class="b"><img src="/images/img/forums.gif" alt="image" /> ';
+                echo '<div class="b"><img src="/assets/img/images/forums.gif" alt="image" /> ';
                 echo '<b><a href="/admin/board?act=board&amp;id='.$data[2].'">'.$data[0].'</a></b> ('.(int)$totalboard.')';
 
                 if ($is_admin){
@@ -51,7 +51,7 @@ if ($act == 'index') {
         } else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
     } else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
 
-    if ($is_admin) {echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/board?act=add">Добавить</a><br />';}
+    if ($is_admin) {echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/board?act=add">Добавить</a><br />';}
 }
 
 ############################################################################################
@@ -96,7 +96,7 @@ if ($act=="board")  {
 
                     echo '<input type="checkbox" name="del[]" value="'.$num.'" /> ';
 
-                    echo '<img src="/images/img/forums.gif" alt="image" /> '.($i+1).'. ';
+                    echo '<img src="/assets/img/images/forums.gif" alt="image" /> '.($i+1).'. ';
                     echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;start='.$start.'">'.$data[0].'</a></b> ';
                     echo '(<small>'.date_fixed($data[3]).'</small>)</div>';
                     echo '<div>Текст объявления: '.$data[2].'<br />';

@@ -42,9 +42,9 @@ if (is_admin()) {
                     echo '<input type="checkbox" name="del[]" value="'.$data['downs_id'].'" /> ';
 
                     if (empty($data['downs_app'])) {
-                        echo '<img src="/images/img/download.gif" alt="image" /> ';
+                        echo '<img src="/assets/img/images/download.gif" alt="image" /> ';
                     } else {
-                        echo '<img src="/images/img/open.gif" alt="image" /> ';
+                        echo '<img src="/assets/img/images/open.gif" alt="image" /> ';
                     }
 
                     echo '<b><a href="/admin/newload?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.date_fixed($data['downs_time']).')</div>';
@@ -52,12 +52,12 @@ if (is_admin()) {
                     echo 'Категория: <a href="/load/down?cid='.$data['downs_cats_id'].'">'.$data['cats_name'].'</a><br />';
                     echo 'Добавлено: '.profile($data['downs_user']).'<br />';
                     if (!empty($data['downs_link'])) {
-                        echo 'Файл: '.$data['downs_link'].' ('.read_file(BASEDIR.'/upload/files/'.$data['downs_link']).')<br />';
+                        echo 'Файл: '.$data['downs_link'].' ('.read_file(HOME.'/upload/files/'.$data['downs_link']).')<br />';
                     } else {
                         echo 'Файл: Не загружен<br />';
                     }
                     if (!empty($data['downs_screen'])) {
-                        echo 'Скрин: '.$data['downs_screen'].' ('.read_file(BASEDIR.'/upload/screen/'.$data['downs_screen']).')<br />';
+                        echo 'Скрин: '.$data['downs_screen'].' ('.read_file(HOME.'/upload/screen/'.$data['downs_screen']).')<br />';
                     } else {
                         echo 'Скрин: Не загружен<br />';
                     }
@@ -98,16 +98,16 @@ if (is_admin()) {
                         $folder = $new['folder'] ? $new['folder'].'/' : '';
 
                         if (!empty($new['downs_link'])) {
-                            echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(BASEDIR.'/upload/files/'.$folder.$new['downs_link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+                            echo '<img src="/assets/img/images/download.gif" alt="image" /> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['downs_link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
                         } else {
-                            echo '<img src="/images/img/download.gif" alt="image" /> <b>Не загружен</b><br />';
+                            echo '<img src="/assets/img/images/download.gif" alt="image" /> <b>Не загружен</b><br />';
                         }
 
                         if (!empty($new['downs_screen'])) {
-                            echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(BASEDIR.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+                            echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
                             echo resize_image('upload/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
                         } else {
-                            echo '<img src="/images/img/gallery.gif" alt="image" /> <b>Не загружен</b><br />';
+                            echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b>Не загружен</b><br />';
                         }
 
                         echo '<br /><b><big>Редактирование</big></b><br /><br />';
@@ -218,7 +218,7 @@ if (is_admin()) {
                                                         $newtitle = DB::run() -> querySingle("SELECT `downs_title` FROM `downs` WHERE `downs_title`=? AND `downs_id`<>? LIMIT 1;", array($title, $id));
                                                         if (empty($newtitle)) {
 
-                                                            if (!empty($link) && $link != $new['downs_link'] && file_exists(BASEDIR.'/upload/files/'.$folder.$new['downs_link'])) {
+                                                            if (!empty($link) && $link != $new['downs_link'] && file_exists(HOME.'/upload/files/'.$folder.$new['downs_link'])) {
 
                                                                 $oldext = getExtension($new['downs_link']);
                                                                 $newext = getExtension($link);
@@ -226,12 +226,12 @@ if (is_admin()) {
                                                                 if ($oldext == $newext) {
 
                                                                     $screen = $new['downs_screen'];
-                                                                    rename(BASEDIR.'/upload/files/'.$folder.$new['downs_link'], BASEDIR.'/upload/files/'.$folder.$link);
+                                                                    rename(HOME.'/upload/files/'.$folder.$new['downs_link'], HOME.'/upload/files/'.$folder.$link);
 
-                                                                    if (!empty($new['downs_screen']) && file_exists(BASEDIR.'/upload/screen/'.$folder.$new['downs_screen'])) {
+                                                                    if (!empty($new['downs_screen']) && file_exists(HOME.'/upload/screen/'.$folder.$new['downs_screen'])) {
 
                                                                         $screen = $link.'.'.getExtension($new['downs_screen']);
-                                                                        rename(BASEDIR.'/upload/screen/'.$folder.$new['downs_screen'], BASEDIR.'/upload/screen/'.$screen);
+                                                                        rename(HOME.'/upload/screen/'.$folder.$new['downs_screen'], HOME.'/upload/screen/'.$screen);
                                                                         unlink_image('upload/screen/'.$folder, $new['downs_screen']);
                                                                     }
                                                                     DB::run() -> query("UPDATE `downs` SET `downs_link`=?, `downs_screen`=? WHERE `downs_id`=?;", array($link, $screen, $id));
@@ -355,8 +355,8 @@ if (is_admin()) {
             if (!empty($link)) {
                 if (empty($link['downs_active'])) {
 
-                    if (!empty($link['downs_link']) && file_exists(BASEDIR.'/upload/files/'.$folder.$link['downs_link'])) {
-                        unlink(BASEDIR.'/upload/files/'.$folder.$link['downs_link']);
+                    if (!empty($link['downs_link']) && file_exists(HOME.'/upload/files/'.$folder.$link['downs_link'])) {
+                        unlink(HOME.'/upload/files/'.$folder.$link['downs_link']);
                     }
 
                     unlink_image('upload/screen/'.$folder, $link['downs_screen']);
@@ -432,8 +432,8 @@ if (is_admin()) {
                     foreach ($arr_files as $delfile) {
                         $folder = $delfile['folder'] ? $delfile['folder'].'/' : '';
 
-                        if (!empty($delfile['downs_link']) && file_exists(BASEDIR.'/upload/files/'.$folder.$delfile['downs_link'])) {
-                            unlink(BASEDIR.'/upload/files/'.$folder.$delfile['downs_link']);
+                        if (!empty($delfile['downs_link']) && file_exists(HOME.'/upload/files/'.$folder.$delfile['downs_link'])) {
+                            unlink(HOME.'/upload/files/'.$folder.$delfile['downs_link']);
                         }
 
                         unlink_image('upload/screen/'.$folder, $delfile['downs_screen']);

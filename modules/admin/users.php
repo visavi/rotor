@@ -223,7 +223,7 @@ if (is_admin(array(101, 102))) {
                     echo 'Строгих банов: <b>'.$user['users_totalban'].'</b><br /><br />';
 
                     if ($user['users_level'] < 101 || $user['users_level'] > 105) {
-                        echo '<img src="/images/img/error.gif" alt="image" /> <b><a href="/admin/users?act=poddel&amp;uz='.$uz.'">Удалить профиль</a></b><br />';
+                        echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/users?act=poddel&amp;uz='.$uz.'">Удалить профиль</a></b><br />';
                     }
                 } else {
                     show_error('Ошибка! У вас недостаточно прав для редактирования этого профиля!');
@@ -306,7 +306,7 @@ if (is_admin(array(101, 102))) {
                                                     save_nickname();
                                                     save_money();
 
-                                                    echo '<img src="/images/img/open.gif" alt="image" /> <b>Данные пользователя успешно изменены!</b><br /><br />';
+                                                    echo '<img src="/assets/img/images/open.gif" alt="image" /> <b>Данные пользователя успешно изменены!</b><br /><br />';
                                                 } else {
                                                     show_error('Ошибка! Слишком большая информация в графе о себе, не более 1000 символов!');
                                                 }
@@ -347,7 +347,7 @@ if (is_admin(array(101, 102))) {
         ############################################################################################
         case 'poddel':
 
-            echo '<img src="/images/img/error.gif" alt="image" /> Вы подтверждаете, что хотите полностью удалить аккаунт пользователя <b>'.$uz.'</b>?<br /><br />';
+            echo '<img src="/assets/img/images/error.gif" alt="image" /> Вы подтверждаете, что хотите полностью удалить аккаунт пользователя <b>'.$uz.'</b>?<br /><br />';
 
             echo '<div class="form">';
             echo '<form action="/admin/users?act=deluser&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -424,7 +424,7 @@ if (is_admin(array(101, 102))) {
 
                                 // ------ Удаление загруженных файлов -------//
                                 foreach($topics as $delDir){
-                                    removeDir(BASEDIR.'/upload/forum/'.$delDir);
+                                    removeDir(HOME.'/upload/forum/'.$delDir);
                                 }
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id` IN (".$strtopics.");");
                                 // ------ Удаление загруженных файлов -------//
@@ -443,8 +443,8 @@ if (is_admin(array(101, 102))) {
 
                                 if (!empty($files)){
                                     foreach ($files as $file){
-                                        if (file_exists(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
-                                            unlink(BASEDIR.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash']);
+                                        if (file_exists(HOME.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
+                                            unlink(HOME.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash']);
                                         }
                                     }
                                     DB::run() -> query("DELETE FROM `files_forum` WHERE `file_user`=?;", array($uz));
@@ -479,7 +479,7 @@ if (is_admin(array(101, 102))) {
                         // Удаление профиля
                         delete_users($uz);
 
-                        echo '<img src="/images/img/open.gif" alt="image" /> <b>Профиль пользователя успешно удален!</b><br /><br />';
+                        echo '<img src="/assets/img/images/open.gif" alt="image" /> <b>Профиль пользователя успешно удален!</b><br /><br />';
                     } else {
                         show_error('Ошибка! У вас недостаточно прав для удаления этого профиля!');
                     }

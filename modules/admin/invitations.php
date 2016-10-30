@@ -15,7 +15,7 @@ switch ($act):
 case 'index':
 
     if (empty($config['invite'])) {
-        echo '<img src="/images/img/warning.gif" alt="image" /> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br /><br />';
+        echo '<img src="/assets/img/images/warning.gif" alt="image" /> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br /><br />';
     }
 
     if (empty($used)){
@@ -57,8 +57,8 @@ case 'index':
         show_error('Приглашений еще нет!');
     }
 
-    echo '<img src="/images/img/open.gif" alt="image" /> <a href="/admin/invitations?act=new">Создать ключи</a><br />';
-    echo '<img src="/images/img/keys.gif" alt="image" /> <a href="/admin/invitations?act=list">Список ключей</a><br />';
+    echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/invitations?act=new">Создать ключи</a><br />';
+    echo '<img src="/assets/img/images/keys.gif" alt="image" /> <a href="/admin/invitations?act=list">Список ключей</a><br />';
 break;
 
 ############################################################################################

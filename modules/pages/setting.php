@@ -12,7 +12,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    echo '<img src="/images/img/document.gif" alt="image" /> ';
+    echo '<img src="/assets/img/images/document.gif" alt="image" /> ';
     echo '<a href="/user/'.App::getUsername().'">Моя анкета</a> / ';
     echo '<a href="/profile">Мой профиль</a> / ';
     echo '<a href="/account">Мои данные</a> / ';
@@ -24,7 +24,7 @@ case 'index':
     echo 'Wap-тема по умолчанию:<br />';
     echo '<select name="themes">';
     echo '<option value="0">Автоматически</option>';
-    $globthemes = glob(BASEDIR."/themes/*", GLOB_ONLYDIR);
+    $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
     foreach ($globthemes as $themes) {
         $selected = ($udata['users_themes'] == basename($themes)) ? ' selected="selected"' : '';
         echo '<option value="'.basename($themes).'"'.$selected.'>'.basename($themes).'</option>';
@@ -93,7 +93,7 @@ case 'edit':
         -> addRule('regex', array($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|'), 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!', true);
 
     if ($validation->run()) {
-        if (file_exists(BASEDIR."/themes/$themes/index.php") || $themes==0) {
+        if (file_exists(HOME."/themes/$themes/index.php") || $themes==0) {
 
             $user = DBM::run()->update('users', array(
                 'users_themes'      => $themes,

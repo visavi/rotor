@@ -19,7 +19,7 @@ if (! empty($key)) {
             'users_login' => $user['users_login']
         ));
 
-        echo '<img src="/images/img/open.gif" alt="image" /> <b>Вы успешно отписались от рассылки!</b><br />';
+        echo '<img src="/assets/img/images/open.gif" alt="image" /> <b>Вы успешно отписались от рассылки!</b><br />';
 
     } else {
         show_error('Ошибка! Ключ для отписки от рассылки устарел!');

@@ -16,28 +16,28 @@ if (is_admin(array(101))) {
         case 'index':
 
             if ($log == $config['nickname']) {
-                echo'<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setzero">Администраторская</a><br />';
+                echo'<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setzero">Администраторская</a><br />';
 
-                echo'<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setone">Основные настройки</a><br />';
-                echo'<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=mail">Почта / Рассылка</a><br />';
+                echo'<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setone">Основные настройки</a><br />';
+                echo'<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=mail">Почта / Рассылка</a><br />';
             }
 
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=settwo">Вывод информации</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setthree">Гостевая / Новости</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setfour">Форум / Галерея / Объявления</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setfive">Закладки / Голосования / Приват</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setload">Загруз-центр</a> <br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setblog">Блоги</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setevent">События</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setseven">Постраничная навигация</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=seteight">Прочее / Другое</a><br />';
-            // echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setnine">Кэширование</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setten">Защита / Безопасность</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=seteleven">Стоимость и цены</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setadv">Реклама на сайте</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setimage">Загрузка изображений</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setsmile">Смайлы</a><br />';
-            echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/admin/setting?act=setoffer">Предложения и проблемы</a><br /><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=settwo">Вывод информации</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setthree">Гостевая / Новости</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setfour">Форум / Галерея / Объявления</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setfive">Закладки / Голосования / Приват</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setload">Загруз-центр</a> <br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setblog">Блоги</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setevent">События</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setseven">Постраничная навигация</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=seteight">Прочее / Другое</a><br />';
+            // echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setnine">Кэширование</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setten">Защита / Безопасность</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=seteleven">Стоимость и цены</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setadv">Реклама на сайте</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setimage">Загрузка изображений</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setsmile">Смайлы</a><br />';
+            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setoffer">Предложения и проблемы</a><br /><br />';
         break;
 
         ############################################################################################
@@ -146,7 +146,7 @@ if (is_admin(array(101))) {
                 echo 'Wap-тема по умолчанию:<br />';
                 echo '<select name="themes">';
 
-                $globthemes = glob(BASEDIR."/themes/*", GLOB_ONLYDIR);
+                $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
 
                 foreach ($globthemes as $wapthemes) {
                     $selected = (basename($wapthemes) == $setting['themes']) ? ' selected="selected"' : '';
@@ -159,7 +159,7 @@ if (is_admin(array(101))) {
                 echo 'Web-тема по умолчанию:<br />';
                 echo '<select name="webthemes">';
 
-                $globthemes = glob(BASEDIR."/themes/*", GLOB_ONLYDIR);
+                $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
 
                 echo '<option value="0">Выключить</option>';
 
@@ -174,7 +174,7 @@ if (is_admin(array(101))) {
                 echo 'Touch-тема по умолчанию:<br />';
                 echo '<select name="touchthemes">';
 
-                $globthemes = glob(BASEDIR."/themes/*", GLOB_ONLYDIR);
+                $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
 
                 echo '<option value="0">Выключить</option>';
 
@@ -1302,7 +1302,7 @@ if (is_admin(array(101))) {
 
             $checked = ($setting['copyfoto'] == 1) ? ' checked="checked"' : '';
             echo '<input name="copyfoto" type="checkbox" value="1"'.$checked.' /> Наложение копирайта<br />';
-            echo '<img src="/images/img/watermark.png" alt="watermark" title="'.$config['home'].'/images/img/watermark.png" /><br />';
+            echo '<img src="/assets/img/images/watermark.png" alt="watermark" title="'.$config['home'].'/assets/img/images/watermark.png" /><br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 

@@ -286,7 +286,7 @@ if ($config['rotorversion'] < '4.5.0') {
 	echo 'Необходимо выполнить <a href="/upgrade/upgrade_bbcodes.php">апгрейд тегов</a><br />';
 }
 
-if (file_exists(BASEDIR.'/assets/fonts/.htaccess')){
+if (file_exists(HOME.'/assets/fonts/.htaccess')){
 	echo '<i class="fa fa-exclamation-circle"></i> Необходимо удалить файл assets/fonts/.htaccess<br />';
 }
 

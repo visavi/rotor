@@ -34,7 +34,7 @@ case 'index':
             }
 
             echo '<br /><br />';
-            echo '<img src="/images/img/open_dir.gif" alt="image" /> <b>'.$cats['cats_name'].'</b> (Файлов: '.$cats['cats_count'].')';
+            echo '<img src="/assets/img/images/open_dir.gif" alt="image" /> <b>'.$cats['cats_name'].'</b> (Файлов: '.$cats['cats_count'].')';
 
             if (is_admin(array(101, 102))) {
                 echo ' (<a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Управление</a>)';
@@ -83,7 +83,7 @@ case 'index':
 
             if (count($sub) > 0 && $start == 0) {
                 foreach($sub as $subdata) {
-                    echo '<div class="b"><img src="/images/img/dir.gif" alt="image" /> ';
+                    echo '<div class="b"><img src="/assets/img/images/dir.gif" alt="image" /> ';
                     echo '<b><a href="/load/down?cid='.$subdata['cats_id'].'">'.$subdata['cats_name'].'</a></b> ('.$subdata['cats_count'].')</div>';
                 }
                 echo '<hr />';
@@ -102,10 +102,10 @@ case 'index':
 
                 while ($data = $querydown -> fetch()) {
 
-                    $filesize = (!empty($data['downs_link'])) ? read_file(BASEDIR.'/upload/files/'.$folder.$data['downs_link']) : 0;
+                    $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
 
                     echo '<div class="b">';
-                    echo '<img src="/images/img/zip.gif" alt="image" /> ';
+                    echo '<img src="/assets/img/images/zip.gif" alt="image" /> ';
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
                     echo '<div>';
 
@@ -133,7 +133,7 @@ case 'index':
             show_error('Ошибка! Данного раздела не существует!');
         }
 
-        echo '<a href="#up"><img src="/images/img/ups.gif" alt="up" /></a> ';
+        echo '<a href="#up"><img src="/assets/img/images/ups.gif" alt="up" /></a> ';
         echo '<a href="/load/top">Топ файлов</a> / ';
         echo '<a href="/load/search">Поиск</a>';
 
@@ -170,8 +170,8 @@ case 'view':
 
             echo '<a href="/load/down?cid='.$downs['cats_id'].'">'.$downs['cats_name'].'</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><br /><br />';
 
-            $filesize = (!empty($downs['downs_link'])) ? read_file(BASEDIR.'/upload/files/'.$folder.$downs['downs_link']) : 0;
-            echo '<img src="/images/img/zip.gif" alt="image" /> <b>'.$downs['downs_title'].'</b> ('.$filesize.')';
+            $filesize = (!empty($downs['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$downs['downs_link']) : 0;
+            echo '<img src="/assets/img/images/zip.gif" alt="image" /> <b>'.$downs['downs_title'].'</b> ('.$filesize.')';
 
             if (is_admin(array(101, 102))) {
                 echo ' (<a href="/admin/load?act=editdown&amp;cid='.$downs['cats_id'].'&amp;id='.$id.'">Редактировать</a> / ';
@@ -181,7 +181,7 @@ case 'view':
 
             if (empty($downs['downs_active']) && $downs['downs_user'] == $log){
                 echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br />';
-                echo '<img src="/images/img/edit.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br />';
+                echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br />';
             }
 
             $ext = getExtension($downs['downs_link']);
@@ -192,7 +192,7 @@ case 'view':
 
             echo bb_code($downs['downs_text']).'<br /><br />';
 
-            if (!empty($downs['downs_screen']) && file_exists(BASEDIR.'/upload/screen/'.$folder.$downs['downs_screen'])) {
+            if (!empty($downs['downs_screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['downs_screen'])) {
                 echo 'Скриншот:<br />';
 
                 echo '<a href="screen/'.$folder.$downs['downs_screen'].'">'.resize_image('upload/screen/'.$folder, $downs['downs_screen'], $config['previewsize'], array('alt' => $downs['downs_title'])).'</a><br /><br />';
@@ -214,7 +214,7 @@ case 'view':
             echo 'Добавлено: '.profile($downs['downs_user']).' ('.date_fixed($downs['downs_time']).')<hr />';
 
             // -----------------------------------------------------------//
-            if (!empty($downs['downs_link']) && file_exists(BASEDIR.'/upload/files/'.$folder.$downs['downs_link'])) {
+            if (!empty($downs['downs_link']) && file_exists(HOME.'/upload/files/'.$folder.$downs['downs_link'])) {
 
                 if ($ext == 'mp3') {?>
 
@@ -231,11 +231,11 @@ case 'view':
                 }
 
                 if ($ext == 'zip') {
-                    echo '<img src="/images/img/zip.gif" alt="image" /> <b><a href="/load/zip?id='.$id.'">Просмотреть архив</a></b><br />';
+                    echo '<img src="/assets/img/images/zip.gif" alt="image" /> <b><a href="/load/zip?id='.$id.'">Просмотреть архив</a></b><br />';
                 }
 
                 if (is_user()) {
-                    echo '<img src="/images/img/download.gif" alt="image" /> <b><a href="/load/down?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br />';
+                    echo '<img src="/assets/img/images/download.gif" alt="image" /> <b><a href="/load/down?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br />';
                 } else {
                     echo '<div class="form">';
                     echo '<form action="/load/down?act=load&amp;id='.$id.'" method="post">';
@@ -247,7 +247,7 @@ case 'view':
                     echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br />';
                 }
 
-                echo '<img src="/images/img/balloon.gif" alt="image" /> <b><a href="/load/down?act=comments&amp;id='.$id.'">Комментарии</a></b> ('.$downs['downs_comments'].') ';
+                echo '<img src="/assets/img/images/balloon.gif" alt="image" /> <b><a href="/load/down?act=comments&amp;id='.$id.'">Комментарии</a></b> ('.$downs['downs_comments'].') ';
                 echo '<a href="/load/down?act=end&amp;id='.$id.'">&raquo;</a><br />';
 
                 $raiting = (!empty($downs['downs_rated'])) ? round($downs['downs_raiting'] / $downs['downs_rated'], 1) : 0;
@@ -404,7 +404,7 @@ case 'comments':
         if (!empty($downs['downs_active'])) {
             $config['newtitle'] = 'Комментарии - '.$downs['downs_title'];
 
-            echo '<img src="/images/img/zip.gif" alt="image" /> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['downs_title'].'</a></b><br /><br />';
+            echo '<img src="/assets/img/images/zip.gif" alt="image" /> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['downs_title'].'</a></b><br /><br />';
 
             echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr />';
 
@@ -588,7 +588,7 @@ case 'reply':
         $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? LIMIT 1;", array($pid));
 
         if (!empty($post)) {
-            echo '<div class="b"><img src="/images/img/edit.gif" alt="image" /> <b>'.profile($post['commload_author']).'</b> '.user_title($post['commload_author']).' '.user_online($post['commload_author']).' <small>('.date_fixed($post['commload_time']).')</small></div>';
+            echo '<div class="b"><img src="/assets/img/images/edit.gif" alt="image" /> <b>'.profile($post['commload_author']).'</b> '.user_title($post['commload_author']).' '.user_online($post['commload_author']).' <small>('.date_fixed($post['commload_time']).')</small></div>';
             echo '<div>Сообщение: '.bb_code($post['commload_text']).'</div><hr />';
 
             echo '<div class="form">';
@@ -648,7 +648,7 @@ case 'edit':
         if (!empty($post)) {
             if ($post['commload_time'] + 600 > SITETIME) {
 
-                echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($post['commload_author']).'</b> <small>('.date_fixed($post['commload_time']).')</small><br /><br />';
+                echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.nickname($post['commload_author']).'</b> <small>('.date_fixed($post['commload_time']).')</small><br /><br />';
 
                 echo '<div class="form">';
                 echo '<form action="/load/down?act=editpost&amp;id='.$post['commload_down'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';

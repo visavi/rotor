@@ -18,7 +18,7 @@
 			Сменить браузер, войти с другого IP или с прокси-сервера и<br />
 			Попросить администрацию разбанить ваш IP<br /><br />
 			Если нет такой возможности остается только ждать, список забаненых IP очищают раз в 3-4 дня<br /><br />
-			<img src="/images/img/homepage.gif" alt="image" /> <a href="/">На главную</a>
+			<img src="/assets/img/images/homepage.gif" alt="image" /> <a href="/">На главную</a>
 		</div>
 	</body>
 </html>

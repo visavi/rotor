@@ -152,7 +152,7 @@ break;
                                 $handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $lastid);
                                 if ($handle) {
 
-                                    $handle -> process(BASEDIR.'/upload/pictures/');
+                                    $handle -> process(HOME.'/upload/pictures/');
                                     if ($handle -> processed) {
 
                                         DB::run() -> query("UPDATE `photo` SET `photo_link`=? WHERE `photo_id`=?;", array($handle -> file_dst_name, $lastid));
@@ -275,7 +275,7 @@ break;
         if (!empty($photo)) {
             $config['newtitle'] = 'Комментарии - '.$photo['photo_title'];
 
-            echo '<img src="/images/img/gallery.gif" alt="image" /> <b><a href="/gallery?act=view&amp;gid='.$photo['photo_id'].'">'.$photo['photo_title'].'</a></b><br /><br />';
+            echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b><a href="/gallery?act=view&amp;gid='.$photo['photo_id'].'">'.$photo['photo_title'].'</a></b><br /><br />';
 
             echo '<a href="/gallery?act=comments&amp;gid='.$gid.'&amp;rand='.mt_rand(100, 999).'">Обновить</a><hr />';
 
@@ -423,7 +423,7 @@ break;
                 if (empty($comm['photo_closed'])) {
                     if ($comm['commphoto_time'] + 600 > SITETIME) {
 
-                        echo '<img src="/images/img/edit.gif" alt="image" /> <b>'.nickname($comm['commphoto_user']).'</b> <small>('.date_fixed($comm['commphoto_time']).')</small><br /><br />';
+                        echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.nickname($comm['commphoto_user']).'</b> <small>('.date_fixed($comm['commphoto_time']).')</small><br /><br />';
 
                         echo '<div class="form">';
                         echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['commphoto_gid'].'&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -538,7 +538,7 @@ break;
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
-                if (is_writeable(BASEDIR.'/upload/pictures')) {
+                if (is_writeable(HOME.'/upload/pictures')) {
                     $querydel = DB::run() -> queryfetch("SELECT `photo_id`, `photo_link`, `photo_comments` FROM `photo` WHERE `photo_id`=? AND `photo_user`=? LIMIT 1;", array($gid, $log));
                     if (!empty($querydel)) {
                         if (empty($querydel['photo_comments'])) {
@@ -605,7 +605,7 @@ break;
     *
     * $del = implode(',', $del);
     *
-    * if (is_writeable(BASEDIR.'/upload/pictures')){
+    * if (is_writeable(HOME.'/upload/pictures')){
     *
     * $querydel = DB::run()->query("SELECT `photo_id`, `photo_link` FROM `photo` WHERE `photo_id` IN (".$del.") AND `photo_user`=?;", array($log));
     * $arr_photo = $querydel->fetchAll();
@@ -614,7 +614,7 @@ break;
     * foreach ($arr_photo as $delete){
     * DB::run()->query("DELETE FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($delete['photo_id']));
     * DB::run()->query("DELETE FROM `commphoto` WHERE `commphoto_gid`=?;", array($delete['photo_id']));
-    * if (file_exists(BASEDIR.'/upload/pictures/'.$delete['photo_link'])) {unlink(BASEDIR.'/upload/pictures/'.$delete['photo_link']);}
+    * if (file_exists(HOME.'/upload/pictures/'.$delete['photo_link'])) {unlink(HOME.'/upload/pictures/'.$delete['photo_link']);}
     * }
     *
     * $_SESSION['note'] = 'Выбранные фотографии успешно удалены!';

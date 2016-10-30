@@ -19,7 +19,7 @@ if (is_user()) {
             $intotal = DB::run() -> query("SELECT count(*) FROM `outbox` WHERE `outbox_author`=? UNION ALL SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
 
-            echo '<img src="/images/img/mail.gif" alt="image" /> <b>Входящие ('.$total.')</b> / ';
+            echo '<img src="/assets/img/images/mail.gif" alt="image" /> <b>Входящие ('.$total.')</b> / ';
             echo '<a href="/private?act=output">Отправленные ('.$intotal[0].')</a> / ';
             echo '<a href="/private?act=trash">Корзина ('.$intotal[1].')</a><hr />';
 
@@ -70,7 +70,7 @@ if (is_user()) {
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Объем ящика: <b>'.$config['limitmail'].'</b><br /><br />';
 
-                echo '<img src="/images/img/error.gif" alt="image" /> <a href="/private?act=alldel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/private?act=alldel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Входящих писем еще нет!');
             }
@@ -86,7 +86,7 @@ if (is_user()) {
             $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `inbox_user`=? UNION ALL SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
 
-            echo '<img src="/images/img/mail.gif" alt="image" /> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
+            echo '<img src="/assets/img/images/mail.gif" alt="image" /> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
             echo '<b>Отправленные ('.$total.')</b> / ';
             echo '<a href="/private?act=trash">Корзина ('.$intotal[1].')</a><hr />';
 
@@ -121,7 +121,7 @@ if (is_user()) {
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Объем ящика: <b>'.$config['limitoutmail'].'</b><br /><br />';
 
-                echo '<img src="/images/img/error.gif" alt="image" /> <a href="/private?act=alloutdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/private?act=alloutdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Отправленных писем еще нет!');
             }
@@ -137,7 +137,7 @@ if (is_user()) {
             $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `inbox_user`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `outbox_author`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
 
-            echo '<img src="/images/img/mail.gif" alt="image" /> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
+            echo '<img src="/assets/img/images/mail.gif" alt="image" /> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
             echo '<a href="/private?act=output">Отправленные ('.$intotal[1].')</a> / ';
 
             echo '<b>Корзина ('.$total.')</b><hr />';
@@ -166,7 +166,7 @@ if (is_user()) {
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Срок хранения: <b>'.$config['expiresmail'].'</b><br /><br />';
 
-                echo '<img src="/images/img/error.gif" alt="image" /> <a href="/private?act=alltrashdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/private?act=alltrashdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Удаленных писем еще нет!');
             }
@@ -214,8 +214,8 @@ if (is_user()) {
             } else {
                 if (!user_privacy($uz) || is_admin() || is_contact($uz, $log)){
 
-                    echo '<img src="/images/img/mail.gif" alt="image" /> Сообщение для <b>'.profile($uz).'</b> '.user_visit($uz).':<br />';
-                    echo '<img src="/images/img/history.gif" alt="image" /> <a href="/private?act=history&amp;uz='.$uz.'">История переписки</a><br /><br />';
+                    echo '<img src="/assets/img/images/mail.gif" alt="image" /> Сообщение для <b>'.profile($uz).'</b> '.user_visit($uz).':<br />';
+                    echo '<img src="/assets/img/images/history.gif" alt="image" /> <a href="/private?act=history&amp;uz='.$uz.'">История переписки</a><br /><br />';
 
                     $ignorstr = DB::run() -> querySingle("SELECT `ignore_id` FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($log, $uz));
                     if (!empty($ignorstr)) {
@@ -518,7 +518,7 @@ if (is_user()) {
         ############################################################################################
         case 'history':
 
-            echo '<img src="/images/img/mail.gif" alt="image" /> <a href="/private">Входящие</a> / ';
+            echo '<img src="/assets/img/images/mail.gif" alt="image" /> <a href="/private">Входящие</a> / ';
             echo '<a href="/private?act=output">Отправленные</a> / ';
             echo '<a href="/private?act=trash">Корзина</a><hr />';
 
@@ -585,8 +585,8 @@ if (is_user()) {
     show_login('Вы не авторизованы, для просмотра писем, необходимо');
 }
 
-echo '<img src="/images/img/search.gif" alt="Поиск" /> <a href="/searchuser">Поиск контактов</a><br />';
-echo '<img src="/images/img/mail.gif" alt="Написать" /> <a href="/private?act=submit">Написать письмо</a><br />';
-echo '<img src="/images/img/users.gif" alt="Контакт" /> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br />';
+echo '<img src="/assets/img/images/search.gif" alt="Поиск" /> <a href="/searchuser">Поиск контактов</a><br />';
+echo '<img src="/assets/img/images/mail.gif" alt="Написать" /> <a href="/private?act=submit">Написать письмо</a><br />';
+echo '<img src="/assets/img/images/users.gif" alt="Контакт" /> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br />';
 
 App::view($config['themes'].'/foot');

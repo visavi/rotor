@@ -111,6 +111,6 @@ switch ($act):
 
 endswitch;
 
-echo '<img src="/images/img/users.gif" alt="image" /> <a href="/onlinewho">Новички</a><br />';
+echo '<img src="/assets/img/images/users.gif" alt="image" /> <a href="/onlinewho">Новички</a><br />';
 
 App::view($config['themes'].'/foot');

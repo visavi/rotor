@@ -37,7 +37,7 @@ class App
 
         $params +=compact('config', 'log');
 
-        $blade = new Philo\Blade\Blade([BASEDIR.'/assets/views', BASEDIR.'/themes'], DATADIR.'/cache');
+        $blade = new Philo\Blade\Blade([BASEDIR.'/views', HOME.'/themes'], DATADIR.'/cache');
 
         if ($return) {
             return $blade->view()->make($template, $params)->render();

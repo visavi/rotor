@@ -58,7 +58,7 @@ switch ($act):
             while ($data = $queryonline -> fetch()) {
                 if (empty($data['online_user'])) {
                     echo '<div class="b">';
-                    echo '<img src="/images/img/user.gif" alt="image" /> <b>'.$config['guestsuser'].'</b>  (Время: '.date_fixed($data['online_time'], 'H:i:s').')</div>';
+                    echo '<img src="/assets/img/images/user.gif" alt="image" /> <b>'.$config['guestsuser'].'</b>  (Время: '.date_fixed($data['online_time'], 'H:i:s').')</div>';
                 } else {
                     echo '<div class="b">';
                     echo user_gender($data['online_user']).' <b>'.profile($data['online_user']).'</b> (Время: '.date_fixed($data['online_time'], 'H:i:s').')</div>';

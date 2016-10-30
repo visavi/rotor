@@ -30,7 +30,7 @@ case 'index':
             echo '<div class="b">';
 
             $icon = (empty($data['event_closed'])) ? 'document_plus.gif' : 'document_minus.gif';
-            echo '<img src="/images/img/'.$icon.'" alt="image" /> ';
+            echo '<img src="/assets/img/images/'.$icon.'" alt="image" /> ';
 
             echo '<b><a href="/events?act=read&amp;id='.$data['event_id'].'">'.$data['event_title'].'</a></b><small> ('.date_fixed($data['event_time']).')</small><br />';
             echo '<input type="checkbox" name="del[]" value="'.$data['event_id'].'" /> ';
@@ -64,7 +64,7 @@ case 'index':
         show_error('Событий еще нет!');
     }
 
-    echo '<img src="/images/img/open.gif" alt="image" /> <a href="/events?act=new">Добавить событие</a><br />';
+    echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/events?act=new">Добавить событие</a><br />';
 
     if (is_admin(array(101))) {
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
@@ -87,10 +87,10 @@ case 'edit':
         echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['event_title'].'" /><br />';
         echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['event_text'].'</textarea><br />';
 
-        if (!empty($dataevent['event_image']) && file_exists(BASEDIR.'/upload/events/'.$dataevent['event_image'])){
+        if (!empty($dataevent['event_image']) && file_exists(HOME.'/upload/events/'.$dataevent['event_image'])){
 
             echo '<a href="/upload/events/'.$dataevent['event_image'].'">'.resize_image('upload/events/', $dataevent['event_image'], 75, array('alt' => $dataevent['event_title'])).'</a><br />';
-            echo '<b>'.$dataevent['event_image'].'</b> ('.read_file(BASEDIR.'/upload/events/'.$dataevent['event_image']).')<br /><br />';
+            echo '<b>'.$dataevent['event_image'].'</b> ('.read_file(HOME.'/upload/events/'.$dataevent['event_image']).')<br /><br />';
         }
 
         echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
@@ -144,7 +144,7 @@ case 'change':
                     unlink_image('upload/events/', $dataevent['event_image']);
                 }
 
-                $handle -> process(BASEDIR.'/upload/events/');
+                $handle -> process(HOME.'/upload/events/');
 
                 if ($handle -> processed) {
 
@@ -203,7 +203,7 @@ case 'del':
 
     if ($uid == $_SESSION['token']) {
         if (!empty($del)) {
-            if (is_writeable(BASEDIR.'/upload/events')){
+            if (is_writeable(HOME.'/upload/events')){
 
                 $del = implode(',', $del);
 

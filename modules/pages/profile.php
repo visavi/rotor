@@ -13,7 +13,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-	echo '<img src="/images/img/document.gif" alt="image" /> ';
+	echo '<img src="/assets/img/images/document.gif" alt="image" /> ';
 	echo '<a href="/user/'.App::getUsername().'">Моя анкета</a> / ';
 	echo '<b>Мой профиль</b> / ';
 	echo '<a href="/account">Мои данные</a> / ';
@@ -23,12 +23,12 @@ case 'index':
 	echo '<form method="post" action="/profile?act=edit&amp;uid='.$_SESSION['token'].'">';
 
 	echo '<div class="pull-right">';
-	if (!empty($udata['users_picture']) && file_exists(BASEDIR.'/upload/photos/'.$udata['users_picture'])) {
+	if (!empty($udata['users_picture']) && file_exists(HOME.'/upload/photos/'.$udata['users_picture'])) {
 		echo '<a href="/upload/photos/'.$udata['users_picture'].'">';
 		echo resize_image('upload/photos/', $udata['users_picture'], $config['previewsize'], array('alt' => nickname($udata['users_login']), 'class' => 'img-responsive img-rounded')).'</a>';
 		echo '<a href="/pictures">Изменить</a> / <a href="/pictures?act=del&amp;uid='.$_SESSION['token'].'">Удалить</a>';
 	} else {
-		echo '<img class="img-responsive img-rounded" src="/images/img/photo.jpg" alt="Фото" />';
+		echo '<img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />';
 		echo '<a href="/pictures">Загрузить фото</a>';
 	}
 	echo '</div>';

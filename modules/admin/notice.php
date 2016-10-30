@@ -25,7 +25,7 @@ case 'index':
 
             echo '<div class="b">';
 
-            echo '<img src="/images/img/mail.gif" alt="image" /> <b><a href="/admin/notice?act=edit&amp;id='.$notice['notice_id'].'">'.$notice['notice_name'].'</a></b>';
+            echo '<img src="/assets/img/images/mail.gif" alt="image" /> <b><a href="/admin/notice?act=edit&amp;id='.$notice['notice_id'].'">'.$notice['notice_name'].'</a></b>';
             if (empty($notice['notice_protect'])) {
                 echo ' (<a href="/admin/notice?act=del&amp;id='.$notice['notice_id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>)';
             } else {
@@ -49,7 +49,7 @@ case 'index':
     } else {
         show_error('Шаблонов еще нет!');
     }
-    echo '<img src="/images/img/open.gif" alt="image" /> <a href="/admin/notice?act=new">Добавить</a><br />';
+    echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/notice?act=new">Добавить</a><br />';
 break;
 
 /**
@@ -80,7 +80,7 @@ case 'edit':
     if (! empty($notice)) {
 
         if (! empty($notice['notice_protect'])) {
-            echo '<div class="info"><img src="/images/img/warning.gif" alt="image" /> <b>Вы редактируете системный шаблон</b></div><br />';
+            echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="image" /> <b>Вы редактируете системный шаблон</b></div><br />';
         }
 
         echo '<div class="form">';

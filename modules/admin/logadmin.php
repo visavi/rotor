@@ -32,7 +32,7 @@ if (is_admin(array(101))) {
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/images/img/files.gif" alt="image" /> <b>'.profile($data['admlog_user']).'</b>';
+                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.profile($data['admlog_user']).'</b>';
                     echo ' ('.date_fixed($data['admlog_time']).')</div>';
                     echo '<div>Страница: '.$data['admlog_request'].'<br />';
                     echo 'Откуда: '.$data['admlog_referer'].'<br />';
@@ -41,7 +41,7 @@ if (is_admin(array(101))) {
 
                 page_strnavigation('/admin/logadmin?', $config['loglist'], $start, $total);
 
-                echo '<img src="/images/img/error.gif" alt="image" /> <a href="/admin/logadmin?act=del&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br />';
+                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/logadmin?act=del&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br />';
             } else {
                 show_error('Записей еще нет!');
             }

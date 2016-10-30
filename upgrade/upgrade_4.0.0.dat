@@ -673,114 +673,114 @@ save_setting();
 echo '<div class="note"><b>RotorCMS автоматически обновлен до версии ' . $version . '</b></div><br />';
 
 if (file_exists(BASEDIR.'/mpanel')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию mpanel</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию mpanel</div>';
 }
 
 if (file_exists(BASEDIR.'/pages/stat.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл pages/stat.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл pages/stat.php</div>';
 }
 
 if (file_exists(BASEDIR.'/pages/themes.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл pages/themes.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл pages/themes.php</div>';
 }
 
 if (file_exists(BASEDIR.'/pages/traffic.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл pages/traffic.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл pages/traffic.php</div>';
 }
 
 if (file_exists(BASEDIR.'/pages/skin.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл pages/skin.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл pages/skin.php</div>';
 }
 
 if (file_exists(BASEDIR.'/pages/link.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл pages/link.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл pages/link.php</div>';
 }
 
 if (file_exists(BASEDIR.'/games')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию games</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию games</div>';
 }
 
 if (file_exists(BASEDIR.'/admin/headlines.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл admin/headlines.php и admin/links/headlines_102.dat</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл admin/headlines.php и admin/links/headlines_102.dat</div>';
 }
 
 if (file_exists(BASEDIR.'/images/smiles2')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/smiles2</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию images/smiles2</div>';
 }
 
 if (file_exists(BASEDIR.'/images/avatars2')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/avatars2</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию images/avatars2</div>';
 }
 
 if (file_exists(BASEDIR.'/images/bandit')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/bandit</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию images/bandit</div>';
 }
 
 if (file_exists(BASEDIR.'/images/cards')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/cards</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию images/cards</div>';
 }
 
 if (file_exists(BASEDIR.'/images/kosti')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/kosti</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию images/kosti</div>';
 }
 
 if (file_exists(BASEDIR.'/images/naperstki')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/naperstki</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию images/naperstki</div>';
 }
 
 if (file_exists(BASEDIR.'/images/weapon')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию images/weapon</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию images/weapon</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/onliner.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/onliner.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/onliner.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/footer.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/footer.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/footer.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/idna_convert.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/idna_convert.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/idna_convert.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/link.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/link.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/link.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/note.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/note.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/note.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/reklama.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/reklama.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/reklama.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/skin.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/skin.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/skin.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/navigation.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/navigation.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/navigation.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/info.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/info.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/info.php</div>';
 }
 
 if (file_exists(BASEDIR.'/includes/quotesbase.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл includes/quotesbase.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл includes/quotesbase.php</div>';
 }
 
 if (file_exists(BASEDIR.'/gallery/graph.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл gallery/graph.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл gallery/graph.php</div>';
 }
 
 if (file_exists(BASEDIR.'/gallery/level.php')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить файл gallery/level.php</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить файл gallery/level.php</div>';
 }
 
 if (file_exists(BASEDIR.'/gallery/fonts')){
-	echo '<div class="info"><img src="/images/img/warning.gif" alt="warning" /> Необходимо удалить директорию gallery/fonts</div>';
+	echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="warning" /> Необходимо удалить директорию gallery/fonts</div>';
 }
 ?>

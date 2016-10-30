@@ -24,7 +24,7 @@ if ($act == 'index') {
 
                 $totalboard = counter_string(DATADIR."/board/$data[2].dat");
 
-                echo '<div class="b"><img src="/images/img/forums.gif" alt="image" /> ';
+                echo '<div class="b"><img src="/assets/img/images/forums.gif" alt="image" /> ';
                 echo '<b><a href="/board?act=board&amp;id='.$data[2].'">'.$data[0].'</a></b> ('.(int)$totalboard.')</div>';
 
                 echo '<div>'.$data[1].'<br />';
@@ -100,7 +100,7 @@ if ($act == "board"){
                     }
 
                     echo '<div class="b">';
-                    echo '<img src="/images/img/forums.gif" alt="image" /> '.($i+1).'. ';
+                    echo '<img src="/assets/img/images/forums.gif" alt="image" /> '.($i+1).'. ';
                     echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;start='.$start.'">'.$data[0].'</a></b> ';
                     echo '<small>('.date_fixed($data[3]).')</small></div>';
                     echo 'Текст объявления: '.$data[2].'<br />';
@@ -215,6 +215,6 @@ if ($act == "add"){
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=new&amp;id='.$id.'">Вернуться</a><br />';
 }
 
-echo '<img src="/images/img/homepage.gif" alt="image" /> <a href="/">На главную</a><br />';
+echo '<img src="/assets/img/images/homepage.gif" alt="image" /> <a href="/">На главную</a><br />';
 
 

@@ -36,7 +36,7 @@ if (is_admin(array(101, 102))) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['ban_id'].'" />';
-                    echo '<img src="/images/img/files.gif" alt="image" /> <b>'.$data['ban_ip'].'</b></div>';
+                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.$data['ban_ip'].'</b></div>';
 
                     echo '<div>Добавлено: ';
 
@@ -68,7 +68,7 @@ if (is_admin(array(101, 102))) {
             echo 'Или по маске 127.0.0.* , 127.0.*.* , будут забанены все IP совпадающие по начальным цифрам<br /><br />';
 
             if ($total > 0 && is_admin(array(101))) {
-                echo '<img src="/images/img/error.gif" alt="image" /> <a href="/admin/ipban?act=clear&amp;uid='.$_SESSION['token'].'">Очистить список</a><br />';
+                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/ipban?act=clear&amp;uid='.$_SESSION['token'].'">Очистить список</a><br />';
             }
         break;
 
@@ -124,10 +124,10 @@ if (is_admin(array(101, 102))) {
                     $_SESSION['note'] = 'Выбранные IP успешно удалены из списка!';
                     redirect("/admin/ipban?start=$start");
                 } else {
-                    echo '<img src="/images/img/error.gif" alt="image" /> <b>Ошибка удаления! Отсутствуют выбранные IP</b><br />';
+                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Ошибка удаления! Отсутствуют выбранные IP</b><br />';
                 }
             } else {
-                echo '<img src="/images/img/error.gif" alt="image" /> <b>Ошибка! Неверный идентификатор сессии, повторите действие!</b><br />';
+                echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Ошибка! Неверный идентификатор сессии, повторите действие!</b><br />';
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban?start='.$start.'">Вернуться</a><br />';
