@@ -77,15 +77,15 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 			);
 
 		imageFilledPolygon($img, $points, 4, $color3);
-		// imageTTFtext($img, 7, 90, $x1+8, 50, $colorBlack, HOME.'/assets/fonts/font.ttf', $host_data[$index]);
-		imagestringup($img, 1, $x1 + 3, 52, $host_data[$index], $colorBlack);
+		imageTTFtext($img, 6, 90, $x1+10, 50, $colorBlack, HOME.'/assets/fonts/font.ttf', $host_data[$index]);
+		//imagestringup($img, 1, $x1 + 3, 52, $host_data[$index], $colorBlack);
 		imageTTFtext($img, 6, 0, $x1 + 3, 66, $colorBlack, HOME.'/assets/fonts/font.ttf', $arr_week[$week_day]);
 
 		$x1 += $collW;
 		$x2 += $collW;
 	}
 	//Header("Content-type: image/gif");
-	ImageGIF($img, BASEDIR.$imagecache);
+	ImageGIF($img, HOME.$imagecache);
 	ImageDestroy($img);
 }
 

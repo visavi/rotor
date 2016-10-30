@@ -2,7 +2,7 @@
 // markItUp bb-code setting!
 // ----------------------------------------------------------------------------
 mySettings = {
-	previewParserPath:  '/bbcode', // path to your BBCode parser
+	previewParserPath:  '/ajax/bbcode', // path to your BBCode parser
 	previewAutoRefresh: false,
 	markupSet: [
 		{title:'Жирный текст', name:'<i class="fa fa-bold"></i>', className:"bb-bold", key:'B', openWith:'[b]', closeWith:'[/b]'},

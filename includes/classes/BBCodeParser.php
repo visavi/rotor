@@ -243,7 +243,7 @@ class BBCodeParser {
 
 		$count = 0;
 		foreach($list_smiles as $smile) {
-			$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_name'].'" /> ', $source, $this->setting['resmiles'] - $count, $cnt);
+			$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/assets/img/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_name'].'" /> ', $source, $this->setting['resmiles'] - $count, $cnt);
 			$count += $cnt;
 			if ($count >= $this->setting['resmiles']) break;
 		}

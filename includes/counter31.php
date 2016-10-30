@@ -92,7 +92,7 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 		$x2 -= $coll + 2;
 	}
 	//Header("Content-type: image/gif");
-	ImageGIF($img, BASEDIR.$imagecache);
+	ImageGIF($img, HOME.$imagecache);
 	ImageDestroy($img);
 }
 
