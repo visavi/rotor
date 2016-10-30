@@ -1,9 +1,9 @@
-#storage/antidos/
-#storage/backup/
-#storage/board/
-#storage/cache/
-#storage/chat/
-#storage/temp/
+storage/antidos/
+storage/backup/
+storage/board/
+storage/cache/
+storage/chat/
+storage/temp/
 public/upload/files/
 public/upload/screen/
 public/upload/loader/
@@ -16,7 +16,7 @@ public/upload/photos
 public/upload/pictures
 public/upload/thumbnail
 includes/connect.php
-#vendor/
+vendor/
 composer.phar
 composer.lock
 .idea/
