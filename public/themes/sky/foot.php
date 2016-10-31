@@ -64,7 +64,7 @@ echo '<div class="art-Block">
                                 <div class="art-BlockContent">
                                     <div class="art-BlockContent-body">
                                         <div>';
-include (DATADIR.'/main/recent.dat');
+include (STORAGE.'/main/recent.dat');
 echo '</div>
                                     </div>
                                 </div>

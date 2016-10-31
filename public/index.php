@@ -7,7 +7,7 @@
 #              ICQ  :  36-44-66               #
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
-include_once __DIR__.'/../includes/start.php';
+include_once __DIR__.'/../app/start.php';
 
 $params = App::router('params');
 $target = App::router('target');
@@ -26,7 +26,7 @@ if ($target && is_callable($target)) {
         $act = $params['action'];
     }
 
-    include_once (BASEDIR.$target[0]);
+    include_once (APP.$target[0]);
 
 } else {
     App::abort(404);

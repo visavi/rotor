@@ -137,7 +137,7 @@ echo ' &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a
 echo '</div>';
 }
 
-  include (DATADIR.'/main/menu.dat');
+  include (STORAGE.'/main/menu.dat');
 
 } else {
 
@@ -181,7 +181,7 @@ echo '<div class="art-Block">
                                     <div class="art-BlockContent-body">
                                         <div>';
 echo '<div class="divb">Календарь</div>';
-include (BASEDIR.'/includes/calendar.php');
+include (APP.'/includes/calendar.php');
 echo '</div>
                                     </div>
                                 </div>

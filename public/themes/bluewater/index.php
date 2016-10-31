@@ -78,9 +78,9 @@ if (is_user()){
 
 			<?php
 			if (is_user()) {
-				include (DATADIR.'/main/menu.dat');
+				include (STORAGE.'/main/menu.dat');
 			} else {
-				include (DATADIR.'/main/recent.dat');
+				include (STORAGE.'/main/recent.dat');
 			}
 			?>
 		</div>
