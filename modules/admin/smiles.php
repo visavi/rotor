@@ -26,7 +26,7 @@ case 'index':
     echo '<form action="/admin/smiles?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
     foreach($smiles as $smile) {
-        echo '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
+        echo '<img src="'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
 
         echo '<input type="checkbox" name="del[]" value="'.$smile['smiles_id'].'" /> <a href="/admin/smiles?act=edit&amp;id='.$smile['smiles_id'].'&amp;start='.$start.'">Редактировать</a><br />';
     }
@@ -73,7 +73,7 @@ case 'load':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
 
-    if (is_writeable(BASEDIR.'/images/smiles')){
+    if (is_writeable(HOME.'/upload/smiles')){
 
         $smile = DBM::run()->selectFirst('smiles', array('smiles_code' => $code));
 
@@ -102,13 +102,13 @@ case 'load':
                 $handle -> image_max_height = $config['smilemaxweight']; // px
                 $handle -> image_min_width = $config['smileminweight'];   // px
                 $handle -> image_min_height = $config['smileminweight'];  // px
-                $handle -> process(BASEDIR.'/images/smiles/');
+                $handle -> process(HOME.'/upload/smiles/');
 
                 if ($handle -> processed) {
 
                     $smile = DBM::run()->insert('smiles', array(
                         'smiles_cats' => 1,
-                        'smiles_name' => $handle->file_dst_name,
+                        'smiles_name' => '/upload/smiles/'.$handle->file_dst_name,
                         'smiles_code' => $code,
                     ));
 
@@ -144,7 +144,7 @@ case 'edit':
     if (! empty($smile)) {
         echo '<b><big>Редактирование смайла</big></b><br /><br />';
 
-        echo '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
+        echo '<img src="'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
 
         echo '<div class="form">';
         echo '<form action="/admin/smiles?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -184,28 +184,13 @@ case 'change':
 
     if ($validation->run()) {
 
-        if (! preg_match('/[А-Яа-яЁё]/u', $code)) {
-            $newname = rename_file($smile['smiles_name'], substr($code, 1));
-        } else {
-            $newname = $smile['smiles_name'];
-        }
+        $smile = DBM::run()->update('smiles', ['smiles_code' => $code], ['smiles_id' => $id]);
+        clearCache();
 
-        if (rename(BASEDIR.'/images/smiles/'.$smile['smiles_name'], BASEDIR.'/images/smiles/'.$newname)){
+        notice('Смайл успешно отредактирован!');
+        redirect("/admin/smiles?start=$start");
 
-            $smile = DBM::run()->update('smiles', array(
-                'smiles_name' => $newname,
-                'smiles_code' => $code,
-            ), array(
-                'smiles_id' => $id
-            ));
-            clearCache();
 
-            notice('Смайл успешно отредактирован!');
-            redirect("/admin/smiles?start=$start");
-
-        } else {
-            show_error('Ошибка! Не удалось переименовать файл смайла!');
-        }
     } else {
         show_error($validation->getErrors());
     }

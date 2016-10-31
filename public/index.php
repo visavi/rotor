@@ -42,3 +42,6 @@ if (isset($_SESSION['input'])) unset($_SESSION['input']);
 // Удалить таблицу аватаров, настройки итд avatarupload avatarpoints avatarsize avatarweight avlist
 // Удалить админску рекламу таблица advert (сделано)
 // Удалить пирамиду таблица pyramid $config['showlink'] (сделано)
+
+// ALTER TABLE `rotorcms`.`smiles` CHANGE COLUMN `smiles_name` `smiles_name` VARCHAR(100) NOT NULL ;
+// UPDATE `smiles` SET `smiles_name`= CONCAT('/assets/img/smiles/', `smiles_name`);  и /upload/smiles системным

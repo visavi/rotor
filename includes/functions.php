@@ -2114,12 +2114,6 @@ function getExtension($filename){
     return strtolower(substr(strrchr($filename, '.'), 1));
 }
 
-// ---------------- Функция переименовывания файла ----------------//
-function rename_file($filename, $newname){
-    $ext = getExtension($filename);
-    return $newname.'.'.$ext;
-}
-
 // ----- Функция определения входит ли пользователь в контакты -----//
 function is_contact($login, $contact){
 

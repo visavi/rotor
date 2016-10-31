@@ -16,7 +16,7 @@ if ($total > 0) {
 	$smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`smiles_code`) ASC LIMIT :start, :limit;", array('start' => intval($start), 'limit' => intval($config['smilelist'])));
 
 	foreach($smiles as $smile) {
-		echo '<img src="/images/smiles/'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
+		echo '<img src="'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
 	}
 
 	page_strnavigation('/smiles?', $config['smilelist'], $start, $total);
