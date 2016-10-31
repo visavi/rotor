@@ -1,4 +1,0 @@
-<Files ~ ".(php|phtml)$">
-   Order allow,deny
-   Deny from all
-</Files>
