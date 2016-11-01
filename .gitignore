@@ -1,5 +1,5 @@
 /app/storage/antidos/
-#/app/storage/backup/
+/app/storage/backup/
 /app/storage/board/
 /app/storage/cache/
 /app/storage/chat/
