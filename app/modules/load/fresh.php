@@ -22,11 +22,11 @@ if ($total > 0) {
         echo '<div class="b">';
 
         if ($data['downs_time'] >= (SITETIME-3600 * 24)) {
-            echo '<img src="/assets/img/images/new.gif" alt="image" /> ';
+            echo '<i class="fa fa-file-o text-success"></i> ';
         } elseif ($data['downs_time'] >= (SITETIME-3600 * 72)) {
-            echo '<img src="/assets/img/images/new1.gif" alt="image" /> ';
+            echo '<i class="fa fa-file-o text-warning"></i> ';
         } else {
-            echo '<img src="/assets/img/images/new2.gif" alt="image" /> ';
+            echo '<i class="fa fa-file-o text-danger"></i> ';
         }
 
         echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
@@ -40,9 +40,9 @@ if ($total > 0) {
 
     page_strnavigation('/load/fresh?', $config['downlist'], $start, $total);
 
-    echo '<img src="/assets/img/images/new.gif" alt="image" /> - Самая свежая загрузка<br />';
-    echo '<img src="/assets/img/images/new1.gif" alt="image" /> - Более дня назад<br />';
-    echo '<img src="/assets/img/images/new2.gif" alt="image" /> - Более 3 дней назад<br /><br />';
+    echo '<i class="fa fa-file-o text-success"></i> - Самая свежая загрузка<br />';
+    echo '<i class="fa fa-file-o text-warning"></i> - Более дня назад<br />';
+    echo '<i class="fa fa-file-o text-danger"></i> - Более 3 дней назад<br /><br />';
 
     echo 'Всего файлов: <b>'.$total.'</b><br /><br />';
 } else {

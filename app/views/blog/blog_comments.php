@@ -1,4 +1,4 @@
-<img src="/assets/img/images/edit.gif" alt="Статья" /> <b><a href="/blog/blog?act=view&amp;id=<?=$blogs['blogs_id']?>"><?=$blogs['blogs_title']?></a></b><br /><br />
+<i class="fa fa-pencil"></i> <b><a href="/blog/blog?act=view&amp;id=<?=$blogs['blogs_id']?>"><?=$blogs['blogs_title']?></a></b><br /><br />
 
 <a href="/blog/blog?act=comments&amp;id=<?=$blogs['blogs_id']?>&amp;rand=<?=mt_rand(100, 999)?>">Обновить</a> / <a href="/blog/rss?id=<?=$blogs['blogs_id']?>">RSS-лента</a><hr />
 

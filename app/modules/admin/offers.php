@@ -35,7 +35,7 @@ if (is_admin(array(101, 102))) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array($type));
             $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array($type2));
 
-            echo '<img src="/assets/img/images/document.gif" alt="image" /> ';
+            echo '<i class="fa fa-book"></i> ';
 
             if (empty($type)) {
                 echo '<b>Предложения</b> ('.$total.') / <a href="/admin/offers?type=1">Проблемы</a> ('.$total2.')';
@@ -56,7 +56,7 @@ if (is_admin(array(101, 102))) {
 
                 while ($data = $queryoffers -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> ';
+                    echo '<i class="fa fa-file-o"></i> ';
                     echo '<b><a href="/admin/offers?act=view&amp;type='.$type.'&amp;id='.$data['offers_id'].'">'.$data['offers_title'].'</a></b> (Голосов: '.$data['offers_votes'].')<br />';
 
                     switch ($data['offers_status']) {
@@ -101,7 +101,7 @@ if (is_admin(array(101, 102))) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(0));
             $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(1));
 
-            echo '<img src="/assets/img/images/document.gif" alt="image" /> <a href="/admin/offers?type=0">Предложения</a>  ('.$total.') / ';
+            echo '<i class="fa fa-book"></i> <a href="/admin/offers?type=0">Предложения</a>  ('.$total.') / ';
             echo '<a href="/admin/offers?type=1">Проблемы</a> ('.$total2.') / ';
             echo '<a href="/pages//admin/offers?act=view&amp;type='.$type.'&amp;id='.$id.'">Обзор</a><hr />';
 
@@ -110,7 +110,7 @@ if (is_admin(array(101, 102))) {
                 $config['newtitle'] = $queryoff['offers_title'];
 
                 echo '<div class="b">';
-                echo '<img src="/assets/img/images/files.gif" alt="image" /> ';
+                echo '<i class="fa fa-file-o"></i> ';
                 echo '<b>'.$queryoff['offers_title'].'</b> (Голосов: '.$queryoff['offers_votes'].')<br />';
 
                 switch ($queryoff['offers_status']) {

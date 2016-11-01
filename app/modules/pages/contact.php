@@ -136,7 +136,7 @@ if (is_user()) {
                 $data = DB::run() -> queryFetch("SELECT * FROM contact WHERE contact_id=? AND contact_user=? LIMIT 1;", array($id, $log));
 
                 if (!empty($data)) {
-                    echo '<img src="/assets/img/images/edit.gif" alt="image" /> Заметка для пользователя <b>'.nickname($data['contact_name']).'</b> '.user_online($data['contact_name']).':<br /><br />';
+                    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['contact_name']).'</b> '.user_online($data['contact_name']).':<br /><br />';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/contact?act=editnote&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">';

@@ -76,7 +76,7 @@ if (is_admin(array(101, 102))) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['black_id'].'" /> ';
 
-                    echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.$data['black_value'].'</b></div>';
+                    echo '<i class="fa fa-pencil"></i> <b>'.$data['black_value'].'</b></div>';
                     echo '<div>Добавлено: '.profile($data['black_user']).'<br />';
                     echo 'Время: '.date_fixed($data['black_time']).'</div>';
                 }

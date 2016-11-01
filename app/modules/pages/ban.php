@@ -18,7 +18,7 @@ if (is_user()) {
             ############################################################################################
                 case 'index':
 
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Вас забанили</b><br /><br />';
+                    echo '<i class="fa fa-times"></i> <b>Вас забанили</b><br /><br />';
                     echo '<b><span style="color:#ff0000">Причина бана: '.bb_code($udata['users_reasonban']).'</span></b><br /><br />';
 
                     echo 'До окончания бана осталось <b>'.formattime($udata['users_timeban'] - SITETIME).'</b><br /><br />';
@@ -90,7 +90,7 @@ if (is_user()) {
         ##                                    Конец бана                                          ##
         ############################################################################################
         } else {
-            echo '<img src="/assets/img/images/open.gif" alt="image" /> <b>Срок бана закончился!</b><br /><br />';
+            echo '<i class="fa fa-check"></i> <b>Срок бана закончился!</b><br /><br />';
             echo '<b><span style="color:#ff0000">Причина бана: '.bb_code($udata['users_reasonban']).'</span></b><br /><br />';
 
             echo 'Поздравляем!!! Время вашего бана вышло, постарайтесь вести себя достойно и не нарушать правила сайта<br /><br />';

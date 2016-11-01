@@ -1,7 +1,7 @@
 <?php foreach ($blogs as $data): ?>
 
 	<div class="b">
-		<img src="/assets/img/images/edit.gif" alt="image" />
+		<i class="fa fa-pencil"></i>
 		<b><a href="/blog/blog?act=view&amp;id=<?=$data['blogs_id']?>"><?=$data['blogs_title']?></a></b> (<?=format_num($data['blogs_rating'])?>)
 	</div>
 

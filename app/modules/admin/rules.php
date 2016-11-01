@@ -33,7 +33,7 @@ if (is_admin(array(101, 102))) {
                 show_error('Правила сайта еще не установлены!');
             }
 
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/rules?act=edit">Редактировать</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/rules?act=edit">Редактировать</a><br />';
         break;
 
         ############################################################################################

@@ -28,7 +28,7 @@ if (is_user()) {
                 show_error('Запись пустая или отсутствует!');
             }
 
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/notebook?act=edit">Редактировать</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/notebook?act=edit">Редактировать</a><br />';
             break;
 
         ############################################################################################

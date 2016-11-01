@@ -26,7 +26,7 @@ if (is_admin(array(101, 102, 103))) {
             echo '<div>До окончания бана осталось '.formattime($data['users_timeban'] - SITETIME).'<br />';
             echo 'Забанил: <b>'.profile($data['users_loginsendban']).'</b><br />';
             echo 'Причина: '.bb_code($data['users_reasonban']).'<br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/ban?act=edit&amp;uz='.$data['users_login'].'">Редактировать</a></div>';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=edit&amp;uz='.$data['users_login'].'">Редактировать</a></div>';
         }
 
         page_strnavigation('/admin/banlist?', $config['banlist'], $start, $total);

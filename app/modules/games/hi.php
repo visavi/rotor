@@ -75,7 +75,7 @@ if (is_user()) {
 
                             echo 'У вас в наличии: '.moneys($allmoney).'<br /><br />';
                         } else {
-                            echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Вы проигали потому что, не отгадали число за '.(int)$config['hipopytka'].' попыток</b><br />';
+                            echo '<i class="fa fa-times"></i> <b>Вы проигали потому что, не отгадали число за '.(int)$config['hipopytka'].' попыток</b><br />';
                             echo 'Было загадано число: '.$_SESSION['hill'].'<br /><br />';
 
                             unset($_SESSION['hill']);

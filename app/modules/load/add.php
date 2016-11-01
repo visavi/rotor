@@ -16,7 +16,7 @@ case 'index':
 
     show_title('Публикация нового файла');
 
-    echo '<img src="/assets/img/images/document.gif" alt="image" /> <b>Публикация</b> / ';
+    echo '<i class="fa fa-book"></i> <b>Публикация</b> / ';
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<a href="/load/active">Проверенные</a><hr />';
 
@@ -87,7 +87,7 @@ case 'waiting':
 
     show_title('Список ожидающих модерации файлов');
 
-    echo '<img src="/assets/img/images/document.gif" alt="image" /> <a href="/load/add">Публикация</a> / ';
+    echo '<i class="fa fa-book"></i> <a href="/load/add">Публикация</a> / ';
     echo '<b>Ожидающие</b> / ';
     echo '<a href="/load/active">Проверенные</a><hr />';
 
@@ -99,7 +99,7 @@ case 'waiting':
         while ($data = $querynew -> fetch()) {
             echo '<div class="b">';
 
-            echo '<img src="/assets/img/images/download.gif" alt="image" /> ';
+            echo '<i class="fa fa-download"></i> ';
 
             echo '<b><a href="/load/add?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.date_fixed($data['downs_time']).')</div>';
             echo '<div>';
@@ -201,7 +201,7 @@ case 'view':
 
     show_title('Редактирование ожидающего файла');
 
-    echo '<img src="/assets/img/images/document.gif" alt="image" /> <a href="/load/add">Публикация</a> / ';
+    echo '<i class="fa fa-book"></i> <a href="/load/add">Публикация</a> / ';
     echo '<b><a href="/load/add?act=waiting">Ожидающие</a></b> / ';
     echo '<a href="/load/active?act=files">Проверенные</a><hr />';
 
@@ -238,7 +238,7 @@ case 'view':
 
                     } else {
 
-                        echo '<img src="/assets/img/images/download.gif" alt="image" /> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['downs_link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+                        echo '<i class="fa fa-download"></i> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['downs_link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
 
                         $ext = getExtension($new['downs_link']);
                         if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {

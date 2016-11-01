@@ -42,9 +42,9 @@ if (is_admin()) {
                     echo '<input type="checkbox" name="del[]" value="'.$data['downs_id'].'" /> ';
 
                     if (empty($data['downs_app'])) {
-                        echo '<img src="/assets/img/images/download.gif" alt="image" /> ';
+                        echo '<i class="fa fa-download"></i> ';
                     } else {
-                        echo '<img src="/assets/img/images/open.gif" alt="image" /> ';
+                        echo '<i class="fa fa-check"></i> ';
                     }
 
                     echo '<b><a href="/admin/newload?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.date_fixed($data['downs_time']).')</div>';
@@ -98,9 +98,9 @@ if (is_admin()) {
                         $folder = $new['folder'] ? $new['folder'].'/' : '';
 
                         if (!empty($new['downs_link'])) {
-                            echo '<img src="/assets/img/images/download.gif" alt="image" /> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['downs_link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+                            echo '<i class="fa fa-download"></i> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['downs_link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
                         } else {
-                            echo '<img src="/assets/img/images/download.gif" alt="image" /> <b>Не загружен</b><br />';
+                            echo '<i class="fa fa-download"></i> <b>Не загружен</b><br />';
                         }
 
                         if (!empty($new['downs_screen'])) {

@@ -64,7 +64,7 @@ case 'index':
         show_error('Событий еще нет!');
     }
 
-    echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/events?act=new">Добавить событие</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/events?act=new">Добавить событие</a><br />';
 
     if (is_admin(array(101))) {
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';

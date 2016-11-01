@@ -61,10 +61,10 @@ function unlink_image($dir, $image) {
 // ------------------- Функция полного удаления юзера --------------------//
 function delete_users($user) {
     if (!empty($user)){
-        $userpic = DB::run() -> querySingle("SELECT `users_picture` FROM `users` WHERE `users_login`=? LIMIT 1;", array($user));
+        $userpic = DB::run() -> query("SELECT users_picture, users_avatar FROM users WHERE users_login=? LIMIT 1;", [$user]);
 
-        unlink_image('upload/photos/', $userpic);
-        unlink_image('upload/avatars/', $user.'.gif'); // TODO: перенос аватаров
+        unlink_image('upload/photos/', $userpic['users_picture']);
+        unlink_image('upload/avatars/', $userpic['users_avatar']);
 
         DB::run() -> query("DELETE FROM `inbox` WHERE `inbox_user`=?;", array($user));
         DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_author`=?;", array($user));
@@ -630,7 +630,7 @@ function user_mail($login) {
 }
 
 // --------------- Функция кэширования аватаров -------------------//
-function save_avatar($time = 0) { // TODO: save_photos и хранить только имя файла, а не путь
+function save_avatar($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/avatars.dat") < time() - $time) {
         $queryavat = DB::run() -> query("SELECT `users_login`, `users_avatar` FROM `users` WHERE `users_avatar`<>?;", array(''));
         $allavat = $queryavat -> fetchAssoc();
@@ -644,7 +644,7 @@ function user_avatars($login) {
     static $arravat;
 
     if ($login == $config['guestsuser']) {
-        return '<img src="/assets/img/images/avatar_guest.gif" alt="" /> ';
+        return '<img src="/assets/img/images/avatar_guest.png" alt="" /> ';
     }
 
     if (empty($arravat)) {
@@ -652,11 +652,11 @@ function user_avatars($login) {
         $arravat = unserialize(file_get_contents(STORAGE."/temp/avatars.dat"));
     }
 
-    if (isset($arravat[$login]) && file_exists(HOME.'/'.$arravat[$login])) {
-        return '<a href="/user/'.$login.'"><img src="/'.$arravat[$login].'" alt="" /></a> ';
+    if (isset($arravat[$login]) && file_exists(HOME.'/upload/avatars/'.$arravat[$login])) {
+        return '<a href="/user/'.$login.'"><img src="/upload/avatars/'.$arravat[$login].'" alt="" /></a> ';
     }
 
-    return '<a href="/user/'.$login.'"><img src="/assets/img/images/avatar_default.gif" alt="" /></a> ';
+    return '<a href="/user/'.$login.'"><img src="/assets/img/images/avatar_default.png" alt="" /></a> ';
 }
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//

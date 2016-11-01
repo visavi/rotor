@@ -1,4 +1,4 @@
-<img src="/assets/img/images/edit.gif" alt="image" /> <b><?=nickname($post['commblog_author'])?></b> <small>(<?=date_fixed($post['commblog_time'])?>)</small><br /><br />
+<i class="fa fa-pencil"></i> <b><?=nickname($post['commblog_author'])?></b> <small>(<?=date_fixed($post['commblog_time'])?>)</small><br /><br />
 
 <div class="form">
 	<form action="/blog/blog?act=editpost&amp;id=<?=$post['commblog_blog']?>&amp;pid=<?=$pid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>" method="post">

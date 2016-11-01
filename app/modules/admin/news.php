@@ -66,7 +66,7 @@ case 'index':
         show_error('Новостей еще нет!');
     }
 
-    echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/news?act=add">Добавить</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br />';
 
     if (is_admin(array(101))) {
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';

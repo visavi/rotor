@@ -47,7 +47,7 @@ if (is_admin(array(101, 102, 103))) {
             echo 'Всего слов в базе: <b>'.$total.'</b><br /><br />';
 
             if (is_admin(array(101)) && $total > 0) {
-                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/antimat?act=prodel">Очистить</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/admin/antimat?act=prodel">Очистить</a><br />';
             }
         break;
 
@@ -112,7 +112,7 @@ if (is_admin(array(101, 102, 103))) {
         case "prodel":
 
             echo 'Вы уверены что хотите удалить все слова в антимате?<br />';
-            echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/antimat?act=clear&amp;uid='.$_SESSION['token'].'">Да уверен!</a></b><br /><br />';
+            echo '<i class="fa fa-times"></i> <b><a href="/admin/antimat?act=clear&amp;uid='.$_SESSION['token'].'">Да уверен!</a></b><br /><br />';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br />';
         break;

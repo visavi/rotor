@@ -3,5 +3,5 @@
 <?php endif; ?>
 
 <?php if ($is_user && $act != 'new'): ?>
-        <img src="/assets/img/images/open.gif" alt="image" /> <a href="/events?act=new">Добавить событие</a><br />
+        <i class="fa fa-check"></i> <a href="/events?act=new">Добавить событие</a><br />
 <?php endif; ?>

@@ -49,14 +49,14 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
                     $strok = count(file(STORAGE."/main/$arrfiles[$i]"));
 
                     if ($arrfiles[$i] == 'index.dat') {
-                        echo '<div class="b"><img src="/assets/img/images/edit.gif" alt="image" /> ';
+                        echo '<div class="b"><i class="fa fa-pencil"></i> ';
                         echo '<b><a href="/"><span style="color:#ff0000">'.$arrfiles[$i].'</span></a></b> ('.$size.')<br />';
                         echo '<a href="/admin/files?act=edit&amp;file='.$arrfiles[$i].'">Редактировать</a> | ';
                         echo '<a href="/admin/files?act=obzor&amp;file='.$arrfiles[$i].'">Просмотр</a></div>';
                         echo '<div>Кол. строк: '.$strok.'<br />';
                         echo 'Изменен: '.date_fixed(filemtime(STORAGE."/main/$arrfiles[$i]")).'</div>';
                     } else {
-                        echo '<div class="b"><img src="/assets/img/images/edit.gif" alt="image" /> ';
+                        echo '<div class="b"><i class="fa fa-pencil"></i> ';
                         echo '<b><a href="/page/'.$filename.'">'.$arrfiles[$i].'</a></b> ('.$size.')<br />';
                         echo '<a href="/admin/files?act=edit&amp;file='.$arrfiles[$i].'">Редактировать</a> | ';
                         echo '<a href="/admin/files?act=obzor&amp;file='.$arrfiles[$i].'">Просмотр</a> | ';
@@ -73,7 +73,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
                 show_error('Файлов еще нет!');
             }
 
-            echo'<img src="/assets/img/images/files.gif" alt="image" /> <a href="/admin/files?act=new">Создать</a><br />';
+            echo'<i class="fa fa-file-o"></i> <a href="/admin/files?act=new">Создать</a><br />';
         break;
 
         ############################################################################################
@@ -92,8 +92,8 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
 
                     echo '<pre class="prettyprint linenums">'.check($opis).'</pre><br />';
 
-                    echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/files?act=edit&amp;file='.$file.'">Редактировать</a><br />';
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/files?act=poddel&amp;file='.$file.'">Удалить</a><br />';
+                    echo '<i class="fa fa-pencil"></i> <a href="/admin/files?act=edit&amp;file='.$file.'">Редактировать</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/files?act=poddel&amp;file='.$file.'">Удалить</a><br />';
                 } else {
                     show_error('Ошибка! Данного файла не существует!');
                 }
@@ -240,7 +240,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
             if (preg_match('|^[a-z0-9_\.\-]+$|i', $file)) {
                 if (file_exists(STORAGE."/main/$file")) {
                     echo 'Вы подтверждаете что хотите удалить файл <b>'.$file.'</b><br />';
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/files?act=del&amp;file='.$file.'&amp;uid='.$_SESSION['token'].'">Удалить</a></b><br /><br />';
+                    echo '<i class="fa fa-times"></i> <b><a href="/admin/files?act=del&amp;file='.$file.'&amp;uid='.$_SESSION['token'].'">Удалить</a></b><br /><br />';
                 } else {
                     show_error('Ошибка! Данного файла не существует!');
                 }

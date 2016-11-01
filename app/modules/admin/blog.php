@@ -36,7 +36,7 @@ if (is_admin()) {
 
             if (count($blogs) > 0) {
                 foreach($blogs as $data) {
-                    echo '<img src="/assets/img/images/dir.gif" alt="image" /> ';
+                    echo '<i class="fa fa-folder-open"></i> ';
                     echo '<b>'.$data['cats_order'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ('.$data['cats_count'].')<br />';
 
                     if (is_admin(array(101))) {
@@ -190,7 +190,7 @@ if (is_admin()) {
 
                 if (!empty($blogs)) {
                     echo 'Вы уверены что хотите удалить раздел <b>'.$blogs['cats_name'].'</b> в блогах?<br />';
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/blog?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+                    echo '<i class="fa fa-times"></i> <b><a href="/admin/blog?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
                 } else {
                     show_error('Ошибка! Данного раздела не существует!');
                 }
@@ -243,7 +243,7 @@ if (is_admin()) {
             if (!empty($cats)) {
                 $config['newtitle'] = $cats['cats_name'];
 
-                echo '<img src="/assets/img/images/open_dir.gif" alt="image" /> <b>'.$cats['cats_name'].'</b> (Статей: '.$cats['cats_count'].')';
+                echo '<i class="fa fa-folder-open"></i> <b>'.$cats['cats_name'].'</b> (Статей: '.$cats['cats_count'].')';
                 echo ' (<a href="/blog/blog?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
                 echo '<hr />';
 
@@ -260,7 +260,7 @@ if (is_admin()) {
 
                     while ($data = $queryblog -> fetch()) {
 
-                        echo '<div class="b"><img src="/assets/img/images/edit.gif" alt="image" /> ';
+                        echo '<div class="b"><i class="fa fa-pencil"></i> ';
                         echo '<b><a href="/blog/blog?act=view&amp;id='.$data['blogs_id'].'">'.$data['blogs_title'].'</a></b> ('.format_num($data['blogs_rating']).')<br />';
 
                         echo '<input type="checkbox" name="del[]" value="'.$data['blogs_id'].'" /> ';
@@ -373,7 +373,7 @@ if (is_admin()) {
             $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
 
             if (!empty($blogs)) {
-                echo '<img src="/assets/img/images/zip.gif" alt="image" /> <b>'.$blogs['blogs_title'].'</b><br /><br />';
+                echo '<i class="fa fa-archive"></i> <b>'.$blogs['blogs_title'].'</b><br /><br />';
 
                 $querycats = DB::run() -> query("SELECT `cats_id`, `cats_name` FROM `catsblog` ORDER BY `cats_order` ASC;");
                 $cats = $querycats -> fetchAll();

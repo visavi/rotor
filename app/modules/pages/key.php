@@ -31,7 +31,7 @@ if (is_user()) {
                         echo 'Пока вы не подтвердите регистрацию вы не сможете войти на сайт<br />';
                         echo 'Ваш профиль будет ждать активации в течении 24 часов, после чего автоматически удален<br /><br />';
 
-                        echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/logout">Выход</a><br />';
+                        echo '<i class="fa fa-times"></i> <a href="/logout">Выход</a><br />';
                     break;
 
                     ############################################################################################
@@ -50,7 +50,7 @@ if (is_user()) {
                                 DB::run() -> query("UPDATE users SET users_confirmreg=?, users_confirmregkey=? WHERE users_login=?;", array(0, '', $log));
 
                                 echo 'Мастер-код подтвержден, теперь вы можете войти на сайт!<br /><br />';
-                                echo '<img src="/assets/img/images/open.gif" alt="image" /> <b><a href="/">Вход на сайт!</a></b><br /><br />';
+                                echo '<i class="fa fa-check"></i> <b><a href="/">Вход на сайт!</a></b><br /><br />';
                             } else {
                                 show_error('Ошибка! Мастер-код не совпадает с данными, проверьте правильность ввода!');
                             }
@@ -66,7 +66,7 @@ if (is_user()) {
                 echo 'Добро пожаловать, <b>'.check($log).'!</b><br />';
                 echo 'Ваш аккаунт еще не прошел проверку администрацией<br />';
                 echo 'Если после авторизации вы видите эту страницу, значит ваш профиль еще не активирован!<br /><br />';
-                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/logout">Выход</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/logout">Выход</a><br />';
             }
         } else {
             show_error('Ошибка! Вашему профилю не требуется подтверждение регистрации!');

@@ -1,6 +1,6 @@
 <a href="/blog">Блоги</a> / <a href="/blog/blog?act=new&amp;cid=<?=$cats['cats_id']?>">Написать</a><br /><br />
 
-<img src="/assets/img/images/open_dir.gif" alt="image" /> <b><?=$cats['cats_name']?></b> (Статей: <?=$cats['cats_count']?>)
+<i class="fa fa-folder-open"></i> <b><?=$cats['cats_name']?></b> (Статей: <?=$cats['cats_count']?>)
 
 <?php if (is_admin()): ?>
 	(<a href="/admin/blog?act=blog&amp;cid=<?=$cats['cats_id']?>&amp;start=<?=$start?>">Управление</a>)
@@ -10,7 +10,7 @@
 <?php foreach ($blogs as $data): ?>
 
 	<div class="b">
-		<img src="/assets/img/images/edit.gif" alt="image" />
+		<i class="fa fa-pencil"></i>
 		<b><a href="/blog/blog?act=view&amp;id=<?=$data['blogs_id']?>"><?=$data['blogs_title']?></a></b> (<?=format_num($data['blogs_rating'])?>)
 	</div>
 

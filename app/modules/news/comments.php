@@ -26,7 +26,7 @@ switch ($act):
             while ($data = $querynews -> fetch()) {
                 echo '<div class="b">';
 
-                echo '<img src="/assets/img/images/balloon.gif" alt="image" /> <b><a href="/news/allcomments/'.$data['commnews_news_id'].'/'.$data['commnews_id'].'">'.$data['news_title'].'</a></b> ('.$data['news_comments'].')</div>';
+                echo '<i class="fa fa-comment"></i> <b><a href="/news/allcomments/'.$data['commnews_news_id'].'/'.$data['commnews_id'].'">'.$data['news_title'].'</a></b> ('.$data['news_comments'].')</div>';
 
                 echo '<div>'.bb_code($data['commnews_text']).'<br />';
 

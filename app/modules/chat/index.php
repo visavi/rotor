@@ -239,6 +239,6 @@ echo '<a href="/rules">Правила</a> / ';
 echo '<a href="/smiles">Смайлы</a> / ';
 echo '<a href="/tags">Теги</a><br /><br />';
 
-echo '<img src="/assets/img/images/homepage.gif" alt="image" /> <a href="/">На главную</a>';
+echo '<i class="fa fa-home"></i> <a href="/">На главную</a>';
 
 App::view($config['themes'].'/foot');

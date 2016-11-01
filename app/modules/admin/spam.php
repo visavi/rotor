@@ -47,7 +47,7 @@ if (is_admin(array(101, 102, 103))) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['spam_id'].'" /> ';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
                     echo '<div>Сообщение: '.bb_code($data['spam_text']).'<br />';
 
                     echo '<a href="'.$data['spam_link'].'">Перейти к сообщению</a><br />';
@@ -58,7 +58,7 @@ if (is_admin(array(101, 102, 103))) {
                 page_strnavigation('/admin/spam?act=forum&amp;', $config['spamlist'], $start, $total);
 
                 if (is_admin(array(101, 102))) {
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
                 }
             } else {
                 show_error('Жалоб еще нет!');
@@ -94,7 +94,7 @@ if (is_admin(array(101, 102, 103))) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['spam_id'].'" /> ';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
                     echo '<div>Сообщение: '.bb_code($data['spam_text']).'<br />';
 
                     echo '<a href="'.$data['spam_link'].'">Перейти к сообщению</a><br />';
@@ -105,7 +105,7 @@ if (is_admin(array(101, 102, 103))) {
                 page_strnavigation('/admin/spam?act=guest&amp;', $config['spamlist'], $start, $total);
 
                 if (is_admin(array(101, 102))) {
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
                 }
             } else {
                 show_error('Жалоб еще нет!');
@@ -141,7 +141,7 @@ if (is_admin(array(101, 102, 103))) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['spam_id'].'" /> ';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
                     echo '<div>Сообщение: '.bb_code($data['spam_text']).'<br />';
 
                     echo 'Жалоба: '.profile($data['spam_user']).' ('.date_fixed($data['spam_addtime']).')</div>';
@@ -151,7 +151,7 @@ if (is_admin(array(101, 102, 103))) {
                 page_strnavigation('/admin/spam?act=privat&amp;', $config['spamlist'], $start, $total);
 
                 if (is_admin(array(101, 102))) {
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
                 }
             } else {
                 show_error('Жалоб еще нет!');
@@ -187,7 +187,7 @@ if (is_admin(array(101, 102, 103))) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['spam_id'].'" /> ';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
                     echo '<div>Сообщение: '.bb_code($data['spam_text']).'<br />';
 
                     echo '<a href="'.$data['spam_link'].'">Перейти к сообщению</a><br />';
@@ -198,7 +198,7 @@ if (is_admin(array(101, 102, 103))) {
                 page_strnavigation('/admin/spam?act=wall&amp;', $config['spamlist'], $start, $total);
 
                 if (is_admin(array(101, 102))) {
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
                 }
             } else {
                 show_error('Жалоб еще нет!');
@@ -234,7 +234,7 @@ if (is_admin(array(101, 102, 103))) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['spam_id'].'" /> ';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
                     echo '<div>Сообщение: '.bb_code($data['spam_text']).'<br />';
 
                     echo '<a href="'.$data['spam_link'].'">Перейти к сообщению</a><br />';
@@ -245,7 +245,7 @@ if (is_admin(array(101, 102, 103))) {
                 page_strnavigation('/admin/spam?act=load&amp;', $config['spamlist'], $start, $total);
 
                 if (is_admin(array(101, 102))) {
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
                 }
             } else {
                 show_error('Жалоб еще нет!');
@@ -281,7 +281,7 @@ if (is_admin(array(101, 102, 103))) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['spam_id'].'" /> ';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['spam_login']).'</b> <small>('.date_fixed($data['spam_time'], "d.m.y / H:i:s").')</small></div>';
                     echo '<div>Сообщение: '.bb_code($data['spam_text']).'<br />';
 
                     echo '<a href="'.$data['spam_link'].'">Перейти к сообщению</a><br />';
@@ -292,7 +292,7 @@ if (is_admin(array(101, 102, 103))) {
                 page_strnavigation('/admin/spam?act=blog&amp;', $config['spamlist'], $start, $total);
 
                 if (is_admin(array(101, 102))) {
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
                 }
             } else {
                 show_error('Жалоб еще нет!');

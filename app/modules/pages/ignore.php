@@ -140,7 +140,7 @@ if (is_user()) {
                 $data = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `ignore_id`=? AND `ignore_user`=? LIMIT 1;", array($id, $log));
 
                 if (!empty($data)) {
-                    echo '<img src="/assets/img/images/edit.gif" alt="image" /> Заметка для пользователя <b>'.nickname($data['ignore_name']).'</b> '.user_online($data['ignore_name']).':<br /><br />';
+                    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['ignore_name']).'</b> '.user_online($data['ignore_name']).':<br /><br />';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/ignore?act=editnote&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">';

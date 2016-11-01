@@ -38,7 +38,7 @@ if (is_admin(array(101, 102))) {
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
                     echo '<div>Referer: '.$data['error_referer'].'<br />';
                     echo 'Пользователь: '.$data['error_username'].'<br />';
                     echo '<small><span class="data">('.$data['error_brow'].', '.$data['error_ip'].')</span></small></div>';
@@ -47,7 +47,7 @@ if (is_admin(array(101, 102))) {
                 page_strnavigation('/admin/logs?act=404&amp;', $config['loglist'], $start, $total);
 
                 if (is_admin(array(101))) {
-                    echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/logs?act=clear&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/logs?act=clear&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br />';
                 }
             } else {
                 show_error('Записей еще нет!');
@@ -72,7 +72,7 @@ if (is_admin(array(101, 102))) {
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
                     echo '<div>Referer: '.$data['error_referer'].'<br />';
                     echo 'Пользователь: '.$data['error_username'].'<br />';
                     echo '<small><span class="data">('.$data['error_brow'].', '.$data['error_ip'].')</span></small></div>';
@@ -102,7 +102,7 @@ if (is_admin(array(101, 102))) {
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/assets/img/images/files.gif" alt="image" /> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
                     echo '<div>Referer: '.$data['error_referer'].'<br />';
                     echo 'Пользователь: '.$data['error_username'].'<br />';
                     echo '<small><span class="data">('.$data['error_brow'].', '.$data['error_ip'].')</span></small></div>';

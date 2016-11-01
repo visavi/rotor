@@ -77,7 +77,7 @@ if (is_admin()) {
             echo '<input type="submit" value="Написать" /></form></div><br />';
 
             if (is_admin(array(101)) && $total > 0) {
-                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/admin/chat?act=prodel">Очистить чат</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/admin/chat?act=prodel">Очистить чат</a><br />';
             }
         break;
 
@@ -132,7 +132,7 @@ if (is_admin()) {
             $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `chat_id`=? LIMIT 1;", array($id));
 
             if (!empty($post)) {
-                echo '<div class="b"><img src="/assets/img/images/edit.gif" alt="image" /> <b>'.profile($post['chat_user']).'</b> '.user_online($post['chat_user']).' <small>('.date_fixed($post['chat_time']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['chat_user']).'</b> '.user_online($post['chat_user']).' <small>('.date_fixed($post['chat_time']).')</small></div>';
                 echo '<div>Сообщение: '.bb_code($post['chat_text']).'</div><hr />';
 
                 echo '<div class="form">';
@@ -181,7 +181,7 @@ if (is_admin()) {
             if (!empty($post)) {
                 if ($post['chat_time'] + 600 > SITETIME) {
 
-                    echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.nickname($post['chat_user']).'</b> <small>('.date_fixed($post['chat_time']).')</small><br /><br />';
+                    echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['chat_user']).'</b> <small>('.date_fixed($post['chat_time']).')</small><br /><br />';
 
                     echo '<div class="form">';
                     echo '<form action="/admin/chat?act=editpost&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -240,7 +240,7 @@ if (is_admin()) {
         ############################################################################################
         case 'prodel':
             echo 'Вы уверены что хотите удалить все сообщения в админ-чате?<br />';
-            echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/chat?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+            echo '<i class="fa fa-times"></i> <b><a href="/admin/chat?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br />';
         break;

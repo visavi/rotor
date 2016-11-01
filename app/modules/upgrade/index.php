@@ -103,12 +103,12 @@ switch ($act):
 				if ($config['rotorversion'] >= '3.0.0' && $config['rotorversion'] < '4.0.0') {
 					include_once ('upgrade_4.0.0.dat');
 				} else {
-					echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Вы не сможете обновить движок</b><br />Ваша версия движка не соответствует нужным требованиям (от 3.0.0 до 4.0.0)<br /><br />';
+					echo '<i class="fa fa-times"></i> <b>Вы не сможете обновить движок</b><br />Ваша версия движка не соответствует нужным требованиям (от 3.0.0 до 4.0.0)<br /><br />';
 				}
 
 				echo 'Если обновление прошло успешно, то закройте эту страницу и удалите директорию <b>upgrade</b><br /><br />';
 			} else {
-				echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Ваша система не требует обновлений!</b><br /><br />';
+				echo '<i class="fa fa-times"></i> <b>Ваша система не требует обновлений!</b><br /><br />';
 			}
 		} else {
 			echo '<img src="/assets/img/images/setting.png" alt="image" /> <b>ОТКАЗ ПРИНЯТИЯ УСЛОВИЙ СОГЛАШЕНИЯ</b><br /><br />';
@@ -129,7 +129,7 @@ switch ($act):
 Прежде чем начать обновление убедитесь, что все файлы дистрибутива загружены на сервер, а также выставлены необходимые права доступа для папок и файлов<br /><br />';
 
 		foreach ($arrfile as $file) {
-			echo '<img src="/assets/img/images/right.gif" alt="image" /> <b>'.$file.'</b> (chmod ';
+			echo '<b>'.$file.'</b> (chmod ';
 			echo (is_file('../'.$file)) ? 666 : 777;
 			echo ')<br />';
 		}
@@ -146,16 +146,16 @@ switch ($act):
 
 		if ($config['rotorversion'] != '4.0.0') {
 			if ($config['rotorversion'] >= '3.0.0' && $config['rotorversion'] < '4.0.0') {
-				echo '<img src="/assets/img/images/open.gif" alt="image" /> <b><a href="index.php?act=0">ПРИСТУПИТЬ К ОБНОВЛЕНИЮ</a></b><br /><br />';
+				echo '<i class="fa fa-check"></i> <b><a href="index.php?act=0">ПРИСТУПИТЬ К ОБНОВЛЕНИЮ</a></b><br /><br />';
 			} else {
-				echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Вы не сможете обновить движок</b><br />Ваша версия движка не соответствует нужным требованиям (от 3.0.0 до 4.0.0)<br /><br />';
+				echo '<i class="fa fa-times"></i> <b>Вы не сможете обновить движок</b><br />Ваша версия движка не соответствует нужным требованиям (от 3.0.0 до 4.0.0)<br /><br />';
 			}
 		} else {
-			echo '<img src="/assets/img/images/error.gif" alt="image" /> <b>Ваша система не требует обновлений!</b><br /><br />';
+			echo '<i class="fa fa-times"></i> <b>Ваша система не требует обновлений!</b><br /><br />';
 		}
 	endswitch;
 
-echo '<img src="/assets/img/images/homepage.gif" alt="image" /> <a href="/index.php">На главную</a>';
+echo '<i class="fa fa-home"></i> <a href="/index.php">На главную</a>';
 
 echo '</div><div class="lol" id="down">';
 echo '<p style="text-align:center">';

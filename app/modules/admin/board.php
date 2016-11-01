@@ -51,7 +51,7 @@ if ($act == 'index') {
         } else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
     } else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
 
-    if ($is_admin) {echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/board?act=add">Добавить</a><br />';}
+    if ($is_admin) {echo '<i class="fa fa-pencil"></i> <a href="/admin/board?act=add">Добавить</a><br />';}
 }
 
 ############################################################################################

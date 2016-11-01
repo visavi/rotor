@@ -423,7 +423,7 @@ break;
                 if (empty($comm['photo_closed'])) {
                     if ($comm['commphoto_time'] + 600 > SITETIME) {
 
-                        echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.nickname($comm['commphoto_user']).'</b> <small>('.date_fixed($comm['commphoto_time']).')</small><br /><br />';
+                        echo '<i class="fa fa-pencil"></i> <b>'.nickname($comm['commphoto_user']).'</b> <small>('.date_fixed($comm['commphoto_time']).')</small><br /><br />';
 
                         echo '<div class="form">';
                         echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['commphoto_gid'].'&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';

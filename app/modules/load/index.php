@@ -25,10 +25,10 @@ if (count($downs) > 0) {
 
     $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=? AND `downs_time`>?;", array (1, SITETIME-3600 * 120));
 
-    echo '<img src="/assets/img/images/top_dir.gif" alt="image" /> <b><a href="/load/fresh">Свежие загрузки</a></b> ('.$totalnew.')<br />';
+    echo '<i class="fa fa-folder-open"></i> <b><a href="/load/fresh">Свежие загрузки</a></b> ('.$totalnew.')<br />';
 
     foreach($output[0] as $key => $data) {
-        echo '<img src="/assets/img/images/dir.gif" alt="image" /> ';
+        echo '<i class="fa fa-folder-open"></i> ';
         echo '<b><a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
 
         $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
@@ -61,7 +61,7 @@ if (count($downs) > 0) {
         // ----------------------------------------------------//
     }
 
-    echo '<br /><a href="#up"><img src="/assets/img/images/ups.gif" alt="Вверх" /></a> ';
+    echo '<br />';
     echo '<a href="/load/top">Топ файлов</a> / ';
     echo '<a href="/load/search">Поиск</a> / ';
     echo '<a href="/load/add">Добавить файл</a><br />';

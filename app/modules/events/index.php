@@ -52,7 +52,7 @@ case 'read':
 		$config['newtitle'] = $data['event_title'];
 		$config['description'] = strip_str($data['event_text']);
 
-		echo '<div class="b"><img src="/assets/img/images/files.gif" alt="image" /> ';
+		echo '<div class="b"><i class="fa fa-file-o"></i> ';
 		echo '<b>'.$data['event_title'].'</b><small> ('.date_fixed($data['event_time']).')</small></div>';
 
 		if (!empty($data['event_image'])) {
@@ -66,7 +66,7 @@ case 'read':
 		echo '<div style="clear:both;">Добавлено: '.profile($data['event_author']).'</div><br />';
 
 		if ($data['event_comments'] > 0) {
-		echo '<div class="act"><img src="/assets/img/images/balloon.gif" alt="image" /> <b>Последние комментарии</b></div>';
+		echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
 
 			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `commevent_event_id`=? ORDER BY `commevent_time` DESC LIMIT 5;", array($id));
 			$comments = $querycomm -> fetchAll();
@@ -345,7 +345,7 @@ case 'comments':
 		$page = floor(1 + $start / $config['postevents']);
 		$config['description'] = 'Комментарии - '.$dataevent['event_title'].' (Стр. '.$page.')';
 
-		echo '<img src="/assets/img/images/files.gif" alt="image" /> <b><a href="/events?act=read&amp;id='.$dataevent['event_id'].'">'.$dataevent['event_title'].'</a></b><br /><br />';
+		echo '<i class="fa fa-file-o"></i> <b><a href="/events?act=read&amp;id='.$dataevent['event_id'].'">'.$dataevent['event_title'].'</a></b><br /><br />';
 
 		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
 

@@ -49,7 +49,7 @@ case 'index':
     } else {
         show_error('Шаблонов еще нет!');
     }
-    echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/notice?act=new">Добавить</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/admin/notice?act=new">Добавить</a><br />';
 break;
 
 /**

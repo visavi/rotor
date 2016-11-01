@@ -38,7 +38,7 @@ switch ($act):
 
             while ($data = $querycomm -> fetch()) {
 
-                echo '<div class="b"><img src="/assets/img/images/balloon.gif" alt="image" /> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['commphoto_gid'].'&amp;cid='.$data['commphoto_id'].'">'.$data['photo_title'].'</a></b>';
+                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['commphoto_gid'].'&amp;cid='.$data['commphoto_id'].'">'.$data['photo_title'].'</a></b>';
                 echo '</div>';
 
 
@@ -79,7 +79,7 @@ switch ($act):
 
             while ($data = $querycomm -> fetch()) {
 
-                echo '<div class="b"><img src="/assets/img/images/balloon.gif" alt="image" /> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['commphoto_gid'].'&amp;cid='.$data['commphoto_id'].'">'.$data['photo_title'].'</a></b>';
+                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['commphoto_gid'].'&amp;cid='.$data['commphoto_id'].'">'.$data['photo_title'].'</a></b>';
 
                 if (is_admin()) {
                     echo ' — <a href="/gallery/comments?act=del&amp;id='.$data['commphoto_id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';

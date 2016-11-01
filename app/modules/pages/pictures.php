@@ -29,7 +29,7 @@ if (is_user()) {
         break;
 
         ############################################################################################
-        ##                                    Загрузка аватара                                    ##
+        ##                                Загрузка фото и аватара                                 ##
         ############################################################################################
         case 'upload':
 
@@ -43,24 +43,42 @@ if (is_user()) {
                         $handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $log);
                         if ($handle) {
 
-                            //-------- Удаляем старую фотку ----------//
-                            $userpic = DB::run() -> querySingle("SELECT `users_picture` FROM `users` WHERE `users_login`=? LIMIT 1;", array($log));
+                            //-------- Удаляем старую фотку и аватар ----------//
+                            $userpic = DB::run()->querySingle("SELECT users_picture, users_avatar FROM users WHERE users_login=? LIMIT 1;", [$log]);
 
-                            if (!empty($userpic)){
-                                unlink_image('upload/photos/', $userpic);
-                                DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?;", array('', $log));
+                            if (!empty($userpic['users_picture'])){
+                                unlink_image('upload/photos/', $userpic['users_picture']);
+                                unlink_image('upload/avatars/', $userpic['users_avatar']);
+
+                                DB::run()->query("UPDATE `users` SET `users_picture`=?, `users_avatar`=? WHERE `users_login`=?;", ['', '', $log]);
                             }
-                            //-------- Удаляем старую фотку ----------//
 
-                            $handle -> process(HOME.'/upload/photos/');
+                            //-------- Генерируем аватар ----------//
+                            $handle->process(HOME.'/upload/photos/');
+                            $picture = $handle -> file_dst_name;
 
-                            if ($handle -> processed) {
-                                DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?;", array($handle -> file_dst_name, $log));
+                            $handle->file_new_name_body = $log;
+                            $handle->image_resize = true;
+                            $handle->image_ratio_crop      = true;
+                            $handle->image_y = 48;
+                            $handle->image_x = 48;
+                            $handle->image_watermark = false;
+                            $handle->image_convert = 'png';
+                            $handle->file_overwrite = true;
 
-                                $handle -> clean();
+                            $handle->process(HOME.'/upload/avatars/');
+                            $avatar = $handle -> file_dst_name;
+
+                            if ($handle->processed) {
+
+                                DB::run()->query("UPDATE `users` SET `users_picture`=?, `users_avatar`=? WHERE `users_login`=?;", [$picture, $avatar, $log]);
+
+                                $handle->clean();
+
+                                save_avatar();
 
                                 notice('Фотография успешно загружена!');
-                                redirect("/profile");
+                                //redirect("/profile");
 
                             } else {
                                 show_error($handle -> error);
@@ -82,7 +100,7 @@ if (is_user()) {
         break;
 
         ############################################################################################
-        ##                                  Удаление фотографии                                   ##
+        ##                                  Удаление фото и аватара                               ##
         ############################################################################################
         case 'del':
 
@@ -96,7 +114,7 @@ if (is_user()) {
                     unlink_image('upload/photos/', $userpic);
                     DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?", array('', $log));
 
-                    $_SESSION['note'] = 'Фотография успешно удалена!';
+                    notice('Фотография успешно удалена!');
                     redirect("/profile");
 
                 } else {

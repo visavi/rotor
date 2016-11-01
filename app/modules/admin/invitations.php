@@ -57,7 +57,7 @@ case 'index':
         show_error('Приглашений еще нет!');
     }
 
-    echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/invitations?act=new">Создать ключи</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/admin/invitations?act=new">Создать ключи</a><br />';
     echo '<img src="/assets/img/images/keys.gif" alt="image" /> <a href="/admin/invitations?act=list">Список ключей</a><br />';
 break;
 

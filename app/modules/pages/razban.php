@@ -34,7 +34,7 @@ if (is_user()) {
             echo 'Денег на руках: <b>'.moneys($udata['users_money']).'</b><br /><br />';
 
             if ($udata['users_totalban'] > 0 && $daytime >= 30 && $udata['users_money'] >= 100000) {
-                echo '<img src="/assets/img/images/open.gif" alt="image" /> <b><a href="/razban?act=go">Снять нарушение</a></b><br />';
+                echo '<i class="fa fa-check"></i> <b><a href="/razban?act=go">Снять нарушение</a></b><br />';
                 echo 'У вас имеется возможность снять нарушение<br /><br />';
             } else {
                 echo '<b>Вы не можете снять нарушение</b><br />';

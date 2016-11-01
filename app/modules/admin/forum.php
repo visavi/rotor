@@ -259,7 +259,7 @@ if (is_admin()) {
                 if (!empty($forums['forums_id'])) {
                     if (empty($forums['subcnt'])) {
                         echo 'Вы уверены что хотите удалить раздел <b>'.$forums['forums_title'].'</b> в форуме?<br />';
-                        echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/forum?act=delforum&amp;fid='.$fid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+                        echo '<i class="fa fa-times"></i> <b><a href="/admin/forum?act=delforum&amp;fid='.$fid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
                     } else {
                         show_error('Ошибка! Данный раздел имеет подфорумы!');
                     }
@@ -908,7 +908,7 @@ if (is_admin()) {
             $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($pid));
             if (!empty($post)) {
 
-                echo '<img src="/assets/img/images/edit.gif" alt="image" /> <b>'.nickname($post['posts_user']).'</b> <small>('.date_fixed($post['posts_time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['posts_user']).'</b> <small>('.date_fixed($post['posts_time']).')</small><br /><br />';
 
                 echo '<div class="form" id="form">';
                 echo '<form action="/admin/forum?act=addeditpost&amp;tid='.$post['posts_topics_id'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';

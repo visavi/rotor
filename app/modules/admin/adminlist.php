@@ -12,10 +12,10 @@ if (is_admin(array(101, 102, 103))) {
 
     if ($total > 0) {
         foreach($arradmin as $value) {
-            echo '<img src="/assets/img/images/user.gif" alt="image" /> <b>'.profile($value['users_login']).'</b>  ('.user_status($value['users_level']).') '.user_online($value['users_login']).'<br />';
+            echo '<i class="fa fa-user-circle-o"></i> <b>'.profile($value['users_login']).'</b>  ('.user_status($value['users_level']).') '.user_online($value['users_login']).'<br />';
 
             if (is_admin(array(101))) {
-                echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/users?act=edit&amp;uz='.$value['users_login'].'">Изменить</a><br />';
+                echo '<i class="fa fa-pencil"></i> <a href="/admin/users?act=edit&amp;uz='.$value['users_login'].'">Изменить</a><br />';
             }
         }
         echo '<br />Всего в администрации: <b>'.$total.'</b><br /><br />';

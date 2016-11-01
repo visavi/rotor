@@ -13,7 +13,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-	echo '<img src="/assets/img/images/document.gif" alt="image" /> ';
+	echo '<i class="fa fa-book"></i> ';
 	echo '<a href="/user/'.App::getUsername().'">Моя анкета</a> / ';
 	echo '<b>Мой профиль</b> / ';
 	echo '<a href="/account">Мои данные</a> / ';

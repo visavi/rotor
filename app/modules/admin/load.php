@@ -28,7 +28,7 @@ case 'index':
         }
 
         foreach($output[0] as $key => $data) {
-            echo '<img src="/assets/img/images/dir.gif" alt="image" /> ';
+            echo '<i class="fa fa-folder-open"></i> ';
             echo $data['cats_order'].'. <b><a href="/admin/load?act=down&amp;cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
 
             $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
@@ -74,7 +74,7 @@ case 'index':
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
     }
 
-    echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/load?act=newfile">Добавить</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile">Добавить</a><br />';
 break;
 
 ############################################################################################
@@ -213,7 +213,7 @@ case 'addimport':
                         }
 
                         if ($count > 0) {
-                            echo '<img src="/assets/img/images/open.gif" alt="image" /> <b>Выбранные файлы успешно импортированы</b><br /><br />';
+                            echo '<i class="fa fa-check"></i> <b>Выбранные файлы успешно импортированы</b><br /><br />';
                         }
 
                         if ($total != $count) {
@@ -594,7 +594,7 @@ case 'prodelcats':
         if (!empty($downs['cats_id'])) {
             if (empty($downs['subcnt'])) {
                 echo 'Вы уверены что хотите удалить раздел <b>'.$downs['cats_name'].'</b> в загрузках?<br />';
-                echo '<img src="/assets/img/images/error.gif" alt="image" /> <b><a href="/admin/load?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+                echo '<i class="fa fa-times"></i> <b><a href="/admin/load?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
             } else {
                 show_error('Ошибка! Данный раздел имеет подкатегории!');
             }
@@ -687,7 +687,7 @@ case 'down':
     if ($cats > 0) {
         $config['newtitle'] = $cats['cats_name'];
 
-        echo '<img src="/assets/img/images/open_dir.gif" alt="image" /> <b>'.$cats['cats_name'].'</b> (Файлов: '.$cats['cats_count'].')';
+        echo '<i class="fa fa-folder-open"></i> <b>'.$cats['cats_name'].'</b> (Файлов: '.$cats['cats_count'].')';
         echo ' (<a href="/load/down?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
         echo '<hr />';
 
@@ -696,7 +696,7 @@ case 'down':
 
         if (count($sub) > 0 && $start == 0) {
             foreach($sub as $subdata) {
-                echo '<div class="b"><img src="/assets/img/images/dir.gif" alt="image" /> ';
+                echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                 echo '<b><a href="/admin/load?act=down&amp;cid='.$subdata['cats_id'].'">'.$subdata['cats_name'].'</a></b> ('.$subdata['cats_count'].')</div>';
             }
             echo '<hr />';
@@ -723,7 +723,7 @@ case 'down':
                 $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
 
                 echo '<div class="b">';
-                echo '<img src="/assets/img/images/zip.gif" alt="image" /> ';
+                echo '<i class="fa fa-archive"></i> ';
                 echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')<br />';
 
                 if ($is_admin) {
@@ -761,7 +761,7 @@ case 'down':
         show_error('Ошибка! Данного раздела не существует!');
     }
     if (empty($cats['closed'])) {
-        echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Добавить</a><br />';
+        echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Добавить</a><br />';
     }
     echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load">Категории</a><br />';
 break;
@@ -801,7 +801,7 @@ case 'editdown':
         } else {
             $folder = $new['folder'] ? $new['folder'].'/' : '';
 
-            echo '<img src="/assets/img/images/download.gif" alt="image" /> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['downs_link']).') (<a href="/admin/load?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+            echo '<i class="fa fa-download"></i> <b><a href="/upload/files/'.$folder.$new['downs_link'].'">'.$new['downs_link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['downs_link']).') (<a href="/admin/load?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
 
             $ext = getExtension($new['downs_link']);
             if (! in_array($ext, array('jpg', 'jpeg', 'gif', 'png'))) {
@@ -1168,7 +1168,7 @@ case 'movedown':
     if (!empty($downs)) {
         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
-        echo '<img src="/assets/img/images/download.gif" alt="image" /> <b>'.$downs['downs_title'].'</b> ('.read_file(HOME.'/upload/files/'.$folder.$downs['downs_link']).')<br /><br />';
+        echo '<i class="fa fa-download"></i> <b>'.$downs['downs_title'].'</b> ('.read_file(HOME.'/upload/files/'.$folder.$downs['downs_link']).')<br /><br />';
 
         $querycats = DB::run() -> query("SELECT * FROM `cats` ORDER BY `cats_order` ASC;");
         $cats = $querycats -> fetchAll();

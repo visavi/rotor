@@ -27,7 +27,7 @@ if (is_admin(array(101))) {
                 arsort($globfiles);
 
                 foreach($globfiles as $value) {
-                    echo '<img src="/assets/img/images/zip.gif" alt="image" /> <b>'.basename($value).'</b> ('.read_file($value).') (<a href="/admin/backup?act=del&amp;backup='.basename($value).'&amp;uid='.$_SESSION['token'].'">Удалить</a>)<br />';
+                    echo '<i class="fa fa-archive"></i> <b>'.basename($value).'</b> ('.read_file($value).') (<a href="/admin/backup?act=del&amp;backup='.basename($value).'&amp;uid='.$_SESSION['token'].'">Удалить</a>)<br />';
                 }
 
                 echo '<br />Всего бэкапов: <b>'.$total.'</b><br /><br />';
@@ -35,7 +35,7 @@ if (is_admin(array(101))) {
                 show_error('Бэкапов еще нет!');
             }
 
-            echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/admin/backup?act=choice">Новый бэкап</a><br />';
+            echo '<i class="fa fa-check"></i> <a href="/admin/backup?act=choice">Новый бэкап</a><br />';
         break;
 
         ############################################################################################

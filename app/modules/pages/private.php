@@ -70,7 +70,7 @@ if (is_user()) {
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Объем ящика: <b>'.$config['limitmail'].'</b><br /><br />';
 
-                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/private?act=alldel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/private?act=alldel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Входящих писем еще нет!');
             }
@@ -121,7 +121,7 @@ if (is_user()) {
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Объем ящика: <b>'.$config['limitoutmail'].'</b><br /><br />';
 
-                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/private?act=alloutdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/private?act=alloutdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Отправленных писем еще нет!');
             }
@@ -166,7 +166,7 @@ if (is_user()) {
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Срок хранения: <b>'.$config['expiresmail'].'</b><br /><br />';
 
-                echo '<img src="/assets/img/images/error.gif" alt="image" /> <a href="/private?act=alltrashdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/private?act=alltrashdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Удаленных писем еще нет!');
             }

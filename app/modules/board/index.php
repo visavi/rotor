@@ -215,6 +215,6 @@ if ($act == "add"){
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=new&amp;id='.$id.'">Вернуться</a><br />';
 }
 
-echo '<img src="/assets/img/images/homepage.gif" alt="image" /> <a href="/">На главную</a><br />';
+echo '<i class="fa fa-home"></i> <a href="/">На главную</a><br />';
 
 

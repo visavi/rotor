@@ -16,28 +16,28 @@ if (is_admin(array(101))) {
         case 'index':
 
             if ($log == $config['nickname']) {
-                echo'<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setzero">Администраторская</a><br />';
+                echo'<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setzero">Администраторская</a><br />';
 
-                echo'<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setone">Основные настройки</a><br />';
-                echo'<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=mail">Почта / Рассылка</a><br />';
+                echo'<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setone">Основные настройки</a><br />';
+                echo'<i class="fa fa-pencil"></i> <a href="/admin/setting?act=mail">Почта / Рассылка</a><br />';
             }
 
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=settwo">Вывод информации</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setthree">Гостевая / Новости</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setfour">Форум / Галерея / Объявления</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setfive">Закладки / Голосования / Приват</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setload">Загруз-центр</a> <br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setblog">Блоги</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setevent">События</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setseven">Постраничная навигация</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=seteight">Прочее / Другое</a><br />';
-            // echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setnine">Кэширование</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setten">Защита / Безопасность</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=seteleven">Стоимость и цены</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setadv">Реклама на сайте</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setimage">Загрузка изображений</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setsmile">Смайлы</a><br />';
-            echo '<img src="/assets/img/images/edit.gif" alt="image" /> <a href="/admin/setting?act=setoffer">Предложения и проблемы</a><br /><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=settwo">Вывод информации</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setthree">Гостевая / Новости</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setfour">Форум / Галерея / Объявления</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setfive">Закладки / Голосования / Приват</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setload">Загруз-центр</a> <br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setblog">Блоги</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setevent">События</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setseven">Постраничная навигация</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=seteight">Прочее / Другое</a><br />';
+            // echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setnine">Кэширование</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setten">Защита / Безопасность</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=seteleven">Стоимость и цены</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setadv">Реклама на сайте</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setimage">Загрузка изображений</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setsmile">Смайлы</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setoffer">Предложения и проблемы</a><br /><br />';
         break;
 
         ############################################################################################

@@ -51,8 +51,8 @@ case 'index':
         show_error('Новостей еще нет!');
     }
 
-    echo '<img src="/assets/img/images/rss.gif" alt="image" /> <a href="/news/rss">RSS подписка</a><br />';
-    echo '<img src="/assets/img/images/balloon.gif" alt="image" /> <a href="/news/allcomments">Комментарии</a><br />';
+    echo '<i class="fa fa-rss"></i> <a href="/news/rss">RSS подписка</a><br />';
+    echo '<i class="fa fa-comment"></i> <a href="/news/allcomments">Комментарии</a><br />';
 break;
 
 ############################################################################################
@@ -72,7 +72,7 @@ case 'view':
         $config['newtitle'] = $data['news_title'];
         $config['description'] = strip_str($data['news_text']);
 
-        echo '<div class="b"><img src="/assets/img/images/files.gif" alt="image" /> ';
+        echo '<div class="b"><i class="fa fa-file-o"></i> ';
         echo '<b>'.$data['news_title'].'</b><small> ('.date_fixed($data['news_time']).')</small></div>';
 
         if (!empty($data['news_image'])) {
@@ -85,7 +85,7 @@ case 'view':
         echo '<div style="clear:both;">Добавлено: '.profile($data['news_author']).'</div><br />';
 
         if ($data['news_comments'] > 0) {
-            echo '<div class="act"><img src="/assets/img/images/balloon.gif" alt="image" /> <b>Последние комментарии</b></div>';
+            echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
 
             $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `commnews_news_id`=? ORDER BY `commnews_time` DESC LIMIT 5;", array($id));
             $comments = $querycomm -> fetchAll();
@@ -213,7 +213,7 @@ case 'comments':
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
                 echo '<input type="submit" value="Написать" /></form></div>';
 
-                echo '<br /><a href="#up"><img src="/assets/img/images/ups.gif" alt="image" /></a> ';
+                echo '<br />';
                 echo '<a href="/rules">Правила</a> / ';
                 echo '<a href="/smiles">Смайлы</a> / ';
                 echo '<a href="/tags">Теги</a><br /><br />';

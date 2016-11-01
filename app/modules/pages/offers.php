@@ -39,7 +39,7 @@ switch ($act):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array($type));
         $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array($type2));
 
-        echo '<img src="/assets/img/images/document.gif" alt="image" /> ';
+        echo '<i class="fa fa-book"></i> ';
 
         if (empty($type)) {
             echo '<b>Предложения</b> ('.$total.') / <a href="/offers?type=1">Проблемы</a> ('.$total2.')';
@@ -98,7 +98,7 @@ switch ($act):
 
             while ($data = $queryoffers -> fetch()) {
                 echo '<div class="b">';
-                echo '<img src="/assets/img/images/files.gif" alt="image" /> ';
+                echo '<i class="fa fa-file-o"></i> ';
                 echo '<b><a href="/offers?act=view&amp;type='.$type.'&amp;id='.$data['offers_id'].'">'.$data['offers_title'].'</a></b> (Голосов: '.$data['offers_votes'].')<br />';
 
                 switch ($data['offers_status']) {
@@ -125,7 +125,7 @@ switch ($act):
             show_error('Записей еще нет!');
         }
 
-        echo '<img src="/assets/img/images/open.gif" alt="image" /> <a href="/offers?act=new">Добавить</a><br />';
+        echo '<i class="fa fa-check"></i> <a href="/offers?act=new">Добавить</a><br />';
     break;
 
     ############################################################################################
@@ -136,7 +136,7 @@ switch ($act):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(0));
         $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(1));
 
-        echo '<img src="/assets/img/images/document.gif" alt="image" /> <a href="/offers?type=0">Предложения</a>  ('.$total.') / ';
+        echo '<i class="fa fa-book"></i> <a href="/offers?type=0">Предложения</a>  ('.$total.') / ';
         echo '<a href="/offers?type=1">Проблемы</a> ('.$total2.')';
 
         if (is_admin(array(101, 102))) {
@@ -149,7 +149,7 @@ switch ($act):
             $config['newtitle'] = $queryoff['offers_title'];
 
             echo '<div class="b">';
-            echo '<img src="/assets/img/images/files.gif" alt="image" /> ';
+            echo '<i class="fa fa-file-o"></i> ';
             echo '<b>'.$queryoff['offers_title'].'</b> (Голосов: '.$queryoff['offers_votes'].')<br />';
 
             switch ($queryoff['offers_status']) {
@@ -190,7 +190,7 @@ switch ($act):
                 echo profile($queryoff['offers_user_reply']).' ('.date_fixed($queryoff['offers_time_reply']).')</div><br />';
             }
             // ------------------------------------------------//
-            echo '<div class="b"><img src="/assets/img/images/balloon.gif" alt="image" /> <b>Последние комментарии</b></div><br />';
+            echo '<div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br />';
 
             if ($queryoff['offers_comments'] > 0) {
                 $querycomm = DB::run() -> query("SELECT * FROM `commoffers` WHERE `comm_offers`=? ORDER BY `comm_time` DESC LIMIT 5;", array($id));
@@ -334,7 +334,7 @@ switch ($act):
         if (!empty($queryoff)) {
             $config['newtitle'] = 'Комментарии - '.$queryoff['offers_title'];
 
-            echo '<img src="/assets/img/images/balloon.gif" alt="image" /> <b><a href="/offers?act=view&amp;id='.$queryoff['offers_id'].'">'.$queryoff['offers_title'].'</a></b><br /><br />';
+            echo '<i class="fa fa-comment"></i> <b><a href="/offers?act=view&amp;id='.$queryoff['offers_id'].'">'.$queryoff['offers_title'].'</a></b><br /><br />';
 
             echo '<a href="/offers?type=0">Предложения</a> / ';
             echo '<a href="/offers?type=1">Проблемы</a> / ';
