@@ -13,7 +13,7 @@ render('includes/link', array('links' => $links));
 <?php if ($total > 0): ?>
     <?php foreach($photos as $data): ?>
 
-        <div class="b"><img src="/assets/img/images/gallery.gif" alt="image" />
+        <div class="b"><i class="fa fa-picture-o"></i>
             <b><a href="/gallery?act=view&amp;gid=<?= $data['photo_id'] ?>&amp;start=<?= $start ?>"><?= $data['photo_title'] ?></a></b>
             (<?= read_file(HOME.'/upload/pictures/'.$data['photo_link']) ?>) (Рейтинг: <?= format_num($data['photo_rating']) ?>)
         </div>

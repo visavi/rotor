@@ -125,7 +125,7 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы совершать операции, необходимо');
 }
 
-echo '<img src="/assets/img/images/money.gif" alt="image" /> <a href="/games/bank">Банк</a><br />';
-echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-money"></i> <a href="/games/bank">Банк</a><br />';
+echo '<i class="fa fa-money"></i> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

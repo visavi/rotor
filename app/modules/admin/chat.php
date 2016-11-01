@@ -58,7 +58,7 @@ if (is_admin()) {
                     echo '<div>'.bb_code($data['chat_text']).'<br />';
 
                     if (!empty($data['chat_edit'])) {
-                        echo '<img src="/assets/img/images/exclamation_small.gif" alt="image" /> <small>Отредактировано: '.nickname($data['chat_edit']).' ('.date_fixed($data['chat_edit_time']).')</small><br />';
+                        echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.nickname($data['chat_edit']).' ('.date_fixed($data['chat_edit_time']).')</small><br />';
                     }
 
                     echo '<span class="data">('.$data['chat_brow'].', '.$data['chat_ip'].')</span>';

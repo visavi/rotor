@@ -26,7 +26,7 @@ if (is_user()) {
         ##                                    Полученные голоса                                   ##
         ############################################################################################
             case 'received':
-                echo '<img src="/assets/img/images/thumb-up.gif" alt="image" /> <b>Полученные</b> / <a href="/rathist?act=gave&amp;uz='.$uz.'">Отданные</a><hr />';
+                echo '<i class="fa fa-thumbs-up"></i> <b>Полученные</b> / <a href="/rathist?act=gave&amp;uz='.$uz.'">Отданные</a><hr />';
 
                 $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `rating_login`=? ORDER BY `rating_time` DESC LIMIT 20;", array($uz));
                 $rat = $queryrat -> fetchAll();
@@ -44,9 +44,9 @@ if (is_user()) {
                         }
 
                         if (empty($data['rating_vote'])) {
-                            echo '<img src="/assets/img/images/error.gif" alt="Минус" /> ';
+                            echo '<i class="fa fa-thumbs-down"></i> ';
                         } else {
-                            echo '<img src="/assets/img/images/open.gif" alt="Плюс" /> ';
+                            echo '<i class="fa fa-thumbs-up"></i> ';
                         }
 
                         echo '<b>'.profile($data['rating_user']).'</b> ('.date_fixed($data['rating_time']).')</div>';
@@ -75,7 +75,7 @@ if (is_user()) {
             ##                                      Отданные голоса                                   ##
             ############################################################################################
             case 'gave':
-                echo '<img src="/assets/img/images/thumb-up.gif" alt="image" /> <a href="/rathist?act=received&amp;uz='.$uz.'">Полученные</a> / <b>Отданные</b><hr />';
+                echo '<i class="fa fa-thumbs-up"></i> <a href="/rathist?act=received&amp;uz='.$uz.'">Полученные</a> / <b>Отданные</b><hr />';
 
                 $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `rating_user`=? ORDER BY `rating_time` DESC LIMIT 20;", array($uz));
                 $rat = $queryrat -> fetchAll();
@@ -84,9 +84,9 @@ if (is_user()) {
                     foreach($rat as $data) {
                         echo '<div class="b">';
                         if (empty($data['rating_vote'])) {
-                            echo '<img src="/assets/img/images/error.gif" alt="Минус" /> ';
+                            echo '<i class="fa fa-thumbs-down"></i> ';
                         } else {
-                            echo '<img src="/assets/img/images/open.gif" alt="Плюс" /> ';
+                            echo '<i class="fa fa-thumbs-up"></i> ';
                         }
 
                         echo '<b>'.profile($data['rating_login']).'</b> ('.date_fixed($data['rating_time']).')</div>';

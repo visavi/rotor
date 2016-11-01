@@ -60,13 +60,13 @@ if (is_admin(array(101, 102))) {
                     echo '<b><a href="/admin/offers?act=view&amp;type='.$type.'&amp;id='.$data['offers_id'].'">'.$data['offers_title'].'</a></b> (Голосов: '.$data['offers_votes'].')<br />';
 
                     switch ($data['offers_status']) {
-                        case '1': echo '<img src="/assets/img/images/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b><br />';
+                        case '1': echo '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b><br />';
                             break;
-                        case '2': echo '<img src="/assets/img/images/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b><br />';
+                        case '2': echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Выполнено</span></b><br />';
                             break;
-                        case '3': echo '<img src="/assets/img/images/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b><br />';
+                        case '3': echo '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">Закрыто</span></b><br />';
                             break;
-                        default: echo '<img src="/assets/img/images/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b><br />';
+                        default: echo '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">Под вопросом</span></b><br />';
                     }
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['offers_id'].'" /> ';
@@ -114,13 +114,13 @@ if (is_admin(array(101, 102))) {
                 echo '<b>'.$queryoff['offers_title'].'</b> (Голосов: '.$queryoff['offers_votes'].')<br />';
 
                 switch ($queryoff['offers_status']) {
-                    case '1': echo '<img src="/assets/img/images/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
+                    case '1': echo '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b>';
                         break;
-                    case '2': echo '<img src="/assets/img/images/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
+                    case '2': echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Выполнено</span></b>';
                         break;
-                    case '3': echo '<img src="/assets/img/images/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
+                    case '3': echo '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">Закрыто</span></b>';
                         break;
-                    default: echo '<img src="/assets/img/images/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
+                    default: echo '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">Под вопросом</span></b>';
                 }
 
                 echo '</div>';

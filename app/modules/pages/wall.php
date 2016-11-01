@@ -16,7 +16,7 @@ if (!empty($queryuser)) {
         case 'index':
 
             $config['newtitle'] = 'Стена пользователя '.nickname($uz);
-            echo '<img src="/assets/img/images/wall.gif" alt="image" /> <b>Стена  пользователя '.nickname($uz).'</b><br /><br />';
+            echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.nickname($uz).'</b><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `wall_user`=?;", array($uz));
 

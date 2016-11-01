@@ -31,7 +31,7 @@ if (is_user()) {
 
             echo 'У вас в наличии: '.moneys($udata['users_money']).'<br /><br />';
 
-            echo '<img src="/assets/img/images/faq.gif" alt="image" /> <a href="/games/hi?act=faq">Правила</a><br />';
+            echo '<i class="fa fa-question-circle"></i> <a href="/games/hi?act=faq">Правила</a><br />';
         break;
 
         ############################################################################################
@@ -120,6 +120,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы начать игру, необходимо');
 }
 
-echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-money"></i> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

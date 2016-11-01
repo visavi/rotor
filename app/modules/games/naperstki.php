@@ -17,7 +17,7 @@ if (is_user()) {
         echo '<img src="/images/naperstki/1.gif" alt="image" /><br /><br />';
         echo '<b><a href="/games/naperstki?act=choice">Играть</a></b><br /><br />';
         echo 'В наличии: ' . moneys($udata['users_money']) . '<br /><br />';
-        echo '<img src="/assets/img/images/faq.gif" alt="image" /> <a href="/games/naperstki?act=faq">Правила</a><br />';
+        echo '<i class="fa fa-question-circle"></i> <a href="/games/naperstki?act=faq">Правила</a><br />';
         break;
     # ###########################################################################################
     # #                                     Выбор наперстка                                    ##
@@ -114,6 +114,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы начать игру, необходимо');
 }
 
-echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-money"></i> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

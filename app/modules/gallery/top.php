@@ -51,7 +51,7 @@ if ($total > 0) {
 
     while ($data = $queryphoto -> fetch()) {
 
-        echo '<div class="b"><img src="/assets/img/images/gallery.gif" alt="image" /> ';
+        echo '<div class="b"><i class="fa fa-picture-o"></i> ';
         echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['photo_link']).') ('.format_num($data['photo_rating']).')</div>';
 
         echo '<div><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'])).'</a>';

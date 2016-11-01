@@ -95,7 +95,7 @@ if (is_user()) {
                                 if (empty($ignorstr)) {
                                     DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($uz));
                                     // ------------------------------Уведомление по привату------------------------//
-                                    $textpriv = '<img src="/assets/img/images/custom.gif" alt="custom" /> Пользователь [b]'.nickname($log).'[/b] добавил вас в свой контакт-лист!';
+                                    $textpriv = 'Пользователь [b]'.nickname($log).'[/b] добавил вас в свой контакт-лист!';
                                     DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                 }
 
@@ -223,7 +223,7 @@ if (is_user()) {
     show_login('Вы не авторизованы, для просмотра контакт-листа, необходимо');
 }
 
-echo '<img src="/assets/img/images/ignor.gif" alt="image" /> <a href="/ignore">Игнор-лист</a><br />';
-echo '<img src="/assets/img/images/mail.gif" alt="image" /> <a href="/private">Сообщения</a><br />';
+echo '<i class="fa fa-ban"></i> <a href="/ignore">Игнор-лист</a><br />';
+echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br />';
 
 App::view($config['themes'].'/foot');

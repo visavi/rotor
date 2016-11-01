@@ -25,7 +25,7 @@ switch ($act):
         if (count($votes) > 0) {
             foreach($votes as $valvote) {
                 echo '<div class="b">';
-                echo '<img src="/assets/img/images/stat.gif" alt="image" /> <b><a href="/votes?act=poll&amp;id='.$valvote['vote_id'].'">'.$valvote['vote_title'].'</a></b></div>';
+                echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['vote_id'].'">'.$valvote['vote_title'].'</a></b></div>';
                 echo '<div>Создано: '.date_fixed($valvote['vote_time']).'<br />';
                 echo 'Всего голосов: '.$valvote['vote_count'].'</div>';
             }
@@ -47,7 +47,7 @@ switch ($act):
             if (empty($votes['vote_closed'])) {
                 $config['newtitle'] = $votes['vote_title'];
 
-                echo '<img src="/assets/img/images/stat.gif" alt="image" /> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
+                echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
 
                 $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `answer_vote_id`=? ORDER BY `answer_id`;", array($id));
                 $answer = $queryanswer -> fetchAll();
@@ -68,7 +68,7 @@ switch ($act):
                         echo '<br /><input type="submit" value="Голосовать" /></form><br />';
 
                         echo 'Всего вариантов: <b>'.$total.'</b><br /><br />';
-                        echo '<img src="/assets/img/images/history.gif" alt="image" /> <a href="/votes?act=poll&amp;id='.$id.'&amp;result=show">Результаты</a><br />';
+                        echo '<i class="fa fa-history"></i> <a href="/votes?act=poll&amp;id='.$id.'&amp;result=show">Результаты</a><br />';
 
                     } else {
 
@@ -98,9 +98,9 @@ switch ($act):
                         echo 'Вариантов: <b>'.$total.'</b><br /><br />';
 
                         if (!empty($_GET['result'])) {
-                            echo '<img src="/assets/img/images/stat.gif" alt="image" /> <a href="/votes?act=poll&amp;id='.$id.'">К вариантам</a><br />';
+                            echo '<i class="fa fa-bar-chart"></i> <a href="/votes?act=poll&amp;id='.$id.'">К вариантам</a><br />';
                         }
-                        echo '<img src="/assets/img/images/users.gif" alt="image" /> <a href="/votes?act=voters&amp;id='.$id.'">Проголосовавшие</a><br />';
+                        echo '<i class="fa fa-users"></i> <a href="/votes?act=voters&amp;id='.$id.'">Проголосовавшие</a><br />';
                     }
 
                 } else {
@@ -186,7 +186,7 @@ switch ($act):
 
             $config['newtitle'] = $votes['vote_title'];
 
-            echo '<img src="/assets/img/images/stat.gif" alt="image" /> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
+            echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
 
             $querypoll = DB::run() -> query("SELECT `poll_user`, `poll_time` FROM `votepoll` WHERE `poll_vote_id`=? ORDER BY `poll_time` DESC LIMIT 20;", array($id));
             $polls = $querypoll -> fetchAll();
@@ -207,6 +207,6 @@ switch ($act):
 
 endswitch;
 
-echo '<img src="/assets/img/images/luggage.gif" alt="image" /> <a href="/votes/history">Архив голосований</a><br />';
+echo '<i class="fa fa-briefcase"></i> <a href="/votes/history">Архив голосований</a><br />';
 
 App::view($config['themes'].'/foot');

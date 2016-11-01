@@ -27,7 +27,7 @@ case 'index':
 
         foreach($reklama as $data) {
             echo '<div class="b">';
-            echo '<img src="/assets/img/images/online.gif" alt="image" /> ';
+            echo '<i class="fa fa-check-circle"></i> ';
             echo '<b><a href="'.$data['rek_site'].'">'.$data['rek_name'].'</a></b> ('.profile($data['rek_user']).')</div>';
 
             echo 'Истекает: '.date_fixed($data['rek_time']).'<br />';
@@ -52,7 +52,7 @@ case 'index':
         show_error('В данный момент рекламных ссылок еще нет!');
     }
 
-    echo '<img src="/assets/img/images/money.gif" alt="image" /> <a href="/reklama/create">Купить рекламу</a><br />';
+    echo '<i class="fa fa-money"></i> <a href="/reklama/create">Купить рекламу</a><br />';
     break;
 
 ############################################################################################

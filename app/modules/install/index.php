@@ -105,7 +105,7 @@ switch ($act):
 		echo '<input name="agree" id="agree" type="checkbox" value="1" /> <label for="agree"><b>Я ПРИНИМАЮ УСЛОВИЯ СОГЛАШЕНИЯ</b></label><br /><br />';
 
 		echo '<input type="submit" value="Продолжить" /></form><hr />';
-		echo '<img src="../assets/img/images/back.gif" alt="image" /> <a href="index.php">Вернуться</a>';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="index.php">Вернуться</a>';
 	break;
 
 	############################################################################################
@@ -236,7 +236,7 @@ switch ($act):
 			echo 'Любое использование нашего движка означает ваше согласие с нашим соглашением<br /><br />';
 		}
 
-		echo '<img src="../assets/img/images/back.gif" alt="image" /> <a href="index.php?act=0">Вернуться</a>';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="index.php?act=0">Вернуться</a>';
 	break;
 
 	############################################################################################
@@ -264,7 +264,7 @@ switch ($act):
 
 		echo 'База данных и пользователь должны быть созданы в панеле управления вашего сайта!<br /><br />';
 
-		echo '<img src="../assets/img/images/back.gif" alt="image" /> <a href="index.php?act=1&amp;agree=1">Вернуться</a>';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="index.php?act=1&amp;agree=1">Вернуться</a>';
 		break;
 	# ###########################################################################################
 	# #                                     Получение данных                                   ##
@@ -360,7 +360,7 @@ define ('DBPASS', '$dbpass');
 			echo '<b>Ошибка! Вы не ввели важные данные!</b><br /><br />';
 		}
 
-		echo '<img src="../assets/img/images/back.gif" alt="image" /> <a href="index.php?act=2">Вернуться</a>';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="index.php?act=2">Вернуться</a>';
 	break;
 
 	############################################################################################
@@ -399,7 +399,7 @@ define ('DBPASS', '$dbpass');
 		echo 'В поле ввода адреса сайта необходимо ввести адрес в который у вас распакован движок, если это поддомен или папка, то необходимо указать ее, к примеру http://wap.visavi.net<br />';
 		echo 'Пароль необходимо выбирать посложнее, лучше всего состоящий из цифр, маленьких и больших латинских символов одновременно, длинее 5 символов<br /><br />';
 
-		echo '<img src="../assets/img/images/back.gif" alt="image" /> <a href="index.php?act=2">Вернуться</a>';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="index.php?act=2">Вернуться</a>';
 	break;
 
 	############################################################################################
@@ -501,7 +501,7 @@ define ('DBPASS', '$dbpass');
 			echo '<b>Ошибка! Слишком длинный логин или пароль (От 3 до 20 символов)</b><br /><br />';
 		}
 
-		echo '<img src="../assets/img/images/back.gif" alt="image" /> <a href="index.php?act=4">Вернуться</a>';
+		echo '<i class="fa fa-arrow-circle-left"></i> <a href="index.php?act=4">Вернуться</a>';
 	break;
 
 	############################################################################################

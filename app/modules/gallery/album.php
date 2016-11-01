@@ -38,7 +38,7 @@ switch ($act):
 
             while ($data = $queryphoto -> fetch()) {
 
-                echo '<img src="/assets/img/images/gallery.gif" alt="image" /> ';
+                echo '<i class="fa fa-picture-o"></i> ';
                 echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data['photo_user'].'">'.nickname($data['photo_user']).'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
             }
 
@@ -73,7 +73,7 @@ switch ($act):
             $moder = ($log == $uz) ? 1 : 0;
 
             while ($data = $queryphoto -> fetch()) {
-                echo '<div class="b"><img src="/assets/img/images/gallery.gif" alt="image" /> ';
+                echo '<div class="b"><i class="fa fa-picture-o"></i> ';
                 echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['photo_link']).')<br />';
 
                 if (!empty($moder)) {

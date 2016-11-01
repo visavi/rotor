@@ -29,7 +29,7 @@ case 'index':
 
         while ($data = $querynews -> fetch()) {
             echo '<div class="b">';
-            echo $data['news_closed'] == 0 ? '<img src="/assets/img/images/document_plus.gif" alt="image" /> ' : '<img src="/assets/img/images/document_minus.gif" alt="image" /> ';
+            echo $data['news_closed'] == 0 ? '<i class="fa fa-plus-square-o"></i> ' : '<i class="fa fa-minus-square-o"></i> ';
             echo '<b><a href="/news/'.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small></div>';
 
             if (!empty($data['news_image'])) {

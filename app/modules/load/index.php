@@ -54,7 +54,7 @@ if (count($downs) > 0) {
                 $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
                 $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
 
-                echo '<img src="/assets/img/images/right.gif" alt="image" /> <b><a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
+                echo '<i class="fa fa-angle-right"></i> <b><a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
                 echo '('.$data['cats_count'] . $subcnt . $new.')<br />';
             }
         }

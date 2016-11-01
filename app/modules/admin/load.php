@@ -43,7 +43,7 @@ case 'index':
             // ----------------------------------------------------//
             if (isset($output[$key])) {
                 foreach($output[$key] as $data) {
-                    echo '<img src="/assets/img/images/right.gif" alt="image" /> ';
+                    echo '<i class="fa fa-angle-right"></i> ';
                     echo $data['cats_order'].'. <b><a href="/admin/load?act=down&amp;cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
 
                     $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
@@ -70,7 +70,7 @@ case 'index':
         echo '<input type="text" name="name" maxlength="50" />';
         echo '<input type="submit" value="Создать раздел" /></form></div><br />';
 
-        echo '<img src="/assets/img/images/circle.gif" alt="image" /> <a href="/admin/load?act=newimport">FTP-импорт</a><br />';
+        echo '<i class="fa fa-cloud-upload"></i> <a href="/admin/load?act=newimport">FTP-импорт</a><br />';
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
     }
 
@@ -813,7 +813,7 @@ case 'editdown':
                     echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br /><input type="file" name="screen" /><br />';
                     echo '<input value="Загрузить" type="submit" /></form></div><br />';
                 } else {
-                    echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+                    echo '<i class="fa fa-picture-o"></i> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
                     echo resize_image('upload/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
                 }
             }

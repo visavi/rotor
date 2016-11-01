@@ -1,6 +1,6 @@
 <?php foreach($events as $data): ?>
     <div class="b">
-        <?=$data['event_closed'] == 0 ? '<img src="/assets/img/images/document_plus.gif" alt="image" /> ' : '<img src="/assets/img/images/document_minus.gif" alt="image" />'; ?>
+        <?=$data['event_closed'] == 0 ? '<i class="fa fa-plus-square-o"></i> ' : '<i class="fa fa-minus-square-o"></i>'; ?>
 
         <b><a href="/events?act=read&amp;id=<?=$data['event_id']?>"><?=$data['event_title']?></a></b><small> (<?=date_fixed($data['event_time'])?>)</small>
     </div>

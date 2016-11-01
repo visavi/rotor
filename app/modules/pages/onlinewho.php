@@ -56,6 +56,6 @@ if ($total > 0) {
     show_error('Новичков пока нет!');
 }
 
-echo '<img src="/assets/img/images/users.gif" alt="image" /> <a href="/who">Kто-где?</a><br />';
+echo '<i class="fa fa-users"></i> <a href="/who">Kто-где?</a><br />';
 
 App::view($config['themes'].'/foot');

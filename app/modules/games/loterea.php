@@ -85,7 +85,7 @@ if (is_user()) {
             echo 'Cтоимость билета '.moneys(50).'<br />';
             echo 'В наличии: '.moneys($udata['users_money']).'<br /><br />';
 
-            echo '<img src="/assets/img/images/users.gif" alt="image" /> <a href="/games/loterea?act=show">Участники</a><br />';
+            echo '<i class="fa fa-users"></i> <a href="/games/loterea?act=show">Участники</a><br />';
         break;
 
         ############################################################################################
@@ -116,7 +116,7 @@ if (is_user()) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/loterea">Вернуться</a><br />';
-            echo '<img src="/assets/img/images/users.gif" alt="image" /> <a href="/games/loterea?act=show">Участники</a><br />';
+            echo '<i class="fa fa-users"></i> <a href="/games/loterea?act=show">Участники</a><br />';
         break;
 
         ############################################################################################
@@ -151,6 +151,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы учавствовать в лотерее, необходимо');
 }
 
-echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-money"></i> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

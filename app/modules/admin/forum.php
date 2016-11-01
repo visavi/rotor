@@ -46,7 +46,7 @@ if (is_admin()) {
                 echo '<a href="/forum">Обзор форума</a><hr />';
 
                 foreach($output[0] as $key => $data) {
-                    echo '<div class="b"><img src="/assets/img/images/forums.gif" alt="image" /> ';
+                    echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                     echo '<b>'.$data['forums_order'].'. <a href="/admin/forum?act=forum&amp;fid='.$data['forums_id'].'">'.$data['forums_title'].'</a></b> ('.$data['forums_topics'].'/'.$data['forums_posts'].')';
 
                     if (!empty($data['forums_desc'])) {
@@ -62,7 +62,7 @@ if (is_admin()) {
                     // ----------------------------------------------------//
                     if (isset($output[$key])) {
                         foreach($output[$key] as $datasub) {
-                            echo '<img src="/assets/img/images/topics-small.gif" alt="image" /> ';
+                            echo '<i class="fa fa-angle-right"></i> ';
                             echo '<b>'.$datasub['forums_order'].'. <a href="/admin/forum?act=forum&amp;fid='.$datasub['forums_id'].'">'.$datasub['forums_title'].'</a></b>  ('.$datasub['forums_topics'].'/'.$datasub['forums_posts'].') ';
                             if (is_admin(array(101))) {
                                 echo '(<a href="/admin/forum?act=editforum&amp;fid='.$datasub['forums_id'].'">Редактировать</a> / ';
@@ -358,11 +358,11 @@ if (is_admin()) {
                         echo '<div class="b">';
 
                         if ($data['topics_locked'] == 1) {
-                            echo '<img src="/assets/img/images/lock.gif" alt="image" /> ';
+                            echo '<i class="fa fa-thumb-tack"></i> ';
                         } elseif ($data['topics_closed'] == 1) {
-                            echo '<img src="/assets/img/images/closed.gif" alt="image" /> ';
+                            echo '<i class="fa fa-lock"></i> ';
                         } else {
-                            echo '<img src="/assets/img/images/topics.gif" alt="image" /> ';
+                            echo '<i class="fa folder-open"></i> ';
                         }
 
                         echo '<b><a href="/admin/forum?act=topic&amp;tid='.$data['topics_id'].'">'.$data['topics_title'].'</a></b> ('.$data['topics_posts'].')<br />';
@@ -480,7 +480,7 @@ if (is_admin()) {
 
             $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
             if (!empty($topics)) {
-                echo '<img src="/assets/img/images/topics.gif" alt="image" /> <b>'.$topics['topics_title'].'</b> (Автор темы: '.nickname($topics['topics_author']).')<br /><br />';
+                echo '<i class="fa fa-folder-open"></i> <b>'.$topics['topics_title'].'</b> (Автор темы: '.nickname($topics['topics_author']).')<br /><br />';
 
                 $queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY `forums_order` ASC;");
                 $forums = $queryforum -> fetchAll();
@@ -919,7 +919,7 @@ if (is_admin()) {
                 $files = $queryfiles->fetchAll();
 
                 if (!empty($files)){
-                    echo '<img src="/assets/img/images/paper-clip.gif" alt="attach" /> <b>Удаление файлов:</b><br />';
+                    echo '<i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br />';
                     foreach ($files as $file){
                         echo '<input type="checkbox" name="delfile[]" value="'.$file['file_id'].'" /> ';
                         echo '<a href="/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'].'" target="_blank">'.$file['file_name'].'</a> ('.formatsize($file['file_size']).')<br />';

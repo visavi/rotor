@@ -38,7 +38,7 @@ if (is_admin()) {
 
                 while ($data = $queryphoto -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/assets/img/images/gallery.gif" alt="image" /> ';
+                    echo '<i class="fa fa-picture-o"></i> ';
                     echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['photo_link']).')<br />';
                     echo '<input type="checkbox" name="del[]" value="'.$data['photo_id'].'" /> <a href="/admin/gallery?act=edit&amp;start='.$start.'&amp;gid='.$data['photo_id'].'">Редактировать</a>';
                     echo '</div>';

@@ -21,7 +21,7 @@
 
 Автор статьи: <?=profile($blogs['blogs_user'])?> (<?=date_fixed($blogs['blogs_time'])?>)<br />
 
-<img src="/assets/img/images/tag.gif" alt="Метки" /> <?=$tags?>
+<i class="fa fa-tag"></i> <?=$tags?>
 
 <hr />
 

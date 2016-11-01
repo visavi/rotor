@@ -275,7 +275,7 @@ break;
         if (!empty($photo)) {
             $config['newtitle'] = 'Комментарии - '.$photo['photo_title'];
 
-            echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b><a href="/gallery?act=view&amp;gid='.$photo['photo_id'].'">'.$photo['photo_title'].'</a></b><br /><br />';
+            echo '<i class="fa fa-picture-o"></i> <b><a href="/gallery?act=view&amp;gid='.$photo['photo_id'].'">'.$photo['photo_title'].'</a></b><br /><br />';
 
             echo '<a href="/gallery?act=comments&amp;gid='.$gid.'&amp;rand='.mt_rand(100, 999).'">Обновить</a><hr />';
 

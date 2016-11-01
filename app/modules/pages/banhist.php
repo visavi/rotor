@@ -26,7 +26,7 @@ if (is_user()) {
 
         while ($data = $queryhist -> fetch()) {
             echo '<div class="b">';
-            echo '<img src="/assets/img/images/history.gif" alt="image" /> ';
+            echo '<i class="fa fa-history"></i> ';
             echo '<b>'.profile($data['ban_user']).'</b> ('.date_fixed($data['ban_time']).')</div>';
 
             echo '<div>';

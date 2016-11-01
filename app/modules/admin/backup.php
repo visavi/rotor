@@ -57,7 +57,7 @@ if (is_admin(array(101))) {
 
                 foreach ($tables as $data) {
                     echo '<input type="checkbox" name="tables[]" value="'.$data['Name'].'" /> ';
-                    echo '<img src="/assets/img/images/database.gif" alt="db" /> <b>'.$data['Name'].'</b> (Записей: '.$data['Rows'].' / Размер: '.formatsize($data['Data_length']).')<br />';
+                    echo '<i class="fa fa-database"></i> <b>'.$data['Name'].'</b> (Записей: '.$data['Rows'].' / Размер: '.formatsize($data['Data_length']).')<br />';
                 }
 
                 echo '<br />Метод сжатия:<br />';

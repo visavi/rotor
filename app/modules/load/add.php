@@ -22,7 +22,7 @@ case 'index':
 
     if ($config['home'] == 'http://visavi.net') {
         echo '<div class="info">';
-        echo '<img src="/assets/img/images/faq.gif" alt="image" /> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
+        echo '<i class="fa fa-question-circle"></i> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
         echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br />';
     }
 
@@ -253,7 +253,7 @@ case 'view':
                                 echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px</div><br /><br />';
 
                             } else {
-                                echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+                                echo '<i class="fa fa-picture-o"></i> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
                                 echo resize_image('upload/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
                             }
                         }
@@ -663,6 +663,6 @@ endswitch;
     show_login('Вы не авторизованы, для добавления файла, необходимо');
 }
 
-render('includes/back', array('link' => '/load/', 'title' => 'Категории', 'icon' => 'reload.gif'));
+render('includes/back', array('link' => '/load/', 'title' => 'Категории'));
 
 App::view($config['themes'].'/foot');

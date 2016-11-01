@@ -136,7 +136,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files">Вернуться</a><br />';
-            echo '<img src="/assets/img/images/online.gif" alt="image" /> <a href="/page/'.$filename.'">Просмотр</a><br />';
+            echo '<i class="fa fa-check-circle"></i> <a href="/page/'.$filename.'">Просмотр</a><br />';
         break;
 
         ############################################################################################

@@ -20,7 +20,7 @@ if (is_user()) {
 
             echo 'У вас в наличии: ' . moneys($udata['users_money']) . '<br /><br />';
 
-            echo '<img src="/assets/img/images/faq.gif" alt="image" /> <a href="/games/kosti?act=faq">Правила</a><br />';
+            echo '<i class="fa fa-question-circle"></i> <a href="/games/kosti?act=faq">Правила</a><br />';
             break;
         # ###########################################################################################
         # #                                       Результат                                        ##
@@ -68,7 +68,7 @@ if (is_user()) {
                 show_error('Вы не можете играть т.к. на вашем счету недостаточно средств!');
             }
 
-            echo '<img src="/assets/img/images/faq.gif" alt="image" /> <a href="/games/kosti?act=faq">Правила</a><br />';
+            echo '<i class="fa fa-question-circle"></i> <a href="/games/kosti?act=faq">Правила</a><br />';
             break;
         # ###########################################################################################
         # #                                    Правила игры                                        ##
@@ -89,6 +89,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы начать игру, необходимо');
 }
 
-echo '<img src="/assets/img/images/games.gif" alt="image" /> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-money"></i> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

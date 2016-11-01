@@ -82,7 +82,7 @@
 
     if (is_user() && $log != $user['users_login']) {
     echo '[ <a href="/rating?uz='.$user['users_login'].'&amp;vote=1"><img src="/assets/img/images/plus.gif" alt="Плюс" /><span style="color:#0099cc"> Плюс</span></a> / ';
-    echo '<a href="/rating?uz='.$user['users_login'].'&amp;vote=0"><span style="color:#ff0000">Минус</span> <img src="/assets/img/images/minus.gif" alt="Минус" /></a> ]<br />';
+    echo '<a href="/rating?uz='.$user['users_login'].'&amp;vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br />';
     }
 
     echo '<b><a href="/forum/active/themes?user='.$user['users_login'].'">Форум</a></b> (<a href="/forum/active/posts?user='.$user['users_login'].'">Сообщ.</a>) / ';
@@ -98,7 +98,7 @@
     $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `note_user`=? LIMIT 1;", array($user['users_login']));
 
     echo '<div class="form">';
-        echo '<img src="/assets/img/images/pin.gif" alt="Заметка" /> <b>Заметка:</b> (<a href="/user/'.$user['users_login'].'/note">Изменить</a>)<br />';
+        echo '<i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/'.$user['users_login'].'/note">Изменить</a>)<br />';
 
         if (!empty($usernote['note_text'])) {
         echo bb_code($usernote['note_text']).'<br />';

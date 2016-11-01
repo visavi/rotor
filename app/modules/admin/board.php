@@ -28,7 +28,7 @@ if ($act == 'index') {
 
                 $totalboard = counter_string(STORAGE."/board/$data[2].dat");
 
-                echo '<div class="b"><img src="/assets/img/images/forums.gif" alt="image" /> ';
+                echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                 echo '<b><a href="/admin/board?act=board&amp;id='.$data[2].'">'.$data[0].'</a></b> ('.(int)$totalboard.')';
 
                 if ($is_admin){
@@ -96,7 +96,7 @@ if ($act=="board")  {
 
                     echo '<input type="checkbox" name="del[]" value="'.$num.'" /> ';
 
-                    echo '<img src="/assets/img/images/forums.gif" alt="image" /> '.($i+1).'. ';
+                    echo '<i class="fa fa-folder-open"></i> '.($i+1).'. ';
                     echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;start='.$start.'">'.$data[0].'</a></b> ';
                     echo '(<small>'.date_fixed($data[3]).'</small>)</div>';
                     echo '<div>Текст объявления: '.$data[2].'<br />';

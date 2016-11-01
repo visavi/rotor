@@ -43,7 +43,7 @@ case 'index':
                         for ($i = $start; $i < $end; $i++) {
                             if ($list[$i]['folder'] == 1) {
                                 $filename = substr($list[$i]['filename'], 0, -1);
-                                echo '<img src="/images/icons/dir.gif" alt="image" /> <b>Директория '.$filename.'</b><br />';
+                                echo '<i class="fa fa-folder-open"></i> <b>Директория '.$filename.'</b><br />';
                             } else {
                                 $ext = getExtension($list[$i]['filename']);
 

@@ -102,13 +102,13 @@ switch ($act):
                 echo '<b><a href="/offers?act=view&amp;type='.$type.'&amp;id='.$data['offers_id'].'">'.$data['offers_title'].'</a></b> (Голосов: '.$data['offers_votes'].')<br />';
 
                 switch ($data['offers_status']) {
-                    case '1': echo '<img src="/assets/img/images/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
+                    case '1': echo '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b>';
                         break;
-                    case '2': echo '<img src="/assets/img/images/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
+                    case '2': echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Выполнено</span></b>';
                         break;
-                    case '3': echo '<img src="/assets/img/images/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
+                    case '3': echo '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">Закрыто</span></b>';
                         break;
-                    default: echo '<img src="/assets/img/images/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
+                    default: echo '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">Под вопросом</span></b>';
                 }
 
                 echo '</div>';
@@ -153,13 +153,13 @@ switch ($act):
             echo '<b>'.$queryoff['offers_title'].'</b> (Голосов: '.$queryoff['offers_votes'].')<br />';
 
             switch ($queryoff['offers_status']) {
-                case '1': echo '<img src="/assets/img/images/custom.gif" alt="В процессе" /> <b><span style="color:#0000ff">В процессе</span></b>';
+                case '1': echo '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b>';
                     break;
-                case '2': echo '<img src="/assets/img/images/open.gif" alt="Выполнено" /> <b><span style="color:#00cc00">Выполнено</span></b>';
+                case '2': echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Выполнено</span></b>';
                     break;
-                case '3': echo '<img src="/assets/img/images/error.gif" alt="Закрыто" /> <b><span style="color:#ff0000">Закрыто</span></b>';
+                case '3': echo '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">Закрыто</span></b>';
                     break;
-                default: echo '<img src="/assets/img/images/faq.gif" alt="Под вопросом" /> <b><span style="color:#ffa500">Под вопросом</span></b>';
+                default: echo '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">Под вопросом</span></b>';
             }
 
             echo '</div>';
@@ -175,9 +175,9 @@ switch ($act):
                 $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `ratedoffers` WHERE `rated_offers`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
 
                 if (empty($queryrated)) {
-                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><img src="/assets/img/images/thumb-up.gif" alt="Согласен" /> Согласен</a></b><br />';
+                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br />';
                 } else {
-                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><img src="/assets/img/images/thumb-down.gif" alt="Против" /> Передумал</a></b><br />';
+                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-down"></i> Передумал</a></b><br />';
                 }
             }
 

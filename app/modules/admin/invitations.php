@@ -15,7 +15,7 @@ switch ($act):
 case 'index':
 
     if (empty($config['invite'])) {
-        echo '<img src="/assets/img/images/warning.gif" alt="image" /> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br /><br />';
+        echo '<i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br /><br />';
     }
 
     if (empty($used)){
@@ -58,7 +58,7 @@ case 'index':
     }
 
     echo '<i class="fa fa-check"></i> <a href="/admin/invitations?act=new">Создать ключи</a><br />';
-    echo '<img src="/assets/img/images/keys.gif" alt="image" /> <a href="/admin/invitations?act=list">Список ключей</a><br />';
+    echo '<i class="fa fa-key"></i> <a href="/admin/invitations?act=list">Список ключей</a><br />';
 break;
 
 ############################################################################################

@@ -22,13 +22,13 @@ if (is_admin(array(101, 102, 103))) {
         case "index":
 
             if ($config['regkeys'] == 0) {
-                echo '<img src="/assets/img/images/warning.gif" alt="image" /> <b><span style="color:#ff0000">Подтверждение регистрации отключено!</span></b><br /><br />';
+                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Подтверждение регистрации отключено!</span></b><br /><br />';
             }
             if ($config['regkeys'] == 1) {
-                echo '<img src="/assets/img/images/warning.gif" alt="image" /> <b><span style="color:#ff0000">Включено автоматическое подтверждение регистраций!</span></b><br /><br />';
+                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включено автоматическое подтверждение регистраций!</span></b><br /><br />';
             }
             if ($config['regkeys'] == 2) {
-                echo '<img src="/assets/img/images/warning.gif" alt="image" /> <b><span style="color:#ff0000">Включена модерация регистраций!</span></b><br /><br />';
+                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включена модерация регистраций!</span></b><br /><br />';
             }
             // --------------- Удаление не подтвердивших регистрацию -----------//
             if ($config['regkeys'] == 1) {

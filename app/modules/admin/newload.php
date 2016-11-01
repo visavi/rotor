@@ -104,10 +104,10 @@ if (is_admin()) {
                         }
 
                         if (!empty($new['downs_screen'])) {
-                            echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+                            echo '<i class="fa fa-picture-o"></i> <b><a href="/upload/screen/'.$folder.$new['downs_screen'].'">'.$new['downs_screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['downs_screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
                             echo resize_image('upload/screen/'.$folder, $new['downs_screen'], $config['previewsize']).'<br />';
                         } else {
-                            echo '<img src="/assets/img/images/gallery.gif" alt="image" /> <b>Не загружен</b><br />';
+                            echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br />';
                         }
 
                         echo '<br /><b><big>Редактирование</big></b><br /><br />';

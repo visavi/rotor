@@ -32,7 +32,7 @@ if (is_admin(array(101, 102, 103))) {
             if (count($votes) > 0) {
                 foreach($votes as $valvote) {
                     echo '<div class="b">';
-                    echo '<img src="/assets/img/images/stat.gif" alt="image" /> <b><a href="/votes?act=poll&amp;id='.$valvote['vote_id'].'">'.$valvote['vote_title'].'</a></b><br />';
+                    echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['vote_id'].'">'.$valvote['vote_title'].'</a></b><br />';
                     echo '<a href="/admin/votes?act=edit&amp;id='.$valvote['vote_id'].'">Изменить</a>';
                     echo ' / <a href="/admin/votes?act=action&amp;do=close&amp;id='.$valvote['vote_id'].'&amp;uid='.$_SESSION['token'].'">Закрыть</a>';
 
@@ -50,8 +50,8 @@ if (is_admin(array(101, 102, 103))) {
                 show_error('Открытых голосований еще нет!');
             }
 
-            echo '<img src="/assets/img/images/stat.gif" alt="image" /> <a href="/admin/votes?act=new">Создать голосование</a><br />';
-            echo '<img src="/assets/img/images/luggage.gif" alt="image" /> <a href="/admin/votes?act=history">История голосований</a><br />';
+            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes?act=new">Создать голосование</a><br />';
+            echo '<i class="fa fa-briefcase"></i> <a href="/admin/votes?act=history">История голосований</a><br />';
 
             if (is_admin(array(101))) {
                 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/votes?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
@@ -120,7 +120,7 @@ if (is_admin(array(101, 102, 103))) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=new">Вернуться</a><br />';
-            echo '<img src="/assets/img/images/stat.gif" alt="image" /> <a href="/admin/votes">К голосованиям</a><br />';
+            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">К голосованиям</a><br />';
         break;
 
         ############################################################################################
@@ -206,7 +206,7 @@ if (is_admin(array(101, 102, 103))) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=edit&amp;id='.$id.'">Вернуться</a><br />';
-            echo '<img src="/assets/img/images/stat.gif" alt="image" /> <a href="/admin/votes">К голосованиям</a><br />';
+            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">К голосованиям</a><br />';
         break;
 
         ############################################################################################
@@ -313,7 +313,7 @@ if (is_admin(array(101, 102, 103))) {
 
                 while ($data = $queryvote -> fetch()) {
                     echo '<div class="b">';
-                    echo '<img src="/assets/img/images/luggage.gif" alt="image" /> <b><a href="/votes/history?act=result&amp;id='.$data['vote_id'].'&amp;start='.$start.'">'.$data['vote_title'].'</a></b><br />';
+                    echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['vote_id'].'&amp;start='.$start.'">'.$data['vote_title'].'</a></b><br />';
 
                     echo '<a href="/admin/votes?act=action&amp;do=open&amp;id='.$data['vote_id'].'&amp;uid='.$_SESSION['token'].'">Открыть</a>';
 
@@ -331,7 +331,7 @@ if (is_admin(array(101, 102, 103))) {
                 show_error('Голосований в архиве еще нет!');
             }
 
-            echo '<img src="/assets/img/images/stat.gif" alt="image" /> <a href="/admin/votes">Список голосований</a><br />';
+            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">Список голосований</a><br />';
         break;
 
     endswitch;

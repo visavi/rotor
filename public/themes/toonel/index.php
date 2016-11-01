@@ -64,7 +64,7 @@ header("Content-type:text/html; charset=utf-8");
 		<td valign="top" class="lr">
 			<?php if (is_admin()): ?>
 				<div class="nmenu">
-					<img src="/assets/img/images/panel.gif" alt="panel"/> <a
+					<i class="fa fa-wrench"></i> <a
 						href="/admin">Панель</a>
 
 					<?php if (stats_spam() > 0): ?>

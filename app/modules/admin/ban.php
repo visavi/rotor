@@ -54,7 +54,7 @@ if (is_admin(array(101, 102, 103))) {
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `ban_user`=?;", array($uz));
 
                 echo 'Строгих нарушений: <b>'.$user['users_totalban'].'</b><br />';
-                echo '<img src="/assets/img/images/history.gif" alt="image" /> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br /><br />';
+                echo '<i class="fa fa-history"></i> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br /><br />';
 
                 if ($user['users_level'] < 101 || $user['users_level'] > 105) {
                     if (empty($user['users_ban']) || $user['users_timeban'] < SITETIME) {

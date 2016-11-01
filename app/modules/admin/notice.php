@@ -25,7 +25,7 @@ case 'index':
 
             echo '<div class="b">';
 
-            echo '<img src="/assets/img/images/mail.gif" alt="image" /> <b><a href="/admin/notice?act=edit&amp;id='.$notice['notice_id'].'">'.$notice['notice_name'].'</a></b>';
+            echo '<i class="fa fa-envelope"></i> <b><a href="/admin/notice?act=edit&amp;id='.$notice['notice_id'].'">'.$notice['notice_name'].'</a></b>';
             if (empty($notice['notice_protect'])) {
                 echo ' (<a href="/admin/notice?act=del&amp;id='.$notice['notice_id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>)';
             } else {
@@ -80,7 +80,7 @@ case 'edit':
     if (! empty($notice)) {
 
         if (! empty($notice['notice_protect'])) {
-            echo '<div class="info"><img src="/assets/img/images/warning.gif" alt="image" /> <b>Вы редактируете системный шаблон</b></div><br />';
+            echo '<div class="info"><i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b></div><br />';
         }
 
         echo '<div class="form">';

@@ -16,11 +16,11 @@ if (is_admin()) {
         echo '<a href="/admin/minichat?rand=' . mt_rand(100, 990) . '">Обновить</a> / ';
         echo '<a href="/chat?start=' . $start . '">Обзор</a><br /><hr />';
 
-        if (! file_exists(DATADIR . "/chat/chat.dat")){
-            touch(DATADIR . "/chat/chat.dat");
+        if (! file_exists(STORAGE."/chat/chat.dat")){
+            touch(STORAGE."/chat/chat.dat");
         }
 
-        $file = file(DATADIR . "/chat/chat.dat");
+        $file = file(STORAGE."/chat/chat.dat");
         $file = array_reverse($file);
         $total = count($file);
 
@@ -46,17 +46,17 @@ if (is_admin()) {
 
                 if ($data[1] == 'Вундер-киндер') {
                     $useravatars = '<img src="/modules/chat/img/mag.gif" alt="image" /> ';
-                    $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
+                    $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Вундер-киндер';
                 }
                 if ($data[1] == 'Настюха') {
                     $useravatars = '<img src="/modules/chat/img/bot.gif" alt="image" /> ';
-                    $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
+                    $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Настюха';
                 }
                 if ($data[1] == 'Весельчак') {
                     $useravatars = '<img src="/modules/chat/img/shut.gif" alt="image" /> ';
-                    $useronline = '<img src="/assets/img/images/on.gif" alt="image">';
+                    $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Весельчак';
                 }
 
@@ -103,7 +103,7 @@ if (is_admin()) {
 
         if (is_admin(array(101))) {
             if ($uid == $_SESSION['token']) {
-                clear_files(DATADIR . "/chat/chat.dat");
+                clear_files(STORAGE."/chat/chat.dat");
 
                 notice('Мини-чат успешно очищен!');
                 redirect("/admin/minichat");
@@ -127,7 +127,7 @@ if (is_admin()) {
 
         if ($uid == $_SESSION['token']) {
             if ($del !== "") {
-                delete_lines(DATADIR . "/chat/chat.dat", $del);
+                delete_lines(STORAGE."/chat/chat.dat", $del);
 
                 notice('Выбранные сообщения успешно удалены!');
                 redirect("/admin/minichat?start=$start");
@@ -147,7 +147,7 @@ if (is_admin()) {
     ############################################################################################
     if ($act == "edit") {
         if ($id !== "") {
-            $file = file(DATADIR . "/chat/chat.dat");
+            $file = file(STORAGE."/chat/chat.dat");
             if (isset($file[$id])) {
                 $data = explode("|", $file[$id]);
 
@@ -180,7 +180,7 @@ if (is_admin()) {
         if ($uid == $_SESSION['token']) {
             if ($id !== "") {
                 if ($msg != "") {
-                    $file = file(DATADIR . "/chat/chat.dat");
+                    $file = file(STORAGE."/chat/chat.dat");
                     if (isset($file[$id])) {
                         $data = explode("|", $file[$id]);
 
@@ -188,7 +188,7 @@ if (is_admin()) {
 
                         $text = no_br($msg . '|' . $data[1] . '|' . $data[2] . '|' . $data[3] . '|' . $data[4] . '|' . $data[5] . '|' . $data[6] . '|' . $data[7] . '|' . $data[8] . '|');
 
-                        replace_lines(DATADIR . "/chat/chat.dat", $id, $text);
+                        replace_lines(STORAGE."/chat/chat.dat", $id, $text);
 
                         notice('Сообщение успешно отредактировано!');
                         redirect("/admin/minichat?start=$start");
