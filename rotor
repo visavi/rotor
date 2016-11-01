@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Phinx\Console\PhinxApplication;
+
+require __DIR__.'/app/bootstrap.php';
+
+class RotorApplication extends PhinxApplication
+{
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln('<info>RotorCMS by Vantuz - http://visavi.net.</info> version <comment>'.VERSION.'</comment>');
+        parent::doRun($input, $output);
+    }
+}
+
+$app = new RotorApplication();
+$app->run();

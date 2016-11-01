@@ -26,7 +26,7 @@ case 'index':
     echo '<form action="/admin/smiles?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
     foreach($smiles as $smile) {
-        echo '<img src="'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
+        echo '<img src="/upload/smiles/'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
 
         echo '<input type="checkbox" name="del[]" value="'.$smile['smiles_id'].'" /> <a href="/admin/smiles?act=edit&amp;id='.$smile['smiles_id'].'&amp;start='.$start.'">Редактировать</a><br />';
     }
@@ -39,7 +39,7 @@ case 'index':
 
     //show_error('Смайлы еще не загружены!');
 
-    echo '<img src="/assets/img/images/download.gif" alt="image" /> <a href="/admin/smiles?act=add&amp;start='.$start.'">Загрузить</a><br />';
+    echo '<i class="fa fa-upload"></i> <a href="/admin/smiles?act=add&amp;start='.$start.'">Загрузить</a><br />';
 break;
 
 /**
@@ -108,7 +108,7 @@ case 'load':
 
                     $smile = DBM::run()->insert('smiles', array(
                         'smiles_cats' => 1,
-                        'smiles_name' => '/upload/smiles/'.$handle->file_dst_name,
+                        'smiles_name' => $handle->file_dst_name,
                         'smiles_code' => $code,
                     ));
 
@@ -143,8 +143,7 @@ case 'edit':
 
     if (! empty($smile)) {
         echo '<b><big>Редактирование смайла</big></b><br /><br />';
-
-        echo '<img src="'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
+        echo '<img src="/upload/smiles/'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
 
         echo '<div class="form">';
         echo '<form action="/admin/smiles?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -207,7 +206,7 @@ case 'del':
 
     if ($uid == $_SESSION['token']) {
         if (! empty($del)) {
-            if (is_writeable(BASEDIR.'/images/smiles')){
+            if (is_writeable(HOME.'/upload/smiles')){
 
                 $del = implode(',', $del);
 
@@ -215,8 +214,8 @@ case 'del':
 
                 if (count($arr_smiles)>0){
                     foreach ($arr_smiles as $delfile) {
-                        if (file_exists(BASEDIR.'/images/smiles/'.$delfile['smiles_name'])) {
-                            unlink(BASEDIR.'/images/smiles/'.$delfile['smiles_name']);
+                        if (file_exists(HOME.'/upload/smiles/'.$delfile['smiles_name'])) {
+                            unlink(HOME.'/upload/smiles/'.$delfile['smiles_name']);
                         }
                     }
                 }
@@ -241,6 +240,6 @@ break;
 
 endswitch;
 
-render('includes/back', array('link' => '/admin/', 'title' => 'В админку'));
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 App::view($config['themes'].'/foot');

@@ -14,7 +14,7 @@
 /public/upload/photos
 /public/upload/pictures
 /public/upload/thumbnail
-/public/upload/smiles
+#/public/upload/smiles
 /vendor
 composer.phar
 composer.lock
