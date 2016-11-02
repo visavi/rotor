@@ -40,9 +40,6 @@ case 'index':
     }
 
     $page = floor(1 + $start / $config['forumpost']);
-    $config['newtitle'] = $topics['topics_title'].' (Стр. '.$page.')';
-    $config['description'] = 'Обсуждение темы: '.$topics['topics_title'].' (Стр. '.$page.')';
-
 
     $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_time` ASC LIMIT ".$start.", ".$config['forumpost'].";", array($tid));
 
@@ -67,7 +64,7 @@ case 'index':
         }
     }
     // ------------------------------------- //
-    App::view('forum/topic', compact('topics', 'tid', 'start', 'total'));
+    App::view('forum/topic', compact('topics', 'tid', 'start', 'total', 'page'));
 
 break;
 

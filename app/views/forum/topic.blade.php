@@ -1,6 +1,7 @@
 @extends('layout')
 
-@section('title', e($topics['topics_title']).' - @parent')
+@section('title', e($topics['topics_title'].' (Стр. '.$page.')').' - @parent')
+@section('description', e('Обсуждение темы: '.$topics['topics_title'].' (Стр. '.$page.')'))
 
 @section('content')
 
