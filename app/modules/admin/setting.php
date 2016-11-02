@@ -1093,16 +1093,15 @@ if (is_admin(array(101))) {
 
             echo 'Максимальное количество символов [4-6]:<br /><input name="captcha_maxlength" maxlength="1" value="'.$setting['captcha_maxlength'].'" /><br />';
 
-            echo 'Амплитуда колебаний символов [0-8]:<br /><input name="captcha_amplitude" maxlength="1" value="'.$setting['captcha_amplitude'].'" /><br />';
+            echo 'Поворот букв [0-30]:<br /><input name="captcha_angle" maxlength="2" value="'.$setting['captcha_angle'].'" /><br />';
 
-            $checked = ($setting['captcha_noise']) ? ' checked="checked"' : '';
-            echo '<input name="captcha_noise" type="checkbox" value="1"'.$checked.' /> Цифровой шум<br />';
+            echo 'Амплитуда колебаний символов [0-10]:<br /><input name="captcha_offset" maxlength="2" value="'.$setting['captcha_offset'].'" /><br />';
 
-            $checked = ($setting['captcha_spaces']) ? ' checked="checked"' : '';
-            echo '<input name="captcha_spaces" type="checkbox" value="1"'.$checked.' /> Пробелы между символами<br />';
+            $checked = ($setting['captcha_distortion']) ? ' checked="checked"' : '';
+            echo '<input name="captcha_distortion" type="checkbox" value="1"'.$checked.' /> Искажение<br />';
 
-            $checked = ($setting['captcha_credits']) ? ' checked="checked"' : '';
-            echo '<input name="captcha_credits" type="checkbox" value="1"'.$checked.' /> Копирайт на картинке<br />';
+            $checked = ($setting['captcha_interpolation']) ? ' checked="checked"' : '';
+            echo '<input name="captcha_interpolation" type="checkbox" value="1"'.$checked.' /> Размытие<br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
@@ -1117,25 +1116,25 @@ if (is_admin(array(101))) {
             $uid = check($_GET['uid']);
             $captcha_symbols = check(strtolower($_POST['captcha_symbols']));
             $captcha_maxlength = intval(strtolower($_POST['captcha_maxlength']));
-            $captcha_amplitude = intval(strtolower($_POST['captcha_amplitude']));
-            $captcha_noise = (empty($_POST['captcha_noise'])) ? 0 : 1;
-            $captcha_spaces = (empty($_POST['captcha_spaces'])) ? 0 : 1;
-            $captcha_credits = (empty($_POST['captcha_credits'])) ? 0 : 1;
+            $captcha_angle = intval(strtolower($_POST['captcha_angle']));
+            $captcha_offset = intval(strtolower($_POST['captcha_offset']));
+            $captcha_distortion = (empty($_POST['captcha_distortion'])) ? 0 : 1;
+            $captcha_interpolation = (empty($_POST['captcha_interpolation'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['resmiles'] != "") {
                     if (preg_match('|^[a-z0-9]+$|', $captcha_symbols)) {
                         if (preg_match('|^[4-6]{1}+$|', $captcha_maxlength)) {
-                            if (preg_match('|^[0-8]{1}+$|', $captcha_amplitude)) {
+                            if (preg_match('|^[0-9]{1,}+$|', $captcha_offset)) {
 
                                 $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
                                 $dbr -> execute(intval($_POST['resmiles']), 'resmiles');
                                 $dbr -> execute($captcha_symbols, 'captcha_symbols');
                                 $dbr -> execute($captcha_maxlength, 'captcha_maxlength');
-                                $dbr -> execute($captcha_amplitude, 'captcha_amplitude');
-                                $dbr -> execute($captcha_noise, 'captcha_noise');
-                                $dbr -> execute($captcha_spaces, 'captcha_spaces');
-                                $dbr -> execute($captcha_credits, 'captcha_credits');
+                                $dbr -> execute($captcha_angle, 'captcha_angle');
+                                $dbr -> execute($captcha_offset, 'captcha_offset');
+                                $dbr -> execute($captcha_distortion, 'captcha_distortion');
+                                $dbr -> execute($captcha_interpolation, 'captcha_interpolation');
                                 save_setting();
 
                                 notice('Настройки сайта успешно изменены!');

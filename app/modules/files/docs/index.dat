@@ -14,7 +14,6 @@
 - win_to_utf<br />
 - utf_lower<br />
 - <a href="/files/docs/check">check</a><br />
-- get_user_agent<br />
 - subtok<br />
 - no_br<br />
 - yes_br<br />

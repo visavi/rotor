@@ -45,17 +45,17 @@ if (is_admin()) {
                 $anketa = profile($data[1]);
 
                 if ($data[1] == 'Вундер-киндер') {
-                    $useravatars = '<img src="/modules/chat/img/mag.gif" alt="image" /> ';
+                    $useravatars = '<img src="/assets/img/chat/mag.gif" alt="image" /> ';
                     $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Вундер-киндер';
                 }
                 if ($data[1] == 'Настюха') {
-                    $useravatars = '<img src="/modules/chat/img/bot.gif" alt="image" /> ';
+                    $useravatars = '<img src="/assets/img/chat/bot.gif" alt="image" /> ';
                     $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Настюха';
                 }
                 if ($data[1] == 'Весельчак') {
-                    $useravatars = '<img src="/modules/chat/img/shut.gif" alt="image" /> ';
+                    $useravatars = '<img src="/assets/img/chat/shut.gif" alt="image" /> ';
                     $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Весельчак';
                 }

@@ -208,69 +208,9 @@ function check($msg) {
 
         $msg = str_replace($search, $replace, $msg);
         $msg = stripslashes(trim($msg));
-
-        $msg = preg_replace('%(?:
-            \xF0[\x90-\xBF][\x80-\xBF]{2} |
-            [\xF1-\xF3][\x80-\xBF]{3} |
-            \xF4[\x80-\x8F][\x80-\xBF]{2}
-            )%xs', '', $msg);
     }
 
     return $msg;
-}
-
-// ------------------ Функция определения браузера --------------------//
-function get_user_agent() {
-    if (isset($_SERVER['HTTP_USER_AGENT'])) {
-        $agent = check($_SERVER['HTTP_USER_AGENT']);
-
-        if (stripos($agent, 'Avant Browser') !== false) {
-            return 'Avant Browser';
-        } elseif (stripos($agent, 'Acoo Browser') !== false) {
-            return 'Acoo Browser';
-        } elseif (stripos($agent, 'MyIE2') !== false) {
-            return 'MyIE2';
-        } elseif (preg_match('|Iron/([0-9a-z\.]*)|i', $agent, $pocket)) {
-            return 'SRWare Iron '.subtok($pocket[1], '.', 0, 2);
-        } elseif (preg_match('|Chrome/([0-9a-z\.]*)|i', $agent, $pocket)) {
-            return 'Chrome '.subtok($pocket[1], '.', 0, 2);
-        } elseif (preg_match('#(Maxthon|NetCaptor)( [0-9a-z\.]*)?#i', $agent, $pocket)) {
-            return $pocket[1] . $pocket[2];
-        } elseif (stripos($agent, 'Safari') !== false && preg_match('|Version/([0-9]{1,2}.[0-9]{1,2})|i', $agent, $pocket)) {
-            return 'Safari '.subtok($pocket[1], '.', 0, 2);
-        } elseif (preg_match('#(NetFront|K-Meleon|Netscape|Galeon|Epiphany|Konqueror|Safari|Opera Mini|Opera Mobile)/([0-9a-z\.]*)#i', $agent, $pocket)) {
-            return $pocket[1].' '.subtok($pocket[2], '.', 0, 2);
-        } elseif (stripos($agent, 'Opera') !== false && preg_match('|Version/([0-9]{1,2}.[0-9]{1,2})|i', $agent, $pocket)) {
-            return 'Opera '.$pocket[1];
-        } elseif (preg_match('|Opera[/ ]([0-9a-z\.]*)|i', $agent, $pocket)) {
-            return 'Opera '.subtok($pocket[1], '.', 0, 2);
-        } elseif (preg_match('|Orca/([ 0-9a-z\.]*)|i', $agent, $pocket)) {
-            return 'Orca '.subtok($pocket[1], '.', 0, 2);
-        } elseif (preg_match('#(SeaMonkey|Firefox|GranParadiso|Minefield|Shiretoko)/([0-9a-z\.]*)#i', $agent, $pocket)) {
-            return $pocket[1].' '.subtok($pocket[2], '.', 0, 2);
-        } elseif (preg_match('|rv:([0-9a-z\.]*)|i', $agent, $pocket) && strpos($agent, 'Mozilla/') !== false) {
-            return 'Mozilla '.subtok($pocket[1], '.', 0, 2);
-        } elseif (preg_match('|Lynx/([0-9a-z\.]*)|i', $agent, $pocket)) {
-            return 'Lynx '.subtok($pocket[1], '.', 0, 2);
-        } elseif (preg_match('|MSIE ([0-9a-z\.]*)|i', $agent, $pocket)) {
-            return 'IE '.subtok($pocket[1], '.', 0, 2);
-        } else {
-            $agent = preg_replace('|http://|i', '', $agent);
-            $agent = strtok($agent, '( ');
-            $agent = substr($agent, 0, 22);
-            $agent = subtok($agent, '.', 0, 2);
-
-            if (!empty($agent)) {
-                return $agent;
-            }
-        }
-    }
-    return 'Unknown';
-}
-
-// ----------------------- Функция обрезки строки с условием -------------------------//
-function subtok($string, $chr, $pos, $len = null) {
-    return implode($chr, array_slice(explode($chr, $string), $pos, $len));
 }
 
 // --------------- Функция правильного вывода веса файла -------------------//
@@ -1504,45 +1444,60 @@ function ob_processing($str)
 // ------------------ Функция вывода иконки расширения --------------------//
 function icons($ext) {
     switch ($ext) {
-        case 'dir': $ico = 'dir.gif';
+        case 'php':
+            $ico = 'file-code-o';
             break;
-        case 'php': $ico = 'php.gif';
+        case 'ppt':
+            $ico = 'file-powerpoint-o';
             break;
-        case 'txt': case 'css': case 'dat': $ico = 'txt.gif';
+        case 'doc':
+        case 'docx':
+            $ico = 'file-word-o';
             break;
-        case 'htm': case 'html': $ico = 'htm.gif';
+        case 'xls':
+        case 'xlsx':
+            $ico = 'file-excel-o';
             break;
-        case 'wav': case 'amr': $ico = 'wav.gif';
+        case 'txt':
+        case 'css':
+        case 'dat':
+        case 'html':
+        case 'htm':
+            $ico = 'file-text-o';
             break;
-        case 'zip': case 'rar': $ico = 'zip.gif';
+        case 'wav':
+        case 'amr':
+        case 'mp3':
+        case 'mid':
+            $ico = 'file-audio-o';
             break;
-        case 'jpg': case 'jpeg': $ico = 'jpg.gif';
+        case 'zip':
+        case 'rar':
+        case '7z':
+        case 'gz':
+            $ico = 'file-archive-o';
             break;
-        case 'bmp': case 'wbmp': $ico = 'bmp.gif';
+        case '3gp':
+        case 'mp4':
+            $ico = 'file-video-o';
             break;
-        case 'gif': $ico = 'gif.gif';
+        case 'jpg':
+        case 'jpeg':
+        case 'bmp':
+        case 'wbmp':
+        case 'gif':
+        case 'png':
+            $ico = 'file-image-o';
             break;
-        case 'png': $ico = 'png.gif';
+        case 'ttf':
+            $ico = 'font';
             break;
-        case 'mmf': $ico = 'mmf.gif';
+        case 'pdf':
+            $ico = 'file-pdf-o';
             break;
-        case 'jad': $ico = 'jad.gif';
-            break;
-        case 'jar': $ico = 'jar.gif';
-            break;
-        case 'mid': $ico = 'mid.gif';
-            break;
-        case 'mp3': $ico = 'mp3.gif';
-            break;
-        case 'exe': $ico = 'exe.gif';
-            break;
-        case 'ttf': $ico = 'ttf.gif';
-            break;
-        case 'htaccess': $ico = 'htaccess.gif';
-            break;
-        default: $ico = 'file.gif';
+        default: $ico = 'file-o';
     }
-    return $ico;
+    return '<i class="fa fa-'.$ico.'"></i>';
 }
 
 // ------------------ Функция смешивания ассоциативного массива --------------------//
@@ -1896,7 +1851,7 @@ function last_page($total, $posts) {
 // ------------- Функция кэширования пользовательских функций -------------//
 function cache_functions($cache=10800) {
     if (@filemtime(STORAGE.'/temp/functions.dat') < time()-$cache) {
-        $files = array_diff(scandir(APP.'/includes/functions'), array('.', '..', '.htaccess'));
+        $files = array_diff(scandir(APP.'/functions'), array('.', '..'));
 
         file_put_contents(STORAGE.'/temp/functions.dat', serialize($files), LOCK_EX);
     }
@@ -1907,7 +1862,7 @@ function cache_functions($cache=10800) {
 // ------------- Функция кэширования админских ссылок -------------//
 function cache_admin_links($cache=10800) {
     if (@filemtime(STORAGE.'/temp/adminlinks.dat') < time()-$cache) {
-        $files = array_diff(scandir(APP.'/modules/admin/links'), array('.', '..', '.htaccess'));
+        $files = array_diff(scandir(APP.'/modules/admin/links'), array('.', '..'));
         $links = array();
 
         foreach ($files as $file){
@@ -2032,7 +1987,7 @@ function include_style(){
 
 // ------------- Подключение javascript -------------//
 function include_javascript(){
-    echo '<script type="text/javascript" src="/assets/js/jquery-3.1.0.min.js"></script>'."\r\n";
+    echo '<script type="text/javascript" src="/assets/js/jquery-3.1.1.min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/prettify.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/markitup/jquery.markitup.js"></script>'."\r\n";
@@ -2239,42 +2194,8 @@ function prepare_array($array, $key = 'show') {
     return false;
 }
 
-// ------------ Определение IP -----------//
-function real_ip()
-{
-    $header_checks = array(
-        'HTTP_CLIENT_IP',
-        'HTTP_PRAGMA',
-        'HTTP_XONNECTION',
-        'HTTP_CACHE_INFO',
-        'HTTP_XPROXY',
-        'HTTP_PROXY',
-        'HTTP_PROXY_CONNECTION',
-        'HTTP_VIA',
-        'HTTP_X_COMING_FROM',
-        'HTTP_COMING_FROM',
-        'HTTP_X_FORWARDED_FOR',
-        'HTTP_X_FORWARDED',
-        'HTTP_X_CLUSTER_CLIENT_IP',
-        'HTTP_FORWARDED_FOR',
-        'HTTP_FORWARDED',
-        'ZHTTP_CACHE_CONTROL',
-        'REMOTE_ADDR'
-    );
 
-    foreach ($header_checks as $key) {
-        if (array_key_exists($key, $_SERVER) === true) {
-            foreach (explode(',', $_SERVER[$key]) as $ip) {
-                $ip = ($ip == '::1')  ? '127.0.0.1' : trim($ip);
 
-                //filter the ip with filter functions
-                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
-                    return $ip;
-                }
-            }
-        }
-    }
-}
 
 /**
  * Проверка является ли запрос AJAX
@@ -2348,8 +2269,8 @@ $functions = cache_functions();
 
 if (!empty($functions)) {
     foreach ($functions as $file) {
-        if (file_exists(APP.'/includes/functions/'.$file)) {
-            include_once (APP.'/includes/functions/'.$file);
+        if (file_exists(APP.'/functions/'.$file)) {
+            include_once (APP.'/functions/'.$file);
         }
     }
 }

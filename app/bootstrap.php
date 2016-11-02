@@ -31,8 +31,8 @@ if (env('APP_DEBUG')) {
 function autoloader($class) {
 
 	$class = str_replace('\\', '/', $class);
-	if (file_exists(APP.'/includes/classes/'.$class.'.php')) {
-		include_once APP.'/includes/classes/'.$class.'.php';
+	if (file_exists(APP.'/classes/'.$class.'.php')) {
+		include_once APP.'/classes/'.$class.'.php';
 	}
 }
 

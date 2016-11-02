@@ -29,8 +29,8 @@ case 'index':
         while ($data = $queryevents -> fetch()) {
             echo '<div class="b">';
 
-            $icon = (empty($data['event_closed'])) ? 'document_plus.gif' : 'document_minus.gif';
-            echo '<img src="/assets/img/images/'.$icon.'" alt="image" /> ';
+            $icon = (empty($data['event_closed'])) ? 'unlock' : 'lock';
+            echo '<i class="fa fa-'.$icon.'"></i> ';
 
             echo '<b><a href="/events?act=read&amp;id='.$data['event_id'].'">'.$data['event_title'].'</a></b><small> ('.date_fixed($data['event_time']).')</small><br />';
             echo '<input type="checkbox" name="del[]" value="'.$data['event_id'].'" /> ';

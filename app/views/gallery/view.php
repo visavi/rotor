@@ -19,7 +19,7 @@
             <?= bb_code($photo['photo_text']) ?><br />
         <?php endif; ?>
 
-        Рейтинг: <a href="/gallery?act=vote&amp;gid=<?= $photo['photo_id'] ?>&amp;vote=down&amp;uid=<?= $_SESSION['token'] ?>"><img src="/assets/img/images/thumb-down.gif" alt="Минус" /></a> <big><b><?= format_num($photo['photo_rating']) ?></b></big> <a href="/gallery?act=vote&amp;gid=<?= $photo['photo_id'] ?>&amp;vote=up&amp;uid=<?= $_SESSION['token'] ?>"><img src="/assets/img/images/thumb-up.gif" alt="Плюс" /></a><br />
+        Рейтинг: <a href="/gallery?act=vote&amp;gid=<?= $photo['photo_id'] ?>&amp;vote=down&amp;uid=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-down"></i></a> <big><b><?= format_num($photo['photo_rating']) ?></b></big> <a href="/gallery?act=vote&amp;gid=<?= $photo['photo_id'] ?>&amp;vote=up&amp;uid=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-up"></i></a><br />
 
         Размер: <?= read_file(HOME.'/upload/pictures/'.$photo['photo_link']) ?><br />
         Добавлено: <?= profile($photo['photo_user'])?> (<?= date_fixed($photo['photo_time']) ?>)<br />

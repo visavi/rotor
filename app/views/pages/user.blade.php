@@ -81,7 +81,7 @@
     echo '<a href="/rathist?uz='.$user['users_login'].'">Авторитет: <b>'.format_num($user['users_rating']).'</b> (+'.$user['users_posrating'].'/-'.$user['users_negrating'].')</a><br />';
 
     if (is_user() && $log != $user['users_login']) {
-    echo '[ <a href="/rating?uz='.$user['users_login'].'&amp;vote=1"><img src="/assets/img/images/plus.gif" alt="Плюс" /><span style="color:#0099cc"> Плюс</span></a> / ';
+    echo '[ <a href="/rating?uz='.$user['users_login'].'&amp;vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> / ';
     echo '<a href="/rating?uz='.$user['users_login'].'&amp;vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br />';
     }
 
@@ -111,33 +111,33 @@
     }
 
     echo '<div class="act">';
-        echo '<img src="/assets/img/images/wall.gif" alt="Стена" /> <a href="/wall?uz='.$user['users_login'].'">Стена сообщений</a> ('.user_wall($user['users_login']).')<br />';
+        echo '<i class="fa fa-sticky-note"></i> <a href="/wall?uz='.$user['users_login'].'">Стена сообщений</a> ('.user_wall($user['users_login']).')<br />';
 
         if ($user['users_login'] != $log) {
-        echo '<img src="/assets/img/images/users.gif" alt="Добавить" /> Добавить в ';
+        echo '<i class="fa fa-address-book"></i> Добавить в ';
         echo '<a href="/contact?act=add&amp;uz='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">контакт</a> / ';
         echo '<a href="/ignore?act=add&amp;uz='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">игнор</a><br />';
-        echo '<img src="/assets/img/images/mail.gif" alt="Отправить" /> <a href="/private?act=submit&amp;uz='.$user['users_login'].'">Отправить сообщение</a><br />';
+        echo '<i class="fa fa-envelope"></i> <a href="/private?act=submit&amp;uz='.$user['users_login'].'">Отправить сообщение</a><br />';
 
-        echo '<img src="/assets/img/images/money.gif" alt="Перечислить" /> <a href="/games/transfer?uz='.$user['users_login'].'">Перечислить денег</a><br />';
+        echo '<i class="fa fa-money"></i> <a href="/games/transfer?uz='.$user['users_login'].'">Перечислить денег</a><br />';
 
         if (!empty($user['users_site'])) {
-        echo '<img src="/assets/img/images/homepage.gif" alt="Перейти" /> <a href="'.$user['users_site'].'">Перейти на сайт '.$user['users_login'].'</a><br />';
+        echo '<i class="fa fa-home"></i> <a href="'.$user['users_site'].'">Перейти на сайт '.$user['users_login'].'</a><br />';
         }
 
         if (is_admin(array(101, 102, 103))) {
         if (!empty($config['invite'])) {
-        echo '<img src="/assets/img/images/error.gif" alt="Бан" /> <a href="/admin/invitations?act=send&amp;user='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">Отправить инвайт</a><br />';
+        echo '<i class="fa fa-ban"></i> <a href="/admin/invitations?act=send&amp;user='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">Отправить инвайт</a><br />';
         }
-        echo '<img src="/assets/img/images/error.gif" alt="Бан" /> <a href="/admin/ban?act=edit&amp;uz='.$user['users_login'].'">Бан / Разбан</a><br />';
+        echo '<i class="fa fa-ban"></i> <a href="/admin/ban?act=edit&amp;uz='.$user['users_login'].'">Бан / Разбан</a><br />';
         }
 
         if (is_admin(array(101, 102))) {
-        echo '<img src="/assets/img/images/panel.gif" alt="Редактировать" /> <a href="/admin/users?act=edit&amp;uz='.$user['users_login'].'">Редактировать</a><br />';
+        echo '<i class="fa fa-wrench"></i> <a href="/admin/users?act=edit&amp;uz='.$user['users_login'].'">Редактировать</a><br />';
         }
         } else {
-        echo '<img src="/assets/img/images/user.gif" alt="Профиль" /> <a href="/profile">Мой профиль</a><br />';
-        echo '<img src="/assets/img/images/account.gif" alt="Данные" /> <a href="/account">Мои данные</a><br />';
+        echo '<i class="fa fa-user-circle-o"></i> <a href="/profile">Мой профиль</a><br />';
+        echo '<i class="fa fa-cog"></i> <a href="/account">Мои данные</a><br />';
         echo '<i class="fa fa-wrench"></i> <a href="/setting">Настройки</a><br />';
         }
 

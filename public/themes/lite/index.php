@@ -11,7 +11,6 @@ header("Content-type:text/html; charset=utf-8");
 
 function amendment($skinxhtml)
 {
-	$skinxhtml = str_replace('images/img/act.png', 'themes/lite/img/act.gif', $skinxhtml);
 	$skinxhtml = str_replace('<hr />', '<br />', $skinxhtml);
 	return $skinxhtml;
 }

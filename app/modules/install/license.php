@@ -16,9 +16,9 @@ echo '<link rel="stylesheet" href="style.css" type="text/css" />';
 echo '<meta name="generator" content="Visavi.net" />';
 echo '</head><body>';
 
-echo '<div class="cs" id="up"><img src="../assets/img/images/logo.png" alt="RotorCMS" /><br />';
+echo '<div class="cs" id="up"><img src="/assets/img/images/logo.png" alt="RotorCMS" /><br />';
 echo 'Система управления мобильным сайтом</div><div>';
-echo '<img src="../assets/img/images/setting.png" alt="img" /> <b>Пользовательское соглашение</b><br /><br />';
+echo '<b>Пользовательское соглашение</b><br /><br />';
 
 ?>
 

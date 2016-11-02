@@ -43,11 +43,11 @@ case 'index':
                         for ($i = $start; $i < $end; $i++) {
                             if ($list[$i]['folder'] == 1) {
                                 $filename = substr($list[$i]['filename'], 0, -1);
-                                echo '<i class="fa fa-folder-open"></i> <b>Директория '.$filename.'</b><br />';
+                                echo '<i class="fa fa-folder-open-o"></i> <b>Директория '.$filename.'</b><br />';
                             } else {
                                 $ext = getExtension($list[$i]['filename']);
 
-                                echo '<img src="/images/icons/'.icons($ext).'" alt="image" /> ';
+                                echo icons($ext).' ';
 
                                 if (in_array($ext, $arrext)) {
                                     echo '<a href="/load/zip?act=preview&amp;id='.$id.'&amp;view='.$list[$i]['index'].'&amp;start='.$start.'">'.$list[$i]['filename'].'</a>';

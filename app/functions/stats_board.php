@@ -1,16 +1,4 @@
 <?php
-#---------------------------------------------#
-#      ********* RotorCMS *********           #
-#           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
-#             Site  :  http://visavi.net      #
-#              ICQ  :  36-44-66               #
-#            Skype  :  vantuzilla             #
-#---------------------------------------------#
-if (!defined('BASEDIR')) {
-    header("Location:../index.php");
-    exit;
-}
 
 // ------------------- Функция подсчета объявлений --------------------//
 function stats_board() {
@@ -27,4 +15,3 @@ function stats_board() {
     }
     return (int)$itogoboards;
 }
-?>

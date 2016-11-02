@@ -124,7 +124,7 @@ class DBM {
 			$new_connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 
 			$new_connection->exec('SET CHARACTER SET utf8');
-			$new_connection->exec('SET NAMES utf8');
+			$new_connection->exec('SET NAMES utf8mb4');
 
 			// return the new connection
 			return $new_connection;

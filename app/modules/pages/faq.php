@@ -1,7 +1,7 @@
 <?php
 App::view($config['themes'].'/index');
 
-echo '<img src="/assets/img/images/site.png" alt="image" /> <b>FAQ по сайту</b><br /><br />';
+echo '<b>FAQ по сайту</b><br /><br />';
 
 echo '<b>Для чего регистрироваться</b><br />';
 echo 'Регистрация предназначена для тех, кто намерен часто заходить на сайт и иметь полный доступ ко все разделам сайта<br />';

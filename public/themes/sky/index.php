@@ -23,19 +23,6 @@ echo '<meta name="generator" content="RotorCMS '.$config['rotorversion'].'" />';
 echo '</head><body>';
 echo '<!--Themes by TurikUs-->';
 
-function htmltoweb($skinweb) {
-$skinweb = str_replace('<img src="/assets/img/images/site.png" alt="Мое меню" /> <b>Мое меню</b><br /><br />','<div class="divb">Мое меню</div>',$skinweb);
-$skinweb = str_replace('<img src="/assets/img/images/info.png" alt="Статистика сайта" /> <b>Статистика сайта</b><br /><br />','<div class="divb">Статистика сайта</div>',$skinweb);
-$skinweb = str_replace('<img src="/assets/img/images/run.png" alt="Жизнь сайта" /> <b>Жизнь сайта</b><br /><br />','<div class="divb">Жизнь сайта</div>',$skinweb);
-$skinweb = str_replace('<img src="/assets/img/images/site.png" alt="Партнеры и друзья" /> <b>Партнеры и друзья</b><br /><br />','<div class="divb">Партнеры и друзья</div>',$skinweb);
-$skinweb = str_replace('<img src="/assets/img/images/services.png" alt="Wap-мастеру" /> <b>Wap-мастеру</b><br /><br />','<div class="divb">Wap-мастеру</div>',$skinweb);
-$skinweb = str_replace('<img src="/assets/img/images/info.png" alt="Активность" /> <b>Активность</b><br /><br />','<div class="divb">Активность</div>',$skinweb);
-return $skinweb;
-}
-
-ob_start('htmltoweb');
-
-
 echo '<div id="art-page-background-simple-gradient">
         <div id="art-page-background-gradient"></div>
     </div>
@@ -124,7 +111,7 @@ if (is_user()) {
 
 if (is_admin()){
 echo '<div class="nmenu">';
-echo '<img src="/assets/img/images/panel.gif" alt="Панель" /> <a href="/admin">Панель</a>';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">Панель</a>';
 
 if (stats_spam()>0){
 echo ' &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>';

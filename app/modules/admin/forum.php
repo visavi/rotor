@@ -794,7 +794,7 @@ if (is_admin()) {
                                     echo '<div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />';
                                     foreach ($forumfiles[$data['posts_id']] as $file){
                                         $ext = getExtension($file['file_hash']);
-                                        echo '<img src="/images/icons/'.icons($ext).'" alt="image" /> ';
+                                        echo icons($ext).' ';
 
                                         echo '<a href="/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'].'" target="_blank">'.$file['file_name'].'</a> ('.formatsize($file['file_size']).')<br />';
                                     }

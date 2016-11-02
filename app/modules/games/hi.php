@@ -52,10 +52,10 @@ if (is_user()) {
                             echo '<b>Попыток: '.(int)$_SESSION['hi_count'].'</b><br />';
 
                             if ($guess > $_SESSION['hill']) {
-                                echo $guess.' — это большое число<br /><img src="/assets/img/images/minus.gif" alt="image" /> Введите меньше<br /><br />';
+                                echo $guess.' — это большое число<br /><i class="fa fa-minus-circle"></i> Введите меньше<br /><br />';
                             }
                             if ($guess < $_SESSION['hill']) {
-                                echo $guess.' — это маленькое число<br /><img src="/assets/img/images/plus.gif" alt="image" /> Введите больше<br /><br />';
+                                echo $guess.' — это маленькое число<br /><i class="fa fa-plus-circle"></i> Введите больше<br /><br />';
                             }
 
                             echo '<div class="form">';

@@ -51,7 +51,7 @@ switch ($act):
 ############################################################################################
 	case '0':
 
-		echo '<img src="/assets/img/images/setting.png" alt="img" /> <b>ПРИНЯТИЕ СОГЛАШЕНИЯ</b><br /><br />';
+		echo '<i class="fa fa-wrench"></i> <b>ПРИНЯТИЕ СОГЛАШЕНИЯ</b><br /><br />';
 
 		echo '<big><b>Пользовательское соглашение</b></big><br />';
 
@@ -97,7 +97,7 @@ switch ($act):
 		$agree = (empty($_REQUEST['agree'])) ? 0 : 1;
 
 		if (!empty($agree)) {
-			echo '<img src="/assets/img/images/setting.png" alt="img" /> <b>ОБНОВЛЕНИЕ СИСТЕМЫ</b><br /><br />';
+			echo '<i class="fa fa-wrench"></i> <b>ОБНОВЛЕНИЕ СИСТЕМЫ</b><br /><br />';
 
 			if ($config['rotorversion'] != '4.0.0') {
 				if ($config['rotorversion'] >= '3.0.0' && $config['rotorversion'] < '4.0.0') {
@@ -123,7 +123,7 @@ switch ($act):
 	##                                    Главная страница                                    ##
 	############################################################################################
 	default:
-		echo '<img src="/assets/img/images/setting.png" alt="img" /> <b>Установка скрипта RotorCMS</b><br /><br />';
+		echo '<i class="fa fa-wrench"></i> <b>Установка скрипта RotorCMS</b><br /><br />';
 		echo 'Добро пожаловать в мастер обновления RotorCMS<br />
 Данный мастер поможет вам обновить скрипт всего за пару минут<br /><br />
 Прежде чем начать обновление убедитесь, что все файлы дистрибутива загружены на сервер, а также выставлены необходимые права доступа для папок и файлов<br /><br />';

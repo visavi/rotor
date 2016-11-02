@@ -68,7 +68,7 @@ switch ($act):
 ############################################################################################
 	case '0':
 
-		echo '<img src="../assets/img/images/setting.png" alt="img" /> <b>ШАГ ПЕРВЫЙ - ПРИНЯТИЕ СОГЛАШЕНИЯ</b><br /><br />';
+		echo '<i class="fa fa-wrench"></i> <b>ШАГ ПЕРВЫЙ - ПРИНЯТИЕ СОГЛАШЕНИЯ</b><br /><br />';
 
 		echo '<big><b>Пользовательское соглашение</b></big><br />';
 
@@ -116,64 +116,64 @@ switch ($act):
 		$agree = (empty($_REQUEST['agree'])) ? 0 : 1;
 
 		if (!empty($agree)) {
-			echo '<img src="../assets/img/images/setting.png" alt="img" /> <b>ШАГ ВТОРОЙ - ПРОВЕРКА СИСТЕМЫ</b><br /><br />';
+			echo '<i class="fa fa-wrench"></i> <b>ШАГ ВТОРОЙ - ПРОВЕРКА СИСТЕМЫ</b><br /><br />';
 
 			$error_setting = 0;
 
 			if (version_compare(PHP_VERSION, '5.5.9') > 0) {
-				echo '<img src="../assets/img/images/plus.gif" alt="image" /> Версия PHP 5.5.9 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br />';
+				echo '<i class="fa fa-plus-circle"></i> Версия PHP 5.5.9 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br />';
 			} else {
-				echo '<img src="../assets/img/images/minus.gif" alt="image" /> Версия PHP 5.5.9 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br />';
+				echo '<i class="fa fa-minus-circle"></i> Версия PHP 5.5.9 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br />';
 				$error_critical = 1;
 			}
 
 			if (extension_loaded('pdo_mysql')) {
 
-				echo '<img src="../assets/img/images/plus.gif" alt="image" /> Расширение PDO-MySQL: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(getModuleSetting('pdo_mysql', array('Client API version', 'PDO Driver for MySQL, client library version')), '-') . ')<br />';
+				echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(getModuleSetting('pdo_mysql', array('Client API version', 'PDO Driver for MySQL, client library version')), '-') . ')<br />';
 			} else {
-				echo '<img src="../assets/img/images/minus.gif" alt="image" /> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
+				echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
 				$error_critical = 1;
 			}
 
 			if (extension_loaded('gd')) {
-				echo '<img src="../assets/img/images/plus.gif" alt="image" /> Библиотека GD: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . getModuleSetting('gd', array('GD Version', 'GD library Version', 'GD headers Version')) . ')<br />';
+				echo '<i class="fa fa-plus-circle"></i> Библиотека GD: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . getModuleSetting('gd', array('GD Version', 'GD library Version', 'GD headers Version')) . ')<br />';
 			} else {
-				echo '<img src="../assets/img/images/minus.gif" alt="image" /> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
+				echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
 				$error_setting++;
 			}
 
 			if (extension_loaded('zlib')) {
-				echo '<img src="../assets/img/images/plus.gif" alt="image" /> Библиотека Zlib: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . getModuleSetting('zlib', 'Compiled Version') . ')<br />';
+				echo '<i class="fa fa-plus-circle"></i> Библиотека Zlib: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . getModuleSetting('zlib', 'Compiled Version') . ')<br />';
 			} else {
-				echo '<img src="../assets/img/images/minus.gif" alt="image" /> Библиотека Zlib: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
+				echo '<i class="fa fa-minus-circle"></i> Библиотека Zlib: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
 				$error_setting++;
 			}
 
 			if (!ini_get('safe_mode')) {
-				echo '<img src="../assets/img/images/plus.gif" alt="image" /> Safe Mode: <b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
+				echo '<i class="fa fa-plus-circle"></i> Safe Mode: <b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
 			} else {
-				echo '<img src="../assets/img/images/minus.gif" alt="image" /> Safe Mode: <b><span style="color:#ffa500">Предупреждение</span></b> (Включено)<br />';
+				echo '<i class="fa fa-minus-circle"></i> Safe Mode: <b><span style="color:#ffa500">Предупреждение</span></b> (Включено)<br />';
 				$error_setting++;
 			}
 
 			if (!ini_get('session.auto_start')) {
-				echo '<img src="../assets/img/images/plus.gif" alt="image" /> Session auto start: <b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
+				echo '<i class="fa fa-plus-circle"></i> Session auto start: <b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
 			} else {
-				echo '<img src="../assets/img/images/minus.gif" alt="image" /> Session auto start: <b><span style="color:#ffa500">Предупреждение</span></b> (Включено)<br />';
+				echo '<i class="fa fa-minus-circle"></i> Session auto start: <b><span style="color:#ffa500">Предупреждение</span></b> (Включено)<br />';
 				$error_setting++;
 			}
 
 			if (!ini_get('register_globals')) {
-				echo '<img src="../assets/img/images/plus.gif" alt="image" /> Register Globals: <b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
+				echo '<i class="fa fa-plus-circle"></i> Register Globals: <b><span style="color:#00cc00">ОК</span></b> (Выключено)<br />';
 			} else {
-				echo '<img src="../assets/img/images/minus.gif" alt="image" /> Register Globals: <b><span style="color:#ffa500">Предупреждение</span></b> (Включено)<br />';
+				echo '<i class="fa fa-minus-circle"></i> Register Globals: <b><span style="color:#ffa500">Предупреждение</span></b> (Включено)<br />';
 				$error_setting++;
 			}
 
 			if (ini_get('file_uploads')) {
-				echo '<img src="../assets/img/images/plus.gif" alt="image" /> Загрузка файлов: <b><span style="color:#00cc00">ОК</span></b> (Включено)<br />';
+				echo '<i class="fa fa-plus-circle"></i> Загрузка файлов: <b><span style="color:#00cc00">ОК</span></b> (Включено)<br />';
 			} else {
-				echo '<img src="../assets/img/images/minus.gif" alt="image" /> Загрузка файлов: <b><span style="color:#ffa500">Предупреждение</span></b> (Выключено)<br />';
+				echo '<i class="fa fa-minus-circle"></i> Загрузка файлов: <b><span style="color:#ffa500">Предупреждение</span></b> (Выключено)<br />';
 				$error_setting++;
 			}
 
@@ -206,14 +206,14 @@ switch ($act):
 
 				$chmod_value = @decoct(@fileperms($realfile)) % 1000;
 
-				echo '<img src="../assets/img/images/right.gif" alt="image" /> '.$file . ' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br />';
+				echo '<i class="fa fa-angle-right"></i> '.$file . ' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br />';
 			}
 
 			echo '<br />Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br />';
 			echo 'Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br /><br />';
 
 			if (empty($error_critical) && empty($not_found_errors) && empty($chmod_errors)) {
-				echo '<img src="../assets/img/images/open.gif" alt="image" /> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br /><br />';
+				echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br /><br />';
 
 				if (empty($error_setting)) {
 					echo 'Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br /><br />';
@@ -223,7 +223,7 @@ switch ($act):
 					echo 'Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br /><br />';
 				}
 
-				echo '<img src="../assets/img/images/reload.gif" alt="image" /> <b><a href="index.php?act=2">ПРИСТУПИТЬ К УСТАНОВКЕ</a></b><br /><br />';
+				echo '<i class="fa fa-play"></i> <b><a href="index.php?act=2">ПРИСТУПИТЬ К УСТАНОВКЕ</a></b><br /><br />';
 			} else {
 				echo '<b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br />';
 				echo 'Вы не сможете приступить к установке, пока не устраните все ошибки<br /><br />';
@@ -231,7 +231,7 @@ switch ($act):
 				echo 'Это расширение уже встроено в PHP, его нужно только включить, обратитесть в поддержку вашего хостинга<br /><br />';
 			}
 		} else {
-			echo '<img src="../assets/img/images/setting.png" alt="image" /> <b>ОТКАЗ ПРИНЯТИЯ УСЛОВИЙ СОГЛАШЕНИЯ</b><br /><br />';
+			echo '<i class="fa fa-wrench"></i> <b>ОТКАЗ ПРИНЯТИЯ УСЛОВИЙ СОГЛАШЕНИЯ</b><br /><br />';
 			echo 'Вы не можете продолжить установку движка так как отказываетесь принимать условия соглашения<br />';
 			echo 'Любое использование нашего движка означает ваше согласие с нашим соглашением<br /><br />';
 		}
@@ -243,7 +243,7 @@ switch ($act):
 	##                                     Подключение к базе                                 ##
 	############################################################################################
 	case '2':
-		echo '<img src="../assets/img/images/setting.png" alt="img" /> <b>ШАГ ТРЕТИЙ - ПОДКЛЮЧЕНИЕ К БД</b><br /><br />';
+		echo '<i class="fa fa-wrench"></i> <b>ШАГ ТРЕТИЙ - ПОДКЛЮЧЕНИЕ К БД</b><br /><br />';
 
 		echo 'Данные подключения к БД будут записаны в файл includes/connect.php, после записи файлу будут автоматически присвоены права CHMOD 644<br />';
 		echo 'Если этого не произошло, то вы можете вручную выставить файлу права запрещающие запись в него<br /><br />';
@@ -270,7 +270,7 @@ switch ($act):
 	# #                                     Получение данных                                   ##
 	# ###########################################################################################
 	case '3':
-		echo '<img src="../assets/img/images/setting.png" alt="img" /> <b>ИМПОРТ ТАБЛИЦ</b><br /><br />';
+		echo '<i class="fa fa-wrench"></i> <b>ИМПОРТ ТАБЛИЦ</b><br /><br />';
 
 		if (!empty($_POST['dbhost']) && !empty($_POST['dbport']) && !empty($_POST['dbname']) && !empty($_POST['dbuser'])) {
 			$dbhost = htmlspecialchars(trim($_POST['dbhost']));
@@ -354,7 +354,7 @@ define ('DBPASS', '$dbpass');
 			if (empty($errorconnect) && empty($errortables)) {
 				echo 'Если на этой странице вы не видите никаких ошибок значит все таблицы были успешно импортированы<br /><br />';
 				echo 'Не обновляйте страницу, переходите сразу к следующему шагу установки RotorCMS<br /><br />';
-				echo '<img src="../assets/img/images/reload.gif" alt="image" /> <b><a href="index.php?act=4">ПРОДОЛЖИТЬ УСТАНОВКУ</a></b><br /><br />';
+				echo '<i class="fa fa-play"></i> <b><a href="index.php?act=4">ПРОДОЛЖИТЬ УСТАНОВКУ</a></b><br /><br />';
 			}
 		} else {
 			echo '<b>Ошибка! Вы не ввели важные данные!</b><br /><br />';
@@ -368,7 +368,7 @@ define ('DBPASS', '$dbpass');
 	############################################################################################
 	case '4':
 
-		echo '<img src="../assets/img/images/setting.png" alt="img" /> <b>ШАГ ЧЕТВЕРТЫЙ - НАСТРОЙКА СИСТЕМЫ</b><br /><br />';
+		echo '<i class="fa fa-wrench"></i> <b>ШАГ ЧЕТВЕРТЫЙ - НАСТРОЙКА СИСТЕМЫ</b><br /><br />';
 
 		echo 'Прежде чем перейти к администрированию вашего сайта, необходимо создать аккаунт администратора.<br />';
 		echo 'Перед тем как нажимать кнопку Пуск, убедитесь, что на предыдущей странице нет уведомлений об ошибках, иначе процесс не сможет быть завершен удачно.<br />';
@@ -407,7 +407,7 @@ define ('DBPASS', '$dbpass');
 	############################################################################################
 	case '5':
 
-		echo '<img src="../assets/img/images/setting.png" alt="img" /> <b>Результат установки RotorCMS</b><br /><br />';
+		echo '<i class="fa fa-wrench"></i> <b>Результат установки RotorCMS</b><br /><br />';
 
 		$login = htmlspecialchars($_POST['login']);
 		$password = htmlspecialchars($_POST['password']);
@@ -469,7 +469,7 @@ define ('DBPASS', '$dbpass');
 											echo 'Поздравляем Вас, RotorCMS был успешно установлен на Ваш сервер. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br />
 Приятной Вам работы<br /><br />';
 
-											echo '<img src="../assets/img/images/reload.gif" alt="image" /> <b><a href="../input.php?login=' . $login . '&amp;pass=' . $password . '">Войти на сайт</a></b><br /><br />';
+											echo '<i class="fa fa-play"></i> <b><a href="../input.php?login=' . $login . '&amp;pass=' . $password . '">Войти на сайт</a></b><br /><br />';
 
 											echo 'Обязательно удалите директорию <b>install</b> со всем содержимым, эта папка больше не потребуется для работы движка<br /><br />';
 										} else {
@@ -508,13 +508,13 @@ define ('DBPASS', '$dbpass');
 	##                                    Главная страница                                    ##
 	############################################################################################
 	default:
-		echo '<img src="../assets/img/images/setting.png" alt="img" /> <b>Установка скрипта RotorCMS</b><br /><br />';
+		echo '<i class="fa fa-wrench"></i> <b>Установка скрипта RotorCMS</b><br /><br />';
 		echo 'Добро пожаловать в мастер установки RotorCMS<br />
 Данный мастер поможет вам установить скрипт всего за пару минут<br /><br />
 Прежде чем начать установку убедитесь, что все файлы дистрибутива загружены на сервер, а также выставлены необходимые права доступа для папок и файлов<br /><br />';
 
 		foreach ($arrfile as $file) {
-			echo '<img src="../assets/img/images/right.gif" alt="image" /> <b>'.$file.'</b> (chmod ';
+			echo '<i class="fa fa-angle-right"></i> <b>'.$file.'</b> (chmod ';
 			echo (is_file('../'.$file)) ? 666 : 777;
 			echo ')<br />';
 		}
@@ -535,11 +535,11 @@ define ('DBPASS', '$dbpass');
 		echo '<span style="color:#ff0000">Внимание:</span> при установке скрипта создается структура базы данных, создается аккаунт администратора, а также прописываются основные настройки системы, поэтому после успешной установки удалите директорию <b>install</b> во избежание повторной установки скрипта!<br /><br />
 Приятной Вам работы<br /><br />';
 
-		echo '<img src="../assets/img/images/open.gif" alt="image" /> <b><a href="index.php?act=0">ПРОДОЛЖИТЬ УСТАНОВКУ</a></b><br /><br />';
+		echo '<i class="fa fa-check-circle"></i> <b><a href="index.php?act=0">ПРОДОЛЖИТЬ УСТАНОВКУ</a></b><br /><br />';
 
 		if (file_exists('../upgrade/index.php')){
 			echo 'Если вам нужно обновить ваш движок, то перейдите к мастеру обновлений движка<br /><br />';
-			echo '<img src="../assets/img/images/circle.gif" alt="image" /> <b><a href="../upgrade/index.php">Мастер обновлений движка</a></b><br />';
+			echo '<i class="fa fa-refresh"></i> <b><a href="../upgrade/index.php">Мастер обновлений движка</a></b><br />';
 			echo ' Обновление доступно для версий движка RotorCMS 3.0.0 - 3.6.5<br /><br />';
 		}
 

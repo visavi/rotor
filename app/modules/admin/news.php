@@ -31,8 +31,8 @@ case 'index':
 
             echo '<div class="b">';
 
-            $icon = (empty($data['news_closed'])) ? 'document_plus.gif' : 'document_minus.gif';
-            echo '<img src="/assets/img/images/'.$icon.'" alt="image" /> ';
+            $icon = (empty($data['news_closed'])) ? 'unlock' : 'lock';
+            echo '<i class="fa fa-'.$icon.'"></i> ';
 
             echo '<b><a href="/news/'.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small><br />';
             echo '<input type="checkbox" name="del[]" value="'.$data['news_id'].'" /> ';

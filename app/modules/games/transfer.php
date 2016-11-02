@@ -76,7 +76,7 @@ if (is_user()) {
 
                                             $comment = (!empty($msg)) ? $msg : 'Не указано';
                                             // ------------------------Уведомление по привату------------------------//
-                                            $textpriv = '<img src="/assets/img/images/money.gif" alt="money" /> Пользователь [b]'.nickname($log).'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
+                                            $textpriv = 'Пользователь [b]'.nickname($log).'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
 
                                             DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                             // ------------------------ Запись логов ------------------------//
@@ -84,7 +84,7 @@ if (is_user()) {
 
                                             DB::run() -> query("DELETE FROM `transfers` WHERE `trans_time` < (SELECT MIN(`trans_time`) FROM (SELECT `trans_time` FROM `transfers` ORDER BY `trans_time` DESC LIMIT 1000) AS del);");
 
-                                            $_SESSION['note'] = 'Перевод успешно завершен! Пользователь уведомлен о переводе';
+                                            notice('Перевод успешно завершен! Пользователь уведомлен о переводе');
                                             redirect("/transfer");
 
                                         } else {

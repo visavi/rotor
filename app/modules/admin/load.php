@@ -128,7 +128,7 @@ case 'newimport':
 
                     foreach ($files as $file) {
                         $ext = getExtension($file);
-                        echo '<input type="checkbox" name="files[]" value="'.$file.'" /> <img src="/images/icons/'.icons($ext).'" alt="image" /> '.$file.'<br />';
+                        echo '<input type="checkbox" name="files[]" value="'.$file.'" /> '.icons($ext).' '.$file.'<br />';
                     }
 
                     echo '<input value="Импортировать" type="submit" /></form></div><br />';
