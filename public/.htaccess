@@ -1,24 +1,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(.*)/$ /$1 [L,R=301]
     RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ /$1 [L,R=301]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
-
-<Files ~ "includes|local">
-   Order allow,deny
-    Deny from all
-</Files>
-<Files ~ ".(dat|gitignore|json|lock|phar)$">
-   Order allow,deny
-   Deny from all
-</Files>
-
-php_value magic_quotes_gpc Off
-php_value magic_quotes_runtime Off
-php_value magic_quotes_sybase Off
-php_value file_uploads On
 
 DirectoryIndex index.php
 AddDefaultCharset UTF-8
@@ -77,7 +63,7 @@ AddType application/octet-stream .bin .exe
 AddType application/oda .oda
 AddType application/pdf .pdf
 AddType application/rtf .rtf
-AddType image/gif .gif .GIF
+AddType image/gif .gif .gif
 AddType image/ief .ief
 AddType image/jpeg .jpeg .jpg .jpe .JPG
 AddType image/tiff .tiff .tif
