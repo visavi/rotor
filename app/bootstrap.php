@@ -7,7 +7,7 @@ define('HOME', BASEDIR.'/public');
 define('STORAGE', APP.'/storage');
 define('SITETIME', time());
 define('PCLZIP_TEMPORARY_DIR', STORAGE.'/temp/');
-define('VERSION', '4.6.0');
+define('VERSION', '6.0.0');
 
 require_once BASEDIR.'/vendor/autoload.php';
 require_once APP.'/functions.php';

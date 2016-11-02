@@ -659,6 +659,15 @@ function show_counter()
      */
     if (isset($_SESSION['note'])) {
         unset($_SESSION['note']);
+
+    }
+
+    $_SESSION['counton']++;
+
+    if (is_user()) {
+        $visitPage = !empty($config['newtitle']) ? $config['newtitle'] : '';
+
+        DB::run()->query("INSERT INTO `visit` (`visit_user`, `visit_self`, `visit_ip`, `visit_nowtime`, `visit_page`)  VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `visit_self`=?, `visit_ip`=?, `visit_count`=?, `visit_nowtime`=?, `visit_page`=?;", [APP::getUsername(), App::server('PHP_SELF'), APP::getClientIp(), SITETIME, $visitPage, App::server('PHP_SELF'), APP::getClientIp(), $_SESSION['counton'], SITETIME, $visitPage]);
     }
 
     include_once (APP."/includes/counters.php");
