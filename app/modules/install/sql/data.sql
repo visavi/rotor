@@ -18,7 +18,6 @@ INSERT INTO `setting` (`setting_name`, `setting_value`) VALUES
 ('touchthemes', '0'),
 ('regkeys', '0'),
 ('openreg', '1'),
-('gzip', '0'),
 ('closedsite', '0'),
 ('incount', '5'),
 ('invite', '0'),

@@ -15,8 +15,6 @@ case 'index':
         App::abort('default', 'Данной темы не существует!');
     }
 
-    $config['header'] = $topics['topics_title'];
-
     if (!empty($topics['forums_parent'])) {
         $topics['subparent'] = DB::run() -> queryFetch("SELECT `forums_id`, `forums_title` FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($topics['forums_parent']));
     }

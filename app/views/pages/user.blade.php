@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Анкета пользователя '.e($user['users_login']).'. - @parent')
+@section('title', 'Анкета пользователя '.e($user['users_login']).' - @parent')
 
 @section('content')
 

@@ -1437,8 +1437,6 @@ function ob_processing($str)
 
     if (isset($config['newtitle'])) {
         $str = str_replace('<title>', '<title>'.$config['newtitle'].' - ', $str);
-    } else {
-        $str = str_replace('<title>', '<title>'.$config['logos'].' - ', $str);
     }
 
     $str = str_replace('%KEYWORDS%', $config['keywords'], $str);

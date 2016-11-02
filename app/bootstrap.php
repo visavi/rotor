@@ -18,7 +18,7 @@ if (! env('APP_ENV')) {
 }
 
 if (env('APP_DEBUG')) {
-    $whoops = new Whoops\Run;
+    $whoops = new Whoops\Run();
     $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler);
     $whoops->pushHandler(function() {
         $_SERVER = array_except($_SERVER, array_keys($_ENV));

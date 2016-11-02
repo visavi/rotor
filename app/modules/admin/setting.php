@@ -216,9 +216,6 @@ if (is_admin(array(101))) {
                 $checked = ($setting['regmail'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="regmail" type="checkbox" value="1"'.$checked.' /> Запрос email при регистрации<br />';
 
-                $checked = ($setting['gzip'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="gzip" type="checkbox" value="1"'.$checked.' /> Включить сжатие GZIP<br />';
-
                 $checked = ($setting['anonymity'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="anonymity" type="checkbox" value="1"'.$checked.' /> Анонимность пользователей<br />';
 
@@ -242,7 +239,6 @@ if (is_admin(array(101))) {
             $regmail = (empty($_POST['regmail'])) ? 0 : 1;
             $invite = (empty($_POST['invite'])) ? 0 : 1;
             $openreg = (empty($_POST['openreg'])) ? 0 : 1;
-            $gzip = (empty($_POST['gzip'])) ? 0 : 1;
             $anonymity = (empty($_POST['anonymity'])) ? 0 : 1;
             $session = (empty($_POST['session'])) ? 0 : 1;
             $regkeys = (isset($_POST['regkeys'])) ? abs(intval($_POST['regkeys'])) : 0;
@@ -269,7 +265,6 @@ if (is_admin(array(101))) {
                         $dbr -> execute($regmail, 'regmail');
                         $dbr -> execute($invite, 'invite');
                         $dbr -> execute($openreg, 'openreg');
-                        $dbr -> execute($gzip, 'gzip');
                         $dbr -> execute($anonymity, 'anonymity');
                         $dbr -> execute($closedsite, 'closedsite');
                         $dbr -> execute($session, 'session');

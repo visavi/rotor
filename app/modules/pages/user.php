@@ -10,8 +10,6 @@ case 'index':
 
     if (! $user = user($uz)) App::abort('default', 'Пользователя с данным логином не существует!');
 
-    $config['newtitle'] = 'Анкета пользователя '.nickname($user['users_login']);
-
     App::view('pages/user', compact('user'));
 break;
 
