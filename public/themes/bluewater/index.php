@@ -46,7 +46,7 @@ if (is_user()){
 		echo ' | <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>';
 		}
 
-		if ($udata['users_newchat']<stats_newchat()){
+		if (App::user('users_newchat')<stats_newchat()){
 		echo ' | <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>';
 		}
 

@@ -27,7 +27,7 @@ if (is_admin()) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
 
-            if ($udata['users_newchat'] != stats_newchat()) {
+            if (App::user('users_newchat') != stats_newchat()) {
                 DB::run() -> query("UPDATE `users` SET `users_newchat`=? WHERE `users_login`=? LIMIT 1;", array(stats_newchat(), $log));
             }
 

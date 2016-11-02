@@ -71,7 +71,7 @@ header("Content-type:text/html; charset=utf-8");
 						&bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
 					<?php endif; ?>
 
-					<?php if ($udata['users_newchat'] < stats_newchat()): ?>
+					<?php if (App::user('users_newchat') < stats_newchat()): ?>
 						&bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
 					<?php endif; ?>
 				</div>

@@ -189,7 +189,7 @@ if (!is_user() || empty($config['themes'])) {
     }
 }
 
-if (empty($config['themes'])) {
+if (empty($config['themes']) || ! file_exists(HOME.'/themes/'.$config['themes'])) {
     $config['themes'] = 'default';
 }
 
