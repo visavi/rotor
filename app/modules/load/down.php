@@ -510,7 +510,7 @@ case 'add':
                             DB::run() -> query("UPDATE `downs` SET `downs_comments`=`downs_comments`+1 WHERE `downs_id`=?;", array($id));
                             DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
-                            $_SESSION['note'] = 'Сообщение успешно добавлено!';
+                            notice('Сообщение успешно добавлено!');
                             redirect("/load/down?act=end&id=$id");
                         } else {
                             show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
@@ -553,7 +553,7 @@ case 'spam':
                     if (is_flood($log)) {
                         DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(5, $data['commload_id'], $log, $data['commload_author'], $data['commload_text'], $data['commload_time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start));
 
-                        $_SESSION['note'] = 'Жалоба успешно отправлена!';
+                        notice('Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&start=$start");
                     } else {
                         show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
@@ -688,7 +688,7 @@ case 'editpost':
 
                         DB::run() -> query("UPDATE `commload` SET `commload_text`=? WHERE `commload_id`=?", array($msg, $pid));
 
-                        $_SESSION['note'] = 'Сообщение успешно отредактировано!';
+                        notice('Сообщение успешно отредактировано!');
                         redirect("/load/down?act=comments&id=$id&start=$start");
                     } else {
                         show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
@@ -729,7 +729,7 @@ case 'del':
                 $delcomments = DB::run() -> exec("DELETE FROM `commload` WHERE `commload_id` IN (".$del.") AND `commload_down`=".$id.";");
                 DB::run() -> query("UPDATE `downs` SET `downs_comments`=`downs_comments`-? WHERE `downs_id`=?;", array($delcomments, $id));
 
-                $_SESSION['note'] = 'Выбранные комментарии успешно удалены!';
+                notice('Выбранные комментарии успешно удалены!');
                 redirect("/load/down?act=comments&id=$id&start=$start");
             } else {
                 show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');

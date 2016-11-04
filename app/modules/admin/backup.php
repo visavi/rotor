@@ -165,7 +165,7 @@ if (is_admin(array(101))) {
 
                         fn_close($fp, $method);
 
-                        $_SESSION['note'] = 'База данных успешно обработана и сохранена!';
+                        notice('База данных успешно обработана и сохранена!');
                         redirect("/admin/backup");
 
                     } else {
@@ -195,7 +195,7 @@ if (is_admin(array(101))) {
                         if (file_exists(STORAGE.'/backup/'.$backup)) {
                             unlink (STORAGE.'/backup/'.$backup);
 
-                            $_SESSION['note'] = 'Бэкап успешно удален!';
+                            notice('Бэкап успешно удален!');
                             redirect("/admin/backup");
 
                         } else {

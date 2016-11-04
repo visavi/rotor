@@ -28,15 +28,15 @@ if (is_admin(array(101))) {
                     $start = 0;
                 }
 
-                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `admlog_time` DESC LIMIT ".$start.", ".$config['loglist'].";");
+                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";");
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['admlog_user']).'</b>';
-                    echo ' ('.date_fixed($data['admlog_time']).')</div>';
-                    echo '<div>Страница: '.$data['admlog_request'].'<br />';
-                    echo 'Откуда: '.$data['admlog_referer'].'<br />';
-                    echo '<small><span style="color:#cc00cc">('.$data['admlog_brow'].', '.$data['admlog_ip'].')</span></small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['user']).'</b>';
+                    echo ' ('.date_fixed($data['time']).')</div>';
+                    echo '<div>Страница: '.$data['request'].'<br />';
+                    echo 'Откуда: '.$data['referer'].'<br />';
+                    echo '<small><span style="color:#cc00cc">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
                 page_strnavigation('/admin/logadmin?', $config['loglist'], $start, $total);
@@ -57,7 +57,7 @@ if (is_admin(array(101))) {
             if ($uid == $_SESSION['token']) {
                 DB::run() -> query("DELETE FROM admlog;");
 
-                $_SESSION['note'] = 'Лог-файл успешно очищен!';
+                notice('Лог-файл успешно очищен!');
                 redirect("/admin/logadmin");
             } else {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');

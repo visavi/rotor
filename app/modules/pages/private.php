@@ -355,7 +355,7 @@ if (is_user()) {
                         if (is_flood($log)) {
                             DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`) VALUES (?, ?, ?, ?, ?, ?, ?);", array(3, $data['inbox_id'], $log, $data['inbox_author'], $data['inbox_text'], $data['inbox_time'], SITETIME));
 
-                            $_SESSION['note'] = 'Жалоба успешно отправлена!';
+                            notice('Жалоба успешно отправлена!');
                             redirect("/private?start=$start");
 
                         } else {
@@ -398,7 +398,7 @@ if (is_user()) {
                     DB::run() -> query("DELETE FROM `inbox` WHERE `inbox_id` IN (".$del.") AND `inbox_user`=?;", array($log));
                     save_usermail(60);
 
-                    $_SESSION['note'] = 'Выбранные сообщения успешно удалены!';
+                    notice('Выбранные сообщения успешно удалены!');
                     redirect("/private?start=$start");
 
                 } else {
@@ -429,7 +429,7 @@ if (is_user()) {
 
                     DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_id` IN (".$del.") AND `outbox_author`=?;", array($log));
 
-                    $_SESSION['note'] = 'Выбранные сообщения успешно удалены!';
+                    notice('Выбранные сообщения успешно удалены!');
                     redirect("/private?act=output&start=$start");
 
                 } else {
@@ -460,7 +460,7 @@ if (is_user()) {
                     DB::run() -> query("DELETE FROM `inbox` WHERE `inbox_user`=?;", array($log));
                     save_usermail(60);
 
-                    $_SESSION['note'] = 'Ящик успешно очищен!';
+                    notice('Ящик успешно очищен!');
                     redirect("/private");
 
                 } else {
@@ -483,7 +483,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_author`=?;", array($log));
 
-                $_SESSION['note'] = 'Ящик успешно очищен!';
+                notice('Ящик успешно очищен!');
                 redirect("/private?act=output");
 
             } else {
@@ -503,7 +503,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 DB::run() -> query("DELETE FROM `trash` WHERE `trash_user`=?;", array($log));
 
-                $_SESSION['note'] = 'Ящик успешно очищен!';
+                notice('Ящик успешно очищен!');
                 redirect("/private?act=trash");
 
             } else {

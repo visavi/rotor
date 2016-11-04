@@ -136,7 +136,7 @@ case 'del':
                 DB::run() -> query("DELETE FROM `commload` WHERE `commload_id`=? AND `commload_down`=?;", array($id, $downs));
                 DB::run() -> query("UPDATE `downs` SET `downs_comments`=`downs_comments`-? WHERE `downs_id`=?;", array(1, $downs));
 
-                $_SESSION['note'] = 'Комментарий успешно удален!';
+                notice('Комментарий успешно удален!');
                 redirect("/load/active?act=comments&uz=$uz&start=$start");
             } else {
                 show_error('Ошибка! Данного комментария не существует!');

@@ -152,7 +152,7 @@ switch ($act):
                     DB::run() -> query("DELETE FROM `commphoto` WHERE `commphoto_id`=? AND `commphoto_gid`=?;", array($id, $photo));
                     DB::run() -> query("UPDATE `photo` SET `photo_comments`=`photo_comments`-? WHERE `photo_id`=?;", array(1, $photo));
 
-                    $_SESSION['note'] = 'Комментарий успешно удален!';
+                    notice('Комментарий успешно удален!');
                     redirect("/gallery/comments?act=comments&uz=$uz&start=$start");
                 } else {
                     show_error('Ошибка! Данного комментария не существует!');

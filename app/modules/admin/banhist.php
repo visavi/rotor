@@ -151,7 +151,7 @@ if (is_admin(array(101, 102, 103))) {
 
                     DB::run() -> query("DELETE FROM `banhist` WHERE `ban_id` IN (".$del.");");
 
-                    $_SESSION['note'] = 'Выбранные баны успешно удалены!';
+                    notice('Выбранные баны успешно удалены!');
                     redirect("/admin/banhist?start=$start");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные баны!');

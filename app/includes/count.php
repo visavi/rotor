@@ -13,7 +13,7 @@ if (file_exists(STORAGE.'/temp/counter7.dat')) {
 	$host_data = array_fill(0, 6, 0);
 }
 
-array_push($host_data, $count['count_dayhosts']);
+array_push($host_data, $count['dayhosts']);
 // ----------------------------------------------------------------------//
 $img = imageCreateFromPNG(HOME.'/assets/img/images/counter.png');
 $color = imagecolorallocate($img, 0, 0, 0);
@@ -60,8 +60,8 @@ foreach ($per_host as $key => $percent) {
 	$x2 += $coll;
 }
 
-imageTTFtext($img, 6, 0, 13, 23, $color2, HOME.'/assets/fonts/font4.ttf', $count['count_dayhosts']);
-imageTTFtext($img, 6, 0, 13, 29, $color2, HOME.'/assets/fonts/font4.ttf', $count['count_dayhits']);
+imageTTFtext($img, 6, 0, 13, 23, $color2, HOME.'/assets/fonts/font4.ttf', $count['dayhosts']);
+imageTTFtext($img, 6, 0, 13, 29, $color2, HOME.'/assets/fonts/font4.ttf', $count['dayhits']);
 imageTTFtext($img, 12, 0, $pos, 29, $color2, HOME.'/assets/fonts/font7.ttf', $online[1]);
 
 ImagePNG($img, HOME.'/upload/counters/counter_new.png');

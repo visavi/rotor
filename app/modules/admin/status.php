@@ -91,7 +91,7 @@ if (is_admin(array(101, 102))) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
                         DB::run() -> query("UPDATE `status` SET `status_topoint`=?, `status_point`=?, `status_name`=?, `status_color`=? WHERE `status_id`=?;", array($topoint, $point, $name, $color, $id));
 
-                        $_SESSION['note'] = 'Статус успешно изменен!';
+                        notice('Статус успешно изменен!');
                         redirect("/admin/status");
                     } else {
                         show_error('Ошибка! Недопустимый формат цвета статуса!');
@@ -145,7 +145,7 @@ if (is_admin(array(101, 102))) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
                         DB::run() -> query("INSERT INTO `status` (`status_topoint`, `status_point`, `status_name`, `status_color`) VALUES (?, ?, ?, ?);", array($topoint, $point, $name, $color));
 
-                        $_SESSION['note'] = 'Статус успешно добавлен!';
+                        notice('Статус успешно добавлен!');
                         redirect("/admin/status");
                     } else {
                         show_error('Ошибка! Недопустимый формат цвета статуса!');
@@ -172,7 +172,7 @@ if (is_admin(array(101, 102))) {
                 if (!empty($id)) {
                     DB::run() -> query("DELETE FROM `status` WHERE `status_id`=?;", array($id));
 
-                    $_SESSION['note'] = 'Статус успешно удален!';
+                    notice('Статус успешно удален!');
                     redirect("/admin/status");
                 } else {
                     show_error('Ошибка! Отсутствует выбранный статус для удаления!');

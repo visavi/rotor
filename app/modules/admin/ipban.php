@@ -87,7 +87,7 @@ if (is_admin(array(101, 102))) {
                         DB::run() -> query("INSERT INTO ban (`ban_ip`, `ban_user`, `ban_time`) VALUES (?, ?, ?);", array($ips, $log, SITETIME));
                         save_ipban();
 
-                        $_SESSION['note'] = 'IP успешно занесен в список!';
+                        notice('IP успешно занесен в список!');
                         redirect("/admin/ipban?start=$start");
                     } else {
                         show_error('Ошибка! Введенный IP уже имеетеся в списке!');
@@ -121,7 +121,7 @@ if (is_admin(array(101, 102))) {
                     DB::run() -> query("DELETE FROM `ban` WHERE `ban_id` IN (".$del.");");
                     save_ipban();
 
-                    $_SESSION['note'] = 'Выбранные IP успешно удалены из списка!';
+                    notice('Выбранные IP успешно удалены из списка!');
                     redirect("/admin/ipban?start=$start");
                 } else {
                     echo '<i class="fa fa-times"></i> <b>Ошибка удаления! Отсутствуют выбранные IP</b><br />';
@@ -145,7 +145,7 @@ if (is_admin(array(101, 102))) {
                     DB::run() -> query("TRUNCATE `ban`;");
                     save_ipban();
 
-                    $_SESSION['note'] = 'Список IP успешно очищен!';
+                    notice('Список IP успешно очищен!');
                     redirect("/admin/ipban");
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');

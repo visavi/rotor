@@ -15,27 +15,27 @@ if (isset($_GET['start'])) {
 if (is_user()) {
     show_title('История банов '.nickname($uz));
 
-    $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `ban_user`=?;", array($uz));
+    $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", array($uz));
 
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `ban_user`=? ORDER BY `ban_time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", array($uz));
+        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", array($uz));
 
         while ($data = $queryhist -> fetch()) {
             echo '<div class="b">';
             echo '<i class="fa fa-history"></i> ';
-            echo '<b>'.profile($data['ban_user']).'</b> ('.date_fixed($data['ban_time']).')</div>';
+            echo '<b>'.profile($data['user']).'</b> ('.date_fixed($data['time']).')</div>';
 
             echo '<div>';
-            if (!empty($data['ban_type'])) {
-                echo 'Причина: '.bb_code($data['ban_reason']).'<br />';
-                echo 'Срок: '.formattime($data['ban_term']).'<br />';
+            if (!empty($data['type'])) {
+                echo 'Причина: '.bb_code($data['reason']).'<br />';
+                echo 'Срок: '.formattime($data['term']).'<br />';
             }
 
-            switch ($data['ban_type']) {
+            switch ($data['type']) {
                 case '1': $stat = '<span style="color:#ff0000">Забанил</span>:';
                     break;
                 case '2': $stat = '<span style="color:#ffa500">Изменил</span>:';
@@ -43,7 +43,7 @@ if (is_user()) {
                 default: $stat = '<span style="color:#00cc00">Разбанил</span>:';
             }
 
-            echo $stat.' '.profile($data['ban_send']).'<br />';
+            echo $stat.' '.profile($data['send']).'<br />';
 
             echo '</div>';
         }

@@ -70,7 +70,7 @@ if (is_admin(array(101, 102))) {
 
                     DB::run() -> query("REPLACE INTO `rules` (`rules_id`, `rules_text`, `rules_time`) VALUES (?,?,?);", array(1, $msg, SITETIME));
 
-                    $_SESSION['note'] = 'Правила успешно изменены!';
+                    notice('Правила успешно изменены!');
                     redirect("/admin/rules");
                 } else {
                     show_error('Ошибка! Вы не ввели текст с правилами сайта!');

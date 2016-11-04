@@ -117,7 +117,7 @@ if (is_admin(array(101, 102, 103))) {
                             $arrayusers = implode(',', $arrayusers);
                             DB::run() -> query("UPDATE `users` SET `users_confirmreg`=?, `users_confirmregkey`=? WHERE `users_login` IN ('".$arrayusers."');", array(0, ''));
 
-                            $_SESSION['note'] = 'Выбранные аккаунты успешно одобрены!';
+                            notice('Выбранные аккаунты успешно одобрены!');
                             redirect("/admin/reglist?start=$start");
                         }
                         // ----------------------------------- Запрет регистрации -------------------------------------//
@@ -127,7 +127,7 @@ if (is_admin(array(101, 102, 103))) {
                                 delete_users($value);
                             }
 
-                            $_SESSION['note'] = 'Выбранные пользователи успешно удалены!';
+                            notice('Выбранные пользователи успешно удалены!');
                             redirect("/admin/reglist?start=$start");
                         }
                     } else {

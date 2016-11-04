@@ -125,7 +125,7 @@ if (is_admin(array(101, 102))) {
                 if (is_admin(array(101))) {
                     DB::run() -> query("TRUNCATE `error`;");
 
-                    $_SESSION['note'] = 'Лог-файлы успешно очищены!';
+                    notice('Лог-файлы успешно очищены!');
                     redirect("/admin/logs");
 
                 } else {

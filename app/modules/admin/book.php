@@ -127,7 +127,7 @@ if (is_admin()) {
 
                         DB::run() -> query("UPDATE guest SET guest_reply=? WHERE guest_id=?", array($reply, $id));
 
-                        $_SESSION['note'] = 'Ответ успешно добавлен!';
+                        notice('Ответ успешно добавлен!');
                         redirect("/admin/book?start=$start");
                     } else {
                         show_error('Ошибка! Сообщения для ответа не существует!');
@@ -183,7 +183,7 @@ if (is_admin()) {
 
                         DB::run() -> query("UPDATE guest SET guest_text=?, guest_edit=?, guest_edit_time=? WHERE guest_id=?", array($msg, $log, SITETIME, $id));
 
-                        $_SESSION['note'] = 'Сообщение успешно отредактировано!';
+                        notice('Сообщение успешно отредактировано!');
                         redirect("/admin/book?start=$start");
                     } else {
                         show_error('Ошибка! Сообщения для редактирования не существует!');
@@ -216,7 +216,7 @@ if (is_admin()) {
 
                     DB::run() -> query("DELETE FROM guest WHERE guest_id IN (".$del.");");
 
-                    $_SESSION['note'] = 'Выбранные сообщения успешно удалены!';
+                    notice('Выбранные сообщения успешно удалены!');
                     redirect("/admin/book?start=$start");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные сообщения!');
@@ -249,7 +249,7 @@ if (is_admin()) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("DELETE FROM guest;");
 
-                    $_SESSION['note'] = 'Гостевая книга успешно очищена!';
+                    notice('Гостевая книга успешно очищена!');
                     redirect("/admin/book");
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');

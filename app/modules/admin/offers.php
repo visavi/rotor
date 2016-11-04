@@ -207,7 +207,7 @@ if (is_admin(array(101, 102))) {
                                 DB::run() -> query("DELETE FROM `ratedoffers` WHERE `rated_offers`=?;", array($id));
                             }
 
-                            $_SESSION['note'] = 'Данные успешно отправлены!';
+                            notice('Данные успешно отправлены!');
                             redirect("/admin/offers?act=view&id=$id");
                         } else {
                             show_error('Ошибка! Недопустимый статус предложения или проблемы!');
@@ -281,7 +281,7 @@ if (is_admin(array(101, 102))) {
 
                             DB::run() -> query("UPDATE `offers` SET `offers_type`=?, `offers_closed`=?, `offers_title`=?, `offers_text`=? WHERE `offers_id`=?;", array($types, $closed, $title, $text, $id));
 
-                            $_SESSION['note'] = 'Данные успешно отредактированы!';
+                            notice('Данные успешно отредактированы!');
                             redirect("/admin/offers?act=view&id=$id");
                         } else {
                             show_error('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
@@ -319,7 +319,7 @@ if (is_admin(array(101, 102))) {
                     DB::run() -> query("DELETE FROM `commoffers` WHERE `comm_offers` IN (".$del.");");
                     DB::run() -> query("DELETE FROM `ratedoffers` WHERE `rated_offers` IN (".$del.");");
 
-                    $_SESSION['note'] = 'Выбранные пункты успешно удалены!';
+                    notice('Выбранные пункты успешно удалены!');
                     redirect("/admin/offers?type=$type&start=$start");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные предложения или проблемы!');
@@ -342,7 +342,7 @@ if (is_admin(array(101, 102))) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("UPDATE `offers` SET `offers_comments`=(SELECT count(*) FROM `commoffers` WHERE `offers`.`offers_id`=`commoffers`.`comm_offers`);");
 
-                    $_SESSION['note'] = 'Комментарии успешно пересчитаны!';
+                    notice('Комментарии успешно пересчитаны!');
                     redirect("/admin/offers");
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');

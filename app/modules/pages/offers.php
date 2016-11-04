@@ -301,7 +301,7 @@ switch ($act):
 
                                 DB::run() -> query("UPDATE `offers` SET `offers_type`=?, `offers_title`=?, `offers_text`=? WHERE `offers_id`=?;", array($types, $title, $text, $id));
 
-                                $_SESSION['note'] = 'Данные успешно отредактированы!';
+                                notice('Данные успешно отредактированы!');
                                 redirect("/offers?act=view&type=$types&id=$id");
                             } else {
                                 show_error('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
@@ -434,7 +434,7 @@ switch ($act):
 
                                 DB::run() -> query("UPDATE `offers` SET `offers_comments`=`offers_comments`+1 WHERE `offers_id`=?;", array($id));
 
-                                $_SESSION['note'] = 'Комментарий успешно добавлен!';
+                                notice('Комментарий успешно добавлен!');
                                 redirect("/offers?act=end&id=$id");
                             } else {
                                 show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
@@ -482,7 +482,7 @@ switch ($act):
                                 }
                             }
 
-                            $_SESSION['note'] = 'Спасибо! Ваш голос учтен!';
+                            notice('Спасибо! Ваш голос учтен!');
                             redirect("/offers?act=view&id=$id");
                         } else {
                             show_error('Ошибка! Запрещено голосовать за свое продложение или проблему!');
@@ -554,7 +554,7 @@ switch ($act):
 
                             DB::run() -> query("INSERT INTO `ratedoffers` (`rated_offers`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($lastid, $log, SITETIME));
 
-                            $_SESSION['note'] = 'Сообщение успешно добавлено!';
+                            notice('Сообщение успешно добавлено!');
                             redirect("/offers?act=view&type=$types&id=$lastid");
                         } else {
                             show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
@@ -595,7 +595,7 @@ switch ($act):
                     $delcomments = DB::run() -> exec("DELETE FROM `commoffers` WHERE `comm_id` IN (".$del.") AND `comm_offers`=".$id.";");
                     DB::run() -> query("UPDATE `offers` SET `offers_comments`=`offers_comments`-? WHERE `offers_id`=?;", array($delcomments, $id));
 
-                    $_SESSION['note'] = 'Выбранные комментарии успешно удалены!';
+                    notice('Выбранные комментарии успешно удалены!');
                     redirect("/offers?act=comments&id=$id&start=$start");
                 } else {
                     show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');

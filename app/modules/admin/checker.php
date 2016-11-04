@@ -80,7 +80,7 @@ if (is_admin(array(101))) {
 
                     file_put_contents(STORAGE."/temp/checker.dat", serialize($arr['files']), LOCK_EX);
 
-                    $_SESSION['note'] = 'Сайт успешно отсканирован!';
+                    notice('Сайт успешно отсканирован!');
                     redirect("/admin/checker");
                 } else {
                     show_error('Ошибка! Директория temp недоступна для записи!');

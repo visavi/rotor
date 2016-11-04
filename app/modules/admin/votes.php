@@ -107,7 +107,7 @@ if (is_admin(array(101, 102, 103))) {
                             $dbr -> execute($lastid, $data);
                         }
 
-                        $_SESSION['note'] = 'Голосование успешно создано!';
+                        notice('Голосование успешно создано!');
                         redirect("/admin/votes");
                     } else {
                         show_error('Ошибка! Отсутствуют варианты ответов!');
@@ -190,7 +190,7 @@ if (is_admin(array(101, 102, 103))) {
                                 }
                             }
 
-                            $_SESSION['note'] = 'Голосование успешно изменено!';
+                            notice('Голосование успешно изменено!');
                             redirect("/admin/votes");
                         } else {
                             show_error('Ошибка! Не заполнены все обязательные поля с ответами!');
@@ -224,13 +224,13 @@ if (is_admin(array(101, 102, 103))) {
                         if ($do == 'close') {
                             DB::run() -> query("UPDATE `vote` SET `vote_closed`=? WHERE `vote_id`=?;", array(1, $id));
                             DB::run() -> query("DELETE FROM `votepoll` WHERE `poll_vote_id`=?;", array($id));
-                            $_SESSION['note'] = 'Голосование успешно закрыто!';
+                            notice('Голосование успешно закрыто!');
                             redirect("/admin/votes");
                         }
 
                         if ($do == 'open') {
                             DB::run() -> query("UPDATE `vote` SET `vote_closed`=? WHERE `vote_id`=?;", array(0, $id));
-                            $_SESSION['note'] = 'Голосование успешно открыто!';
+                            notice('Голосование успешно открыто!');
                             redirect("/admin/votes?act=history");
                         }
                     } else {
@@ -261,7 +261,7 @@ if (is_admin(array(101, 102, 103))) {
                         DB::run() -> query("DELETE FROM `voteanswer` WHERE `answer_vote_id`=?;", array($id));
                         DB::run() -> query("DELETE FROM `votepoll` WHERE `poll_vote_id`=?;", array($id));
 
-                        $_SESSION['note'] = 'Голосование успешно удалено!';
+                        notice('Голосование успешно удалено!');
                         redirect("/admin/votes");
                     } else {
                         show_error('Ошибка! Данного голосования не существует!');
@@ -285,7 +285,7 @@ if (is_admin(array(101, 102, 103))) {
                 if (is_admin(array(101))) {
                     DB::run() -> query("UPDATE `vote` SET `vote_count`=(SELECT SUM(`answer_result`) FROM `voteanswer` WHERE `vote`.vote_id=`voteanswer`.`answer_vote_id`) WHERE `vote_closed`=?;", array(0));
 
-                    $_SESSION['note'] = 'Все данные успешно пересчитаны!';
+                    notice('Все данные успешно пересчитаны!');
                     redirect("/admin/votes");
                 } else {
                     show_error('Ошибка! Пересчитывать голосования могут только суперадмины!');

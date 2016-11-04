@@ -119,7 +119,7 @@ if (is_admin()) {
 
                             DB::run() -> query("UPDATE `photo` SET `photo_title`=?, `photo_text`=?, `photo_closed`=? WHERE `photo_id`=?;", array($title, $text, $closed, $gid));
 
-                            $_SESSION['note'] = 'Фотография успешно отредактирована!';
+                            notice('Фотография успешно отредактирована!');
                             redirect("/admin/gallery?start=$start");
 
                         } else {
@@ -170,7 +170,7 @@ if (is_admin()) {
                                 unlink_image('upload/pictures/', $delete['photo_link']);
                             }
 
-                            $_SESSION['note'] = 'Выбранные фотографии успешно удалены!';
+                            notice('Выбранные фотографии успешно удалены!');
                             redirect("/admin/gallery?start=$start");
 
                         } else {
@@ -200,7 +200,7 @@ if (is_admin()) {
                 if ($uid == $_SESSION['token']) {
                     restatement('gallery');
 
-                    $_SESSION['note'] = 'Комментарии успешно пересчитаны!';
+                    notice('Комментарии успешно пересчитаны!');
                     redirect("/admin/gallery");
 
                 } else {

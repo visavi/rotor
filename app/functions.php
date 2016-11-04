@@ -27,7 +27,7 @@ function date_fixed($timestamp, $format = "d.m.y / H:i") {
     if (!is_numeric($timestamp)) {
         $timestamp = SITETIME;
     }
-    $shift = $udata['users_timezone'] * 3600;
+    $shift = $udata['timezone'] * 3600;
     $datestamp = date($format, $timestamp + $shift);
 
     $today = date("d.m.y", SITETIME + $shift);
@@ -61,26 +61,26 @@ function unlink_image($dir, $image) {
 // ------------------- Функция полного удаления юзера --------------------//
 function delete_users($user) {
     if (!empty($user)){
-        $userpic = DB::run() -> query("SELECT users_picture, users_avatar FROM users WHERE users_login=? LIMIT 1;", [$user]);
+        $userpic = DB::run() -> query("SELECT picture, avatar FROM users WHERE login=? LIMIT 1;", [$user]);
 
-        unlink_image('upload/photos/', $userpic['users_picture']);
-        unlink_image('upload/avatars/', $userpic['users_avatar']);
+        unlink_image('upload/photos/', $userpic['picture']);
+        unlink_image('upload/avatars/', $userpic['avatar']);
 
-        DB::run() -> query("DELETE FROM `inbox` WHERE `inbox_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_author`=?;", array($user));
-        DB::run() -> query("DELETE FROM `trash` WHERE `trash_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `contact` WHERE `contact_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `ignore` WHERE `ignore_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `rating` WHERE `rating_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `visit` WHERE `visit_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `wall` WHERE `wall_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `notebook` WHERE `note_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `banhist` WHERE `ban_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `note` WHERE `note_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `bookmarks` WHERE `book_user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `login` WHERE `login_user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", array($user));
+        DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `contact` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `ignore` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `rating` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `visit` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `wall` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `notebook` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `banhist` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `note` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `bookmarks` WHERE `user`=?;", array($user));
+        DB::run() -> query("DELETE FROM `login` WHERE `user`=?;", array($user));
         DB::run() -> query("DELETE FROM `invite` WHERE `user`=? OR `invited`=?;", array($user, $user));
-        DB::run() -> query("DELETE FROM `users` WHERE `users_login`=?;", array($user));
+        DB::run() -> query("DELETE FROM `users` WHERE `login`=?;", array($user));
     }
 }
 
@@ -88,15 +88,15 @@ function delete_users($user) {
 function delete_album($user) {
 
     if (!empty($user)){
-        $querydel = DB::run() -> query("SELECT `photo_id`, `photo_link` FROM `photo` WHERE `photo_user`=?;", array($user));
+        $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `user`=?;", array($user));
         $arr_photo = $querydel -> fetchAll();
 
         if (count($arr_photo) > 0) {
             foreach ($arr_photo as $delete) {
-                DB::run() -> query("DELETE FROM `photo` WHERE `photo_id`=?;", array($delete['photo_id']));
-                DB::run() -> query("DELETE FROM `commphoto` WHERE `commphoto_gid`=?;", array($delete['photo_id']));
+                DB::run() -> query("DELETE FROM `photo` WHERE `id`=?;", array($delete['id']));
+                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", array($delete['id']));
 
-                unlink_image('upload/pictures/', $delete['photo_link']);
+                unlink_image('upload/pictures/', $delete['link']);
             }
         }
     }
@@ -273,7 +273,7 @@ function formattime($file_time, $round = 1) {
 
 // ------------------ Функция антимата --------------------//
 function antimat($str) {
-    $querymat = DB::run() -> query("SELECT `mat_string` FROM `antimat` ORDER BY CHAR_LENGTH(`mat_string`) DESC;");
+    $querymat = DB::run() -> query("SELECT `string` FROM `antimat` ORDER BY CHAR_LENGTH(`string`) DESC;");
     $arrmat = $querymat -> fetchAll(PDO::FETCH_COLUMN);
 
     if (count($arrmat) > 0) {
@@ -309,22 +309,22 @@ function user_status($level) {
 // ---------------- Функция кэширования статусов ------------------//
 function save_title($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
-        $querylevel = DB::run() -> query("SELECT `users_login`, `users_status`, `status_name`, `status_color`
-FROM `users` LEFT JOIN `status` ON `users_point` BETWEEN `status_topoint` AND `status_point` WHERE `users_point`>?;", array(0));
+        $querylevel = DB::run() -> query("SELECT `login`, `status`, `name`, `color`
+FROM `users` LEFT JOIN `status` ON `point` BETWEEN `topoint` AND `point` WHERE `point`>?;", array(0));
 
         $allstat = array();
         while ($row = $querylevel -> fetch()) {
-            if (!empty($row['users_status'])) {
-                $allstat[$row['users_login']] = '<span style="color:#ff0000">'.$row['users_status'].'</span>';
+            if (!empty($row['status'])) {
+                $allstat[$row['login']] = '<span style="color:#ff0000">'.$row['status'].'</span>';
                 continue;
             }
 
-            if (!empty($row['status_color'])) {
-                $allstat[$row['users_login']] = '<span style="color:'.$row['status_color'].'">'.$row['status_name'].'</span>';
+            if (!empty($row['color'])) {
+                $allstat[$row['login']] = '<span style="color:'.$row['color'].'">'.$row['name'].'</span>';
                 continue;
             }
 
-            $allstat[$row['users_login']] = $row['status_name'];
+            $allstat[$row['login']] = $row['name'];
         }
 
         file_put_contents(STORAGE.'/temp/status.dat', serialize($allstat), LOCK_EX);
@@ -347,7 +347,7 @@ function user_title($login) {
 // --------------- Функция кэширования ников -------------------//
 function save_nickname($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/nickname.dat') < time() - $time) {
-        $querynick = DB::run() -> query("SELECT `users_login`, `users_nickname` FROM `users` WHERE `users_nickname`<>?;", array(''));
+        $querynick = DB::run() -> query("SELECT `login`, `nickname` FROM `users` WHERE `nickname`<>?;", array(''));
         $allnick = $querynick -> fetchAssoc();
         file_put_contents(STORAGE.'/temp/nickname.dat', serialize($allnick), LOCK_EX);
     }
@@ -367,14 +367,14 @@ function nickname($login) {
 
 // --------------- Функция кэширования настроек -------------------//
 function save_setting() {
-    $queryset = DB::run() -> query("SELECT `setting_name`, `setting_value` FROM `setting`;");
+    $queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");
     $config = $queryset -> fetchAssoc();
     file_put_contents(STORAGE."/temp/setting.dat", serialize($config), LOCK_EX);
 }
 
 // --------------- Функция кэширования забаненных IP -------------------//
 function save_ipban() {
-    $querybanip = DB::run() -> query("SELECT `ban_ip` FROM `ban`;");
+    $querybanip = DB::run() -> query("SELECT `ip` FROM `ban`;");
     $arrbanip = $querybanip -> fetchAll(PDO::FETCH_COLUMN);
     file_put_contents(STORAGE."/temp/ipban.dat", serialize($arrbanip), LOCK_EX);
     return $arrbanip;
@@ -386,16 +386,16 @@ function flood_period() {
 
     $period = $config['floodstime'];
 
-    if ($udata['users_point'] < 50) {
+    if ($udata['point'] < 50) {
         $period = round($config['floodstime'] * 2);
     }
-    if ($udata['users_point'] >= 500) {
+    if ($udata['point'] >= 500) {
         $period = round($config['floodstime'] / 2);
     }
-    if ($udata['users_point'] >= 1000) {
+    if ($udata['point'] >= 1000) {
         $period = round($config['floodstime'] / 3);
     }
-    if ($udata['users_point'] >= 5000) {
+    if ($udata['point'] >= 5000) {
         $period = round($config['floodstime'] / 6);
     }
     if (is_admin()) {
@@ -412,12 +412,12 @@ function is_flood($log, $period = 0) {
 
     if (empty($period)) return true;
 
-    DB::run() -> query("DELETE FROM `flood` WHERE `flood_time`<?;", array(SITETIME));
+    DB::run() -> query("DELETE FROM `flood` WHERE `time`<?;", array(SITETIME));
 
-    $queryflood = DB::run() -> querySingle("SELECT `flood_id` FROM `flood` WHERE `flood_user`=? AND `flood_page`=? LIMIT 1;", array($log, APP::server('PHP_SELF')));
+    $queryflood = DB::run() -> querySingle("SELECT `id` FROM `flood` WHERE `user`=? AND `page`=? LIMIT 1;", array($log, APP::server('PHP_SELF')));
 
     if (empty($queryflood)) {
-        DB::run() -> query("INSERT INTO `flood` (`flood_user`, `flood_page`, `flood_time`) VALUES (?, ?, ?);", array($log, APP::server('PHP_SELF'), SITETIME + $period));
+        DB::run() -> query("INSERT INTO `flood` (`user`, `page`, `time`) VALUES (?, ?, ?);", array($log, APP::server('PHP_SELF'), SITETIME + $period));
 
         return true;
     }
@@ -535,7 +535,7 @@ function make_calendar ($month, $year) {
 // --------------- Функция сохранения количества денег  у юзера ---------------//
 function save_money($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/money.dat") < time() - $time) {
-        $queryuser = DB::run() -> query("SELECT `users_login`, `users_money` FROM `users` WHERE `users_money`>?;", array(0));
+        $queryuser = DB::run() -> query("SELECT `login`, `money` FROM `users` WHERE `money`>?;", array(0));
         $alluser = $queryuser -> fetchAssoc();
         file_put_contents(STORAGE."/temp/money.dat", serialize($alluser), LOCK_EX);
     }
@@ -556,7 +556,7 @@ function user_money($login) {
 // --------------- Функция сохранения количества писем ---------------//
 function save_usermail($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/usermail.dat") < time() - $time) {
-        $querymail = DB::run() -> query("SELECT `inbox_user`, COUNT(*) FROM `inbox` GROUP BY `inbox_user`;");
+        $querymail = DB::run() -> query("SELECT `user`, COUNT(*) FROM `inbox` GROUP BY `user`;");
         $arrmail = $querymail -> fetchAssoc();
         file_put_contents(STORAGE."/temp/usermail.dat", serialize($arrmail), LOCK_EX);
     }
@@ -572,7 +572,7 @@ function user_mail($login) {
 // --------------- Функция кэширования аватаров -------------------//
 function save_avatar($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/avatars.dat") < time() - $time) {
-        $queryavat = DB::run() -> query("SELECT `users_login`, `users_avatar` FROM `users` WHERE `users_avatar`<>?;", array(''));
+        $queryavat = DB::run() -> query("SELECT `login`, `avatar` FROM `users` WHERE `avatar`<>?;", array(''));
         $allavat = $queryavat -> fetchAssoc();
         file_put_contents(STORAGE."/temp/avatars.dat", serialize($allavat), LOCK_EX);
     }
@@ -601,23 +601,23 @@ function user_avatars($login) {
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
 function user_contact($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `contact_user`=?;", array($login));
+    return DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", array($login));
 }
 
 // --------------- Функция подсчета человек в игнор-листе ---------------//
 function user_ignore($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `ignore_user`=?;", array($login));
+    return DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", array($login));
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
 function user_wall($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `wall_user`=?;", array($login));
+    return DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", array($login));
 }
 
 // ------------------ Функция подсчета пользователей онлайн -----------------//
 function stats_online($cache = 30) {
     if (@filemtime(STORAGE."/temp/online.dat") < time()-$cache) {
-        $queryonline = DB::run() -> query("SELECT count(*) FROM `online` WHERE `online_user`<>? UNION ALL SELECT count(*) FROM `online`;", array(''));
+        $queryonline = DB::run() -> query("SELECT count(*) FROM `online` WHERE `user`<>? UNION ALL SELECT count(*) FROM `online`;", array(''));
         $online = $queryonline -> fetchAll(PDO::FETCH_COLUMN);
 
         include_once(APP.'/includes/count.php');
@@ -667,7 +667,7 @@ function show_counter()
     if (is_user()) {
         $visitPage = !empty($config['newtitle']) ? $config['newtitle'] : '';
 
-        DB::run()->query("INSERT INTO `visit` (`visit_user`, `visit_self`, `visit_ip`, `visit_nowtime`, `visit_page`)  VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `visit_self`=?, `visit_ip`=?, `visit_count`=?, `visit_nowtime`=?, `visit_page`=?;", [APP::getUsername(), App::server('PHP_SELF'), APP::getClientIp(), SITETIME, $visitPage, App::server('PHP_SELF'), APP::getClientIp(), $_SESSION['counton'], SITETIME, $visitPage]);
+        DB::run()->query("INSERT INTO `visit` (`user`, `self`, `ip`, `nowtime`, `page`)  VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `self`=?, `ip`=?, `count`=?, `nowtime`=?, `page`=?;", [APP::getUsername(), App::server('PHP_SELF'), APP::getClientIp(), SITETIME, $visitPage, App::server('PHP_SELF'), APP::getClientIp(), $_SESSION['counton'], SITETIME, $visitPage]);
     }
 
     include_once (APP."/includes/counters.php");
@@ -683,7 +683,7 @@ function show_counter()
 function stats_users() {
     if (@filemtime(STORAGE."/temp/statusers.dat") < time()-3600) {
         $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
-        $new = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `users_joined`>UNIX_TIMESTAMP(CURDATE());");
+        $new = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `joined`>UNIX_TIMESTAMP(CURDATE());");
 
         if (empty($new)) {
             $stat = $total;
@@ -700,7 +700,7 @@ function stats_users() {
 // --------------- Функция вывода количества админов и модеров --------------------//
 function stats_admins() {
     if (@filemtime(STORAGE."/temp/statadmins.dat") < time()-3600) {
-        $stat = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `users_level`>=? AND `users_level`<=?;", array(101, 105));
+        $stat = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `level`>=? AND `level`<=?;", array(101, 105));
 
         file_put_contents(STORAGE."/temp/statadmins.dat", $stat, LOCK_EX);
     }
@@ -714,7 +714,7 @@ function stats_spam() {
 }
 // --------------- Функция вывода количества забаненных --------------------//
 function stats_banned() {
-    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `users_ban`=? AND `users_timeban`>?;", array(1, SITETIME));
+    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", array(1, SITETIME));
 }
 
 // --------------- Функция вывода истории банов --------------------//
@@ -724,7 +724,7 @@ function stats_banhist() {
 
 // ------------ Функция вывода количества ожидающих регистрации -----------//
 function stats_reglist() {
-    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `users_confirmreg`>?;", array(0));
+    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", array(0));
 }
 
 // --------------- Функция вывода количества забаненных IP --------------------//
@@ -736,7 +736,7 @@ function stats_ipbanned() {
 function stats_gallery() {
     if (@filemtime(STORAGE."/temp/statgallery.dat") < time()-900) {
         $total = DB::run() -> querySingle("SELECT count(*) FROM `photo`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `photo_time`>?;", array(SITETIME-86400 * 3));
+        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `time`>?;", array(SITETIME-86400 * 3));
 
         if (empty($totalnew)) {
             $stat = $total;
@@ -757,7 +757,7 @@ function stats_allnews() {
 
 // ---------- Функция вывода записей в черном списке ------------//
 function stats_blacklist() {
-    $query = DB::run() -> query("SELECT `black_type`, count(*) FROM `blacklist` GROUP BY `black_type`;");
+    $query = DB::run() -> query("SELECT `type`, count(*) FROM `blacklist` GROUP BY `type`;");
     $blacklist = $query -> fetchAssoc();
     $list = $blacklist + array_fill(1, 3, 0);
     return $list[1].'/'.$list[2].'/'.$list[3];
@@ -820,7 +820,7 @@ function user_online($login) {
 
     if (empty($arrvisit)) {
         if (@filemtime(STORAGE."/temp/visit.dat") < time()-10) {
-            $queryvisit = DB::run() -> query("SELECT `visit_user` FROM `visit` WHERE `visit_nowtime`>?;", array(SITETIME-600));
+            $queryvisit = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>?;", array(SITETIME-600));
             $allvisits = $queryvisit -> fetchAll(PDO::FETCH_COLUMN);
             file_put_contents(STORAGE."/temp/visit.dat", serialize($allvisits), LOCK_EX);
         }
@@ -843,7 +843,7 @@ function user_gender($login) {
 
     if (empty($arrgender)) {
         if (@filemtime(STORAGE."/temp/gender.dat") < time()-600) {
-            $querygender = DB::run() -> query("SELECT `users_login` FROM `users` WHERE `users_gender`=?;", array(2));
+            $querygender = DB::run() -> query("SELECT `login` FROM `users` WHERE `gender`=?;", array(2));
             $allgender = $querygender -> fetchAll(PDO::FETCH_COLUMN);
             file_put_contents(STORAGE."/temp/gender.dat", serialize($allgender), LOCK_EX);
         }
@@ -860,7 +860,7 @@ function user_gender($login) {
 // --------------- Функция вывода пользователей онлайн ---------------//
 function allonline() {
     if (@filemtime(STORAGE."/temp/allonline.dat") < time()-30) {
-        $queryvisit = DB::run() -> query("SELECT `visit_user` FROM `visit` WHERE `visit_nowtime`>? ORDER BY `visit_nowtime` DESC;", array(SITETIME-600));
+        $queryvisit = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>? ORDER BY `nowtime` DESC;", array(SITETIME-600));
         $allvisits = $queryvisit -> fetchAll(PDO::FETCH_COLUMN);
         file_put_contents(STORAGE."/temp/allonline.dat", serialize($allvisits), LOCK_EX);
     }
@@ -872,7 +872,7 @@ function allonline() {
 function user_visit($login) {
     $visit = '(Оффлайн)';
 
-    $queryvisit = DB::run() -> querySingle("SELECT `visit_nowtime` FROM `visit` WHERE `visit_user`=? LIMIT 1;", array($login));
+    $queryvisit = DB::run() -> querySingle("SELECT `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", array($login));
     if (!empty($queryvisit)) {
         if ($queryvisit > SITETIME-600) {
             $visit = '(Сейчас на сайте)';
@@ -1141,8 +1141,8 @@ function photo_navigation($id) {
 // --------------------- Функция вывода статистики блогов ------------------------//
 function stats_blog() {
     if (@filemtime(STORAGE."/temp/statblog.dat") < time()-900) {
-        $totalblog = DB::run() -> querySingle("SELECT SUM(`cats_count`) FROM `catsblog`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `blogs_time`>?;", array(SITETIME-86400 * 3));
+        $totalblog = DB::run() -> querySingle("SELECT SUM(`count`) FROM `catsblog`;");
+        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `time`>?;", array(SITETIME-86400 * 3));
 
         if (empty($totalnew)) {
             $stat = (int)$totalblog;
@@ -1159,7 +1159,7 @@ function stats_blog() {
 // --------------------- Функция вывода статистики форума ------------------------//
 function stats_forum() {
     if (@filemtime(STORAGE."/temp/statforum.dat") < time()-600) {
-        $queryforum = DB::run() -> query("SELECT SUM(`forums_topics`) FROM `forums` UNION ALL SELECT SUM(`forums_posts`) FROM `forums`;");
+        $queryforum = DB::run() -> query("SELECT SUM(`topics`) FROM `forums` UNION ALL SELECT SUM(`posts`) FROM `forums`;");
         $total = $queryforum -> fetchAll(PDO::FETCH_COLUMN);
 
         file_put_contents(STORAGE."/temp/statforum.dat", (int)$total[0].'/'.(int)$total[1], LOCK_EX);
@@ -1175,7 +1175,7 @@ function stats_guest() {
         $total = DB::run() -> querySingle("SELECT count(*) FROM `guest`;");
 
         if ($total > ($config['maxpostbook']-10)) {
-            $stat = DB::run() -> querySingle("SELECT MAX(`guest_id`) FROM `guest`;");
+            $stat = DB::run() -> querySingle("SELECT MAX(`id`) FROM `guest`;");
         } else {
             $stat = $total;
         }
@@ -1193,7 +1193,7 @@ function stats_chat() {
     $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
 
     if ($total > ($config['chatpost']-10)) {
-        $total = DB::run() -> querySingle("SELECT MAX(`chat_id`) FROM `chat`;");
+        $total = DB::run() -> querySingle("SELECT MAX(`id`) FROM `chat`;");
     }
 
     return $total;
@@ -1201,7 +1201,7 @@ function stats_chat() {
 
 // ------------------ Функция вывода времени последнего сообщения --------------------//
 function stats_newchat() {
-    return intval(DB::run() -> querySingle("SELECT MAX(`chat_time`) FROM `chat`;"));
+    return intval(DB::run() -> querySingle("SELECT MAX(`time`) FROM `chat`;"));
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//
@@ -1209,8 +1209,8 @@ function stats_load($cats=0) {
     if (empty($cats)){
 
         if (@filemtime(STORAGE."/temp/statload.dat") < time()-900) {
-            $totalloads = DB::run() -> querySingle("SELECT SUM(`cats_count`) FROM `cats`;");
-            $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=? AND `downs_time`>?;", array(1, SITETIME-86400 * 5));
+            $totalloads = DB::run() -> querySingle("SELECT SUM(`count`) FROM `cats`;");
+            $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", array(1, SITETIME-86400 * 5));
 
             if (empty($totalnew)) {
                 $stat = intval($totalloads);
@@ -1226,14 +1226,14 @@ function stats_load($cats=0) {
 
         if (@filemtime(STORAGE."/temp/statloadcats.dat") < time()-900) {
 
-        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`cats_count`) FROM `cats` WHERE `cats_parent`=`c`.`cats_id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `downs_cats_id`=`cats_id` AND `downs_active`=? AND `downs_time` > ?) AS `new` FROM `cats` `c` ORDER BY `cats_order` ASC;", array(1, SITETIME-86400*5));
+        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`cats_id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY `order` ASC;", array(1, SITETIME-86400*5));
         $downs = $querydown->fetchAll();
 
             if (!empty($downs)){
                 foreach ($downs as $data){
                     $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
                     $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
-                    $stat[$data['cats_id']] = $data['cats_count'].$subcnt.$new;
+                    $stat[$data['id']] = $data['count'].$subcnt.$new;
                 }
             }
             file_put_contents(STORAGE."/temp/statloadcats.dat", serialize($stat), LOCK_EX);
@@ -1246,8 +1246,8 @@ function stats_load($cats=0) {
 
 // --------------------- Функция подсчета непроверенных файлов ------------------------//
 function stats_newload() {
-    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=?;", array(0));
-    $totalcheck = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=? AND `downs_app`=?;", array(0, 1));
+    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", array(0));
+    $totalcheck = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `app`=?;", array(0, 1));
 
     if (empty($totalcheck)) {
         return intval($totalnew);
@@ -1282,7 +1282,7 @@ function intar($string) {
 // ------------------- Функция подсчета голосований --------------------//
 function stats_votes() {
     if (@filemtime(STORAGE."/temp/statvote.dat") < time()-900) {
-        $data = DB::run() -> queryFetch("SELECT count(*) AS `count`, SUM(`vote_count`) AS `sum` FROM `vote` WHERE `vote_closed`=?;", array(0));
+        $data = DB::run() -> queryFetch("SELECT count(*) AS `count`, SUM(`count`) AS `sum` FROM `vote` WHERE `closed`=?;", array(0));
 
         if (empty($data['sum'])) {
             $data['sum'] = 0;
@@ -1299,10 +1299,10 @@ function stats_news() {
     if (@filemtime(STORAGE."/temp/statnews.dat") < time()-900) {
         $stat = 0;
 
-        $data = DB::run() -> queryFetch("SELECT `news_time` FROM `news` ORDER BY `news_id` DESC LIMIT 1;");
+        $data = DB::run() -> queryFetch("SELECT `time` FROM `news` ORDER BY `id` DESC LIMIT 1;");
 
         if ($data > 0) {
-            $stat = date_fixed($data['news_time'], "d.m.y");
+            $stat = date_fixed($data['time'], "d.m.y");
             if ($stat == 'Сегодня') {
                 $stat = '<span style="color:#ff0000">Сегодня</span>';
             }
@@ -1320,19 +1320,19 @@ function last_news() {
 
     if ($config['lastnews'] > 0) {
 
-        $query = DB::run()->query("SELECT * FROM `news` WHERE `news_top`=? ORDER BY `news_time` DESC LIMIT ".$config['lastnews'].";", array(1));
+        $query = DB::run()->query("SELECT * FROM `news` WHERE `top`=? ORDER BY `time` DESC LIMIT ".$config['lastnews'].";", array(1));
         $news = $query->fetchAll();
 
         $total = count($news);
 
         if ($total > 0) {
             foreach ($news as $data) {
-                $data['news_text'] = str_replace('[cut]', '', $data['news_text']);
-                echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data['news_id'].'">'.$data['news_title'].'</a> ('.$data['news_comments'].') <i class="fa fa-caret-down news-title"></i><br />';
+                $data['news_text'] = str_replace('[cut]', '', $data['text']);
+                echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].') <i class="fa fa-caret-down news-title"></i><br />';
 
-                echo '<div class="news-text" style="display: none;">'.bb_code($data['news_text']).'<br />';
-                echo '<a href="/news/'.$data['news_id'].'/comments">Комментарии</a> ';
-                echo '<a href="/news/'.$data['news_id'].'/end">&raquo;</a></div>';
+                echo '<div class="news-text" style="display: none;">'.bb_code($data['text']).'<br />';
+                echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ';
+                echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
             }
         }
     }
@@ -1342,7 +1342,7 @@ function last_news() {
 function stats_events() {
     if (@filemtime(STORAGE."/temp/statevents.dat") < time()-900) {
         $total = DB::run() -> querySingle("SELECT count(*) FROM `events`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `events` WHERE `event_time`>?;", array(SITETIME-86400 * 3));
+        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `events` WHERE `time`>?;", array(SITETIME-86400 * 3));
 
         if (empty($totalnew)) {
             $stat = (int)$total;
@@ -1359,7 +1359,7 @@ function stats_events() {
 // --------------------- Функция получения данных аккаунта  --------------------//
 function user($login) {
     if (! empty($login)) {
-        return DBM::run()->selectFirst('users', array('users_login'=>$login));
+        return DBM::run()->selectFirst('users', array('login'=>$login));
     }
     return false;
 }
@@ -1371,10 +1371,10 @@ function is_user() {
 
     if (empty($user)) {
         if (isset($_SESSION['log']) && isset($_SESSION['par'])) {
-            $udata = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array(check($_SESSION['log'])));
+            $udata = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array(check($_SESSION['log'])));
 
             if (!empty($udata)) {
-                if ($_SESSION['log'] == $udata['users_login'] && $_SESSION['par'] == md5($config['keypass'].$udata['users_pass'])) {
+                if ($_SESSION['log'] == $udata['login'] && $_SESSION['par'] == md5($config['keypass'].$udata['pass'])) {
                     $user = $udata;
                 }
             }
@@ -1392,7 +1392,7 @@ function is_admin($access = array()) {
 
     if (is_user()) {
         global $udata;
-        if (in_array($udata['users_level'], $access)) {
+        if (in_array($udata['level'], $access)) {
             return true;
         }
     }
@@ -1563,19 +1563,19 @@ function show_advertuser() {
 
 // --------------- Функция кэширования пользовательской рекламы -------------------//
 function save_advertuser() {
-    $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `rek_time`>?;", array(SITETIME));
+    $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>?;", array(SITETIME));
     $data = $queryrek -> fetchAll();
 
     $arraylink = array();
 
     if (count($data) > 0) {
         foreach ($data as $val) {
-            if (!empty($val['rek_color'])) {
-                $val['rek_name'] = '<span style="color:'.$val['rek_color'].'">'.$val['rek_name'].'</span>';
+            if (!empty($val['color'])) {
+                $val['name'] = '<span style="color:'.$val['color'].'">'.$val['name'].'</span>';
             }
-            $link = '<a href="'.$val['rek_site'].'" target="_blank" rel="nofollow">'.$val['rek_name'].'</a>';
+            $link = '<a href="'.$val['site'].'" target="_blank" rel="nofollow">'.$val['name'].'</a>';
 
-            if (!empty($val['rek_bold'])) {
+            if (!empty($val['bold'])) {
                 $link = '<b>'.$link.'</b>';
             }
 
@@ -1639,7 +1639,7 @@ function curl_connect($url, $user_agent = 'Mozilla/5.0', $proxy = null) {
 function recentevents($show = 5) {
 
     if (@filemtime(STORAGE."/temp/recentevents.dat") < time()-600) {
-        $query = DB::run()->query("SELECT * FROM `events` WHERE `event_top`=? ORDER BY `event_time` DESC LIMIT ".$show.";", array(1));
+        $query = DB::run()->query("SELECT * FROM `events` WHERE `top`=? ORDER BY `time` DESC LIMIT ".$show.";", array(1));
         $events = $query->fetchAll();
 
         file_put_contents(STORAGE."/temp/recentevents.dat", serialize($events), LOCK_EX);
@@ -1650,7 +1650,7 @@ function recentevents($show = 5) {
     if (is_array($events) && count($events) > 0) {
         foreach ($events as $data) {
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i> ';
-            echo '<a href="/events/?act=read&amp;id='.$data['event_id'].'">'.$data['event_title'].'</a> ('.$data['event_comments'].')<br />';
+            echo '<a href="/events/?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].')<br />';
         }
     }
 }
@@ -1659,7 +1659,7 @@ function recentevents($show = 5) {
 function recentphotos($show = 5) {
     global $config;
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
-        $recent = DBM::run()->query("SELECT * FROM `photo` ORDER BY `photo_time` DESC LIMIT ".$show.";");
+        $recent = DBM::run()->query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$show.";");
         file_put_contents(STORAGE."/temp/recentphotos.dat", serialize($recent), LOCK_EX);
     }
 
@@ -1667,7 +1667,7 @@ function recentphotos($show = 5) {
 
     if (is_array($photos) && count($photos) > 0) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery?act=view&amp;gid='.$data['photo_id'].'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;')).'</a>';
+            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], array('alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;')).'</a>';
         }
 
         echo '<br />';
@@ -1679,7 +1679,7 @@ function recentphotos($show = 5) {
 // --------------- Функция кэширования последних тем форума -------------------//
 function recenttopics($show = 5) {
     if (@filemtime(STORAGE."/temp/recenttopics.dat") < time()-180) {
-        $querytopic = DB::run() -> query("SELECT * FROM `topics` ORDER BY `topics_last_time` DESC LIMIT ".$show.";");
+        $querytopic = DB::run() -> query("SELECT * FROM `topics` ORDER BY `last_time` DESC LIMIT ".$show.";");
         $recent = $querytopic -> fetchAll();
 
         file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($recent), LOCK_EX);
@@ -1689,8 +1689,8 @@ function recenttopics($show = 5) {
 
     if (is_array($topics) && count($topics) > 0) {
         foreach ($topics as $topic) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['topics_id'].'">'.$topic['topics_title'].'</a> ('.$topic['topics_posts'].')';
-            echo '<a href="/topic/'.$topic['topics_id'].'/end">&raquo;</a><br />';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic['posts'].')';
+            echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br />';
         }
     }
 }
@@ -1698,7 +1698,7 @@ function recenttopics($show = 5) {
 // ------------- Функция кэширования последних файлов в загрузках -----------------//
 function recentfiles($show = 5) {
     if (@filemtime(STORAGE."/temp/recentfiles.dat") < time()-600) {
-        $queryfiles = DB::run() -> query("SELECT * FROM `downs` WHERE `downs_active`=? ORDER BY `downs_time` DESC LIMIT ".$show.";", array(1));
+        $queryfiles = DB::run() -> query("SELECT * FROM `downs` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$show.";", array(1));
         $recent = $queryfiles -> fetchAll();
 
         file_put_contents(STORAGE."/temp/recentfiles.dat", serialize($recent), LOCK_EX);
@@ -1709,8 +1709,8 @@ function recentfiles($show = 5) {
     if (is_array($files) && count($files) > 0) {
         foreach ($files as $file){
 
-            $filesize = (!empty($file['downs_link'])) ? read_file(HOME.'/upload/files/'.$file['downs_link']) : 0;
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['downs_id'].'">'.$file['downs_title'].'</a> ('.$filesize.')<br />';
+            $filesize = (!empty($file['link'])) ? read_file(HOME.'/upload/files/'.$file['link']) : 0;
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['id'].'">'.$file['title'].'</a> ('.$filesize.')<br />';
         }
     }
 }
@@ -1718,7 +1718,7 @@ function recentfiles($show = 5) {
 // ------------- Функция кэширования последних статей в блогах -----------------//
 function recentblogs() {
     if (@filemtime(STORAGE."/temp/recentblog.dat") < time()-600) {
-        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` ORDER BY `blogs_time` DESC LIMIT 5;");
+        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` ORDER BY `time` DESC LIMIT 5;");
         $recent = $queryblogs -> fetchAll();
 
         file_put_contents(STORAGE."/temp/recentblog.dat", serialize($recent), LOCK_EX);
@@ -1728,7 +1728,7 @@ function recentblogs() {
 
     if (is_array($blogs) && count($blogs) > 0) {
         foreach ($blogs as $blog) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/blog/blog?act=view&amp;id='.$blog['blogs_id'].'">'.$blog['blogs_title'].'</a> ('.$blog['blogs_comments'].')<br />';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/blog/blog?act=view&amp;id='.$blog['id'].'">'.$blog['title'].'</a> ('.$blog['comments'].')<br />';
         }
     }
 }
@@ -1736,8 +1736,8 @@ function recentblogs() {
 // ------------- Функция вывода количества предложений и пожеланий -------------//
 function stats_offers() {
     if (@filemtime(STORAGE."/temp/offers.dat") < time()-10800) {
-        $offers = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(0));
-        $problems = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `offers_type`=?;", array(1));
+        $offers = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array(0));
+        $problems = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array(1));
 
         file_put_contents(STORAGE."/temp/offers.dat", $offers.'/'.$problems, LOCK_EX);
     }
@@ -1785,31 +1785,31 @@ function fn_close($fp, $method) {
 function restatement($mode) {
     switch ($mode) {
         case 'forum':
-            DB::run() -> query("UPDATE `forums` SET `forums_topics`=(SELECT count(*) FROM `topics` WHERE `forums`.`forums_id`=`topics`.`topics_forums_id`);");
-            DB::run() -> query("UPDATE `forums` SET `forums_posts`=(SELECT count(*) FROM `posts` WHERE `forums`.`forums_id`=`posts`.`posts_forums_id`);");
-            DB::run() -> query("UPDATE `topics` SET `topics_posts`=(SELECT count(*) FROM `posts` WHERE `topics`.`topics_id`=`posts`.`posts_topics_id`);");
+            DB::run() -> query("UPDATE `forums` SET `topics`=(SELECT count(*) FROM `topics` WHERE `forums`.`id`=`topics`.`forums_id`);");
+            DB::run() -> query("UPDATE `forums` SET `posts`=(SELECT count(*) FROM `posts` WHERE `forums`.`id`=`posts`.`forums_id`);");
+            DB::run() -> query("UPDATE `topics` SET `posts`=(SELECT count(*) FROM `posts` WHERE `topics`.`id`=`posts`.`topics_id`);");
             break;
 
         case 'blog':
-            DB::run() -> query("UPDATE `catsblog` SET `cats_count`=(SELECT count(*) FROM `blogs` WHERE `catsblog`.`cats_id`=`blogs`.`blogs_cats_id`);");
-            DB::run() -> query("UPDATE `blogs` SET `blogs_comments`=(SELECT count(*) FROM `commblog` WHERE `blogs`.`blogs_id`=`commblog`.`commblog_blog`);");
+            DB::run() -> query("UPDATE `catsblog` SET `count`=(SELECT count(*) FROM `blogs` WHERE `catsblog`.`id`=`blogs`.`cats_id`);");
+            DB::run() -> query("UPDATE `blogs` SET `comments`=(SELECT count(*) FROM `commblog` WHERE `blogs`.`id`=`commblog`.`blog`);");
             break;
 
         case 'load':
-            DB::run() -> query("UPDATE `cats` SET `cats_count`=(SELECT count(*) FROM `downs` WHERE `cats`.`cats_id`=`downs`.`downs_cats_id` AND `downs_active`=?);", array(1));
-            DB::run() -> query("UPDATE `downs` SET `downs_comments`=(SELECT count(*) FROM `commload` WHERE `downs`.`downs_id`=`commload`.`commload_down`);");
+            DB::run() -> query("UPDATE `cats` SET `count`=(SELECT count(*) FROM `downs` WHERE `cats`.`id`=`downs`.`cats_id` AND `active`=?);", array(1));
+            DB::run() -> query("UPDATE `downs` SET `comments`=(SELECT count(*) FROM `commload` WHERE `downs`.`id`=`commload`.`down`);");
             break;
 
         case 'news':
-            DB::run() -> query("UPDATE `news` SET `news_comments`=(SELECT count(*) FROM `commnews` WHERE `news`.`news_id`=`commnews`.`commnews_news_id`);");
+            DB::run() -> query("UPDATE `news` SET `comments`=(SELECT count(*) FROM `commnews` WHERE `news`.`id`=`commnews`.`news_id`);");
             break;
 
         case 'gallery':
-            DB::run() -> query("UPDATE `photo` SET `photo_comments`=(SELECT count(*) FROM `commphoto` WHERE `photo`.`photo_id`=`commphoto`.`commphoto_gid`);");
+            DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `commphoto` WHERE `photo`.`id`=`commphoto`.`gid`);");
             break;
 
         case 'events':
-            DB::run() -> query("UPDATE `events` SET `event_comments`=(SELECT count(*) FROM `commevents` WHERE `events`.`event_id`=`commevents`.`commevent_event_id`);");
+            DB::run() -> query("UPDATE `events` SET `comments`=(SELECT count(*) FROM `commevents` WHERE `events`.`id`=`commevents`.`event_id`);");
             break;
     }
     return true;
@@ -2080,7 +2080,7 @@ function getExtension($filename){
 function is_contact($login, $contact){
 
     if (user($contact)) {
-        $check_contact = DB::run() -> queryFetch("SELECT * FROM `contact` WHERE `contact_user`=? AND `contact_name`=? LIMIT 1;", array($login, $contact));
+        $check_contact = DB::run() -> queryFetch("SELECT * FROM `contact` WHERE `user`=? AND `name`=? LIMIT 1;", array($login, $contact));
 
         if (!empty($check_contact)){
             return true;
@@ -2093,7 +2093,7 @@ function is_contact($login, $contact){
 function is_ignore($login, $ignore){
 
     if (user($ignore)) {
-        $check_ignore = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($login, $ignore));
+        $check_ignore = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($login, $ignore));
 
         if (!empty($check_ignore)){
             return true;
@@ -2104,7 +2104,7 @@ function is_ignore($login, $ignore){
 
 // ----- Функция определения приватности у пользователя -----//
 function user_privacy($login){
-    $privacy = DB::run() -> querySingle("SELECT `users_privacy` FROM `users` WHERE `users_login`=? LIMIT 1;", array($login));
+    $privacy = DB::run() -> querySingle("SELECT `privacy` FROM `users` WHERE `login`=? LIMIT 1;", array($login));
     return ($privacy) ? true : false;
 }
 
@@ -2124,10 +2124,10 @@ function removeDir($dir){
 function send_private($login, $sender, $text, $time = SITETIME){
     if (user($login)) {
 
-        DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);",
+        DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);",
         array($login, $sender, $text, $time));
 
-        DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;", array($login));
+        DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;", array($login));
 
         save_usermail();
         return true;
@@ -2138,7 +2138,7 @@ function send_private($login, $sender, $text, $time = SITETIME){
 // ----- Функция подготовки приватного сообщения -----//
 function text_private($id, $replace = array()){
 
-    $message = DB::run() -> querySingle("SELECT `notice_text` FROM `notice` WHERE `notice_id`=? LIMIT 1;", array($id));
+    $message = DB::run() -> querySingle("SELECT `text` FROM `notice` WHERE `id`=? LIMIT 1;", array($id));
 
     if (!empty($message)){
         foreach ($replace as $key=>$val){

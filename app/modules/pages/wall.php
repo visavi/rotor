@@ -113,7 +113,7 @@ if (!empty($queryuser)) {
 
                                     DB::run() -> query("DELETE FROM `wall` WHERE `wall_user`=? AND `wall_time` < (SELECT MIN(`wall_time`) FROM (SELECT `wall_time` FROM `wall` WHERE `wall_user`=? ORDER BY `wall_time` DESC LIMIT ".$config['wallmaxpost'].") AS del);", array($uz, $uz));
 
-                                    $_SESSION['note'] = 'Запись успешно добавлена!';
+                                    notice('Запись успешно добавлена!');
                                     redirect("/wall?uz=$uz");
                                 } else {
                                     show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
@@ -156,7 +156,7 @@ if (!empty($queryuser)) {
                             if (is_flood($log)) {
                                 DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(4, $data['wall_id'], $log, $data['wall_login'], $data['wall_text'], $data['wall_time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;start='.$start));
 
-                                $_SESSION['note'] = 'Жалоба успешно отправлена!';
+                                notice('Жалоба успешно отправлена!');
                                 redirect("/wall?uz=$uz&start=$start");
                             } else {
                                 show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
@@ -196,7 +196,7 @@ if (!empty($queryuser)) {
 
                         $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `wall_id` IN (".$del.") AND `wall_user`=?;", array($log));
 
-                        $_SESSION['note'] = 'Выбранные записи успешно удалены!';
+                        notice('Выбранные записи успешно удалены!');
                         redirect("/wall?uz=$uz&start=$start");
                     } else {
                         show_error('Ошибка! Отстутствуют выбранные сообщения для удаления!');
@@ -230,7 +230,7 @@ if (!empty($queryuser)) {
 
                         $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `wall_id` IN (".$del.");");
 
-                        $_SESSION['note'] = 'Выбранные записи успешно удалены!';
+                        notice('Выбранные записи успешно удалены!');
                         redirect("/wall?uz=$uz&start=$start");
                     } else {
                         show_error('Ошибка! Отстутствуют выбранные сообщения для удаления!');

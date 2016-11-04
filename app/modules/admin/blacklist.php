@@ -116,7 +116,7 @@ if (is_admin(array(101, 102))) {
                                 if (empty($black)) {
                                     DB::run() -> query("INSERT INTO `blacklist` (`black_type`, `black_value`, `black_user`, `black_time`) VALUES (?, ?, ?, ?);", array($type, $value, $log, SITETIME));
 
-                                    $_SESSION['note'] = 'Запись успешно добавлена в черный список!';
+                                    notice('Запись успешно добавлена в черный список!');
                                     redirect("/admin/blacklist?page=$page&start=$start");
 
                                 } else {
@@ -160,7 +160,7 @@ if (is_admin(array(101, 102))) {
 
                     DB::run() -> query("DELETE FROM `blacklist` WHERE `black_type`=? AND `black_id` IN (".$del.");", array($type));
 
-                    $_SESSION['note'] = 'Выбранные записи успешно удалены!';
+                    notice('Выбранные записи успешно удалены!');
                     redirect("/admin/blacklist?page=$page&start=$start");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные записи для удаления!');

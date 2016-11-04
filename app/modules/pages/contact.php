@@ -99,7 +99,7 @@ if (is_user()) {
                                     DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                 }
 
-                                $_SESSION['note'] = 'Пользователь успешно добавлен в контакты!';
+                                notice('Пользователь успешно добавлен в контакты!');
                                 redirect("/contact?start=$start");
 
                             } else {
@@ -170,7 +170,7 @@ if (is_user()) {
                     if (utf_strlen($msg) < 1000) {
                         DB::run() -> query("UPDATE contact SET contact_text=? WHERE contact_id=? AND contact_user=?;", array($msg, $id, $log));
 
-                        $_SESSION['note'] = 'Заметка успешно отредактирована!';
+                        notice('Заметка успешно отредактирована!');
                         redirect("/contact?start=$start");
 
                     } else {
@@ -204,7 +204,7 @@ if (is_user()) {
                     $del = implode(',', $del);
                     DB::run() -> query("DELETE FROM contact WHERE contact_id IN (".$del.") AND contact_user=?;", array($log));
 
-                    $_SESSION['note'] = 'Выбранные пользователи успешно удалены из контактов!';
+                    notice('Выбранные пользователи успешно удалены из контактов!');
                     redirect("/contact?start=$start");
 
                 } else {

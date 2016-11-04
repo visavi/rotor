@@ -65,7 +65,7 @@ if (is_user()) {
                                     DB::run() -> query("UPDATE `users` SET `users_explainban`=? WHERE `users_login`=?;", array(0, $log));
                                     DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?;", array($udata['users_loginsendban']));
 
-                                    $_SESSION['note'] = 'Объяснение успешно отправлено!';
+                                    notice('Объяснение успешно отправлено!');
                                     redirect("/ban");
 
                                 } else {

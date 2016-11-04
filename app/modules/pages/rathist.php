@@ -126,7 +126,7 @@ if (is_user()) {
 
                             DB::run() -> query("DELETE FROM `rating` WHERE `rating_id` IN (".$del.") AND `rating_login`=?;", array($uz));
 
-                            $_SESSION['note'] = 'Выбранные голосования успешно удалены!';
+                            notice('Выбранные голосования успешно удалены!');
                             redirect("/rathist?uz=$uz");
                         } else {
                             show_error('Ошибка! Отсутствуют выбранные голосования!');

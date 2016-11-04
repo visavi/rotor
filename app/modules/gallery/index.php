@@ -71,7 +71,7 @@ break;
                                 DB::run() -> query("INSERT INTO `ratedphoto` (`rated_photo`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($gid, $log, $expiresrated));
                                 DB::run() -> query("UPDATE `photo` SET `photo_rating`=`photo_rating`+? WHERE `photo_id`=?;", array($score, $gid));
 
-                                $_SESSION['note'] = 'Ваша оценка принята! Рейтинг фотографии: '.format_num($data['photo_rating'] + $score);
+                                notice('Ваша оценка принята! Рейтинг фотографии: '.format_num($data['photo_rating'] + $score));
                                 redirect("/gallery?act=view&gid=$gid");
 
                             } else {
@@ -242,7 +242,7 @@ break;
 
                             DB::run() -> query("UPDATE `photo` SET `photo_title`=?, `photo_text`=?, `photo_closed`=? WHERE `photo_id`=?;", array($title, $text, $closed, $gid));
 
-                            $_SESSION['note'] = 'Фотография успешно отредактирована!';
+                            notice('Фотография успешно отредактирована!');
                             redirect("/gallery/album?act=photo&uz=$uz&start=$start");
 
                         } else {
@@ -383,7 +383,7 @@ break;
                                 DB::run() -> query("UPDATE `photo` SET `photo_comments`=`photo_comments`+1 WHERE `photo_id`=?;", array($gid));
                                 DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
-                                $_SESSION['note'] = 'Комментарий успешно добавлен!';
+                                notice('Комментарий успешно добавлен!');
                                 redirect("/gallery?act=end&gid=$gid");
 
                             } else {
@@ -468,7 +468,7 @@ break;
 
                                 DB::run() -> query("UPDATE `commphoto` SET `commphoto_text`=? WHERE `commphoto_id`=?;", array($msg, $cid));
 
-                                $_SESSION['note'] = 'Комментарий успешно отредактирован!';
+                                notice('Комментарий успешно отредактирован!');
                                 redirect("/gallery?act=comments&gid=$gid&start=$start");
 
                             } else {
@@ -513,7 +513,7 @@ break;
                     $delcomments = DB::run() -> exec("DELETE FROM commphoto WHERE commphoto_id IN (".$del.") AND commphoto_gid=".$gid.";");
                     DB::run() -> query("UPDATE photo SET photo_comments=photo_comments-? WHERE photo_id=?;", array($delcomments, $gid));
 
-                    $_SESSION['note'] = 'Выбранные комментарии успешно удалены!';
+                    notice('Выбранные комментарии успешно удалены!');
                     redirect("/gallery?act=comments&gid=$gid&start=$start");
 
                 } else {
@@ -547,7 +547,7 @@ break;
 
                             unlink_image('upload/pictures/', $querydel['photo_link']);
 
-                            $_SESSION['note'] = 'Фотография успешно удалена!';
+                            notice('Фотография успешно удалена!');
                             redirect("/gallery?act=photo&start=$start");
 
                         } else {
@@ -617,7 +617,7 @@ break;
     * if (file_exists(HOME.'/upload/pictures/'.$delete['photo_link'])) {unlink(HOME.'/upload/pictures/'.$delete['photo_link']);}
     * }
     *
-    * $_SESSION['note'] = 'Выбранные фотографии успешно удалены!';
+    * notice('Выбранные фотографии успешно удалены!');
     * redirect("/gallery?act=album&start=$start");
     *
     * } else {show_error('Ошибка! Данных фотографий не существует или вы не автор этих фотографий!');}

@@ -146,7 +146,7 @@ switch ($act):
                                     DB::run() -> query("UPDATE `voteanswer` SET `answer_result`=`answer_result`+1 WHERE `answer_id`=?;", array($poll));
                                     DB::run() -> query("INSERT INTO `votepoll` (`poll_vote_id`, `poll_user`, `poll_time`) VALUES (?, ?, ?);", array($id, $log, SITETIME));
 
-                                    $_SESSION['note'] = 'Ваш голос успешно принят!';
+                                    notice('Ваш голос успешно принят!');
                                     redirect("/votes?act=poll&id=$id");
 
                                 } else {

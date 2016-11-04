@@ -30,7 +30,7 @@ if (is_admin(array(101, 102, 103))) {
                     } else {
                         $comma = ', ';
                     }
-                    echo $comma.'<a href="/admin/antimat?act=del&amp;id='.$value['mat_id'].'&amp;uid='.$_SESSION['token'].'">'.$value['mat_string'].'</a>';
+                    echo $comma.'<a href="/admin/antimat?act=del&amp;id='.$value['id'].'&amp;uid='.$_SESSION['token'].'">'.$value['string'].'</a>';
                 }
 
                 echo '<br /><br />';
@@ -61,11 +61,11 @@ if (is_admin(array(101, 102, 103))) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($mat)) {
-                    $querymat = DB::run() -> querySingle("SELECT mat_id FROM antimat WHERE mat_string=? LIMIT 1;", array($mat));
+                    $querymat = DB::run() -> querySingle("SELECT id FROM antimat WHERE string=? LIMIT 1;", array($mat));
                     if (empty($querymat)) {
-                        DB::run() -> query("INSERT INTO antimat (mat_string) VALUES (?);", array($mat));
+                        DB::run() -> query("INSERT INTO antimat (string) VALUES (?);", array($mat));
 
-                        $_SESSION['note'] = 'Слово успешно добавлено в список антимата!';
+                        notice('Слово успешно добавлено в список антимата!');
                         redirect("/admin/antimat");
 
                     } else {
@@ -91,9 +91,9 @@ if (is_admin(array(101, 102, 103))) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($id)) {
-                    DB::run() -> query("DELETE FROM antimat WHERE mat_id=?;", array($id));
+                    DB::run() -> query("DELETE FROM antimat WHERE id=?;", array($id));
 
-                    $_SESSION['note'] = 'Слово успешно удалено из списка антимата!';
+                    notice('Слово успешно удалено из списка антимата!');
                     redirect("/admin/antimat");
 
                 } else {
@@ -128,7 +128,7 @@ if (is_admin(array(101, 102, 103))) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("DELETE FROM antimat;");
 
-                    $_SESSION['note'] = 'Список антимата успешно очищен!';
+                    notice('Список антимата успешно очищен!');
                     redirect("/admin/antimat");
 
                 } else {

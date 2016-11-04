@@ -1087,7 +1087,7 @@ case 'loadscreen':
 
                         $handle -> clean();
 
-                        $_SESSION['note'] = 'Скриншот успешно загружен!';
+                        notice('Скриншот успешно загружен!');
                         redirect("/admin/load?act=editdown&id=$id");
                     } else {
                         show_error($handle -> error);

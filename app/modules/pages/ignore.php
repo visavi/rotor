@@ -100,7 +100,7 @@ if (is_user()) {
                                         DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                     }
 
-                                    $_SESSION['note'] = 'Пользователь успешно отправлен в игнор!';
+                                    notice('Пользователь успешно отправлен в игнор!');
                                     redirect("/ignore?start=$start");
 
                                 } else {
@@ -174,7 +174,7 @@ if (is_user()) {
                     if (utf_strlen($msg) < 1000) {
                         DB::run() -> query("UPDATE `ignore` SET `ignore_text`=? WHERE `ignore_id`=? AND `ignore_user`=?;", array($msg, $id, $log));
 
-                        $_SESSION['note'] = 'Заметка успешно отредактирована!';
+                        notice('Заметка успешно отредактирована!');
                         redirect("/ignore?start=$start");
 
                     } else {
@@ -208,7 +208,7 @@ if (is_user()) {
                     $del = implode(',', $del);
                     DB::run() -> query("DELETE FROM `ignore` WHERE `ignore_id` IN (".$del.") AND `ignore_user`=?;", array($log));
 
-                    $_SESSION['note'] = 'Выбранные пользователи успешно удалены из игнора!';
+                    notice('Выбранные пользователи успешно удалены из игнора!');
                     redirect("/ignore?start=$start");
 
                 } else {

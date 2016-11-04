@@ -80,7 +80,7 @@ if (is_admin(array(101))) {
                                 $insertprivat -> execute($uzval, $log, $msg, SITETIME);
                             }
 
-                            $_SESSION['note'] = 'Сообщение успешно разослано! (Отправлено: '.$total.')';
+                            notice('Сообщение успешно разослано! (Отправлено: '.$total.')');
                             redirect("/admin/delivery");
 
                         } else {

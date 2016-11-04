@@ -87,7 +87,7 @@ switch ($act):
                 if (!empty($rat)) {
                     $page = floor(($rat - 1) / $config['avtorlist']) * $config['avtorlist'];
 
-                    $_SESSION['note'] = 'Позиция в рейтинге: '.$rat;
+                    notice('Позиция в рейтинге: '.$rat);
                     redirect("/authoritylist?start=$page&uz=$queryuser");
                 } else {
                     show_error('Пользователь с данным логином не найден!');

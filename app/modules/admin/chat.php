@@ -107,7 +107,7 @@ if (is_admin()) {
 
                     DB::run() -> query("UPDATE `users` SET `users_newchat`=? WHERE `users_login`=? LIMIT 1;", array(stats_newchat(), $log));
 
-                    $_SESSION['note'] = 'Сообщение успешно добавлено!';
+                    notice('Сообщение успешно добавлено!');
                     redirect ("/admin/chat");
 
                 } else {
@@ -215,7 +215,7 @@ if (is_admin()) {
 
                             DB::run() -> query("UPDATE `chat` SET `chat_text`=?, `chat_edit`=?, `chat_edit_time`=? WHERE `chat_id`=? LIMIT 1;", array($msg, $log, SITETIME, $id));
 
-                            $_SESSION['note'] = 'Сообщение успешно отредактировано!';
+                            notice('Сообщение успешно отредактировано!');
                             redirect ("/admin/chat?start=$start");
 
                         } else {
@@ -256,7 +256,7 @@ if (is_admin()) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("TRUNCATE `chat`;");
 
-                    $_SESSION['note'] = 'Админ-чат успешно очищен!';
+                    notice('Админ-чат успешно очищен!');
                     redirect ("/admin/chat");
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');

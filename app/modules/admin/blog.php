@@ -71,7 +71,7 @@ if (is_admin()) {
                 if ($uid == $_SESSION['token']) {
                     restatement('blog');
 
-                    $_SESSION['note'] = 'Все данные успешно пересчитаны!';
+                    notice('Все данные успешно пересчитаны!');
                     redirect("/admin/blog");
 
                 } else {
@@ -98,7 +98,7 @@ if (is_admin()) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`cats_order`),0)+1 FROM `catsblog`;");
                         DB::run() -> query("INSERT INTO `catsblog` (`cats_order`, `cats_name`) VALUES (?, ?);", array($maxorder, $name));
 
-                        $_SESSION['note'] = 'Новый раздел успешно добавлен!';
+                        notice('Новый раздел успешно добавлен!');
                         redirect("/admin/blog");
 
                     } else {
@@ -160,7 +160,7 @@ if (is_admin()) {
                         if (!empty($blogs)) {
                             DB::run() -> query("UPDATE `catsblog` SET `cats_order`=?, `cats_name`=? WHERE `cats_id`=?;", array($order, $name, $cid));
 
-                            $_SESSION['note'] = 'Раздел успешно отредактирован!';
+                            notice('Раздел успешно отредактирован!');
                             redirect("/admin/blog");
 
                         } else {
@@ -217,7 +217,7 @@ if (is_admin()) {
                         DB::run() -> query("DELETE FROM `blogs` WHERE `blogs_cats_id`=?;", array($cid));
                         DB::run() -> query("DELETE FROM `catsblog` WHERE `cats_id`=?;", array($cid));
 
-                        $_SESSION['note'] = 'Раздел успешно удален!';
+                        notice('Раздел успешно удален!');
                         redirect("/admin/blog");
 
                     } else {
@@ -339,7 +339,7 @@ if (is_admin()) {
 
                                     DB::run() -> query("UPDATE `blogs` SET `blogs_title`=?, `blogs_text`=?, `blogs_user`=?, `blogs_tags`=? WHERE `blogs_id`=?;", array($title, $text, $user, $tags, $id));
 
-                                    $_SESSION['note'] = 'Статья успешно отредактирована!';
+                                    notice('Статья успешно отредактирована!');
                                     redirect("/admin/blog?act=blog&cid=$cid&start=$start");
 
                                 } else {
@@ -423,7 +423,7 @@ if (is_admin()) {
                         DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($section));
                         DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`-1 WHERE `cats_id`=?", array($cid));
 
-                        $_SESSION['note'] = 'Статья успешно перемещена!';
+                        notice('Статья успешно перемещена!');
                         redirect("/admin/blog?act=blog&cid=$section");
 
                     } else {
@@ -463,7 +463,7 @@ if (is_admin()) {
                     // Обновление счетчиков
                     DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`-? WHERE `cats_id`=?", array($delblogs, $cid));
 
-                    $_SESSION['note'] = 'Выбранные статьи успешно удалены!';
+                    notice('Выбранные статьи успешно удалены!');
                     redirect("/admin/blog?act=blog&cid=$cid&start=$start");
 
                 } else {

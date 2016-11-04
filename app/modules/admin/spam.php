@@ -318,7 +318,7 @@ if (is_admin(array(101, 102, 103))) {
 
                     DB::run() -> query("DELETE FROM `spam` WHERE `spam_id` IN (".$del.");");
 
-                    $_SESSION['note'] = 'Выбранные жалобы успешно удалены!';
+                    notice('Выбранные жалобы успешно удалены!');
                     redirect("/admin/spam?act=$ref&start=$start");
 
                 } else {
@@ -342,7 +342,7 @@ if (is_admin(array(101, 102, 103))) {
                 if (is_admin(array(101, 102))) {
                     DB::run() -> query("TRUNCATE `spam`;");
 
-                    $_SESSION['note'] = 'Жалобы успешно очищены!';
+                    notice('Жалобы успешно очищены!');
                     redirect("/admin/spam");
 
                 } else {

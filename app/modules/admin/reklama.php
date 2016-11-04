@@ -131,7 +131,7 @@ if (is_admin()) {
                                     DB::run() -> query("UPDATE `rekuser` SET `rek_site`=?, `rek_name`=?, `rek_color`=?, `rek_bold`=? WHERE `rek_id`=?", array($site, $name, $color, $bold, $id));
                                     save_advertuser();
 
-                                    $_SESSION['note'] = 'Рекламная ссылка успешно изменена!';
+                                    notice('Рекламная ссылка успешно изменена!');
                                     redirect("/admin/reklama?start=$start");
                                 } else {
                                     show_error('Ошибка! Редактируемой ссылки не существует!');
@@ -174,7 +174,7 @@ if (is_admin()) {
                     DB::run() -> query("DELETE FROM `rekuser` WHERE `rek_id` IN (".$del.");");
                     save_advertuser();
 
-                    $_SESSION['note'] = 'Выбранные ссылки успешно удалены!';
+                    notice('Выбранные ссылки успешно удалены!');
                     redirect("/admin/reklama?start=$start");
                 } else {
                     show_error('Ошибка! Не выбраны ссылки для удаления!');

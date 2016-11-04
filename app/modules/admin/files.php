@@ -161,7 +161,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
                         flock ($fp, LOCK_UN);
                         fclose($fp);
 
-                        $_SESSION['note'] = 'Файл успешно отредактирован!';
+                        notice('Файл успешно отредактирован!');
                         redirect ("/admin/files?act=edit&file=$file");
 
                     } else {
@@ -216,7 +216,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
                         fclose($fp);
                         chmod(STORAGE.'/main/'.$newfile.'.dat', 0666);
 
-                        $_SESSION['note'] = 'Новый файл успешно создан!';
+                        notice('Новый файл успешно создан!');
                         redirect ('/admin/files?act=edit&file='.$newfile.'.dat');
 
                     } else {
@@ -263,7 +263,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
                     if (file_exists(STORAGE."/main/$file")) {
                         if ($file != 'index.dat') {
                             if (unlink (STORAGE."/main/$file")) {
-                                $_SESSION['note'] = 'Файл успешно удален!';
+                                notice('Файл успешно удален!');
                                 redirect ('/admin/files');
 
                             } else {

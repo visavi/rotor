@@ -51,7 +51,7 @@ if (is_admin(array(101, 102, 103))) {
                     echo 'Забанил: '.profile($user['users_loginsendban']).'</div><br />';
                 }
 
-                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `ban_user`=?;", array($uz));
+                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", array($uz));
 
                 echo 'Строгих нарушений: <b>'.$user['users_totalban'].'</b><br />';
                 echo '<i class="fa fa-history"></i> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br /><br />';
@@ -173,7 +173,7 @@ if (is_admin(array(101, 102, 103))) {
             $note = check($_POST['note']);
 
             if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
                 if (!empty($user)) {
                     if (!empty($user['users_ban']) && $user['users_timeban'] > SITETIME) {
@@ -193,11 +193,11 @@ if (is_admin(array(101, 102, 103))) {
                                     if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
                                         if (utf_strlen($note) <= 1000) {
 
-                                            DB::run() -> query("UPDATE `users` SET `users_ban`=?, `users_timeban`=?, `users_reasonban`=?, `users_loginsendban`=? WHERE `users_login`=? LIMIT 1;", array(1, SITETIME + ($bantotaltime * 60), $reasonban, $log, $uz));
+                                            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `reasonban`=?, `loginsendban`=? WHERE `login`=? LIMIT 1;", array(1, SITETIME + ($bantotaltime * 60), $reasonban, $log, $uz));
 
-                                            DB::run() -> query("INSERT INTO `banhist` (`ban_user`, `ban_send`, `ban_type`, `ban_reason`, `ban_term`, `ban_time`) VALUES (?, ?, ?, ?, ?, ?);", array($uz, $log, 2, $reasonban, $bantotaltime * 60, SITETIME));
+                                            DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", array($uz, $log, 2, $reasonban, $bantotaltime * 60, SITETIME));
 
-                                            $_SESSION['note'] = 'Данные успешно изменены!';
+                                            notice('Данные успешно изменены!');
                                             redirect("/admin/ban?act=edit&uz=$uz");
                                         } else {
                                             show_error('Ошибка! Слишком большая заметка, не более 1000 символов!');
@@ -239,11 +239,11 @@ if (is_admin(array(101, 102, 103))) {
             $note = check($_POST['note']);
 
             if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
                 if (!empty($user)) {
-                    if (empty($user['users_ban']) || $user['users_timeban'] < SITETIME) {
-                        if ($user['users_level'] < 101 || $user['users_level'] > 105) {
+                    if (empty($user['ban']) || $user['timeban'] < SITETIME) {
+                        if ($user['level'] < 101 || $user['level'] > 105) {
                             if ($bantype == 'min') {
                                 $bantotaltime = $bantime;
                             }
@@ -265,13 +265,13 @@ if (is_admin(array(101, 102, 103))) {
                                                 $bancount = 0;
                                             }
 
-                                            DB::run() -> query("UPDATE `users` SET `users_ban`=?, `users_timeban`=?, `users_timelastban`=?, `users_reasonban`=?, `users_loginsendban`=?, `users_totalban`=`users_totalban`+?, `users_explainban`=? WHERE `users_login`=? LIMIT 1;", array(1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, $log, $bancount, 1, $uz));
+                                            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `timelastban`=?, `reasonban`=?, `loginsendban`=?, `totalban`=`totalban`+?, `explainban`=? WHERE `login`=? LIMIT 1;", array(1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, $log, $bancount, 1, $uz));
 
-                                            DB::run() -> query("INSERT INTO `banhist` (`ban_user`, `ban_send`, `ban_type`, `ban_reason`, `ban_term`, `ban_time`) VALUES (?, ?, ?, ?, ?, ?);", array($uz, $log, 1, $reasonban, $bantotaltime * 60, SITETIME));
+                                            DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", array($uz, $log, 1, $reasonban, $bantotaltime * 60, SITETIME));
 
-                                            DB::run() -> query("INSERT INTO `note` (`note_user`, `note_text`, `note_edit`, `note_time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `note_text`=?, `note_edit`=?, `note_time`=?;", array($uz, $note, $log, SITETIME, $note, $log, SITETIME));
+                                            DB::run() -> query("INSERT INTO `note` (`user`, `text`, `edit`, `time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `text`=?, `edit`=?, `time`=?;", array($uz, $note, $log, SITETIME, $note, $log, SITETIME));
 
-                                            $_SESSION['note'] = 'Аккаунт успешно заблокирован!';
+                                            notice('Аккаунт успешно заблокирован!');
                                             redirect("/admin/ban?act=edit&uz=$uz");
                                         } else {
                                             show_error('Ошибка! Слишком большая заметка, не более 1000 символов!');
@@ -309,21 +309,21 @@ if (is_admin(array(101, 102, 103))) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
                 if (!empty($user)) {
-                    if ($user['users_ban'] == 1) {
-                        if ($user['users_totalban'] > 0 && $user['users_timeban'] > SITETIME + 43200) {
+                    if ($user['ban'] == 1) {
+                        if ($user['totalban'] > 0 && $user['timeban'] > SITETIME + 43200) {
                             $bancount = 1;
                         } else {
                             $bancount = 0;
                         }
 
-                        DB::run() -> query("UPDATE `users` SET `users_ban`=?, `users_timeban`=?, `users_totalban`=`users_totalban`-?, `users_explainban`=? WHERE `users_login`=? LIMIT 1;", array(0, 0, $bancount, 0, $uz));
+                        DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `totalban`=`totalban`-?, `explainban`=? WHERE `login`=? LIMIT 1;", array(0, 0, $bancount, 0, $uz));
 
-                        DB::run() -> query("INSERT INTO `banhist` (`ban_user`, `ban_send`, `ban_time`) VALUES (?, ?, ?);", array($uz, $log, SITETIME));
+                        DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `time`) VALUES (?, ?, ?);", array($uz, $log, SITETIME));
 
-                        $_SESSION['note'] = 'Аккаунт успешно разблокирован!';
+                        notice('Аккаунт успешно разблокирован!');
                         redirect("/admin/ban?act=edit&uz=$uz");
                     } else {
                         show_error('Ошибка! Данный аккаунт уже разблокирован!');
@@ -346,20 +346,20 @@ if (is_admin(array(101, 102, 103))) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
                 if (!empty($user)) {
                     if ($user['users_totalban'] >= 5) {
-                        if ($user['users_level'] < 101 || $user['users_level'] > 105) {
+                        if ($user['level'] < 101 || $user['level'] > 105) {
 
-                            $blackmail = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(1, $user['users_email']));
-                            if (empty($blackmail) && !empty($user['users_email'])) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`black_type`, `black_value`, `black_user`, `black_time`) VALUES (?, ?, ?, ?);", array(1, $user['users_email'], $log, SITETIME));
+                            $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $user['email']));
+                            if (empty($blackmail) && !empty($user['email'])) {
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(1, $user['email'], $log, SITETIME));
                             }
 
-                            $blacklogin = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(2, strtolower($user['users_login'])));
+                            $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($user['users_login'])));
                             if (empty($blacklogin)) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`black_type`, `black_value`, `black_user`, `black_time`) VALUES (?, ?, ?, ?);", array(2, $user['users_login'], $log, SITETIME));
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(2, $user['login'], $log, SITETIME));
                             }
 
                             delete_album($uz);
