@@ -127,14 +127,7 @@ if ($udata = is_user()) {
     Registry::set('user', $udata);
 
     $log = $udata['users_login'];
-    // ---------------------- Переопределение глобальных настроек -------------------------//
-    $config['themes']     = $udata['users_themes'];      # Скин/тема по умолчанию
-    $config['bookpost']   = $udata['users_postguest'];   # Вывод сообщений в гостевой
-    $config['postnews']   = $udata['users_postnews'];    # Новостей на страницу
-    $config['forumpost']  = $udata['users_postforum'];   # Вывод сообщений в форуме
-    $config['forumtem']   = $udata['users_themesforum']; # Вывод тем в форуме
-    $config['boardspost'] = $udata['users_postboard'];   # Вывод объявлений
-    $config['privatpost'] = $udata['users_postprivat'];  # Вывод писем в привате
+    $config['themes'] = $udata['users_themes'];
 
     if ($udata['users_ban'] == 1) {
         if (!strsearch(App::server('PHP_SELF'), array('/ban', '/rules'))) {
