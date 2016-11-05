@@ -34,19 +34,19 @@ switch ($act):
             $page = floor(1 + $start / $config['postgallery']);
             $config['newtitle'] = 'Список всех комментариев (Стр. '.$page.')';
 
-            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `photo_title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`commphoto_gid`=`photo`.`photo_id` ORDER BY `commphoto_time` DESC LIMIT ".$start.", ".$config['postgallery'].";");
+            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `photo_title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`photo_id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postgallery'].";");
 
             while ($data = $querycomm -> fetch()) {
 
-                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['commphoto_gid'].'&amp;cid='.$data['commphoto_id'].'">'.$data['photo_title'].'</a></b>';
+                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['gid'].'&amp;cid='.$data['id'].'">'.$data['photo_title'].'</a></b>';
                 echo '</div>';
 
 
-                echo '<div>'.bb_code($data['commphoto_text']).'<br />';
-                echo 'Написал: '.profile($data['commphoto_user']).'</b> <small>('.date_fixed($data['commphoto_time']).')</small><br />';
+                echo '<div>'.bb_code($data['text']).'<br />';
+                echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
-                    echo '<span class="data">('.$data['commphoto_brow'].', '.$data['commphoto_ip'].')</span>';
+                    echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
                 echo '</div>';
@@ -65,7 +65,7 @@ switch ($act):
     case 'comments':
         show_title('Список всех комментариев '.nickname($uz));
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `commphoto` WHERE `commphoto_user`=?;", array($uz));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `commphoto` WHERE `user`=?;", array($uz));
 
         if ($total > 0) {
             if ($start >= $total) {
@@ -75,24 +75,24 @@ switch ($act):
             $page = floor(1 + $start / $config['postgallery']);
             $config['newtitle'] = 'Список всех комментариев '.nickname($uz).' (Стр. '.$page.')';
 
-            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `photo_title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`commphoto_gid`=`photo`.`photo_id` WHERE `commphoto_user`=? ORDER BY `commphoto_time` DESC LIMIT ".$start.", ".$config['postgallery'].";", array($uz));
+            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `photo_title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`photo_id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['postgallery'].";", array($uz));
 
             while ($data = $querycomm -> fetch()) {
 
-                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['commphoto_gid'].'&amp;cid='.$data['commphoto_id'].'">'.$data['photo_title'].'</a></b>';
+                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['gid'].'&amp;cid='.$data['id'].'">'.$data['photo_title'].'</a></b>';
 
                 if (is_admin()) {
-                    echo ' — <a href="/gallery/comments?act=del&amp;id='.$data['commphoto_id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+                    echo ' — <a href="/gallery/comments?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
                 }
 
                 echo '</div>';
 
 
-                echo '<div>'.bb_code($data['commphoto_text']).'<br />';
-                echo 'Написал: '.profile($data['commphoto_user']).'</b> <small>('.date_fixed($data['commphoto_time']).')</small><br />';
+                echo '<div>'.bb_code($data['text']).'<br />';
+                echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
-                    echo '<span class="data">('.$data['commphoto_brow'].', '.$data['commphoto_ip'].')</span>';
+                    echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
                 echo '</div>';
@@ -121,7 +121,7 @@ switch ($act):
             $cid = 0;
         }
 
-        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commphoto` WHERE `commphoto_id`<=? AND `commphoto_gid`=? ORDER BY `commphoto_time` ASC LIMIT 1;", array($cid, $gid));
+        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commphoto` WHERE `id`<=? AND `gid`=? ORDER BY `time` ASC LIMIT 1;", array($cid, $gid));
 
         if (!empty($querycomm)) {
             $end = floor(($querycomm - 1) / $config['postgallery']) * $config['postgallery'];
@@ -146,10 +146,10 @@ switch ($act):
 
         if (is_admin()) {
             if ($uid == $_SESSION['token']) {
-                $photo = DB::run() -> querySingle("SELECT `commphoto_gid` FROM `commphoto` WHERE `commphoto_id`=?;", array($id));
+                $photo = DB::run() -> querySingle("SELECT `gid` FROM `commphoto` WHERE `id`=?;", array($id));
 
                 if (!empty($photo)) {
-                    DB::run() -> query("DELETE FROM `commphoto` WHERE `commphoto_id`=? AND `commphoto_gid`=?;", array($id, $photo));
+                    DB::run() -> query("DELETE FROM `commphoto` WHERE `id`=? AND `gid`=?;", array($id, $photo));
                     DB::run() -> query("UPDATE `photo` SET `photo_comments`=`photo_comments`-? WHERE `photo_id`=?;", array(1, $photo));
 
                     notice('Комментарий успешно удален!');

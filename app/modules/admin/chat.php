@@ -36,32 +36,32 @@ if (is_admin()) {
                     $start = last_page($total, $config['chatpost']);
                 }
 
-                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `chat_time` DESC LIMIT ".$start.", ".$config['chatpost'].";");
+                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$start.", ".$config['chatpost'].";");
 
                 while ($data = $querychat -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['chat_user']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
-                    echo '<b>'.profile($data['chat_user']).'</b> <small>('.date_fixed($data['chat_time']).')</small><br />';
-                    echo user_title($data['chat_user']).' '.user_online($data['chat_user']).'</div>';
+                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    if ($log != $data['chat_user']) {
+                    if ($log != $data['user']) {
                         echo '<div class="right">';
-                        echo '<a href="/admin/chat?act=reply&amp;id='.$data['chat_id'].'&amp;start='.$start.'">Отв</a> / ';
-                        echo '<a href="/admin/chat?act=quote&amp;id='.$data['chat_id'].'&amp;start='.$start.'">Цит</a></div>';
+                        echo '<a href="/admin/chat?act=reply&amp;id='.$data['id'].'&amp;start='.$start.'">Отв</a> / ';
+                        echo '<a href="/admin/chat?act=quote&amp;id='.$data['id'].'&amp;start='.$start.'">Цит</a></div>';
                     }
 
-                    if ($log == $data['chat_user'] && $data['chat_time'] + 600 > SITETIME) {
-                        echo '<div class="right"><a href="/admin/chat?act=edit&amp;id='.$data['chat_id'].'&amp;start='.$start.'">Редактировать</a></div>';
+                    if ($log == $data['user'] && $data['time'] + 600 > SITETIME) {
+                        echo '<div class="right"><a href="/admin/chat?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.bb_code($data['chat_text']).'<br />';
+                    echo '<div>'.bb_code($data['text']).'<br />';
 
-                    if (!empty($data['chat_edit'])) {
-                        echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.nickname($data['chat_edit']).' ('.date_fixed($data['chat_edit_time']).')</small><br />';
+                    if (!empty($data['edit'])) {
+                        echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.nickname($data['edit']).' ('.date_fixed($data['edit_time']).')</small><br />';
                     }
 
-                    echo '<span class="data">('.$data['chat_brow'].', '.$data['chat_ip'].')</span>';
+                    echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
 
                     echo '</div>';
                 }
@@ -91,19 +91,19 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1500) {
-                    $post = DB::run() -> queryFetch("SELECT * FROM `chat` ORDER BY `chat_id` DESC LIMIT 1;");
+                    $post = DB::run() -> queryFetch("SELECT * FROM `chat` ORDER BY `id` DESC LIMIT 1;");
 
-                    if ($log == $post['chat_user'] && $post['chat_time'] + 1800 > SITETIME && (utf_strlen($msg) + utf_strlen($post['chat_text']) <= 1500)) {
+                    if ($log == $post['user'] && $post['time'] + 1800 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= 1500)) {
 
-                        $newpost = $post['chat_text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['chat_time']).' сек.[/size][/i]'."\n".$msg;
-                        DB::run() -> query("UPDATE `chat` SET `chat_text`=? WHERE `chat_id`=? LIMIT 1;", array($newpost, $post['chat_id']));
+                        $newpost = $post['text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['time']).' сек.[/size][/i]'."\n".$msg;
+                        DB::run() -> query("UPDATE `chat` SET `text`=? WHERE `id`=? LIMIT 1;", array($newpost, $post['id']));
 
                     } else {
 
-                        DB::run() -> query("INSERT INTO `chat` (`chat_user`, `chat_text`, `chat_ip`, `chat_brow`, `chat_time`) VALUES (?, ?, ?, ?, ?);", array($log, $msg, $ip, $brow, SITETIME));
+                        DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", array($log, $msg, $ip, $brow, SITETIME));
                     }
 
-                    DB::run() -> query("DELETE FROM `chat` WHERE `chat_time` < (SELECT MIN(`chat_time`) FROM (SELECT `chat_time` FROM `chat` ORDER BY `chat_time` DESC LIMIT ".$config['maxpostchat'].") AS del);");
+                    DB::run() -> query("DELETE FROM `chat` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `chat` ORDER BY `time` DESC LIMIT ".$config['maxpostchat'].") AS del);");
 
                     DB::run() -> query("UPDATE `users` SET `users_newchat`=? WHERE `users_login`=? LIMIT 1;", array(stats_newchat(), $log));
 
@@ -129,15 +129,15 @@ if (is_admin()) {
 
             echo '<b><big>Ответ на сообщение</big></b><br /><br />';
 
-            $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `chat_id`=? LIMIT 1;", array($id));
+            $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? LIMIT 1;", array($id));
 
             if (!empty($post)) {
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['chat_user']).'</b> '.user_online($post['chat_user']).' <small>('.date_fixed($post['chat_time']).')</small></div>';
-                echo '<div>Сообщение: '.bb_code($post['chat_text']).'</div><hr />';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
+                echo '<div>Сообщение: '.bb_code($post['text']).'</div><hr />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/chat?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[b]'.nickname($post['chat_user']).'[/b], </textarea><br />';
+                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[b]'.nickname($post['user']).'[/b], </textarea><br />';
                 echo '<input type="submit" value="Ответить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
@@ -155,12 +155,12 @@ if (is_admin()) {
 
             echo '<b><big>Цитирование</big></b><br /><br />';
 
-            $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `chat_id`=? LIMIT 1;", array($id));
+            $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? LIMIT 1;", array($id));
 
             if (!empty($post)) {
                 echo '<div class="form">';
                 echo '<form action="/admin/chat?act=add&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['chat_user']).'[/b] ('.date_fixed($post['chat_time']).')'."\r\n".$post['chat_text'].'[/quote]'."\r\n".'</textarea><br />';
+                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['user']).'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
                 echo '<input type="submit" value="Ответить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
@@ -176,16 +176,16 @@ if (is_admin()) {
 
             $id = abs(intval($_GET['id']));
 
-            $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `chat_id`=? AND `chat_user`=? LIMIT 1;", array($id, $log));
+            $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? AND `user`=? LIMIT 1;", array($id, $log));
 
             if (!empty($post)) {
-                if ($post['chat_time'] + 600 > SITETIME) {
+                if ($post['time'] + 600 > SITETIME) {
 
-                    echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['chat_user']).'</b> <small>('.date_fixed($post['chat_time']).')</small><br /><br />';
+                    echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['user']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                     echo '<div class="form">';
                     echo '<form action="/admin/chat?act=editpost&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$post['chat_text'].'</textarea><br />';
+                    echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br />';
                     echo '<input type="submit" value="Редактировать" /></form></div><br />';
                 } else {
                     show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
@@ -208,12 +208,12 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1500) {
-                    $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `chat_id`=? AND `chat_user`=? LIMIT 1;", array($id, $log));
+                    $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? AND `user`=? LIMIT 1;", array($id, $log));
 
                     if (!empty($post)) {
-                        if ($post['chat_time'] + 600 > SITETIME) {
+                        if ($post['time'] + 600 > SITETIME) {
 
-                            DB::run() -> query("UPDATE `chat` SET `chat_text`=?, `chat_edit`=?, `chat_edit_time`=? WHERE `chat_id`=? LIMIT 1;", array($msg, $log, SITETIME, $id));
+                            DB::run() -> query("UPDATE `chat` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=? LIMIT 1;", array($msg, $log, SITETIME, $id));
 
                             notice('Сообщение успешно отредактировано!');
                             redirect ("/admin/chat?start=$start");

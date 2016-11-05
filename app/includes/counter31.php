@@ -5,7 +5,7 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 
 	$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 
-	$querycount = DB::run() -> query("SELECT * FROM `counter31` ORDER BY `count_days` DESC;");
+	$querycount = DB::run() -> query("SELECT * FROM `counter31` ORDER BY `days` DESC;");
 	$counts = $querycount -> fetchAll();
 
 	$arrhits = array();
@@ -14,8 +14,8 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 	$host_data = array();
 
 	foreach ($counts as $val) {
-		$arrhits[$val['count_days']] = $val['count_hits'];
-		$arrhosts[$val['count_days']] = $val['count_hosts'];
+		$arrhits[$val['days']] = $val['hits'];
+		$arrhosts[$val['days']] = $val['hosts'];
 	}
 
 	for ($i = 0, $tekdays = $days; $i < 31; $tekdays -= 1, $i++) {

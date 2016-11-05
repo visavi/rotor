@@ -22,7 +22,7 @@ case 'blogs':
             $start = last_page($total, $config['blogpost']);
         }
 
-        $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`blogs_cats_id`=`catsblog`.`cats_id` ORDER BY `blogs_time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+        $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
         $blogs = $queryblog->fetchAll();
 
         render('blog/new_blogs', array('blogs' => $blogs));
@@ -49,7 +49,7 @@ case 'comments':
             $start = last_page($total, $config['blogpost']);
         }
 
-        $querycomment = DB::run() -> query("SELECT `commblog`.*, `blogs_title`, `blogs_comments` FROM `commblog` LEFT JOIN `blogs` ON `commblog`.`commblog_blog`=`blogs`.`blogs_id` ORDER BY `commblog_time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+        $querycomment = DB::run() -> query("SELECT `commblog`.*, `title`, `comments` FROM `commblog` LEFT JOIN `blogs` ON `commblog`.`blog`=`blogs`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
         $comments = $querycomment->fetchAll();
 
         render('blog/new_comments', array('comments' => $comments));

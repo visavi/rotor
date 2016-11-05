@@ -13,13 +13,13 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `bookmarks` WHERE `book_user`=?;", array($log));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `bookmarks` WHERE `user`=?;", array($log));
 
     if ($total > 0 && $start >= $total) {
         $start = last_page($total, $config['forumtem']);
     }
 
-    $querytopic = DB::run() -> query("SELECT `topics`.*, `bookmarks`.* FROM `bookmarks` LEFT JOIN `topics` ON `bookmarks`.`book_topic`=`topics`.`topics_id` WHERE `book_user`=?  ORDER BY `topics_last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($log));
+    $querytopic = DB::run() -> query("SELECT `topics`.*, `bookmarks`.* FROM `bookmarks` LEFT JOIN `topics` ON `bookmarks`.`topic`=`topics`.`topics_id` WHERE `user`=?  ORDER BY `topics_last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($log));
     $topics = $querytopic->fetchAll();
 
     App::view('forum/bookmark', compact('topics', 'start', 'total'));
@@ -45,13 +45,13 @@ case 'perform':
 
     if ($validation->run()) {
 
-        $bookmark = DB::run()->querySingle("SELECT `book_id` FROM `bookmarks` WHERE `book_topic`=? AND `book_user`=? LIMIT 1;", array($tid, $log));
+        $bookmark = DB::run()->querySingle("SELECT `id` FROM `bookmarks` WHERE `topic`=? AND `user`=? LIMIT 1;", array($tid, $log));
 
         if ($bookmark) {
-            DB::run() -> query("DELETE FROM `bookmarks` WHERE `book_topic`=? AND `book_user`=?;", array($tid, $log));
+            DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic`=? AND `user`=?;", array($tid, $log));
             exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
         } else {
-            DB::run()->query("INSERT INTO `bookmarks` (`book_user`, `book_topic`, `book_forum`, `book_posts`) VALUES (?, ?, ?, ?);", array($log, $tid, $topic['topics_forums_id'], $topic['topics_posts']));
+            DB::run()->query("INSERT INTO `bookmarks` (`user`, `topic`, `forum`, `posts`) VALUES (?, ?, ?, ?);", array($log, $tid, $topic['topics_forums_id'], $topic['topics_posts']));
             exit(json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']));
         }
 
@@ -75,7 +75,7 @@ case 'delete':
     if ($validation->run()) {
         $topicIds = implode(',', $topicIds);
 
-        DB::run()->query("DELETE FROM `bookmarks` WHERE `book_id` IN (".$topicIds.") AND `book_user`=?;", array($log));
+        DB::run()->query("DELETE FROM `bookmarks` WHERE `id` IN (".$topicIds.") AND `user`=?;", array($log));
 
         App::setFlash('success', 'Выбранные темы успешно удалены из закладок!');
     } else {

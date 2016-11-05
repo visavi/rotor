@@ -4,7 +4,7 @@ App::view($config['themes'].'/index');
 show_title('Загрузки');
 $config['newtitle'] = 'Загрузки - Список разделов';
 
-$querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`cats_count`) FROM `cats` WHERE `cats_parent`=`c`.`cats_id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `downs_cats_id`=`cats_id` AND `downs_active`=? AND `downs_time` > ?) AS `new` FROM `cats` `c` ORDER BY `cats_order` ASC;", array(1, SITETIME-86400 * 5));
+$querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY `order` ASC;", array(1, SITETIME-86400 * 5));
 
 $downs = $querydown -> fetchAll();
 
@@ -12,8 +12,8 @@ if (count($downs) > 0) {
     $output = array();
 
     foreach ($downs as $row) {
-        $id = $row['cats_id'];
-        $fp = $row['cats_parent'];
+        $id = $row['id'];
+        $fp = $row['parent'];
         $output[$fp][$id] = $row;
     }
 
@@ -23,18 +23,18 @@ if (count($downs) > 0) {
 
     echo 'Новые: <a href="/load/new?act=files">файлы</a>, <a href="/load/new?act=comments">комментарии</a><hr />';
 
-    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=? AND `downs_time`>?;", array (1, SITETIME-3600 * 120));
+    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", array (1, SITETIME-3600 * 120));
 
     echo '<i class="fa fa-folder-open"></i> <b><a href="/load/fresh">Свежие загрузки</a></b> ('.$totalnew.')<br />';
 
     foreach($output[0] as $key => $data) {
         echo '<i class="fa fa-folder-open"></i> ';
-        echo '<b><a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
+        echo '<b><a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a></b> ';
 
         $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
         $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
 
-        echo '('.$data['cats_count'] . $subcnt . $new.')<br />';
+        echo '('.$data['count'] . $subcnt . $new.')<br />';
         // ---------------------- Старый вывод ------------------------------//
         /**
         * if (isset($output[$key])) {
@@ -43,7 +43,7 @@ if (count($downs) > 0) {
         * $i = 0;
         * foreach($output[$key] as $datasub){
         * if ($i==0) {$comma = '';} else {$comma = ', ';}
-        * echo $comma.'<a href="/load/down?cid='.$datasub['cats_id'].'">'.$datasub['cats_name'].'</a>';
+        * echo $comma.'<a href="/load/down?cid='.$datasub['id'].'">'.$datasub['name'].'</a>';
         * ++$i;}
         * echo '</small><br />';
         * }
@@ -54,8 +54,8 @@ if (count($downs) > 0) {
                 $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
                 $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
 
-                echo '<i class="fa fa-angle-right"></i> <b><a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ';
-                echo '('.$data['cats_count'] . $subcnt . $new.')<br />';
+                echo '<i class="fa fa-angle-right"></i> <b><a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a></b> ';
+                echo '('.$data['count'] . $subcnt . $new.')<br />';
             }
         }
         // ----------------------------------------------------//

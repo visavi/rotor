@@ -10,7 +10,7 @@ $config['newtitle'] = 'Блоги - Список разделов';
 
 
 
-    $queryblog = DB::run() -> query("SELECT *, (SELECT COUNT(*) FROM `blogs` WHERE `blogs`.`blogs_cats_id` = `catsblog`.`cats_id` AND `blogs`.`blogs_time` > ?) AS `new` FROM `catsblog` ORDER BY `cats_order` ASC;", array(SITETIME-86400 * 3));
+    $queryblog = DB::run() -> query("SELECT *, (SELECT COUNT(*) FROM `blogs` WHERE `blogs`.`cats_id` = `catsblog`.`id` AND `blogs`.`time` > ?) AS `new` FROM `catsblog` ORDER BY `order` ASC;", array(SITETIME-86400 * 3));
 
     $blogs = $queryblog -> fetchAll();
 

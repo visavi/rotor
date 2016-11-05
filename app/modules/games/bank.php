@@ -12,19 +12,19 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `bank_user`=? LIMIT 1;", array($log));
+            $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", array($log));
             if (!empty($databank)) {
                 echo '<b>Выписка по счету</b><br />';
                 echo 'На руках: '.moneys($udata['users_money']).'<br />';
-                echo 'В банке: '.moneys($databank['bank_sum']).'<br /><br />';
+                echo 'В банке: '.moneys($databank['sum']).'<br /><br />';
 
-                if ($databank['bank_sum'] > 0) {
-                    if ($databank['bank_sum'] <= $config['maxsumbank']) {
-                        if ($databank['bank_time'] >= SITETIME) {
-                            echo '<b>До получения процентов осталось '.formattime($databank['bank_time'] - SITETIME).'</b><br />';
-                            echo 'Будет получено с процентов: '.moneys(percent_bank($databank['bank_sum'])).'<br /><br />';
+                if ($databank['sum'] > 0) {
+                    if ($databank['sum'] <= $config['maxsumbank']) {
+                        if ($databank['time'] >= SITETIME) {
+                            echo '<b>До получения процентов осталось '.formattime($databank['time'] - SITETIME).'</b><br />';
+                            echo 'Будет получено с процентов: '.moneys(percent_bank($databank['sum'])).'<br /><br />';
                         } else {
-                            echo '<b>Получение процентов</b> ('.moneys(percent_bank($databank['bank_sum'])).')<br />';
+                            echo '<b>Получение процентов</b> ('.moneys(percent_bank($databank['sum'])).')<br />';
                             echo '<div class="form">';
                             echo '<form action="/games/bank?act=prolong&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -40,7 +40,7 @@ if (is_user()) {
                         }
                     } else {
                         echo '<b><span style="color:#ff0000">Внимание у вас слишком большой вклад</span></b><br />';
-                        echo 'Превышена максимальная сумма вклада для получения процентов на '.moneys($databank['bank_sum'] - $config['maxsumbank']).'<br /><br />';
+                        echo 'Превышена максимальная сумма вклада для получения процентов на '.moneys($databank['sum'] - $config['maxsumbank']).'<br /><br />';
                     }
                 } else {
                     echo 'Для получения процентов на счете должны быть средства, но не более '.moneys($config['maxsumbank']).'<br /><br />';
@@ -85,17 +85,17 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($provkod == $_SESSION['protect']) {
-                    $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `bank_user`=? LIMIT 1;", array($log));
+                    $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", array($log));
                     if (!empty($databank)) {
-                        if ($databank['bank_sum'] > 0 && $databank['bank_sum'] <= $config['maxsumbank']) {
-                            if ($databank['bank_time'] < SITETIME) {
-                                $percent = percent_bank($databank['bank_sum']);
+                        if ($databank['sum'] > 0 && $databank['sum'] <= $config['maxsumbank']) {
+                            if ($databank['time'] < SITETIME) {
+                                $percent = percent_bank($databank['sum']);
 
                                 if (empty($oper)) {
                                     DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`+? WHERE `users_login`=?", array($percent, $log));
-                                    DB::run() -> query("UPDATE `bank` SET `bank_oper`=`bank_oper`+1, `bank_time`=? WHERE `bank_user`=?", array(SITETIME + 43200, $log));
+                                    DB::run() -> query("UPDATE `bank` SET `oper`=`oper`+1, `time`=? WHERE `user`=?", array(SITETIME + 43200, $log));
                                 } else {
-                                    DB::run() -> query("UPDATE `bank` SET `bank_sum`=`bank_sum`+?, `bank_oper`=`bank_oper`+1, `bank_time`=? WHERE `bank_user`=?", array($percent, SITETIME + 43200, $log));
+                                    DB::run() -> query("UPDATE `bank` SET `sum`=`sum`+?, `oper`=`oper`+1, `time`=? WHERE `user`=?", array($percent, SITETIME + 43200, $log));
                                 }
                                 echo '<b>Продление счета успешно завершено, получено c процентов: '.moneys($percent).'</b><br /><br />';
                             } else {
@@ -129,11 +129,11 @@ if (is_user()) {
                 show_title('Снятие со счета');
 
                 if ($gold > 0) {
-                    $querysum = DB::run() -> querySingle("SELECT `bank_sum` FROM `bank` WHERE `bank_user`=? LIMIT 1;", array($log));
+                    $querysum = DB::run() -> querySingle("SELECT `sum` FROM `bank` WHERE `user`=? LIMIT 1;", array($log));
                     if (!empty($querysum)) {
                         if ($gold <= $querysum) {
                             DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`+? WHERE `users_login`=?", array($gold, $log));
-                            DB::run() -> query("UPDATE `bank` SET `bank_sum`=`bank_sum`-?, `bank_time`=? WHERE `bank_user`=?", array($gold, SITETIME + 43200, $log));
+                            DB::run() -> query("UPDATE `bank` SET `sum`=`sum`-?, `time`=? WHERE `user`=?", array($gold, SITETIME + 43200, $log));
 
                             echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно списана с вашего счета<br /><br />';
                         } else {
@@ -154,11 +154,11 @@ if (is_user()) {
                     if ($gold <= $udata['users_money']) {
                         DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`-? WHERE `users_login`=?", array($gold, $log));
 
-                        $querybank = DB::run() -> querySingle("SELECT `bank_id` FROM `bank` WHERE `bank_user`=? LIMIT 1;", array($log));
+                        $querybank = DB::run() -> querySingle("SELECT `id` FROM `bank` WHERE `user`=? LIMIT 1;", array($log));
                         if (!empty($querybank)) {
-                            DB::run() -> query("UPDATE `bank` SET `bank_sum`=`bank_sum`+?, `bank_time`=? WHERE `bank_user`=?", array($gold, SITETIME + 43200, $log));
+                            DB::run() -> query("UPDATE `bank` SET `sum`=`sum`+?, `time`=? WHERE `user`=?", array($gold, SITETIME + 43200, $log));
                         } else {
-                            DB::run() -> query("INSERT INTO `bank` (`bank_user`, `bank_sum`, `bank_time`) VALUES (?, ?, ?);", array($log, $gold, SITETIME + 43200));
+                            DB::run() -> query("INSERT INTO `bank` (`user`, `sum`, `time`) VALUES (?, ?, ?);", array($log, $gold, SITETIME + 43200));
                         }
 
                         echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно зачислена на ваш счет<br />';

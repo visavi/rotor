@@ -11,8 +11,8 @@
 		<option value="0">Выберите категорию</option>
 
 		<?php foreach ($cats as $key => $data): ?>
-			<?php $selected = ($cid == $data['cats_id']) ? ' selected="selected"' : ''; ?>
-			<option value="<?=$data['cats_id']?>"<?=$selected?>><?=$data['cats_name']?></option>
+			<?php $selected = ($cid == $data['id']) ? ' selected="selected"' : ''; ?>
+			<option value="<?=$data['id']?>"<?=$selected?>><?=$data['name']?></option>
 		<?php endforeach; ?>
 
 		</select><br />

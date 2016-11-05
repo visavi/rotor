@@ -11,6 +11,6 @@ class RenameFieldsInAntimat extends AbstractMigration
     {
         $table = $this->table('antimat');
         $table->renameColumn('mat_id', 'id');
-        $table->renameColumn('mat_string', 'mat_string');
+        $table->renameColumn('mat_string', 'string');
     }
 }

@@ -185,7 +185,7 @@ if (is_user()) {
                 echo 'Введите логин:<br />';
                 echo '<input type="text" name="uz" maxlength="20" /><br />';
 
-                $querycontact = DB::run() -> query("SELECT `contact_name` FROM `contact` WHERE `contact_user`=? ORDER BY `contact_name` DESC;", array($log));
+                $querycontact = DB::run() -> query("SELECT `name` FROM `contact` WHERE `user`=? ORDER BY `name` DESC;", array($log));
                 $contact = $querycontact -> fetchAll();
 
                 if (count($contact) > 0) {
@@ -194,7 +194,7 @@ if (is_user()) {
                     echo '<option value="0">Список контактов</option>';
 
                     foreach($contact as $data) {
-                        echo '<option value="'.$data['contact_name'].'">'.nickname($data['contact_name']).'</option>';
+                        echo '<option value="'.$data['name'].'">'.nickname($data['name']).'</option>';
                     }
                     echo '</select><br />';
                 }

@@ -21,33 +21,33 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `contact_user`=?;", array($log));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", array($log));
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = last_page($total, $config['contactlist']);
                 }
 
-                $querycontact = DB::run() -> query("SELECT * FROM `contact` WHERE `contact_user`=? ORDER BY `contact_time` DESC LIMIT ".$start.", ".$config['contactlist'].";", array($log));
+                $querycontact = DB::run() -> query("SELECT * FROM `contact` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['contactlist'].";", array($log));
 
                 echo '<form action="/contact?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $querycontact -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['contact_name']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['name']).'</div>';
 
-                    echo '<b>'.profile($data['contact_name']).'</b> <small>('.date_fixed($data['contact_time']).')</small><br />';
-                    echo user_title($data['contact_name']).' '.user_online($data['contact_name']).'</div>';
+                    echo '<b>'.profile($data['name']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo user_title($data['name']).' '.user_online($data['name']).'</div>';
 
                     echo '<div>';
-                    if (!empty($data['contact_text'])) {
-                        echo 'Заметка: '.$data['contact_text'].'<br />';
+                    if (!empty($data['text'])) {
+                        echo 'Заметка: '.$data['text'].'<br />';
                     }
 
-                    echo '<input type="checkbox" name="del[]" value="'.$data['contact_id'].'" /> ';
-                    echo '<a href="/private?act=submit&amp;uz='.$data['contact_name'].'">Написать</a> | ';
-                    echo '<a href="/games/transfer?uz='.$data['contact_name'].'">Перевод</a> | ';
-                    echo '<a href="/contact?act=note&amp;id='.$data['contact_id'].'">Заметка</a>';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<a href="/private?act=submit&amp;uz='.$data['name'].'">Написать</a> | ';
+                    echo '<a href="/games/transfer?uz='.$data['name'].'">Перевод</a> | ';
+                    echo '<a href="/contact?act=note&amp;id='.$data['id'].'">Заметка</a>';
                     echo '</div>';
                 }
 
@@ -84,12 +84,12 @@ if (is_user()) {
                     $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
                     if (!empty($queryuser)) {
 
-                        $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `contact_user`=?;", array($log));
+                        $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", array($log));
                         if ($total <= $config['limitcontact']) {
                             // ------------------------ Проверка на существование ------------------------//
                             if (!is_contact($log, $uz)){
 
-                                DB::run() -> query("INSERT INTO `contact` (`contact_user`, `contact_name`, `contact_time`) VALUES (?, ?, ?);", array($log, $uz, SITETIME));
+                                DB::run() -> query("INSERT INTO `contact` (`user`, `name`, `time`) VALUES (?, ?, ?);", array($log, $uz, SITETIME));
                                 // ----------------------------- Проверка на игнор ----------------------------//
                                 $ignorstr = DB::run() -> querySingle("SELECT `ignore_id` FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($uz, $log));
                                 if (empty($ignorstr)) {
@@ -133,15 +133,15 @@ if (is_user()) {
             }
 
             if ($id > 0) {
-                $data = DB::run() -> queryFetch("SELECT * FROM contact WHERE contact_id=? AND contact_user=? LIMIT 1;", array($id, $log));
+                $data = DB::run() -> queryFetch("SELECT * FROM contact WHERE id=? AND user=? LIMIT 1;", array($id, $log));
 
                 if (!empty($data)) {
-                    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['contact_name']).'</b> '.user_online($data['contact_name']).':<br /><br />';
+                    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['name']).'</b> '.user_online($data['name']).':<br /><br />';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/contact?act=editnote&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">';
                     echo 'Заметка:<br />';
-                    echo '<textarea cols="25" rows="5" name="msg">'.$data['contact_text'].'</textarea><br />';
+                    echo '<textarea cols="25" rows="5" name="msg">'.$data['text'].'</textarea><br />';
                     echo '<input value="Редактировать" name="do" type="submit" /></form></div><br />';
                 } else {
                     show_error('Ошибка редактирования заметки!');
@@ -168,7 +168,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($id > 0) {
                     if (utf_strlen($msg) < 1000) {
-                        DB::run() -> query("UPDATE contact SET contact_text=? WHERE contact_id=? AND contact_user=?;", array($msg, $id, $log));
+                        DB::run() -> query("UPDATE contact SET text=? WHERE id=? AND user=?;", array($msg, $id, $log));
 
                         notice('Заметка успешно отредактирована!');
                         redirect("/contact?start=$start");
@@ -202,7 +202,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($del > 0) {
                     $del = implode(',', $del);
-                    DB::run() -> query("DELETE FROM contact WHERE contact_id IN (".$del.") AND contact_user=?;", array($log));
+                    DB::run() -> query("DELETE FROM contact WHERE id IN (".$del.") AND user=?;", array($log));
 
                     notice('Выбранные пользователи успешно удалены из контактов!');
                     redirect("/contact?start=$start");

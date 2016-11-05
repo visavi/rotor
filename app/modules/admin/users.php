@@ -394,17 +394,17 @@ if (is_admin(array(101, 102))) {
 
                         // -------------//
                         if (!empty($mailblack)) {
-                            $blackmail = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(1, $user['users_email']));
+                            $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $user['users_email']));
                             if (empty($blackmail) && !empty($user['users_email'])) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`black_type`, `black_value`, `black_user`, `black_time`) VALUES (?, ?, ?, ?);", array(1, $user['users_email'], $log, SITETIME));
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(1, $user['users_email'], $log, SITETIME));
                             }
                         }
 
                         // -------------//
                         if (!empty($loginblack)) {
-                            $blacklogin = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(2, strtolower($user['users_login'])));
+                            $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($user['users_login'])));
                             if (empty($blacklogin)) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`black_type`, `black_value`, `black_user`, `black_time`) VALUES (?, ?, ?, ?);", array(2, $user['users_login'], $log, SITETIME));
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(2, $user['users_login'], $log, SITETIME));
                             }
                         }
 
@@ -457,22 +457,22 @@ if (is_admin(array(101, 102))) {
 
                         // ------ Удаление коментарий -------//
                         if (!empty($delcommblog)) {
-                            DB::run() -> query("DELETE FROM `commblog` WHERE `commblog_author`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `commblog` WHERE `author`=?;", array($uz));
                             restatement('blog');
                         }
 
                         if (!empty($delcommload)) {
-                            DB::run() -> query("DELETE FROM `commload` WHERE `commload_author`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `commload` WHERE `author`=?;", array($uz));
                             restatement('load');
                         }
 
                         if (!empty($delcommphoto)) {
-                            DB::run() -> query("DELETE FROM `commphoto` WHERE `commphoto_user`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `commphoto` WHERE `user`=?;", array($uz));
                             restatement('gallery');
                         }
 
                         if (!empty($delcommnews)) {
-                            DB::run() -> query("DELETE FROM `commnews` WHERE `commnews_author`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `commnews` WHERE `author`=?;", array($uz));
                             restatement('news');
                         }
 

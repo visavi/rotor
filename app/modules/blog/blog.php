@@ -17,11 +17,11 @@ switch ($act):
 case 'index':
 
     if (!empty($cid)) {
-        $cats = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cid));
+        $cats = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
 
         if (!empty($cats)) {
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `blogs_cats_id`=?;", array($cid));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `cats_id`=?;", array($cid));
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -29,9 +29,9 @@ case 'index':
                 }
 
                 $page = floor(1 + $start / $config['blogpost']);
-                $config['newtitle'] = $cats['cats_name'].' (Стр. '.$page.')';
+                $config['newtitle'] = $cats['name'].' (Стр. '.$page.')';
 
-                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `blogs_cats_id`=? ORDER BY `blogs_time` DESC LIMIT ".$start.", ".$config['blogpost'].";", array($cid));
+                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `cats_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", array($cid));
                 $blogs = $queryblog->fetchAll();
 
                 render('blog/blog', array('blogs' => $blogs, 'cats' => $cats, 'start' => $start));
@@ -54,26 +54,26 @@ break;
 ############################################################################################
 case 'view':
 
-    $blogs = DB::run() -> queryFetch("SELECT `blogs`.*, `catsblog`.`cats_id`, `catsblog`.`cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`blogs_cats_id`=`catsblog`.`cats_id` WHERE `blogs_id`=? LIMIT 1;", array($id));
+    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` b LEFT JOIN `catsblog` cb ON b.`cats_id`=cb.`id` WHERE b.`id`=? LIMIT 1;", array($id));
 
     if (!empty($blogs)) {
-        $text = preg_split('|\[nextpage\](<br * /?>)*|', $blogs['blogs_text'], -1, PREG_SPLIT_NO_EMPTY);
+        $text = preg_split('|\[nextpage\](<br * /?>)*|', $blogs['text'], -1, PREG_SPLIT_NO_EMPTY);
 
         $total = count($text);
         if ($total > 0) {
-            $config['newtitle'] = $blogs['blogs_title'];
-            $config['keywords'] = $blogs['blogs_tags'];
-            $config['description'] = strip_str($blogs['blogs_text']);
+            $config['newtitle'] = $blogs['title'];
+            $config['keywords'] = $blogs['tags'];
+            $config['description'] = strip_str($blogs['text']);
 
             // --------------
             if (empty($start)) {
-                $queryreads = DB::run() -> querySingle("SELECT `read_ip` FROM `readblog` WHERE `read_blog`=? AND `read_ip`=? LIMIT 1;", array($id, App::getClientIp()));
+                $queryreads = DB::run() -> querySingle("SELECT `ip` FROM `readblog` WHERE `blog`=? AND `ip`=? LIMIT 1;", array($id, App::getClientIp()));
 
                 if (empty($queryreads)) {
                     $expiresread = SITETIME + 3600 * $config['blogexpread'];
-                    DB::run() -> query("DELETE FROM `readblog` WHERE `read_time`<?;", array(SITETIME));
-                    DB::run() -> query("INSERT INTO `readblog` (`read_blog`, `read_ip`, `read_time`) VALUES (?, ?, ?);", array($id, App::getClientIp(), $expiresread));
-                    DB::run() -> query("UPDATE `blogs` SET `blogs_read`=`blogs_read`+1 WHERE `blogs_id`=? LIMIT 1;", array($id));
+                    DB::run() -> query("DELETE FROM `readblog` WHERE `time`<?;", array(SITETIME));
+                    DB::run() -> query("INSERT INTO `readblog` (`blog`, `ip`, `time`) VALUES (?, ?, ?);", array($id, App::getClientIp(), $expiresread));
+                    DB::run() -> query("UPDATE `blogs` SET `read`=`read`+1 WHERE `id`=? LIMIT 1;", array($id));
                 }
             }
             // --------------
@@ -86,7 +86,7 @@ case 'view':
                 $blogs['text'] = bb_code($text[$i]).'<br />';
             }
 
-            $tags = preg_split('/[\s]*[,][\s]*/', $blogs['blogs_tags']);
+            $tags = preg_split('/[\s]*[,][\s]*/', $blogs['tags']);
 
             $arrtags = '';
             foreach($tags as $key => $value) {
@@ -112,11 +112,11 @@ break;
 case 'editblog':
 
     if (is_user()) {
-        $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+        $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
         if (!empty($blogs)) {
-            if ($blogs['blogs_user'] == $log) {
-                $querycats = DB::run() -> query("SELECT `cats_id`, `cats_name` FROM `catsblog` ORDER BY `cats_order` ASC;");
+            if ($blogs['user'] == $log) {
+                $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY `order` ASC;");
                 $cats = $querycats -> fetchAll();
 
                 render('blog/blog_editblog', array('blogs' => $blogs, 'cats' => $cats));
@@ -152,21 +152,21 @@ case 'changeblog':
             if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                 if (utf_strlen($text) >= 100 && utf_strlen($text) <= $config['maxblogpost']) {
                     if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
-                        $querycats = DB::run() -> querySingle("SELECT `cats_id` FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cats));
+                        $querycats = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cats));
                         if (!empty($cats)) {
-                            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+                            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
                             if (!empty($blogs)) {
-                                if ($blogs['blogs_user'] == $log) {
+                                if ($blogs['user'] == $log) {
 
                                     // Обновление счетчиков
-                                    if ($blogs['blogs_cats_id'] != $cats) {
-                                        DB::run() -> query("UPDATE `commblog` SET `commblog_cats`=? WHERE `commblog_blog`=?;", array($cats, $id));
-                                        DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($cats));
-                                        DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`-1 WHERE `cats_id`=?", array($blogs['blogs_cats_id']));
+                                    if ($blogs['cats_id'] != $cats) {
+                                        DB::run() -> query("UPDATE `commblog` SET `cats`=? WHERE `blog`=?;", array($cats, $id));
+                                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", array($cats));
+                                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", array($blogs['cats_id']));
                                     }
 
-                                    DB::run() -> query("UPDATE `blogs` SET `blogs_cats_id`=?, `blogs_title`=?, `blogs_text`=?, `blogs_tags`=? WHERE `blogs_id`=?;", array($cats, $title, $text, $tags, $id));
+                                    DB::run() -> query("UPDATE `blogs` SET `cats_id`=?, `title`=?, `text`=?, `tags`=? WHERE `id`=?;", array($cats, $title, $text, $tags, $id));
 
                                     notice('Статья успешно отредактирована!');
                                     redirect("/blog/blog?act=view&id=$id");
@@ -207,14 +207,14 @@ case 'blogs':
 
     $config['newtitle'] = 'Статьи пользователей';
 
-    $total = DB::run() -> querySingle("select COUNT(DISTINCT `blogs_user`) from `blogs`");
+    $total = DB::run() -> querySingle("select COUNT(DISTINCT `user`) from `blogs`");
 
     if ($total > 0) {
         if ($start >= $total) {
             $start = last_page($total, $config['bloggroup']);
         }
 
-        $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `blogs_user` FROM `blogs` GROUP BY `blogs_user` ORDER BY cnt DESC LIMIT ".$start.", ".$config['bloggroup'].";");
+        $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$start.", ".$config['bloggroup'].";");
         $blogs = $queryblogs -> fetchAll();
 
         render('blog/blog_blogs', array('blogs' => $blogs, 'total' => $total));
@@ -237,7 +237,7 @@ case 'new':
 
     if (is_user()) {
 
-        $querycat = DB::run() -> query("SELECT `cats_id`, `cats_name` FROM `catsblog` ORDER BY `cats_order` ASC;");
+        $querycat = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY `order` ASC;");
         $cats = $querycat -> fetchAll();
 
         if (count($cats) > 0) {
@@ -273,17 +273,17 @@ case 'addblog':
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                     if (utf_strlen($text) >= 100 && utf_strlen($text) <= $config['maxblogpost']) {
                         if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
-                            $blogs = DB::run() -> querySingle("SELECT `cats_id` FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cid));
+                            $blogs = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
                             if (!empty($blogs)) {
 
                                 if (is_flood($log)) {
 
                                     $text = antimat($text);
 
-                                    DB::run() -> query("INSERT INTO `blogs` (`blogs_cats_id`, `blogs_user`, `blogs_title`, `blogs_text`, `blogs_tags`, `blogs_time`) VALUES (?, ?, ?, ?, ?, ?);", array($cid, $log, $title, $text, $tags, SITETIME));
+                                    DB::run() -> query("INSERT INTO `blogs` (`cats_id`, `user`, `title`, `text`, `tags`, `time`) VALUES (?, ?, ?, ?, ?, ?);", array($cid, $log, $title, $text, $tags, SITETIME));
                                     $lastid = DB::run() -> lastInsertId();
 
-                                    DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?;", array($cid));
+                                    DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?;", array($cid));
 
                                     DB::run() -> query("UPDATE `users` SET `users_point`=`users_point`+5, `users_money`=`users_money`+100 WHERE `users_login`=? LIMIT 1;", array($log));
 
@@ -333,10 +333,10 @@ case 'vote':
 
                     $score = ($vote == 'up') ? 1 : -1;
 
-                    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+                    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
                     if (!empty($blogs)) {
-                        if ($log != $blogs['blogs_user']) {
+                        if ($log != $blogs['user']) {
                             $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `ratedblog` WHERE `rated_blog`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
 
                             if (empty($queryrated)) {
@@ -344,9 +344,9 @@ case 'vote':
 
                                 DB::run() -> query("DELETE FROM `ratedblog` WHERE `rated_time`<?;", array(SITETIME));
                                 DB::run() -> query("INSERT INTO `ratedblog` (`rated_blog`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($id, $log, $expiresrated));
-                                DB::run() -> query("UPDATE `blogs` SET `blogs_rating`=`blogs_rating`+? WHERE `blogs_id`=?;", array($score, $id));
+                                DB::run() -> query("UPDATE `blogs` SET `rating`=`rating`+? WHERE `id`=?;", array($score, $id));
 
-                                notice('Ваша оценка принята! Рейтинг статьи: '.format_num($blogs['blogs_rating'] + $score));
+                                notice('Ваша оценка принята! Рейтинг статьи: '.format_num($blogs['rating'] + $score));
                                 redirect("/blog/blog?act=view&id=$id");
 
                             } else {
@@ -379,19 +379,19 @@ break;
 ############################################################################################
 case 'comments':
 
-    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
     if (!empty($blogs)) {
-        $config['newtitle'] = 'Комментарии - '.$blogs['blogs_title'];
+        $config['newtitle'] = 'Комментарии - '.$blogs['title'];
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `commblog` WHERE `commblog_blog`=?;", array($id));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `commblog` WHERE `blog`=?;", array($id));
 
         if ($total > 0) {
             if ($start >= $total) {
                 $start = last_page($total, $config['blogcomm']);
             }
 
-            $querycomm = DB::run() -> query("SELECT * FROM `commblog` WHERE `commblog_blog`=? ORDER BY `commblog_time` ASC LIMIT ".$start.", ".$config['blogcomm'].";", array($id));
+            $querycomm = DB::run() -> query("SELECT * FROM `commblog` WHERE `blog`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['blogcomm'].";", array($id));
             $comments = $querycomm -> fetchAll();
 
             render('blog/blog_comments', array('blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'start' => $start));
@@ -426,18 +426,18 @@ case 'add':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $queryblog = DB::run() -> querySingle("SELECT `blogs_cats_id` FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+                $queryblog = DB::run() -> querySingle("SELECT `cats_id` FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
                 if (!empty($queryblog)) {
                     if (is_flood($log)) {
 
                         $msg = antimat($msg);
 
-                        DB::run() -> query("INSERT INTO `commblog` (`commblog_cats`, `commblog_blog`, `commblog_text`, `commblog_author`, `commblog_time`, `commblog_ip`, `commblog_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($queryblog, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                        DB::run() -> query("INSERT INTO `commblog` (`cats`, `blog`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($queryblog, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-                        DB::run() -> query("DELETE FROM `commblog` WHERE `commblog_blog`=? AND `commblog_time` < (SELECT MIN(`commblog_time`) FROM (SELECT `commblog_time` FROM `commblog` WHERE `commblog_blog`=? ORDER BY `commblog_time` DESC LIMIT ".$config['maxblogcomm'].") AS del);", array($id, $id));
+                        DB::run() -> query("DELETE FROM `commblog` WHERE `blog`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commblog` WHERE `blog`=? ORDER BY `time` DESC LIMIT ".$config['maxblogcomm'].") AS del);", array($id, $id));
 
-                        DB::run() -> query("UPDATE `blogs` SET `blogs_comments`=`blogs_comments`+1 WHERE `blogs_id`=?;", array($id));
+                        DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
                         DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
                         notice('Сообщение успешно добавлено!');
@@ -472,14 +472,14 @@ case 'spam':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            $data = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `commblog_id`=? LIMIT 1;", array($pid));
+            $data = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? LIMIT 1;", array($pid));
 
             if (!empty($data)) {
                 $queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(6, $pid));
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(6, $data['commblog_id'], $log, $data['commblog_author'], $data['commblog_text'], $data['commblog_time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start));
+                        DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(6, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start));
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/blog/blog?act=comments&id=$id&start=$start");
@@ -512,7 +512,7 @@ case 'reply':
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `commblog_id`=? LIMIT 1;", array($pid));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? LIMIT 1;", array($pid));
 
         if (!empty($post)) {
             render('blog/blog_reply', array('post' => $post, 'id' => $id));
@@ -535,7 +535,7 @@ case 'quote':
 
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `commblog_id`=? LIMIT 1;", array($pid));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? LIMIT 1;", array($pid));
 
         if (!empty($post)) {
             render('blog/blog_quote', array('post' => $post, 'id' => $id));
@@ -559,10 +559,10 @@ case 'edit':
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `commblog_id`=? AND `commblog_author`=? LIMIT 1;", array($pid, $log));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? AND `author`=? LIMIT 1;", array($pid, $log));
 
         if (!empty($post)) {
-            if ($post['commblog_time'] + 600 > SITETIME) {
+            if ($post['time'] + 600 > SITETIME) {
 
                 render('blog/blog_edit', array('post' => $post, 'pid' => $pid, 'start' => $start));
             } else {
@@ -590,13 +590,13 @@ case 'editpost':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `commblog_id`=? AND `commblog_author`=? LIMIT 1;", array($pid, $log));
+                $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? AND `author`=? LIMIT 1;", array($pid, $log));
 
                 if (!empty($post)) {
-                    if ($post['commblog_time'] + 600 > SITETIME) {
+                    if ($post['time'] + 600 > SITETIME) {
                         $msg = antimat($msg);
 
-                        DB::run() -> query("UPDATE `commblog` SET `commblog_text`=? WHERE `commblog_id`=?", array($msg, $pid));
+                        DB::run() -> query("UPDATE `commblog` SET `text`=? WHERE `id`=?", array($msg, $pid));
 
                         notice('Сообщение успешно отредактировано!');
                         redirect("/blog/blog?act=comments&id=$id&start=$start");
@@ -637,8 +637,8 @@ case 'del':
             if (!empty($del)) {
                 $del = implode(',', $del);
 
-                $delcomments = DB::run() -> exec("DELETE FROM `commblog` WHERE `commblog_id` IN (".$del.") AND `commblog_blog`=".$id.";");
-                DB::run() -> query("UPDATE `blogs` SET `blogs_comments`=`blogs_comments`-? WHERE `blogs_id`=?;", array($delcomments, $id));
+                $delcomments = DB::run() -> exec("DELETE FROM `commblog` WHERE `id` IN (".$del.") AND `blog`=".$id.";");
+                DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", array($delcomments, $id));
 
                 notice('Выбранные комментарии успешно удалены!');
                 redirect("/blog/blog?act=comments&id=$id&start=$start");
@@ -661,7 +661,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commblog` WHERE `commblog_blog`=? LIMIT 1;", array($id));
+    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commblog` WHERE `blog`=? LIMIT 1;", array($id));
 
     if (!empty($query['total_comments'])) {
 

@@ -20,28 +20,28 @@ if (is_admin(array(101, 102, 103))) {
                     $start = 0;
                 }
 
-                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `ban_time` DESC LIMIT ".$start.", ".$config['listbanhist'].";");
+                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$start.", ".$config['listbanhist'].";");
 
                 echo '<form action="/admin/banhist?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryhist -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['ban_user']).'</div>';
-                    echo '<b>'.profile($data['ban_user']).'</b> '.user_online($data['ban_user']).' ';
+                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                    echo '<small>('.date_fixed($data['ban_time']).')</small><br />';
+                    echo '<small>('.date_fixed($data['time']).')</small><br />';
 
-                    echo '<input type="checkbox" name="del[]" value="'.$data['ban_id'].'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
 
-                    echo '<a href="/admin/ban?act=editban&amp;uz='.$data['ban_user'].'">Изменить</a> / <a href="/admin/banhist?act=view&amp;uz='.$data['ban_user'].'">Все изменения</a></div>';
+                    echo '<a href="/admin/ban?act=editban&amp;uz='.$data['user'].'">Изменить</a> / <a href="/admin/banhist?act=view&amp;uz='.$data['user'].'">Все изменения</a></div>';
 
                     echo '<div>';
-                    if (!empty($data['ban_type'])) {
-                        echo 'Причина: '.bb_code($data['ban_reason']).'<br />';
-                        echo 'Срок: '.formattime($data['ban_term']).'<br />';
+                    if (!empty($data['type'])) {
+                        echo 'Причина: '.bb_code($data['reason']).'<br />';
+                        echo 'Срок: '.formattime($data['term']).'<br />';
                     }
 
-                    switch ($data['ban_type']) {
+                    switch ($data['type']) {
                         case '1': $stat = '<span style="color:#ff0000">Забанил</span>:';
                             break;
                         case '2': $stat = '<span style="color:#ffa500">Изменил</span>:';
@@ -49,7 +49,7 @@ if (is_admin(array(101, 102, 103))) {
                         default: $stat = '<span style="color:#00cc00">Разбанил</span>:';
                     }
 
-                    echo $stat.' '.profile($data['ban_send']).'<br />';
+                    echo $stat.' '.profile($data['send']).'<br />';
 
                     echo '</div>';
                 }
@@ -78,34 +78,34 @@ if (is_admin(array(101, 102, 103))) {
             $uz = (isset($_GET['uz'])) ? check($_GET['uz']) : '';
 
             if (user($uz)) {
-                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `ban_user`=?;", array($uz));
+                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", array($uz));
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `ban_user`=? ORDER BY `ban_time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", array($uz));
+                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", array($uz));
 
                     echo '<form action="/admin/banhist?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
-                        echo '<div class="img">'.user_avatars($data['ban_user']).'</div>';
-                        echo '<b>'.profile($data['ban_user']).'</b> '.user_online($data['ban_user']).' ';
+                        echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                        echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                        echo '<small>('.date_fixed($data['ban_time']).')</small><br />';
+                        echo '<small>('.date_fixed($data['time']).')</small><br />';
 
-                        echo '<input type="checkbox" name="del[]" value="'.$data['ban_id'].'" /> ';
-                        echo '<a href="/admin/ban?act=editban&amp;uz='.$data['ban_user'].'">Изменить</a></div>';
+                        echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                        echo '<a href="/admin/ban?act=editban&amp;uz='.$data['user'].'">Изменить</a></div>';
 
                         echo '<div>';
-                        if (!empty($data['ban_type'])) {
-                            echo 'Причина: '.bb_code($data['ban_reason']).'<br />';
-                            echo 'Срок: '.formattime($data['ban_term']).'<br />';
+                        if (!empty($data['type'])) {
+                            echo 'Причина: '.bb_code($data['reason']).'<br />';
+                            echo 'Срок: '.formattime($data['term']).'<br />';
                         }
 
-                        switch ($data['ban_type']) {
+                        switch ($data['type']) {
                             case '1': $stat = '<span style="color:#ff0000">Забанил</span>:';
                                 break;
                             case '2': $stat = '<span style="color:#ffa500">Изменил</span>:';
@@ -113,7 +113,7 @@ if (is_admin(array(101, 102, 103))) {
                             default: $stat = '<span style="color:#00cc00">Разбанил</span>:';
                         }
 
-                        echo $stat.' '.profile($data['ban_send']).'<br />';
+                        echo $stat.' '.profile($data['send']).'<br />';
 
                         echo '</div>';
                     }
@@ -149,7 +149,7 @@ if (is_admin(array(101, 102, 103))) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `banhist` WHERE `ban_id` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `banhist` WHERE `id` IN (".$del.");");
 
                     notice('Выбранные баны успешно удалены!');
                     redirect("/admin/banhist?start=$start");

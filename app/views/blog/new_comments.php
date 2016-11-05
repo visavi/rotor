@@ -1,15 +1,15 @@
 <?php foreach ($comments as $data): ?>
 
 	<div class="b">
-		<i class="fa fa-comment"></i> <b><a href="/blog/blog?act=comments&amp;id=<?=$data['commblog_blog']?>"><?=$data['blogs_title']?></a></b> (<?=$data['blogs_comments']?>)
+		<i class="fa fa-comment"></i> <b><a href="/blog/blog?act=comments&amp;id=<?=$data['blog']?>"><?=$data['title']?></a></b> (<?=$data['comments']?>)
 	</div>
 
 	<div>
-		<?=bb_code($data['commblog_text'])?><br />
-		Написал: <?=profile($data['commblog_author'])?> <small>(<?=date_fixed($data['commblog_time'])?>)</small><br />
+		<?=bb_code($data['text'])?><br />
+		Написал: <?=profile($data['author'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />
 
 		<?php if (is_admin() || empty($config['anonymity'])): ?>
-			<span class="data">(<?=$data['commblog_brow']?>, <?=$data['commblog_ip']?>)</span>
+			<span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
 		<?php endif; ?>
 	</div>
 

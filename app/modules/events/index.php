@@ -68,22 +68,22 @@ case 'read':
 		if ($data['event_comments'] > 0) {
 		echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
 
-			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `commevent_event_id`=? ORDER BY `commevent_time` DESC LIMIT 5;", array($id));
+			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT 5;", array($id));
 			$comments = $querycomm -> fetchAll();
 			$comments = array_reverse($comments);
 
 			foreach ($comments as $comm) {
 				echo '<div class="b">';
-				echo '<div class="img">'.user_avatars($comm['commevent_author']).'</div>';
+				echo '<div class="img">'.user_avatars($comm['author']).'</div>';
 
-				echo '<b>'.profile($comm['commevent_author']).'</b>';
-				echo '<small> ('.date_fixed($comm['commevent_time']).')</small><br />';
-				echo user_title($comm['commevent_author']).' '.user_online($comm['commevent_author']).'</div>';
+				echo '<b>'.profile($comm['author']).'</b>';
+				echo '<small> ('.date_fixed($comm['time']).')</small><br />';
+				echo user_title($comm['author']).' '.user_online($comm['author']).'</div>';
 
-				echo '<div>'.bb_code($comm['commevent_text']).'<br />';
+				echo '<div>'.bb_code($comm['text']).'<br />';
 
 				if (is_admin() || empty($config['anonymity'])) {
-					echo '<span class="data">('.$comm['commevent_brow'].', '.$comm['commevent_ip'].')</span>';
+					echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
 				}
 
 				echo '</div>';
@@ -349,7 +349,7 @@ case 'comments':
 
 		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
-		$total = DB::run() -> querySingle("SELECT count(*) FROM `commevents` WHERE `commevent_event_id`=?;", array($id));
+		$total = DB::run() -> querySingle("SELECT count(*) FROM `commevents` WHERE `event_id`=?;", array($id));
 
 		if ($total > 0) {
 			if ($start >= $total) {
@@ -361,25 +361,25 @@ case 'comments':
 				echo '<form action="/events?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 			}
 
-			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `commevent_event_id`=? ORDER BY `commevent_time` ASC LIMIT ".$start.", ".$config['postevents'].";", array($id));
+			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `event_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postevents'].";", array($id));
 
 			while ($data = $querycomm -> fetch()) {
 
 				echo '<div class="b">';
-				echo '<div class="img">'.user_avatars($data['commevent_author']).'</div>';
+				echo '<div class="img">'.user_avatars($data['author']).'</div>';
 
 				if ($is_admin) {
-					echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['commevent_id'].'" /></span>';
+					echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
 				}
 
-				echo '<b>'.profile($data['commevent_author']).'</b>';
-				echo '<small> ('.date_fixed($data['commevent_time']).')</small><br />';
-				echo user_title($data['commevent_author']).' '.user_online($data['commevent_author']).'</div>';
+				echo '<b>'.profile($data['author']).'</b>';
+				echo '<small> ('.date_fixed($data['time']).')</small><br />';
+				echo user_title($data['author']).' '.user_online($data['author']).'</div>';
 
-				echo '<div>'.bb_code($data['commevent_text']).'<br />';
+				echo '<div>'.bb_code($data['text']).'<br />';
 
 				if (is_admin() || empty($config['anonymity'])) {
-					echo '<span class="data">('.$data['commevent_brow'].', '.$data['commevent_ip'].')</span>';
+					echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
 				}
 
 				echo '</div>';
@@ -441,9 +441,9 @@ case 'addcomment':
 
 			$msg = antimat($msg);
 
-			DB::run() -> query("INSERT INTO `commevents` (`commevent_event_id`, `commevent_text`, `commevent_author`, `commevent_time`, `commevent_ip`, `commevent_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()));
+			DB::run() -> query("INSERT INTO `commevents` (`event_id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()));
 
-			DB::run() -> query("DELETE FROM `commevents` WHERE `commevent_event_id`=? AND `commevent_time` < (SELECT MIN(`commevent_time`) FROM (SELECT `commevent_time` FROM `commevents` WHERE `commevent_event_id`=? ORDER BY `commevent_time` DESC LIMIT ".$config['maxkommevents'].") AS del);", array($id, $id));
+			DB::run() -> query("DELETE FROM `commevents` WHERE `event_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommevents'].") AS del);", array($id, $id));
 
 			DB::run() -> query("UPDATE `events` SET `event_comments`=`event_comments`+1 WHERE `event_id`=?;", array($id));
 			DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array(App::getUsername()));
@@ -481,7 +481,7 @@ case 'del':
 
 				$del = implode(',', $del);
 
-				$delcomments = DB::run() -> exec("DELETE FROM `commevents` WHERE `commevent_id` IN (".$del.") AND `commevent_event_id`=".$id.";");
+				$delcomments = DB::run() -> exec("DELETE FROM `commevents` WHERE `id` IN (".$del.") AND `event_id`=".$id.";");
 				DB::run() -> query("UPDATE `events` SET `event_comments`=`event_comments`-? WHERE `event_id`=?;", array($delcomments, $id));
 
 				notice('Выбранные комментарии успешно удалены!');
@@ -506,7 +506,7 @@ break;
 ############################################################################################
 case 'end':
 
-	$query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commevents` WHERE `commevent_event_id`=? LIMIT 1;", array($id));
+	$query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commevents` WHERE `event_id`=? LIMIT 1;", array($id));
 
 	if (!empty($query)) {
 		$total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];

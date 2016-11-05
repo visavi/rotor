@@ -5,11 +5,11 @@ $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $sort = (isset($_GET['sort'])) ? check($_GET['sort']) : 'read';
 
 switch ($sort) {
-    case 'rated': $order = 'blogs_rating';
+    case 'rated': $order = 'rating';
         break;
-    case 'comm': $order = 'blogs_comments';
+    case 'comm': $order = 'comments';
         break;
-    default: $order = 'blogs_read';
+    default: $order = 'read';
 }
 ############################################################################################
 ##                                       Топ тем                                          ##
@@ -23,7 +23,7 @@ if ($total > 0) {
         $start = last_page($total, $config['blogpost']);
     }
 
-    $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`blogs_cats_id`=`catsblog`.`cats_id` ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['blogpost'].";");
+    $queryblog = DB::run() -> query("SELECT `blogs`.*, `id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['blogpost'].";");
     $blogs = $queryblog->fetchAll();
 
     render('blog/top', array('blogs' => $blogs, 'order' => $order));

@@ -279,7 +279,7 @@ break;
 
             echo '<a href="/gallery?act=comments&amp;gid='.$gid.'&amp;rand='.mt_rand(100, 999).'">Обновить</a><hr />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `commphoto` WHERE `commphoto_gid`=?;", array($gid));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `commphoto` WHERE `gid`=?;", array($gid));
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -291,28 +291,28 @@ break;
                     echo '<form action="/gallery?act=delcomm&amp;gid='.$gid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `commphoto` WHERE `commphoto_gid`=? ORDER BY `commphoto_time` ASC LIMIT ".$start.", ".$config['postgallery'].";", array($gid));
+                $querycomm = DB::run() -> query("SELECT * FROM `commphoto` WHERE `gid`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postgallery'].";", array($gid));
 
                 while ($data = $querycomm -> fetch()) {
 
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['commphoto_user']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
                     if ($is_admin) {
-                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['commphoto_id'].'" /></span>';
+                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
                     }
 
-                    echo '<b>'.profile($data['commphoto_user']).'</b> <small>('.date_fixed($data['commphoto_time']).')</small><br />';
-                    echo user_title($data['commphoto_user']).' '.user_online($data['commphoto_user']).'</div>';
+                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    if ($log == $data['commphoto_user'] && $data['commphoto_time'] + 600 > SITETIME) {
-                        echo '<div class="right"><a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$data['commphoto_id'].'&amp;start='.$start.'">Редактировать</a></div>';
+                    if ($log == $data['user'] && $data['time'] + 600 > SITETIME) {
+                        echo '<div class="right"><a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.bb_code($data['commphoto_text']).'<br />';
+                    echo '<div>'.bb_code($data['text']).'<br />';
 
                     if (is_admin() || empty($config['anonymity'])) {
-                        echo '<span class="data">('.$data['commphoto_brow'].', '.$data['commphoto_ip'].')</span>';
+                        echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                     }
 
                     echo '</div>';
@@ -376,9 +376,9 @@ break;
                             if (is_flood($log)) {
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `commphoto` (`commphoto_gid`, `commphoto_text`, `commphoto_user`, `commphoto_time`, `commphoto_ip`, `commphoto_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($gid, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                                DB::run() -> query("INSERT INTO `commphoto` (`gid`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", array($gid, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-                                DB::run() -> query("DELETE FROM `commphoto` WHERE `commphoto_gid`=? AND `commphoto_time` < (SELECT MIN(`commphoto_time`) FROM (SELECT `commphoto_time` FROM `commphoto` WHERE `commphoto_gid`=? ORDER BY `commphoto_time` DESC LIMIT ".$config['maxpostgallery'].") AS del);", array($gid, $gid));
+                                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commphoto` WHERE `gid`=? ORDER BY `time` DESC LIMIT ".$config['maxpostgallery'].") AS del);", array($gid, $gid));
 
                                 DB::run() -> query("UPDATE `photo` SET `photo_comments`=`photo_comments`+1 WHERE `photo_id`=?;", array($gid));
                                 DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
@@ -417,17 +417,17 @@ break;
         $cid = abs(intval($_GET['cid']));
 
         if (is_user()) {
-            $comm = DB::run() -> queryFetch("SELECT `commphoto`.*, `photo`.`photo_closed` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`commphoto_gid`=`photo`.`photo_id` WHERE `commphoto_id`=? AND `commphoto_user`=? LIMIT 1;", array($cid, $log));
+            $comm = DB::run() -> queryFetch("SELECT `commphoto`.*, `photo`.`photo_closed` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`photo_id` WHERE `id`=? AND `user`=? LIMIT 1;", array($cid, $log));
 
             if (!empty($comm)) {
                 if (empty($comm['photo_closed'])) {
-                    if ($comm['commphoto_time'] + 600 > SITETIME) {
+                    if ($comm['time'] + 600 > SITETIME) {
 
-                        echo '<i class="fa fa-pencil"></i> <b>'.nickname($comm['commphoto_user']).'</b> <small>('.date_fixed($comm['commphoto_time']).')</small><br /><br />';
+                        echo '<i class="fa fa-pencil"></i> <b>'.nickname($comm['user']).'</b> <small>('.date_fixed($comm['time']).')</small><br /><br />';
 
                         echo '<div class="form">';
-                        echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['commphoto_gid'].'&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                        echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$comm['commphoto_text'].'</textarea><br />';
+                        echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['gid'].'&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                        echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$comm['text'].'</textarea><br />';
                         echo '<input type="submit" value="Редактировать" /></form></div><br />';
 
                     } else {
@@ -458,15 +458,15 @@ break;
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
-                    $comm = DB::run() -> queryFetch("SELECT `commphoto`.*, `photo`.`photo_closed` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`commphoto_gid`=`photo`.`photo_id` WHERE `commphoto_id`=? AND `commphoto_user`=? LIMIT 1;", array($cid, $log));
+                    $comm = DB::run() -> queryFetch("SELECT `commphoto`.*, `photo`.`photo_closed` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`photo_id` WHERE `id`=? AND `user`=? LIMIT 1;", array($cid, $log));
 
                     if (!empty($comm)) {
                         if (empty($comm['photo_closed'])) {
-                            if ($comm['commphoto_time'] + 600 > SITETIME) {
+                            if ($comm['time'] + 600 > SITETIME) {
 
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("UPDATE `commphoto` SET `commphoto_text`=? WHERE `commphoto_id`=?;", array($msg, $cid));
+                                DB::run() -> query("UPDATE `commphoto` SET `text`=? WHERE `id`=?;", array($msg, $cid));
 
                                 notice('Комментарий успешно отредактирован!');
                                 redirect("/gallery?act=comments&gid=$gid&start=$start");
@@ -510,7 +510,7 @@ break;
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    $delcomments = DB::run() -> exec("DELETE FROM commphoto WHERE commphoto_id IN (".$del.") AND commphoto_gid=".$gid.";");
+                    $delcomments = DB::run() -> exec("DELETE FROM commphoto WHERE id IN (".$del.") AND gid=".$gid.";");
                     DB::run() -> query("UPDATE photo SET photo_comments=photo_comments-? WHERE photo_id=?;", array($delcomments, $gid));
 
                     notice('Выбранные комментарии успешно удалены!');
@@ -543,7 +543,7 @@ break;
                     if (!empty($querydel)) {
                         if (empty($querydel['photo_comments'])) {
                             DB::run() -> query("DELETE FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($querydel['photo_id']));
-                            DB::run() -> query("DELETE FROM `commphoto` WHERE `commphoto_gid`=?;", array($querydel['photo_id']));
+                            DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", array($querydel['photo_id']));
 
                             unlink_image('upload/pictures/', $querydel['photo_link']);
 
@@ -574,7 +574,7 @@ break;
     ############################################################################################
     case 'end':
 
-        $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commphoto` WHERE `commphoto_gid`=? LIMIT 1;", array($gid));
+        $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commphoto` WHERE `gid`=? LIMIT 1;", array($gid));
 
         if (!empty($query)) {
 
@@ -613,7 +613,7 @@ break;
     * if (count($arr_photo)>0){
     * foreach ($arr_photo as $delete){
     * DB::run()->query("DELETE FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($delete['photo_id']));
-    * DB::run()->query("DELETE FROM `commphoto` WHERE `commphoto_gid`=?;", array($delete['photo_id']));
+    * DB::run()->query("DELETE FROM `commphoto` WHERE `gid`=?;", array($delete['photo_id']));
     * if (file_exists(HOME.'/upload/pictures/'.$delete['photo_link'])) {unlink(HOME.'/upload/pictures/'.$delete['photo_link']);}
     * }
     *

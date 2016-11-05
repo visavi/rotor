@@ -31,17 +31,17 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            $queryblog = DB::run() -> query("SELECT * FROM `catsblog` ORDER BY `cats_order` ASC;");
+            $queryblog = DB::run() -> query("SELECT * FROM `catsblog` ORDER BY `order` ASC;");
             $blogs = $queryblog -> fetchAll();
 
             if (count($blogs) > 0) {
                 foreach($blogs as $data) {
                     echo '<i class="fa fa-folder-open"></i> ';
-                    echo '<b>'.$data['cats_order'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['cats_id'].'">'.$data['cats_name'].'</a></b> ('.$data['cats_count'].')<br />';
+                    echo '<b>'.$data['order'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ('.$data['count'].')<br />';
 
                     if (is_admin(array(101))) {
-                        echo '<a href="/admin/blog?act=editcats&amp;cid='.$data['cats_id'].'">Редактировать</a> / ';
-                        echo '<a href="/admin/blog?act=prodelcats&amp;cid='.$data['cats_id'].'">Удалить</a>';
+                        echo '<a href="/admin/blog?act=editcats&amp;cid='.$data['id'].'">Редактировать</a> / ';
+                        echo '<a href="/admin/blog?act=prodelcats&amp;cid='.$data['id'].'">Удалить</a>';
                     }
                     echo '<br />';
                 }
@@ -95,8 +95,8 @@ if (is_admin()) {
             if (is_admin(array(101))) {
                 if ($uid == $_SESSION['token']) {
                     if (utf_strlen($name) >= 3 && utf_strlen($name) < 50) {
-                        $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`cats_order`),0)+1 FROM `catsblog`;");
-                        DB::run() -> query("INSERT INTO `catsblog` (`cats_order`, `cats_name`) VALUES (?, ?);", array($maxorder, $name));
+                        $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`order`),0)+1 FROM `catsblog`;");
+                        DB::run() -> query("INSERT INTO `catsblog` (`order`, `name`) VALUES (?, ?);", array($maxorder, $name));
 
                         notice('Новый раздел успешно добавлен!');
                         redirect("/admin/blog");
@@ -120,7 +120,7 @@ if (is_admin()) {
         case 'editcats':
 
             if (is_admin(array(101))) {
-                $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cid));
+                $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
 
                 if (!empty($blogs)) {
                     echo '<b><big>Редактирование</big></b><br /><br />';
@@ -128,9 +128,9 @@ if (is_admin()) {
                     echo '<div class="form">';
                     echo '<form action="/admin/blog?act=changecats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo 'Заголовок:<br />';
-                    echo '<input type="text" name="name" maxlength="50" value="'.$blogs['cats_name'].'" /><br />';
+                    echo '<input type="text" name="name" maxlength="50" value="'.$blogs['name'].'" /><br />';
                     echo 'Положение:<br />';
-                    echo '<input type="text" name="order" maxlength="2" value="'.$blogs['cats_order'].'" /><br /><br />';
+                    echo '<input type="text" name="order" maxlength="2" value="'.$blogs['order'].'" /><br /><br />';
 
                     echo '<input type="submit" value="Изменить" /></form></div><br />';
                 } else {
@@ -155,10 +155,10 @@ if (is_admin()) {
             if (is_admin(array(101))) {
                 if ($uid == $_SESSION['token']) {
                     if (utf_strlen($name) >= 3 && utf_strlen($name) < 50) {
-                        $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cid));
+                        $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
 
                         if (!empty($blogs)) {
-                            DB::run() -> query("UPDATE `catsblog` SET `cats_order`=?, `cats_name`=? WHERE `cats_id`=?;", array($order, $name, $cid));
+                            DB::run() -> query("UPDATE `catsblog` SET `order`=?, `name`=? WHERE `id`=?;", array($order, $name, $cid));
 
                             notice('Раздел успешно отредактирован!');
                             redirect("/admin/blog");
@@ -186,10 +186,10 @@ if (is_admin()) {
         case 'prodelcats':
 
             if (is_admin(array(101))) {
-                $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cid));
+                $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
 
                 if (!empty($blogs)) {
-                    echo 'Вы уверены что хотите удалить раздел <b>'.$blogs['cats_name'].'</b> в блогах?<br />';
+                    echo 'Вы уверены что хотите удалить раздел <b>'.$blogs['name'].'</b> в блогах?<br />';
                     echo '<i class="fa fa-times"></i> <b><a href="/admin/blog?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
                 } else {
                     show_error('Ошибка! Данного раздела не существует!');
@@ -210,12 +210,12 @@ if (is_admin()) {
 
             if (is_admin(array(101)) && $log == $config['nickname']) {
                 if ($uid == $_SESSION['token']) {
-                    $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cid));
+                    $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
 
                     if (!empty($blogs)) {
-                        DB::run() -> query("DELETE FROM `commblog` WHERE `commblog_cats`=?;", array($cid));
-                        DB::run() -> query("DELETE FROM `blogs` WHERE `blogs_cats_id`=?;", array($cid));
-                        DB::run() -> query("DELETE FROM `catsblog` WHERE `cats_id`=?;", array($cid));
+                        DB::run() -> query("DELETE FROM `commblog` WHERE `cats`=?;", array($cid));
+                        DB::run() -> query("DELETE FROM `blogs` WHERE `cats_id`=?;", array($cid));
+                        DB::run() -> query("DELETE FROM `catsblog` WHERE `id`=?;", array($cid));
 
                         notice('Раздел успешно удален!');
                         redirect("/admin/blog");
@@ -238,39 +238,39 @@ if (is_admin()) {
         ############################################################################################
         case 'blog':
 
-            $cats = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($cid));
+            $cats = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
 
             if (!empty($cats)) {
-                $config['newtitle'] = $cats['cats_name'];
+                $config['newtitle'] = $cats['name'];
 
-                echo '<i class="fa fa-folder-open"></i> <b>'.$cats['cats_name'].'</b> (Статей: '.$cats['cats_count'].')';
+                echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Статей: '.$cats['count'].')';
                 echo ' (<a href="/blog/blog?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
                 echo '<hr />';
 
-                $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `blogs_cats_id`=?;", array($cid));
+                $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `cats_id`=?;", array($cid));
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `blogs_cats_id`=? ORDER BY `blogs_time` DESC LIMIT ".$start.", ".$config['blogpost'].";", array($cid));
+                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `cats_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", array($cid));
 
                     echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                     while ($data = $queryblog -> fetch()) {
 
                         echo '<div class="b"><i class="fa fa-pencil"></i> ';
-                        echo '<b><a href="/blog/blog?act=view&amp;id='.$data['blogs_id'].'">'.$data['blogs_title'].'</a></b> ('.format_num($data['blogs_rating']).')<br />';
+                        echo '<b><a href="/blog/blog?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.format_num($data['rating']).')<br />';
 
-                        echo '<input type="checkbox" name="del[]" value="'.$data['blogs_id'].'" /> ';
+                        echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
 
-                        echo '<a href="/admin/blog?act=editblog&amp;cid='.$cid.'&amp;id='.$data['blogs_id'].'&amp;start='.$start.'">Редактировать</a> / ';
-                        echo '<a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$data['blogs_id'].'&amp;start='.$start.'">Переместить</a></div>';
+                        echo '<a href="/admin/blog?act=editblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
+                        echo '<a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;start='.$start.'">Переместить</a></div>';
 
-                        echo '<div>Автор: '.profile($data['blogs_user']).' ('.date_fixed($data['blogs_time']).')<br />';
-                        echo 'Просмотров: '.$data['blogs_read'].'<br />';
-                        echo '<a href="/blog/blog?act=comments&amp;id='.$data['blogs_id'].'">Комментарии</a> ('.$data['blogs_comments'].')<br />';
+                        echo '<div>Автор: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
+                        echo 'Просмотров: '.$data['read'].'<br />';
+                        echo '<a href="/blog/blog?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].')<br />';
                         echo '</div>';
                     }
 
@@ -292,7 +292,7 @@ if (is_admin()) {
         ############################################################################################
         case 'editblog':
 
-            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
             if (!empty($blogs)) {
                 echo '<b><big>Редактирование</big></b><br /><br />';
@@ -301,13 +301,13 @@ if (is_admin()) {
                 echo '<form action="/admin/blog?act=addeditblog&amp;cid='.$cid.'&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 echo 'Заголовок:<br />';
-                echo '<input type="text" name="title" size="50" maxlength="50" value="'.$blogs['blogs_title'].'" /><br />';
+                echo '<input type="text" name="title" size="50" maxlength="50" value="'.$blogs['title'].'" /><br />';
                 echo 'Текст:<br />';
-                echo '<textarea id="markItUp" cols="25" rows="15" name="text">'.$blogs['blogs_text'].'</textarea><br />';
+                echo '<textarea id="markItUp" cols="25" rows="15" name="text">'.$blogs['text'].'</textarea><br />';
                 echo 'Автор:<br />';
-                echo '<input type="text" name="user" maxlength="20" value="'.$blogs['blogs_user'].'" /><br />';
+                echo '<input type="text" name="user" maxlength="20" value="'.$blogs['user'].'" /><br />';
                 echo 'Метки:<br />';
-                echo '<input type="text" name="tags" size="50" maxlength="100" value="'.$blogs['blogs_tags'].'" /><br />';
+                echo '<input type="text" name="tags" size="50" maxlength="100" value="'.$blogs['tags'].'" /><br />';
 
                 echo '<input type="submit" value="Изменить" /></form></div><br />';
             } else {
@@ -334,10 +334,10 @@ if (is_admin()) {
                     if (utf_strlen($text) >= 100 && utf_strlen($text) <= $config['maxblogpost']) {
                         if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
                             if (preg_match('|^[a-z0-9\-]+$|i', $user)) {
-                                $queryblog = DB::run() -> querySingle("SELECT `blogs_id` FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+                                $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
                                 if (!empty($queryblog)) {
 
-                                    DB::run() -> query("UPDATE `blogs` SET `blogs_title`=?, `blogs_text`=?, `blogs_user`=?, `blogs_tags`=? WHERE `blogs_id`=?;", array($title, $text, $user, $tags, $id));
+                                    DB::run() -> query("UPDATE `blogs` SET `title`=?, `text`=?, `user`=?, `tags`=? WHERE `id`=?;", array($title, $text, $user, $tags, $id));
 
                                     notice('Статья успешно отредактирована!');
                                     redirect("/admin/blog?act=blog&cid=$cid&start=$start");
@@ -370,25 +370,25 @@ if (is_admin()) {
         ############################################################################################
         case 'moveblog':
 
-            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
             if (!empty($blogs)) {
-                echo '<i class="fa fa-archive"></i> <b>'.$blogs['blogs_title'].'</b><br /><br />';
+                echo '<i class="fa fa-archive"></i> <b>'.$blogs['title'].'</b><br /><br />';
 
-                $querycats = DB::run() -> query("SELECT `cats_id`, `cats_name` FROM `catsblog` ORDER BY `cats_order` ASC;");
+                $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY `order` ASC;");
                 $cats = $querycats -> fetchAll();
 
                 if (count($cats) > 0) {
                     echo '<div class="form">';
-                    echo '<form action="/admin/blog?act=addmoveblog&amp;cid='.$blogs['blogs_cats_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/admin/blog?act=addmoveblog&amp;cid='.$blogs['cats_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                     echo 'Выберите раздел для перемещения:<br />';
                     echo '<select name="section">';
                     echo '<option value="0">Список разделов</option>';
 
                     foreach ($cats as $data) {
-                        if ($blogs['blogs_cats_id'] != $data['cats_id']) {
-                            echo '<option value="'.$data['cats_id'].'">'.$data['cats_name'].'</option>';
+                        if ($blogs['cats_id'] != $data['id']) {
+                            echo '<option value="'.$data['id'].'">'.$data['name'].'</option>';
                         }
                     }
 
@@ -413,15 +413,15 @@ if (is_admin()) {
             $section = abs(intval($_POST['section']));
 
             if ($uid == $_SESSION['token']) {
-                $querycats = DB::run() -> querySingle("SELECT `cats_id` FROM `catsblog` WHERE `cats_id`=? LIMIT 1;", array($section));
+                $querycats = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", array($section));
                 if (!empty($querycats)) {
-                    $queryblog = DB::run() -> querySingle("SELECT `blogs_id` FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+                    $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
                     if (!empty($queryblog)) {
-                        DB::run() -> query("UPDATE `blogs` SET `blogs_cats_id`=? WHERE `blogs_id`=?;", array($section, $id));
-                        DB::run() -> query("UPDATE `commblog` SET `commblog_cats`=? WHERE `commblog_blog`=?;", array($section, $id));
+                        DB::run() -> query("UPDATE `blogs` SET `cats_id`=? WHERE `id`=?;", array($section, $id));
+                        DB::run() -> query("UPDATE `commblog` SET `cats`=? WHERE `blog`=?;", array($section, $id));
                         // Обновление счетчиков
-                        DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`+1 WHERE `cats_id`=?", array($section));
-                        DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`-1 WHERE `cats_id`=?", array($cid));
+                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", array($section));
+                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", array($cid));
 
                         notice('Статья успешно перемещена!');
                         redirect("/admin/blog?act=blog&cid=$section");
@@ -458,10 +458,10 @@ if (is_admin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `commblog` WHERE `commblog_blog` IN (".$del.");");
-                    $delblogs = DB::run() -> exec("DELETE FROM `blogs` WHERE `blogs_id` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `commblog` WHERE `blog` IN (".$del.");");
+                    $delblogs = DB::run() -> exec("DELETE FROM `blogs` WHERE `id` IN (".$del.");");
                     // Обновление счетчиков
-                    DB::run() -> query("UPDATE `catsblog` SET `cats_count`=`cats_count`-? WHERE `cats_id`=?", array($delblogs, $cid));
+                    DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-? WHERE `id`=?", array($delblogs, $cid));
 
                     notice('Выбранные статьи успешно удалены!');
                     redirect("/admin/blog?act=blog&cid=$cid&start=$start");

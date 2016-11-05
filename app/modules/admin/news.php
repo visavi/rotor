@@ -302,7 +302,7 @@ case 'del':
                 }
 
                 DB::run() -> query("DELETE FROM `news` WHERE `news_id` IN (".$del.");");
-                DB::run() -> query("DELETE FROM `commnews` WHERE `commnews_news_id` IN (".$del.");");
+                DB::run() -> query("DELETE FROM `commnews` WHERE `news_id` IN (".$del.");");
 
                 notice('Выбранные новости успешно удалены!');
                 redirect("/admin/news?start=$start");

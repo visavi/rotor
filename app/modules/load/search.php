@@ -76,7 +76,7 @@ case "search":
 
             if (empty($_SESSION['loadfindres']) || $loadfind!=$_SESSION['loadfind']) {
 
-                $querysearch = DB::run() -> query("SELECT `downs_id` FROM `downs` WHERE `downs_active`=? AND MATCH (`downs_title`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", array(1));
+                $querysearch = DB::run() -> query("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`title`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", array(1));
                 $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
                 $_SESSION['loadfind'] = $loadfind;
@@ -94,19 +94,19 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id` IN (".$result.") ORDER BY `downs_time` DESC LIMIT ".$start.", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`cats_id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-                    $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
+                    $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b"><i class="fa fa-archive"></i> ';
-                    echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
+                    echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-                    echo '<div>Категория: <a href="/load/down?cid='.$data['downs_cats_id'].'">'.$data['cats_name'].'</a><br />';
-                    echo 'Скачиваний: '.$data['downs_load'].'<br />';
-                    echo 'Добавил: '.profile($data['downs_user']).' ('.date_fixed($data['downs_time']).')</div>';
+                    echo '<div>Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a><br />';
+                    echo 'Скачиваний: '.$data['load'].'<br />';
+                    echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 
                 page_strnavigation('/load/search?act=search&amp;find='.urlencode($find).'&amp;type='.$type.'&amp;where='.$where.'&amp;', $config['downlist'], $start, $total);
@@ -120,7 +120,7 @@ case "search":
 
             if (empty($_SESSION['loadfindres']) || $loadfind!=$_SESSION['loadfind']) {
 
-                $querysearch = DB::run() -> query("SELECT `downs_id` FROM `downs` WHERE `downs_active`=? AND MATCH (`downs_text`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", array(1));
+                $querysearch = DB::run() -> query("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`text`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", array(1));
                 $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
                 $_SESSION['loadfind'] = $loadfind;
@@ -138,25 +138,25 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id` IN (".$result.") ORDER BY `downs_time` DESC LIMIT ".$start.", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`cats_id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-                    $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
+                    $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b"><i class="fa fa-archive"></i> ';
-                    echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
+                    echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-                    if (utf_strlen($data['downs_text']) > 300) {
-                        $data['downs_text'] = strip_tags(bb_code($data['downs_text']), '<br>');
-                        $data['downs_text'] = utf_substr($data['downs_text'], 0, 300).'...';
+                    if (utf_strlen($data['text']) > 300) {
+                        $data['text'] = strip_tags(bb_code($data['text']), '<br>');
+                        $data['text'] = utf_substr($data['text'], 0, 300).'...';
                     }
 
-                    echo '<div>'.$data['downs_text'].'<br />';
+                    echo '<div>'.$data['text'].'<br />';
 
-                    echo 'Категория: <a href="/load/down?cid='.$data['downs_cats_id'].'">'.$data['cats_name'].'</a><br />';
-                    echo 'Добавил: '.profile($data['downs_user']).' ('.date_fixed($data['downs_time']).')</div>';
+                    echo 'Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a><br />';
+                    echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 
                 page_strnavigation('/load/search?act=search&amp;find='.urlencode($find).'&amp;type='.$type.'&amp;where='.$where.'&amp;', $config['downlist'], $start, $total);

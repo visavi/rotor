@@ -305,7 +305,7 @@ if (is_admin()) {
                             DB::run() -> query("DELETE FROM `posts` WHERE `posts_forums_id`=?;", array($fid));
                             DB::run() -> query("DELETE FROM `topics` WHERE `topics_forums_id`=?;", array($fid));
                             DB::run() -> query("DELETE FROM `forums` WHERE `forums_id`=?;", array($fid));
-                            DB::run() -> query("DELETE FROM `bookmarks` WHERE `book_forum`=?;", array($fid));
+                            DB::run() -> query("DELETE FROM `bookmarks` WHERE `forum`=?;", array($fid));
 
                             notice('Раздел успешно удален!');
                             redirect("/admin/forum");
@@ -553,7 +553,7 @@ if (is_admin()) {
 
                         DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($newlast['topics_id'], $newlast['topics_title'], $newlast['topics_last_user'], $newlast['topics_last_time'], $newlast['topics_forums_id']));
                         // Обновление закладок
-                        DB::run() -> query("UPDATE `bookmarks` SET `book_forum`=? WHERE `book_topic`=?;", array($section, $tid));
+                        DB::run() -> query("UPDATE `bookmarks` SET `forum`=? WHERE `topic`=?;", array($section, $tid));
 
                         notice('Тема успешно перемещена!');
                         redirect("/admin/forum?act=forum&fid=$section");
@@ -602,7 +602,7 @@ if (is_admin()) {
                     $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `posts_topics_id` IN (".$delId.");");
 
                     // Удаление закладок
-                    DB::run() -> query("DELETE FROM `bookmarks` WHERE `book_topic` IN (".$delId.");");
+                    DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic` IN (".$delId.");");
 
                     // Обновление счетчиков
                     DB::run() -> query("UPDATE `forums` SET `forums_topics`=`forums_topics`-?, `forums_posts`=`forums_posts`-? WHERE `forums_id`=?;", array($deltopics, $delposts, $fid));

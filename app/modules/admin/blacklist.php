@@ -61,24 +61,24 @@ if (is_admin(array(101, 102))) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `blacklist` WHERE `black_type`=?;", array($type));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `blacklist` WHERE `type`=?;", array($type));
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `black_type`=? ORDER BY `black_time` DESC LIMIT ".$start.", ".$config['blacklist'].";", array($type));
+                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blacklist'].";", array($type));
 
                 echo '<form action="/admin/blacklist?act=del&amp;page='.$page.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryblack -> fetch()) {
                     echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['black_id'].'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
 
-                    echo '<i class="fa fa-pencil"></i> <b>'.$data['black_value'].'</b></div>';
-                    echo '<div>Добавлено: '.profile($data['black_user']).'<br />';
-                    echo 'Время: '.date_fixed($data['black_time']).'</div>';
+                    echo '<i class="fa fa-pencil"></i> <b>'.$data['value'].'</b></div>';
+                    echo '<div>Добавлено: '.profile($data['user']).'<br />';
+                    echo 'Время: '.date_fixed($data['time']).'</div>';
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
@@ -112,9 +112,9 @@ if (is_admin(array(101, 102))) {
 
                                 $value = str_replace('http://', '', $value);
 
-                                $black = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array($type, $value));
+                                $black = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array($type, $value));
                                 if (empty($black)) {
-                                    DB::run() -> query("INSERT INTO `blacklist` (`black_type`, `black_value`, `black_user`, `black_time`) VALUES (?, ?, ?, ?);", array($type, $value, $log, SITETIME));
+                                    DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array($type, $value, $log, SITETIME));
 
                                     notice('Запись успешно добавлена в черный список!');
                                     redirect("/admin/blacklist?page=$page&start=$start");
@@ -158,7 +158,7 @@ if (is_admin(array(101, 102))) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `blacklist` WHERE `black_type`=? AND `black_id` IN (".$del.");", array($type));
+                    DB::run() -> query("DELETE FROM `blacklist` WHERE `type`=? AND `id` IN (".$del.");", array($type));
 
                     notice('Выбранные записи успешно удалены!');
                     redirect("/admin/blacklist?page=$page&start=$start");

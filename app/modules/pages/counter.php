@@ -19,23 +19,23 @@ switch ($act):
 		echo 'Всего авторизованных: <b>'.$online[0].'</b><br />';
 		echo 'Всего гостей: <b>'.($online[1] - $online[0]).'</b><br /><br />';
 
-		echo 'Хостов сегодня: <b>'.$count['count_dayhosts'].'</b><br />';
-		echo 'Хитов сегодня: <b>'.$count['count_dayhits'].'</b><br />';
-		echo 'Всего хостов: <b>'.$count['count_allhosts'].'</b><br />';
-		echo 'Всего хитов: <b>'.$count['count_allhits'].'</b><br /><br />';
+		echo 'Хостов сегодня: <b>'.$count['dayhosts'].'</b><br />';
+		echo 'Хитов сегодня: <b>'.$count['dayhits'].'</b><br />';
+		echo 'Всего хостов: <b>'.$count['allhosts'].'</b><br />';
+		echo 'Всего хитов: <b>'.$count['allhits'].'</b><br /><br />';
 
-		echo 'Хостов за текущий час: <b>'.$count['count_hosts24'].'</b><br />';
-		echo 'Хитов за текущий час: <b>'.$count['count_hits24'].'</b><br /><br />';
+		echo 'Хостов за текущий час: <b>'.$count['hosts24'].'</b><br />';
+		echo 'Хитов за текущий час: <b>'.$count['hits24'].'</b><br /><br />';
 
-		$counts24 = DB::run() -> queryFetch("SELECT SUM(`count_hosts`) AS `hosts`, SUM(`count_hits`) AS `hits` FROM `counter24`;");
+		$counts24 = DB::run() -> queryFetch("SELECT SUM(`hosts`) AS `hosts`, SUM(`hits`) AS `hits` FROM `counter24`;");
 
-		echo 'Хостов за 24 часа: <b>'.($counts24['hosts'] + $count['count_hosts24']).'</b><br />';
-		echo 'Хитов за 24 часа: <b>'.($counts24['hits'] + $count['count_hits24']).'</b><br /><br />';
+		echo 'Хостов за 24 часа: <b>'.($counts24['hosts'] + $count['hosts24']).'</b><br />';
+		echo 'Хитов за 24 часа: <b>'.($counts24['hits'] + $count['hits24']).'</b><br /><br />';
 
-		$counts31 = DB::run() -> queryFetch("SELECT SUM(`count_hosts`) AS `hosts`, SUM(`count_hits`) AS `hits` FROM `counter31`;");
+		$counts31 = DB::run() -> queryFetch("SELECT SUM(`hosts`) AS `hosts`, SUM(`hits`) AS `hits` FROM `counter31`;");
 
-		echo 'Хостов за месяц: <b>'.($counts31['hosts'] + $count['count_dayhosts']).'</b><br />';
-		echo 'Хитов за месяц: <b>'.($counts31['hits'] + $count['count_dayhits']).'</b><br /><br />';
+		echo 'Хостов за месяц: <b>'.($counts31['hosts'] + $count['dayhosts']).'</b><br />';
+		echo 'Хитов за месяц: <b>'.($counts31['hits'] + $count['dayhits']).'</b><br /><br />';
 
 		echo 'Динамика за неделю<br />';
 		include_once(APP.'/includes/counter7.php');
@@ -63,7 +63,7 @@ switch ($act):
 		if ($currhour > 0) {
 			$hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
 
-			$querycount = DB::run() -> query("SELECT * FROM `counter24` ORDER BY `count_hour` DESC;");
+			$querycount = DB::run() -> query("SELECT * FROM `counter24` ORDER BY `hour` DESC;");
 			$counts = $querycount -> fetchAll();
 
 			$arrhits = array();
@@ -72,8 +72,8 @@ switch ($act):
 			$host_data = array();
 
 			foreach ($counts as $val) {
-				$arrhits[$val['count_hour']] = $val['count_hits'];
-				$arrhosts[$val['count_hour']] = $val['count_hosts'];
+				$arrhits[$val['hour']] = $val['hits'];
+				$arrhosts[$val['hour']] = $val['hosts'];
 			}
 
 			for ($i = 0, $tekhours = $hours; $i < 24; $tekhours -= 1, $i++) {
@@ -119,7 +119,7 @@ switch ($act):
 		if ($currday > 1) {
 			$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 
-			$querycount = DB::run() -> query("SELECT * FROM `counter31` ORDER BY `count_days` DESC;");
+			$querycount = DB::run() -> query("SELECT * FROM `counter31` ORDER BY `days` DESC;");
 			$counts = $querycount -> fetchAll();
 
 			$arrhits = array();
@@ -128,8 +128,8 @@ switch ($act):
 			$host_data = array();
 
 			foreach ($counts as $val) {
-				$arrhits[$val['count_days']] = $val['count_hits'];
-				$arrhosts[$val['count_days']] = $val['count_hosts'];
+				$arrhits[$val['days']] = $val['hits'];
+				$arrhosts[$val['days']] = $val['hosts'];
 			}
 
 			for ($i = 0, $tekdays = $days; $i < 31; $tekdays -= 1, $i++) {

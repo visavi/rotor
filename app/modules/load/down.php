@@ -16,17 +16,17 @@ switch ($act):
 case 'index':
 
     if (!empty($cid)) {
-        $cats = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cid));
+        $cats = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", array($cid));
 
         if (!empty($cats)) {
-            $config['newtitle'] = $cats['cats_name'];
+            $config['newtitle'] = $cats['name'];
 
             echo '<a href="/load">Категории</a>';
 
-            if (!empty($cats['cats_parent'])) {
-                $podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($cats['cats_parent']));
+            if (!empty($cats['parent'])) {
+                $podcats = DB::run() -> queryFetch("SELECT `id`, `name` FROM `cats` WHERE `id`=? LIMIT 1;", array($cats['parent']));
 
-                echo ' / <a href="/load/down?cid='.$podcats['cats_id'].'">'.$podcats['cats_name'].'</a>';
+                echo ' / <a href="/load/down?cid='.$podcats['id'].'">'.$podcats['name'].'</a>';
             }
 
             if (empty($cats['closed'])) {
@@ -34,43 +34,43 @@ case 'index':
             }
 
             echo '<br /><br />';
-            echo '<i class="fa fa-folder-open"></i> <b>'.$cats['cats_name'].'</b> (Файлов: '.$cats['cats_count'].')';
+            echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
 
             if (is_admin(array(101, 102))) {
                 echo ' (<a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Управление</a>)';
             }
 
             switch ($sort) {
-                case 'rated': $order = 'downs_rated';
+                case 'rated': $order = 'rated';
                     break;
-                case 'comm': $order = 'downs_comments';
+                case 'comm': $order = 'comments';
                     break;
-                case 'load': $order = 'downs_load';
+                case 'load': $order = 'load';
                     break;
-                default: $order = 'downs_time';
+                default: $order = 'time';
             }
 
             echo '<br />Сортировать: ';
 
-            if ($order == 'downs_time') {
+            if ($order == 'time') {
                 echo '<b>По дате</b> / ';
             } else {
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=date">По дате</a> / ';
             }
 
-            if ($order == 'downs_load') {
+            if ($order == 'load') {
                 echo '<b>Скачивания</b> / ';
             } else {
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=load">Скачивания</a> / ';
             }
 
-            if ($order == 'downs_rated') {
+            if ($order == 'rated') {
                 echo '<b>Оценки</b> / ';
             } else {
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=rated">Оценки</a> / ';
             }
 
-            if ($order == 'downs_comments') {
+            if ($order == 'comments') {
                 echo '<b>Комментарии</b>';
             } else {
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=comm">Комментарии</a>';
@@ -78,44 +78,44 @@ case 'index':
 
             echo '<hr />';
 
-            $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `cats_parent`=?;", array($cid));
+            $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `parent`=?;", array($cid));
             $sub = $querysub -> fetchAll();
 
             if (count($sub) > 0 && $start == 0) {
                 foreach($sub as $subdata) {
                     echo '<div class="b"><i class="fa fa-folder-open"></i> ';
-                    echo '<b><a href="/load/down?cid='.$subdata['cats_id'].'">'.$subdata['cats_name'].'</a></b> ('.$subdata['cats_count'].')</div>';
+                    echo '<b><a href="/load/down?cid='.$subdata['id'].'">'.$subdata['name'].'</a></b> ('.$subdata['count'].')</div>';
                 }
                 echo '<hr />';
             }
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_cats_id`=? AND `downs_active`=?;", array($cid, 1));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `cats_id`=? AND `active`=?;", array($cid, 1));
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `downs_cats_id`=? AND `downs_active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", array($cid, 1));
+                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `cats_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", array($cid, 1));
 
                 $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
                 while ($data = $querydown -> fetch()) {
 
-                    $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
+                    $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b">';
                     echo '<i class="fa fa-archive"></i> ';
-                    echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
+                    echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
                     echo '<div>';
 
-                    echo 'Скачиваний: '.$data['downs_load'].'<br />';
+                    echo 'Скачиваний: '.$data['load'].'<br />';
 
-                    $raiting = (!empty($data['downs_rated'])) ? round($data['downs_raiting'] / $data['downs_rated'], 1) : 0;
+                    $raiting = (!empty($data['rated'])) ? round($data['raiting'] / $data['rated'], 1) : 0;
 
-                    echo 'Рейтинг: <b>'.$raiting.'</b> (Голосов: '.$data['downs_rated'].')<br />';
-                    echo '<a href="/load/down?act=comments&amp;id='.$data['downs_id'].'">Комментарии</a> ('.$data['downs_comments'].') ';
-                    echo '<a href="/load/down?act=end&amp;id='.$data['downs_id'].'">&raquo;</a></div>';
+                    echo 'Рейтинг: <b>'.$raiting.'</b> (Голосов: '.$data['rated'].')<br />';
+                    echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
+                    echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
                 }
 
                 page_strnavigation('/load/down?cid='.$cid.'&amp;sort='.$sort.'&amp;', $config['downlist'], $start, $total);
@@ -150,27 +150,27 @@ break;
 ############################################################################################
 case 'view':
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
 
     if (!empty($downs)) {
-        if (!empty($downs['downs_active']) || $downs['downs_user'] == $log) {
+        if (!empty($downs['active']) || $downs['user'] == $log) {
 
-            $config['newtitle'] = $downs['downs_title'];
-            $config['description'] = strip_str($downs['downs_text']);
+            $config['newtitle'] = $downs['title'];
+            $config['description'] = strip_str($downs['text']);
 
             $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
             echo '<a href="/load">Категории</a> / ';
 
-            if (!empty($downs['cats_parent'])) {
-                $podcats = DB::run() -> queryFetch("SELECT `cats_id`, `cats_name` FROM `cats` WHERE `cats_id`=? LIMIT 1;", array($downs['cats_parent']));
-                echo '<a href="/load/down?cid='.$podcats['cats_id'].'">'.$podcats['cats_name'].'</a> / ';
+            if (!empty($downs['parent'])) {
+                $podcats = DB::run() -> queryFetch("SELECT `id`, `name` FROM `cats` WHERE `id`=? LIMIT 1;", array($downs['parent']));
+                echo '<a href="/load/down?cid='.$podcats['id'].'">'.$podcats['name'].'</a> / ';
             }
 
-            echo '<a href="/load/down?cid='.$downs['cats_id'].'">'.$downs['cats_name'].'</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><br /><br />';
+            echo '<a href="/load/down?cid='.$downs['id'].'">'.$downs['name'].'</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><br /><br />';
 
-            $filesize = (!empty($downs['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$downs['downs_link']) : 0;
-            echo '<i class="fa fa-archive"></i> <b>'.$downs['downs_title'].'</b> ('.$filesize.')';
+            $filesize = (!empty($downs['link'])) ? read_file(HOME.'/upload/files/'.$folder.$downs['link']) : 0;
+            echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b> ('.$filesize.')';
 
             if (is_admin(array(101, 102))) {
                 echo ' (<a href="/admin/load?act=editdown&amp;cid='.$downs['cats_id'].'&amp;id='.$id.'">Редактировать</a> / ';
@@ -178,42 +178,42 @@ case 'view':
             }
             echo '<hr />';
 
-            if (empty($downs['downs_active']) && $downs['downs_user'] == $log){
+            if (empty($downs['active']) && $downs['user'] == $log){
                 echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br />';
                 echo '<i class="fa fa-pencil"></i> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br />';
             }
 
-            $ext = getExtension($downs['downs_link']);
+            $ext = getExtension($downs['link']);
 
             if (in_array($ext, array('jpg', 'jpeg', 'gif', 'png'))) {
-                echo '<a href="/upload/files/'.$folder.$downs['downs_link'].'">'.resize_image('upload/files/'.$folder, $downs['downs_link'], $config['previewsize'], array('alt' => $downs['downs_title'])).'</a><br />';
+                echo '<a href="/upload/files/'.$folder.$downs['link'].'">'.resize_image('upload/files/'.$folder, $downs['link'], $config['previewsize'], array('alt' => $downs['title'])).'</a><br />';
             }
 
-            echo bb_code($downs['downs_text']).'<br /><br />';
+            echo bb_code($downs['text']).'<br /><br />';
 
-            if (!empty($downs['downs_screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['downs_screen'])) {
+            if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
                 echo 'Скриншот:<br />';
 
-                echo '<a href="screen/'.$folder.$downs['downs_screen'].'">'.resize_image('upload/screen/'.$folder, $downs['downs_screen'], $config['previewsize'], array('alt' => $downs['downs_title'])).'</a><br /><br />';
+                echo '<a href="screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], array('alt' => $downs['title'])).'</a><br /><br />';
             }
 
-            if (!empty($downs['downs_author'])) {
-                echo 'Автор файла: '.$downs['downs_author'];
+            if (!empty($downs['author'])) {
+                echo 'Автор файла: '.$downs['author'];
 
-                if (!empty($downs['downs_site'])) {
-                    echo ' (<a href="'.$downs['downs_site'].'">'.$downs['downs_site'].'</a>)';
+                if (!empty($downs['site'])) {
+                    echo ' (<a href="'.$downs['site'].'">'.$downs['site'].'</a>)';
                 }
                 echo '<br />';
             }
 
-            if (!empty($downs['downs_site']) && empty($downs['downs_author'])) {
-                echo 'Сайт автора: <a href="'.$downs['downs_site'].'">'.$downs['downs_site'].'</a><br />';
+            if (!empty($downs['site']) && empty($downs['author'])) {
+                echo 'Сайт автора: <a href="'.$downs['site'].'">'.$downs['site'].'</a><br />';
             }
 
-            echo 'Добавлено: '.profile($downs['downs_user']).' ('.date_fixed($downs['downs_time']).')<hr />';
+            echo 'Добавлено: '.profile($downs['user']).' ('.date_fixed($downs['time']).')<hr />';
 
             // -----------------------------------------------------------//
-            if (!empty($downs['downs_link']) && file_exists(HOME.'/upload/files/'.$folder.$downs['downs_link'])) {
+            if (!empty($downs['link']) && file_exists(HOME.'/upload/files/'.$folder.$downs['link'])) {
 
                 if ($ext == 'mp3') {?>
 
@@ -225,7 +225,7 @@ case 'view':
                         });
                     </script>
 
-                    <audio src="/upload/files/<?= $folder.$downs['downs_link']?>" preload="auto"></audio><br />
+                    <audio src="/upload/files/<?= $folder.$downs['link']?>" preload="auto"></audio><br />
                     <?php
                 }
 
@@ -246,12 +246,12 @@ case 'view':
                     echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br />';
                 }
 
-                echo '<i class="fa fa-comment"></i> <b><a href="/load/down?act=comments&amp;id='.$id.'">Комментарии</a></b> ('.$downs['downs_comments'].') ';
+                echo '<i class="fa fa-comment"></i> <b><a href="/load/down?act=comments&amp;id='.$id.'">Комментарии</a></b> ('.$downs['comments'].') ';
                 echo '<a href="/load/down?act=end&amp;id='.$id.'">&raquo;</a><br />';
 
-                $raiting = (!empty($downs['downs_rated'])) ? round($downs['downs_raiting'] / $downs['downs_rated'], 1) : 0;
+                $raiting = (!empty($downs['rated'])) ? round($downs['raiting'] / $downs['rated'], 1) : 0;
                 echo '<br />Рейтинг: '.raiting_vote($raiting).'<br />';
-                echo 'Всего голосов: <b>'.$downs['downs_rated'].'</b><br /><br />';
+                echo 'Всего голосов: <b>'.$downs['rated'].'</b><br /><br />';
 
                 if (is_user()) {
                     echo '<form action="/load/down?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -265,14 +265,14 @@ case 'view':
                     echo '<input type="submit" value="Oценить" /></form>';
                 }
 
-                echo 'Всего скачиваний: <b>'.$downs['downs_load'].'</b><br />';
-                if (!empty($downs['downs_last_load'])) {
-                    echo 'Последнее скачивание: '.date_fixed($downs['downs_last_load']).'<br />';
+                echo 'Всего скачиваний: <b>'.$downs['load'].'</b><br />';
+                if (!empty($downs['last_load'])) {
+                    echo 'Последнее скачивание: '.date_fixed($downs['last_load']).'<br />';
                 }
 
                 if (is_user()) {
                     echo '<br />Скопировать адрес:<br />';
-                    echo '<input name="text" size="40" value="'.$config['home'].'/upload/files/'.$folder.$downs['downs_link'].'" /><br />';
+                    echo '<input name="text" size="40" value="'.$config['home'].'/upload/files/'.$folder.$downs['link'].'" /><br />';
                 }
 
                 echo '<br />';
@@ -280,7 +280,7 @@ case 'view':
                 show_error('Файл еще не загружен!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['cats_id'].'">'.$downs['cats_name'].'</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['id'].'">'.$downs['name'].'</a><br />';
 
         } else {
             show_error('Ошибка! Данный файл еще не проверен модератором!');
@@ -301,24 +301,24 @@ case 'load':
 
     if (is_user() || $provkod == $_SESSION['protect']) {
 
-        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
 
         if (!empty($downs)) {
-            if (!empty($downs['downs_active'])) {
+            if (!empty($downs['active'])) {
 
                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
-                if (file_exists('upload/files/'.$folder.$downs['downs_link'])) {
+                if (file_exists('upload/files/'.$folder.$downs['link'])) {
                     $queryloads = DB::run() -> querySingle("SELECT loads_ip FROM loads WHERE loads_down=? AND loads_ip=? LIMIT 1;", array($id, App::getClientIp()));
                     if (empty($queryloads)) {
                         $expiresloads = SITETIME + 3600 * $config['expiresloads'];
 
                         DB::run() -> query("DELETE FROM loads WHERE loads_time<?;", array(SITETIME));
                         DB::run() -> query("INSERT INTO loads (loads_down, loads_ip, loads_time) VALUES (?, ?, ?);", array($id, App::getClientIp(), $expiresloads));
-                        DB::run() -> query("UPDATE downs SET downs_load=downs_load+1, downs_last_load=? WHERE downs_id=?", array(SITETIME, $id));
+                        DB::run() -> query("UPDATE downs SET load=load+1, last_load=? WHERE id=?", array(SITETIME, $id));
                     }
 
-                    redirect("/upload/files/".$folder.$downs['downs_link']);
+                    redirect("/upload/files/".$folder.$downs['link']);
                 } else {
                     show_error('Ошибка! Файла для скачивания не существует!');
                 }
@@ -350,11 +350,11 @@ case 'vote':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if ($score > 0 && $score <= 5) {
-                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
 
                 if (!empty($downs)) {
-                    if (!empty($downs['downs_active'])) {
-                        if ($log != $downs['downs_user']) {
+                    if (!empty($downs['active'])) {
+                        if ($log != $downs['user']) {
                             $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `rateddown` WHERE `rated_down`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
 
                             if (empty($queryrated)) {
@@ -362,11 +362,11 @@ case 'vote':
 
                                 DB::run() -> query("DELETE FROM `rateddown` WHERE `rated_time`<?;", array(SITETIME));
                                 DB::run() -> query("INSERT INTO `rateddown` (`rated_down`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($id, $log, $expiresrated));
-                                DB::run() -> query("UPDATE `downs` SET `downs_raiting`=`downs_raiting`+?, `downs_rated`=`downs_rated`+1 WHERE `downs_id`=?", array($score, $id));
+                                DB::run() -> query("UPDATE `downs` SET `raiting`=`raiting`+?, `rated`=`rated`+1 WHERE `id`=?", array($score, $id));
 
                                 echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br />';
-                                echo 'Всего оценивало: '.($downs['downs_rated'] + 1).'<br />';
-                                echo 'Средняя оценка: '.round(($downs['downs_raiting'] + $score) / ($downs['downs_rated'] + 1), 1).'<br /><br />';
+                                echo 'Всего оценивало: '.($downs['rated'] + 1).'<br />';
+                                echo 'Средняя оценка: '.round(($downs['raiting'] + $score) / ($downs['rated'] + 1), 1).'<br /><br />';
                             } else {
                                 show_error('Ошибка! Вы уже оценивали данный файл!');
                             }
@@ -397,17 +397,17 @@ break;
 ############################################################################################
 case 'comments':
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
 
     if (!empty($downs)) {
-        if (!empty($downs['downs_active'])) {
-            $config['newtitle'] = 'Комментарии - '.$downs['downs_title'];
+        if (!empty($downs['active'])) {
+            $config['newtitle'] = 'Комментарии - '.$downs['title'];
 
-            echo '<i class="fa fa-archive"></i> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['downs_title'].'</a></b><br /><br />';
+            echo '<i class="fa fa-archive"></i> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['title'].'</a></b><br /><br />';
 
             echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `commload_down`=?;", array($id));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `down`=?;", array($id));
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -419,34 +419,34 @@ case 'comments':
                     echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `commload` WHERE `commload_down`=? ORDER BY `commload_time` ASC LIMIT ".$start.", ".$config['downcomm'].";", array($id));
+                $querycomm = DB::run() -> query("SELECT * FROM `commload` WHERE `down`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['downcomm'].";", array($id));
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['commload_author']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['author']).'</div>';
 
                     if ($is_admin) {
-                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['commload_id'].'" /></span>';
+                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
                     }
 
-                    echo '<b>'.profile($data['commload_author']).'</b> <small>('.date_fixed($data['commload_time']).')</small><br />';
-                    echo user_title($data['commload_author']).' '.user_online($data['commload_author']).'</div>';
+                    echo '<b>'.profile($data['author']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo user_title($data['author']).' '.user_online($data['author']).'</div>';
 
-                    if (!empty($log) && $log != $data['commload_author']) {
+                    if (!empty($log) && $log != $data['author']) {
                         echo '<div class="right">';
-                        echo '<a href="/load/down?act=reply&amp;id='.$id.'&amp;pid='.$data['commload_id'].'&amp;start='.$start.'">Отв</a> / ';
-                        echo '<a href="/load/down?act=quote&amp;id='.$id.'&amp;pid='.$data['commload_id'].'&amp;start='.$start.'">Цит</a> / ';
-                        echo '<noindex><a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['commload_id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
+                        echo '<a href="/load/down?act=reply&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Отв</a> / ';
+                        echo '<a href="/load/down?act=quote&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Цит</a> / ';
+                        echo '<noindex><a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                     }
 
-                    if ($log == $data['commload_author'] && $data['commload_time'] + 600 > SITETIME) {
-                        echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['commload_id'].'&amp;start='.$start.'">Редактировать</a></div>';
+                    if ($log == $data['author'] && $data['time'] + 600 > SITETIME) {
+                        echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.bb_code($data['commload_text']).'<br />';
+                    echo '<div>'.bb_code($data['text']).'<br />';
 
                     if (is_admin() || empty($config['anonymity'])) {
-                        echo '<span class="data">('.$data['commload_brow'].', '.$data['commload_ip'].')</span>';
+                        echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                     }
                     echo '</div>';
                 }
@@ -495,19 +495,19 @@ case 'add':
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
 
-                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
 
                 if (!empty($downs)) {
-                    if (!empty($downs['downs_active'])) {
+                    if (!empty($downs['active'])) {
                         if (is_flood($log)) {
 
                             $msg = antimat($msg);
 
-                            DB::run() -> query("INSERT INTO `commload` (`commload_cats`, `commload_down`, `commload_text`, `commload_author`, `commload_time`, `commload_ip`, `commload_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($downs['downs_cats_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                            DB::run() -> query("INSERT INTO `commload` (`cats`, `down`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($downs['cats_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-                            DB::run() -> query("DELETE FROM `commload` WHERE `commload_down`=? AND `commload_time` < (SELECT MIN(`commload_time`) FROM (SELECT `commload_time` FROM `commload` WHERE `commload_down`=? ORDER BY `commload_time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", array($id, $id));
+                            DB::run() -> query("DELETE FROM `commload` WHERE `down`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", array($id, $id));
 
-                            DB::run() -> query("UPDATE `downs` SET `downs_comments`=`downs_comments`+1 WHERE `downs_id`=?;", array($id));
+                            DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
                             DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
                             notice('Сообщение успешно добавлено!');
@@ -544,14 +544,14 @@ case 'spam':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            $data = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? LIMIT 1;", array($pid));
+            $data = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", array($pid));
 
             if (!empty($data)) {
                 $queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(5, $pid));
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(5, $data['commload_id'], $log, $data['commload_author'], $data['commload_text'], $data['commload_time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start));
+                        DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(5, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start));
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&start=$start");
@@ -584,16 +584,16 @@ case 'reply':
     echo '<b><big>Ответ на сообщение</big></b><br /><br />';
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? LIMIT 1;", array($pid));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", array($pid));
 
         if (!empty($post)) {
-            echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['commload_author']).'</b> '.user_title($post['commload_author']).' '.user_online($post['commload_author']).' <small>('.date_fixed($post['commload_time']).')</small></div>';
-            echo '<div>Сообщение: '.bb_code($post['commload_text']).'</div><hr />';
+            echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['author']).'</b> '.user_title($post['author']).' '.user_online($post['author']).' <small>('.date_fixed($post['time']).')</small></div>';
+            echo '<div>Сообщение: '.bb_code($post['text']).'</div><hr />';
 
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo 'Сообщение:<br />';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.nickname($post['commload_author']).'[/b], </textarea><br />';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.nickname($post['author']).'[/b], </textarea><br />';
             echo '<input type="submit" value="Ответить" /></form></div><br />';
         } else {
             show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
@@ -614,13 +614,13 @@ case 'quote':
 
     echo '<b><big>Цитирование</big></b><br /><br />';
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? LIMIT 1;", array($pid));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", array($pid));
 
         if (!empty($post)) {
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo 'Сообщение:<br />';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['commload_author']).'[/b] ('.date_fixed($post['commload_time']).')'."\r\n".$post['commload_text'].'[/quote]'."\r\n".'</textarea><br />';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['author']).'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
             echo '<input type="submit" value="Цитировать" /></form></div><br />';
         } else {
             show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
@@ -642,17 +642,17 @@ case 'edit':
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? AND `commload_author`=? LIMIT 1;", array($pid, $log));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? AND `author`=? LIMIT 1;", array($pid, $log));
 
         if (!empty($post)) {
-            if ($post['commload_time'] + 600 > SITETIME) {
+            if ($post['time'] + 600 > SITETIME) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['commload_author']).'</b> <small>('.date_fixed($post['commload_time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['author']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                 echo '<div class="form">';
-                echo '<form action="/load/down?act=editpost&amp;id='.$post['commload_down'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/load/down?act=editpost&amp;id='.$post['down'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Редактирование сообщения:<br />';
-                echo '<textarea cols="25" rows="5" name="msg" id="msg">'.$post['commload_text'].'</textarea><br />';
+                echo '<textarea cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br />';
                 echo '<input type="submit" value="Редактировать" /></form></div><br />';
             } else {
                 show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
@@ -679,14 +679,14 @@ case 'editpost':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `commload_id`=? AND `commload_author`=? LIMIT 1;", array($pid, $log));
+                $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? AND `author`=? LIMIT 1;", array($pid, $log));
 
                 if (!empty($post)) {
-                    if ($post['commload_time'] + 600 > SITETIME) {
+                    if ($post['time'] + 600 > SITETIME) {
 
                         $msg = antimat($msg);
 
-                        DB::run() -> query("UPDATE `commload` SET `commload_text`=? WHERE `commload_id`=?", array($msg, $pid));
+                        DB::run() -> query("UPDATE `commload` SET `text`=? WHERE `id`=?", array($msg, $pid));
 
                         notice('Сообщение успешно отредактировано!');
                         redirect("/load/down?act=comments&id=$id&start=$start");
@@ -726,8 +726,8 @@ case 'del':
             if (!empty($del)) {
                 $del = implode(',', $del);
 
-                $delcomments = DB::run() -> exec("DELETE FROM `commload` WHERE `commload_id` IN (".$del.") AND `commload_down`=".$id.";");
-                DB::run() -> query("UPDATE `downs` SET `downs_comments`=`downs_comments`-? WHERE `downs_id`=?;", array($delcomments, $id));
+                $delcomments = DB::run() -> exec("DELETE FROM `commload` WHERE `id` IN (".$del.") AND `down`=".$id.";");
+                DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", array($delcomments, $id));
 
                 notice('Выбранные комментарии успешно удалены!');
                 redirect("/load/down?act=comments&id=$id&start=$start");
@@ -749,7 +749,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commload` WHERE `commload_down`=? LIMIT 1;", array($id));
+    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commload` WHERE `down`=? LIMIT 1;", array($id));
 
     if (!empty($query)) {
 

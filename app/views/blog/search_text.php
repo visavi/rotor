@@ -5,18 +5,18 @@
 
 	<div class="b">
 		<i class="fa fa-pencil"></i>
-		<b><a href="/blog/blog?act=view&amp;id=<?=$data['blogs_id']?>"><?=$data['blogs_title']?></a></b> (<?=format_num($data['blogs_rating'])?>)
+		<b><a href="/blog/blog?act=view&amp;id=<?=$data['id']?>"><?=$data['title']?></a></b> (<?=format_num($data['rating'])?>)
 	</div>
 
-	<?php if (utf_strlen($data['blogs_text']) > 200) {
-		$data['blogs_text'] = strip_tags(bb_code($data['blogs_text']), '<br>');
-		$data['blogs_text'] = utf_substr($data['blogs_text'], 0, 200).'...';
+	<?php if (utf_strlen($data['text']) > 200) {
+		$data['text'] = strip_tags(bb_code($data['text']), '<br>');
+		$data['text'] = utf_substr($data['text'], 0, 200).'...';
 	} ?>
 
 	<div>
-		<?=$data['blogs_text']?><br />
+		<?=$data['text']?><br />
 
-		Категория: <a href="/blog/blog?cid=<?=$data['cats_id']?>"><?=$data['cats_name']?></a><br />
-		Автор: <?=profile($data['blogs_user'])?> (<?=date_fixed($data['blogs_time'])?>)
+		Категория: <a href="/blog/blog?cid=<?=$data['id']?>"><?=$data['name']?></a><br />
+		Автор: <?=profile($data['user'])?> (<?=date_fixed($data['time'])?>)
 	</div>
 <?php endforeach; ?>

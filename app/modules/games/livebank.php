@@ -20,22 +20,22 @@ switch ($act):
                 $start = 0;
             }
 
-            $queryvklad = DB::run() -> query("SELECT * FROM `bank` ORDER BY `bank_sum` DESC, `bank_user` ASC LIMIT ".$start.", ".$config['vkladlist'].";");
+            $queryvklad = DB::run() -> query("SELECT * FROM `bank` ORDER BY `sum` DESC, `user` ASC LIMIT ".$start.", ".$config['vkladlist'].";");
 
             $i = 0;
             while ($data = $queryvklad -> fetch()) {
                 ++$i;
 
-                echo '<div class="b">'.($start + $i).'. '.user_gender($data['bank_user']).' ';
+                echo '<div class="b">'.($start + $i).'. '.user_gender($data['user']).' ';
 
-                if ($uz == $data['bank_user']) {
-                    echo '<b><big>'.profile($data['bank_user'], '#ff0000').'</big></b> ('.moneys($data['bank_sum']).')</div>';
+                if ($uz == $data['user']) {
+                    echo '<b><big>'.profile($data['user'], '#ff0000').'</big></b> ('.moneys($data['sum']).')</div>';
                 } else {
-                    echo '<b>'.profile($data['bank_user']).'</b> ('.moneys($data['bank_sum']).')</div>';
+                    echo '<b>'.profile($data['user']).'</b> ('.moneys($data['sum']).')</div>';
                 }
 
-                echo '<div>Начислений: '.$data['bank_oper'].'<br />';
-                echo 'Посл. операция: '.date_fixed($data['bank_time']).'</div>';
+                echo '<div>Начислений: '.$data['oper'].'<br />';
+                echo 'Посл. операция: '.date_fixed($data['time']).'</div>';
             }
 
             page_strnavigation('/games/livebank?', $config['vkladlist'], $start, $total);
@@ -61,7 +61,7 @@ switch ($act):
             $queryuser = DB::run() -> querySingle("SELECT `users_login` FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
 
             if (!empty($queryuser)) {
-                $queryrating = DB::run() -> query("SELECT `bank_user` FROM `bank` ORDER BY `bank_sum` DESC, `bank_user` ASC;");
+                $queryrating = DB::run() -> query("SELECT `user` FROM `bank` ORDER BY `sum` DESC, `user` ASC;");
                 $ratusers = $queryrating -> fetchAll(PDO::FETCH_COLUMN);
 
                 foreach ($ratusers as $key => $ratval) {

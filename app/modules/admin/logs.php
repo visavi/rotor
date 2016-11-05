@@ -27,21 +27,21 @@ if (is_admin(array(101, 102))) {
 
             echo '<b>Ошибки 404</b> | <a href="/admin/logs?act=403">Ошибки 403</a> | <a href="/admin/logs?act=666">Автобаны</a><br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `error_num`=?;", array(404));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", array(404));
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `error_num`=? ORDER BY `error_time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(404));
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(404));
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
-                    echo '<div>Referer: '.$data['error_referer'].'<br />';
-                    echo 'Пользователь: '.$data['error_username'].'<br />';
-                    echo '<small><span class="data">('.$data['error_brow'].', '.$data['error_ip'].')</span></small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.date_fixed($data['time']).')</small></div>';
+                    echo '<div>Referer: '.$data['referer'].'<br />';
+                    echo 'Пользователь: '.$data['username'].'<br />';
+                    echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
                 page_strnavigation('/admin/logs?act=404&amp;', $config['loglist'], $start, $total);
@@ -61,21 +61,21 @@ if (is_admin(array(101, 102))) {
 
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <b>Ошибки 403</b> | <a href="/admin/logs?act=666">Автобаны</a><br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `error_num`=?;", array(403));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", array(403));
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `error_num`=? ORDER BY `error_time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(403));
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(403));
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
-                    echo '<div>Referer: '.$data['error_referer'].'<br />';
-                    echo 'Пользователь: '.$data['error_username'].'<br />';
-                    echo '<small><span class="data">('.$data['error_brow'].', '.$data['error_ip'].')</span></small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.date_fixed($data['time']).')</small></div>';
+                    echo '<div>Referer: '.$data['referer'].'<br />';
+                    echo 'Пользователь: '.$data['username'].'<br />';
+                    echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
                 page_strnavigation('/admin/logs?act=403&amp;', $config['loglist'], $start, $total);
@@ -91,21 +91,21 @@ if (is_admin(array(101, 102))) {
 
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <a href="/admin/logs?act=403">Ошибки 403</a> | <b>Автобаны</b><br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `error_num`=?;", array(666));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", array(666));
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `error_num`=? ORDER BY `error_time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(666));
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(666));
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> <b>'.$data['error_request'].'</b> <small>('.date_fixed($data['error_time']).')</small></div>';
-                    echo '<div>Referer: '.$data['error_referer'].'<br />';
-                    echo 'Пользователь: '.$data['error_username'].'<br />';
-                    echo '<small><span class="data">('.$data['error_brow'].', '.$data['error_ip'].')</span></small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.date_fixed($data['time']).')</small></div>';
+                    echo '<div>Referer: '.$data['referer'].'<br />';
+                    echo 'Пользователь: '.$data['username'].'<br />';
+                    echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
                 page_strnavigation('/admin/logs?act=666&amp;', $config['loglist'], $start, $total);

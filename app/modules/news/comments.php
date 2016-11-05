@@ -21,19 +21,19 @@ switch ($act):
                 $start = last_page($total, $config['postnews']);
             }
 
-            $querynews = DB::run() -> query("SELECT `commnews`.*, `news_title`, `news_comments` FROM `commnews` LEFT JOIN `news` ON `commnews`.`commnews_news_id`=`news`.`news_id` ORDER BY `commnews_time` DESC LIMIT ".$start.", ".$config['postnews'].";");
+            $querynews = DB::run() -> query("SELECT `commnews`.*, `news_title`, `news_comments` FROM `commnews` LEFT JOIN `news` ON `commnews`.`news_id`=`news`.`news_id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postnews'].";");
 
             while ($data = $querynews -> fetch()) {
                 echo '<div class="b">';
 
-                echo '<i class="fa fa-comment"></i> <b><a href="/news/allcomments/'.$data['commnews_news_id'].'/'.$data['commnews_id'].'">'.$data['news_title'].'</a></b> ('.$data['news_comments'].')</div>';
+                echo '<i class="fa fa-comment"></i> <b><a href="/news/allcomments/'.$data['news_id'].'/'.$data['id'].'">'.$data['news_title'].'</a></b> ('.$data['news_comments'].')</div>';
 
-                echo '<div>'.bb_code($data['commnews_text']).'<br />';
+                echo '<div>'.bb_code($data['text']).'<br />';
 
-                echo 'Написал: '.profile($data['commnews_author']).' <small>('.date_fixed($data['commnews_time']).')</small><br />';
+                echo 'Написал: '.profile($data['author']).' <small>('.date_fixed($data['time']).')</small><br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
-                    echo '<span class="data">('.$data['commnews_brow'].', '.$data['commnews_ip'].')</span>';
+                    echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
                 echo '</div>';
@@ -53,7 +53,7 @@ switch ($act):
 		$id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
         $nid  = isset($params['nid']) ? abs(intval($params['nid'])) : 0;
 
-        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commnews` WHERE `commnews_id`<=? AND `commnews_news_id`=? ORDER BY `commnews_time` ASC LIMIT 1;", [$id, $nid]);
+        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commnews` WHERE `id`<=? AND `news_id`=? ORDER BY `time` ASC LIMIT 1;", [$id, $nid]);
 
         if (!empty($querycomm)) {
             $end = floor(($querycomm - 1) / $config['postnews']) * $config['postnews'];

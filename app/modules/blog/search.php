@@ -54,12 +54,12 @@ case 'search':
                 if ($type == 2) {
                     $arrfind[0] = $findme;
                 }
-                $search1 = (isset($arrfind[1]) && $type != 2) ? $types." `blogs_title` LIKE '%".$arrfind[1]."%'" : '';
-                $search2 = (isset($arrfind[2]) && $type != 2) ? $types." `blogs_title` LIKE '%".$arrfind[2]."%'" : '';
+                $search1 = (isset($arrfind[1]) && $type != 2) ? $types." `title` LIKE '%".$arrfind[1]."%'" : '';
+                $search2 = (isset($arrfind[2]) && $type != 2) ? $types." `title` LIKE '%".$arrfind[2]."%'" : '';
 
                 if (empty($_SESSION['blogfindres']) || $blogfind!=$_SESSION['blogfind']) {
 
-                    $querysearch = DB::run() -> query("SELECT `blogs_id` FROM `blogs` WHERE `blogs_title` LIKE '%".$arrfind[0]."%' ".$search1." ".$search2." LIMIT 500;");
+                    $querysearch = DB::run() -> query("SELECT `id` FROM `blogs` WHERE `title` LIKE '%".$arrfind[0]."%' ".$search1." ".$search2." LIMIT 500;");
                     $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
                     $_SESSION['blogfind'] = $blogfind;
@@ -75,7 +75,7 @@ case 'search':
 
                     $result = implode(',', $_SESSION['blogfindres']);
 
-                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`blogs_cats_id`=`catsblog`.`cats_id` WHERE `blogs_id` IN (".$result.") ORDER BY `blogs_time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`cats_id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
                     $blogs = $queryblog -> fetchAll();
 
                     render('blog/search_title', array('blogs' => $blogs, 'find' => $find, 'total' => $total));
@@ -91,12 +91,12 @@ case 'search':
                 if ($type == 2) {
                     $arrfind[0] = $findme;
                 }
-                $search1 = (isset($arrfind[1]) && $type != 2) ? $types." `blogs_text` LIKE '%".$arrfind[1]."%'" : '';
-                $search2 = (isset($arrfind[2]) && $type != 2) ? $types." `blogs_text` LIKE '%".$arrfind[2]."%'" : '';
+                $search1 = (isset($arrfind[1]) && $type != 2) ? $types." `text` LIKE '%".$arrfind[1]."%'" : '';
+                $search2 = (isset($arrfind[2]) && $type != 2) ? $types." `text` LIKE '%".$arrfind[2]."%'" : '';
 
                 if (empty($_SESSION['blogfindres']) || $blogfind!=$_SESSION['blogfind']) {
 
-                    $querysearch = DB::run() -> query("SELECT `blogs_id` FROM `blogs` WHERE `blogs_text` LIKE '%".$arrfind[0]."%' ".$search1." ".$search2." LIMIT 500;");
+                    $querysearch = DB::run() -> query("SELECT `id` FROM `blogs` WHERE `text` LIKE '%".$arrfind[0]."%' ".$search1." ".$search2." LIMIT 500;");
                     $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
                     $_SESSION['blogfind'] = $blogfind;
@@ -112,7 +112,7 @@ case 'search':
 
                     $result = implode(',', $_SESSION['blogfindres']);
 
-                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`blogs_cats_id`=`catsblog`.`cats_id` WHERE `blogs_id` IN (".$result.") ORDER BY `blogs_time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`cats_id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
                     $blogs = $queryblog -> fetchAll();
 
                     render('blog/search_text', array('blogs' => $blogs, 'find' => $find, 'total' => $total));

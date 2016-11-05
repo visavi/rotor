@@ -17,27 +17,27 @@ case 'files':
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<b>Проверенные</b><hr />';
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `downs_active`=? AND `downs_user`=?;", array(1, $uz));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", array(1, $uz));
 
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_active`=? AND `downs_user`=? ORDER BY `downs_time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, $uz));
+        $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`cats_id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, $uz));
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-            $filesize = (!empty($data['downs_link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['downs_link']) : 0;
+            $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
             echo '<div class="b"><i class="fa fa-archive"></i> ';
-            echo '<b><a href="/load/down?act=view&amp;id='.$data['downs_id'].'">'.$data['downs_title'].'</a></b> ('.$filesize.')</div>';
+            echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-            echo '<div>Категория: <a href="/load/down?cid='.$data['downs_cats_id'].'">'.$data['cats_name'].'</a><br />';
-            echo 'Скачиваний: '.$data['downs_load'].'<br />';
-            echo '<a href="/load/down?act=comments&amp;id='.$data['downs_id'].'">Комментарии</a> ('.$data['downs_comments'].') ';
-            echo '<a href="/load/down?act=end&amp;id='.$data['downs_id'].'">&raquo;</a></div>';
+            echo '<div>Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a><br />';
+            echo 'Скачиваний: '.$data['load'].'<br />';
+            echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
+            echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
         }
 
         page_strnavigation('/load/active?act=files&amp;uz='.$uz.'&amp;', $config['downlist'], $start, $total);
@@ -52,7 +52,7 @@ break;
 case 'comments':
     show_title('Список всех комментариев');
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `commload_author`=?;", array($uz));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `author`=?;", array($uz));
 
     if ($total > 0) {
         if ($start >= $total) {
@@ -61,24 +61,24 @@ case 'comments':
 
         $is_admin = is_admin();
 
-        $querypost = DB::run() -> query("SELECT `commload`.*, `downs_title`, `downs_comments` FROM `commload` LEFT JOIN `downs` ON `commload`.`commload_down`=`downs`.`downs_id` WHERE `commload_author`=? ORDER BY `commload_time` DESC LIMIT ".$start.", ".$config['downlist'].";", array($uz));
+        $querypost = DB::run() -> query("SELECT `commload`.*, `title`, `comments` FROM `commload` LEFT JOIN `downs` ON `commload`.`down`=`downs`.`id` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array($uz));
 
         while ($data = $querypost -> fetch()) {
             echo '<div class="b">';
 
-            echo '<i class="fa fa-comment"></i> <b><a href="/load/active?act=viewcomm&amp;id='.$data['commload_down'].'&amp;cid='.$data['commload_id'].'">'.$data['downs_title'].'</a></b> ('.$data['downs_comments'].')';
+            echo '<i class="fa fa-comment"></i> <b><a href="/load/active?act=viewcomm&amp;id='.$data['down'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')';
 
             if ($is_admin) {
-                echo ' — <a href="/load/active?act=del&amp;id='.$data['commload_id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+                echo ' — <a href="/load/active?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
             }
 
             echo '</div>';
-            echo '<div>'.bb_code($data['commload_text']).'<br />';
+            echo '<div>'.bb_code($data['text']).'<br />';
 
-            echo 'Написал: '.nickname($data['commload_author']).' <small>('.date_fixed($data['commload_time']).')</small><br />';
+            echo 'Написал: '.nickname($data['author']).' <small>('.date_fixed($data['time']).')</small><br />';
 
             if ($is_admin || empty($config['anonymity'])) {
-                echo '<span class="data">('.$data['commload_brow'].', '.$data['commload_ip'].')</span>';
+                echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
             }
 
             echo '</div>';
@@ -106,7 +106,7 @@ case 'viewcomm':
         $cid = 0;
     }
 
-    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commload` WHERE `commload_id`<=? AND `commload_down`=? ORDER BY `commload_time` ASC LIMIT 1;", array($cid, $id));
+    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commload` WHERE `id`<=? AND `down`=? ORDER BY `time` ASC LIMIT 1;", array($cid, $id));
 
     if (!empty($querycomm)) {
         $end = floor(($querycomm - 1) / $config['downlist']) * $config['downlist'];
@@ -131,10 +131,10 @@ case 'del':
 
     if (is_admin()) {
         if ($uid == $_SESSION['token']) {
-            $downs = DB::run() -> querySingle("SELECT `commload_down` FROM `commload` WHERE `commload_id`=?;", array($id));
+            $downs = DB::run() -> querySingle("SELECT `down` FROM `commload` WHERE `id`=?;", array($id));
             if (!empty($downs)) {
-                DB::run() -> query("DELETE FROM `commload` WHERE `commload_id`=? AND `commload_down`=?;", array($id, $downs));
-                DB::run() -> query("UPDATE `downs` SET `downs_comments`=`downs_comments`-? WHERE `downs_id`=?;", array(1, $downs));
+                DB::run() -> query("DELETE FROM `commload` WHERE `id`=? AND `down`=?;", array($id, $downs));
+                DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", array(1, $downs));
 
                 notice('Комментарий успешно удален!');
                 redirect("/load/active?act=comments&uz=$uz&start=$start");

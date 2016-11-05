@@ -7,7 +7,7 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 	$arr_week = array('вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб');
 	$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 
-	$querycount = DB::run() -> query("SELECT `count_days`, `count_hosts` FROM `counter31` ORDER BY `count_days` DESC LIMIT 7;");
+	$querycount = DB::run() -> query("SELECT `days`, `hosts` FROM `counter31` ORDER BY `days` DESC LIMIT 7;");
 	$counts = $querycount -> fetchAssoc();
 
 	$host_data = array();

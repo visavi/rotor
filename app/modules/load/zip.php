@@ -12,14 +12,14 @@ switch ($act):
 ##                                    Главная страница                                    ##
 ############################################################################################
 case 'index':
-    $downs = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`cats_id`, `cats`.`cats_name` FROM `downs` LEFT JOIN `cats` ON `downs`.`downs_cats_id`=`cats`.`cats_id` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`cats_id`, `cats`.`cats_name` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`cats_id` WHERE `id`=? LIMIT 1;", array($id));
 
     if (!empty($downs)) {
-        if (!empty($downs['downs_active'])) {
-            if (getExtension($downs['downs_link']) == 'zip') {
-                $config['newtitle'] = 'Просмотр архива - '.$downs['downs_title'];
+        if (!empty($downs['active'])) {
+            if (getExtension($downs['link']) == 'zip') {
+                $config['newtitle'] = 'Просмотр архива - '.$downs['title'];
 
-                $zip = new PclZip('upload/files/'.$downs['downs_link']);
+                $zip = new PclZip('upload/files/'.$downs['link']);
                 if (($list = $zip -> listContent()) != 0) {
                     $intotal = $zip -> properties();
                     $total = $intotal['nb'];
@@ -27,7 +27,7 @@ case 'index':
                     sort($list);
 
                     if ($total > 0) {
-                        echo '<i class="fa fa-archive"></i> <b>'.$downs['downs_title'].'</b><br /><br />';
+                        echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
                         echo 'Всего файлов: '.$total.'<hr />';
 
                         $arrext = array('xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg');
@@ -85,11 +85,11 @@ case 'preview':
 
     $view = isset($_GET['view']) ? abs(intval($_GET['view'])) : '';
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `downs_id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
 
     if (! empty($downs) && $view !== '') {
-        if (!empty($downs['downs_active'])) {
-            $zip = new PclZip('upload/files/'.$downs['downs_link']);
+        if (!empty($downs['active'])) {
+            $zip = new PclZip('upload/files/'.$downs['link']);
 
             $content = $zip -> extract(PCLZIP_OPT_BY_INDEX, $view, PCLZIP_OPT_EXTRACT_AS_STRING);
             if (!empty($content)) {
@@ -98,7 +98,7 @@ case 'preview':
 
                 $config['newtitle'] = 'Просмотр файла - '.$filename;
 
-                echo '<i class="fa fa-archive"></i> <b>'.$downs['downs_title'].'</b><br /><br />';
+                echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
 
                 echo '<b>'.$filename.'</b> ('.formatsize($content[0]['size']).')<hr />';
 

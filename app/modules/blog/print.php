@@ -5,14 +5,14 @@ $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
 show_title('Блоги - Печать страницы');
 
-$blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+$blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
 if (!empty($blog)) {
 
     while (ob_get_level()) {
         ob_end_clean();
     }
-    $blog['blogs_text'] = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog['blogs_text']);
+    $blog['text'] = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog['text']);
 
     header("Content-Encoding: none");
     header('Content-type:text/html; charset=utf-8');

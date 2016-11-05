@@ -5,10 +5,10 @@ $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
 show_title('RSS комментарии');
 
-$blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `blogs_id`=? LIMIT 1;", array($id));
+$blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
 if (!empty($blog)) {
-    $querycomm = DB::run() -> query("SELECT * FROM `commblog` WHERE `commblog_blog`=? ORDER BY `commblog_time` DESC LIMIT 15;", array($id));
+    $querycomm = DB::run() -> query("SELECT * FROM `commblog` WHERE `blog`=? ORDER BY `time` DESC LIMIT 15;", array($id));
     $comments = $querycomm->fetchAll();
 
     while (ob_get_level()) {

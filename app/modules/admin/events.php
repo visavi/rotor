@@ -217,7 +217,7 @@ case 'del':
                 }
 
                 DB::run() -> query("DELETE FROM `events` WHERE `event_id` IN (".$del.");");
-                DB::run() -> query("DELETE FROM `commevents` WHERE `commevent_event_id` IN (".$del.");");
+                DB::run() -> query("DELETE FROM `commevents` WHERE `event_id` IN (".$del.");");
 
                 notice('Выбранные события успешно удалены!');
                 redirect("/admin/events?start=$start");

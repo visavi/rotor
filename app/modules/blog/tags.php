@@ -14,7 +14,7 @@ case 'index':
     $config['newtitle'] = 'Блоги - Облако тегов';
 
     if (@filemtime(STORAGE."/temp/tagcloud.dat") < time()-3600) {
-        $querytag = DB::run() -> query("SELECT `blogs_tags` FROM `blogs`;");
+        $querytag = DB::run() -> query("SELECT `tags` FROM `blogs`;");
         $tags = $querytag -> fetchAll(PDO::FETCH_COLUMN);
 
         $alltag = implode(',', $tags);
@@ -53,7 +53,7 @@ case 'search':
     if (utf_strlen($tags) >= 2) {
 
         if (empty($_SESSION['findresult']) || empty($_SESSION['blogfind']) || $tags!=$_SESSION['blogfind']) {
-            $querysearch = DB::run() -> query("SELECT `blogs_id` FROM `blogs` WHERE `blogs_tags` LIKE '%".$tags."%' LIMIT 500;");
+            $querysearch = DB::run() -> query("SELECT `id` FROM `blogs` WHERE `tags` LIKE '%".$tags."%' LIMIT 500;");
             $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
             $_SESSION['blogfind'] = $tags;
@@ -69,7 +69,7 @@ case 'search':
 
             $result = implode(',', $_SESSION['findresult']);
 
-            $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`blogs_cats_id`=`catsblog`.`cats_id` WHERE `blogs_id` IN (".$result.") ORDER BY `blogs_time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+            $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
             $blogs = $queryblog -> fetchAll();
 
             render('blog/tags_search', array('blogs' => $blogs, 'tags' => $tags, 'total' => $total));

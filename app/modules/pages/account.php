@@ -124,11 +124,11 @@ case 'changemail':
 	$validation -> addRule('empty', $regmail, 'Указанный вами адрес e-mail уже используется в системе!');
 
 	// Проверка email в черном списке
-	$blackmail = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(1, $meil));
+	$blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $meil));
 	$validation -> addRule('empty', $blackmail, 'Указанный вами адрес email занесен в черный список!');
 
-	DB::run() -> query("DELETE FROM `changemail` WHERE `change_time`<?;", array(SITETIME));
-	$changemail = DB::run() -> querySingle("SELECT `change_id` FROM `changemail` WHERE `change_user`=? LIMIT 1;", array($log));
+	DB::run() -> query("DELETE FROM `changemail` WHERE `time`<?;", array(SITETIME));
+	$changemail = DB::run() -> querySingle("SELECT `id` FROM `changemail` WHERE `user`=? LIMIT 1;", array($log));
 	$validation -> addRule('empty', $changemail, 'Вы уже отправили код подтверждения на новый адрес почты!');
 
 	if ($validation->run()) {
@@ -140,7 +140,7 @@ case 'changemail':
 			nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".$config['home']."/pages//account?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течении суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо")
 		);
 
-		DB::run() -> query("INSERT INTO `changemail` (`change_user`, `change_mail`, `change_key`, `change_time`) VALUES (?, ?, ?, ?);", array($log, $meil, $genkey, SITETIME + 86400));
+		DB::run() -> query("INSERT INTO `changemail` (`user`, `mail`, `key`, `time`) VALUES (?, ?, ?, ?);", array($log, $meil, $genkey, SITETIME + 86400));
 
 		notice('На новый адрес почты отправлено письмо для подтверждения!');
 		redirect("/account");
@@ -159,26 +159,26 @@ case 'editmail':
 
 	$key = (isset($_GET['key'])) ? check(strval($_GET['key'])) : '';
 
-	DB::run() -> query("DELETE FROM `changemail` WHERE `change_time`<?;", array(SITETIME));
-	$armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE `change_key`=? AND `change_user`=? LIMIT 1;", array($key, $log));
+	DB::run() -> query("DELETE FROM `changemail` WHERE `time`<?;", array(SITETIME));
+	$armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE `key`=? AND `user`=? LIMIT 1;", array($key, $log));
 
 	$validation = new Validation();
 
 	$validation -> addRule('not_empty', $key, 'Вы не ввели код изменения электронной почты!')
 		-> addRule('not_empty', $armail, 'Данный код изменения электронной почты не найден в списке!')
-		-> addRule('not_equal', array($armail['change_mail'], $udata['users_email']), 'Новый адрес email должен отличаться от текущего!')
-		-> addRule('email', $armail['change_mail'], 'Неправильный адрес e-mail, необходим формат name@site.domen!', true);
+		-> addRule('not_equal', array($armail['mail'], $udata['email']), 'Новый адрес email должен отличаться от текущего!')
+		-> addRule('email', $armail['mail'], 'Неправильный адрес e-mail, необходим формат name@site.domen!', true);
 
-	$regmail = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_email`=? LIMIT 1;", array($armail['change_mail']));
+	$regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", array($armail['mail']));
 	$validation -> addRule('empty', $regmail, 'Указанный вами адрес e-mail уже используется в системе!');
 
-	$blackmail = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(1, $armail['change_mail']));
+	$blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $armail['mail']));
 	$validation -> addRule('empty', $blackmail, 'Указанный вами адрес e-mail занесен в черный список!');
 
 	if ($validation->run()) {
 
-		DB::run() -> query("UPDATE `users` SET `users_email`=? WHERE `users_login`=? LIMIT 1;", array($armail['change_mail'], $log));
-		DB::run() -> query("DELETE FROM `changemail` WHERE `change_key`=? AND `change_user`=? LIMIT 1;", array($key, $log));
+		DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", array($armail['mail'], $log));
+		DB::run() -> query("DELETE FROM `changemail` WHERE `key`=? AND `user`=? LIMIT 1;", array($key, $log));
 
 		notice('Адрес электронной почты успешно изменен!');
 		redirect("/account");
@@ -251,7 +251,7 @@ case 'editnick':
 		$regnick = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE lower(`users_nickname`)=? LIMIT 1;", array(utf_lower($nickname)));
 		$validation -> addRule('empty', $regnick, 'Выбранный вами ник уже используется на сайте!');
 
-		$blacklogin = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(2, utf_lower($nickname)));
+		$blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, utf_lower($nickname)));
 		$validation -> addRule('empty', $blacklogin, 'Выбранный вами ник занесен в черный список!');
 	}
 

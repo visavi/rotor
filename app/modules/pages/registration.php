@@ -44,7 +44,7 @@ if (Request::isMethod('post')) {
         $validation -> addRule('empty', $reglogin, ['logs' => 'Пользователь с данным логином или ником уже зарегистрирован!']);
 
         // Проверка логина в черном списке
-        $blacklogin = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(2, strtolower($logs)));
+        $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($logs)));
         $validation -> addRule('empty', $blacklogin, ['logs' => 'Выбранный вами логин занесен в черный список!']);
     }
 
@@ -54,11 +54,11 @@ if (Request::isMethod('post')) {
         $validation -> addRule('empty', $regmail, ['meil' => 'Указанный вами адрес e-mail уже используется в системе!']);
 
         // Проверка домена от email в черном списке
-        $blackdomain = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(3, $domain));
+        $blackdomain = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(3, $domain));
         $validation -> addRule('empty', $blackdomain, ['meil' => 'Домен от вашего адреса email занесен в черный список!']);
 
         // Проверка email в черном списке
-        $blackmail = DB::run() -> querySingle("SELECT `black_id` FROM `blacklist` WHERE `black_type`=? AND `black_value`=? LIMIT 1;", array(1, $meil));
+        $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $meil));
         $validation -> addRule('empty', $blackmail, ['meil' => 'Указанный вами адрес email занесен в черный список!']);
     }
 

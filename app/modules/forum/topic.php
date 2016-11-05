@@ -20,10 +20,10 @@ case 'index':
     }
 
     if (is_user()) {
-        $topics['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `book_topic`=? AND `book_user`=? LIMIT 1;", array($tid, $log));
+        $topics['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `topic`=? AND `user`=? LIMIT 1;", array($tid, $log));
 
-        if (!empty($topics['bookmark']) && $topics['topics_posts'] > $topics['bookmark']['book_posts']) {
-            DB::run() -> query("UPDATE `bookmarks` SET `book_posts`=? WHERE `book_topic`=? AND `book_user`=? LIMIT 1;", array($topics['topics_posts'], $tid, $log));
+        if (!empty($topics['bookmark']) && $topics['topics_posts'] > $topics['bookmark']['posts']) {
+            DB::run() -> query("UPDATE `bookmarks` SET `posts`=? WHERE `topic`=? AND `user`=? LIMIT 1;", array($topics['topics_posts'], $tid, $log));
         }
     }
 

@@ -87,22 +87,22 @@ case 'view':
         if ($data['news_comments'] > 0) {
             echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
 
-            $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `commnews_news_id`=? ORDER BY `commnews_time` DESC LIMIT 5;", array($id));
+            $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `news_id`=? ORDER BY `time` DESC LIMIT 5;", array($id));
             $comments = $querycomm -> fetchAll();
             $comments = array_reverse($comments);
 
             foreach ($comments as $comm) {
                 echo '<div class="b">';
-                echo '<div class="img">'.user_avatars($comm['commnews_author']).'</div>';
+                echo '<div class="img">'.user_avatars($comm['author']).'</div>';
 
-                echo '<b>'.profile($comm['commnews_author']).'</b>';
-                echo '<small> ('.date_fixed($comm['commnews_time']).')</small><br />';
-                echo user_title($comm['commnews_author']).' '.user_online($comm['commnews_author']).'</div>';
+                echo '<b>'.profile($comm['author']).'</b>';
+                echo '<small> ('.date_fixed($comm['time']).')</small><br />';
+                echo user_title($comm['author']).' '.user_online($comm['author']).'</div>';
 
-                echo '<div>'.bb_code($comm['commnews_text']).'<br />';
+                echo '<div>'.bb_code($comm['text']).'<br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
-                    echo '<span class="data">('.$comm['commnews_brow'].', '.$comm['commnews_ip'].')</span>';
+                    echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
                 }
 
                 echo '</div>';
@@ -157,7 +157,7 @@ case 'comments':
 
         echo '<h1><a href="/news/'.$datanews['news_id'].'">'.$datanews['news_title'].'</a></h1>';
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `commnews` WHERE `commnews_news_id`=?;", array($id));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `commnews` WHERE `news_id`=?;", array($id));
 
         if ($total > 0) {
             if ($start >= $total) {
@@ -170,25 +170,25 @@ case 'comments':
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
             }
 
-            $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `commnews_news_id`=? ORDER BY `commnews_time` ASC LIMIT ".$start.", ".$config['postnews'].";", array($id));
+            $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `news_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postnews'].";", array($id));
 
             while ($data = $querycomm -> fetch()) {
 
-                echo '<div class="b" id="comment_'.$data['commnews_id'].'"">';
-                echo '<div class="img">'.user_avatars($data['commnews_author']).'</div>';
+                echo '<div class="b" id="comment_'.$data['id'].'"">';
+                echo '<div class="img">'.user_avatars($data['author']).'</div>';
 
                 if ($is_admin) {
-                    echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['commnews_id'].'" /></span>';
+                    echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
                 }
 
-                echo '<b>'.profile($data['commnews_author']).'</b>';
-                echo '<small> ('.date_fixed($data['commnews_time']).')</small><br />';
-                echo user_title($data['commnews_author']).' '.user_online($data['commnews_author']).'</div>';
+                echo '<b>'.profile($data['author']).'</b>';
+                echo '<small> ('.date_fixed($data['time']).')</small><br />';
+                echo user_title($data['author']).' '.user_online($data['author']).'</div>';
 
-                echo '<div>'.bb_code($data['commnews_text']).'<br />';
+                echo '<div>'.bb_code($data['text']).'<br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
-                    echo '<span class="data">('.$data['commnews_brow'].', '.$data['commnews_ip'].')</span>';
+                    echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
                 echo '</div>';
@@ -254,9 +254,9 @@ case 'create':
 
             $msg = antimat($msg);
 
-            DB::run() -> query("INSERT INTO `commnews` (`commnews_news_id`, `commnews_text`, `commnews_author`, `commnews_time`, `commnews_ip`, `commnews_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+            DB::run() -> query("INSERT INTO `commnews` (`news_id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-            DB::run() -> query("DELETE FROM `commnews` WHERE `commnews_news_id`=? AND `commnews_time` < (SELECT MIN(`commnews_time`) FROM (SELECT `commnews_time` FROM `commnews` WHERE `commnews_news_id`=? ORDER BY `commnews_time` DESC LIMIT ".$config['maxkommnews'].") AS del);", array($id, $id));
+            DB::run() -> query("DELETE FROM `commnews` WHERE `news_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commnews` WHERE `news_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommnews'].") AS del);", array($id, $id));
 
             DB::run() -> query("UPDATE `news` SET `news_comments`=`news_comments`+1 WHERE `news_id`=?;", array($id));
             DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
@@ -294,7 +294,7 @@ case 'delete':
 
                 $del = implode(',', $del);
 
-                $delcomments = DB::run() -> exec("DELETE FROM `commnews` WHERE `commnews_id` IN (".$del.") AND `commnews_news_id`=".$id.";");
+                $delcomments = DB::run() -> exec("DELETE FROM `commnews` WHERE `id` IN (".$del.") AND `news_id`=".$id.";");
                 DB::run() -> query("UPDATE `news` SET `news_comments`=`news_comments`-? WHERE `news_id`=?;", array($delcomments, $id));
 
                 notice('Выбранные комментарии успешно удалены!');
@@ -319,7 +319,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commnews` WHERE `commnews_news_id`=? LIMIT 1;", array($id));
+    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commnews` WHERE `news_id`=? LIMIT 1;", array($id));
 
     if (!empty($query)) {
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];

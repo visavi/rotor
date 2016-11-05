@@ -29,24 +29,24 @@ if (is_admin(array(101, 102))) {
                     $start = 0;
                 }
 
-                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `ban_time` DESC LIMIT ".$start.", ".$config['ipbanlist'].";");
+                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$start.", ".$config['ipbanlist'].";");
 
                 echo '<form action="/admin/ipban?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['ban_id'].'" />';
-                    echo '<i class="fa fa-file-o"></i> <b>'.$data['ban_ip'].'</b></div>';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" />';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['ip'].'</b></div>';
 
                     echo '<div>Добавлено: ';
 
-                    if (!empty($data['ban_user'])) {
-                        echo '<b>'.profile($data['ban_user']).'</b><br />';
+                    if (!empty($data['user'])) {
+                        echo '<b>'.profile($data['user']).'</b><br />';
                     } else {
                         echo '<b>Автоматически</b><br />';
                     }
 
-                    echo 'Время: '.date_fixed($data['ban_time']).'</div>';
+                    echo 'Время: '.date_fixed($data['time']).'</div>';
                 }
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -82,9 +82,9 @@ if (is_admin(array(101, 102))) {
 
             if ($uid == $_SESSION['token']) {
                 if (preg_match('|^[0-9]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}$|', $ips)) {
-                    $banip = DB::run() -> querySingle("SELECT `ban_id` FROM `ban` WHERE `ban_ip`=? LIMIT 1;", array($ips));
+                    $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", array($ips));
                     if (empty($banip)) {
-                        DB::run() -> query("INSERT INTO ban (`ban_ip`, `ban_user`, `ban_time`) VALUES (?, ?, ?);", array($ips, $log, SITETIME));
+                        DB::run() -> query("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", array($ips, $log, SITETIME));
                         save_ipban();
 
                         notice('IP успешно занесен в список!');
@@ -118,7 +118,7 @@ if (is_admin(array(101, 102))) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `ban` WHERE `ban_id` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `ban` WHERE `id` IN (".$del.");");
                     save_ipban();
 
                     notice('Выбранные IP успешно удалены из списка!');

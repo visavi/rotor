@@ -1,12 +1,12 @@
 <?= '<?xml version="1.0" encoding="utf-8"?>' ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Комментарии - <?=$blog['blogs_title']?></title>
+		<title>Комментарии - <?=$blog['title']?></title>
 		<link><?=$config['home']?></link>
 		<description>Сообщения RSS - <?=$config['title']?></description>
 		<image>
 			<url><?=$config['logotip']?></url>
-			<title>Комментарии - <?=$blog['blogs_title']?></title>
+			<title>Комментарии - <?=$blog['title']?></title>
 			<link><?=$config['home']?></link>
 		</image>
 		<language>ru</language>
@@ -16,17 +16,17 @@
 		<lastBuildDate><?=date("r", SITETIME)?></lastBuildDate>
 
 		<?php foreach ($comments as $data): ?>
-			<?php $data['commblog_text'] = bb_code($data['commblog_text']); ?>
-			<?php $data['commblog_text'] = str_replace('/images/smiles', $config['home'].'/images/smiles', $data['commblog_text']); ?>
-			<?php $data['commblog_text'] = htmlspecialchars($data['commblog_text']); ?>
+			<?php $data['text'] = bb_code($data['text']); ?>
+			<?php $data['text'] = str_replace('/images/smiles', $config['home'].'/images/smiles', $data['text']); ?>
+			<?php $data['text'] = htmlspecialchars($data['text']); ?>
 
 			<item>
-				<title><?=$blog['blogs_title']?></title>
-				<link><?=$config['home']?>/blog/blog?act=comments&amp;id=<?=$blog['blogs_id']?></link>
-				<description><?=$data['commblog_text']?> </description><author><?=nickname($data['commblog_author'])?></author>
-				<pubDate><?=date("r", $data['commblog_time'])?></pubDate>
+				<title><?=$blog['title']?></title>
+				<link><?=$config['home']?>/blog/blog?act=comments&amp;id=<?=$blog['id']?></link>
+				<description><?=$data['text']?> </description><author><?=nickname($data['author'])?></author>
+				<pubDate><?=date("r", $data['time'])?></pubDate>
 				<category>Комментарии</category>
-				<guid><?=$config['home']?>/blog/blog?act=comments&amp;id=<?=$blog['blogs_id']?>&amp;pid=<?=$data['commblog_id']?></guid>
+				<guid><?=$config['home']?>/blog/blog?act=comments&amp;id=<?=$blog['id']?>&amp;pid=<?=$data['id']?></guid>
 			</item>
 		<?php endforeach; ?>
 
