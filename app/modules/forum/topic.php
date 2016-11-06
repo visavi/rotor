@@ -9,7 +9,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`id`, `forums`.`title`, `forums`.`parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` WHERE `id`=? LIMIT 1;", array($tid));
+    $topics = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON t.`forums_id`=f.`id` WHERE t.`id`=? LIMIT 1;", array($tid));
 
     if (empty($topics)) {
         App::abort('default', 'Данной темы не существует!');

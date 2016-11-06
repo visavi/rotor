@@ -485,7 +485,7 @@ if (is_admin()) {
                 $queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY `order` ASC;");
                 $forums = $queryforum -> fetchAll();
 
-                if (count($forums) > 0) {
+                if (count($forums) > 1) {
                     $output = array();
                     foreach ($forums as $row) {
                         $i = $row['id'];
@@ -517,7 +517,9 @@ if (is_admin()) {
                     echo '</select>';
 
                     echo '<input type="submit" value="Переместить" /></form></div><br />';
-                } else {
+                } elseif(count($forums) == 1) {
+                    show_error('Нет разделов для перемещения!');
+                }else {
                     show_error('Разделы форума еще не созданы!');
                 }
             } else {
@@ -608,7 +610,8 @@ if (is_admin()) {
                     DB::run() -> query("UPDATE `forums` SET `topics`=`topics`-?, `posts`=`posts`-? WHERE `id`=?;", array($deltopics, $delposts, $fid));
 
                     // ------------------------------------------------------------//
-                    $oldlast = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` WHERE `topics`.`forums_id`=? ORDER BY `topics`.`last_time` DESC LIMIT 1;", array($fid));
+                    $oldlast = DB::run() -> queryFetch("SELECT `t`.*, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON `t`.`forums_id`=`f`.`id` WHERE `t`.`forums_id`=? ORDER BY `t`.`last_time` DESC LIMIT 1;", array($fid));
+
 
                     if (empty($oldlast['id'])) {
                         $oldlast['id'] = 0;
@@ -620,7 +623,7 @@ if (is_admin()) {
                     DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", array($oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $fid));
 
                     // Обновление родительского форума
-                    if ($oldlast['parent'] > 0) {
+                    if (! empty($oldlast['parent'])) {
                         DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", array($oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $oldlast['parent']));
                     }
 
@@ -692,7 +695,7 @@ if (is_admin()) {
         ############################################################################################
         case 'topic':
             if (!empty($tid)) {
-                $topic = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`id`, `forums`.`title`, `forums`.`parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` WHERE `id`=? LIMIT 1;", array($tid));
+                $topic = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON `t`.`forums_id`=`f`.`id` WHERE t.`id`=? LIMIT 1;", array($tid));
 
                 if (!empty($topic)) {
                     echo '<a href="/admin/forum">Форум</a> / ';
@@ -702,7 +705,7 @@ if (is_admin()) {
                         echo '<a href="/admin/forum?fid='.$forums['id'].'">'.$forums['title'].'</a> / ';
                     }
 
-                    echo '<a href="/admin/forum?act=forum&amp;fid='.$topic['id'].'">'.$topic['title'].'</a> / ';
+                    echo '<a href="/admin/forum?act=forum&amp;fid='.$topic['forums_id'].'">'.$topic['forum_title'].'</a> / ';
                     echo '<a href="/topic/'.$tid.'?start='.$start.'">Обзор темы</a><br /><br />';
 
                     echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$topic['title'].'</b>';

@@ -50,7 +50,7 @@ case 'create':
 
     if (! is_user()) App::abort(403);
 
-    $forums = DBM::run()->select('forums', null, null, null, ['order'=>'ASC']);
+    $forums = DBM::run()->select('forums', null, null, null, ['`order`'=>'ASC']);
 
     if (empty(count($forums))) {
         App::abort('default', 'Разделы форума еще не созданы!');
