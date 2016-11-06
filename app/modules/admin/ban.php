@@ -70,10 +70,10 @@ if (is_admin(array(101, 102, 103))) {
                             echo '<b>Причина бана:</b><br />';
                             echo '<textarea name="reasonban" cols="25" rows="5"></textarea><br />';
 
-                            $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `note_user`=? LIMIT 1;", array($uz));
+                            $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `user`=? LIMIT 1;", array($uz));
 
                             echo '<b>Заметка:</b><br />';
-                            echo '<textarea cols="25" rows="5" name="note">'.$usernote['note_text'].'</textarea><br />';
+                            echo '<textarea cols="25" rows="5" name="note">'.$usernote['text'].'</textarea><br />';
 
                             echo '<input value="Забанить" type="submit" /></form></div><br />';
 

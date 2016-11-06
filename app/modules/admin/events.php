@@ -22,37 +22,37 @@ case 'index':
             $start = last_page($total, $config['postevents']);
         }
 
-        $queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `event_time` DESC LIMIT ".$start.", ".$config['postevents'].";");
+        $queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postevents'].";");
 
         echo '<form action="/admin/events?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
         while ($data = $queryevents -> fetch()) {
             echo '<div class="b">';
 
-            $icon = (empty($data['event_closed'])) ? 'unlock' : 'lock';
+            $icon = (empty($data['closed'])) ? 'unlock' : 'lock';
             echo '<i class="fa fa-'.$icon.'"></i> ';
 
-            echo '<b><a href="/events?act=read&amp;id='.$data['event_id'].'">'.$data['event_title'].'</a></b><small> ('.date_fixed($data['event_time']).')</small><br />';
-            echo '<input type="checkbox" name="del[]" value="'.$data['event_id'].'" /> ';
-            echo '<a href="/admin/events?act=edit&amp;id='.$data['event_id'].'&amp;start='.$start.'">Редактировать</a></div>';
+            echo '<b><a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small><br />';
+            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+            echo '<a href="/admin/events?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
 
-            if (!empty($data['event_image'])) {
-                echo '<div class="img"><a href="/upload/events/'.$data['event_image'].'">'.resize_image('upload/events/', $data['event_image'], 75, array('alt' => $data['event_title'])).'</a></div>';
+            if (!empty($data['image'])) {
+                echo '<div class="img"><a href="/upload/events/'.$data['image'].'">'.resize_image('upload/events/', $data['image'], 75, array('alt' => $data['title'])).'</a></div>';
             }
 
-            if (!empty($data['event_top'])){
+            if (!empty($data['top'])){
                 echo '<div class="right"><span style="color:#ff0000">На главной</span></div>';
             }
 
-            if(stristr($data['event_text'], '[cut]')) {
-                $data['event_text'] = current(explode('[cut]', $data['event_text'])).' <a href="/events?act=read&amp;id='.$data['event_id'].'">Читать далее &raquo;</a>';
+            if(stristr($data['text'], '[cut]')) {
+                $data['text'] = current(explode('[cut]', $data['text'])).' <a href="/events?act=read&amp;id='.$data['id'].'">Читать далее &raquo;</a>';
             }
 
-            echo '<div>'.bb_code($data['event_text']).'</div>';
+            echo '<div>'.bb_code($data['text']).'</div>';
 
-            echo '<div style="clear:both;">Добавлено: '.profile($data['event_author']).'<br />';
-            echo '<a href="/events?act=comments&amp;id='.$data['event_id'].'">Комментарии</a> ('.$data['event_comments'].') ';
-            echo '<a href="/events?act=end&amp;id='.$data['event_id'].'">&raquo;</a></div>';
+            echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'<br />';
+            echo '<a href="/events?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
+            echo '<a href="/events?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
         }
 
         echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -75,7 +75,7 @@ break;
 ##                          Подготовка к редактированию события                           ##
 ############################################################################################
 case 'edit':
-    $dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `event_id`=? LIMIT 1;", array($id));
+    $dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
 
     if (!empty($dataevent)) {
 
@@ -84,22 +84,22 @@ case 'edit':
         echo '<div class="form cut">';
         echo '<form action="/admin/events?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
         echo 'Заголовок:<br />';
-        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['event_title'].'" /><br />';
-        echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['event_text'].'</textarea><br />';
+        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['title'].'" /><br />';
+        echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br />';
 
-        if (!empty($dataevent['event_image']) && file_exists(HOME.'/upload/events/'.$dataevent['event_image'])){
+        if (!empty($dataevent['image']) && file_exists(HOME.'/upload/events/'.$dataevent['image'])){
 
-            echo '<a href="/upload/events/'.$dataevent['event_image'].'">'.resize_image('upload/events/', $dataevent['event_image'], 75, array('alt' => $dataevent['event_title'])).'</a><br />';
-            echo '<b>'.$dataevent['event_image'].'</b> ('.read_file(HOME.'/upload/events/'.$dataevent['event_image']).')<br /><br />';
+            echo '<a href="/upload/events/'.$dataevent['image'].'">'.resize_image('upload/events/', $dataevent['image'], 75, array('alt' => $dataevent['title'])).'</a><br />';
+            echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/upload/events/'.$dataevent['image']).')<br /><br />';
         }
 
         echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
         echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize($config['filesize']).' и '.$config['fileupfoto'].'px)</i><br /><br />';
 
-        $checked = ($dataevent['event_closed'] == 1) ? ' checked="checked"' : '';
+        $checked = ($dataevent['closed'] == 1) ? ' checked="checked"' : '';
         echo '<input name="closed" type="checkbox" value="1"'.$checked.' /> Закрыть комментарии<br />';
 
-        $checked = ($dataevent['event_top'] == 1) ? ' checked="checked"' : '';
+        $checked = ($dataevent['top'] == 1) ? ' checked="checked"' : '';
         echo '<input name="top" type="checkbox" value="1"'.$checked.' /> Показывать на главной<br />';
 
         echo '<br /><input type="submit" value="Изменить" /></form></div><br />';
@@ -121,7 +121,7 @@ case 'change':
     $closed = (empty($_POST['closed'])) ? 0 : 1;
     $top = (empty($_POST['top'])) ? 0 : 1;
 
-    $dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `event_id`=? LIMIT 1;", array($id));
+    $dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
 
     $validation = new Validation();
 
@@ -132,7 +132,7 @@ case 'change':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `events` SET `event_title`=?, `event_text`=?, `event_closed`=?, `event_top`=? WHERE `event_id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
+        DB::run() -> query("UPDATE `events` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -140,15 +140,15 @@ case 'change':
             if ($handle) {
 
                 // Удаление старой картинки
-                if (!empty($dataevent['event_image'])) {
-                    unlink_image('upload/events/', $dataevent['event_image']);
+                if (!empty($dataevent['image'])) {
+                    unlink_image('upload/events/', $dataevent['image']);
                 }
 
                 $handle -> process(HOME.'/upload/events/');
 
                 if ($handle -> processed) {
 
-                    DB::run() -> query("UPDATE `events` SET `event_image`=? WHERE `event_id`=? LIMIT 1;", array($handle -> file_dst_name, $id));
+                    DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", array($handle -> file_dst_name, $id));
                     $handle -> clean();
 
                 } else {
@@ -207,16 +207,16 @@ case 'del':
 
                 $del = implode(',', $del);
 
-                $querydel = DB::run()->query("SELECT `event_image` FROM `events` WHERE `event_id` IN (".$del.");");
+                $querydel = DB::run()->query("SELECT `image` FROM `events` WHERE `id` IN (".$del.");");
                 $arr_image = $querydel->fetchAll();
 
                 if (count($arr_image)>0){
                     foreach ($arr_image as $delete){
-                        unlink_image('upload/events/', $delete['event_image']);
+                        unlink_image('upload/events/', $delete['image']);
                     }
                 }
 
-                DB::run() -> query("DELETE FROM `events` WHERE `event_id` IN (".$del.");");
+                DB::run() -> query("DELETE FROM `events` WHERE `id` IN (".$del.");");
                 DB::run() -> query("DELETE FROM `commevents` WHERE `event_id` IN (".$del.");");
 
                 notice('Выбранные события успешно удалены!');

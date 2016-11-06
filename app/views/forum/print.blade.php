@@ -1,11 +1,11 @@
 @extends('layout_simple')
 
-@section('title', $topic['topics_title'].' - @parent')
+@section('title', $topic['title'].' - @parent')
 
 @section('content')
 
 
-	<h2><?=$topic['topics_title']?></h2>
+	<h2><?=$topic['title']?></h2>
 
 	<?php foreach ($posts as $key => $data): ?>
 
@@ -15,5 +15,5 @@
 
 	<?php endforeach; ?>
 
-	URL: <a href="<?=$config['home']?>/topic/<?=$topic['topics_id']?>"><?=$config['home']?>/topic/<?=$topic['topics_id']?></a>
+	URL: <a href="<?=$config['home']?>/topic/<?=$topic['id']?>"><?=$config['home']?>/topic/<?=$topic['id']?></a>
 @stop

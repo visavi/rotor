@@ -14,16 +14,16 @@ echo '<managingEditor>'.$config['emails'].' ('.$config['nickname'].')</managingE
 echo '<webMaster>'.$config['emails'].' ('.$config['nickname'].')</webMaster>';
 echo '<lastBuildDate>'.date("r", SITETIME).'</lastBuildDate>';
 
-$querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `news_id` DESC LIMIT 15;");
+$querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT 15;");
 
 while ($data = $querynews -> fetch()) {
 
-    $data['news_text'] = bb_code($data['news_text']);
-    $data['news_text'] = str_replace(array('/images/smiles', '[cut]'), array($config['home'].'/images/smiles', ''), $data['news_text']);
+    $data['text'] = bb_code($data['text']);
+    $data['text'] = str_replace(array('/images/smiles', '[cut]'), array($config['home'].'/images/smiles', ''), $data['text']);
 
-    echo '<item><title>'.htmlspecialchars($data['news_title']).'</title><link>'.$config['home'].'/news/'.$data['news_id'].'</link>';
-    echo '<description>'.htmlspecialchars($data['news_text']).' </description><author>'.nickname($data['news_author']).'</author>';
-    echo '<pubDate>'.date("r", $data['news_time']).'</pubDate><category>Новости</category><guid>'.$config['home'].'/news/'.$data['news_id'].'</guid></item>';
+    echo '<item><title>'.htmlspecialchars($data['title']).'</title><link>'.$config['home'].'/news/'.$data['id'].'</link>';
+    echo '<description>'.htmlspecialchars($data['text']).' </description><author>'.nickname($data['author']).'</author>';
+    echo '<pubDate>'.date("r", $data['time']).'</pubDate><category>Новости</category><guid>'.$config['home'].'/news/'.$data['id'].'</guid></item>';
 }
 
 echo '</channel></rss>';

@@ -10,7 +10,7 @@
         <div class="post">
             <div class="b">
 
-                <i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['posts_topics_id']?>/<?=$data['posts_id']?>"><?=$data['topics_title']?></a></b>
+                <i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['posts_topics_id']?>/<?=$data['posts_id']?>"><?=$data['title']?></a></b>
 
                 <?php if (is_admin()): ?>
                     <a href="#" class="pull-right" onclick="return deletePost(this)" data-tid="{{ $data['posts_id'] }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>

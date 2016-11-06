@@ -8,7 +8,7 @@ switch ($act):
 ##                                        Вывод тем                                       ##
 ############################################################################################
 case 'themes':
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `topics_author`=?;", array($user));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `author`=?;", array($user));
     if (! $total) {
         App::abort('default', 'Созданных тем еще нет!');
     }
@@ -17,7 +17,7 @@ case 'themes':
         $start = last_page($total, $config['forumtem']);
     }
 
-    $querytopic = DB::run() -> query("SELECT `topics`.*, `forums_title` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics_author`=? ORDER BY `topics_last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($user));
+    $querytopic = DB::run() -> query("SELECT `topics`.*, `title` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` WHERE `author`=? ORDER BY `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($user));
     $topics = $querytopic->fetchAll();
 
     App::view('forum/active_themes', compact('topics', 'user', 'start', 'total'));
@@ -37,7 +37,7 @@ case 'posts':
         $start = last_page($total, $config['forumpost']);
     }
 
-    $querypost = DB::run() -> query("SELECT `posts`.*, `topics_title` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_user`=? ORDER BY `posts_time` DESC LIMIT ".$start.", ".$config['forumpost'].";", array($user));
+    $querypost = DB::run() -> query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`id` WHERE `posts_user`=? ORDER BY `posts_time` DESC LIMIT ".$start.", ".$config['forumpost'].";", array($user));
     $posts = $querypost->fetchAll();
 
     App::view('forum/active_posts', compact('posts', 'user', 'start', 'total'));
@@ -63,8 +63,8 @@ case 'delete':
     if ($validation->run()) {
 
         DB::run() -> query("DELETE FROM `posts` WHERE `posts_id`=? AND `posts_topics_id`=?;", array($tid, $post['posts_topics_id']));
-        DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`-? WHERE `topics_id`=?;", array(1, $post['posts_topics_id']));
-        DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`-? WHERE `forums_id`=?;", array(1, $post['posts_forums_id']));
+        DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", array(1, $post['posts_topics_id']));
+        DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", array(1, $post['posts_forums_id']));
 
         exit(json_encode(['status' => 'success']));
     } else {

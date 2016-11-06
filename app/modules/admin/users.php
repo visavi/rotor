@@ -416,7 +416,7 @@ if (is_admin(array(101, 102))) {
                         // ------ Удаление тем в форуме -------//
                         if (!empty($delpostforum) || !empty($deltopicforum)) {
 
-                            $query = DB::run() -> query("SELECT `topics_id` FROM `topics` WHERE `topics_author`=?;", array($uz));
+                            $query = DB::run() -> query("SELECT `id` FROM `topics` WHERE `author`=?;", array($uz));
                             $topics = $query -> fetchAll(PDO::FETCH_COLUMN);
 
                             if (!empty($topics)){
@@ -426,11 +426,11 @@ if (is_admin(array(101, 102))) {
                                 foreach($topics as $delDir){
                                     removeDir(HOME.'/upload/forum/'.$delDir);
                                 }
-                                DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id` IN (".$strtopics.");");
+                                DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id` IN (".$strtopics.");");
                                 // ------ Удаление загруженных файлов -------//
 
                                 DB::run() -> query("DELETE FROM `posts` WHERE `posts_topics_id` IN (".$strtopics.");");
-                                DB::run() -> query("DELETE FROM `topics` WHERE `topics_id` IN (".$strtopics.");");
+                                DB::run() -> query("DELETE FROM `topics` WHERE `id` IN (".$strtopics.");");
                             }
 
                             // ------ Удаление сообщений в форуме -------//
@@ -438,16 +438,16 @@ if (is_admin(array(101, 102))) {
                                 DB::run() -> query("DELETE FROM `posts` WHERE `posts_user`=?;", array($uz));
 
                                 // ------ Удаление загруженных файлов -------//
-                                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_user`=?;", array($uz));
+                                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `user`=?;", array($uz));
                                 $files = $queryfiles->fetchAll();
 
                                 if (!empty($files)){
                                     foreach ($files as $file){
-                                        if (file_exists(HOME.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
-                                            unlink(HOME.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash']);
+                                        if (file_exists(HOME.'/upload/forum/'.$file['topics_id'].'/'.$file['hash'])){
+                                            unlink(HOME.'/upload/forum/'.$file['topics_id'].'/'.$file['hash']);
                                         }
                                     }
-                                    DB::run() -> query("DELETE FROM `files_forum` WHERE `file_user`=?;", array($uz));
+                                    DB::run() -> query("DELETE FROM `files_forum` WHERE `user`=?;", array($uz));
                                 }
                                 // ------ Удаление загруженных файлов -------//
                             }

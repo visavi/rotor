@@ -25,7 +25,7 @@ case 'index':
         $page = floor(1 + $start / $config['fotolist']);
         $config['newtitle'] = 'Галерея сайта (Стр. '.$page.')';
 
-        $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `photo_time` DESC LIMIT ".$start.", ".$config['fotolist'].";");
+        $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$start.", ".$config['fotolist'].";");
         $photos = $queryphoto->fetchAll();
 
     }
@@ -38,7 +38,7 @@ break;
     ############################################################################################
     case 'view':
 
-        $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($gid));
+        $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", array($gid));
 
         render('gallery/view', array('photo' => $photo, 'start' => $start));
 
@@ -58,10 +58,10 @@ break;
 
                     $score = ($vote == 'up') ? 1 : -1;
 
-                    $data = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($gid));
+                    $data = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", array($gid));
 
                     if (!empty($data)) {
-                        if ($log != $data['photo_user']) {
+                        if ($log != $data['user']) {
                             $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `ratedphoto` WHERE `rated_photo`=? AND `rated_user`=? LIMIT 1;", array($gid, $log));
 
                             if (empty($queryrated)) {
@@ -69,9 +69,9 @@ break;
 
                                 DB::run() -> query("DELETE FROM `ratedphoto` WHERE `rated_time`<?;", array(SITETIME));
                                 DB::run() -> query("INSERT INTO `ratedphoto` (`rated_photo`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($gid, $log, $expiresrated));
-                                DB::run() -> query("UPDATE `photo` SET `photo_rating`=`photo_rating`+? WHERE `photo_id`=?;", array($score, $gid));
+                                DB::run() -> query("UPDATE `photo` SET `rating`=`rating`+? WHERE `id`=?;", array($score, $gid));
 
-                                notice('Ваша оценка принята! Рейтинг фотографии: '.format_num($data['photo_rating'] + $score));
+                                notice('Ваша оценка принята! Рейтинг фотографии: '.format_num($data['rating'] + $score));
                                 redirect("/gallery?act=view&gid=$gid");
 
                             } else {
@@ -144,7 +144,7 @@ break;
 
                                 $text = antimat($text);
 
-                                DB::run() -> query("INSERT INTO `photo` (`photo_user`, `photo_title`, `photo_text`, `photo_link`, `photo_time`, `photo_closed`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $title, $text, '', SITETIME, $closed));
+                                DB::run() -> query("INSERT INTO `photo` (`user`, `title`, `text`, `link`, `time`, `closed`) VALUES (?, ?, ?, ?, ?, ?);", array($log, $title, $text, '', SITETIME, $closed));
 
                                 $lastid = DB::run() -> lastInsertId();
 
@@ -155,7 +155,7 @@ break;
                                     $handle -> process(HOME.'/upload/pictures/');
                                     if ($handle -> processed) {
 
-                                        DB::run() -> query("UPDATE `photo` SET `photo_link`=? WHERE `photo_id`=?;", array($handle -> file_dst_name, $lastid));
+                                        DB::run() -> query("UPDATE `photo` SET `link`=? WHERE `id`=?;", array($handle -> file_dst_name, $lastid));
 
                                         $handle -> clean();
 
@@ -195,17 +195,17 @@ break;
     case 'edit':
 
         if (is_user()) {
-            $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `photo_id`=? AND `photo_user`=? LIMIT 1;", array($gid, $log));
+            $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", array($gid, $log));
 
             if (!empty($photo)) {
 
                 echo '<div class="form">';
                 echo '<form action="/gallery?act=change&amp;gid='.$gid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo 'Название: <br /><input type="text" name="title" value="'.$photo['photo_title'].'" /><br />';
-                echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['photo_text'].'</textarea><br />';
+                echo 'Название: <br /><input type="text" name="title" value="'.$photo['title'].'" /><br />';
+                echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br />';
 
                 echo 'Закрыть комментарии: ';
-                $checked = ($photo['photo_closed'] == 1) ? ' checked="checked"' : '';
+                $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
 
                 echo '<input type="submit" value="Изменить" /></form></div><br />';
@@ -232,7 +232,7 @@ break;
 
         if ($uid == $_SESSION['token']) {
             if (is_user()) {
-                $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `photo_id`=? AND `photo_user`=? LIMIT 1;", array($gid, $log));
+                $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", array($gid, $log));
 
                 if (!empty($photo)) {
                     if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
@@ -240,7 +240,7 @@ break;
 
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `photo` SET `photo_title`=?, `photo_text`=?, `photo_closed`=? WHERE `photo_id`=?;", array($title, $text, $closed, $gid));
+                            DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", array($title, $text, $closed, $gid));
 
                             notice('Фотография успешно отредактирована!');
                             redirect("/gallery/album?act=photo&uz=$uz&start=$start");
@@ -270,12 +270,12 @@ break;
     ############################################################################################
     case 'comments':
 
-        $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($gid));
+        $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", array($gid));
 
         if (!empty($photo)) {
-            $config['newtitle'] = 'Комментарии - '.$photo['photo_title'];
+            $config['newtitle'] = 'Комментарии - '.$photo['title'];
 
-            echo '<i class="fa fa-picture-o"></i> <b><a href="/gallery?act=view&amp;gid='.$photo['photo_id'].'">'.$photo['photo_title'].'</a></b><br /><br />';
+            echo '<i class="fa fa-picture-o"></i> <b><a href="/gallery?act=view&amp;gid='.$photo['id'].'">'.$photo['title'].'</a></b><br /><br />';
 
             echo '<a href="/gallery?act=comments&amp;gid='.$gid.'&amp;rand='.mt_rand(100, 999).'">Обновить</a><hr />';
 
@@ -325,7 +325,7 @@ break;
                 page_strnavigation('/gallery?act=comments&amp;gid='.$gid.'&amp;', $config['postgallery'], $start, $total);
             }
 
-            if (empty($photo['photo_closed'])) {
+            if (empty($photo['closed'])) {
 
                 if (empty($total)) {
                     show_error('Комментариев еще нет!');
@@ -348,7 +348,7 @@ break;
                 show_error('Комментирование данной фотографии закрыто!');
             }
 
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery?act=photo&amp;uz='.$photo['photo_user'].'">Альбом</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery?act=photo&amp;uz='.$photo['user'].'">Альбом</a><br />';
         } else {
             show_error('Ошибка! Данного изображение не существует!');
         }
@@ -369,10 +369,10 @@ break;
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
-                    $data = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($gid));
+                    $data = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", array($gid));
 
                     if (!empty($data)) {
-                        if (empty($data['photo_closed'])) {
+                        if (empty($data['closed'])) {
                             if (is_flood($log)) {
                                 $msg = antimat($msg);
 
@@ -380,7 +380,7 @@ break;
 
                                 DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commphoto` WHERE `gid`=? ORDER BY `time` DESC LIMIT ".$config['maxpostgallery'].") AS del);", array($gid, $gid));
 
-                                DB::run() -> query("UPDATE `photo` SET `photo_comments`=`photo_comments`+1 WHERE `photo_id`=?;", array($gid));
+                                DB::run() -> query("UPDATE `photo` SET `comments`=`comments`+1 WHERE `id`=?;", array($gid));
                                 DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
                                 notice('Комментарий успешно добавлен!');
@@ -417,10 +417,10 @@ break;
         $cid = abs(intval($_GET['cid']));
 
         if (is_user()) {
-            $comm = DB::run() -> queryFetch("SELECT `commphoto`.*, `photo`.`photo_closed` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`photo_id` WHERE `id`=? AND `user`=? LIMIT 1;", array($cid, $log));
+            $comm = DB::run() -> queryFetch("SELECT `commphoto`.*, `photo`.`closed` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`id` WHERE `id`=? AND `user`=? LIMIT 1;", array($cid, $log));
 
             if (!empty($comm)) {
-                if (empty($comm['photo_closed'])) {
+                if (empty($comm['closed'])) {
                     if ($comm['time'] + 600 > SITETIME) {
 
                         echo '<i class="fa fa-pencil"></i> <b>'.nickname($comm['user']).'</b> <small>('.date_fixed($comm['time']).')</small><br /><br />';
@@ -458,10 +458,10 @@ break;
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
-                    $comm = DB::run() -> queryFetch("SELECT `commphoto`.*, `photo`.`photo_closed` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`photo_id` WHERE `id`=? AND `user`=? LIMIT 1;", array($cid, $log));
+                    $comm = DB::run() -> queryFetch("SELECT `commphoto`.*, `photo`.`closed` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`id` WHERE `id`=? AND `user`=? LIMIT 1;", array($cid, $log));
 
                     if (!empty($comm)) {
-                        if (empty($comm['photo_closed'])) {
+                        if (empty($comm['closed'])) {
                             if ($comm['time'] + 600 > SITETIME) {
 
                                 $msg = antimat($msg);
@@ -511,7 +511,7 @@ break;
                     $del = implode(',', $del);
 
                     $delcomments = DB::run() -> exec("DELETE FROM commphoto WHERE id IN (".$del.") AND gid=".$gid.";");
-                    DB::run() -> query("UPDATE photo SET photo_comments=photo_comments-? WHERE photo_id=?;", array($delcomments, $gid));
+                    DB::run() -> query("UPDATE photo SET comments=comments-? WHERE id=?;", array($delcomments, $gid));
 
                     notice('Выбранные комментарии успешно удалены!');
                     redirect("/gallery?act=comments&gid=$gid&start=$start");
@@ -539,13 +539,13 @@ break;
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if (is_writeable(HOME.'/upload/pictures')) {
-                    $querydel = DB::run() -> queryfetch("SELECT `photo_id`, `photo_link`, `photo_comments` FROM `photo` WHERE `photo_id`=? AND `photo_user`=? LIMIT 1;", array($gid, $log));
+                    $querydel = DB::run() -> queryfetch("SELECT `id`, `link`, `comments` FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", array($gid, $log));
                     if (!empty($querydel)) {
-                        if (empty($querydel['photo_comments'])) {
-                            DB::run() -> query("DELETE FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($querydel['photo_id']));
-                            DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", array($querydel['photo_id']));
+                        if (empty($querydel['comments'])) {
+                            DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", array($querydel['id']));
+                            DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", array($querydel['id']));
 
-                            unlink_image('upload/pictures/', $querydel['photo_link']);
+                            unlink_image('upload/pictures/', $querydel['link']);
 
                             notice('Фотография успешно удалена!');
                             redirect("/gallery?act=photo&start=$start");
@@ -607,14 +607,14 @@ break;
     *
     * if (is_writeable(HOME.'/upload/pictures')){
     *
-    * $querydel = DB::run()->query("SELECT `photo_id`, `photo_link` FROM `photo` WHERE `photo_id` IN (".$del.") AND `photo_user`=?;", array($log));
+    * $querydel = DB::run()->query("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.") AND `user`=?;", array($log));
     * $arr_photo = $querydel->fetchAll();
     *
     * if (count($arr_photo)>0){
     * foreach ($arr_photo as $delete){
-    * DB::run()->query("DELETE FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($delete['photo_id']));
-    * DB::run()->query("DELETE FROM `commphoto` WHERE `gid`=?;", array($delete['photo_id']));
-    * if (file_exists(HOME.'/upload/pictures/'.$delete['photo_link'])) {unlink(HOME.'/upload/pictures/'.$delete['photo_link']);}
+    * DB::run()->query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", array($delete['id']));
+    * DB::run()->query("DELETE FROM `commphoto` WHERE `gid`=?;", array($delete['id']));
+    * if (file_exists(HOME.'/upload/pictures/'.$delete['link'])) {unlink(HOME.'/upload/pictures/'.$delete['link']);}
     * }
     *
     * notice('Выбранные фотографии успешно удалены!');

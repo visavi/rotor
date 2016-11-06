@@ -150,7 +150,7 @@ break;
 ############################################################################################
 case 'view':
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
 
     if (!empty($downs)) {
         if (!empty($downs['active']) || $downs['user'] == $log) {
@@ -309,12 +309,12 @@ case 'load':
                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
                 if (file_exists('upload/files/'.$folder.$downs['link'])) {
-                    $queryloads = DB::run() -> querySingle("SELECT loads_ip FROM loads WHERE loads_down=? AND loads_ip=? LIMIT 1;", array($id, App::getClientIp()));
+                    $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", array($id, App::getClientIp()));
                     if (empty($queryloads)) {
                         $expiresloads = SITETIME + 3600 * $config['expiresloads'];
 
-                        DB::run() -> query("DELETE FROM loads WHERE loads_time<?;", array(SITETIME));
-                        DB::run() -> query("INSERT INTO loads (loads_down, loads_ip, loads_time) VALUES (?, ?, ?);", array($id, App::getClientIp(), $expiresloads));
+                        DB::run() -> query("DELETE FROM loads WHERE time<?;", array(SITETIME));
+                        DB::run() -> query("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", array($id, App::getClientIp(), $expiresloads));
                         DB::run() -> query("UPDATE downs SET load=load+1, last_load=? WHERE id=?", array(SITETIME, $id));
                     }
 

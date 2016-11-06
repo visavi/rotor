@@ -75,7 +75,7 @@ if (is_user()) {
                                             // ------------------------------Уведомление по привату------------------------//
                                             $textpriv = 'Пользователь [b]'.nickname($log).'[/b] поставил вам плюс! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
-                                            DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
+                                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
 
                                             echo '<i class="fa fa-thumbs-up"></i> Ваш положительный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
                                             echo 'В данный момент его авторитет: '.$uzdata['users_rating'].'<br />';
@@ -108,7 +108,7 @@ if (is_user()) {
                                                     // ------------------------------Уведомление по привату------------------------//
                                                     $textpriv = 'Пользователь [b]'.nickname($log).'[/b] поставил вам минус! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
-                                                    DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
+                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
 
                                                     echo '<i class="fa fa-thumbs-down"></i> Ваш отрицательный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
                                                     echo 'В данный момент его авторитет: '.$uzdata['users_rating'].'<br />';

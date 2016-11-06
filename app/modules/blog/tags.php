@@ -69,7 +69,7 @@ case 'search':
 
             $result = implode(',', $_SESSION['findresult']);
 
-            $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+            $queryblog = DB::run() -> query("SELECT `blogs`.*, `id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
             $blogs = $queryblog -> fetchAll();
 
             render('blog/tags_search', array('blogs' => $blogs, 'tags' => $tags, 'total' => $total));

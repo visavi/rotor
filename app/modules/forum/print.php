@@ -2,7 +2,7 @@
 
 $tid  = isset($params['tid']) ? abs(intval($params['tid'])) : 0;
 
-$topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+$topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($tid));
 
 if (empty($topic)) {
     App::abort('default', 'Данной темы не существует!');

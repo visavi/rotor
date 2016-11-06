@@ -91,12 +91,12 @@ if (is_user()) {
 
                                 DB::run() -> query("INSERT INTO `contact` (`user`, `name`, `time`) VALUES (?, ?, ?);", array($log, $uz, SITETIME));
                                 // ----------------------------- Проверка на игнор ----------------------------//
-                                $ignorstr = DB::run() -> querySingle("SELECT `ignore_id` FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($uz, $log));
+                                $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
                                 if (empty($ignorstr)) {
                                     DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($uz));
                                     // ------------------------------Уведомление по привату------------------------//
                                     $textpriv = 'Пользователь [b]'.nickname($log).'[/b] добавил вас в свой контакт-лист!';
-                                    DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                 }
 
                                 notice('Пользователь успешно добавлен в контакты!');

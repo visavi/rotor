@@ -94,7 +94,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`cats_id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -104,7 +104,7 @@ case "search":
                     echo '<div class="b"><i class="fa fa-archive"></i> ';
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-                    echo '<div>Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a><br />';
+                    echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
                     echo 'Скачиваний: '.$data['load'].'<br />';
                     echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
@@ -138,7 +138,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`cats_id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -155,7 +155,7 @@ case "search":
 
                     echo '<div>'.$data['text'].'<br />';
 
-                    echo 'Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a><br />';
+                    echo 'Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
                     echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 

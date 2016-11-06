@@ -21,46 +21,46 @@
             <div class="post">
                 <div class="b">
 
-                    <?php if (!empty($log) && $log != $data['guest_user']): ?>
+                    <?php if (!empty($log) && $log != $data['user']): ?>
 
                         <div class="pull-right">
-                            <a href="#" onclick="return postReply('<?= nickname($data['guest_user']) ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postReply('<?= nickname($data['user']) ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <noindex><a href="#" onclick="return sendComplaint(this)" data-type="/book" data-id="{{ $data['guest_id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $start }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
+                            <noindex><a href="#" onclick="return sendComplaint(this)" data-type="/book" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $start }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
                         </div>
 
                     <?php endif; ?>
 
-                    <?php if ($log == $data['guest_user'] && $data['guest_time'] + 600 > SITETIME): ?>
+                    <?php if ($log == $data['user'] && $data['time'] + 600 > SITETIME): ?>
                         <div class="pull-right">
-                            <a href="/book/edit/<?=$data['guest_id']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                            <a href="/book/edit/<?=$data['id']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         </div>
                     <?php endif; ?>
 
-                    <div class="img"><?=user_avatars($data['guest_user'])?></div>
+                    <div class="img"><?=user_avatars($data['user'])?></div>
 
-                    <?php if ($data['guest_user'] == $config['guestsuser']): ?>
-                        <b><?=$data['guest_user']?></b> <small>(<?=date_fixed($data['guest_time'])?>)</small>
+                    <?php if ($data['user'] == $config['guestsuser']): ?>
+                        <b><?=$data['user']?></b> <small>(<?=date_fixed($data['time'])?>)</small>
                     <?php else: ?>
-                        <b><?=profile($data['guest_user'])?></b> <small>(<?=date_fixed($data['guest_time'])?>)</small><br />
-                        <?=user_title($data['guest_user'])?> <?=user_online($data['guest_user'])?>
+                        <b><?=profile($data['user'])?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
+                        <?=user_title($data['user'])?> <?=user_online($data['user'])?>
                     <?php endif; ?>
                 </div>
 
-                <div class="message"><?=bb_code($data['guest_text'])?></div>
+                <div class="message"><?=bb_code($data['text'])?></div>
 
-                <?php if (!empty($data['guest_edit'])): ?>
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['guest_edit'])?> (<?=date_fixed($data['guest_edit_time'])?>)</small><br />
+                <?php if (!empty($data['edit'])): ?>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['edit'])?> (<?=date_fixed($data['edit_time'])?>)</small><br />
                 <?php endif; ?>
 
                 <?php if (is_admin() || empty($config['anonymity'])): ?>
-                    <span class="data">(<?=$data['guest_brow']?>, <?=$data['guest_ip']?>)</span>
+                    <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
                 <?php endif; ?>
 
-                <?php if (!empty($data['guest_reply'])): ?>
-                    <br /><span style="color:#ff0000">Ответ: <?=bb_code($data['guest_reply'])?></span>
+                <?php if (!empty($data['reply'])): ?>
+                    <br /><span style="color:#ff0000">Ответ: <?=bb_code($data['reply'])?></span>
                 <?php endif; ?>
 
             </div>

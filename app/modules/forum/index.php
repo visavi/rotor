@@ -1,7 +1,7 @@
 <?php
 include_once (STORAGE.'/advert/forum.dat');
 
-$forums = DBM::run()->select('forums', null, null, null, ['forums_order'=>'ASC']);
+$forums = DBM::run()->select('forums', null, null, null, ['`order`'=>'ASC']);
 
 if (empty(count($forums))) {
     App::abort('default', 'Разделы форума еще не созданы!');
@@ -10,8 +10,8 @@ if (empty(count($forums))) {
 $output = array();
 
 foreach ($forums as $row) {
-    $id = $row['forums_id'];
-    $fp = $row['forums_parent'];
+    $id = $row['id'];
+    $fp = $row['parent'];
     $output[$fp][$id] = $row;
 }
 

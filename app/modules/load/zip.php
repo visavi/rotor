@@ -12,7 +12,7 @@ switch ($act):
 ##                                    Главная страница                                    ##
 ############################################################################################
 case 'index':
-    $downs = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`cats_id`, `cats`.`cats_name` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`cats_id` WHERE `id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`id`, `cats`.`name` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
 
     if (!empty($downs)) {
         if (!empty($downs['active'])) {
@@ -60,7 +60,7 @@ case 'index':
 
                         page_strnavigation('/load/zip?id='.$id.'&amp;', $config['ziplist'], $start, $total);
 
-                        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['cats_id'].'">'.$downs['cats_name'].'</a><br />';
+                        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['id'].'">'.$downs['name'].'</a><br />';
                     } else {
                         show_error('Ошибка! В данном архиве нет файлов!');
                     }

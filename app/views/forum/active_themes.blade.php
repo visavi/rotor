@@ -10,9 +10,9 @@
         <div class="b">
 
             <?php
-            if ($data['topics_locked']) {
+            if ($data['locked']) {
                 $icon = 'fa-thumb-tack';
-            } elseif ($data['topics_closed']) {
+            } elseif ($data['closed']) {
                 $icon = 'fa-lock';
             } else {
                 $icon = 'fa-folder-open';
@@ -20,14 +20,14 @@
             ?>
 
             <i class="fa <?=$icon?> text-muted"></i>
-            <b><a href="/topic/<?=$data['topics_id']?>"><?=$data['topics_title']?></a></b> (<?=$data['topics_posts']?>)
+            <b><a href="/topic/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=$data['posts']?>)
         </div>
 
         <div>
             Страницы:
-            <?php forum_navigation('/topic/'.$data['topics_id'].'?', $config['forumpost'], $data['topics_posts']); ?>
-            Форум: <a href="/forum/<?=$data['topics_forums_id']?>"><?=$data['forums_title']?></a><br />
-            Автор: <?=nickname($data['topics_author'])?> / Посл.: <?=nickname($data['topics_last_user'])?> (<?=date_fixed($data['topics_last_time'])?>)
+            <?php forum_navigation('/topic/'.$data['id'].'?', $config['forumpost'], $data['posts']); ?>
+            Форум: <a href="/forum/<?=$data['forums_id']?>"><?=$data['title']?></a><br />
+            Автор: <?=nickname($data['author'])?> / Посл.: <?=nickname($data['last_user'])?> (<?=date_fixed($data['last_time'])?>)
         </div>
 
     <?php endforeach; ?>

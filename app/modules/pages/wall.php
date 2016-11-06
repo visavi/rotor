@@ -99,7 +99,7 @@ if (!empty($queryuser)) {
                 if ($uz == $log || is_admin() || is_contact($uz, $log)){
                     if ($uid == $_SESSION['token']) {
                         if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                            $ignorstr = DB::run() -> querySingle("SELECT `ignore_id` FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($uz, $log));
+                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
                             if (empty($ignorstr)) {
                                 if (is_flood($log)) {
 

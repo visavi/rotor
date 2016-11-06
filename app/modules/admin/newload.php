@@ -243,7 +243,7 @@ if (is_admin()) {
                                                                 if (user($new['user'])) {
                                                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.$config['home'].'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                                                    DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($new['user'], $log, $textpriv, SITETIME));
+                                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($new['user'], $log, $textpriv, SITETIME));
 
                                                                     DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($new['user']));
                                                                 }
@@ -317,7 +317,7 @@ if (is_admin()) {
                                 if (user($new['user'])) {
                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.$config['home'].'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                    DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($new['user'], $log, $textpriv, SITETIME));
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($new['user'], $log, $textpriv, SITETIME));
                                     DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($new['user']));
                                 }
 

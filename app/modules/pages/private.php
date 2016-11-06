@@ -14,9 +14,9 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `inbox_user`=?;", array($log));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `user`=?;", array($log));
 
-            $intotal = DB::run() -> query("SELECT count(*) FROM `outbox` WHERE `outbox_author`=? UNION ALL SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log, $log));
+            $intotal = DB::run() -> query("SELECT count(*) FROM `outbox` WHERE `author`=? UNION ALL SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
 
             echo '<i class="fa fa-envelope"></i> <b>Входящие ('.$total.')</b> / ';
@@ -41,7 +41,7 @@ if (is_user()) {
                     $start = last_page($total, $config['privatpost']);
                 }
 
-                $querypriv = DB::run() -> query("SELECT * FROM `inbox` WHERE `inbox_user`=? ORDER BY `inbox_time` DESC LIMIT ".$start.", ".$config['privatpost'].";", array($log));
+                $querypriv = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['privatpost'].";", array($log));
 
                 echo '<form action="/private?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -49,18 +49,18 @@ if (is_user()) {
                 echo '</div>';
                 while ($data = $querypriv -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['inbox_author']).'</div>';
-                    echo '<b>'.profile($data['inbox_author']).'</b>  ('.date_fixed($data['inbox_time']).')<br />';
-                    echo user_title($data['inbox_author']).' '.user_online($data['inbox_author']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['author']).'</div>';
+                    echo '<b>'.profile($data['author']).'</b>  ('.date_fixed($data['time']).')<br />';
+                    echo user_title($data['author']).' '.user_online($data['author']).'</div>';
 
-                    echo '<div>'.bb_code($data['inbox_text']).'<br />';
+                    echo '<div>'.bb_code($data['text']).'<br />';
 
-                    echo '<input type="checkbox" name="del[]" value="'.$data['inbox_id'].'" /> ';
-                    echo '<a href="/private?act=submit&amp;uz='.$data['inbox_author'].'">Ответить</a> / ';
-                    echo '<a href="/private?act=history&amp;uz='.$data['inbox_author'].'">История</a> / ';
-                    echo '<a href="/contact?act=add&amp;uz='.$data['inbox_author'].'&amp;uid='.$_SESSION['token'].'">В контакт</a> / ';
-                    echo '<a href="/ignore?act=add&amp;uz='.$data['inbox_author'].'&amp;uid='.$_SESSION['token'].'">Игнор</a> / ';
-                    echo '<noindex><a href="/private?act=spam&amp;id='.$data['inbox_id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<a href="/private?act=submit&amp;uz='.$data['author'].'">Ответить</a> / ';
+                    echo '<a href="/private?act=history&amp;uz='.$data['author'].'">История</a> / ';
+                    echo '<a href="/contact?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">В контакт</a> / ';
+                    echo '<a href="/ignore?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">Игнор</a> / ';
+                    echo '<noindex><a href="/private?act=spam&amp;id='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                 }
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -81,9 +81,9 @@ if (is_user()) {
         ############################################################################################
         case 'output':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `outbox` WHERE `outbox_author`=?;", array($log));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `outbox` WHERE `author`=?;", array($log));
 
-            $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `inbox_user`=? UNION ALL SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log, $log));
+            $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
 
             echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
@@ -95,7 +95,7 @@ if (is_user()) {
                     $start = last_page($total, $config['privatpost']);
                 }
 
-                $querypriv = DB::run() -> query("SELECT * FROM `outbox` WHERE `outbox_author`=? ORDER BY `outbox_time` DESC LIMIT ".$start.", ".$config['privatpost'].";", array($log));
+                $querypriv = DB::run() -> query("SELECT * FROM `outbox` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['privatpost'].";", array($log));
 
                 echo '<form action="/private?act=outdel&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -103,15 +103,15 @@ if (is_user()) {
                 echo '</div>';
                 while ($data = $querypriv -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['outbox_user']).'</div>';
-                    echo '<b>'.profile($data['outbox_user']).'</b>  ('.date_fixed($data['outbox_time']).')<br />';
-                    echo user_title($data['outbox_user']).' '.user_online($data['outbox_user']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<b>'.profile($data['user']).'</b>  ('.date_fixed($data['time']).')<br />';
+                    echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    echo '<div>'.bb_code($data['outbox_text']).'<br />';
+                    echo '<div>'.bb_code($data['text']).'<br />';
 
-                    echo '<input type="checkbox" name="del[]" value="'.$data['outbox_id'].'" /> ';
-                    echo '<a href="/private?act=submit&amp;uz='.$data['outbox_user'].'">Написать еще</a> / ';
-                    echo '<a href="/private?act=history&amp;uz='.$data['outbox_user'].'">История</a></div>';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<a href="/private?act=submit&amp;uz='.$data['user'].'">Написать еще</a> / ';
+                    echo '<a href="/private?act=history&amp;uz='.$data['user'].'">История</a></div>';
                 }
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -134,7 +134,7 @@ if (is_user()) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log));
 
-            $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `inbox_user`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `outbox_author`=?;", array($log, $log));
+            $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `author`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
 
             echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
@@ -217,7 +217,7 @@ if (is_user()) {
                     echo '<i class="fa fa-envelope"></i> Сообщение для <b>'.profile($uz).'</b> '.user_visit($uz).':<br />';
                     echo '<i class="fa fa-history"></i> <a href="/private?act=history&amp;uz='.$uz.'">История переписки</a><br /><br />';
 
-                    $ignorstr = DB::run() -> querySingle("SELECT `ignore_id` FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($log, $uz));
+                    $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($log, $uz));
                     if (!empty($ignorstr)) {
                         echo '<b>Внимание! Данный пользователь внесен в ваш игнор-лист!</b><br />';
                     }
@@ -261,21 +261,21 @@ if (is_user()) {
                                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
                                     $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
                                     if (!empty($queryuser)) {
-                                        $uztotal = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `inbox_user`=?;", array($uz));
+                                        $uztotal = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `user`=?;", array($uz));
                                         if ($uztotal < $config['limitmail']) {
                                             // ----------------------------- Проверка на игнор ----------------------------//
-                                            $ignorstr = DB::run() -> querySingle("SELECT `ignore_id` FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($uz, $log));
+                                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
                                             if (empty($ignorstr)) {
                                                 if (is_flood($log)) {
 
                                                     $msg = antimat($msg);
 
                                                     DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;", array($uz));
-                                                    DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
+                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
 
-                                                    DB::run() -> query("INSERT INTO `outbox` (`outbox_user`, `outbox_author`, `outbox_text`, `outbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
+                                                    DB::run() -> query("INSERT INTO `outbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
 
-                                                    DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_author`=? AND `outbox_time` < (SELECT MIN(`outbox_time`) FROM (SELECT `outbox_time` FROM `outbox` WHERE `outbox_author`=? ORDER BY `outbox_time` DESC LIMIT ".$config['limitoutmail'].") AS del);", array($log, $log));
+                                                    DB::run() -> query("DELETE FROM `outbox` WHERE `author`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `outbox` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$config['limitoutmail'].") AS del);", array($log, $log));
                                                     save_usermail(60);
 
                                                     $deliveryUsers = DBM::run()->select('users', array(
@@ -347,13 +347,13 @@ if (is_user()) {
             $id = abs(intval($_GET['id']));
 
             if ($uid == $_SESSION['token']) {
-                $data = DB::run() -> queryFetch("SELECT * FROM `inbox` WHERE `inbox_user`=? AND `inbox_id`=? LIMIT 1;", array($log, $id));
+                $data = DB::run() -> queryFetch("SELECT * FROM `inbox` WHERE `user`=? AND `id`=? LIMIT 1;", array($log, $id));
                 if (!empty($data)) {
                     $queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(3, $id));
 
                     if (empty($queryspam)) {
                         if (is_flood($log)) {
-                            DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`) VALUES (?, ?, ?, ?, ?, ?, ?);", array(3, $data['inbox_id'], $log, $data['inbox_author'], $data['inbox_text'], $data['inbox_time'], SITETIME));
+                            DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`) VALUES (?, ?, ?, ?, ?, ?, ?);", array(3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME));
 
                             notice('Жалоба успешно отправлена!');
                             redirect("/private?start=$start");
@@ -393,9 +393,9 @@ if (is_user()) {
 
                     DB::run() -> query("DELETE FROM `trash` WHERE `trash_del`<?;", array(SITETIME));
 
-                    DB::run() -> query("INSERT INTO `trash` (`trash_user`, `trash_author`, `trash_text`, `trash_time`, `trash_del`) SELECT `inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`, ? FROM `inbox` WHERE `inbox_id` IN (".$del.") AND `inbox_user`=?;", array($deltrash, $log));
+                    DB::run() -> query("INSERT INTO `trash` (`trash_user`, `trash_author`, `trash_text`, `trash_time`, `trash_del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", array($deltrash, $log));
 
-                    DB::run() -> query("DELETE FROM `inbox` WHERE `inbox_id` IN (".$del.") AND `inbox_user`=?;", array($log));
+                    DB::run() -> query("DELETE FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", array($log));
                     save_usermail(60);
 
                     notice('Выбранные сообщения успешно удалены!');
@@ -427,7 +427,7 @@ if (is_user()) {
                 if ($del > 0) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_id` IN (".$del.") AND `outbox_author`=?;", array($log));
+                    DB::run() -> query("DELETE FROM `outbox` WHERE `id` IN (".$del.") AND `author`=?;", array($log));
 
                     notice('Выбранные сообщения успешно удалены!');
                     redirect("/private?act=output&start=$start");
@@ -455,9 +455,9 @@ if (is_user()) {
 
                     DB::run() -> query("DELETE FROM `trash` WHERE `trash_del`<?;", array(SITETIME));
 
-                    DB::run() -> query("INSERT INTO `trash` (`trash_user`, `trash_author`, `trash_text`, `trash_time`, `trash_del`) SELECT `inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`, ? FROM `inbox` WHERE `inbox_user`=?;", array($deltrash, $log));
+                    DB::run() -> query("INSERT INTO `trash` (`trash_user`, `trash_author`, `trash_text`, `trash_time`, `trash_del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `user`=?;", array($deltrash, $log));
 
-                    DB::run() -> query("DELETE FROM `inbox` WHERE `inbox_user`=?;", array($log));
+                    DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", array($log));
                     save_usermail(60);
 
                     notice('Ящик успешно очищен!');
@@ -481,7 +481,7 @@ if (is_user()) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                DB::run() -> query("DELETE FROM `outbox` WHERE `outbox_author`=?;", array($log));
+                DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", array($log));
 
                 notice('Ящик успешно очищен!');
                 redirect("/private?act=output");
@@ -525,7 +525,7 @@ if (is_user()) {
             if ($uz != $log) {
                 $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
                 if (!empty($queryuser)) {
-                    $total = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `inbox_user`=? AND `inbox_author`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `outbox_user`=? AND `outbox_author`=?;", array($log, $uz, $uz, $log));
+                    $total = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `user`=? AND `author`=?;", array($log, $uz, $uz, $log));
 
                     $total = array_sum($total -> fetchAll(PDO::FETCH_COLUMN));
 
@@ -534,13 +534,13 @@ if (is_user()) {
                             $start = last_page($total, $config['privatpost']);
                         }
 
-                        $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `inbox_user`=? AND `inbox_author`=? UNION ALL SELECT * FROM `outbox` WHERE `outbox_user`=? AND `outbox_author`=? ORDER BY `inbox_time` DESC LIMIT ".$start.", ".$config['privatpost'].";", array($log, $uz, $uz, $log));
+                        $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT * FROM `outbox` WHERE `user`=? AND `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['privatpost'].";", array($log, $uz, $uz, $log));
 
                         while ($data = $queryhistory -> fetch()) {
                             echo '<div class="b">';
-                            echo user_avatars($data['inbox_author']);
-                            echo '<b>'.profile($data['inbox_author']).'</b> '.user_online($data['inbox_author']).' ('.date_fixed($data['inbox_time']).')</div>';
-                            echo '<div>'.bb_code($data['inbox_text']).'</div>';
+                            echo user_avatars($data['author']);
+                            echo '<b>'.profile($data['author']).'</b> '.user_online($data['author']).' ('.date_fixed($data['time']).')</div>';
+                            echo '<div>'.bb_code($data['text']).'</div>';
                         }
 
                         page_strnavigation('/private?act=history&amp;uz='.$uz.'&amp;', $config['privatpost'], $start, $total);

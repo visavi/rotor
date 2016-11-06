@@ -24,7 +24,7 @@ switch ($act):
     case 'index':
         show_title('Альбомы пользователей');
 
-        $total = DB::run() -> querySingle("select COUNT(DISTINCT `photo_user`) from `photo`");
+        $total = DB::run() -> querySingle("select COUNT(DISTINCT `user`) from `photo`");
 
         if ($total > 0) {
             if ($start >= $total) {
@@ -34,12 +34,12 @@ switch ($act):
             $page = floor(1 + $start / $config['photogroup']);
             $config['newtitle'] = 'Альбомы пользователей (Стр. '.$page.')';
 
-            $queryphoto = DB::run() -> query("SELECT COUNT(*) AS cnt, SUM(`photo_comments`) AS comments, `photo_user` FROM `photo` GROUP BY `photo_user` ORDER BY cnt DESC LIMIT ".$start.", ".$config['photogroup'].";");
+            $queryphoto = DB::run() -> query("SELECT COUNT(*) AS cnt, SUM(`comments`) AS comments, `user` FROM `photo` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$start.", ".$config['photogroup'].";");
 
             while ($data = $queryphoto -> fetch()) {
 
                 echo '<i class="fa fa-picture-o"></i> ';
-                echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data['photo_user'].'">'.nickname($data['photo_user']).'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
+                echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data['user'].'">'.nickname($data['user']).'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
             }
 
             page_strnavigation('/gallery/album?', $config['photogroup'], $start, $total);
@@ -58,7 +58,7 @@ switch ($act):
 
         show_title('Список всех фотографий '.nickname($uz));
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `photo_user`=?;", array($uz));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `user`=?;", array($uz));
 
         if ($total > 0) {
             if ($start >= $total) {
@@ -68,28 +68,28 @@ switch ($act):
             $page = floor(1 + $start / $config['fotolist']);
             $config['newtitle'] = 'Список всех фотографий '.nickname($uz).' (Стр. '.$page.')';
 
-            $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `photo_user`=? ORDER BY `photo_time` DESC LIMIT ".$start.", ".$config['fotolist'].";", array($uz));
+            $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['fotolist'].";", array($uz));
 
             $moder = ($log == $uz) ? 1 : 0;
 
             while ($data = $queryphoto -> fetch()) {
                 echo '<div class="b"><i class="fa fa-picture-o"></i> ';
-                echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['photo_link']).')<br />';
+                echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).')<br />';
 
                 if (!empty($moder)) {
-                    echo '<a href="/gallery?act=edit&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">Редактировать</a> / ';
-                    echo '<a href="/gallery?act=delphoto&amp;gid='.$data['photo_id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+                    echo '<a href="/gallery?act=edit&amp;gid='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
+                    echo '<a href="/gallery?act=delphoto&amp;gid='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
                 }
 
                 echo '</div><div>';
-                echo '<a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'])).'</a><br />';
+                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], array('alt' => $data['title'])).'</a><br />';
 
-                if (!empty($data['photo_text'])){
-                    echo bb_code($data['photo_text']).'<br />';
+                if (!empty($data['text'])){
+                    echo bb_code($data['text']).'<br />';
                 }
 
-                echo 'Добавлено: '.profile($data['photo_user']).' ('.date_fixed($data['photo_time']).')<br />';
-                echo '<a href="/gallery?act=comments&amp;gid='.$data['photo_id'].'">Комментарии</a> ('.$data['photo_comments'].')';
+                echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
+                echo '<a href="/gallery?act=comments&amp;gid='.$data['id'].'">Комментарии</a> ('.$data['comments'].')';
                 echo '</div>';
             }
 

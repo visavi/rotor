@@ -35,40 +35,40 @@ if (is_admin()) {
                     $start = 0;
                 }
 
-                $queryguest = DB::run() -> query("SELECT * FROM guest ORDER BY guest_time DESC LIMIT ".$start.", ".$config['bookpost'].";");
+                $queryguest = DB::run() -> query("SELECT * FROM guest ORDER BY time DESC LIMIT ".$start.", ".$config['bookpost'].";");
 
                 echo '<form action="/admin/book?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryguest -> fetch()) {
 
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['guest_user']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
-                    echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['guest_id'].'" /></span>';
+                    echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
 
-                    if ($data['guest_user'] == $config['guestsuser']) {
-                        echo '<b>'.$data['guest_user'].'</b> <small>('.date_fixed($data['guest_time']).')</small>';
+                    if ($data['user'] == $config['guestsuser']) {
+                        echo '<b>'.$data['user'].'</b> <small>('.date_fixed($data['time']).')</small>';
                     } else {
-                        echo '<b>'.profile($data['guest_user']).'</b> <small>('.date_fixed($data['guest_time']).')</small><br />';
-                        echo user_title($data['guest_user']).' '.user_online($data['guest_user']);
+                        echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                        echo user_title($data['user']).' '.user_online($data['user']);
                     }
 
                     echo '</div>';
 
                     echo '<div class="right">';
-                    echo '<a href="/admin/book?act=edit&amp;id='.$data['guest_id'].'&amp;start='.$start.'">Редактировать</a> / ';
-                    echo '<a href="/admin/book?act=reply&amp;id='.$data['guest_id'].'&amp;start='.$start.'">Ответить</a></div>';
+                    echo '<a href="/admin/book?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
+                    echo '<a href="/admin/book?act=reply&amp;id='.$data['id'].'&amp;start='.$start.'">Ответить</a></div>';
 
-                    echo '<div>'.bb_code($data['guest_text']).'<br />';
+                    echo '<div>'.bb_code($data['text']).'<br />';
 
-                    if (!empty($data['guest_edit'])) {
-                        echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.nickname($data['guest_edit']).' ('.date_fixed($data['guest_edit_time']).')</small><br />';
+                    if (!empty($data['edit'])) {
+                        echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.nickname($data['edit']).' ('.date_fixed($data['edit_time']).')</small><br />';
                     }
 
-                    echo '<span class="data">('.$data['guest_brow'].', '.$data['guest_ip'].')</span>';
+                    echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
 
-                    if (!empty($data['guest_reply'])) {
-                        echo '<br /><span style="color:#ff0000">Ответ: '.$data['guest_reply'].'</span>';
+                    if (!empty($data['reply'])) {
+                        echo '<br /><span style="color:#ff0000">Ответ: '.$data['reply'].'</span>';
                     }
 
                     echo '</div>';
@@ -92,18 +92,18 @@ if (is_admin()) {
         ############################################################################################
         case 'reply':
 
-            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE guest_id=? LIMIT 1;", array($id));
+            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE id=? LIMIT 1;", array($id));
 
             if (!empty($data)) {
                 echo '<b><big>Добавление ответа</big></b><br /><br />';
 
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($data['guest_user']).'</b> '.user_title($data['guest_user']) . user_online($data['guest_user']).' <small>('.date_fixed($data['guest_time']).')</small></div>';
-                echo '<div>Сообщение: '.bb_code($data['guest_text']).'</div><hr />';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($data['user']).'</b> '.user_title($data['user']) . user_online($data['user']).' <small>('.date_fixed($data['time']).')</small></div>';
+                echo '<div>Сообщение: '.bb_code($data['text']).'</div><hr />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?id='.$id.'&amp;act=addreply&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Cообщение:<br />';
-                echo '<textarea cols="25" rows="5" name="reply">'.$data['guest_reply'].'</textarea>';
+                echo '<textarea cols="25" rows="5" name="reply">'.$data['reply'].'</textarea>';
                 echo '<br /><input type="submit" value="Ответить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Сообщения для ответа не существует!');
@@ -122,10 +122,10 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($reply) >= 5 && utf_strlen($reply) < $config['guesttextlength']) {
-                    $queryguest = DB::run() -> querySingle("SELECT guest_id FROM guest WHERE guest_id=? LIMIT 1;", array($id));
+                    $queryguest = DB::run() -> querySingle("SELECT id FROM guest WHERE id=? LIMIT 1;", array($id));
                     if (!empty($queryguest)) {
 
-                        DB::run() -> query("UPDATE guest SET guest_reply=? WHERE guest_id=?", array($reply, $id));
+                        DB::run() -> query("UPDATE guest SET reply=? WHERE id=?", array($reply, $id));
 
                         notice('Ответ успешно добавлен!');
                         redirect("/admin/book?start=$start");
@@ -148,18 +148,18 @@ if (is_admin()) {
         ############################################################################################
         case 'edit':
 
-            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE guest_id=? LIMIT 1;", array($id));
+            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE id=? LIMIT 1;", array($id));
 
             if (!empty($data)) {
 
                 echo '<b><big>Редактирование сообщения</big></b><br /><br />';
 
-                echo '<i class="fa fa-pencil"></i> <b>'.nickname($data['guest_user']).'</b> <small>('.date_fixed($data['guest_time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.nickname($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br /><br />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?act=addedit&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Cообщение:<br />';
-                echo '<textarea cols="50" rows="5" name="msg">'.$data['guest_text'].'</textarea><br /><br />';
+                echo '<textarea cols="50" rows="5" name="msg">'.$data['text'].'</textarea><br /><br />';
                 echo '<input type="submit" value="Изменить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Сообщения для редактирования не существует!');
@@ -178,10 +178,10 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
-                    $queryguest = DB::run() -> querySingle("SELECT guest_id FROM guest WHERE guest_id=? LIMIT 1;", array($id));
+                    $queryguest = DB::run() -> querySingle("SELECT id FROM guest WHERE id=? LIMIT 1;", array($id));
                     if (!empty($queryguest)) {
 
-                        DB::run() -> query("UPDATE guest SET guest_text=?, guest_edit=?, guest_edit_time=? WHERE guest_id=?", array($msg, $log, SITETIME, $id));
+                        DB::run() -> query("UPDATE guest SET text=?, edit=?, edit_time=? WHERE id=?", array($msg, $log, SITETIME, $id));
 
                         notice('Сообщение успешно отредактировано!');
                         redirect("/admin/book?start=$start");
@@ -214,7 +214,7 @@ if (is_admin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM guest WHERE guest_id IN (".$del.");");
+                    DB::run() -> query("DELETE FROM guest WHERE id IN (".$del.");");
 
                     notice('Выбранные сообщения успешно удалены!');
                     redirect("/admin/book?start=$start");

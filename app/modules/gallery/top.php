@@ -13,11 +13,11 @@ if (isset($_GET['sort'])) {
 }
 
 switch ($sort) {
-    case 'rated': $order = 'photo_rating';
+    case 'rated': $order = 'rating';
         break;
-    case 'comm': $order = 'photo_comments';
+    case 'comm': $order = 'comments';
         break;
-    default: $order = 'photo_rating';
+    default: $order = 'rating';
 }
 ############################################################################################
 ##                                       Топ фото                                         ##
@@ -26,13 +26,13 @@ show_title('Топ популярных фотографий');
 
 echo 'Сортировать: ';
 
-if ($order == 'photo_rating') {
+if ($order == 'rating') {
     echo '<b><a href="/gallery/top?sort=rated">Оценки</a></b>, ';
 } else {
     echo '<a href="/gallery/top?sort=rated">Оценки</a>, ';
 }
 
-if ($order == 'photo_comments') {
+if ($order == 'comments') {
     echo '<b><a href="/gallery/top?sort=comm">Комментарии</a></b>';
 } else {
     echo '<a href="/gallery/top?sort=comm">Комментарии</a>';
@@ -52,15 +52,15 @@ if ($total > 0) {
     while ($data = $queryphoto -> fetch()) {
 
         echo '<div class="b"><i class="fa fa-picture-o"></i> ';
-        echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['photo_link']).') ('.format_num($data['photo_rating']).')</div>';
+        echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).') ('.format_num($data['rating']).')</div>';
 
-        echo '<div><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'])).'</a>';
+        echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], array('alt' => $data['title'])).'</a>';
 
-        echo '<br />'.bb_code($data['photo_text']).'<br />';
+        echo '<br />'.bb_code($data['text']).'<br />';
 
-        echo 'Добавлено: '.profile($data['photo_user']).' ('.date_fixed($data['photo_time']).')<br />';
-        echo '<a href="/gallery?act=comments&amp;gid='.$data['photo_id'].'">Комментарии</a> ('.$data['photo_comments'].') ';
-        echo '<a href="/gallery?act=end&amp;gid='.$data['photo_id'].'">&raquo;</a>';
+        echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
+        echo '<a href="/gallery?act=comments&amp;gid='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
+        echo '<a href="/gallery?act=end&amp;gid='.$data['id'].'">&raquo;</a>';
         echo '</div>';
     }
 

@@ -24,7 +24,7 @@ case 'files':
             $start = 0;
         }
 
-        $querydown = DB::run() -> query("SELECT `downs`.*, `cats_name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`cats_id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, $uz));
+        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, $uz));
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -34,7 +34,7 @@ case 'files':
             echo '<div class="b"><i class="fa fa-archive"></i> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-            echo '<div>Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['cats_name'].'</a><br />';
+            echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
             echo 'Скачиваний: '.$data['load'].'<br />';
             echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
             echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';

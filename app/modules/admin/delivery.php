@@ -73,7 +73,7 @@ if (is_admin(array(101))) {
                         if ($total>0){
 
                             $updateusers = DB::run() -> prepare("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;");
-                            $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);");
+                            $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);");
 
                             foreach ($arrusers as $uzval){
                                 $updateusers -> execute($uzval);

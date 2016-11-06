@@ -183,7 +183,7 @@ case 'mailing':
                 $text = 'Поздравляем! Вы получили пригласительный ключ'.PHP_EOL.'Ваш ключ: %s'.PHP_EOL.'С помощью этого ключа вы можете пригласить вашего друга на этот сайт!';
 
                 $updateusers = DB::run() -> prepare("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;");
-                $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);");
+                $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);");
                 $dbr = DB::run() -> prepare("INSERT INTO `invite` (`key`, `user`, `time`) VALUES (?, ?, ?);");
 
                 foreach ($users as $user){

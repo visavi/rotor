@@ -32,7 +32,7 @@ case 'note':
 
         if ($validation->run()) {
 
-            DB::run()->query("INSERT INTO `note` (`note_user`, `note_text`, `note_edit`, `note_time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `note_text`=?, `note_edit`=?, `note_time`=?;", array($uz, $note, $log, SITETIME, $note, $log, SITETIME));
+            DB::run()->query("INSERT INTO `note` (`user`, `text`, `edit`, `time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `text`=?, `edit`=?, `time`=?;", array($uz, $note, $log, SITETIME, $note, $log, SITETIME));
 
             App::setFlash('success', 'Заметка успешно сохранена!');
             App::redirect('/user/'.$uz);
@@ -43,7 +43,7 @@ case 'note':
         }
     }
 
-    $note = DBM::run()->selectFirst('note', ['note_user' => $uz]);
+    $note = DBM::run()->selectFirst('note', ['user' => $uz]);
 
     App::view('pages/user_note', compact('note', 'uz'));
 break;

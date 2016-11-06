@@ -9,27 +9,27 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_id`, `forums`.`forums_title`, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics_id`=? LIMIT 1;", array($tid));
+    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`id`, `forums`.`title`, `forums`.`parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` WHERE `id`=? LIMIT 1;", array($tid));
 
     if (empty($topics)) {
         App::abort('default', 'Данной темы не существует!');
     }
 
-    if (!empty($topics['forums_parent'])) {
-        $topics['subparent'] = DB::run() -> queryFetch("SELECT `forums_id`, `forums_title` FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($topics['forums_parent']));
+    if (!empty($topics['parent'])) {
+        $topics['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", array($topics['parent']));
     }
 
     if (is_user()) {
         $topics['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `topic`=? AND `user`=? LIMIT 1;", array($tid, $log));
 
-        if (!empty($topics['bookmark']) && $topics['topics_posts'] > $topics['bookmark']['posts']) {
-            DB::run() -> query("UPDATE `bookmarks` SET `posts`=? WHERE `topic`=? AND `user`=? LIMIT 1;", array($topics['topics_posts'], $tid, $log));
+        if (!empty($topics['bookmark']) && $topics['posts'] > $topics['bookmark']['posts']) {
+            DB::run() -> query("UPDATE `bookmarks` SET `posts`=? WHERE `topic`=? AND `user`=? LIMIT 1;", array($topics['posts'], $tid, $log));
         }
     }
 
     // --------------------------------------------------------------//
-    if (!empty($topics['topics_mod'])) {
-        $topics['curator'] = explode(',', $topics['topics_mod']);
+    if (!empty($topics['mod'])) {
+        $topics['curator'] = explode(',', $topics['mod']);
         $topics['is_moder'] = in_array($log, $topics['curator'], true) ? 1 : 0;
     }
 
@@ -54,13 +54,13 @@ case 'index':
     $ipdpost = implode(',', $ipdpost);
 
     if (!empty($ipdpost)) {
-        $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id` IN (".$ipdpost.");");
+        $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id` IN (".$ipdpost.");");
         $files = $queryfiles->fetchAll();
     }
     if (!empty($files)){
         $forumfiles = array();
         foreach ($files as $file){
-            $topics['posts_files'][$file['file_posts_id']][] = $file;
+            $topics['posts_files'][$file['posts_id']][] = $file;
         }
     }
     // ------------------------------------- //
@@ -78,12 +78,12 @@ case 'create':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для добавления сообщения!');
 
-    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`forums_parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` WHERE `topics`.`topics_id`=? LIMIT 1;", array($tid));
+    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` WHERE `topics`.`id`=? LIMIT 1;", array($tid));
 
     $validation = new Validation();
     $validation -> addRule('equal', array($token, $_SESSION['token']), ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
         -> addRule('not_empty', $topics, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
-        -> addRule('empty', $topics['topics_closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
+        -> addRule('empty', $topics['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
         -> addRule('equal', [is_flood($log), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!'])
         -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, $config['forumtextlength']);
 
@@ -104,17 +104,17 @@ case 'create':
 
         } else {
 
-            DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($tid, $topics['topics_forums_id'], $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()));
+            DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($tid, $topics['forums_id'], $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()));
             $lastid = DB::run() -> lastInsertId();
 
             DB::run() -> query("UPDATE `users` SET `users_allforum`=`users_allforum`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=? LIMIT 1;", array($log));
 
-            DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`+1, `topics_last_user`=?, `topics_last_time`=? WHERE `topics_id`=?;", array($log, SITETIME, $tid));
+            DB::run() -> query("UPDATE `topics` SET `posts`=`posts`+1, `last_user`=?, `last_time`=? WHERE `id`=?;", array($log, SITETIME, $tid));
 
-            DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`+1, `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($tid, $topics['topics_title'], $log, SITETIME, $topics['topics_forums_id']));
+            DB::run() -> query("UPDATE `forums` SET `posts`=`posts`+1, `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", array($tid, $topics['title'], $log, SITETIME, $topics['forums_id']));
             // Обновление родительского форума
-            if ($topics['forums_parent'] > 0) {
-                DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?;", array($tid, $topics['topics_title'], $log, SITETIME, $topics['forums_parent']));
+            if ($topics['parent'] > 0) {
+                DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", array($tid, $topics['title'], $log, SITETIME, $topics['forums_parent']));
             }
         }
 
@@ -137,22 +137,22 @@ case 'create':
                                 $filename = utf_substr($filename, 0, 45).'.'.$ext;
                             }
 
-                            if (!file_exists(HOME.'/upload/forum/'.$topics['topics_id'])){
+                            if (!file_exists(HOME.'/upload/forum/'.$topics['id'])){
                                 $old = umask(0);
-                                mkdir(HOME.'/upload/forum/'.$topics['topics_id'], 0777, true);
+                                mkdir(HOME.'/upload/forum/'.$topics['id'], 0777, true);
                                 umask($old);
                             }
 
                             $num = 0;
                             $hash = $lastid.'.'.$ext;
-                            while(file_exists(HOME.'/upload/forum/'.$topics['topics_id'].'/'.$hash)){
+                            while(file_exists(HOME.'/upload/forum/'.$topics['id'].'/'.$hash)){
                                 $num++;
                                 $hash = $lastid.'_'.$num.'.'.$ext;
                             }
 
-                            move_uploaded_file($_FILES['file']['tmp_name'], HOME.'/upload/forum/'.$topics['topics_id'].'/'.$hash);
+                            move_uploaded_file($_FILES['file']['tmp_name'], HOME.'/upload/forum/'.$topics['id'].'/'.$hash);
 
-                            DB::run() -> query("INSERT INTO `files_forum` (`file_topics_id`, `file_posts_id`, `file_hash`, `file_name`, `file_size`, `file_user`, `file_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($topics['topics_id'], $lastid, $hash, $filename, $filesize, $log, SITETIME));
+                            DB::run() -> query("INSERT INTO `files_forum` (`topics_id`, `posts_id`, `hash`, `name`, `size`, `user`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($topics['id'], $lastid, $hash, $filename, $filesize, $log, SITETIME));
 
                         } else {
                             $fileError = 'Файл не загружен! Недопустимое расширение!';
@@ -230,15 +230,15 @@ case 'delete':
     $token = check(Request::input('token'));
     $del   = intar(Request::input('del'));
 
-    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($tid));
 
-    $isModer = in_array($log, explode(',', $topic['topics_mod'], true)) ? true : false;
+    $isModer = in_array($log, explode(',', $topic['mod'], true)) ? true : false;
 
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('bool', is_user(), 'Для закрытия тем необходимо авторизоваться')
         -> addRule('not_empty', $del, 'Отстутствуют выбранные сообщения для удаления!')
-        -> addRule('empty', $topic['topics_closed'], 'Редактирование невозможно. Данная тема закрыта!')
+        -> addRule('empty', $topic['closed'], 'Редактирование невозможно. Данная тема закрыта!')
         -> addRule('equal', [$isModer, true], 'Удалять сообщения могут только кураторы темы!');
 
     if ($validation->run()) {
@@ -246,21 +246,21 @@ case 'delete':
         $del = implode(',', $del);
 
         // ------ Удаление загруженных файлов -------//
-        $queryfiles = DB::run() -> query("SELECT `file_hash` FROM `files_forum` WHERE `file_posts_id` IN (".$del.");");
+        $queryfiles = DB::run() -> query("SELECT `hash` FROM `files_forum` WHERE `posts_id` IN (".$del.");");
         $files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
 
         if (!empty($files)){
             foreach ($files as $file){
-                if (file_exists(HOME.'/upload/forum/'.$topic['topics_id'].'/'.$file)){
-                    unlink(HOME.'/upload/forum/'.$topic['topics_id'].'/'.$file);
+                if (file_exists(HOME.'/upload/forum/'.$topic['id'].'/'.$file)){
+                    unlink(HOME.'/upload/forum/'.$topic['id'].'/'.$file);
                 }
             }
-            DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id` IN (".$del.");");
+            DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id` IN (".$del.");");
         }
 
         $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `posts_id` IN (".$del.") AND `posts_topics_id`=".$tid.";");
-        DB::run() -> query("UPDATE `topics` SET `topics_posts`=`topics_posts`-? WHERE `topics_id`=?;", array($delposts, $tid));
-        DB::run() -> query("UPDATE `forums` SET `forums_posts`=`forums_posts`-? WHERE `forums_id`=?;", array($delposts, $topic['topics_forums_id']));
+        DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", array($delposts, $tid));
+        DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", array($delposts, $topic['forums_id']));
 
         App::setFlash('success', 'Выбранные сообщения успешно удалены!');
     } else {
@@ -277,19 +277,19 @@ case 'close':
 
     $token = check(Request::input('token'));
 
-    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($tid));
 
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
          -> addRule('bool', is_user(), 'Для закрытия тем необходимо авторизоваться')
          -> addRule('max', [App::user('users_point'), App::setting('editforumpoint')], 'Для закрытия тем вам необходимо набрать '.points(App::setting('editforumpoint')).'!')
         -> addRule('not_empty', $topic, 'Выбранная вами тема не существует, возможно она была удалена!')
-        -> addRule('equal', [$topic['topics_author'], $log], 'Вы не автор данной темы!')
-        -> addRule('empty', $topic['topics_closed'], 'Данная тема уже закрыта!');
+        -> addRule('equal', [$topic['author'], $log], 'Вы не автор данной темы!')
+        -> addRule('empty', $topic['closed'], 'Данная тема уже закрыта!');
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `topics` SET `topics_closed`=? WHERE `topics_id`=?;", array(1, $tid));
+        DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", array(1, $tid));
 
         App::setFlash('success', 'Тема успешно закрыта!');
     } else {
@@ -310,16 +310,16 @@ case 'edit':
         App::abort('default', 'У вас недостаточно актива для изменения темы!');
     }
 
-    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($tid));
+    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($tid));
     if (empty($topic)) {
         App::abort('default', 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    if ($topic['topics_author'] !== $log) {
+    if ($topic['author'] !== $log) {
         App::abort('default', 'Изменение невозможно, вы не автор данной темы!');
     }
 
-    if ($topic['topics_closed']) {
+    if ($topic['closed']) {
         App::abort('default', ' Изменение невозможно, данная тема закрыта!');
     }
 
@@ -344,7 +344,7 @@ case 'edit':
             $title = antimat($title);
             $msg   = antimat($msg);
 
-            DB::run() -> query("UPDATE `topics` SET `topics_title`=? WHERE topics_id=?;", array($title, $tid));
+            DB::run() -> query("UPDATE `topics` SET `title`=? WHERE id=?;", array($title, $tid));
 
             if ($post) {
                 DB::run()->query("UPDATE `posts` SET `posts_user`=?, `posts_text`=?, `posts_ip`=?, `posts_brow`=?, `posts_edit`=?, `posts_edit_time`=? WHERE `posts_id`=?;", array($log, $msg, App::getClientIp(), App::getUserAgent(), $log, SITETIME, $post['posts_id']));
@@ -372,15 +372,15 @@ case 'editpost':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения сообщения!');
 
-    $post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.* FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id`=? LIMIT 1;", array($id));
+    $post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.* FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`id` WHERE `posts_id`=? LIMIT 1;", array($id));
 
-    $isModer = in_array($log, explode(',', $post['topics_mod'], true)) ? true : false;
+    $isModer = in_array($log, explode(',', $post['mod'], true)) ? true : false;
 
     if (empty($post)) {
         App::abort('default', 'Данного сообщения не существует!');
     }
 
-    if ($post['topics_closed']) {
+    if ($post['closed']) {
         App::abort('default', 'Редактирование невозможно, данная тема закрыта!');
     }
 
@@ -412,16 +412,16 @@ case 'editpost':
             if ($delfile) {
                 $del = implode(',', $delfile);
 
-                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id`=? AND `file_id` IN (".$del.");", array($id));
+                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", array($id));
                 $files = $queryfiles->fetchAll();
 
                 if (!empty($files)){
                     foreach ($files as $file){
-                        if (file_exists(HOME.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash'])){
-                            unlink(HOME.'/upload/forum/'.$file['file_topics_id'].'/'.$file['file_hash']);
+                        if (file_exists(HOME.'/upload/forum/'.$file['id'].'/'.$file['hash'])){
+                            unlink(HOME.'/upload/forum/'.$file['id'].'/'.$file['hash']);
                         }
                     }
-                    DB::run() -> query("DELETE FROM `files_forum` WHERE `file_posts_id`=? AND `file_id` IN (".$del.");", array($id));
+                    DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", array($id));
                 }
             }
 
@@ -434,7 +434,7 @@ case 'editpost':
         }
     }
 
-    $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `file_posts_id`=?;", array($id));
+    $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=?;", array($id));
     $files = $queryfiles->fetchAll();
 
     App::view('forum/topic_edit_post', compact('post', 'files', 'start'));
@@ -464,13 +464,13 @@ break;
 ############################################################################################
 case 'end':
 
-    $topic = DBM::run()->selectFirst('topics', ['topics_id' => $tid]);
+    $topic = DBM::run()->selectFirst('topics', ['id' => $tid]);
 
     if (empty($topic)) {
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    $end = floor(($topic['topics_posts'] - 1) / $config['forumpost']) * $config['forumpost'];
+    $end = floor(($topic['posts'] - 1) / $config['forumpost']) * $config['forumpost'];
     App::redirect('/topic/'.$tid.'?start='.$end);
 break;
 

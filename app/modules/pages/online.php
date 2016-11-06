@@ -6,7 +6,7 @@ $start = abs(intval(Request::input('start', 0)));
 show_title('Кто в онлайне');
 
 $total_all = DB::run() -> querySingle("SELECT count(*) FROM `online`;");
-$total = DB::run() -> querySingle("SELECT count(*) FROM `online` WHERE `online_user`<>?;", array(''));
+$total = DB::run() -> querySingle("SELECT count(*) FROM `online` WHERE `user`<>?;", array(''));
 
 echo 'Всего на сайте: <b>'.$total_all.'</b><br />';
 echo 'Зарегистрированных:  <b>'.$total.'</b><br /><br />';
@@ -22,14 +22,14 @@ switch ($act):
                 $start = 0;
             }
 
-            $queryonline = DB::run() -> query("SELECT * FROM `online` WHERE `online_user`<>? ORDER BY `online_time` DESC LIMIT ".$start.", ".$config['onlinelist'].";", array(''));
+            $queryonline = DB::run() -> query("SELECT * FROM `online` WHERE `user`<>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['onlinelist'].";", array(''));
 
             while ($data = $queryonline -> fetch()) {
                 echo '<div class="b">';
-                echo user_gender($data['online_user']).' <b>'.profile($data['online_user']).'</b> (Время: '.date_fixed($data['online_time'], 'H:i:s').')</div>';
+                echo user_gender($data['user']).' <b>'.profile($data['user']).'</b> (Время: '.date_fixed($data['time'], 'H:i:s').')</div>';
 
                 if (is_admin() || empty($config['anonymity'])) {
-                    echo '<div><span class="data">('.$data['online_brow'].', '.$data['online_ip'].')</span></div>';
+                    echo '<div><span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
                 }
             }
 
@@ -53,19 +53,19 @@ switch ($act):
                 $start = 0;
             }
 
-            $queryonline = DB::run() -> query("SELECT * FROM `online` ORDER BY `online_time` DESC LIMIT ".$start.", ".$config['onlinelist'].";");
+            $queryonline = DB::run() -> query("SELECT * FROM `online` ORDER BY `time` DESC LIMIT ".$start.", ".$config['onlinelist'].";");
 
             while ($data = $queryonline -> fetch()) {
-                if (empty($data['online_user'])) {
+                if (empty($data['user'])) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-user-circle-o"></i> <b>'.$config['guestsuser'].'</b>  (Время: '.date_fixed($data['online_time'], 'H:i:s').')</div>';
+                    echo '<i class="fa fa-user-circle-o"></i> <b>'.$config['guestsuser'].'</b>  (Время: '.date_fixed($data['time'], 'H:i:s').')</div>';
                 } else {
                     echo '<div class="b">';
-                    echo user_gender($data['online_user']).' <b>'.profile($data['online_user']).'</b> (Время: '.date_fixed($data['online_time'], 'H:i:s').')</div>';
+                    echo user_gender($data['user']).' <b>'.profile($data['user']).'</b> (Время: '.date_fixed($data['time'], 'H:i:s').')</div>';
                 }
 
                 if (is_admin() || empty($config['anonymity'])) {
-                    echo '<div><span class="data">('.$data['online_brow'].', '.$data['online_ip'].')</span></div>';
+                    echo '<div><span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
                 }
             }
 

@@ -20,7 +20,7 @@ case 'themes':
 		$start = last_page($total, $config['forumtem']);
 	}
 
-	$querytopic = DB::run() -> query("SELECT `topics`.*, `forums_title` FROM `topics` LEFT JOIN `forums` ON `topics`.`topics_forums_id`=`forums`.`forums_id` ORDER BY `topics_last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";");
+	$querytopic = DB::run() -> query("SELECT `topics`.*, `title` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` ORDER BY `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";");
 	$topics = $querytopic->fetchAll();
 
 	App::view('forum/new_themes', compact('topics', 'start', 'total'));
@@ -43,7 +43,7 @@ case 'posts':
 		$start = last_page($total, $config['forumpost']);
 	}
 
-	$querypost = DB::run() -> query("SELECT `posts`.*, `topics_title`, `topics_posts` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` ORDER BY `posts_time` DESC LIMIT ".$start.", ".$config['forumpost'].";");
+	$querypost = DB::run() -> query("SELECT `posts`.*, `title`, `posts` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`id` ORDER BY `posts_time` DESC LIMIT ".$start.", ".$config['forumpost'].";");
 	$posts = $querypost->fetchAll();
 
 	App::view('forum/new_posts', compact('posts', 'start', 'total'));

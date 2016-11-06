@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <i class="fa fa-pencil text-muted"></i> <b><?=profile($post['guest_user'])?></b> (<?=date_fixed($post['guest_time'])?>)<br /><br />
+    <i class="fa fa-pencil text-muted"></i> <b><?=profile($post['user'])?></b> (<?=date_fixed($post['time'])?>)<br /><br />
 
     <div class="form">
         <form action="/book/edit/<?= $id ?>" method="post">
@@ -12,7 +12,7 @@
 
             <div class="form-group{{ App::hasError('msg') }}">
                 <label for="inputText">Сообщение:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg', $post['guest_text']) }}</textarea>
+                <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg', $post['text']) }}</textarea>
                 {!! App::textError('msg') !!}
             </div>
 

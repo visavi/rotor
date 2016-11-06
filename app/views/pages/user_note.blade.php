@@ -11,7 +11,7 @@
 
             <div class="form-group{{ App::hasError('note') }}">
                 <label for="markItUp">Сообщение:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="note" required>{{ App::getInput('note', $note['note_text']) }}</textarea>
+                <textarea class="form-control" id="markItUp" rows="5" name="note" required>{{ App::getInput('note', $note['text']) }}</textarea>
                 {!! App::textError('note') !!}
             </div>
 

@@ -23,7 +23,7 @@ case 'index':
             $start = last_page($total, $config['postnews']);
         }
 
-        $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `news_time` DESC LIMIT ".$start.", ".$config['postnews'].";");
+        $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postnews'].";");
 
         echo '<form action="/admin/news?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -31,30 +31,30 @@ case 'index':
 
             echo '<div class="b">';
 
-            $icon = (empty($data['news_closed'])) ? 'unlock' : 'lock';
+            $icon = (empty($data['closed'])) ? 'unlock' : 'lock';
             echo '<i class="fa fa-'.$icon.'"></i> ';
 
-            echo '<b><a href="/news/'.$data['news_id'].'">'.$data['news_title'].'</a></b><small> ('.date_fixed($data['news_time']).')</small><br />';
-            echo '<input type="checkbox" name="del[]" value="'.$data['news_id'].'" /> ';
-            echo '<a href="/admin/news?act=edit&amp;id='.$data['news_id'].'&amp;start='.$start.'">Редактировать</a></div>';
+            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small><br />';
+            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+            echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
 
-            if (!empty($data['news_image'])) {
-                echo '<div class="img"><a href="/upload/news/'.$data['news_image'].'">'.resize_image('upload/news/', $data['news_image'], 75, array('alt' => $data['news_title'])).'</a></div>';
+            if (!empty($data['image'])) {
+                echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, array('alt' => $data['title'])).'</a></div>';
             }
 
-            if (!empty($data['news_top'])){
+            if (!empty($data['top'])){
                 echo '<div class="right"><span style="color:#ff0000">На главной</span></div>';
             }
 
-            if(stristr($data['news_text'], '[cut]')) {
-                $data['news_text'] = current(explode('[cut]', $data['news_text'])).' <a href="/news/'.$data['news_id'].'">Читать далее &raquo;</a>';
+            if(stristr($data['text'], '[cut]')) {
+                $data['text'] = current(explode('[cut]', $data['text'])).' <a href="/news/'.$data['id'].'">Читать далее &raquo;</a>';
             }
 
-            echo '<div>'.bb_code($data['news_text']).'</div>';
+            echo '<div>'.bb_code($data['text']).'</div>';
 
-            echo '<div style="clear:both;">Добавлено: '.profile($data['news_author']).'<br />';
-            echo '<a href="/news/'.$data['news_id'].'/comments">Комментарии</a> ('.$data['news_comments'].') ';
-            echo '<a href="/news/'.$data['news_id'].'/end">&raquo;</a></div>';
+            echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'<br />';
+            echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ('.$data['comments'].') ';
+            echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
         }
 
         echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -77,7 +77,7 @@ break;
 ##                          Подготовка к редактированию новости                           ##
 ############################################################################################
 case 'edit':
-    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `news_id`=? LIMIT 1;", array($id));
+    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", array($id));
 
     if (!empty($datanews)) {
 
@@ -86,23 +86,23 @@ case 'edit':
         echo '<div class="form cut">';
         echo '<form action="/admin/news?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
         echo 'Заголовок:<br />';
-        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$datanews['news_title'].'" /><br />';
-        echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$datanews['news_text'].'</textarea><br />';
+        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$datanews['title'].'" /><br />';
+        echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$datanews['text'].'</textarea><br />';
 
-        if (!empty($datanews['news_image']) && file_exists(HOME.'/upload/news/'.$datanews['news_image'])){
+        if (!empty($datanews['image']) && file_exists(HOME.'/upload/news/'.$datanews['image'])){
 
-            echo '<a href="/upload/news/'.$datanews['news_image'].'">'.resize_image('upload/news/', $datanews['news_image'], 75, array('alt' => $datanews['news_title'])).'</a><br />';
-            echo '<b>'.$datanews['news_image'].'</b> ('.read_file(HOME.'/upload/news/'.$datanews['news_image']).')<br /><br />';
+            echo '<a href="/upload/news/'.$datanews['image'].'">'.resize_image('upload/news/', $datanews['image'], 75, array('alt' => $datanews['title'])).'</a><br />';
+            echo '<b>'.$datanews['image'].'</b> ('.read_file(HOME.'/upload/news/'.$datanews['image']).')<br /><br />';
         }
 
         echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br /><br />';
 
         echo 'Закрыть комментарии: ';
-        $checked = ($datanews['news_closed'] == 1) ? ' checked="checked"' : '';
+        $checked = ($datanews['closed'] == 1) ? ' checked="checked"' : '';
         echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
 
         echo 'Показывать на главной: ';
-        $checked = ($datanews['news_top'] == 1) ? ' checked="checked"' : '';
+        $checked = ($datanews['top'] == 1) ? ' checked="checked"' : '';
         echo '<input name="top" type="checkbox" value="1"'.$checked.' /><br />';
 
         echo '<br /><input type="submit" value="Изменить" /></form></div><br />';
@@ -124,7 +124,7 @@ case 'change':
     $closed = (empty($_POST['closed'])) ? 0 : 1;
     $top = (empty($_POST['top'])) ? 0 : 1;
 
-    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `news_id`=? LIMIT 1;", array($id));
+    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", array($id));
 
     $validation = new Validation();
 
@@ -135,7 +135,7 @@ case 'change':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `news` SET `news_title`=?, `news_text`=?, `news_closed`=?, `news_top`=? WHERE `news_id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
+        DB::run() -> query("UPDATE `news` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -143,15 +143,15 @@ case 'change':
             if ($handle) {
 
                 // Удаление старой картинки
-                if (!empty($datanews['news_image'])) {
-                    unlink_image('upload/news/', $datanews['news_image']);
+                if (!empty($datanews['image'])) {
+                    unlink_image('upload/news/', $datanews['image']);
                 }
 
                 $handle -> process(HOME.'/upload/news/');
 
                 if ($handle -> processed) {
 
-                    DB::run() -> query("UPDATE `news` SET `news_image`=? WHERE `news_id`=? LIMIT 1;", array($handle -> file_dst_name, $id));
+                    DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", array($handle -> file_dst_name, $id));
                     $handle -> clean();
 
                 } else {
@@ -214,7 +214,7 @@ case 'addnews':
 
     if ($validation->run()) {
 
-        DB::run() -> query("INSERT INTO `news` (`news_title`, `news_text`, `news_author`, `news_time`, `news_comments`, `news_closed`, `news_top`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($title, $msg, $log, SITETIME, 0, $closed, $top));
+        DB::run() -> query("INSERT INTO `news` (`title`, `text`, `author`, `time`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($title, $msg, $log, SITETIME, 0, $closed, $top));
 
         $lastid = DB::run() -> lastInsertId();
 
@@ -232,7 +232,7 @@ case 'addnews':
                 $handle -> process(HOME.'/upload/news/');
 
                 if ($handle -> processed) {
-                    DB::run() -> query("UPDATE `news` SET `news_image`=? WHERE `news_id`=? LIMIT 1;", array($handle -> file_dst_name, $lastid));
+                    DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", array($handle -> file_dst_name, $lastid));
                     $handle -> clean();
 
                 } else {
@@ -292,17 +292,17 @@ case 'del':
 
                 $del = implode(',', $del);
 
-                $querydel = DB::run()->query("SELECT `news_image` FROM `news` WHERE `news_id` IN (".$del.");");
+                $querydel = DB::run()->query("SELECT `image` FROM `news` WHERE `id` IN (".$del.");");
                 $arr_image = $querydel->fetchAll();
 
                 if (count($arr_image)>0){
                     foreach ($arr_image as $delete){
-                        unlink_image('upload/news/', $delete['news_image']);
+                        unlink_image('upload/news/', $delete['image']);
                     }
                 }
 
-                DB::run() -> query("DELETE FROM `news` WHERE `news_id` IN (".$del.");");
-                DB::run() -> query("DELETE FROM `commnews` WHERE `news_id` IN (".$del.");");
+                DB::run() -> query("DELETE FROM `news` WHERE `id` IN (".$del.");");
+                DB::run() -> query("DELETE FROM `commnews` WHERE `id` IN (".$del.");");
 
                 notice('Выбранные новости успешно удалены!');
                 redirect("/admin/news?start=$start");

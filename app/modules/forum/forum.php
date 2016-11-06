@@ -9,30 +9,30 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-		$forums = DBM::run()->selectFirst('forums', ['forums_id' => $fid]);
+		$forums = DBM::run()->selectFirst('forums', ['id' => $fid]);
 
 		if (!$forums) {
             App::abort('default', 'Данного раздела не существует!');
         }
 
         $page = floor(1 + $start / $config['forumtem']);
-        $config['header'] = $forums['forums_title'];
-        $config['newtitle'] = $forums['forums_title'].' (Стр. '.$page.')';
+        $config['header'] = $forums['title'];
+        $config['newtitle'] = $forums['title'].' (Стр. '.$page.')';
 
-        if (!empty($forums['forums_parent'])) {
-            $forums['subparent'] = DB::run() -> queryFetch("SELECT `forums_id`, `forums_title` FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($forums['forums_parent']));
+        if (!empty($forums['parent'])) {
+            $forums['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", array($forums['parent']));
         }
 
-        $querysub = DB::run() -> query("SELECT * FROM `forums` WHERE `forums_parent`=? ORDER BY `forums_order` ASC;", array($fid));
+        $querysub = DB::run() -> query("SELECT * FROM `forums` WHERE `parent`=? ORDER BY `order` ASC;", array($fid));
         $forums['subforums'] = $querysub -> fetchAll();
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `topics_forums_id`=?;", array($fid));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `forums_id`=?;", array($fid));
 
         if ($total > 0 && $start >= $total) {
             $start = last_page($total, $config['forumtem']);
         }
 
-        $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `topics_forums_id`=? ORDER BY `topics_locked` DESC, `topics_last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($fid));
+        $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `forums_id`=? ORDER BY `locked` DESC, `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($fid));
         $forums['topics'] = $querytopic->fetchAll();
 
         App::view('forum/forum', compact('forums', 'fid', 'start', 'total'));
@@ -50,7 +50,7 @@ case 'create':
 
     if (! is_user()) App::abort(403);
 
-    $forums = DBM::run()->select('forums', null, null, null, ['forums_order'=>'ASC']);
+    $forums = DBM::run()->select('forums', null, null, null, ['order'=>'ASC']);
 
     if (empty(count($forums))) {
         App::abort('default', 'Разделы форума еще не созданы!');
@@ -62,12 +62,12 @@ case 'create':
         $msg = check(Request::input('msg'));
         $token = check(Request::input('token'));
 
-        $forum = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `forums_id`=? LIMIT 1;", array($fid));
+        $forum = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", array($fid));
 
         $validation = new Validation();
         $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
             -> addRule('not_empty', $forum, ['fid' => 'Раздела для новой темы не существует!'])
-            -> addRule('empty', $forum['forums_closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
+            -> addRule('empty', $forum['closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
             -> addRule('equal', [is_flood($log), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!'])
             -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50)
             -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, $config['forumtextlength']);
@@ -81,16 +81,16 @@ case 'create':
 
             DB::run() -> query("UPDATE `users` SET `users_allforum`=`users_allforum`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
 
-            DB::run() -> query("INSERT INTO `topics` (`topics_forums_id`, `topics_title`, `topics_author`, `topics_posts`, `topics_last_user`, `topics_last_time`) VALUES (?, ?, ?, ?, ?, ?);", array($fid, $title, $log, 1, $log, SITETIME));
+            DB::run() -> query("INSERT INTO `topics` (`forums_id`, `title`, `author`, `posts`, `last_user`, `last_time`) VALUES (?, ?, ?, ?, ?, ?);", array($fid, $title, $log, 1, $log, SITETIME));
 
             $lastid = DB::run() -> lastInsertId();
 
             DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($lastid, $fid, $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()));
 
-            DB::run() -> query("UPDATE `forums` SET `forums_topics`=`forums_topics`+1, `forums_posts`=`forums_posts`+1, `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?", array($lastid, $title, $log, SITETIME, $fid));
+            DB::run() -> query("UPDATE `forums` SET `topics`=`topics`+1, `posts`=`posts`+1, `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?", array($lastid, $title, $log, SITETIME, $fid));
             // Обновление родительского форума
-            if ($forum['forums_parent'] > 0) {
-                DB::run() -> query("UPDATE `forums` SET `forums_last_id`=?, `forums_last_themes`=?, `forums_last_user`=?, `forums_last_time`=? WHERE `forums_id`=?", array($lastid, $title, $log, SITETIME, $forum['forums_parent']));
+            if ($forum['parent'] > 0) {
+                DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?", array($lastid, $title, $log, SITETIME, $forum['parent']));
             }
 
             App::setFlash('success', 'Новая тема успешно создана!');
@@ -105,8 +105,8 @@ case 'create':
     $output = array();
 
     foreach ($forums as $row) {
-        $i = $row['forums_id'];
-        $p = $row['forums_parent'];
+        $i = $row['id'];
+        $p = $row['parent'];
         $output[$p][$i] = $row;
     }
     App::view('forum/forum_create', ['forums' => $output, 'fid' => $fid]);

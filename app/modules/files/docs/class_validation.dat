@@ -97,7 +97,7 @@ addRule('not_equal', array($logs, $pars), 'Пароль и логин должн
 
 <h3 id="validateEmpty">validateEmpty</h3>
 <pre class="prettyprint linenums">
-addRule('empty', $forums['forums_closed'], 'В данном разделе запрещено создавать темы!')
+addRule('empty', $forums['closed'], 'В данном разделе запрещено создавать темы!')
 </pre>
 
 <h3 id="validateNotEmpty">validateNotEmpty</h3>

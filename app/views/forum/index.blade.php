@@ -15,12 +15,12 @@
     @foreach($forums[0] AS $key => $data)
         <div class="b">
             <i class="fa fa-file-text-o fa-lg text-muted"></i>
-            <b><a href="/forum/{{ $data['forums_id'] }}">{{ $data['forums_title'] }}</a></b>
-            ({{ $data['forums_topics'] }}/{{ $data['forums_posts'] }})
+            <b><a href="/forum/{{ $data['id'] }}">{{ $data['title'] }}</a></b>
+            ({{ $data['topics'] }}/{{ $data['posts'] }})
 
-            @if (!empty($data['forums_desc']))
+            @if (!empty($data['desc']))
                 <br/>
-                <small>{{ $data['forums_desc'] }}</small>
+                <small>{{ $data['desc'] }}</small>
             @endif
 
         </div>
@@ -28,15 +28,15 @@
         <div>
             @if (isset($forums[$key]))
                 @foreach($forums[$key] as $datasub)
-                    <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $datasub['forums_id'] }}">{{ $datasub['forums_title'] }}</a></b>
-                    ({{ $datasub['forums_topics'] }}/{{ $datasub['forums_posts'] }})<br/>
+                    <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $datasub['id'] }}">{{ $datasub['title'] }}</a></b>
+                    ({{ $datasub['topics'] }}/{{ $datasub['posts'] }})<br/>
                 @endforeach
             @endif
 
-            @if ($data['forums_last_id'] > 0)
-                Тема: <a href="/topic/{{ $data['forums_last_id'] }}/end">{{ $data['forums_last_themes'] }}</a>
+            @if ($data['last_id'] > 0)
+                Тема: <a href="/topic/{{ $data['last_id'] }}/end">{{ $data['last_themes'] }}</a>
                 <br/>
-                Сообщение: {{ nickname($data['forums_last_user']) }} ({{ date_fixed($data['forums_last_time']) }})
+                Сообщение: {{ nickname($data['last_user']) }} ({{ date_fixed($data['last_time']) }})
             @else
                 Темы еще не созданы!
             @endif

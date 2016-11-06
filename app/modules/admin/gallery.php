@@ -34,24 +34,24 @@ if (is_admin()) {
 
                 echo '<form action="/admin/gallery?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-                $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `photo_time` DESC LIMIT ".$start.", ".$config['fotolist'].";");
+                $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$start.", ".$config['fotolist'].";");
 
                 while ($data = $queryphoto -> fetch()) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-picture-o"></i> ';
-                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.$data['photo_title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['photo_link']).')<br />';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['photo_id'].'" /> <a href="/admin/gallery?act=edit&amp;start='.$start.'&amp;gid='.$data['photo_id'].'">Редактировать</a>';
+                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).')<br />';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> <a href="/admin/gallery?act=edit&amp;start='.$start.'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['photo_id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['photo_link'], $config['previewsize'], array('alt' => $data['photo_title'])).'</a><br />';
+                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], array('alt' => $data['title'])).'</a><br />';
 
-                    if (!empty($data['photo_text'])){
-                        echo bb_code($data['photo_text']).'<br />';
+                    if (!empty($data['text'])){
+                        echo bb_code($data['text']).'<br />';
                     }
 
-                    echo 'Добавлено: '.profile($data['photo_user']).' ('.date_fixed($data['photo_time']).')<br />';
-                    echo '<a href="/gallery?act=comments&amp;gid='.$data['photo_id'].'">Комментарии</a> ('.$data['photo_comments'].') ';
-                    echo '<a href="/gallery?act=end&amp;gid='.$data['photo_id'].'">&raquo;</a>';
+                    echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
+                    echo '<a href="/gallery?act=comments&amp;gid='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
+                    echo '<a href="/gallery?act=end&amp;gid='.$data['id'].'">&raquo;</a>';
                     echo '</div>';
                 }
 
@@ -76,17 +76,17 @@ if (is_admin()) {
 
             $gid = abs(intval($_GET['gid']));
 
-            $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($gid));
+            $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", array($gid));
 
             if (!empty($photo)) {
 
                 echo '<div class="form">';
                 echo '<form action="/admin/gallery?act=change&amp;gid='.$gid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo 'Название: <br /><input type="text" name="title" value="'.$photo['photo_title'].'" /><br />';
-                echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['photo_text'].'</textarea><br />';
+                echo 'Название: <br /><input type="text" name="title" value="'.$photo['title'].'" /><br />';
+                echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br />';
 
                 echo 'Закрыть комментарии: ';
-                $checked = ($photo['photo_closed'] == 1) ? ' checked="checked"' : '';
+                $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
 
                 echo '<input type="submit" value="Изменить" /></form></div><br />';
@@ -109,7 +109,7 @@ if (is_admin()) {
             $closed = (empty($_POST['closed'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($gid));
+                $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", array($gid));
 
                 if (!empty($photo)) {
                     if (utf_strlen($title) >= 5 && utf_strlen($title) < 50) {
@@ -117,7 +117,7 @@ if (is_admin()) {
 
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `photo` SET `photo_title`=?, `photo_text`=?, `photo_closed`=? WHERE `photo_id`=?;", array($title, $text, $closed, $gid));
+                            DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", array($title, $text, $closed, $gid));
 
                             notice('Фотография успешно отредактирована!');
                             redirect("/admin/gallery?start=$start");
@@ -159,15 +159,15 @@ if (is_admin()) {
                     $del = implode(',', $del);
 
                     if (is_writeable(HOME.'/upload/pictures')) {
-                        $querydel = DB::run() -> query("SELECT `photo_id`, `photo_link` FROM `photo` WHERE `photo_id` IN (".$del.");");
+                        $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.");");
                         $arr_photo = $querydel -> fetchAll();
 
                         if (count($arr_photo) > 0) {
                             foreach ($arr_photo as $delete) {
-                                DB::run() -> query("DELETE FROM `photo` WHERE `photo_id`=? LIMIT 1;", array($delete['photo_id']));
-                                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", array($delete['photo_id']));
+                                DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", array($delete['id']));
+                                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", array($delete['id']));
 
-                                unlink_image('upload/pictures/', $delete['photo_link']);
+                                unlink_image('upload/pictures/', $delete['link']);
                             }
 
                             notice('Выбранные фотографии успешно удалены!');

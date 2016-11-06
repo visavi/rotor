@@ -10,7 +10,7 @@ $section = abs(intval(Request::input('section')));
 
 if (empty($find)) {
 
-    $forums = DBM::run()->select('forums', null, null, null, ['forums_order'=>'ASC']);
+    $forums = DBM::run()->select('forums', null, null, null, ['order'=>'ASC']);
 
     if (empty(count($forums))) {
         App::abort('default', 'Разделы форума еще не созданы!');
@@ -18,8 +18,8 @@ if (empty($find)) {
 
     $output = [];
     foreach ($forums as $row) {
-        $i = $row['forums_id'];
-        $p = $row['forums_parent'];
+        $i = $row['id'];
+        $p = $row['parent'];
         $output[$p][$i] = $row;
     }
 
@@ -59,10 +59,10 @@ if (empty($find)) {
 
             if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
-                $searchsec = ($section > 0) ? "`topics_forums_id`=" . $section . " AND" : '';
-                $searchper = ($period > 0) ? "`topics_last_time`>" . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
+                $searchsec = ($section > 0) ? "`forums_id`=" . $section . " AND" : '';
+                $searchper = ($period > 0) ? "`last_time`>" . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
-                $querysearch = DB::run()->query("SELECT `topics_id` FROM `topics` WHERE " . $searchsec . " " . $searchper . "  MATCH (`topics_title`) AGAINST ('" . $findme . "' IN BOOLEAN MODE) LIMIT 100;");
+                $querysearch = DB::run()->query("SELECT `id` FROM `topics` WHERE " . $searchsec . " " . $searchper . "  MATCH (`title`) AGAINST ('" . $findme . "' IN BOOLEAN MODE) LIMIT 100;");
 
                 $result = $querysearch->fetchAll(PDO::FETCH_COLUMN);
 
@@ -79,7 +79,7 @@ if (empty($find)) {
 
                 $result = implode(',', $_SESSION['forumfindres']);
 
-                $querytopic = DB::run()->query("SELECT * FROM `topics` WHERE `topics_id` IN (" . $result . ") ORDER BY `topics_last_time` DESC LIMIT " . $start . ", " . $config['forumtem'] . ";");
+                $querytopic = DB::run()->query("SELECT * FROM `topics` WHERE `id` IN (" . $result . ") ORDER BY `last_time` DESC LIMIT " . $start . ", " . $config['forumtem'] . ";");
                 $topics = $querytopic->fetchAll();
 
                 App::view('forum/search_topics', compact('topics', 'start', 'total', 'find', 'type', 'where', 'section', 'period'));
@@ -115,7 +115,7 @@ if (empty($find)) {
 
                 $result = implode(',', $_SESSION['forumfindres']);
 
-                $querypost = DB::run()->query("SELECT `posts`.*, `topics_title` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`topics_id` WHERE `posts_id` IN (" . $result . ") ORDER BY `posts_time` DESC LIMIT " . $start . ", " . $config['forumpost'] . ";");
+                $querypost = DB::run()->query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`id` WHERE `posts_id` IN (" . $result . ") ORDER BY `posts_time` DESC LIMIT " . $start . ", " . $config['forumpost'] . ";");
                 $posts = $querypost->fetchAll();
 
                 App::view('forum/search_posts', compact('posts', 'start', 'total', 'find', 'type', 'where', 'section', 'period'));

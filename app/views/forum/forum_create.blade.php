@@ -14,15 +14,15 @@
                 <select class="form-control" id="inputForum" name="fid">
 
                     <?php foreach ($forums[0] as $key => $data): ?>
-                    <?php $selected = ($fid == $data['forums_id']) ? ' selected="selected"' : ''; ?>
-                    <?php $disabled = ! empty($data['forums_closed']) ? ' disabled="disabled"' : ''; ?>
-                    <option value="<?=$data['forums_id']?>"<?=$selected?><?=$disabled?>><?=$data['forums_title']?></option>
+                    <?php $selected = ($fid == $data['id']) ? ' selected="selected"' : ''; ?>
+                    <?php $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : ''; ?>
+                    <option value="<?=$data['id']?>"<?=$selected?><?=$disabled?>><?=$data['title']?></option>
 
                     <?php if (isset($forums[$key])): ?>
                     <?php foreach($forums[$key] as $datasub): ?>
-                    <?php $selected = $fid == $datasub['forums_id'] ? ' selected="selected"' : ''; ?>
-                    <?php $disabled = ! empty($datasub['forums_closed']) ? ' disabled="disabled"' : ''; ?>
-                    <option value="<?=$datasub['forums_id']?>"<?=$selected?><?=$disabled?>>– <?=$datasub['forums_title']?></option>
+                    <?php $selected = $fid == $datasub['id'] ? ' selected="selected"' : ''; ?>
+                    <?php $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : ''; ?>
+                    <option value="<?=$datasub['id']?>"<?=$selected?><?=$disabled?>>– <?=$datasub['title']?></option>
                     <?php endforeach; ?>
                     <?php endif; ?>
                     <?php endforeach; ?>

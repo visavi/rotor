@@ -1,22 +1,22 @@
 @extends('layout')
 
-@section('title', e($topics['topics_title'].' (Стр. '.$page.')').' - @parent')
-@section('description', e('Обсуждение темы: '.$topics['topics_title'].' (Стр. '.$page.')'))
+@section('title', e($topics['title'].' (Стр. '.$page.')').' - @parent')
+@section('description', e('Обсуждение темы: '.$topics['title'].' (Стр. '.$page.')'))
 
 @section('content')
 
-    <h1>{{ $topics['topics_title'] }}</h1>
+    <h1>{{ $topics['title'] }}</h1>
     <a href="/forum">Форум</a> /
 
     <?php if (!empty($topics['subparent'])): ?>
-        <a href="/forum/<?=$topics['subparent']['forums_id']?>"><?=$topics['subparent']['forums_title']?></a> /
+        <a href="/forum/<?=$topics['subparent']['id']?>"><?=$topics['subparent']['title']?></a> /
     <?php endif; ?>
 
-    <a href="/forum/<?=$topics['forums_id']?>"><?=$topics['forums_title']?></a> /
+    <a href="/forum/<?=$topics['id']?>"><?=$topics['title']?></a> /
     <a href="/topic/<?=$tid?>/print">Печать</a> / <a href="/topic/<?=$tid?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
-        <?php if ($topics['topics_author'] == $log && empty($topics['topics_closed']) && App::user('users_point') >= $config['editforumpoint']): ?>
+        <?php if ($topics['author'] == $log && empty($topics['closed']) && App::user('users_point') >= $config['editforumpoint']): ?>
            / <a href="/topic/<?= $tid ?>/close?token=<?=$_SESSION['token']?>">Закрыть</a>
            / <a href="/topic/<?= $tid ?>/edit">Изменить</a>
         <?php endif; ?>
@@ -37,20 +37,20 @@
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($topics['topics_note'])): ?>
-        <div class="info"><?=bb_code($topics['topics_note'])?></div>
+    <?php if (!empty($topics['note'])): ?>
+        <div class="info"><?=bb_code($topics['note'])?></div>
     <?php endif; ?>
 
     <hr />
 
     <?php if (is_admin()): ?>
-        <?php if (empty($topics['topics_closed'])): ?>
+        <?php if (empty($topics['closed'])): ?>
             <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a> /
         <?php else: ?>
             <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Открыть</a> /
         <?php endif; ?>
 
-        <?php if (empty($topics['topics_locked'])): ?>
+        <?php if (empty($topics['locked'])): ?>
             <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрепить</a> /
         <?php else: ?>
             <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Открепить</a> /
@@ -106,13 +106,13 @@
                 <?php if (isset($topics['posts_files'][$data['posts_id']])): ?>
                     <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />
                     <?php foreach ($topics['posts_files'][$data['posts_id']] as $file): ?>
-                        <?php $ext = getExtension($file['file_hash']); ?>
+                        <?php $ext = getExtension($file['hash']); ?>
 
 
                         <?= icons($ext) ?>
-                        <a href="/upload/forum/<?=$topics['topics_id']?>/<?=$file['file_hash']?>"><?=$file['file_name']?></a> (<?=formatsize($file['file_size'])?>)<br />
+                        <a href="/upload/forum/<?=$topics['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
                         <?php if (in_array($ext, array('jpg', 'jpeg', 'gif', 'png'))): ?>
-                            <a href="/upload/forum/<?=$topics['topics_id']?>/<?=$file['file_hash']?>"><?= resize_image('upload/forum/', $topics['topics_id'].'/'.$file['file_hash'], $config['previewsize'], array('alt' => $file['file_name'])) ?></a><br />
+                            <a href="/upload/forum/<?=$topics['id']?>/<?=$file['hash']?>"><?= resize_image('upload/forum/', $topics['id'].'/'.$file['hash'], $config['previewsize'], array('alt' => $file['name'])) ?></a><br />
                         <?php endif; ?>
                     <?php endforeach; ?>
                     </div>
@@ -144,7 +144,7 @@
     <?php page_strnavigation('/topic/'.$tid.'?', $config['forumpost'], $start, $total); ?>
 
     <?php if (is_user()): ?>
-        <?php if (empty($topics['topics_closed'])): ?>
+        <?php if (empty($topics['closed'])): ?>
             <div class="form">
                 <form action="/topic/<?=$tid?>/create" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />

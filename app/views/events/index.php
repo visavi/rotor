@@ -1,31 +1,31 @@
 <?php foreach($events as $data): ?>
     <div class="b">
-        <?=$data['event_closed'] == 0 ? '<i class="fa fa-plus-square-o"></i> ' : '<i class="fa fa-minus-square-o"></i>'; ?>
+        <?=$data['closed'] == 0 ? '<i class="fa fa-plus-square-o"></i> ' : '<i class="fa fa-minus-square-o"></i>'; ?>
 
-        <b><a href="/events?act=read&amp;id=<?=$data['event_id']?>"><?=$data['event_title']?></a></b><small> (<?=date_fixed($data['event_time'])?>)</small>
+        <b><a href="/events?act=read&amp;id=<?=$data['id']?>"><?=$data['title']?></a></b><small> (<?=date_fixed($data['time'])?>)</small>
     </div>
 
-    <?php if (!empty($data['event_image'])): ?>
+    <?php if (!empty($data['image'])): ?>
         <div class="img">
-            <a href="/upload/events/<?=$data['event_image']?>"><?=resize_image('upload/events/', $data['event_image'], 75, array('alt' => $data['event_title']))?></a>
+            <a href="/upload/events/<?=$data['image']?>"><?=resize_image('upload/events/', $data['image'], 75, array('alt' => $data['title']))?></a>
         </div>
     <?php endif; ?>
 
-    <?php if (App::getUsername() == $data['event_author'] && $data['event_time'] + 3600 > SITETIME): ?>
+    <?php if (App::getUsername() == $data['author'] && $data['time'] + 3600 > SITETIME): ?>
         <div class="right">
-            <a href="/events?act=editevent&amp;id=<?=$data['event_id']?>">Редактировать</a>
+            <a href="/events?act=editevent&amp;id=<?=$data['id']?>">Редактировать</a>
         </div>
     <?php endif; ?>
 
-    <?php if(stristr($data['event_text'], '[cut]')) {
-        $data['event_text'] = current(explode('[cut]', $data['event_text'])).' <a href="/events?act=read&amp;id='.$data['event_id'].'">Читать далее &raquo;</a>';
+    <?php if(stristr($data['text'], '[cut]')) {
+        $data['text'] = current(explode('[cut]', $data['text'])).' <a href="/events?act=read&amp;id='.$data['id'].'">Читать далее &raquo;</a>';
     } ?>
 
-    <div><?=bb_code($data['event_text'])?></div>
+    <div><?=bb_code($data['text'])?></div>
 
-    <div style="clear:both;">Добавлено: <?=profile($data['event_author'])?><br />
-        <a href="/events?act=comments&amp;id=<?=$data['event_id']?>">Комментарии</a> (<?=$data['event_comments']?>)
-        <a href="/events?act=end&amp;id=<?=$data['event_id']?>">&raquo;</a>
+    <div style="clear:both;">Добавлено: <?=profile($data['author'])?><br />
+        <a href="/events?act=comments&amp;id=<?=$data['id']?>">Комментарии</a> (<?=$data['comments']?>)
+        <a href="/events?act=end&amp;id=<?=$data['id']?>">&raquo;</a>
     </div>
 
 <?php endforeach; ?>

@@ -14,20 +14,20 @@ render('includes/link', array('links' => $links));
     <?php foreach($photos as $data): ?>
 
         <div class="b"><i class="fa fa-picture-o"></i>
-            <b><a href="/gallery?act=view&amp;gid=<?= $data['photo_id'] ?>&amp;start=<?= $start ?>"><?= $data['photo_title'] ?></a></b>
-            (<?= read_file(HOME.'/upload/pictures/'.$data['photo_link']) ?>) (Рейтинг: <?= format_num($data['photo_rating']) ?>)
+            <b><a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;start=<?= $start ?>"><?= $data['title'] ?></a></b>
+            (<?= read_file(HOME.'/upload/pictures/'.$data['link']) ?>) (Рейтинг: <?= format_num($data['rating']) ?>)
         </div>
 
         <div>
-            <a href="/gallery?act=view&amp;gid=<?= $data['photo_id'] ?>&amp;start=<?= $start ?>"><?= resize_image('upload/pictures/', $data['photo_link'], App::setting('previewsize'), array('alt' => $data['photo_title'])) ?></a><br />
+            <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;start=<?= $start ?>"><?= resize_image('upload/pictures/', $data['link'], App::setting('previewsize'), array('alt' => $data['title'])) ?></a><br />
 
-            <?php if (!empty($data['photo_text'])): ?>
-                <?php bb_code($data['photo_text']) ?><br />
+            <?php if (!empty($data['text'])): ?>
+                <?php bb_code($data['text']) ?><br />
             <?php endif; ?>
 
-            Добавлено: <?= profile($data['photo_user']) ?> (<?= date_fixed($data['photo_time']) ?>)<br />
-            <a href="/gallery?act=comments&amp;gid=<?= $data['photo_id'] ?>">Комментарии</a> (<?= $data['photo_comments'] ?>)
-            <a href="/gallery?act=end&amp;gid=<?= $data['photo_id'] ?>">&raquo;</a>
+            Добавлено: <?= profile($data['user']) ?> (<?= date_fixed($data['time']) ?>)<br />
+            <a href="/gallery?act=comments&amp;gid=<?= $data['id'] ?>">Комментарии</a> (<?= $data['comments'] ?>)
+            <a href="/gallery?act=end&amp;gid=<?= $data['id'] ?>">&raquo;</a>
         </div>
     <?php endforeach; ?>
 

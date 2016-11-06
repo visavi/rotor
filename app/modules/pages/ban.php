@@ -60,7 +60,7 @@ if (is_user()) {
 
                                     $textpriv = 'Объяснение нарушения: '.$msg;
 
-                                    DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($udata['users_loginsendban'], $log, $textpriv, SITETIME));
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($udata['users_loginsendban'], $log, $textpriv, SITETIME));
 
                                     DB::run() -> query("UPDATE `users` SET `users_explainban`=? WHERE `users_login`=?;", array(0, $log));
                                     DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?;", array($udata['users_loginsendban']));

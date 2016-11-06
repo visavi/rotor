@@ -19,15 +19,15 @@ case 'index':
 
     if ($total > 0) {
 
-        $notices = DBM::run()->select('notice', null, null, null, array('notice_id'=>'ASC'));
+        $notices = DBM::run()->select('notice', null, null, null, array('id'=>'ASC'));
 
         foreach ($notices as $notice) {
 
             echo '<div class="b">';
 
-            echo '<i class="fa fa-envelope"></i> <b><a href="/admin/notice?act=edit&amp;id='.$notice['notice_id'].'">'.$notice['notice_name'].'</a></b>';
-            if (empty($notice['notice_protect'])) {
-                echo ' (<a href="/admin/notice?act=del&amp;id='.$notice['notice_id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>)';
+            echo '<i class="fa fa-envelope"></i> <b><a href="/admin/notice?act=edit&amp;id='.$notice['id'].'">'.$notice['name'].'</a></b>';
+            if (empty($notice['protect'])) {
+                echo ' (<a href="/admin/notice?act=del&amp;id='.$notice['id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>)';
             } else {
                 echo ' (Системный шаблон)';
             }
@@ -35,11 +35,11 @@ case 'index':
 
             echo '<div>Изменено: ';
 
-            if (!empty($notice['notice_user'])){
-                echo profile($notice['notice_user']);
+            if (!empty($notice['user'])){
+                echo profile($notice['user']);
             }
 
-            echo ' ('.date_fixed($notice['notice_time']).')';
+            echo ' ('.date_fixed($notice['time']).')';
 
             echo '</div>';
         }
@@ -75,11 +75,11 @@ break;
  * Редактирование шаблона
  */
 case 'edit':
-    $notice = DBM::run()->selectFirst('notice', array('notice_id' => $id));
+    $notice = DBM::run()->selectFirst('notice', array('id' => $id));
 
     if (! empty($notice)) {
 
-        if (! empty($notice['notice_protect'])) {
+        if (! empty($notice['protect'])) {
             echo '<div class="info"><i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b></div><br />';
         }
 
@@ -87,10 +87,10 @@ case 'edit':
         echo '<form action="/admin/notice?act=save&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
         echo 'Название: <br />';
-        echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['notice_name'].'" /><br />';
-        echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['notice_text'].'</textarea><br />';
+        echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['name'].'" /><br />';
+        echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['text'].'</textarea><br />';
 
-        $checked = $notice['notice_protect'] ? ' checked="checked"' : '';
+        $checked = $notice['protect'] ? ' checked="checked"' : '';
 
         echo '<input name="protect" id="protect" type="checkbox" value="1" '.$checked.' /> <label for="protect">Системный шаблон</label><br />';
 
@@ -121,14 +121,14 @@ case "save":
 
     if ($validation->run()) {
 
-        $notice = DBM::run()->selectFirst('notice', array('notice_id' => $id));
+        $notice = DBM::run()->selectFirst('notice', array('id' => $id));
 
         $note = array(
-            'notice_name'    => $name,
-            'notice_text'    => str_replace('&#37;', '%', $text),
-            'notice_user'    => $log,
-            'notice_protect' => $protect,
-            'notice_time'    => SITETIME,
+            'name'    => $name,
+            'text'    => str_replace('&#37;', '%', $text),
+            'user'    => $log,
+            'protect' => $protect,
+            'time'    => SITETIME,
         );
 
         if (empty($notice)) {
@@ -138,7 +138,7 @@ case "save":
         } else {
 
             $note = DBM::run()->update('notice', $note,
-                array('notice_id' => $id)
+                array('id' => $id)
             );
         }
 
@@ -159,17 +159,17 @@ case 'del':
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
 
-    $notice = DBM::run()->selectFirst('notice', array('notice_id' => $id));
+    $notice = DBM::run()->selectFirst('notice', array('id' => $id));
 
     $validation = new Validation();
 
     $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('not_empty', $notice, 'Не найден шаблон для удаления!')
-        -> addRule('empty', $notice['notice_protect'], 'Запрещено удалять защищенный шаблон!');
+        -> addRule('empty', $notice['protect'], 'Запрещено удалять защищенный шаблон!');
 
     if ($validation->run()) {
 
-        $delete = DBM::run()->delete('notice', array('notice_id' => $id));
+        $delete = DBM::run()->delete('notice', array('id' => $id));
 
         notice('Выбранный шаблон успешно удален!');
         redirect("/admin/notice");

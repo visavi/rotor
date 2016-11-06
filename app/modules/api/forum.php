@@ -11,7 +11,7 @@ if (!empty($key)){
     $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `users_apikey`=? LIMIT 1;", array($key));
     if (!empty($user)){
 
-        $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `topics_id`=? LIMIT 1;", array($id));
+        $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($id));
         if (!empty($topic)) {
 
             $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_time` ASC;", array($id));
@@ -30,9 +30,9 @@ if (!empty($key)){
             }
 
             echo json_encode(array(
-                'id' => $topic['topics_id'],
-                'author' => $topic['topics_author'],
-                'title' => $topic['topics_title'],
+                'id' => $topic['id'],
+                'author' => $topic['author'],
+                'title' => $topic['title'],
                 'messages' => $messages
             ));
 

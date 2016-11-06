@@ -34,11 +34,11 @@ switch ($act):
             $page = floor(1 + $start / $config['postgallery']);
             $config['newtitle'] = 'Список всех комментариев (Стр. '.$page.')';
 
-            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `photo_title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`photo_id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postgallery'].";");
+            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postgallery'].";");
 
             while ($data = $querycomm -> fetch()) {
 
-                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['gid'].'&amp;cid='.$data['id'].'">'.$data['photo_title'].'</a></b>';
+                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['gid'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b>';
                 echo '</div>';
 
 
@@ -75,11 +75,11 @@ switch ($act):
             $page = floor(1 + $start / $config['postgallery']);
             $config['newtitle'] = 'Список всех комментариев '.nickname($uz).' (Стр. '.$page.')';
 
-            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `photo_title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`photo_id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['postgallery'].";", array($uz));
+            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['postgallery'].";", array($uz));
 
             while ($data = $querycomm -> fetch()) {
 
-                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['gid'].'&amp;cid='.$data['id'].'">'.$data['photo_title'].'</a></b>';
+                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['gid'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b>';
 
                 if (is_admin()) {
                     echo ' — <a href="/gallery/comments?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
@@ -150,7 +150,7 @@ switch ($act):
 
                 if (!empty($photo)) {
                     DB::run() -> query("DELETE FROM `commphoto` WHERE `id`=? AND `gid`=?;", array($id, $photo));
-                    DB::run() -> query("UPDATE `photo` SET `photo_comments`=`photo_comments`-? WHERE `photo_id`=?;", array(1, $photo));
+                    DB::run() -> query("UPDATE `photo` SET `comments`=`comments`-? WHERE `id`=?;", array(1, $photo));
 
                     notice('Комментарий успешно удален!');
                     redirect("/gallery/comments?act=comments&uz=$uz&start=$start");

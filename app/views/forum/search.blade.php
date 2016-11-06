@@ -19,15 +19,15 @@
                     <option value="0">Не имеет значения</option>
 
                     <?php foreach ($forums[0] as $key => $data): ?>
-                        <?php $selected = (App::getInput('section') == $data['forums_id'] || $fid == $data['forums_id']) ? ' selected' : ''; ?>
+                        <?php $selected = (App::getInput('section') == $data['id'] || $fid == $data['id']) ? ' selected' : ''; ?>
 
-                        <option value="<?=$data['forums_id']?>"<?=$selected?>><?=$data['forums_title']?></option>
+                        <option value="<?=$data['id']?>"<?=$selected?>><?=$data['title']?></option>
 
                         <?php if (isset($forums[$key])): ?>
                             <?php foreach($forums[$key] as $datasub): ?>
-                                <?php $selected = (App::getInput('section') == $data['forums_id'] || $fid == $datasub['forums_id']) ? ' selected' : ''; ?>
+                                <?php $selected = (App::getInput('section') == $data['id'] || $fid == $datasub['id']) ? ' selected' : ''; ?>
 
-                                <option value="<?=$datasub['forums_id']?>"<?=$selected?>>– <?=$datasub['forums_title']?></option>
+                                <option value="<?=$datasub['id']?>"<?=$selected?>>– <?=$datasub['title']?></option>
 
                             <?php endforeach; ?>
                         <?php endif; ?>

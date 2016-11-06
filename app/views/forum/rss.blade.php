@@ -1,6 +1,6 @@
 @extends('layout_rss')
 
-@section('title', 'Сообщения - '.$topic['topics_title'].' - @parent')
+@section('title', 'Сообщения - '.$topic['title'].' - @parent')
 
 @section('content')
 
@@ -10,13 +10,13 @@
         <?php $data['posts_text'] = htmlspecialchars($data['posts_text']); ?>
 
         <item>
-            <title><?= $topic['topics_title'] ?></title>
-            <link><?= App::setting('home') ?>/topic/<?= $topic['topics_id'] ?></link>
+            <title><?= $topic['title'] ?></title>
+            <link><?= App::setting('home') ?>/topic/<?= $topic['id'] ?></link>
             <description><?=$data['posts_text']?> </description>
             <author><?=nickname($data['posts_user'])?></author>
             <pubDate><?=date("r", $data['posts_time'])?></pubDate>
             <category>Сообщения</category>
-            <guid><?= App::setting('home') ?>/topic/<?=$topic['topics_id']?>/<?=$data['posts_id']?></guid>
+            <guid><?= App::setting('home') ?>/topic/<?=$topic['id']?>/<?=$data['posts_id']?></guid>
         </item>
     <?php endforeach; ?>
 @stop

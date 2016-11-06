@@ -21,32 +21,32 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `ignore_user`=?;", array($log));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", array($log));
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = last_page($total, $config['ignorlist']);
                 }
 
-                $queryignor = DB::run() -> query("SELECT * FROM `ignore` WHERE `ignore_user`=? ORDER BY `ignore_time` DESC LIMIT ".$start.", ".$config['ignorlist'].";", array($log));
+                $queryignor = DB::run() -> query("SELECT * FROM `ignore` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['ignorlist'].";", array($log));
 
                 echo '<form action="/ignore?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryignor -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['ignore_name']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['name']).'</div>';
 
-                    echo '<b>'.profile($data['ignore_name']).'</b> <small>('.date_fixed($data['ignore_time']).')</small><br />';
-                    echo user_title($data['ignore_name']).' '.user_online($data['ignore_name']).'</div>';
+                    echo '<b>'.profile($data['name']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo user_title($data['name']).' '.user_online($data['name']).'</div>';
 
                     echo '<div>';
-                    if (!empty($data['ignore_text'])) {
-                        echo 'Заметка: '.$data['ignore_text'].'<br />';
+                    if (!empty($data['text'])) {
+                        echo 'Заметка: '.$data['text'].'<br />';
                     }
 
-                    echo '<input type="checkbox" name="del[]" value="'.$data['ignore_id'].'" /> ';
-                    echo '<a href="/private?act=submit&amp;uz='.$data['ignore_name'].'">Написать</a> | ';
-                    echo '<a href="/ignore?act=note&amp;id='.$data['ignore_id'].'">Заметка</a>';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<a href="/private?act=submit&amp;uz='.$data['name'].'">Написать</a> | ';
+                    echo '<a href="/ignore?act=note&amp;id='.$data['id'].'">Заметка</a>';
                     echo '</div>';
                 }
 
@@ -85,19 +85,19 @@ if (is_user()) {
 
                         if ($queryuser['users_level']<101 || $queryuser['users_level']>105){
 
-                            $total = DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `ignore_user`=?;", array($log));
+                            $total = DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", array($log));
                             if ($total <= $config['limitignore']) {
                                 // ------------------------ Проверка на существование ------------------------//
                                 if (!is_ignore($log, $uz)){
 
-                                    DB::run() -> query("INSERT INTO `ignore` (`ignore_user`, `ignore_name`, `ignore_time`) VALUES (?, ?, ?);", array($log, $uz, SITETIME));
+                                    DB::run() -> query("INSERT INTO `ignore` (`user`, `name`, `time`) VALUES (?, ?, ?);", array($log, $uz, SITETIME));
                                     // ----------------------------- Проверка на игнор ----------------------------//
-                                    $ignorstr = DB::run() -> querySingle("SELECT `ignore_id` FROM `ignore` WHERE `ignore_user`=? AND `ignore_name`=? LIMIT 1;", array($uz, $log));
+                                    $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
                                     if (empty($ignorstr)) {
                                         DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($uz));
                                         // ------------------------------Уведомление по привату------------------------//
                                         $textpriv = 'Пользователь [b]'.nickname($log).'[/b] добавил вас в свой игнор-лист!';
-                                        DB::run() -> query("INSERT INTO `inbox` (`inbox_user`, `inbox_author`, `inbox_text`, `inbox_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
+                                        DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                     }
 
                                     notice('Пользователь успешно отправлен в игнор!');
@@ -137,15 +137,15 @@ if (is_user()) {
             }
 
             if ($id > 0) {
-                $data = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `ignore_id`=? AND `ignore_user`=? LIMIT 1;", array($id, $log));
+                $data = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `id`=? AND `user`=? LIMIT 1;", array($id, $log));
 
                 if (!empty($data)) {
-                    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['ignore_name']).'</b> '.user_online($data['ignore_name']).':<br /><br />';
+                    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['name']).'</b> '.user_online($data['name']).':<br /><br />';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/ignore?act=editnote&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">';
                     echo 'Заметка:<br />';
-                    echo '<textarea cols="25" rows="5" name="msg">'.$data['ignore_text'].'</textarea><br />';
+                    echo '<textarea cols="25" rows="5" name="msg">'.$data['text'].'</textarea><br />';
                     echo '<input value="Редактировать" type="submit" /></form></div><br />';
                 } else {
                     show_error('Ошибка редактирования заметки!');
@@ -172,7 +172,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($id > 0) {
                     if (utf_strlen($msg) < 1000) {
-                        DB::run() -> query("UPDATE `ignore` SET `ignore_text`=? WHERE `ignore_id`=? AND `ignore_user`=?;", array($msg, $id, $log));
+                        DB::run() -> query("UPDATE `ignore` SET `text`=? WHERE `id`=? AND `user`=?;", array($msg, $id, $log));
 
                         notice('Заметка успешно отредактирована!');
                         redirect("/ignore?start=$start");
@@ -206,7 +206,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($del > 0) {
                     $del = implode(',', $del);
-                    DB::run() -> query("DELETE FROM `ignore` WHERE `ignore_id` IN (".$del.") AND `ignore_user`=?;", array($log));
+                    DB::run() -> query("DELETE FROM `ignore` WHERE `id` IN (".$del.") AND `user`=?;", array($log));
 
                     notice('Выбранные пользователи успешно удалены из игнора!');
                     redirect("/ignore?start=$start");

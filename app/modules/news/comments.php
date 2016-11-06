@@ -21,12 +21,12 @@ switch ($act):
                 $start = last_page($total, $config['postnews']);
             }
 
-            $querynews = DB::run() -> query("SELECT `commnews`.*, `news_title`, `news_comments` FROM `commnews` LEFT JOIN `news` ON `commnews`.`news_id`=`news`.`news_id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postnews'].";");
+            $querynews = DB::run() -> query("SELECT `commnews`.*, `title`, `comments` FROM `commnews` LEFT JOIN `news` ON `commnews`.`id`=`news`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postnews'].";");
 
             while ($data = $querynews -> fetch()) {
                 echo '<div class="b">';
 
-                echo '<i class="fa fa-comment"></i> <b><a href="/news/allcomments/'.$data['news_id'].'/'.$data['id'].'">'.$data['news_title'].'</a></b> ('.$data['news_comments'].')</div>';
+                echo '<i class="fa fa-comment"></i> <b><a href="/news/allcomments/'.$data['id'].'/'.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')</div>';
 
                 echo '<div>'.bb_code($data['text']).'<br />';
 
@@ -53,7 +53,7 @@ switch ($act):
 		$id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
         $nid  = isset($params['nid']) ? abs(intval($params['nid'])) : 0;
 
-        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commnews` WHERE `id`<=? AND `news_id`=? ORDER BY `time` ASC LIMIT 1;", [$id, $nid]);
+        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commnews` WHERE `id`<=? AND `id`=? ORDER BY `time` ASC LIMIT 1;", [$id, $nid]);
 
         if (!empty($querycomm)) {
             $end = floor(($querycomm - 1) / $config['postnews']) * $config['postnews'];

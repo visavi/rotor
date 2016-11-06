@@ -95,14 +95,14 @@
     }
 
     if (is_admin()) {
-    $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `note_user`=? LIMIT 1;", array($user['users_login']));
+    $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `user`=? LIMIT 1;", array($user['users_login']));
 
     echo '<div class="form">';
         echo '<i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/'.$user['users_login'].'/note">Изменить</a>)<br />';
 
-        if (!empty($usernote['note_text'])) {
-        echo bb_code($usernote['note_text']).'<br />';
-        echo 'Изменено: '.profile($usernote['note_edit']).' ('.date_fixed($usernote['note_time']).')<br />';
+        if (!empty($usernote['text'])) {
+        echo bb_code($usernote['text']).'<br />';
+        echo 'Изменено: '.profile($usernote['edit']).' ('.date_fixed($usernote['time']).')<br />';
         } else {
         echo'Записей еще нет!<br />';
         }

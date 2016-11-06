@@ -20,8 +20,8 @@
             <?php if (!empty($files)): ?>
                 <i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br />
                 <?php foreach ($files as $file): ?>
-                    <input type="checkbox" name="delfile[]" value="<?=$file['file_id']?>" />
-                    <a href="<?= HOME ?>/upload/forum/<?=$file['file_topics_id']?>/<?=$file['file_hash']?>" target="_blank"><?=$file['file_name']?></a> (<?=formatsize($file['file_size'])?>)<br />
+                    <input type="checkbox" name="delfile[]" value="<?=$file['id']?>" />
+                    <a href="<?= HOME ?>/upload/forum/<?=$file['topics_id']?>/<?=$file['hash']?>" target="_blank"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
                 <?php endforeach; ?>
                 <br />
             <?php endif; ?>

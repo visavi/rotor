@@ -1,24 +1,24 @@
 @extends('layout')
 
-@section('title', $forums['forums_title'].' - @parent')
+@section('title', $forums['title'].' - @parent')
 
 @section('content')
 
-	<h1>{{ $forums['forums_title'] }}</h1>
+	<h1>{{ $forums['title'] }}</h1>
 
 	<a href="/forum">Форум</a>
 
 	@if (!empty($forums['subparent']))
-		/ <a href="/forum/<?=$forums['subparent']['forums_id']?>"><?=$forums['subparent']['forums_title']?></a>
+		/ <a href="/forum/<?=$forums['subparent']['id']?>"><?=$forums['subparent']['title']?></a>
 	@endif
 
-	/ {{ $forums['forums_title'] }}
+	/ {{ $forums['title'] }}
 
 	@if (is_admin())
 		/ <a href="/admin/forum?act=forum&amp;fid=<?=$fid?>&amp;start=<?=$start?>">Управление</a>
 	@endif
 
-	@if (is_user() && empty($forums['forums_closed']))
+	@if (is_user() && empty($forums['closed']))
 		<div class="pull-right">
 			<a class="btn btn-success" href="/forum/create?fid={{ $fid }}">Создать тему</a>
 		</div>
@@ -31,11 +31,11 @@
 
 		<?php foreach ($forums['subforums'] as $subforum): ?>
 			<div class="b"><i class="fa fa-file-text-o fa-lg text-muted"></i>
-			<b><a href="/forum/<?=$subforum['forums_id']?>"><?=$subforum['forums_title']?></a></b> (<?=$subforum['forums_topics']?>/<?=$subforum['forums_posts']?>)</div>
+			<b><a href="/forum/<?=$subforum['id']?>"><?=$subforum['title']?></a></b> (<?=$subforum['topics']?>/<?=$subforum['posts']?>)</div>
 
-			<?php if ($subforum['forums_last_id'] > 0): ?>
-				<div>Тема: <a href="/topic/<?=$subforum['forums_last_id']?>/end"><?=$subforum['forums_last_themes']?></a><br />
-				Сообщение: <?=nickname($subforum['forums_last_user'])?> (<?=date_fixed($subforum['forums_last_time'])?>)</div>
+			<?php if ($subforum['last_id'] > 0): ?>
+				<div>Тема: <a href="/topic/<?=$subforum['last_id']?>/end"><?=$subforum['last_themes']?></a><br />
+				Сообщение: <?=nickname($subforum['last_user'])?> (<?=date_fixed($subforum['last_time'])?>)</div>
 			<?php else: ?>
 				<div>Темы еще не созданы!</div>
 			<?php endif; ?>
@@ -47,12 +47,12 @@
 
 	<?php if ($total > 0): ?>
 		<?php foreach ($forums['topics'] as $topic): ?>
-			<div class="b" id="topic_<?=$topic['topics_id']?>">
+			<div class="b" id="topic_<?=$topic['id']?>">
 
 				<?php
-				if ($topic['topics_locked']) {
+				if ($topic['locked']) {
 					$icon = 'fa-thumb-tack';
-				} elseif ($topic['topics_closed']) {
+				} elseif ($topic['closed']) {
 					$icon = 'fa-lock';
 				} else {
 					$icon = 'fa-folder-open';
@@ -60,17 +60,17 @@
 				?>
 
 				<i class="fa <?=$icon?> text-muted"></i>
-				<b><a href="/topic/<?=$topic['topics_id']?>"><?=$topic['topics_title']?></a></b> (<?=$topic['topics_posts']?>)
+				<b><a href="/topic/<?=$topic['id']?>"><?=$topic['title']?></a></b> (<?=$topic['posts']?>)
 			</div>
 			<div>
-				Страницы: <?=forum_navigation('/topic/'.$topic['topics_id'].'?', $config['forumpost'], $topic['topics_posts'])?>
-				Сообщение: <?=nickname($topic['topics_last_user'])?> (<?=date_fixed($topic['topics_last_time'])?>)
+				Страницы: <?=forum_navigation('/topic/'.$topic['id'].'?', $config['forumpost'], $topic['posts'])?>
+				Сообщение: <?=nickname($topic['last_user'])?> (<?=date_fixed($topic['last_time'])?>)
 			</div>
 		<?php endforeach; ?>
 
 		<?php page_strnavigation('/forum/'.$fid.'?', $config['forumtem'], $start, $total); ?>
 
-	<?php elseif ($forums['forums_closed']): ?>
+	<?php elseif ($forums['closed']): ?>
 		<?=show_error('В данном разделе запрещено создавать темы!')?>
 	<?php else: ?>
 		<?=show_error('Тем еще нет, будь первым!')?>

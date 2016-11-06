@@ -1132,8 +1132,8 @@ function photo_navigation($id) {
         return false;
     }
 
-    $next_id = DB::run() -> querySingle("SELECT `photo_id` FROM `photo` WHERE `photo_id`>? ORDER BY `photo_id` ASC LIMIT 1;", array($id));
-    $prev_id = DB::run() -> querySingle("SELECT `photo_id` FROM `photo` WHERE `photo_id`<? ORDER BY `photo_id` DESC LIMIT 1;", array($id));
+    $next_id = DB::run() -> querySingle("SELECT `id` FROM `photo` WHERE `id`>? ORDER BY `id` ASC LIMIT 1;", array($id));
+    $prev_id = DB::run() -> querySingle("SELECT `id` FROM `photo` WHERE `id`<? ORDER BY `id` DESC LIMIT 1;", array($id));
     return array('next' => $next_id, 'prev' => $prev_id);
 
 }
@@ -1327,7 +1327,7 @@ function last_news() {
 
         if ($total > 0) {
             foreach ($news as $data) {
-                $data['news_text'] = str_replace('[cut]', '', $data['text']);
+                $data['text'] = str_replace('[cut]', '', $data['text']);
                 echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].') <i class="fa fa-caret-down news-title"></i><br />';
 
                 echo '<div class="news-text" style="display: none;">'.bb_code($data['text']).'<br />';

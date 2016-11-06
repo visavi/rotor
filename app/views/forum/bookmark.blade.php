@@ -13,9 +13,9 @@
 					<input type="checkbox" name="del[]" value="<?=$data['book_id']?>" />
 
 					<?php
-					if ($data['topics_locked']) {
+					if ($data['locked']) {
 						$icon = 'fa-thumb-tack';
-					} elseif ($data['topics_closed']) {
+					} elseif ($data['closed']) {
 						$icon = 'fa-lock';
 					} else {
 						$icon = 'fa-folder-open';
@@ -24,15 +24,15 @@
 
 					<i class="fa <?=$icon?> text-muted"></i>
 
-					<?php $newpost = ($data['topics_posts'] > $data['book_posts']) ? '/<span style="color:#00cc00">+'.($data['topics_posts'] - $data['book_posts']).'</span>' : ''; ?>
+					<?php $newpost = ($data['posts'] > $data['book_posts']) ? '/<span style="color:#00cc00">+'.($data['posts'] - $data['book_posts']).'</span>' : ''; ?>
 
-					<b><a href="/topic/<?=$data['topics_id']?>"><?=$data['topics_title']?></a></b> (<?=$data['topics_posts']?><?=$newpost?>)
+					<b><a href="/topic/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=$data['posts']?><?=$newpost?>)
 				</div>
 
 				<div>
 					Страницы:
-					<?php forum_navigation('/topic/'.$data['topics_id'].'?', $config['forumpost'], $data['topics_posts']); ?>
-					Автор: <?=nickname($data['topics_author'])?> / Посл.: <?=nickname($data['topics_last_user'])?> (<?=date_fixed($data['topics_last_time'])?>)
+					<?php forum_navigation('/topic/'.$data['id'].'?', $config['forumpost'], $data['posts']); ?>
+					Автор: <?=nickname($data['author'])?> / Посл.: <?=nickname($data['last_user'])?> (<?=date_fixed($data['last_time'])?>)
 				</div>
 			<?php endforeach; ?>
 

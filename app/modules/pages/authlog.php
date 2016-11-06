@@ -18,29 +18,29 @@ if (is_user()) {
     ############################################################################################
     ##                                   История авторизаций                                  ##
     ############################################################################################
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `login_user`=?;", array($log));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", array($log));
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `login_user`=? ORDER BY `login_time` DESC LIMIT ".$start.", ".$config['loginauthlist'].";", array($log));
+        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loginauthlist'].";", array($log));
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';
 
-            if (empty($data['login_type'])) {
+            if (empty($data['type'])) {
                 echo '<b>Автовход</b>';
             } else {
                 echo '<b>Авторизация</b>';
             }
-            echo ' <small>('.date_fixed($data['login_time']).')</small>';
+            echo ' <small>('.date_fixed($data['time']).')</small>';
 
             echo '</div>';
 
             echo '<div><span class="data">';
-            echo 'Browser '.$data['login_brow'].' / ';
-            echo 'IP '.$data['login_ip'];
+            echo 'Browser '.$data['brow'].' / ';
+            echo 'IP '.$data['ip'];
             echo '</span></div>';
         }
 

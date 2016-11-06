@@ -14,12 +14,12 @@ $total = DBM::run()->count('guest');
 
 Выводит количество всех сообщений пользователя Vantuz в гостевой книге
 <pre class="prettyprint linenums">
-$total = DBM::run()->count('guest', array('guest_user' => 'Vantuz'));
+$total = DBM::run()->count('guest', array('user' => 'Vantuz'));
 </pre>
 
 Выводит количество сообщений в гостевой книге за последний час
 <pre class="prettyprint linenums">
-$total = DBM::run()->count('guest', array('guest_time' => array('>', SITETIME - 3600)));
+$total = DBM::run()->count('guest', array('time' => array('>', SITETIME - 3600)));
 </pre>
 
 <h3>select(string $table, array $params = null, int $limit = null, int $start = null, array $order_by = null)</h3>
@@ -27,19 +27,19 @@ $total = DBM::run()->count('guest', array('guest_time' => array('>', SITETIME - 
 
 Принимает имя таблицы, массив параметров, количество возвращаемых элементов, смещение и сортировка<br />
 
-Получает 10 записей из гостевой книги со смещением 50 записей отсортированных по guest_time по убыванию
+Получает 10 записей из гостевой книги со смещением 50 записей отсортированных по time по убыванию
 <pre class="prettyprint linenums">
-$posts = DBM::run()->select('guest', null, 10, 50, array('guest_time'=>'DESC'));
+$posts = DBM::run()->select('guest', null, 10, 50, array('time'=>'DESC'));
 </pre>
 
-Получает все записи из гостевой книги отсортированных по guest_time по убыванию
+Получает все записи из гостевой книги отсортированных по time по убыванию
 <pre class="prettyprint linenums">
-$posts = DBM::run()->select('guest', null, null, null, array('guest_time'=>'ASC'));
+$posts = DBM::run()->select('guest', null, null, null, array('time'=>'ASC'));
 </pre>
 
 Получает все записи пользователя Vantuz из гостевой книги за последний час
 <pre class="prettyprint linenums">
-$posts = DBM::run()->select('guest', array('guest_user' => 'Vantuz', 'guest_time' => array('>', SITETIME - 3600)));
+$posts = DBM::run()->select('guest', array('user' => 'Vantuz', 'time' => array('>', SITETIME - 3600)));
 </pre>
 
 Просто получает все записи из гостевой книги
@@ -60,12 +60,12 @@ select($table, $params, 1, null, $order_by)
 
 Удаляет запись из гостевой книги с ID = 55
 <pre class="prettyprint linenums">
-$delete = DBM::run()->delete('guest', array('guest_id' => 55));
+$delete = DBM::run()->delete('guest', array('id' => 55));
 </pre>
 
 Удаляет записи из гостевой книги старее чем 1 месяц (3600 (секунды в часе) * 24 часа * 30 дней)
 <pre class="prettyprint linenums">
-$delete = DBM::run()->delete('guest', array('guest_time' => array('<', SITETIME - 3600 * 24 * 30)));
+$delete = DBM::run()->delete('guest', array('time' => array('<', SITETIME - 3600 * 24 * 30)));
 </pre>
 
 <h3>update(string $table, array $params, array $wheres = array(), boolean $timestamp_this = false)</h3>
@@ -76,9 +76,9 @@ $delete = DBM::run()->delete('guest', array('guest_time' => array('<', SITETIME 
 Обновляет текст записи в гостевой книге с ID под номером 5
 <pre class="prettyprint linenums">
 $update = DBM::run()->update('guestbook', array(
-	'guest_text' => 'Новый текст',
+	'text' => 'Новый текст',
 ), array(
-	'guest_id' => 5
+	'id' => 5
 ));
 </pre>
 
@@ -101,11 +101,11 @@ $user = DBM::run()->update('users', array(
 Добавление записи в гостевую книгу
 <pre class="prettyprint linenums">
 $guest = DBM::run()->insert('guest', array(
-	'guest_user' => $log,
-	'guest_text' => $msg,
-	'guest_ip'   => $ip,
-	'guest_brow' => $brow,
-	'guest_time' => SITETIME,
+	'user' => $log,
+	'text' => $msg,
+	'ip'   => $ip,
+	'brow' => $brow,
+	'time' => SITETIME,
 ));
 </pre>
 
@@ -115,7 +115,7 @@ $guest = DBM::run()->insert('guest', array(
 
 <pre class="prettyprint linenums">
 DBM::run()->insertMultiple('guest', array(
-		'guest_user', 'guest_text', 'guest_ip', 'guest_brow', 'guest_time'
+		'user', 'text', 'ip', 'brow', 'time'
 	),
 	array(
 		array('Vantuz', 'Сообщение первое', '123.222.111.33', 'Opera', SITETIME),
@@ -129,7 +129,7 @@ DBM::run()->insertMultiple('guest', array(
 Возвращает количество затронутых элементов или Exception
 
 <pre class="prettyprint linenums">
-DBM::run()->execute("DELETE FROM `guest` WHERE `guest_id`=:id;", array('id' => 5));
+DBM::run()->execute("DELETE FROM `guest` WHERE `id`=:id;", array('id' => 5));
 </pre>
 
 <h3>query(string $query, array $params = array())</h3>
@@ -137,7 +137,7 @@ DBM::run()->execute("DELETE FROM `guest` WHERE `guest_id`=:id;", array('id' => 5
 Возвращает набор данных в виде массива подходящий по запросу или Exception
 
 <pre class="prettyprint linenums">
-$posts = DBM::run()->query("SELECT * FROM guest WHERE guest_user = :user LIMIT :limit;",
+$posts = DBM::run()->query("SELECT * FROM guest WHERE user = :user LIMIT :limit;",
 	array(
 		'user'  => 'Vantuz',
 		'limit' => 10,
@@ -151,7 +151,7 @@ $posts = DBM::run()->query("SELECT * FROM guest WHERE guest_user = :user LIMIT :
 Возвращает первый элемент массива найденных данных или Exception
 
 <pre class="prettyprint linenums">
-$post_id = DBM::run()->queryFirst("SELECT `guest_id` FROM `guest` WHERE `guest_user`=:user AND `guest_id`<>:id LIMIT 1;", compact('user', 'id'));
+$post_id = DBM::run()->queryFirst("SELECT `id` FROM `guest` WHERE `user`=:user AND `id`<>:id LIMIT 1;", compact('user', 'id'));
 </pre>
 
 <br />

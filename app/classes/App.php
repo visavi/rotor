@@ -420,11 +420,11 @@ class App
 
                     DB::run()->query("UPDATE `users` SET `users_visits`=`users_visits`+1, `users_timelastlogin`=? WHERE `users_login`=?", [SITETIME, $user['users_login']]);
 
-                    $authorization = DB::run()->querySingle("SELECT `login_id` FROM `login` WHERE `login_user`=? AND `login_time`>? LIMIT 1;", [$user['users_login'], SITETIME - 30]);
+                    $authorization = DB::run()->querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$user['users_login'], SITETIME - 30]);
 
                     if (empty($authorization)) {
-                        DB::run()->query("INSERT INTO `login` (`login_user`, `login_ip`, `login_brow`, `login_time`, `login_type`) VALUES (?, ?, ?, ?, ?);", [$user['users_login'], App::getClientIp(), App::getUserAgent(), SITETIME, 1]);
-                        DB::run()->query("DELETE FROM `login` WHERE `login_user`=? AND `login_time` < (SELECT MIN(`login_time`) FROM (SELECT `login_time` FROM `login` WHERE `login_user`=? ORDER BY `login_time` DESC LIMIT 50) AS del);", [$user['users_login'], $user['users_login']]);
+                        DB::run()->query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`, `type`) VALUES (?, ?, ?, ?, ?);", [$user['users_login'], App::getClientIp(), App::getUserAgent(), SITETIME, 1]);
+                        DB::run()->query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$user['users_login'], $user['users_login']]);
                     }
 
                     return $user;

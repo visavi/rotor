@@ -11,7 +11,7 @@ if (!empty($key)){
     $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `users_apikey`=? LIMIT 1;", array($key));
     if (!empty($user)){
 
-        $query = DB::run() -> query("SELECT * FROM `inbox` WHERE `inbox_user`=? ORDER BY `inbox_time` DESC LIMIT ".$count.";", array($user['users_login']));
+        $query = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$count.";", array($user['users_login']));
         $inbox = $query -> fetchAll();
         $total = count($inbox);
 
@@ -20,12 +20,12 @@ if (!empty($key)){
             $messages = array();
             foreach ($inbox as $data) {
 
-                $data['inbox_text'] = bb_code(str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $data['inbox_text']));
+                $data['text'] = bb_code(str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $data['text']));
 
                 $messages[] = array(
-                    'author' => $data['inbox_author'],
-                    'text'   => $data['inbox_text'],
-                    'time'   => $data['inbox_time'],
+                    'author' => $data['author'],
+                    'text'   => $data['text'],
+                    'time'   => $data['time'],
                 );
             }
 

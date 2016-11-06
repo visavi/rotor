@@ -15,15 +15,15 @@ if (is_user()) {
         ##                                    Главная страница                                    ##
         ############################################################################################
         case "index":
-            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `note_user`=? LIMIT 1;", array($log));
+            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", array($log));
 
             echo 'Здесь вы можете хранить отрывки сообщений или любую другую важную информацию<br /><br />';
 
-            if (!empty($note['note_text'])) {
+            if (!empty($note['text'])) {
                 echo '<div>Личная запись:<br />';
-                echo bb_code($note['note_text']).'</div><br />';
+                echo bb_code($note['text']).'</div><br />';
 
-                echo 'Последнее изменение: '.date_fixed($note['note_time']).'<br /><br />';
+                echo 'Последнее изменение: '.date_fixed($note['time']).'<br /><br />';
             } else {
                 show_error('Запись пустая или отсутствует!');
             }
@@ -36,11 +36,11 @@ if (is_user()) {
         ############################################################################################
         case "edit":
 
-            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `note_user`=? LIMIT 1;", array($log));
+            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", array($log));
 
             echo '<div class="form">';
             echo '<form action="/notebook?act=change&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$note['note_text'].'</textarea><br />';
+            echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$note['text'].'</textarea><br />';
             echo '<input type="submit" value="Сохранить" /></form></div><br />';
 
             echo '* Доступ к личной записи не имеет никто кроме вас<br /><br />';
@@ -59,11 +59,11 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) < 10000) {
 
-                    $querynote = DB::run() -> querySingle("SELECT `note_id` FROM `notebook` WHERE `note_user`=? LIMIT 1;", array($log));
+                    $querynote = DB::run() -> querySingle("SELECT `id` FROM `notebook` WHERE `user`=? LIMIT 1;", array($log));
                     if (!empty($querynote)) {
-                        DB::run() -> query("UPDATE `notebook` SET `note_text`=?, `note_time`=? WHERE `note_user`=?", array($msg, SITETIME, $log));
+                        DB::run() -> query("UPDATE `notebook` SET `text`=?, `time`=? WHERE `user`=?", array($msg, SITETIME, $log));
                     } else {
-                        DB::run() -> query("INSERT INTO `notebook` (`note_user`, `note_text`, `note_time`) VALUES (?, ?, ?);", array($log, $msg, SITETIME));
+                        DB::run() -> query("INSERT INTO `notebook` (`user`, `text`, `time`) VALUES (?, ?, ?);", array($log, $msg, SITETIME));
                     }
 
                     notice('Запись успешно сохранена!');
