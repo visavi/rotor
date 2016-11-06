@@ -44,13 +44,13 @@ if (is_user()) {
                         if ($handle) {
 
                             //-------- Удаляем старую фотку и аватар ----------//
-                            $userpic = DB::run()->querySingle("SELECT users_picture, users_avatar FROM users WHERE users_login=? LIMIT 1;", [$log]);
+                            $userpic = DB::run()->querySingle("SELECT picture, avatar FROM users WHERE login=? LIMIT 1;", [$log]);
 
-                            if (!empty($userpic['users_picture'])){
-                                unlink_image('upload/photos/', $userpic['users_picture']);
-                                unlink_image('upload/avatars/', $userpic['users_avatar']);
+                            if (!empty($userpic['picture'])){
+                                unlink_image('upload/photos/', $userpic['picture']);
+                                unlink_image('upload/avatars/', $userpic['avatar']);
 
-                                DB::run()->query("UPDATE `users` SET `users_picture`=?, `users_avatar`=? WHERE `users_login`=?;", ['', '', $log]);
+                                DB::run()->query("UPDATE `users` SET `picture`=?, `avatar`=? WHERE `login`=?;", ['', '', $log]);
                             }
 
                             //-------- Генерируем аватар ----------//
@@ -71,7 +71,7 @@ if (is_user()) {
 
                             if ($handle->processed) {
 
-                                DB::run()->query("UPDATE `users` SET `users_picture`=?, `users_avatar`=? WHERE `users_login`=?;", [$picture, $avatar, $log]);
+                                DB::run()->query("UPDATE `users` SET `picture`=?, `avatar`=? WHERE `login`=?;", [$picture, $avatar, $log]);
 
                                 $handle->clean();
 
@@ -107,12 +107,12 @@ if (is_user()) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                $userpic = DB::run() -> querySingle("SELECT `users_picture` FROM `users` WHERE `users_login`=? LIMIT 1;", array($log));
+                $userpic = DB::run() -> querySingle("SELECT `picture` FROM `users` WHERE `login`=? LIMIT 1;", array($log));
 
                 if (!empty($userpic)){
 
                     unlink_image('upload/photos/', $userpic);
-                    DB::run() -> query("UPDATE `users` SET `users_picture`=? WHERE `users_login`=?", array('', $log));
+                    DB::run() -> query("UPDATE `users` SET `picture`=? WHERE `login`=?", array('', $log));
 
                     notice('Фотография успешно удалена!');
                     redirect("/profile");

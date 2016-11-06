@@ -8,10 +8,10 @@ $count = (!empty($_REQUEST['count'])) ? abs(intval($_REQUEST['count'])) : 10;
 
 if (!empty($key)){
 
-    $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `users_apikey`=? LIMIT 1;", array($key));
+    $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `apikey`=? LIMIT 1;", array($key));
     if (!empty($user)){
 
-        $query = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$count.";", array($user['users_login']));
+        $query = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$count.";", array($user['login']));
         $inbox = $query -> fetchAll();
         $total = count($inbox);
 

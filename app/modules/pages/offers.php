@@ -509,7 +509,7 @@ switch ($act):
     case 'new':
         echo '<b><big>Добавление</big></b><br /><br />';
 
-        if ($udata['users_point'] >= $config['addofferspoint']) {
+        if ($udata['point'] >= $config['addofferspoint']) {
             echo '<div class="form">';
             echo '<form action="/offers?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -541,7 +541,7 @@ switch ($act):
         $types = (empty($_POST['types'])) ? 0 : 1;
 
         if ($uid == $_SESSION['token']) {
-            if ($udata['users_point'] >= $config['addofferspoint']) {
+            if ($udata['point'] >= $config['addofferspoint']) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                     if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
                         if (is_flood($log)) {

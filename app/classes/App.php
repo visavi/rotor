@@ -32,7 +32,7 @@ class App
      */
     public static function view($template, $params = [], $return = false)
     {
-        $log    = static::user('users_login');
+        $log    = static::user('login');
         $config = Registry::get('config');
 
         $params +=compact('config', 'log');
@@ -404,27 +404,27 @@ class App
 
         if (!empty($login) && !empty($password)) {
 
-            $user = DB::run()->queryFetch("SELECT `users_login`, `users_pass` FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", [$login, $login]);
+            $user = DB::run()->queryFetch("SELECT `login`, `pass` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [$login, $login]);
 
             if (!empty($user)) {
-                if ($password == $user['users_pass']) {
+                if ($password == $user['pass']) {
 
                     if ($remember) {
-                        setcookie('cooklog', $user['users_login'], time() + 3600 * 24 * 365, '/', $domain);
+                        setcookie('cooklog', $user['login'], time() + 3600 * 24 * 365, '/', $domain);
                         setcookie('cookpar', md5($password . Registry::get('config')['keypass']), time() + 3600 * 24 * 365, '/', $domain, null, true);
                     }
 
-                    $_SESSION['log'] = $user['users_login'];
+                    $_SESSION['log'] = $user['login'];
                     $_SESSION['par'] = md5(Registry::get('config')['keypass'] . $password);
                     $_SESSION['my_ip'] = App::getClientIp();
 
-                    DB::run()->query("UPDATE `users` SET `users_visits`=`users_visits`+1, `users_timelastlogin`=? WHERE `users_login`=?", [SITETIME, $user['users_login']]);
+                    DB::run()->query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=?", [SITETIME, $user['login']]);
 
-                    $authorization = DB::run()->querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$user['users_login'], SITETIME - 30]);
+                    $authorization = DB::run()->querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$user['login'], SITETIME - 30]);
 
                     if (empty($authorization)) {
-                        DB::run()->query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`, `type`) VALUES (?, ?, ?, ?, ?);", [$user['users_login'], App::getClientIp(), App::getUserAgent(), SITETIME, 1]);
-                        DB::run()->query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$user['users_login'], $user['users_login']]);
+                        DB::run()->query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`, `type`) VALUES (?, ?, ?, ?, ?);", [$user['login'], App::getClientIp(), App::getUserAgent(), SITETIME, 1]);
+                        DB::run()->query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$user['login'], $user['login']]);
                     }
 
                     return $user;

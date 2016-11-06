@@ -50,19 +50,19 @@ if (is_admin(array(101))) {
 
                         // Рассылка активным пользователям, которые посещали сайт менее недели назад
                         if ($rec==2){
-                            $query = DB::run()->query("SELECT `users_login` FROM `users` WHERE `users_timelastlogin`>?;", array(SITETIME - (86400 * 7)));
+                            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", array(SITETIME - (86400 * 7)));
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
                         // Рассылка администрации
                         if ($rec==3){
-                            $query = DB::run()->query("SELECT `users_login` FROM `users` WHERE `users_level`>=? AND `users_level`<=?;", array(101, 105));
+                            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `level`>=? AND `level`<=?;", array(101, 105));
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
                         // Рассылка всем пользователям сайта
                         if ($rec==4){
-                            $query = DB::run()->query("SELECT `users_login` FROM `users`;");
+                            $query = DB::run()->query("SELECT `login` FROM `users`;");
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
@@ -72,7 +72,7 @@ if (is_admin(array(101))) {
                         // Рассылка сообщений с подготовкой запросов
                         if ($total>0){
 
-                            $updateusers = DB::run() -> prepare("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;");
+                            $updateusers = DB::run() -> prepare("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;");
                             $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);");
 
                             foreach ($arrusers as $uzval){

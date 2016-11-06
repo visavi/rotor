@@ -7,7 +7,7 @@ $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
 
 show_title('Стена сообщений');
 
-$queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+$queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 if (!empty($queryuser)) {
     switch ($act):
     ############################################################################################
@@ -20,9 +20,9 @@ if (!empty($queryuser)) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `wall_user`=?;", array($uz));
 
-            if ($uz == $log && $udata['users_newwall'] > 0) {
-                echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.$udata['users_newwall'].'</span></b></div>';
-                DB::run() -> query("UPDATE `users` SET `users_newwall`=? WHERE `users_login`=?;", array(0, $log));
+            if ($uz == $log && $udata['newwall'] > 0) {
+                echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.$udata['newwall'].'</span></b></div>';
+                DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", array(0, $log));
             }
 
             if ($total > 0) {
@@ -106,7 +106,7 @@ if (!empty($queryuser)) {
                                     $msg = antimat($msg);
 
                                     if ($uz != $log) {
-                                        DB::run() -> query("UPDATE `users` SET `users_newwall`=`users_newwall`+1 WHERE `users_login`=?", array($uz));
+                                        DB::run() -> query("UPDATE `users` SET `newwall`=`newwall`+1 WHERE `login`=?", array($uz));
                                     }
 
                                     DB::run() -> query("INSERT INTO `wall` (`wall_user`, `wall_login`, `wall_text`, `wall_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));

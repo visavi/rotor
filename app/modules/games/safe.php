@@ -15,7 +15,7 @@ switch ($act):
 case 'index':
     echo '<img src="/images/safe/safe-closed.png" alt="сейф"/><br />';
     echo 'Ну что '.nickname($log).', взломаем?<br />';
-    echo 'У тебя '.moneys($udata['users_money']).'<br />';
+    echo 'У тебя '.moneys($udata['money']).'<br />';
 
     $_SESSION['code'] = sprintf('%04d', mt_rand(0,9999));
 
@@ -35,7 +35,7 @@ case 'index':
     У тебя будет только 5 попыток чтобы подобрать код из 4-х цифр.<br />
     Если тебя это устраивает, то ВПЕРЁД!<br />';
 
-    if($udata['users_money']<$config['safeattempt']){
+    if($udata['money']<$config['safeattempt']){
         echo 'У тебя не достаточно денег!';
     }else{
         echo '&#187; <a href="/games/safe?act=vzlom">Лoмaть ceйф</a><br /><br />';
@@ -44,13 +44,13 @@ break;
 
 case 'vzlom':
 
-    if ($udata['users_money'] < $config['safeattempt']) {
+    if ($udata['money'] < $config['safeattempt']) {
             notice('У тебя нет таких денег!');
             redirect('/games/safe');
     }else{
 
         if (empty($_SESSION['go']) || !$_SESSION['try']){
-            DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`-? WHERE `users_login`=? LIMIT 1;", array($config['safeattempt'], $log));
+            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", array($config['safeattempt'], $log));
             $_SESSION['go'] = 'ok';
         }
 
@@ -152,7 +152,7 @@ case 'vzlom1':
             echo '<br />ПОЗДРАВЛЯЮ! СЕЙФ УСПЕШНО ВЗЛОМАН!<br />
             <font color="red">НА ВАШ СЧЁТ ПЕРЕВЕДЕНЫ 1000$</font><br />';
 
-            DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`+? WHERE `users_login`=? LIMIT 1;", array($config['safesum'], $log));
+            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", array($config['safesum'], $log));
             unset($_SESSION['go'], $_SESSION['try']);
 
             echo'&raquo; <a href="/games/safe">Ещё взломать?</a><br /><br />';

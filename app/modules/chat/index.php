@@ -195,7 +195,7 @@ if ($act == 'add') {
                     delete_lines(STORAGE."/chat/chat.dat", array(0, 1, 2, 3, 4));
                 }
 
-                DB::run() -> query("UPDATE `users` SET `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+                DB::run() -> query("UPDATE `users` SET `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array($log));
 
                 // --------------------------------------------------------------------------//
                 if ($config['botnik'] == 1) {

@@ -61,7 +61,7 @@ case 'index':
 case 'create':
 
     if (is_user()) {
-        if ($udata['users_point'] >= 50) {
+        if ($udata['point'] >= 50) {
 
             if (Request::isMethod('post')) {
                 $uid = !empty($_GET['uid']) ? check($_GET['uid']) : 0;
@@ -74,7 +74,7 @@ case 'create':
                 $validation = new Validation();
 
                 $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-                    -> addRule('max', array($udata['users_point'], 50), 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
+                    -> addRule('max', array($udata['point'], 50), 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
                     -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
                     -> addRule('regex', array($site, '|^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'), 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)
                     -> addRule('string', $site, 'Слишком длинный или короткий адрес ссылки!', true, 5, 50)
@@ -102,7 +102,7 @@ case 'create':
                                 $price = $price + $config['rekuseroptprice'];
                             }
 
-                            if ($udata['users_money'] >= $price) {
+                            if ($udata['money'] >= $price) {
 
                                 $rek = DBM::run()->insert('rekuser', array(
                                     'rek_site'  => $site,
@@ -114,9 +114,9 @@ case 'create':
                                 ));
 
                                 $user = DBM::run()->update('users', array(
-                                    'users_money' => array('-', $price),
+                                    'money' => array('-', $price),
                                 ), array(
-                                    'users_login' => $log
+                                    'login' => $log
                                 ));
 
                                 save_advertuser();
@@ -146,7 +146,7 @@ case 'create':
                 $rekuser = DBM::run()->selectFirst('rekuser', array('rek_user' => $log, 'rek_time' => array('>', SITETIME)));
 
                 if (empty($rekuser)) {
-                    echo 'У вас в наличии: <b>'.moneys($udata['users_money']).'</b><br /><br />';
+                    echo 'У вас в наличии: <b>'.moneys($udata['money']).'</b><br /><br />';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/reklama/create">';

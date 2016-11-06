@@ -508,7 +508,7 @@ case 'add':
                             DB::run() -> query("DELETE FROM `commload` WHERE `down`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", array($id, $id));
 
                             DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
-                            DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array($log));
 
                             notice('Сообщение успешно добавлено!');
                             redirect("/load/down?act=end&id=$id");

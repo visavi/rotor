@@ -26,35 +26,35 @@ case 'index':
     echo '<option value="0">Автоматически</option>';
     $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
     foreach ($globthemes as $themes) {
-        $selected = ($udata['users_themes'] == basename($themes)) ? ' selected="selected"' : '';
+        $selected = ($udata['themes'] == basename($themes)) ? ' selected="selected"' : '';
         echo '<option value="'.basename($themes).'"'.$selected.'>'.basename($themes).'</option>';
     }
     echo '</select><br />';
 
-    echo 'Сообщений в гостевой:<br /><input name="postguest" value="'.$udata['users_postguest'].'" /><br />';
-    echo 'Новостей на стр.:<br /><input name="postnews" value="'.$udata['users_postnews'].'" /><br />';
-    echo 'Писем в привате на стр.:<br /><input name="postprivat" value="'.$udata['users_postprivat'].'" /><br />';
-    echo 'Сообщений в форуме:<br /><input name="postforum" value="'.$udata['users_postforum'].'" /><br />';
-    echo 'Тем в форуме:<br /><input name="themesforum" value="'.$udata['users_themesforum'].'" /><br />';
-    echo 'Объявлений на стр.:<br /><input name="postboard" value="'.$udata['users_postboard'].'" /><br />';
+    echo 'Сообщений в гостевой:<br /><input name="postguest" value="'.$udata['postguest'].'" /><br />';
+    echo 'Новостей на стр.:<br /><input name="postnews" value="'.$udata['postnews'].'" /><br />';
+    echo 'Писем в привате на стр.:<br /><input name="postprivat" value="'.$udata['postprivat'].'" /><br />';
+    echo 'Сообщений в форуме:<br /><input name="postforum" value="'.$udata['postforum'].'" /><br />';
+    echo 'Тем в форуме:<br /><input name="themesforum" value="'.$udata['themesforum'].'" /><br />';
+    echo 'Объявлений на стр.:<br /><input name="postboard" value="'.$udata['postboard'].'" /><br />';
 
     $arrtimezone = range(-12, 12);
 
     echo 'Временной сдвиг:<br />';
     echo '<select name="timezone">';
     foreach($arrtimezone as $zone) {
-        $selected = ($udata['users_timezone'] == $zone) ? ' selected="selected"' : '';
+        $selected = ($udata['timezone'] == $zone) ? ' selected="selected"' : '';
         echo '<option value="'.$zone.'"'.$selected.'>'.$zone.'</option>';
     }
     echo '</select> - '.date_fixed(SITETIME, 'H:i').'<br />';
 
-    $checked = ($udata['users_ipbinding'] == 1) ? ' checked="checked"' : '';
+    $checked = ($udata['ipbinding'] == 1) ? ' checked="checked"' : '';
     echo '<input name="ipbinding" id="ipbinding" type="checkbox" value="1"'.$checked.' title="IP привязывается к сессии, улучшается надежность" /> <label for="ipbinding">Привязка к IP</label><br />';
 
-    $checked = ($udata['users_privacy'] == 1) ? ' checked="checked"' : '';
+    $checked = ($udata['privacy'] == 1) ? ' checked="checked"' : '';
     echo '<input name="privacy" id="privacy" type="checkbox" value="1"'.$checked.' title="Писать в приват и на стену смогут только пользователи из контактов" /> <label for="privacy">Режим приватности</label><br />';
 
-    $checked = (! empty($udata['users_subscribe'])) ? ' checked="checked"' : '';
+    $checked = (! empty($udata['subscribe'])) ? ' checked="checked"' : '';
     echo '<input name="subscribe" id="subscribe" type="checkbox" value="1"'.$checked.' title="Получение уведомлений с сайта на email" /> <label for="subscribe">Получать информационные письма</label><br />';
 
     echo '<input value="Изменить" type="submit" /></form></div><br />';
@@ -96,19 +96,19 @@ case 'edit':
         if (file_exists(HOME."/themes/$themes/index.php") || $themes==0) {
 
             $user = DBM::run()->update('users', array(
-                'users_themes'      => $themes,
-                'users_postguest'   => $postguest,
-                'users_postnews'    => $postnews,
-                'users_postprivat'  => $postprivat,
-                'users_postforum'   => $postforum,
-                'users_themesforum' => $themesforum,
-                'users_postboard'   => $postboard,
-                'users_timezone'    => $timezone,
-                'users_ipbinding'   => $ipbinding,
-                'users_privacy'     => $privacy,
-                'users_subscribe'   => $subscribe,
+                'themes'      => $themes,
+                'postguest'   => $postguest,
+                'postnews'    => $postnews,
+                'postprivat'  => $postprivat,
+                'postforum'   => $postforum,
+                'themesforum' => $themesforum,
+                'postboard'   => $postboard,
+                'timezone'    => $timezone,
+                'ipbinding'   => $ipbinding,
+                'privacy'     => $privacy,
+                'subscribe'   => $subscribe,
             ), array(
-                'users_login' => $log
+                'login' => $log
             ));
 
             notice('Настройки успешно изменены!');

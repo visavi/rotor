@@ -29,7 +29,7 @@ if (is_user()) {
             echo '<input type="submit" value="Угадать" />';
             echo '</form></div><br />';
 
-            echo 'У вас в наличии: '.moneys($udata['users_money']).'<br /><br />';
+            echo 'У вас в наличии: '.moneys($udata['money']).'<br /><br />';
 
             echo '<i class="fa fa-question-circle"></i> <a href="/games/hi?act=faq">Правила</a><br />';
         break;
@@ -41,7 +41,7 @@ if (is_user()) {
 
             $guess = abs(intval($_POST['guess']));
 
-            if ($udata['users_money'] >= $config['hisumma']) {
+            if ($udata['money'] >= $config['hisumma']) {
                 if ($guess >= 1 && $guess <= 100) {
                     $_SESSION['hi_count']++;
 
@@ -65,13 +65,13 @@ if (is_user()) {
                             echo '<input type="submit" value="Угадать" />';
                             echo '</form></div><br />';
 
-                            DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`- ".$config['hisumma']." WHERE `users_login`=? LIMIT 1;", array($log));
+                            DB::run() -> query("UPDATE `users` SET `money`=`money`- ".$config['hisumma']." WHERE `login`=? LIMIT 1;", array($log));
 
                             $count_pop = $config['hipopytka'] - $_SESSION['hi_count'];
 
                             echo 'Осталось попыток: <b>'.(int)$count_pop.'</b><br />';
 
-                            $allmoney = DB::run() -> querySingle("SELECT `users_money` FROM `users` WHERE `users_login`=? LIMIT 1;", array($log));
+                            $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", array($log));
 
                             echo 'У вас в наличии: '.moneys($allmoney).'<br /><br />';
                         } else {
@@ -82,7 +82,7 @@ if (is_user()) {
                             unset($_SESSION['hi_count']);
                         }
                     } else {
-                        DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`+? WHERE `users_login`=? LIMIT 1;", array($config['hiprize'], $log));
+                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", array($config['hiprize'], $log));
 
                         echo '<b>Поздравляем!!! Вы угадали число '.(int)$guess.'</b><br />';
                         echo 'Ваш выигрыш составил '.moneys($config['hiprize']).'<br /><br />';

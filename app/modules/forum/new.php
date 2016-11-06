@@ -43,7 +43,7 @@ case 'posts':
 		$start = last_page($total, $config['forumpost']);
 	}
 
-	$querypost = DB::run() -> query("SELECT `posts`.*, `title`, `posts` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`id` ORDER BY `posts_time` DESC LIMIT ".$start.", ".$config['forumpost'].";");
+	$querypost = DB::run() -> query("SELECT `posts`.*, `title`, `posts` FROM `posts` LEFT JOIN `topics` ON `posts`.`topics_id`=`topics`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['forumpost'].";");
 	$posts = $querypost->fetchAll();
 
 	App::view('forum/new_posts', compact('posts', 'start', 'total'));

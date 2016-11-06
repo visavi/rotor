@@ -24,9 +24,9 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            echo 'В наличии: '.moneys($udata['users_money']).'<br /><br />';
+            echo 'В наличии: '.moneys($udata['money']).'<br /><br />';
 
-            if ($udata['users_point'] >= $config['sendmoneypoint']) {
+            if ($udata['point'] >= $config['sendmoneypoint']) {
                 if (empty($uz)) {
                     echo '<div class="form">';
                     echo '<form action="/transfer?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -63,16 +63,16 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($money > 0) {
-                    if ($udata['users_point'] >= $config['sendmoneypoint']) {
-                        if ($money <= $udata['users_money']) {
+                    if ($udata['point'] >= $config['sendmoneypoint']) {
+                        if ($money <= $udata['money']) {
                             if ($uz != $log) {
                                 if ($msg <= 1000) {
-                                    $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                                    $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
                                     if (!empty($queryuser)) {
                                         $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
                                         if (empty($ignorstr)) {
-                                            DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`-? WHERE `users_login`=?;", array($money, $log));
-                                            DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`+?, `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?;", array($money, $uz));
+                                            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?;", array($money, $log));
+                                            DB::run() -> query("UPDATE `users` SET `money`=`money`+?, `newprivat`=`newprivat`+1 WHERE `login`=?;", array($money, $uz));
 
                                             $comment = (!empty($msg)) ? $msg : 'Не указано';
                                             // ------------------------Уведомление по привату------------------------//

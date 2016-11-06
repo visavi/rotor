@@ -18,7 +18,7 @@ if (is_user()) {
 
             echo '<b><a href="/games/kosti?act=go&amp;rand=' . $rand . '">Играть</a></b><br /><br />';
 
-            echo 'У вас в наличии: ' . moneys($udata['users_money']) . '<br /><br />';
+            echo 'У вас в наличии: ' . moneys($udata['money']) . '<br /><br />';
 
             echo '<i class="fa fa-question-circle"></i> <a href="/games/kosti?act=faq">Правила</a><br />';
             break;
@@ -27,7 +27,7 @@ if (is_user()) {
         # ###########################################################################################
         case "go":
 
-            if ($udata['users_money'] >= 5) {
+            if ($udata['money'] >= 5) {
                 $num1 = mt_rand(2, 6);
                 $num2 = mt_rand(1, 6);
                 $num3 = mt_rand(1, 6);
@@ -43,13 +43,13 @@ if (is_user()) {
                 $num_user = $num3 + $num4;
                 // ------------------------------ Выигрыш банкира ----------------------------//
                 if ($num_bank > $num_user) {
-                    DB::run()->query("UPDATE users SET users_money=users_money-5 WHERE users_login=?", array($log));
+                    DB::run()->query("UPDATE users SET money=money-5 WHERE login=?", array($log));
 
                     echo '<b>Банкир выиграл!</b>';
                 }
                 // ------------------------------ Выигрыш пользователя ----------------------------//
                 if ($num_bank < $num_user) {
-                    DB::run()->query("UPDATE users SET users_money=users_money+10 WHERE users_login=?", array($log));
+                    DB::run()->query("UPDATE users SET money=money+10 WHERE login=?", array($log));
 
                     echo '<b>Вы выиграли!</b>';
                 }
@@ -61,7 +61,7 @@ if (is_user()) {
                 echo '<br /><br />';
                 echo '<b><a href="/games/kosti?act=go&amp;rand=' . $rand . '">Играть</a></b><br /><br />';
 
-                $allmoney = DB::run()->querySingle("SELECT users_money FROM users WHERE users_login=?;", array($log));
+                $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", array($log));
 
                 echo 'У вас в наличии: ' . moneys($allmoney) . '<br /><br />';
             } else {

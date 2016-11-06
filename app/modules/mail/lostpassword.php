@@ -36,15 +36,15 @@ case 'remind':
 
     if (!empty($uz)) {
 
-        $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`users_login`)=? OR `users_email`=? OR LOWER(`users_nickname`)=? LIMIT 1;", array($uz, $uz, $uz));
+        $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR `email`=? OR LOWER(`nickname`)=? LIMIT 1;", array($uz, $uz, $uz));
 
         if (!empty($user)) {
 
-            $email = ($uz == $user['users_email']) ? $user['users_email'] : '';
+            $email = ($uz == $user['email']) ? $user['email'] : '';
 
-            echo '<div class="b">'.user_gender($user['users_login']).' <b>'.profile($user['users_login']).'</b> '.user_visit($user['users_login']).'</div>';
+            echo '<div class="b">'.user_gender($user['login']).' <b>'.profile($user['login']).'</b> '.user_visit($user['login']).'</div>';
 
-            if (!empty($user['users_email'])) {
+            if (!empty($user['email'])) {
                 echo '<b><big>Восстановление на e-mail:</big></b><br />';
                 echo '<div class="form">';
                 echo '<form method="post" action="/lostpassword?act=send">';
@@ -53,26 +53,26 @@ case 'remind':
                 echo 'Проверочный код:<br /> ';
                 echo '<img src="/captcha" alt="" /><br />';
                 echo '<input name="provkod" size="6" maxlength="6" /><br />';
-                echo '<input name="uz" type="hidden" value="'.$user['users_login'].'" />';
+                echo '<input name="uz" type="hidden" value="'.$user['login'].'" />';
                 echo '<br /><input value="Восстановить" type="submit" /></form></div><br />';
             }
             // --------------------------------------------------------------//
-            if (!empty($user['users_secquest'])) {
+            if (!empty($user['secquest'])) {
                 echo '<b><big>Ответ на секретный вопрос:</big></b><br />';
                 echo '<div class="form">';
                 echo '<form method="post" action="/lostpassword?act=answer">';
 
-                echo $user['users_secquest'].'<br />';
+                echo $user['secquest'].'<br />';
                 echo '<input name="answer" type="text" maxlength="30" /><br />';
 
                 echo 'Проверочный код:<br /> ';
                 echo '<img src="/captcha" alt="" /><br />';
                 echo '<input name="provkod" size="6" maxlength="6" /><br />';
-                echo '<input name="uz" type="hidden" value="'.$user['users_login'].'" />';
+                echo '<input name="uz" type="hidden" value="'.$user['login'].'" />';
                 echo '<br /><input value="Восстановить" type="submit" /></form></div><br />';
             }
 
-            if (empty($user['users_email']) && empty($user['users_secquest'])) {
+            if (empty($user['email']) && empty($user['secquest'])) {
                 echo '<i class="fa fa-times"></i> <b>Невозможно восстановить пароль!</b><br />';
                 echo 'Нет технической возможности восстановить пароль, так как у данного пользователя не указан адрес почтового ящика и не установлен секретный вопрос<br />';
                 echo 'Для того чтобы вернуть доступ к своему аккаунту необходимо связаться с администрацией сайта<br /><br />';
@@ -96,26 +96,26 @@ case 'send':
     $email = check(strval($_POST['email']));
     $provkod = check($_POST['provkod']);
 
-    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
     if (! empty($user)) {
 
         $validation = new Validation();
 
         $validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
             -> addRule('not_empty', $email, 'Не введен адрес почтового ящика для восстановления!')
-            -> addRule('not_empty', $user['users_email'], 'У данного пользователя не установлен email!')
-            -> addRule('equal', array($email, $user['users_email']), 'Введенный адрес email не совпадает с адресом в профиле!')
-            -> addRule('min', array($user['users_timepasswd'], SITETIME), 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
+            -> addRule('not_empty', $user['email'], 'У данного пользователя не установлен email!')
+            -> addRule('equal', array($email, $user['email']), 'Введенный адрес email не совпадает с адресом в профиле!')
+            -> addRule('min', array($user['timepasswd'], SITETIME), 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
 
         if ($validation->run()) {
 
             $restkey = generate_password();
 
-            DB::run() -> query("UPDATE `users` SET `users_keypasswd`=?, `users_timepasswd`=? WHERE `users_login`=?;", array($restkey, SITETIME + 43200, $uz));
+            DB::run() -> query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", array($restkey, SITETIME + 43200, $uz));
             // ---------------- Инструкция по восстановлению пароля на E-mail --------------------------//
-            sendMail($user['users_email'],
+            sendMail($user['email'],
                 'Подтверждение восстановления пароля на сайте '.$config['title'],
-                nl2br("Здравствуйте, ".nickname($user['users_login'])." \nВами была произведена операция по восстановлению пароля на сайте ".$config['home']." \n\nДанные отправителя: \nIp: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nОтправлено: ".date('j.m.Y / H:i', SITETIME)."\n\nДля того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n".$config['home']."/lostpassword?act=restore&uz=".$user['users_login']."&key=".$restkey." \n\nЕсли это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его")
+                nl2br("Здравствуйте, ".nickname($user['login'])." \nВами была произведена операция по восстановлению пароля на сайте ".$config['home']." \n\nДанные отправителя: \nIp: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nОтправлено: ".date('j.m.Y / H:i', SITETIME)."\n\nДля того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n".$config['home']."/lostpassword?act=restore&uz=".$user['login']."&key=".$restkey." \n\nЕсли это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его")
             );
 
             echo '<i class="fa fa-check"></i> <b>Восстановление пароля инициализировано!</b><br /><br />';
@@ -141,27 +141,27 @@ case 'restore':
     $uz = isset($_GET['uz']) ? check($_GET['uz']) : '';
     $key = isset($_GET['key']) ? check($_GET['key']) : '';
 
-    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
     if (!empty($user)) {
 
         $validation = new Validation();
 
         $validation -> addRule('not_empty', $key, 'Отсутствует секретный код в ссылке для восстановления пароля!')
-            -> addRule('not_empty', $user['users_keypasswd'], 'Данный пользователь не запрашивал восстановление пароля!')
-            -> addRule('equal', array($key, $user['users_keypasswd']), 'Секретный код в ссылке не совпадает с данными в профиле!')
-            -> addRule('max', array($user['users_timepasswd'], SITETIME), 'Секретный ключ для восстановления уже устарел!');
+            -> addRule('not_empty', $user['keypasswd'], 'Данный пользователь не запрашивал восстановление пароля!')
+            -> addRule('equal', array($key, $user['keypasswd']), 'Секретный код в ссылке не совпадает с данными в профиле!')
+            -> addRule('max', array($user['timepasswd'], SITETIME), 'Секретный ключ для восстановления уже устарел!');
 
         if ($validation->run()) {
 
             $newpass = generate_password();
             $mdnewpas = md5(md5($newpass));
 
-            DB::run() -> query("UPDATE `users` SET `users_pass`=?, `users_keypasswd`=?, `users_timepasswd`=? WHERE `users_login`=?;", array($mdnewpas, '', 0, $uz));
+            DB::run() -> query("UPDATE `users` SET `pass`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", array($mdnewpas, '', 0, $uz));
 
             echo '<b>Пароль успешно восстановлен!</b><br />';
             echo 'Ваши новые данные для входа на сайт<br /><br />';
 
-            echo 'Логин: <b>'.$user['users_login'].'</b><br />';
+            echo 'Логин: <b>'.$user['login'].'</b><br />';
             echo 'Пароль: <b>'.$newpass.'</b><br /><br />';
 
             echo 'Запомните и постарайтесь больше не забывать данные<br /><br />';
@@ -169,9 +169,9 @@ case 'restore':
             echo 'Пароль вы сможете поменять в своем профиле<br /><br />';
 
             // --------------------------- Восстановлению пароля на E-mail --------------------------//
-            sendMail($user['users_email'],
+            sendMail($user['email'],
                 'Восстановление пароля на сайте '.$config['title'],
-                nl2br("Здравствуйте, ".nickname($user['users_login'])." \nВаши новые данные для входа на на сайт ".$config['home']." \nЛогин: ".$user['users_login']." \nПароль: ".$newpass." \n\nЗапомните и постарайтесь больше не забывать данные \nПароль вы сможете поменять в своем профиле \nВсего наилучшего!")
+                nl2br("Здравствуйте, ".nickname($user['login'])." \nВаши новые данные для входа на на сайт ".$config['home']." \nЛогин: ".$user['login']." \nПароль: ".$newpass." \n\nЗапомните и постарайтесь больше не забывать данные \nПароль вы сможете поменять в своем профиле \nВсего наилучшего!")
             );
 
         } else {
@@ -192,27 +192,27 @@ case 'answer':
     $answer = check(strval($_POST['answer']));
     $provkod = check($_POST['provkod']);
 
-    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
     if (!empty($user)) {
 
         $validation = new Validation();
 
         $validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
             -> addRule('not_empty', $answer, 'Не введен ответ на секретный вопрос для восстановления!')
-            -> addRule('not_empty', $user['users_secquest'], 'У данного пользователя не установлен секретный вопрос!')
-            -> addRule('equal', array(md5(md5($answer)), $user['users_secanswer']), 'Ответ на секретный вопрос не совпадает с данными в профиле!');
+            -> addRule('not_empty', $user['secquest'], 'У данного пользователя не установлен секретный вопрос!')
+            -> addRule('equal', array(md5(md5($answer)), $user['secanswer']), 'Ответ на секретный вопрос не совпадает с данными в профиле!');
 
         if ($validation->run()) {
 
             $newpass = generate_password();
             $mdnewpas = md5(md5($newpass));
 
-            DB::run() -> query("UPDATE `users` SET `users_pass`=?, `users_keypasswd`=?, `users_timepasswd`=? WHERE `users_login`=?;", array($mdnewpas, '', 0, $uz));
+            DB::run() -> query("UPDATE `users` SET `pass`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", array($mdnewpas, '', 0, $uz));
 
             echo '<b>Пароль успешно восстановлен!</b><br />';
             echo 'Ваши новые данные для входа на сайт<br /><br />';
 
-            echo 'Логин: <b>'.$user['users_login'].'</b><br />';
+            echo 'Логин: <b>'.$user['login'].'</b><br />';
             echo 'Пароль: <b>'.$newpass.'</b><br /><br />';
 
             echo 'Запомните и постарайтесь больше не забывать данные<br /><br />';

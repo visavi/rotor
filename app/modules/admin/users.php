@@ -49,16 +49,16 @@ if (is_admin(array(101, 102))) {
                     $start = 0;
                 }
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `users_joined` DESC LIMIT ".$start.", ".$config['userlist'].";");
+                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$start.", ".$config['userlist'].";");
 
                 while ($data = $queryusers -> fetch()) {
-                    if (empty($data['users_email'])) {
-                        $data['users_email'] = 'Не указан';
+                    if (empty($data['email'])) {
+                        $data['email'] = 'Не указан';
                     }
 
-                    echo '<hr /><div>'.user_gender($data['users_login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['users_login'].'">'.$data['users_login'].'</a></b> (E-mail: '.$data['users_email'].')<br />';
+                    echo '<hr /><div>'.user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (E-mail: '.$data['email'].')<br />';
 
-                    echo 'Зарегистрирован: '.date_fixed($data['users_joined']).'</div>';
+                    echo 'Зарегистрирован: '.date_fixed($data['joined']).'</div>';
                 }
 
                 page_strnavigation('/admin/users?', $config['userlist'], $start, $total);
@@ -87,24 +87,24 @@ if (is_admin(array(101, 102))) {
                     $search = "LIKE '$q%'";
                 }
 
-                $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE LOWER(`users_login`) ".$search.";");
+                $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE LOWER(`login`) ".$search.";");
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $queryuser = DB::run() -> query("SELECT `users_login`, `users_nickname`, `users_point` FROM `users` WHERE LOWER(`users_login`) ".$search." ORDER BY `users_point` DESC LIMIT ".$start.", ".$config['usersearch'].";");
+                    $queryuser = DB::run() -> query("SELECT `login`, `nickname`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$start.", ".$config['usersearch'].";");
 
                     while ($data = $queryuser -> fetch()) {
 
-                        echo user_gender($data['users_login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['users_login'].'">'.$data['users_login'].'</a></b> ';
+                        echo user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> ';
 
-                        if (!empty($data['users_nickname'])) {
-                            echo '(Ник: '.$data['users_nickname'].') ';
+                        if (!empty($data['nickname'])) {
+                            echo '(Ник: '.$data['nickname'].') ';
                         }
 
-                        echo user_online($data['users_login']).' ('.points($data['users_point']).')<br />';
+                        echo user_online($data['login']).' ('.points($data['point']).')<br />';
                     }
 
                     page_strnavigation('/admin/users?act=sort&amp;q='.$q.'&amp;', $config['usersearch'], $start, $total);
@@ -125,20 +125,20 @@ if (is_admin(array(101, 102))) {
         ############################################################################################
         case 'edit':
 
-            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
+            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
 
             if (!empty($user)) {
-                $uz = $user['users_login'];
+                $uz = $user['login'];
 
-                echo user_gender($user['users_login']).' <b>Профиль '.profile($user['users_login']).'</b> '.user_visit($user['users_login']).'<br /><br />';
+                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br /><br />';
 
-                if ($log == $config['nickname'] || $log == $user['users_login'] || ($user['users_level'] < 101 || $user['users_level'] > 105)) {
-                    if ($user['users_login'] == $log) {
+                if ($log == $config['nickname'] || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                    if ($user['login'] == $log) {
                         echo '<b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br /><br />';
                     }
 
                     echo '<div class="form">';
-                    echo '<form method="post" action="/admin/users?act=upgrade&amp;uz='.$user['users_login'].'&amp;uid='.$_SESSION['token'].'">';
+                    echo '<form method="post" action="/admin/users?act=upgrade&amp;uz='.$user['login'].'&amp;uid='.$_SESSION['token'].'">';
 
                     if ($log == $config['nickname']) {
                         $arr_access = array(101, 102, 103, 105, 107);
@@ -146,7 +146,7 @@ if (is_admin(array(101, 102))) {
                         echo 'Уровень доступа:<br />';
                         echo '<select name="level">';
                         foreach ($arr_access as $value) {
-                            $selected = ($user['users_level'] == $value) ? ' selected="selected"' : '';
+                            $selected = ($user['level'] == $value) ? ' selected="selected"' : '';
                             echo '<option value="'.$value.'"'.$selected.'>'.user_status($value).'</option>';
                         }
                         echo '</select><br />';
@@ -155,53 +155,53 @@ if (is_admin(array(101, 102))) {
                     echo 'Новый пароль: (Oставьте пустым если не надо менять)<br />';
                     echo '<input type="text" name="pass" maxlength="20" /><br />';
                     echo 'Страна:<br />';
-                    echo '<input type="text" name="country" maxlength="30" value="'.$user['users_country'].'" /><br />';
+                    echo '<input type="text" name="country" maxlength="30" value="'.$user['country'].'" /><br />';
                     echo 'Откуда:<br />';
-                    echo '<input type="text" name="city" maxlength="50" value="'.$user['users_city'].'" /><br />';
+                    echo '<input type="text" name="city" maxlength="50" value="'.$user['city'].'" /><br />';
                     echo 'E-mail:<br />';
-                    echo '<input type="text" name="email" maxlength="50" value="'.$user['users_email'].'" /><br />';
+                    echo '<input type="text" name="email" maxlength="50" value="'.$user['email'].'" /><br />';
                     echo 'Сайт:<br />';
-                    echo '<input type="text" name="site" maxlength="50" value="'.$user['users_site'].'" /><br />';
+                    echo '<input type="text" name="site" maxlength="50" value="'.$user['site'].'" /><br />';
                     echo 'Зарегистрирован:<br />';
-                    echo '<input type="text" name="joined" maxlength="10" value="'.date_fixed($user['users_joined'], "d.m.Y").'" /><br />';
+                    echo '<input type="text" name="joined" maxlength="10" value="'.date_fixed($user['joined'], "d.m.Y").'" /><br />';
                     echo 'Дата рождения:<br />';
-                    echo '<input type="text" name="birthday" maxlength="10" value="'.$user['users_birthday'].'" /><br />';
+                    echo '<input type="text" name="birthday" maxlength="10" value="'.$user['birthday'].'" /><br />';
                     echo 'ICQ:<br />';
-                    echo '<input type="text" name="icq" maxlength="10" value="'.$user['users_icq'].'" /><br />';
+                    echo '<input type="text" name="icq" maxlength="10" value="'.$user['icq'].'" /><br />';
                     echo 'Имя пользователя:<br />';
-                    echo '<input type="text" name="name" maxlength="20" value="'.$user['users_name'].'" /><br />';
+                    echo '<input type="text" name="name" maxlength="20" value="'.$user['name'].'" /><br />';
                     echo 'Ник пользователя:<br />';
-                    echo '<input type="text" name="nickname" maxlength="20" value="'.$user['users_nickname'].'" /><br />';
+                    echo '<input type="text" name="nickname" maxlength="20" value="'.$user['nickname'].'" /><br />';
                     echo 'Актив:<br />';
-                    echo '<input type="text" name="point" value="'.$user['users_point'].'" /><br />';
+                    echo '<input type="text" name="point" value="'.$user['point'].'" /><br />';
                     echo 'Деньги:<br />';
-                    echo '<input type="text" name="money" value="'.$user['users_money'].'" /><br />';
+                    echo '<input type="text" name="money" value="'.$user['money'].'" /><br />';
                     echo 'Особый статус:<br />';
-                    echo '<input type="text" name="status" maxlength="25" value="'.$user['users_status'].'" /><br />';
+                    echo '<input type="text" name="status" maxlength="25" value="'.$user['status'].'" /><br />';
                     echo 'Аватар:<br />';
-                    echo '<input type="text" name="avatar" value="'.$user['users_avatar'].'" /><br />';
+                    echo '<input type="text" name="avatar" value="'.$user['avatar'].'" /><br />';
                     echo 'Авторитет (плюсы):<br />';
-                    echo '<input type="text" name="posrating" value="'.$user['users_posrating'].'" /><br />';
+                    echo '<input type="text" name="posrating" value="'.$user['posrating'].'" /><br />';
                     echo 'Авторитет (минусы):<br />';
-                    echo '<input type="text" name="negrating" value="'.$user['users_negrating'].'" /><br />';
+                    echo '<input type="text" name="negrating" value="'.$user['negrating'].'" /><br />';
                     echo 'Скин:<br />';
-                    echo '<input type="text" name="themes" value="'.$user['users_themes'].'" /><br />';
+                    echo '<input type="text" name="themes" value="'.$user['themes'].'" /><br />';
 
                     echo 'Пол:<br />';
                     echo '<select name="gender">';
-                    $selected = ($user['users_gender'] == 1) ? ' selected="selected"' : '';
+                    $selected = ($user['gender'] == 1) ? ' selected="selected"' : '';
                     echo '<option value="1"'.$selected.'>Мужской</option>';
-                    $selected = ($user['users_gender'] == 2) ? ' selected="selected"' : '';
+                    $selected = ($user['gender'] == 2) ? ' selected="selected"' : '';
                     echo '<option value="2"'.$selected.'>Женский</option>';
                     echo '</select><br />';
 
                     echo 'О себе:<br />';
-                    echo '<textarea cols="25" rows="5" name="info">'.$user['users_info'].'</textarea><br />';
+                    echo '<textarea cols="25" rows="5" name="info">'.$user['info'].'</textarea><br />';
 
                     echo '<input value="Изменить" type="submit" /></form></div><br />';
 
                     echo '<div class="b"><b>Дополнительная информация</b></div>';
-                    if ($user['users_confirmreg'] == 1) {
+                    if ($user['confirmreg'] == 1) {
                         echo '<span style="color:#ff0000"><b>Аккаунт не активирован</b></span><br />';
                     }
 
@@ -211,18 +211,18 @@ if (is_admin(array(101, 102))) {
                         echo '<b>Последний IP:</b> '.$visit['visit_ip'].'<br />';
                     }
 
-                    if ($user['users_ban'] == 1 && $user['users_timeban'] > SITETIME) {
+                    if ($user['ban'] == 1 && $user['timeban'] > SITETIME) {
                         echo '<span style="color:#ff0000"><b>Пользователь забанен</b></span><br />';
                     }
-                    if (!empty($user['users_timelastban']) && !empty($user['users_reasonban'])) {
+                    if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                         echo '<div class="form">';
-                        echo 'Последний бан: '.date_fixed($user['users_timelastban'], 'j F Y / H:i').'<br />';
-                        echo 'Последняя причина: '.bb_code($user['users_reasonban']).'<br />';
-                        echo 'Забанил: '.profile($user['users_loginsendban']).'</div>';
+                        echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br />';
+                        echo 'Последняя причина: '.bb_code($user['reasonban']).'<br />';
+                        echo 'Забанил: '.profile($user['loginsendban']).'</div>';
                     }
-                    echo 'Строгих банов: <b>'.$user['users_totalban'].'</b><br /><br />';
+                    echo 'Строгих банов: <b>'.$user['totalban'].'</b><br /><br />';
 
-                    if ($user['users_level'] < 101 || $user['users_level'] > 105) {
+                    if ($user['level'] < 101 || $user['level'] > 105) {
                         echo '<i class="fa fa-times"></i> <b><a href="/admin/users?act=poddel&amp;uz='.$uz.'">Удалить профиль</a></b><br />';
                     }
                 } else {
@@ -267,10 +267,10 @@ if (is_admin(array(101, 102))) {
             $negrating = intval($_POST['negrating']);
 
             if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
                 if (!empty($user)) {
-                    if ($log == $config['nickname'] || $log == $user['users_login'] || ($user['users_level'] < 101 || $user['users_level'] > 105)) {
+                    if ($log == $config['nickname'] || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
                         if (empty($pass) || preg_match('|^[a-z0-9\-]+$|i', $pass)) {
                             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
                                 if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
@@ -281,7 +281,7 @@ if (is_admin(array(101, 102))) {
                                                     if ($log == $config['nickname']) {
                                                         $access = $level;
                                                     } else {
-                                                        $access = $user['users_level'];
+                                                        $access = $user['level'];
                                                     }
 
                                                     if (!empty($pass)) {
@@ -289,7 +289,7 @@ if (is_admin(array(101, 102))) {
                                                         echo 'Не забудьте ему напомнить его новый пароль: <b>'.$pass.'</b><br /><br />';
                                                         $mdpass = md5(md5($pass));
                                                     } else {
-                                                        $mdpass = $user['users_pass'];
+                                                        $mdpass = $user['pass'];
                                                     }
 
                                                     list($uday, $umonth, $uyear) = explode(".", $joined);
@@ -300,7 +300,7 @@ if (is_admin(array(101, 102))) {
                                                     $city = utf_substr($city, 0, 50);
                                                     $rating = $posrating - $negrating;
 
-                                                    DB::run() -> query("UPDATE `users` SET `users_pass`=?, `users_email`=?, `users_joined`=?, `users_level`=?, `users_name`=?, `users_nickname`=?, `users_country`=?, `users_city`=?, `users_info`=?, `users_site`=?, `users_icq`=?, `users_gender`=?, `users_birthday`=?, `users_themes`=?, `users_point`=?, `users_money`=?, `users_status`=?, `users_avatar`=?, `users_rating`=?, `users_posrating`=?, `users_negrating`=? WHERE `users_login`=? LIMIT 1;", array($mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz));
+                                                    DB::run() -> query("UPDATE `users` SET `pass`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `avatar`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", array($mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz));
 
                                                     save_title();
                                                     save_nickname();
@@ -387,24 +387,24 @@ if (is_admin(array(101, 102))) {
             $delimages = (empty($_POST['delimages'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
                 if (!empty($user)) {
-                    if ($user['users_level'] < 101 || $user['users_level'] > 105) {
+                    if ($user['level'] < 101 || $user['level'] > 105) {
 
                         // -------------//
                         if (!empty($mailblack)) {
-                            $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $user['users_email']));
-                            if (empty($blackmail) && !empty($user['users_email'])) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(1, $user['users_email'], $log, SITETIME));
+                            $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $user['email']));
+                            if (empty($blackmail) && !empty($user['email'])) {
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(1, $user['email'], $log, SITETIME));
                             }
                         }
 
                         // -------------//
                         if (!empty($loginblack)) {
-                            $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($user['users_login'])));
+                            $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($user['login'])));
                             if (empty($blacklogin)) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(2, $user['users_login'], $log, SITETIME));
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(2, $user['login'], $log, SITETIME));
                             }
                         }
 
@@ -429,13 +429,13 @@ if (is_admin(array(101, 102))) {
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id` IN (".$strtopics.");");
                                 // ------ Удаление загруженных файлов -------//
 
-                                DB::run() -> query("DELETE FROM `posts` WHERE `posts_topics_id` IN (".$strtopics.");");
+                                DB::run() -> query("DELETE FROM `posts` WHERE `topics_id` IN (".$strtopics.");");
                                 DB::run() -> query("DELETE FROM `topics` WHERE `id` IN (".$strtopics.");");
                             }
 
                             // ------ Удаление сообщений в форуме -------//
                             if (!empty($delpostforum)) {
-                                DB::run() -> query("DELETE FROM `posts` WHERE `posts_user`=?;", array($uz));
+                                DB::run() -> query("DELETE FROM `posts` WHERE `user`=?;", array($uz));
 
                                 // ------ Удаление загруженных файлов -------//
                                 $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `user`=?;", array($uz));

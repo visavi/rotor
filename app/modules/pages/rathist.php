@@ -17,7 +17,7 @@ show_title('История голосований '.nickname($uz));
 if (is_user()) {
     $is_admin = is_admin();
 
-    $data = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+    $data = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
     if (!empty($data)) {
 

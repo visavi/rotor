@@ -22,7 +22,7 @@ case 'index':
 	echo '<div class="form">';
 	echo '<form method="post" action="/account?act=changemail&amp;uid='.$_SESSION['token'].'">';
 	echo 'Е-mail:<br />';
-	echo '<input name="meil" maxlength="50" value="'.$udata['users_email'].'" /><br />';
+	echo '<input name="meil" maxlength="50" value="'.$udata['email'].'" /><br />';
 	echo 'Текущий пароль:<br />';
 	echo '<input name="provpass" type="password" maxlength="20" /><br />';
 	echo '<input value="Изменить" type="submit" /></form></div><br />';
@@ -32,11 +32,11 @@ case 'index':
 	############################################################################################
 	echo '<b><big>Изменение ника</big></b><br />';
 
-	if ($udata['users_point'] >= $config['editnickpoint']) {
+	if ($udata['point'] >= $config['editnickpoint']) {
 		echo '<div class="form">';
 		echo '<form method="post" action="/account?act=editnick&amp;uid='.$_SESSION['token'].'">';
 		echo 'Ваш ник:<br />';
-		echo '<input name="nickname" maxlength="20" value="'.$udata['users_nickname'].'" />';
+		echo '<input name="nickname" maxlength="20" value="'.$udata['nickname'].'" />';
 		echo '<input value="Изменить" type="submit" /></form></div><br />';
 	} else {
 		show_error('Изменять ник могут пользователи у которых более '.points($config['editnickpoint']).'!');
@@ -47,11 +47,11 @@ case 'index':
 	if (!empty($config['editstatus'])) {
 		echo '<b><big>Изменение статуса</big></b><br />';
 
-		if ($udata['users_point'] >= $config['editstatuspoint']) {
+		if ($udata['point'] >= $config['editstatuspoint']) {
 			echo '<div class="form">';
 			echo '<form method="post" action="/account?act=editstatus&amp;uid='.$_SESSION['token'].'">';
 			echo 'Персональный статус:<br />';
-			echo '<input name="status" maxlength="20" value="'.$udata['users_status'].'" />';
+			echo '<input name="status" maxlength="20" value="'.$udata['status'].'" />';
 			echo '<input value="Изменить" type="submit" /></form>';
 
 			if (!empty($config['editstatusmoney'])) {
@@ -70,7 +70,7 @@ case 'index':
 	echo '<div class="form">';
 	echo '<form method="post" action="/account?act=editsec&amp;uid='.$_SESSION['token'].'">';
 	echo 'Секретный вопрос:<br />';
-	echo '<input name="secquest" maxlength="50" value="'.$udata['users_secquest'].'" /><br />';
+	echo '<input name="secquest" maxlength="50" value="'.$udata['secquest'].'" /><br />';
 	echo 'Ответ на вопрос:<br /><input name="secanswer" maxlength="30" /><br />';
 	echo 'Текущий пароль:<br /><input name="provpass" type="password" maxlength="20" /><br />';
 	echo '<input value="Изменить" type="submit" /></form></div><br />';
@@ -92,14 +92,14 @@ case 'index':
 	############################################################################################
 	echo '<b><big>Ваш API-ключ</big></b><br />';
 
-	if(empty($udata['users_apikey'])) {
+	if(empty($udata['apikey'])) {
 		echo '<div class="form">';
 		echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
 		echo '<input value="Получить ключ" type="submit" /></form></div><br />';
 	} else {
 		echo '<div class="form">';
 		echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
-		echo 'Ключ: <strong>'.$udata['users_apikey'].'</strong><br />';
+		echo 'Ключ: <strong>'.$udata['apikey'].'</strong><br />';
 		echo '<input value="Изменить ключ" type="submit" /></form></div><br />';
 	}
 break;
@@ -116,11 +116,11 @@ case 'changemail':
 	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-		-> addRule('not_equal', array($meil, $udata['users_email']), 'Новый адрес email должен отличаться от текущего!')
+		-> addRule('not_equal', array($meil, $udata['email']), 'Новый адрес email должен отличаться от текущего!')
 		-> addRule('email', $meil, 'Неправильный адрес e-mail, необходим формат name@site.domen!', true)
-		-> addRule('equal', array(md5(md5($provpass)), $udata['users_pass']), 'Введенный пароль не совпадает с данными в профиле!');
+		-> addRule('equal', array(md5(md5($provpass)), $udata['pass']), 'Введенный пароль не совпадает с данными в профиле!');
 
-	$regmail = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_email`=? LIMIT 1;", array($meil));
+	$regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", array($meil));
 	$validation -> addRule('empty', $regmail, 'Указанный вами адрес e-mail уже используется в системе!');
 
 	// Проверка email в черном списке
@@ -202,20 +202,20 @@ case 'editstatus':
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('not_empty', $config['editstatus'], 'Изменение статуса запрещено администрацией сайта!')
-		-> addRule('empty', $udata['users_ban'], 'Для изменения статуса у вас не должно быть нарушений!')
-		-> addRule('not_equal', array($status, $udata['users_status']), 'Новый статус должен отличаться от текущего!')
-		-> addRule('max', array($udata['users_point'], $config['editstatuspoint']), 'У вас недостаточно актива для изменения статуса!')
-		-> addRule('max', array($udata['users_money'], $cost), 'У вас недостаточно денег для изменения статуса!')
+		-> addRule('empty', $udata['ban'], 'Для изменения статуса у вас не должно быть нарушений!')
+		-> addRule('not_equal', array($status, $udata['status']), 'Новый статус должен отличаться от текущего!')
+		-> addRule('max', array($udata['point'], $config['editstatuspoint']), 'У вас недостаточно актива для изменения статуса!')
+		-> addRule('max', array($udata['money'], $cost), 'У вас недостаточно денег для изменения статуса!')
 		-> addRule('string', $status, 'Слишком длинный или короткий статус!', false, 3, 20);
 
 	if (!empty($status)) {
-		$checkstatus = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE lower(`users_status`)=? LIMIT 1;", array(utf_lower($status)));
+		$checkstatus = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE lower(`status`)=? LIMIT 1;", array(utf_lower($status)));
 		$validation -> addRule('empty', $checkstatus, 'Выбранный вами статус уже используется на сайте!');
 	}
 
 	if ($validation->run()) {
 
-		DB::run() -> query("UPDATE `users` SET `users_status`=?, `users_money`=`users_money`-? WHERE `users_login`=? LIMIT 1;", array($status, $cost, $log));
+		DB::run() -> query("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", array($status, $cost, $log));
 		save_title();
 
 		notice('Ваш статус успешно изменен!');
@@ -238,17 +238,17 @@ case 'editnick':
 	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-		-> addRule('max', array($udata['users_point'], $config['editnickpoint']), 'У вас недостаточно актива для изменения ника!')
-		-> addRule('min', array($udata['users_timenickname'], SITETIME), 'Изменять ник можно не чаще чем 1 раз в сутки!')
+		-> addRule('max', array($udata['point'], $config['editnickpoint']), 'У вас недостаточно актива для изменения ника!')
+		-> addRule('min', array($udata['timenickname'], SITETIME), 'Изменять ник можно не чаще чем 1 раз в сутки!')
 		-> addRule('regex', array($nickname, '|^[0-9a-zA-Zа-яА-ЯЁё_\.\-\s]+$|u'), 'Разрешены символы русского, латинского алфавита и цифры!')
 		-> addRule('string', $nickname, 'Слишком длинный или короткий ник!', false, 3, 20)
-		-> addRule('not_equal', array($nickname, $udata['users_nickname']), 'Новый ник должен отличаться от текущего!');
+		-> addRule('not_equal', array($nickname, $udata['nickname']), 'Новый ник должен отличаться от текущего!');
 
 	if (!empty($nickname)) {
-		$reglogin = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE lower(`users_login`)=? LIMIT 1;", array(utf_lower($nickname)));
+		$reglogin = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE lower(`login`)=? LIMIT 1;", array(utf_lower($nickname)));
 		$validation -> addRule('empty', $reglogin, 'Выбранный вами ник используется кем-то в качестве логина!');
 
-		$regnick = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE lower(`users_nickname`)=? LIMIT 1;", array(utf_lower($nickname)));
+		$regnick = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE lower(`nickname`)=? LIMIT 1;", array(utf_lower($nickname)));
 		$validation -> addRule('empty', $regnick, 'Выбранный вами ник уже используется на сайте!');
 
 		$blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, utf_lower($nickname)));
@@ -257,7 +257,7 @@ case 'editnick':
 
 	if ($validation->run()) {
 
-		DB::run() -> query("UPDATE `users` SET `users_nickname`=?, `users_timenickname`=? WHERE `users_login`=? LIMIT 1;", array($nickname, SITETIME + 86400, $log));
+		DB::run() -> query("UPDATE `users` SET `nickname`=?, `timenickname`=? WHERE `login`=? LIMIT 1;", array($nickname, SITETIME + 86400, $log));
 		save_nickname();
 
 		notice('Ваш ник успешно изменен!');
@@ -283,8 +283,8 @@ case 'editsec':
 	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-		-> addRule('equal', array(md5(md5($provpass)), $udata['users_pass']), 'Введенный пароль не совпадает с данными в профиле!')
-		-> addRule('not_equal', array($secquest, $udata['users_secquest']), 'Новый секретный вопрос должен отличаться от текущего!')
+		-> addRule('equal', array(md5(md5($provpass)), $udata['pass']), 'Введенный пароль не совпадает с данными в профиле!')
+		-> addRule('not_equal', array($secquest, $udata['secquest']), 'Новый секретный вопрос должен отличаться от текущего!')
 		-> addRule('string', $secquest, 'Слишком длинный или короткий секретный вопрос!', false, 3, 50);
 
 	if (!empty($secquest)) {
@@ -296,7 +296,7 @@ case 'editsec':
 
 	if ($validation->run()) {
 
-		DB::run() -> query("UPDATE `users` SET `users_secquest`=?, `users_secanswer`=? WHERE `users_login`=? LIMIT 1;", array($secquest, $secanswer, $log));
+		DB::run() -> query("UPDATE `users` SET `secquest`=?, `secanswer`=? WHERE `login`=? LIMIT 1;", array($secquest, $secanswer, $log));
 
 		notice('Секретный вопрос и ответ успешно изменены!');
 		redirect("/account");
@@ -321,7 +321,7 @@ case 'editpass':
 	$validation = new Validation();
 
 	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-		-> addRule('equal', array(md5(md5($oldpass)), $udata['users_pass']), 'Введенный пароль не совпадает с данными в профиле!')
+		-> addRule('equal', array(md5(md5($oldpass)), $udata['pass']), 'Введенный пароль не совпадает с данными в профиле!')
 		-> addRule('equal', array($newpass, $newpass2), 'Новые пароли не одинаковые!')
 		-> addRule('string', $newpass, 'Слишком длинный или короткий новый пароль!', true, 6, 20)
 		-> addRule('regex', array($newpass, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в пароле, разрешены знаки латинского алфавита, цифры и дефис!', true)
@@ -333,10 +333,10 @@ case 'editpass':
 
 	if ($validation->run()) {
 
-		DB::run() -> query("UPDATE `users` SET `users_pass`=? WHERE `users_login`=? LIMIT 1;", array(md5(md5($newpass)), $log));
+		DB::run() -> query("UPDATE `users` SET `pass`=? WHERE `login`=? LIMIT 1;", array(md5(md5($newpass)), $log));
 
-		if (! empty($udata['users_email'])){
-			sendMail($udata['users_email'],
+		if (! empty($udata['email'])){
+			sendMail($udata['email'],
 				'Изменение пароля на сайте '.$config['title'],
 				nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению пароля \n\nВаш новый пароль: ".$newpass." \nСохраните его в надежном месте \n\nДанные инициализации: \nIP: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nВремя: ".date('j.m.y / H:i', SITETIME))
 			);
@@ -364,7 +364,7 @@ case 'apikey':
 
 		$key = generate_password();
 
-		DB::run() -> query("UPDATE `users` SET `users_apikey`=? WHERE `users_login`=?;", array(md5($log.$key), $log));
+		DB::run() -> query("UPDATE `users` SET `apikey`=? WHERE `login`=?;", array(md5($log.$key), $log));
 
 		notice('Новый ключ успешно сгенерирован!');
 		redirect("/account");

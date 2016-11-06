@@ -18,7 +18,7 @@ switch ($act):
             echo 'Ваше имя:<br /><input name="name" maxlength="20" /><br />';
             echo 'Ваш E-mail:<br /><input name="umail" maxlength="50" /><br />';
         } else {
-            if (empty($udata['users_email'])) {
+            if (empty($udata['email'])) {
                 echo 'Ваш E-mail:<br /><input name="umail" maxlength="50" /><br />';
             }
         }
@@ -48,8 +48,8 @@ switch ($act):
         if (is_user()) {
             $name = $log;
 
-            if (!empty($udata['users_email'])) {
-                $umail = $udata['users_email'];
+            if (!empty($udata['email'])) {
+                $umail = $udata['email'];
             }
         }
 

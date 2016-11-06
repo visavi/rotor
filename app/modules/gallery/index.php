@@ -381,7 +381,7 @@ break;
                                 DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commphoto` WHERE `gid`=? ORDER BY `time` DESC LIMIT ".$config['maxpostgallery'].") AS del);", array($gid, $gid));
 
                                 DB::run() -> query("UPDATE `photo` SET `comments`=`comments`+1 WHERE `id`=?;", array($gid));
-                                DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+                                DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array($log));
 
                                 notice('Комментарий успешно добавлен!');
                                 redirect("/gallery?act=end&gid=$gid");

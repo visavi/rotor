@@ -27,7 +27,7 @@ break;
 ##                                     Вывод сообщений                                    ##
 ############################################################################################
 case 'posts':
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `posts_user`=?;", array($user));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `user`=?;", array($user));
 
     if (! $total) {
         App::abort('default', 'Созданных сообщений еще нет!');
@@ -37,7 +37,7 @@ case 'posts':
         $start = last_page($total, $config['forumpost']);
     }
 
-    $querypost = DB::run() -> query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`posts_topics_id`=`topics`.`id` WHERE `posts_user`=? ORDER BY `posts_time` DESC LIMIT ".$start.", ".$config['forumpost'].";", array($user));
+    $querypost = DB::run() -> query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topics_id`=`topics`.`id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['forumpost'].";", array($user));
     $posts = $querypost->fetchAll();
 
     App::view('forum/active_posts', compact('posts', 'user', 'start', 'total'));
@@ -57,14 +57,14 @@ case 'delete':
     $validation = new Validation();
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
 
-    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `posts_id`=? LIMIT 1;", array($tid));
+    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", array($tid));
     $validation->addRule('custom', $post, 'Ошибка! Данного сообщения не существует!');
 
     if ($validation->run()) {
 
-        DB::run() -> query("DELETE FROM `posts` WHERE `posts_id`=? AND `posts_topics_id`=?;", array($tid, $post['posts_topics_id']));
-        DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", array(1, $post['posts_topics_id']));
-        DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", array(1, $post['posts_forums_id']));
+        DB::run() -> query("DELETE FROM `posts` WHERE `id`=? AND `topics_id`=?;", array($tid, $post['topics_id']));
+        DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", array(1, $post['topics_id']));
+        DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", array(1, $post['forums_id']));
 
         exit(json_encode(['status' => 'success']));
     } else {

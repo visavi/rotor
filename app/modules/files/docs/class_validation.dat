@@ -77,12 +77,12 @@ addRule('string', $invite, 'Слишком длинный или коротки�
 
 <h3 id="validateMax">validateMax</h3>
 <pre class="prettyprint linenums">
-addRule('max', array($udata['users_point'], $config['eventpoint']), 'У вас недостаточно актива для создания события!')
+addRule('max', array($udata['point'], $config['eventpoint']), 'У вас недостаточно актива для создания события!')
 </pre>
 
 <h3 id="validateMin">validateMin</h3>
 <pre class="prettyprint linenums">
-addRule('min', array($udata['users_timenickname'], SITETIME), 'Изменять ник можно не чаще чем 1 раз в сутки!')
+addRule('min', array($udata['timenickname'], SITETIME), 'Изменять ник можно не чаще чем 1 раз в сутки!')
 </pre>
 
 <h3 id="validateEqual">validateEqual</h3>

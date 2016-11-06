@@ -85,10 +85,10 @@ $update = DBM::run()->update('guestbook', array(
 Добавляет пользователю Vantuz 1 балл и 5 монет
 <pre class="prettyprint linenums">
 $user = DBM::run()->update('users', array(
-	'users_point'    => array('+', 1),
-	'users_money'    => array('+', 5),
+	'point'    => array('+', 1),
+	'money'    => array('+', 5),
 ), array(
-	'users_login' => 'Vantuz'
+	'login' => 'Vantuz'
 ));
 </pre>
 

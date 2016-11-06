@@ -21,19 +21,19 @@ if (is_user()) {
             echo 'Снять нарушение можно раз в месяц при условии, что с вашего последнего бана вы не нарушали правил и были добросовестным участником сайта<br />';
             echo 'Также вы должны будете выплатить банку штраф в размере '.moneys(100000).'<br />';
             echo 'Если с момента вашего последнего бана прошло менее месяца или у вас нет на руках суммы для штрафа, тогда строгое нарушение снять не удастся<br /><br />';
-            echo 'Общее число строгих нарушений: <b>'.$udata['users_totalban'].'</b><br />';
+            echo 'Общее число строгих нарушений: <b>'.$udata['totalban'].'</b><br />';
 
-            $daytime = round(((SITETIME - $udata['users_timelastban']) / 3600) / 24);
+            $daytime = round(((SITETIME - $udata['timelastban']) / 3600) / 24);
 
-            if ($udata['users_timelastban'] > 0 && $udata['users_totalban'] > 0) {
+            if ($udata['timelastban'] > 0 && $udata['totalban'] > 0) {
                 echo 'Суток прошедших с момента последнего нарушения: <b>'.$daytime.'</b><br />';
             } else {
                 echo 'Дата последнего нарушения не указана<br />';
             }
 
-            echo 'Денег на руках: <b>'.moneys($udata['users_money']).'</b><br /><br />';
+            echo 'Денег на руках: <b>'.moneys($udata['money']).'</b><br /><br />';
 
-            if ($udata['users_totalban'] > 0 && $daytime >= 30 && $udata['users_money'] >= 100000) {
+            if ($udata['totalban'] > 0 && $daytime >= 30 && $udata['money'] >= 100000) {
                 echo '<i class="fa fa-check"></i> <b><a href="/razban?act=go">Снять нарушение</a></b><br />';
                 echo 'У вас имеется возможность снять нарушение<br /><br />';
             } else {
@@ -47,9 +47,9 @@ if (is_user()) {
         ############################################################################################
         case "go":
 
-            $daytime = round(((SITETIME - $udata['users_timelastban']) / 3600) / 24);
-            if ($udata['users_totalban'] > 0 && $daytime >= 30 && $udata['users_money'] >= 100000) {
-                DB::run() -> query("UPDATE users SET users_timelastban=?, users_totalban=users_totalban-1, users_money=users_money-? WHERE users_login=?", array(SITETIME, 100000, $log));
+            $daytime = round(((SITETIME - $udata['timelastban']) / 3600) / 24);
+            if ($udata['totalban'] > 0 && $daytime >= 30 && $udata['money'] >= 100000) {
+                DB::run() -> query("UPDATE users SET timelastban=?, totalban=totalban-1, money=money-? WHERE login=?", array(SITETIME, 100000, $log));
 
                 echo 'Нарушение успешно списано, с вашего счета списано <b>'.moneys(100000).'</b><br />';
                 echo 'Следующее нарушение вы сможете снять не ранее чем через 30 суток<br /><br />';

@@ -126,7 +126,7 @@ break;
 ############################################################################################
 case 'new':
 	if (is_user()) {
-		if ($udata['users_point'] >= $config['eventpoint']){
+		if ($udata['point'] >= $config['eventpoint']){
 			echo '<b><big>Добавление события</big></b><br /><br />';
 
 			echo '<div class="form cut">';
@@ -170,7 +170,7 @@ case 'addevent':
 
 		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('equal', array(is_flood(App::getUsername()), true), 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
-			-> addRule('max', array($udata['users_point'], $config['eventpoint']), 'У вас недостаточно актива для создания события!')
+			-> addRule('max', array($udata['point'], $config['eventpoint']), 'У вас недостаточно актива для создания события!')
 			-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 			-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
@@ -446,7 +446,7 @@ case 'addcomment':
 			DB::run() -> query("DELETE FROM `commevents` WHERE `event_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommevents'].") AS del);", array($id, $id));
 
 			DB::run() -> query("UPDATE `events` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
-			DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array(App::getUsername()));
+			DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array(App::getUsername()));
 
 			notice('Комментарий успешно добавлен!');
 

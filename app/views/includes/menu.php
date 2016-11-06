@@ -7,7 +7,7 @@
 		<?php if (stats_spam()>0): ?>
 			<a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a> &bull;
 		<?php endif; ?>
-		<?php if (App::user('users_newchat')<stats_newchat()): ?>
+		<?php if (App::user('newchat')<stats_newchat()): ?>
 			<a href="/admin/chat"><span style="color:#ff0000">Чат</span></a> &bull;
 		<?php endif; ?>
 	<?php endif; ?>

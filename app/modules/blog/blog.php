@@ -285,7 +285,7 @@ case 'addblog':
 
                                     DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?;", array($cid));
 
-                                    DB::run() -> query("UPDATE `users` SET `users_point`=`users_point`+5, `users_money`=`users_money`+100 WHERE `users_login`=? LIMIT 1;", array($log));
+                                    DB::run() -> query("UPDATE `users` SET `point`=`point`+5, `money`=`money`+100 WHERE `login`=? LIMIT 1;", array($log));
 
                                     notice('Статья успешно опубликована!');
                                     redirect("/blog/blog?act=view&id=$lastid");
@@ -328,7 +328,7 @@ case 'vote':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            if ($udata['users_point'] >= $config['blogvotepoint']){
+            if ($udata['point'] >= $config['blogvotepoint']){
                 if ($vote == 'up' || $vote == 'down') {
 
                     $score = ($vote == 'up') ? 1 : -1;
@@ -438,7 +438,7 @@ case 'add':
                         DB::run() -> query("DELETE FROM `commblog` WHERE `blog`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commblog` WHERE `blog`=? ORDER BY `time` DESC LIMIT ".$config['maxblogcomm'].") AS del);", array($id, $id));
 
                         DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
-                        DB::run() -> query("UPDATE `users` SET `users_allcomments`=`users_allcomments`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+                        DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array($log));
 
                         notice('Сообщение успешно добавлено!');
                         redirect("/blog/blog?act=end&id=$id");

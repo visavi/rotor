@@ -20,7 +20,7 @@ if (is_user()) {
 
             echo '<br /><b><a href="bandit?act=go">Играть</a></b><br />';
 
-            echo 'В наличии ' . moneys($udata['users_money']) . '<br /><br />';
+            echo 'В наличии ' . moneys($udata['money']) . '<br /><br />';
 
             echo '<i class="fa fa-question-circle"></i> <a href="bandit?act=faq">Правила игры</a><br />';
             break;
@@ -28,7 +28,7 @@ if (is_user()) {
         # #                                           Игра                                         ##
         # ###########################################################################################
         case "go":
-            if ($udata['users_money'] >= 5) {
+            if ($udata['money'] >= 5) {
                 $num1 = mt_rand(1, 8);
                 $num2 = mt_rand(1, 8);
                 $num3 = mt_rand(1, 8);
@@ -330,12 +330,12 @@ if (is_user()) {
                     $sum += "150";
                 }
 
-                DB::run()->query("UPDATE users SET users_money=users_money-5 WHERE users_login=?", array($log));
+                DB::run()->query("UPDATE users SET money=money-5 WHERE login=?", array($log));
 
                 if ($sum > 0) {
                     echo 'Ваш выигрыш составил: <b>' . (int)$sum . '</b><br /><br />';
 
-                    DB::run()->query("UPDATE users SET users_money=users_money+? WHERE users_login=?", array($sum, $log));
+                    DB::run()->query("UPDATE users SET money=money+? WHERE login=?", array($sum, $log));
                 }
 
                 echo '<b><a href="bandit?act=go&amp;rand=' . $rand . '">Играть</a></b><br />';
@@ -343,7 +343,7 @@ if (is_user()) {
                 show_error('Вы не можете играть т.к. на вашем счету недостаточно средств');
             }
 
-            $allmoney = DB::run()->querySingle("SELECT users_money FROM users WHERE users_login=?;", array($log));
+            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", array($log));
 
             echo 'В наличии ' . moneys($allmoney) . '<br /><br />';
 

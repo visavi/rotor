@@ -309,8 +309,8 @@ function user_status($level) {
 // ---------------- Функция кэширования статусов ------------------//
 function save_title($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
-        $querylevel = DB::run() -> query("SELECT `login`, `status`, `name`, `color`
-FROM `users` LEFT JOIN `status` ON `point` BETWEEN `topoint` AND `point` WHERE `point`>?;", array(0));
+        $querylevel = DB::run() -> query("SELECT u.`login`, u.`status`, s.`name`, s.`color`
+FROM `users` u LEFT JOIN `status` s ON u.`point` BETWEEN s.`topoint` AND s.`point` WHERE u.`point`>?;", array(0));
 
         $allstat = array();
         while ($row = $querylevel -> fetch()) {

@@ -80,10 +80,10 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($uz != $log) {
-                    $queryuser = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                    $queryuser = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
                     if (!empty($queryuser)) {
 
-                        if ($queryuser['users_level']<101 || $queryuser['users_level']>105){
+                        if ($queryuser['level']<101 || $queryuser['level']>105){
 
                             $total = DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", array($log));
                             if ($total <= $config['limitignore']) {
@@ -94,7 +94,7 @@ if (is_user()) {
                                     // ----------------------------- Проверка на игнор ----------------------------//
                                     $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
                                     if (empty($ignorstr)) {
-                                        DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($uz));
+                                        DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", array($uz));
                                         // ------------------------------Уведомление по привату------------------------//
                                         $textpriv = 'Пользователь [b]'.nickname($log).'[/b] добавил вас в свой игнор-лист!';
                                         DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));

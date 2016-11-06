@@ -37,28 +37,28 @@ if (is_admin(array(101, 102, 103))) {
         ############################################################################################
         case 'edit':
 
-            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
+            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
 
             if (!empty($user)) {
-                $uz = $user['users_login'];
+                $uz = $user['login'];
 
-                echo user_gender($user['users_login']).' <b>Профиль '.profile($user['users_login']).'</b> '.user_visit($user['users_login']).'<br /><br />';
+                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br /><br />';
 
-                if (!empty($user['users_timelastban']) && !empty($user['users_reasonban'])) {
+                if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                     echo '<div class="form">';
-                    echo 'Последний бан: '.date_fixed($user['users_timelastban'], 'j F Y / H:i').'<br />';
-                    echo 'Последняя причина: '.bb_code($user['users_reasonban']).'<br />';
-                    echo 'Забанил: '.profile($user['users_loginsendban']).'</div><br />';
+                    echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br />';
+                    echo 'Последняя причина: '.bb_code($user['reasonban']).'<br />';
+                    echo 'Забанил: '.profile($user['loginsendban']).'</div><br />';
                 }
 
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", array($uz));
 
-                echo 'Строгих нарушений: <b>'.$user['users_totalban'].'</b><br />';
+                echo 'Строгих нарушений: <b>'.$user['totalban'].'</b><br />';
                 echo '<i class="fa fa-history"></i> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br /><br />';
 
-                if ($user['users_level'] < 101 || $user['users_level'] > 105) {
-                    if (empty($user['users_ban']) || $user['users_timeban'] < SITETIME) {
-                        if ($user['users_totalban'] < 5) {
+                if ($user['level'] < 101 || $user['level'] > 105) {
+                    if (empty($user['ban']) || $user['timeban'] < SITETIME) {
+                        if ($user['totalban'] < 5) {
                             echo '<div class="form">';
                             echo '<form method="post" action="/admin/ban?act=zaban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">';
                             echo '<b>Время бана:</b><br /><input name="bantime" /><br />';
@@ -88,7 +88,7 @@ if (is_admin(array(101, 102, 103))) {
                         }
                     } else {
                         echo '<b><span style="color:#ff0000">Внимание, данный аккаунт заблокирован!</span></b><br />';
-                        echo 'До окончания бана: '.formattime($user['users_timeban'] - SITETIME).'<br /><br />';
+                        echo 'До окончания бана: '.formattime($user['timeban'] - SITETIME).'<br /><br />';
 
                         echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Изменить</a><br />';
                         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/ban?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr />';
@@ -108,29 +108,29 @@ if (is_admin(array(101, 102, 103))) {
         ############################################################################################
         case 'editban':
 
-            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
             if (!empty($user)) {
-                echo user_gender($user['users_login']).' <b>Профиль '.profile($user['users_login']).'</b> '.user_visit($user['users_login']).'<br /><br />';
+                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br /><br />';
 
-                if ($user['users_level'] < 101 || $user['users_level'] > 105) {
-                    if (!empty($user['users_ban']) && $user['users_timeban'] > SITETIME) {
-                        if (!empty($user['users_timelastban'])) {
-                            echo 'Последний бан: '.date_fixed($user['users_timelastban'], 'j F Y / H:i').'<br />';
-                            echo 'Забанил: '.profile($user['users_loginsendban']).'<br />';
+                if ($user['level'] < 101 || $user['level'] > 105) {
+                    if (!empty($user['ban']) && $user['timeban'] > SITETIME) {
+                        if (!empty($user['timelastban'])) {
+                            echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br />';
+                            echo 'Забанил: '.profile($user['loginsendban']).'<br />';
                         }
-                        echo 'Строгих нарушений: <b>'.$user['users_totalban'].'</b><br />';
-                        echo 'До окончания бана: '.formattime($user['users_timeban'] - SITETIME).'<br /><br />';
+                        echo 'Строгих нарушений: <b>'.$user['totalban'].'</b><br />';
+                        echo 'До окончания бана: '.formattime($user['timeban'] - SITETIME).'<br /><br />';
 
-                        if ($user['users_timeban'] - SITETIME >= 86400) {
+                        if ($user['timeban'] - SITETIME >= 86400) {
                             $type = 'sut';
-                            $file_time = round(((($user['users_timeban'] - SITETIME) / 60) / 60) / 24, 1);
+                            $file_time = round(((($user['timeban'] - SITETIME) / 60) / 60) / 24, 1);
                         } elseif (
-                            $user['users_timeban'] - SITETIME >= 3600) {
+                            $user['timeban'] - SITETIME >= 3600) {
                             $type = 'chas';
-                            $file_time = round((($user['users_timeban'] - SITETIME) / 60) / 60, 1);
+                            $file_time = round((($user['timeban'] - SITETIME) / 60) / 60, 1);
                         } else {
                             $type = 'min';
-                            $file_time = round(($user['users_timeban'] - SITETIME) / 60);
+                            $file_time = round(($user['timeban'] - SITETIME) / 60);
                         }
 
                         echo '<div class="form">';
@@ -145,7 +145,7 @@ if (is_admin(array(101, 102, 103))) {
                         echo '<input name="bantype" type="radio" value="sut"'.$checked.' /> Суток<br />';
 
                         echo 'Причина бана:<br />';
-                        echo '<textarea name="reasonban" cols="25" rows="5">'.$user['users_reasonban'].'</textarea><br />';
+                        echo '<textarea name="reasonban" cols="25" rows="5">'.$user['reasonban'].'</textarea><br />';
 
                         echo '<input value="Изменить" type="submit" /></form></div><br />';
                     } else {
@@ -176,8 +176,8 @@ if (is_admin(array(101, 102, 103))) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
                 if (!empty($user)) {
-                    if (!empty($user['users_ban']) && $user['users_timeban'] > SITETIME) {
-                        if ($user['users_level'] < 101 || $user['users_level'] > 105) {
+                    if (!empty($user['ban']) && $user['timeban'] > SITETIME) {
+                        if ($user['level'] < 101 || $user['level'] > 105) {
                             if ($bantype == 'min') {
                                 $bantotaltime = $bantime;
                             }
@@ -349,7 +349,7 @@ if (is_admin(array(101, 102, 103))) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
 
                 if (!empty($user)) {
-                    if ($user['users_totalban'] >= 5) {
+                    if ($user['totalban'] >= 5) {
                         if ($user['level'] < 101 || $user['level'] > 105) {
 
                             $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $user['email']));
@@ -357,7 +357,7 @@ if (is_admin(array(101, 102, 103))) {
                                 DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(1, $user['email'], $log, SITETIME));
                             }
 
-                            $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($user['users_login'])));
+                            $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($user['login'])));
                             if (empty($blacklogin)) {
                                 DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(2, $user['login'], $log, SITETIME));
                             }

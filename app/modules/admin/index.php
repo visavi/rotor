@@ -54,10 +54,10 @@ site_version();
     <?php }?>
 
     <?php if ($admin = user($config['nickname'])) {?>
-        <?php if ($admin['users_level'] != 101) {?>
+        <?php if ($admin['level'] != 101) {?>
 
             <br /><div class="b"><b><span style="color:#ff0000">Внимание!!! Cуперадминистратор не имеет достаточных прав!</span></b><br />
-            Профилю назначен уровень доступа <b><?=$admin['users_level']?> - <?=user_status($admin['users_level'])?></b></div>
+            Профилю назначен уровень доступа <b><?=$admin['level']?> - <?=user_status($admin['level'])?></b></div>
 
         <?php }?>
 

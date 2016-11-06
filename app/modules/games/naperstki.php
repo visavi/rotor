@@ -16,7 +16,7 @@ if (is_user()) {
 
         echo '<img src="/images/naperstki/1.gif" alt="image" /><br /><br />';
         echo '<b><a href="/games/naperstki?act=choice">Играть</a></b><br /><br />';
-        echo 'В наличии: ' . moneys($udata['users_money']) . '<br /><br />';
+        echo 'В наличии: ' . moneys($udata['money']) . '<br /><br />';
         echo '<i class="fa fa-question-circle"></i> <a href="/games/naperstki?act=faq">Правила</a><br />';
         break;
     # ###########################################################################################
@@ -34,7 +34,7 @@ if (is_user()) {
 
         echo 'Выберите наперсток в котором может находится шарик<br />';
 
-        echo 'В наличии: ' . moneys($udata['users_money']) . '<br /><br />';
+        echo 'В наличии: ' . moneys($udata['money']) . '<br /><br />';
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/naperstki">Вернуться</a><br />';
         break;
@@ -47,7 +47,7 @@ if (is_user()) {
         if (!isset($_SESSION['naperstki'])) {
             $_SESSION['naperstki'] = 0;
         }
-        if ($udata['users_money'] >= 50) {
+        if ($udata['money'] >= 50) {
             if ($_SESSION['naperstki'] < 3) {
                 $_SESSION['naperstki']++;
 
@@ -72,12 +72,12 @@ if (is_user()) {
                 }
                 // ------------------------------ Выигрыш ----------------------------//
                 if ($thimble == $rand_thimble) {
-                    DB::run()->query("UPDATE users SET users_money=users_money+100 WHERE users_login=?", array($log));
+                    DB::run()->query("UPDATE users SET money=money+100 WHERE login=?", array($log));
 
                     echo '<br /><b>Вы выиграли!</b><br />';
                     // ------------------------------ Проигрыш ----------------------------//
                 } else {
-                    DB::run()->query("UPDATE users SET users_money=users_money-50 WHERE users_login=?", array($log));
+                    DB::run()->query("UPDATE users SET money=money-50 WHERE login=?", array($log));
 
                     echo '<br /><b>Вы проиграли!</b><br />';
                 }
@@ -87,7 +87,7 @@ if (is_user()) {
 
             echo '<br /><b><a href="/games/naperstki?act=choice&amp;rand=' . $rand . '">К выбору</a></b><br /><br />';
 
-            $allmoney = DB::run()->querySingle("SELECT users_money FROM users WHERE users_login=?;", array($log));
+            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", array($log));
             echo 'У вас в наличии: ' . moneys($allmoney) . '<br /><br />';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/naperstki">Вернуться</a><br />';

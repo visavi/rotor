@@ -33,7 +33,7 @@ if (is_user()) {
                             $textpriv = 'Поздравляем! Вы сорвали Джек-пот в лотерее и выиграли '.moneys($winmoneys);
                             DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($winuz, $config['nickname'], $textpriv, SITETIME));
 
-                            DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1, `users_money`=`users_money`+? WHERE `users_login`=?", array($winmoneys, $winuz));
+                            DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `money`=`money`+? WHERE `login`=?", array($winmoneys, $winuz));
                         }
                     }
 
@@ -83,7 +83,7 @@ if (is_user()) {
 
             echo 'В этом туре участвуют: '.$total.'<br />';
             echo 'Cтоимость билета '.moneys(50).'<br />';
-            echo 'В наличии: '.moneys($udata['users_money']).'<br /><br />';
+            echo 'В наличии: '.moneys($udata['money']).'<br /><br />';
 
             echo '<i class="fa fa-users"></i> <a href="/games/loterea?act=show">Участники</a><br />';
         break;
@@ -96,12 +96,12 @@ if (is_user()) {
             $bilet = abs(intval($_POST['bilet']));
 
             if ($bilet > 0 && $bilet <= 100) {
-                if ($udata['users_money'] >= 50) {
+                if ($udata['money'] >= 50) {
                     $querysum = DB::run() -> querySingle("SELECT `id` FROM `lotusers` WHERE `user`=? LIMIT 1;", array($log));
                     if (empty($querysum)) {
                         DB::run() -> query("UPDATE `lotinfo` SET `sum`=`sum`+50 WHERE `id`=?;", array(1));
                         DB::run() -> query("INSERT INTO `lotusers` (`user`, `num`, `time`) VALUES (?, ?, ?);", array($log, $bilet, SITETIME));
-                        DB::run() -> query("UPDATE users SET `users_money`=`users_money`-50 WHERE `users_login`=?", array($log));
+                        DB::run() -> query("UPDATE users SET `money`=`money`-50 WHERE `login`=?", array($log));
 
                         echo '<b>Билет успешно приобретен!</b><br />';
                         echo 'Результат розыгрыша станет известным после полуночи!<br /><br />';

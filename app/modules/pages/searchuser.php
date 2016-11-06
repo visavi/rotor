@@ -49,21 +49,21 @@ switch ($act):
                 $search = "LIKE '$q%'";
             }
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE lower(`users_login`) ".$search.";");
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE lower(`login`) ".$search.";");
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryuser = DB::run() -> query("SELECT `users_login`, `users_nickname`, `users_point` FROM `users` WHERE lower(`users_login`) ".$search." ORDER BY `users_point` DESC LIMIT ".$start.", ".$config['usersearch'].";");
+                $queryuser = DB::run() -> query("SELECT `login`, `nickname`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$start.", ".$config['usersearch'].";");
                 while ($data = $queryuser -> fetch()) {
 
-                    echo user_gender($data['users_login']).' <b>'.profile($data['users_login'], false, false).'</b> ';
-                    if (!empty($data['users_nickname'])) {
-                        echo '(Ник: '.$data['users_nickname'].') ';
+                    echo user_gender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
+                    if (!empty($data['nickname'])) {
+                        echo '(Ник: '.$data['nickname'].') ';
                     }
-                    echo user_online($data['users_login']).' ('.points($data['users_point']).')<br />';
+                    echo user_online($data['login']).' ('.points($data['point']).')<br />';
                 }
 
                 page_strnavigation('/searchuser?act=sort&amp;q='.$q.'&amp;', $config['usersearch'], $start, $total);
@@ -87,19 +87,19 @@ switch ($act):
         $find = check(strtolower($_POST['find']));
 
         if (utf_strlen($find)>=3 && utf_strlen($find)<=20) {
-            $querysearch = DB::run() -> query("SELECT `users_login`, `users_point` FROM `users` WHERE lower(`users_login`) LIKE ? OR `users_nickname` LIKE ? ORDER BY `users_point` DESC LIMIT ".$config['usersearch'].";", array('%'.$find.'%', '%'.$find.'%'));
+            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? OR `nickname` LIKE ? ORDER BY `point` DESC LIMIT ".$config['usersearch'].";", array('%'.$find.'%', '%'.$find.'%'));
 
             $result = $querysearch -> fetchAll();
             $total = count($result);
 
             if ($total > 0) {
                 foreach($result as $value) {
-                    echo user_gender($value['users_login']);
+                    echo user_gender($value['login']);
 
-                    if ($find == $value['users_login']) {
-                        echo '<b><big>'.profile($value['users_login'], '#ff0000').'</big></b> '.user_online($value['users_login']).' ('.points($value['users_point']).')<br />';
+                    if ($find == $value['login']) {
+                        echo '<b><big>'.profile($value['login'], '#ff0000').'</big></b> '.user_online($value['login']).' ('.points($value['point']).')<br />';
                     } else {
-                        echo '<b>'.profile($value['users_login']).'</b> '.user_online($value['users_login']).' ('.points($value['users_point']).')<br />';
+                        echo '<b>'.profile($value['login']).'</b> '.user_online($value['login']).' ('.points($value['point']).')<br />';
                     }
                 }
 

@@ -11,11 +11,11 @@
 	<?php foreach ($posts as $data): ?>
 
 		<div class="b">
-			<i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['posts_topics_id']?>/<?=$data['posts_id']?>"><?=$data['title']?></a></b>
+			<i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['topics_id']?>/<?=$data['id']?>"><?=$data['title']?></a></b>
 		</div>
 
-		<div><?=bb_code($data['posts_text'])?><br />
-			Написал: <?=profile($data['posts_user'])?> <?=user_online($data['posts_user'])?> <small>(<?=date_fixed($data['posts_time'])?>)</small><br />
+		<div><?=bb_code($data['text'])?><br />
+			Написал: <?=profile($data['user'])?> <?=user_online($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />
 		</div>
 
 	<?php endforeach; ?>

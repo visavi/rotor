@@ -8,24 +8,24 @@ $id = (!empty($_REQUEST['id'])) ? abs(intval($_REQUEST['id'])) : null;
 
 if (!empty($key)){
 
-    $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `users_apikey`=? LIMIT 1;", array($key));
+    $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `apikey`=? LIMIT 1;", array($key));
     if (!empty($user)){
 
         $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($id));
         if (!empty($topic)) {
 
-            $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `posts_topics_id`=? ORDER BY `posts_time` ASC;", array($id));
+            $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` ASC;", array($id));
             $posts = $querypost->fetchAll();
 
             $messages = array();
             foreach ($posts as $post) {
 
-                $post['posts_text'] = bb_code(str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $post['posts_text']));
+                $post['text'] = bb_code(str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $post['text']));
 
                 $messages[] = array(
-                    'author' => $post['posts_user'],
-                    'text'   => $post['posts_text'],
-                    'time'   => $post['posts_time']
+                    'author' => $post['user'],
+                    'text'   => $post['text'],
+                    'time'   => $post['time']
                 );
             }
 

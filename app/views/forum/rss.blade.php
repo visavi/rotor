@@ -5,18 +5,18 @@
 @section('content')
 
     <?php foreach ($posts as $data): ?>
-        <?php $data['posts_text'] = bb_code($data['posts_text']); ?>
-        <?php $data['posts_text'] = str_replace('/images/smiles', $config['home'].'/images/smiles', $data['posts_text']); ?>
-        <?php $data['posts_text'] = htmlspecialchars($data['posts_text']); ?>
+        <?php $data['text'] = bb_code($data['text']); ?>
+        <?php $data['text'] = str_replace('/images/smiles', $config['home'].'/images/smiles', $data['text']); ?>
+        <?php $data['text'] = htmlspecialchars($data['text']); ?>
 
         <item>
             <title><?= $topic['title'] ?></title>
             <link><?= App::setting('home') ?>/topic/<?= $topic['id'] ?></link>
-            <description><?=$data['posts_text']?> </description>
-            <author><?=nickname($data['posts_user'])?></author>
-            <pubDate><?=date("r", $data['posts_time'])?></pubDate>
+            <description><?=$data['text']?> </description>
+            <author><?=nickname($data['user'])?></author>
+            <pubDate><?=date("r", $data['time'])?></pubDate>
             <category>Сообщения</category>
-            <guid><?= App::setting('home') ?>/topic/<?=$topic['id']?>/<?=$data['posts_id']?></guid>
+            <guid><?= App::setting('home') ?>/topic/<?=$topic['id']?>/<?=$data['id']?></guid>
         </item>
     <?php endforeach; ?>
 @stop

@@ -171,7 +171,7 @@ case 'mailing':
     if ($uid == $_SESSION['token']) {
         if (is_admin(array(101))){
 
-            $query = DB::run()->query("SELECT `users_login` FROM `users` WHERE `users_timelastlogin`>?;", array(SITETIME - (86400 * 7)));
+            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", array(SITETIME - (86400 * 7)));
             $users = $query->fetchAll(PDO::FETCH_COLUMN);
 
             $users = array_diff($users, array($log));
@@ -182,7 +182,7 @@ case 'mailing':
 
                 $text = 'Поздравляем! Вы получили пригласительный ключ'.PHP_EOL.'Ваш ключ: %s'.PHP_EOL.'С помощью этого ключа вы можете пригласить вашего друга на этот сайт!';
 
-                $updateusers = DB::run() -> prepare("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;");
+                $updateusers = DB::run() -> prepare("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;");
                 $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);");
                 $dbr = DB::run() -> prepare("INSERT INTO `invite` (`key`, `user`, `time`) VALUES (?, ?, ?);");
 

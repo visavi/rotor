@@ -10,8 +10,8 @@ if (isset($_GET['act'])) {
 show_title('Бан пользователя');
 
 if (is_user()) {
-    if ($udata['users_ban'] == 1) {
-        if ($udata['users_timeban'] > SITETIME) {
+    if ($udata['ban'] == 1) {
+        if ($udata['timeban'] > SITETIME) {
             switch ($act):
             ############################################################################################
             ##                                    Главная страница                                    ##
@@ -19,19 +19,19 @@ if (is_user()) {
                 case 'index':
 
                     echo '<i class="fa fa-times"></i> <b>Вас забанили</b><br /><br />';
-                    echo '<b><span style="color:#ff0000">Причина бана: '.bb_code($udata['users_reasonban']).'</span></b><br /><br />';
+                    echo '<b><span style="color:#ff0000">Причина бана: '.bb_code($udata['reasonban']).'</span></b><br /><br />';
 
-                    echo 'До окончания бана осталось <b>'.formattime($udata['users_timeban'] - SITETIME).'</b><br /><br />';
+                    echo 'До окончания бана осталось <b>'.formattime($udata['timeban'] - SITETIME).'</b><br /><br />';
 
                     echo 'Чтобы не терять время зря, рекомендуем вам ознакомиться с <b><a href="/rules">Правилами сайта</a></b><br /><br />';
 
-                    echo 'Общее число строгих нарушений: <b>'.$udata['users_totalban'].'</b><br />';
+                    echo 'Общее число строгих нарушений: <b>'.$udata['totalban'].'</b><br />';
                     echo 'Внимание, максимальное количество нарушений: <b>5</b><br />';
                     echo 'При превышении лимита нарушений ваш профиль автоматически удаляется<br />';
                     echo 'Востановление профиля или данных после этого будет невозможным<br />';
                     echo 'Будьте внимательны, старайтесь не нарушать больше правил<br /><br />';
                     // --------------------------------------------------//
-                    if ($config['addbansend'] == 1 && $udata['users_explainban'] == 1) {
+                    if ($config['addbansend'] == 1 && $udata['explainban'] == 1) {
                         echo '<div class="form">';
                         echo '<form method="post" action="/ban?act=send">';
                         echo 'Объяснение:<br />';
@@ -51,19 +51,19 @@ if (is_user()) {
                     $msg = check($_POST['msg']);
 
                     if ($config['addbansend'] == 1) {
-                        if ($udata['users_explainban'] == 1) {
+                        if ($udata['explainban'] == 1) {
                             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                                $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($udata['users_loginsendban']));
+                                $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($udata['loginsendban']));
                                 if (!empty($queryuser)) {
 
                                     $msg = antimat($msg);
 
                                     $textpriv = 'Объяснение нарушения: '.$msg;
 
-                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($udata['users_loginsendban'], $log, $textpriv, SITETIME));
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($udata['loginsendban'], $log, $textpriv, SITETIME));
 
-                                    DB::run() -> query("UPDATE `users` SET `users_explainban`=? WHERE `users_login`=?;", array(0, $log));
-                                    DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?;", array($udata['users_loginsendban']));
+                                    DB::run() -> query("UPDATE `users` SET `explainban`=? WHERE `login`=?;", array(0, $log));
+                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?;", array($udata['loginsendban']));
 
                                     notice('Объяснение успешно отправлено!');
                                     redirect("/ban");
@@ -91,7 +91,7 @@ if (is_user()) {
         ############################################################################################
         } else {
             echo '<i class="fa fa-check"></i> <b>Срок бана закончился!</b><br /><br />';
-            echo '<b><span style="color:#ff0000">Причина бана: '.bb_code($udata['users_reasonban']).'</span></b><br /><br />';
+            echo '<b><span style="color:#ff0000">Причина бана: '.bb_code($udata['reasonban']).'</span></b><br /><br />';
 
             echo 'Поздравляем!!! Время вашего бана вышло, постарайтесь вести себя достойно и не нарушать правила сайта<br /><br />';
 
@@ -100,7 +100,7 @@ if (is_user()) {
             echo 'Также у вас есть возможность исправиться и снять строгое нарушение.<br />';
             echo 'Если прошло более 1 месяца после последнего бана, то на странице <b><a href="/razban">Исправительная</a></b> заплатив штраф вы можете снять 1 строгое нарушение<br /><br />';
 
-            DB::run() -> query("UPDATE `users` SET `users_ban`=?, `users_timeban`=?, `users_explainban`=? WHERE `users_login`=?;", array(0, 0, 0, $log));
+            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `explainban`=? WHERE `login`=?;", array(0, 0, 0, $log));
         }
     } else {
         show_error('Ошибка! Вы не забанены или срок бана истек!');

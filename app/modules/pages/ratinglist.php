@@ -34,18 +34,18 @@ switch ($act):
                 $start = 0;
             }
 
-            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `users_money` DESC, `users_login` ASC LIMIT ".$start.", ".$config['userlist'].";");
+            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `money` DESC, `login` ASC LIMIT ".$start.", ".$config['userlist'].";");
 
             $i = 0;
             while ($data = $queryusers -> fetch()) {
                 ++$i;
 
-                echo '<div class="b">'.($start + $i).'. '.user_gender($data['users_login']);
+                echo '<div class="b">'.($start + $i).'. '.user_gender($data['login']);
 
-                if ($uz == $data['users_login']) {
-                    echo '<b><big>'.profile($data['users_login'], '#ff0000').'</big></b> ('.moneys($data['users_money']).')</div>';
+                if ($uz == $data['login']) {
+                    echo '<b><big>'.profile($data['login'], '#ff0000').'</big></b> ('.moneys($data['money']).')</div>';
                 } else {
-                    echo '<b>'.profile($data['users_login']).'</b> ('.moneys($data['users_money']).')</div>';
+                    echo '<b>'.profile($data['login']).'</b> ('.moneys($data['money']).')</div>';
                 }
             }
 
@@ -69,10 +69,10 @@ switch ($act):
     case 'search':
 
         if (!empty($uz)) {
-            $queryuser = DB::run() -> querySingle("SELECT `users_login` FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
+            $queryuser = DB::run() -> querySingle("SELECT `login` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
 
             if (!empty($queryuser)) {
-                $queryrating = DB::run() -> query("SELECT `users_login` FROM `users` ORDER BY `users_money` DESC, `users_login` ASC;");
+                $queryrating = DB::run() -> query("SELECT `login` FROM `users` ORDER BY `money` DESC, `login` ASC;");
                 $ratusers = $queryrating -> fetchAll(PDO::FETCH_COLUMN);
 
                 foreach ($ratusers as $key => $ratval) {

@@ -81,7 +81,7 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($uz != $log) {
-                    $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                    $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
                     if (!empty($queryuser)) {
 
                         $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", array($log));
@@ -93,7 +93,7 @@ if (is_user()) {
                                 // ----------------------------- Проверка на игнор ----------------------------//
                                 $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
                                 if (empty($ignorstr)) {
-                                    DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=?", array($uz));
+                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", array($uz));
                                     // ------------------------------Уведомление по привату------------------------//
                                     $textpriv = 'Пользователь [b]'.nickname($log).'[/b] добавил вас в свой контакт-лист!';
                                     DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));

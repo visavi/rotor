@@ -15,7 +15,7 @@ if (is_user()) {
             $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", array($log));
             if (!empty($databank)) {
                 echo '<b>Выписка по счету</b><br />';
-                echo 'На руках: '.moneys($udata['users_money']).'<br />';
+                echo 'На руках: '.moneys($udata['money']).'<br />';
                 echo 'В банке: '.moneys($databank['sum']).'<br /><br />';
 
                 if ($databank['sum'] > 0) {
@@ -92,7 +92,7 @@ if (is_user()) {
                                 $percent = percent_bank($databank['sum']);
 
                                 if (empty($oper)) {
-                                    DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`+? WHERE `users_login`=?", array($percent, $log));
+                                    DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=?", array($percent, $log));
                                     DB::run() -> query("UPDATE `bank` SET `oper`=`oper`+1, `time`=? WHERE `user`=?", array(SITETIME + 43200, $log));
                                 } else {
                                     DB::run() -> query("UPDATE `bank` SET `sum`=`sum`+?, `oper`=`oper`+1, `time`=? WHERE `user`=?", array($percent, SITETIME + 43200, $log));
@@ -132,7 +132,7 @@ if (is_user()) {
                     $querysum = DB::run() -> querySingle("SELECT `sum` FROM `bank` WHERE `user`=? LIMIT 1;", array($log));
                     if (!empty($querysum)) {
                         if ($gold <= $querysum) {
-                            DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`+? WHERE `users_login`=?", array($gold, $log));
+                            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=?", array($gold, $log));
                             DB::run() -> query("UPDATE `bank` SET `sum`=`sum`-?, `time`=? WHERE `user`=?", array($gold, SITETIME + 43200, $log));
 
                             echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно списана с вашего счета<br /><br />';
@@ -151,8 +151,8 @@ if (is_user()) {
                 show_title('Пополнение счета');
 
                 if ($gold > 0) {
-                    if ($gold <= $udata['users_money']) {
-                        DB::run() -> query("UPDATE `users` SET `users_money`=`users_money`-? WHERE `users_login`=?", array($gold, $log));
+                    if ($gold <= $udata['money']) {
+                        DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?", array($gold, $log));
 
                         $querybank = DB::run() -> querySingle("SELECT `id` FROM `bank` WHERE `user`=? LIMIT 1;", array($log));
                         if (!empty($querybank)) {

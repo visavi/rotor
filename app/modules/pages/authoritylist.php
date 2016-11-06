@@ -34,22 +34,22 @@ switch ($act):
                 $start = 0;
             }
 
-            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `users_rating` DESC, `users_login` ASC LIMIT ".$start.", ".$config['avtorlist'].";");
+            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `rating` DESC, `login` ASC LIMIT ".$start.", ".$config['avtorlist'].";");
 
             $i = 0;
             while ($data = $queryusers -> fetch()) {
                 ++$i;
 
-                echo '<div class="b">'.($start + $i).'. '.user_gender($data['users_login']);
+                echo '<div class="b">'.($start + $i).'. '.user_gender($data['login']);
 
-                if ($uz == $data['users_login']) {
-                    echo '<b><big>'.profile($data['users_login'], '#ff0000').'</big></b> (Авторитет: '.($data['users_rating']).')</div>';
+                if ($uz == $data['login']) {
+                    echo '<b><big>'.profile($data['login'], '#ff0000').'</big></b> (Авторитет: '.($data['rating']).')</div>';
                 } else {
-                    echo '<b>'.profile($data['users_login']).'</b> (Авторитет: '.($data['users_rating']).')</div>';
+                    echo '<b>'.profile($data['login']).'</b> (Авторитет: '.($data['rating']).')</div>';
                 }
 
-                echo '<div>Плюсов: '.$data['users_posrating'].' / Минусов: '.$data['users_negrating'].'<br />';
-                echo 'Дата регистрации: '.date_fixed($data['users_joined'], 'j F Y').'</div>';
+                echo '<div>Плюсов: '.$data['posrating'].' / Минусов: '.$data['negrating'].'<br />';
+                echo 'Дата регистрации: '.date_fixed($data['joined'], 'j F Y').'</div>';
             }
 
             page_strnavigation('/authoritylist?', $config['avtorlist'], $start, $total);
@@ -72,10 +72,10 @@ switch ($act):
     case 'search':
 
         if (!empty($uz)) {
-            $queryuser = DB::run() -> querySingle("SELECT `users_login` FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
+            $queryuser = DB::run() -> querySingle("SELECT `login` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
 
             if (!empty($queryuser)) {
-                $queryrating = DB::run() -> query("SELECT `users_login` FROM `users` ORDER BY `users_rating` DESC, `users_login` ASC;");
+                $queryrating = DB::run() -> query("SELECT `login` FROM `users` ORDER BY `rating` DESC, `login` ASC;");
                 $ratusers = $queryrating -> fetchAll(PDO::FETCH_COLUMN);
 
                 foreach ($ratusers as $key => $ratval) {

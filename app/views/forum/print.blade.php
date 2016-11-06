@@ -9,8 +9,8 @@
 
 	<?php foreach ($posts as $key => $data): ?>
 
-		<?=($key + 1)?>. <b><?=nickname($data['posts_user'])?></b> (<?=date_fixed($data['posts_time'])?>)<br />
-		<?=bb_code($data['posts_text'])?>
+		<?=($key + 1)?>. <b><?=nickname($data['user'])?></b> (<?=date_fixed($data['time'])?>)<br />
+		<?=bb_code($data['text'])?>
 		<br /><br />
 
 	<?php endforeach; ?>

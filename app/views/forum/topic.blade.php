@@ -16,7 +16,7 @@
     <a href="/topic/<?=$tid?>/print">Печать</a> / <a href="/topic/<?=$tid?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
-        <?php if ($topics['author'] == $log && empty($topics['closed']) && App::user('users_point') >= $config['editforumpoint']): ?>
+        <?php if ($topics['author'] == $log && empty($topics['closed']) && App::user('point') >= $config['editforumpoint']): ?>
            / <a href="/topic/<?= $tid ?>/close?token=<?=$_SESSION['token']?>">Закрыть</a>
            / <a href="/topic/<?= $tid ?>/edit">Изменить</a>
         <?php endif; ?>
@@ -71,41 +71,41 @@
         <?php foreach ($topics['posts'] as $key=>$data): ?>
             <?php $num = ($start + $key + 1); ?>
             <div class="post">
-            <div class="b" id="post_<?=$data['posts_id']?>">
+            <div class="b" id="post_<?=$data['id']?>">
 
                 <div class="pull-right">
-                    <?php if (!empty($log) && $log != $data['posts_user']): ?>
+                    <?php if (!empty($log) && $log != $data['user']): ?>
 
-                        <a href="#" onclick="return postReply('<?= nickname($data['posts_user']) ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="#" onclick="return postReply('<?= nickname($data['user']) ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                         <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
                         <noindex>
-                            <a href="#" onclick="return sendComplaint(this)" data-type="/topic" data-id="{{ $data['posts_id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $start }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="/topic" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $start }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         </noindex>
 
                     <?php endif; ?>
 
-                    <?php if (($log == $data['posts_user'] && $data['posts_time'] + 600 > SITETIME) || !empty($topics['is_moder'])): ?>
-                        <a href="/topic/<?=$tid?>/<?=$data['posts_id']?>/edit?start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                    <?php if (($log == $data['user'] && $data['time'] + 600 > SITETIME) || !empty($topics['is_moder'])): ?>
+                        <a href="/topic/<?=$tid?>/<?=$data['id']?>/edit?start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         <?php if (!empty($topics['is_moder'])): ?>
-                        <input type="checkbox" name="del[]" value="<?=$data['posts_id']?>" />
+                        <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
 
-                <div class="img"><?=user_avatars($data['posts_user'])?></div>
+                <div class="img"><?=user_avatars($data['user'])?></div>
 
-                <?=$num?>. <b><?=profile($data['posts_user'])?></b> <small>(<?=date_fixed($data['posts_time'])?>)</small><br />
-                <?=user_title($data['posts_user'])?> <?=user_online($data['posts_user'])?>
+                <?=$num?>. <b><?=profile($data['user'])?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
+                <?=user_title($data['user'])?> <?=user_online($data['user'])?>
             </div>
 
-            <div class="message"><?=bb_code($data['posts_text'])?></div>
+            <div class="message"><?=bb_code($data['text'])?></div>
 
-            <?php if (!empty($topics['posts_files'])): ?>
-                <?php if (isset($topics['posts_files'][$data['posts_id']])): ?>
+            <?php if (!empty($topics['files'])): ?>
+                <?php if (isset($topics['files'][$data['id']])): ?>
                     <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />
-                    <?php foreach ($topics['posts_files'][$data['posts_id']] as $file): ?>
+                    <?php foreach ($topics['files'][$data['id']] as $file): ?>
                         <?php $ext = getExtension($file['hash']); ?>
 
 
@@ -119,12 +119,12 @@
                 <?php endif; ?>
             <?php endif; ?>
 
-            <?php if (!empty($data['posts_edit'])): ?>
-                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['posts_edit'])?> (<?=date_fixed($data['posts_edit_time'])?>)</small><br />
+            <?php if (!empty($data['edit'])): ?>
+                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['edit'])?> (<?=date_fixed($data['edit_time'])?>)</small><br />
             <?php endif; ?>
 
             <?php if (is_admin() || empty($config['anonymity'])): ?>
-                <span class="data">(<?=$data['posts_brow']?>, <?=$data['posts_ip']?>)</span>
+                <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
             <?php endif; ?>
 
             </div>
@@ -155,7 +155,7 @@
                         {!! App::textError('msg') !!}
                     </div>
 
-                    <?php if (App::user('users_point') >= $config['forumloadpoints']): ?>
+                    <?php if (App::user('point') >= $config['forumloadpoints']): ?>
                         <div class="js-attach-form" style="display: none;">
 
                             <label class="btn btn-sm btn-default" for="inputFile">

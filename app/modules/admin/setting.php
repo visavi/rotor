@@ -79,14 +79,14 @@ if (is_admin(array(101))) {
                 if ($uid == $_SESSION['token']) {
                     if (!empty($login) && !empty($mail) && !empty($pass)) {
 
-                        if (md5(md5($pass)) == $udata['users_pass']) {
+                        if (md5(md5($pass)) == $udata['pass']) {
                             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mail)) {
 
-                                $queryuser = DB::run()->queryFetch("SELECT * FROM `users` WHERE `users_login`=? LIMIT 1;", array($login));
+                                $queryuser = DB::run()->queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($login));
                                 if (!empty($queryuser)){
 
                                     if ($login!=$setting['nickname']){
-                                        DB::run() -> query("UPDATE `users` SET `users_level`=? WHERE `users_login`=? LIMIT 1;", array(101, $login));
+                                        DB::run() -> query("UPDATE `users` SET `level`=? WHERE `login`=? LIMIT 1;", array(101, $login));
                                     }
 
                                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");

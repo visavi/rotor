@@ -40,7 +40,7 @@ if (Request::isMethod('post')) {
 
     if (!empty($logs)){
         // Проверка логина или ника на существование
-        $reglogin = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", array(strtolower($logs), strtolower($logs)));
+        $reglogin = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($logs), strtolower($logs)));
         $validation -> addRule('empty', $reglogin, ['logs' => 'Пользователь с данным логином или ником уже зарегистрирован!']);
 
         // Проверка логина в черном списке
@@ -50,7 +50,7 @@ if (Request::isMethod('post')) {
 
     if (!empty($config['regmail']) && !empty($meil)){
         // Проверка email на существование
-        $regmail = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_email`=? LIMIT 1;", array($meil));
+        $regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", array($meil));
         $validation -> addRule('empty', $regmail, ['meil' => 'Указанный вами адрес e-mail уже используется в системе!']);
 
         // Проверка домена от email в черном списке
@@ -99,25 +99,25 @@ if (Request::isMethod('post')) {
         }
 
         $registration = DBM::run()->insert('users', array(
-            'users_login'         => $logs,
-            'users_pass'          => md5(md5($pars)),
-            'users_email'         => $meil,
-            'users_joined'        => SITETIME,
-            'users_level'         => 107,
-            'users_gender'        => $gender,
-            'users_themes'        => 0,
-            'users_postguest'     => $config['bookpost'],
-            'users_postnews'      => $config['postnews'],
-            'users_postprivat'    => $config['privatpost'],
-            'users_postforum'     => $config['forumpost'],
-            'users_themesforum'   => $config['forumtem'],
-            'users_postboard'     => $config['boardspost'],
-            'users_point'         => 0,
-            'users_money'         => $config['registermoney'],
-            'users_timelastlogin' => SITETIME,
-            'users_confirmreg'    => $config['regkeys'],
-            'users_confirmregkey' => $registration_key,
-            'users_subscribe'     => generate_password(32),
+            'login'         => $logs,
+            'pass'          => md5(md5($pars)),
+            'email'         => $meil,
+            'joined'        => SITETIME,
+            'level'         => 107,
+            'gender'        => $gender,
+            'themes'        => 0,
+            'postguest'     => $config['bookpost'],
+            'postnews'      => $config['postnews'],
+            'postprivat'    => $config['privatpost'],
+            'postforum'     => $config['forumpost'],
+            'themesforum'   => $config['forumtem'],
+            'postboard'     => $config['boardspost'],
+            'point'         => 0,
+            'money'         => $config['registermoney'],
+            'timelastlogin' => SITETIME,
+            'confirmreg'    => $config['regkeys'],
+            'confirmregkey' => $registration_key,
+            'subscribe'     => generate_password(32),
         ));
 
         // ------------------------------ Уведомление в приват ----------------------------------//

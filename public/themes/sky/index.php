@@ -117,7 +117,7 @@ if (stats_spam()>0){
 echo ' &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>';
 }
 
-if (App::user('users_newchat')<stats_newchat()){
+if (App::user('newchat')<stats_newchat()){
 echo ' &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>';
 }
 

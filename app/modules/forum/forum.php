@@ -79,13 +79,13 @@ case 'create':
             $title = antimat($title);
             $msg = antimat($msg);
 
-            DB::run() -> query("UPDATE `users` SET `users_allforum`=`users_allforum`+1, `users_point`=`users_point`+1, `users_money`=`users_money`+5 WHERE `users_login`=?", array($log));
+            DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array($log));
 
             DB::run() -> query("INSERT INTO `topics` (`forums_id`, `title`, `author`, `posts`, `last_user`, `last_time`) VALUES (?, ?, ?, ?, ?, ?);", array($fid, $title, $log, 1, $log, SITETIME));
 
             $lastid = DB::run() -> lastInsertId();
 
-            DB::run() -> query("INSERT INTO `posts` (`posts_topics_id`, `posts_forums_id`, `posts_user`, `posts_text`, `posts_time`, `posts_ip`, `posts_brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($lastid, $fid, $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()));
+            DB::run() -> query("INSERT INTO `posts` (`topics_id`, `forums_id`, `user`, `text`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($lastid, $fid, $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()));
 
             DB::run() -> query("UPDATE `forums` SET `topics`=`topics`+1, `posts`=`posts`+1, `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?", array($lastid, $title, $log, SITETIME, $fid));
             // Обновление родительского форума

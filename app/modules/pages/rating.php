@@ -16,8 +16,8 @@ show_title('Изменение авторитета');
 
 if (is_user()) {
     if ($log != $uz) {
-        if ($udata['users_point'] >= $config['editratingpoint']) {
-            $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+        if ($udata['point'] >= $config['editratingpoint']) {
+            $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
             if (!empty($queryuser)) {
                 $querytime = DB::run() -> querySingle("SELECT MAX(`rating_time`) FROM `rating` WHERE `rating_user`=? LIMIT 1;", array($log));
                 if ($querytime + 10800 < SITETIME) {
@@ -69,18 +69,18 @@ if (is_user()) {
                                             DB::run() -> query("INSERT INTO `rating` (`rating_user`, `rating_login`, `rating_text`, `rating_vote`, `rating_time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 1, SITETIME));
                                             DB::run() -> query("DELETE FROM `rating` WHERE `rating_user`=? AND `rating_time` < (SELECT MIN(`rating_time`) FROM (SELECT `rating_time` FROM `rating` WHERE `rating_user`=? ORDER BY `rating_time` DESC LIMIT 20) AS del);", array($log, $log));
 
-                                            DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1, `users_rating`=CAST(`users_posrating`AS SIGNED)-CAST(`users_negrating`AS SIGNED)+1, `users_posrating`=`users_posrating`+1 WHERE `users_login`=? LIMIT 1;", array($uz));
+                                            DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `rating`=CAST(`posrating`AS SIGNED)-CAST(`negrating`AS SIGNED)+1, `posrating`=`posrating`+1 WHERE `login`=? LIMIT 1;", array($uz));
 
-                                            $uzdata = DB::run() -> queryFetch("SELECT `users_rating`, `users_posrating`, `users_negrating` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                                            $uzdata = DB::run() -> queryFetch("SELECT `rating`, `posrating`, `negrating` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
                                             // ------------------------------Уведомление по привату------------------------//
-                                            $textpriv = 'Пользователь [b]'.nickname($log).'[/b] поставил вам плюс! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
+                                            $textpriv = 'Пользователь [b]'.nickname($log).'[/b] поставил вам плюс! (Ваш рейтинг: '.$uzdata['rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
                                             DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
 
                                             echo '<i class="fa fa-thumbs-up"></i> Ваш положительный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
-                                            echo 'В данный момент его авторитет: '.$uzdata['users_rating'].'<br />';
-                                            echo 'Всего положительных голосов: '.$uzdata['users_posrating'].'<br />';
-                                            echo 'Всего отрицательных голосов: '.$uzdata['users_negrating'].'<br /><br />';
+                                            echo 'В данный момент его авторитет: '.$uzdata['rating'].'<br />';
+                                            echo 'Всего положительных голосов: '.$uzdata['posrating'].'<br />';
+                                            echo 'Всего отрицательных голосов: '.$uzdata['negrating'].'<br /><br />';
 
                                             echo 'От общего числа положительных и отрицательных голосов строится рейтинг самых авторитетных<br />';
                                             echo 'Внимание, следующий голос вы сможете оставить не менее чем через 3 часа!<br /><br />';
@@ -91,7 +91,7 @@ if (is_user()) {
                                         ##                                Уменьшение авторитета                                   ##
                                         ############################################################################################
                                         if ($vote == 0) {
-                                            if ($udata['users_rating'] >= 10) {
+                                            if ($udata['rating'] >= 10) {
 
                                                 /* Запрещаем ставить обратный минус */
                                                 $revertRating = DB::run() -> querySingle("SELECT `rating_id` FROM `rating` WHERE `rating_user`=? AND `rating_login`=? AND `rating_vote`=? ORDER BY `rating_time` DESC LIMIT 1;", array($uz, $log, 0));
@@ -102,18 +102,18 @@ if (is_user()) {
                                                     DB::run() -> query("INSERT INTO `rating` (`rating_user`, `rating_login`, `rating_text`, `rating_vote`, `rating_time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 0, SITETIME));
                                                     DB::run() -> query("DELETE FROM `rating` WHERE `rating_user`=? AND `rating_time` < (SELECT MIN(`rating_time`) FROM (SELECT `rating_time` FROM `rating` WHERE `rating_user`=? ORDER BY `rating_time` DESC LIMIT 20) AS del);", array($log, $log));
 
-                                                    DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1, `users_rating`=CAST(`users_posrating`AS SIGNED)-CAST(`users_negrating`AS SIGNED)-1, `users_negrating`=`users_negrating`+1 WHERE `users_login`=? LIMIT 1;", array($uz));
+                                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `rating`=CAST(`posrating`AS SIGNED)-CAST(`negrating`AS SIGNED)-1, `negrating`=`negrating`+1 WHERE `login`=? LIMIT 1;", array($uz));
 
-                                                    $uzdata = DB::run() -> queryFetch("SELECT `users_rating`, `users_posrating`, `users_negrating` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                                                    $uzdata = DB::run() -> queryFetch("SELECT `rating`, `posrating`, `negrating` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
                                                     // ------------------------------Уведомление по привату------------------------//
-                                                    $textpriv = 'Пользователь [b]'.nickname($log).'[/b] поставил вам минус! (Ваш рейтинг: '.$uzdata['users_rating'].')'.PHP_EOL.'Комментарий: '.$text;
+                                                    $textpriv = 'Пользователь [b]'.nickname($log).'[/b] поставил вам минус! (Ваш рейтинг: '.$uzdata['rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
                                                     DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
 
                                                     echo '<i class="fa fa-thumbs-down"></i> Ваш отрицательный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
-                                                    echo 'В данный момент его авторитет: '.$uzdata['users_rating'].'<br />';
-                                                    echo 'Всего положительных голосов: '.$uzdata['users_posrating'].'<br />';
-                                                    echo 'Всего отрицательных голосов: '.$uzdata['users_negrating'].'<br /><br />';
+                                                    echo 'В данный момент его авторитет: '.$uzdata['rating'].'<br />';
+                                                    echo 'Всего положительных голосов: '.$uzdata['posrating'].'<br />';
+                                                    echo 'Всего отрицательных голосов: '.$uzdata['negrating'].'<br /><br />';
 
                                                     echo 'От общего числа положительных и отрицательных голосов строится рейтинг самых авторитетных<br />';
                                                     echo 'Внимание, следующий голос вы сможете оставить не менее чем через 3 часа!<br /><br />';

@@ -34,29 +34,29 @@ switch ($act):
                 $start = 0;
             }
 
-            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `users_point` DESC, `users_login` ASC LIMIT ".$start.", ".$config['userlist'].";");
+            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `point` DESC, `login` ASC LIMIT ".$start.", ".$config['userlist'].";");
 
             $i = 0;
             while ($data = $queryusers -> fetch()) {
                 ++$i;
 
                 echo '<div class="b"> ';
-                echo '<div class="img">'.user_avatars($data['users_login']).'</div>';
+                echo '<div class="img">'.user_avatars($data['login']).'</div>';
 
-                if ($uz == $data['users_login']) {
-                    echo ($start + $i).'. <b><big>'.profile($data['users_login'], '#ff0000').'</big></b> ';
+                if ($uz == $data['login']) {
+                    echo ($start + $i).'. <b><big>'.profile($data['login'], '#ff0000').'</big></b> ';
                 } else {
-                    echo ($start + $i).'. <b>'.profile($data['users_login']).'</b> ';
+                    echo ($start + $i).'. <b>'.profile($data['login']).'</b> ';
                 }
-                echo '('.points($data['users_point']).')<br />';
-                echo user_title($data['users_login']).' '.user_online($data['users_login']);
+                echo '('.points($data['point']).')<br />';
+                echo user_title($data['login']).' '.user_online($data['login']);
                 echo '</div>';
 
                 echo '<div>';
-                echo 'Форум: '.$data['users_allforum'].' | Гостевая: '.$data['users_allguest'].' | Коммент: '.$data['users_allcomments'].'<br />';
-                echo 'Посещений: '.$data['users_visits'].'<br />';
-                echo 'Деньги: '.user_money($data['users_login']).'<br />';
-                echo 'Дата регистрации: '.date_fixed($data['users_joined'], 'j F Y').'</div>';
+                echo 'Форум: '.$data['allforum'].' | Гостевая: '.$data['allguest'].' | Коммент: '.$data['allcomments'].'<br />';
+                echo 'Посещений: '.$data['visits'].'<br />';
+                echo 'Деньги: '.user_money($data['login']).'<br />';
+                echo 'Дата регистрации: '.date_fixed($data['joined'], 'j F Y').'</div>';
             }
 
             page_strnavigation('/userlist?', $config['userlist'], $start, $total);
@@ -79,10 +79,10 @@ switch ($act):
     case 'search':
 
         if (!empty($uz)) {
-            $queryuser = DB::run() -> querySingle("SELECT `users_login` FROM `users` WHERE LOWER(`users_login`)=? OR LOWER(`users_nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
+            $queryuser = DB::run() -> querySingle("SELECT `login` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
 
             if (!empty($queryuser)) {
-                $queryrating = DB::run() -> query("SELECT `users_login` FROM `users` ORDER BY `users_point` DESC, `users_login` ASC;");
+                $queryrating = DB::run() -> query("SELECT `login` FROM `users` ORDER BY `point` DESC, `login` ASC;");
                 $ratusers = $queryrating -> fetchAll(PDO::FETCH_COLUMN);
 
                 foreach ($ratusers as $key => $ratval) {

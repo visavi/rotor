@@ -27,8 +27,8 @@ if (is_admin()) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
 
-            if (App::user('users_newchat') != stats_newchat()) {
-                DB::run() -> query("UPDATE `users` SET `users_newchat`=? WHERE `users_login`=? LIMIT 1;", array(stats_newchat(), $log));
+            if (App::user('newchat') != stats_newchat()) {
+                DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", array(stats_newchat(), $log));
             }
 
             if ($total > 0) {
@@ -105,7 +105,7 @@ if (is_admin()) {
 
                     DB::run() -> query("DELETE FROM `chat` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `chat` ORDER BY `time` DESC LIMIT ".$config['maxpostchat'].") AS del);");
 
-                    DB::run() -> query("UPDATE `users` SET `users_newchat`=? WHERE `users_login`=? LIMIT 1;", array(stats_newchat(), $log));
+                    DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", array(stats_newchat(), $log));
 
                     notice('Сообщение успешно добавлено!');
                     redirect ("/admin/chat");

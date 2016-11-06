@@ -6,7 +6,7 @@
 
     <h1>Изменение темы</h1>
 
-    <i class="fa fa-pencil"></i> <b><?=nickname($post['posts_user'])?></b> <small>(<?=date_fixed($post['posts_time'])?>)</small><br /><br />
+    <i class="fa fa-pencil"></i> <b><?=nickname($post['user'])?></b> <small>(<?=date_fixed($post['time'])?>)</small><br /><br />
 
     <div class="form">
         <form action="/topic/<?=$topic['id']?>/edit" method="post">
@@ -22,7 +22,7 @@
             @if ($post)
                 <div class="form-group{{ App::hasError('msg') }}">
                     <label for="markItUp">Сообщение:</label>
-                    <textarea class="form-control" id="markItUp" rows="5" name="msg" required>{{ App::getInput('msg', $post['posts_text']) }}</textarea>
+                    <textarea class="form-control" id="markItUp" rows="5" name="msg" required>{{ App::getInput('msg', $post['text']) }}</textarea>
                     {!! App::textError('msg') !!}
                 </div>
             @endif

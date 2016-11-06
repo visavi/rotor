@@ -23,9 +23,9 @@ if (is_user()) {
             echo '<a href="/private?act=output">Отправленные ('.$intotal[0].')</a> / ';
             echo '<a href="/private?act=trash">Корзина ('.$intotal[1].')</a><hr />';
 
-            if ($udata['users_newprivat'] > 0) {
-                echo '<div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: '.(int)$udata['users_newprivat'].'</span></b></div>';
-                DB::run() -> query("UPDATE `users` SET `users_newprivat`=?, `users_sendprivatmail`=? WHERE `users_login`=? LIMIT 1;", array(0, 0, $log));
+            if ($udata['newprivat'] > 0) {
+                echo '<div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: '.(int)$udata['newprivat'].'</span></b></div>';
+                DB::run() -> query("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `login`=? LIMIT 1;", array(0, 0, $log));
             }
 
             if ($total >= ($config['limitmail'] - ($config['limitmail'] / 10)) && $total < $config['limitmail']) {
@@ -201,7 +201,7 @@ if (is_user()) {
 
                 echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
 
-                if ($udata['users_point'] < $config['privatprotect']) {
+                if ($udata['point'] < $config['privatprotect']) {
                     echo 'Проверочный код:<br />';
                     echo '<img src="/captcha" alt="" /><br />';
                     echo '<input name="provkod" size="6" maxlength="6" /><br />';
@@ -227,7 +227,7 @@ if (is_user()) {
 
                     echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
 
-                    if ($udata['users_point'] < $config['privatprotect']) {
+                    if ($udata['point'] < $config['privatprotect']) {
                         echo 'Проверочный код:<br />';
                         echo '<img src="/captcha" alt="" /><br />';
                         echo '<input name="provkod" size="6" maxlength="6" /><br />';
@@ -257,9 +257,9 @@ if (is_user()) {
                 if (!empty($uz)) {
                     if ($uz != $log) {
                         if (!user_privacy($uz) || is_admin() || is_contact($uz, $log)){
-                            if ($udata['users_point'] >= $config['privatprotect'] || $provkod == $_SESSION['protect']) {
+                            if ($udata['point'] >= $config['privatprotect'] || $provkod == $_SESSION['protect']) {
                                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                                    $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                                    $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
                                     if (!empty($queryuser)) {
                                         $uztotal = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `user`=?;", array($uz));
                                         if ($uztotal < $config['limitmail']) {
@@ -270,7 +270,7 @@ if (is_user()) {
 
                                                     $msg = antimat($msg);
 
-                                                    DB::run() -> query("UPDATE `users` SET `users_newprivat`=`users_newprivat`+1 WHERE `users_login`=? LIMIT 1;", array($uz));
+                                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;", array($uz));
                                                     DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
 
                                                     DB::run() -> query("INSERT INTO `outbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
@@ -279,25 +279,25 @@ if (is_user()) {
                                                     save_usermail(60);
 
                                                     $deliveryUsers = DBM::run()->select('users', array(
-                                                            'users_newprivat' => array('>', 0),
-                                                            'users_sendprivatmail' => 0,
-                                                            'users_timelastlogin' => array('<', SITETIME - 86400 * $config['sendprivatmailday']),
-                                                            'users_subscribe' => array('<>', ''),
-                                                            'users_email' => array('<>', ''),
-                                                            'users_confirmreg' => 0,
-                                                    ), $config['sendmailpacket'], null, array('users_timelastlogin'=>'ASC'));
+                                                            'newprivat' => array('>', 0),
+                                                            'sendprivatmail' => 0,
+                                                            'timelastlogin' => array('<', SITETIME - 86400 * $config['sendprivatmailday']),
+                                                            'subscribe' => array('<>', ''),
+                                                            'email' => array('<>', ''),
+                                                            'confirmreg' => 0,
+                                                    ), $config['sendmailpacket'], null, array('timelastlogin'=>'ASC'));
 
                                                     foreach ($deliveryUsers as $user) {
-                                                        sendMail($user['users_email'],
-                                                            $user['users_newprivat'].' непрочитанных сообщений ('.$config['title'].')',
-                                                            nl2br("Здравствуйте ".nickname($user['users_login'])."! \nУ вас имеются непрочитанные сообщения (".$user['users_newprivat']." шт.) на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages//private"),
-                                                            array('unsubkey' => $user['users_subscribe'])
+                                                        sendMail($user['email'],
+                                                            $user['newprivat'].' непрочитанных сообщений ('.$config['title'].')',
+                                                            nl2br("Здравствуйте ".nickname($user['login'])."! \nУ вас имеются непрочитанные сообщения (".$user['newprivat']." шт.) на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages//private"),
+                                                            array('unsubkey' => $user['subscribe'])
                                                         );
 
                                                         $user = DBM::run()->update('users', array(
-                                                            'users_sendprivatmail' => 1,
+                                                            'sendprivatmail' => 1,
                                                         ), array(
-                                                            'users_login' => $user['users_login'],
+                                                            'login' => $user['login'],
                                                         ));
                                                     }
                                                     notice('Ваше письмо успешно отправлено!');
@@ -450,7 +450,7 @@ if (is_user()) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if (empty($udata['users_newprivat'])) {
+                if (empty($udata['newprivat'])) {
                     $deltrash = SITETIME + 86400 * $config['expiresmail'];
 
                     DB::run() -> query("DELETE FROM `trash` WHERE `trash_del`<?;", array(SITETIME));
@@ -523,7 +523,7 @@ if (is_user()) {
             echo '<a href="/private?act=trash">Корзина</a><hr />';
 
             if ($uz != $log) {
-                $queryuser = DB::run() -> querySingle("SELECT `users_id` FROM `users` WHERE `users_login`=? LIMIT 1;", array($uz));
+                $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
                 if (!empty($queryuser)) {
                     $total = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `user`=? AND `author`=?;", array($log, $uz, $uz, $log));
 
@@ -552,7 +552,7 @@ if (is_user()) {
                             echo 'Сообщение:<br />';
                             echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
 
-                            if ($udata['users_point'] < $config['privatprotect']) {
+                            if ($udata['point'] < $config['privatprotect']) {
                                 echo 'Проверочный код:<br /> ';
                                 echo '<img src="/captcha" alt="" /><br />';
                                 echo '<input name="provkod" size="6" maxlength="6" /><br />';
