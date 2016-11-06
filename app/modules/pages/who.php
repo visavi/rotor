@@ -15,21 +15,21 @@ if ($total > 0) {
         $start = 0;
     }
 
-    $queryvisit = DB::run() -> query("SELECT * FROM `visit` ORDER BY `visit_nowtime` DESC LIMIT ".$start.", ".$config['showuser'].";");
+    $queryvisit = DB::run() -> query("SELECT * FROM `visit` ORDER BY `nowtime` DESC LIMIT ".$start.", ".$config['showuser'].";");
 
     while ($data = $queryvisit -> fetch()) {
 
-        if (SITETIME - $data['visit_nowtime'] < 600) {
+        if (SITETIME - $data['nowtime'] < 600) {
             $lastvisit = '<span style="color:#00ff00">Oнлайн</span>';
         } else {
-            $lastvisit = formattime(SITETIME - $data['visit_nowtime'], 0).' назад';
+            $lastvisit = formattime(SITETIME - $data['nowtime'], 0).' назад';
         }
 
-        echo '<div class="b">'.user_gender($data['visit_user']).' <b>'.profile($data['visit_user']).'</b> ('.$lastvisit.')</div>';
+        echo '<div class="b">'.user_gender($data['user']).' <b>'.profile($data['user']).'</b> ('.$lastvisit.')</div>';
 
-        $position = (!empty($data['visit_page'])) ? $data['visit_page'] : 'Не определено';
+        $position = (!empty($data['page'])) ? $data['page'] : 'Не определено';
         echo '<div>Находится: '.$position.'<br />';
-        echo 'Переходов: '.$data['visit_count'].'</div>';
+        echo 'Переходов: '.$data['count'].'</div>';
     }
 
     page_strnavigation('/who?', $config['showuser'], $start, $total);

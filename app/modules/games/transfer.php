@@ -80,9 +80,9 @@ if (is_user()) {
 
                                             DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
                                             // ------------------------ Запись логов ------------------------//
-                                            DB::run() -> query("INSERT INTO `transfers` (`trans_user`, `trans_login`, `trans_text`, `trans_summ`, `trans_time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $comment, $money, SITETIME));
+                                            DB::run() -> query("INSERT INTO `transfers` (`user`, `login`, `text`, `summ`, `time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $comment, $money, SITETIME));
 
-                                            DB::run() -> query("DELETE FROM `transfers` WHERE `trans_time` < (SELECT MIN(`trans_time`) FROM (SELECT `trans_time` FROM `transfers` ORDER BY `trans_time` DESC LIMIT 1000) AS del);");
+                                            DB::run() -> query("DELETE FROM `transfers` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `transfers` ORDER BY `time` DESC LIMIT 1000) AS del);");
 
                                             notice('Перевод успешно завершен! Пользователь уведомлен о переводе');
                                             redirect("/transfer");

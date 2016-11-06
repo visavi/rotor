@@ -25,20 +25,20 @@ switch ($act):
 
         show_title('История голосований');
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `vote_closed`=? ORDER BY `vote_time`;", array(1));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", array(1));
 
         if ($total > 0) {
             if ($start >= $total) {
                 $start = 0;
             }
 
-            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `vote_closed`=? ORDER BY `vote_time` DESC LIMIT ".$start.", ".$config['allvotes'].";", array(1));
+            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['allvotes'].";", array(1));
 
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
-                echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['vote_id'].'&amp;start='.$start.'">'.$data['vote_title'].'</a></b></div>';
-                echo '<div>Создано: '.date_fixed($data['vote_time']).'<br />';
-                echo 'Всего голосов: '.$data['vote_count'].'</div>';
+                echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b></div>';
+                echo '<div>Создано: '.date_fixed($data['time']).'<br />';
+                echo 'Всего голосов: '.$data['count'].'</div>';
             }
 
             page_strnavigation('/votes/history?', $config['allvotes'], $start, $total);
@@ -53,21 +53,21 @@ switch ($act):
     case 'result':
         show_title('Результаты голосований');
 
-        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `vote_id`=? LIMIT 1;", array($id));
+        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", array($id));
 
         if (!empty($votes)) {
-            if (!empty($votes['vote_closed'])) {
-                $config['newtitle'] = $votes['vote_title'];
+            if (!empty($votes['closed'])) {
+                $config['newtitle'] = $votes['title'];
 
-                echo '<i class="fa fa-briefcase"></i> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
+                echo '<i class="fa fa-briefcase"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
-                $queryanswer = DB::run() -> query("SELECT `answer_option`, `answer_result` FROM `voteanswer` WHERE `answer_vote_id`=? ORDER BY `answer_result` DESC;", array($id));
+                $queryanswer = DB::run() -> query("SELECT `option`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", array($id));
                 $answer = $queryanswer -> fetchAssoc();
 
                 $total = count($answer);
 
                 if ($total > 0) {
-                    $sum = $votes['vote_count'];
+                    $sum = $votes['count'];
                     $max = max($answer);
 
                     if (empty($sum)) {

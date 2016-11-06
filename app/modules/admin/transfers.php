@@ -21,21 +21,21 @@ if (is_admin(array(101, 102, 103))) {
                     $start = 0;
                 }
 
-                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `trans_time` DESC LIMIT ".$start.", ".$config['listtransfers'].";");
+                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$start.", ".$config['listtransfers'].";");
 
                 while ($data = $querytrans -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['trans_user']).'</div>';
-                    echo '<b>'.profile($data['trans_user']).'</b> '.user_online($data['trans_user']).' ';
+                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                    echo '<small>('.date_fixed($data['trans_time']).')</small><br />';
+                    echo '<small>('.date_fixed($data['time']).')</small><br />';
 
-                    echo '<a href="/admin/transfers?act=view&amp;uz='.$data['trans_user'].'">Все переводы</a></div>';
+                    echo '<a href="/admin/transfers?act=view&amp;uz='.$data['user'].'">Все переводы</a></div>';
 
                     echo '<div>';
-                    echo 'Кому: '.profile($data['trans_login']).'<br />';
-                    echo 'Сумма: '.moneys($data['trans_summ']).'<br />';
-                    echo 'Комментарий: '.$data['trans_text'].'<br />';
+                    echo 'Кому: '.profile($data['login']).'<br />';
+                    echo 'Сумма: '.moneys($data['summ']).'<br />';
+                    echo 'Комментарий: '.$data['text'].'<br />';
                     echo '</div>';
                 }
 
@@ -64,27 +64,27 @@ if (is_admin(array(101, 102, 103))) {
 
             if (user($uz)) {
 
-                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `trans_user`=?;", array($uz));
+                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `user`=?;", array($uz));
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `trans_user`=? ORDER BY `trans_time` DESC LIMIT ".$start.", ".$config['listtransfers'].";", array($uz));
+                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listtransfers'].";", array($uz));
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
-                        echo '<div class="img">'.user_avatars($data['trans_user']).'</div>';
-                        echo '<b>'.profile($data['trans_user']).'</b> '.user_online($data['trans_user']).' ';
+                        echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                        echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                        echo '<small>('.date_fixed($data['trans_time']).')</small>';
+                        echo '<small>('.date_fixed($data['time']).')</small>';
                         echo '</div>';
 
                         echo '<div>';
-                        echo 'Кому: '.profile($data['trans_login']).'<br />';
-                        echo 'Сумма: '.moneys($data['trans_summ']).'<br />';
-                        echo 'Комментарий: '.$data['trans_text'].'<br />';
+                        echo 'Кому: '.profile($data['login']).'<br />';
+                        echo 'Сумма: '.moneys($data['summ']).'<br />';
+                        echo 'Комментарий: '.$data['text'].'<br />';
                         echo '</div>';
                     }
 

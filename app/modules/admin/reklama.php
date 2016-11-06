@@ -21,35 +21,35 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `rekuser` WHERE `rek_time`>?;", array(SITETIME));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `rekuser` WHERE `time`>?;", array(SITETIME));
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `rek_time`>? ORDER BY `rek_time` DESC LIMIT ".$start.", ".$config['rekuserpost'].";", array(SITETIME));
+                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['rekuserpost'].";", array(SITETIME));
 
                 echo '<form action="/admin/reklama?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryrek -> fetch()) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-check-circle"></i> ';
-                    echo '<b><a href="'.$data['rek_site'].'">'.$data['rek_name'].'</a></b> ('.profile($data['rek_user']).')<br />';
+                    echo '<b><a href="'.$data['site'].'">'.$data['name'].'</a></b> ('.profile($data['user']).')<br />';
 
-                    echo '<input type="checkbox" name="del[]" value="'.$data['rek_id'].'" /> ';
-                    echo '<a href="/admin/reklama?act=edit&amp;id='.$data['rek_id'].'&amp;start='.$start.'">Редактировать</a>';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<a href="/admin/reklama?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a>';
                     echo '</div>';
 
-                    echo 'Истекает: '.date_fixed($data['rek_time']).'<br />';
+                    echo 'Истекает: '.date_fixed($data['time']).'<br />';
 
-                    if (!empty($data['rek_color'])) {
-                        echo 'Цвет: <span style="color:'.$data['rek_color'].'">'.$data['rek_color'].'</span>, ';
+                    if (!empty($data['color'])) {
+                        echo 'Цвет: <span style="color:'.$data['color'].'">'.$data['color'].'</span>, ';
                     } else {
                         echo 'Цвет: нет, ';
                     }
 
-                    if (!empty($data['rek_bold'])) {
+                    if (!empty($data['bold'])) {
                         echo 'Жирность: есть<br />';
                     } else {
                         echo 'Жирность: нет<br />';
@@ -74,7 +74,7 @@ if (is_admin()) {
 
             $id = abs(intval($_GET['id']));
 
-            $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `rek_id`=? LIMIT 1;", array($id));
+            $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", array($id));
 
             if (!empty($data)) {
                 echo '<b><big>Редактирование заголовка</big></b><br /><br />';
@@ -82,10 +82,10 @@ if (is_admin()) {
                 echo '<div class="form">';
                 echo '<form action="/admin/reklama?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Адрес сайта:<br />';
-                echo '<input name="site" type="text" value="'.$data['rek_site'].'" maxlength="50" /><br />';
+                echo '<input name="site" type="text" value="'.$data['site'].'" maxlength="50" /><br />';
 
                 echo 'Название ссылки:<br />';
-                echo '<input name="name" type="text" maxlength="35" value="'.$data['rek_name'].'" /><br />';
+                echo '<input name="name" type="text" maxlength="35" value="'.$data['name'].'" /><br />';
 
                 echo 'Код цвета:';
 
@@ -94,10 +94,10 @@ if (is_admin()) {
                 }
 
                 echo '<br />';
-                echo '<input name="color" type="text" maxlength="7" value="'.$data['rek_color'].'" /><br />';
+                echo '<input name="color" type="text" maxlength="7" value="'.$data['color'].'" /><br />';
 
                 echo 'Жирность: ';
-                $checked = ($data['rek_bold'] == 1) ? ' checked="checked"' : '';
+                $checked = ($data['bold'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="bold" type="checkbox" value="1"'.$checked.' /><br />';
 
                 echo '<br /><input type="submit" value="Изменить" /></form></div><br />';
@@ -126,9 +126,9 @@ if (is_admin()) {
                     if (utf_strlen($site) >= 5 && utf_strlen($site) <= 50) {
                         if (utf_strlen($name) >= 5 && utf_strlen($name) <= 35) {
                             if (preg_match('|^#+[A-f0-9]{6}$|', $color) || empty($color)) {
-                                $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `rek_id`=? LIMIT 1;", array($id));
+                                $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", array($id));
                                 if (!empty($data)) {
-                                    DB::run() -> query("UPDATE `rekuser` SET `rek_site`=?, `rek_name`=?, `rek_color`=?, `rek_bold`=? WHERE `rek_id`=?", array($site, $name, $color, $bold, $id));
+                                    DB::run() -> query("UPDATE `rekuser` SET `site`=?, `name`=?, `color`=?, `bold`=? WHERE `id`=?", array($site, $name, $color, $bold, $id));
                                     save_advertuser();
 
                                     notice('Рекламная ссылка успешно изменена!');
@@ -171,7 +171,7 @@ if (is_admin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `rekuser` WHERE `rek_id` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `rekuser` WHERE `id` IN (".$del.");");
                     save_advertuser();
 
                     notice('Выбранные ссылки успешно удалены!');

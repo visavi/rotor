@@ -16,7 +16,7 @@ if (is_admin(array(101, 102))) {
     ############################################################################################
         case "index":
 
-            $querystatus = DB::run() -> query("SELECT * FROM `status` ORDER BY `status_topoint` DESC;");
+            $querystatus = DB::run() -> query("SELECT * FROM `status` ORDER BY `topoint` DESC;");
             $status = $querystatus -> fetchAll();
             $total = count($status);
 
@@ -26,14 +26,14 @@ if (is_admin(array(101, 102))) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-user-circle-o"></i> ';
 
-                    if (empty($statval['status_color'])) {
-                        echo '<b>'.$statval['status_name'].'</b> <small>('.$statval['status_topoint'].'-'.$statval['status_point'].')</small><br />';
+                    if (empty($statval['color'])) {
+                        echo '<b>'.$statval['name'].'</b> <small>('.$statval['topoint'].'-'.$statval['point'].')</small><br />';
                     } else {
-                        echo '<b><span style="color:'.$statval['status_color'].'">'.$statval['status_name'].'</span></b> <small>('.$statval['status_topoint'].'-'.$statval['status_point'].')</small><br />';
+                        echo '<b><span style="color:'.$statval['color'].'">'.$statval['name'].'</span></b> <small>('.$statval['topoint'].'-'.$statval['point'].')</small><br />';
                     }
                     echo '</div>';
-                    echo '<a href="/admin/status?act=edit&amp;id='.$statval['status_id'].'">Изменить</a> / ';
-                    echo '<a href="/admin/status?act=del&amp;id='.$statval['status_id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a><br />';
+                    echo '<a href="/admin/status?act=edit&amp;id='.$statval['id'].'">Изменить</a> / ';
+                    echo '<a href="/admin/status?act=del&amp;id='.$statval['id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a><br />';
                 }
                 echo '<br />Всего статусов: <b>'.$total.'</b><br /><br />';
             } else {
@@ -50,7 +50,7 @@ if (is_admin(array(101, 102))) {
 
             $id = abs(intval($_GET['id']));
 
-            $status = DB::run() -> queryFetch("SELECT * FROM `status` WHERE `status_id`=? LIMIT 1;", array($id));
+            $status = DB::run() -> queryFetch("SELECT * FROM `status` WHERE `id`=? LIMIT 1;", array($id));
 
             if (!empty($status)) {
                 echo '<b><big>Изменение статуса</big></b><br /><br />';
@@ -58,13 +58,13 @@ if (is_admin(array(101, 102))) {
                 echo '<div class="form">';
                 echo '<form action="/admin/status?act=change&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'От:<br />';
-                echo '<input type="text" name="topoint" maxlength="10" value="'.$status['status_topoint'].'" /><br />';
+                echo '<input type="text" name="topoint" maxlength="10" value="'.$status['topoint'].'" /><br />';
                 echo 'До:<br />';
-                echo '<input type="text" name="point" maxlength="10" value="'.$status['status_point'].'" /><br />';
+                echo '<input type="text" name="point" maxlength="10" value="'.$status['point'].'" /><br />';
                 echo 'Статус:<br />';
-                echo '<input type="text" name="name" maxlength="30" value="'.$status['status_name'].'" /><br />';
+                echo '<input type="text" name="name" maxlength="30" value="'.$status['name'].'" /><br />';
                 echo 'Цвет:<br />';
-                echo '<input type="text" name="color" maxlength="7" value="'.$status['status_color'].'" /><br />';
+                echo '<input type="text" name="color" maxlength="7" value="'.$status['color'].'" /><br />';
 
                 echo '<input type="submit" value="Изменить" /></form></div><br />';
             } else {
@@ -89,7 +89,7 @@ if (is_admin(array(101, 102))) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($name) >= 5 && utf_strlen($name) < 30) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
-                        DB::run() -> query("UPDATE `status` SET `status_topoint`=?, `status_point`=?, `status_name`=?, `status_color`=? WHERE `status_id`=?;", array($topoint, $point, $name, $color, $id));
+                        DB::run() -> query("UPDATE `status` SET `topoint`=?, `point`=?, `name`=?, `color`=? WHERE `id`=?;", array($topoint, $point, $name, $color, $id));
 
                         notice('Статус успешно изменен!');
                         redirect("/admin/status");
@@ -143,7 +143,7 @@ if (is_admin(array(101, 102))) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($name) >= 5 && utf_strlen($name) < 30) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
-                        DB::run() -> query("INSERT INTO `status` (`status_topoint`, `status_point`, `status_name`, `status_color`) VALUES (?, ?, ?, ?);", array($topoint, $point, $name, $color));
+                        DB::run() -> query("INSERT INTO `status` (`topoint`, `point`, `name`, `color`) VALUES (?, ?, ?, ?);", array($topoint, $point, $name, $color));
 
                         notice('Статус успешно добавлен!');
                         redirect("/admin/status");
@@ -170,7 +170,7 @@ if (is_admin(array(101, 102))) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($id)) {
-                    DB::run() -> query("DELETE FROM `status` WHERE `status_id`=?;", array($id));
+                    DB::run() -> query("DELETE FROM `status` WHERE `id`=?;", array($id));
 
                     notice('Статус успешно удален!');
                     redirect("/admin/status");

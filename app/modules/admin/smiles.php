@@ -21,14 +21,14 @@ case 'index':
         $start = last_page($total, $config['smilelist']);
     }
 
-    $smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`smiles_code`) ASC LIMIT :start, :limit;", array('start' => intval($start), 'limit' => intval($config['smilelist'])));
+    $smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", array('start' => intval($start), 'limit' => intval($config['smilelist'])));
 
     echo '<form action="/admin/smiles?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
     foreach($smiles as $smile) {
-        echo '<img src="/upload/smiles/'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
+        echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
 
-        echo '<input type="checkbox" name="del[]" value="'.$smile['smiles_id'].'" /> <a href="/admin/smiles?act=edit&amp;id='.$smile['smiles_id'].'&amp;start='.$start.'">Редактировать</a><br />';
+        echo '<input type="checkbox" name="del[]" value="'.$smile['id'].'" /> <a href="/admin/smiles?act=edit&amp;id='.$smile['id'].'&amp;start='.$start.'">Редактировать</a><br />';
     }
 
     echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -75,7 +75,7 @@ case 'load':
 
     if (is_writeable(HOME.'/upload/smiles')){
 
-        $smile = DBM::run()->selectFirst('smiles', array('smiles_code' => $code));
+        $smile = DBM::run()->selectFirst('smiles', array('code' => $code));
 
         $validation = new Validation();
 
@@ -107,9 +107,9 @@ case 'load':
                 if ($handle -> processed) {
 
                     $smile = DBM::run()->insert('smiles', array(
-                        'smiles_cats' => 1,
-                        'smiles_name' => $handle->file_dst_name,
-                        'smiles_code' => $code,
+                        'cats' => 1,
+                        'name' => $handle->file_dst_name,
+                        'code' => $code,
                     ));
 
                     $handle -> clean();
@@ -139,16 +139,16 @@ break;
  */
 case 'edit':
 
-    $smile = DBM::run()->selectFirst('smiles', array('smiles_id' => $id));
+    $smile = DBM::run()->selectFirst('smiles', array('id' => $id));
 
     if (! empty($smile)) {
         echo '<b><big>Редактирование смайла</big></b><br /><br />';
-        echo '<img src="/upload/smiles/'.$smile['smiles_name'].'" alt="" /> — <b>'.$smile['smiles_code'].'</b><br />';
+        echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
 
         echo '<div class="form">';
         echo '<form action="/admin/smiles?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
         echo 'Код смайла:<br />';
-        echo '<input type="text" name="code" value="'.$smile['smiles_code'].'" /> <i>Код смайла должен начинаться со знака двоеточия</i><br />';
+        echo '<input type="text" name="code" value="'.$smile['code'].'" /> <i>Код смайла должен начинаться со знака двоеточия</i><br />';
         echo '<input type="submit" value="Изменить" /></form></div><br />';
     } else {
         show_error('Ошибка! Смайла для редактирования не существует!');
@@ -165,13 +165,13 @@ case 'change':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
 
-    $smile = DBM::run()->selectFirst('smiles', array('smiles_id' => $id));
+    $smile = DBM::run()->selectFirst('smiles', array('id' => $id));
 
     $checkcode = DBM::run()->selectFirst('smiles', array(
-        'smiles_code' => $code,
-        'smiles_id' => $id,
+        'code' => $code,
+        'id' => $id,
     ));
-    $checkcode = DBM::run()->queryFirst("SELECT `smiles_id` FROM `smiles` WHERE `smiles_code`=:code AND `smiles_id`<>:id LIMIT 1;", compact('code', 'id'));
+    $checkcode = DBM::run()->queryFirst("SELECT `id` FROM `smiles` WHERE `code`=:code AND `id`<>:id LIMIT 1;", compact('code', 'id'));
 
     $validation = new Validation();
 
@@ -183,7 +183,7 @@ case 'change':
 
     if ($validation->run()) {
 
-        $smile = DBM::run()->update('smiles', ['smiles_code' => $code], ['smiles_id' => $id]);
+        $smile = DBM::run()->update('smiles', ['code' => $code], ['id' => $id]);
         clearCache();
 
         notice('Смайл успешно отредактирован!');
@@ -210,16 +210,16 @@ case 'del':
 
                 $del = implode(',', $del);
 
-                $arr_smiles = DBM::run()->query("SELECT `smiles_name` FROM `smiles` WHERE `smiles_id` IN(".$del.");");
+                $arr_smiles = DBM::run()->query("SELECT `name` FROM `smiles` WHERE `id` IN(".$del.");");
 
                 if (count($arr_smiles)>0){
                     foreach ($arr_smiles as $delfile) {
-                        if (file_exists(HOME.'/upload/smiles/'.$delfile['smiles_name'])) {
-                            unlink(HOME.'/upload/smiles/'.$delfile['smiles_name']);
+                        if (file_exists(HOME.'/upload/smiles/'.$delfile['name'])) {
+                            unlink(HOME.'/upload/smiles/'.$delfile['name']);
                         }
                     }
                 }
-                DBM::run()->execute("DELETE FROM `smiles` WHERE `smiles_id` IN (".$del.");");
+                DBM::run()->execute("DELETE FROM `smiles` WHERE `id` IN (".$del.");");
                 clearCache();
 
                 notice('Выбранные смайлы успешно удалены!');

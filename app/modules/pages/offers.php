@@ -172,7 +172,7 @@ switch ($act):
             echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br />';
 
             if ($queryoff['status'] <= 1 && $log != $queryoff['user']) {
-                $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `ratedoffers` WHERE `rated_offers`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
+                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", array($id, $log));
 
                 if (empty($queryrated)) {
                     echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br />';
@@ -471,12 +471,12 @@ switch ($act):
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
                         if ($log != $queryoff['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `ratedoffers` WHERE `rated_offers`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", array($id, $log));
                             if (empty($queryrated)) {
-                                DB::run() -> query("INSERT INTO `ratedoffers` (`rated_offers`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($id, $log, SITETIME));
+                                DB::run() -> query("INSERT INTO `ratedoffers` (`offers`, `user`, `time`) VALUES (?, ?, ?);", array($id, $log, SITETIME));
                                 DB::run() -> query("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", array($id));
                             } else {
-                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `rated_offers`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
+                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", array($id, $log));
                                 if ($queryoff['votes'] > 0) {
                                     DB::run() -> query("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", array($id));
                                 }
@@ -552,7 +552,7 @@ switch ($act):
                             DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", array($types, $title, $text, $log, 1, SITETIME));
                             $lastid = DB::run() -> lastInsertId();
 
-                            DB::run() -> query("INSERT INTO `ratedoffers` (`rated_offers`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($lastid, $log, SITETIME));
+                            DB::run() -> query("INSERT INTO `ratedoffers` (`offers`, `user`, `time`) VALUES (?, ?, ?);", array($lastid, $log, SITETIME));
 
                             notice('Сообщение успешно добавлено!');
                             redirect("/offers?act=view&type=$types&id=$lastid");

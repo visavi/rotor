@@ -355,13 +355,13 @@ case 'vote':
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
                         if ($log != $downs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `rateddown` WHERE `rated_down`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `rateddown` WHERE `down`=? AND `user`=? LIMIT 1;", array($id, $log));
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * $config['expiresrated'];
 
-                                DB::run() -> query("DELETE FROM `rateddown` WHERE `rated_time`<?;", array(SITETIME));
-                                DB::run() -> query("INSERT INTO `rateddown` (`rated_down`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($id, $log, $expiresrated));
+                                DB::run() -> query("DELETE FROM `rateddown` WHERE `time`<?;", array(SITETIME));
+                                DB::run() -> query("INSERT INTO `rateddown` (`down`, `user`, `time`) VALUES (?, ?, ?);", array($id, $log, $expiresrated));
                                 DB::run() -> query("UPDATE `downs` SET `raiting`=`raiting`+?, `rated`=`rated`+1 WHERE `id`=?", array($score, $id));
 
                                 echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br />';
@@ -547,11 +547,11 @@ case 'spam':
             $data = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", array($pid));
 
             if (!empty($data)) {
-                $queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(5, $pid));
+                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", array(5, $pid));
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(5, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start));
+                        DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(5, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start));
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&start=$start");

@@ -15,30 +15,30 @@ case 'index':
 
     $config['newtitle'] = 'Список всех ссылок';
 
-    $total = DBM::run()->count('rekuser', array('rek_time' => array('>', SITETIME)));
+    $total = DBM::run()->count('rekuser', array('time' => array('>', SITETIME)));
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
         $reklama = DBM::run()->select('rekuser', array(
-            'rek_time' => array('>', SITETIME),
-        ), $config['rekuserpost'], $start, array('rek_time'=>'DESC'));
+            'time' => array('>', SITETIME),
+        ), $config['rekuserpost'], $start, array('time'=>'DESC'));
 
         foreach($reklama as $data) {
             echo '<div class="b">';
             echo '<i class="fa fa-check-circle"></i> ';
-            echo '<b><a href="'.$data['rek_site'].'">'.$data['rek_name'].'</a></b> ('.profile($data['rek_user']).')</div>';
+            echo '<b><a href="'.$data['site'].'">'.$data['name'].'</a></b> ('.profile($data['user']).')</div>';
 
-            echo 'Истекает: '.date_fixed($data['rek_time']).'<br />';
+            echo 'Истекает: '.date_fixed($data['time']).'<br />';
 
-            if (! empty($data['rek_color'])) {
-                echo 'Цвет: <span style="color:'.$data['rek_color'].'">'.$data['rek_color'].'</span>, ';
+            if (! empty($data['color'])) {
+                echo 'Цвет: <span style="color:'.$data['color'].'">'.$data['color'].'</span>, ';
             } else {
                 echo 'Цвет: нет, ';
             }
 
-            if (! empty($data['rek_bold'])) {
+            if (! empty($data['bold'])) {
                 echo 'Жирность: есть<br />';
             } else {
                 echo 'Жирность: нет<br />';
@@ -83,13 +83,13 @@ case 'create':
 
                 if ($validation->run()) {
 
-                    DBM::run()->delete('rekuser', array('rek_time' => array('<', SITETIME)));
+                    DBM::run()->delete('rekuser', array('time' => array('<', SITETIME)));
 
-                    $total = DBM::run()->count('rekuser', array('rek_time' => array('>', SITETIME)));
+                    $total = DBM::run()->count('rekuser', array('time' => array('>', SITETIME)));
 
                     if ($total < $config['rekusertotal']) {
 
-                        $rekuser = DBM::run()->selectFirst('rekuser', array('rek_user' => $log));
+                        $rekuser = DBM::run()->selectFirst('rekuser', array('user' => $log));
 
                         if (empty($rekuser)) {
                             $price = $config['rekuserprice'];
@@ -105,12 +105,12 @@ case 'create':
                             if ($udata['money'] >= $price) {
 
                                 $rek = DBM::run()->insert('rekuser', array(
-                                    'rek_site'  => $site,
-                                    'rek_name'  => $name,
-                                    'rek_color' => $color,
-                                    'rek_bold' => $bold,
-                                    'rek_user' => $log,
-                                    'rek_time' => SITETIME + ($config['rekusertime'] * 3600),
+                                    'site'  => $site,
+                                    'name'  => $name,
+                                    'color' => $color,
+                                    'bold' => $bold,
+                                    'user' => $log,
+                                    'time' => SITETIME + ($config['rekusertime'] * 3600),
                                 ));
 
                                 $user = DBM::run()->update('users', array(
@@ -139,11 +139,11 @@ case 'create':
             }
 
 
-            $total = DBM::run()->count('rekuser', array('rek_time' => array('>', SITETIME)));
+            $total = DBM::run()->count('rekuser', array('time' => array('>', SITETIME)));
 
             if ($total < $config['rekusertotal']) {
 
-                $rekuser = DBM::run()->selectFirst('rekuser', array('rek_user' => $log, 'rek_time' => array('>', SITETIME)));
+                $rekuser = DBM::run()->selectFirst('rekuser', array('user' => $log, 'time' => array('>', SITETIME)));
 
                 if (empty($rekuser)) {
                     echo 'У вас в наличии: <b>'.moneys($udata['money']).'</b><br /><br />';

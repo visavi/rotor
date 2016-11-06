@@ -434,21 +434,21 @@ define ('DBPASS', '$dbpass');
                                         echo 'Код ошибки: ' . $e -> getMessage() . '<br /><br />';
                                     }
 
-                                    $result = $db -> query("SELECT * FROM `setting` WHERE `setting_name`='nickname' LIMIT 1;");
+                                    $result = $db -> query("SELECT * FROM `setting` WHERE `name`='nickname' LIMIT 1;");
                                     $row = $result -> fetch();
 
-                                    if (empty($row['setting_value'])) {
+                                    if (empty($row['value'])) {
 
                                         $reglogin = $db -> query("SELECT `id` FROM `users` WHERE lower(`login`)='" . strtolower($login) . "' LIMIT 1;");
                                         $data = $reglogin -> fetch();
                                         if (empty($data['id'])) {
 
                                             // -------------- Настройки ---------------//
-                                            $db -> query("UPDATE `setting` SET `setting_value`='" . $login . "' WHERE `setting_name`='nickname';");
-                                            $db -> query("UPDATE `setting` SET `setting_value`='" . $mail . "' WHERE `setting_name`='emails';");
-                                            $db -> query("UPDATE `setting` SET `setting_value`='" . $site . "' WHERE `setting_name`='home';");
-                                            $db -> query("UPDATE `setting` SET `setting_value`='" . $site . "/assets/img/images/logo.png' WHERE `setting_name`='logotip';");
-                                            $db -> query("UPDATE `setting` SET `setting_value`='" . generate_password() . "' WHERE `setting_name`='keypass';");
+                                            $db -> query("UPDATE `setting` SET `value`='" . $login . "' WHERE `name`='nickname';");
+                                            $db -> query("UPDATE `setting` SET `value`='" . $mail . "' WHERE `name`='emails';");
+                                            $db -> query("UPDATE `setting` SET `value`='" . $site . "' WHERE `name`='home';");
+                                            $db -> query("UPDATE `setting` SET `value`='" . $site . "/assets/img/images/logo.png' WHERE `name`='logotip';");
+                                            $db -> query("UPDATE `setting` SET `value`='" . generate_password() . "' WHERE `name`='keypass';");
                                             // ---------- Очистка кэша настроек --------//
                                             if (file_exists('../local/temp/setting.dat')) {
                                                 unlink ('../local/temp/setting.dat');

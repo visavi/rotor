@@ -6,7 +6,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 if (is_admin(array(101))) {
     show_title('Настройки сайта');
 
-    $queryset = DB::run() -> query("SELECT `setting_name`, `setting_value` FROM `setting`;");
+    $queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");
     $setting = $queryset -> fetchAssoc();
 
     switch ($act):
@@ -89,7 +89,7 @@ if (is_admin(array(101))) {
                                         DB::run() -> query("UPDATE `users` SET `level`=? WHERE `login`=? LIMIT 1;", array(101, $login));
                                     }
 
-                                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                                     $dbr -> execute($login, 'nickname');
                                     $dbr -> execute($mail, 'emails');
 
@@ -248,7 +248,7 @@ if (is_admin(array(101))) {
                 if ($uid == $_SESSION['token']) {
                     if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['keypass'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
 
-                        $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                        $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                         $dbr -> execute(check($_POST['title']), 'title');
                         $dbr -> execute(check($_POST['logos']), 'logos');
                         $dbr -> execute(check($_POST['copy']), 'copy');
@@ -356,7 +356,7 @@ if (is_admin(array(101))) {
                     if (empty($mailusername ) || preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mailusername)) {
                         if ($_POST['maildriver'] != "" && $_POST['mailhost'] != "" && $_POST['mailport'] != "" && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
 
-                            $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                            $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                             $dbr -> execute(check($_POST['maildriver']), 'maildriver');
                             $dbr -> execute(check($_POST['mailhost']), 'mailhost');
                             $dbr -> execute(intval($_POST['mailport']), 'mailport');
@@ -434,7 +434,7 @@ if (is_admin(array(101))) {
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['incount'] != "" && $_POST['timeonline'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['incount']), 'incount');
                     $dbr -> execute($performance, 'performance');
                     $dbr -> execute($onlines, 'onlines');
@@ -516,7 +516,7 @@ if (is_admin(array(101))) {
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['lastnews'] != "" && $_POST['postnews'] != "" && $_POST['bookpost'] != "" && $_POST['guestsuser'] != "" && $_POST['maxkommnews'] != "" && $_POST['maxpostbook'] != "" && $_POST['guesttextlength'] != "" && $_POST['chatpost'] != "" && $_POST['maxpostchat'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['lastnews']), 'lastnews');
                     $dbr -> execute(intval($_POST['postnews']), 'postnews');
                     $dbr -> execute(intval($_POST['bookpost']), 'bookpost');
@@ -586,7 +586,7 @@ if (is_admin(array(101))) {
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['forumpost'] != "" && $_POST['forumtem'] != "" && $_POST['forumtextlength'] != "" && $_POST['forumloadsize'] != "" && $_POST['forumextload'] != "" && $_POST['forumloadpoints'] != "" && $_POST['boardspost'] != "" && $_POST['boarddays'] != "" && $_POST['fotolist'] != "" && $_POST['postgallery'] != "" && $_POST['maxpostgallery'] != "" && $_POST['photoexprated'] != "" && $_POST['photogroup'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['forumpost']), 'forumpost');
                     $dbr -> execute(intval($_POST['forumtem']), 'forumtem');
                     $dbr -> execute(intval($_POST['forumtextlength']), 'forumtextlength');
@@ -650,7 +650,7 @@ if (is_admin(array(101))) {
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['limitmail'] != "" && $_POST['limitoutmail'] != "" && $_POST['expiresmail'] != "" && $_POST['privatpost'] != "" && $_POST['privatprotect'] != "" && $_POST['contactlist'] != "" && $_POST['ignorlist'] != "" && $_POST['limitcontact'] != "" && $_POST['limitignore'] != "" && $_POST['allvotes'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['limitmail']), 'limitmail');
                     $dbr -> execute(intval($_POST['limitoutmail']), 'limitoutmail');
                     $dbr -> execute(intval($_POST['expiresmail']), 'expiresmail');
@@ -716,7 +716,7 @@ if (is_admin(array(101))) {
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['downlist'] != "" && $_POST['downcomm'] != "" && $_POST['maxdowncomm'] != "" && $_POST['expiresloads'] != "" && $_POST['expiresrated'] != "" && $_POST['ziplist'] != "" && $_POST['fileupload'] != "" && $_POST['screenupload'] != "" && $_POST['screenupsize'] != "" && $_POST['allowextload'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['downlist']), 'downlist');
                     $dbr -> execute(intval($_POST['downcomm']), 'downcomm');
                     $dbr -> execute(intval($_POST['maxdowncomm']), 'maxdowncomm');
@@ -777,7 +777,7 @@ if (is_admin(array(101))) {
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['blogpost'] != "" && $_POST['blogcomm'] != "" && $_POST['maxblogcomm'] != "" && $_POST['blogexpread'] != "" && $_POST['blogexprated'] != "" && $_POST['bloggroup'] != "" && $_POST['maxblogpost'] != "" && $_POST['blogvotepoint'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['blogpost']), 'blogpost');
                     $dbr -> execute(intval($_POST['blogcomm']), 'blogcomm');
                     $dbr -> execute(intval($_POST['maxblogcomm']), 'maxblogcomm');
@@ -830,7 +830,7 @@ if (is_admin(array(101))) {
             if ($uid == $_SESSION['token']) {
                 if ($_POST['postevents'] != "" && $_POST['maxkommevents'] != "" && $_POST['eventpoint'] != "" ) {
 
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
 
                     $dbr -> execute(intval($_POST['postevents']), 'postevents');
                     $dbr -> execute(intval($_POST['maxkommevents']), 'maxkommevents');
@@ -899,7 +899,7 @@ if (is_admin(array(101))) {
             if ($uid == $_SESSION['token']) {
                 if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['showref'] != "" && $_POST['referer'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['headlines'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "") {
 
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['userlist']), 'userlist');
                     $dbr -> execute(intval($_POST['showuser']), 'showuser');
                     $dbr -> execute(intval($_POST['lastusers']), 'lastusers');
@@ -983,7 +983,7 @@ if (is_admin(array(101))) {
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['maxlogdat'] != "" && $_POST['keywords'] != "" && $_POST['description'] != "" && $_POST['nocheck'] != "" && $_POST['maxbantime'] != "" && $_POST['moneyname'] != "" && $_POST['scorename'] != "" && $_POST['statusname'] != "" && $_POST['statusdef'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['maxlogdat']), 'maxlogdat');
                     $dbr -> execute(check($_POST['keywords']), 'keywords');
                     $dbr -> execute(check($_POST['description']), 'description');
@@ -1049,7 +1049,7 @@ if (is_admin(array(101))) {
         * if ($uid==$_SESSION['token']){
         * if ($_POST['userlistcache']!="" && $_POST['avtorlistcache']!="" && $_POST['raitinglistcache']!="" &&  $_POST['usersearchcache']!="" && $_POST['lifelistcache']!="" && $_POST['vkladlistcache']!="" && $_POST['adminlistcache']!="" && $_POST['regusercache']!="" && $_POST['themescache']!=""){
         *
-        * $dbr = DB::run()->prepare("UPDATE setting SET setting_value=? WHERE setting_name=?;");
+        * $dbr = DB::run()->prepare("UPDATE setting SET value=? WHERE name=?;");
         * $dbr->execute(intval($_POST['userlistcache']), 'userlistcache');
         * $dbr->execute(intval($_POST['avtorlistcache']), 'avtorlistcache');
         * $dbr->execute(intval($_POST['raitinglistcache']), 'raitinglistcache');
@@ -1122,7 +1122,7 @@ if (is_admin(array(101))) {
                         if (preg_match('|^[4-6]{1}+$|', $captcha_maxlength)) {
                             if (preg_match('|^[0-9]{1,}+$|', $captcha_offset)) {
 
-                                $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                                $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                                 $dbr -> execute(intval($_POST['resmiles']), 'resmiles');
                                 $dbr -> execute($captcha_symbols, 'captcha_symbols');
                                 $dbr -> execute($captcha_maxlength, 'captcha_maxlength');
@@ -1197,7 +1197,7 @@ if (is_admin(array(101))) {
             if ($uid == $_SESSION['token']) {
                 if ($_POST['editnickpoint'] != "" && $_POST['sendmoneypoint'] != "" && $_POST['editratingpoint'] != "" && $_POST['editforumpoint'] != "" && $_POST['editnickpoint'] != "" && $_POST['editstatuspoint'] != "" && $_POST['editstatusmoney'] != "" && $_POST['bonusmoney'] != "" && $_POST['registermoney'] != "") {
 
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['editnickpoint']), 'editnickpoint');
                     $dbr -> execute(intval($_POST['sendmoneypoint']), 'sendmoneypoint');
                     $dbr -> execute(intval($_POST['editratingpoint']), 'editratingpoint');
@@ -1255,7 +1255,7 @@ if (is_admin(array(101))) {
 
             if ($uid == $_SESSION['token']) {
                 if ($_POST['rekusershow'] != "" && $_POST['rekuserprice'] != "" && $_POST['rekuseroptprice'] != "" && $_POST['rekusertime'] != "" && $_POST['rekusertotal'] != "" && $_POST['rekuserpost'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['rekusershow']), 'rekusershow');
                     $dbr -> execute(intval($_POST['rekuserprice']), 'rekuserprice');
                     $dbr -> execute(intval($_POST['rekuseroptprice']), 'rekuseroptprice');
@@ -1319,7 +1319,7 @@ if (is_admin(array(101))) {
             if ($uid == $_SESSION['token']) {
                 if ($_POST['filesize'] != "" && $_POST['fileupfoto'] != "" && $_POST['screensize'] != "" && $_POST['previewsize'] != "") {
 
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
 
                     $dbr -> execute(intval($_POST['filesize'] * 1024 * 1024), 'filesize');
                     $dbr -> execute(intval($_POST['fileupfoto']), 'fileupfoto');
@@ -1371,7 +1371,7 @@ if (is_admin(array(101))) {
             if ($uid == $_SESSION['token']) {
                 if ($_POST['smilemaxsize'] != "" && $_POST['smilemaxweight'] != "" && $_POST['smileminweight'] != "") {
 
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
 
                     $dbr -> execute(intval($_POST['smilemaxsize'] * 1024), 'smilemaxsize');
                     $dbr -> execute(intval($_POST['smilemaxweight']), 'smilemaxweight');
@@ -1420,7 +1420,7 @@ if (is_admin(array(101))) {
             if ($uid == $_SESSION['token']) {
                 if ($_POST['postoffers'] != "" && $_POST['postcommoffers'] != "" && $_POST['maxpostoffers'] != "" && $_POST['addofferspoint'] != "") {
 
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;");
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
 
                     $dbr -> execute(intval($_POST['postoffers']), 'postoffers');
                     $dbr -> execute(intval($_POST['postcommoffers']), 'postcommoffers');

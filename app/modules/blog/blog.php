@@ -337,13 +337,13 @@ case 'vote':
 
                     if (!empty($blogs)) {
                         if ($log != $blogs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `ratedblog` WHERE `rated_blog`=? AND `rated_user`=? LIMIT 1;", array($id, $log));
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedblog` WHERE `blog`=? AND `user`=? LIMIT 1;", array($id, $log));
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * $config['blogexprated'];
 
-                                DB::run() -> query("DELETE FROM `ratedblog` WHERE `rated_time`<?;", array(SITETIME));
-                                DB::run() -> query("INSERT INTO `ratedblog` (`rated_blog`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($id, $log, $expiresrated));
+                                DB::run() -> query("DELETE FROM `ratedblog` WHERE `time`<?;", array(SITETIME));
+                                DB::run() -> query("INSERT INTO `ratedblog` (`blog`, `user`, `time`) VALUES (?, ?, ?);", array($id, $log, $expiresrated));
                                 DB::run() -> query("UPDATE `blogs` SET `rating`=`rating`+? WHERE `id`=?;", array($score, $id));
 
                                 notice('Ваша оценка принята! Рейтинг статьи: '.format_num($blogs['rating'] + $score));
@@ -475,11 +475,11 @@ case 'spam':
             $data = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? LIMIT 1;", array($pid));
 
             if (!empty($data)) {
-                $queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(6, $pid));
+                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", array(6, $pid));
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(6, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start));
+                        DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(6, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start));
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/blog/blog?act=comments&id=$id&start=$start");

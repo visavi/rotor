@@ -16,7 +16,7 @@ if (is_user()) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `user`=?;", array($log));
 
-            $intotal = DB::run() -> query("SELECT count(*) FROM `outbox` WHERE `author`=? UNION ALL SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log, $log));
+            $intotal = DB::run() -> query("SELECT count(*) FROM `outbox` WHERE `author`=? UNION ALL SELECT count(*) FROM `trash` WHERE `user`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
 
             echo '<i class="fa fa-envelope"></i> <b>Входящие ('.$total.')</b> / ';
@@ -83,7 +83,7 @@ if (is_user()) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `outbox` WHERE `author`=?;", array($log));
 
-            $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log, $log));
+            $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `trash` WHERE `user`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
 
             echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
@@ -132,7 +132,7 @@ if (is_user()) {
         ############################################################################################
         case 'trash':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `trash` WHERE `trash_user`=?;", array($log));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `trash` WHERE `user`=?;", array($log));
 
             $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `author`=?;", array($log, $log));
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
@@ -146,19 +146,19 @@ if (is_user()) {
                     $start = last_page($total, $config['privatpost']);
                 }
 
-                $querypriv = DB::run() -> query("SELECT * FROM `trash` WHERE `trash_user`=? ORDER BY `trash_time` DESC LIMIT ".$start.", ".$config['privatpost'].";", array($log));
+                $querypriv = DB::run() -> query("SELECT * FROM `trash` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['privatpost'].";", array($log));
 
                 while ($data = $querypriv -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['trash_author']).'</div>';
-                    echo '<b>'.profile($data['trash_author']).'</b>  ('.date_fixed($data['trash_time']).')<br />';
-                    echo user_title($data['trash_author']).' '.user_online($data['trash_author']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['author']).'</div>';
+                    echo '<b>'.profile($data['author']).'</b>  ('.date_fixed($data['time']).')<br />';
+                    echo user_title($data['author']).' '.user_online($data['author']).'</div>';
 
-                    echo '<div>'.bb_code($data['trash_text']).'<br />';
+                    echo '<div>'.bb_code($data['text']).'<br />';
 
-                    echo '<a href="/private?act=submit&amp;uz='.$data['trash_author'].'">Ответить</a> / ';
-                    echo '<a href="/contact?act=add&amp;uz='.$data['trash_author'].'&amp;uid='.$_SESSION['token'].'">В контакт</a> / ';
-                    echo '<a href="/ignore?act=add&amp;uz='.$data['trash_author'].'&amp;uid='.$_SESSION['token'].'">Игнор</a></div>';
+                    echo '<a href="/private?act=submit&amp;uz='.$data['author'].'">Ответить</a> / ';
+                    echo '<a href="/contact?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">В контакт</a> / ';
+                    echo '<a href="/ignore?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">Игнор</a></div>';
                 }
 
                 page_strnavigation('/private?act=trash&amp;', $config['privatpost'], $start, $total);
@@ -349,11 +349,11 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 $data = DB::run() -> queryFetch("SELECT * FROM `inbox` WHERE `user`=? AND `id`=? LIMIT 1;", array($log, $id));
                 if (!empty($data)) {
-                    $queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(3, $id));
+                    $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", array(3, $id));
 
                     if (empty($queryspam)) {
                         if (is_flood($log)) {
-                            DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`) VALUES (?, ?, ?, ?, ?, ?, ?);", array(3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME));
+                            DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`) VALUES (?, ?, ?, ?, ?, ?, ?);", array(3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME));
 
                             notice('Жалоба успешно отправлена!');
                             redirect("/private?start=$start");
@@ -391,9 +391,9 @@ if (is_user()) {
                     $del = implode(',', $del);
                     $deltrash = SITETIME + 86400 * $config['expiresmail'];
 
-                    DB::run() -> query("DELETE FROM `trash` WHERE `trash_del`<?;", array(SITETIME));
+                    DB::run() -> query("DELETE FROM `trash` WHERE `del`<?;", array(SITETIME));
 
-                    DB::run() -> query("INSERT INTO `trash` (`trash_user`, `trash_author`, `trash_text`, `trash_time`, `trash_del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", array($deltrash, $log));
+                    DB::run() -> query("INSERT INTO `trash` (`user`, `author`, `text`, `time`, `del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", array($deltrash, $log));
 
                     DB::run() -> query("DELETE FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", array($log));
                     save_usermail(60);
@@ -453,9 +453,9 @@ if (is_user()) {
                 if (empty($udata['newprivat'])) {
                     $deltrash = SITETIME + 86400 * $config['expiresmail'];
 
-                    DB::run() -> query("DELETE FROM `trash` WHERE `trash_del`<?;", array(SITETIME));
+                    DB::run() -> query("DELETE FROM `trash` WHERE `del`<?;", array(SITETIME));
 
-                    DB::run() -> query("INSERT INTO `trash` (`trash_user`, `trash_author`, `trash_text`, `trash_time`, `trash_del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `user`=?;", array($deltrash, $log));
+                    DB::run() -> query("INSERT INTO `trash` (`user`, `author`, `text`, `time`, `del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `user`=?;", array($deltrash, $log));
 
                     DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", array($log));
                     save_usermail(60);
@@ -501,7 +501,7 @@ if (is_user()) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                DB::run() -> query("DELETE FROM `trash` WHERE `trash_user`=?;", array($log));
+                DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", array($log));
 
                 notice('Ящик успешно очищен!');
                 redirect("/private?act=trash");

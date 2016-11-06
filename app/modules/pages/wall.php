@@ -18,7 +18,7 @@ if (!empty($queryuser)) {
             $config['newtitle'] = 'Стена пользователя '.nickname($uz);
             echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.nickname($uz).'</b><br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `wall_user`=?;", array($uz));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", array($uz));
 
             if ($uz == $log && $udata['newwall'] > 0) {
                 echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.$udata['newwall'].'</span></b></div>';
@@ -38,27 +38,27 @@ if (!empty($queryuser)) {
                     echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `wall_user`=? ORDER BY `wall_time` DESC LIMIT ".$start.", ".$config['wallpost'].";", array($uz));
+                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['wallpost'].";", array($uz));
 
                 while ($data = $querywall -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['wall_login']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['login']).'</div>';
 
                     if ($is_admin || $uz == $log) {
-                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['wall_id'].'" /></span>';
+                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
                     }
 
-                    echo '<b>'.profile($data['wall_login']).'</b> <small>('.date_fixed($data['wall_time']).')</small><br />';
-                    echo user_title($data['wall_login']).' '.user_online($data['wall_login']).'</div>';
+                    echo '<b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo user_title($data['login']).' '.user_online($data['login']).'</div>';
 
-                    if ($uz == $log && $log != $data['wall_login']) {
+                    if ($uz == $log && $log != $data['login']) {
                         echo '<div class="right">';
-                        echo '<a href="/private?act=submit&amp;uz='.$data['wall_login'].'">Приват</a> / ';
-                        echo '<a href="/wall?uz='.$data['wall_login'].'">Стена</a> / ';
-                        echo '<noindex><a href="/wall?act=spam&amp;id='.$data['wall_id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
+                        echo '<a href="/private?act=submit&amp;uz='.$data['login'].'">Приват</a> / ';
+                        echo '<a href="/wall?uz='.$data['login'].'">Стена</a> / ';
+                        echo '<noindex><a href="/wall?act=spam&amp;id='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                     }
 
-                    echo '<div>'.bb_code($data['wall_text']).'</div>';
+                    echo '<div>'.bb_code($data['text']).'</div>';
                 }
 
                 if ($is_admin || $uz == $log) {
@@ -109,9 +109,9 @@ if (!empty($queryuser)) {
                                         DB::run() -> query("UPDATE `users` SET `newwall`=`newwall`+1 WHERE `login`=?", array($uz));
                                     }
 
-                                    DB::run() -> query("INSERT INTO `wall` (`wall_user`, `wall_login`, `wall_text`, `wall_time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
+                                    DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
 
-                                    DB::run() -> query("DELETE FROM `wall` WHERE `wall_user`=? AND `wall_time` < (SELECT MIN(`wall_time`) FROM (SELECT `wall_time` FROM `wall` WHERE `wall_user`=? ORDER BY `wall_time` DESC LIMIT ".$config['wallmaxpost'].") AS del);", array($uz, $uz));
+                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$config['wallmaxpost'].") AS del);", array($uz, $uz));
 
                                     notice('Запись успешно добавлена!');
                                     redirect("/wall?uz=$uz");
@@ -147,14 +147,14 @@ if (!empty($queryuser)) {
 
             if (is_user()) {
                 if ($uid == $_SESSION['token']) {
-                    $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `wall_user`=? AND `wall_id`=? LIMIT 1;", array($log, $id));
+                    $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", array($log, $id));
 
                     if (!empty($data)) {
-                        $queryspam = DB::run() -> querySingle("SELECT `spam_id` FROM `spam` WHERE `spam_key`=? AND `spam_idnum`=? LIMIT 1;", array(4, $id));
+                        $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", array(4, $id));
 
                         if (empty($queryspam)) {
                             if (is_flood($log)) {
-                                DB::run() -> query("INSERT INTO `spam` (`spam_key`, `spam_idnum`, `spam_user`, `spam_login`, `spam_text`, `spam_time`, `spam_addtime`, `spam_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(4, $data['wall_id'], $log, $data['wall_login'], $data['wall_text'], $data['wall_time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;start='.$start));
+                                DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;start='.$start));
 
                                 notice('Жалоба успешно отправлена!');
                                 redirect("/wall?uz=$uz&start=$start");
@@ -194,7 +194,7 @@ if (!empty($queryuser)) {
                     if (!empty($del)) {
                         $del = implode(',', $del);
 
-                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `wall_id` IN (".$del.") AND `wall_user`=?;", array($log));
+                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", array($log));
 
                         notice('Выбранные записи успешно удалены!');
                         redirect("/wall?uz=$uz&start=$start");
@@ -228,7 +228,7 @@ if (!empty($queryuser)) {
                     if (!empty($del)) {
                         $del = implode(',', $del);
 
-                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `wall_id` IN (".$del.");");
+                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.");");
 
                         notice('Выбранные записи успешно удалены!');
                         redirect("/wall?uz=$uz&start=$start");

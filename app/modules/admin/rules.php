@@ -24,11 +24,11 @@ if (is_admin(array(101, 102))) {
             $rules = DB::run() -> queryFetch("SELECT * FROM `rules`;");
 
             if (!empty($rules)) {
-                $rules['rules_text'] = str_replace(array('%SITENAME%', '%MAXBAN%'), array($config['title'], round($config['maxbantime'] / 1440)), $rules['rules_text']);
+                $rules['text'] = str_replace(array('%SITENAME%', '%MAXBAN%'), array($config['title'], round($config['maxbantime'] / 1440)), $rules['text']);
 
-                echo bb_code($rules['rules_text']).'<hr />';
+                echo bb_code($rules['text']).'<hr />';
 
-                echo 'Последнее изменение: '.date_fixed($rules['rules_time']).'<br /><br />';
+                echo 'Последнее изменение: '.date_fixed($rules['time']).'<br /><br />';
             } else {
                 show_error('Правила сайта еще не установлены!');
             }
@@ -46,7 +46,7 @@ if (is_admin(array(101, 102))) {
             echo '<div class="form">';
             echo '<form action="/admin/rules?act=change&amp;uid='.$_SESSION['token'].'" method="post">';
 
-            echo '<textarea id="markItUp" cols="35" rows="20" name="msg">'.$rules['rules_text'].'</textarea><br />';
+            echo '<textarea id="markItUp" cols="35" rows="20" name="msg">'.$rules['text'].'</textarea><br />';
             echo '<input type="submit" value="Изменить" /></form></div><br />';
 
             echo '<b>Внутренние переменные:</b><br />';
@@ -68,7 +68,7 @@ if (is_admin(array(101, 102))) {
                 if (utf_strlen($msg) > 0) {
                     $msg = str_replace('&#37;', '%', $msg);
 
-                    DB::run() -> query("REPLACE INTO `rules` (`rules_id`, `rules_text`, `rules_time`) VALUES (?,?,?);", array(1, $msg, SITETIME));
+                    DB::run() -> query("REPLACE INTO `rules` (`id`, `text`, `time`) VALUES (?,?,?);", array(1, $msg, SITETIME));
 
                     notice('Правила успешно изменены!');
                     redirect("/admin/rules");

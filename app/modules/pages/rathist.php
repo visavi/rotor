@@ -28,7 +28,7 @@ if (is_user()) {
             case 'received':
                 echo '<i class="fa fa-thumbs-up"></i> <b>Полученные</b> / <a href="/rathist?act=gave&amp;uz='.$uz.'">Отданные</a><hr />';
 
-                $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `rating_login`=? ORDER BY `rating_time` DESC LIMIT 20;", array($uz));
+                $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `login`=? ORDER BY `time` DESC LIMIT 20;", array($uz));
                 $rat = $queryrat -> fetchAll();
 
                 if (count($rat) > 0) {
@@ -40,20 +40,20 @@ if (is_user()) {
                         echo '<div class="b">';
 
                         if ($is_admin) {
-                            echo '<input type="checkbox" name="del[]" value="'.$data['rating_id'].'" /> ';
+                            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                         }
 
-                        if (empty($data['rating_vote'])) {
+                        if (empty($data['vote'])) {
                             echo '<i class="fa fa-thumbs-down"></i> ';
                         } else {
                             echo '<i class="fa fa-thumbs-up"></i> ';
                         }
 
-                        echo '<b>'.profile($data['rating_user']).'</b> ('.date_fixed($data['rating_time']).')</div>';
+                        echo '<b>'.profile($data['user']).'</b> ('.date_fixed($data['time']).')</div>';
                         echo '<div>Комментарий: ';
 
-                        if (!empty($data['rating_text'])) {
-                            echo bb_code($data['rating_text']);
+                        if (!empty($data['text'])) {
+                            echo bb_code($data['text']);
                         } else {
                             echo 'Отсутствует';
                         }
@@ -77,23 +77,23 @@ if (is_user()) {
             case 'gave':
                 echo '<i class="fa fa-thumbs-up"></i> <a href="/rathist?act=received&amp;uz='.$uz.'">Полученные</a> / <b>Отданные</b><hr />';
 
-                $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `rating_user`=? ORDER BY `rating_time` DESC LIMIT 20;", array($uz));
+                $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20;", array($uz));
                 $rat = $queryrat -> fetchAll();
 
                 if (count($rat) > 0) {
                     foreach($rat as $data) {
                         echo '<div class="b">';
-                        if (empty($data['rating_vote'])) {
+                        if (empty($data['vote'])) {
                             echo '<i class="fa fa-thumbs-down"></i> ';
                         } else {
                             echo '<i class="fa fa-thumbs-up"></i> ';
                         }
 
-                        echo '<b>'.profile($data['rating_login']).'</b> ('.date_fixed($data['rating_time']).')</div>';
+                        echo '<b>'.profile($data['login']).'</b> ('.date_fixed($data['time']).')</div>';
                         echo '<div>Комментарий: ';
 
-                        if (!empty($data['rating_text'])) {
-                            echo bb_code($data['rating_text']);
+                        if (!empty($data['text'])) {
+                            echo bb_code($data['text']);
                         } else {
                             echo 'Отсутствует';
                         }
@@ -124,7 +124,7 @@ if (is_user()) {
                         if (!empty($del)) {
                             $del = implode(',', $del);
 
-                            DB::run() -> query("DELETE FROM `rating` WHERE `rating_id` IN (".$del.") AND `rating_login`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `rating` WHERE `id` IN (".$del.") AND `login`=?;", array($uz));
 
                             notice('Выбранные голосования успешно удалены!');
                             redirect("/rathist?uz=$uz");

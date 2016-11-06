@@ -62,13 +62,13 @@ break;
 
                     if (!empty($data)) {
                         if ($log != $data['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `rated_id` FROM `ratedphoto` WHERE `rated_photo`=? AND `rated_user`=? LIMIT 1;", array($gid, $log));
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedphoto` WHERE `photo`=? AND `user`=? LIMIT 1;", array($gid, $log));
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * $config['photoexprated'];
 
-                                DB::run() -> query("DELETE FROM `ratedphoto` WHERE `rated_time`<?;", array(SITETIME));
-                                DB::run() -> query("INSERT INTO `ratedphoto` (`rated_photo`, `rated_user`, `rated_time`) VALUES (?, ?, ?);", array($gid, $log, $expiresrated));
+                                DB::run() -> query("DELETE FROM `ratedphoto` WHERE `time`<?;", array(SITETIME));
+                                DB::run() -> query("INSERT INTO `ratedphoto` (`photo`, `user`, `time`) VALUES (?, ?, ?);", array($gid, $log, $expiresrated));
                                 DB::run() -> query("UPDATE `photo` SET `rating`=`rating`+? WHERE `id`=?;", array($score, $gid));
 
                                 notice('Ваша оценка принята! Рейтинг фотографии: '.format_num($data['rating'] + $score));

@@ -19,15 +19,15 @@ switch ($act):
     case 'index':
         show_title('Голосования');
 
-        $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `vote_closed`=? ORDER BY `vote_time` DESC;", array(0));
+        $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC;", array(0));
         $votes = $queryvote -> fetchAll();
 
         if (count($votes) > 0) {
             foreach($votes as $valvote) {
                 echo '<div class="b">';
-                echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['vote_id'].'">'.$valvote['vote_title'].'</a></b></div>';
-                echo '<div>Создано: '.date_fixed($valvote['vote_time']).'<br />';
-                echo 'Всего голосов: '.$valvote['vote_count'].'</div>';
+                echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['id'].'">'.$valvote['title'].'</a></b></div>';
+                echo '<div>Создано: '.date_fixed($valvote['time']).'<br />';
+                echo 'Всего голосов: '.$valvote['count'].'</div>';
             }
             echo '<br />';
         } else {
@@ -41,20 +41,20 @@ switch ($act):
     case 'poll':
         show_title('site.png', 'Голосование');
 
-        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `vote_id`=? LIMIT 1;", array($id));
+        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", array($id));
 
         if (!empty($votes)) {
-            if (empty($votes['vote_closed'])) {
-                $config['newtitle'] = $votes['vote_title'];
+            if (empty($votes['closed'])) {
+                $config['newtitle'] = $votes['title'];
 
-                echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
+                echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
-                $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `answer_vote_id`=? ORDER BY `answer_id`;", array($id));
+                $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `vote_id`=? ORDER BY `id`;", array($id));
                 $answer = $queryanswer -> fetchAll();
 
                 $total = count($answer);
                 if ($total > 0) {
-                    $polls = DB::run() -> querySingle("SELECT `poll_id` FROM `votepoll` WHERE `poll_vote_id`=? AND `poll_user`=? LIMIT 1;", array($id, $log));
+                    $polls = DB::run() -> querySingle("SELECT `id` FROM `votepoll` WHERE `vote_id`=? AND `user`=? LIMIT 1;", array($id, $log));
 
                     if ((is_user() && empty($polls)) && empty($_GET['result'])) {
 
@@ -62,7 +62,7 @@ switch ($act):
                         echo '<form action="/votes?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                         foreach($answer as $data) {
-                            echo '<input name="poll" type="radio" value="'.$data['answer_id'].'" /> '.$data['answer_option'].'<br />';
+                            echo '<input name="poll" type="radio" value="'.$data['id'].'" /> '.$data['option'].'<br />';
                         }
 
                         echo '<br /><input type="submit" value="Голосовать" /></form><br />';
@@ -72,12 +72,12 @@ switch ($act):
 
                     } else {
 
-                        $queryanswer = DB::run() -> query("SELECT `answer_option`, `answer_result` FROM `voteanswer` WHERE `answer_vote_id`=? ORDER BY `answer_result` DESC;", array($id));
+                        $queryanswer = DB::run() -> query("SELECT `option`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", array($id));
                         $answer = $queryanswer -> fetchAssoc();
 
                         $total = count($answer);
 
-                        $sum = $votes['vote_count'];
+                        $sum = $votes['count'];
                         $max = max($answer);
 
                         if (empty($sum)) {
@@ -132,19 +132,19 @@ switch ($act):
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if (!empty($poll)) {
-                    $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `vote_id`=? LIMIT 1;", array($id));
+                    $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", array($id));
 
                     if (!empty($votes)) {
-                        if (empty($votes['vote_closed'])) {
-                            $queryanswer = DB::run() -> querySingle("SELECT `answer_vote_id` FROM `voteanswer` WHERE `answer_id`=? AND `answer_vote_id`=?  LIMIT 1;", array($poll, $id));
+                        if (empty($votes['closed'])) {
+                            $queryanswer = DB::run() -> querySingle("SELECT `vote_id` FROM `voteanswer` WHERE `id`=? AND `vote_id`=?  LIMIT 1;", array($poll, $id));
                             if (!empty($queryanswer)) {
 
-                                $polls = DB::run() -> querySingle("SELECT `poll_id` FROM `votepoll` WHERE `poll_vote_id`=? AND `poll_user`=? LIMIT 1;", array($id, $log));
+                                $polls = DB::run() -> querySingle("SELECT `id` FROM `votepoll` WHERE `vote_id`=? AND `user`=? LIMIT 1;", array($id, $log));
                                 if (empty($polls)) {
 
-                                    DB::run() -> query("UPDATE `vote` SET `vote_count`=`vote_count`+1 WHERE `vote_id`=?;", array($id));
-                                    DB::run() -> query("UPDATE `voteanswer` SET `answer_result`=`answer_result`+1 WHERE `answer_id`=?;", array($poll));
-                                    DB::run() -> query("INSERT INTO `votepoll` (`poll_vote_id`, `poll_user`, `poll_time`) VALUES (?, ?, ?);", array($id, $log, SITETIME));
+                                    DB::run() -> query("UPDATE `vote` SET `count`=`count`+1 WHERE `id`=?;", array($id));
+                                    DB::run() -> query("UPDATE `voteanswer` SET `result`=`result`+1 WHERE `id`=?;", array($poll));
+                                    DB::run() -> query("INSERT INTO `votepoll` (`vote_id`, `user`, `time`) VALUES (?, ?, ?);", array($id, $log, SITETIME));
 
                                     notice('Ваш голос успешно принят!');
                                     redirect("/votes?act=poll&id=$id");
@@ -181,18 +181,18 @@ switch ($act):
     case 'voters':
         show_title('Последние проголосовавшие');
 
-        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `vote_id`=? LIMIT 1;", array($id));
+        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", array($id));
         if (!empty($votes)) {
 
-            $config['newtitle'] = $votes['vote_title'];
+            $config['newtitle'] = $votes['title'];
 
-            echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['vote_title'].'</b> (Голосов: '.$votes['vote_count'].')<br /><br />';
+            echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
-            $querypoll = DB::run() -> query("SELECT `poll_user`, `poll_time` FROM `votepoll` WHERE `poll_vote_id`=? ORDER BY `poll_time` DESC LIMIT 20;", array($id));
+            $querypoll = DB::run() -> query("SELECT `user`, `time` FROM `votepoll` WHERE `vote_id`=? ORDER BY `time` DESC LIMIT 20;", array($id));
             $polls = $querypoll -> fetchAll();
 
             foreach($polls as $poll){
-                echo user_gender($poll['poll_user']).profile($poll['poll_user']).' ('.date_fixed($poll['poll_time']).')<br />';
+                echo user_gender($poll['user']).profile($poll['user']).' ('.date_fixed($poll['time']).')<br />';
             }
 
             echo '<br />';

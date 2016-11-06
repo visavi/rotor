@@ -44,7 +44,7 @@ if (is_admin(array(101))) {
 
                         // Рассылка пользователям, которые в онлайне
                         if ($rec==1){
-                            $query = DB::run() -> query("SELECT `visit_user` FROM `visit` WHERE `visit_nowtime`>?;", array(SITETIME-600));
+                            $query = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>?;", array(SITETIME-600));
                             $arrusers = $query -> fetchAll(PDO::FETCH_COLUMN);
                         }
 

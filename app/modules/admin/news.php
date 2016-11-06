@@ -220,7 +220,7 @@ case 'addnews':
 
         // Выводим на главную если там нет новостей
         if (!empty($top) && empty($config['lastnews'])) {
-            DB::run() -> query("UPDATE `setting` SET `setting_value`=? WHERE `setting_name`=?;", array(1, 'lastnews'));
+            DB::run() -> query("UPDATE `setting` SET `value`=? WHERE `name`=?;", array(1, 'lastnews'));
             save_setting();
         }
 

@@ -8,7 +8,7 @@ echo 'При наборе определенного количества акт
 echo 'Актив - это сумма постов на форуме, гостевой, в комментариях и пр.<br /><br />';
 
 
-$querystatus = DB::run()->query("SELECT * FROM `status` ORDER BY `status_topoint` DESC;");
+$querystatus = DB::run()->query("SELECT * FROM `status` ORDER BY `topoint` DESC;");
 $status = $querystatus->fetchAll();
 $total = count($status);
 
@@ -17,10 +17,10 @@ if ($total>0){
 
         echo '<i class="fa fa-user-circle-o"></i> ';
 
-        if (empty($statval['status_color'])){
-            echo '<b>'.$statval['status_name'].'</b> — '.points($statval['status_topoint']).'<br />';
+        if (empty($statval['color'])){
+            echo '<b>'.$statval['name'].'</b> — '.points($statval['topoint']).'<br />';
         } else {
-            echo '<b><span style="color:'.$statval['status_color'].'">'.$statval['status_name'].'</span></b> — '.points($statval['status_topoint']).'<br />';
+            echo '<b><span style="color:'.$statval['color'].'">'.$statval['name'].'</span></b> — '.points($statval['topoint']).'<br />';
         }
     }
 

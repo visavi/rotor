@@ -234,7 +234,7 @@ class BBCodeParser {
 		if (empty($list_smiles)) {
 			if (! file_exists(STORAGE.'/temp/smiles.dat')) {
 
-				$smiles = DBM::run()->query("SELECT smiles_code, smiles_name FROM smiles ORDER BY CHAR_LENGTH(smiles_code) DESC;");
+				$smiles = DBM::run()->query("SELECT code, name FROM smiles ORDER BY CHAR_LENGTH(code) DESC;");
 				file_put_contents(STORAGE.'/temp/smiles.dat', serialize($smiles));
 			}
 
@@ -243,7 +243,7 @@ class BBCodeParser {
 
 		$count = 0;
 		foreach($list_smiles as $smile) {
-			$source = preg_replace('|'.preg_quote($smile['smiles_code']).'|', '<img src="/upload/smiles/'.$smile['smiles_name'].'" alt="'.$smile['smiles_code'].'" /> ', $source, $this->setting['resmiles'] - $count, $cnt);
+			$source = preg_replace('|'.preg_quote($smile['code']).'|', '<img src="/upload/smiles/'.$smile['name'].'" alt="'.$smile['code'].'" /> ', $source, $this->setting['resmiles'] - $count, $cnt);
 			$count += $cnt;
 			if ($count >= $this->setting['resmiles']) break;
 		}

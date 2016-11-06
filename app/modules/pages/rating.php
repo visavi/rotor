@@ -19,9 +19,9 @@ if (is_user()) {
         if ($udata['point'] >= $config['editratingpoint']) {
             $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
             if (!empty($queryuser)) {
-                $querytime = DB::run() -> querySingle("SELECT MAX(`rating_time`) FROM `rating` WHERE `rating_user`=? LIMIT 1;", array($log));
+                $querytime = DB::run() -> querySingle("SELECT MAX(`time`) FROM `rating` WHERE `user`=? LIMIT 1;", array($log));
                 if ($querytime + 10800 < SITETIME) {
-                    $queryrat = DB::run() -> querySingle("SELECT `rating_id` FROM `rating` WHERE `rating_user`=? AND `rating_login`=? AND `rating_time`>? LIMIT 1;", array($log, $uz, SITETIME-86400 * 30));
+                    $queryrat = DB::run() -> querySingle("SELECT `id` FROM `rating` WHERE `user`=? AND `login`=? AND `time`>? LIMIT 1;", array($log, $uz, SITETIME-86400 * 30));
                     if (empty($queryrat)) {
 
                         switch ($act):
@@ -66,8 +66,8 @@ if (is_user()) {
 
                                             $text = antimat($text);
 
-                                            DB::run() -> query("INSERT INTO `rating` (`rating_user`, `rating_login`, `rating_text`, `rating_vote`, `rating_time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 1, SITETIME));
-                                            DB::run() -> query("DELETE FROM `rating` WHERE `rating_user`=? AND `rating_time` < (SELECT MIN(`rating_time`) FROM (SELECT `rating_time` FROM `rating` WHERE `rating_user`=? ORDER BY `rating_time` DESC LIMIT 20) AS del);", array($log, $log));
+                                            DB::run() -> query("INSERT INTO `rating` (`user`, `login`, `text`, `vote`, `time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 1, SITETIME));
+                                            DB::run() -> query("DELETE FROM `rating` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20) AS del);", array($log, $log));
 
                                             DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `rating`=CAST(`posrating`AS SIGNED)-CAST(`negrating`AS SIGNED)+1, `posrating`=`posrating`+1 WHERE `login`=? LIMIT 1;", array($uz));
 
@@ -94,13 +94,13 @@ if (is_user()) {
                                             if ($udata['rating'] >= 10) {
 
                                                 /* Запрещаем ставить обратный минус */
-                                                $revertRating = DB::run() -> querySingle("SELECT `rating_id` FROM `rating` WHERE `rating_user`=? AND `rating_login`=? AND `rating_vote`=? ORDER BY `rating_time` DESC LIMIT 1;", array($uz, $log, 0));
+                                                $revertRating = DB::run() -> querySingle("SELECT `id` FROM `rating` WHERE `user`=? AND `login`=? AND `vote`=? ORDER BY `time` DESC LIMIT 1;", array($uz, $log, 0));
                                                 if (empty($revertRating)) {
 
                                                     $text = antimat($text);
 
-                                                    DB::run() -> query("INSERT INTO `rating` (`rating_user`, `rating_login`, `rating_text`, `rating_vote`, `rating_time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 0, SITETIME));
-                                                    DB::run() -> query("DELETE FROM `rating` WHERE `rating_user`=? AND `rating_time` < (SELECT MIN(`rating_time`) FROM (SELECT `rating_time` FROM `rating` WHERE `rating_user`=? ORDER BY `rating_time` DESC LIMIT 20) AS del);", array($log, $log));
+                                                    DB::run() -> query("INSERT INTO `rating` (`user`, `login`, `text`, `vote`, `time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 0, SITETIME));
+                                                    DB::run() -> query("DELETE FROM `rating` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20) AS del);", array($log, $log));
 
                                                     DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `rating`=CAST(`posrating`AS SIGNED)-CAST(`negrating`AS SIGNED)-1, `negrating`=`negrating`+1 WHERE `login`=? LIMIT 1;", array($uz));
 

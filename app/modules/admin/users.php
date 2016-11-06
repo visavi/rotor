@@ -205,10 +205,10 @@ if (is_admin(array(101, 102))) {
                         echo '<span style="color:#ff0000"><b>Аккаунт не активирован</b></span><br />';
                     }
 
-                    $visit = DB::run() -> queryFetch("SELECT `visit_ip`, `visit_nowtime` FROM `visit` WHERE `visit_user`=? LIMIT 1;", array($uz));
+                    $visit = DB::run() -> queryFetch("SELECT `ip`, `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", array($uz));
                     if (!empty($visit)) {
-                        echo '<b>Последний визит:</b> '.date_fixed($visit['visit_nowtime'], 'j F Y / H:i').'<br />';
-                        echo '<b>Последний IP:</b> '.$visit['visit_ip'].'<br />';
+                        echo '<b>Последний визит:</b> '.date_fixed($visit['nowtime'], 'j F Y / H:i').'<br />';
+                        echo '<b>Последний IP:</b> '.$visit['ip'].'<br />';
                     }
 
                     if ($user['ban'] == 1 && $user['timeban'] > SITETIME) {

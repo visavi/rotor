@@ -204,7 +204,7 @@ if (is_admin(array(101, 102))) {
                             DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", array($status, $closed, $text, $log, SITETIME, $id));
 
                             if ($queryoff['status'] >= 2) {
-                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `rated_offers`=?;", array($id));
+                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers`=?;", array($id));
                             }
 
                             notice('Данные успешно отправлены!');
@@ -317,7 +317,7 @@ if (is_admin(array(101, 102))) {
 
                     DB::run() -> query("DELETE FROM `offers` WHERE `id` IN (".$del.");");
                     DB::run() -> query("DELETE FROM `commoffers` WHERE `comm_offers` IN (".$del.");");
-                    DB::run() -> query("DELETE FROM `ratedoffers` WHERE `rated_offers` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers` IN (".$del.");");
 
                     notice('Выбранные пункты успешно удалены!');
                     redirect("/admin/offers?type=$type&start=$start");

@@ -43,7 +43,7 @@ include_once APP.'/routes.php';
 DBM::run()->config(env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'), env('DB_PORT'));
 
 if (!file_exists(STORAGE.'/temp/setting.dat')) {
-	$queryset = DB::run() -> query("SELECT `setting_name`, `setting_value` FROM `setting`;");
+	$queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");
 	$config = $queryset -> fetchAssoc();
 	file_put_contents(STORAGE.'/temp/setting.dat', serialize($config), LOCK_EX);
 }

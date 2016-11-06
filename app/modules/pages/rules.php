@@ -6,13 +6,13 @@ show_title('Правила сайта');
 $rules = DB::run() -> queryFetch("SELECT * FROM `rules`;");
 
 if (!empty($rules)) {
-    $rules['rules_text'] = str_replace(
+    $rules['text'] = str_replace(
         ['%SITENAME%', '%MAXBAN%'],
         [$config['title'], round($config['maxbantime'] / 1440)],
-        $rules['rules_text']
+        $rules['text']
     );
 
-    echo bb_code($rules['rules_text']).'<br />';
+    echo bb_code($rules['text']).'<br />';
 } else {
     show_error('Правила сайта еще не установлены!');
 }
