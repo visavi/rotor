@@ -75,7 +75,7 @@ switch ($act):
             $page = floor(1 + $start / $config['postgallery']);
             $config['newtitle'] = 'Список всех комментариев '.nickname($uz).' (Стр. '.$page.')';
 
-            $querycomm = DB::run() -> query("SELECT `commphoto`.*, `title` FROM `commphoto` LEFT JOIN `photo` ON `commphoto`.`gid`=`photo`.`id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['postgallery'].";", array($uz));
+            $querycomm = DB::run() -> query("SELECT `cp`.*, `title` FROM `commphoto` cp LEFT JOIN `photo` p ON `cp`.`gid`=`p`.`id` WHERE cp.`user`=? ORDER BY cp.`time` DESC LIMIT ".$start.", ".$config['postgallery'].";", array($uz));
 
             while ($data = $querycomm -> fetch()) {
 

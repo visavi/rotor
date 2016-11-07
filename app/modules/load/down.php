@@ -45,7 +45,7 @@ case 'index':
                     break;
                 case 'comm': $order = 'comments';
                     break;
-                case 'load': $order = 'load';
+                case 'load': $order = 'last_load';
                     break;
                 default: $order = 'time';
             }
@@ -58,7 +58,7 @@ case 'index':
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=date">По дате</a> / ';
             }
 
-            if ($order == 'load') {
+            if ($order == 'last_load') {
                 echo '<b>Скачивания</b> / ';
             } else {
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=load">Скачивания</a> / ';
@@ -105,7 +105,7 @@ case 'index':
                     $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b">';
-                    echo '<i class="fa fa-archive"></i> ';
+                    echo '<i class="fa fa-file-o"></i> ';
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
                     echo '<div>';
 
@@ -170,7 +170,7 @@ case 'view':
             echo '<a href="/load/down?cid='.$downs['id'].'">'.$downs['name'].'</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><br /><br />';
 
             $filesize = (!empty($downs['link'])) ? read_file(HOME.'/upload/files/'.$folder.$downs['link']) : 0;
-            echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b> ('.$filesize.')';
+            echo '<i class="fa fa-file-o"></i> <b>'.$downs['title'].'</b> ('.$filesize.')';
 
             if (is_admin(array(101, 102))) {
                 echo ' (<a href="/admin/load?act=editdown&amp;cid='.$downs['cats_id'].'&amp;id='.$id.'">Редактировать</a> / ';
@@ -403,7 +403,7 @@ case 'comments':
         if (!empty($downs['active'])) {
             $config['newtitle'] = 'Комментарии - '.$downs['title'];
 
-            echo '<i class="fa fa-archive"></i> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['title'].'</a></b><br /><br />';
+            echo '<i class="fa fa-file-o"></i> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['title'].'</a></b><br /><br />';
 
             echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr />';
 

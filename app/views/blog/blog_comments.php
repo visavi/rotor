@@ -19,7 +19,7 @@
 		<?=user_title($data['author'])?> <?=user_online($data['author'])?>
 	</div>
 
-		<?php if (!empty($log) && $log != $data['author']): ?>
+		<?php if (!empty(App::getUsername()) && App::getUsername() != $data['author']): ?>
 			<div class="right">
 				<a href="/blog/blog?act=reply&amp;id=<?=$blogs['id']?>&amp;pid=<?=$data['id']?>&amp;start=<?=$start?>">Отв</a> /
 				<a href="/blog/blog?act=quote&amp;id=<?=$blogs['id']?>&amp;pid=<?=$data['id']?>&amp;start=<?=$start?>">Цит</a> /
@@ -27,7 +27,7 @@
 			</div>
 		<?php endif; ?>
 
-		<?php if ($log == $data['author'] && $data['time'] + 600 > SITETIME): ?>
+		<?php if (App::getUsername() == $data['author'] && $data['time'] + 600 > SITETIME): ?>
 			<div class="right">
 				<a href="/blog/blog?act=edit&amp;id=<?=$blogs['id']?>&amp;pid=<?=$data['id']?>&amp;start=<?=$start?>">Редактировать</a>
 			</div>

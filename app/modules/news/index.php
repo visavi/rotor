@@ -254,7 +254,7 @@ case 'create':
 
             $msg = antimat($msg);
 
-            DB::run() -> query("INSERT INTO `commnews` (`id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+            DB::run() -> query("INSERT INTO `commnews` (`news_id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
 
             DB::run() -> query("DELETE FROM `commnews` WHERE `id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commnews` WHERE `id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommnews'].") AS del);", array($id, $id));
 

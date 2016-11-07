@@ -500,7 +500,7 @@ case 'addeditcats':
 
                         $cat = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", array($cid));
 
-                        $query = DB::run() -> query("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=?;", array($cid));
+                        $query = DB::run() -> query("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=?;", array($cid));
                         $downs = $query -> fetchAll();
 
                         // Перенос файлов
@@ -723,7 +723,7 @@ case 'down':
                 $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
                 echo '<div class="b">';
-                echo '<i class="fa fa-archive"></i> ';
+                echo '<i class="fa fa-file-o"></i> ';
                 echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')<br />';
 
                 if ($is_admin) {
@@ -865,7 +865,7 @@ case 'changedown':
                             if (strlen($loadfile) <= 50) {
                                 if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $loadfile)) {
 
-                                    $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+                                    $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
 
                                     if (! empty($new)) {
 
@@ -947,7 +947,7 @@ case 'copyfile':
 
     $loadfile = check($_POST['loadfile']);
 
-    $down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
 
     if (! empty($down)) {
         if (empty($down['link'])) {
@@ -1007,7 +1007,7 @@ break;
 case 'loadfile':
     show_title('Загрузка файла');
 
-    $down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
 
     if (!empty($down)) {
         if (empty($down['link'])) {
@@ -1069,7 +1069,7 @@ break;
 case 'loadscreen':
     show_title('Загрузка скриншота');
 
-    $down = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
 
     if (!empty($down)) {
         if (empty($down['screen'])) {
@@ -1113,8 +1113,7 @@ break;
 ############################################################################################
 case 'delfile':
 
-    $link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
-
+    $link = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
     if (!empty($link)) {
         $folder = $link['folder'] ? $link['folder'].'/' : '';
 
@@ -1140,8 +1139,7 @@ break;
 ############################################################################################
 case 'delscreen':
 
-    $screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
-
+    $screen = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
     if (!empty($screen)) {
         $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
@@ -1163,7 +1161,7 @@ break;
 ############################################################################################
 case 'movedown':
 
-    $downs = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
 
     if (!empty($downs)) {
         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
@@ -1173,7 +1171,7 @@ case 'movedown':
         $querycats = DB::run() -> query("SELECT * FROM `cats` ORDER BY `order` ASC;");
         $cats = $querycats -> fetchAll();
 
-        if (count($cats) > 0) {
+        if (count($cats) > 1) {
             $output = array();
             foreach ($cats as $row) {
                 $i = $row['id'];
@@ -1206,6 +1204,9 @@ case 'movedown':
             echo '</select>';
 
             echo '<input type="submit" value="Переместить" /></form></div><br />';
+
+        } elseif(count($cats) == 1) {
+            show_error('Нет доступных разделов для перемещения!');
         } else {
             show_error('Разделы загрузок еще не созданы!');
         }
@@ -1230,7 +1231,7 @@ case 'addmovedown':
 
         if (! empty($catsTo)) {
 
-            $downFrom = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+            $downFrom  = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
             if (!empty($downFrom)) {
 
                 $folderFrom = $downFrom['folder'] ? $downFrom['folder'].'/' : '';
@@ -1275,7 +1276,7 @@ case 'deldown':
 
                 if (is_writeable(HOME.'/upload/files')) {
 
-                    $querydel = DB::run() -> query("SELECT `downs`.*, `cats`.* FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id` IN (".$del.");");
+                    $querydel = DB::run() -> query("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id` IN (".$del.");");
                     $arr_script = $querydel -> fetchAll();
 
                     DB::run() -> query("DELETE FROM `commload` WHERE `down` IN (".$del.");");
@@ -1293,7 +1294,7 @@ case 'deldown':
                     }
 
                     notice('Выбранные файлы успешно удалены!');
-                    //redirect("/admin/load?act=down&cid=$cid&start=$start");
+                    redirect("/admin/load?act=down&cid=$cid&start=$start");
                 } else {
                     show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
                 }

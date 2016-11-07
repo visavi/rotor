@@ -548,7 +548,7 @@ break;
                             unlink_image('upload/pictures/', $querydel['link']);
 
                             notice('Фотография успешно удалена!');
-                            redirect("/gallery?act=photo&start=$start");
+                            redirect("/gallery/album?act=photo&start=$start");
 
                         } else {
                             show_error('Ошибка! Запрещено удалять фотографии к которым имеются комментарии!');

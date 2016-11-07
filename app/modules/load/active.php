@@ -24,14 +24,14 @@ case 'files':
             $start = 0;
         }
 
-        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, $uz));
+        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, $uz));
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
 
             $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
-            echo '<div class="b"><i class="fa fa-archive"></i> ';
+            echo '<div class="b"><i class="fa fa-file-o"></i> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
             echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
@@ -61,7 +61,7 @@ case 'comments':
 
         $is_admin = is_admin();
 
-        $querypost = DB::run() -> query("SELECT `commload`.*, `title`, `comments` FROM `commload` LEFT JOIN `downs` ON `commload`.`down`=`downs`.`id` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array($uz));
+        $querypost = DB::run() -> query("SELECT `cl`.*, `title`, `comments` FROM `commload` cl LEFT JOIN `downs` d ON `cl`.`down`=`d`.`id` WHERE cl.`author`=? ORDER BY cl.`time` DESC LIMIT ".$start.", ".$config['downlist'].";", array($uz));
 
         while ($data = $querypost -> fetch()) {
             echo '<div class="b">';

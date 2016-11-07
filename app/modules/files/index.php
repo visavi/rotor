@@ -15,11 +15,11 @@ if (!empty($params['page'])){
         $page = $page.'/index';
     }
 
-    if (! file_exists(BASEDIR.'/modules/files/'.$page.'.dat')) {
+    if (! file_exists(APP.'/modules/files/'.$page.'.dat')) {
         App::abort('default', 'Ошибка! Данной страницы не существует!');
     }
 
-    include_once (BASEDIR.'/modules/files/'.$page.'.dat');
+    include_once (APP.'/modules/files/'.$page.'.dat');
 
 } else {
 	include_once (STORAGE.'/main/files.dat');

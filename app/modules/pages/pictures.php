@@ -78,7 +78,7 @@ if (is_user()) {
                                 save_avatar();
 
                                 notice('Фотография успешно загружена!');
-                                //redirect("/profile");
+                                redirect("/profile");
 
                             } else {
                                 show_error($handle -> error);

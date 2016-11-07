@@ -101,7 +101,7 @@ case "search":
 
                     $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
-                    echo '<div class="b"><i class="fa fa-archive"></i> ';
+                    echo '<div class="b"><i class="fa fa-file-o"></i> ';
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
                     echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
@@ -145,7 +145,7 @@ case "search":
 
                     $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
 
-                    echo '<div class="b"><i class="fa fa-archive"></i> ';
+                    echo '<div class="b"><i class="fa fa-file-o"></i> ';
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
                     if (utf_strlen($data['text']) > 300) {

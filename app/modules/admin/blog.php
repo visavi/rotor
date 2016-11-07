@@ -373,7 +373,7 @@ if (is_admin()) {
             $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
 
             if (!empty($blogs)) {
-                echo '<i class="fa fa-archive"></i> <b>'.$blogs['title'].'</b><br /><br />';
+                echo '<i class="fa fa-file-o"></i> <b>'.$blogs['title'].'</b><br /><br />';
 
                 $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY `order` ASC;");
                 $cats = $querycats -> fetchAll();

@@ -31,13 +31,6 @@ case 'index':
     }
     echo '</select><br />';
 
-    echo 'Сообщений в гостевой:<br /><input name="postguest" value="'.$udata['postguest'].'" /><br />';
-    echo 'Новостей на стр.:<br /><input name="postnews" value="'.$udata['postnews'].'" /><br />';
-    echo 'Писем в привате на стр.:<br /><input name="postprivat" value="'.$udata['postprivat'].'" /><br />';
-    echo 'Сообщений в форуме:<br /><input name="postforum" value="'.$udata['postforum'].'" /><br />';
-    echo 'Тем в форуме:<br /><input name="themesforum" value="'.$udata['themesforum'].'" /><br />';
-    echo 'Объявлений на стр.:<br /><input name="postboard" value="'.$udata['postboard'].'" /><br />';
-
     $arrtimezone = range(-12, 12);
 
     echo 'Временной сдвиг:<br />';
@@ -69,12 +62,6 @@ case 'edit':
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $themes = (isset($_POST['themes'])) ? check($_POST['themes']) : '';
-    $postguest = (isset($_POST['postguest'])) ? abs(intval($_POST['postguest'])) : 0;
-    $postnews = (isset($_POST['postnews'])) ? abs(intval($_POST['postnews'])) : 0;
-    $postprivat = (isset($_POST['postprivat'])) ? abs(intval($_POST['postprivat'])) : 0;
-    $postforum = (isset($_POST['postforum'])) ? abs(intval($_POST['postforum'])) : 0;
-    $themesforum = (isset($_POST['themesforum'])) ? abs(intval($_POST['themesforum'])) : 0;
-    $postboard = (isset($_POST['postboard'])) ? abs(intval($_POST['postboard'])) : 0;
     $timezone = (isset($_POST['timezone'])) ? check($_POST['timezone']) : 0;
     $ipbinding = (empty($_POST['ipbinding'])) ? 0 : 1;
     $privacy = (empty($_POST['privacy'])) ? 0 : 1;
@@ -84,12 +71,6 @@ case 'edit':
 
     $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('regex', array($themes, '|^[a-z0-9_\-]+$|i'), 'Недопустимое название темы!', true)
-        -> addRule('numeric', $postguest, 'Количество сообщений в гостевой. (Допустимое значение от 3 до 50)!', true, 3, 50)
-        -> addRule('numeric', $postnews, 'Количество новостей на страницу. (Допустимое значение от 3 до 50)!', true, 3, 50)
-        -> addRule('numeric', $postprivat, 'Количество приватных сообщений. (Допустимое значение от 3 до 50)!', true, 3, 50)
-        -> addRule('numeric', $postforum, 'Количество сообщения в форуме. (Допустимое значение от 3 до 50)!', true, 3, 50)
-        -> addRule('numeric', $themesforum, 'Количество тем в форуме. (Допустимое значение от 3 до 50)!', true, 3, 50)
-        -> addRule('numeric', $postboard, 'Количество объявлений на страницу. (Допустимое значение от 3 до 50)!', true, 3, 50)
         -> addRule('regex', array($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|'), 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!', true);
 
     if ($validation->run()) {
@@ -97,12 +78,6 @@ case 'edit':
 
             $user = DBM::run()->update('users', array(
                 'themes'      => $themes,
-                'postguest'   => $postguest,
-                'postnews'    => $postnews,
-                'postprivat'  => $postprivat,
-                'postforum'   => $postforum,
-                'themesforum' => $themesforum,
-                'postboard'   => $postboard,
                 'timezone'    => $timezone,
                 'ipbinding'   => $ipbinding,
                 'privacy'     => $privacy,
