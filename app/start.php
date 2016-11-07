@@ -130,7 +130,7 @@ if ($udata = is_user()) {
     $config['themes'] = $udata['themes'];
 
     if ($udata['ban'] == 1) {
-        if (!strsearch(App::server('PHP_SELF'), ['/ban', '/rules'])) {
+        if (!strsearch(App::server('PHP_SELF'), ['/ban', '/rules', '/logout'])) {
             redirect('/ban?log='.$log);
         }
     }
