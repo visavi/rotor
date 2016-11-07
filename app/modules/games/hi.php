@@ -65,13 +65,13 @@ if (is_user()) {
                             echo '<input type="submit" value="Угадать" />';
                             echo '</form></div><br />';
 
-                            DB::run() -> query("UPDATE `users` SET `money`=`money`- ".$config['hisumma']." WHERE `login`=? LIMIT 1;", array($log));
+                            DB::run() -> query("UPDATE `users` SET `money`=`money`- ".$config['hisumma']." WHERE `login`=? LIMIT 1;", [$log]);
 
                             $count_pop = $config['hipopytka'] - $_SESSION['hi_count'];
 
                             echo 'Осталось попыток: <b>'.(int)$count_pop.'</b><br />';
 
-                            $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", array($log));
+                            $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [$log]);
 
                             echo 'У вас в наличии: '.moneys($allmoney).'<br /><br />';
                         } else {
@@ -82,7 +82,7 @@ if (is_user()) {
                             unset($_SESSION['hi_count']);
                         }
                     } else {
-                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", array($config['hiprize'], $log));
+                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$config['hiprize'], $log]);
 
                         echo '<b>Поздравляем!!! Вы угадали число '.(int)$guess.'</b><br />';
                         echo 'Ваш выигрыш составил '.moneys($config['hiprize']).'<br /><br />';

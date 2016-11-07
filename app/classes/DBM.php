@@ -30,12 +30,11 @@ class DBM {
 	 */
 	protected static $instance = null;
 
-	/**
-	 * method instance.
-	 * 	- static, for singleton, for creating a global instance of this object
-	 *
-	 * @return - DBM Object
-	 */
+    /**
+     * method instance.
+     *    - static, for singleton, for creating a global instance of this object
+     * @return DBM - DBM Object
+     */
 	public static function run() {
 		if (! isset(self::$instance)) {
 			self::$instance = new DBM();
@@ -49,17 +48,24 @@ class DBM {
 	 */
 	protected function __construct() {}
 
-	/**
-	 * method config
-	 * 	- configure connection credentials to the db server
-	 *
-	 * @param host - the host name of the db to connect to
-	 * @param name - the database name
-	 * @param user - the user name
-	 * @param password - the users password
-	 * @param port (optional) - the port to connect using, default to 3306
-	 * @param driver - the dsn prefix
-	 */
+    /**
+     * method config
+     *    - configure connection credentials to the db server
+     *
+     * @param $host
+     * @param $name
+     * @param $user
+     * @param $password
+     * @param null $port
+     * @param string $driver
+     * @throws Exception
+     * @internal param $host - the host name of the db to connect to
+     * @internal param $name - the database name
+     * @internal param $user - the user name
+     * @internal param $password - the users password
+     * @internal param $port (optional) - the port to connect using, default to 3306
+     * @internal param $driver - the dsn prefix
+     */
 	public function config($host, $name, $user, $password, $port=null, $driver='mysql') {
 		if (!$this->validateDriver($driver)) {
 			throw new Exception('DATABASE WRAPPER::error, the database you wish to connect to is not supported by your install of PHP.');
@@ -69,28 +75,35 @@ class DBM {
 			error_log('DATABASE WRAPPER::warning, attempting to config after connection exists');
 		}
 
-		$this->config = array(
+		$this->config = [
 			'driver' => $driver,
 			'host' => $host,
 			'name' => $name,
 			'user' => $user,
 			'password' => $password,
 			'port' => $port
-		);
+        ];
 	}
 
-	/**
-	 * method createConnection.
-	 * 	- create a PDO connection using the credentials provided
-	 *
-     * @param driver - the dsn prefix
-	 * @param host - the host name of the db to connect to
-	 * @param name - the database name
-	 * @param user - the user name
-	 * @param password - the users password
-	 * @param port (optional) - the port to connect using, default to 3306
-	 * @return PDO object with a connection to the database specified
-	 */
+    /**
+     * method createConnection.
+     *    - create a PDO connection using the credentials provided
+     *
+     * @param $driver
+     * @param $host
+     * @param $name
+     * @param $user
+     * @param $password
+     * @param null $port
+     * @return PDO object with a connection to the database specified
+     * @throws Exception
+     * @internal param $driver - the dsn prefix
+     * @internal param $host - the host name of the db to connect to
+     * @internal param $name - the database name
+     * @internal param $user - the user name
+     * @internal param $password - the users password
+     * @internal param $port (optional) - the port to connect using, default to 3306
+     */
 	protected function createConnection($driver, $host, $name, $user, $password, $port=null) {
 		if (!$this->validateDriver($driver)) {
 			throw new Exception('DATABASE WRAPPER::error, the database you wish to connect to is not supported by your install of PHP.');
@@ -160,12 +173,13 @@ class DBM {
 		return $this->pdo;
 	}
 
-	/**
-	 * Получение количества элементов в таблице
-	 * @param  string $table  имя таблицы
-	 * @param  array  $params массив условий
-	 * @return integer        количество записей
-	 */
+    /**
+     * Получение количества элементов в таблице
+     * @param  string $table имя таблицы
+     * @param  array $params массив условий
+     * @return int количество записей
+     * @throws Exception
+     */
 	public function count($table, $params = null) {
 		$sql_str = "SELECT count(*) FROM $table";
 
@@ -174,7 +188,7 @@ class DBM {
 		$add_and = false;
 		// add each clause using parameter array
 		if (empty($params)) {
-			$params = array();
+			$params = [];
 		}
 		foreach ($params as $key=>$val) {
 			// only add AND after the first clause item has been appended
@@ -217,17 +231,18 @@ class DBM {
 		}
 	}
 
-	/**
-	 * method select.
-	 * 	- retrieve information from the database, as an array
-	 *
-	 * @param string $table - the name of the db table we are retreiving the rows from
-	 * @param array $params - associative array representing the WHERE clause filters
-	 * @param int $limit (optional) - the amount of rows to return
-	 * @param int $start (optional) - the row to start on, indexed by zero
-	 * @param array $order_by (optional) - an array with order by clause
-	 * @return mixed - associate representing the fetched table row, false on failure
-	 */
+    /**
+     * method select.
+     *    - retrieve information from the database, as an array
+     *
+     * @param string $table - the name of the db table we are retreiving the rows from
+     * @param array $params - associative array representing the WHERE clause filters
+     * @param int $limit (optional) - the amount of rows to return
+     * @param int $start (optional) - the row to start on, indexed by zero
+     * @param array $order_by (optional) - an array with order by clause
+     * @return mixed - associate representing the fetched table row, false on failure
+     * @throws Exception
+     */
 	public function select($table, $params = null, $limit = null, $start = null, $order_by = null) {
 		// building query string
 		$sql_str = "SELECT * FROM $table";
@@ -237,7 +252,7 @@ class DBM {
 		$add_and = false;
 		// add each clause using parameter array
 		if (empty($params)) {
-			$params = array();
+			$params = [];
 		}
 		foreach ($params as $key=>$val) {
 			// only add AND after the first clause item has been appended
@@ -276,7 +291,7 @@ class DBM {
             $pdoDriver = $this->get()->getAttribute(PDO::ATTR_DRIVER_NAME);
 
 			//@TODO MS SQL Server & Oracle handle LIMITs differently, for now its disabled but we should address it later.
-			$disableLimit = array("sqlsrv", "mssql", "oci");
+			$disableLimit = ["sqlsrv", "mssql", "oci"];
 
 			// add the limit clause if we have one
 			if (!is_null($limit) && !in_array($pdoDriver, $disableLimit)) {
@@ -310,28 +325,29 @@ class DBM {
 		}
 	}
 
-	/**
-	 * method selectFirst.
-	 * 	- retrieve the first row returned from a select statement
-	 *
-	 * @param table - the name of the db table we are retreiving the rows from
-	 * @param params - associative array representing the WHERE clause filters
-	 * @param array $order_by (optional) - an array with order by clause
-	 * @return mixed - associate representing the fetched table row, false on failure
-	 */
-	public function selectFirst($table, $params = array(), $order_by = null) {
+    /**
+     * method selectFirst.
+     *    - retrieve the first row returned from a select statement
+     *
+     * @param table - the name of the db table we are retreiving the rows from
+     * @param array $params
+     * @param array $order_by (optional) - an array with order by clause
+     * @return mixed - associate representing the fetched table row, false on failure
+     */
+	public function selectFirst($table, $params = [], $order_by = null) {
 		return $this->select($table, $params, 1, null, $order_by);
 	}
 
-	/**
-	 * method delete.
-	 * 	- deletes rows from a table based on the parameters
-	 *
-	 * @param table - the name of the db table we are deleting the rows from
-	 * @param params - associative array representing the WHERE clause filters
-	 * @return bool - associate representing the fetched table row, false on failure
-	 */
-	public function delete($table, $params = array()) {
+    /**
+     * method delete.
+     *    - deletes rows from a table based on the parameters
+     *
+     * @param table - the name of the db table we are deleting the rows from
+     * @param array $params
+     * @return bool - associate representing the fetched table row, false on failure
+     * @throws Exception
+     */
+	public function delete($table, $params = []) {
 		// building query string
 		$sql_str = "DELETE FROM $table";
 		// append WHERE if necessary
@@ -381,17 +397,18 @@ class DBM {
 		}
 	}
 
- 	/**
-	 * method update.
-	 * 	- updates a row to the specified table
-	 *
-	 * @param string $table - the name of the db table we are adding row to
-	 * @param array $params - associative array representing the columns and their respective values to update
-	 * @param array $wheres (Optional) - the where clause of the query
-	 * @param bool $timestamp_this (Optional) - if true we set created and modified values to now
-	 * @return int|bool - the amount of rows updated, false on failure
-	 */
-	public function update($table, $params, $wheres = array(), $timestamp_this = false) {
+    /**
+     * method update.
+     *    - updates a row to the specified table
+     *
+     * @param string $table - the name of the db table we are adding row to
+     * @param array $params - associative array representing the columns and their respective values to update
+     * @param array $wheres (Optional) - the where clause of the query
+     * @param bool $timestamp_this (Optional) - if true we set created and modified values to now
+     * @return bool|int - the amount of rows updated, false on failure
+     * @throws Exception
+     */
+	public function update($table, $params, $wheres = [], $timestamp_this = false) {
 		if (! $timestamp_this) {
 			$timestamp_this = self::$timestamp_writes;
 		}
@@ -424,7 +441,7 @@ class DBM {
 		$where_string = '';
 		if (!empty($wheres)) {
 			// load each key value pair, and implode them with an AND
-			$where_array = array();
+			$where_array = [];
 			foreach($wheres as $key => $val) {
 
 				// append clause item
@@ -473,16 +490,17 @@ class DBM {
 		}
 	}
 
-	/**
-	 * method insert.
-	 * 	- adds a row to the specified table
-	 *
-	 * @param string $table - the name of the db table we are adding row to
-	 * @param array $params - associative array representing the columns and their respective values
-	 * @param bool $timestamp_this (Optional), if true we set created and modified values to now
-	 * @return mixed - new primary key of inserted table, false on failure
-	 */
-	public function insert($table, $params = array(), $timestamp_this = false) {
+    /**
+     * method insert.
+     *    - adds a row to the specified table
+     *
+     * @param string $table - the name of the db table we are adding row to
+     * @param array $params - associative array representing the columns and their respective values
+     * @param bool $timestamp_this (Optional), if true we set created and modified values to now
+     * @return mixed - new primary key of inserted table, false on failure
+     * @throws Exception
+     */
+	public function insert($table, $params = [], $timestamp_this = false) {
 		if (! $timestamp_this) {
 			$timestamp_this = self::$timestamp_writes;
 		}
@@ -543,16 +561,18 @@ class DBM {
 		}
 	}
 
-	/**
-	 * method insertMultiple.
-	 * 	- adds multiple rows to a table with a single query
-	 *
-	 * @param string $table - the name of the db table we are adding row to
-	 * @param array $columns - contains the column names
-	 * @param bool $timestamp_these (Optional), if true we set created and modified values to NOW() for each row
-	 * @return mixed - new primary key of inserted table, false on failure
-	 */
-	public function insertMultiple($table, $columns = array(), $rows = array(), $timestamp_these = false) {
+    /**
+     * method insertMultiple.
+     *    - adds multiple rows to a table with a single query
+     *
+     * @param string $table - the name of the db table we are adding row to
+     * @param array $columns - contains the column names
+     * @param array $rows
+     * @param bool $timestamp_these (Optional), if true we set created and modified values to NOW() for each row
+     * @return mixed - new primary key of inserted table, false on failure
+     * @throws Exception
+     */
+	public function insertMultiple($table, $columns = [], $rows = [], $timestamp_these = false) {
 		if (! $timestamp_these) {
 			$timestamp_these = self::$timestamp_writes;
 		}
@@ -617,23 +637,25 @@ class DBM {
 			return true;
 		}
 		catch(PDOException $e) {
-			$this->get()->rollback();
+			$this->get()->rollBack();
 			throw $e;
 		}
 		catch(Exception $e) {
-			$this->get()->rollback();
+			$this->get()->rollBack();
 			throw $e;
 		}
 	}
 
-	/**
-	 * method execute.
-	 * 	- executes a query that modifies the database
-	 *
-	 * @param string $query - the SQL query we are executing
-	 * @return mixed - the affected rows, false on failure
-	 */
-	public function execute($query, $params = array()) {
+    /**
+     * method execute.
+     *    - executes a query that modifies the database
+     *
+     * @param string $query - the SQL query we are executing
+     * @param array $params
+     * @return mixed - the affected rows, false on failure
+     * @throws Exception
+     */
+	public function execute($query, $params = []) {
 		try {
 			// prepare the statement
 			$pstmt = $this->get()->prepare($query);
@@ -657,15 +679,16 @@ class DBM {
 		}
 	}
 
-	/**
-	 * method query.
-	 * 	- returns data from a free form select query
-	 *
-	 * @param string $query - the SQL query we are executing
-	 * @param array $params - a list of bind parameters
-	 * @return mixed - the affected rows, false on failure
-	 */
-	public function query($query, $params = array()) {
+    /**
+     * method query.
+     *    - returns data from a free form select query
+     *
+     * @param string $query - the SQL query we are executing
+     * @param array $params - a list of bind parameters
+     * @return mixed - the affected rows, false on failure
+     * @throws Exception
+     */
+	public function query($query, $params = []) {
 		try {
 
 			$pstmt = $this->get()->prepare($query);
@@ -697,7 +720,7 @@ class DBM {
 	 * @param array $params - a list of bind parameters
 	 * @return mixed - the affected rows, false on failure
 	 */
-	public function queryFirst($query, $params = array()) {
+	public function queryFirst($query, $params = []) {
 		$result = $this->query($query, $params);
 		if (empty($result)) {
 			return false;

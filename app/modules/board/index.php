@@ -71,7 +71,7 @@ if ($act == "board"){
         if (file_exists(STORAGE."/board/$id.dat")){
             $files = file(STORAGE."/board/$id.dat");
             //---------------Функция автоудаления--------------------//
-            $newlines = array();
+            $newlines = [];
             foreach($files as $bkey=>$bvalue){
                 $bdata = explode("|", $bvalue);
                 if($bdata[4]<SITETIME){

@@ -35,7 +35,7 @@ if (is_admin()) {
             $forums = $queryforum -> fetchAll();
 
             if (count($forums) > 0) {
-                $output = array();
+                $output = [];
 
                 foreach ($forums as $row) {
                     $id = $row['id'];
@@ -53,7 +53,7 @@ if (is_admin()) {
                         echo '<br /><small>'.$data['desc'].'</small>';
                     }
 
-                    if (is_admin(array(101))) {
+                    if (is_admin([101])) {
                         echo '<br /><a href="/admin/forum?act=editforum&amp;fid='.$data['id'].'">Редактировать</a> / ';
                         echo '<a href="/admin/forum?act=prodelforum&amp;fid='.$data['id'].'">Удалить</a>';
                     }
@@ -64,7 +64,7 @@ if (is_admin()) {
                         foreach($output[$key] as $datasub) {
                             echo '<i class="fa fa-angle-right"></i> ';
                             echo '<b>'.$datasub['order'].'. <a href="/admin/forum?act=forum&amp;fid='.$datasub['id'].'">'.$datasub['title'].'</a></b>  ('.$datasub['topics'].'/'.$datasub['posts'].') ';
-                            if (is_admin(array(101))) {
+                            if (is_admin([101])) {
                                 echo '(<a href="/admin/forum?act=editforum&amp;fid='.$datasub['id'].'">Редактировать</a> / ';
                                 echo '<a href="/admin/forum?act=prodelforum&amp;fid='.$datasub['id'].'">Удалить</a>)';
                             }
@@ -84,7 +84,7 @@ if (is_admin()) {
                 show_error('Разделы форума еще не созданы!');
             }
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 echo '<hr /><form action="/admin/forum?act=addforum&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Заголовок:<br />';
                 echo '<input type="text" name="title" maxlength="50" />';
@@ -102,7 +102,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     restatement('forum');
 
@@ -127,11 +127,11 @@ if (is_admin()) {
             $uid = check($_GET['uid']);
             $title = check($_POST['title']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (utf_strlen($title) >= 3 && utf_strlen($title) <= 50) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`order`),0)+1 FROM `forums`;");
-                        DB::run() -> query("INSERT INTO `forums` (`order`, `title`) VALUES (?, ?);", array($maxorder, $title));
+                        DB::run() -> query("INSERT INTO `forums` (`order`, `title`) VALUES (?, ?);", [$maxorder, $title]);
 
                         notice('Новый раздел успешно добавлен!');
                         redirect("/admin/forum");
@@ -154,8 +154,8 @@ if (is_admin()) {
         ############################################################################################
         case 'editforum':
 
-            if (is_admin(array(101))) {
-                $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", array($fid));
+            if (is_admin([101])) {
+                $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", [$fid]);
                 if (!empty($forums)) {
                     echo '<b><big>Редактирование</big></b><br /><br />';
 
@@ -164,7 +164,7 @@ if (is_admin()) {
                     echo 'Раздел: <br />';
                     echo '<input type="text" name="title" maxlength="50" value="'.$forums['title'].'" /><br />';
 
-                    $query = DB::run() -> query("SELECT `id`, `title`, `parent` FROM `forums` WHERE `parent`=? ORDER BY `order` ASC;", array(0));
+                    $query = DB::run() -> query("SELECT `id`, `title`, `parent` FROM `forums` WHERE `parent`=? ORDER BY `order` ASC;", [0]);
                     $section = $query -> fetchAll();
 
                     echo 'Родительский форум:<br />';
@@ -212,15 +212,15 @@ if (is_admin()) {
             $order = abs(intval($_POST['order']));
             $closed = (empty($_POST['closed'])) ? 0 : 1;
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (utf_strlen($title) >= 3 && utf_strlen($title) <= 50) {
                         if (utf_strlen($desc) <= 100) {
                             if ($fid != $parent) {
-                                $forums = DB::run() -> queryFetch("SELECT `id` FROM `forums` WHERE `parent`=? LIMIT 1;", array($fid));
+                                $forums = DB::run() -> queryFetch("SELECT `id` FROM `forums` WHERE `parent`=? LIMIT 1;", [$fid]);
 
                                 if (empty($forums) || empty($parent)) {
-                                    DB::run() -> query("UPDATE `forums` SET `order`=?, `parent`=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", array($order, $parent, $title, $desc, $closed, $fid));
+                                    DB::run() -> query("UPDATE `forums` SET `order`=?, `parent`=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $title, $desc, $closed, $fid]);
 
                                     notice('Раздел успешно отредактирован!');
                                     redirect("/admin/forum");
@@ -253,8 +253,8 @@ if (is_admin()) {
         ############################################################################################
         case 'prodelforum':
 
-            if (is_admin(array(101))) {
-                $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.`parent` = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", array($fid));
+            if (is_admin([101])) {
+                $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.`parent` = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", [$fid]);
 
                 if (!empty($forums['id'])) {
                     if (empty($forums['subcnt'])) {
@@ -280,15 +280,15 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.`parent` = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", array($fid));
+                    $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.`parent` = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", [$fid]);
 
                     if (!empty($forums['id'])) {
                         if (empty($forums['subcnt'])) {
 
                             // ------ Удаление загруженных файлов -------//
-                            $querytopics = DB::run() -> query("SELECT `id` FROM `topics` WHERE `forums_id`=?;", array($fid));
+                            $querytopics = DB::run() -> query("SELECT `id` FROM `topics` WHERE `forums_id`=?;", [$fid]);
                             $topics = $querytopics->fetchAll(PDO::FETCH_COLUMN);
 
                             if (!empty($topics)){
@@ -302,10 +302,10 @@ if (is_admin()) {
                             }
                             // ------ Удаление загруженных файлов -------//
 
-                            DB::run() -> query("DELETE FROM `posts` WHERE `forums_id`=?;", array($fid));
-                            DB::run() -> query("DELETE FROM `topics` WHERE `forums_id`=?;", array($fid));
-                            DB::run() -> query("DELETE FROM `forums` WHERE `id`=?;", array($fid));
-                            DB::run() -> query("DELETE FROM `bookmarks` WHERE `forum`=?;", array($fid));
+                            DB::run() -> query("DELETE FROM `posts` WHERE `forums_id`=?;", [$fid]);
+                            DB::run() -> query("DELETE FROM `topics` WHERE `forums_id`=?;", [$fid]);
+                            DB::run() -> query("DELETE FROM `forums` WHERE `id`=?;", [$fid]);
+                            DB::run() -> query("DELETE FROM `bookmarks` WHERE `forum`=?;", [$fid]);
 
                             notice('Раздел успешно удален!');
                             redirect("/admin/forum");
@@ -331,7 +331,7 @@ if (is_admin()) {
         ############################################################################################
         case 'forum':
 
-            $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", array($fid));
+            $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", [$fid]);
 
             if (!empty($forums)) {
                 echo '<a href="/admin/forum">Форум</a> / ';
@@ -339,14 +339,14 @@ if (is_admin()) {
 
                 echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$forums['title'].'</b><hr />';
 
-                $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `forums_id`=?;", array($fid));
+                $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `forums_id`=?;", [$fid]);
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `forums_id`=? ORDER BY `locked` DESC, `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", array($fid));
+                    $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `forums_id`=? ORDER BY `locked` DESC, `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", [$fid]);
 
                     echo '<form action="/admin/forum?act=deltopics&amp;fid='.$fid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -401,7 +401,7 @@ if (is_admin()) {
         ############################################################################################
         case 'edittopic':
 
-            $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`id` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` WHERE `id`=? LIMIT 1;", array($tid));
+            $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 
             if (!empty($topics)) {
 
@@ -430,7 +430,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной темы не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topics['id'].'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topics['forums_id'].'&amp;start='.$start.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -451,7 +451,7 @@ if (is_admin()) {
 
                         $mod = implode(',', preg_split('/[\s]*[,][\s]*/', $mod));
 
-                        DB::run() -> query("UPDATE `topics` SET `title`=?, `closed`=?, `locked`=?, `mod`=?, `note`=? WHERE `id`=?;", array($title, $closed, $locked, $mod, $note, $tid));
+                        DB::run() -> query("UPDATE `topics` SET `title`=?, `closed`=?, `locked`=?, `mod`=?, `note`=? WHERE `id`=?;", [$title, $closed, $locked, $mod, $note, $tid]);
 
                         if ($locked == 1) {
                             $start = 0;
@@ -478,7 +478,7 @@ if (is_admin()) {
         ############################################################################################
         case 'movetopic':
 
-            $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($tid));
+            $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
             if (!empty($topics)) {
                 echo '<i class="fa fa-folder-open"></i> <b>'.$topics['title'].'</b> (Автор темы: '.nickname($topics['author']).')<br /><br />';
 
@@ -486,7 +486,7 @@ if (is_admin()) {
                 $forums = $queryforum -> fetchAll();
 
                 if (count($forums) > 1) {
-                    $output = array();
+                    $output = [];
                     foreach ($forums as $row) {
                         $i = $row['id'];
                         $p = $row['parent'];
@@ -538,24 +538,24 @@ if (is_admin()) {
             $section = abs(intval($_POST['section']));
 
             if ($uid == $_SESSION['token']) {
-                $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", array($section));
-                $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($tid));
+                $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", [$section]);
+                $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 
                 if (!empty($forums)) {
                     if (empty($forums['closed'])) {
                         // Обновление номера раздела
-                        DB::run() -> query("UPDATE `topics` SET `forums_id`=? WHERE `id`=?;", array($section, $tid));
-                        DB::run() -> query("UPDATE `posts` SET `forums_id`=? WHERE `topics_id`=?;", array($section, $tid));
+                        DB::run() -> query("UPDATE `topics` SET `forums_id`=? WHERE `id`=?;", [$section, $tid]);
+                        DB::run() -> query("UPDATE `posts` SET `forums_id`=? WHERE `topics_id`=?;", [$section, $tid]);
 
                         // Ищем последние темы в форумах для обновления списка последних тем
-                        $oldlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forums_id`=? ORDER BY `last_time` DESC LIMIT 1;", array($topics['forums_id']));
-                        $newlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forums_id`=? ORDER BY `last_time` DESC LIMIT 1;", array($section));
+                        $oldlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forums_id`=? ORDER BY `last_time` DESC LIMIT 1;", [$topics['forums_id']]);
+                        $newlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forums_id`=? ORDER BY `last_time` DESC LIMIT 1;", [$section]);
 
-                        DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", array($oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $oldlast['forums_id']));
+                        DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $oldlast['forums_id']]);
 
-                        DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", array($newlast['id'], $newlast['title'], $newlast['last_user'], $newlast['last_time'], $newlast['forums_id']));
+                        DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$newlast['id'], $newlast['title'], $newlast['last_user'], $newlast['last_time'], $newlast['forums_id']]);
                         // Обновление закладок
-                        DB::run() -> query("UPDATE `bookmarks` SET `forum`=? WHERE `topic`=?;", array($section, $tid));
+                        DB::run() -> query("UPDATE `bookmarks` SET `forum`=? WHERE `topic`=?;", [$section, $tid]);
 
                         notice('Тема успешно перемещена!');
                         redirect("/admin/forum?act=forum&fid=$section");
@@ -583,7 +583,7 @@ if (is_admin()) {
             if (isset($_POST['del'])) {
                 $del = intar($_POST['del']);
             } elseif (isset($_GET['del'])) {
-                $del = array(abs(intval($_GET['del'])));
+                $del = [abs(intval($_GET['del']))];
             } else {
                 $del = 0;
             }
@@ -607,10 +607,10 @@ if (is_admin()) {
                     DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic` IN (".$delId.");");
 
                     // Обновление счетчиков
-                    DB::run() -> query("UPDATE `forums` SET `topics`=`topics`-?, `posts`=`posts`-? WHERE `id`=?;", array($deltopics, $delposts, $fid));
+                    DB::run() -> query("UPDATE `forums` SET `topics`=`topics`-?, `posts`=`posts`-? WHERE `id`=?;", [$deltopics, $delposts, $fid]);
 
                     // ------------------------------------------------------------//
-                    $oldlast = DB::run() -> queryFetch("SELECT `t`.*, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON `t`.`forums_id`=`f`.`id` WHERE `t`.`forums_id`=? ORDER BY `t`.`last_time` DESC LIMIT 1;", array($fid));
+                    $oldlast = DB::run() -> queryFetch("SELECT `t`.*, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON `t`.`forums_id`=`f`.`id` WHERE `t`.`forums_id`=? ORDER BY `t`.`last_time` DESC LIMIT 1;", [$fid]);
 
 
                     if (empty($oldlast['id'])) {
@@ -620,11 +620,11 @@ if (is_admin()) {
                         $oldlast['last_time'] = 0;
                     }
 
-                    DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", array($oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $fid));
+                    DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $fid]);
 
                     // Обновление родительского форума
                     if (! empty($oldlast['parent'])) {
-                        DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", array($oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $oldlast['parent']));
+                        DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $oldlast['parent']]);
                     }
 
                     notice('Выбранные темы успешно удалены!');
@@ -649,30 +649,30 @@ if (is_admin()) {
             $do = check($_GET['do']);
 
             if ($uid == $_SESSION['token']) {
-                $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($tid));
+                $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 
                 if (!empty($topics)) {
                     switch ($do):
                         case 'closed':
-                            DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", array(1, $tid));
+                            DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
                             notice('Тема успешно закрыта!');
                             redirect("/admin/forum?act=topic&tid=$tid&start=$start");
                             break;
 
                         case 'open':
-                            DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", array(0, $tid));
+                            DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [0, $tid]);
                             notice('Тема успешно открыта!');
                             redirect("/admin/forum?act=topic&tid=$tid&start=$start");
                             break;
 
                         case 'locked':
-                            DB::run() -> query("UPDATE `topics` SET `locked`=? WHERE `id`=?;", array(1, $tid));
+                            DB::run() -> query("UPDATE `topics` SET `locked`=? WHERE `id`=?;", [1, $tid]);
                             notice('Тема успешно закреплена!');
                             redirect("/admin/forum?act=topic&tid=$tid&start=$start");
                             break;
 
                         case 'unlocked':
-                            DB::run() -> query("UPDATE `topics` SET `locked`=? WHERE `id`=?;", array(0, $tid));
+                            DB::run() -> query("UPDATE `topics` SET `locked`=? WHERE `id`=?;", [0, $tid]);
                             notice('Тема успешно откреплена!');
                             redirect("/admin/forum?act=topic&tid=$tid&start=$start");
                             break;
@@ -695,13 +695,13 @@ if (is_admin()) {
         ############################################################################################
         case 'topic':
             if (!empty($tid)) {
-                $topic = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON `t`.`forums_id`=`f`.`id` WHERE t.`id`=? LIMIT 1;", array($tid));
+                $topic = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON `t`.`forums_id`=`f`.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
 
                 if (!empty($topic)) {
                     echo '<a href="/admin/forum">Форум</a> / ';
 
                     if (!empty($topic['parent'])) {
-                        $forums = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", array($topic['parent']));
+                        $forums = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$topic['parent']]);
                         echo '<a href="/admin/forum?fid='.$forums['id'].'">'.$forums['title'].'</a> / ';
                     }
 
@@ -742,18 +742,18 @@ if (is_admin()) {
                     echo '<a href="/admin/forum?act=movetopic&amp;tid='.$tid.'">Переместить</a> / ';
                     echo '<a href="/admin/forum?act=deltopics&amp;fid='.$topic['id'].'&amp;del='.$tid.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данную тему?\')">Удалить</a><br />';
 
-                    $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topics_id`=?;", array($tid));
+                    $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topics_id`=?;", [$tid]);
 
                     if ($total > 0) {
                         if ($start >= $total) {
                             $start = last_page($total, $config['forumpost']);
                         }
 
-                        $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['forumpost'].";", array($tid));
+                        $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['forumpost'].";", [$tid]);
                         $posts = $querypost->fetchAll();
 
                         // ----- Получение массива файлов ----- //
-                        $ipdpost = array();
+                        $ipdpost = [];
                         foreach ($posts as $val) {
                             $ipdpost[] = $val['id'];
                         }
@@ -764,7 +764,7 @@ if (is_admin()) {
                         $files = $queryfiles->fetchAll();
 
                         if (!empty($files)){
-                            $forumfiles = array();
+                            $forumfiles = [];
                             foreach ($files as $file){
                                 $forumfiles[$file['id']][] = $file;
                             }
@@ -867,7 +867,7 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($del)) {
-                    $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($tid));
+                    $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
                     $del = implode(',', $del);
 
                     // ------ Удаление загруженных файлов -------//
@@ -885,8 +885,8 @@ if (is_admin()) {
                     // ------ Удаление загруженных файлов -------//
 
                     $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `id` IN (".$del.") AND `id`=".$tid.";");
-                    DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", array($delposts, $tid));
-                    DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", array($delposts, $topics['forums_id']));
+                    DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $tid]);
+                    DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topics['forums_id']]);
 
                     notice('Выбранные сообщения успешно удалены!');
                     redirect("/admin/forum?act=topic&tid=$tid&start=$start");
@@ -908,7 +908,7 @@ if (is_admin()) {
 
             $pid = abs(intval($_GET['pid']));
 
-            $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", array($pid));
+            $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
             if (!empty($post)) {
 
                 echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['user']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
@@ -918,7 +918,7 @@ if (is_admin()) {
                 echo 'Редактирование сообщения:<br />';
                 echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$post['text'].'</textarea><br />';
 
-                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=?;", array($pid));
+                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=?;", [$pid]);
                 $files = $queryfiles->fetchAll();
 
                 if (!empty($files)){
@@ -955,16 +955,16 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
-                    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", array($pid));
+                    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
                     if (!empty($post)) {
 
-                        DB::run() -> query("UPDATE `posts` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=?;", array($msg, $log, SITETIME, $pid));
+                        DB::run() -> query("UPDATE `posts` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=?;", [$msg, $log, SITETIME, $pid]);
 
                         // ------ Удаление загруженных файлов -------//
                         if (!empty($del)) {
                             $del = implode(',', $del);
 
-                            $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", array($pid));
+                            $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", [$pid]);
                             $files = $queryfiles->fetchAll();
 
                             if (!empty($files)){
@@ -973,7 +973,7 @@ if (is_admin()) {
                                         unlink_image('upload/forum/', $file['topics_id'].'/'.$file['hash']);
                                     }
                                 }
-                                DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", array($pid));
+                                DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", [$pid]);
                             }
                         }
                         // ------ Удаление загруженных файлов -------//

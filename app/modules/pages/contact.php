@@ -21,14 +21,14 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", array($log));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", [$log]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = last_page($total, $config['contactlist']);
                 }
 
-                $querycontact = DB::run() -> query("SELECT * FROM `contact` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['contactlist'].";", array($log));
+                $querycontact = DB::run() -> query("SELECT * FROM `contact` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['contactlist'].";", [$log]);
 
                 echo '<form action="/contact?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -81,22 +81,22 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($uz != $log) {
-                    $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+                    $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
                     if (!empty($queryuser)) {
 
-                        $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", array($log));
+                        $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", [$log]);
                         if ($total <= $config['limitcontact']) {
                             // ------------------------ Проверка на существование ------------------------//
                             if (!is_contact($log, $uz)){
 
-                                DB::run() -> query("INSERT INTO `contact` (`user`, `name`, `time`) VALUES (?, ?, ?);", array($log, $uz, SITETIME));
+                                DB::run() -> query("INSERT INTO `contact` (`user`, `name`, `time`) VALUES (?, ?, ?);", [$log, $uz, SITETIME]);
                                 // ----------------------------- Проверка на игнор ----------------------------//
-                                $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
+                                $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
                                 if (empty($ignorstr)) {
-                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", array($uz));
+                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$uz]);
                                     // ------------------------------Уведомление по привату------------------------//
                                     $textpriv = 'Пользователь [b]'.nickname($log).'[/b] добавил вас в свой контакт-лист!';
-                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $textpriv, SITETIME]);
                                 }
 
                                 notice('Пользователь успешно добавлен в контакты!');
@@ -133,7 +133,7 @@ if (is_user()) {
             }
 
             if ($id > 0) {
-                $data = DB::run() -> queryFetch("SELECT * FROM contact WHERE id=? AND user=? LIMIT 1;", array($id, $log));
+                $data = DB::run() -> queryFetch("SELECT * FROM contact WHERE id=? AND user=? LIMIT 1;", [$id, $log]);
 
                 if (!empty($data)) {
                     echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['name']).'</b> '.user_online($data['name']).':<br /><br />';
@@ -168,7 +168,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($id > 0) {
                     if (utf_strlen($msg) < 1000) {
-                        DB::run() -> query("UPDATE contact SET text=? WHERE id=? AND user=?;", array($msg, $id, $log));
+                        DB::run() -> query("UPDATE contact SET text=? WHERE id=? AND user=?;", [$msg, $id, $log]);
 
                         notice('Заметка успешно отредактирована!');
                         redirect("/contact?start=$start");
@@ -202,7 +202,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($del > 0) {
                     $del = implode(',', $del);
-                    DB::run() -> query("DELETE FROM contact WHERE id IN (".$del.") AND user=?;", array($log));
+                    DB::run() -> query("DELETE FROM contact WHERE id IN (".$del.") AND user=?;", [$log]);
 
                     notice('Выбранные пользователи успешно удалены из контактов!');
                     redirect("/contact?start=$start");

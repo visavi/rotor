@@ -12,7 +12,7 @@ switch ($act):
 ##                                    Главная страница                                    ##
 ############################################################################################
 case 'index':
-    $downs = DB::run() -> queryFetch("SELECT `d`.*, `c`.`name` FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT `d`.*, `c`.`name` FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($downs)) {
         if (!empty($downs['active'])) {
@@ -30,7 +30,7 @@ case 'index':
                         echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
                         echo 'Всего файлов: '.$total.'<hr />';
 
-                        $arrext = array('xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg');
+                        $arrext = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg'];
 
                         if ($start < 0 || $start >= $total) {
                             $start = 0;
@@ -85,7 +85,7 @@ case 'preview':
 
     $view = isset($_GET['view']) ? abs(intval($_GET['view'])) : '';
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (! empty($downs) && $view !== '') {
         if (!empty($downs['active'])) {

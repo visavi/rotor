@@ -5,14 +5,14 @@ $start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0;
 
 show_title('Список свежих загрузок');
 
-$total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", array (1, SITETIME-3600 * 120));
+$total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-3600 * 120]);
 
 if ($total > 0) {
     if ($start >= $total) {
         $start = 0;
     }
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, SITETIME-3600 * 120));
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1, SITETIME-3600 * 120]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';

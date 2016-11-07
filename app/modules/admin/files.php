@@ -17,7 +17,7 @@ if (isset($_GET['file'])) {
     $file = '';
 }
 
-if (is_admin(array(101)) && $log == $config['nickname']) {
+if (is_admin([101]) && $log == $config['nickname']) {
     show_title('Редактирование страниц');
 
     switch ($act):
@@ -26,7 +26,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
     ############################################################################################
         case 'index':
 
-            $arrfiles = array();
+            $arrfiles = [];
             $globfiles = glob(STORAGE."/main/*.dat");
             foreach ($globfiles as $filename) {
                 $arrfiles[] = basename($filename);

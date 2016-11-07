@@ -28,7 +28,7 @@ mySettings = {
 
 			{name:'Magenta', openWith:'[color=#ff00ff]', closeWith:'[/color]', className:"col3-1" },
 			{name:'Gray', openWith:'[color=#808080]', closeWith:'[/color]', className:"col3-2" },
-			{name:'Cyan', openWith:'[color=#00ffff]', closeWith:'[/color]', className:"col3-3" },
+			{name:'Cyan', openWith:'[color=#00ffff]', closeWith:'[/color]', className:"col3-3" }
 		]},
 
 		{separator:'---------------' },
@@ -38,7 +38,7 @@ mySettings = {
 			{name:'small', openWith:'[size=2]', closeWith:'[/size]' },
 			{name:'medium', openWith:'[size=3]', closeWith:'[/size]' },
 			{name:'large', openWith:'[size=4]', closeWith:'[/size]' },
-			{name:'x-large', openWith:'[size=5]', closeWith:'[/size]' },
+			{name:'x-large', openWith:'[size=5]', closeWith:'[/size]' }
 		]},
 
 		{title:'По центру', name:'<i class="fa fa-align-center"></i>', className:"bb-center", openWith:'[center]', closeWith:'[/center]'},
@@ -81,13 +81,13 @@ mySettings = {
 			{name:':xaxa', openWith:' :xaxa ', className:"col5-2" },
 			{name:':4moks', openWith:' :4moks ', className:"col5-3" },
 			{name:':heart', openWith:' :heart ', className:"col5-4" },
-			{name:':moder', openWith:' :moder ', className:"col5-5" },
+			{name:':moder', openWith:' :moder ', className:"col5-5" }
 		]},
 		{title:'Разделение страниц', name:'<i class="fa fa-exchange"></i>', className:"bb-nextpage", openWith:'[nextpage]'},
 		{title:'Обрезка страницы', name:'<i class="fa fa-scissors"></i>', className:"bb-cutpage", openWith:'[cut]'},
-		{title:'Просмотр', name:'<i class="fa fa-check-square-o"></i>', className:'bb-preview',  call:'preview'},
+		{title:'Просмотр', name:'<i class="fa fa-check-square-o"></i>', className:'bb-preview',  call:'preview'}
 	]
-}
+};
 
 // ----------------------------------------------------------------------------
 // markItUp Html setting!
@@ -119,4 +119,4 @@ myHtmlSettings = {
 		{separator:'---------------' },
 		{title:'Очистка BB-кода', name:'<i class="fa fa-eraser"></i>', className:'bb-clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } }
 	]
-}
+};

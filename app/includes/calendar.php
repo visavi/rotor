@@ -4,8 +4,8 @@ $cal_den = date_fixed(SITETIME, "j");
 $cal_mon = date_fixed(SITETIME, "m");
 $cal_year = date_fixed(SITETIME, "Y");
 
-$array_news = array();
-$array_komm = array();
+$array_news = [];
+$array_komm = [];
 
 $querynews = DB::run() -> query("SELECT `id`, `time` FROM `news` WHERE EXTRACT(YEAR_MONTH FROM FROM_UNIXTIME(`time`))=EXTRACT(YEAR_MONTH FROM NOW());");
 

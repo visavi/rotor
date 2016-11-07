@@ -1,12 +1,12 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (is_admin(array(101, 102, 103))) {
+if (is_admin([101, 102, 103])) {
     show_title('Администрация сайта');
     ############################################################################################
     ##                                     Вывод администрации                                ##
     ############################################################################################
-    $queryadmin = DB::run() -> query("SELECT login, level FROM users WHERE level>=? AND level<=?;", array(101, 105));
+    $queryadmin = DB::run() -> query("SELECT login, level FROM users WHERE level>=? AND level<=?;", [101, 105]);
     $arradmin = $queryadmin -> fetchAll();
     $total = count($arradmin);
 
@@ -14,7 +14,7 @@ if (is_admin(array(101, 102, 103))) {
         foreach($arradmin as $value) {
             echo '<i class="fa fa-user-circle-o"></i> <b>'.profile($value['login']).'</b>  ('.user_status($value['level']).') '.user_online($value['login']).'<br />';
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 echo '<i class="fa fa-pencil"></i> <a href="/admin/users?act=edit&amp;uz='.$value['login'].'">Изменить</a><br />';
             }
         }

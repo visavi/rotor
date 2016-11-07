@@ -7,7 +7,7 @@
 
     <?php if (!empty($data['image'])): ?>
         <div class="img">
-            <a href="/upload/events/<?=$data['image']?>"><?=resize_image('upload/events/', $data['image'], 75, array('alt' => $data['title']))?></a>
+            <a href="/upload/events/<?=$data['image']?>"><?=resize_image('upload/events/', $data['image'], 75, ['alt' => $data['title']])?></a>
         </div>
     <?php endif; ?>
 

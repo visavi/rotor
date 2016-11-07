@@ -5,7 +5,7 @@ show_title('Администрация сайта');
 ############################################################################################
 ##                                     Вывод администрации                                ##
 ############################################################################################
-$queryadmin = DB::run() -> query("SELECT `login`, `level` FROM `users` WHERE `level`>=? AND `level`<=?;", array(101, 105));
+$queryadmin = DB::run() -> query("SELECT `login`, `level` FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
 $arradmin = $queryadmin -> fetchAll();
 $total = count($arradmin);
 

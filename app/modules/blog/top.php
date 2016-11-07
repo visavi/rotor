@@ -26,13 +26,13 @@ if ($total > 0) {
     $queryblog = DB::run() -> query("SELECT `blogs`.*, `id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['blogpost'].";");
     $blogs = $queryblog->fetchAll();
 
-    render('blog/top', array('blogs' => $blogs, 'order' => $order));
+    render('blog/top', ['blogs' => $blogs, 'order' => $order]);
 
     page_strnavigation('/blog/top?sort='.$sort.'&amp;', $config['blogpost'], $start, $total);
 } else {
     show_error('Опубликованных статей еще нет!');
 }
 
-render('includes/back', array('link' => '/blog', 'title' => 'Категории', 'icon' => 'reload.gif'));
+render('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'reload.gif']);
 
 App::view($config['themes'].'/foot');

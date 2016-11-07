@@ -17,11 +17,11 @@ show_title('Изменение авторитета');
 if (is_user()) {
     if ($log != $uz) {
         if ($udata['point'] >= $config['editratingpoint']) {
-            $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+            $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
             if (!empty($queryuser)) {
-                $querytime = DB::run() -> querySingle("SELECT MAX(`time`) FROM `rating` WHERE `user`=? LIMIT 1;", array($log));
+                $querytime = DB::run() -> querySingle("SELECT MAX(`time`) FROM `rating` WHERE `user`=? LIMIT 1;", [$log]);
                 if ($querytime + 10800 < SITETIME) {
-                    $queryrat = DB::run() -> querySingle("SELECT `id` FROM `rating` WHERE `user`=? AND `login`=? AND `time`>? LIMIT 1;", array($log, $uz, SITETIME-86400 * 30));
+                    $queryrat = DB::run() -> querySingle("SELECT `id` FROM `rating` WHERE `user`=? AND `login`=? AND `time`>? LIMIT 1;", [$log, $uz, SITETIME-86400 * 30]);
                     if (empty($queryrat)) {
 
                         switch ($act):
@@ -66,16 +66,16 @@ if (is_user()) {
 
                                             $text = antimat($text);
 
-                                            DB::run() -> query("INSERT INTO `rating` (`user`, `login`, `text`, `vote`, `time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 1, SITETIME));
-                                            DB::run() -> query("DELETE FROM `rating` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20) AS del);", array($log, $log));
+                                            DB::run() -> query("INSERT INTO `rating` (`user`, `login`, `text`, `vote`, `time`) VALUES (?, ?, ?, ?, ?);", [$log, $uz, $text, 1, SITETIME]);
+                                            DB::run() -> query("DELETE FROM `rating` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20) AS del);", [$log, $log]);
 
-                                            DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `rating`=CAST(`posrating`AS SIGNED)-CAST(`negrating`AS SIGNED)+1, `posrating`=`posrating`+1 WHERE `login`=? LIMIT 1;", array($uz));
+                                            DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `rating`=CAST(`posrating`AS SIGNED)-CAST(`negrating`AS SIGNED)+1, `posrating`=`posrating`+1 WHERE `login`=? LIMIT 1;", [$uz]);
 
-                                            $uzdata = DB::run() -> queryFetch("SELECT `rating`, `posrating`, `negrating` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+                                            $uzdata = DB::run() -> queryFetch("SELECT `rating`, `posrating`, `negrating` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
                                             // ------------------------------Уведомление по привату------------------------//
                                             $textpriv = 'Пользователь [b]'.nickname($log).'[/b] поставил вам плюс! (Ваш рейтинг: '.$uzdata['rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
-                                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
+                                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $textpriv, SITETIME]);
 
                                             echo '<i class="fa fa-thumbs-up"></i> Ваш положительный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
                                             echo 'В данный момент его авторитет: '.$uzdata['rating'].'<br />';
@@ -94,21 +94,21 @@ if (is_user()) {
                                             if ($udata['rating'] >= 10) {
 
                                                 /* Запрещаем ставить обратный минус */
-                                                $revertRating = DB::run() -> querySingle("SELECT `id` FROM `rating` WHERE `user`=? AND `login`=? AND `vote`=? ORDER BY `time` DESC LIMIT 1;", array($uz, $log, 0));
+                                                $revertRating = DB::run() -> querySingle("SELECT `id` FROM `rating` WHERE `user`=? AND `login`=? AND `vote`=? ORDER BY `time` DESC LIMIT 1;", [$uz, $log, 0]);
                                                 if (empty($revertRating)) {
 
                                                     $text = antimat($text);
 
-                                                    DB::run() -> query("INSERT INTO `rating` (`user`, `login`, `text`, `vote`, `time`) VALUES (?, ?, ?, ?, ?);", array($log, $uz, $text, 0, SITETIME));
-                                                    DB::run() -> query("DELETE FROM `rating` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20) AS del);", array($log, $log));
+                                                    DB::run() -> query("INSERT INTO `rating` (`user`, `login`, `text`, `vote`, `time`) VALUES (?, ?, ?, ?, ?);", [$log, $uz, $text, 0, SITETIME]);
+                                                    DB::run() -> query("DELETE FROM `rating` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20) AS del);", [$log, $log]);
 
-                                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `rating`=CAST(`posrating`AS SIGNED)-CAST(`negrating`AS SIGNED)-1, `negrating`=`negrating`+1 WHERE `login`=? LIMIT 1;", array($uz));
+                                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `rating`=CAST(`posrating`AS SIGNED)-CAST(`negrating`AS SIGNED)-1, `negrating`=`negrating`+1 WHERE `login`=? LIMIT 1;", [$uz]);
 
-                                                    $uzdata = DB::run() -> queryFetch("SELECT `rating`, `posrating`, `negrating` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+                                                    $uzdata = DB::run() -> queryFetch("SELECT `rating`, `posrating`, `negrating` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
                                                     // ------------------------------Уведомление по привату------------------------//
                                                     $textpriv = 'Пользователь [b]'.nickname($log).'[/b] поставил вам минус! (Ваш рейтинг: '.$uzdata['rating'].')'.PHP_EOL.'Комментарий: '.$text;
 
-                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $textpriv, SITETIME));
+                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $textpriv, SITETIME]);
 
                                                     echo '<i class="fa fa-thumbs-down"></i> Ваш отрицательный голос за пользователя <b>'.nickname($uz).'</b> успешно оставлен!<br />';
                                                     echo 'В данный момент его авторитет: '.$uzdata['rating'].'<br />';

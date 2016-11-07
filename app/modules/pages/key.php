@@ -47,7 +47,7 @@ if (is_user()) {
 
                         if (!empty($key)) {
                             if ($key == $udata['confirmregkey']) {
-                                DB::run() -> query("UPDATE users SET confirmreg=?, confirmregkey=? WHERE login=?;", array(0, '', $log));
+                                DB::run() -> query("UPDATE users SET confirmreg=?, confirmregkey=? WHERE login=?;", [0, '', $log]);
 
                                 echo 'Мастер-код подтвержден, теперь вы можете войти на сайт!<br /><br />';
                                 echo '<i class="fa fa-check"></i> <b><a href="/">Вход на сайт!</a></b><br /><br />';

@@ -24,7 +24,7 @@
 
     if (!empty($user['picture']) && file_exists(HOME.'/upload/photos/'.$user['picture'])) {
     echo '<a class="pull-right" href="/upload/photos/'.$user['picture'].'">';
-        echo resize_image('upload/photos/', $user['picture'], $config['previewsize'], array('alt' => nickname($user['login']), 'class' => 'img-responsive img-rounded')).'</a>';
+        echo resize_image('upload/photos/', $user['picture'], $config['previewsize'], ['alt' => nickname($user['login']), 'class' => 'img-responsive img-rounded']).'</a>';
     } else {
     echo '<img src="/assets/img/images/photo.jpg" alt="Фото" class="pull-right img-responsive img-rounded" />';
     }
@@ -69,7 +69,7 @@
     }
     echo 'Дата регистрации: '.date_fixed($user['joined'], 'j F Y').'<br />';
 
-    $invite = DB::run() -> queryFetch("SELECT * FROM `invite` WHERE `invited`=?;", array($user['login']));
+    $invite = DB::run() -> queryFetch("SELECT * FROM `invite` WHERE `invited`=?;", [$user['login']]);
     if (!empty($invite)){
     echo 'Зарегистрирован по приглашению: '.profile($invite['user']).'<br />';
     }
@@ -95,7 +95,7 @@
     }
 
     if (is_admin()) {
-    $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `user`=? LIMIT 1;", array($user['login']));
+    $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `user`=? LIMIT 1;", [$user['login']]);
 
     echo '<div class="form">';
         echo '<i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/'.$user['login'].'/note">Изменить</a>)<br />';
@@ -125,14 +125,14 @@
         echo '<i class="fa fa-home"></i> <a href="'.$user['site'].'">Перейти на сайт '.$user['login'].'</a><br />';
         }
 
-        if (is_admin(array(101, 102, 103))) {
+        if (is_admin([101, 102, 103])) {
         if (!empty($config['invite'])) {
         echo '<i class="fa fa-ban"></i> <a href="/admin/invitations?act=send&amp;user='.$user['login'].'&amp;uid='.$_SESSION['token'].'">Отправить инвайт</a><br />';
         }
         echo '<i class="fa fa-ban"></i> <a href="/admin/ban?act=edit&amp;uz='.$user['login'].'">Бан / Разбан</a><br />';
         }
 
-        if (is_admin(array(101, 102))) {
+        if (is_admin([101, 102])) {
         echo '<i class="fa fa-wrench"></i> <a href="/admin/users?act=edit&amp;uz='.$user['login'].'">Редактировать</a><br />';
         }
         } else {

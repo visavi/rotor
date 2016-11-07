@@ -5,7 +5,7 @@ $act   = check(Request::input('act', 'index'));
 $id    = abs(intval(Request::input('id', 0)));
 $start = abs(intval(Request::input('start', 0)));
 
-if (is_admin(array(101, 102))) {
+if (is_admin([101, 102])) {
     show_title('Управление новостями');
 
 switch ($act):
@@ -39,7 +39,7 @@ case 'index':
             echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
-                echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, array('alt' => $data['title'])).'</a></div>';
+                echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
             }
 
             if (!empty($data['top'])){
@@ -68,7 +68,7 @@ case 'index':
 
     echo '<i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br />';
 
-    if (is_admin(array(101))) {
+    if (is_admin([101])) {
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
     }
 break;
@@ -77,7 +77,7 @@ break;
 ##                          Подготовка к редактированию новости                           ##
 ############################################################################################
 case 'edit':
-    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", array($id));
+    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($datanews)) {
 
@@ -91,7 +91,7 @@ case 'edit':
 
         if (!empty($datanews['image']) && file_exists(HOME.'/upload/news/'.$datanews['image'])){
 
-            echo '<a href="/upload/news/'.$datanews['image'].'">'.resize_image('upload/news/', $datanews['image'], 75, array('alt' => $datanews['title'])).'</a><br />';
+            echo '<a href="/upload/news/'.$datanews['image'].'">'.resize_image('upload/news/', $datanews['image'], 75, ['alt' => $datanews['title']]).'</a><br />';
             echo '<b>'.$datanews['image'].'</b> ('.read_file(HOME.'/upload/news/'.$datanews['image']).')<br /><br />';
         }
 
@@ -124,18 +124,18 @@ case 'change':
     $closed = (empty($_POST['closed'])) ? 0 : 1;
     $top = (empty($_POST['top'])) ? 0 : 1;
 
-    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", array($id));
+    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('not_empty', $datanews, 'Выбранной новости не существует, возможно она была удалена!')
         -> addRule('string', $title, 'Слишком длинный или короткий заголовок новости!', true, 5, 50)
         -> addRule('string', $msg, 'Слишком длинный или короткий текст новости!', true, 5, 10000);
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `news` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
+        DB::run() -> query("UPDATE `news` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", [$title, $msg, $closed, $top, $id]);
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -151,7 +151,7 @@ case 'change':
 
                 if ($handle -> processed) {
 
-                    DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", array($handle -> file_dst_name, $id));
+                    DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
                     $handle -> clean();
 
                 } else {
@@ -208,19 +208,19 @@ case 'addnews':
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
         -> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
     if ($validation->run()) {
 
-        DB::run() -> query("INSERT INTO `news` (`title`, `text`, `author`, `time`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($title, $msg, $log, SITETIME, 0, $closed, $top));
+        DB::run() -> query("INSERT INTO `news` (`title`, `text`, `author`, `time`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, $log, SITETIME, 0, $closed, $top]);
 
         $lastid = DB::run() -> lastInsertId();
 
         // Выводим на главную если там нет новостей
         if (!empty($top) && empty($config['lastnews'])) {
-            DB::run() -> query("UPDATE `setting` SET `value`=? WHERE `name`=?;", array(1, 'lastnews'));
+            DB::run() -> query("UPDATE `setting` SET `value`=? WHERE `name`=?;", [1, 'lastnews']);
             save_setting();
         }
 
@@ -232,7 +232,7 @@ case 'addnews':
                 $handle -> process(HOME.'/upload/news/');
 
                 if ($handle -> processed) {
-                    DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", array($handle -> file_dst_name, $lastid));
+                    DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
                     $handle -> clean();
 
                 } else {
@@ -261,7 +261,7 @@ case 'restatement':
 
     $uid = check($_GET['uid']);
 
-    if (is_admin(array(101))) {
+    if (is_admin([101])) {
         if ($uid == $_SESSION['token']) {
             restatement('news');
 

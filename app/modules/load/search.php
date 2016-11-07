@@ -51,7 +51,7 @@ case "search":
 
         $findmewords = explode(" ", utf_lower($find));
 
-        $arrfind = array();
+        $arrfind = [];
         foreach ($findmewords as $val) {
             if (utf_strlen($val) >= 3) {
                 $arrfind[] = (empty($type)) ? '+'.$val.'*' : $val.'*';
@@ -76,7 +76,7 @@ case "search":
 
             if (empty($_SESSION['loadfindres']) || $loadfind!=$_SESSION['loadfind']) {
 
-                $querysearch = DB::run() -> query("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`title`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", array(1));
+                $querysearch = DB::run() -> query("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`title`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", [1]);
                 $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
                 $_SESSION['loadfind'] = $loadfind;
@@ -120,7 +120,7 @@ case "search":
 
             if (empty($_SESSION['loadfindres']) || $loadfind!=$_SESSION['loadfind']) {
 
-                $querysearch = DB::run() -> query("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`text`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", array(1));
+                $querysearch = DB::run() -> query("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`text`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", [1]);
                 $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
                 $_SESSION['loadfind'] = $loadfind;

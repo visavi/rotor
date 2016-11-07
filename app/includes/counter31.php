@@ -8,10 +8,10 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 	$querycount = DB::run() -> query("SELECT * FROM `counter31` ORDER BY `days` DESC;");
 	$counts = $querycount -> fetchAll();
 
-	$arrhits = array();
-	$arrhosts = array();
-	$hits_data = array();
-	$host_data = array();
+	$arrhits = [];
+	$arrhosts = [];
+	$hits_data = [];
+	$host_data = [];
 
 	foreach ($counts as $val) {
 		$arrhits[$val['days']] = $val['hits'];
@@ -46,20 +46,20 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 		$maxhit = 1;
 	}
 	// процентное соотношение хитов
-	$per_hit = array();
+	$per_hit = [];
 	foreach ($hits_data as $value) {
 		$per_hit[] = $value * 0.90 / $maxhit;
 	}
 	// процентное соотношение хостов
-	$per_host = array();
+	$per_host = [];
 	foreach ($host_data as $value) {
 		$per_host[] = $value * 2.90 / $maxhit;
 	}
-	$img = imageCreateFromGIF(HOME.'/assets/img/images/counter31.gif');
+	$img = imagecreatefromgif(HOME.'/assets/img/images/counter31.gif');
 	// линейный
-	$color1 = imageColorAllocate($img, 44, 191, 228);
-	$color2 = imageColorAllocate($img, 0, 0, 120);
-	$color_red = imageColorAllocate($img, 200, 0, 0);
+	$color1 = imagecolorallocate($img, 44, 191, 228);
+	$color2 = imagecolorallocate($img, 0, 0, 120);
+	$color_red = imagecolorallocate($img, 200, 0, 0);
 
 	$image = 47;
 	$coll = 3;
@@ -73,18 +73,18 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 		$counth = 31;
 	}
 
-	imageTTFtext($img, 6, 0, 50, 7, $color_red, HOME.'/assets/fonts/font.ttf', 'max. '.$maxhost.' / '.$maxhit);
+	imagettftext($img, 6, 0, 50, 7, $color_red, HOME.'/assets/fonts/font.ttf', 'max. '.$maxhost.' / '.$maxhit);
 
 	for($i = 1;$i < $counth;$i++) {
 		// хиты
 		$y2_hits = (int)($image - $image * $per_hit[$i] + 7);
-		imageLine($img, $x1 + 1, $y1_hits, $x2, $y2_hits, $color1);
+		imageline($img, $x1 + 1, $y1_hits, $x2, $y2_hits, $color1);
 		// хосты
 		$y2_host = (int)($image - $image * $per_host[$i] + 7);
-		imageLine($img, $x1 + 1, $y1_host, $x2, $y2_host, $color2);
+		imageline($img, $x1 + 1, $y1_host, $x2, $y2_host, $color2);
 
 		if ($hits_data[$i] != 0 && $i == $max_index) {
-			imageLine($img, $x2-1, $y2_hits-2, $x2-1, $y2_hits + 42, $color_red);
+			imageline($img, $x2-1, $y2_hits-2, $x2-1, $y2_hits + 42, $color_red);
 		}
 		$y1_hits = $y2_hits;
 		$y1_host = $y2_host;
@@ -92,8 +92,8 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 		$x2 -= $coll + 2;
 	}
 	//Header("Content-type: image/gif");
-	ImageGIF($img, HOME.$imagecache);
-	ImageDestroy($img);
+	imagegif($img, HOME.$imagecache);
+	imagedestroy($img);
 }
 
 echo '<img src="'.$imagecache.'?'.date_fixed(SITETIME, "dmY").'" alt="Месяц" /><br /><br />';

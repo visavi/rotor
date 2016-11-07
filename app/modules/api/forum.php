@@ -8,34 +8,34 @@ $id = (!empty($_REQUEST['id'])) ? abs(intval($_REQUEST['id'])) : null;
 
 if (!empty($key)){
 
-    $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `apikey`=? LIMIT 1;", array($key));
+    $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `apikey`=? LIMIT 1;", [$key]);
     if (!empty($user)){
 
-        $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", array($id));
+        $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($topic)) {
 
-            $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` ASC;", array($id));
+            $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` ASC;", [$id]);
             $posts = $querypost->fetchAll();
 
-            $messages = array();
+            $messages = [];
             foreach ($posts as $post) {
 
                 $post['text'] = bb_code(str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $post['text']));
 
-                $messages[] = array(
+                $messages[] = [
                     'author' => $post['user'],
                     'text'   => $post['text'],
                     'time'   => $post['time']
-                );
+                ];
             }
 
-            echo json_encode(array(
+            echo json_encode([
                 'id' => $topic['id'],
                 'author' => $topic['author'],
                 'title' => $topic['title'],
                 'messages' => $messages
-            ));
+            ]);
 
-        } else {echo json_encode(array('error'=>'notopic'));}
-    } else {echo json_encode(array('error'=>'nouser'));}
-} else {echo json_encode(array('error'=>'nokey'));}
+        } else {echo json_encode(['error'=>'notopic']);}
+    } else {echo json_encode(['error'=>'nouser']);}
+} else {echo json_encode(['error'=>'nokey']);}

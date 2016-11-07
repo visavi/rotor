@@ -24,7 +24,7 @@ if (file_exists('../includes/connect.php')) {
     }
 }
 
-$arrfile = array(
+$arrfile = [
     'includes/connect.php',
     'upload/avatars',
     'upload/counters',
@@ -45,7 +45,7 @@ $arrfile = array(
     'local/chat',
     'local/main',
     'local/temp'
-);
+];
 
 
 header("Content-type:text/html; charset=utf-8");
@@ -129,14 +129,14 @@ switch ($act):
 
             if (extension_loaded('pdo_mysql')) {
 
-                echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(getModuleSetting('pdo_mysql', array('Client API version', 'PDO Driver for MySQL, client library version')), '-') . ')<br />';
+                echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-') . ')<br />';
             } else {
                 echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
                 $error_critical = 1;
             }
 
             if (extension_loaded('gd')) {
-                echo '<i class="fa fa-plus-circle"></i> Библиотека GD: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . getModuleSetting('gd', array('GD Version', 'GD library Version', 'GD headers Version')) . ')<br />';
+                echo '<i class="fa fa-plus-circle"></i> Библиотека GD: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . getModuleSetting('gd', ['GD Version', 'GD library Version', 'GD headers Version']) . ')<br />';
             } else {
                 echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
                 $error_setting++;
@@ -550,4 +550,3 @@ echo '<p style="text-align:center">';
 echo '<a href="http://visavi.net">Powered by RotorCMS</a><br />';
 echo '</p>';
 echo '</div></body></html>';
-?>

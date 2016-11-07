@@ -58,11 +58,11 @@ if (!empty($config['doslimit'])) {
         if (counter_string(STORAGE.'/antidos/'.App::getClientIp().'.dat') > $config['doslimit']) {
 
             if (!empty($config['errorlog'])){
-                $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", array(App::getClientIp()));
+                $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", [App::getClientIp()]);
                 if (empty($banip)) {
-                    DB::run() -> query("INSERT INTO `error` (`num`, `request`, `referer`, `username`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", array(666, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getUsername(), App::getClientIp(), App::getUserAgent(), SITETIME));
+                    DB::run() -> query("INSERT INTO `error` (`num`, `request`, `referer`, `username`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [666, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getUsername(), App::getClientIp(), App::getUserAgent(), SITETIME]);
 
-                    DB::run() -> query("INSERT IGNORE INTO ban (`ip`, `time`) VALUES (?, ?);", array(App::getClientIp(), SITETIME));
+                    DB::run() -> query("INSERT IGNORE INTO ban (`ip`, `time`) VALUES (?, ?);", [App::getClientIp(), SITETIME]);
                     save_ipban();
                 }
             }
@@ -80,7 +80,7 @@ if (empty($_SESSION['log']) && empty($_SESSION['par'])) {
         $unlog = check($_COOKIE['cooklog']);
         $unpar = check($_COOKIE['cookpar']);
 
-        $checkuser = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($unlog));
+        $checkuser = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$unlog]);
 
         if (!empty($checkuser)) {
             if ($unlog == $checkuser['login'] && $unpar == md5($checkuser['pass'].$config['keypass'])) {
@@ -90,14 +90,14 @@ if (empty($_SESSION['log']) && empty($_SESSION['par'])) {
                 $_SESSION['log'] = $unlog;
                 $_SESSION['par'] = md5($config['keypass'].$checkuser['pass']);
 
-                $authorization = DB::run() -> querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", array($unlog, SITETIME-30));
+                $authorization = DB::run() -> querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$unlog, SITETIME-30]);
 
                 if (empty($authorization)) {
-                    DB::run() -> query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?);", array($unlog, App::getClientIp(), App::getUserAgent(), SITETIME));
-                    DB::run() -> query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", array($unlog, $unlog));
+                    DB::run() -> query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?);", [$unlog, App::getClientIp(), App::getUserAgent(), SITETIME]);
+                    DB::run() -> query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$unlog, $unlog]);
                 }
 
-                DB::run() -> query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=? LIMIT 1;", array(SITETIME, $unlog));
+                DB::run() -> query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=? LIMIT 1;", [SITETIME, $unlog]);
             }
         }
     }
@@ -130,13 +130,13 @@ if ($udata = is_user()) {
     $config['themes'] = $udata['themes'];
 
     if ($udata['ban'] == 1) {
-        if (!strsearch(App::server('PHP_SELF'), array('/ban', '/rules'))) {
+        if (!strsearch(App::server('PHP_SELF'), ['/ban', '/rules'])) {
             redirect('/ban?log='.$log);
         }
     }
 
     if ($config['regkeys'] > 0 && $udata['confirmreg'] > 0 && empty($udata['ban'])) {
-        if (!strsearch(App::server('PHP_SELF'), array('/key', '/login'))) {
+        if (!strsearch(App::server('PHP_SELF'), ['/key', '/login'])) {
             redirect('/key?log='.$log);
         }
     }
@@ -144,7 +144,7 @@ if ($udata = is_user()) {
     // --------------------- Проверка соответствия ip-адреса ---------------------//
     if (!empty($udata['ipbinding'])) {
         if ($_SESSION['my_ip'] != App::getClientIp()) {
-            $_SESSION = array();
+            $_SESSION = [];
             setcookie(session_name(), '', 0, '/', '');
             session_destroy();
             redirect(html_entity_decode(App::server('REQUEST_URI')));
@@ -153,13 +153,13 @@ if ($udata = is_user()) {
 
     // ---------------------- Получение ежедневного бонуса -----------------------//
     if (isset($udata['timebonus']) && $udata['timebonus'] < time() - 82800) {  // Получение бонуса каждые 23 часа
-        DB::run() -> query("UPDATE `users` SET `timebonus`=?, `money`=`money`+? WHERE `login`=? LIMIT 1;", array(SITETIME, $config['bonusmoney'], $log));
+        DB::run() -> query("UPDATE `users` SET `timebonus`=?, `money`=`money`+? WHERE `login`=? LIMIT 1;", [SITETIME, $config['bonusmoney'], $log]);
         notice('Получен ежедневный бонус '.moneys($config['bonusmoney']).'!');
     }
 
     // ------------------ Запись текущей страницы для админов --------------------//
     if (strstr(App::server('PHP_SELF'), '/admin')) {
-        DB::run() -> query("INSERT INTO `admlog` (`user`, `request`, `referer`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?);", array($log, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME));
+        DB::run() -> query("INSERT INTO `admlog` (`user`, `request`, `referer`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$log, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME]);
 
         DB::run() -> query("DELETE FROM `admlog` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `admlog` ORDER BY `time` DESC LIMIT 500) AS del);");
     }

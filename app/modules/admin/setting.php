@@ -3,7 +3,7 @@ App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-if (is_admin(array(101))) {
+if (is_admin([101])) {
     show_title('Настройки сайта');
 
     $queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");
@@ -82,11 +82,11 @@ if (is_admin(array(101))) {
                         if (md5(md5($pass)) == $udata['pass']) {
                             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mail)) {
 
-                                $queryuser = DB::run()->queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($login));
+                                $queryuser = DB::run()->queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$login]);
                                 if (!empty($queryuser)){
 
                                     if ($login!=$setting['nickname']){
-                                        DB::run() -> query("UPDATE `users` SET `level`=? WHERE `login`=? LIMIT 1;", array(101, $login));
+                                        DB::run() -> query("UPDATE `users` SET `level`=? WHERE `login`=? LIMIT 1;", [101, $login]);
                                     }
 
                                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
@@ -187,7 +187,7 @@ if (is_admin(array(101))) {
 
                 echo 'Подтверждение регистрации:<br />';
                 echo '<select name="regkeys">';
-                $regist = array(0 => 'Выключить', 1 => 'Автоматически', 2 => 'Вручную');
+                $regist = [0 => 'Выключить', 1 => 'Автоматически', 2 => 'Вручную'];
 
                 foreach($regist as $k => $v) {
                     $selected = ($k == $setting['regkeys']) ? ' selected="selected"' : '';
@@ -198,7 +198,7 @@ if (is_admin(array(101))) {
 
                 echo 'Доступ к сайту:<br />';
                 echo '<select name="closedsite">';
-                $statsite = array(0 => 'Сайт открыт', 1 => 'Закрыто для гостей', 2 => 'Закрыто для всех');
+                $statsite = [0 => 'Сайт открыт', 1 => 'Закрыто для гостей', 2 => 'Закрыто для всех'];
 
                 foreach($statsite as $k => $v) {
                     $selected = ($k == $setting['closedsite']) ? ' selected="selected"' : '';
@@ -302,7 +302,7 @@ if (is_admin(array(101))) {
                 echo '<b>Почта</b><br />';
                 echo 'Способ отправки почты: <br />';
 
-                $maildrivers = array('sendmail' => 'Отправка средставами PHP', 'smtp' => 'Протокол SMTP');
+                $maildrivers = ['sendmail' => 'Отправка средставами PHP', 'smtp' => 'Протокол SMTP'];
                 echo '<select name="maildriver">';
 
                 foreach ($maildrivers as $k => $v) {
@@ -318,7 +318,7 @@ if (is_admin(array(101))) {
 
                 echo 'Протокол шифрования: <br />';
 
-                $maildrivers = array('' => 'Без протокола', 'ssl' => 'SSL шифрование', 'tls' => 'TLS шифрование');
+                $maildrivers = ['' => 'Без протокола', 'ssl' => 'SSL шифрование', 'tls' => 'TLS шифрование'];
                 echo '<select name="mailsecurity">';
 
                 foreach ($maildrivers as $k => $v) {
@@ -402,7 +402,7 @@ if (is_admin(array(101))) {
 
             echo 'Отображение счетчика:<br /><select name="incount">';
 
-            $incounters = array('Выключить', 'Хосты | Хосты всего', 'Хиты | Хиты всего', 'Хиты | Хосты', 'Хиты всего | Хосты всего', 'Графический');
+            $incounters = ['Выключить', 'Хосты | Хосты всего', 'Хиты | Хиты всего', 'Хиты | Хосты', 'Хиты всего | Хосты всего', 'Графический'];
 
             foreach($incounters as $k => $v) {
                 $selected = ($k == $setting['incount']) ? ' selected="selected"' : '';
@@ -469,7 +469,7 @@ if (is_admin(array(101))) {
             echo '<b>Новости</b><br />';
             echo 'Макс. кол. новостей на главной: <br />';
 
-            $innews = array('Не выводить', '1 новость', '2 новости', '3 новости', '4 новости', '5 новостей');
+            $innews = ['Не выводить', '1 новость', '2 новости', '3 новости', '4 новости', '5 новостей'];
             echo '<select name="lastnews">';
 
             foreach ($innews as $k => $v) {

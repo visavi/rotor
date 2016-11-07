@@ -12,7 +12,7 @@ if (isset($_GET['start'])) {
     $start = 0;
 }
 
-if (is_admin(array(101, 102))) {
+if (is_admin([101, 102])) {
     show_title('IP-бан панель');
 
     switch ($act):
@@ -67,7 +67,7 @@ if (is_admin(array(101, 102))) {
             echo 'Примеры банов: 127.0.0.1 без отступов и пробелов<br />';
             echo 'Или по маске 127.0.0.* , 127.0.*.* , будут забанены все IP совпадающие по начальным цифрам<br /><br />';
 
-            if ($total > 0 && is_admin(array(101))) {
+            if ($total > 0 && is_admin([101])) {
                 echo '<i class="fa fa-times"></i> <a href="/admin/ipban?act=clear&amp;uid='.$_SESSION['token'].'">Очистить список</a><br />';
             }
         break;
@@ -82,9 +82,9 @@ if (is_admin(array(101, 102))) {
 
             if ($uid == $_SESSION['token']) {
                 if (preg_match('|^[0-9]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}$|', $ips)) {
-                    $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", array($ips));
+                    $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", [$ips]);
                     if (empty($banip)) {
-                        DB::run() -> query("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", array($ips, $log, SITETIME));
+                        DB::run() -> query("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, $log, SITETIME]);
                         save_ipban();
 
                         notice('IP успешно занесен в список!');
@@ -140,7 +140,7 @@ if (is_admin(array(101, 102))) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("TRUNCATE `ban`;");
                     save_ipban();

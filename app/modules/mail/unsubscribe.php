@@ -13,11 +13,11 @@ if (! empty($key)) {
     $user = DBM::run()->queryFirst("SELECT * FROM `users` WHERE BINARY `subscribe`=:key LIMIT 1;", compact('key'));
     if ($user) {
 
-        $user = DBM::run()->update('users', array(
+        $user = DBM::run()->update('users', [
             'subscribe' => '',
-        ), array(
+        ], [
             'login' => $user['login']
-        ));
+        ]);
 
         echo '<i class="fa fa-check"></i> <b>Вы успешно отписались от рассылки!</b><br />';
 

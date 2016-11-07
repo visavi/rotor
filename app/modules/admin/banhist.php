@@ -4,7 +4,7 @@ App::view($config['themes'].'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 
-if (is_admin(array(101, 102, 103))) {
+if (is_admin([101, 102, 103])) {
     show_title('История банов');
 
     switch ($act):
@@ -78,14 +78,14 @@ if (is_admin(array(101, 102, 103))) {
             $uz = (isset($_GET['uz'])) ? check($_GET['uz']) : '';
 
             if (user($uz)) {
-                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", array($uz));
+                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", array($uz));
+                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", [$uz]);
 
                     echo '<form action="/admin/banhist?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 

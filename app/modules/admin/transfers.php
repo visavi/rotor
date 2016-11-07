@@ -5,7 +5,7 @@ $config['listtransfers'] = 10;
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 
-if (is_admin(array(101, 102, 103))) {
+if (is_admin([101, 102, 103])) {
     show_title('Денежные операции');
 
     switch ($act):
@@ -64,14 +64,14 @@ if (is_admin(array(101, 102, 103))) {
 
             if (user($uz)) {
 
-                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `user`=?;", array($uz));
+                $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `user`=?;", [$uz]);
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listtransfers'].";", array($uz));
+                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listtransfers'].";", [$uz]);
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';

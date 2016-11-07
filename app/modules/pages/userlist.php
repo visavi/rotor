@@ -79,7 +79,7 @@ switch ($act):
     case 'search':
 
         if (!empty($uz)) {
-            $queryuser = DB::run() -> querySingle("SELECT `login` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
+            $queryuser = DB::run() -> querySingle("SELECT `login` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($uz), utf_lower($uz)]);
 
             if (!empty($queryuser)) {
                 $queryrating = DB::run() -> query("SELECT `login` FROM `users` ORDER BY `point` DESC, `login` ASC;");

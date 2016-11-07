@@ -113,6 +113,7 @@ class Validation
      * @param bool $required If the field is required
      * @param int $min The minimum length or range
      * @param int $max The maximum length or range
+     * @return $this
      */
     public function addRule($type, $var, $label, $required = false, $min = 0, $max = 0)
     {
@@ -123,6 +124,7 @@ class Validation
     /**
      * displays an error
      * @param string $error The error text
+     * @param null $description
      */
     public function addError($error, $description = null)
     {
@@ -157,6 +159,7 @@ class Validation
      * @param int $min The minimum string length
      * @param int $max The maximum string length
      * @param bool $required
+     * @return bool
      */
     private function validateString($var, $label, $min = 0, $max = 0, $required = false)
     {
@@ -209,6 +212,7 @@ class Validation
      * @param int $max The maximum number range
      * @param bool $required
      *
+     * @return bool
      */
     private function validateNumeric($var, $label, $min = 0, $max = 0, $required = false)
     {
@@ -225,6 +229,7 @@ class Validation
      * validate a equality
      * @param array $var List of variables
      * @param mixed $label The label of variable
+     * @return bool
      */
     private function validateEqual($var, $label)
     {
@@ -239,6 +244,7 @@ class Validation
      * validate the inequality
      * @param array $var List of variables
      * @param mixed $label The label of variable
+     * @return bool
      */
     private function validateNotEqual($var, $label)
     {
@@ -277,6 +283,7 @@ class Validation
      * validate is InArray
      * @param array $var List of variables
      * @param mixed $label The label of variable
+     * @return bool
      */
     private function validateIn($var, $label)
     {
@@ -292,6 +299,7 @@ class Validation
      * @param string $var The variable
      * @param mixed $label The label of variable
      * @param bool $required
+     * @return bool
      */
     private function validateRegex($var, $label, $required = false)
     {
@@ -309,6 +317,7 @@ class Validation
      * @param string $var The variable
      * @param mixed $label The label of variable
      * @param bool $required
+     * @return bool
      */
 
     private function validateFloat($var, $label, $required = false)
@@ -327,6 +336,7 @@ class Validation
      * @param string $var The variable
      * @param mixed $label The label of variable
      * @param bool $required
+     * @return bool
      */
     private function validateUrl($var, $label, $required = false)
     {
@@ -344,6 +354,7 @@ class Validation
      * @param string $var The variable
      * @param mixed $label The label of variable
      * @param bool $required
+     * @return bool
      */
     private function validateEmail($var, $label, $required = false)
     {
@@ -360,7 +371,7 @@ class Validation
      * validate a boolean
      * @param string $var The variable
      * @param mixed $label The label of variable
-     * @param bool $required
+     * @internal param bool $required
      */
     private function validateBool($var, $label)
     {

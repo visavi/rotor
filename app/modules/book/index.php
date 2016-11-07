@@ -16,7 +16,7 @@ case 'index':
 
     $page = floor(1 + $start / $config['bookpost']);
 
-    $posts = DBM::run()->select('guest', null, $config['bookpost'], $start, array('time'=>'DESC'));
+    $posts = DBM::run()->select('guest', null, $config['bookpost'], $start, ['time'=>'DESC']);
 
     App::view('book/index', compact('posts', 'start', 'total', 'page'));
 break;
@@ -49,26 +49,26 @@ case 'add':
         if (is_user()) {
             $bookscores = ($config['bookscores']) ? 1 : 0;
 
-            $user = DBM::run()->update('users', array(
-                'allguest' => array('+', 1),
-                'point' => array('+', $bookscores),
-                'money' => array('+', 5),
-            ), array(
+            $user = DBM::run()->update('users', [
+                'allguest' => ['+', 1],
+                'point' => ['+', $bookscores],
+                'money' => ['+', 5],
+            ], [
                 'login' => $log
-            ));
+            ]);
         }
 
         $username = is_user() ? $log : $config['guestsuser'];
 
-        $guest = DBM::run()->insert('guest', array(
+        $guest = DBM::run()->insert('guest', [
             'user' => $username,
             'text' => $msg,
             'ip'   => App::getClientIp(),
             'brow' => App::getUserAgent(),
             'time' => SITETIME,
-        ));
+        ]);
 
-        DBM::run()->execute("DELETE FROM `guest` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `guest` ORDER BY `time` DESC LIMIT :limit) AS del);", array('limit' => intval($config['maxpostbook'])));
+        DBM::run()->execute("DELETE FROM `guest` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `guest` ORDER BY `time` DESC LIMIT :limit) AS del);", ['limit' => intval($config['maxpostbook'])]);
 
         App::setFlash('success', 'Сообщение успешно добавлено!');
     } else {
@@ -87,7 +87,7 @@ case 'edit':
 
     if (! is_user()) App::abort(403);
 
-    $post = DBM::run()->selectFirst('guest', array('id' => $id, 'user' =>$log));
+    $post = DBM::run()->selectFirst('guest', ['id' => $id, 'user' =>$log]);
 
     if (! $post) {
         App::abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
@@ -110,13 +110,13 @@ case 'edit':
 
             $msg = antimat($msg);
 
-            $guest = DBM::run()->update('guest', array(
+            $guest = DBM::run()->update('guest', [
                 'text'      => $msg,
                 'edit'      => $log,
                 'edit_time' => SITETIME,
-            ), array(
+            ], [
                 'id' => $id
-            ));
+            ]);
 
             App::setFlash('success', 'Сообщение успешно отредактировано!');
             App::redirect('/book');
@@ -142,15 +142,15 @@ case 'complaint':
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
 
-    $data = DBM::run()->selectFirst('guest', array('id' => $id));
+    $data = DBM::run()->selectFirst('guest', ['id' => $id]);
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
 
-    $spam = DBM::run()->selectFirst('spam', array('key' => 2, 'idnum' => $id));
+    $spam = DBM::run()->selectFirst('spam', ['key' => 2, 'idnum' => $id]);
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
-        $spam = DBM::run()->insert('spam', array(
+        $spam = DBM::run()->insert('spam', [
             'key'     => 2,
             'idnum'   => $data['id'],
             'user'    => $log,
@@ -159,7 +159,7 @@ case 'complaint':
             'time'    => $data['time'],
             'addtime' => SITETIME,
             'link'    => '/book?start='.$start,
-        ));
+        ]);
 
         exit(json_encode(['status' => 'success']));
     } else {

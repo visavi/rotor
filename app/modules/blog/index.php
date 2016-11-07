@@ -10,13 +10,13 @@ $config['newtitle'] = 'Блоги - Список разделов';
 
 
 
-    $queryblog = DB::run() -> query("SELECT *, (SELECT COUNT(*) FROM `blogs` WHERE `blogs`.`cats_id` = `catsblog`.`id` AND `blogs`.`time` > ?) AS `new` FROM `catsblog` ORDER BY `order` ASC;", array(SITETIME-86400 * 3));
+    $queryblog = DB::run() -> query("SELECT *, (SELECT COUNT(*) FROM `blogs` WHERE `blogs`.`cats_id` = `catsblog`.`id` AND `blogs`.`time` > ?) AS `new` FROM `catsblog` ORDER BY `order` ASC;", [SITETIME-86400 * 3]);
 
     $blogs = $queryblog -> fetchAll();
 
     if (count($blogs) > 0) {
 
-        render('blog/index', array('blogs' => $blogs));
+        render('blog/index', ['blogs' => $blogs]);
 
     } else {
         show_error('Разделы блогов еще не созданы!');

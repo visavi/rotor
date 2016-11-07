@@ -35,7 +35,7 @@ if (empty($find)) {
 
         $findmewords = explode(' ', utf_lower($find));
 
-        $arrfind = array();
+        $arrfind = [];
         foreach ($findmewords as $val) {
             if (utf_strlen($val) >= 3) {
                 $arrfind[] = (empty($type)) ? '+' . $val . '*' : $val . '*';

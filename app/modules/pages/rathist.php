@@ -17,7 +17,7 @@ show_title('История голосований '.nickname($uz));
 if (is_user()) {
     $is_admin = is_admin();
 
-    $data = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+    $data = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
     if (!empty($data)) {
 
@@ -28,7 +28,7 @@ if (is_user()) {
             case 'received':
                 echo '<i class="fa fa-thumbs-up"></i> <b>Полученные</b> / <a href="/rathist?act=gave&amp;uz='.$uz.'">Отданные</a><hr />';
 
-                $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `login`=? ORDER BY `time` DESC LIMIT 20;", array($uz));
+                $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `login`=? ORDER BY `time` DESC LIMIT 20;", [$uz]);
                 $rat = $queryrat -> fetchAll();
 
                 if (count($rat) > 0) {
@@ -77,7 +77,7 @@ if (is_user()) {
             case 'gave':
                 echo '<i class="fa fa-thumbs-up"></i> <a href="/rathist?act=received&amp;uz='.$uz.'">Полученные</a> / <b>Отданные</b><hr />';
 
-                $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20;", array($uz));
+                $queryrat = DB::run() -> query("SELECT * FROM `rating` WHERE `user`=? ORDER BY `time` DESC LIMIT 20;", [$uz]);
                 $rat = $queryrat -> fetchAll();
 
                 if (count($rat) > 0) {
@@ -124,7 +124,7 @@ if (is_user()) {
                         if (!empty($del)) {
                             $del = implode(',', $del);
 
-                            DB::run() -> query("DELETE FROM `rating` WHERE `id` IN (".$del.") AND `login`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `rating` WHERE `id` IN (".$del.") AND `login`=?;", [$uz]);
 
                             notice('Выбранные голосования успешно удалены!');
                             redirect("/rathist?uz=$uz");

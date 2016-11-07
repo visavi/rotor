@@ -6,11 +6,11 @@
  */
 class FileUpload extends upload {
 
-    function translate($str, $tokens = array())
+    function translate($str, $tokens = [])
     {
 
         // sets default language
-        $this->translation = array();
+        $this->translation = [];
         $this->translation['file_error']                  = 'Файловая ошибка. Попробуйте еще раз.';
         $this->translation['local_file_missing']          = 'Локальный файл не существует.';
         $this->translation['local_file_not_readable']     = 'Локальный файл закрыт для чтения.';
@@ -66,7 +66,7 @@ class FileUpload extends upload {
     function init()
     {
         parent::init(); // Array list of allowed extensions
-        $this->ext_check = array();
+        $this->ext_check = [];
     }
 
     function process($server_path = null)
@@ -82,7 +82,7 @@ class FileUpload extends upload {
         if ($this->processed) {
             if (!empty($this->ext_check) && !in_array($this->file_src_name_ext, $this->ext_check)) {
                 $this->processed = false;
-                $this->error = $this->translate('incorrect_ext', array(implode(', ', $this->ext_check)));
+                $this->error = $this->translate('incorrect_ext', [implode(', ', $this->ext_check)]);
             } else {
                 $this->log .= '- file ext OK<br />';
             }
@@ -92,7 +92,7 @@ class FileUpload extends upload {
             // checks file max size
             if ($this->file_src_size > $this->file_max_size) {
                 $this->processed = false;
-                $this->error = $this->translate('file_too_big', array(formatsize($this->file_max_size)));
+                $this->error = $this->translate('file_too_big', [formatsize($this->file_max_size)]);
             } else {
                 $this->log .= '- file size OK<br />';
             }
@@ -104,19 +104,19 @@ class FileUpload extends upload {
 
                     if (!is_null($this->image_max_width) && $this->image_src_x > $this->image_max_width) {
                         $this->processed = false;
-                        $this->error = $this->translate('image_too_wide', array($this->image_max_width));
+                        $this->error = $this->translate('image_too_wide', [$this->image_max_width]);
                     }
                     if (!is_null($this->image_min_width) && $this->image_src_x < $this->image_min_width) {
                         $this->processed = false;
-                        $this->error = $this->translate('image_too_narrow', array($this->image_min_width));
+                        $this->error = $this->translate('image_too_narrow', [$this->image_min_width]);
                     }
                     if (!is_null($this->image_max_height) && $this->image_src_y > $this->image_max_height) {
                         $this->processed = false;
-                        $this->error = $this->translate('image_too_high', array($this->image_max_height));
+                        $this->error = $this->translate('image_too_high', [$this->image_max_height]);
                     }
                     if (!is_null($this->image_min_height) && $this->image_src_y < $this->image_min_height) {
                         $this->processed = false;
-                        $this->error = $this->translate('image_too_short', array($this->image_min_height));
+                        $this->error = $this->translate('image_too_short', [$this->image_min_height]);
                     }
                 } else {
                     $this->log .= '- no image properties available, can\'t enforce dimension checks : ' . $this->file_src_mime . '<br />';

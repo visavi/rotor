@@ -84,7 +84,7 @@ if ($act == 'index') {
             // ----------------------------  Подключение бота  -----------------------------------------//
             if ($config['botnik'] == 1) {
             if (empty($_SESSION['botochat'])) {
-                $hellobots = array('Приветик', 'Здравствуй', 'Хай', 'Добро пожаловать', 'Салют', 'Hello', 'Здарова');
+                $hellobots = ['Приветик', 'Здравствуй', 'Хай', 'Добро пожаловать', 'Салют', 'Hello', 'Здарова'];
                 $hellobots_rand = array_rand($hellobots);
                 $hellobots_well = $hellobots[$hellobots_rand];
 
@@ -102,7 +102,7 @@ if ($act == 'index') {
 
             $countstr = counter_string(STORAGE."/chat/chat.dat");
             if ($countstr >= $config['maxpostchat']) {
-            delete_lines(STORAGE."/chat/chat.dat", array(0, 1, 2, 3, 4));
+            delete_lines(STORAGE."/chat/chat.dat", [0, 1, 2, 3, 4]);
             }
         }
 
@@ -192,10 +192,10 @@ if ($act == 'add') {
 
                 $countstr = counter_string(STORAGE."/chat/chat.dat");
                 if ($countstr >= $config['maxpostchat']) {
-                    delete_lines(STORAGE."/chat/chat.dat", array(0, 1, 2, 3, 4));
+                    delete_lines(STORAGE."/chat/chat.dat", [0, 1, 2, 3, 4]);
                 }
 
-                DB::run() -> query("UPDATE `users` SET `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array($log));
+                DB::run() -> query("UPDATE `users` SET `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
 
                 // --------------------------------------------------------------------------//
                 if ($config['botnik'] == 1) {

@@ -17,14 +17,14 @@ case 'files':
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<b>Проверенные</b><hr />';
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", array(1, $uz));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [1, $uz]);
 
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1, $uz));
+        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1, $uz]);
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -52,7 +52,7 @@ break;
 case 'comments':
     show_title('Список всех комментариев');
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `author`=?;", array($uz));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `author`=?;", [$uz]);
 
     if ($total > 0) {
         if ($start >= $total) {
@@ -61,7 +61,7 @@ case 'comments':
 
         $is_admin = is_admin();
 
-        $querypost = DB::run() -> query("SELECT `cl`.*, `title`, `comments` FROM `commload` cl LEFT JOIN `downs` d ON `cl`.`down`=`d`.`id` WHERE cl.`author`=? ORDER BY cl.`time` DESC LIMIT ".$start.", ".$config['downlist'].";", array($uz));
+        $querypost = DB::run() -> query("SELECT `cl`.*, `title`, `comments` FROM `commload` cl LEFT JOIN `downs` d ON `cl`.`down`=`d`.`id` WHERE cl.`author`=? ORDER BY cl.`time` DESC LIMIT ".$start.", ".$config['downlist'].";", [$uz]);
 
         while ($data = $querypost -> fetch()) {
             echo '<div class="b">';
@@ -106,7 +106,7 @@ case 'viewcomm':
         $cid = 0;
     }
 
-    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commload` WHERE `id`<=? AND `down`=? ORDER BY `time` ASC LIMIT 1;", array($cid, $id));
+    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commload` WHERE `id`<=? AND `down`=? ORDER BY `time` ASC LIMIT 1;", [$cid, $id]);
 
     if (!empty($querycomm)) {
         $end = floor(($querycomm - 1) / $config['downlist']) * $config['downlist'];
@@ -131,10 +131,10 @@ case 'del':
 
     if (is_admin()) {
         if ($uid == $_SESSION['token']) {
-            $downs = DB::run() -> querySingle("SELECT `down` FROM `commload` WHERE `id`=?;", array($id));
+            $downs = DB::run() -> querySingle("SELECT `down` FROM `commload` WHERE `id`=?;", [$id]);
             if (!empty($downs)) {
-                DB::run() -> query("DELETE FROM `commload` WHERE `id`=? AND `down`=?;", array($id, $downs));
-                DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", array(1, $downs));
+                DB::run() -> query("DELETE FROM `commload` WHERE `id`=? AND `down`=?;", [$id, $downs]);
+                DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $downs]);
 
                 notice('Комментарий успешно удален!');
                 redirect("/load/active?act=comments&uz=$uz&start=$start");

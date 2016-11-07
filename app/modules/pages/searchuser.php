@@ -87,7 +87,7 @@ switch ($act):
         $find = check(strtolower($_POST['find']));
 
         if (utf_strlen($find)>=3 && utf_strlen($find)<=20) {
-            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? OR `nickname` LIKE ? ORDER BY `point` DESC LIMIT ".$config['usersearch'].";", array('%'.$find.'%', '%'.$find.'%'));
+            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? OR `nickname` LIKE ? ORDER BY `point` DESC LIMIT ".$config['usersearch'].";", ['%'.$find.'%', '%'.$find.'%']);
 
             $result = $querysearch -> fetchAll();
             $total = count($result);

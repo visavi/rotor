@@ -21,7 +21,7 @@ if (isset($_GET['type'])) {
     $type = 0;
 }
 
-if (is_admin(array(101, 102))) {
+if (is_admin([101, 102])) {
     show_title('Предложения и проблемы');
 
     switch ($act):
@@ -32,8 +32,8 @@ if (is_admin(array(101, 102))) {
 
             $type2 = (empty($type))? 1 : 0;
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array($type));
-            $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array($type2));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type]);
+            $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type2]);
 
             echo '<i class="fa fa-book"></i> ';
 
@@ -50,7 +50,7 @@ if (is_admin(array(101, 102))) {
                     $start = 0;
                 }
 
-                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$start.", ".$config['postoffers'].";", array($type));
+                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$start.", ".$config['postoffers'].";", [$type]);
 
                 echo '<form action="/admin/offers?act=del&amp;type='.$type.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -88,7 +88,7 @@ if (is_admin(array(101, 102))) {
                 show_error('Записей еще нет!');
             }
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/offers?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
             }
         break;
@@ -98,14 +98,14 @@ if (is_admin(array(101, 102))) {
         ############################################################################################
         case 'view':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array(0));
-            $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array(1));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [0]);
+            $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [1]);
 
             echo '<i class="fa fa-book"></i> <a href="/admin/offers?type=0">Предложения</a>  ('.$total.') / ';
             echo '<a href="/admin/offers?type=1">Проблемы</a> ('.$total2.') / ';
             echo '<a href="/pages//admin/offers?act=view&amp;type='.$type.'&amp;id='.$id.'">Обзор</a><hr />';
 
-            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
             if (!empty($queryoff)) {
                 $config['newtitle'] = $queryoff['title'];
 
@@ -151,7 +151,7 @@ if (is_admin(array(101, 102))) {
         ############################################################################################
         case 'reply':
 
-            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
             if (!empty($queryoff)) {
 
                 echo '<div class="form">';
@@ -161,7 +161,7 @@ if (is_admin(array(101, 102))) {
 
                 echo 'Статус: <br />';
 
-                $arrstatus = array('Под вопросом', 'В процессе', 'Выполнено', 'Закрыто');
+                $arrstatus = ['Под вопросом', 'В процессе', 'Выполнено', 'Закрыто'];
                 echo '<select name="status">';
 
                 foreach ($arrstatus as $k => $v) {
@@ -194,17 +194,17 @@ if (is_admin(array(101, 102))) {
             $closed = (empty($_POST['closed'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
                     if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
                         if ($status >= 0 && $status <= 3) {
 
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", array($status, $closed, $text, $log, SITETIME, $id));
+                            DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, $log, SITETIME, $id]);
 
                             if ($queryoff['status'] >= 2) {
-                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers`=?;", array($id));
+                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers`=?;", [$id]);
                             }
 
                             notice('Данные успешно отправлены!');
@@ -230,7 +230,7 @@ if (is_admin(array(101, 102))) {
         ############################################################################################
         case 'edit':
 
-            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
             if (!empty($queryoff)) {
 
                 echo '<div class="form">';
@@ -271,7 +271,7 @@ if (is_admin(array(101, 102))) {
             $closed = (empty($_POST['closed'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
                     if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                         if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
@@ -279,7 +279,7 @@ if (is_admin(array(101, 102))) {
                             $title = antimat($title);
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `offers` SET `type`=?, `closed`=?, `title`=?, `text`=? WHERE `id`=?;", array($types, $closed, $title, $text, $id));
+                            DB::run() -> query("UPDATE `offers` SET `type`=?, `closed`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $closed, $title, $text, $id]);
 
                             notice('Данные успешно отредактированы!');
                             redirect("/admin/offers?act=view&id=$id");
@@ -338,7 +338,7 @@ if (is_admin(array(101, 102))) {
 
             $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `commoffers` WHERE `offers`.`id`=`commoffers`.`comm_offers`);");
 

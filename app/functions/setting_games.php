@@ -63,7 +63,7 @@ function percent_bank($money) {
 // --------------- Функция сохранения количества денег в банке ---------------//
 function save_bankmoney($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/moneybank.dat") < time() - $time) {
-        $querybank = DB::run() -> query("SELECT `user`, `sum` FROM `bank` WHERE `sum`>?;", array(0));
+        $querybank = DB::run() -> query("SELECT `user`, `sum` FROM `bank` WHERE `sum`>?;", [0]);
         $allbank = $querybank -> fetchAssoc();
         file_put_contents(STORAGE."/temp/moneybank.dat", serialize($allbank), LOCK_EX);
     }

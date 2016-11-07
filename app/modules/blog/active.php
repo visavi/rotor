@@ -12,17 +12,17 @@ switch ($act):
 case 'blogs':
     show_title('Список всех статей '.$uz);
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `user`=?;", array($uz));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `user`=?;", [$uz]);
 
     if ($total > 0) {
         if ($start >= $total) {
             $start = last_page($total, $config['blogpost']);
         }
 
-        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", array($uz));
+        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$uz]);
         $blogs = $queryblogs -> fetchAll();
 
-        render('blog/active_blogs', array('blogs' => $blogs));
+        render('blog/active_blogs', ['blogs' => $blogs]);
 
         page_strnavigation('/blog/active?act=blogs&amp;uz='.$uz.'&amp;', $config['blogpost'], $start, $total);
 
@@ -38,7 +38,7 @@ break;
 case 'comments':
     show_title('Список всех комментариев '.$uz);
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `commblog` WHERE `author`=?;", array($uz));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `commblog` WHERE `author`=?;", [$uz]);
 
     if ($total > 0) {
         if ($start >= $total) {
@@ -47,10 +47,10 @@ case 'comments':
 
         $is_admin = is_admin();
 
-        $querycomments = DB::run() -> query("SELECT `commblog`.*, `title`, `comments` FROM `commblog` LEFT JOIN `blogs` ON `commblog`.`blog`=`blogs`.`id` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", array($uz));
+        $querycomments = DB::run() -> query("SELECT `commblog`.*, `title`, `comments` FROM `commblog` LEFT JOIN `blogs` ON `commblog`.`blog`=`blogs`.`id` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$uz]);
         $comments = $querycomments -> fetchAll();
 
-        render('blog/active_comments', array('comments' => $comments, 'start' => $start));
+        render('blog/active_comments', ['comments' => $comments, 'start' => $start]);
 
         page_strnavigation('/blog/active?act=comments&amp;uz='.$uz.'&amp;', $config['blogpost'], $start, $total);
     } else {
@@ -68,10 +68,10 @@ case 'del':
 
     if (is_admin()) {
         if ($uid == $_SESSION['token']) {
-            $blogs = DB::run() -> querySingle("SELECT `blog` FROM `commblog` WHERE `id`=?;", array($id));
+            $blogs = DB::run() -> querySingle("SELECT `blog` FROM `commblog` WHERE `id`=?;", [$id]);
             if (!empty($blogs)) {
-                DB::run() -> query("DELETE FROM `commblog` WHERE `id`=? AND blog=?;", array($id, $blogs));
-                DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", array(1, $blogs));
+                DB::run() -> query("DELETE FROM `commblog` WHERE `id`=? AND blog=?;", [$id, $blogs]);
+                DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $blogs]);
 
                 notice('Комментарий успешно удален!');
                 redirect("/blog/active?act=comments&uz=$uz&start=$start");
@@ -86,11 +86,11 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    render('includes/back', array('link' => '/blog/active?act=comments&amp;uz='.$uz.'&amp;start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/blog/active?act=comments&amp;uz='.$uz.'&amp;start='.$start, 'title' => 'Вернуться']);
 break;
 
 endswitch;
 
-render('includes/back', array('link' => '/blog', 'title' => 'Категории', 'icon' => 'reload.gif'));
+render('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'reload.gif']);
 
 App::view($config['themes'].'/foot');

@@ -96,4 +96,3 @@ echo '</div><div class="art-Footer-background"></div>
 <a href="/mail">Поддержка</a>
 </small></div>';
 echo '</body></html>';
-?>

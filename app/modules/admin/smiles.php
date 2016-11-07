@@ -5,7 +5,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 
-if (! is_admin(array(101, 102))) redirect('/admin/');
+if (! is_admin([101, 102])) redirect('/admin/');
 
 show_title('Управление смайлами');
 
@@ -21,7 +21,7 @@ case 'index':
         $start = last_page($total, $config['smilelist']);
     }
 
-    $smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", array('start' => intval($start), 'limit' => intval($config['smilelist'])));
+    $smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => intval($start), 'limit' => intval($config['smilelist'])]);
 
     echo '<form action="/admin/smiles?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -75,14 +75,14 @@ case 'load':
 
     if (is_writeable(HOME.'/upload/smiles')){
 
-        $smile = DBM::run()->selectFirst('smiles', array('code' => $code));
+        $smile = DBM::run()->selectFirst('smiles', ['code' => $code]);
 
         $validation = new Validation();
 
-        $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+        $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
             -> addRule('empty', $smile, 'Смайл с данным кодом уже имеется в списке!')
             -> addRule('string', $code, 'Слишком длинный или короткий код смайла!', true, 2, 20)
-            -> addRule('regex', array($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i'), 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
+            -> addRule('regex', [$code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i'], 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
 
 
         if ($validation->run()) {
@@ -96,7 +96,7 @@ case 'load':
                 }
                 //$handle -> file_overwrite = true;
 
-                $handle -> ext_check = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
+                $handle -> ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
                 $handle -> file_max_size = $config['smilemaxsize'];  // byte
                 $handle -> image_max_width = $config['smilemaxweight'];  // px
                 $handle -> image_max_height = $config['smilemaxweight']; // px
@@ -106,11 +106,11 @@ case 'load':
 
                 if ($handle -> processed) {
 
-                    $smile = DBM::run()->insert('smiles', array(
+                    $smile = DBM::run()->insert('smiles', [
                         'cats' => 1,
                         'name' => $handle->file_dst_name,
                         'code' => $code,
-                    ));
+                    ]);
 
                     $handle -> clean();
                     clearCache();
@@ -131,7 +131,7 @@ case 'load':
         show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
     }
 
-    render('includes/back', array('link' => '/admin/smiles?act=add&amp;start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/smiles?act=add&amp;start='.$start, 'title' => 'Вернуться']);
 break;
 
 /**
@@ -139,7 +139,7 @@ break;
  */
 case 'edit':
 
-    $smile = DBM::run()->selectFirst('smiles', array('id' => $id));
+    $smile = DBM::run()->selectFirst('smiles', ['id' => $id]);
 
     if (! empty($smile)) {
         echo '<b><big>Редактирование смайла</big></b><br /><br />';
@@ -154,7 +154,7 @@ case 'edit':
         show_error('Ошибка! Смайла для редактирования не существует!');
     }
 
-    render('includes/back', array('link' => '/admin/smiles?start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/smiles?start='.$start, 'title' => 'Вернуться']);
 break;
 
 /**
@@ -165,21 +165,21 @@ case 'change':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
 
-    $smile = DBM::run()->selectFirst('smiles', array('id' => $id));
+    $smile = DBM::run()->selectFirst('smiles', ['id' => $id]);
 
-    $checkcode = DBM::run()->selectFirst('smiles', array(
+    $checkcode = DBM::run()->selectFirst('smiles', [
         'code' => $code,
         'id' => $id,
-    ));
+    ]);
     $checkcode = DBM::run()->queryFirst("SELECT `id` FROM `smiles` WHERE `code`=:code AND `id`<>:id LIMIT 1;", compact('code', 'id'));
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('not_empty', $smile, 'Не найден смайл для редактирования!')
         -> addRule('empty', $checkcode, 'Смайл с данным кодом уже имеется в списке!')
         -> addRule('string', $code, 'Слишком длинный или короткий код смайла!', true, 1, 20)
-        -> addRule('regex', array($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i'), 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
+        -> addRule('regex', [$code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i'], 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
 
     if ($validation->run()) {
 
@@ -194,7 +194,7 @@ case 'change':
         show_error($validation->getErrors());
     }
 
-    render('includes/back', array('link' => '/admin/smiles?act=edit&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/smiles?act=edit&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться']);
 break;
 
 /**
@@ -235,7 +235,7 @@ case 'del':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    render('includes/back', array('link' => '/admin/smiles?start='.$start, 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/smiles?start='.$start, 'title' => 'Вернуться']);
 break;
 
 endswitch;

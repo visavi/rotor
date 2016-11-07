@@ -7,7 +7,7 @@ $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 
 show_title('Интернет события');
 
-render('events/menu', array('act' => $act, 'is_admin' => is_admin(), 'is_user' => is_user()));
+render('events/menu', ['act' => $act, 'is_admin' => is_admin(), 'is_user' => is_user()]);
 
 switch ($act):
 ############################################################################################
@@ -28,7 +28,7 @@ case 'index':
 		$queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postevents'].";");
 		$events = $queryevents->fetchAll();
 
-		render('events/index', array('events' => $events));
+		render('events/index', ['events' => $events]);
 
 		page_strnavigation('/events?', $config['postevents'], $start, $total);
 	} else {
@@ -40,7 +40,7 @@ break;
 ##                                     Чтение события                                     ##
 ############################################################################################
 case 'read':
-	$data = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
+	$data = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", [$id]);
 
 	if (!empty($data)) {
 
@@ -68,7 +68,7 @@ case 'read':
 		if ($data['comments'] > 0) {
 		echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
 
-			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT 5;", array($id));
+			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT 5;", [$id]);
 			$comments = $querycomm -> fetchAll();
 			$comments = array_reverse($comments);
 
@@ -168,9 +168,9 @@ case 'addevent':
 
 		$validation = new Validation();
 
-		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('equal', array(is_flood(App::getUsername()), true), 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
-			-> addRule('max', array($udata['point'], $config['eventpoint']), 'У вас недостаточно актива для создания события!')
+		$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+			-> addRule('equal', [is_flood(App::getUsername()), true], 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
+			-> addRule('max', [$udata['point'], $config['eventpoint']], 'У вас недостаточно актива для создания события!')
 			-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 			-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
@@ -178,7 +178,7 @@ case 'addevent':
 
 			$msg = antimat($msg);
 
-			DB::run() -> query("INSERT INTO `events` (`title`, `text`, `author`, `time`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($title, $msg, App::getUsername(), SITETIME, 0, $closed, $top));
+			DB::run() -> query("INSERT INTO `events` (`title`, `text`, `author`, `time`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, App::getUsername(), SITETIME, 0, $closed, $top]);
 
 			$lastid = DB::run() -> lastInsertId();
 
@@ -190,7 +190,7 @@ case 'addevent':
 					$handle -> process(HOME.'/upload/events/');
 
 					if ($handle -> processed) {
-						DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", array($handle -> file_dst_name, $lastid));
+						DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
 						$handle -> clean();
 
 					} else {
@@ -220,13 +220,13 @@ break;
 ############################################################################################
 case 'editevent':
 	if (is_user()) {
-		$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
+		$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", [$id]);
 
 		$validation = new Validation();
 
 		$validation -> addRule('not_empty', $dataevent, 'Выбранного события не существует, возможно оно было удалено!')
-			-> addRule('equal', array(App::getUsername(), $dataevent['author']), 'Изменение невозможно, вы не автор данного события!')
-			-> addRule('max', array(($dataevent['time'] + 3600), SITETIME), 'Изменение невозможно, прошло более 1 часа!');
+			-> addRule('equal', [App::getUsername(), $dataevent['author']], 'Изменение невозможно, вы не автор данного события!')
+			-> addRule('max', [($dataevent['time'] + 3600), SITETIME], 'Изменение невозможно, прошло более 1 часа!');
 
 		if ($validation->run()) {
 
@@ -239,7 +239,7 @@ case 'editevent':
 			echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br />';
 
 			if (!empty($dataevent['image']) && file_exists(HOME.'/upload/events/'.$dataevent['image'])){
-				echo '<a href="/upload/events/'.$dataevent['image'].'">'.resize_image('upload/events/', $dataevent['image'], 75, array('alt' => $dataevent['title'])).'</a><br />';
+				echo '<a href="/upload/events/'.$dataevent['image'].'">'.resize_image('upload/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br />';
 				echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/upload/events/'.$dataevent['image']).')<br /><br />';
 			}
 
@@ -279,14 +279,14 @@ case 'changeevent':
 	$closed = (!is_admin() || empty($_POST['closed'])) ? 0 : 1;
 
 	if (is_user()) {
-		$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
+		$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", [$id]);
 
 		$validation = new Validation();
 
-		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+		$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('not_empty', $dataevent, 'Выбранного события не существует, возможно оно было удалено!')
-			-> addRule('equal', array(App::getUsername(), $dataevent['author']), 'Изменение невозможно, вы не автор данного события!')
-			-> addRule('max', array(($dataevent['time'] + 3600), SITETIME), 'Изменение невозможно, прошло более 1 часа!')
+			-> addRule('equal', [App::getUsername(), $dataevent['author']], 'Изменение невозможно, вы не автор данного события!')
+			-> addRule('max', [($dataevent['time'] + 3600), SITETIME], 'Изменение невозможно, прошло более 1 часа!')
 			-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 			-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
@@ -294,7 +294,7 @@ case 'changeevent':
 
 			$msg = antimat($msg);
 
-			DB::run() -> query("UPDATE `events` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
+			DB::run() -> query("UPDATE `events` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", [$title, $msg, $closed, $top, $id]);
 
 			// ---------------------------- Загрузка изображения -------------------------------//
 			if (is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -309,7 +309,7 @@ case 'changeevent':
 					$handle -> process(HOME.'/upload/events/');
 
 					if ($handle -> processed) {
-						DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", array($handle -> file_dst_name, $id));
+						DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
 						$handle -> clean();
 
 					} else {
@@ -337,7 +337,7 @@ break;
 ############################################################################################
 case 'comments':
 
-	$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
+	$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", [$id]);
 
 	if (!empty($dataevent)) {
 		$config['newtitle'] = 'Комментарии - '.$dataevent['title'];
@@ -349,7 +349,7 @@ case 'comments':
 
 		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
-		$total = DB::run() -> querySingle("SELECT count(*) FROM `commevents` WHERE `event_id`=?;", array($id));
+		$total = DB::run() -> querySingle("SELECT count(*) FROM `commevents` WHERE `event_id`=?;", [$id]);
 
 		if ($total > 0) {
 			if ($start >= $total) {
@@ -361,7 +361,7 @@ case 'comments':
 				echo '<form action="/events?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 			}
 
-			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `event_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postevents'].";", array($id));
+			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `event_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postevents'].";", [$id]);
 
 			while ($data = $querycomm -> fetch()) {
 
@@ -427,12 +427,12 @@ case 'addcomment':
 	$msg = (isset($_POST['msg'])) ? check($_POST['msg']) : '';
 
 	if (is_user()) {
-		$data = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
+		$data = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", [$id]);
 
 		$validation = new Validation();
 
-		$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('equal', array(is_flood(App::getUsername()), true), 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
+		$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+			-> addRule('equal', [is_flood(App::getUsername()), true], 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
 			-> addRule('not_empty', $data, 'Выбранного события не существует, возможно оно было удалено!')
 			-> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
 			-> addRule('empty', $data['closed'], 'Комментирование данного события запрещено!');
@@ -441,12 +441,12 @@ case 'addcomment':
 
 			$msg = antimat($msg);
 
-			DB::run() -> query("INSERT INTO `commevents` (`event_id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()));
+			DB::run() -> query("INSERT INTO `commevents` (`event_id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-			DB::run() -> query("DELETE FROM `commevents` WHERE `event_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommevents'].") AS del);", array($id, $id));
+			DB::run() -> query("DELETE FROM `commevents` WHERE `event_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommevents'].") AS del);", [$id, $id]);
 
-			DB::run() -> query("UPDATE `events` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
-			DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array(App::getUsername()));
+			DB::run() -> query("UPDATE `events` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
+			DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
 			notice('Комментарий успешно добавлен!');
 
@@ -482,7 +482,7 @@ case 'del':
 				$del = implode(',', $del);
 
 				$delcomments = DB::run() -> exec("DELETE FROM `commevents` WHERE `id` IN (".$del.") AND `event_id`=".$id.";");
-				DB::run() -> query("UPDATE `events` SET `comments`=`comments`-? WHERE `id`=?;", array($delcomments, $id));
+				DB::run() -> query("UPDATE `events` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
 				notice('Выбранные комментарии успешно удалены!');
 				redirect("/events?act=comments&id=$id&start=$start");
@@ -506,7 +506,7 @@ break;
 ############################################################################################
 case 'end':
 
-	$query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commevents` WHERE `event_id`=? LIMIT 1;", array($id));
+	$query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commevents` WHERE `event_id`=? LIMIT 1;", [$id]);
 
 	if (!empty($query)) {
 		$total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];

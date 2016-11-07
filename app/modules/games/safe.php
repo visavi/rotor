@@ -50,7 +50,7 @@ case 'vzlom':
     }else{
 
         if (empty($_SESSION['go']) || !$_SESSION['try']){
-            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", array($config['safeattempt'], $log));
+            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [$config['safeattempt'], $log]);
             $_SESSION['go'] = 'ok';
         }
 
@@ -152,7 +152,7 @@ case 'vzlom1':
             echo '<br />ПОЗДРАВЛЯЮ! СЕЙФ УСПЕШНО ВЗЛОМАН!<br />
             <font color="red">НА ВАШ СЧЁТ ПЕРЕВЕДЕНЫ 1000$</font><br />';
 
-            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", array($config['safesum'], $log));
+            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$config['safesum'], $log]);
             unset($_SESSION['go'], $_SESSION['try']);
 
             echo'&raquo; <a href="/games/safe">Ещё взломать?</a><br /><br />';

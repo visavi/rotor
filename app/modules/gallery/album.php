@@ -58,7 +58,7 @@ switch ($act):
 
         show_title('Список всех фотографий '.nickname($uz));
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `user`=?;", array($uz));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `user`=?;", [$uz]);
 
         if ($total > 0) {
             if ($start >= $total) {
@@ -68,7 +68,7 @@ switch ($act):
             $page = floor(1 + $start / $config['fotolist']);
             $config['newtitle'] = 'Список всех фотографий '.nickname($uz).' (Стр. '.$page.')';
 
-            $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['fotolist'].";", array($uz));
+            $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['fotolist'].";", [$uz]);
 
             $moder = ($log == $uz) ? 1 : 0;
 
@@ -82,7 +82,7 @@ switch ($act):
                 }
 
                 echo '</div><div>';
-                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], array('alt' => $data['title'])).'</a><br />';
+                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
 
                 if (!empty($data['text'])){
                     echo bb_code($data['text']).'<br />';

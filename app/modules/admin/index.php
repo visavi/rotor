@@ -19,7 +19,7 @@ site_version();
 
     <?=show_admin_links(105);?>
 
-    <?php if (is_admin(array(101, 102, 103))) {?>
+    <?php if (is_admin([101, 102, 103])) {?>
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Старший модер</b></div>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/ban">Бан / Разбан</a><br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/banlist">Список забаненых</a> (<?=stats_banned()?>)<br />
@@ -30,7 +30,7 @@ site_version();
         <?=show_admin_links(103);?>
     <?php }?>
 
-    <?php if (is_admin(array(101, 102))) {?>
+    <?php if (is_admin([101, 102])) {?>
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Администратор</b></div>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/rules">Правила сайта</a><br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/news">Новости</a> (<?=stats_allnews()?>)<br />
@@ -41,7 +41,7 @@ site_version();
         <?=show_admin_links(102);?>
     <?php }?>
 
-    <?php if (is_admin(array(101))) {?>
+    <?php if (is_admin([101])) {?>
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Суперадмин</b></div>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/setting">Настройки сайта</a><br />
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br />

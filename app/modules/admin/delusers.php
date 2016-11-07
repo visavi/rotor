@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin(array(101)) && $log == $config['nickname']) {
+if (is_admin([101]) && $log == $config['nickname']) {
     show_title('Очистка базы юзеров');
 
     switch ($act):
@@ -47,7 +47,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
             if ($deldate >= 180) {
                 $deltime = $deldate * 24 * 3600;
 
-                $queryusers = DB::run() -> query("SELECT login FROM users WHERE timelastlogin<? AND point<=?;", array(SITETIME - $deltime, $point));
+                $queryusers = DB::run() -> query("SELECT login FROM users WHERE timelastlogin<? AND point<=?;", [SITETIME - $deltime, $point]);
                 $users = $queryusers -> fetchAll(PDO::FETCH_COLUMN);
                 $total = count($users);
 
@@ -92,7 +92,7 @@ if (is_admin(array(101)) && $log == $config['nickname']) {
                 if ($deldate >= 180) {
                     $deltime = $deldate * 24 * 3600;
 
-                    $queryusers = DB::run() -> query("SELECT login FROM users WHERE timelastlogin<? AND point<=?;", array(SITETIME - $deltime, $point));
+                    $queryusers = DB::run() -> query("SELECT login FROM users WHERE timelastlogin<? AND point<=?;", [SITETIME - $deltime, $point]);
                     $users = $queryusers -> fetchAll(PDO::FETCH_COLUMN);
                     $total = count($users);
 

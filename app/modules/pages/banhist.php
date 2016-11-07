@@ -15,14 +15,14 @@ if (isset($_GET['start'])) {
 if (is_user()) {
     show_title('История банов '.nickname($uz));
 
-    $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", array($uz));
+    $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
 
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", array($uz));
+        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", [$uz]);
 
         while ($data = $queryhist -> fetch()) {
             echo '<div class="b">';

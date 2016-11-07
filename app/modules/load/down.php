@@ -16,7 +16,7 @@ switch ($act):
 case 'index':
 
     if (!empty($cid)) {
-        $cats = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", array($cid));
+        $cats = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
 
         if (!empty($cats)) {
             $config['newtitle'] = $cats['name'];
@@ -24,7 +24,7 @@ case 'index':
             echo '<a href="/load">Категории</a>';
 
             if (!empty($cats['parent'])) {
-                $podcats = DB::run() -> queryFetch("SELECT `id`, `name` FROM `cats` WHERE `id`=? LIMIT 1;", array($cats['parent']));
+                $podcats = DB::run() -> queryFetch("SELECT `id`, `name` FROM `cats` WHERE `id`=? LIMIT 1;", [$cats['parent']]);
 
                 echo ' / <a href="/load/down?cid='.$podcats['id'].'">'.$podcats['name'].'</a>';
             }
@@ -36,7 +36,7 @@ case 'index':
             echo '<br /><br />';
             echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
 
-            if (is_admin(array(101, 102))) {
+            if (is_admin([101, 102])) {
                 echo ' (<a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Управление</a>)';
             }
 
@@ -78,7 +78,7 @@ case 'index':
 
             echo '<hr />';
 
-            $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `parent`=?;", array($cid));
+            $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `parent`=?;", [$cid]);
             $sub = $querysub -> fetchAll();
 
             if (count($sub) > 0 && $start == 0) {
@@ -89,14 +89,14 @@ case 'index':
                 echo '<hr />';
             }
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `cats_id`=? AND `active`=?;", array($cid, 1));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `cats_id`=? AND `active`=?;", [$cid, 1]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `cats_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", array($cid, 1));
+                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `cats_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [$cid, 1]);
 
                 $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
@@ -150,7 +150,7 @@ break;
 ############################################################################################
 case 'view':
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($downs)) {
         if (!empty($downs['active']) || $downs['user'] == $log) {
@@ -163,7 +163,7 @@ case 'view':
             echo '<a href="/load">Категории</a> / ';
 
             if (!empty($downs['parent'])) {
-                $podcats = DB::run() -> queryFetch("SELECT `id`, `name` FROM `cats` WHERE `id`=? LIMIT 1;", array($downs['parent']));
+                $podcats = DB::run() -> queryFetch("SELECT `id`, `name` FROM `cats` WHERE `id`=? LIMIT 1;", [$downs['parent']]);
                 echo '<a href="/load/down?cid='.$podcats['id'].'">'.$podcats['name'].'</a> / ';
             }
 
@@ -172,7 +172,7 @@ case 'view':
             $filesize = (!empty($downs['link'])) ? read_file(HOME.'/upload/files/'.$folder.$downs['link']) : 0;
             echo '<i class="fa fa-file-o"></i> <b>'.$downs['title'].'</b> ('.$filesize.')';
 
-            if (is_admin(array(101, 102))) {
+            if (is_admin([101, 102])) {
                 echo ' (<a href="/admin/load?act=editdown&amp;cid='.$downs['cats_id'].'&amp;id='.$id.'">Редактировать</a> / ';
                 echo '<a href="/admin/load?act=movedown&amp;cid='.$downs['cats_id'].'&amp;id='.$id.'">Переместить</a>)';
             }
@@ -185,8 +185,8 @@ case 'view':
 
             $ext = getExtension($downs['link']);
 
-            if (in_array($ext, array('jpg', 'jpeg', 'gif', 'png'))) {
-                echo '<a href="/upload/files/'.$folder.$downs['link'].'">'.resize_image('upload/files/'.$folder, $downs['link'], $config['previewsize'], array('alt' => $downs['title'])).'</a><br />';
+            if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
+                echo '<a href="/upload/files/'.$folder.$downs['link'].'">'.resize_image('upload/files/'.$folder, $downs['link'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br />';
             }
 
             echo bb_code($downs['text']).'<br /><br />';
@@ -194,7 +194,7 @@ case 'view':
             if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
                 echo 'Скриншот:<br />';
 
-                echo '<a href="screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], array('alt' => $downs['title'])).'</a><br /><br />';
+                echo '<a href="screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
             }
 
             if (!empty($downs['author'])) {
@@ -301,7 +301,7 @@ case 'load':
 
     if (is_user() || $provkod == $_SESSION['protect']) {
 
-        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
         if (!empty($downs)) {
             if (!empty($downs['active'])) {
@@ -309,13 +309,13 @@ case 'load':
                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
                 if (file_exists('upload/files/'.$folder.$downs['link'])) {
-                    $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", array($id, App::getClientIp()));
+                    $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", [$id, App::getClientIp()]);
                     if (empty($queryloads)) {
                         $expiresloads = SITETIME + 3600 * $config['expiresloads'];
 
-                        DB::run() -> query("DELETE FROM loads WHERE time<?;", array(SITETIME));
-                        DB::run() -> query("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", array($id, App::getClientIp(), $expiresloads));
-                        DB::run() -> query("UPDATE downs SET load=load+1, last_load=? WHERE id=?", array(SITETIME, $id));
+                        DB::run() -> query("DELETE FROM loads WHERE time<?;", [SITETIME]);
+                        DB::run() -> query("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, App::getClientIp(), $expiresloads]);
+                        DB::run() -> query("UPDATE downs SET load=load+1, last_load=? WHERE id=?", [SITETIME, $id]);
                     }
 
                     redirect("/upload/files/".$folder.$downs['link']);
@@ -350,19 +350,19 @@ case 'vote':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if ($score > 0 && $score <= 5) {
-                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
+                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
                         if ($log != $downs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `rateddown` WHERE `down`=? AND `user`=? LIMIT 1;", array($id, $log));
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `rateddown` WHERE `down`=? AND `user`=? LIMIT 1;", [$id, $log]);
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * $config['expiresrated'];
 
-                                DB::run() -> query("DELETE FROM `rateddown` WHERE `time`<?;", array(SITETIME));
-                                DB::run() -> query("INSERT INTO `rateddown` (`down`, `user`, `time`) VALUES (?, ?, ?);", array($id, $log, $expiresrated));
-                                DB::run() -> query("UPDATE `downs` SET `raiting`=`raiting`+?, `rated`=`rated`+1 WHERE `id`=?", array($score, $id));
+                                DB::run() -> query("DELETE FROM `rateddown` WHERE `time`<?;", [SITETIME]);
+                                DB::run() -> query("INSERT INTO `rateddown` (`down`, `user`, `time`) VALUES (?, ?, ?);", [$id, $log, $expiresrated]);
+                                DB::run() -> query("UPDATE `downs` SET `raiting`=`raiting`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
 
                                 echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br />';
                                 echo 'Всего оценивало: '.($downs['rated'] + 1).'<br />';
@@ -397,7 +397,7 @@ break;
 ############################################################################################
 case 'comments':
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($downs)) {
         if (!empty($downs['active'])) {
@@ -407,7 +407,7 @@ case 'comments':
 
             echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `down`=?;", array($id));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `down`=?;", [$id]);
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -419,7 +419,7 @@ case 'comments':
                     echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `commload` WHERE `down`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['downcomm'].";", array($id));
+                $querycomm = DB::run() -> query("SELECT * FROM `commload` WHERE `down`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['downcomm'].";", [$id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -495,7 +495,7 @@ case 'add':
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
 
-                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
+                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
@@ -503,12 +503,12 @@ case 'add':
 
                             $msg = antimat($msg);
 
-                            DB::run() -> query("INSERT INTO `commload` (`cats`, `down`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", array($downs['cats_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                            DB::run() -> query("INSERT INTO `commload` (`cats`, `down`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$downs['cats_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                            DB::run() -> query("DELETE FROM `commload` WHERE `down`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", array($id, $id));
+                            DB::run() -> query("DELETE FROM `commload` WHERE `down`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", [$id, $id]);
 
-                            DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
-                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array($log));
+                            DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
+                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
 
                             notice('Сообщение успешно добавлено!');
                             redirect("/load/down?act=end&id=$id");
@@ -544,14 +544,14 @@ case 'spam':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            $data = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", array($pid));
+            $data = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", [$pid]);
 
             if (!empty($data)) {
-                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", array(5, $pid));
+                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", [5, $pid]);
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(5, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start));
+                        DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start]);
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&start=$start");
@@ -584,7 +584,7 @@ case 'reply':
     echo '<b><big>Ответ на сообщение</big></b><br /><br />';
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", array($pid));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", [$pid]);
 
         if (!empty($post)) {
             echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['author']).'</b> '.user_title($post['author']).' '.user_online($post['author']).' <small>('.date_fixed($post['time']).')</small></div>';
@@ -614,7 +614,7 @@ case 'quote':
 
     echo '<b><big>Цитирование</big></b><br /><br />';
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", array($pid));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", [$pid]);
 
         if (!empty($post)) {
             echo '<div class="form">';
@@ -642,7 +642,7 @@ case 'edit':
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? AND `author`=? LIMIT 1;", array($pid, $log));
+        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? AND `author`=? LIMIT 1;", [$pid, $log]);
 
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
@@ -679,14 +679,14 @@ case 'editpost':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? AND `author`=? LIMIT 1;", array($pid, $log));
+                $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? AND `author`=? LIMIT 1;", [$pid, $log]);
 
                 if (!empty($post)) {
                     if ($post['time'] + 600 > SITETIME) {
 
                         $msg = antimat($msg);
 
-                        DB::run() -> query("UPDATE `commload` SET `text`=? WHERE `id`=?", array($msg, $pid));
+                        DB::run() -> query("UPDATE `commload` SET `text`=? WHERE `id`=?", [$msg, $pid]);
 
                         notice('Сообщение успешно отредактировано!');
                         redirect("/load/down?act=comments&id=$id&start=$start");
@@ -727,7 +727,7 @@ case 'del':
                 $del = implode(',', $del);
 
                 $delcomments = DB::run() -> exec("DELETE FROM `commload` WHERE `id` IN (".$del.") AND `down`=".$id.";");
-                DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", array($delcomments, $id));
+                DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                 notice('Выбранные комментарии успешно удалены!');
                 redirect("/load/down?act=comments&id=$id&start=$start");
@@ -749,7 +749,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commload` WHERE `down`=? LIMIT 1;", array($id));
+    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commload` WHERE `down`=? LIMIT 1;", [$id]);
 
     if (!empty($query)) {
 

@@ -25,7 +25,7 @@ case 'blogs':
         $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
         $blogs = $queryblog->fetchAll();
 
-        render('blog/new_blogs', array('blogs' => $blogs));
+        render('blog/new_blogs', ['blogs' => $blogs]);
 
         page_strnavigation('/blog/new?act=blogs&amp;', $config['blogpost'], $start, $total);
     } else {
@@ -52,7 +52,7 @@ case 'comments':
         $querycomment = DB::run() -> query("SELECT `commblog`.*, `title`, `comments` FROM `commblog` LEFT JOIN `blogs` ON `commblog`.`blog`=`blogs`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
         $comments = $querycomment->fetchAll();
 
-        render('blog/new_comments', array('comments' => $comments));
+        render('blog/new_comments', ['comments' => $comments]);
 
         page_strnavigation('/blog/new?act=comments&amp;', $config['blogpost'], $start, $total);
     } else {
@@ -62,6 +62,6 @@ break;
 
 endswitch;
 
-render('includes/back', array('link' => '/blog', 'title' => 'Категории', 'icon' => 'reload.gif'));
+render('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'reload.gif']);
 
 App::view($config['themes'].'/foot');

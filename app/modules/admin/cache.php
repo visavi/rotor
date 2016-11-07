@@ -3,7 +3,7 @@ App::view($config['themes'].'/index');
 
 $start = abs(intval(Request::input('start', 0)));
 
-if (is_admin(array(101))) {
+if (is_admin([101])) {
 show_title('Очистка кэша');
 
 switch ($act):
@@ -80,7 +80,7 @@ case 'clear':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    render('includes/back', array('link' => '/admin/cache', 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/cache', 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -110,7 +110,7 @@ case 'clearimage':
     }
 
 
-    render('includes/back', array('link' => '/admin/cache/image', 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/cache/image', 'title' => 'Вернуться']);
 break;
 
 endswitch;

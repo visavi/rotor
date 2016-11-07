@@ -4,12 +4,12 @@ App::view($config['themes'].'/index');
 show_title('Загрузки');
 $config['newtitle'] = 'Загрузки - Список разделов';
 
-$querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY `order` ASC;", array(1, SITETIME-86400 * 5));
+$querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY `order` ASC;", [1, SITETIME-86400 * 5]);
 
 $downs = $querydown -> fetchAll();
 
 if (count($downs) > 0) {
-    $output = array();
+    $output = [];
 
     foreach ($downs as $row) {
         $id = $row['id'];
@@ -23,7 +23,7 @@ if (count($downs) > 0) {
 
     echo 'Новые: <a href="/load/new?act=files">файлы</a>, <a href="/load/new?act=comments">комментарии</a><hr />';
 
-    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", array (1, SITETIME-3600 * 120));
+    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-3600 * 120]);
 
     echo '<i class="fa fa-folder-open"></i> <b><a href="/load/fresh">Свежие загрузки</a></b> ('.$totalnew.')<br />';
 
@@ -50,12 +50,12 @@ if (count($downs) > 0) {
         */
         // ------------------------- Новый вывод ---------------------------//
         if (isset($output[$key])) {
-            foreach($output[$key] as $data) {
-                $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
-                $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
+            foreach($output[$key] as $odata) {
+                $subcnt = (empty($odata['subcnt'])) ? '' : '/'.$odata['subcnt'];
+                $new = (empty($odata['new'])) ? '' : '/<span style="color:#ff0000">+'.$odata['new'].'</span>';
 
-                echo '<i class="fa fa-angle-right"></i> <b><a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a></b> ';
-                echo '('.$data['count'] . $subcnt . $new.')<br />';
+                echo '<i class="fa fa-angle-right"></i> <b><a href="/load/down?cid='.$odata['id'].'">'.$odata['name'].'</a></b> ';
+                echo '('.$odata['count'] . $subcnt . $new.')<br />';
             }
         }
         // ----------------------------------------------------//

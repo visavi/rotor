@@ -43,7 +43,7 @@ if (is_admin()) {
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> <a href="/admin/gallery?act=edit&amp;start='.$start.'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], array('alt' => $data['title'])).'</a><br />';
+                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
 
                     if (!empty($data['text'])){
                         echo bb_code($data['text']).'<br />';
@@ -64,7 +64,7 @@ if (is_admin()) {
                 show_error('Фотографий еще нет!');
             }
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
             }
         break;
@@ -76,7 +76,7 @@ if (is_admin()) {
 
             $gid = abs(intval($_GET['gid']));
 
-            $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", array($gid));
+            $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
             if (!empty($photo)) {
 
@@ -109,7 +109,7 @@ if (is_admin()) {
             $closed = (empty($_POST['closed'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", array($gid));
+                $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
                 if (!empty($photo)) {
                     if (utf_strlen($title) >= 5 && utf_strlen($title) < 50) {
@@ -117,7 +117,7 @@ if (is_admin()) {
 
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", array($title, $text, $closed, $gid));
+                            DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", [$title, $text, $closed, $gid]);
 
                             notice('Фотография успешно отредактирована!');
                             redirect("/admin/gallery?start=$start");
@@ -149,7 +149,7 @@ if (is_admin()) {
             if (isset($_POST['del'])) {
                 $del = intar($_POST['del']);
             } elseif (isset($_GET['del'])) {
-                $del = array(abs(intval($_GET['del'])));
+                $del = [abs(intval($_GET['del']))];
             } else {
                 $del = 0;
             }
@@ -164,8 +164,8 @@ if (is_admin()) {
 
                         if (count($arr_photo) > 0) {
                             foreach ($arr_photo as $delete) {
-                                DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", array($delete['id']));
-                                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", array($delete['id']));
+                                DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$delete['id']]);
+                                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", [$delete['id']]);
 
                                 unlink_image('upload/pictures/', $delete['link']);
                             }
@@ -196,7 +196,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     restatement('gallery');
 

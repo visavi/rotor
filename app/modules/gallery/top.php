@@ -54,7 +54,7 @@ if ($total > 0) {
         echo '<div class="b"><i class="fa fa-picture-o"></i> ';
         echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).') ('.format_num($data['rating']).')</div>';
 
-        echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], array('alt' => $data['title'])).'</a>';
+        echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a>';
 
         echo '<br />'.bb_code($data['text']).'<br />';
 

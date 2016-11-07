@@ -36,8 +36,8 @@ function date_fixed($timestamp, $format = "d.m.y / H:i") {
     $datestamp = str_replace($today, 'Сегодня', $datestamp);
     $datestamp = str_replace($yesterday, 'Вчера', $datestamp);
 
-    $search = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-    $replace = array('Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря');
+    $search = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    $replace = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
     $datestamp = str_replace($search, $replace, $datestamp);
 
     return $datestamp;
@@ -66,21 +66,21 @@ function delete_users($user) {
         unlink_image('upload/photos/', $userpic['picture']);
         unlink_image('upload/avatars/', $userpic['avatar']);
 
-        DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", array($user));
-        DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `contact` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `ignore` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `rating` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `visit` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `wall` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `notebook` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `banhist` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `note` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `bookmarks` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `login` WHERE `user`=?;", array($user));
-        DB::run() -> query("DELETE FROM `invite` WHERE `user`=? OR `invited`=?;", array($user, $user));
-        DB::run() -> query("DELETE FROM `users` WHERE `login`=?;", array($user));
+        DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `contact` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `ignore` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `rating` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `visit` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `wall` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `notebook` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `banhist` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `note` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `bookmarks` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `login` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `invite` WHERE `user`=? OR `invited`=?;", [$user, $user]);
+        DB::run() -> query("DELETE FROM `users` WHERE `login`=?;", [$user]);
     }
 }
 
@@ -88,13 +88,13 @@ function delete_users($user) {
 function delete_album($user) {
 
     if (!empty($user)){
-        $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `user`=?;", array($user));
+        $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `user`=?;", [$user]);
         $arr_photo = $querydel -> fetchAll();
 
         if (count($arr_photo) > 0) {
             foreach ($arr_photo as $delete) {
-                DB::run() -> query("DELETE FROM `photo` WHERE `id`=?;", array($delete['id']));
-                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", array($delete['id']));
+                DB::run() -> query("DELETE FROM `photo` WHERE `id`=?;", [$delete['id']]);
+                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", [$delete['id']]);
 
                 unlink_image('upload/pictures/', $delete['link']);
             }
@@ -162,11 +162,11 @@ function utf_to_win($str) {
     if (function_exists('mb_convert_encoding')) return mb_convert_encoding($str, 'windows-1251', 'utf-8');
     if (function_exists('iconv')) return iconv('utf-8', 'windows-1251', $str);
 
-    $utf8win1251 = array("А" => "\xC0", "Б" => "\xC1", "В" => "\xC2", "Г" => "\xC3", "Д" => "\xC4", "Е" => "\xC5", "Ё" => "\xA8", "Ж" => "\xC6", "З" => "\xC7", "И" => "\xC8", "Й" => "\xC9", "К" => "\xCA", "Л" => "\xCB", "М" => "\xCC",
+    $utf8win1251 = ["А" => "\xC0", "Б" => "\xC1", "В" => "\xC2", "Г" => "\xC3", "Д" => "\xC4", "Е" => "\xC5", "Ё" => "\xA8", "Ж" => "\xC6", "З" => "\xC7", "И" => "\xC8", "Й" => "\xC9", "К" => "\xCA", "Л" => "\xCB", "М" => "\xCC",
         "Н" => "\xCD", "О" => "\xCE", "П" => "\xCF", "Р" => "\xD0", "С" => "\xD1", "Т" => "\xD2", "У" => "\xD3", "Ф" => "\xD4", "Х" => "\xD5", "Ц" => "\xD6", "Ч" => "\xD7", "Ш" => "\xD8", "Щ" => "\xD9", "Ъ" => "\xDA",
         "Ы" => "\xDB", "Ь" => "\xDC", "Э" => "\xDD", "Ю" => "\xDE", "Я" => "\xDF", "а" => "\xE0", "б" => "\xE1", "в" => "\xE2", "г" => "\xE3", "д" => "\xE4", "е" => "\xE5", "ё" => "\xB8", "ж" => "\xE6", "з" => "\xE7",
         "и" => "\xE8", "й" => "\xE9", "к" => "\xEA", "л" => "\xEB", "м" => "\xEC", "н" => "\xED", "о" => "\xEE", "п" => "\xEF", "р" => "\xF0", "с" => "\xF1", "т" => "\xF2", "у" => "\xF3", "ф" => "\xF4", "х" => "\xF5",
-        "ц" => "\xF6", "ч" => "\xF7", "ш" => "\xF8", "щ" => "\xF9", "ъ" => "\xFA", "ы" => "\xFB", "ь" => "\xFC", "э" => "\xFD", "ю" => "\xFE", "я" => "\xFF");
+        "ц" => "\xF6", "ч" => "\xF7", "ш" => "\xF8", "щ" => "\xF9", "ъ" => "\xFA", "ы" => "\xFB", "ь" => "\xFC", "э" => "\xFD", "ю" => "\xFE", "я" => "\xFF"];
 
     return strtr($str, $utf8win1251);
 }
@@ -176,11 +176,11 @@ function win_to_utf($str) {
     if (function_exists('mb_convert_encoding')) return mb_convert_encoding($str, 'utf-8', 'windows-1251');
     if (function_exists('iconv')) return iconv('windows-1251', 'utf-8', $str);
 
-    $win1251utf8 = array("\xC0" => "А", "\xC1" => "Б", "\xC2" => "В", "\xC3" => "Г", "\xC4" => "Д", "\xC5" => "Е", "\xA8" => "Ё", "\xC6" => "Ж", "\xC7" => "З", "\xC8" => "И", "\xC9" => "Й", "\xCA" => "К", "\xCB" => "Л", "\xCC" => "М",
+    $win1251utf8 = ["\xC0" => "А", "\xC1" => "Б", "\xC2" => "В", "\xC3" => "Г", "\xC4" => "Д", "\xC5" => "Е", "\xA8" => "Ё", "\xC6" => "Ж", "\xC7" => "З", "\xC8" => "И", "\xC9" => "Й", "\xCA" => "К", "\xCB" => "Л", "\xCC" => "М",
         "\xCD" => "Н", "\xCE" => "О", "\xCF" => "П", "\xD0" => "Р", "\xD1" => "С", "\xD2" => "Т", "\xD3" => "У", "\xD4" => "Ф", "\xD5" => "Х", "\xD6" => "Ц", "\xD7" => "Ч", "\xD8" => "Ш", "\xD9" => "Щ", "\xDA" => "Ъ",
         "\xDB" => "Ы", "\xDC" => "Ь", "\xDD" => "Э", "\xDE" => "Ю", "\xDF" => "Я", "\xE0" => "а", "\xE1" => "б", "\xE2" => "в", "\xE3" => "г", "\xE4" => "д", "\xE5" => "е", "\xB8" => "ё", "\xE6" => "ж", "\xE7" => "з",
         "\xE8" => "и", "\xE9" => "й", "\xEA" => "к", "\xEB" => "л", "\xEC" => "м", "\xED" => "н", "\xEE" => "о", "\xEF" => "п", "\xF0" => "р", "\xF1" => "с", "\xF2" => "т", "\xF3" => "у", "\xF4" => "ф", "\xF5" => "х",
-        "\xF6" => "ц", "\xF7" => "ч", "\xF8" => "ш", "\xF9" => "щ", "\xFA" => "ъ", "\xFB" => "ы", "\xFC" => "ь", "\xFD" => "э", "\xFE" => "ю", "\xFF" => "я");
+        "\xF6" => "ц", "\xF7" => "ч", "\xF8" => "ш", "\xF9" => "щ", "\xFA" => "ъ", "\xFB" => "ы", "\xFC" => "ь", "\xFD" => "э", "\xFE" => "ю", "\xFF" => "я"];
 
     return strtr($str, $win1251utf8);
 }
@@ -189,8 +189,8 @@ function win_to_utf($str) {
 function utf_lower($str) {
     if (function_exists('mb_strtolower')) return mb_strtolower($str, 'utf-8');
 
-    $arraytolower = array('А' => 'а', 'Б' => 'б', 'В' => 'в', 'Г' => 'г', 'Д' => 'д', 'Е' => 'е', 'Ё' => 'ё', 'Ж' => 'ж', 'З' => 'з', 'И' => 'и', 'Й' => 'й', 'К' => 'к', 'Л' => 'л', 'М' => 'м', 'Н' => 'н', 'О' => 'о', 'П' => 'п', 'Р' => 'р', 'С' => 'с', 'Т' => 'т', 'У' => 'у', 'Ф' => 'ф', 'Х' => 'х', 'Ц' => 'ц', 'Ч' => 'ч', 'Ш' => 'ш', 'Щ' => 'щ', 'Ь' => 'ь', 'Ъ' => 'ъ', 'Ы' => 'ы', 'Э' => 'э', 'Ю' => 'ю', 'Я' => 'я',
-        'A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e', 'I' => 'i', 'F' => 'f', 'G' => 'g', 'H' => 'h', 'J' => 'j', 'K' => 'k', 'L' => 'l', 'M' => 'm', 'N' => 'n', 'O' => 'o', 'P' => 'p', 'Q' => 'q', 'R' => 'r', 'S' => 's', 'T' => 't', 'U' => 'u', 'V' => 'v', 'W' => 'w', 'X' => 'x', 'Y' => 'y', 'Z' => 'z');
+    $arraytolower = ['А' => 'а', 'Б' => 'б', 'В' => 'в', 'Г' => 'г', 'Д' => 'д', 'Е' => 'е', 'Ё' => 'ё', 'Ж' => 'ж', 'З' => 'з', 'И' => 'и', 'Й' => 'й', 'К' => 'к', 'Л' => 'л', 'М' => 'м', 'Н' => 'н', 'О' => 'о', 'П' => 'п', 'Р' => 'р', 'С' => 'с', 'Т' => 'т', 'У' => 'у', 'Ф' => 'ф', 'Х' => 'х', 'Ц' => 'ц', 'Ч' => 'ч', 'Ш' => 'ш', 'Щ' => 'щ', 'Ь' => 'ь', 'Ъ' => 'ъ', 'Ы' => 'ы', 'Э' => 'э', 'Ю' => 'ю', 'Я' => 'я',
+        'A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e', 'I' => 'i', 'F' => 'f', 'G' => 'g', 'H' => 'h', 'J' => 'j', 'K' => 'k', 'L' => 'l', 'M' => 'm', 'N' => 'n', 'O' => 'o', 'P' => 'p', 'Q' => 'q', 'R' => 'r', 'S' => 's', 'T' => 't', 'U' => 'u', 'V' => 'v', 'W' => 'w', 'X' => 'x', 'Y' => 'y', 'Z' => 'z'];
 
     return strtr($str, $arraytolower);
 }
@@ -203,8 +203,8 @@ function check($msg) {
         }
     } else {
         $msg = htmlspecialchars($msg);
-        $search = array('|', '\'', '$', '\\', "\0", "\x00", "\x1A", chr(226) . chr(128) . chr(174));
-        $replace = array('&#124;', '&#39;', '&#36;', '&#92;', '', '', '', '');
+        $search = ['|', '\'', '$', '\\', "\0", "\x00", "\x1A", chr(226) . chr(128) . chr(174)];
+        $replace = ['&#124;', '&#39;', '&#36;', '&#92;', '', '', '', ''];
 
         $msg = str_replace($search, $replace, $msg);
         $msg = stripslashes(trim($msg));
@@ -310,9 +310,9 @@ function user_status($level) {
 function save_title($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
         $querylevel = DB::run() -> query("SELECT u.`login`, u.`status`, s.`name`, s.`color`
-FROM `users` u LEFT JOIN `status` s ON u.`point` BETWEEN s.`topoint` AND s.`point` WHERE u.`point`>?;", array(0));
+FROM `users` u LEFT JOIN `status` s ON u.`point` BETWEEN s.`topoint` AND s.`point` WHERE u.`point`>?;", [0]);
 
-        $allstat = array();
+        $allstat = [];
         while ($row = $querylevel -> fetch()) {
             if (!empty($row['status'])) {
                 $allstat[$row['login']] = '<span style="color:#ff0000">'.$row['status'].'</span>';
@@ -347,7 +347,7 @@ function user_title($login) {
 // --------------- Функция кэширования ников -------------------//
 function save_nickname($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/nickname.dat') < time() - $time) {
-        $querynick = DB::run() -> query("SELECT `login`, `nickname` FROM `users` WHERE `nickname`<>?;", array(''));
+        $querynick = DB::run() -> query("SELECT `login`, `nickname` FROM `users` WHERE `nickname`<>?;", ['']);
         $allnick = $querynick -> fetchAssoc();
         file_put_contents(STORAGE.'/temp/nickname.dat', serialize($allnick), LOCK_EX);
     }
@@ -412,12 +412,12 @@ function is_flood($log, $period = 0) {
 
     if (empty($period)) return true;
 
-    DB::run() -> query("DELETE FROM `flood` WHERE `time`<?;", array(SITETIME));
+    DB::run() -> query("DELETE FROM `flood` WHERE `time`<?;", [SITETIME]);
 
-    $queryflood = DB::run() -> querySingle("SELECT `id` FROM `flood` WHERE `user`=? AND `page`=? LIMIT 1;", array($log, APP::server('PHP_SELF')));
+    $queryflood = DB::run() -> querySingle("SELECT `id` FROM `flood` WHERE `user`=? AND `page`=? LIMIT 1;", [$log, App::server('PHP_SELF')]);
 
     if (empty($queryflood)) {
-        DB::run() -> query("INSERT INTO `flood` (`user`, `page`, `time`) VALUES (?, ?, ?);", array($log, APP::server('PHP_SELF'), SITETIME + $period));
+        DB::run() -> query("INSERT INTO `flood` (`user`, `page`, `time`) VALUES (?, ?, ?);", [$log, App::server('PHP_SELF'), SITETIME + $period]);
 
         return true;
     }
@@ -446,12 +446,12 @@ function raiting_vote($rating) {
 // ------------------ Функция для обработки base64 --------------------//
 function safe_encode($string) {
     $data = base64_encode($string);
-    $data = str_replace(array('+', '/', '='), array('_', '-', ''), $data);
+    $data = str_replace(['+', '/', '='], ['_', '-', ''], $data);
     return $data;
 }
 
 function safe_decode($string) {
-    $string = str_replace(array('_', '-'), array('+', '/'), $string);
+    $string = str_replace(['_', '-'], ['+', '/'], $string);
     $data = base64_decode($string);
     return $data;
 }
@@ -474,7 +474,7 @@ function scan_check($dirname) {
     global $arr, $config;
 
     if (empty($arr['files'])) {
-        $arr['files'] = array();
+        $arr['files'] = [];
     }
     if (empty($arr['totalfiles'])) {
         $arr['totalfiles'] = 0;
@@ -485,7 +485,7 @@ function scan_check($dirname) {
 
     $no_check = explode(',', $config['nocheck']);
 
-    $dirs = array_diff(scandir($dirname), array(".", ".."));
+    $dirs = array_diff(scandir($dirname), [".", ".."]);
 
     foreach ($dirs as $file) {
         if (is_file($dirname.'/'.$file)) {
@@ -514,9 +514,9 @@ function make_calendar ($month, $year) {
         $wday = 7;
     }
     $n = - ($wday-2);
-    $cal = array();
+    $cal = [];
     for ($y = 0; $y < 6; $y++) {
-        $row = array();
+        $row = [];
         $notEmpty = false;
         for ($x = 0; $x < 7; $x++, $n++) {
             if (checkdate($month, $n, $year)) {
@@ -535,7 +535,7 @@ function make_calendar ($month, $year) {
 // --------------- Функция сохранения количества денег  у юзера ---------------//
 function save_money($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/money.dat") < time() - $time) {
-        $queryuser = DB::run() -> query("SELECT `login`, `money` FROM `users` WHERE `money`>?;", array(0));
+        $queryuser = DB::run() -> query("SELECT `login`, `money` FROM `users` WHERE `money`>?;", [0]);
         $alluser = $queryuser -> fetchAssoc();
         file_put_contents(STORAGE."/temp/money.dat", serialize($alluser), LOCK_EX);
     }
@@ -572,7 +572,7 @@ function user_mail($login) {
 // --------------- Функция кэширования аватаров -------------------//
 function save_avatar($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/avatars.dat") < time() - $time) {
-        $queryavat = DB::run() -> query("SELECT `login`, `avatar` FROM `users` WHERE `avatar`<>?;", array(''));
+        $queryavat = DB::run() -> query("SELECT `login`, `avatar` FROM `users` WHERE `avatar`<>?;", ['']);
         $allavat = $queryavat -> fetchAssoc();
         file_put_contents(STORAGE."/temp/avatars.dat", serialize($allavat), LOCK_EX);
     }
@@ -601,23 +601,23 @@ function user_avatars($login) {
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
 function user_contact($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", array($login));
+    return DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", [$login]);
 }
 
 // --------------- Функция подсчета человек в игнор-листе ---------------//
 function user_ignore($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", array($login));
+    return DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", [$login]);
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
 function user_wall($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", array($login));
+    return DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$login]);
 }
 
 // ------------------ Функция подсчета пользователей онлайн -----------------//
 function stats_online($cache = 30) {
     if (@filemtime(STORAGE."/temp/online.dat") < time()-$cache) {
-        $queryonline = DB::run() -> query("SELECT count(*) FROM `online` WHERE `user`<>? UNION ALL SELECT count(*) FROM `online`;", array(''));
+        $queryonline = DB::run() -> query("SELECT count(*) FROM `online` WHERE `user`<>? UNION ALL SELECT count(*) FROM `online`;", ['']);
         $online = $queryonline -> fetchAll(PDO::FETCH_COLUMN);
 
         include_once(APP.'/includes/count.php');
@@ -667,7 +667,7 @@ function show_counter()
     if (is_user()) {
         $visitPage = !empty($config['newtitle']) ? $config['newtitle'] : '';
 
-        DB::run()->query("INSERT INTO `visit` (`user`, `self`, `ip`, `nowtime`, `page`)  VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `self`=?, `ip`=?, `count`=?, `nowtime`=?, `page`=?;", [APP::getUsername(), App::server('PHP_SELF'), APP::getClientIp(), SITETIME, $visitPage, App::server('PHP_SELF'), APP::getClientIp(), $_SESSION['counton'], SITETIME, $visitPage]);
+        DB::run()->query("INSERT INTO `visit` (`user`, `self`, `ip`, `nowtime`, `page`)  VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `self`=?, `ip`=?, `count`=?, `nowtime`=?, `page`=?;", [App::getUsername(), App::server('PHP_SELF'), App::getClientIp(), SITETIME, $visitPage, App::server('PHP_SELF'), App::getClientIp(), $_SESSION['counton'], SITETIME, $visitPage]);
     }
 
     include_once (APP."/includes/counters.php");
@@ -700,7 +700,7 @@ function stats_users() {
 // --------------- Функция вывода количества админов и модеров --------------------//
 function stats_admins() {
     if (@filemtime(STORAGE."/temp/statadmins.dat") < time()-3600) {
-        $stat = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `level`>=? AND `level`<=?;", array(101, 105));
+        $stat = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
 
         file_put_contents(STORAGE."/temp/statadmins.dat", $stat, LOCK_EX);
     }
@@ -714,7 +714,7 @@ function stats_spam() {
 }
 // --------------- Функция вывода количества забаненных --------------------//
 function stats_banned() {
-    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", array(1, SITETIME));
+    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", [1, SITETIME]);
 }
 
 // --------------- Функция вывода истории банов --------------------//
@@ -724,7 +724,7 @@ function stats_banhist() {
 
 // ------------ Функция вывода количества ожидающих регистрации -----------//
 function stats_reglist() {
-    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", array(0));
+    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", [0]);
 }
 
 // --------------- Функция вывода количества забаненных IP --------------------//
@@ -736,7 +736,7 @@ function stats_ipbanned() {
 function stats_gallery() {
     if (@filemtime(STORAGE."/temp/statgallery.dat") < time()-900) {
         $total = DB::run() -> querySingle("SELECT count(*) FROM `photo`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `time`>?;", array(SITETIME-86400 * 3));
+        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `time`>?;", [SITETIME-86400 * 3]);
 
         if (empty($totalnew)) {
             $stat = $total;
@@ -784,8 +784,8 @@ function stats_checker() {
 
 // --------------- Функция вывода количества приглашений --------------//
 function stats_invite() {
-    $invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", array(0));
-    $used_invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", array(1));
+    $invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", [0]);
+    $used_invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", [1]);
     return $invite.'/'.$used_invite;
 }
 
@@ -820,7 +820,7 @@ function user_online($login) {
 
     if (empty($arrvisit)) {
         if (@filemtime(STORAGE."/temp/visit.dat") < time()-10) {
-            $queryvisit = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>?;", array(SITETIME-600));
+            $queryvisit = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>?;", [SITETIME-600]);
             $allvisits = $queryvisit -> fetchAll(PDO::FETCH_COLUMN);
             file_put_contents(STORAGE."/temp/visit.dat", serialize($allvisits), LOCK_EX);
         }
@@ -843,7 +843,7 @@ function user_gender($login) {
 
     if (empty($arrgender)) {
         if (@filemtime(STORAGE."/temp/gender.dat") < time()-600) {
-            $querygender = DB::run() -> query("SELECT `login` FROM `users` WHERE `gender`=?;", array(2));
+            $querygender = DB::run() -> query("SELECT `login` FROM `users` WHERE `gender`=?;", [2]);
             $allgender = $querygender -> fetchAll(PDO::FETCH_COLUMN);
             file_put_contents(STORAGE."/temp/gender.dat", serialize($allgender), LOCK_EX);
         }
@@ -860,7 +860,7 @@ function user_gender($login) {
 // --------------- Функция вывода пользователей онлайн ---------------//
 function allonline() {
     if (@filemtime(STORAGE."/temp/allonline.dat") < time()-30) {
-        $queryvisit = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>? ORDER BY `nowtime` DESC;", array(SITETIME-600));
+        $queryvisit = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>? ORDER BY `nowtime` DESC;", [SITETIME-600]);
         $allvisits = $queryvisit -> fetchAll(PDO::FETCH_COLUMN);
         file_put_contents(STORAGE."/temp/allonline.dat", serialize($allvisits), LOCK_EX);
     }
@@ -872,7 +872,7 @@ function allonline() {
 function user_visit($login) {
     $visit = '(Оффлайн)';
 
-    $queryvisit = DB::run() -> querySingle("SELECT `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", array($login));
+    $queryvisit = DB::run() -> querySingle("SELECT `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", [$login]);
     if (!empty($queryvisit)) {
         if ($queryvisit > SITETIME-600) {
             $visit = '(Сейчас на сайте)';
@@ -887,7 +887,7 @@ function user_visit($login) {
 // ---------- Функция обработки строк данных и ссылок ---------//
 function check_string($string) {
     $string = strtolower($string);
-    $string = str_replace(array('http://www.', 'http://wap.', 'http://', 'https://'), '', $string);
+    $string = str_replace(['http://www.', 'http://wap.', 'http://', 'https://'], '', $string);
     $string = strtok($string, '/?');
     return $string;
 }
@@ -972,12 +972,12 @@ function is_utf($str) {
  * @param  array   $params Дополнительные параметры
  * @return boolean  Результат отправки
  */
-function sendMail($to, $subject, $body, $params = array()) {
+function sendMail($to, $subject, $body, $params = []) {
     global $config;
 
     if (empty($params['from'])) {
         $config['mailusername'] = !empty($config['mailusername']) ? $config['mailusername'] : $config['emails'];
-        $params['from'] = array($config['mailusername'] => $config['nickname']);
+        $params['from'] = [$config['mailusername'] => $config['nickname']];
     }
 
     $message = Swift_Message::newInstance()
@@ -1009,7 +1009,7 @@ function sendMail($to, $subject, $body, $params = array()) {
 function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 
     if ($total > 0) {
-        $pages = array();
+        $pages = [];
 
         $pg_cnt = ceil($total / $posts);
         $cur_page = ceil(($start + 1) / $posts);
@@ -1017,26 +1017,26 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
         $idx_lst = min($cur_page + $range, $pg_cnt);
 
         if ($cur_page != 1) {
-            $pages[] = array(
+            $pages[] = [
                 'start' => (($cur_page - 2) * $posts),
                 'title' => 'Назад',
                 'name' => '&laquo;',
-            );
+            ];
         }
 
         if (($start - $posts) >= 0) {
             if ($cur_page > ($range + 1)) {
 
-                $pages[] = array(
+                $pages[] = [
                     'start' => 0,
                     'title' => '1 страница',
                     'name' => 1,
-                );
+                ];
                 if ($cur_page != ($range + 2)) {
-                    $pages[] = array(
+                    $pages[] = [
                         'separator' => true,
                         'name' => ' ... ',
-                    );
+                    ];
                 }
             }
         }
@@ -1045,42 +1045,42 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
             $offset_page = ($i - 1) * $posts;
             if ($i == $cur_page) {
 
-                $pages[] = array(
+                $pages[] = [
                     'current' => true,
                     'name' => $i,
-                );
+                ];
             } else {
 
-                $pages[] = array(
+                $pages[] = [
                     'start' => $offset_page,
                     'title' => $i.' страница',
                     'name' => $i,
-                );
+                ];
             }
         }
 
         if (($start + $posts) < $total) {
             if ($cur_page < ($pg_cnt - $range)) {
                 if ($cur_page != ($pg_cnt - $range - 1)) {
-                    $pages[] = array(
+                    $pages[] = [
                         'separator' => true,
                         'name' => ' ... ',
-                    );
+                    ];
                 }
-                $pages[] = array(
+                $pages[] = [
                     'start' => ($pg_cnt - 1) * $posts,
                     'title' => $pg_cnt . ' страница',
                     'name' => $pg_cnt,
-                );
+                ];
             }
         }
 
         if ($cur_page != $pg_cnt) {
-            $pages[] = array(
+            $pages[] = [
                 'start' => $cur_page * $posts,
                 'title' => 'Вперед',
                 'name' => '&raquo;',
-            );
+            ];
         }
 
         render('includes/pagination', compact('pages', 'url'));
@@ -1091,17 +1091,17 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 function forum_navigation($url, $posts, $total) {
     if ($total > 0) {
 
-        $pages = array();
+        $pages = [];
         $last_page = ceil($total / $posts);
         $last_start = $last_page * $posts - $posts;
         $max = $posts * 5;
 
         for($i = 0; $i < $max;) {
             if ($i < $total && $i >= 0) {
-                $pages[] = array(
+                $pages[] = [
                     'start' => $i,
                     'name' => floor(1 + $i / $posts),
-                );
+                ];
             }
             $i += $posts;
         }
@@ -1109,16 +1109,16 @@ function forum_navigation($url, $posts, $total) {
         if ($max < $total) {
 
             if ($max + $posts < $total) {
-                $pages[] = array(
+                $pages[] = [
                     'separator' => true,
                     'name' => ' ... ',
-                );
+                ];
             }
 
-            $pages[] = array(
+            $pages[] = [
                 'start' => $last_start,
                 'name' => $last_page,
-            );
+            ];
         }
 
         render('includes/pagination_forum', compact('pages', 'url'));
@@ -1132,9 +1132,9 @@ function photo_navigation($id) {
         return false;
     }
 
-    $next_id = DB::run() -> querySingle("SELECT `id` FROM `photo` WHERE `id`>? ORDER BY `id` ASC LIMIT 1;", array($id));
-    $prev_id = DB::run() -> querySingle("SELECT `id` FROM `photo` WHERE `id`<? ORDER BY `id` DESC LIMIT 1;", array($id));
-    return array('next' => $next_id, 'prev' => $prev_id);
+    $next_id = DB::run() -> querySingle("SELECT `id` FROM `photo` WHERE `id`>? ORDER BY `id` ASC LIMIT 1;", [$id]);
+    $prev_id = DB::run() -> querySingle("SELECT `id` FROM `photo` WHERE `id`<? ORDER BY `id` DESC LIMIT 1;", [$id]);
+    return ['next' => $next_id, 'prev' => $prev_id];
 
 }
 
@@ -1142,7 +1142,7 @@ function photo_navigation($id) {
 function stats_blog() {
     if (@filemtime(STORAGE."/temp/statblog.dat") < time()-900) {
         $totalblog = DB::run() -> querySingle("SELECT SUM(`count`) FROM `catsblog`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `time`>?;", array(SITETIME-86400 * 3));
+        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `time`>?;", [SITETIME-86400 * 3]);
 
         if (empty($totalnew)) {
             $stat = (int)$totalblog;
@@ -1210,7 +1210,7 @@ function stats_load($cats=0) {
 
         if (@filemtime(STORAGE."/temp/statload.dat") < time()-900) {
             $totalloads = DB::run() -> querySingle("SELECT SUM(`count`) FROM `cats`;");
-            $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", array(1, SITETIME-86400 * 5));
+            $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-86400 * 5]);
 
             if (empty($totalnew)) {
                 $stat = intval($totalloads);
@@ -1226,7 +1226,7 @@ function stats_load($cats=0) {
 
         if (@filemtime(STORAGE."/temp/statloadcats.dat") < time()-900) {
 
-        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`cats_id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY `order` ASC;", array(1, SITETIME-86400*5));
+        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`cats_id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY `order` ASC;", [1, SITETIME-86400*5]);
         $downs = $querydown->fetchAll();
 
             if (!empty($downs)){
@@ -1246,8 +1246,8 @@ function stats_load($cats=0) {
 
 // --------------------- Функция подсчета непроверенных файлов ------------------------//
 function stats_newload() {
-    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", array(0));
-    $totalcheck = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `app`=?;", array(0, 1));
+    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [0]);
+    $totalcheck = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `app`=?;", [0, 1]);
 
     if (empty($totalcheck)) {
         return intval($totalnew);
@@ -1273,7 +1273,7 @@ function intar($string) {
     if (is_array($string)) {
         $newstring = array_map('intval', $string);
     } else {
-        $newstring = array(abs(intval($string)));
+        $newstring = [abs(intval($string))];
     }
 
     return $newstring;
@@ -1282,7 +1282,7 @@ function intar($string) {
 // ------------------- Функция подсчета голосований --------------------//
 function stats_votes() {
     if (@filemtime(STORAGE."/temp/statvote.dat") < time()-900) {
-        $data = DB::run() -> queryFetch("SELECT count(*) AS `count`, SUM(`count`) AS `sum` FROM `vote` WHERE `closed`=?;", array(0));
+        $data = DB::run() -> queryFetch("SELECT count(*) AS `count`, SUM(`count`) AS `sum` FROM `vote` WHERE `closed`=?;", [0]);
 
         if (empty($data['sum'])) {
             $data['sum'] = 0;
@@ -1320,7 +1320,7 @@ function last_news() {
 
     if ($config['lastnews'] > 0) {
 
-        $query = DB::run()->query("SELECT * FROM `news` WHERE `top`=? ORDER BY `time` DESC LIMIT ".$config['lastnews'].";", array(1));
+        $query = DB::run()->query("SELECT * FROM `news` WHERE `top`=? ORDER BY `time` DESC LIMIT ".$config['lastnews'].";", [1]);
         $news = $query->fetchAll();
 
         $total = count($news);
@@ -1342,7 +1342,7 @@ function last_news() {
 function stats_events() {
     if (@filemtime(STORAGE."/temp/statevents.dat") < time()-900) {
         $total = DB::run() -> querySingle("SELECT count(*) FROM `events`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `events` WHERE `time`>?;", array(SITETIME-86400 * 3));
+        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `events` WHERE `time`>?;", [SITETIME-86400 * 3]);
 
         if (empty($totalnew)) {
             $stat = (int)$total;
@@ -1359,7 +1359,7 @@ function stats_events() {
 // --------------------- Функция получения данных аккаунта  --------------------//
 function user($login) {
     if (! empty($login)) {
-        return DBM::run()->selectFirst('users', array('login'=>$login));
+        return DBM::run()->selectFirst('users', ['login'=>$login]);
     }
     return false;
 }
@@ -1371,7 +1371,7 @@ function is_user() {
 
     if (empty($user)) {
         if (isset($_SESSION['log']) && isset($_SESSION['par'])) {
-            $udata = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array(check($_SESSION['log'])));
+            $udata = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [check($_SESSION['log'])]);
 
             if (!empty($udata)) {
                 if ($_SESSION['log'] == $udata['login'] && $_SESSION['par'] == md5($config['keypass'].$udata['pass'])) {
@@ -1385,9 +1385,9 @@ function is_user() {
 }
 
 // ------------------------- Функция проверки администрации  ------------------------//
-function is_admin($access = array()) {
+function is_admin($access = []) {
     if (empty($access)) {
-        $access = array(101, 102, 103, 105);
+        $access = [101, 102, 103, 105];
     }
 
     if (is_user()) {
@@ -1410,7 +1410,7 @@ function show_title($header, $subheader = false) {
     $config['subheader'] = $subheader;
 
     if (empty($show)) {
-        echo $show = render('includes/title', array(), true);
+        echo $show = render('includes/title', [], true);
     }
 
     return $config;
@@ -1430,6 +1430,8 @@ function show_login($notice) {
 /**
  * @deprecated
  * Используется только для совместимости со старыми страницами
+ * @param $str
+ * @return mixed
  */
 function ob_processing($str)
 {
@@ -1512,7 +1514,7 @@ function shuffle_assoc(&$array) {
     $keys = array_keys($array);
 
     shuffle($keys);
-    $new = array();
+    $new = [];
 
     foreach($keys as $key) {
         $new[$key] = $array[$key];
@@ -1547,7 +1549,7 @@ function show_advertuser() {
             $quot_rand = array_rand($datafile, $config['rekusershow']);
 
             if ($config['rekusershow'] > 1) {
-                $result = array();
+                $result = [];
                 for($i = 0; $i < $config['rekusershow']; $i++) {
                     $result[] = $datafile[$quot_rand[$i]];
                 }
@@ -1563,10 +1565,10 @@ function show_advertuser() {
 
 // --------------- Функция кэширования пользовательской рекламы -------------------//
 function save_advertuser() {
-    $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>?;", array(SITETIME));
+    $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>?;", [SITETIME]);
     $data = $queryrek -> fetchAll();
 
-    $arraylink = array();
+    $arraylink = [];
 
     if (count($data) > 0) {
         foreach ($data as $val) {
@@ -1639,7 +1641,7 @@ function curl_connect($url, $user_agent = 'Mozilla/5.0', $proxy = null) {
 function recentevents($show = 5) {
 
     if (@filemtime(STORAGE."/temp/recentevents.dat") < time()-600) {
-        $query = DB::run()->query("SELECT * FROM `events` WHERE `top`=? ORDER BY `time` DESC LIMIT ".$show.";", array(1));
+        $query = DB::run()->query("SELECT * FROM `events` WHERE `top`=? ORDER BY `time` DESC LIMIT ".$show.";", [1]);
         $events = $query->fetchAll();
 
         file_put_contents(STORAGE."/temp/recentevents.dat", serialize($events), LOCK_EX);
@@ -1667,7 +1669,7 @@ function recentphotos($show = 5) {
 
     if (is_array($photos) && count($photos) > 0) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], array('alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;')).'</a>';
+            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br />';
@@ -1698,7 +1700,7 @@ function recenttopics($show = 5) {
 // ------------- Функция кэширования последних файлов в загрузках -----------------//
 function recentfiles($show = 5) {
     if (@filemtime(STORAGE."/temp/recentfiles.dat") < time()-600) {
-        $queryfiles = DB::run() -> query("SELECT * FROM `downs` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$show.";", array(1));
+        $queryfiles = DB::run() -> query("SELECT * FROM `downs` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$show.";", [1]);
         $recent = $queryfiles -> fetchAll();
 
         file_put_contents(STORAGE."/temp/recentfiles.dat", serialize($recent), LOCK_EX);
@@ -1736,8 +1738,8 @@ function recentblogs() {
 // ------------- Функция вывода количества предложений и пожеланий -------------//
 function stats_offers() {
     if (@filemtime(STORAGE."/temp/offers.dat") < time()-10800) {
-        $offers = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array(0));
-        $problems = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array(1));
+        $offers = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [0]);
+        $problems = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [1]);
 
         file_put_contents(STORAGE."/temp/offers.dat", $offers.'/'.$problems, LOCK_EX);
     }
@@ -1796,7 +1798,7 @@ function restatement($mode) {
             break;
 
         case 'load':
-            DB::run() -> query("UPDATE `cats` SET `count`=(SELECT count(*) FROM `downs` WHERE `cats`.`id`=`downs`.`cats_id` AND `active`=?);", array(1));
+            DB::run() -> query("UPDATE `cats` SET `count`=(SELECT count(*) FROM `downs` WHERE `cats`.`id`=`downs`.`cats_id` AND `active`=?);", [1]);
             DB::run() -> query("UPDATE `downs` SET `comments`=(SELECT count(*) FROM `commload` WHERE `downs`.`id`=`commload`.`down`);");
             break;
 
@@ -1858,7 +1860,7 @@ function last_page($total, $posts) {
 // ------------- Функция кэширования пользовательских функций -------------//
 function cache_functions($cache=10800) {
     if (@filemtime(STORAGE.'/temp/functions.dat') < time()-$cache) {
-        $files = array_diff(scandir(APP.'/functions'), array('.', '..'));
+        $files = array_diff(scandir(APP.'/functions'), ['.', '..']);
 
         file_put_contents(STORAGE.'/temp/functions.dat', serialize($files), LOCK_EX);
     }
@@ -1869,8 +1871,8 @@ function cache_functions($cache=10800) {
 // ------------- Функция кэширования админских ссылок -------------//
 function cache_admin_links($cache=10800) {
     if (@filemtime(STORAGE.'/temp/adminlinks.dat') < time()-$cache) {
-        $files = array_diff(scandir(APP.'/modules/admin/links'), array('.', '..'));
-        $links = array();
+        $files = array_diff(scandir(APP.'/modules/admin/links'), ['.', '..']);
+        $links = [];
 
         foreach ($files as $file){
             $access = intval(preg_replace('/[^\d]+/', '', $file));
@@ -1897,7 +1899,7 @@ function show_admin_links($level = 0) {
 }
 
 // ------------- Функция кэширования уменьшенных изображений -------------//
-function resize_image($dir, $name, $size, $params = array()) {
+function resize_image($dir, $name, $size, $params = []) {
 
     if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
 
@@ -1913,7 +1915,7 @@ function resize_image($dir, $name, $size, $params = array()) {
             $params['class'] = 'img-responsive';
         }
 
-        $strParams = array();
+        $strParams = [];
         foreach ($params as $key => $param) {
             $strParams[] = $key.'="'.$param.'"';
         }
@@ -2058,7 +2060,7 @@ function upload_image($file, $weight, $size, $new_name = false){
             $handle -> image_watermark_position = 'BR';
         }
 
-        $handle -> ext_check = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
+        $handle -> ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
         $handle -> file_max_size = $weight;  // byte
         $handle -> image_max_width = $size;  // px
         $handle -> image_max_height = $size; // px
@@ -2080,7 +2082,7 @@ function getExtension($filename){
 function is_contact($login, $contact){
 
     if (user($contact)) {
-        $check_contact = DB::run() -> queryFetch("SELECT * FROM `contact` WHERE `user`=? AND `name`=? LIMIT 1;", array($login, $contact));
+        $check_contact = DB::run() -> queryFetch("SELECT * FROM `contact` WHERE `user`=? AND `name`=? LIMIT 1;", [$login, $contact]);
 
         if (!empty($check_contact)){
             return true;
@@ -2093,7 +2095,7 @@ function is_contact($login, $contact){
 function is_ignore($login, $ignore){
 
     if (user($ignore)) {
-        $check_ignore = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($login, $ignore));
+        $check_ignore = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$login, $ignore]);
 
         if (!empty($check_ignore)){
             return true;
@@ -2104,7 +2106,7 @@ function is_ignore($login, $ignore){
 
 // ----- Функция определения приватности у пользователя -----//
 function user_privacy($login){
-    $privacy = DB::run() -> querySingle("SELECT `privacy` FROM `users` WHERE `login`=? LIMIT 1;", array($login));
+    $privacy = DB::run() -> querySingle("SELECT `privacy` FROM `users` WHERE `login`=? LIMIT 1;", [$login]);
     return ($privacy) ? true : false;
 }
 
@@ -2125,9 +2127,9 @@ function send_private($login, $sender, $text, $time = SITETIME){
     if (user($login)) {
 
         DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);",
-        array($login, $sender, $text, $time));
+        [$login, $sender, $text, $time]);
 
-        DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;", array($login));
+        DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;", [$login]);
 
         save_usermail();
         return true;
@@ -2136,9 +2138,9 @@ function send_private($login, $sender, $text, $time = SITETIME){
 }
 
 // ----- Функция подготовки приватного сообщения -----//
-function text_private($id, $replace = array()){
+function text_private($id, $replace = []){
 
-    $message = DB::run() -> querySingle("SELECT `text` FROM `notice` WHERE `id`=? LIMIT 1;", array($id));
+    $message = DB::run() -> querySingle("SELECT `text` FROM `notice` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($message)){
         foreach ($replace as $key=>$val){
@@ -2166,9 +2168,13 @@ function perfomance(){
 
 /**
  * @deprecated нужно использовать App::view($view, $params = array(), $return = false)
+ * @param $view
+ * @param array $params
+ * @param bool $return
+ * @return string
  */
 // ------------ Функция подключения шаблонов -----------//
-function render($view, $params = array(), $return = false){
+function render($view, $params = [], $return = false){
 
     extract($params);
 
@@ -2189,7 +2195,7 @@ function render($view, $params = array(), $return = false){
 
 // ------------ Подготовка массивов -----------//
 function prepare_array($array, $key = 'show') {
-    $prepared_array = array();
+    $prepared_array = [];
 
     if (is_array($array) && count($array)) {
         foreach ($array as &$el) {
@@ -2222,10 +2228,10 @@ function isAjaxRequest()
 function clearCache()
 {
     $cachefiles = glob(STORAGE.'/temp/*.dat');
-    $cachefiles = array_diff($cachefiles, array(
+    $cachefiles = array_diff($cachefiles, [
         STORAGE.'/temp/checker.dat',
         STORAGE.'/temp/counter7.dat'
-    ));
+    ]);
 
     if (is_array($cachefiles) && count($cachefiles)>0){
         foreach ($cachefiles as $file) {

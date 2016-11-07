@@ -21,14 +21,14 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `rekuser` WHERE `time`>?;", array(SITETIME));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `rekuser` WHERE `time`>?;", [SITETIME]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['rekuserpost'].";", array(SITETIME));
+                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['rekuserpost'].";", [SITETIME]);
 
                 echo '<form action="/admin/reklama?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -74,7 +74,7 @@ if (is_admin()) {
 
             $id = abs(intval($_GET['id']));
 
-            $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", array($id));
+            $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($data)) {
                 echo '<b><big>Редактирование заголовка</big></b><br /><br />';
@@ -126,9 +126,9 @@ if (is_admin()) {
                     if (utf_strlen($site) >= 5 && utf_strlen($site) <= 50) {
                         if (utf_strlen($name) >= 5 && utf_strlen($name) <= 35) {
                             if (preg_match('|^#+[A-f0-9]{6}$|', $color) || empty($color)) {
-                                $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", array($id));
+                                $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", [$id]);
                                 if (!empty($data)) {
-                                    DB::run() -> query("UPDATE `rekuser` SET `site`=?, `name`=?, `color`=?, `bold`=? WHERE `id`=?", array($site, $name, $color, $bold, $id));
+                                    DB::run() -> query("UPDATE `rekuser` SET `site`=?, `name`=?, `color`=?, `bold`=? WHERE `id`=?", [$site, $name, $color, $bold, $id]);
                                     save_advertuser();
 
                                     notice('Рекламная ссылка успешно изменена!');

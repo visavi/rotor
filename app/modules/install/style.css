@@ -5,11 +5,9 @@ body, td, tr {
 	cursor: default;
 }
 body {
-	margin: 1px;
 	padding: 1px;
 	color: #858585;
-	background-color: #ffffff;
-	background-image: url(/themes/default/bg.png);
+	background: #ffffff url(/themes/default/bg.png);
 	max-width: 500px;
 	text-align: left;
 	margin: auto;
@@ -30,15 +28,13 @@ fieldset {
 	padding-bottom: 10px;
 }
 form {
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 a:active, a:visited, a:link {
 	color: #999;
     text-decoration : none;
-    border-bottom-width : 1px;
-    border-bottom-style : solid;
-    border-bottom-color : #d9d0d0;
+	border-bottom: 1px solid #d9d0d0;
 }
 
 a:hover {
@@ -46,16 +42,7 @@ a:hover {
 	text-decoration: none;
 	padding: 1px;
 }
-a.nav:active, a.nav:visited, a.nav:link {
-	color: #ff7f00;
-	font-weight: bold;
-	text-decoration: none;
-}
-a.nav:hover {
-	font-weight: bold;
-	color: #666;
-	text-decoration: underline;
-}
+
 input, select {
 	font-size: 8pt;
 }
@@ -70,14 +57,14 @@ div {
 	background-image: url(/themes/default/f.png);
 }
 table {
-	margin: 1px 0px 1px 0px;
+	margin: 1px 0 1px 0;
 	padding: 1px 1px 1px 1px;
 	font-size: 13px;
 }
 
 .img {
 	float:left;
-	padding : 0px;
+	padding : 0;
 	margin-right : 5px;
     background: none;
 }
@@ -89,52 +76,46 @@ table {
 
 .a {
 	color: #666;
-	background-image: url(/themes/default/aa.gif);
-	background-color: #dddddd;
+	background: #dddddd url(/themes/default/aa.gif);
 	border: 1px solid #cccccc;
 }
 .b {
 	font-size: 13px;
 	color: #888888;
-	background-image: url(/themes/default/bb.gif);
 	border: 1px solid #cccccc;
-	background-color: #dddddd;
+	background: #dddddd url(/themes/default/bb.gif);
 	overflow:hidden;
 }
 .c {
 	color: #aaaaaa;
-	background-image: url(/themes/default/aa.gif);
-	background-color: #dddddd;
+	background: #dddddd url(/themes/default/aa.gif);
 	border: 1px solid #cccccc;
 }
 
 .cs {
 	color: #666;
     text-align : center;
-	background-image: url(/themes/default/ff.gif);
-	background-color: #dddddd;
+	background: #dddddd url(/themes/default/ff.gif);
 	height:75px;
 }
 
 .lol {
 	color: #ffffff;
-	background-image: url(/themes/default/lol.gif);
-	background-color: #dddddd;
+	background: #dddddd url(/themes/default/lol.gif);
 	border-top: 1px solid #cccccc;
 }
 
 .form {
 	color: #666;
 	padding : 3px;
-	background-image: url(/themes/default/bp.gif);
-	background-color: #dddddd;
+	background: #dddddd url(/themes/default/bp.gif);
 	border: 1px solid #cccccc;
 }
 
 .login {
 	color: #666;
 	padding : 10px;
-    margin : 0px 0 10px 0;
+    margin : 0 0 10px 0;
 	background-color: #ebf9eb;
 	border: 1px solid #cccccc;
 }
@@ -167,14 +148,9 @@ img {
      font-size: x-small;
 }
 
-.nav {
-	padding : 4px;
-	font-size : 10px;
-}
-
 .nav a {
 	border : 1px solid #dedede;
-	padding : 0px 5px 0px 5px;
+	padding : 0 5px 0 5px;
 	font-size : 9px;
 	text-decoration : none;
 }
@@ -182,15 +158,8 @@ img {
 .nav a:hover {
 	background-color : #f7f7f7;
 	border : 1px solid #dedede;
-	padding : 0px 5px 0px 5px;
+	padding : 0 5px 0 5px;
 	text-decoration : none;
 	font-size : 9px;
 }
 
-.navcurrent {
-	background-color : #edebeb;
-	border : 1px solid #dedede;
-	padding : 0px 5px 0px 5px;
-	font-weight: bold;
-	text-decoration : none;
-}

@@ -10,26 +10,26 @@ class PDO_ extends PDO {
 		$this->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 	}
 
-	function prepare($sql, $params = array()) {
-		$stmt = parent::prepare($sql, array(
-				PDO::ATTR_STATEMENT_CLASS => array('PDOStatement_')
-				));
+	function prepare($sql, $params = []) {
+		$stmt = parent::prepare($sql, [
+				PDO::ATTR_STATEMENT_CLASS => ['PDOStatement_']
+        ]);
 		return $stmt;
 	}
 
-	function query($sql, $params = array()) {
+	function query($sql, $params = []) {
 		self::$counter++;
 		$stmt = $this->prepare($sql);
 		$stmt->execute($params);
 		return $stmt;
 	}
 
-	function querySingle($sql, $params = array()) {
+	function querySingle($sql, $params = []) {
 		$stmt = $this->query($sql, $params);
 		return $stmt->fetchColumn(0);
 	}
 
-	function queryFetch($sql, $params = array()) {
+	function queryFetch($sql, $params = []) {
 		$stmt = $this->query($sql, $params);
 		return $stmt->fetch();
 	}
@@ -40,14 +40,14 @@ class PDO_ extends PDO {
 }
 // ----------------------------------------------------//
 class PDOStatement_ extends PDOStatement {
-	function execute($params = array()) {
+	function execute($params = []) {
 		if (func_num_args() == 1) {
 			$params = func_get_arg(0);
 		} else {
 			$params = func_get_args();
 		}
 		if (! is_array($params)) {
-			$params = array($params);
+			$params = [$params];
 		}
 		parent::execute($params);
 		return $this;
@@ -59,7 +59,7 @@ class PDOStatement_ extends PDOStatement {
 
 	function fetchAssoc() {
 		$this->setFetchMode(PDO::FETCH_NUM);
-		$data = array();
+		$data = [];
 		while ($row = $this->fetch()) {
 			$data[$row[0]] = $row[1];
 		}

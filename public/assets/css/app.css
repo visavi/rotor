@@ -89,10 +89,9 @@ blockquote {
 .hiding {
   padding: 10px;
   margin: 10px 0;
-  border: 1px solid #eee;
-  border-left-width: 5px;
   border-radius: 3px;
-  border-left-color: #d9534f;
+  border: 1px solid #eee;
+  border-left: 5px #d9534f;
   background-color: #f8f8f8;
 }
 

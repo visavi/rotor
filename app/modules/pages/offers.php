@@ -36,8 +36,8 @@ switch ($act):
     case 'index':
         $type2 = (empty($type))? 1 : 0;
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array($type));
-        $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array($type2));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type]);
+        $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type2]);
 
         echo '<i class="fa fa-book"></i> ';
 
@@ -47,7 +47,7 @@ switch ($act):
             echo '<a href="/offers?type=0">Предложения</a> ('.$total2.') / <b>Проблемы</b> ('.$total.')';
         }
 
-        if (is_admin(array(101, 102))) {
+        if (is_admin([101, 102])) {
             echo ' / <a href="/admin/offers?type='.$type.'&amp;start='.$start.'">Управление</a>';
         }
 
@@ -94,7 +94,7 @@ switch ($act):
                 $start = 0;
             }
 
-            $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['postoffers'].";", array($type));
+            $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['postoffers'].";", [$type]);
 
             while ($data = $queryoffers -> fetch()) {
                 echo '<div class="b">';
@@ -133,18 +133,18 @@ switch ($act):
     ############################################################################################
     case 'view':
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array(0));
-        $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", array(1));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [0]);
+        $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [1]);
 
         echo '<i class="fa fa-book"></i> <a href="/offers?type=0">Предложения</a>  ('.$total.') / ';
         echo '<a href="/offers?type=1">Проблемы</a> ('.$total2.')';
 
-        if (is_admin(array(101, 102))) {
+        if (is_admin([101, 102])) {
             echo ' / <a href="/admin//offers?act=view&amp;id='.$id.'">Управление</a>';
         }
         echo '<hr />';
 
-        $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+        $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($queryoff)) {
             $config['newtitle'] = $queryoff['title'];
 
@@ -172,7 +172,7 @@ switch ($act):
             echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br />';
 
             if ($queryoff['status'] <= 1 && $log != $queryoff['user']) {
-                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", array($id, $log));
+                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", [$id, $log]);
 
                 if (empty($queryrated)) {
                     echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br />';
@@ -193,7 +193,7 @@ switch ($act):
             echo '<div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br />';
 
             if ($queryoff['comments'] > 0) {
-                $querycomm = DB::run() -> query("SELECT * FROM `commoffers` WHERE `comm_offers`=? ORDER BY `comm_time` DESC LIMIT 5;", array($id));
+                $querycomm = DB::run() -> query("SELECT * FROM `commoffers` WHERE `comm_offers`=? ORDER BY `comm_time` DESC LIMIT 5;", [$id]);
 
                 while ($comm = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -246,7 +246,7 @@ switch ($act):
     case 'edit':
 
         if (is_user()) {
-            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", array($id, $log));
+            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, $log]);
             if (!empty($queryoff)) {
                 if ($queryoff['status'] <= 1) {
 
@@ -290,7 +290,7 @@ switch ($act):
 
         if ($uid == $_SESSION['token']) {
             if (is_user()) {
-                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", array($id, $log));
+                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, $log]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
                         if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
@@ -299,7 +299,7 @@ switch ($act):
                                 $title = antimat($title);
                                 $text = antimat($text);
 
-                                DB::run() -> query("UPDATE `offers` SET `type`=?, `title`=?, `text`=? WHERE `id`=?;", array($types, $title, $text, $id));
+                                DB::run() -> query("UPDATE `offers` SET `type`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $title, $text, $id]);
 
                                 notice('Данные успешно отредактированы!');
                                 redirect("/offers?act=view&type=$types&id=$id");
@@ -330,7 +330,7 @@ switch ($act):
     ############################################################################################
     case 'comments':
 
-        $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+        $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($queryoff)) {
             $config['newtitle'] = 'Комментарии - '.$queryoff['title'];
 
@@ -340,7 +340,7 @@ switch ($act):
             echo '<a href="/offers?type=1">Проблемы</a> / ';
             echo '<a href="/offers?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `commoffers` WHERE `comm_offers`=?;", array($id));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `commoffers` WHERE `comm_offers`=?;", [$id]);
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -353,7 +353,7 @@ switch ($act):
                     echo '<form action="/offers?act=delcomm&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `commoffers` WHERE `comm_offers`=? ORDER BY `comm_time` ASC LIMIT ".$start.", ".$config['postcommoffers'].";", array($id));
+                $querycomm = DB::run() -> query("SELECT * FROM `commoffers` WHERE `comm_offers`=? ORDER BY `comm_time` ASC LIMIT ".$start.", ".$config['postcommoffers'].";", [$id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -421,18 +421,18 @@ switch ($act):
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
-                    $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+                    $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryoff)) {
                         if (empty($queryoff['closed'])) {
                             if (is_flood($log)) {
 
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `commoffers` (`comm_offers`, `comm_text`, `comm_user`, `comm_time`, `comm_ip`, `comm_brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+                                DB::run() -> query("INSERT INTO `commoffers` (`comm_offers`, `comm_text`, `comm_user`, `comm_time`, `comm_ip`, `comm_brow`) VALUES (?, ?, ?, ?, ?, ?);", [$id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                                DB::run() -> query("DELETE FROM `commoffers` WHERE `comm_offers`=? AND `comm_time` < (SELECT MIN(`comm_time`) FROM (SELECT `comm_time` FROM `commoffers` WHERE `comm_id`=? ORDER BY `comm_time` DESC LIMIT ".$config['maxpostoffers'].") AS del);", array($id, $id));
+                                DB::run() -> query("DELETE FROM `commoffers` WHERE `comm_offers`=? AND `comm_time` < (SELECT MIN(`comm_time`) FROM (SELECT `comm_time` FROM `commoffers` WHERE `comm_id`=? ORDER BY `comm_time` DESC LIMIT ".$config['maxpostoffers'].") AS del);", [$id, $id]);
 
-                                DB::run() -> query("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
+                                DB::run() -> query("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 
                                 notice('Комментарий успешно добавлен!');
                                 redirect("/offers?act=end&id=$id");
@@ -467,18 +467,18 @@ switch ($act):
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
-                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", array($id));
+                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
                         if ($log != $queryoff['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", array($id, $log));
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", [$id, $log]);
                             if (empty($queryrated)) {
-                                DB::run() -> query("INSERT INTO `ratedoffers` (`offers`, `user`, `time`) VALUES (?, ?, ?);", array($id, $log, SITETIME));
-                                DB::run() -> query("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", array($id));
+                                DB::run() -> query("INSERT INTO `ratedoffers` (`offers`, `user`, `time`) VALUES (?, ?, ?);", [$id, $log, SITETIME]);
+                                DB::run() -> query("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", [$id]);
                             } else {
-                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", array($id, $log));
+                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", [$id, $log]);
                                 if ($queryoff['votes'] > 0) {
-                                    DB::run() -> query("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", array($id));
+                                    DB::run() -> query("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", [$id]);
                                 }
                             }
 
@@ -549,10 +549,10 @@ switch ($act):
                             $title = antimat($title);
                             $text = antimat($text);
 
-                            DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", array($types, $title, $text, $log, 1, SITETIME));
+                            DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, $log, 1, SITETIME]);
                             $lastid = DB::run() -> lastInsertId();
 
-                            DB::run() -> query("INSERT INTO `ratedoffers` (`offers`, `user`, `time`) VALUES (?, ?, ?);", array($lastid, $log, SITETIME));
+                            DB::run() -> query("INSERT INTO `ratedoffers` (`offers`, `user`, `time`) VALUES (?, ?, ?);", [$lastid, $log, SITETIME]);
 
                             notice('Сообщение успешно добавлено!');
                             redirect("/offers?act=view&type=$types&id=$lastid");
@@ -593,7 +593,7 @@ switch ($act):
                     $del = implode(',', $del);
 
                     $delcomments = DB::run() -> exec("DELETE FROM `commoffers` WHERE `comm_id` IN (".$del.") AND `comm_offers`=".$id.";");
-                    DB::run() -> query("UPDATE `offers` SET `comments`=`comments`-? WHERE `id`=?;", array($delcomments, $id));
+                    DB::run() -> query("UPDATE `offers` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                     notice('Выбранные комментарии успешно удалены!');
                     redirect("/offers?act=comments&id=$id&start=$start");
@@ -615,7 +615,7 @@ switch ($act):
     ############################################################################################
     case 'end':
 
-        $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commoffers` WHERE `comm_offers`=? LIMIT 1;", array($id));
+        $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commoffers` WHERE `comm_offers`=? LIMIT 1;", [$id]);
 
         if (!empty($query)) {
             $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];

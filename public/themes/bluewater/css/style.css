@@ -43,11 +43,11 @@ h1 small {
 /* images */
 .img {
 	float:left;
-	padding : 0px;
+	padding : 0;
 	margin-right : 5px;
 }
-img.float-right { margin: 5px 0px 10px 10px;  }
-img.float-left { margin: 5px 10px 10px 0px; }
+img.float-right { margin: 5px 0 10px 10px;  }
+img.float-left { margin: 5px 10px 10px 0; }
 
 h1, h2, h3, p {
 	margin: 10px 15px;
@@ -336,7 +336,7 @@ input.button {
 }
 
 .body_center {
-	padding: 0px; margin: 0px 20px 10px 13px;
+	padding: 0; margin: 0 20px 10px 13px;
 	font-size: 100%;
     text-align: left;
 }
@@ -405,7 +405,7 @@ input.button {
 .login {
 	color: #666;
 	padding : 10px;
-	margin : 0px 0 10px 0;
+	margin : 0 0 10px 0;
 	background-color: #ebf9eb;
 	border: 1px solid #ccc;
 }

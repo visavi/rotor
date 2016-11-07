@@ -12,7 +12,7 @@ if (isset($_GET['start'])) {
     $start = 0;
 }
 
-if (is_admin(array(101, 102, 103))) {
+if (is_admin([101, 102, 103])) {
     show_title('Ожидающие регистрации');
 
     switch ($act):
@@ -32,7 +32,7 @@ if (is_admin(array(101, 102, 103))) {
             }
             // --------------- Удаление не подтвердивших регистрацию -----------//
             if ($config['regkeys'] == 1) {
-                $querydeluser = DB::run() -> query("SELECT `login` FROM `users` WHERE `confirmreg`>? AND `joined`<?;", array(0, SITETIME-86400));
+                $querydeluser = DB::run() -> query("SELECT `login` FROM `users` WHERE `confirmreg`>? AND `joined`<?;", [0, SITETIME-86400]);
                 $arrdelusers = $querydeluser -> fetchAll(PDO::FETCH_COLUMN);
 
                 $deltotal = count($arrdelusers);
@@ -55,14 +55,14 @@ if (is_admin(array(101, 102, 103))) {
                 }
             }
             // --------------------------------------------------------//
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", array(0));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", [0]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$start.", ".$config['reglist'].";", array(0));
+                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$start.", ".$config['reglist'].";", [0]);
 
                 echo '<form action="/admin/reglist?act=choice&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -115,7 +115,7 @@ if (is_admin(array(101, 102, 103))) {
                         // -------------------------------- Разрешение регистрации -------------------------------------//
                         if ($choice == 1) {
                             $arrayusers = implode(',', $arrayusers);
-                            DB::run() -> query("UPDATE `users` SET `confirmreg`=?, `confirmregkey`=? WHERE `login` IN ('".$arrayusers."');", array(0, ''));
+                            DB::run() -> query("UPDATE `users` SET `confirmreg`=?, `confirmregkey`=? WHERE `login` IN ('".$arrayusers."');", [0, '']);
 
                             notice('Выбранные аккаунты успешно одобрены!');
                             redirect("/admin/reglist?start=$start");

@@ -5,7 +5,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $used = (!empty($_GET['used'])) ? 1  : 0;
 
-if (is_admin(array(101, 102, 103))) {
+if (is_admin([101, 102, 103])) {
     show_title('Приглашения');
 
 switch ($act):
@@ -24,14 +24,14 @@ case 'index':
         echo '<a href="/admin/invitations">Неиспользованные</a> / <b>Использованные</b><hr />';
     }
 
-    $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `invite` WHERE `used`=?;", array($used));
+    $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `invite` WHERE `used`=?;", [$used]);
 
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listinvite'].";", array($used));
+        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listinvite'].";", [$used]);
 
         echo '<form action="/admin/invitations?act=del&amp;used='.$used.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -94,7 +94,7 @@ case 'new':
     echo '</select><br />';
     echo '<input type="submit" value="Отправить" /></form></div><br />';
 
-    if (is_admin(array(101))){
+    if (is_admin([101])){
         echo '<b><big>Рассылка ключей:</big></b><br />';
         echo '<div class="form">';
         echo 'Разослать ключи активным пользователям:<br />';
@@ -109,7 +109,7 @@ break;
 ##                                       Список ключей                                    ##
 ############################################################################################
 case 'list':
-    $invitations = DB::run() -> query("SELECT `key` FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", array($log, 0));
+    $invitations = DB::run() -> query("SELECT `key` FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [$log, 0]);
     $invite = $invitations -> fetchAll(PDO::FETCH_COLUMN);
     $total = count($invite);
 
@@ -137,7 +137,7 @@ case 'send':
 
             $dbr = DB::run() -> prepare("INSERT INTO `invite` (`key`, `user`, `time`) VALUES (?, ?, ?);");
 
-            $listkeys = array();
+            $listkeys = [];
 
             for($i = 0; $i < $keys; $i++) {
                 $key = generate_password(rand(12, 15));
@@ -169,12 +169,12 @@ case 'mailing':
     $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
 
     if ($uid == $_SESSION['token']) {
-        if (is_admin(array(101))){
+        if (is_admin([101])){
 
-            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", array(SITETIME - (86400 * 7)));
+            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
             $users = $query->fetchAll(PDO::FETCH_COLUMN);
 
-            $users = array_diff($users, array($log));
+            $users = array_diff($users, [$log]);
             $total = count($users);
 
             // Рассылка сообщений с подготовкой запросов

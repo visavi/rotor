@@ -20,8 +20,8 @@ ini_set('error_reporting', E_ALL);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <style type="text/css">
 body {
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	font-family: verdana, arial, helvetica, sans-serif;
 	color: black;
 	background-color: white;
@@ -32,10 +32,7 @@ body {
 #main {
 	width: 600px;
 	padding: 15px;
-	margin-top: 20px;
-	margin-bottom: 20px;
-	margin-right: auto;
-	margin-left: auto;
+	margin: 20px auto;
 	background: #eff5fb;
 	border: 1px groove #333;
 	text-align:left;
@@ -70,7 +67,7 @@ function parsePHPModules() {
 	$s = preg_replace('/<th[^>]*>([^<]+)<\/th>/', "<info>\\1</info>", $s);
 	$s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', "<info>\\1</info>", $s);
 	$vTmp = preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
-	$vModules = array();
+	$vModules = [];
 	for ($i = 1;$i < count($vTmp);$i++) {
 		if (preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $vTmp[$i], $vMat)) {
 			$vName = trim($vMat[1]);
@@ -80,7 +77,7 @@ function parsePHPModules() {
 				$vPat3 = "/$vPat\s*$vPat\s*$vPat/";
 				$vPat2 = "/$vPat\s*$vPat/";
 				if (preg_match($vPat3, $vOne, $vMat)) {
-					$vModules[$vName][trim($vMat[1])] = array(trim($vMat[2]), trim($vMat[3]));
+					$vModules[$vName][trim($vMat[1])] = [trim($vMat[2]), trim($vMat[3])];
 				} elseif (preg_match($vPat2, $vOne, $vMat)) {
 					$vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
 				}

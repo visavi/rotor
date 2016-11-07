@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin(array(101))) {
+if (is_admin([101])) {
     show_title('Рассылка приватных сообщений');
 
     switch ($act):
@@ -44,19 +44,19 @@ if (is_admin(array(101))) {
 
                         // Рассылка пользователям, которые в онлайне
                         if ($rec==1){
-                            $query = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>?;", array(SITETIME-600));
+                            $query = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>?;", [SITETIME-600]);
                             $arrusers = $query -> fetchAll(PDO::FETCH_COLUMN);
                         }
 
                         // Рассылка активным пользователям, которые посещали сайт менее недели назад
                         if ($rec==2){
-                            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", array(SITETIME - (86400 * 7)));
+                            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
                         // Рассылка администрации
                         if ($rec==3){
-                            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `level`>=? AND `level`<=?;", array(101, 105));
+                            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
@@ -66,7 +66,7 @@ if (is_admin(array(101))) {
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
-                        $arrusers = array_diff($arrusers, array($log));
+                        $arrusers = array_diff($arrusers, [$log]);
                         $total = count($arrusers);
 
                         // Рассылка сообщений с подготовкой запросов

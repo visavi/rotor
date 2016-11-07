@@ -13,7 +13,7 @@ show_title('Доска объявлений');
 ############################################################################################
 if ($act == 'index') {
 
-    $is_admin = is_admin(array(101,102));
+    $is_admin = is_admin([101,102]);
 
     if (file_exists(STORAGE."/board/database.dat")) {
         $lines = file(STORAGE."/board/database.dat");
@@ -122,7 +122,7 @@ if ($act=="board")  {
 ############################################################################################
 if ($act=="add") {
 
-    if (is_admin(array(101,102))){
+    if (is_admin([101,102])){
 
         echo '<b><big>Добавление рубрики</big></b><br /><br />';
 
@@ -146,7 +146,7 @@ if ($act=="addrub") {
     $zag = check($_POST['zag']);
     $msg = check($_POST['msg']);
 
-    if (is_admin(array(101,102))){
+    if (is_admin([101,102])){
         if ($uid==$_SESSION['token']){
             if (utf_strlen(trim($zag))>=3 && utf_strlen($zag)<50){
                 if (utf_strlen(trim($msg))>=5 && utf_strlen($msg)<50){
@@ -175,7 +175,7 @@ if ($act=="addrub") {
 ############################################################################################
 if ($act=="edit") {
 
-    if (is_admin(array(101,102))){
+    if (is_admin([101,102])){
         if ($id!==""){
 
             $file = file(STORAGE."/board/database.dat");
@@ -208,7 +208,7 @@ $uid = check($_GET['uid']);
 $zag = check($_POST['zag']);
 $msg = check($_POST['msg']);
 
-if (is_admin(array(101,102))){
+if (is_admin([101,102])){
     if ($uid==$_SESSION['token']){
         if ($id!==""){
             if (utf_strlen(trim($zag))>=3 && utf_strlen($zag)<50){
@@ -244,7 +244,7 @@ if ($act=="move"){
     $uid = check($_GET['uid']);
     $where = (isset($_REQUEST['where'])) ? abs(intval($_REQUEST['where'])) : "";
 
-    if (is_admin(array(101,102))){
+    if (is_admin([101,102])){
         if ($uid==$_SESSION['token']){
             if ($id!==""){
                 if ($where!==""){
@@ -271,7 +271,7 @@ if ($act=="delrub") {
     $uid = check($_GET['uid']);
     $del = (isset($_REQUEST['del'])) ? intar($_REQUEST['del']) : "";
 
-    if (is_admin(array(101,102))){
+    if (is_admin([101,102])){
         if ($uid==$_SESSION['token']){
             if ($del!==""){
 

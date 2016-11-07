@@ -5,7 +5,7 @@ $id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 
 show_title('Комментарии');
 
-$down = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
+$down = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
 if (!empty($down)) {
     if (!empty($down['active'])) {
@@ -28,7 +28,7 @@ if (!empty($down)) {
         echo '<webMaster>'.$config['emails'].'</webMaster>';
         echo '<lastBuildDate>'.date("r", SITETIME).'</lastBuildDate>';
 
-        $querycomm = DB::run() -> query("SELECT * FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT 15;", array($id));
+        $querycomm = DB::run() -> query("SELECT * FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT 15;", [$id]);
 
         while ($data = $querycomm -> fetch()) {
             $data['text'] = bb_code($data['text']);

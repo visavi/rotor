@@ -78,7 +78,7 @@ if (is_admin()) {
 
             echo '<p>Всего сообщений: <b>' . (int)$total . '</b></p>';
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 echo '<i class="fa fa-times"></i> <a href="/admin/minichat?act=prodel">Очистить</a><br />';
             }
         } else {
@@ -101,7 +101,7 @@ if (is_admin()) {
     if ($act == "alldel") {
         $uid = check($_GET['uid']);
 
-        if (is_admin(array(101))) {
+        if (is_admin([101])) {
             if ($uid == $_SESSION['token']) {
                 clear_files(STORAGE."/chat/chat.dat");
 

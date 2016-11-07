@@ -65,7 +65,7 @@ switch ($act):
     case 'comments':
         show_title('Список всех комментариев '.nickname($uz));
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `commphoto` WHERE `user`=?;", array($uz));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `commphoto` WHERE `user`=?;", [$uz]);
 
         if ($total > 0) {
             if ($start >= $total) {
@@ -75,7 +75,7 @@ switch ($act):
             $page = floor(1 + $start / $config['postgallery']);
             $config['newtitle'] = 'Список всех комментариев '.nickname($uz).' (Стр. '.$page.')';
 
-            $querycomm = DB::run() -> query("SELECT `cp`.*, `title` FROM `commphoto` cp LEFT JOIN `photo` p ON `cp`.`gid`=`p`.`id` WHERE cp.`user`=? ORDER BY cp.`time` DESC LIMIT ".$start.", ".$config['postgallery'].";", array($uz));
+            $querycomm = DB::run() -> query("SELECT `cp`.*, `title` FROM `commphoto` cp LEFT JOIN `photo` p ON `cp`.`gid`=`p`.`id` WHERE cp.`user`=? ORDER BY cp.`time` DESC LIMIT ".$start.", ".$config['postgallery'].";", [$uz]);
 
             while ($data = $querycomm -> fetch()) {
 
@@ -121,7 +121,7 @@ switch ($act):
             $cid = 0;
         }
 
-        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commphoto` WHERE `id`<=? AND `gid`=? ORDER BY `time` ASC LIMIT 1;", array($cid, $gid));
+        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commphoto` WHERE `id`<=? AND `gid`=? ORDER BY `time` ASC LIMIT 1;", [$cid, $gid]);
 
         if (!empty($querycomm)) {
             $end = floor(($querycomm - 1) / $config['postgallery']) * $config['postgallery'];
@@ -146,11 +146,11 @@ switch ($act):
 
         if (is_admin()) {
             if ($uid == $_SESSION['token']) {
-                $photo = DB::run() -> querySingle("SELECT `gid` FROM `commphoto` WHERE `id`=?;", array($id));
+                $photo = DB::run() -> querySingle("SELECT `gid` FROM `commphoto` WHERE `id`=?;", [$id]);
 
                 if (!empty($photo)) {
-                    DB::run() -> query("DELETE FROM `commphoto` WHERE `id`=? AND `gid`=?;", array($id, $photo));
-                    DB::run() -> query("UPDATE `photo` SET `comments`=`comments`-? WHERE `id`=?;", array(1, $photo));
+                    DB::run() -> query("DELETE FROM `commphoto` WHERE `id`=? AND `gid`=?;", [$id, $photo]);
+                    DB::run() -> query("UPDATE `photo` SET `comments`=`comments`-? WHERE `id`=?;", [1, $photo]);
 
                     notice('Комментарий успешно удален!');
                     redirect("/gallery/comments?act=comments&uz=$uz&start=$start");

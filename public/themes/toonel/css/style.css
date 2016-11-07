@@ -9,9 +9,7 @@ body {
 a {
 	color: #5c5c5c;
 	text-decoration: none;
-	border-bottom-width: 1px;
-	border-bottom-style: dotted;
-	border-bottom-color: #9f9f9f;
+    border-bottom: 1px dotted #9f9f9f;
 }
 
 a:active, a:visited, a:link {
@@ -77,66 +75,51 @@ table {
 
 .t2 {
 	width: 16px;
-	background-image: url(../img/menu_left.gif);
-	background-repeat: no-repeat;
+	background: url(../img/menu_left.gif) no-repeat;
 }
 
 .t3 {
 	text-align: center;
-	background-image: url(../img/menu_bg.gif);
-	background-repeat: repeat-x;
+	background: url(../img/menu_bg.gif) repeat-x;
 	padding-top: 4px;
 }
 
 .t4 {
 	width: 16px;
-	background-image: url(../img/menu_right.gif);
-	background-repeat: no-repeat;
+	background: url(../img/menu_right.gif) no-repeat;
 }
 
 .ftop {
-	background-image: url(../img/fottop_bg.gif);
-	background-repeat: repeat-x;
+	background: url(../img/fottop_bg.gif) repeat-x;
 	width: 500px;
 }
 
 .fbottom {
-	background-repeat: repeat-x;
-	background-image: url(../img/footer_bg.gif);
+	background: url(../img/footer_bg.gif) repeat-x;
 }
 
 .fottopleft {
 	width: 120px;
 	height: 6px;
-	background-image: url(../img/fottopleft.gif);
-	background-repeat: no-repeat;
+	background: url(../img/fottopleft.gif) no-repeat;
 }
 
 .fottopright {
 	width: 120px;
 	height: 6px;
-	background-image: url(../img/fottopright.gif);
-	background-position: right 0;
-	background-repeat: no-repeat;
+	background: url(../img/fottopright.gif) no-repeat right 0;
 }
 
 .footer_left {
 	width: 120px;
 	height: 27px;
-	background-image: url(../img/footer_left.gif);
-	background-repeat: no-repeat;
+	background: url(../img/footer_left.gif) no-repeat;
 }
 
 .footer_right {
 	width: 120px;
 	height: 27px;
-	background-image: url(../img/footer_right.gif);
-	background-position: right 0;
-	background-repeat: no-repeat;
-}
-
-.fottext {
-	padding-bottom: 7px;
+	background: url(../img/footer_right.gif) no-repeat right 0;
 }
 
 .tab2 {
@@ -147,16 +130,13 @@ table {
 .leftop {
 	width: 7px;
 	height: 27px;
-	background-image: url(../img/cortopleft.gif);
-	background-repeat: no-repeat;
+	background: url(../img/cortopleft.gif) no-repeat;
 }
 
 .righttop {
 	width: 7px;
 	height: 27px;
-	background-image: url(../img/cortopright.gif);
-	background-position: right 0;
-	background-repeat: no-repeat;
+	background: url(../img/cortopright.gif) no-repeat right 0;
 }
 
 .bortop {
@@ -164,9 +144,7 @@ table {
 }
 
 .left_mid {
-	border-left-color: #e6e6e6;
-	border-left-style: solid;
-	border-left-width: 1px;
+	border-left: 1px solid #e6e6e6;
 }
 
 .lr {
@@ -176,38 +154,28 @@ table {
 }
 
 .right_mid {
-	border-right-color: #e6e6e6;
-	border-right-style: solid;
-	border-right-width: 1px;
+	border-right: 1px solid #e6e6e6;
 }
 
 .lefbot {
 	width: 7px;
 	height: 6px;
-	background-image: url(../img/corbotleft.gif);
-	background-position: right 0;
-	background-repeat: no-repeat;
+	background: url(../img/corbotleft.gif) no-repeat right 0;
 }
 
 .rightbot {
 	width: 7px;
 	height: 6px;
-	background-image: url(../img/corbotright.gif);
-	background-repeat: no-repeat;
+	background: url(../img/corbotright.gif) no-repeat;
 }
 
 .borbottom {
-	background-image: url(../img/bor_bottom.gif);
-	background-repeat: repeat-x;
+	background: url(../img/bor_bottom.gif) repeat-x;
 }
 
 .ftexttd {
-	border-left-color: #e6e6e6;
-	border-left-style: solid;
-	border-left-width: 1px;
-	border-right-color: #e6e6e6;
-	border-right-style: solid;
-	border-right-width: 1px;
+	border-right: 1px solid #e6e6e6;
+	border-left: 1px solid #e6e6e6;
 }
 
 img {
@@ -248,10 +216,8 @@ input[type="submit"] {
 .b {
 	font-size: 12px;
 	color: #666;
-	background-color: #f3f3f3;
 	padding: 3px;
-	background-image: url(../img/b.gif);
-	background-repeat: repeat-x;
+	background: #f3f3f3 url(../img/b.gif) repeat-x;
 	overflow: hidden;
 	border: 1px solid #eee;
 	border-radius: 5px;

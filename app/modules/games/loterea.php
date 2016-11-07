@@ -14,10 +14,10 @@ if (is_user()) {
     ############################################################################################
         case "index":
 
-            $datalot = DB::run() -> queryFetch("SELECT * FROM `lotinfo` WHERE `id`=?;", array(1));
+            $datalot = DB::run() -> queryFetch("SELECT * FROM `lotinfo` WHERE `id`=?;", [1]);
 
             if ($newtime != $datalot['date']) {
-                $querywin = DB::run() -> query("SELECT `user` FROM `lotusers` WHERE `num`=?;", array($datalot['newnum']));
+                $querywin = DB::run() -> query("SELECT `user` FROM `lotusers` WHERE `num`=?;", [$datalot['newnum']]);
                 $arrwinners = $querywin -> fetchAll(PDO::FETCH_COLUMN);
 
                 $winusers = '';
@@ -31,9 +31,9 @@ if (is_user()) {
                     foreach ($arrwinners as $winuz) {
                         if (check_user($winuz)) {
                             $textpriv = 'Поздравляем! Вы сорвали Джек-пот в лотерее и выиграли '.moneys($winmoneys);
-                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($winuz, $config['nickname'], $textpriv, SITETIME));
+                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$winuz, $config['nickname'], $textpriv, SITETIME]);
 
-                            DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `money`=`money`+? WHERE `login`=?", array($winmoneys, $winuz));
+                            DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `money`=`money`+? WHERE `login`=?", [$winmoneys, $winuz]);
                         }
                     }
 
@@ -41,12 +41,12 @@ if (is_user()) {
                     $jackpot = $config['jackpot'];
                 }
 
-                DB::run() -> query("REPLACE INTO `lotinfo` (`id`, `date`, `sum`, `newnum`, `oldnum`, `winners`) VALUES (?, ?, ?, ?, ?, ?);", array(1, $newtime, $jackpot, $rand, $oldnum, $winusers));
+                DB::run() -> query("REPLACE INTO `lotinfo` (`id`, `date`, `sum`, `newnum`, `oldnum`, `winners`) VALUES (?, ?, ?, ?, ?, ?);", [1, $newtime, $jackpot, $rand, $oldnum, $winusers]);
                 DB::run() -> query("TRUNCATE `lotusers`;");
             }
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `lotusers`;");
-            $datalot = DB::run() -> queryFetch("SELECT * FROM `lotinfo` WHERE `id`=?;", array(1));
+            $datalot = DB::run() -> queryFetch("SELECT * FROM `lotinfo` WHERE `id`=?;", [1]);
 
             echo 'Участвуй в лотерее! С каждым разом джек-пот растет<br />';
             echo 'Стань счастливым обладателем заветной суммы!<br /><br />';
@@ -97,11 +97,11 @@ if (is_user()) {
 
             if ($bilet > 0 && $bilet <= 100) {
                 if ($udata['money'] >= 50) {
-                    $querysum = DB::run() -> querySingle("SELECT `id` FROM `lotusers` WHERE `user`=? LIMIT 1;", array($log));
+                    $querysum = DB::run() -> querySingle("SELECT `id` FROM `lotusers` WHERE `user`=? LIMIT 1;", [$log]);
                     if (empty($querysum)) {
-                        DB::run() -> query("UPDATE `lotinfo` SET `sum`=`sum`+50 WHERE `id`=?;", array(1));
-                        DB::run() -> query("INSERT INTO `lotusers` (`user`, `num`, `time`) VALUES (?, ?, ?);", array($log, $bilet, SITETIME));
-                        DB::run() -> query("UPDATE users SET `money`=`money`-50 WHERE `login`=?", array($log));
+                        DB::run() -> query("UPDATE `lotinfo` SET `sum`=`sum`+50 WHERE `id`=?;", [1]);
+                        DB::run() -> query("INSERT INTO `lotusers` (`user`, `num`, `time`) VALUES (?, ?, ?);", [$log, $bilet, SITETIME]);
+                        DB::run() -> query("UPDATE users SET `money`=`money`-50 WHERE `login`=?", [$log]);
 
                         echo '<b>Билет успешно приобретен!</b><br />';
                         echo 'Результат розыгрыша станет известным после полуночи!<br /><br />';

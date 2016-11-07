@@ -12,7 +12,7 @@ if (isset($_GET['start'])) {
     $start = 0;
 }
 
-if (is_admin(array(101))) {
+if (is_admin([101])) {
     show_title('Админ-логи');
 
     switch ($act):

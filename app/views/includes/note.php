@@ -1,6 +1,6 @@
 <?php if (isset($_SESSION['note'])): ?>
     <?php if (! is_array($_SESSION['note'])) {
-        $_SESSION['note'] = array('success' => $_SESSION['note']);
+        $_SESSION['note'] = ['success' => $_SESSION['note']];
     }?>
 
     <?php foreach ($_SESSION['note'] as $status => $messages): ?>

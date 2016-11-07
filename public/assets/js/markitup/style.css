@@ -3,7 +3,7 @@
 // By Jay Salvat - http://markitup.jaysalvat.com/
 // ------------------------------------------------------------------*/
 .markItUp * {
-	margin:0px; padding:0px;
+	margin:0; padding:0;
 	outline:none;
 }
 .markItUp a:link,
@@ -53,13 +53,13 @@
 	padding-right: 5px;
 }
 .markItUpHeader ul .markItUpDropMenu li {
-	margin-right:0px;
+	margin-right:0;
 }
 /* next rows of buttons */
 .markItUpHeader ul ul {
 	display:none;
 	position:absolute;
-	top:18px; left:0px;
+	top:18px; left:0;
 	background: #fff;
 	border:1px solid #ccc;
 	border-radius: 5px;
@@ -101,10 +101,9 @@
 	display:block;
 	color: #333;
 	font-size: 12px;
-	padding-left:0px;
 	text-indent:0;
 	width:100px;
-	padding:2px 5px;
+	padding: 2px 5px;
 	background-position:2px 50%;
 }
 .markItUpHeader ul ul a:hover  {
@@ -127,16 +126,13 @@
 	border:1px solid white;
 	width:25px;	height:25px;
 	overflow:hidden;
-	padding:0px; margin:0px;
+	padding:0; margin:0;
 	float:left;
 }
 .markItUp .bb-color ul a {
 	width:25px;
 	height:25px;
 	text-indent:-10000px;
-}
-.markItUp .bb-color ul a:hover {
-	background-color:none;
 }
 
 .markItUp .bb-color .col1-1 a {
@@ -188,7 +184,6 @@
 	text-indent:-10000px;
 }
 .markItUp .bb-smile .col1-0 a{padding:1px}
-.markItUp .bb-smile ul a:hover {background-color:none;}
 
 .markItUp .bb-smile .col1-1 a {
 	background-image:url('/upload/smiles/).gif');

@@ -7,7 +7,7 @@ $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
 
 show_title('Стена сообщений');
 
-$queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+$queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 if (!empty($queryuser)) {
     switch ($act):
     ############################################################################################
@@ -18,11 +18,11 @@ if (!empty($queryuser)) {
             $config['newtitle'] = 'Стена пользователя '.nickname($uz);
             echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.nickname($uz).'</b><br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", array($uz));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
 
             if ($uz == $log && $udata['newwall'] > 0) {
                 echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.$udata['newwall'].'</span></b></div>';
-                DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", array(0, $log));
+                DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, $log]);
             }
 
             if ($total > 0) {
@@ -38,7 +38,7 @@ if (!empty($queryuser)) {
                     echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['wallpost'].";", array($uz));
+                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['wallpost'].";", [$uz]);
 
                 while ($data = $querywall -> fetch()) {
                     echo '<div class="b">';
@@ -99,19 +99,19 @@ if (!empty($queryuser)) {
                 if ($uz == $log || is_admin() || is_contact($uz, $log)){
                     if ($uid == $_SESSION['token']) {
                         if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", array($uz, $log));
+                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
                             if (empty($ignorstr)) {
                                 if (is_flood($log)) {
 
                                     $msg = antimat($msg);
 
                                     if ($uz != $log) {
-                                        DB::run() -> query("UPDATE `users` SET `newwall`=`newwall`+1 WHERE `login`=?", array($uz));
+                                        DB::run() -> query("UPDATE `users` SET `newwall`=`newwall`+1 WHERE `login`=?", [$uz]);
                                     }
 
-                                    DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", array($uz, $log, $msg, SITETIME));
+                                    DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $msg, SITETIME]);
 
-                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$config['wallmaxpost'].") AS del);", array($uz, $uz));
+                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$config['wallmaxpost'].") AS del);", [$uz, $uz]);
 
                                     notice('Запись успешно добавлена!');
                                     redirect("/wall?uz=$uz");
@@ -147,14 +147,14 @@ if (!empty($queryuser)) {
 
             if (is_user()) {
                 if ($uid == $_SESSION['token']) {
-                    $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", array($log, $id));
+                    $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", [$log, $id]);
 
                     if (!empty($data)) {
-                        $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", array(4, $id));
+                        $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", [4, $id]);
 
                         if (empty($queryspam)) {
                             if (is_flood($log)) {
-                                DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", array(4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;start='.$start));
+                                DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;start='.$start]);
 
                                 notice('Жалоба успешно отправлена!');
                                 redirect("/wall?uz=$uz&start=$start");
@@ -194,7 +194,7 @@ if (!empty($queryuser)) {
                     if (!empty($del)) {
                         $del = implode(',', $del);
 
-                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", array($log));
+                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [$log]);
 
                         notice('Выбранные записи успешно удалены!');
                         redirect("/wall?uz=$uz&start=$start");

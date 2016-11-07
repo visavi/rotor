@@ -24,7 +24,7 @@ if ($total > 0) {
 
 echo '<div class="b"><b>Поздравляем именинников:</b></div>';
 
-$queryuser = DB::run() -> query("SELECT `login` FROM `users` WHERE substr(`birthday`,1,5)=?;", array($montime));
+$queryuser = DB::run() -> query("SELECT `login` FROM `users` WHERE substr(`birthday`,1,5)=?;", [$montime]);
 $arrhappy = $queryuser -> fetchAll(PDO::FETCH_COLUMN);
 $total = count($arrhappy);
 
@@ -41,7 +41,7 @@ if ($total > 0) {
 // ---------------------------------------------------------------------------------//
 echo '<div class="b"><b>Приветствуем новичков:</b></div>';
 
-$queryuser = DB::run() -> query("SELECT `login` FROM `users` WHERE `joined`>?;", array(SITETIME-86400));
+$queryuser = DB::run() -> query("SELECT `login` FROM `users` WHERE `joined`>?;", [SITETIME-86400]);
 $arrnovice = $queryuser -> fetchAll(PDO::FETCH_COLUMN);
 $total = count($arrnovice);
 

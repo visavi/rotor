@@ -1,7 +1,7 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (is_admin(array(101, 102))) {
+if (is_admin([101, 102])) {
     show_title('PHP-info');
 
     echo 'PHP version: <b>'.phpversion().'</b><br />';

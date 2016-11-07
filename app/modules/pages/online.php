@@ -6,7 +6,7 @@ $start = abs(intval(Request::input('start', 0)));
 show_title('Кто в онлайне');
 
 $total_all = DB::run() -> querySingle("SELECT count(*) FROM `online`;");
-$total = DB::run() -> querySingle("SELECT count(*) FROM `online` WHERE `user`<>?;", array(''));
+$total = DB::run() -> querySingle("SELECT count(*) FROM `online` WHERE `user`<>?;", ['']);
 
 echo 'Всего на сайте: <b>'.$total_all.'</b><br />';
 echo 'Зарегистрированных:  <b>'.$total.'</b><br /><br />';
@@ -22,7 +22,7 @@ switch ($act):
                 $start = 0;
             }
 
-            $queryonline = DB::run() -> query("SELECT * FROM `online` WHERE `user`<>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['onlinelist'].";", array(''));
+            $queryonline = DB::run() -> query("SELECT * FROM `online` WHERE `user`<>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['onlinelist'].";", ['']);
 
             while ($data = $queryonline -> fetch()) {
                 echo '<div class="b">';

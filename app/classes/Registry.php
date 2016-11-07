@@ -41,9 +41,6 @@ class Registry
         }
     }
 
-    private function __wakeup() {
-    }
-
     private function __construct() {
     }
 

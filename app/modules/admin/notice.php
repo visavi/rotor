@@ -4,7 +4,7 @@ App::view($config['themes'].'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
-if (! is_admin(array(101))) redirect('/admin/');
+if (! is_admin([101])) redirect('/admin/');
 
 show_title('Шаблоны писем');
 
@@ -19,7 +19,7 @@ case 'index':
 
     if ($total > 0) {
 
-        $notices = DBM::run()->select('notice', null, null, null, array('id'=>'ASC'));
+        $notices = DBM::run()->select('notice', null, null, null, ['id'=>'ASC']);
 
         foreach ($notices as $notice) {
 
@@ -68,14 +68,14 @@ case 'new':
 
     echo '<input type="submit" value="Сохранить" /></form></div><br />';
 
-    render('includes/back', array('link' => '/admin/notice', 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
 break;
 
 /**
  * Редактирование шаблона
  */
 case 'edit':
-    $notice = DBM::run()->selectFirst('notice', array('id' => $id));
+    $notice = DBM::run()->selectFirst('notice', ['id' => $id]);
 
     if (! empty($notice)) {
 
@@ -100,7 +100,7 @@ case 'edit':
         show_error('Ошибка! Шаблона для редактирования не существует!');
     }
 
-    render('includes/back', array('link' => '/admin/notice', 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
 break;
 
 /**
@@ -115,21 +115,21 @@ case "save":
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('string', $name, 'Слишком длинный или короткий заголовок шаблона!', true, 5, 100)
         -> addRule('string', $text, 'Слишком длинный или короткий текст шаблона!', true, 10, 65000);
 
     if ($validation->run()) {
 
-        $notice = DBM::run()->selectFirst('notice', array('id' => $id));
+        $notice = DBM::run()->selectFirst('notice', ['id' => $id]);
 
-        $note = array(
+        $note = [
             'name'    => $name,
             'text'    => str_replace('&#37;', '%', $text),
             'user'    => $log,
             'protect' => $protect,
             'time'    => SITETIME,
-        );
+        ];
 
         if (empty($notice)) {
 
@@ -138,7 +138,7 @@ case "save":
         } else {
 
             $note = DBM::run()->update('notice', $note,
-                array('id' => $id)
+                ['id' => $id]
             );
         }
 
@@ -149,7 +149,7 @@ case "save":
         show_error($validation->getErrors());
     }
 
-    render('includes/back', array('link' => '/admin/notice?act=edit&amp;id='.$id, 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/notice?act=edit&amp;id='.$id, 'title' => 'Вернуться']);
 break;
 
 /**
@@ -159,17 +159,17 @@ case 'del':
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
 
-    $notice = DBM::run()->selectFirst('notice', array('id' => $id));
+    $notice = DBM::run()->selectFirst('notice', ['id' => $id]);
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('not_empty', $notice, 'Не найден шаблон для удаления!')
         -> addRule('empty', $notice['protect'], 'Запрещено удалять защищенный шаблон!');
 
     if ($validation->run()) {
 
-        $delete = DBM::run()->delete('notice', array('id' => $id));
+        $delete = DBM::run()->delete('notice', ['id' => $id]);
 
         notice('Выбранный шаблон успешно удален!');
         redirect("/admin/notice");
@@ -178,11 +178,11 @@ case 'del':
         show_error($validation->getErrors());
     }
 
-    render('includes/back', array('link' => '/admin/notice', 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
 break;
 
 endswitch;
 
-render('includes/back', array('link' => '/admin/', 'title' => 'В админку', 'icon' => 'panel.gif'));
+render('includes/back', ['link' => '/admin/', 'title' => 'В админку', 'icon' => 'panel.gif']);
 
 App::view($config['themes'].'/foot');

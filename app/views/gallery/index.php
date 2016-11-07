@@ -1,13 +1,13 @@
 <?php
-$links = array(
-    array('url' => '/gallery/album?act=photo', 'label' => 'Мои фото', 'show' => is_user()),
-    array('url' => '/gallery/comments?act=comments', 'label' => 'Мои комментарии', 'show' => is_user()),
-    array('url' => '/gallery/album', 'label' => 'Все альбомы'),
-    array('url' => '/gallery/comments', 'label' => 'Все комментарии'),
-    array('url' => '/admin/gallery?start='.$start, 'label' => 'Управление', 'show' => is_admin()),
-);
+$links = [
+    ['url' => '/gallery/album?act=photo', 'label' => 'Мои фото', 'show' => is_user()],
+    ['url' => '/gallery/comments?act=comments', 'label' => 'Мои комментарии', 'show' => is_user()],
+    ['url' => '/gallery/album', 'label' => 'Все альбомы'],
+    ['url' => '/gallery/comments', 'label' => 'Все комментарии'],
+    ['url' => '/admin/gallery?start='.$start, 'label' => 'Управление', 'show' => is_admin()],
+];
 
-render('includes/link', array('links' => $links));
+render('includes/link', ['links' => $links]);
 ?>
 
 <?php if ($total > 0): ?>
@@ -19,7 +19,7 @@ render('includes/link', array('links' => $links));
         </div>
 
         <div>
-            <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;start=<?= $start ?>"><?= resize_image('upload/pictures/', $data['link'], App::setting('previewsize'), array('alt' => $data['title'])) ?></a><br />
+            <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;start=<?= $start ?>"><?= resize_image('upload/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]) ?></a><br />
 
             <?php if (!empty($data['text'])): ?>
                 <?php bb_code($data['text']) ?><br />
@@ -40,10 +40,10 @@ render('includes/link', array('links' => $links));
 <?php endif; ?>
 
 <?php
-$links = array(
-    array('url' => '/gallery/top', 'label' => 'Топ фото'),
-    array('url' => '/gallery?act=addphoto', 'label' => 'Добавить фото'),
-);
+$links = [
+    ['url' => '/gallery/top', 'label' => 'Топ фото'],
+    ['url' => '/gallery?act=addphoto', 'label' => 'Добавить фото'],
+];
 
-render('includes/link', array('links' => $links));
+render('includes/link', ['links' => $links]);
 ?>

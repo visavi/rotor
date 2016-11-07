@@ -7,17 +7,17 @@ if (isset($_GET['start'])) {
     $start = 0;
 }
 
-if (is_admin(array(101, 102, 103))) {
+if (is_admin([101, 102, 103])) {
     show_title('Список забаненых');
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", array(1, SITETIME));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", [1, SITETIME]);
 
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `ban`=? AND `timeban`>? ORDER BY `timelastban` DESC LIMIT ".$start.", ".$config['reglist'].";", array(1, SITETIME));
+        $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `ban`=? AND `timeban`>? ORDER BY `timelastban` DESC LIMIT ".$start.", ".$config['reglist'].";", [1, SITETIME]);
 
         while ($data = $queryusers -> fetch()) {
             echo '<div class="b">';

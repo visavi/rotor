@@ -38,14 +38,14 @@ if ($order == 'comments') {
 
 echo '<hr />';
 
-$total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", array(1));
+$total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [1]);
 
 if ($total > 0) {
     if ($start >= $total) {
         $start = 0;
     }
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `id`, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", array(1));
+    $querydown = DB::run() -> query("SELECT `downs`.*, `id`, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';

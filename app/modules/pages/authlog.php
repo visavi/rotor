@@ -18,13 +18,13 @@ if (is_user()) {
     ############################################################################################
     ##                                   История авторизаций                                  ##
     ############################################################################################
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", array($log));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [$log]);
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loginauthlist'].";", array($log));
+        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loginauthlist'].";", [$log]);
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';

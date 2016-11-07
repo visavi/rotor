@@ -11,7 +11,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin(array(101))) {
+if (is_admin([101])) {
     show_title('Backup базы данных');
 
     switch ($act):
@@ -75,7 +75,7 @@ if (is_admin(array(101))) {
 
                 echo '</select><br />';
 
-                $level = array(0 => 'Без сжатия', 1 => '1 (минимальная)', 2 => '2', 3 => '3', 4 => '4', 5 => '5 (средняя)', 6 => '6', 7 => '7 (рекомендуемая)', 8 => '8', 9 => '9 (максимальная)');
+                $level = [0 => 'Без сжатия', 1 => '1 (минимальная)', 2 => '2', 3 => '3', 4 => '4', 5 => '5 (средняя)', 6 => '6', 7 => '7 (рекомендуемая)', 8 => '8', 9 => '9 (максимальная)'];
 
                 echo 'Степень сжатия:<br />';
                 echo '<select name="level">';
@@ -131,7 +131,7 @@ if (is_admin(array(101))) {
 
                             if ($total > 0) {
 
-                                $NumericColumn = array();
+                                $NumericColumn = [];
                                 $result = DB::run() -> query("SHOW COLUMNS FROM `{$data}`");
                                 $field = 0;
                                 while ($numcol = $result -> fetch(PDO::FETCH_NUM)) {

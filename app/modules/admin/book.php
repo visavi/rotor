@@ -79,7 +79,7 @@ if (is_admin()) {
 
                 echo 'Всего сообщений: <b>'.(int)$total.'</b><br /><br />';
 
-                if (is_admin(array(101))) {
+                if (is_admin([101])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/book?act=prodel">Очистить</a><br />';
                 }
             } else {
@@ -92,7 +92,7 @@ if (is_admin()) {
         ############################################################################################
         case 'reply':
 
-            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE id=? LIMIT 1;", array($id));
+            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE id=? LIMIT 1;", [$id]);
 
             if (!empty($data)) {
                 echo '<b><big>Добавление ответа</big></b><br /><br />';
@@ -122,10 +122,10 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($reply) >= 5 && utf_strlen($reply) < $config['guesttextlength']) {
-                    $queryguest = DB::run() -> querySingle("SELECT id FROM guest WHERE id=? LIMIT 1;", array($id));
+                    $queryguest = DB::run() -> querySingle("SELECT id FROM guest WHERE id=? LIMIT 1;", [$id]);
                     if (!empty($queryguest)) {
 
-                        DB::run() -> query("UPDATE guest SET reply=? WHERE id=?", array($reply, $id));
+                        DB::run() -> query("UPDATE guest SET reply=? WHERE id=?", [$reply, $id]);
 
                         notice('Ответ успешно добавлен!');
                         redirect("/admin/book?start=$start");
@@ -148,7 +148,7 @@ if (is_admin()) {
         ############################################################################################
         case 'edit':
 
-            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE id=? LIMIT 1;", array($id));
+            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE id=? LIMIT 1;", [$id]);
 
             if (!empty($data)) {
 
@@ -178,10 +178,10 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
-                    $queryguest = DB::run() -> querySingle("SELECT id FROM guest WHERE id=? LIMIT 1;", array($id));
+                    $queryguest = DB::run() -> querySingle("SELECT id FROM guest WHERE id=? LIMIT 1;", [$id]);
                     if (!empty($queryguest)) {
 
-                        DB::run() -> query("UPDATE guest SET text=?, edit=?, edit_time=? WHERE id=?", array($msg, $log, SITETIME, $id));
+                        DB::run() -> query("UPDATE guest SET text=?, edit=?, edit_time=? WHERE id=?", [$msg, $log, SITETIME, $id]);
 
                         notice('Сообщение успешно отредактировано!');
                         redirect("/admin/book?start=$start");
@@ -245,7 +245,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("DELETE FROM guest;");
 

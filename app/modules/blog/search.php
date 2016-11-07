@@ -32,7 +32,7 @@ case 'search':
         $findme = utf_lower($find);
         $findmewords = explode(" ", $findme);
 
-        $arrfind = array();
+        $arrfind = [];
         foreach ($findmewords as $valfind) {
             if (utf_strlen($valfind) >= 3) {
                 $arrfind[] = $valfind;
@@ -78,7 +78,7 @@ case 'search':
                     $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`cats_id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
                     $blogs = $queryblog -> fetchAll();
 
-                    render('blog/search_title', array('blogs' => $blogs, 'find' => $find, 'total' => $total));
+                    render('blog/search_title', ['blogs' => $blogs, 'find' => $find, 'total' => $total]);
 
                     page_strnavigation('/blog/search?act=search&amp;find='.urlencode($find).'&amp;type='.$type.'&amp;where='.$where.'&amp;', $config['blogpost'], $start, $total);
                 } else {
@@ -115,7 +115,7 @@ case 'search':
                     $queryblog = DB::run() -> query("SELECT `blogs`.*, `cats_id`, `cats_name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`cats_id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
                     $blogs = $queryblog -> fetchAll();
 
-                    render('blog/search_text', array('blogs' => $blogs, 'find' => $find, 'total' => $total));
+                    render('blog/search_text', ['blogs' => $blogs, 'find' => $find, 'total' => $total]);
 
                     page_strnavigation('/blog/search?act=search&amp;find='.urlencode($find).'&amp;type='.$type.'&amp;where='.$where.'&amp;', $config['blogpost'], $start, $total);
                 } else {
@@ -129,7 +129,7 @@ case 'search':
         show_error('Ошибка! Запрос должен содержать не более 50 символов!');
     }
 
-    render('includes/back', array('link' => '/blog/search', 'title' => 'Вернуться'));
+    render('includes/back', ['link' => '/blog/search', 'title' => 'Вернуться']);
 break;
 
 endswitch;
@@ -138,6 +138,6 @@ endswitch;
     show_login('Вы не авторизованы, чтобы использовать поиск, необходимо');
 }
 
-render('includes/back', array('link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif'));
+render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif']);
 
 App::view($config['themes'].'/foot');

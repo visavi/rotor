@@ -37,7 +37,7 @@ case 'index':
             echo '<a href="/admin/events?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
-                echo '<div class="img"><a href="/upload/events/'.$data['image'].'">'.resize_image('upload/events/', $data['image'], 75, array('alt' => $data['title'])).'</a></div>';
+                echo '<div class="img"><a href="/upload/events/'.$data['image'].'">'.resize_image('upload/events/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
             }
 
             if (!empty($data['top'])){
@@ -66,7 +66,7 @@ case 'index':
 
     echo '<i class="fa fa-check"></i> <a href="/events?act=new">Добавить событие</a><br />';
 
-    if (is_admin(array(101))) {
+    if (is_admin([101])) {
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
     }
 break;
@@ -75,7 +75,7 @@ break;
 ##                          Подготовка к редактированию события                           ##
 ############################################################################################
 case 'edit':
-    $dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
+    $dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($dataevent)) {
 
@@ -89,7 +89,7 @@ case 'edit':
 
         if (!empty($dataevent['image']) && file_exists(HOME.'/upload/events/'.$dataevent['image'])){
 
-            echo '<a href="/upload/events/'.$dataevent['image'].'">'.resize_image('upload/events/', $dataevent['image'], 75, array('alt' => $dataevent['title'])).'</a><br />';
+            echo '<a href="/upload/events/'.$dataevent['image'].'">'.resize_image('upload/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br />';
             echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/upload/events/'.$dataevent['image']).')<br /><br />';
         }
 
@@ -121,18 +121,18 @@ case 'change':
     $closed = (empty($_POST['closed'])) ? 0 : 1;
     $top = (empty($_POST['top'])) ? 0 : 1;
 
-    $dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", array($id));
+    $dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", [$id]);
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('not_empty', $dataevent, 'Выбранного события не существует, возможно оно было удалено!')
         -> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
         -> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `events` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", array($title, $msg, $closed, $top, $id));
+        DB::run() -> query("UPDATE `events` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", [$title, $msg, $closed, $top, $id]);
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -148,7 +148,7 @@ case 'change':
 
                 if ($handle -> processed) {
 
-                    DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", array($handle -> file_dst_name, $id));
+                    DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
                     $handle -> clean();
 
                 } else {
@@ -176,7 +176,7 @@ case 'restatement':
 
     $uid = check($_GET['uid']);
 
-    if (is_admin(array(101))) {
+    if (is_admin([101])) {
         if ($uid == $_SESSION['token']) {
             restatement('events');
 

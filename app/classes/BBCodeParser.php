@@ -15,93 +15,93 @@ class BBCodeParser {
 	/**
 	 * @var array
 	 */
-	protected $parsers = array(
-		'code' => array(
+	protected $parsers = [
+		'code' => [
 			'pattern' => '/\[code\](.*?)\[\/code\]/s',
 			'callback' => 'highlightCode'
-		),
-		'bold' => array(
+        ],
+		'bold' => [
 			'pattern' => '/\[b\](.*?)\[\/b\]/s',
 			'replace' => '<strong>$1</strong>',
-		),
-		'italic' => array(
+        ],
+		'italic' => [
 			'pattern' => '/\[i\](.*?)\[\/i\]/s',
 			'replace' => '<em>$1</em>',
-		),
-		'underLine' => array(
+        ],
+		'underLine' => [
 			'pattern' => '/\[u\](.*?)\[\/u\]/s',
 			'replace' => '<u>$1</u>',
-		),
-		'lineThrough' => array(
+        ],
+		'lineThrough' => [
 			'pattern' => '/\[s\](.*?)\[\/s\]/s',
 			'replace' => '<strike>$1</strike>',
-		),
-		'fontSize' => array(
+        ],
+		'fontSize' => [
 			'pattern' => '/\[size\=([1-5])\](.*?)\[\/size\]/s',
 			'replace' => '<font size="$1">$2</font>',
-		),
-		'fontColor' => array(
+        ],
+		'fontColor' => [
 			'pattern' => '/\[color\=(#[A-f0-9]{6}|#[A-f0-9]{3})\](.*?)\[\/color\]/s',
 			'replace' => '<font color="$1">$2</font>',
 			'iterate' => 5,
-		),
-		'center' => array(
+        ],
+		'center' => [
 			'pattern' => '/\[center\](.*?)\[\/center\]/s',
 			'replace' => '<div style="text-align:center;">$1</div>',
-		),
-		'quote' => array(
+        ],
+		'quote' => [
 			'pattern' => '/\[quote\](.*?)\[\/quote\]/s',
 			'replace' => '<blockquote>$1</blockquote>',
 			'iterate' => 3,
-		),
-		'namedQuote' => array(
+        ],
+		'namedQuote' => [
 			'pattern' => '/\[quote\=(.*?)\](.*?)\[\/quote\]/s',
 			'replace' => '<blockquote>$2<small>$1</small></blockquote>',
 			'iterate' => 3,
-		),
-		'http' => array(
+        ],
+		'http' => [
 			'pattern' => '%\b((?<!(=|]))[\w-]+://[^\s()<>\[\]]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))%s',
 			'callback' => 'urlReplace',
-		),
-		'link' => array(
+        ],
+		'link' => [
 			'pattern' => '%\[url\](\b([\w-]+://[^\s()<>\[\]]+))\[/url\]%s',
 			'callback' => 'urlReplace',
-		),
-		'namedLink' => array(
+        ],
+		'namedLink' => [
 			'pattern' => '%\[url\=\b([\w-]+://[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
 			'callback' => 'urlReplace',
-		),
-		'image' => array(
+        ],
+		'image' => [
 			'pattern' => '%\[img\]\b([\w-]+://[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
 			'replace' => '<img src="$1" class="img-responsive" alt="image">',
-		),
-		'orderedList' => array(
+        ],
+		'orderedList' => [
 			'pattern' => '/\[list=1\](.*?)\[\/list\]/s',
 			'callback' => 'listReplace',
-		),
-		'unorderedList' => array(
+        ],
+		'unorderedList' => [
 			'pattern' => '/\[list\](.*?)\[\/list\]/s',
 			'callback' => 'listReplace',
-		),
-		'spoiler' => array(
+        ],
+		'spoiler' => [
 			'pattern' => '/\[spoiler\](.*?)\[\/spoiler\]/s',
 			'callback' => 'spoilerText',
 			'iterate' => 1,
-		),
-		'shortSpoiler' => array(
+        ],
+		'shortSpoiler' => [
 			'pattern' => '/\[spoiler\=(.*?)\](.*?)\[\/spoiler\]/s',
 			'callback' => 'spoilerText',
 			'iterate' => 1,
-		),
-		'hide' => array(
+        ],
+		'hide' => [
 			'pattern' => '/\[hide\](.*?)\[\/hide\]/s',
 			'callback' => 'hiddenText',
-		),
-		'youtube' => array(
+        ],
+		'youtube' => [
 			'pattern' => '/\[youtube\]([\w-]{11})\[\/youtube\]/s',
 			'replace' => '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/$1"></iframe></div>',
-		),
-	);
+        ],
+    ];
 
 	/**
 	 * Конструктор
@@ -127,7 +127,7 @@ class BBCodeParser {
 
 			for ($i = 0; $i < $iterate; $i++) {
 				if (isset($parser['callback'])) {
-					$source = preg_replace_callback($parser['pattern'], array($this, $parser['callback']), $source);
+					$source = preg_replace_callback($parser['pattern'], [$this, $parser['callback']], $source);
 				} else {
 					$source = preg_replace($parser['pattern'], $parser['replace'], $source);
 				}
@@ -169,7 +169,7 @@ class BBCodeParser {
 		$li = preg_split('/<br[^>]*>\R/', $match[1], -1, PREG_SPLIT_NO_EMPTY);
 		if (empty($li)) return $match[0];
 
-		$list = array();
+		$list = [];
 		foreach($li as $l){
 			$list[] = '<li>'.$l.'</li>';
 		}
@@ -187,7 +187,7 @@ class BBCodeParser {
 	public function highlightCode($match)
 	{
 		//Чтобы bb-код и смайлы не работали внутри тега [code]
-		$match[1] = strtr($match[1], array(':' => '&#58;', '[' => '&#91;'));
+		$match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;']);
 
 		return '<pre class="prettyprint linenums">'.$match[1].'</pre>';
 	}
@@ -222,11 +222,12 @@ class BBCodeParser {
 				'</div>';
 	}
 
-	/**
-	 * Обработка смайлов
-	 * @param  string $text Необработанный текст
-	 * @return string       Обработанный текст
-	 */
+    /**
+     * Обработка смайлов
+     * @param $source
+     * @return string Обработанный текст
+     * @internal param string $text Необработанный текст
+     */
 	public function parseSmiles($source)
 	{
 		static $list_smiles;
@@ -260,10 +261,10 @@ class BBCodeParser {
 	 */
 	public function setParser($name, $pattern, $replace)
 	{
-		$this->parsers[$name] = array(
+		$this->parsers[$name] = [
 			'pattern' => $pattern,
 			'replace' => $replace
-		);
+        ];
 	}
 
 	/**
@@ -309,11 +310,12 @@ class BBCodeParser {
 		return array_intersect_key($this->parsers, array_flip($only));
 	}
 
-	/**
-	 * Removes the parsers that you don´t want
-	 * @param  array $except parsers to exclude
-	 * @return array parsers
-	 */
+    /**
+     * Removes the parsers that you don´t want
+     * @param array $excepts
+     * @return array parsers
+     * @internal param array $except parsers to exclude
+     */
 	private function arrayExcept(array $excepts)
 	{
 		return array_diff_key($this->parsers, array_flip($excepts));

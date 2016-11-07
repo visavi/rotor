@@ -61,7 +61,7 @@ switch ($act):
                         if (sendMail($config['emails'],
                                 'Письмо с сайта '.$config['title'],
                                 nl2br(html_entity_decode($body, ENT_QUOTES)).'<br /><br />IP: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Отправлено: '.date_fixed(SITETIME, 'j.m.Y / H:i'),
-                                array('from' => array($umail => $name))
+                                ['from' => [$umail => $name]]
                             )) {
 
                             notice('Ваше письмо успешно отправлено!');

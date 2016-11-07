@@ -39,7 +39,7 @@ if (is_admin()) {
                     echo '<i class="fa fa-folder-open"></i> ';
                     echo '<b>'.$data['order'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ('.$data['count'].')<br />';
 
-                    if (is_admin(array(101))) {
+                    if (is_admin([101])) {
                         echo '<a href="/admin/blog?act=editcats&amp;cid='.$data['id'].'">Редактировать</a> / ';
                         echo '<a href="/admin/blog?act=prodelcats&amp;cid='.$data['id'].'">Удалить</a>';
                     }
@@ -49,7 +49,7 @@ if (is_admin()) {
                 show_error('Разделы блогов еще не созданы!');
             }
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 echo '<br /><div class="form">';
                 echo '<form action="/admin/blog?act=addcats&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<b>Заголовок:</b><br />';
@@ -67,7 +67,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     restatement('blog');
 
@@ -92,11 +92,11 @@ if (is_admin()) {
             $uid = check($_GET['uid']);
             $name = check($_POST['name']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (utf_strlen($name) >= 3 && utf_strlen($name) < 50) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`order`),0)+1 FROM `catsblog`;");
-                        DB::run() -> query("INSERT INTO `catsblog` (`order`, `name`) VALUES (?, ?);", array($maxorder, $name));
+                        DB::run() -> query("INSERT INTO `catsblog` (`order`, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
                         notice('Новый раздел успешно добавлен!');
                         redirect("/admin/blog");
@@ -119,8 +119,8 @@ if (is_admin()) {
         ############################################################################################
         case 'editcats':
 
-            if (is_admin(array(101))) {
-                $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
+            if (is_admin([101])) {
+                $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                 if (!empty($blogs)) {
                     echo '<b><big>Редактирование</big></b><br /><br />';
@@ -152,13 +152,13 @@ if (is_admin()) {
             $name = check($_POST['name']);
             $order = abs(intval($_POST['order']));
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (utf_strlen($name) >= 3 && utf_strlen($name) < 50) {
-                        $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
+                        $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                         if (!empty($blogs)) {
-                            DB::run() -> query("UPDATE `catsblog` SET `order`=?, `name`=? WHERE `id`=?;", array($order, $name, $cid));
+                            DB::run() -> query("UPDATE `catsblog` SET `order`=?, `name`=? WHERE `id`=?;", [$order, $name, $cid]);
 
                             notice('Раздел успешно отредактирован!');
                             redirect("/admin/blog");
@@ -185,8 +185,8 @@ if (is_admin()) {
         ############################################################################################
         case 'prodelcats':
 
-            if (is_admin(array(101))) {
-                $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
+            if (is_admin([101])) {
+                $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                 if (!empty($blogs)) {
                     echo 'Вы уверены что хотите удалить раздел <b>'.$blogs['name'].'</b> в блогах?<br />';
@@ -208,14 +208,14 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101)) && $log == $config['nickname']) {
+            if (is_admin([101]) && $log == $config['nickname']) {
                 if ($uid == $_SESSION['token']) {
-                    $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
+                    $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                     if (!empty($blogs)) {
-                        DB::run() -> query("DELETE FROM `commblog` WHERE `cats`=?;", array($cid));
-                        DB::run() -> query("DELETE FROM `blogs` WHERE `cats_id`=?;", array($cid));
-                        DB::run() -> query("DELETE FROM `catsblog` WHERE `id`=?;", array($cid));
+                        DB::run() -> query("DELETE FROM `commblog` WHERE `cats`=?;", [$cid]);
+                        DB::run() -> query("DELETE FROM `blogs` WHERE `cats_id`=?;", [$cid]);
+                        DB::run() -> query("DELETE FROM `catsblog` WHERE `id`=?;", [$cid]);
 
                         notice('Раздел успешно удален!');
                         redirect("/admin/blog");
@@ -238,7 +238,7 @@ if (is_admin()) {
         ############################################################################################
         case 'blog':
 
-            $cats = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", array($cid));
+            $cats = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
             if (!empty($cats)) {
                 $config['newtitle'] = $cats['name'];
@@ -247,14 +247,14 @@ if (is_admin()) {
                 echo ' (<a href="/blog/blog?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
                 echo '<hr />';
 
-                $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `cats_id`=?;", array($cid));
+                $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `cats_id`=?;", [$cid]);
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `cats_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", array($cid));
+                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `cats_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$cid]);
 
                     echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -292,7 +292,7 @@ if (is_admin()) {
         ############################################################################################
         case 'editblog':
 
-            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
+            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($blogs)) {
                 echo '<b><big>Редактирование</big></b><br /><br />';
@@ -334,10 +334,10 @@ if (is_admin()) {
                     if (utf_strlen($text) >= 100 && utf_strlen($text) <= $config['maxblogpost']) {
                         if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
                             if (preg_match('|^[a-z0-9\-]+$|i', $user)) {
-                                $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
+                                $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
                                 if (!empty($queryblog)) {
 
-                                    DB::run() -> query("UPDATE `blogs` SET `title`=?, `text`=?, `user`=?, `tags`=? WHERE `id`=?;", array($title, $text, $user, $tags, $id));
+                                    DB::run() -> query("UPDATE `blogs` SET `title`=?, `text`=?, `user`=?, `tags`=? WHERE `id`=?;", [$title, $text, $user, $tags, $id]);
 
                                     notice('Статья успешно отредактирована!');
                                     redirect("/admin/blog?act=blog&cid=$cid&start=$start");
@@ -370,7 +370,7 @@ if (is_admin()) {
         ############################################################################################
         case 'moveblog':
 
-            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
+            $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($blogs)) {
                 echo '<i class="fa fa-file-o"></i> <b>'.$blogs['title'].'</b><br /><br />';
@@ -413,15 +413,15 @@ if (is_admin()) {
             $section = abs(intval($_POST['section']));
 
             if ($uid == $_SESSION['token']) {
-                $querycats = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", array($section));
+                $querycats = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", [$section]);
                 if (!empty($querycats)) {
-                    $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
+                    $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryblog)) {
-                        DB::run() -> query("UPDATE `blogs` SET `cats_id`=? WHERE `id`=?;", array($section, $id));
-                        DB::run() -> query("UPDATE `commblog` SET `cats`=? WHERE `blog`=?;", array($section, $id));
+                        DB::run() -> query("UPDATE `blogs` SET `cats_id`=? WHERE `id`=?;", [$section, $id]);
+                        DB::run() -> query("UPDATE `commblog` SET `cats`=? WHERE `blog`=?;", [$section, $id]);
                         // Обновление счетчиков
-                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", array($section));
-                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", array($cid));
+                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$section]);
+                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$cid]);
 
                         notice('Статья успешно перемещена!');
                         redirect("/admin/blog?act=blog&cid=$section");
@@ -449,7 +449,7 @@ if (is_admin()) {
             if (isset($_POST['del'])) {
                 $del = intar($_POST['del']);
             } elseif (isset($_GET['del'])) {
-                $del = array(abs(intval($_GET['del'])));
+                $del = [abs(intval($_GET['del']))];
             } else {
                 $del = 0;
             }
@@ -461,7 +461,7 @@ if (is_admin()) {
                     DB::run() -> query("DELETE FROM `commblog` WHERE `blog` IN (".$del.");");
                     $delblogs = DB::run() -> exec("DELETE FROM `blogs` WHERE `id` IN (".$del.");");
                     // Обновление счетчиков
-                    DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-? WHERE `id`=?", array($delblogs, $cid));
+                    DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-? WHERE `id`=?", [$delblogs, $cid]);
 
                     notice('Выбранные статьи успешно удалены!');
                     redirect("/admin/blog?act=blog&cid=$cid&start=$start");

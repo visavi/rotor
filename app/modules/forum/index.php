@@ -7,7 +7,7 @@ if (empty(count($forums))) {
     App::abort('default', 'Разделы форума еще не созданы!');
 }
 
-$output = array();
+$output = [];
 
 foreach ($forums as $row) {
     $id = $row['id'];

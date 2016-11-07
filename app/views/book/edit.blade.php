@@ -20,5 +20,5 @@
         </form>
     </div><br />
 
-    <?php render('includes/back', array('link' => '/book', 'title' => 'Вернуться')); ?>
+    <?php render('includes/back', ['link' => '/book', 'title' => 'Вернуться']); ?>
 @stop

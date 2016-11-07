@@ -5,7 +5,7 @@ $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
 show_title('Блоги - Печать страницы');
 
-$blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", array($id));
+$blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
 
 if (!empty($blog)) {
 
@@ -16,12 +16,12 @@ if (!empty($blog)) {
 
     header("Content-Encoding: none");
     header('Content-type:text/html; charset=utf-8');
-    die(render('blog/print', array('blog' => $blog)));
+    die(render('blog/print', ['blog' => $blog]));
 
 } else {
     show_error('Ошибка! Выбранная вами статья не существует, возможно она была удалена!');
 }
 
-render('includes/back', array('link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif'));
+render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif']);
 
 App::view($config['themes'].'/foot');

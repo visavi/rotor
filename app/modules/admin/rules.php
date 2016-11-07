@@ -12,7 +12,7 @@ if (isset($_GET['start'])) {
     $start = 0;
 }
 
-if (is_admin(array(101, 102))) {
+if (is_admin([101, 102])) {
     show_title('Правила сайта');
 
     switch ($act):
@@ -24,7 +24,7 @@ if (is_admin(array(101, 102))) {
             $rules = DB::run() -> queryFetch("SELECT * FROM `rules`;");
 
             if (!empty($rules)) {
-                $rules['text'] = str_replace(array('%SITENAME%', '%MAXBAN%'), array($config['title'], round($config['maxbantime'] / 1440)), $rules['text']);
+                $rules['text'] = str_replace(['%SITENAME%', '%MAXBAN%'], [$config['title'], round($config['maxbantime'] / 1440)], $rules['text']);
 
                 echo bb_code($rules['text']).'<hr />';
 
@@ -68,7 +68,7 @@ if (is_admin(array(101, 102))) {
                 if (utf_strlen($msg) > 0) {
                     $msg = str_replace('&#37;', '%', $msg);
 
-                    DB::run() -> query("REPLACE INTO `rules` (`id`, `text`, `time`) VALUES (?,?,?);", array(1, $msg, SITETIME));
+                    DB::run() -> query("REPLACE INTO `rules` (`id`, `text`, `time`) VALUES (?,?,?);", [1, $msg, SITETIME]);
 
                     notice('Правила успешно изменены!');
                     redirect("/admin/rules");

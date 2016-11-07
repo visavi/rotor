@@ -21,7 +21,7 @@ if (isset($_GET['start'])) {
     $start = 0;
 }
 
-if (is_admin(array(101, 102))) {
+if (is_admin([101, 102])) {
     show_title('Управление пользователями');
 
     switch ($act):
@@ -125,7 +125,7 @@ if (is_admin(array(101, 102))) {
         ############################################################################################
         case 'edit':
 
-            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($uz), utf_lower($uz)));
+            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($uz), utf_lower($uz)]);
 
             if (!empty($user)) {
                 $uz = $user['login'];
@@ -141,7 +141,7 @@ if (is_admin(array(101, 102))) {
                     echo '<form method="post" action="/admin/users?act=upgrade&amp;uz='.$user['login'].'&amp;uid='.$_SESSION['token'].'">';
 
                     if ($log == $config['nickname']) {
-                        $arr_access = array(101, 102, 103, 105, 107);
+                        $arr_access = [101, 102, 103, 105, 107];
 
                         echo 'Уровень доступа:<br />';
                         echo '<select name="level">';
@@ -205,7 +205,7 @@ if (is_admin(array(101, 102))) {
                         echo '<span style="color:#ff0000"><b>Аккаунт не активирован</b></span><br />';
                     }
 
-                    $visit = DB::run() -> queryFetch("SELECT `ip`, `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", array($uz));
+                    $visit = DB::run() -> queryFetch("SELECT `ip`, `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", [$uz]);
                     if (!empty($visit)) {
                         echo '<b>Последний визит:</b> '.date_fixed($visit['nowtime'], 'j F Y / H:i').'<br />';
                         echo '<b>Последний IP:</b> '.$visit['ip'].'<br />';
@@ -267,7 +267,7 @@ if (is_admin(array(101, 102))) {
             $negrating = intval($_POST['negrating']);
 
             if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
                     if ($log == $config['nickname'] || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
@@ -300,7 +300,7 @@ if (is_admin(array(101, 102))) {
                                                     $city = utf_substr($city, 0, 50);
                                                     $rating = $posrating - $negrating;
 
-                                                    DB::run() -> query("UPDATE `users` SET `pass`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `avatar`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", array($mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz));
+                                                    DB::run() -> query("UPDATE `users` SET `pass`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `avatar`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz]);
 
                                                     save_title();
                                                     save_nickname();
@@ -387,24 +387,24 @@ if (is_admin(array(101, 102))) {
             $delimages = (empty($_POST['delimages'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+                $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
                     if ($user['level'] < 101 || $user['level'] > 105) {
 
                         // -------------//
                         if (!empty($mailblack)) {
-                            $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $user['email']));
+                            $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $user['email']]);
                             if (empty($blackmail) && !empty($user['email'])) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(1, $user['email'], $log, SITETIME));
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], $log, SITETIME]);
                             }
                         }
 
                         // -------------//
                         if (!empty($loginblack)) {
-                            $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($user['login'])));
+                            $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($user['login'])]);
                             if (empty($blacklogin)) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", array(2, $user['login'], $log, SITETIME));
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], $log, SITETIME]);
                             }
                         }
 
@@ -416,7 +416,7 @@ if (is_admin(array(101, 102))) {
                         // ------ Удаление тем в форуме -------//
                         if (!empty($delpostforum) || !empty($deltopicforum)) {
 
-                            $query = DB::run() -> query("SELECT `id` FROM `topics` WHERE `author`=?;", array($uz));
+                            $query = DB::run() -> query("SELECT `id` FROM `topics` WHERE `author`=?;", [$uz]);
                             $topics = $query -> fetchAll(PDO::FETCH_COLUMN);
 
                             if (!empty($topics)){
@@ -435,10 +435,10 @@ if (is_admin(array(101, 102))) {
 
                             // ------ Удаление сообщений в форуме -------//
                             if (!empty($delpostforum)) {
-                                DB::run() -> query("DELETE FROM `posts` WHERE `user`=?;", array($uz));
+                                DB::run() -> query("DELETE FROM `posts` WHERE `user`=?;", [$uz]);
 
                                 // ------ Удаление загруженных файлов -------//
-                                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `user`=?;", array($uz));
+                                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `user`=?;", [$uz]);
                                 $files = $queryfiles->fetchAll();
 
                                 if (!empty($files)){
@@ -447,7 +447,7 @@ if (is_admin(array(101, 102))) {
                                             unlink(HOME.'/upload/forum/'.$file['topics_id'].'/'.$file['hash']);
                                         }
                                     }
-                                    DB::run() -> query("DELETE FROM `files_forum` WHERE `user`=?;", array($uz));
+                                    DB::run() -> query("DELETE FROM `files_forum` WHERE `user`=?;", [$uz]);
                                 }
                                 // ------ Удаление загруженных файлов -------//
                             }
@@ -457,22 +457,22 @@ if (is_admin(array(101, 102))) {
 
                         // ------ Удаление коментарий -------//
                         if (!empty($delcommblog)) {
-                            DB::run() -> query("DELETE FROM `commblog` WHERE `author`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `commblog` WHERE `author`=?;", [$uz]);
                             restatement('blog');
                         }
 
                         if (!empty($delcommload)) {
-                            DB::run() -> query("DELETE FROM `commload` WHERE `author`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `commload` WHERE `author`=?;", [$uz]);
                             restatement('load');
                         }
 
                         if (!empty($delcommphoto)) {
-                            DB::run() -> query("DELETE FROM `commphoto` WHERE `user`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `commphoto` WHERE `user`=?;", [$uz]);
                             restatement('gallery');
                         }
 
                         if (!empty($delcommnews)) {
-                            DB::run() -> query("DELETE FROM `commnews` WHERE `author`=?;", array($uz));
+                            DB::run() -> query("DELETE FROM `commnews` WHERE `author`=?;", [$uz]);
                             restatement('news');
                         }
 

@@ -34,7 +34,7 @@ if (is_user()) {
                 $num3 = mt_rand(1, 8);
                 $num4 = mt_rand(1, 8);
 
-                $num_arr = array(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 8);
+                $num_arr = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 8];
                 $num5 = $num_arr[array_rand($num_arr)];
 
                 $num6 = mt_rand(1, 8);
@@ -330,12 +330,12 @@ if (is_user()) {
                     $sum += "150";
                 }
 
-                DB::run()->query("UPDATE users SET money=money-5 WHERE login=?", array($log));
+                DB::run()->query("UPDATE users SET money=money-5 WHERE login=?", [$log]);
 
                 if ($sum > 0) {
                     echo 'Ваш выигрыш составил: <b>' . (int)$sum . '</b><br /><br />';
 
-                    DB::run()->query("UPDATE users SET money=money+? WHERE login=?", array($sum, $log));
+                    DB::run()->query("UPDATE users SET money=money+? WHERE login=?", [$sum, $log]);
                 }
 
                 echo '<b><a href="bandit?act=go&amp;rand=' . $rand . '">Играть</a></b><br />';
@@ -343,7 +343,7 @@ if (is_user()) {
                 show_error('Вы не можете играть т.к. на вашем счету недостаточно средств');
             }
 
-            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", array($log));
+            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", [$log]);
 
             echo 'В наличии ' . moneys($allmoney) . '<br /><br />';
 

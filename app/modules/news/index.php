@@ -11,7 +11,7 @@ switch ($act):
 case 'index':
     show_title('Новости сайта');
 
-    if (is_admin(array(101, 102))){
+    if (is_admin([101, 102])){
         echo '<div class="form"><a href="/admin/news">Управление новостями</a></div>';
     }
 
@@ -33,7 +33,7 @@ case 'index':
             echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small></div>';
 
             if (!empty($data['image'])) {
-                echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, array('alt' => $data['title'])).'</a></div>';
+                echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
             }
 
             if(stristr($data['text'], '[cut]')) {
@@ -60,7 +60,7 @@ break;
 ############################################################################################
 case 'view':
 
-    $data = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", array($id));
+    $data = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($data)) {
 
@@ -77,7 +77,7 @@ case 'view':
 
         if (!empty($data['image'])) {
 
-            echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, array('alt' => $data['title'])).'</a></div>';
+            echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
         }
 
         $data['text'] = str_replace('[cut]', '', $data['text']);
@@ -87,7 +87,7 @@ case 'view':
         if ($data['comments'] > 0) {
             echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
 
-            $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `id`=? ORDER BY `time` DESC LIMIT 5;", array($id));
+            $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `id`=? ORDER BY `time` DESC LIMIT 5;", [$id]);
             $comments = $querycomm -> fetchAll();
             $comments = array_reverse($comments);
 
@@ -147,7 +147,7 @@ break;
 ##                                     Комментарии                                        ##
 ############################################################################################
 case 'comments':
-    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", array($id));
+    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($datanews)) {
         $config['newtitle'] = 'Комментарии - '.$datanews['title'];
@@ -157,7 +157,7 @@ case 'comments':
 
         echo '<h1><a href="/news/'.$datanews['id'].'">'.$datanews['title'].'</a></h1>';
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `commnews` WHERE `id`=?;", array($id));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `commnews` WHERE `id`=?;", [$id]);
 
         if ($total > 0) {
             if ($start >= $total) {
@@ -170,7 +170,7 @@ case 'comments':
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
             }
 
-            $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postnews'].";", array($id));
+            $querycomm = DB::run() -> query("SELECT * FROM `commnews` WHERE `id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postnews'].";", [$id]);
 
             while ($data = $querycomm -> fetch()) {
 
@@ -240,12 +240,12 @@ case 'create':
 
     if (is_user()) {
 
-        $data = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", array($id));
+        $data = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
         $validation = new Validation();
 
-        $validation -> addRule('equal', array($token, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-            -> addRule('equal', array(is_flood($log), true), 'Антифлуд! Разрешается комментировать раз в '.flood_period().' сек!')
+        $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            -> addRule('equal', [is_flood($log), true], 'Антифлуд! Разрешается комментировать раз в '.flood_period().' сек!')
             -> addRule('not_empty', $data, 'Выбранной новости не существует, возможно она было удалена!')
             -> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
             -> addRule('empty', $data['closed'], 'Комментирование данной новости запрещено!');
@@ -254,12 +254,12 @@ case 'create':
 
             $msg = antimat($msg);
 
-            DB::run() -> query("INSERT INTO `commnews` (`news_id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", array($id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()));
+            DB::run() -> query("INSERT INTO `commnews` (`news_id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-            DB::run() -> query("DELETE FROM `commnews` WHERE `id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commnews` WHERE `id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommnews'].") AS del);", array($id, $id));
+            DB::run() -> query("DELETE FROM `commnews` WHERE `id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commnews` WHERE `id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommnews'].") AS del);", [$id, $id]);
 
-            DB::run() -> query("UPDATE `news` SET `comments`=`comments`+1 WHERE `id`=?;", array($id));
-            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", array($log));
+            DB::run() -> query("UPDATE `news` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
+            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
 
             notice('Комментарий успешно добавлен!');
 
@@ -295,7 +295,7 @@ case 'delete':
                 $del = implode(',', $del);
 
                 $delcomments = DB::run() -> exec("DELETE FROM `commnews` WHERE `id` IN (".$del.") AND `id`=".$id.";");
-                DB::run() -> query("UPDATE `news` SET `comments`=`comments`-? WHERE `id`=?;", array($delcomments, $id));
+                DB::run() -> query("UPDATE `news` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                 notice('Выбранные комментарии успешно удалены!');
                 redirect('/news/'.$id.'/comments?start='.$start);
@@ -319,7 +319,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commnews` WHERE `id`=? LIMIT 1;", array($id));
+    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commnews` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($query)) {
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];

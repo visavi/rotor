@@ -69,22 +69,22 @@ case 'edit':
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('regex', array($themes, '|^[a-z0-9_\-]+$|i'), 'Недопустимое название темы!', true)
-        -> addRule('regex', array($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|'), 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!', true);
+    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+        -> addRule('regex', [$themes, '|^[a-z0-9_\-]+$|i'], 'Недопустимое название темы!', true)
+        -> addRule('regex', [$timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|'], 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!', true);
 
     if ($validation->run()) {
         if (file_exists(HOME."/themes/$themes/index.php") || $themes==0) {
 
-            $user = DBM::run()->update('users', array(
+            $user = DBM::run()->update('users', [
                 'themes'      => $themes,
                 'timezone'    => $timezone,
                 'ipbinding'   => $ipbinding,
                 'privacy'     => $privacy,
                 'subscribe'   => $subscribe,
-            ), array(
+            ], [
                 'login' => $log
-            ));
+            ]);
 
             notice('Настройки успешно изменены!');
             redirect("/setting");

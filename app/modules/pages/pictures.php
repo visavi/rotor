@@ -107,12 +107,12 @@ if (is_user()) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                $userpic = DB::run() -> querySingle("SELECT `picture` FROM `users` WHERE `login`=? LIMIT 1;", array($log));
+                $userpic = DB::run() -> querySingle("SELECT `picture` FROM `users` WHERE `login`=? LIMIT 1;", [$log]);
 
                 if (!empty($userpic)){
 
                     unlink_image('upload/photos/', $userpic);
-                    DB::run() -> query("UPDATE `users` SET `picture`=? WHERE `login`=?", array('', $log));
+                    DB::run() -> query("UPDATE `users` SET `picture`=? WHERE `login`=?", ['', $log]);
 
                     notice('Фотография успешно удалена!');
                     redirect("/profile");

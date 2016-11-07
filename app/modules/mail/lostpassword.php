@@ -36,7 +36,7 @@ case 'remind':
 
     if (!empty($uz)) {
 
-        $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR `email`=? OR LOWER(`nickname`)=? LIMIT 1;", array($uz, $uz, $uz));
+        $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR `email`=? OR LOWER(`nickname`)=? LIMIT 1;", [$uz, $uz, $uz]);
 
         if (!empty($user)) {
 
@@ -96,22 +96,22 @@ case 'send':
     $email = check(strval($_POST['email']));
     $provkod = check($_POST['provkod']);
 
-    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
     if (! empty($user)) {
 
         $validation = new Validation();
 
-        $validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
+        $validation -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
             -> addRule('not_empty', $email, 'Не введен адрес почтового ящика для восстановления!')
             -> addRule('not_empty', $user['email'], 'У данного пользователя не установлен email!')
-            -> addRule('equal', array($email, $user['email']), 'Введенный адрес email не совпадает с адресом в профиле!')
-            -> addRule('min', array($user['timepasswd'], SITETIME), 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
+            -> addRule('equal', [$email, $user['email']], 'Введенный адрес email не совпадает с адресом в профиле!')
+            -> addRule('min', [$user['timepasswd'], SITETIME], 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
 
         if ($validation->run()) {
 
             $restkey = generate_password();
 
-            DB::run() -> query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", array($restkey, SITETIME + 43200, $uz));
+            DB::run() -> query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$restkey, SITETIME + 43200, $uz]);
             // ---------------- Инструкция по восстановлению пароля на E-mail --------------------------//
             sendMail($user['email'],
                 'Подтверждение восстановления пароля на сайте '.$config['title'],
@@ -141,22 +141,22 @@ case 'restore':
     $uz = isset($_GET['uz']) ? check($_GET['uz']) : '';
     $key = isset($_GET['key']) ? check($_GET['key']) : '';
 
-    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
     if (!empty($user)) {
 
         $validation = new Validation();
 
         $validation -> addRule('not_empty', $key, 'Отсутствует секретный код в ссылке для восстановления пароля!')
             -> addRule('not_empty', $user['keypasswd'], 'Данный пользователь не запрашивал восстановление пароля!')
-            -> addRule('equal', array($key, $user['keypasswd']), 'Секретный код в ссылке не совпадает с данными в профиле!')
-            -> addRule('max', array($user['timepasswd'], SITETIME), 'Секретный ключ для восстановления уже устарел!');
+            -> addRule('equal', [$key, $user['keypasswd']], 'Секретный код в ссылке не совпадает с данными в профиле!')
+            -> addRule('max', [$user['timepasswd'], SITETIME], 'Секретный ключ для восстановления уже устарел!');
 
         if ($validation->run()) {
 
             $newpass = generate_password();
             $mdnewpas = md5(md5($newpass));
 
-            DB::run() -> query("UPDATE `users` SET `pass`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", array($mdnewpas, '', 0, $uz));
+            DB::run() -> query("UPDATE `users` SET `pass`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$mdnewpas, '', 0, $uz]);
 
             echo '<b>Пароль успешно восстановлен!</b><br />';
             echo 'Ваши новые данные для входа на сайт<br /><br />';
@@ -192,22 +192,22 @@ case 'answer':
     $answer = check(strval($_POST['answer']));
     $provkod = check($_POST['provkod']);
 
-    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", array($uz));
+    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
     if (!empty($user)) {
 
         $validation = new Validation();
 
-        $validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
+        $validation -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
             -> addRule('not_empty', $answer, 'Не введен ответ на секретный вопрос для восстановления!')
             -> addRule('not_empty', $user['secquest'], 'У данного пользователя не установлен секретный вопрос!')
-            -> addRule('equal', array(md5(md5($answer)), $user['secanswer']), 'Ответ на секретный вопрос не совпадает с данными в профиле!');
+            -> addRule('equal', [md5(md5($answer)), $user['secanswer']], 'Ответ на секретный вопрос не совпадает с данными в профиле!');
 
         if ($validation->run()) {
 
             $newpass = generate_password();
             $mdnewpas = md5(md5($newpass));
 
-            DB::run() -> query("UPDATE `users` SET `pass`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", array($mdnewpas, '', 0, $uz));
+            DB::run() -> query("UPDATE `users` SET `pass`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$mdnewpas, '', 0, $uz]);
 
             echo '<b>Пароль успешно восстановлен!</b><br />';
             echo 'Ваши новые данные для входа на сайт<br /><br />';

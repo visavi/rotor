@@ -25,7 +25,7 @@ case 'index':
 	echo '<div class="pull-right">';
 	if (!empty($udata['picture']) && file_exists(HOME.'/upload/photos/'.$udata['picture'])) {
 		echo '<a href="/upload/photos/'.$udata['picture'].'">';
-		echo resize_image('upload/photos/', $udata['picture'], $config['previewsize'], array('alt' => nickname($udata['login']), 'class' => 'img-responsive img-rounded')).'</a>';
+		echo resize_image('upload/photos/', $udata['picture'], $config['previewsize'], ['alt' => nickname($udata['login']), 'class' => 'img-responsive img-rounded']).'</a>';
 		echo '<a href="/pictures">Изменить</a> / <a href="/pictures?act=del&amp;uid='.$_SESSION['token'].'">Удалить</a>';
 	} else {
 		echo '<img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />';
@@ -73,11 +73,11 @@ case 'edit':
 
 	$validation = new Validation();
 
-	$validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-		-> addRule('regex', array($site, '#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u'), 'Недопустимый адрес сайта, необходим формата http://my_site.domen!', false)
-		-> addRule('regex', array($birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#'), 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!', false)
-		-> addRule('regex', array($icq, '#^[0-9]{5,10}$#'), 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!', false)
-		-> addRule('regex', array($skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#'), 'Недопустимый формат Skype, только латинские символы от 6 до 32!', false)
+	$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+		-> addRule('regex', [$site, '#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u'], 'Недопустимый адрес сайта, необходим формата http://my_site.domen!', false)
+		-> addRule('regex', [$birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#'], 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!', false)
+		-> addRule('regex', [$icq, '#^[0-9]{5,10}$#'], 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!', false)
+		-> addRule('regex', [$skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#'], 'Недопустимый формат Skype, только латинские символы от 6 до 32!', false)
 		-> addRule('numeric', $gender, 'Вы не указали ваш пол!', true, 1, 2)
 		-> addRule('string', $info, 'Слишком большая информация о себе, не более 1000 символов!',  true, 0, 1000);
 
@@ -87,7 +87,7 @@ case 'edit':
 		$country = utf_substr($country, 0, 30);
 		$city = utf_substr($city, 0, 50);
 
-		DB::run() -> query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `gender`=?, `info`=? WHERE `login`=? LIMIT 1;", array($name, $country, $city, $icq, $skype, $site, $birthday, $gender, $info, $log));
+		DB::run() -> query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `gender`=?, `info`=? WHERE `login`=? LIMIT 1;", [$name, $country, $city, $icq, $skype, $site, $birthday, $gender, $info, $log]);
 
 		notice('Ваш профиль успешно изменен!');
 		redirect("/profile");

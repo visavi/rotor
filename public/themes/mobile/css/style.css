@@ -7,7 +7,6 @@ body, td, tr {
 }
 
 body {
-	margin : 5px;
 	padding : 5px;
 	background : #f3f3f3;
 	color : #666;
@@ -129,7 +128,6 @@ img {
 	color : #666;
 	background-color : #f3f3f3;
 	padding : 3px;
-	color : #666;
 	border : 1px solid #ccc;
 	overflow:hidden;
 }

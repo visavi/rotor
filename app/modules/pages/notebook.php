@@ -15,7 +15,7 @@ if (is_user()) {
         ##                                    Главная страница                                    ##
         ############################################################################################
         case "index":
-            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", array($log));
+            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", [$log]);
 
             echo 'Здесь вы можете хранить отрывки сообщений или любую другую важную информацию<br /><br />';
 
@@ -36,7 +36,7 @@ if (is_user()) {
         ############################################################################################
         case "edit":
 
-            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", array($log));
+            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", [$log]);
 
             echo '<div class="form">';
             echo '<form action="/notebook?act=change&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -59,11 +59,11 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) < 10000) {
 
-                    $querynote = DB::run() -> querySingle("SELECT `id` FROM `notebook` WHERE `user`=? LIMIT 1;", array($log));
+                    $querynote = DB::run() -> querySingle("SELECT `id` FROM `notebook` WHERE `user`=? LIMIT 1;", [$log]);
                     if (!empty($querynote)) {
-                        DB::run() -> query("UPDATE `notebook` SET `text`=?, `time`=? WHERE `user`=?", array($msg, SITETIME, $log));
+                        DB::run() -> query("UPDATE `notebook` SET `text`=?, `time`=? WHERE `user`=?", [$msg, SITETIME, $log]);
                     } else {
-                        DB::run() -> query("INSERT INTO `notebook` (`user`, `text`, `time`) VALUES (?, ?, ?);", array($log, $msg, SITETIME));
+                        DB::run() -> query("INSERT INTO `notebook` (`user`, `text`, `time`) VALUES (?, ?, ?);", [$log, $msg, SITETIME]);
                     }
 
                     notice('Запись успешно сохранена!');

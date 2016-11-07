@@ -6,14 +6,14 @@ $(document).ready(function(){
 
     toastr.options = {
         "progressBar": true,
-        "positionClass": "toast-top-full-width",
+        "positionClass": "toast-top-full-width"
     };
 
     $('#markItUp').markItUp(mySettings);
     $('#markItUpHtml').markItUp(myHtmlSettings);
 
     $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover()
+    $('[data-toggle="popover"]').popover();
 
     // Скрывает поповеры по клику в любом месте
     $('body').on('click', function (e) {
@@ -60,27 +60,30 @@ function postJump() {
 }
 
 /* Ответ на сообщение */
-function postReply(name) {
-
+function postReply(name)
+{
     postJump();
-    separator = $("#markItUp").val().length ? '\n' : '';
-    $('#markItUp').focus().val($('#markItUp').val() + separator + '[b]' + name + '[/b], ');
+
+    var field = $("#markItUp");
+    separ = field.val().length ? '\n' : '';
+    field.focus().val(field.val() + separ + '[b]' + name + '[/b], ');
 
     return false;
 }
 
 /* Цитирование сообщения */
-function postQuote(el) {
-
+function postQuote(el)
+{
     postJump();
 
+    var field = $("#markItUp");
     var post = $(el).closest('.post');
     var author = post.find('b').text();
     var date = post.find('small').text();
     var message = post.find('.message').text();
 
-    separator = $("#markItUp").val().length ? '\n' : '';
-    $('#markItUp').focus().val($('#markItUp').val() + separator + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
+    separ = field.val().length ? '\n' : '';
+    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
 
     return false;
 }

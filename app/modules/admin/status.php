@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin(array(101, 102))) {
+if (is_admin([101, 102])) {
     show_title('Управление статусами');
 
     switch ($act):
@@ -50,7 +50,7 @@ if (is_admin(array(101, 102))) {
 
             $id = abs(intval($_GET['id']));
 
-            $status = DB::run() -> queryFetch("SELECT * FROM `status` WHERE `id`=? LIMIT 1;", array($id));
+            $status = DB::run() -> queryFetch("SELECT * FROM `status` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($status)) {
                 echo '<b><big>Изменение статуса</big></b><br /><br />';
@@ -89,7 +89,7 @@ if (is_admin(array(101, 102))) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($name) >= 5 && utf_strlen($name) < 30) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
-                        DB::run() -> query("UPDATE `status` SET `topoint`=?, `point`=?, `name`=?, `color`=? WHERE `id`=?;", array($topoint, $point, $name, $color, $id));
+                        DB::run() -> query("UPDATE `status` SET `topoint`=?, `point`=?, `name`=?, `color`=? WHERE `id`=?;", [$topoint, $point, $name, $color, $id]);
 
                         notice('Статус успешно изменен!');
                         redirect("/admin/status");
@@ -143,7 +143,7 @@ if (is_admin(array(101, 102))) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($name) >= 5 && utf_strlen($name) < 30) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
-                        DB::run() -> query("INSERT INTO `status` (`topoint`, `point`, `name`, `color`) VALUES (?, ?, ?, ?);", array($topoint, $point, $name, $color));
+                        DB::run() -> query("INSERT INTO `status` (`topoint`, `point`, `name`, `color`) VALUES (?, ?, ?, ?);", [$topoint, $point, $name, $color]);
 
                         notice('Статус успешно добавлен!');
                         redirect("/admin/status");
@@ -170,7 +170,7 @@ if (is_admin(array(101, 102))) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($id)) {
-                    DB::run() -> query("DELETE FROM `status` WHERE `id`=?;", array($id));
+                    DB::run() -> query("DELETE FROM `status` WHERE `id`=?;", [$id]);
 
                     notice('Статус успешно удален!');
                     redirect("/admin/status");

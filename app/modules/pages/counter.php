@@ -66,10 +66,10 @@ switch ($act):
 			$querycount = DB::run() -> query("SELECT * FROM `counter24` ORDER BY `hour` DESC;");
 			$counts = $querycount -> fetchAll();
 
-			$arrhits = array();
-			$arrhosts = array();
-			$hits_data = array();
-			$host_data = array();
+			$arrhits = [];
+			$arrhosts = [];
+			$hits_data = [];
+			$host_data = [];
 
 			foreach ($counts as $val) {
 				$arrhits[$val['hour']] = $val['hits'];
@@ -122,10 +122,10 @@ switch ($act):
 			$querycount = DB::run() -> query("SELECT * FROM `counter31` ORDER BY `days` DESC;");
 			$counts = $querycount -> fetchAll();
 
-			$arrhits = array();
-			$arrhosts = array();
-			$hits_data = array();
-			$host_data = array();
+			$arrhits = [];
+			$arrhosts = [];
+			$hits_data = [];
+			$host_data = [];
 
 			foreach ($counts as $val) {
 				$arrhits[$val['days']] = $val['hits'];

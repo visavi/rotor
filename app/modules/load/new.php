@@ -11,7 +11,7 @@ switch ($act):
 case 'files':
     show_title('Список новых файлов');
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", array(1));
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [1]);
 
     if ($total > 0) {
         if ($total > 100) {
@@ -21,7 +21,7 @@ case 'files':
             $start = 0;
         }
 
-        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", array(1));
+        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -98,7 +98,7 @@ case 'viewcomm':
         $cid = 0;
     }
 
-    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commload` WHERE `id`<=? AND `down`=? ORDER BY `time` ASC LIMIT 1;", array($cid, $id));
+    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commload` WHERE `id`<=? AND `down`=? ORDER BY `time` ASC LIMIT 1;", [$cid, $id]);
 
     if (!empty($querycomm)) {
         $end = floor(($querycomm - 1) / $config['downlist']) * $config['downlist'];

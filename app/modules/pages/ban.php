@@ -53,17 +53,17 @@ if (is_user()) {
                     if ($config['addbansend'] == 1) {
                         if ($udata['explainban'] == 1) {
                             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                                $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", array($udata['loginsendban']));
+                                $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$udata['loginsendban']]);
                                 if (!empty($queryuser)) {
 
                                     $msg = antimat($msg);
 
                                     $textpriv = 'Объяснение нарушения: '.$msg;
 
-                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($udata['loginsendban'], $log, $textpriv, SITETIME));
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$udata['loginsendban'], $log, $textpriv, SITETIME]);
 
-                                    DB::run() -> query("UPDATE `users` SET `explainban`=? WHERE `login`=?;", array(0, $log));
-                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?;", array($udata['loginsendban']));
+                                    DB::run() -> query("UPDATE `users` SET `explainban`=? WHERE `login`=?;", [0, $log]);
+                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?;", [$udata['loginsendban']]);
 
                                     notice('Объяснение успешно отправлено!');
                                     redirect("/ban");
@@ -100,7 +100,7 @@ if (is_user()) {
             echo 'Также у вас есть возможность исправиться и снять строгое нарушение.<br />';
             echo 'Если прошло более 1 месяца после последнего бана, то на странице <b><a href="/razban">Исправительная</a></b> заплатив штраф вы можете снять 1 строгое нарушение<br /><br />';
 
-            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `explainban`=? WHERE `login`=?;", array(0, 0, 0, $log));
+            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `explainban`=? WHERE `login`=?;", [0, 0, 0, $log]);
         }
     } else {
         show_error('Ошибка! Вы не забанены или срок бана истек!');

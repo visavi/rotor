@@ -15,15 +15,15 @@ case 'index':
 
     $config['newtitle'] = 'Список всех ссылок';
 
-    $total = DBM::run()->count('rekuser', array('time' => array('>', SITETIME)));
+    $total = DBM::run()->count('rekuser', ['time' => ['>', SITETIME]]);
     if ($total > 0) {
         if ($start >= $total) {
             $start = 0;
         }
 
-        $reklama = DBM::run()->select('rekuser', array(
-            'time' => array('>', SITETIME),
-        ), $config['rekuserpost'], $start, array('time'=>'DESC'));
+        $reklama = DBM::run()->select('rekuser', [
+            'time' => ['>', SITETIME],
+        ], $config['rekuserpost'], $start, ['time'=>'DESC']);
 
         foreach($reklama as $data) {
             echo '<div class="b">';
@@ -73,23 +73,23 @@ case 'create':
 
                 $validation = new Validation();
 
-                $validation -> addRule('equal', array($uid, $_SESSION['token']), 'Неверный идентификатор сессии, повторите действие!')
-                    -> addRule('max', array($udata['point'], 50), 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
-                    -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
-                    -> addRule('regex', array($site, '|^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'), 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)
+                $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                    -> addRule('max', [$udata['point'], 50], 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
+                    -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
+                    -> addRule('regex', [$site, '|^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'], 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)
                     -> addRule('string', $site, 'Слишком длинный или короткий адрес ссылки!', true, 5, 50)
                     -> addRule('string', $name, 'Слишком длинное или короткое название ссылки!', true, 5, 35)
-                    -> addRule('regex', array($color, '|^#+[A-f0-9]{6}$|'), 'Недопустимый формат цвета ссылки! (пример #ff0000)', false);
+                    -> addRule('regex', [$color, '|^#+[A-f0-9]{6}$|'], 'Недопустимый формат цвета ссылки! (пример #ff0000)', false);
 
                 if ($validation->run()) {
 
-                    DBM::run()->delete('rekuser', array('time' => array('<', SITETIME)));
+                    DBM::run()->delete('rekuser', ['time' => ['<', SITETIME]]);
 
-                    $total = DBM::run()->count('rekuser', array('time' => array('>', SITETIME)));
+                    $total = DBM::run()->count('rekuser', ['time' => ['>', SITETIME]]);
 
                     if ($total < $config['rekusertotal']) {
 
-                        $rekuser = DBM::run()->selectFirst('rekuser', array('user' => $log));
+                        $rekuser = DBM::run()->selectFirst('rekuser', ['user' => $log]);
 
                         if (empty($rekuser)) {
                             $price = $config['rekuserprice'];
@@ -104,20 +104,20 @@ case 'create':
 
                             if ($udata['money'] >= $price) {
 
-                                $rek = DBM::run()->insert('rekuser', array(
+                                $rek = DBM::run()->insert('rekuser', [
                                     'site'  => $site,
                                     'name'  => $name,
                                     'color' => $color,
                                     'bold' => $bold,
                                     'user' => $log,
                                     'time' => SITETIME + ($config['rekusertime'] * 3600),
-                                ));
+                                ]);
 
-                                $user = DBM::run()->update('users', array(
-                                    'money' => array('-', $price),
-                                ), array(
+                                $user = DBM::run()->update('users', [
+                                    'money' => ['-', $price],
+                                ], [
                                     'login' => $log
-                                ));
+                                ]);
 
                                 save_advertuser();
 
@@ -139,11 +139,11 @@ case 'create':
             }
 
 
-            $total = DBM::run()->count('rekuser', array('time' => array('>', SITETIME)));
+            $total = DBM::run()->count('rekuser', ['time' => ['>', SITETIME]]);
 
             if ($total < $config['rekusertotal']) {
 
-                $rekuser = DBM::run()->selectFirst('rekuser', array('user' => $log, 'time' => array('>', SITETIME)));
+                $rekuser = DBM::run()->selectFirst('rekuser', ['user' => $log, 'time' => ['>', SITETIME]]);
 
                 if (empty($rekuser)) {
                     echo 'У вас в наличии: <b>'.moneys($udata['money']).'</b><br /><br />';

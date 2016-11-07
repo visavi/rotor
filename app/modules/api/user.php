@@ -7,10 +7,10 @@ $key = (!empty($_REQUEST['key'])) ? check($_REQUEST['key']) : null;
 
 if (!empty($key)){
 
-    $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `apikey`=? LIMIT 1;", array($key));
+    $user = DB::run()->queryFetch("SELECT * FROM `users` WHERE `apikey`=? LIMIT 1;", [$key]);
     if (!empty($user)){
 
-        echo json_encode(array(
+        echo json_encode([
             'login'     => $user['login'],
             'email'     => $user['email'],
             'nickname'  => $user['nickname'],
@@ -33,8 +33,8 @@ if (!empty($key)){
             'picture'   => $user['picture'],
             'rating'    => $user['rating'],
             'lastlogin' => $user['timelastlogin'],
-        ));
+        ]);
 
-    } else {echo json_encode(array('error'=>'nouser'));}
-} else {echo json_encode(array('error'=>'nokey'));}
+    } else {echo json_encode(['error'=>'nouser']);}
+} else {echo json_encode(['error'=>'nokey']);}
 

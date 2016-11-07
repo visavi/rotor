@@ -25,14 +25,14 @@ switch ($act):
 
         show_title('История голосований');
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", array(1));
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
 
         if ($total > 0) {
             if ($start >= $total) {
                 $start = 0;
             }
 
-            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['allvotes'].";", array(1));
+            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['allvotes'].";", [1]);
 
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
@@ -53,7 +53,7 @@ switch ($act):
     case 'result':
         show_title('Результаты голосований');
 
-        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", array($id));
+        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
 
         if (!empty($votes)) {
             if (!empty($votes['closed'])) {
@@ -61,7 +61,7 @@ switch ($act):
 
                 echo '<i class="fa fa-briefcase"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
-                $queryanswer = DB::run() -> query("SELECT `option`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", array($id));
+                $queryanswer = DB::run() -> query("SELECT `option`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", [$id]);
                 $answer = $queryanswer -> fetchAssoc();
 
                 $total = count($answer);

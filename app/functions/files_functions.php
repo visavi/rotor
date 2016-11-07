@@ -70,7 +70,6 @@ function delete_lines($files, $lines) {
 if (!function_exists('clear_files')){
 function clear_files($files) {
     if (file_exists($files)) {
-        $file = file($files);
         $fp = fopen($files, "a+");
         flock ($fp, LOCK_EX);
         ftruncate ($fp, 0);
@@ -132,7 +131,7 @@ if (!function_exists('unifile')){
 function unifile($file, $ceil) {
     if (file_exists($file)) {
         if ($ceil !== "") {
-            $arrdata = array(0);
+            $arrdata = [0];
 
             $files = file($file);
             foreach($files as $value) {

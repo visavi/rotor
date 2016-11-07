@@ -12,7 +12,7 @@ if (isset($_GET['start'])) {
     $start = 0;
 }
 
-if (is_admin(array(101, 102))) {
+if (is_admin([101, 102])) {
     show_title('Просмотр лог-файлов');
 
     if (empty($config['errorlog'])){
@@ -27,14 +27,14 @@ if (is_admin(array(101, 102))) {
 
             echo '<b>Ошибки 404</b> | <a href="/admin/logs?act=403">Ошибки 403</a> | <a href="/admin/logs?act=666">Автобаны</a><br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", array(404));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [404]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(404));
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", [404]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -46,7 +46,7 @@ if (is_admin(array(101, 102))) {
 
                 page_strnavigation('/admin/logs?act=404&amp;', $config['loglist'], $start, $total);
 
-                if (is_admin(array(101))) {
+                if (is_admin([101])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/logs?act=clear&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br />';
                 }
             } else {
@@ -61,14 +61,14 @@ if (is_admin(array(101, 102))) {
 
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <b>Ошибки 403</b> | <a href="/admin/logs?act=666">Автобаны</a><br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", array(403));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [403]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(403));
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", [403]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -91,14 +91,14 @@ if (is_admin(array(101, 102))) {
 
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <a href="/admin/logs?act=403">Ошибки 403</a> | <b>Автобаны</b><br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", array(666));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [666]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", array(666));
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", [666]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -122,7 +122,7 @@ if (is_admin(array(101, 102))) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if (is_admin(array(101))) {
+                if (is_admin([101])) {
                     DB::run() -> query("TRUNCATE `error`;");
 
                     notice('Лог-файлы успешно очищены!');

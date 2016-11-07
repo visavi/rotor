@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin(array(101, 102, 103))) {
+if (is_admin([101, 102, 103])) {
     show_title('Управление антиматом');
 
     switch ($act):
@@ -46,7 +46,7 @@ if (is_admin(array(101, 102, 103))) {
 
             echo 'Всего слов в базе: <b>'.$total.'</b><br /><br />';
 
-            if (is_admin(array(101)) && $total > 0) {
+            if (is_admin([101]) && $total > 0) {
                 echo '<i class="fa fa-times"></i> <a href="/admin/antimat?act=prodel">Очистить</a><br />';
             }
         break;
@@ -61,9 +61,9 @@ if (is_admin(array(101, 102, 103))) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($mat)) {
-                    $querymat = DB::run() -> querySingle("SELECT id FROM antimat WHERE string=? LIMIT 1;", array($mat));
+                    $querymat = DB::run() -> querySingle("SELECT id FROM antimat WHERE string=? LIMIT 1;", [$mat]);
                     if (empty($querymat)) {
-                        DB::run() -> query("INSERT INTO antimat (string) VALUES (?);", array($mat));
+                        DB::run() -> query("INSERT INTO antimat (string) VALUES (?);", [$mat]);
 
                         notice('Слово успешно добавлено в список антимата!');
                         redirect("/admin/antimat");
@@ -91,7 +91,7 @@ if (is_admin(array(101, 102, 103))) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($id)) {
-                    DB::run() -> query("DELETE FROM antimat WHERE id=?;", array($id));
+                    DB::run() -> query("DELETE FROM antimat WHERE id=?;", [$id]);
 
                     notice('Слово успешно удалено из списка антимата!');
                     redirect("/admin/antimat");
@@ -124,7 +124,7 @@ if (is_admin(array(101, 102, 103))) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101))) {
+            if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("DELETE FROM antimat;");
 

@@ -26,14 +26,14 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", array(0));
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [0]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$start.", ".$config['downlist'].";", array(0));
+                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$start.", ".$config['downlist'].";", [0]);
 
                 echo '<form action="/admin/newload?act=deldown&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -79,7 +79,7 @@ if (is_admin()) {
         ############################################################################################
         case 'view':
 
-            $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+            $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($new)) {
                 if (empty($new['active'])) {
@@ -89,7 +89,7 @@ if (is_admin()) {
 
                     if (count($downs) > 0) {
 
-                        if (is_admin(array(101)) && $log == $config['nickname']) {
+                        if (is_admin([101]) && $log == $config['nickname']) {
                             echo '<a href="/admin/newload?act=allow&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете публикацию файла?\')">Опубликовать</a> / ';
                         }
 
@@ -119,7 +119,7 @@ if (is_admin()) {
                         echo '<form action="/admin/newload?act=edit&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
                         echo 'Категория*:<br />';
 
-                        $output = array();
+                        $output = [];
 
                         foreach ($downs as $row) {
                             $i = $row['id'];
@@ -204,18 +204,18 @@ if (is_admin()) {
                                 if (strlen($link) <= 50) {
                                     if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $link)) {
 
-                                        $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+                                        $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
                                         $folder = $new['folder'] ? $new['folder'].'/' : '';
 
                                         if (!empty($new)) {
                                             if (empty($new['active'])) {
-                                                $downs = DB::run() -> querySingle("SELECT `id` FROM `cats` WHERE `id`=? LIMIT 1;", array($cid));
+                                                $downs = DB::run() -> querySingle("SELECT `id` FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
                                                 if (!empty($downs)) {
-                                                    $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? AND `id`<>? LIMIT 1;", array($link, $id));
+                                                    $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? AND `id`<>? LIMIT 1;", [$link, $id]);
                                                     if (empty($downlink)) {
 
-                                                        $newtitle = DB::run() -> querySingle("SELECT `title` FROM `downs` WHERE `title`=? AND `id`<>? LIMIT 1;", array($title, $id));
+                                                        $newtitle = DB::run() -> querySingle("SELECT `title` FROM `downs` WHERE `title`=? AND `id`<>? LIMIT 1;", [$title, $id]);
                                                         if (empty($newtitle)) {
 
                                                             if (!empty($link) && $link != $new['link'] && file_exists(HOME.'/upload/files/'.$folder.$new['link'])) {
@@ -234,7 +234,7 @@ if (is_admin()) {
                                                                         rename(HOME.'/upload/screen/'.$folder.$new['screen'], HOME.'/upload/screen/'.$screen);
                                                                         unlink_image('upload/screen/'.$folder, $new['screen']);
                                                                     }
-                                                                    DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", array($link, $screen, $id));
+                                                                    DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", [$link, $screen, $id]);
                                                                 }
                                                             }
 
@@ -243,13 +243,13 @@ if (is_admin()) {
                                                                 if (user($new['user'])) {
                                                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.$config['home'].'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($new['user'], $log, $textpriv, SITETIME));
+                                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], $log, $textpriv, SITETIME]);
 
-                                                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", array($new['user']));
+                                                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                                                 }
                                                             }
 
-                                                            DB::run() -> query("UPDATE `downs` SET `cats_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `notice`=?, `time`=?, `app`=? WHERE `id`=?;", array($cid, $title, $text, $author, $site, $notice, $new['time'], $app, $id));
+                                                            DB::run() -> query("UPDATE `downs` SET `cats_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `notice`=?, `time`=?, `app`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $notice, $new['time'], $app, $id]);
 
                                                             notice('Данные успешно изменены!');
                                                             redirect("/admin/newload?act=view&id=$id");
@@ -302,23 +302,23 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin(array(101)) && $log == $config['nickname']) {
+            if (is_admin([101]) && $log == $config['nickname']) {
                 if ($uid == $_SESSION['token']) {
-                    $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", array($id));
+                    $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
                     if (!empty($new)) {
                         if (empty($new['active'])) {
                             if (!empty($new['link'])) {
 
-                                DB::run() -> query("UPDATE `downs` SET `notice`=?, `time`=?, `app`=?, `active`=? WHERE `id`=?;", array('', SITETIME, 0, 1, $id));
+                                DB::run() -> query("UPDATE `downs` SET `notice`=?, `time`=?, `app`=?, `active`=? WHERE `id`=?;", ['', SITETIME, 0, 1, $id]);
 
-                                DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", array($new['cats_id']));
+                                DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$new['cats_id']]);
 
                                 if (user($new['user'])) {
                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.$config['home'].'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", array($new['user'], $log, $textpriv, SITETIME));
-                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", array($new['user']));
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], $log, $textpriv, SITETIME]);
+                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                 }
 
                                 notice('Файл успешно опубликован!');
@@ -348,7 +348,7 @@ if (is_admin()) {
         ############################################################################################
         case 'delfile':
 
-            $link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+            $link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
             $folder = $link['folder'] ? $link['folder'].'/' : '';
 
@@ -361,7 +361,7 @@ if (is_admin()) {
 
                     unlink_image('upload/screen/'.$folder, $link['screen']);
 
-                    DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", array('', '', $id));
+                    DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
                     notice('Файл успешно удален!');
                     redirect("/admin/newload?act=view&id=$id");
@@ -381,7 +381,7 @@ if (is_admin()) {
         ############################################################################################
         case 'delscreen':
 
-            $screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", array($id));
+            $screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
             $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
@@ -390,7 +390,7 @@ if (is_admin()) {
 
                     unlink_image('upload/screen/'.$folder, $screen['screen']);
 
-                    DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", array('', $id));
+                    DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
                     notice('Скриншот успешно удален!');
                     redirect("/admin/newload?act=view&id=$id");
@@ -414,7 +414,7 @@ if (is_admin()) {
             if (isset($_POST['del'])) {
                 $del = intar($_POST['del']);
             } elseif (isset($_GET['del'])) {
-                $del = array(abs(intval($_GET['del'])));
+                $del = [abs(intval($_GET['del']))];
             } else {
                 $del = 0;
             }

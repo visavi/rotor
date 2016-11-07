@@ -33,7 +33,7 @@ case 'index':
     $max = max($arraytags);
     $min = min($arraytags);
 
-    render('blog/tags', array('tags' => $arraytags, 'max' => $max, 'min' => $min));
+    render('blog/tags', ['tags' => $arraytags, 'max' => $max, 'min' => $min]);
 break;
 
 ############################################################################################
@@ -72,7 +72,7 @@ case 'search':
             $queryblog = DB::run() -> query("SELECT `blogs`.*, `id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
             $blogs = $queryblog -> fetchAll();
 
-            render('blog/tags_search', array('blogs' => $blogs, 'tags' => $tags, 'total' => $total));
+            render('blog/tags_search', ['blogs' => $blogs, 'tags' => $tags, 'total' => $total]);
 
             page_strnavigation('/blog/tags?act=search&amp;tags='.urlencode($tags).'&amp;', $config['blogpost'], $start, $total);
         } else {
@@ -82,11 +82,11 @@ case 'search':
         show_error('Ошибка! Необходимо не менее 2-х символов в запросе!');
     }
 
-    render('includes/back', array('link' => '/blog/tags', 'title' => 'Облако', 'icon' => 'balloon.gif'));
+    render('includes/back', ['link' => '/blog/tags', 'title' => 'Облако', 'icon' => 'balloon.gif']);
 break;
 
 endswitch;
 
-render('includes/back', array('link' => '/blog', 'title' => 'К блогам'));
+render('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 
 App::view($config['themes'].'/foot');

@@ -4,6 +4,7 @@ class App
 {
     /**
      * Данные роутов
+     * @param $key
      * @return object данные роутов
      */
     public static function router($key)
@@ -15,6 +16,7 @@ class App
 
     /**
      * Получает текущую страницу
+     * @param null $url
      * @return string текущая страница
      */
     public static function returnUrl($url = null)
@@ -25,10 +27,11 @@ class App
 
     /**
      * Метод подключения шаблонов
-     * @param  string  $view   имя шаблона
-     * @param  array   $params массив параметров
+     * @param $template
+     * @param  array $params массив параметров
      * @param  boolean $return выводить или возвращать код
-     * @return string          сформированный код
+     * @return string сформированный код
+     * @internal param string $view имя шаблона
      */
     public static function view($template, $params = [], $return = false)
     {
@@ -94,8 +97,8 @@ class App
 
     /**
      * Вывод flash уведомления
-     * @param  array $errors массив уведомлений
      * @return string сформированный блок с уведомлениями
+     * @internal param array $errors массив уведомлений
      */
     public static function getFlash()
     {
@@ -114,6 +117,7 @@ class App
     /**
      * Вывод значения из POST данных
      * @param string $name имя поля
+     * @param string $default
      * @return string сохраненный текст
      */
     public static function getInput($name, $default = '')
@@ -195,8 +199,8 @@ class App
     {
         $date = (is_null($date)) ? time() : strtotime($date);
 
-        $eng = array('January','February','March','April','May','June','July','August','September','October','November','December');
-        $rus = array('января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря');
+        $eng = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        $rus = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
         return str_replace($eng, $rus, date($format, $date));
     }
 
@@ -221,7 +225,7 @@ class App
         if (!file_exists($filename)) return 0;
 
         $bytes = filesize($filename);
-        $size = array('B','kB','MB','GB','TB');
+        $size = ['B','kB','MB','GB','TB'];
         $factor = floor((strlen($bytes) - 1) / 3);
         $unit = isset($size[$factor]) ? $size[$factor] : '';
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).$unit;
@@ -273,6 +277,7 @@ class App
 
     /**
      * Определение браузера
+     * @param null $userAgent
      * @return string браузер и версия браузера
      */
     public static function getUserAgent($userAgent = null)
@@ -316,7 +321,7 @@ class App
      */
     public static function arrayPrepare($array)
     {
-        $array_prepare = array();
+        $array_prepare = [];
         if ( is_array($array) )
         {
             foreach($array as $property => $keys) {
@@ -341,7 +346,7 @@ class App
      */
     public static function arrayAssoc($enumerable, $key, $val)
     {
-        $ret = array();
+        $ret = [];
         foreach ($enumerable as $value)
         {
             if (is_array($value))

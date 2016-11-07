@@ -1,51 +1,49 @@
 body
 {
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 11px;
-	font-style: normal;
-	font-weight: normal;
-	color: #1A2E33;
-	margin: 0 auto;
-	padding: 0;
-	background-color: #FFFFFF;
-	background-image: url(../img/Page-BgSimpleGradient.jpg);
-	background-repeat: repeat-x;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: normal;
+    color: #1A2E33;
+    margin: 0 auto;
+    padding: 0;
+	background: #FFFFFF url(../img/Page-BgSimpleGradient.jpg) repeat-x;
 	width: 100%;
-	height: 933px;
+    height: 933px;
 }
 
 .note {
-	color: #777;
-	background: #eff5fb;
-	border: 1px solid #81bef7;
-	padding: 5px;
-	margin : 5px;
-	text-align: center;
-	font-weight: bold;
+    color: #777;
+    background: #eff5fb;
+    border: 1px solid #81bef7;
+    padding: 5px;
+    margin : 5px;
+    text-align: center;
+    font-weight: bold;
 }
 .data {
-	 color: #cc00cc;
-	 font-size: x-small;
+     color: #cc00cc;
+     font-size: x-small;
 }
 
 .right {
-	 text-align: right;
-	 font-size: x-small;
+     text-align: right;
+     font-size: x-small;
 }
 
 .form {
-	color: #666;
-	padding : 3px;
-	background-color: #f3f3f3;
-	border: 1px dotted #ccc;
+    color: #666;
+    padding : 3px;
+    background-color: #f3f3f3;
+    border: 1px dotted #ccc;
 }
 
 .login {
-	color: #666;
-	padding : 10px;
-	margin : 0px 0 10px 0;
-	background-color: #ebf9eb;
-	border: 1px solid #cccccc;
+    color: #666;
+    padding : 10px;
+    margin : 0 0 10px 0;
+    background-color: #ebf9eb;
+    border: 1px solid #cccccc;
 }
 
 #art-main
@@ -59,26 +57,26 @@ body
 
 .cleared
 {
-	float: none;
-	clear: both;
-	margin: 0;
-	padding: 0;
-	border: none;
-	font-size:1px;
+    float: none;
+    clear: both;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size:1px;
 }
 
 
 form
 {
-	padding:0 !important;
-	margin:0 !important;
+    padding:0 !important;
+    margin:0 !important;
 }
 
 table.position
 {
-	position: relative;
-	width: 100%;
-	table-layout: fixed;
+    position: relative;
+    width: 100%;
+    table-layout: fixed;
 }
 
 .art-Sheet
@@ -203,11 +201,11 @@ table.position
 
 .art-menu a, .art-menu a:link, .art-menu a:visited, .art-menu a:hover
 {
-	text-align:left;
-	text-decoration:none;
-	outline:none;
-	letter-spacing:normal;
-	word-spacing:normal;
+    text-align:left;
+    text-decoration:none;
+    outline:none;
+    letter-spacing:normal;
+    word-spacing:normal;
 }
 
 .art-menu, .art-menu ul
@@ -221,47 +219,47 @@ table.position
 
 .art-menu li
 {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	display: block;
-	float: left;
-	position: relative;
-	z-index: 5;
-	background:none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: block;
+    float: left;
+    position: relative;
+    z-index: 5;
+    background:none;
 }
 
 .art-menu li:hover
 {
-	z-index: 10000;
-	white-space: normal;
+    z-index: 10000;
+    white-space: normal;
 }
 
 .art-menu li li
 {
-	float: none;
+    float: none;
 }
 
 .art-menu ul
 {
-	visibility: hidden;
-	position: absolute;
-	z-index: 10;
-	left: 0;
-	top: 0;
-	background:none;
+    visibility: hidden;
+    position: absolute;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    background:none;
 }
 
 .art-menu li:hover>ul
 {
-	visibility: visible;
-	top: 100%;
+    visibility: visible;
+    top: 100%;
 }
 
 .art-menu li li:hover>ul
 {
-	top: 0;
-	left: 100%;
+    top: 0;
+    left: 100%;
 }
 
 .art-menu:after, .art-menu ul:after
@@ -280,71 +278,70 @@ table.position
 
 .art-menu ul
 {
-	background-image: url(../img/spacer.gif);
-	padding: 10px 30px 30px 30px;
-	margin: -10px 0 0 -30px;
+    background-image: url(../img/spacer.gif);
+    padding: 10px 30px 30px 30px;
+    margin: -10px 0 0 -30px;
 }
 
 .art-menu ul ul
 {
-	padding: 30px 30px 30px 10px;
-	margin: -30px 0 0 -10px;
+    padding: 30px 30px 30px 10px;
+    margin: -30px 0 0 -10px;
 }
 
 
 .nmenu {
-	text-align : left;
-	padding : 3px;
+    text-align : left;
+    padding : 3px;
 }
 .nmenu a {
-	text-decoration : none;
-	color : #999;
-	font-weight : bold;
+    text-decoration : none;
+    color : #999;
+    font-weight : bold;
 }
 .nmenu a:hover {
-	text-decoration : underline;
-	color : #ccc;
+    text-decoration : underline;
+    color : #ccc;
 }
 
 
 .b {
-	font-size : 1.2em;
-	color : #333;
-	background-color : #9BC7F3;
-	background-image: url(../img/Block-c.png);
+    font-size : 1.2em;
+    color : #333;
+	background: #9BC7F3 url(../img/Block-c.png);
 	padding : 3px;
-	overflow:hidden;
+    overflow:hidden;
 }
 
 .info {
-	color : #992a2a;
-	background : #f2dddd;
-	border: 1px solid #e3c0c0;
-	padding: 3px;
-	margin :  1px 0 1px 0;
+    color : #992a2a;
+    background : #f2dddd;
+    border: 1px solid #e3c0c0;
+    padding: 3px;
+    margin :  1px 0 1px 0;
 }
 
 .act {
-	color: #888888;
-	background : #e4eaf2;
-	border: 1px solid #c3cfe1;
-	padding: 3px;
-	margin :  1px 0 1px 0;
+    color: #888888;
+    background : #e4eaf2;
+    border: 1px solid #c3cfe1;
+    padding: 3px;
+    margin :  1px 0 1px 0;
 }
 
 hr {
-	border : 1px dotted #ccc;
+    border : 1px dotted #ccc;
 }
 
 .img {
-	float:left;
-	padding : 0px;
-	margin-right : 5px;
+    float:left;
+    padding : 0;
+    margin-right : 5px;
 }
 
 .imgright {
-	float:right;
-	margin : 5px;
+    float:right;
+    margin : 5px;
 }
 
 .divb
@@ -373,191 +370,187 @@ hr {
 
 .art-nav .l, .art-nav .r
 {
-	position: absolute;
-	z-index: -1;
-	top: 0;
-	height: 40px;
-	background-image: url(../img/nav.png);
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    height: 40px;
+    background-image: url(../img/nav.png);
 }
 
 .art-nav .l
 {
-	left: 0;
-	right:14px;
+    left: 0;
+    right:14px;
 }
 
 .art-nav .r
 {
-	right: 0;
-	width: 982px;
-	clip: rect(auto, 10000px, 10000px, 868px);
+    right: 0;
+    width: 982px;
+    clip: rect(auto, 10000px, 10000px, 868px);
 }
 
 .art-menu ul li
 {
-	clear: both;
+    clear: both;
 }
 
 .art-menu a
 {
-	position:relative;
-	display: block;
-	overflow:hidden;
-	height: 34px;
-	cursor: pointer;
-	text-decoration: none;
-	margin-right: 3px;
-	margin-left: 3px;
+    position:relative;
+    display: block;
+    overflow:hidden;
+    height: 34px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-right: 3px;
+    margin-left: 3px;
 }
 
 
 .art-menu a .r, .art-menu a .l
 {
-	position:absolute;
-	display: block;
-	top:0;
-	z-index:-1;
-	height: 102px;
-	background-image: url(../img/MenuItem.png);
+    position:absolute;
+    display: block;
+    top:0;
+    z-index:-1;
+    height: 102px;
+    background-image: url(../img/MenuItem.png);
 }
 
 .art-menu a .l
 {
-	left:0;
-	right:17px;
+    left:0;
+    right:17px;
 }
 
 .art-menu a .r
 {
-	width:434px;
-	right:0;
-	clip: rect(auto, 10000px, 10000px, 417px);
+    width:434px;
+    right:0;
+    clip: rect(auto, 10000px, 10000px, 417px);
 }
 
 .art-menu a .t
 {
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 10px;
-	font-style: normal;
-	font-weight: bold;
-	text-decoration: none;
-	text-transform: uppercase;
-	color: #132225;
-	padding: 0 2px;
-	margin: 0 17px;
-	line-height: 34px;
-	text-align: center;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #132225;
+    padding: 0 2px;
+    margin: 0 17px;
+    line-height: 34px;
+    text-align: center;
 }
 
 .art-menu a:hover .l, .art-menu a:hover .r
 {
-	top:-34px;
+    top:-34px;
 }
 
 .art-menu li:hover>a .l, .art-menu li:hover>a .r
 {
-	top:-34px;
+    top:-34px;
 }
 
 .art-menu li:hover a .l, .art-menu li:hover a .r
 {
-	top:-34px;
+    top:-34px;
 }
 .art-menu a:hover .t
 {
-	color: #FCEEE8;
+    color: #FCEEE8;
 }
 
 .art-menu li:hover a .t
 {
-	color: #FCEEE8;
+    color: #FCEEE8;
 }
 
 .art-menu li:hover>a .t
 {
-	color: #FCEEE8;
+    color: #FCEEE8;
 }
 
 
 .art-menu a.active .l, .art-menu a.active .r
 {
-	top: -68px;
+    top: -68px;
 }
 
 .art-menu a.active .t
 {
-	color: #244147;
+    color: #244147;
 }
 
 .art-menu ul a
 {
-	display:block;
-	text-align: center;
-	white-space: nowrap;
-	height: 16px;
-	width: 150px;
-	overflow:hidden;
-	line-height: 16px;
-	margin-right: auto;
+    display:block;
+    text-align: center;
+    white-space: nowrap;
+    height: 16px;
+    width: 150px;
+    overflow:hidden;
+    line-height: 16px;
+    margin-right: auto;
 
-
-	background-image: url(../img/subitem-bg.png);
-	background-position: left top;
-	background-repeat: repeat-x;
-	border-width: 0px;
-	border-style: solid;
+	background: url(../img/subitem-bg.png) repeat-x left top;
+	border: 0 solid;
 }
 
 .art-nav ul.art-menu ul span, .art-nav ul.art-menu ul span span
 {
-	display: inline;
-	float: none;
-	margin: inherit;
-	padding: inherit;
-	background-image: none;
-	text-align: inherit;
-	text-decoration: inherit;
+    display: inline;
+    float: none;
+    margin: inherit;
+    padding: inherit;
+    background-image: none;
+    text-align: inherit;
+    text-decoration: inherit;
 }
 
 .art-menu ul a, .art-menu ul a:link, .art-menu ul a:visited, .art-menu ul a:hover, .art-menu ul a:active, .art-nav ul.art-menu ul span, .art-nav ul.art-menu ul span span
 {
-	text-align: left;
-	text-indent: 12px;
-	text-decoration: none;
-	line-height: 16px;
-	color: #FAE3DB;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 10px;
-	font-style: normal;
-	font-weight: bold;
-	text-decoration: none;
+    text-align: left;
+    text-indent: 12px;
+    text-decoration: none;
+    line-height: 16px;
+    color: #FAE3DB;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
 }
 
 .art-menu ul ul a
 {
-	margin-left: auto;
+    margin-left: auto;
 }
 
 .art-menu ul li a:hover
 {
-	color: #000000;
-	background-position: 0 -16px;
+    color: #000000;
+    background-position: 0 -16px;
 }
 
 .art-menu ul li:hover>a
 {
-	color: #000000;
-	background-position: 0 -16px;
+    color: #000000;
+    background-position: 0 -16px;
 }
 
 .art-nav .art-menu ul li a:hover span, .art-nav .art-menu ul li a:hover span span
 {
-	color: #000000;
+    color: #000000;
 }
 
 .art-nav .art-menu ul li:hover>a span, .art-nav .art-menu ul li:hover>a span span
 {
-	color: #000000;
+    color: #000000;
 }
 
 .art-contentLayout
@@ -716,9 +709,9 @@ hr {
 
 .art-BlockContent-body a:link
 {
-	color: #007994;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	text-decoration: none;
+    color: #007994;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    text-decoration: none;
 }
 
 .art-BlockContent-body a:visited, .art-BlockContent-body a.visited
@@ -730,32 +723,31 @@ hr {
 
 .art-BlockContent-body a:hover, .art-BlockContent-body a.hover
 {
-	color: #00A2C7;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	text-decoration: underline;
+    color: #00A2C7;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    text-decoration: underline;
 }
 
 .art-BlockContent-body ul
 {
-	list-style-type: none;
-	color: #203B40;
-	margin:0;
-	padding:0;
+    list-style-type: none;
+    color: #203B40;
+    margin:0;
+    padding:0;
 }
 
 .art-BlockContent-body li
 {
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 11px;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    font-size: 11px;
 }
 
 .art-BlockContent-body ul li
 {
-	padding:0px 0 0px 5px;
-	background-image: url(../img/BlockContentBullets.png);
-	background-repeat:no-repeat;
+    padding:0 0 0 5px;
+	background: url(../img/BlockContentBullets.png) no-repeat;
 	margin:0.5em 0 0.5em 0;
-	line-height:1.2em;
+    line-height:1.2em;
 }
 
 .art-Post
@@ -874,7 +866,7 @@ hr {
 
 a img
 {
-	border: 0;
+    border: 0;
 }
 
 .art-article img, img.art-article
@@ -885,9 +877,9 @@ a img
 
 .art-metadata-icons img
 {
-	border: none;
-	vertical-align: middle;
-	margin:2px;
+    border: none;
+    vertical-align: middle;
+    margin:2px;
 }
 
 .art-article table, table.art-article
@@ -899,22 +891,22 @@ a img
 
 .art-article table, table.art-article .art-article tr, .art-article th, .art-article td
 {
-	background-color:Transparent;
+    background-color:Transparent;
 }
 
 .art-article th, .art-article td
 {
-	padding: 2px;
-	border: solid 1px #7BB0BC;
-	vertical-align: top;
-	text-align:left;
+    padding: 2px;
+    border: solid 1px #7BB0BC;
+    vertical-align: top;
+    text-align:left;
 }
 
 .art-article th
 {
-	text-align:center;
-	vertical-align:middle;
-	padding: 7px;
+    text-align:center;
+    vertical-align:middle;
+    padding: 7px;
 }
 
 .art-PostHeaderIcon-wrapper
@@ -1008,8 +1000,8 @@ a:hover, a.hover
 }
 
 h1, h2, h3, h4, h5, h6,
-h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
-h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover,
 h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited
 {
   font-weight: normal;
@@ -1060,41 +1052,41 @@ h6, h6 a, h6 a:link, h6 a:visited, h6 a:hover
 }
 
 h1 small {
-	font-weight: normal;
-	line-height: 1;
-	color: #999;
-	font-size: 80%;
+    font-weight: normal;
+    line-height: 1;
+    color: #999;
+    font-size: 80%;
 }
 
 ol, ul
 {
-	color: #26444B;
-	margin:1em 0 1em 2em;
-	padding:0;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 11px;
+    color: #26444B;
+    margin:1em 0 1em 2em;
+    padding:0;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    font-size: 11px;
 }
 
 li ol, li ul
 {
-	margin:0.5em 0 0.5em 2em;
-	padding:0;
+    margin:0.5em 0 0.5em 2em;
+    padding:0;
 }
 
 li
 {
-	margin:0.2em 0;
-	padding:0;
+    margin:0.2em 0;
+    padding:0;
 }
 
 ul
 {
-	list-style-type: none;
+    list-style-type: none;
 }
 
 ol
 {
-	list-style-position:inside;
+    list-style-position:inside;
 
 }
 
@@ -1102,95 +1094,49 @@ ol
 
 .art-Post li
 {
-	//padding:0px 0 0px 10px;
-	line-height:1.2em;
+    //padding:0px 0 0px 10px;
+    line-height:1.2em;
 }
 
 .art-Post ol li, .art-Post ul ol li
 {
-	background: none;
-	padding-left:0;
+    background: none;
+    padding-left:0;
 }
 
 .art-Post ul li, .art-Post ol ul li
 {
-	//background-image: url(../img/PostBullets.png);
-	background-repeat:no-repeat;
-	//padding-left:10px;
+    //background-image: url(../img/PostBullets.png);
+    background-repeat:no-repeat;
+    //padding-left:10px;
 }
 
 blockquote p
 {
-	color:#0A1214;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    color:#0A1214;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
 }
 
 blockquote
 {
-		margin:10px 10px 10px 50px;
-	padding:5px 5px 5px 41px;
-	background-color:#CCE1E5;
-	background-image:url(../img/PostQuote.png);
-	background-position:left top;
-	background-repeat:no-repeat;
-}
-
-.art-button-wrapper .art-button
-{
-	display:inline-block;
-	width: auto;
-	outline:none;
-	border:none;
-	background:none;
-	line-height:34px;
-	margin:0 !important;
-	padding:0 !important;
-	overflow: visible;
-	cursor: default;
-	text-decoration: none !important;
-	z-index:0;
-}
-
-.art-button-wrapper
-{
-	display:inline-block;
-	position:relative;
-	height: 34px;
-	overflow:hidden;
-	white-space: nowrap;
-	width: auto;
-	z-index:0;
-}
-
-.art-button-wrapper .art-button
-{
-	display:block;
-	height: 34px;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 10px;
-	font-style: normal;
-	font-weight: bold;
-	white-space: nowrap;
-	text-align: left;
-	padding: 0 26px !important;
-	line-height: 34px;
-	text-decoration: none !important;
-	color: #FCEEE8 !important;
+        margin:10px 10px 10px 50px;
+    padding:5px 5px 5px 41px;
+	background: #CCE1E5 url(../img/PostQuote.png) no-repeat left top;
 }
 
 input, select, textarea
 {
-	border: 1px solid #7bb0bc;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	font-size: 10px;
-	font-style: normal;
-	font-weight: bold;
-	color: #078fbb;
+    border: 1px solid #7bb0bc;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: bold;
+    color: #078fbb;
 }
 
 textarea {
-	width : 98%;
-	padding : 5px;
+    width : 98%;
+    padding : 5px;
 }
 
 .art-button-wrapper.hover .art-button, .art-button:hover
@@ -1206,34 +1152,34 @@ textarea {
 
 .art-button-wrapper .l, .art-button-wrapper .r
 {
-	display:block;
-	position:absolute;
-	z-index:-1;
-	height: 102px;
-	background-image: url(../img/Button.png);
+    display:block;
+    position:absolute;
+    z-index:-1;
+    height: 102px;
+    background-image: url(../img/Button.png);
 }
 
 .art-button-wrapper .l
 {
-	left:0;
-	right:17px;
+    left:0;
+    right:17px;
 }
 
 .art-button-wrapper .r
 {
-	width:423px;
-	right:0;
-	clip: rect(auto, 10000px, 10000px, 406px);
+    width:423px;
+    right:0;
+    clip: rect(auto, 10000px, 10000px, 406px);
 }
 
 .art-button-wrapper.hover .l, .art-button-wrapper.hover .r
 {
-	top: -34px;
+    top: -34px;
 }
 
 .art-button-wrapper.active .l, .art-button-wrapper.active .r
 {
-	top: -68px;
+    top: -68px;
 }
 
 .art-Footer
@@ -1285,7 +1231,7 @@ textarea {
 
 .art-Footer .art-Footer-text p
 {
-	margin: 0;
+    margin: 0;
 }
 
 .art-Footer .art-Footer-text
@@ -1298,26 +1244,23 @@ textarea {
 
 .art-Footer .art-Footer-text a:link
 {
-	text-decoration: none;
-	color: #DBF8FF;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	text-decoration: none;
+    color: #DBF8FF;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    text-decoration: none;
 }
 
 .art-Footer .art-Footer-text a:visited
 {
-	text-decoration: none;
-	color: #E7F1F3;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	text-decoration: none;
+    color: #E7F1F3;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    text-decoration: none;
 }
 
 .art-Footer .art-Footer-text a:hover
 {
-	text-decoration: none;
-	color: #66E3FF;
-	font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-	text-decoration: underline;
+    color: #66E3FF;
+    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+    text-decoration: underline;
 }
 
 .art-page-footer, .art-page-footer a, .art-page-footer a:link, .art-page-footer a:visited, .art-page-footer a:hover
@@ -1404,6 +1347,6 @@ textarea {
 }
 
 .message {
-	overflow: hidden;
-	text-overflow: ellipsis;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

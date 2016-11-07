@@ -40,31 +40,31 @@ if (Request::isMethod('post')) {
 
     if (!empty($logs)){
         // Проверка логина или ника на существование
-        $reglogin = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($logs), strtolower($logs)));
+        $reglogin = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($logs), strtolower($logs)]);
         $validation -> addRule('empty', $reglogin, ['logs' => 'Пользователь с данным логином или ником уже зарегистрирован!']);
 
         // Проверка логина в черном списке
-        $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(2, strtolower($logs)));
+        $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($logs)]);
         $validation -> addRule('empty', $blacklogin, ['logs' => 'Выбранный вами логин занесен в черный список!']);
     }
 
     if (!empty($config['regmail']) && !empty($meil)){
         // Проверка email на существование
-        $regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", array($meil));
+        $regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$meil]);
         $validation -> addRule('empty', $regmail, ['meil' => 'Указанный вами адрес e-mail уже используется в системе!']);
 
         // Проверка домена от email в черном списке
-        $blackdomain = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(3, $domain));
+        $blackdomain = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [3, $domain]);
         $validation -> addRule('empty', $blackdomain, ['meil' => 'Домен от вашего адреса email занесен в черный список!']);
 
         // Проверка email в черном списке
-        $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", array(1, $meil));
+        $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $meil]);
         $validation -> addRule('empty', $blackmail, ['meil' => 'Указанный вами адрес email занесен в черный список!']);
     }
 
     // Проверка пригласительного ключа
     if (!empty($config['invite'])){
-        $invitation = DB::run() -> querySingle("SELECT `id` FROM `invite` WHERE `key`=? AND `used`=? LIMIT 1;", array($invite, 0));
+        $invitation = DB::run() -> querySingle("SELECT `id` FROM `invite` WHERE `key`=? AND `used`=? LIMIT 1;", [$invite, 0]);
         $validation -> addRule('not_empty', $invitation, ['invite' => 'Ключ приглашения недействителен!']);
     }
 
@@ -95,10 +95,10 @@ if (Request::isMethod('post')) {
 
         // Активация пригласительного ключа
         if (!empty($config['invite'])){
-            DB::run() -> query("UPDATE `invite` SET `used`=?, `invited`=? WHERE `key`=? LIMIT 1;", array(1, $logs, $invite));
+            DB::run() -> query("UPDATE `invite` SET `used`=?, `invited`=? WHERE `key`=? LIMIT 1;", [1, $logs, $invite]);
         }
 
-        $registration = DBM::run()->insert('users', array(
+        $registration = DBM::run()->insert('users', [
             'login'         => $logs,
             'pass'          => md5(md5($pars)),
             'email'         => $meil,
@@ -118,10 +118,10 @@ if (Request::isMethod('post')) {
             'confirmreg'    => $config['regkeys'],
             'confirmregkey' => $registration_key,
             'subscribe'     => generate_password(32),
-        ));
+        ]);
 
         // ------------------------------ Уведомление в приват ----------------------------------//
-        $textpriv = text_private(1, array('%USERNAME%'=>$logs, '%SITENAME%'=>$config['home']));
+        $textpriv = text_private(1, ['%USERNAME%'=>$logs, '%SITENAME%'=>$config['home']]);
         send_private($logs, $config['nickname'], $textpriv);
 
         if (!empty($config['regmail'])) {

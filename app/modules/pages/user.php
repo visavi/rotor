@@ -32,7 +32,7 @@ case 'note':
 
         if ($validation->run()) {
 
-            DB::run()->query("INSERT INTO `note` (`user`, `text`, `edit`, `time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `text`=?, `edit`=?, `time`=?;", array($uz, $note, $log, SITETIME, $note, $log, SITETIME));
+            DB::run()->query("INSERT INTO `note` (`user`, `text`, `edit`, `time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `text`=?, `edit`=?, `time`=?;", [$uz, $note, $log, SITETIME, $note, $log, SITETIME]);
 
             App::setFlash('success', 'Заметка успешно сохранена!');
             App::redirect('/user/'.$uz);
