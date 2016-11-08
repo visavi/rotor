@@ -29,7 +29,7 @@ case 'index':
 
         foreach($output[0] as $key => $data) {
             echo '<i class="fa fa-folder-open"></i> ';
-            echo $data['order'].'. <b><a href="/admin/load?act=down&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ';
+            echo $data['sort'].'. <b><a href="/admin/load?act=down&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ';
 
             $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
             $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
@@ -44,7 +44,7 @@ case 'index':
             if (isset($output[$key])) {
                 foreach($output[$key] as $odata) {
                     echo '<i class="fa fa-angle-right"></i> ';
-                    echo $odata['order'].'. <b><a href="/admin/load?act=down&amp;cid='.$odata['id'].'">'.$odata['name'].'</a></b> ';
+                    echo $odata['sort'].'. <b><a href="/admin/load?act=down&amp;cid='.$odata['id'].'">'.$odata['name'].'</a></b> ';
 
                     $subcnt = (empty($odata['subcnt'])) ? '' : '/'.$odata['subcnt'];
                     $new = (empty($odata['new'])) ? '' : '/<span style="color:#ff0000">+'.$odata['new'].'</span>';
@@ -453,7 +453,7 @@ case 'editcats':
             echo '</select><br />';
 
             echo 'Положение: <br />';
-            echo '<input type="text" name="order" maxlength="2" value="'.$downs['order'].'" /><br />';
+            echo '<input type="text" name="order" maxlength="2" value="'.$downs['sort'].'" /><br />';
 
             echo 'Директория: <br />';
             echo '<input type="text" name="folder" maxlength="50" value="'.$downs['folder'].'" /><br />';

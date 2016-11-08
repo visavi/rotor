@@ -17,7 +17,7 @@ case 'themes':
         $start = last_page($total, $config['forumtem']);
     }
 
-    $querytopic = DB::run() -> query("SELECT `t`.*, f.`title` forum_title FROM `topics` t LEFT JOIN `forums` f ON `t`.`forums_id`=`f`.`id` WHERE t.`author`=? ORDER BY t.`last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", [$user]);
+    $querytopic = DB::run() -> query("SELECT `t`.*, f.`title` forum_title FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE t.`author`=? ORDER BY t.`last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", [$user]);
     $topics = $querytopic->fetchAll();
 
     App::view('forum/active_themes', compact('topics', 'user', 'start', 'total'));
@@ -37,7 +37,7 @@ case 'posts':
         $start = last_page($total, $config['forumpost']);
     }
 
-    $querypost = DB::run() -> query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topics_id`=`topics`.`id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['forumpost'].";", [$user]);
+    $querypost = DB::run() -> query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['forumpost'].";", [$user]);
     $posts = $querypost->fetchAll();
 
     App::view('forum/active_posts', compact('posts', 'user', 'start', 'total'));
@@ -62,9 +62,9 @@ case 'delete':
 
     if ($validation->run()) {
 
-        DB::run() -> query("DELETE FROM `posts` WHERE `id`=? AND `topics_id`=?;", [$tid, $post['topics_id']]);
-        DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post['topics_id']]);
-        DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post['forums_id']]);
+        DB::run() -> query("DELETE FROM `posts` WHERE `id`=? AND `topic_id`=?;", [$tid, $post['topic_id']]);
+        DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post['topic_id']]);
+        DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post['forum_id']]);
 
         exit(json_encode(['status' => 'success']));
     } else {

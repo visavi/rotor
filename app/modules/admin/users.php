@@ -429,7 +429,7 @@ if (is_admin([101, 102])) {
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id` IN (".$strtopics.");");
                                 // ------ Удаление загруженных файлов -------//
 
-                                DB::run() -> query("DELETE FROM `posts` WHERE `topics_id` IN (".$strtopics.");");
+                                DB::run() -> query("DELETE FROM `posts` WHERE `topic_id` IN (".$strtopics.");");
                                 DB::run() -> query("DELETE FROM `topics` WHERE `id` IN (".$strtopics.");");
                             }
 
@@ -443,8 +443,8 @@ if (is_admin([101, 102])) {
 
                                 if (!empty($files)){
                                     foreach ($files as $file){
-                                        if (file_exists(HOME.'/upload/forum/'.$file['topics_id'].'/'.$file['hash'])){
-                                            unlink(HOME.'/upload/forum/'.$file['topics_id'].'/'.$file['hash']);
+                                        if (file_exists(HOME.'/upload/forum/'.$file['topic_id'].'/'.$file['hash'])){
+                                            unlink(HOME.'/upload/forum/'.$file['topic_id'].'/'.$file['hash']);
                                         }
                                     }
                                     DB::run() -> query("DELETE FROM `files_forum` WHERE `user`=?;", [$uz]);

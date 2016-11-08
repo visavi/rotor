@@ -9,7 +9,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $topics = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON t.`forums_id`=f.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
+    $topics = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON t.`forum_id`=f.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
 
     if (empty($topics)) {
         App::abort('default', 'Данной темы не существует!');
@@ -28,12 +28,12 @@ case 'index':
     }
 
     // --------------------------------------------------------------//
-    if (!empty($topics['mod'])) {
-        $topics['curator'] = explode(',', $topics['mod']);
+    if (!empty($topics['moderators'])) {
+        $topics['curator'] = explode(',', $topics['moderators']);
         $topics['is_moder'] = in_array($log, $topics['curator'], true) ? 1 : 0;
     }
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topics_id`=?;", [$tid]);
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
 
     if ($total > 0 && $start >= $total) {
         $start = last_page($total, $config['forumpost']);
@@ -41,7 +41,7 @@ case 'index':
 
     $page = floor(1 + $start / $config['forumpost']);
 
-    $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['forumpost'].";", [$tid]);
+    $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['forumpost'].";", [$tid]);
 
     $topics['posts'] = $querypost->fetchAll();
 
@@ -73,12 +73,12 @@ break;
 ############################################################################################
 case 'create':
 
-    $msg   = check(Request::input('msg'));
+    $msg = check(Request::input('msg'));
     $token = check(Request::input('token'));
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для добавления сообщения!');
 
-    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`forums_id`=`forums`.`id` WHERE `topics`.`id`=? LIMIT 1;", [$tid]);
+    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`forum_id`=`forums`.`id` WHERE `topics`.`id`=? LIMIT 1;", [$tid]);
 
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -88,7 +88,7 @@ case 'create':
         -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, $config['forumtextlength']);
 
         // Проверка сообщения на схожесть
-        $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `id` DESC LIMIT 1;", [$tid]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `id` DESC LIMIT 1;", [$tid]);
         $validation -> addRule('not_equal', [$msg, $post['text']], 'Ваше сообщение повторяет предыдущий пост!');
 
     if ($validation->run()) {
@@ -104,14 +104,14 @@ case 'create':
 
         } else {
 
-            DB::run() -> query("INSERT INTO `posts` (`topics_id`, `forums_id`, `user`, `text`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$tid, $topics['forums_id'], $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
+            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `forum_id`, `user`, `text`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$tid, $topics['forum_id'], $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
             $lastid = DB::run() -> lastInsertId();
 
             DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=? LIMIT 1;", [$log]);
 
             DB::run() -> query("UPDATE `topics` SET `posts`=`posts`+1, `last_user`=?, `last_time`=? WHERE `id`=?;", [$log, SITETIME, $tid]);
 
-            DB::run() -> query("UPDATE `forums` SET `posts`=`posts`+1, `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$tid, $topics['title'], $log, SITETIME, $topics['forums_id']]);
+            DB::run() -> query("UPDATE `forums` SET `posts`=`posts`+1, `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$tid, $topics['title'], $log, SITETIME, $topics['forum_id']]);
             // Обновление родительского форума
             if ($topics['parent'] > 0) {
                 DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$tid, $topics['title'], $log, SITETIME, $topics['forums_parent']]);
@@ -152,7 +152,7 @@ case 'create':
 
                             move_uploaded_file($_FILES['file']['tmp_name'], HOME.'/upload/forum/'.$topics['id'].'/'.$hash);
 
-                            DB::run() -> query("INSERT INTO `files_forum` (`topics_id`, `posts_id`, `hash`, `name`, `size`, `user`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$topics['id'], $lastid, $hash, $filename, $filesize, $log, SITETIME]);
+                            DB::run() -> query("INSERT INTO `files_forum` (`topic_id`, `posts_id`, `hash`, `name`, `size`, `user`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$topics['id'], $lastid, $hash, $filename, $filesize, $log, SITETIME]);
 
                         } else {
                             $fileError = 'Файл не загружен! Недопустимое расширение!';
@@ -212,7 +212,7 @@ case 'complaint':
             'text'    => $data['text'],
             'time'    => $data['time'],
             'addtime' => SITETIME,
-            'link'    => '/topic/'.$data['topics_id'].'?start='.$start,
+            'link'    => '/topic/'.$data['topic_id'].'?start='.$start,
         ]);
 
         exit(json_encode(['status' => 'success']));
@@ -232,7 +232,7 @@ case 'delete':
 
     $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 
-    $isModer = in_array($log, explode(',', $topic['mod'], true)) ? true : false;
+    $isModer = in_array($log, explode(',', $topic['moderators'], true)) ? true : false;
 
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -258,9 +258,9 @@ case 'delete':
             DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id` IN (".$del.");");
         }
 
-        $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `id` IN (".$del.") AND `topics_id`=".$tid.";");
+        $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `id` IN (".$del.") AND `topic_id`=".$tid.";");
         DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $tid]);
-        DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topic['forums_id']]);
+        DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topic['forum_id']]);
 
         App::setFlash('success', 'Выбранные сообщения успешно удалены!');
     } else {
@@ -323,7 +323,7 @@ case 'edit':
         App::abort('default', ' Изменение невозможно, данная тема закрыта!');
     }
 
-    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY id ASC LIMIT 1;", [$tid]);
+    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY id ASC LIMIT 1;", [$tid]);
 
     if (Request::isMethod('post')) {
 
@@ -372,9 +372,9 @@ case 'editpost':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения сообщения!');
 
-    $post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.* FROM `posts` LEFT JOIN `topics` ON `posts`.`topics_id`=`topics`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+    $post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.* FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
-    $isModer = in_array($log, explode(',', $post['mod'], true)) ? true : false;
+    $isModer = in_array($log, explode(',', $post['moderators'], true)) ? true : false;
 
     if (empty($post)) {
         App::abort('default', 'Данного сообщения не существует!');
@@ -449,7 +449,7 @@ case 'viewpost':
 
     $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
 
-    $querytopic = DB::run() -> querySingle("SELECT COUNT(*) FROM `posts` WHERE `id`<=? AND `topics_id`=? ORDER BY `time` ASC LIMIT 1;", [$id, $tid]);
+    $querytopic = DB::run() -> querySingle("SELECT COUNT(*) FROM `posts` WHERE `id`<=? AND `topic_id`=? ORDER BY `time` ASC LIMIT 1;", [$id, $tid]);
 
     if (empty($querytopic)) {
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');

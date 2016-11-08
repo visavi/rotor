@@ -12,7 +12,7 @@
         <a href="/forum/<?=$topics['subparent']['id']?>"><?=$topics['subparent']['title']?></a> /
     <?php endif; ?>
 
-    <a href="/forum/<?=$topics['forums_id']?>"><?=$topics['forum_title']?></a> /
+    <a href="/forum/<?=$topics['forum_id']?>"><?=$topics['forum_title']?></a> /
     <a href="/topic/<?=$tid?>/print">Печать</a> / <a href="/topic/<?=$tid?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
@@ -58,7 +58,7 @@
 
         <a href="/admin/forum?act=edittopic&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Изменить</a> /
         <a href="/admin/forum?act=movetopic&amp;tid=<?=$tid?>">Переместить</a> /
-        <a href="/admin/forum?act=deltopics&amp;fid=<?=$topics['forums_id']?>&amp;del=<?=$tid?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
+        <a href="/admin/forum?act=deltopics&amp;fid=<?=$topics['forum_id']?>&amp;del=<?=$tid?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
         <a href="/admin/forum?act=topic&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Управление</a><br />
     <?php endif; ?>
 
@@ -190,5 +190,5 @@
     <a href="/tags">Теги</a>  /
     <a href="/rules">Правила</a> /
     <a href="/forum/top/themes">Топ тем</a> /
-    <a href="/forum/search?fid=<?=$topics['forums_id']?>">Поиск</a><br />
+    <a href="/forum/search?fid=<?=$topics['forum_id']?>">Поиск</a><br />
 @stop

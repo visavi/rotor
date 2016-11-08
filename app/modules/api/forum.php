@@ -14,7 +14,7 @@ if (!empty($key)){
         $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($topic)) {
 
-            $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` ASC;", [$id]);
+            $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` ASC;", [$id]);
             $posts = $querypost->fetchAll();
 
             $messages = [];

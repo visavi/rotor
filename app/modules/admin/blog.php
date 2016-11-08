@@ -37,7 +37,7 @@ if (is_admin()) {
             if (count($blogs) > 0) {
                 foreach($blogs as $data) {
                     echo '<i class="fa fa-folder-open"></i> ';
-                    echo '<b>'.$data['order'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ('.$data['count'].')<br />';
+                    echo '<b>'.$data['sort'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ('.$data['count'].')<br />';
 
                     if (is_admin([101])) {
                         echo '<a href="/admin/blog?act=editcats&amp;cid='.$data['id'].'">Редактировать</a> / ';
@@ -130,7 +130,7 @@ if (is_admin()) {
                     echo 'Заголовок:<br />';
                     echo '<input type="text" name="name" maxlength="50" value="'.$blogs['name'].'" /><br />';
                     echo 'Положение:<br />';
-                    echo '<input type="text" name="order" maxlength="2" value="'.$blogs['order'].'" /><br /><br />';
+                    echo '<input type="text" name="order" maxlength="2" value="'.$blogs['sort'].'" /><br /><br />';
 
                     echo '<input type="submit" value="Изменить" /></form></div><br />';
                 } else {

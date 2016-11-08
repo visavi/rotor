@@ -8,7 +8,7 @@ if (empty($topic)) {
     App::abort('default', 'Данной темы не существует!');
 }
 
-$querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` ASC;", [$tid]);
+$querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` ASC;", [$tid]);
 $posts = $querypost->fetchAll();
 
 App::view('forum/print', compact('topic', 'posts'));

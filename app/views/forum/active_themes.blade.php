@@ -26,7 +26,7 @@
         <div>
             Страницы:
             <?php forum_navigation('/topic/'.$data['id'].'?', $config['forumpost'], $data['posts']); ?>
-            Форум: <a href="/forum/<?=$data['forums_id']?>"><?=$data['forum_title']?></a><br />
+            Форум: <a href="/forum/<?=$data['forum_id']?>"><?=$data['forum_title']?></a><br />
             Автор: <?=nickname($data['author'])?> / Посл.: <?=nickname($data['last_user'])?> (<?=date_fixed($data['last_time'])?>)
         </div>
 

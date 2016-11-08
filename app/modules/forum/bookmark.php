@@ -51,7 +51,7 @@ case 'perform':
             DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic`=? AND `user`=?;", [$tid, $log]);
             exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
         } else {
-            DB::run()->query("INSERT INTO `bookmarks` (`user`, `topic`, `forum`, `posts`) VALUES (?, ?, ?, ?);", [$log, $tid, $topic['forums_id'], $topic['posts']]);
+            DB::run()->query("INSERT INTO `bookmarks` (`user`, `topic`, `forum`, `posts`) VALUES (?, ?, ?, ?);", [$log, $tid, $topic['forum_id'], $topic['posts']]);
             exit(json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']));
         }
 

@@ -11,7 +11,7 @@
 	<?php foreach ($posts as $data): ?>
 
 		<div class="b">
-			<i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['topics_id']?>/<?=$data['id']?>"><?=$data['title']?></a></b>
+			<i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['topic_id']?>/<?=$data['id']?>"><?=$data['title']?></a></b>
 		</div>
 
 		<div><?=bb_code($data['text'])?><br />

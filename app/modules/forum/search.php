@@ -59,7 +59,7 @@ if (empty($find)) {
 
             if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
-                $searchsec = ($section > 0) ? "`forums_id`=" . $section . " AND" : '';
+                $searchsec = ($section > 0) ? "`forum_id`=" . $section . " AND" : '';
                 $searchper = ($period > 0) ? "`last_time`>" . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
                 $querysearch = DB::run()->query("SELECT `id` FROM `topics` WHERE " . $searchsec . " " . $searchper . "  MATCH (`title`) AGAINST ('" . $findme . "' IN BOOLEAN MODE) LIMIT 100;");
@@ -96,7 +96,7 @@ if (empty($find)) {
 
             if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
-                $searchsec = ($section > 0) ? "`forums_id`=" . $section . " AND" : '';
+                $searchsec = ($section > 0) ? "`forum_id`=" . $section . " AND" : '';
                 $searchper = ($period > 0) ? "`time`>" . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
                 $querysearch = DB::run()->query("SELECT `id` FROM `posts` WHERE " . $searchsec . " " . $searchper . "  MATCH (`text`) AGAINST ('" . $findme . "' IN BOOLEAN MODE) LIMIT 100;");
@@ -115,7 +115,7 @@ if (empty($find)) {
 
                 $result = implode(',', $_SESSION['forumfindres']);
 
-                $querypost = DB::run()->query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topics_id`=`topics`.`id` WHERE `id` IN (" . $result . ") ORDER BY `time` DESC LIMIT " . $start . ", " . $config['forumpost'] . ";");
+                $querypost = DB::run()->query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE `id` IN (" . $result . ") ORDER BY `time` DESC LIMIT " . $start . ", " . $config['forumpost'] . ";");
                 $posts = $querypost->fetchAll();
 
                 App::view('forum/search_posts', compact('posts', 'start', 'total', 'find', 'type', 'where', 'section', 'period'));

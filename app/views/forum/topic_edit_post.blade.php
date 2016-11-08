@@ -8,7 +8,7 @@
     <i class="fa fa-pencil"></i> <b><?=nickname($post['user'])?></b> <small>(<?=date_fixed($post['time'])?>)</small><br /><br />
 
     <div class="form">
-        <form action="/topic/<?= $post['topics_id'] ?>/<?= $post['id'] ?>/edit?start=<?= $start ?>" method="post">
+        <form action="/topic/<?= $post['topic_id'] ?>/<?= $post['id'] ?>/edit?start=<?= $start ?>" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ App::hasError('msg') }}">
@@ -21,7 +21,7 @@
                 <i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br />
                 <?php foreach ($files as $file): ?>
                     <input type="checkbox" name="delfile[]" value="<?=$file['id']?>" />
-                    <a href="<?= HOME ?>/upload/forum/<?=$file['topics_id']?>/<?=$file['hash']?>" target="_blank"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
+                    <a href="<?= HOME ?>/upload/forum/<?=$file['topic_id']?>/<?=$file['hash']?>" target="_blank"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
                 <?php endforeach; ?>
                 <br />
             <?php endif; ?>

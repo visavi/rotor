@@ -8,7 +8,7 @@ if (empty($topic)) {
     App::abort('default', 'Данной темы не существует!');
 }
 
-$querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topics_id`=? ORDER BY `time` DESC LIMIT 15;", [$tid]);
+$querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` DESC LIMIT 15;", [$tid]);
 $posts = $querypost->fetchAll();
 
 App::view('forum/rss', compact('topic', 'posts'));
