@@ -23,7 +23,7 @@ case 'index':
             $forums['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$forums['parent']]);
         }
 
-        $querysub = DB::run() -> query("SELECT * FROM `forums` WHERE `parent`=? ORDER BY `order` ASC;", [$fid]);
+        $querysub = DB::run() -> query("SELECT * FROM `forums` WHERE `parent`=? ORDER BY sort ASC;", [$fid]);
         $forums['subforums'] = $querysub -> fetchAll();
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `forums_id`=?;", [$fid]);
@@ -50,7 +50,7 @@ case 'create':
 
     if (! is_user()) App::abort(403);
 
-    $forums = DBM::run()->select('forums', null, null, null, ['`order`'=>'ASC']);
+    $forums = DBM::run()->select('forums', null, null, null, ['sort'=>'ASC']);
 
     if (empty(count($forums))) {
         App::abort('default', 'Разделы форума еще не созданы!');

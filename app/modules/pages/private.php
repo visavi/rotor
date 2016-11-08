@@ -217,7 +217,7 @@ if (is_user()) {
                     echo '<i class="fa fa-envelope"></i> Сообщение для <b>'.profile($uz).'</b> '.user_visit($uz).':<br />';
                     echo '<i class="fa fa-history"></i> <a href="/private?act=history&amp;uz='.$uz.'">История переписки</a><br /><br />';
 
-                    $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$log, $uz]);
+                    $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$log, $uz]);
                     if (!empty($ignorstr)) {
                         echo '<b>Внимание! Данный пользователь внесен в ваш игнор-лист!</b><br />';
                     }
@@ -264,7 +264,7 @@ if (is_user()) {
                                         $uztotal = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `user`=?;", [$uz]);
                                         if ($uztotal < $config['limitmail']) {
                                             // ----------------------------- Проверка на игнор ----------------------------//
-                                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
+                                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
                                             if (empty($ignorstr)) {
                                                 if (is_flood($log)) {
 
@@ -349,11 +349,11 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 $data = DB::run() -> queryFetch("SELECT * FROM `inbox` WHERE `user`=? AND `id`=? LIMIT 1;", [$log, $id]);
                 if (!empty($data)) {
-                    $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", [3, $id]);
+                    $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [3, $id]);
 
                     if (empty($queryspam)) {
                         if (is_flood($log)) {
-                            DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`) VALUES (?, ?, ?, ?, ?, ?, ?);", [3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME]);
+                            DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`) VALUES (?, ?, ?, ?, ?, ?, ?);", [3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME]);
 
                             notice('Жалоба успешно отправлена!');
                             redirect("/private?start=$start");

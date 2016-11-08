@@ -21,14 +21,14 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", [$log]);
+            $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$log]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = last_page($total, $config['ignorlist']);
                 }
 
-                $queryignor = DB::run() -> query("SELECT * FROM `ignore` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['ignorlist'].";", [$log]);
+                $queryignor = DB::run() -> query("SELECT * FROM ignoring WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['ignorlist'].";", [$log]);
 
                 echo '<form action="/ignore?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -85,14 +85,14 @@ if (is_user()) {
 
                         if ($queryuser['level']<101 || $queryuser['level']>105){
 
-                            $total = DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", [$log]);
+                            $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$log]);
                             if ($total <= $config['limitignore']) {
                                 // ------------------------ Проверка на существование ------------------------//
                                 if (!is_ignore($log, $uz)){
 
-                                    DB::run() -> query("INSERT INTO `ignore` (`user`, `name`, `time`) VALUES (?, ?, ?);", [$log, $uz, SITETIME]);
+                                    DB::run() -> query("INSERT INTO ignoring (`user`, `name`, `time`) VALUES (?, ?, ?);", [$log, $uz, SITETIME]);
                                     // ----------------------------- Проверка на игнор ----------------------------//
-                                    $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
+                                    $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
                                     if (empty($ignorstr)) {
                                         DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$uz]);
                                         // ------------------------------Уведомление по привату------------------------//
@@ -137,7 +137,7 @@ if (is_user()) {
             }
 
             if ($id > 0) {
-                $data = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                $data = DB::run() -> queryFetch("SELECT * FROM ignoring WHERE `id`=? AND `user`=? LIMIT 1;", [$id, $log]);
 
                 if (!empty($data)) {
                     echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['name']).'</b> '.user_online($data['name']).':<br /><br />';
@@ -172,7 +172,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($id > 0) {
                     if (utf_strlen($msg) < 1000) {
-                        DB::run() -> query("UPDATE `ignore` SET `text`=? WHERE `id`=? AND `user`=?;", [$msg, $id, $log]);
+                        DB::run() -> query("UPDATE ignoring SET `text`=? WHERE `id`=? AND `user`=?;", [$msg, $id, $log]);
 
                         notice('Заметка успешно отредактирована!');
                         redirect("/ignore?start=$start");
@@ -206,7 +206,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($del > 0) {
                     $del = implode(',', $del);
-                    DB::run() -> query("DELETE FROM `ignore` WHERE `id` IN (".$del.") AND `user`=?;", [$log]);
+                    DB::run() -> query("DELETE FROM ignoring WHERE `id` IN (".$del.") AND `user`=?;", [$log]);
 
                     notice('Выбранные пользователи успешно удалены из игнора!');
                     redirect("/ignore?start=$start");

@@ -200,12 +200,12 @@ case 'complaint':
     $data = DBM::run()->selectFirst('posts', ['id' => $id]);
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
-    $spam = DBM::run()->selectFirst('spam', ['key' => 1, 'idnum' => $id]);
+    $spam = DBM::run()->selectFirst('spam', ['relate' => 1, 'idnum' => $id]);
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
         $spam = DBM::run()->insert('spam', [
-            'key'     => 1,
+            'relate'     => 1,
             'idnum'   => $data['id'],
             'user'    => $log,
             'login'   => $data['user'],

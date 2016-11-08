@@ -99,7 +99,7 @@ if (!empty($queryuser)) {
                 if ($uz == $log || is_admin() || is_contact($uz, $log)){
                     if ($uid == $_SESSION['token']) {
                         if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
+                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
                             if (empty($ignorstr)) {
                                 if (is_flood($log)) {
 
@@ -150,11 +150,11 @@ if (!empty($queryuser)) {
                     $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", [$log, $id]);
 
                     if (!empty($data)) {
-                        $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", [4, $id]);
+                        $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [4, $id]);
 
                         if (empty($queryspam)) {
                             if (is_flood($log)) {
-                                DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;start='.$start]);
+                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;start='.$start]);
 
                                 notice('Жалоба успешно отправлена!');
                                 redirect("/wall?uz=$uz&start=$start");

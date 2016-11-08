@@ -1,7 +1,7 @@
 <?php
 include_once (STORAGE.'/advert/forum.dat');
 
-$forums = DBM::run()->select('forums', null, null, null, ['`order`'=>'ASC']);
+$forums = DBM::run()->select('forums', null, null, null, ['sort'=>'ASC']);
 
 if (empty(count($forums))) {
     App::abort('default', 'Разделы форума еще не созданы!');

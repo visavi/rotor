@@ -146,12 +146,12 @@ case 'complaint':
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
 
-    $spam = DBM::run()->selectFirst('spam', ['key' => 2, 'idnum' => $id]);
+    $spam = DBM::run()->selectFirst('spam', ['relate' => 2, 'idnum' => $id]);
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
         $spam = DBM::run()->insert('spam', [
-            'key'     => 2,
+            'relate'     => 2,
             'idnum'   => $data['id'],
             'user'    => $log,
             'login'   => $data['user'],

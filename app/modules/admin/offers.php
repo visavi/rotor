@@ -43,7 +43,7 @@ if (is_admin([101, 102])) {
                 echo '<a href="/admin/offers?type=0">Предложения</a> ('.$total2.') / <b>Проблемы</b> ('.$total.')';
             }
 
-            echo ' / <a href="/pages//admin/offers?type='.$type.'&amp;start='.$start.'">Обзор</a><hr />';
+            echo ' / <a href="/offers?type='.$type.'&amp;start='.$start.'">Обзор</a><hr />';
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -75,8 +75,8 @@ if (is_admin([101, 102])) {
 
                     echo '<div>'.bb_code($data['text']).'<br />';
                     echo 'Добавлено: '.profile($data['user']).'  ('.date_fixed($data['time']).')<br />';
-                    echo '<a href="/pages//admin/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
-                    echo '<a href="/pages//admin/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
+                    echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
+                    echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
                 }
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -103,7 +103,7 @@ if (is_admin([101, 102])) {
 
             echo '<i class="fa fa-book"></i> <a href="/admin/offers?type=0">Предложения</a>  ('.$total.') / ';
             echo '<a href="/admin/offers?type=1">Проблемы</a> ('.$total2.') / ';
-            echo '<a href="/pages//admin/offers?act=view&amp;type='.$type.'&amp;id='.$id.'">Обзор</a><hr />';
+            echo '<a href="/offers?act=view&amp;type='.$type.'&amp;id='.$id.'">Обзор</a><hr />';
 
             $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
             if (!empty($queryoff)) {
@@ -131,8 +131,8 @@ if (is_admin([101, 102])) {
                 echo '<div>'.bb_code($queryoff['text']).'<br />';
                 echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br />';
 
-                echo '<a href="/pages//admin/offers?act=comments&amp;id='.$id.'">Комментарии</a> ('.$queryoff['comments'].') ';
-                echo '<a href="/pages//admin/offers?act=end&amp;id='.$id.'">&raquo;</a></div><br />';
+                echo '<a href="/offers?act=comments&amp;id='.$id.'">Комментарии</a> ('.$queryoff['comments'].') ';
+                echo '<a href="/offers?act=end&amp;id='.$id.'">&raquo;</a></div><br />';
 
                 if (!empty($queryoff['text_reply'])) {
                     echo '<div class="b"><b>Официальный ответ</b></div>';
@@ -316,7 +316,7 @@ if (is_admin([101, 102])) {
                     $del = implode(',', $del);
 
                     DB::run() -> query("DELETE FROM `offers` WHERE `id` IN (".$del.");");
-                    DB::run() -> query("DELETE FROM `commoffers` WHERE `comm_offers` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `commoffers` WHERE `offers` IN (".$del.");");
                     DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers` IN (".$del.");");
 
                     notice('Выбранные пункты успешно удалены!');
@@ -340,7 +340,7 @@ if (is_admin([101, 102])) {
 
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `commoffers` WHERE `offers`.`id`=`commoffers`.`comm_offers`);");
+                    DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `commoffers` WHERE `offers`.`id`=`commoffers`.`offers`);");
 
                     notice('Комментарии успешно пересчитаны!');
                     redirect("/admin/offers");

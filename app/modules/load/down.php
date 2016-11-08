@@ -547,11 +547,11 @@ case 'spam':
             $data = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", [$pid]);
 
             if (!empty($data)) {
-                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", [5, $pid]);
+                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [5, $pid]);
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start]);
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&start=$start");

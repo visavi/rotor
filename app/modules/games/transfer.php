@@ -69,7 +69,7 @@ if (is_user()) {
                                 if ($msg <= 1000) {
                                     $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
                                     if (!empty($queryuser)) {
-                                        $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
+                                        $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
                                         if (empty($ignorstr)) {
                                             DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?;", [$money, $log]);
                                             DB::run() -> query("UPDATE `users` SET `money`=`money`+?, `newprivat`=`newprivat`+1 WHERE `login`=?;", [$money, $uz]);

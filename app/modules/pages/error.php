@@ -21,7 +21,7 @@ if (!empty($config['errorlog'])){
 	############################################################################################
 	case '403':
 
-		DB::run()->query("INSERT INTO `error` (`error_num`, `error_request`, `error_referer`, `error_username`, `error_ip`, `error_brow`, `error_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [403, $request_uri, $http_referer, $username, $ip, $brow, SITETIME]);
+		DB::run()->query("INSERT INTO `error` (`error_num`, `error_request`, `error_referer`, `error_username`, `error_ip`, `error_brow`, `error_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [403, $request_uri, $http_referer, $username, App::getClientIp(), App::getUsername(), SITETIME]);
 
 		DB::run()->query("DELETE FROM `error` WHERE `error_num`=? AND `error_time` < (SELECT MIN(`error_time`) FROM (SELECT `error_time` FROM `error` WHERE `error_num`=? ORDER BY `error_time` DESC LIMIT ".$config['maxlogdat'].") AS del);", [403, 403]);
 
@@ -32,7 +32,7 @@ if (!empty($config['errorlog'])){
 	##                                       Ошибка 403                                       ##
 	############################################################################################
 	case '404':
-		DB::run()->query("INSERT INTO `error` (`error_num`, `error_request`, `error_referer`, `error_username`, `error_ip`, `error_brow`, `error_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [404, $request_uri, $http_referer, $username, $ip, $brow, SITETIME]);
+		DB::run()->query("INSERT INTO `error` (`error_num`, `error_request`, `error_referer`, `error_username`, `error_ip`, `error_brow`, `error_time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [404, $request_uri, $http_referer, $username, App::getClientIp(), App::getUsername(), SITETIME]);
 
 		DB::run()->query("DELETE FROM `error` WHERE `error_num`=? AND `error_time` < (SELECT MIN(`error_time`) FROM (SELECT `error_time` FROM `error` WHERE `error_num`=? ORDER BY `error_time` DESC LIMIT ".$config['maxlogdat'].") AS del);", [404, 404]);
 

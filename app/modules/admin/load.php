@@ -15,7 +15,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY `order` ASC;", [1, SITETIME-86400 * 5]);
+    $querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400 * 5]);
     $downs = $querydown -> fetchAll();
 
     if (count($downs) > 0) {
@@ -85,7 +85,7 @@ case 'newimport':
 
     if (is_admin([101])) {
         if (file_exists(HOME.'/upload/loader')) {
-            $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `order` ASC;");
+            $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
             $downs = $querydown -> fetchAll();
 
             if (count($downs) > 0) {
@@ -245,7 +245,7 @@ break;
 case 'newfile':
     $config['newtitle'] = 'Публикация нового файла';
 
-    $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `order` ASC;");
+    $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
     $downs = $querydown -> fetchAll();
 
     if (count($downs) > 0) {
@@ -403,8 +403,8 @@ case 'addcats':
     if (is_admin([101])) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($name) >= 4 && utf_strlen($name) < 50) {
-                $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`order`),0)+1 FROM `cats`;");
-                DB::run() -> query("INSERT INTO `cats` (`order`, `name`) VALUES (?, ?);", [$maxorder, $name]);
+                $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `cats`;");
+                DB::run() -> query("INSERT INTO `cats` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
                 notice('Новый раздел успешно добавлен!');
                 redirect("/admin/load");
@@ -437,7 +437,7 @@ case 'editcats':
             echo 'Раздел: <br />';
             echo '<input type="text" name="name" maxlength="50" value="'.$downs['name'].'" /><br />';
 
-            $query = DB::run() -> query("SELECT `id`, `name`, `parent` FROM `cats` WHERE `parent`=0 ORDER BY `order` ASC;");
+            $query = DB::run() -> query("SELECT `id`, `name`, `parent` FROM `cats` WHERE `parent`=0 ORDER BY sort ASC;");
             $section = $query -> fetchAll();
 
             echo 'Родительский раздел:<br />';
@@ -496,7 +496,7 @@ case 'addeditcats':
                     $catParent = DB::run() -> queryFetch("SELECT `id` FROM `cats` WHERE `parent`=? LIMIT 1;", [$cid]);
 
                     if (empty($catParent) || $parent == 0) {
-                        DB::run() -> query("UPDATE `cats` SET `order`=?, `parent`=?, `name`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $name, $closed, $cid]);
+                        DB::run() -> query("UPDATE `cats` SET sort=?, `parent`=?, `name`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $name, $closed, $cid]);
 
                         $cat = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
 
@@ -1168,7 +1168,7 @@ case 'movedown':
 
         echo '<i class="fa fa-download"></i> <b>'.$downs['title'].'</b> ('.read_file(HOME.'/upload/files/'.$folder.$downs['link']).')<br /><br />';
 
-        $querycats = DB::run() -> query("SELECT * FROM `cats` ORDER BY `order` ASC;");
+        $querycats = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
         $cats = $querycats -> fetchAll();
 
         if (count($cats) > 1) {

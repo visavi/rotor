@@ -31,7 +31,7 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            $queryblog = DB::run() -> query("SELECT * FROM `catsblog` ORDER BY `order` ASC;");
+            $queryblog = DB::run() -> query("SELECT * FROM `catsblog` ORDER BY sort ASC;");
             $blogs = $queryblog -> fetchAll();
 
             if (count($blogs) > 0) {
@@ -95,8 +95,8 @@ if (is_admin()) {
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (utf_strlen($name) >= 3 && utf_strlen($name) < 50) {
-                        $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`order`),0)+1 FROM `catsblog`;");
-                        DB::run() -> query("INSERT INTO `catsblog` (`order`, `name`) VALUES (?, ?);", [$maxorder, $name]);
+                        $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `catsblog`;");
+                        DB::run() -> query("INSERT INTO `catsblog` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
                         notice('Новый раздел успешно добавлен!');
                         redirect("/admin/blog");
@@ -158,7 +158,7 @@ if (is_admin()) {
                         $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                         if (!empty($blogs)) {
-                            DB::run() -> query("UPDATE `catsblog` SET `order`=?, `name`=? WHERE `id`=?;", [$order, $name, $cid]);
+                            DB::run() -> query("UPDATE `catsblog` SET sort=?, `name`=? WHERE `id`=?;", [$order, $name, $cid]);
 
                             notice('Раздел успешно отредактирован!');
                             redirect("/admin/blog");
@@ -375,7 +375,7 @@ if (is_admin()) {
             if (!empty($blogs)) {
                 echo '<i class="fa fa-file-o"></i> <b>'.$blogs['title'].'</b><br /><br />';
 
-                $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY `order` ASC;");
+                $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
                 $cats = $querycats -> fetchAll();
 
                 if (count($cats) > 0) {

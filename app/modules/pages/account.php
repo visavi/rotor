@@ -140,7 +140,7 @@ case 'changemail':
 			nl2br("Здравствуйте, ".nickname($log)." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".$config['home']."/pages//account?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течении суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо")
 		);
 
-		DB::run() -> query("INSERT INTO `changemail` (`user`, `mail`, `key`, `time`) VALUES (?, ?, ?, ?);", [$log, $meil, $genkey, SITETIME + 86400]);
+		DB::run() -> query("INSERT INTO `changemail` (`user`, `mail`, hash, `time`) VALUES (?, ?, ?, ?);", [$log, $meil, $genkey, SITETIME + 86400]);
 
 		notice('На новый адрес почты отправлено письмо для подтверждения!');
 		redirect("/account");
@@ -160,7 +160,7 @@ case 'editmail':
 	$key = (isset($_GET['key'])) ? check(strval($_GET['key'])) : '';
 
 	DB::run() -> query("DELETE FROM `changemail` WHERE `time`<?;", [SITETIME]);
-	$armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE `key`=? AND `user`=? LIMIT 1;", [$key, $log]);
+	$armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, $log]);
 
 	$validation = new Validation();
 
@@ -178,7 +178,7 @@ case 'editmail':
 	if ($validation->run()) {
 
 		DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], $log]);
-		DB::run() -> query("DELETE FROM `changemail` WHERE `key`=? AND `user`=? LIMIT 1;", [$key, $log]);
+		DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, $log]);
 
 		notice('Адрес электронной почты успешно изменен!');
 		redirect("/account");

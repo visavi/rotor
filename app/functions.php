@@ -70,7 +70,7 @@ function delete_users($user) {
         DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", [$user]);
         DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", [$user]);
         DB::run() -> query("DELETE FROM `contact` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `ignore` WHERE `user`=?;", [$user]);
+        DB::run() -> query("DELETE FROM ignoring WHERE `user`=?;", [$user]);
         DB::run() -> query("DELETE FROM `rating` WHERE `user`=?;", [$user]);
         DB::run() -> query("DELETE FROM `visit` WHERE `user`=?;", [$user]);
         DB::run() -> query("DELETE FROM `wall` WHERE `user`=?;", [$user]);
@@ -606,7 +606,7 @@ function user_contact($login) {
 
 // --------------- Функция подсчета человек в игнор-листе ---------------//
 function user_ignore($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `ignore` WHERE `user`=?;", [$login]);
+    return DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$login]);
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
@@ -1226,7 +1226,7 @@ function stats_load($cats=0) {
 
         if (@filemtime(STORAGE."/temp/statloadcats.dat") < time()-900) {
 
-        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`cats_id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY `order` ASC;", [1, SITETIME-86400*5]);
+        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`cats_id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400*5]);
         $downs = $querydown->fetchAll();
 
             if (!empty($downs)){
@@ -2095,7 +2095,7 @@ function is_contact($login, $contact){
 function is_ignore($login, $ignore){
 
     if (user($ignore)) {
-        $check_ignore = DB::run() -> queryFetch("SELECT * FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$login, $ignore]);
+        $check_ignore = DB::run() -> queryFetch("SELECT * FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$login, $ignore]);
 
         if (!empty($check_ignore)){
             return true;

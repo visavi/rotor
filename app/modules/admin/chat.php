@@ -100,7 +100,7 @@ if (is_admin()) {
 
                     } else {
 
-                        DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [$log, $msg, $ip, $brow, SITETIME]);
+                        DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [$log, $msg, App::getClientIp(), App::getUserAgent(), SITETIME]);
                     }
 
                     DB::run() -> query("DELETE FROM `chat` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `chat` ORDER BY `time` DESC LIMIT ".$config['maxpostchat'].") AS del);");

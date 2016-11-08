@@ -109,7 +109,7 @@ break;
 ##                                       Список ключей                                    ##
 ############################################################################################
 case 'list':
-    $invitations = DB::run() -> query("SELECT `key` FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [$log, 0]);
+    $invitations = DB::run() -> query("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [$log, 0]);
     $invite = $invitations -> fetchAll(PDO::FETCH_COLUMN);
     $total = count($invite);
 
@@ -135,7 +135,7 @@ case 'send':
         if (user($user)) {
 
 
-            $dbr = DB::run() -> prepare("INSERT INTO `invite` (`key`, `user`, `time`) VALUES (?, ?, ?);");
+            $dbr = DB::run() -> prepare("INSERT INTO `invite` (hash, `user`, `time`) VALUES (?, ?, ?);");
 
             $listkeys = [];
 
@@ -184,7 +184,7 @@ case 'mailing':
 
                 $updateusers = DB::run() -> prepare("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;");
                 $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);");
-                $dbr = DB::run() -> prepare("INSERT INTO `invite` (`key`, `user`, `time`) VALUES (?, ?, ?);");
+                $dbr = DB::run() -> prepare("INSERT INTO `invite` (hash, `user`, `time`) VALUES (?, ?, ?);");
 
                 foreach ($users as $user){
                     $key = generate_password(rand(12, 15));
@@ -219,7 +219,7 @@ case 'generate':
     if ($uid == $_SESSION['token']) {
         if (!empty($keys)) {
 
-            $dbr = DB::run() -> prepare("INSERT INTO `invite` (`key`, `user`, `time`) VALUES (?, ?, ?);");
+            $dbr = DB::run() -> prepare("INSERT INTO `invite` (hash, `user`, `time`) VALUES (?, ?, ?);");
 
             for($i = 0; $i < $keys; $i++) {
                 $key = generate_password(rand(12, 15));

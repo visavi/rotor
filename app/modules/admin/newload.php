@@ -84,7 +84,7 @@ if (is_admin()) {
             if (!empty($new)) {
                 if (empty($new['active'])) {
 
-                    $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `order` ASC;");
+                    $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
                     $downs = $querydown -> fetchAll();
 
                     if (count($downs) > 0) {

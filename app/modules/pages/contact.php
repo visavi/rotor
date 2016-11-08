@@ -91,7 +91,7 @@ if (is_user()) {
 
                                 DB::run() -> query("INSERT INTO `contact` (`user`, `name`, `time`) VALUES (?, ?, ?);", [$log, $uz, SITETIME]);
                                 // ----------------------------- Проверка на игнор ----------------------------//
-                                $ignorstr = DB::run() -> querySingle("SELECT `id` FROM `ignore` WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
+                                $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
                                 if (empty($ignorstr)) {
                                     DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$uz]);
                                     // ------------------------------Уведомление по привату------------------------//

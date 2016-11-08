@@ -116,7 +116,7 @@ case 'editblog':
 
         if (!empty($blogs)) {
             if ($blogs['user'] == $log) {
-                $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY `order` ASC;");
+                $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
                 $cats = $querycats -> fetchAll();
 
                 render('blog/blog_editblog', ['blogs' => $blogs, 'cats' => $cats]);
@@ -237,7 +237,7 @@ case 'new':
 
     if (is_user()) {
 
-        $querycat = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY `order` ASC;");
+        $querycat = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
         $cats = $querycat -> fetchAll();
 
         if (count($cats) > 0) {
@@ -475,11 +475,11 @@ case 'spam':
             $data = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? LIMIT 1;", [$pid]);
 
             if (!empty($data)) {
-                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE `key`=? AND `idnum`=? LIMIT 1;", [6, $pid]);
+                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [6, $pid]);
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (`key`, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start]);
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/blog/blog?act=comments&id=$id&start=$start");

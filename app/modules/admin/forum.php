@@ -31,7 +31,7 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            $queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY `order` ASC;");
+            $queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY sort ASC;");
             $forums = $queryforum -> fetchAll();
 
             if (count($forums) > 0) {
@@ -130,8 +130,8 @@ if (is_admin()) {
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (utf_strlen($title) >= 3 && utf_strlen($title) <= 50) {
-                        $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(`order`),0)+1 FROM `forums`;");
-                        DB::run() -> query("INSERT INTO `forums` (`order`, `title`) VALUES (?, ?);", [$maxorder, $title]);
+                        $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `forums`;");
+                        DB::run() -> query("INSERT INTO `forums` (sort, `title`) VALUES (?, ?);", [$maxorder, $title]);
 
                         notice('Новый раздел успешно добавлен!');
                         redirect("/admin/forum");
@@ -164,7 +164,7 @@ if (is_admin()) {
                     echo 'Раздел: <br />';
                     echo '<input type="text" name="title" maxlength="50" value="'.$forums['title'].'" /><br />';
 
-                    $query = DB::run() -> query("SELECT `id`, `title`, `parent` FROM `forums` WHERE `parent`=? ORDER BY `order` ASC;", [0]);
+                    $query = DB::run() -> query("SELECT `id`, `title`, `parent` FROM `forums` WHERE `parent`=? ORDER BY sort ASC;", [0]);
                     $section = $query -> fetchAll();
 
                     echo 'Родительский форум:<br />';
@@ -220,7 +220,7 @@ if (is_admin()) {
                                 $forums = DB::run() -> queryFetch("SELECT `id` FROM `forums` WHERE `parent`=? LIMIT 1;", [$fid]);
 
                                 if (empty($forums) || empty($parent)) {
-                                    DB::run() -> query("UPDATE `forums` SET `order`=?, `parent`=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $title, $desc, $closed, $fid]);
+                                    DB::run() -> query("UPDATE `forums` SET sort=?, `parent`=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $title, $desc, $closed, $fid]);
 
                                     notice('Раздел успешно отредактирован!');
                                     redirect("/admin/forum");
@@ -482,7 +482,7 @@ if (is_admin()) {
             if (!empty($topics)) {
                 echo '<i class="fa fa-folder-open"></i> <b>'.$topics['title'].'</b> (Автор темы: '.nickname($topics['author']).')<br /><br />';
 
-                $queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY `order` ASC;");
+                $queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY sort ASC;");
                 $forums = $queryforum -> fetchAll();
 
                 if (count($forums) > 1) {
