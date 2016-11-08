@@ -10,7 +10,7 @@
 
 	<div>
 		Категория: <a href="/blog/blog?cid=<?=$data['id']?>"><?=$data['name']?></a><br />
-		Просмотров: <?=$data['read']?><br />
+		Просмотров: <?=$data['visits']?><br />
 		Автор: <?=profile($data['user'])?>  (<?=date_fixed($data['time'])?>)
 	</div>
 <?php endforeach; ?>

@@ -21,7 +21,7 @@ case 'index':
 
         if (!empty($cats)) {
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `cats_id`=?;", [$cid]);
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `category_id`=?;", [$cid]);
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -31,7 +31,7 @@ case 'index':
                 $page = floor(1 + $start / $config['blogpost']);
                 $config['newtitle'] = $cats['name'].' (Стр. '.$page.')';
 
-                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `cats_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$cid]);
+                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$cid]);
                 $blogs = $queryblog->fetchAll();
 
                 render('blog/blog', ['blogs' => $blogs, 'cats' => $cats, 'start' => $start]);
@@ -54,7 +54,7 @@ break;
 ############################################################################################
 case 'view':
 
-    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` b LEFT JOIN `catsblog` cb ON b.`cats_id`=cb.`id` WHERE b.`id`=? LIMIT 1;", [$id]);
+    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` b LEFT JOIN `catsblog` cb ON b.`category_id`=cb.`id` WHERE b.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($blogs)) {
         $text = preg_split('|\[nextpage\](<br * /?>)*|', $blogs['text'], -1, PREG_SPLIT_NO_EMPTY);
@@ -73,7 +73,7 @@ case 'view':
                     $expiresread = SITETIME + 3600 * $config['blogexpread'];
                     DB::run() -> query("DELETE FROM `readblog` WHERE `time`<?;", [SITETIME]);
                     DB::run() -> query("INSERT INTO `readblog` (`blog`, `ip`, `time`) VALUES (?, ?, ?);", [$id, App::getClientIp(), $expiresread]);
-                    DB::run() -> query("UPDATE `blogs` SET `read`=`read`+1 WHERE `id`=? LIMIT 1;", [$id]);
+                    DB::run() -> query("UPDATE `blogs` SET `visits`=`visits`+1 WHERE `id`=? LIMIT 1;", [$id]);
                 }
             }
             // --------------
@@ -160,13 +160,13 @@ case 'changeblog':
                                 if ($blogs['user'] == $log) {
 
                                     // Обновление счетчиков
-                                    if ($blogs['cats_id'] != $cats) {
+                                    if ($blogs['category_id'] != $cats) {
                                         DB::run() -> query("UPDATE `commblog` SET `cats`=? WHERE `blog`=?;", [$cats, $id]);
                                         DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$cats]);
-                                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$blogs['cats_id']]);
+                                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$blogs['category_id']]);
                                     }
 
-                                    DB::run() -> query("UPDATE `blogs` SET `cats_id`=?, `title`=?, `text`=?, `tags`=? WHERE `id`=?;", [$cats, $title, $text, $tags, $id]);
+                                    DB::run() -> query("UPDATE `blogs` SET `category_id`=?, `title`=?, `text`=?, `tags`=? WHERE `id`=?;", [$cats, $title, $text, $tags, $id]);
 
                                     notice('Статья успешно отредактирована!');
                                     redirect("/blog/blog?act=view&id=$id");
@@ -280,7 +280,7 @@ case 'addblog':
 
                                     $text = antimat($text);
 
-                                    DB::run() -> query("INSERT INTO `blogs` (`cats_id`, `user`, `title`, `text`, `tags`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$cid, $log, $title, $text, $tags, SITETIME]);
+                                    DB::run() -> query("INSERT INTO `blogs` (`category_id`, `user`, `title`, `text`, `tags`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$cid, $log, $title, $text, $tags, SITETIME]);
                                     $lastid = DB::run() -> lastInsertId();
 
                                     DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?;", [$cid]);
@@ -426,7 +426,7 @@ case 'add':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $queryblog = DB::run() -> querySingle("SELECT `cats_id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
+                $queryblog = DB::run() -> querySingle("SELECT `category_id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
 
                 if (!empty($queryblog)) {
                     if (is_flood($log)) {

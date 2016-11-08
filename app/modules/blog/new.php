@@ -22,7 +22,7 @@ case 'blogs':
             $start = last_page($total, $config['blogpost']);
         }
 
-        $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`cats_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+        $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
         $blogs = $queryblog->fetchAll();
 
         render('blog/new_blogs', ['blogs' => $blogs]);

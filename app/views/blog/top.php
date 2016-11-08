@@ -1,7 +1,7 @@
 Сортировать:
 
-<?php $active = ($order == 'read') ? ' style="font-weight: bold;"' : ''; ?>
-<a href="/blog/top?sort=read"<?=$active?>>Просмотры</a>,
+<?php $active = ($order == 'visits') ? ' style="font-weight: bold;"' : ''; ?>
+<a href="/blog/top?sort=visits"<?=$active?>>Просмотры</a>,
 
 <?php $active = ($order == 'rating') ? ' style="font-weight: bold;"' : ''; ?>
 <a href="/blog/top?sort=rated"<?=$active?>>Оценки</a>,
@@ -18,8 +18,8 @@
 	</div>
 
 	<div>
-		Категория: <a href="/blog/blog?cid=<?=$data['cats_id']?>"><?=$data['cats_name']?></a><br />
-		Просмотров: <?=$data['read']?><br />
+		Категория: <a href="/blog/blog?cid=<?=$data['category_id']?>"><?=$data['name']?></a><br />
+		Просмотров: <?=$data['visits']?><br />
 		Рейтинг: <b><?=format_num($data['rating'])?></b><br />
 		<a href="/blog/blog?act=comments&amp;id=<?=$data['id']?>">Комментарии</a> (<?=$data['comments']?>)
 		<a href="/blog/blog?act=end&amp;id=<?=$data['id']?>">&raquo;</a>

@@ -45,7 +45,7 @@ if ($total > 0) {
         $start = 0;
     }
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `id`, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `id`, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -57,9 +57,9 @@ if ($total > 0) {
 
         echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
         echo 'Скачиваний: '.$data['load'].'<br />';
-        $raiting = (!empty($data['rated'])) ? round($data['raiting'] / $data['rated'], 1) : 0;
+        $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
-        echo 'Рейтинг: <b>'.$raiting.'</b> (Голосов: '.$data['rated'].')<br />';
+        echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br />';
         echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
         echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
     }

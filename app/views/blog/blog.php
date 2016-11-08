@@ -16,7 +16,7 @@
 
 	<div>
 		Автор: <?=profile($data['user'])?> (<?=date_fixed($data['time'])?>)<br />
-		Просмотров: <?=$data['read']?><br />
+		Просмотров: <?=$data['visits']?><br />
 		<a href="/blog/blog?act=comments&amp;id=<?=$data['id']?>">Комментарии</a> (<?=$data['comments']?>)
 		<a href="/blog/blog?act=end&amp;id=<?=$data['id']?>">&raquo;</a>
 	</div>

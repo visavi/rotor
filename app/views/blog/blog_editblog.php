@@ -11,7 +11,7 @@
 		<select name="cats">
 
 		<?php foreach ($cats as $data): ?>
-			<?php $selected = ($blogs['cats_id'] == $data['id']) ? ' selected="selected"' : ''; ?>
+			<?php $selected = ($blogs['category_id'] == $data['id']) ? ' selected="selected"' : ''; ?>
 			<option value="<?=$data['id']?>"<?=$selected?>><?=$data['name']?></option>
 		<?php endforeach; ?>
 

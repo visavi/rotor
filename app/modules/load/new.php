@@ -21,7 +21,7 @@ case 'files':
             $start = 0;
         }
 
-        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
+        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -31,7 +31,7 @@ case 'files':
             echo '<div class="b"><i class="fa fa-file-o"></i> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-            echo '<div>Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['name'].'</a><br />';
+            echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br />';
             echo 'Скачиваний: '.$data['load'].'<br />';
             echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
         }

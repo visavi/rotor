@@ -15,7 +15,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400 * 5]);
+    $querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `category_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400 * 5]);
     $downs = $querydown -> fetchAll();
 
     if (count($downs) > 0) {
@@ -201,7 +201,7 @@ case 'addimport':
                                                     rename(HOME.'/upload/loader/'.$file, HOME.'/upload/files/'.$folder.$filename);
 
                                                     DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$cid]);
-                                                    DB::run() -> query("INSERT INTO `downs` (`cats_id`, `title`, `text`, `link`, `user`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $file, $text, $filename, $log, $screen, SITETIME, 1]);
+                                                    DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $file, $text, $filename, $log, $screen, SITETIME, 1]);
 
                                                     $count++;
                                                 }
@@ -329,7 +329,7 @@ case 'addfile':
                                         if (empty($downtitle)) {
 
                                             DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$cid]);
-                                            DB::run() -> query("INSERT INTO `downs` (`cats_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', $log, $author, $site, '', SITETIME, 1]);
+                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', $log, $author, $site, '', SITETIME, 1]);
 
                                             $lastid = DB::run() -> lastInsertId();
 
@@ -500,7 +500,7 @@ case 'addeditcats':
 
                         $cat = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
 
-                        $query = DB::run() -> query("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=?;", [$cid]);
+                        $query = DB::run() -> query("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=?;", [$cid]);
                         $downs = $query -> fetchAll();
 
                         // Перенос файлов
@@ -624,11 +624,11 @@ case 'delcats':
                     if (is_writeable(HOME.'/upload/files')) {
                         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
-                        $querydel = DB::run() -> query("SELECT `link`, `screen` FROM `downs` WHERE `cats_id`=?;", [$cid]);
+                        $querydel = DB::run() -> query("SELECT `link`, `screen` FROM `downs` WHERE `category_id`=?;", [$cid]);
                         $arr_script = $querydel -> fetchAll();
 
                         DB::run() -> query("DELETE FROM `commload` WHERE `cats`=?;", [$cid]);
-                        DB::run() -> query("DELETE FROM `downs` WHERE `cats_id`=?;", [$cid]);
+                        DB::run() -> query("DELETE FROM `downs` WHERE `category_id`=?;", [$cid]);
                         DB::run() -> query("DELETE FROM `cats` WHERE `id`=?;", [$cid]);
 
                         foreach ($arr_script as $delfile) {
@@ -702,14 +702,14 @@ case 'down':
             echo '<hr />';
         }
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `cats_id`=? AND `active`=?;", [$cid, 1]);
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
 
         if ($total > 0) {
             if ($start >= $total) {
                 $start = 0;
             }
 
-            $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `cats_id`=? AND `active`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [$cid, 1]);
+            $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [$cid, 1]);
 
             $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
@@ -737,9 +737,9 @@ case 'down':
 
                 echo 'Скачиваний: '.$data['load'].'<br />';
 
-                $raiting = (!empty($data['rated'])) ? round($data['raiting'] / $data['rated'], 1) : 0;
+                $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
-                echo 'Рейтинг: <b>'.$raiting.'</b> (Голосов: '.$data['rated'].')<br />';
+                echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br />';
                 echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].')</div>';
             }
 
@@ -773,7 +773,7 @@ case 'editdown':
 
     $config['newtitle'] = 'Редактирование файла';
 
-    $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (! empty($new)) {
         echo '<a href="/admin/load">Категории</a> / ';
@@ -865,7 +865,7 @@ case 'changedown':
                             if (strlen($loadfile) <= 50) {
                                 if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $loadfile)) {
 
-                                    $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+                                    $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
                                     if (! empty($new)) {
 
@@ -947,7 +947,7 @@ case 'copyfile':
 
     $loadfile = check($_POST['loadfile']);
 
-    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (! empty($down)) {
         if (empty($down['link'])) {
@@ -1007,7 +1007,7 @@ break;
 case 'loadfile':
     show_title('Загрузка файла');
 
-    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($down)) {
         if (empty($down['link'])) {
@@ -1069,7 +1069,7 @@ break;
 case 'loadscreen':
     show_title('Загрузка скриншота');
 
-    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($down)) {
         if (empty($down['screen'])) {
@@ -1113,7 +1113,7 @@ break;
 ############################################################################################
 case 'delfile':
 
-    $link = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $link = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
     if (!empty($link)) {
         $folder = $link['folder'] ? $link['folder'].'/' : '';
 
@@ -1139,7 +1139,7 @@ break;
 ############################################################################################
 case 'delscreen':
 
-    $screen = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $screen = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
     if (!empty($screen)) {
         $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
@@ -1161,7 +1161,7 @@ break;
 ############################################################################################
 case 'movedown':
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($downs)) {
         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
@@ -1179,21 +1179,21 @@ case 'movedown':
                 $output[$p][$i] = $row;
             }
 
-            echo '<div class="form"><form action="/admin/load?act=addmovedown&amp;cid='.$downs['cats_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
+            echo '<div class="form"><form action="/admin/load?act=addmovedown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
             echo 'Выберите раздел для перемещения:<br />';
             echo '<select name="section">';
             echo '<option value="0">Список разделов</option>';
 
             foreach ($output[0] as $key => $data) {
-                if ($downs['cats_id'] != $data['id']) {
+                if ($downs['category_id'] != $data['id']) {
                     $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
                     echo '<option value="'.$data['id'].'"'.$disabled.'>'.$data['name'].'</option>';
                 }
 
                 if (isset($output[$key])) {
                     foreach($output[$key] as $datasub) {
-                        if ($downs['cats_id'] != $datasub['id']) {
+                        if ($downs['category_id'] != $datasub['id']) {
                             $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
                             echo '<option value="'.$datasub['id'].'"'.$disabled.'>– '.$datasub['name'].'</option>';
                         }
@@ -1231,7 +1231,7 @@ case 'addmovedown':
 
         if (! empty($catsTo)) {
 
-            $downFrom  = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+            $downFrom  = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
             if (!empty($downFrom)) {
 
                 $folderFrom = $downFrom['folder'] ? $downFrom['folder'].'/' : '';
@@ -1239,7 +1239,7 @@ case 'addmovedown':
 
                 rename(HOME.'/upload/files/'.$folderFrom.$downFrom['link'], HOME.'/upload/files/'.$folderTo.$downFrom['link']);
 
-                DB::run() -> query("UPDATE `downs` SET `cats_id`=? WHERE `id`=?;", [$section, $id]);
+                DB::run() -> query("UPDATE `downs` SET `category_id`=? WHERE `id`=?;", [$section, $id]);
                 DB::run() -> query("UPDATE `commload` SET `cats`=? WHERE `down`=?;", [$section, $id]);
                 // Обновление счетчиков
                 DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$section]);
@@ -1276,7 +1276,7 @@ case 'deldown':
 
                 if (is_writeable(HOME.'/upload/files')) {
 
-                    $querydel = DB::run() -> query("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id` IN (".$del.");");
+                    $querydel = DB::run() -> query("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id` IN (".$del.");");
                     $arr_script = $querydel -> fetchAll();
 
                     DB::run() -> query("DELETE FROM `commload` WHERE `down` IN (".$del.");");

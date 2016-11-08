@@ -12,7 +12,7 @@ if ($total > 0) {
         $start = 0;
     }
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1, SITETIME-3600 * 120]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1, SITETIME-3600 * 120]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -31,7 +31,7 @@ if ($total > 0) {
 
         echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-        echo '<div>Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['name'].'</a><br />';
+        echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br />';
         echo 'Скачиваний: '.$data['load'].'<br />';
         echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
         echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a><br />';

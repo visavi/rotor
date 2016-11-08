@@ -33,7 +33,7 @@ if (is_admin()) {
                     $start = 0;
                 }
 
-                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$start.", ".$config['downlist'].";", [0]);
+                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$start.", ".$config['downlist'].";", [0]);
 
                 echo '<form action="/admin/newload?act=deldown&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -49,7 +49,7 @@ if (is_admin()) {
 
                     echo '<b><a href="/admin/newload?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.date_fixed($data['time']).')</div>';
                     echo '<div>';
-                    echo 'Категория: <a href="/load/down?cid='.$data['cats_id'].'">'.$data['name'].'</a><br />';
+                    echo 'Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br />';
                     echo 'Добавлено: '.profile($data['user']).'<br />';
                     if (!empty($data['link'])) {
                         echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/upload/files/'.$data['link']).')<br />';
@@ -79,7 +79,7 @@ if (is_admin()) {
         ############################################################################################
         case 'view':
 
-            $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+            $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($new)) {
                 if (empty($new['active'])) {
@@ -130,13 +130,13 @@ if (is_admin()) {
                         echo '<select name="cid">';
 
                         foreach ($output[0] as $key => $data) {
-                            $selected = $new['cats_id'] == $data['id'] ? ' selected="selected"' : '';
+                            $selected = $new['category_id'] == $data['id'] ? ' selected="selected"' : '';
                             $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
                             echo '<option value="'.$data['id'].'"'.$selected.$disabled.'>'.$data['name'].'</option>';
 
                             if (isset($output[$key])) {
                                 foreach($output[$key] as $datasub) {
-                                    $selected = ($new['cats_id'] == $datasub['id']) ? ' selected="selected"' : '';
+                                    $selected = ($new['category_id'] == $datasub['id']) ? ' selected="selected"' : '';
                                     $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
                                     echo '<option value="'.$datasub['id'].'"'.$selected.$disabled.'>– '.$datasub['name'].'</option>';
                                 }
@@ -204,7 +204,7 @@ if (is_admin()) {
                                 if (strlen($link) <= 50) {
                                     if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $link)) {
 
-                                        $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+                                        $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
                                         $folder = $new['folder'] ? $new['folder'].'/' : '';
 
@@ -249,7 +249,7 @@ if (is_admin()) {
                                                                 }
                                                             }
 
-                                                            DB::run() -> query("UPDATE `downs` SET `cats_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `notice`=?, `time`=?, `app`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $notice, $new['time'], $app, $id]);
+                                                            DB::run() -> query("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `notice`=?, `time`=?, `app`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $notice, $new['time'], $app, $id]);
 
                                                             notice('Данные успешно изменены!');
                                                             redirect("/admin/newload?act=view&id=$id");
@@ -312,7 +312,7 @@ if (is_admin()) {
 
                                 DB::run() -> query("UPDATE `downs` SET `notice`=?, `time`=?, `app`=?, `active`=? WHERE `id`=?;", ['', SITETIME, 0, 1, $id]);
 
-                                DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$new['cats_id']]);
+                                DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$new['category_id']]);
 
                                 if (user($new['user'])) {
                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.$config['home'].'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
@@ -348,7 +348,7 @@ if (is_admin()) {
         ############################################################################################
         case 'delfile':
 
-            $link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+            $link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
             $folder = $link['folder'] ? $link['folder'].'/' : '';
 
@@ -381,7 +381,7 @@ if (is_admin()) {
         ############################################################################################
         case 'delscreen':
 
-            $screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+            $screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
             $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
@@ -424,7 +424,7 @@ if (is_admin()) {
                     $del = implode(',', $del);
 
 
-                    $querydel = DB::run() -> query("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id` IN (".$del.");");
+                    $querydel = DB::run() -> query("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id` IN (".$del.");");
                     $arr_files = $querydel -> fetchAll();
 
                     DB::run() -> query("DELETE FROM `downs` WHERE `id` IN (".$del.");");

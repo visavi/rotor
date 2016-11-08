@@ -89,14 +89,14 @@ case 'index':
                 echo '<hr />';
             }
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `cats_id`=? AND `active`=?;", [$cid, 1]);
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
 
             if ($total > 0) {
                 if ($start >= $total) {
                     $start = 0;
                 }
 
-                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `cats_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [$cid, 1]);
+                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [$cid, 1]);
 
                 $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
@@ -111,9 +111,9 @@ case 'index':
 
                     echo 'Скачиваний: '.$data['load'].'<br />';
 
-                    $raiting = (!empty($data['rated'])) ? round($data['raiting'] / $data['rated'], 1) : 0;
+                    $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
-                    echo 'Рейтинг: <b>'.$raiting.'</b> (Голосов: '.$data['rated'].')<br />';
+                    echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br />';
                     echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                     echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
                 }
@@ -150,7 +150,7 @@ break;
 ############################################################################################
 case 'view':
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`cats_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($downs)) {
         if (!empty($downs['active']) || $downs['user'] == $log) {
@@ -173,8 +173,8 @@ case 'view':
             echo '<i class="fa fa-file-o"></i> <b>'.$downs['title'].'</b> ('.$filesize.')';
 
             if (is_admin([101, 102])) {
-                echo ' (<a href="/admin/load?act=editdown&amp;cid='.$downs['cats_id'].'&amp;id='.$id.'">Редактировать</a> / ';
-                echo '<a href="/admin/load?act=movedown&amp;cid='.$downs['cats_id'].'&amp;id='.$id.'">Переместить</a>)';
+                echo ' (<a href="/admin/load?act=editdown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Редактировать</a> / ';
+                echo '<a href="/admin/load?act=movedown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Переместить</a>)';
             }
             echo '<hr />';
 
@@ -249,8 +249,8 @@ case 'view':
                 echo '<i class="fa fa-comment"></i> <b><a href="/load/down?act=comments&amp;id='.$id.'">Комментарии</a></b> ('.$downs['comments'].') ';
                 echo '<a href="/load/down?act=end&amp;id='.$id.'">&raquo;</a><br />';
 
-                $raiting = (!empty($downs['rated'])) ? round($downs['raiting'] / $downs['rated'], 1) : 0;
-                echo '<br />Рейтинг: '.raiting_vote($raiting).'<br />';
+                $rating = (!empty($downs['rated'])) ? round($downs['rating'] / $downs['rated'], 1) : 0;
+                echo '<br />Рейтинг: '.rating_vote($rating).'<br />';
                 echo 'Всего голосов: <b>'.$downs['rated'].'</b><br /><br />';
 
                 if (is_user()) {
@@ -301,7 +301,7 @@ case 'load':
 
     if (is_user() || $provkod == $_SESSION['protect']) {
 
-        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`cats_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
 
         if (!empty($downs)) {
             if (!empty($downs['active'])) {
@@ -362,11 +362,11 @@ case 'vote':
 
                                 DB::run() -> query("DELETE FROM `rateddown` WHERE `time`<?;", [SITETIME]);
                                 DB::run() -> query("INSERT INTO `rateddown` (`down`, `user`, `time`) VALUES (?, ?, ?);", [$id, $log, $expiresrated]);
-                                DB::run() -> query("UPDATE `downs` SET `raiting`=`raiting`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
+                                DB::run() -> query("UPDATE `downs` SET `rating`=`rating`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
 
                                 echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br />';
                                 echo 'Всего оценивало: '.($downs['rated'] + 1).'<br />';
-                                echo 'Средняя оценка: '.round(($downs['raiting'] + $score) / ($downs['rated'] + 1), 1).'<br /><br />';
+                                echo 'Средняя оценка: '.round(($downs['rating'] + $score) / ($downs['rated'] + 1), 1).'<br /><br />';
                             } else {
                                 show_error('Ошибка! Вы уже оценивали данный файл!');
                             }
@@ -503,7 +503,7 @@ case 'add':
 
                             $msg = antimat($msg);
 
-                            DB::run() -> query("INSERT INTO `commload` (`cats`, `down`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$downs['cats_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
+                            DB::run() -> query("INSERT INTO `commload` (`cats`, `down`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$downs['category_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
                             DB::run() -> query("DELETE FROM `commload` WHERE `down`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", [$id, $id]);
 

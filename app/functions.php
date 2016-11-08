@@ -426,7 +426,7 @@ function is_flood($log, $period = 0) {
 }
 
 // ------------------ Функция вывода рейтинга --------------------//
-function raiting_vote($rating) {
+function rating_vote($rating) {
 
     $rating = round($rating / 0.5) * 0.5;
 
@@ -1226,7 +1226,7 @@ function stats_load($cats=0) {
 
         if (@filemtime(STORAGE."/temp/statloadcats.dat") < time()-900) {
 
-        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `cats_id`=`cats_id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400*5]);
+        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `category_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400*5]);
         $downs = $querydown->fetchAll();
 
             if (!empty($downs)){
@@ -1793,12 +1793,12 @@ function restatement($mode) {
             break;
 
         case 'blog':
-            DB::run() -> query("UPDATE `catsblog` SET `count`=(SELECT count(*) FROM `blogs` WHERE `catsblog`.`id`=`blogs`.`cats_id`);");
+            DB::run() -> query("UPDATE `catsblog` SET `count`=(SELECT count(*) FROM `blogs` WHERE `catsblog`.`id`=`blogs`.`category_id`);");
             DB::run() -> query("UPDATE `blogs` SET `comments`=(SELECT count(*) FROM `commblog` WHERE `blogs`.`id`=`commblog`.`blog`);");
             break;
 
         case 'load':
-            DB::run() -> query("UPDATE `cats` SET `count`=(SELECT count(*) FROM `downs` WHERE `cats`.`id`=`downs`.`cats_id` AND `active`=?);", [1]);
+            DB::run() -> query("UPDATE `cats` SET `count`=(SELECT count(*) FROM `downs` WHERE `cats`.`id`=`downs`.`category_id` AND `active`=?);", [1]);
             DB::run() -> query("UPDATE `downs` SET `comments`=(SELECT count(*) FROM `commload` WHERE `downs`.`id`=`commload`.`down`);");
             break;
 

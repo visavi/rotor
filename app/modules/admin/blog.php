@@ -214,7 +214,7 @@ if (is_admin()) {
 
                     if (!empty($blogs)) {
                         DB::run() -> query("DELETE FROM `commblog` WHERE `cats`=?;", [$cid]);
-                        DB::run() -> query("DELETE FROM `blogs` WHERE `cats_id`=?;", [$cid]);
+                        DB::run() -> query("DELETE FROM `blogs` WHERE `category_id`=?;", [$cid]);
                         DB::run() -> query("DELETE FROM `catsblog` WHERE `id`=?;", [$cid]);
 
                         notice('Раздел успешно удален!');
@@ -247,14 +247,14 @@ if (is_admin()) {
                 echo ' (<a href="/blog/blog?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
                 echo '<hr />';
 
-                $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `cats_id`=?;", [$cid]);
+                $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `category_id`=?;", [$cid]);
 
                 if ($total > 0) {
                     if ($start >= $total) {
                         $start = 0;
                     }
 
-                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `cats_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$cid]);
+                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$cid]);
 
                     echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -269,7 +269,7 @@ if (is_admin()) {
                         echo '<a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;start='.$start.'">Переместить</a></div>';
 
                         echo '<div>Автор: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
-                        echo 'Просмотров: '.$data['read'].'<br />';
+                        echo 'Просмотров: '.$data['visits'].'<br />';
                         echo '<a href="/blog/blog?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].')<br />';
                         echo '</div>';
                     }
@@ -380,14 +380,14 @@ if (is_admin()) {
 
                 if (count($cats) > 0) {
                     echo '<div class="form">';
-                    echo '<form action="/admin/blog?act=addmoveblog&amp;cid='.$blogs['cats_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/admin/blog?act=addmoveblog&amp;cid='.$blogs['category_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                     echo 'Выберите раздел для перемещения:<br />';
                     echo '<select name="section">';
                     echo '<option value="0">Список разделов</option>';
 
                     foreach ($cats as $data) {
-                        if ($blogs['cats_id'] != $data['id']) {
+                        if ($blogs['category_id'] != $data['id']) {
                             echo '<option value="'.$data['id'].'">'.$data['name'].'</option>';
                         }
                     }
@@ -417,7 +417,7 @@ if (is_admin()) {
                 if (!empty($querycats)) {
                     $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryblog)) {
-                        DB::run() -> query("UPDATE `blogs` SET `cats_id`=? WHERE `id`=?;", [$section, $id]);
+                        DB::run() -> query("UPDATE `blogs` SET `category_id`=? WHERE `id`=?;", [$section, $id]);
                         DB::run() -> query("UPDATE `commblog` SET `cats`=? WHERE `blog`=?;", [$section, $id]);
                         // Обновление счетчиков
                         DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$section]);
