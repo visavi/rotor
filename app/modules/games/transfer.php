@@ -29,7 +29,7 @@ if (is_user()) {
             if ($udata['point'] >= $config['sendmoneypoint']) {
                 if (empty($uz)) {
                     echo '<div class="form">';
-                    echo '<form action="/transfer?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/games/transfer?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo 'Логин юзера:<br />';
                     echo '<input type="text" name="uz" maxlength="20" /><br />';
                     echo 'Кол-во денег:<br />';
@@ -40,7 +40,7 @@ if (is_user()) {
                 } else {
                     echo '<div class="form">';
                     echo 'Перевод для <b>'.$uz.'</b>:<br /><br />';
-                    echo '<form action="/transfer?act=send&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/games/transfer?act=send&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo 'Кол-во денег:<br />';
                     echo '<input type="text" name="money" /><br />';
                     echo 'Примечание:<br />';
@@ -85,7 +85,7 @@ if (is_user()) {
                                             DB::run() -> query("DELETE FROM `transfers` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `transfers` ORDER BY `time` DESC LIMIT 1000) AS del);");
 
                                             notice('Перевод успешно завершен! Пользователь уведомлен о переводе');
-                                            redirect("/transfer");
+                                            redirect("/games/transfer");
 
                                         } else {
                                             show_error('Ошибка! Вы внесены в игнор-лист получателя!');
@@ -112,7 +112,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/transfer">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/transfer">Вернуться</a><br />';
         break;
 
     endswitch;
