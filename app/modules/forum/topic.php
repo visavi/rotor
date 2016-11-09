@@ -372,7 +372,7 @@ case 'editpost':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения сообщения!');
 
-    $post = DB::run() -> queryFetch("SELECT `posts`.*, `topics`.* FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+    $post = DB::run() -> queryFetch("SELECT p.*, moderators, closed FROM `posts` p LEFT JOIN `topics` t ON `p`.`topic_id`=`t`.`id` WHERE p.`id`=? LIMIT 1;", [$id]);
 
     $isModer = in_array($log, explode(',', $post['moderators'], true)) ? true : false;
 
