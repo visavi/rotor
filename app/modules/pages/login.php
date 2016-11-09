@@ -11,18 +11,23 @@ case 'index':
     $cooklog = (isset($_COOKIE['cooklog'])) ? check($_COOKIE['cooklog']): '';
 
     if (Request::isMethod('post')) {
+        if (Request::has('login') && Request::has('pass')) {
+            $login = check(utf_lower(Request::input('login')));
+            $pass = md5(md5(trim(Request::input('pass'))));
+            $remember = Request::input('remember');
 
-        $login      = check(utf_lower(Request::input('login')));
-        $pass       = md5(md5(trim(Request::input('pass'))));
-        $remember = Request::input('remember');
+            if ($user = App::login($login, $pass, $remember)) {
+                App::setFlash('success', 'Добро пожаловать, '.$login.'!');
+                App::redirect('/');
+            }
 
-        if ($user = App::login($login, $pass, $remember)) {
-            App::setFlash('success', 'Вы успешно авторизованы!');
-            App::redirect('/');
+            App::setInput(Request::all());
+            App::setFlash('danger', 'Ошибка авторизации. Неправильный логин или пароль!');
         }
 
-        App::setInput(Request::all());
-        App::setFlash('danger', 'Ошибка авторизации. Неправильный логин или пароль!');
+        if (Request::has('token')) {
+            App::socialLogin(Request::input('token'));
+        }
     }
 
     App::view('pages/login', compact('cooklog'));

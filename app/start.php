@@ -86,7 +86,7 @@ if (empty($_SESSION['log']) && empty($_SESSION['par'])) {
             if ($unlog == $checkuser['login'] && $unpar == md5($checkuser['pass'].$config['keypass'])) {
                 session_regenerate_id(1);
 
-                $_SESSION['my_ip'] = App::getClientIp();
+                $_SESSION['ip'] = App::getClientIp();
                 $_SESSION['log'] = $unlog;
                 $_SESSION['par'] = md5($config['keypass'].$checkuser['pass']);
 
@@ -143,7 +143,7 @@ if ($udata = is_user()) {
 
     // --------------------- Проверка соответствия ip-адреса ---------------------//
     if (!empty($udata['ipbinding'])) {
-        if ($_SESSION['my_ip'] != App::getClientIp()) {
+        if ($_SESSION['ip'] != App::getClientIp()) {
             $_SESSION = [];
             setcookie(session_name(), '', 0, '/', '');
             session_destroy();

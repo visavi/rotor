@@ -15,16 +15,17 @@
         "php": ">=5.5.9",
         "altorouter/altorouter": "~1.2",
         "cbschuld/browser.php": "dev-master",
-        "gregwar/captcha": "dev-master",
+        "gregwar/captcha": "^1.1",
         "illuminate/http": "~5.3",
-        "mobiledetect/mobiledetectlib": "dev-master",
-        "pclzip/pclzip": "dev-master",
+        "mobiledetect/mobiledetectlib": "^2.8",
+        "pclzip/pclzip": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.6",
         "philo/laravel-blade": "^3.1",
         "swiftmailer/swiftmailer": "~5.4",
         "vlucas/phpdotenv": "^2.4",
         "robmorgan/phinx": "^0.6.5",
-        "verot/class.upload.php": "^0.33.0"
+        "verot/class.upload.php": "^0.33.0",
+        "php-curl-class/php-curl-class": "^7.0"
     },
     "require-dev": {
         "filp/whoops": "^2.1"

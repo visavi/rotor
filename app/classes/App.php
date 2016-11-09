@@ -36,7 +36,7 @@ class App
     public static function view($template, $params = [], $return = false)
     {
         $log    = static::user('login');
-        $config = Registry::get('config');
+        $config = self::setting();
 
         $params +=compact('config', 'log');
 
@@ -65,7 +65,7 @@ class App
             header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
         }
 
-        exit(App::view('errors.'.$code, compact('message')));
+        exit(self::view('errors.'.$code, compact('message')));
     }
 
 
@@ -311,7 +311,7 @@ class App
 
     public static function getUsername()
     {
-        return isset($_SESSION['log']) ? check($_SESSION['log']) : Registry::get('config')['guestsuser'];
+        return isset($_SESSION['log']) ? check($_SESSION['log']) : self::setting('guestsuser');
     }
 
     /**
@@ -405,7 +405,7 @@ class App
      */
     public static function login($login, $password, $remember = true)
     {
-        $domain = check_string(Registry::get('config')['home']);
+        $domain = check_string(self::setting('home'));
 
         if (!empty($login) && !empty($password)) {
 
@@ -416,19 +416,28 @@ class App
 
                     if ($remember) {
                         setcookie('cooklog', $user['login'], time() + 3600 * 24 * 365, '/', $domain);
-                        setcookie('cookpar', md5($password . Registry::get('config')['keypass']), time() + 3600 * 24 * 365, '/', $domain, null, true);
+                        setcookie('cookpar', md5($password . self::setting('keypass')), time() + 3600 * 24 * 365, '/', $domain, null, true);
                     }
 
                     $_SESSION['log'] = $user['login'];
-                    $_SESSION['par'] = md5(Registry::get('config')['keypass'] . $password);
-                    $_SESSION['my_ip'] = App::getClientIp();
+                    $_SESSION['par'] = md5(self::setting('keypass') . $password);
+                    $_SESSION['ip'] = self::getClientIp();
+
+                    // Сохранение привязки к соц. сетям
+                    if (!empty($_SESSION['social'])) {
+                        DBM::run()->insert('socials', [
+                            'user'    => $user['login'],
+                            'network' => $_SESSION['social']->network,
+                            'uid'     => $_SESSION['social']->uid,
+                        ]);
+                    }
 
                     DB::run()->query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=?", [SITETIME, $user['login']]);
 
                     $authorization = DB::run()->querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$user['login'], SITETIME - 30]);
 
                     if (empty($authorization)) {
-                        DB::run()->query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`, `type`) VALUES (?, ?, ?, ?, ?);", [$user['login'], App::getClientIp(), App::getUserAgent(), SITETIME, 1]);
+                        DB::run()->query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`, `type`) VALUES (?, ?, ?, ?, ?);", [$user['login'], self::getClientIp(), self::getUserAgent(), SITETIME, 1]);
                         DB::run()->query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$user['login'], $user['login']]);
                     }
 
@@ -437,5 +446,34 @@ class App
             }
         }
         return false;
+    }
+
+    /**
+     * Авторизация через социальные сети
+     * @param string $token идентификатор Ulogin
+     */
+    public static function socialLogin($token)
+    {
+        $curl = new Curl\Curl();
+        $network = $curl->get('http://ulogin.ru/token.php', [
+            'token' => $token,
+            'host' => $_SERVER['HTTP_HOST']
+        ]);
+
+        if ($network && empty($network->error)) {
+            $_SESSION['social'] = $network;
+
+            $social = DBM::run()->selectFirst('socials', ['network' => $network->network, 'uid' => $network->uid]);
+
+            if ($social && $user = user($social['user'])) {
+
+                $_SESSION['log'] = $user['login'];
+                $_SESSION['par'] = md5(self::setting('keypass') . $user['pass']);
+                $_SESSION['ip'] = Registry::get('ip');
+
+                self::setFlash('success', 'Добро пожаловать, '.$user['login'].'!');
+                self::redirect('/');
+            }
+        }
     }
 }
