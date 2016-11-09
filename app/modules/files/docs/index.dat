@@ -82,7 +82,6 @@
 - check_string<br />
 - utf_substr<br />
 - utf_strlen<br />
-- utf_wordwrap<br />
 - is_utf<br />
 - <a href="/files/docs/addmail">addmail</a><br />
 - <a href="/files/docs/page_jumpnavigation">page_jumpnavigation</a><br />
@@ -116,7 +115,6 @@
 - show_advertuser<br />
 - save_advertuser<br />
 - stats_changes<br />
-- is_serialized<br />
 - curl_connect<br />
 - recenttopics<br />
 - recentfiles<br />

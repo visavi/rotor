@@ -24,7 +24,7 @@ echo 'Для того чтобы вставить ссылку, можно пр�
 echo '<i class="fa fa-link"></i> Для ссылки с названием: [url=http://адрес_cсылки] Название [/url]<br />';
 echo '<i class="fa fa-link"></i> Короткий способ: [url] http://адрес_cсылки [/url]<br /><br />';
 
-echo '<i class="fa fa-image"></i> [img]Ссылка на изображение[/img]<br />'.bb_code('[img]http://visavi.net/assets/img/images/logo.png[/img]').'<br />';
+echo '<i class="fa fa-image"></i> [img]Ссылка на изображение[/img]<br />'.bb_code('[img]'.App::setting('home').'/assets/img/images/logo.png[/img]').'<br />';
 echo '<i class="fa fa-youtube-play"></i> [youtube]Код видео с youtube[/youtube]<br />'.bb_code('[youtube]yf_YWiqqv34[/youtube]').'<br />';
 
 echo '<i class="fa fa-align-center"></i> [center]Текст по центру[/center]'.bb_code('[center]Текст по центру[/center]').'<br />';

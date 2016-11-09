@@ -79,7 +79,7 @@ if (is_admin()) {
         ############################################################################################
         case 'view':
 
-            $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+            $new = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
             if (!empty($new)) {
                 if (empty($new['active'])) {

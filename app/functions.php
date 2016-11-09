@@ -10,16 +10,6 @@ function maketime($time) {
     return $time;
 }
 
-// --------------------------- Функция перевода секунд в дни -----------------------------//
-function makestime($time) {
-    $day = floor($time / 86400);
-    $hours = floor(($time / 3600) - $day * 24);
-    $min = floor(($time - $hours * 3600 - $day * 86400) / 60);
-    $sec = $time - ($min * 60 + $hours * 3600 + $day * 86400);
-
-    return sprintf("%01d дн. %02d:%02d:%02d", $day, $hours, $min, $sec);
-}
-
 // --------------------------- Функция временного сдвига -----------------------------//
 function date_fixed($timestamp, $format = "d.m.y / H:i") {
     global $udata;
@@ -236,27 +226,6 @@ function read_file($file) {
     }
 }
 
-// --------------- Функция подсчета веса директории -------------------//
-function read_dir($dir) {
-    if (empty($allsize)) {
-        $allsize = 0;
-    }
-
-    if ($path = opendir($dir)) {
-        while ($file_name = readdir($path)) {
-            if (($file_name !== '.') && ($file_name !== '..')) {
-                if (is_dir($dir."/".$file_name)) {
-                    $allsize += read_dir($dir."/".$file_name);
-                } else {
-                    $allsize += filesize($dir."/".$file_name);
-                }
-            }
-        }
-        closedir ($path);
-    }
-    return $allsize;
-}
-
 // --------------- Функция правильного вывода времени -------------------//
 function formattime($file_time, $round = 1) {
     if ($file_time >= 86400) {
@@ -443,18 +412,6 @@ function rating_vote($rating) {
     return $output;
 }
 
-// ------------------ Функция для обработки base64 --------------------//
-function safe_encode($string) {
-    $data = base64_encode($string);
-    $data = str_replace(['+', '/', '='], ['_', '-', ''], $data);
-    return $data;
-}
-
-function safe_decode($string) {
-    $string = str_replace(['_', '-'], ['+', '/'], $string);
-    $data = base64_decode($string);
-    return $data;
-}
 // ------------------ Функция генерирования паролей --------------------//
 function generate_password($length = "") {
     if (empty($length)) {
@@ -508,7 +465,7 @@ function scan_check($dirname) {
 }
 
 // --------------- Функция вывода календаря---------------//
-function make_calendar ($month, $year) {
+function make_calendar($month, $year) {
     $wday = date("w", mktime(0, 0, 0, $month, 1, $year));
     if ($wday == 0) {
         $wday = 7;
@@ -789,29 +746,6 @@ function stats_invite() {
     return $invite.'/'.$used_invite;
 }
 
-// --------------- Функция автоустановки прав доступа ---------------//
-function chmode ($path = ".") {
-    if ($handle = opendir ($path)) {
-        while (false !== ($file = readdir($handle))) {
-            if ($file != "." && $file != "..") {
-                $file_path = $path."/".$file;
-
-                if (is_dir ($file_path)) {
-                    $old = umask(0);
-                    chmod ($file_path, 0777);
-                    umask($old);
-
-                    chmode ($file_path);
-                } else {
-                    chmod ($file_path, 0666);
-                }
-            }
-        }
-
-        closedir($handle);
-    }
-}
-
 // --------------- Функция определение онлайн-статуса ---------------//
 function user_online($login) {
     static $arrvisit;
@@ -911,32 +845,6 @@ function utf_strlen($str) {
     if (function_exists('iconv_strlen')) return iconv_strlen($str, 'utf-8');
     if (function_exists('utf8_decode')) return strlen(utf8_decode($str));
     return strlen(utf_to_win($str));
-}
-
-// ---------- Аналог функции wordwrap для UTF-8 ---------//
-function utf_wordwrap($str, $width = 75, $break = ' ', $cut = 1) {
-    $str = utf_to_win($str);
-    $str = wordwrap($str, $width, $break, $cut);
-    return win_to_utf($str);
-}
-
-// ---------- Аналог функции stristr для UTF-8 ---------//
-function utf_stristr($str, $search, $before = false) {
-
-    if (function_exists('mb_stristr'))  return mb_stristr($str, $search, $before, 'utf-8');
-
-    if (utf_strlen($search) == 0 ) {
-        return false;
-    }
-
-    preg_match('|^(.*)'.preg_quote($search).'|iusU', $str, $matches);
-
-    if (count($matches) == 2) {
-        if ($before) return utf_substr($str, 0, utf_strlen($matches[1]));
-        return utf_substr($str, utf_strlen($matches[1]));
-    }
-
-    return false;
 }
 
 // ----------------------- Функция определения кодировки ------------------------//
@@ -1588,38 +1496,6 @@ function save_advertuser() {
     file_put_contents(STORAGE."/temp/rekuser.dat", serialize($arraylink), LOCK_EX);
 }
 
-// ----------- Функция вывода версии и автообновления ------------//
-function site_version() {
-    global $config;
-
-    echo '<i class="fa fa-key fa-lg"></i> <b>Версия '.$config['rotorversion'].'</b><br /><br />';
-
-    // Новый механизм обновлений
-    $upgrade_sql = glob(STORAGE.'/*.dat');
-
-    if ($upgrade_sql) {
-        natcasesort($upgrade_sql);
-
-        $lastupgrade = basename(end($upgrade_sql));
-        $version = substr(strstr($lastupgrade, '_'), 1, -4);
-
-        if ($version > $config['rotorversion']) {
-            include_once (STORAGE.'/'.$lastupgrade);
-        }
-    }
-}
-
-// ----------- Функция проверки сериализации ------------//
-function is_serialized($data) {
-    if (trim($data) == "") {
-        return false;
-    }
-    if (preg_match("/^(i|s|a|o|d)(.*);/si", $data)) {
-        return true;
-    }
-    return false;
-}
-
 // ----------- Функция закачки файла через curl ------------//
 function curl_connect($url, $user_agent = 'Mozilla/5.0', $proxy = null) {
     if (function_exists('curl_init')) {
@@ -1675,8 +1551,6 @@ function recentphotos($show = 5) {
         echo '<br />';
     }
 }
-
-
 
 // --------------- Функция кэширования последних тем форума -------------------//
 function recenttopics($show = 5) {
@@ -1855,17 +1729,6 @@ function strsearch($str, $arr) {
 // --------------- Функция определения последней страницы -----------------//
 function last_page($total, $posts) {
     return floor(($total - 1) / $posts) * $posts;
-}
-
-// ------------- Функция кэширования пользовательских функций -------------//
-function cache_functions($cache=10800) {
-    if (@filemtime(STORAGE.'/temp/functions.dat') < time()-$cache) {
-        $files = array_diff(scandir(APP.'/functions'), ['.', '..']);
-
-        file_put_contents(STORAGE.'/temp/functions.dat', serialize($files), LOCK_EX);
-    }
-
-    return unserialize(file_get_contents(STORAGE.'/temp/functions.dat'));
 }
 
 // ------------- Функция кэширования админских ссылок -------------//
@@ -2275,6 +2138,17 @@ function env($key, $default = null)
         return substr($value, 1, -1);
     }
     return $value;
+}
+
+// ------------- Функция кэширования пользовательских функций -------------//
+function cache_functions($cache=10800) {
+    if (@filemtime(STORAGE.'/temp/functions.dat') < time()-$cache) {
+        $files = array_diff(scandir(APP.'/functions'), ['.', '..']);
+
+        file_put_contents(STORAGE.'/temp/functions.dat', serialize($files), LOCK_EX);
+    }
+
+    return unserialize(file_get_contents(STORAGE.'/temp/functions.dat'));
 }
 
 // ------------- Кеширование пользовательских функций -------------//

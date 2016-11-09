@@ -6,9 +6,10 @@ if (! is_admin()) {
 }
 
 show_title('Панель управления');
-site_version();
 ?>
-    <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
+<i class="fa fa-key fa-lg"></i> <b>Версия <?= VERSION ?></b><br /><br />
+
+<div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/chat">Админ-чат</a> (<?=stats_chat()?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/book">Гостевая книга</a> (<?=stats_guest()?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/forum">Форум</a> (<?=stats_forum()?>)<br />

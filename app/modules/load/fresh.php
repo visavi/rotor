@@ -22,11 +22,11 @@ if ($total > 0) {
         echo '<div class="b">';
 
         if ($data['time'] >= (SITETIME-3600 * 24)) {
-            echo '<i class="fa fa-file-o text-success"></i> ';
+            echo '<i class="fa fa-file text-success"></i> ';
         } elseif ($data['time'] >= (SITETIME-3600 * 72)) {
-            echo '<i class="fa fa-file-o text-warning"></i> ';
+            echo '<i class="fa fa-file text-warning"></i> ';
         } else {
-            echo '<i class="fa fa-file-o text-danger"></i> ';
+            echo '<i class="fa fa-file text-danger"></i> ';
         }
 
         echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
@@ -40,9 +40,9 @@ if ($total > 0) {
 
     page_strnavigation('/load/fresh?', $config['downlist'], $start, $total);
 
-    echo '<i class="fa fa-file-o text-success"></i> - Самая свежая загрузка<br />';
-    echo '<i class="fa fa-file-o text-warning"></i> - Более дня назад<br />';
-    echo '<i class="fa fa-file-o text-danger"></i> - Более 3 дней назад<br /><br />';
+    echo '<i class="fa fa-file text-success"></i> - Самая свежая загрузка<br />';
+    echo '<i class="fa fa-file text-warning"></i> - Более дня назад<br />';
+    echo '<i class="fa fa-file text-danger"></i> - Более 3 дней назад<br /><br />';
 
     echo 'Всего файлов: <b>'.$total.'</b><br /><br />';
 } else {
