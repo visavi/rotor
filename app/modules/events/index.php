@@ -68,17 +68,17 @@ case 'read':
 		if ($data['comments'] > 0) {
 		echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
 
-			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT 5;", [$id]);
+			$querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 5;", ['event', $id]);
 			$comments = $querycomm -> fetchAll();
 			$comments = array_reverse($comments);
 
 			foreach ($comments as $comm) {
 				echo '<div class="b">';
-				echo '<div class="img">'.user_avatars($comm['author']).'</div>';
+				echo '<div class="img">'.user_avatars($comm['user']).'</div>';
 
-				echo '<b>'.profile($comm['author']).'</b>';
+				echo '<b>'.profile($comm['user']).'</b>';
 				echo '<small> ('.date_fixed($comm['time']).')</small><br />';
-				echo user_title($comm['author']).' '.user_online($comm['author']).'</div>';
+				echo user_title($comm['user']).' '.user_online($comm['user']).'</div>';
 
 				echo '<div>'.bb_code($comm['text']).'<br />';
 
@@ -349,7 +349,7 @@ case 'comments':
 
 		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
-		$total = DB::run() -> querySingle("SELECT count(*) FROM `commevents` WHERE `event_id`=?;", [$id]);
+		$total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['event', $id]);
 
 		if ($total > 0) {
 			if ($start >= $total) {
@@ -361,20 +361,20 @@ case 'comments':
 				echo '<form action="/events?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 			}
 
-			$querycomm = DB::run() -> query("SELECT * FROM `commevents` WHERE `event_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postevents'].";", [$id]);
+			$querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postevents'].";", ['event', $id]);
 
 			while ($data = $querycomm -> fetch()) {
 
 				echo '<div class="b">';
-				echo '<div class="img">'.user_avatars($data['author']).'</div>';
+				echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
 				if ($is_admin) {
 					echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
 				}
 
-				echo '<b>'.profile($data['author']).'</b>';
+				echo '<b>'.profile($data['user']).'</b>';
 				echo '<small> ('.date_fixed($data['time']).')</small><br />';
-				echo user_title($data['author']).' '.user_online($data['author']).'</div>';
+				echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
 				echo '<div>'.bb_code($data['text']).'<br />';
 
@@ -441,9 +441,9 @@ case 'addcomment':
 
 			$msg = antimat($msg);
 
-			DB::run() -> query("INSERT INTO `commevents` (`event_id`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
+			DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['event', 0, $id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-			DB::run() -> query("DELETE FROM `commevents` WHERE `event_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commevents` WHERE `event_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommevents'].") AS del);", [$id, $id]);
+			DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommevents'].") AS del);", ['event', $id, 'event', $id]);
 
 			DB::run() -> query("UPDATE `events` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 			DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
@@ -481,7 +481,7 @@ case 'del':
 
 				$del = implode(',', $del);
 
-				$delcomments = DB::run() -> exec("DELETE FROM `commevents` WHERE `id` IN (".$del.") AND `event_id`=".$id.";");
+				$delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='event' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
 				DB::run() -> query("UPDATE `events` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
 				notice('Выбранные комментарии успешно удалены!');
@@ -506,7 +506,7 @@ break;
 ############################################################################################
 case 'end':
 
-	$query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commevents` WHERE `event_id`=? LIMIT 1;", [$id]);
+	$query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", ['event', $id]);
 
 	if (!empty($query)) {
 		$total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];

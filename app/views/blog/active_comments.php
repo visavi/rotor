@@ -1,10 +1,10 @@
 <?php foreach ($comments as $data): ?>
     <div class="b">
 
-        <i class="fa fa-comment"></i> <b><a href="/blog/blog?act=comments&amp;id=<?=$data['blog']?>"><?=$data['title']?></a></b> (<?=$data['comments']?>)
+        <i class="fa fa-comment"></i> <b><a href="/blog/blog?act=comments&amp;id=<?=$data['relate_id']?>"><?=$data['title']?></a></b> (<?=$data['comments']?>)
 
         <?php if (is_admin()): ?>
-            — <a href="/blog/active?act=del&amp;id=<?=$data['id']?>&amp;uz=<?=$data['author']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Удалить</a>
+            — <a href="/blog/active?act=del&amp;id=<?=$data['id']?>&amp;uz=<?=$data['user']?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Удалить</a>
         <?php endif; ?>
 
     </div>
@@ -12,7 +12,7 @@
         <?=bb_code($data['text'])?>
         <br />
 
-        Написал: <?=nickname($data['author'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />
+        Написал: <?=nickname($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />
 
         <?php if (is_admin() || empty($config['anonymity'])): ?>
             <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>

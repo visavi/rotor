@@ -8,7 +8,7 @@ show_title('RSS комментарии');
 $blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
 
 if (!empty($blog)) {
-    $querycomm = DB::run() -> query("SELECT * FROM `commblog` WHERE `blog`=? ORDER BY `time` DESC LIMIT 15;", [$id]);
+    $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 15;", ['blog', $id]);
     $comments = $querycomm->fetchAll();
 
     while (ob_get_level()) {

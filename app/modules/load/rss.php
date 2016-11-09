@@ -28,7 +28,7 @@ if (!empty($down)) {
         echo '<webMaster>'.$config['emails'].'</webMaster>';
         echo '<lastBuildDate>'.date("r", SITETIME).'</lastBuildDate>';
 
-        $querycomm = DB::run() -> query("SELECT * FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT 15;", [$id]);
+        $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 15;", ['down', $id]);
 
         while ($data = $querycomm -> fetch()) {
             $data['text'] = bb_code($data['text']);
@@ -36,7 +36,7 @@ if (!empty($down)) {
             $data['text'] = htmlspecialchars($data['text']);
 
             echo '<item><title>'.$down['title'].'</title><link>'.$config['home'].'/load/down?act=comments&amp;id='.$down['id'].'</link>';
-            echo '<description>'.$data['text'].' </description><author>'.nickname($data['author']).'</author>';
+            echo '<description>'.$data['text'].' </description><author>'.nickname($data['user']).'</author>';
             echo '<pubDate>'.date("r", $data['time']).'</pubDate><category>Комментарии</category><guid>'.$config['home'].'/load/down?act=comments&amp;id='.$down['id'].'&amp;pid='.$data['id'].'</guid></item>';
         }
 

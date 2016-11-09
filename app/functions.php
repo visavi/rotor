@@ -1794,24 +1794,24 @@ function restatement($mode) {
 
         case 'blog':
             DB::run() -> query("UPDATE `catsblog` SET `count`=(SELECT count(*) FROM `blogs` WHERE `catsblog`.`id`=`blogs`.`category_id`);");
-            DB::run() -> query("UPDATE `blogs` SET `comments`=(SELECT count(*) FROM `commblog` WHERE `blogs`.`id`=`commblog`.`blog`);");
+            DB::run() -> query("UPDATE `blogs` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='blog' AND `blogs`.`id`=`comments`.`relate_id`);");
             break;
 
         case 'load':
             DB::run() -> query("UPDATE `cats` SET `count`=(SELECT count(*) FROM `downs` WHERE `cats`.`id`=`downs`.`category_id` AND `active`=?);", [1]);
-            DB::run() -> query("UPDATE `downs` SET `comments`=(SELECT count(*) FROM `commload` WHERE `downs`.`id`=`commload`.`down`);");
+            DB::run() -> query("UPDATE `downs` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='down' AND `downs`.`id`=`comments`.`relate_id`);");
             break;
 
         case 'news':
-            DB::run() -> query("UPDATE `news` SET `comments`=(SELECT count(*) FROM `commnews` WHERE `news`.`id`=`commnews`.`news_id`);");
+            DB::run() -> query("UPDATE `news` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='news' AND `news`.`id`=`comments`.`relate_id`);");
             break;
 
         case 'gallery':
-            DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `commphoto` WHERE `photo`.`id`=`commphoto`.`gid`);");
+            DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='gallery' AND `photo`.`id`=`comments`.`relate_id`);");
             break;
 
         case 'events':
-            DB::run() -> query("UPDATE `events` SET `comments`=(SELECT count(*) FROM `commevents` WHERE `events`.`id`=`commevents`.`event_id`);");
+            DB::run() -> query("UPDATE `events` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='event' AND `events`.`id`=`comments`.`relate_id`);");
             break;
     }
     return true;

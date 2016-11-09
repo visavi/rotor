@@ -627,7 +627,7 @@ case 'delcats':
                         $querydel = DB::run() -> query("SELECT `link`, `screen` FROM `downs` WHERE `category_id`=?;", [$cid]);
                         $arr_script = $querydel -> fetchAll();
 
-                        DB::run() -> query("DELETE FROM `commload` WHERE `cats`=?;", [$cid]);
+                        DB::run() -> query("DELETE FROM `comments` WHERE `relate_category_id`=?;", ['down', $cid]);
                         DB::run() -> query("DELETE FROM `downs` WHERE `category_id`=?;", [$cid]);
                         DB::run() -> query("DELETE FROM `cats` WHERE `id`=?;", [$cid]);
 
@@ -1240,7 +1240,7 @@ case 'addmovedown':
                 rename(HOME.'/upload/files/'.$folderFrom.$downFrom['link'], HOME.'/upload/files/'.$folderTo.$downFrom['link']);
 
                 DB::run() -> query("UPDATE `downs` SET `category_id`=? WHERE `id`=?;", [$section, $id]);
-                DB::run() -> query("UPDATE `commload` SET `cats`=? WHERE `down`=?;", [$section, $id]);
+                DB::run() -> query("UPDATE `comments` SET `relate_category_id`=? WHERE relate_type=? AND `relate_id`=?;", ['down', $section, $id]);
                 // Обновление счетчиков
                 DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$section]);
                 DB::run() -> query("UPDATE `cats` SET `count`=`count`-1 WHERE `id`=?", [$cid]);
@@ -1279,7 +1279,7 @@ case 'deldown':
                     $querydel = DB::run() -> query("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id` IN (".$del.");");
                     $arr_script = $querydel -> fetchAll();
 
-                    DB::run() -> query("DELETE FROM `commload` WHERE `down` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id` IN (".$del.");", ['down']);
                     $deldowns = DB::run() -> exec("DELETE FROM `downs` WHERE `id` IN (".$del.");");
                     // Обновление счетчиков
                     DB::run() -> query("UPDATE `cats` SET `count`=`count`-? WHERE `id`=?", [$deldowns, $cid]);

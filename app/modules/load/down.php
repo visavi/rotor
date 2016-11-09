@@ -407,7 +407,7 @@ case 'comments':
 
             echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `down`=?;", [$id]);
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['down', $id]);
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -419,27 +419,27 @@ case 'comments':
                     echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `commload` WHERE `down`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['downcomm'].";", [$id]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['downcomm'].";", ['down', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['author']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
                     if ($is_admin) {
                         echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
                     }
 
-                    echo '<b>'.profile($data['author']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
-                    echo user_title($data['author']).' '.user_online($data['author']).'</div>';
+                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    if (!empty($log) && $log != $data['author']) {
+                    if (!empty($log) && $log != $data['user']) {
                         echo '<div class="right">';
                         echo '<a href="/load/down?act=reply&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Отв</a> / ';
                         echo '<a href="/load/down?act=quote&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Цит</a> / ';
                         echo '<noindex><a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                     }
 
-                    if ($log == $data['author'] && $data['time'] + 600 > SITETIME) {
+                    if ($log == $data['user'] && $data['time'] + 600 > SITETIME) {
                         echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
                     }
 
@@ -503,9 +503,9 @@ case 'add':
 
                             $msg = antimat($msg);
 
-                            DB::run() -> query("INSERT INTO `commload` (`cats`, `down`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$downs['category_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
+                            DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                            DB::run() -> query("DELETE FROM `commload` WHERE `down`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commload` WHERE `down`=? ORDER BY `time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", [$id, $id]);
+                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", ['down', $id, 'down', $id]);
 
                             DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
                             DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
@@ -544,14 +544,14 @@ case 'spam':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            $data = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", [$pid]);
+            $data = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
             if (!empty($data)) {
                 $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [5, $pid]);
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start]);
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&start=$start");
@@ -584,16 +584,16 @@ case 'reply':
     echo '<b><big>Ответ на сообщение</big></b><br /><br />';
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", [$pid]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
         if (!empty($post)) {
-            echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['author']).'</b> '.user_title($post['author']).' '.user_online($post['author']).' <small>('.date_fixed($post['time']).')</small></div>';
+            echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_title($post['user']).' '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
             echo '<div>Сообщение: '.bb_code($post['text']).'</div><hr />';
 
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo 'Сообщение:<br />';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.nickname($post['author']).'[/b], </textarea><br />';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.nickname($post['user']).'[/b], </textarea><br />';
             echo '<input type="submit" value="Ответить" /></form></div><br />';
         } else {
             show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
@@ -614,13 +614,13 @@ case 'quote':
 
     echo '<b><big>Цитирование</big></b><br /><br />';
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? LIMIT 1;", [$pid]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
         if (!empty($post)) {
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo 'Сообщение:<br />';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['author']).'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['user']).'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
             echo '<input type="submit" value="Цитировать" /></form></div><br />';
         } else {
             show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
@@ -642,15 +642,15 @@ case 'edit':
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? AND `author`=? LIMIT 1;", [$pid, $log]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, $log]);
 
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['author']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['user']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                 echo '<div class="form">';
-                echo '<form action="/load/down?act=editpost&amp;id='.$post['down'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/load/down?act=editpost&amp;id='.$post['relate_id'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Редактирование сообщения:<br />';
                 echo '<textarea cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br />';
                 echo '<input type="submit" value="Редактировать" /></form></div><br />';
@@ -679,14 +679,14 @@ case 'editpost':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $post = DB::run() -> queryFetch("SELECT * FROM `commload` WHERE `id`=? AND `author`=? LIMIT 1;", [$pid, $log]);
+                $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, $log]);
 
                 if (!empty($post)) {
                     if ($post['time'] + 600 > SITETIME) {
 
                         $msg = antimat($msg);
 
-                        DB::run() -> query("UPDATE `commload` SET `text`=? WHERE `id`=?", [$msg, $pid]);
+                        DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'down', $pid]);
 
                         notice('Сообщение успешно отредактировано!');
                         redirect("/load/down?act=comments&id=$id&start=$start");
@@ -726,7 +726,7 @@ case 'del':
             if (!empty($del)) {
                 $del = implode(',', $del);
 
-                $delcomments = DB::run() -> exec("DELETE FROM `commload` WHERE `id` IN (".$del.") AND `down`=".$id.";");
+                $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='down' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
                 DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                 notice('Выбранные комментарии успешно удалены!');
@@ -749,7 +749,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commload` WHERE `down`=? LIMIT 1;", [$id]);
+    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", ['down', $id]);
 
     if (!empty($query)) {
 

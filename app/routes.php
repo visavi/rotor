@@ -14,6 +14,7 @@ $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php'
 
 $router->map('GET',      '/blog',        '/modules/blog/index.php', 'blog');
 $router->map('GET|POST', '/blog/active', '/modules/blog/active.php');
+$router->map('GET|POST', '/blog/new',    '/modules/blog/new.php');
 $router->map('GET|POST', '/blog/blog',   '/modules/blog/blog.php');
 $router->map('GET|POST', '/blog/print',  '/modules/blog/print.php');
 $router->map('GET|POST', '/blog/rss',    '/modules/blog/rss.php');

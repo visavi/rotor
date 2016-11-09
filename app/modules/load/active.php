@@ -52,7 +52,7 @@ break;
 case 'comments':
     show_title('Список всех комментариев');
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `commload` WHERE `author`=?;", [$uz]);
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['down', $uz]);
 
     if ($total > 0) {
         if ($start >= $total) {
@@ -61,12 +61,12 @@ case 'comments':
 
         $is_admin = is_admin();
 
-        $querypost = DB::run() -> query("SELECT `cl`.*, `title`, `comments` FROM `commload` cl LEFT JOIN `downs` d ON `cl`.`down`=`d`.`id` WHERE cl.`author`=? ORDER BY cl.`time` DESC LIMIT ".$start.", ".$config['downlist'].";", [$uz]);
+        $querypost = DB::run() -> query("SELECT `c`.*, `title`, `comments` FROM `comments` c LEFT JOIN `downs` d ON `c`.`relate_id`=`d`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$start.", ".$config['downlist'].";", ['down', $uz]);
 
         while ($data = $querypost -> fetch()) {
             echo '<div class="b">';
 
-            echo '<i class="fa fa-comment"></i> <b><a href="/load/active?act=viewcomm&amp;id='.$data['down'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')';
+            echo '<i class="fa fa-comment"></i> <b><a href="/load/active?act=viewcomm&amp;id='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')';
 
             if ($is_admin) {
                 echo ' — <a href="/load/active?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
@@ -75,7 +75,7 @@ case 'comments':
             echo '</div>';
             echo '<div>'.bb_code($data['text']).'<br />';
 
-            echo 'Написал: '.nickname($data['author']).' <small>('.date_fixed($data['time']).')</small><br />';
+            echo 'Написал: '.nickname($data['user']).' <small>('.date_fixed($data['time']).')</small><br />';
 
             if ($is_admin || empty($config['anonymity'])) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -106,7 +106,7 @@ case 'viewcomm':
         $cid = 0;
     }
 
-    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commload` WHERE `id`<=? AND `down`=? ORDER BY `time` ASC LIMIT 1;", [$cid, $id]);
+    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `id`<=? AND `relate_id`=? ORDER BY `time` ASC LIMIT 1;", ['down', $cid, $id]);
 
     if (!empty($querycomm)) {
         $end = floor(($querycomm - 1) / $config['downlist']) * $config['downlist'];
@@ -131,9 +131,9 @@ case 'del':
 
     if (is_admin()) {
         if ($uid == $_SESSION['token']) {
-            $downs = DB::run() -> querySingle("SELECT `down` FROM `commload` WHERE `id`=?;", [$id]);
+            $downs = DB::run() -> querySingle("SELECT `down` FROM `comments` WHERE relate_type=? AND `id`=?;", ['down', $id]);
             if (!empty($downs)) {
-                DB::run() -> query("DELETE FROM `commload` WHERE `id`=? AND `down`=?;", [$id, $downs]);
+                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `id`=? AND `relate_id`=?;", ['down', $id, $downs]);
                 DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $downs]);
 
                 notice('Комментарий успешно удален!');

@@ -9,17 +9,17 @@
 <?php foreach ($comments as $data): ?>
 
 	<div class="b">
-		<div class="img"><?=user_avatars($data['author'])?></div>
+		<div class="img"><?=user_avatars($data['user'])?></div>
 
 		<?php if ($is_admin): ?>
 			<span class="imgright"><input type="checkbox" name="del[]" value="<?=$data['id']?>" /></span>
 		<?php endif; ?>
 
-		<b><?=profile($data['author'])?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
-		<?=user_title($data['author'])?> <?=user_online($data['author'])?>
+		<b><?=profile($data['user'])?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
+		<?=user_title($data['user'])?> <?=user_online($data['user'])?>
 	</div>
 
-		<?php if (!empty(App::getUsername()) && App::getUsername() != $data['author']): ?>
+		<?php if (!empty(App::getUsername()) && App::getUsername() != $data['user']): ?>
 			<div class="right">
 				<a href="/blog/blog?act=reply&amp;id=<?=$blogs['id']?>&amp;pid=<?=$data['id']?>&amp;start=<?=$start?>">Отв</a> /
 				<a href="/blog/blog?act=quote&amp;id=<?=$blogs['id']?>&amp;pid=<?=$data['id']?>&amp;start=<?=$start?>">Цит</a> /
@@ -27,7 +27,7 @@
 			</div>
 		<?php endif; ?>
 
-		<?php if (App::getUsername() == $data['author'] && $data['time'] + 600 > SITETIME): ?>
+		<?php if (App::getUsername() == $data['user'] && $data['time'] + 600 > SITETIME): ?>
 			<div class="right">
 				<a href="/blog/blog?act=edit&amp;id=<?=$blogs['id']?>&amp;pid=<?=$data['id']?>&amp;start=<?=$start?>">Редактировать</a>
 			</div>

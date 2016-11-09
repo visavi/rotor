@@ -23,7 +23,7 @@
 			<item>
 				<title><?=$blog['title']?></title>
 				<link><?=$config['home']?>/blog/blog?act=comments&amp;id=<?=$blog['id']?></link>
-				<description><?=$data['text']?> </description><author><?=nickname($data['author'])?></author>
+				<description><?=$data['text']?> </description><author><?=nickname($data['user'])?></author>
 				<pubDate><?=date("r", $data['time'])?></pubDate>
 				<category>Комментарии</category>
 				<guid><?=$config['home']?>/blog/blog?act=comments&amp;id=<?=$blog['id']?>&amp;pid=<?=$data['id']?></guid>

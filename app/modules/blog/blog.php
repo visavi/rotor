@@ -161,7 +161,7 @@ case 'changeblog':
 
                                     // Обновление счетчиков
                                     if ($blogs['category_id'] != $cats) {
-                                        DB::run() -> query("UPDATE `commblog` SET `cats`=? WHERE `blog`=?;", [$cats, $id]);
+                                        DB::run() -> query("UPDATE `comments` SET `relate_category_id`=? WHERE `relate_id`=?;", [$cats, $id]);
                                         DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$cats]);
                                         DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$blogs['category_id']]);
                                     }
@@ -384,14 +384,14 @@ case 'comments':
     if (!empty($blogs)) {
         $config['newtitle'] = 'Комментарии - '.$blogs['title'];
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `commblog` WHERE `blog`=?;", [$id]);
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['blog', $id]);
 
         if ($total > 0) {
             if ($start >= $total) {
                 $start = last_page($total, $config['blogcomm']);
             }
 
-            $querycomm = DB::run() -> query("SELECT * FROM `commblog` WHERE `blog`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['blogcomm'].";", [$id]);
+            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['blogcomm'].";", ['blog', $id]);
             $comments = $querycomm -> fetchAll();
 
             render('blog/blog_comments', ['blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'start' => $start]);
@@ -433,9 +433,9 @@ case 'add':
 
                         $msg = antimat($msg);
 
-                        DB::run() -> query("INSERT INTO `commblog` (`cats`, `blog`, `text`, `author`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$queryblog, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
+                        DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['blog', $queryblog, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                        DB::run() -> query("DELETE FROM `commblog` WHERE `blog`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commblog` WHERE `blog`=? ORDER BY `time` DESC LIMIT ".$config['maxblogcomm'].") AS del);", [$id, $id]);
+                        DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE `relate_type`=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".$config['maxblogcomm'].") AS del);", ['blog', $id, 'blog', $id]);
 
                         DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
                         DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
@@ -472,14 +472,14 @@ case 'spam':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            $data = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? LIMIT 1;", [$pid]);
+            $data = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
 
             if (!empty($data)) {
                 $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [6, $pid]);
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start]);
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/blog/blog?act=comments&id=$id&start=$start");
@@ -512,7 +512,7 @@ case 'reply':
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? LIMIT 1;", [$pid]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
 
         if (!empty($post)) {
             render('blog/blog_reply', ['post' => $post, 'id' => $id]);
@@ -535,7 +535,7 @@ case 'quote':
 
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? LIMIT 1;", [$pid]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
 
         if (!empty($post)) {
             render('blog/blog_quote', ['post' => $post, 'id' => $id]);
@@ -559,7 +559,7 @@ case 'edit':
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? AND `author`=? LIMIT 1;", [$pid, $log]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['blog', $pid, $log]);
 
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
@@ -590,16 +590,16 @@ case 'editpost':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $post = DB::run() -> queryFetch("SELECT * FROM `commblog` WHERE `id`=? AND `author`=? LIMIT 1;", [$pid, $log]);
+                $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['blog', $pid, $log]);
 
                 if (!empty($post)) {
                     if ($post['time'] + 600 > SITETIME) {
                         $msg = antimat($msg);
 
-                        DB::run() -> query("UPDATE `commblog` SET `text`=? WHERE `id`=?", [$msg, $pid]);
+                        DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'blog', $pid]);
 
                         notice('Сообщение успешно отредактировано!');
-                        redirect("/blog/blog?act=comments&id=$id&start=$start");
+                       redirect("/blog/blog?act=comments&id=$id&start=$start");
 
                     } else {
                         show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
@@ -637,7 +637,7 @@ case 'del':
             if (!empty($del)) {
                 $del = implode(',', $del);
 
-                $delcomments = DB::run() -> exec("DELETE FROM `commblog` WHERE `id` IN (".$del.") AND `blog`=".$id.";");
+                $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='blog' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
                 DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                 notice('Выбранные комментарии успешно удалены!');
@@ -661,7 +661,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commblog` WHERE `blog`=? LIMIT 1;", [$id]);
+    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", ['blog', $id]);
 
     if (!empty($query['total_comments'])) {
 

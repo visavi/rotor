@@ -193,7 +193,7 @@ switch ($act):
             echo '<div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br />';
 
             if ($queryoff['comments'] > 0) {
-                $querycomm = DB::run() -> query("SELECT * FROM `commoffers` WHERE `offers`=? ORDER BY `time` DESC LIMIT 5;", [$id]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 5;", ['offer', $id]);
 
                 while ($comm = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -340,7 +340,7 @@ switch ($act):
             echo '<a href="/offers?type=1">Проблемы</a> / ';
             echo '<a href="/offers?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `commoffers` WHERE `offers`=?;", [$id]);
+            $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
 
             if ($total > 0) {
                 if ($start >= $total) {
@@ -353,7 +353,7 @@ switch ($act):
                     echo '<form action="/offers?act=delcomm&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `commoffers` WHERE `offers`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postcommoffers'].";", [$id]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postcommoffers'].";", ['offer', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -428,9 +428,9 @@ switch ($act):
 
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `commoffers` (`offers`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
+                                DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                                DB::run() -> query("DELETE FROM `commoffers` WHERE `offers`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `commoffers` WHERE `id`=? ORDER BY `time` DESC LIMIT ".$config['maxpostoffers'].") AS del);", [$id, $id]);
+                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `id`=? ORDER BY `time` DESC LIMIT ".$config['maxpostoffers'].") AS del);", [$id, 'offer', $id, 'offer']);
 
                                 DB::run() -> query("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 
@@ -592,7 +592,7 @@ switch ($act):
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    $delcomments = DB::run() -> exec("DELETE FROM `commoffers` WHERE `id` IN (".$del.") AND `offers`=".$id.";");
+                    $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='offer' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
                     DB::run() -> query("UPDATE `offers` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                     notice('Выбранные комментарии успешно удалены!');
@@ -615,7 +615,7 @@ switch ($act):
     ############################################################################################
     case 'end':
 
-        $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `commoffers` WHERE `offers`=? LIMIT 1;", [$id]);
+        $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", ['offer', $id]);
 
         if (!empty($query)) {
             $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];

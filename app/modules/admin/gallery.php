@@ -165,7 +165,7 @@ if (is_admin()) {
                         if (count($arr_photo) > 0) {
                             foreach ($arr_photo as $delete) {
                                 DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$delete['id']]);
-                                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", [$delete['id']]);
+                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['gallery', $delete['id']]);
 
                                 unlink_image('upload/pictures/', $delete['link']);
                             }

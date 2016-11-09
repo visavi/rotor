@@ -316,7 +316,7 @@ if (is_admin([101, 102])) {
                     $del = implode(',', $del);
 
                     DB::run() -> query("DELETE FROM `offers` WHERE `id` IN (".$del.");");
-                    DB::run() -> query("DELETE FROM `commoffers` WHERE `offers` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `comments` WHERE relate_type='offer' AND `relate_id` IN (".$del.");");
                     DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers` IN (".$del.");");
 
                     notice('Выбранные пункты успешно удалены!');
@@ -340,7 +340,7 @@ if (is_admin([101, 102])) {
 
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `commoffers` WHERE `offers`.`id`=`commoffers`.`offers`);");
+                    DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `comments` WHERE `offers`.`id`=`comments`.`relate_id` AND relate_type='offer');");
 
                     notice('Комментарии успешно пересчитаны!');
                     redirect("/admin/offers");

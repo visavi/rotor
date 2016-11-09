@@ -39,7 +39,7 @@ break;
 case 'comments':
     show_title('Список последних комментариев');
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `commblog`;");
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=?;", ['blog']);
 
     if ($total > 0) {
         if ($total > 100) {
@@ -49,7 +49,7 @@ case 'comments':
             $start = last_page($total, $config['blogpost']);
         }
 
-        $querycomment = DB::run() -> query("SELECT `commblog`.*, `title`, `comments` FROM `commblog` LEFT JOIN `blogs` ON `commblog`.`blog`=`blogs`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+        $querycomment = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' ORDER BY comments.`time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
         $comments = $querycomment->fetchAll();
 
         render('blog/new_comments', ['comments' => $comments]);

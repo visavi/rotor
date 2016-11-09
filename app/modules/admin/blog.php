@@ -213,7 +213,7 @@ if (is_admin()) {
                     $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                     if (!empty($blogs)) {
-                        DB::run() -> query("DELETE FROM `commblog` WHERE `cats`=?;", [$cid]);
+                        DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_category_id`=?;", ['blog', $cid]);
                         DB::run() -> query("DELETE FROM `blogs` WHERE `category_id`=?;", [$cid]);
                         DB::run() -> query("DELETE FROM `catsblog` WHERE `id`=?;", [$cid]);
 
@@ -418,7 +418,7 @@ if (is_admin()) {
                     $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryblog)) {
                         DB::run() -> query("UPDATE `blogs` SET `category_id`=? WHERE `id`=?;", [$section, $id]);
-                        DB::run() -> query("UPDATE `commblog` SET `cats`=? WHERE `blog`=?;", [$section, $id]);
+                        DB::run() -> query("UPDATE `comments` SET `relate_category_id`=? WHERE relate_type=? AND `relate_id`=?;", [$section, 'blog', $id]);
                         // Обновление счетчиков
                         DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$section]);
                         DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$cid]);
@@ -458,7 +458,7 @@ if (is_admin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `commblog` WHERE `blog` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `comments` WHERE relate_type='blog' AND `relate_id` IN (".$del.");");
                     $delblogs = DB::run() -> exec("DELETE FROM `blogs` WHERE `id` IN (".$del.");");
                     // Обновление счетчиков
                     DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-? WHERE `id`=?", [$delblogs, $cid]);

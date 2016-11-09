@@ -20,7 +20,7 @@ case 'themes':
 		$start = last_page($total, $config['forumtem']);
 	}
 
-	$querytopic = DB::run() -> query("SELECT `topics`.*, `title` FROM `topics` LEFT JOIN `forums` ON `topics`.`forum_id`=`forums`.`id` ORDER BY `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";");
+	$querytopic = DB::run() -> query("SELECT `t`.*, f.`title` forum_title FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` ORDER BY `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";");
 	$topics = $querytopic->fetchAll();
 
 	App::view('forum/new_themes', compact('topics', 'start', 'total'));

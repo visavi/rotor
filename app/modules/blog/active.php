@@ -38,7 +38,7 @@ break;
 case 'comments':
     show_title('Список всех комментариев '.$uz);
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `commblog` WHERE `author`=?;", [$uz]);
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['blog', $uz]);
 
     if ($total > 0) {
         if ($start >= $total) {
@@ -47,7 +47,7 @@ case 'comments':
 
         $is_admin = is_admin();
 
-        $querycomments = DB::run() -> query("SELECT `commblog`.*, `title`, `comments` FROM `commblog` LEFT JOIN `blogs` ON `commblog`.`blog`=`blogs`.`id` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$uz]);
+        $querycomments = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' AND comments.`user`=? ORDER BY comments.`time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$uz]);
         $comments = $querycomments -> fetchAll();
 
         render('blog/active_comments', ['comments' => $comments, 'start' => $start]);
@@ -68,9 +68,9 @@ case 'del':
 
     if (is_admin()) {
         if ($uid == $_SESSION['token']) {
-            $blogs = DB::run() -> querySingle("SELECT `blog` FROM `commblog` WHERE `id`=?;", [$id]);
+            $blogs = DB::run() -> querySingle("SELECT `blog` FROM `comments` WHERE relate_type=? AND `id`=?;", ['blog', $id]);
             if (!empty($blogs)) {
-                DB::run() -> query("DELETE FROM `commblog` WHERE `id`=? AND blog=?;", [$id, $blogs]);
+                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `id`=? AND relate_id=?;", ['blog', $id, $blogs]);
                 DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $blogs]);
 
                 notice('Комментарий успешно удален!');

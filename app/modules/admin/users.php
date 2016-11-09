@@ -457,25 +457,25 @@ if (is_admin([101, 102])) {
 
                         // ------ Удаление коментарий -------//
                         if (!empty($delcommblog)) {
-                            DB::run() -> query("DELETE FROM `commblog` WHERE `author`=?;", [$uz]);
+                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['blog', $uz]);
                             restatement('blog');
                         }
 
                         if (!empty($delcommload)) {
-                            DB::run() -> query("DELETE FROM `commload` WHERE `author`=?;", [$uz]);
+                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['down', $uz]);
                             restatement('load');
                         }
 
                         if (!empty($delcommphoto)) {
-                            DB::run() -> query("DELETE FROM `commphoto` WHERE `user`=?;", [$uz]);
+                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['gallery', $uz]);
                             restatement('gallery');
                         }
 
                         if (!empty($delcommnews)) {
-                            DB::run() -> query("DELETE FROM `commnews` WHERE `author`=?;", [$uz]);
+                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['news', $uz]);
                             restatement('news');
                         }
-
+// @TODO: добавит остальные комментарии всего их 6 тут 4
                         // Удаление профиля
                         delete_users($uz);
 

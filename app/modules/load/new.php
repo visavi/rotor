@@ -48,7 +48,7 @@ break;
 case 'comments':
     show_title('Список последних комментариев');
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `commload`;");
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=?;", ['down']);
 
     if ($total > 0) {
         if ($total > 100) {
@@ -58,16 +58,16 @@ case 'comments':
             $start = 0;
         }
 
-        $querydown = DB::run() -> query("SELECT `commload`.*, `title`, `comments` FROM `commload` LEFT JOIN `downs` ON `commload`.`down`=`downs`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
+        $querydown = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `downs` ON `comments`.`relate_id`=`downs`.`id` WHERE relate_type='down' ORDER BY comments.`time` DESC LIMIT ".$start.", ".$config['downlist'].";");
 
         while ($data = $querydown -> fetch()) {
             echo '<div class="b">';
 
-            echo '<i class="fa fa-comment"></i> <b><a href="/load/new?act=viewcomm&amp;id='.$data['down'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')</div>';
+            echo '<i class="fa fa-comment"></i> <b><a href="/load/new?act=viewcomm&amp;id='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')</div>';
 
             echo '<div>'.bb_code($data['text']).'<br />';
 
-            echo 'Написал: '.profile($data['author']).' <small>('.date_fixed($data['time']).')</small><br />';
+            echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['time']).')</small><br />';
 
             if (is_admin() || empty($config['anonymity'])) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -98,7 +98,7 @@ case 'viewcomm':
         $cid = 0;
     }
 
-    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `commload` WHERE `id`<=? AND `down`=? ORDER BY `time` ASC LIMIT 1;", [$cid, $id]);
+    $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `id`<=? AND `relate_id`=? ORDER BY `time` ASC LIMIT 1;", ['down', $cid, $id]);
 
     if (!empty($querycomm)) {
         $end = floor(($querycomm - 1) / $config['downlist']) * $config['downlist'];
