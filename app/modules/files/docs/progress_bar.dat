@@ -17,7 +17,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 progress_bar(55);
 progress_bar(35, \'Батарейка\');
 /* Результат выполнения функции представлен ниже */

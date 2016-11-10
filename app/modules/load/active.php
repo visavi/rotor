@@ -73,7 +73,7 @@ case 'comments':
             }
 
             echo '</div>';
-            echo '<div>'.bb_code($data['text']).'<br />';
+            echo '<div>'.App::bbCode($data['text']).'<br />';
 
             echo 'Написал: '.nickname($data['user']).' <small>('.date_fixed($data['time']).')</small><br />';
 

@@ -10,7 +10,7 @@
 	<?php foreach ($posts as $key => $data): ?>
 
 		<?=($key + 1)?>. <b><?=nickname($data['user'])?></b> (<?=date_fixed($data['time'])?>)<br />
-		<?=bb_code($data['text'])?>
+		<?=App::bbCode($data['text'])?>
 		<br /><br />
 
 	<?php endforeach; ?>

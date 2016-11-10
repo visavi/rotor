@@ -28,7 +28,7 @@ switch ($act):
 
                 echo '<i class="fa fa-comment"></i> <b><a href="/news/allcomments/'.$data['relate_id'].'/'.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')</div>';
 
-                echo '<div>'.bb_code($data['text']).'<br />';
+                echo '<div>'.App::bbCode($data['text']).'<br />';
 
                 echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['time']).')</small><br />';
 

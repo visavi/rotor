@@ -22,7 +22,7 @@
     </div>
 
     <div class="form">
-        <form method="post" action="/login">
+        <form method="post">
 
 
             <div class="form-group">

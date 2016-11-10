@@ -13,7 +13,7 @@ if (isAjaxRequest()){
 		<?= include_javascript() ?>
 	</head>
 	<body>
-		<?php exit(bb_code($message)); ?>
+		<?php exit(App::bbCode($message)); ?>
 	</body>
 	</html>
 <?php } ?>

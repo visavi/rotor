@@ -21,7 +21,7 @@ if (is_user()) {
 
             if (!empty($note['text'])) {
                 echo '<div>Личная запись:<br />';
-                echo bb_code($note['text']).'</div><br />';
+                echo App::bbCode($note['text']).'</div><br />';
 
                 echo 'Последнее изменение: '.date_fixed($note['time']).'<br /><br />';
             } else {

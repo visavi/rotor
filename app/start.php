@@ -75,20 +75,20 @@ if (!empty($config['doslimit'])) {
 ############################################################################################
 ##                               Авторизация по cookies                                   ##
 ############################################################################################
-if (empty($_SESSION['log']) && empty($_SESSION['par'])) {
-    if (isset($_COOKIE['cooklog']) && isset($_COOKIE['cookpar'])) {
-        $unlog = check($_COOKIE['cooklog']);
-        $unpar = check($_COOKIE['cookpar']);
+if (empty($_SESSION['login']) && empty($_SESSION['password'])) {
+    if (isset($_COOKIE['login']) && isset($_COOKIE['password'])) {
+        $unlog = check($_COOKIE['login']);
+        $unpar = check($_COOKIE['password']);
 
         $checkuser = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$unlog]);
 
         if (!empty($checkuser)) {
-            if ($unlog == $checkuser['login'] && $unpar == md5($checkuser['pass'].$config['keypass'])) {
+            if ($unlog == $checkuser['login'] && $unpar == md5($checkuser['password'].env('APP_KEY'))) {
                 session_regenerate_id(1);
 
                 $_SESSION['ip'] = App::getClientIp();
-                $_SESSION['log'] = $unlog;
-                $_SESSION['par'] = md5($config['keypass'].$checkuser['pass']);
+                $_SESSION['login'] = $unlog;
+                $_SESSION['password'] = md5(env('APP_KEY').$checkuser['password']);
 
                 $authorization = DB::run() -> querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$unlog, SITETIME-30]);
 

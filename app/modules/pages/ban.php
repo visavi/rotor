@@ -19,7 +19,7 @@ if (is_user()) {
                 case 'index':
 
                     echo '<i class="fa fa-times"></i> <b>Вас забанили</b><br /><br />';
-                    echo '<b><span style="color:#ff0000">Причина бана: '.bb_code($udata['reasonban']).'</span></b><br /><br />';
+                    echo '<b><span style="color:#ff0000">Причина бана: '.App::bbCode($udata['reasonban']).'</span></b><br /><br />';
 
                     echo 'До окончания бана осталось <b>'.formattime($udata['timeban'] - SITETIME).'</b><br /><br />';
 
@@ -91,7 +91,7 @@ if (is_user()) {
         ############################################################################################
         } else {
             echo '<i class="fa fa-check"></i> <b>Срок бана закончился!</b><br /><br />';
-            echo '<b><span style="color:#ff0000">Причина бана: '.bb_code($udata['reasonban']).'</span></b><br /><br />';
+            echo '<b><span style="color:#ff0000">Причина бана: '.App::bbCode($udata['reasonban']).'</span></b><br /><br />';
 
             echo 'Поздравляем!!! Время вашего бана вышло, постарайтесь вести себя достойно и не нарушать правила сайта<br /><br />';
 

@@ -9,7 +9,7 @@
 	</div>
 
 	<?php if (utf_strlen($data['text']) > 200) {
-		$data['text'] = strip_tags(bb_code($data['text']), '<br>');
+		$data['text'] = strip_tags(App::bbCode($data['text']), '<br>');
 		$data['text'] = utf_substr($data['text'], 0, 200).'...';
 	} ?>
 

@@ -73,7 +73,7 @@ if (is_admin([101, 102])) {
                     echo '<a href="/admin/offers?act=edit&amp;id='.$data['id'].'">Редактировать</a> / ';
                     echo '<a href="/admin/offers?act=reply&amp;id='.$data['id'].'">Ответить</a></div>';
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
                     echo 'Добавлено: '.profile($data['user']).'  ('.date_fixed($data['time']).')<br />';
                     echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                     echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
@@ -128,7 +128,7 @@ if (is_admin([101, 102])) {
                 echo '<div class="right"><a href="/admin/offers?act=edit&amp;id='.$id.'">Редактировать</a> / ';
                 echo '<a href="/admin/offers?act=reply&amp;id='.$id.'">Ответить</a></div>';
 
-                echo '<div>'.bb_code($queryoff['text']).'<br />';
+                echo '<div>'.App::bbCode($queryoff['text']).'<br />';
                 echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br />';
 
                 echo '<a href="/offers?act=comments&amp;id='.$id.'">Комментарии</a> ('.$queryoff['comments'].') ';
@@ -136,7 +136,7 @@ if (is_admin([101, 102])) {
 
                 if (!empty($queryoff['text_reply'])) {
                     echo '<div class="b"><b>Официальный ответ</b></div>';
-                    echo '<div class="q">'.bb_code($queryoff['text_reply']).'<br />';
+                    echo '<div class="q">'.App::bbCode($queryoff['text_reply']).'<br />';
                     echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br />';
                 }
             } else {
@@ -204,7 +204,7 @@ if (is_admin([101, 102])) {
                             DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, $log, SITETIME, $id]);
 
                             if ($queryoff['status'] >= 2) {
-                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers`=?;", [$id]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
                             }
 
                             notice('Данные успешно отправлены!');
@@ -317,7 +317,7 @@ if (is_admin([101, 102])) {
 
                     DB::run() -> query("DELETE FROM `offers` WHERE `id` IN (".$del.");");
                     DB::run() -> query("DELETE FROM `comments` WHERE relate_type='offer' AND `relate_id` IN (".$del.");");
-                    DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers` IN (".$del.");");
+                    DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id` IN (".$del.");");
 
                     notice('Выбранные пункты успешно удалены!');
                     redirect("/admin/offers?type=$type&start=$start");

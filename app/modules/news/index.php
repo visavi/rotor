@@ -40,7 +40,7 @@ case 'index':
                 $data['text'] = current(explode('[cut]', $data['text'])).' <a href="/news/'.$data['id'].'">Читать далее &raquo;</a>';
             }
 
-            echo '<div>'.bb_code($data['text']).'</div>';
+            echo '<div>'.App::bbCode($data['text']).'</div>';
             echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'<br />';
             echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ('.$data['comments'].') ';
             echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
@@ -81,7 +81,7 @@ case 'view':
         }
 
         $data['text'] = str_replace('[cut]', '', $data['text']);
-        echo '<div>'.bb_code($data['text']).'</div>';
+        echo '<div>'.App::bbCode($data['text']).'</div>';
         echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'</div><br />';
 
         if ($data['comments'] > 0) {
@@ -99,7 +99,7 @@ case 'view':
                 echo '<small> ('.date_fixed($comm['time']).')</small><br />';
                 echo user_title($comm['user']).' '.user_online($comm['user']).'</div>';
 
-                echo '<div>'.bb_code($comm['text']).'<br />';
+                echo '<div>'.App::bbCode($comm['text']).'<br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
                     echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
@@ -185,7 +185,7 @@ case 'comments':
                 echo '<small> ('.date_fixed($data['time']).')</small><br />';
                 echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                echo '<div>'.bb_code($data['text']).'<br />';
+                echo '<div>'.App::bbCode($data['text']).'<br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';

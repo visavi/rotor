@@ -49,7 +49,7 @@
                     <?php endif; ?>
                 </div>
 
-                <div class="message"><?=bb_code($data['text'])?></div>
+                <div class="message"><?=App::bbCode($data['text'])?></div>
 
                 <?php if (!empty($data['edit'])): ?>
                     <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['edit'])?> (<?=date_fixed($data['edit_time'])?>)</small><br />
@@ -60,7 +60,7 @@
                 <?php endif; ?>
 
                 <?php if (!empty($data['reply'])): ?>
-                    <br /><span style="color:#ff0000">Ответ: <?=bb_code($data['reply'])?></span>
+                    <br /><span style="color:#ff0000">Ответ: <?=App::bbCode($data['reply'])?></span>
                 <?php endif; ?>
 
             </div>

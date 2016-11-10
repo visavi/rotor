@@ -15,7 +15,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 //Фильтрация строки
 echo check(\'<b>Hello world</b>\'); /* &lt;b&gt;Hello world&lt;/b&gt; */
 

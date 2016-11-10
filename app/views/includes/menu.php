@@ -14,7 +14,7 @@
 		<a href="/menu">Меню</a> &bull;
 		<a href="/logout" onclick="return logout(this)">Выход</a>
 <?php else: ?>
-	<i class="fa fa-lock fa-lg"></i> <a href="/login" rel="nofollow">Авторизация</a> &bull;
+	<i class="fa fa-lock fa-lg"></i> <a href="/login<?= App::returnUrl() ?>" rel="nofollow">Авторизация</a> &bull;
 	<a href="/register" rel="nofollow">Регистрация</a>
 <?php endif; ?>
 </div>

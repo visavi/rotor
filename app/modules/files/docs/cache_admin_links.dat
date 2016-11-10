@@ -18,7 +18,7 @@
 
 <b>Примеры использования</b><br />
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 $links = cache_admin_links();
 // Вызывается внутри функции show_admin_links()
 ?>[/code]'));

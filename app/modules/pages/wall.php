@@ -58,7 +58,7 @@ if (!empty($queryuser)) {
                         echo '<noindex><a href="/wall?act=spam&amp;id='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                     }
 
-                    echo '<div>'.bb_code($data['text']).'</div>';
+                    echo '<div>'.App::bbCode($data['text']).'</div>';
                 }
 
                 if ($is_admin || $uz == $log) {

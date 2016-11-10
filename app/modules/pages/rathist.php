@@ -53,7 +53,7 @@ if (is_user()) {
                         echo '<div>Комментарий: ';
 
                         if (!empty($data['text'])) {
-                            echo bb_code($data['text']);
+                            echo App::bbCode($data['text']);
                         } else {
                             echo 'Отсутствует';
                         }
@@ -93,7 +93,7 @@ if (is_user()) {
                         echo '<div>Комментарий: ';
 
                         if (!empty($data['text'])) {
-                            echo bb_code($data['text']);
+                            echo App::bbCode($data['text']);
                         } else {
                             echo 'Отсутствует';
                         }

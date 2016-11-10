@@ -65,7 +65,7 @@ case 'comments':
 
             echo '<i class="fa fa-comment"></i> <b><a href="/load/new?act=viewcomm&amp;id='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')</div>';
 
-            echo '<div>'.bb_code($data['text']).'<br />';
+            echo '<div>'.App::bbCode($data['text']).'<br />';
 
             echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['time']).')</small><br />';
 

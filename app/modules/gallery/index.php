@@ -62,13 +62,13 @@ break;
 
                     if (!empty($data)) {
                         if ($log != $data['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedphoto` WHERE `photo`=? AND `user`=? LIMIT 1;", [$gid, $log]);
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['gallery', $gid, $log]);
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * $config['photoexprated'];
 
-                                DB::run() -> query("DELETE FROM `ratedphoto` WHERE `time`<?;", [SITETIME]);
-                                DB::run() -> query("INSERT INTO `ratedphoto` (`photo`, `user`, `time`) VALUES (?, ?, ?);", [$gid, $log, $expiresrated]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['gallery', SITETIME]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['gallery', $gid, $log, $expiresrated]);
                                 DB::run() -> query("UPDATE `photo` SET `rating`=`rating`+? WHERE `id`=?;", [$score, $gid]);
 
                                 notice('Ваша оценка принята! Рейтинг фотографии: '.format_num($data['rating'] + $score));
@@ -309,7 +309,7 @@ break;
                         echo '<div class="right"><a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     if (is_admin() || empty($config['anonymity'])) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';

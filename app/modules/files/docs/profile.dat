@@ -18,7 +18,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?
+echo App::bbCode(check('[code]<?
 profile(\'Username\'); /* <a href="/user/Username">Username</a>  */
 profile(\'Username\', \'#ff0000\'); /* <a href="/user/Username"><span style="color:#ff0000">Username</span></a> */
 ?>[/code]'));

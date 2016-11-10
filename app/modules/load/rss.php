@@ -31,7 +31,7 @@ if (!empty($down)) {
         $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 15;", ['down', $id]);
 
         while ($data = $querycomm -> fetch()) {
-            $data['text'] = bb_code($data['text']);
+            $data['text'] = App::bbCode($data['text']);
             $data['text'] = str_replace('/images/smiles', $config['home'].'/images/smiles', $data['text']);
             $data['text'] = htmlspecialchars($data['text']);
 

@@ -7,7 +7,7 @@
 <body>
 	<h2><?=$blog['title']?></h2>
 
-	<?=bb_code($blog['text'])?><br /><br />
+	<?=App::bbCode($blog['text'])?><br /><br />
 
 	URL: <a href="<?=$config['home']?>/blog/blog?act=view&amp;id=<?=$blog['id']?>"><?=$config['home']?>/blog/blog?act=view&amp;id=<?=$blog['id']?></a>
 </body>

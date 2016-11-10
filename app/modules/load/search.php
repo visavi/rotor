@@ -149,7 +149,7 @@ case "search":
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
                     if (utf_strlen($data['text']) > 300) {
-                        $data['text'] = strip_tags(bb_code($data['text']), '<br>');
+                        $data['text'] = strip_tags(App::bbCode($data['text']), '<br>');
                         $data['text'] = utf_substr($data['text'], 0, 300).'...';
                     }
 

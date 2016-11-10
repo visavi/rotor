@@ -42,7 +42,7 @@ switch ($act):
                 echo '</div>';
 
 
-                echo '<div>'.bb_code($data['text']).'<br />';
+                echo '<div>'.App::bbCode($data['text']).'<br />';
                 echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
@@ -88,7 +88,7 @@ switch ($act):
                 echo '</div>';
 
 
-                echo '<div>'.bb_code($data['text']).'<br />';
+                echo '<div>'.App::bbCode($data['text']).'<br />';
                 echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
 
                 if (is_admin() || empty($config['anonymity'])) {

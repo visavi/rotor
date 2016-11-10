@@ -15,7 +15,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 echo maketime (300); /* 05:00 */
 echo maketime (3600); /* 01:00:00 */
 echo maketime (86400); /* 00:00:00 */

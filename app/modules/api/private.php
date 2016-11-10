@@ -20,7 +20,7 @@ if (!empty($key)){
             $messages = [];
             foreach ($inbox as $data) {
 
-                $data['text'] = bb_code(str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $data['text']));
+                $data['text'] = App::bbCode(str_replace('<img src="/images/', '<img src="'.$config['home'].'/images/', $data['text']));
 
                 $messages[] = [
                     'author' => $data['author'],

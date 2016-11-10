@@ -48,7 +48,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.bb_code($data['text']).'<br />';
+                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
 
                     echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
                     echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
@@ -95,7 +95,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.bb_code($data['text']).'<br />';
+                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
 
                     echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
                     echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
@@ -142,7 +142,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.bb_code($data['text']).'<br />';
+                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
 
                     echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
                 }
@@ -188,7 +188,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.bb_code($data['text']).'<br />';
+                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
 
                     echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
                     echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
@@ -235,7 +235,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.bb_code($data['text']).'<br />';
+                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
 
                     echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
                     echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
@@ -282,7 +282,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.bb_code($data['text']).'<br />';
+                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
 
                     echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
                     echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';

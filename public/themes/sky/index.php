@@ -128,11 +128,11 @@ echo '</div>';
 
 } else {
 
-$cooklog = (isset($_COOKIE['cooklog'])) ? check($_COOKIE['cooklog']): '';
+$cooklog = (isset($_COOKIE['login'])) ? check($_COOKIE['login']): '';
 
 echo '<div class="divb">Авторизация</div>';
 
-echo'<form method="post" action="/login">';
+echo'<form method="post" action="/login'.App::returnUrl().'">';
 echo 'Логин:<br /><input name="login" value="'.$cooklog.'" /><br />';
 echo 'Пароль:<br /><input name="pass" type="password" /><br />';
 echo 'Запомнить меня:';
@@ -141,7 +141,7 @@ echo '<input name="cookietrue" type="checkbox" value="1" checked="checked" /><br
 echo '<input value="Войти" type="submit" /></form>';
 
 echo '<a href="/register">Регистрация</a><br />';
-echo '<a href="/mail/lostpassword">Забыли пароль?</a>';
+echo '<a href="/lostpassword">Забыли пароль?</a>';
 }
 
 

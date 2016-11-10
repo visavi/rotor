@@ -12,7 +12,7 @@ if (!empty($rules)) {
         $rules['text']
     );
 
-    echo bb_code($rules['text']).'<br />';
+    echo App::bbCode($rules['text']).'<br />';
 } else {
     show_error('Правила сайта еще не установлены!');
 }

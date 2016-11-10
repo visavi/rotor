@@ -11,7 +11,7 @@
             (<?=$data['posts']?>)
         </div>
         <div>
-            <?=bb_code($data['text'])?><br />
+            <?=App::bbCode($data['text'])?><br />
 
             Написал: <?=nickname($data['user'])?> <?=user_online($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />
 

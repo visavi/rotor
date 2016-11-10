@@ -4,7 +4,7 @@
 	<i class="fa fa-pencil"></i> <b><?=profile($post['user'])?></b> <?=user_title($post['user'])?> <?=user_online($post['user'])?> <small>(<?=date_fixed($post['time'])?>)</small>
 </div>
 <div>
-	Сообщение: <?=bb_code($post['text'])?>
+	Сообщение: <?=App::bbCode($post['text'])?>
 </div><hr />
 
 <div class="form">

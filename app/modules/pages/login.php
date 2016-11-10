@@ -8,17 +8,22 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $cooklog = (isset($_COOKIE['cooklog'])) ? check($_COOKIE['cooklog']): '';
-
+    $cooklog = (isset($_COOKIE['login'])) ? check($_COOKIE['login']): '';
     if (Request::isMethod('post')) {
         if (Request::has('login') && Request::has('pass')) {
+            $return = Request::input('return', '');
             $login = check(utf_lower(Request::input('login')));
-            $pass = md5(md5(trim(Request::input('pass'))));
+            $pass = trim(Request::input('pass'));
             $remember = Request::input('remember');
 
             if ($user = App::login($login, $pass, $remember)) {
-                App::setFlash('success', 'Добро пожаловать, '.$login.'!');
-                App::redirect('/');
+                notice('Добро пожаловать, '.$login.'!');
+
+                if ($return) {
+                    App::redirect($return);
+                } else {
+                    App::redirect('/');
+                }
             }
 
             App::setInput(Request::all());
@@ -38,7 +43,7 @@ break;
 case 'logout':
 
     $_SESSION = [];
-    setcookie('cookpar', '', time() - 3600, '/', $domain, null, true);
+    setcookie('password', '', time() - 3600, '/', $domain, null, true);
     setcookie(session_name(), '', time() - 3600, '/', '');
     session_destroy();
 

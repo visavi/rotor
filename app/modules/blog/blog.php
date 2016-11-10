@@ -83,7 +83,7 @@ case 'view':
             $end = ($total < $start + 1) ? $total : $start + 1;
 
             for ($i = $start; $i < $end; $i++) {
-                $blogs['text'] = bb_code($text[$i]).'<br />';
+                $blogs['text'] = App::bbCode($text[$i]).'<br />';
             }
 
             $tags = preg_split('/[\s]*[,][\s]*/', $blogs['tags']);
@@ -337,13 +337,13 @@ case 'vote':
 
                     if (!empty($blogs)) {
                         if ($log != $blogs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedblog` WHERE `blog`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['blog', $id, $log]);
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * $config['blogexprated'];
 
-                                DB::run() -> query("DELETE FROM `ratedblog` WHERE `time`<?;", [SITETIME]);
-                                DB::run() -> query("INSERT INTO `ratedblog` (`blog`, `user`, `time`) VALUES (?, ?, ?);", [$id, $log, $expiresrated]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['blog', SITETIME]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['blog', $id, $log, $expiresrated]);
                                 DB::run() -> query("UPDATE `blogs` SET `rating`=`rating`+? WHERE `id`=?;", [$score, $id]);
 
                                 notice('Ваша оценка принята! Рейтинг статьи: '.format_num($blogs['rating'] + $score));

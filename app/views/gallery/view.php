@@ -16,7 +16,7 @@
         <a href="/upload/pictures/<?= $photo['link'] ?>"><img  class="img-responsive" src="/upload/pictures/<?= $photo['link'] ?>" alt="image" /></a><br />
 
         <?php if (!empty($photo['text'])): ?>
-            <?= bb_code($photo['text']) ?><br />
+            <?= App::bbCode($photo['text']) ?><br />
         <?php endif; ?>
 
         Рейтинг: <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=down&amp;uid=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-down"></i></a> <big><b><?= format_num($photo['rating']) ?></b></big> <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=up&amp;uid=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-up"></i></a><br />

@@ -53,7 +53,7 @@ if (is_user()){
 	}
 
 } else {
-	echo '<a href="/login">Авторизация</a> | ';
+	echo '<a href="/login'.App::returnUrl().'">Авторизация</a> | ';
 	echo '<a href="/register">Регистрация</a>';
 }
 ?>

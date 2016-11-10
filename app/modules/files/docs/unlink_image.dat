@@ -18,7 +18,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 unlink_image("upload/photos/", "Vantuz.gif");
 /* Удаляет файл Vantuz.gif сначала в директории upload/photos, а затем в upload/thumbnail */
 ?>[/code]'));

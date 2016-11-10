@@ -112,7 +112,7 @@ switch ($act):
                 }
 
                 echo '</div>';
-                echo '<div>'.bb_code($data['text']).'<br />';
+                echo '<div>'.App::bbCode($data['text']).'<br />';
                 echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
                 echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                 echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
@@ -168,11 +168,11 @@ switch ($act):
                 echo '<div class="right"><a href="/offers?act=edit&amp;id='.$id.'">Редактировать</a></div>';
             }
 
-            echo '<div>'.bb_code($queryoff['text']).'<br />';
+            echo '<div>'.App::bbCode($queryoff['text']).'<br />';
             echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br />';
 
             if ($queryoff['status'] <= 1 && $log != $queryoff['user']) {
-                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, $log]);
 
                 if (empty($queryrated)) {
                     echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br />';
@@ -186,7 +186,7 @@ switch ($act):
 
             if (!empty($queryoff['text_reply'])) {
                 echo '<div class="b"><b>Официальный ответ</b></div>';
-                echo '<div class="q">'.bb_code($queryoff['text_reply']).'<br />';
+                echo '<div class="q">'.App::bbCode($queryoff['text_reply']).'<br />';
                 echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br />';
             }
             // ------------------------------------------------//
@@ -203,7 +203,7 @@ switch ($act):
                     echo '<small> ('.date_fixed($comm['time']).')</small><br />';
                     echo user_title($comm['user']).' '.user_online($comm['user']).'</div>';
 
-                    echo '<div>'.bb_code($comm['text']).'<br />';
+                    echo '<div>'.App::bbCode($comm['text']).'<br />';
 
                     if (is_admin() || empty($config['anonymity'])) {
                         echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
@@ -366,7 +366,7 @@ switch ($act):
                     echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     if ($is_admin || empty($config['anonymity'])) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -471,12 +471,12 @@ switch ($act):
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
                         if ($log != $queryoff['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, $log]);
                             if (empty($queryrated)) {
-                                DB::run() -> query("INSERT INTO `ratedoffers` (`offers`, `user`, `time`) VALUES (?, ?, ?);", [$id, $log, SITETIME]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, $log, SITETIME]);
                                 DB::run() -> query("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", [$id]);
                             } else {
-                                DB::run() -> query("DELETE FROM `ratedoffers` WHERE `offers`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, $log]);
                                 if ($queryoff['votes'] > 0) {
                                     DB::run() -> query("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", [$id]);
                                 }
@@ -552,7 +552,7 @@ switch ($act):
                             DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, $log, 1, SITETIME]);
                             $lastid = DB::run() -> lastInsertId();
 
-                            DB::run() -> query("INSERT INTO `ratedoffers` (`offers`, `user`, `time`) VALUES (?, ?, ?);", [$lastid, $log, SITETIME]);
+                            DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, $log, SITETIME]);
 
                             notice('Сообщение успешно добавлено!');
                             redirect("/offers?act=view&type=$types&id=$lastid");

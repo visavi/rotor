@@ -15,7 +15,7 @@
 
 <b>Примеры использования</b><br />
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 chmode(STORAGE.\'/forum\');
 ?>[/code]'));
 ?>

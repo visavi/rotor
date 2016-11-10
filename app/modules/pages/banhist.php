@@ -31,7 +31,7 @@ if (is_user()) {
 
             echo '<div>';
             if (!empty($data['type'])) {
-                echo 'Причина: '.bb_code($data['reason']).'<br />';
+                echo 'Причина: '.App::bbCode($data['reason']).'<br />';
                 echo 'Срок: '.formattime($data['term']).'<br />';
             }
 

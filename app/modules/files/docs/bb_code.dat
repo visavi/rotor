@@ -16,12 +16,12 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
-echo bb_code(\'Текст сообщения [url=http://visavi.net]Visavi[/url]\');
+echo App::bbCode(check('[code]<?php
+echo App::bbCode(\'Текст сообщения [url=http://visavi.net]Visavi[/url]\');
 /* Результат выполнения функции представлен ниже */
 ?>[/code]'));
 
-echo bb_code('Текст сообщения [url=http://visavi.net]Visavi[/url]').'<br />';
+echo App::bbCode('Текст сообщения [url=http://visavi.net]Visavi[/url]').'<br />';
 ?>
 
 <br />

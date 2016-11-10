@@ -79,7 +79,7 @@ if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (!empty($login) && !empty($mail) && !empty($pass)) {
 
-                        if (md5(md5($pass)) == $udata['pass']) {
+                        if (password_verify($pass, $udata['password'])) {
                             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mail)) {
 
                                 $queryuser = DB::run()->queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$login]);

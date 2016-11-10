@@ -721,7 +721,7 @@ if (is_admin()) {
                     }
 
                     if (!empty($topic['note'])){
-                        echo '<div class="info">'.bb_code($topic['note']).'</div>';
+                        echo '<div class="info">'.App::bbCode($topic['note']).'</div>';
                     }
 
                     echo '<hr />';
@@ -789,7 +789,7 @@ if (is_admin()) {
                             echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.date_fixed($data['time']).')</small><br />';
                             echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                            echo '<div>'.bb_code($data['text']).'<br />';
+                            echo '<div>'.App::bbCode($data['text']).'<br />';
 
                             // -- Прикрепленные файлы -- //
                             if (!empty($forumfiles)) {

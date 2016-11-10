@@ -22,7 +22,7 @@
 
 <b>Примеры использования</b><br />
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 echo addmail(\'nobody@example.com\', \'Это тема\', \'Это текст сообщения\'); /* Отправит письмо от администратора сайта */
 echo addmail(\'nobody@example.com\', \'Это тема\', \'Это текст сообщения\', \'webmaster@example.com\', \'webmaster\'); /* Отправит письмо от пользователя webmaster */
 ?>[/code]'));

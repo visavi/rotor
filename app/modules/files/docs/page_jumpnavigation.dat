@@ -26,7 +26,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 page_jumpnavigation(\'/chat?\', 10, $start, $total); /* <-Назад | Далее-> */
 ?>[/code]'));
 ?>

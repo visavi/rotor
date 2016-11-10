@@ -12,7 +12,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $cooklog = (isset($_COOKIE['cooklog'])) ? check($_COOKIE['cooklog']): '';
+    $cooklog = (isset($_COOKIE['login'])) ? check($_COOKIE['login']): '';
 
     echo 'Инструкция по восстановлению будет выслана на электронный адрес указанный в профиле<br />';
     echo 'Восстанавливать пароль можно не чаще чем раз в 12 часов<br /><br />';
@@ -154,9 +154,9 @@ case 'restore':
         if ($validation->run()) {
 
             $newpass = generate_password();
-            $mdnewpas = md5(md5($newpass));
+            $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);;
 
-            DB::run() -> query("UPDATE `users` SET `pass`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$mdnewpas, '', 0, $uz]);
+            DB::run() -> query("UPDATE `users` SET `password`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$hashnewpas, '', 0, $uz]);
 
             echo '<b>Пароль успешно восстановлен!</b><br />';
             echo 'Ваши новые данные для входа на сайт<br /><br />';
@@ -200,14 +200,14 @@ case 'answer':
         $validation -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
             -> addRule('not_empty', $answer, 'Не введен ответ на секретный вопрос для восстановления!')
             -> addRule('not_empty', $user['secquest'], 'У данного пользователя не установлен секретный вопрос!')
-            -> addRule('equal', [md5(md5($answer)), $user['secanswer']], 'Ответ на секретный вопрос не совпадает с данными в профиле!');
+            -> addRule('bool', password_verify($answer, $user['secanswer']), 'Ответ на секретный вопрос не совпадает с данными в профиле!');
 
         if ($validation->run()) {
 
             $newpass = generate_password();
-            $mdnewpas = md5(md5($newpass));
+            $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
 
-            DB::run() -> query("UPDATE `users` SET `pass`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$mdnewpas, '', 0, $uz]);
+            DB::run() -> query("UPDATE `users` SET `password`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$hashnewpas, '', 0, $uz]);
 
             echo '<b>Пароль успешно восстановлен!</b><br />';
             echo 'Ваши новые данные для входа на сайт<br /><br />';

@@ -38,7 +38,7 @@
     <?php endif; ?>
 
     <?php if (!empty($topics['note'])): ?>
-        <div class="info"><?=bb_code($topics['note'])?></div>
+        <div class="info"><?=App::bbCode($topics['note'])?></div>
     <?php endif; ?>
 
     <hr />
@@ -100,7 +100,7 @@
                 <?=user_title($data['user'])?> <?=user_online($data['user'])?>
             </div>
 
-            <div class="message"><?=bb_code($data['text'])?></div>
+            <div class="message"><?=App::bbCode($data['text'])?></div>
 
             <?php if (!empty($topics['files'])): ?>
                 <?php if (isset($topics['files'][$data['id']])): ?>

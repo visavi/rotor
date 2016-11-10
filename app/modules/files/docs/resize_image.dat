@@ -24,7 +24,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 echo resize_image(\'/upload/pictures/\', $data[\'link\'], $config[\'previewsize\'], $data[\'title\']);
  /* Функция вернет уменьшенную картинку <img src="/upload/thumbnail/upload_pictures_1350.jpg" alt="Название"/> */
 ?>[/code]'));

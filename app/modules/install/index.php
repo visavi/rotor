@@ -454,7 +454,7 @@ define ('DBPASS', '$dbpass');
                                                 unlink ('../local/temp/setting.dat');
                                             }
                                             // -------------- Профиль ---------------//
-                                            $db -> query("INSERT INTO `users` (`login`, `pass`, `email`, `joined`, `level`, `info`, `site`, `newprivat`, `themes`, `postguest`, `postnews`, `postprivat`, `postforum`, `themesforum`, `postboard`, `point`, `money`, `status`) VALUES ('" . $login . "', '" . md5(md5($password)) . "', '" . $mail . "', '" . time() . "', 101, 'Администратор сайта', '" . $site . "', 1, 0, 10, 10, 10, 10, 10, 10, 500, 100000, 'Администратор');");
+                                            $db -> query("INSERT INTO `users` (`login`, `password`, `email`, `joined`, `level`, `info`, `site`, `newprivat`, `themes`, `postguest`, `postnews`, `postprivat`, `postforum`, `themesforum`, `postboard`, `point`, `money`, `status`) VALUES ('" . $login . "', '" . md5(md5($password)) . "', '" . $mail . "', '" . time() . "', 101, 'Администратор сайта', '" . $site . "', 1, 0, 10, 10, 10, 10, 10, 10, 500, 100000, 'Администратор');");
 
                                             // -------------- Приват ---------------//
                                             $textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';

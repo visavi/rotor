@@ -17,7 +17,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 delete_album("Vantuz");
 /* Полностью удаляет фотоальбом пользователя Vantuz, а также аватар и персональную фотографию в анкете */
 ?>[/code]'));

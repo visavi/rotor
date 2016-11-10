@@ -9,7 +9,7 @@
 
     </div>
     <div>
-        <?=bb_code($data['text'])?>
+        <?=App::bbCode($data['text'])?>
         <br />
 
         Написал: <?=nickname($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />

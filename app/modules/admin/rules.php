@@ -26,7 +26,7 @@ if (is_admin([101, 102])) {
             if (!empty($rules)) {
                 $rules['text'] = str_replace(['%SITENAME%', '%MAXBAN%'], [$config['title'], round($config['maxbantime'] / 1440)], $rules['text']);
 
-                echo bb_code($rules['text']).'<hr />';
+                echo App::bbCode($rules['text']).'<hr />';
 
                 echo 'Последнее изменение: '.date_fixed($rules['time']).'<br /><br />';
             } else {

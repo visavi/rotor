@@ -21,8 +21,11 @@ class App
      */
     public static function returnUrl($url = null)
     {
+       if (Request::is('/', 'login', 'register', 'lostpassword', 'ban', 'closed')) {
+           return false;
+       }
         $query = Request::has('return') ? Request::input('return') : Request::path();
-        return 'return='.urlencode(is_null($url) ? $query : $url);
+        return '?return='.urlencode(is_null($url) ? $query : $url);
     }
 
     /**
@@ -263,9 +266,9 @@ class App
      * @param  boolean $parse Обрабатывать или вырезать код
      * @return string         Обработанный текст
      */
-/*    public static function bbCode($text, $parse = true)
+    public static function bbCode($text, $parse = true)
     {
-        $bbcode = new BBCodeParser;
+        $bbcode = new BBCodeParser(self::setting());
 
         if ( ! $parse) return $bbcode->clear($text);
 
@@ -273,7 +276,7 @@ class App
         $text = $bbcode->parseSmiles($text);
 
         return $text;
-    }*/
+    }
 
     /**
      * Определение браузера
@@ -311,7 +314,7 @@ class App
 
     public static function getUsername()
     {
-        return isset($_SESSION['log']) ? check($_SESSION['log']) : self::setting('guestsuser');
+        return isset($_SESSION['login']) ? check($_SESSION['login']) : self::setting('guestsuser');
     }
 
     /**
@@ -409,42 +412,52 @@ class App
 
         if (!empty($login) && !empty($password)) {
 
-            $user = DB::run()->queryFetch("SELECT `login`, `pass` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [$login, $login]);
+            $user = DB::run()->queryFetch("SELECT `login`, `password` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [$login, $login]);
 
-            if (!empty($user)) {
-                if ($password == $user['pass']) {
-
-                    if ($remember) {
-                        setcookie('cooklog', $user['login'], time() + 3600 * 24 * 365, '/', $domain);
-                        setcookie('cookpar', md5($password . self::setting('keypass')), time() + 3600 * 24 * 365, '/', $domain, null, true);
-                    }
-
-                    $_SESSION['log'] = $user['login'];
-                    $_SESSION['par'] = md5(self::setting('keypass') . $password);
-                    $_SESSION['ip'] = self::getClientIp();
-
-                    // Сохранение привязки к соц. сетям
-                    if (!empty($_SESSION['social'])) {
-                        DBM::run()->insert('socials', [
-                            'user'    => $user['login'],
-                            'network' => $_SESSION['social']->network,
-                            'uid'     => $_SESSION['social']->uid,
-                        ]);
-                    }
-
-                    DB::run()->query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=?", [SITETIME, $user['login']]);
-
-                    $authorization = DB::run()->querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$user['login'], SITETIME - 30]);
-
-                    if (empty($authorization)) {
-                        DB::run()->query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`, `type`) VALUES (?, ?, ?, ?, ?);", [$user['login'], self::getClientIp(), self::getUserAgent(), SITETIME, 1]);
-                        DB::run()->query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$user['login'], $user['login']]);
-                    }
-
-                    return $user;
+            /* Миграция старых паролей */
+            if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
+            {
+                if (md5(md5($password)) == $user['password']) {
+                    $user['password'] = password_hash($password, PASSWORD_BCRYPT);
+                    DBM::run()->update('users', [
+                        'password' => $user['password'],
+                    ], ['login' => $login]);
                 }
             }
+
+            if ($user && password_verify($password, $user['password'])) {
+
+                if ($remember) {
+                    setcookie('login', $user['login'], time() + 3600 * 24 * 365, '/', $domain);
+                    setcookie('password', md5($user['password'].env('APP_KEY')), time() + 3600 * 24 * 365, '/', $domain, null, true);
+                }
+
+                $_SESSION['ip'] = self::getClientIp();
+                $_SESSION['login'] = $user['login'];
+                $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
+
+                // Сохранение привязки к соц. сетям
+                if (!empty($_SESSION['social'])) {
+                    DBM::run()->insert('socials', [
+                        'user'    => $user['login'],
+                        'network' => $_SESSION['social']->network,
+                        'uid'     => $_SESSION['social']->uid,
+                    ]);
+                }
+
+                DB::run()->query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=?", [SITETIME, $user['login']]);
+
+                $authorization = DB::run()->querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$user['login'], SITETIME - 30]);
+
+                if (empty($authorization)) {
+                    DB::run()->query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`, `type`) VALUES (?, ?, ?, ?, ?);", [$user['login'], self::getClientIp(), self::getUserAgent(), SITETIME, 1]);
+                    DB::run()->query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$user['login'], $user['login']]);
+                }
+
+                return $user;
+            }
         }
+
         return false;
     }
 
@@ -467,8 +480,8 @@ class App
 
             if ($social && $user = user($social['user'])) {
 
-                $_SESSION['log'] = $user['login'];
-                $_SESSION['par'] = md5(self::setting('keypass') . $user['pass']);
+                $_SESSION['login'] = $user['login'];
+                $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
                 $_SESSION['ip'] = Registry::get('ip');
 
                 self::setFlash('success', 'Добро пожаловать, '.$user['login'].'!');

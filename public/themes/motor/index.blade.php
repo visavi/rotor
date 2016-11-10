@@ -65,7 +65,7 @@ header('Content-type:text/html; charset=utf-8');
     <a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
 
 <?php else: ?>
-    <a href="/login">Авторизация</a>/
+    <a href="/login{{ App::returnUrl() }}">Авторизация</a>/
     <a href="/register">Регистрация</a>
 <?php endif; ?>
 

@@ -53,7 +53,7 @@ if (is_user()) {
                     echo '<b>'.profile($data['author']).'</b>  ('.date_fixed($data['time']).')<br />';
                     echo user_title($data['author']).' '.user_online($data['author']).'</div>';
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<a href="/private?act=submit&amp;uz='.$data['author'].'">Ответить</a> / ';
@@ -107,7 +107,7 @@ if (is_user()) {
                     echo '<b>'.profile($data['user']).'</b>  ('.date_fixed($data['time']).')<br />';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<a href="/private?act=submit&amp;uz='.$data['user'].'">Написать еще</a> / ';
@@ -154,7 +154,7 @@ if (is_user()) {
                     echo '<b>'.profile($data['author']).'</b>  ('.date_fixed($data['time']).')<br />';
                     echo user_title($data['author']).' '.user_online($data['author']).'</div>';
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     echo '<a href="/private?act=submit&amp;uz='.$data['author'].'">Ответить</a> / ';
                     echo '<a href="/contact?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">В контакт</a> / ';
@@ -353,7 +353,7 @@ if (is_user()) {
 
                     if (empty($queryspam)) {
                         if (is_flood($log)) {
-                            DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`) VALUES (?, ?, ?, ?, ?, ?, ?);", [3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME]);
+                            DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, link) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, '']);
 
                             notice('Жалоба успешно отправлена!');
                             redirect("/private?start=$start");
@@ -540,7 +540,7 @@ if (is_user()) {
                             echo '<div class="b">';
                             echo user_avatars($data['author']);
                             echo '<b>'.profile($data['author']).'</b> '.user_online($data['author']).' ('.date_fixed($data['time']).')</div>';
-                            echo '<div>'.bb_code($data['text']).'</div>';
+                            echo '<div>'.App::bbCode($data['text']).'</div>';
                         }
 
                         page_strnavigation('/private?act=history&amp;uz='.$uz.'&amp;', $config['privatpost'], $start, $total);

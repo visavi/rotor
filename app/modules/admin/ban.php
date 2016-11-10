@@ -47,7 +47,7 @@ if (is_admin([101, 102, 103])) {
                 if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                     echo '<div class="form">';
                     echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br />';
-                    echo 'Последняя причина: '.bb_code($user['reasonban']).'<br />';
+                    echo 'Последняя причина: '.App::bbCode($user['reasonban']).'<br />';
                     echo 'Забанил: '.profile($user['loginsendban']).'</div><br />';
                 }
 

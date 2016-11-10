@@ -12,7 +12,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 if(is_user()) {
 	echo \'Пользователь авторизирован\';
 } else {

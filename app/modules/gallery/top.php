@@ -56,7 +56,7 @@ if ($total > 0) {
 
         echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a>';
 
-        echo '<br />'.bb_code($data['text']).'<br />';
+        echo '<br />'.App::bbCode($data['text']).'<br />';
 
         echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
         echo '<a href="/gallery?act=comments&amp;gid='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';

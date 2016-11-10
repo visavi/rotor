@@ -189,7 +189,7 @@ case 'view':
                 echo '<a href="/upload/files/'.$folder.$downs['link'].'">'.resize_image('upload/files/'.$folder, $downs['link'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br />';
             }
 
-            echo bb_code($downs['text']).'<br /><br />';
+            echo App::bbCode($downs['text']).'<br /><br />';
 
             if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
                 echo 'Скриншот:<br />';
@@ -355,13 +355,13 @@ case 'vote':
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
                         if ($log != $downs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `rateddown` WHERE `down`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['down', $id, $log]);
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * $config['expiresrated'];
 
-                                DB::run() -> query("DELETE FROM `rateddown` WHERE `time`<?;", [SITETIME]);
-                                DB::run() -> query("INSERT INTO `rateddown` (`down`, `user`, `time`) VALUES (?, ?, ?);", [$id, $log, $expiresrated]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['down', SITETIME]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, $log, $expiresrated]);
                                 DB::run() -> query("UPDATE `downs` SET `rating`=`rating`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
 
                                 echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br />';
@@ -443,7 +443,7 @@ case 'comments':
                         echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     if (is_admin() || empty($config['anonymity'])) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -588,7 +588,7 @@ case 'reply':
 
         if (!empty($post)) {
             echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_title($post['user']).' '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
-            echo '<div>Сообщение: '.bb_code($post['text']).'</div><hr />';
+            echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr />';
 
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';

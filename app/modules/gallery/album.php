@@ -85,7 +85,7 @@ switch ($act):
                 echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
 
                 if (!empty($data['text'])){
-                    echo bb_code($data['text']).'<br />';
+                    echo App::bbCode($data['text']).'<br />';
                 }
 
                 echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';

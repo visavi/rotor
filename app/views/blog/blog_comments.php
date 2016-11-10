@@ -34,7 +34,7 @@
 		<?php endif; ?>
 
 		<div>
-			<?=bb_code($data['text'])?><br />
+			<?=App::bbCode($data['text'])?><br />
 
 		<?php if (is_admin() || empty($config['anonymity'])): ?>
 			<span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>

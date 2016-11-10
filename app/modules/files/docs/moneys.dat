@@ -17,7 +17,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 echo moneys(1); /* 1 рубль */
 echo moneys(2); /* 2 рубля */
 echo moneys(5); /* 5 рублей */

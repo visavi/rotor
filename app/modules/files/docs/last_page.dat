@@ -20,7 +20,7 @@
 
 <b>Примеры использования</b><br />
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 if ($start >= $total) {
   $start = last_page($total, $config[\'bookpost\']);
 }

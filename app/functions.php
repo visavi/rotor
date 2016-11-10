@@ -128,25 +128,6 @@ function points($sum) {
     return $sum.' '.$score[0];
 }
 
-/**
- * Обработка BB-кодов
- * @param  string  $text  Необработанный текст
- * @param  boolean $parse Обрабатывать или вырезать код
- * @return string         Обработанный текст
- */
-function bb_code($text, $parse = true)
-{
-    global $config;
-    $bbcode = new BBCodeParser($config);
-
-    if ( ! $parse) return $bbcode->clear($text);
-
-    $text = $bbcode->parse($text);
-    $text = $bbcode->parseSmiles($text);
-
-    return $text;
-}
-
 // ------------------ Функция перекодировки из UTF в WIN --------------------//
 function utf_to_win($str) {
     if (function_exists('mb_convert_encoding')) return mb_convert_encoding($str, 'windows-1251', 'utf-8');
@@ -1238,7 +1219,7 @@ function last_news() {
                 $data['text'] = str_replace('[cut]', '', $data['text']);
                 echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].') <i class="fa fa-caret-down news-title"></i><br />';
 
-                echo '<div class="news-text" style="display: none;">'.bb_code($data['text']).'<br />';
+                echo '<div class="news-text" style="display: none;">'.App::bbCode($data['text']).'<br />';
                 echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ';
                 echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
             }
@@ -1274,15 +1255,13 @@ function user($login) {
 
 // ------------------------- Функция проверки авторизации  ------------------------//
 function is_user() {
-    global $config;
     static $user = 0;
-
     if (empty($user)) {
-        if (isset($_SESSION['log']) && isset($_SESSION['par'])) {
-            $udata = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [check($_SESSION['log'])]);
+        if (isset($_SESSION['login']) && isset($_SESSION['password'])) {
+            $udata = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [check($_SESSION['login'])]);
 
             if (!empty($udata)) {
-                if ($_SESSION['log'] == $udata['login'] && $_SESSION['par'] == md5($config['keypass'].$udata['pass'])) {
+                if ($_SESSION['password'] == md5(env('APP_KEY').$udata['password'])) {
                     $user = $udata;
                 }
             }
@@ -1772,9 +1751,7 @@ function resize_image($dir, $name, $size, $params = []) {
 
         if (empty($params['alt'])) $params['alt'] = $name;
 
-        if (isset($params['class'])) {
-            $params['class'] .= ' img-responsive';
-        } else {
+        if (! isset($params['class'])) {
             $params['class'] = 'img-responsive';
         }
 

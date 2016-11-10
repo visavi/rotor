@@ -5,7 +5,7 @@
 @section('content')
 
     <?php foreach ($posts as $data): ?>
-        <?php $data['text'] = bb_code($data['text']); ?>
+        <?php $data['text'] = App::bbCode($data['text']); ?>
         <?php $data['text'] = str_replace('/images/smiles', $config['home'].'/images/smiles', $data['text']); ?>
         <?php $data['text'] = htmlspecialchars($data['text']); ?>
 

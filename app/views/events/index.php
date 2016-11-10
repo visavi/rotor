@@ -21,7 +21,7 @@
         $data['text'] = current(explode('[cut]', $data['text'])).' <a href="/events?act=read&amp;id='.$data['id'].'">Читать далее &raquo;</a>';
     } ?>
 
-    <div><?=bb_code($data['text'])?></div>
+    <div><?=App::bbCode($data['text'])?></div>
 
     <div style="clear:both;">Добавлено: <?=profile($data['author'])?><br />
         <a href="/events?act=comments&amp;id=<?=$data['id']?>">Комментарии</a> (<?=$data['comments']?>)

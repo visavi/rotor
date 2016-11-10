@@ -14,7 +14,7 @@
 			<i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['topic_id']?>/<?=$data['id']?>"><?=$data['title']?></a></b>
 		</div>
 
-		<div><?=bb_code($data['text'])?><br />
+		<div><?=App::bbCode($data['text'])?><br />
 			Написал: <?=profile($data['user'])?> <?=user_online($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />
 		</div>
 

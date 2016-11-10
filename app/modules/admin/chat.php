@@ -55,7 +55,7 @@ if (is_admin()) {
                         echo '<div class="right"><a href="/admin/chat?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     if (!empty($data['edit'])) {
                         echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.nickname($data['edit']).' ('.date_fixed($data['edit_time']).')</small><br />';
@@ -133,7 +133,7 @@ if (is_admin()) {
 
             if (!empty($post)) {
                 echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
-                echo '<div>Сообщение: '.bb_code($post['text']).'</div><hr />';
+                echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/chat?act=add&amp;uid='.$_SESSION['token'].'" method="post">';

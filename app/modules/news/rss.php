@@ -18,7 +18,7 @@ $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT 1
 
 while ($data = $querynews -> fetch()) {
 
-    $data['text'] = bb_code($data['text']);
+    $data['text'] = App::bbCode($data['text']);
     $data['text'] = str_replace(['/images/smiles', '[cut]'], [$config['home'].'/images/smiles', ''], $data['text']);
 
     echo '<item><title>'.htmlspecialchars($data['title']).'</title><link>'.$config['home'].'/news/'.$data['id'].'</link>';

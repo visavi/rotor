@@ -217,7 +217,7 @@ if (is_admin([101, 102])) {
                     if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                         echo '<div class="form">';
                         echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br />';
-                        echo 'Последняя причина: '.bb_code($user['reasonban']).'<br />';
+                        echo 'Последняя причина: '.App::bbCode($user['reasonban']).'<br />';
                         echo 'Забанил: '.profile($user['loginsendban']).'</div>';
                     }
                     echo 'Строгих банов: <b>'.$user['totalban'].'</b><br /><br />';
@@ -246,7 +246,7 @@ if (is_admin([101, 102])) {
                 $level = intval($_POST['level']);
             }
 
-            $pass = check($_POST['pass']);
+            $pass = check($_POST['passwors']);
             $email = check($_POST['email']);
             $joined = check($_POST['joined']);
             $name = check($_POST['name']);
@@ -287,9 +287,9 @@ if (is_admin([101, 102])) {
                                                     if (!empty($pass)) {
                                                         echo '<b><span style="color:#ff0000">Внимание! Вы изменили пароль пользователя!</span></b><br />';
                                                         echo 'Не забудьте ему напомнить его новый пароль: <b>'.$pass.'</b><br /><br />';
-                                                        $mdpass = md5(md5($pass));
+                                                        $mdpass = password_hash($pass, PASSWORD_BCRYPT);
                                                     } else {
-                                                        $mdpass = $user['pass'];
+                                                        $mdpass = $user['password'];
                                                     }
 
                                                     list($uday, $umonth, $uyear) = explode(".", $joined);
@@ -300,7 +300,7 @@ if (is_admin([101, 102])) {
                                                     $city = utf_substr($city, 0, 50);
                                                     $rating = $posrating - $negrating;
 
-                                                    DB::run() -> query("UPDATE `users` SET `pass`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `avatar`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz]);
+                                                    DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `avatar`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz]);
 
                                                     save_title();
                                                     save_nickname();

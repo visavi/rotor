@@ -22,7 +22,7 @@ render('includes/link', ['links' => $links]);
             <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;start=<?= $start ?>"><?= resize_image('upload/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]) ?></a><br />
 
             <?php if (!empty($data['text'])): ?>
-                <?php bb_code($data['text']) ?><br />
+                <?php App::bbCode($data['text']) ?><br />
             <?php endif; ?>
 
             Добавлено: <?= profile($data['user']) ?> (<?= date_fixed($data['time']) ?>)<br />

@@ -50,7 +50,7 @@ case 'index':
                 $data['text'] = current(explode('[cut]', $data['text'])).' <a href="/news/'.$data['id'].'">Читать далее &raquo;</a>';
             }
 
-            echo '<div>'.bb_code($data['text']).'</div>';
+            echo '<div>'.App::bbCode($data['text']).'</div>';
 
             echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'<br />';
             echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ('.$data['comments'].') ';

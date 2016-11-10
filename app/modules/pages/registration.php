@@ -11,8 +11,8 @@ if (! $config['openreg']) {
 if (Request::isMethod('post')) {
     if (Request::has('logs') && Request::has('pars')) {
         $logs = check(Request::input('logs'));
-        $pars = check(Request::input('pars'));
-        $pars2 = check(Request::input('pars2'));
+        $pars = trim(Request::input('pars'));
+        $pars2 = trim(Request::input('pars2'));
         $protect = check(strtolower(Request::input('protect')));
         $invite = (!empty($config['invite'])) ? check(Request::input('invite')) : '';
         $meil = (!empty($config['regmail'])) ? strtolower(check(Request::input('meil'))) : '';
@@ -23,7 +23,6 @@ if (Request::isMethod('post')) {
         $validation = new Validation();
         $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
             ->addRule('regex', [$logs, '|^[a-z0-9\-]+$|i'], ['logs' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'], true)
-            ->addRule('regex', [$pars, '|^[a-z0-9\-]+$|i'], ['pars' => 'Недопустимые символы в пароле. Разрешены знаки латинского алфавита, цифры и дефис!'], true)
             ->addRule('email', $meil, ['meil' => 'Вы ввели неверный адрес e-mail, необходим формат name@site.domen!'], $config['regmail'])
             ->addRule('string', $invite, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], $config['invite'], 15, 20)
             ->addRule('string', $logs, ['logs' => 'Слишком длинный или короткий логин!'], true, 3, 20)
@@ -100,7 +99,7 @@ if (Request::isMethod('post')) {
 
             $registration = DBM::run()->insert('users', [
                 'login' => $logs,
-                'pass' => md5(md5($pars)),
+                'password' => password_hash($pars, PASSWORD_BCRYPT),
                 'email' => $meil,
                 'joined' => SITETIME,
                 'level' => 107,
@@ -123,7 +122,7 @@ if (Request::isMethod('post')) {
             }
             // ----------------------------------------------------------------------------------------//
 
-            $user = App::login($logs, md5(md5($pars)));
+            $user = App::login($logs, $pars);
 
             App::setFlash('success', 'Добро пожаловать, ' . $logs . '!');
             App::redirect('/');

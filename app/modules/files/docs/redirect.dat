@@ -18,7 +18,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 redirect("/"); /* Перенаправляет на главную страницу */
 redirect("/", true); /* Устанавливает постоянное перенаправление на главную страницу */
 ?>[/code]'));

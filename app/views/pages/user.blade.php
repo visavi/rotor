@@ -15,7 +15,7 @@
     echo '<div class="form">';
         echo '<b><span style="color:#ff0000">Внимание, юзер находится в бане!</span></b><br />';
         echo 'До окончания бана осталось '.formattime($user['timeban'] - SITETIME).'<br />';
-        echo 'Причина: '.bb_code($user['reasonban']).'</div>';
+        echo 'Причина: '.App::bbCode($user['reasonban']).'</div>';
     }
 
     if ($user['level'] >= 101 && $user['level'] <= 105) {
@@ -91,7 +91,7 @@
     echo '<b><a href="/gallery/album?act=photo&amp;uz='.$user['login'].'">Галерея</a></b> (<a href="/gallery/comments?act=comments&amp;uz='.$user['login'].'">комм.</a>)<br />';
 
     if (!empty($user['info'])) {
-    echo '<div class="hiding"><b>О себе</b>:<br />'.bb_code($user['info']).'</div>';
+    echo '<div class="hiding"><b>О себе</b>:<br />'.App::bbCode($user['info']).'</div>';
     }
 
     if (is_admin()) {
@@ -101,7 +101,7 @@
         echo '<i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/'.$user['login'].'/note">Изменить</a>)<br />';
 
         if (!empty($usernote['text'])) {
-        echo bb_code($usernote['text']).'<br />';
+        echo App::bbCode($usernote['text']).'<br />';
         echo 'Изменено: '.profile($usernote['edit']).' ('.date_fixed($usernote['time']).')<br />';
         } else {
         echo'Записей еще нет!<br />';

@@ -17,7 +17,7 @@
 <b>Примеры использования</b><br />
 
 <?php
-echo bb_code(check('[code]<?php
+echo App::bbCode(check('[code]<?php
 echo points(1); /* 1 балл */
 echo points(2); /* 2 балла */
 echo points(5); /* 5 баллов */

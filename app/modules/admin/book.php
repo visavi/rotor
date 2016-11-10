@@ -59,7 +59,7 @@ if (is_admin()) {
                     echo '<a href="/admin/book?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
                     echo '<a href="/admin/book?act=reply&amp;id='.$data['id'].'&amp;start='.$start.'">Ответить</a></div>';
 
-                    echo '<div>'.bb_code($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     if (!empty($data['edit'])) {
                         echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.nickname($data['edit']).' ('.date_fixed($data['edit_time']).')</small><br />';
@@ -98,7 +98,7 @@ if (is_admin()) {
                 echo '<b><big>Добавление ответа</big></b><br /><br />';
 
                 echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($data['user']).'</b> '.user_title($data['user']) . user_online($data['user']).' <small>('.date_fixed($data['time']).')</small></div>';
-                echo '<div>Сообщение: '.bb_code($data['text']).'</div><hr />';
+                echo '<div>Сообщение: '.App::bbCode($data['text']).'</div><hr />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?id='.$id.'&amp;act=addreply&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';

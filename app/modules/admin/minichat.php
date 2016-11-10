@@ -68,7 +68,7 @@ if (is_admin()) {
                 echo '<input type="checkbox" name="del[]" value="' . $num . '" /> ';
                 echo '<a href="/admin/minichat?act=edit&amp;id=' . $num . '&amp;start=' . $start . '">Редактировать</a>';
 
-                echo '</div><div>' . bb_code($data[0]) . '<br />';
+                echo '</div><div>' . App::bbCode($data[0]) . '<br />';
                 echo '<span style="color:#cc00cc"><small>(' . $data[4] . ', ' . $data[5] . ')</small></span></div>';
             }
 

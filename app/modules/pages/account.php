@@ -118,7 +118,7 @@ case 'changemail':
 	$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
 		-> addRule('not_equal', [$meil, $udata['email']], 'Новый адрес email должен отличаться от текущего!')
 		-> addRule('email', $meil, 'Неправильный адрес e-mail, необходим формат name@site.domen!', true)
-		-> addRule('equal', [md5(md5($provpass)), $udata['pass']], 'Введенный пароль не совпадает с данными в профиле!');
+		-> addRule('bool', password_verify($provpass, $udata['password']), 'Введенный пароль не совпадает с данными в профиле!');
 
 	$regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$meil]);
 	$validation -> addRule('empty', $regmail, 'Указанный вами адрес e-mail уже используется в системе!');
@@ -283,7 +283,7 @@ case 'editsec':
 	$validation = new Validation();
 
 	$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-		-> addRule('equal', [md5(md5($provpass)), $udata['pass']], 'Введенный пароль не совпадает с данными в профиле!')
+		-> addRule('bool', password_verify($provpass, $udata['password']), 'Введенный пароль не совпадает с данными в профиле!')
 		-> addRule('not_equal', [$secquest, $udata['secquest']], 'Новый секретный вопрос должен отличаться от текущего!')
 		-> addRule('string', $secquest, 'Слишком длинный или короткий секретный вопрос!', false, 3, 50);
 
@@ -321,7 +321,7 @@ case 'editpass':
 	$validation = new Validation();
 
 	$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-		-> addRule('equal', [md5(md5($oldpass)), $udata['pass']], 'Введенный пароль не совпадает с данными в профиле!')
+		-> addRule('bool', password_verify($oldpass, $udata['password']), 'Введенный пароль не совпадает с данными в профиле!')
 		-> addRule('equal', [$newpass, $newpass2], 'Новые пароли не одинаковые!')
 		-> addRule('string', $newpass, 'Слишком длинный или короткий новый пароль!', true, 6, 20)
 		-> addRule('regex', [$newpass, '|^[a-z0-9\-]+$|i'], 'Недопустимые символы в пароле, разрешены знаки латинского алфавита, цифры и дефис!', true)
@@ -333,7 +333,7 @@ case 'editpass':
 
 	if ($validation->run()) {
 
-		DB::run() -> query("UPDATE `users` SET `pass`=? WHERE `login`=? LIMIT 1;", [md5(md5($newpass)), $log]);
+		DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), $log]);
 
 		if (! empty($udata['email'])){
 			sendMail($udata['email'],
@@ -342,7 +342,7 @@ case 'editpass':
 			);
 		}
 
-		unset($_SESSION['log'], $_SESSION['par']);
+		unset($_SESSION['login'], $_SESSION['password']);
 
 		notice('Пароль успешно изменен!');
 		redirect("/login");
