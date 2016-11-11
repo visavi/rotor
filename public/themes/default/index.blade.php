@@ -22,7 +22,7 @@ header("Content-type:text/html; charset=utf-8");
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="description" content="@yield('description', App::setting('description'))">
     <meta name="keywords" content="@yield('keywords', App::setting('keywords'))">
-    <meta name="generator" content="RotorCMS {{ App::setting('rotorversion') }}" />
+    <meta name="generator" content="RotorCMS {{ env('VERSION') }}" />
 </head>
 <body>
 

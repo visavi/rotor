@@ -8,22 +8,28 @@
 #            Skype  :  vantuzilla             #
 #---------------------------------------------#
 header("Content-type:text/html; charset=utf-8");
-echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru"><head>';
-echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />';
-echo '<title>%TITLE%</title>';
-echo '<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />';
-include_style();
-echo '<link rel="stylesheet" href="/themes/sky/css/style.css" type="text/css" media="screen" />';
-echo '<link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />';
-include_javascript();
-echo '<meta name="keywords" content="%KEYWORDS%" />';
-echo '<meta name="description" content="%DESCRIPTION%" />';
-echo '<meta name="generator" content="RotorCMS '.$config['rotorversion'].'" />';
-echo '</head><body>';
-echo '<!--Themes by TurikUs-->';
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>
+        @section('title')
+            {{ App::setting('title') }}
+        @show
+    </title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<?= include_style(); ?>
+<link rel="stylesheet" href="/themes/sky/css/style.css" type="text/css" media="screen" />
+<link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />
+<?= include_javascript(); ?>
+<meta name="keywords" content="@yield('keywords', App::setting('keywords'))" />
+<meta name="description" content="@yield('description', App::setting('description'))" />
+<meta name="generator" content="RotorCMS <?= env('VERSION') ?>" />
+</head><body>
+<!--Themes by TurikUs-->
 
-echo '<div id="art-page-background-simple-gradient">
+<div id="art-page-background-simple-gradient">
         <div id="art-page-background-gradient"></div>
     </div>
     <div id="art-page-background-glare">
@@ -81,15 +87,15 @@ echo '<div id="art-page-background-simple-gradient">
                            <ul>
                                  <li><a href="/adminlist">Администрация</a></li>
                                  <li><a href="/userlist">Пользователи</a></li>
-                		   </ul> </li>';
-if (!is_user()) {
-  echo'<li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>';
- } else {
-  echo '<li><a href="/logout" onclick="return confirm(\'Вы действительно хотите выйти?\')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>';
-}
+                		   </ul> </li>
+<?php if (!is_user()): ?>
+<li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
+ <?php else: ?>
+  <li><a href="/logout" onclick="return confirm(\'Вы действительно хотите выйти?\')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
+<?php endif; ?>
 
-echo '</ul></div>';
-echo '                <div class="art-contentLayout">
+</ul></div>
+                <div class="art-contentLayout">
                     <div class="art-sidebar1">
                         <div class="art-Block">
                             <div class="art-Block-tl"></div>
@@ -104,56 +110,56 @@ echo '                <div class="art-contentLayout">
                             <div class="art-Block-body">
                                 <div class="art-BlockContent">
                                     <div class="art-BlockContent-body">
-                                        <div>';
+                                        <div>
 
 
-if (is_user()) {
+<?php if (is_user()): ?>
 
-if (is_admin()){
-echo '<div class="nmenu">';
-echo '<i class="fa fa-wrench"></i> <a href="/admin">Панель</a>';
+<?php if (is_admin()): ?>
+    <div class="nmenu">
+    <i class="fa fa-wrench"></i> <a href="/admin">Панель</a>
 
-if (stats_spam()>0){
-echo ' &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>';
-}
+    <?php if (stats_spam()>0): ?>
+        &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
+    <?php endif; ?>
 
-if (App::user('newchat')<stats_newchat()){
-echo ' &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>';
-}
+    <?php if (App::user('newchat')<stats_newchat()): ?>
+        &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
+    <?php endif; ?>
 
-echo '</div>';
-}
+    </div>
+<?php endif; ?>
 
-  include (STORAGE.'/main/menu.dat');
+  <?php include (STORAGE.'/main/menu.dat'); ?>
 
-} else {
+<?php else: ?>
 
-$cooklog = (isset($_COOKIE['login'])) ? check($_COOKIE['login']): '';
+<?php $cooklog = (isset($_COOKIE['login'])) ? check($_COOKIE['login']): ''; ?>
 
-echo '<div class="divb">Авторизация</div>';
+<div class="divb">Авторизация</div>
 
-echo'<form method="post" action="/login'.App::returnUrl().'">';
-echo 'Логин:<br /><input name="login" value="'.$cooklog.'" /><br />';
-echo 'Пароль:<br /><input name="pass" type="password" /><br />';
-echo 'Запомнить меня:';
-echo '<input name="cookietrue" type="checkbox" value="1" checked="checked" /><br />';
+<form method="post" action="/login<?= App::returnUrl() ?>">
+Логин:<br /><input name="login" value="'.$cooklog.'" /><br />
+Пароль:<br /><input name="pass" type="password" /><br />
+Запомнить меня:
+<input name="cookietrue" type="checkbox" value="1" checked="checked" /><br />
 
-echo '<input value="Войти" type="submit" /></form>';
+<input value="Войти" type="submit" /></form>
 
-echo '<a href="/register">Регистрация</a><br />';
-echo '<a href="/lostpassword">Забыли пароль?</a>';
-}
+<a href="/register">Регистрация</a><br />
+<a href="/lostpassword">Забыли пароль?</a>
+<?php endif; ?>
 
 
-echo '</div>
+</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>';
+                        </div>
 
 
 
-echo '<div class="art-Block">
+<div class="art-Block">
                             <div class="art-Block-tl"></div>
                             <div class="art-Block-tr"></div>
                             <div class="art-Block-bl"></div>
@@ -166,18 +172,18 @@ echo '<div class="art-Block">
                             <div class="art-Block-body">
                                 <div class="art-BlockContent">
                                     <div class="art-BlockContent-body">
-                                        <div>';
-echo '<div class="divb">Календарь</div>';
-include (APP.'/includes/calendar.php');
-echo '</div>
+                                        <div>
+<div class="divb">Календарь</div>';
+<?php include (APP.'/includes/calendar.php'); ?>
+</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>';
+                        </div>
 
 
 
-echo '<div class="art-Block">
+<div class="art-Block">
                             <div class="art-Block-body">
 <div class="art-BlockContent">
 
@@ -185,9 +191,9 @@ echo '<div class="art-Block">
                                 </div>
                             </div>
                         </div>
-                    </div>';
+                    </div>
 
-echo '<div class="art-content">
+<div class="art-content">
                         <div class="art-Post">
                             <div class="art-Post-tl"></div>
                             <div class="art-Post-tr"></div>
@@ -199,21 +205,20 @@ echo '<div class="art-content">
                             <div class="art-Post-cr"></div>
                             <div class="art-Post-cc"></div>
                             <div class="art-Post-body">
-                        <div class="art-Post-inner">';
+                        <div class="art-Post-inner">
 
-/*echo '<div class="art-PostMetadataHeader">';
-render('includes/note', array('php_self' => $php_self));
-echo '</div>';*/
+<div class="art-PostMetadataHeader">
+<?= render('includes/note'); ?>
+</div>
 
-echo '
+
                                 <h2 class="art-PostHeaderIcon-wrapper">
                                     <img src="/themes/sky/img/PostHeaderIcon.png" width="29" height="29" alt="PostHeaderIcon" />
-                                    <span class="art-PostHeader">'.$config['title'].'</span>
+                                    <span class="art-PostHeader"><?= App::setting('title') ?></span>
                                 </h2>
 
-                            <div class="art-PostContent">';
+                            <div class="art-PostContent">
 
 
 
-echo '<div>';
-echo render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/
+<div>

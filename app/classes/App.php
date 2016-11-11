@@ -467,6 +467,8 @@ class App
      */
     public static function socialLogin($token)
     {
+        $domain = check_string(self::setting('home'));
+
         $curl = new Curl\Curl();
         $network = $curl->get('http://ulogin.ru/token.php', [
             'token' => $token,
@@ -479,6 +481,9 @@ class App
             $social = DBM::run()->selectFirst('socials', ['network' => $network->network, 'uid' => $network->uid]);
 
             if ($social && $user = user($social['user'])) {
+
+                setcookie('login', $user['login'], time() + 3600 * 24 * 365, '/', $domain);
+                setcookie('password', md5($user['password'].env('APP_KEY')), time() + 3600 * 24 * 365, '/', $domain, null, true);
 
                 $_SESSION['login'] = $user['login'];
                 $_SESSION['password'] = md5(env('APP_KEY').$user['password']);

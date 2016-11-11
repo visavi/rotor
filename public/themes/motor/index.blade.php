@@ -20,7 +20,7 @@ header('Content-type:text/html; charset=utf-8');
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />
     <meta name="description" content="@yield('description', App::setting('description'))">
     <meta name="keywords" content="@yield('keywords', App::setting('keywords'))">
-    <meta name="generator" content="RotorCMS {{ App::setting('rotorversion') }}" />
+    <meta name="generator" content="RotorCMS {{ env('VERSION') }}" />
 </head>
 <body>
 <!--Design by Vantuz (http://visavi.net)-->

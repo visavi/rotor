@@ -13,7 +13,11 @@ header('Content-type:text/html; charset=utf-8');
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
-	<title>%TITLE%</title>
+	<title>
+		@section('title')
+			{{ App::setting('title') }}
+		@show
+	</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<link rel="image_src" href="/assets/img/images/icon.png"/>
 	<?= include_style() ?>
@@ -22,7 +26,7 @@ header('Content-type:text/html; charset=utf-8');
 	<?= include_javascript() ?>
 	<meta name="keywords" content="%KEYWORDS%"/>
 	<meta name="description" content="%DESCRIPTION%"/>
-	<meta name="generator" content="RotorCMS <?= $config['rotorversion'] ?>"/>
+	<meta name="generator" content="RotorCMS <?= env('VERSION') ?>"/>
 </head>
 <body>
 <!--Design by Vantuz (http://pizdec.ru)-->

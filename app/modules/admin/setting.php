@@ -137,7 +137,6 @@ if (is_admin([101])) {
                 echo 'Главная страница сайта:<br /><input name="home" maxlength="50" value="'.$setting['home'].'" /><br />';
                 echo 'Адрес логотипа:<br /><input name="logotip" maxlength="100" value="'.$setting['logotip'].'" /><br />';
                 echo 'Время антифлуда (сек):<br /><input name="floodstime" maxlength="3" value="'.$setting['floodstime'].'" /><br />';
-                echo 'Ключ для паролей:<br /><input name="keypass" maxlength="25" value="'.$setting['keypass'].'" /><br />';
                 echo 'Лимит запросов с IP (0 - Выкл):<br /><input name="doslimit" maxlength="3" value="'.$setting['doslimit'].'" /><br />';
 
                 echo 'Временная зона:<br /><input name="timezone" maxlength="50" value="'.$setting['timezone'].'" /><br />';
@@ -246,7 +245,7 @@ if (is_admin([101])) {
 
             if ($log == $config['nickname']) {
                 if ($uid == $_SESSION['token']) {
-                    if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['keypass'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
+                    if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
 
                         $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                         $dbr -> execute(check($_POST['title']), 'title');
@@ -255,7 +254,6 @@ if (is_admin([101])) {
                         $dbr -> execute(check($_POST['home']), 'home');
                         $dbr -> execute(check($_POST['logotip']), 'logotip');
                         $dbr -> execute(intval($_POST['floodstime']), 'floodstime');
-                        $dbr -> execute(check($_POST['keypass']), 'keypass');
                         $dbr -> execute(intval($_POST['doslimit']), 'doslimit');
                         $dbr -> execute(check($_POST['timezone']), 'timezone');
                         $dbr -> execute(check($_POST['themes']), 'themes');

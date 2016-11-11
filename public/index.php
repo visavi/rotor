@@ -32,6 +32,3 @@ if ($target && is_callable($target)) {
     App::abort(404);
 }
 if (isset($_SESSION['input'])) unset($_SESSION['input']);
-
-
-// Изменить поля в таблицах key = relate, order => sort, topic_forums => topic_id итд

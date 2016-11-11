@@ -1328,9 +1328,7 @@ function ob_processing($str)
         $str = str_replace('<title>', '<title>'.$config['newtitle'].' - ', $str);
     }
 
-    $str = str_replace('%KEYWORDS%', $config['keywords'], $str);
-    $str = str_replace('%DESCRIPTION%', $config['description'], $str);
-
+    //TODO: Удалить после переделки всех шаблонов
     $str = str_replace('%HEADER%',  isset($config['header']) ? $config['header'] : '', $str);
     $str = str_replace('%SUBHEADER%', isset($config['subheader']) ? $config['subheader'] : '', $str);
 

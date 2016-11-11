@@ -5,7 +5,7 @@
 	<!--footer starts here-->
 	<div id="footer">
 
-		<a href="/"><?= $config['copy'] ?></a><br />
+		<a href="/"><?= App::setting('copy') ?></a><br />
 		<?php
 		show_online();
 		show_counter();
