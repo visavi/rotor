@@ -2125,14 +2125,3 @@ function cache_functions($cache=10800) {
 
     return unserialize(file_get_contents(STORAGE.'/temp/functions.dat'));
 }
-
-// ------------- Кеширование пользовательских функций -------------//
-$functions = cache_functions();
-
-if (!empty($functions)) {
-    foreach ($functions as $file) {
-        if (file_exists(APP.'/functions/'.$file)) {
-            include_once (APP.'/functions/'.$file);
-        }
-    }
-}

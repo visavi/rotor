@@ -54,13 +54,13 @@ case 'index':
     $ipdpost = implode(',', $ipdpost);
 
     if (!empty($ipdpost)) {
-        $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `id` IN (".$ipdpost.");");
+        $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id` IN (".$ipdpost.");");
         $files = $queryfiles->fetchAll();
     }
     if (!empty($files)){
         $forumfiles = [];
         foreach ($files as $file){
-            $topics['files'][$file['id']][] = $file;
+            $topics['files'][$file['post_id']][] = $file;
         }
     }
     // ------------------------------------- //
@@ -89,7 +89,7 @@ case 'create':
 
         // Проверка сообщения на схожесть
         $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `id` DESC LIMIT 1;", [$tid]);
-        $validation -> addRule('not_equal', [$msg, $post['text']], 'Ваше сообщение повторяет предыдущий пост!');
+        $validation -> addRule('not_equal', [$msg, $post['text']], ['msg' => 'Ваше сообщение повторяет предыдущий пост!']);
 
     if ($validation->run()) {
 
@@ -152,7 +152,7 @@ case 'create':
 
                             move_uploaded_file($_FILES['file']['tmp_name'], HOME.'/upload/forum/'.$topics['id'].'/'.$hash);
 
-                            DB::run() -> query("INSERT INTO `files_forum` (`topic_id`, `posts_id`, `hash`, `name`, `size`, `user`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$topics['id'], $lastid, $hash, $filename, $filesize, $log, SITETIME]);
+                            DB::run() -> query("INSERT INTO `files_forum` (`topic_id`, `post_id`, `hash`, `name`, `size`, `user`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$topics['id'], $lastid, $hash, $filename, $filesize, $log, SITETIME]);
 
                         } else {
                             $fileError = 'Файл не загружен! Недопустимое расширение!';
@@ -246,7 +246,7 @@ case 'delete':
         $del = implode(',', $del);
 
         // ------ Удаление загруженных файлов -------//
-        $queryfiles = DB::run() -> query("SELECT `hash` FROM `files_forum` WHERE `posts_id` IN (".$del.");");
+        $queryfiles = DB::run() -> query("SELECT `hash` FROM `files_forum` WHERE `post_id` IN (".$del.");");
         $files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
 
         if (!empty($files)){
@@ -255,7 +255,7 @@ case 'delete':
                     unlink(HOME.'/upload/forum/'.$topic['id'].'/'.$file);
                 }
             }
-            DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id` IN (".$del.");");
+            DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id` IN (".$del.");");
         }
 
         $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `id` IN (".$del.") AND `topic_id`=".$tid.";");
@@ -421,7 +421,7 @@ case 'editpost':
                             unlink(HOME.'/upload/forum/'.$file['id'].'/'.$file['hash']);
                         }
                     }
-                    DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", [$id]);
+                    DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$id]);
                 }
             }
 
@@ -434,7 +434,7 @@ case 'editpost':
         }
     }
 
-    $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=?;", [$id]);
+    $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=?;", [$id]);
     $files = $queryfiles->fetchAll();
 
     App::view('forum/topic_edit_post', compact('post', 'files', 'start'));

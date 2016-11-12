@@ -760,13 +760,13 @@ if (is_admin()) {
 
                         $ipdpost = implode(',', $ipdpost);
 
-                        $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id` IN (".$ipdpost.");");
+                        $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id` IN (".$ipdpost.");");
                         $files = $queryfiles->fetchAll();
 
                         if (!empty($files)){
                             $forumfiles = [];
                             foreach ($files as $file){
-                                $forumfiles[$file['id']][] = $file;
+                                $forumfiles[$file['post_id']][] = $file;
                             }
                         }
                         // ------------------------------------- //
@@ -822,7 +822,7 @@ if (is_admin()) {
 
                     if (empty($topic['closed'])) {
                         echo '<div class="form" id="form">';
-                        echo '<form action="/topic/'.$tid.'/create" method="post">';
+                        echo '<form action="/topic/'.$tid.'/create" method="post" enctype="multipart/form-data">';
                         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
                         echo 'Сообщение:<br />';
@@ -871,7 +871,7 @@ if (is_admin()) {
                     $del = implode(',', $del);
 
                     // ------ Удаление загруженных файлов -------//
-                    $queryfiles = DB::run() -> query("SELECT `hash` FROM `files_forum` WHERE `posts_id` IN (".$del.");");
+                    $queryfiles = DB::run() -> query("SELECT `hash` FROM `files_forum` WHERE `post_id` IN (".$del.");");
                     $files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
 
                     if (!empty($files)){
@@ -880,8 +880,9 @@ if (is_admin()) {
                                 unlink_image('upload/forum/', $topics['id'].'/'.$file);
                             }
                         }
-                        DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id` IN (".$del.");");
                     }
+
+                    DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id` IN (".$del.");");
                     // ------ Удаление загруженных файлов -------//
 
                     $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `id` IN (".$del.") AND `id`=".$tid.";");
@@ -918,7 +919,7 @@ if (is_admin()) {
                 echo 'Редактирование сообщения:<br />';
                 echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$post['text'].'</textarea><br />';
 
-                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=?;", [$pid]);
+                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=?;", [$pid]);
                 $files = $queryfiles->fetchAll();
 
                 if (!empty($files)){
@@ -964,7 +965,7 @@ if (is_admin()) {
                         if (!empty($del)) {
                             $del = implode(',', $del);
 
-                            $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", [$pid]);
+                            $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$pid]);
                             $files = $queryfiles->fetchAll();
 
                             if (!empty($files)){
@@ -973,7 +974,7 @@ if (is_admin()) {
                                         unlink_image('upload/forum/', $file['topic_id'].'/'.$file['hash']);
                                     }
                                 }
-                                DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id`=? AND `id` IN (".$del.");", [$pid]);
+                                DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$pid]);
                             }
                         }
                         // ------ Удаление загруженных файлов -------//

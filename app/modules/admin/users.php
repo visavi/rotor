@@ -426,7 +426,7 @@ if (is_admin([101, 102])) {
                                 foreach($topics as $delDir){
                                     removeDir(HOME.'/upload/forum/'.$delDir);
                                 }
-                                DB::run() -> query("DELETE FROM `files_forum` WHERE `posts_id` IN (".$strtopics.");");
+                                DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id` IN (".$strtopics.");");
                                 // ------ Удаление загруженных файлов -------//
 
                                 DB::run() -> query("DELETE FROM `posts` WHERE `topic_id` IN (".$strtopics.");");
