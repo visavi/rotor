@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.6.4",
         "altorouter/altorouter": "~1.2",
         "cbschuld/browser.php": "dev-master",
         "gregwar/captcha": "^1.1",
