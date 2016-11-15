@@ -45,7 +45,7 @@ case 'index':
                     break;
                 case 'comm': $order = 'comments';
                     break;
-                case 'load': $order = 'last_load';
+                case 'loads': $order = 'loads';
                     break;
                 default: $order = 'time';
             }
@@ -58,10 +58,10 @@ case 'index':
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=date">По дате</a> / ';
             }
 
-            if ($order == 'last_load') {
+            if ($order == 'loads') {
                 echo '<b>Скачивания</b> / ';
             } else {
-                echo '<a href="/load/down?cid='.$cid.'&amp;sort=load">Скачивания</a> / ';
+                echo '<a href="/load/down?cid='.$cid.'&amp;sort=loads">Скачивания</a> / ';
             }
 
             if ($order == 'rated') {
@@ -109,7 +109,7 @@ case 'index':
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
                     echo '<div>';
 
-                    echo 'Скачиваний: '.$data['load'].'<br />';
+                    echo 'Скачиваний: '.$data['loads'].'<br />';
 
                     $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
@@ -265,7 +265,7 @@ case 'view':
                     echo '<input type="submit" value="Oценить" /></form>';
                 }
 
-                echo 'Всего скачиваний: <b>'.$downs['load'].'</b><br />';
+                echo 'Всего скачиваний: <b>'.$downs['loads'].'</b><br />';
                 if (!empty($downs['last_load'])) {
                     echo 'Последнее скачивание: '.date_fixed($downs['last_load']).'<br />';
                 }
@@ -301,7 +301,7 @@ case 'load':
 
     if (is_user() || $provkod == $_SESSION['protect']) {
 
-        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id`=? LIMIT 1;", [$id]);
 
         if (!empty($downs)) {
             if (!empty($downs['active'])) {
@@ -315,7 +315,7 @@ case 'load':
 
                         DB::run() -> query("DELETE FROM loads WHERE time<?;", [SITETIME]);
                         DB::run() -> query("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, App::getClientIp(), $expiresloads]);
-                        DB::run() -> query("UPDATE downs SET load=load+1, last_load=? WHERE id=?", [SITETIME, $id]);
+                        DB::run() -> query("UPDATE downs SET loads=loads+1, last_load=? WHERE id=?", [SITETIME, $id]);
                     }
 
                     redirect("/upload/files/".$folder.$downs['link']);

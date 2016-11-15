@@ -97,6 +97,7 @@ $router->map('GET|POST', '/searchuser',  '/modules/pages/searchuser.php');
 $router->map('GET', '/counter/[24|31:action]?',  '/modules/pages/counter.php');
 $router->map('GET|POST', '/authoritylist',  '/modules/pages/authoritylist.php');
 $router->map('GET|POST', '/ban',  '/modules/pages/ban.php');
+$router->map('GET|POST', '/banip',  '/modules/pages/banip.php');
 $router->map('GET|POST', '/razban',  '/modules/pages/razban.php');
 $router->map('GET|POST', '/banhist',  '/modules/pages/banhist.php');
 $router->map('GET|POST', '/statusfaq',  '/modules/pages/statusfaq.php');

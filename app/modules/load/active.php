@@ -35,7 +35,7 @@ case 'files':
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
             echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
-            echo 'Скачиваний: '.$data['load'].'<br />';
+            echo 'Скачиваний: '.$data['loads'].'<br />';
             echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
             echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
         }

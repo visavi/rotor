@@ -62,10 +62,22 @@ class App
     {
         if ($code == 403) {
             header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
+
+            if (App::setting('errorlog')) {
+                DB::run()->query("INSERT INTO `error` (`num`, `request`, `referer`, `username`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [403, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getUsername(), App::getClientIp(), App::getUserAgent(), SITETIME]);
+
+                DB::run()->query("DELETE FROM `error` WHERE `num`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT " . App::setting('maxlogdat') . ") AS del);", [403, 403]);
+            }
         }
 
         if ($code == 404) {
             header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
+
+            if (App::setting('errorlog')) {
+                DB::run()->query("INSERT INTO `error` (`num`, `request`, `referer`, `username`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [404, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getUsername(), App::getClientIp(), App::getUserAgent(), SITETIME]);
+
+                DB::run()->query("DELETE FROM `error` WHERE `num`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT " . App::setting('maxlogdat') . ") AS del);", [404, 404]);
+            }
         }
 
         exit(self::view('errors.'.$code, compact('message')));

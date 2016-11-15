@@ -32,7 +32,7 @@ case 'files':
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
             echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br />';
-            echo 'Скачиваний: '.$data['load'].'<br />';
+            echo 'Скачиваний: '.$data['loads'].'<br />';
             echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
         }
 

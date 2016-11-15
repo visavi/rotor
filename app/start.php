@@ -37,7 +37,7 @@ if (is_array($arrbanip) && count($arrbanip) > 0) {
             }
         }
 
-        if ($ipmatch == 4) {
+        if ($ipmatch == 4 && Request::path() != 'banip') {
             redirect('/banip');
         } //бан по IP
     }

@@ -2,14 +2,14 @@
 App::view($config['themes'].'/index');
 
 $start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
-$sort = isset($_GET['sort']) ? check($_GET['sort']) : 'load';
+$sort = isset($_GET['sort']) ? check($_GET['sort']) : 'loads';
 
 switch ($sort) {
     case 'rated': $order = 'rated';
         break;
     case 'comm': $order = 'comments';
         break;
-    default: $order = 'load';
+    default: $order = 'loads';
 }
 ############################################################################################
 ##                                       Топ тем                                          ##
@@ -18,10 +18,10 @@ show_title('Топ популярных файлов');
 
 echo 'Сортировать: ';
 
-if ($order == 'load') {
+if ($order == 'loads') {
     echo '<b>Скачивания</b> / ';
 } else {
-    echo '<a href="/load/top?sort=load">Скачивания</a> / ';
+    echo '<a href="/load/top?sort=loads">Скачивания</a> / ';
 }
 
 if ($order == 'rated') {
@@ -45,7 +45,7 @@ if ($total > 0) {
         $start = 0;
     }
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `id`, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -55,8 +55,8 @@ if ($total > 0) {
         echo '<div class="b"><i class="fa fa-file-o"></i> ';
         echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-        echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
-        echo 'Скачиваний: '.$data['load'].'<br />';
+        echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br />';
+        echo 'Скачиваний: '.$data['loads'].'<br />';
         $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
         echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br />';

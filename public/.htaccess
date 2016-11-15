@@ -10,9 +10,6 @@ DirectoryIndex index.php
 AddDefaultCharset UTF-8
 Options -Indexes
 
-ErrorDocument 403 /pages/error.php?error=403
-ErrorDocument 404 /pages/error.php?error=404
-
 FileETag MTime Size
 <ifmodule mod_expires.c>
 <filesmatch ".(ico|jpg|gif|png|css|js)$">

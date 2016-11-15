@@ -1,13 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE>
+<html>
 	<head>
 		<title>Вход на сайт запрещен!</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-		<link rel="stylesheet" href="/themes/default/style.css" type="text/css" />
 	</head>
 	<body>
-		<div><span style="display:none">--BANNED_IP--</span>
+		<div>
 			<center><h2>Вас забанили по IP!<br />Вход на сайт запрещен!</h2></center>
 			<b>Возможные причины:</b><br />
 			1. Вы нарушили какие-либо правила сайта<br />

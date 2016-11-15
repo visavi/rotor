@@ -735,7 +735,7 @@ case 'down':
 
                 echo '<div>';
 
-                echo 'Скачиваний: '.$data['load'].'<br />';
+                echo 'Скачиваний: '.$data['loads'].'<br />';
 
                 $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
