@@ -1827,9 +1827,11 @@ function include_style(){
     echo '<link rel="stylesheet" href="/assets/css/bootstrap.min.css" type="text/css" />'."\r\n";
     echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css" type="text/css" />'."\r\n";
     echo '<link rel="stylesheet" href="/assets/css/prettify.css" type="text/css" />'."\r\n";
-    echo '<link rel="stylesheet" type="text/css" href="/assets/js/markitup/style.css" />'."\r\n";
-    echo '<link rel="stylesheet" type="text/css" href="/assets/css/toastr.min.css" />'."\r\n";
-    echo '<link rel="stylesheet" type="text/css" href="/assets/css/app.css" />'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/js/markitup/style.css" type="text/css" />'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/css/toastr.min.css" type="text/css" />'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/js/mediaelement/mediaelementplayer.min.css" />'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/js/mediaelement/mejs-skins.css" />'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/css/app.css" type="text/css" />'."\r\n";
 }
 
 // ------------- Подключение javascript -------------//
@@ -1841,6 +1843,7 @@ function include_javascript(){
     echo '<script type="text/javascript" src="/assets/js/markitup/markitup.set.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/bootbox.min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/toastr.min.js"></script>'."\r\n";
+    echo '<script type="text/javascript" src="/assets/js/mediaelement/mediaelement-and-player.min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/app.js"></script>'."\r\n";
 }
 

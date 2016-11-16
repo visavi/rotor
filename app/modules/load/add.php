@@ -234,7 +234,7 @@ case 'view':
                         echo 'Прикрепить файл* ('.$config['allowextload'].'):<br /><input type="file" name="loadfile" /><br />';
                         echo '<input value="Загрузить" type="submit" /></form><br />';
 
-                        echo 'Максимальный вес архива: '.formatsize($config['fileupload']).'</div><br />';
+                        echo 'Максимальный вес файла: '.formatsize($config['fileupload']).'</div><br />';
 
                     } else {
 
@@ -409,7 +409,7 @@ case 'loadfile':
             if (empty($down['active'])) {
                 if (empty($down['link'])) {
                     if (is_writeable(HOME.'/upload/files/'.$folder)) {
-                    if (is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
+                    if (isset($_FILES['loadfile']) && is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
                         $filename = check(strtolower($_FILES['loadfile']['name']));
 
                         if (strlen($filename) <= 50) {
@@ -428,6 +428,44 @@ case 'loadfile':
                                             copyright_archive(HOME.'/upload/files/'.$folder.$filename);
 
                                             DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
+                                            // Обработка видео
+                                            if ($ext == 'mp4') {
+
+                                                $ffconfig = [
+                                                    'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
+                                                    'ffprobe.binaries' => '/usr/bin/ffprobe',
+                                                    'timeout'          => 3600,
+                                                    'ffmpeg.threads'   => 4,
+                                                ];
+
+                                                $ffmpeg = FFMpeg\FFMpeg::create($ffconfig);
+
+                                                $video = $ffmpeg->open(HOME.'/upload/files/'.$folder.$filename);
+
+                                                // Сохраняем скрин с 10 секунды
+                                                $video
+                                                    ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
+                                                    ->save(HOME.'/upload/screen/'.$folder.'/'.$filename.'.jpg');
+
+                                                DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$filename.'.jpg', $id]);
+
+                                                // Перекодируем видео в h264
+                                                $ffprobe = FFMpeg\FFProbe::create($ffconfig);
+                                                $codec = $ffprobe
+                                                    ->streams(HOME.'/upload/files/'.$folder.$filename)
+                                                    ->videos()
+                                                    ->first()
+                                                    ->get('codec_name');
+
+                                                if ($codec != 'h264') {
+                                                    $format = new FFMpeg\Format\Video\X264('libmp3lame', 'libx264');
+                                                    $video->save($format, HOME.'/upload/files/'.$folder.'/convert-'.$filename);
+                                                    rename(
+                                                        HOME.'/upload/files/'.$folder.'/convert-'.$filename,
+                                                        HOME.'/upload/files/'.$folder.'/'.$filename
+                                                    );
+                                                }
+                                            }
 
                                             notice('Файл успешно загружен!');
                                             redirect("/load/add?act=view&id=$id");

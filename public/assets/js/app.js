@@ -36,6 +36,8 @@ $(document).ready(function(){
         $(this).toggleClass('fa-caret-up');
         $(this).nextAll(".news-text:first").slideToggle();
     });
+
+    $('video,audio').mediaelementplayer();
 });
 
 /* Вывод уведомлений */

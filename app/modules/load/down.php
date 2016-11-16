@@ -179,7 +179,7 @@ case 'view':
             echo '<hr />';
 
             if (empty($downs['active']) && $downs['user'] == $log){
-                echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br />';
+                echo '<div class="info"><b>Внимание!</b> Данная загрузка добавлена, но еще требует модераторской проверки<br />';
                 echo '<i class="fa fa-pencil"></i> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br />';
             }
 
@@ -194,7 +194,7 @@ case 'view':
             if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
                 echo 'Скриншот:<br />';
 
-                echo '<a href="screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
+                echo '<a href="/upload/screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
             }
 
             if (!empty($downs['author'])) {
@@ -215,18 +215,17 @@ case 'view':
             // -----------------------------------------------------------//
             if (!empty($downs['link']) && file_exists(HOME.'/upload/files/'.$folder.$downs['link'])) {
 
-                if ($ext == 'mp3') {?>
+                if ($ext == 'mp3' || $ext == 'mp4') {?>
 
-                    <script src="/assets/audiojs/audio.min.js"></script>
+                    <?php if ($ext == 'mp3') { ?>
+                        <audio src="/upload/files/<?= $folder.$downs['link'] ?>"></audio><br/>
+                    <?php } ?>
 
-                    <script>
-                        audiojs.events.ready(function() {
-                            audiojs.createAll();
-                        });
-                    </script>
+                    <?php if ($ext == 'mp4') { ?>
+                        <video src="/upload/files/<?= $folder.$downs['link'] ?>" width="320" height="240" poster="/upload/screen/<?= $folder.$downs['screen'] ?>"></video>
+                    <?php } ?>
 
-                    <audio src="/upload/files/<?= $folder.$downs['link']?>" preload="auto"></audio><br />
-                    <?php
+                <?php
                 }
 
                 if ($ext == 'zip') {
