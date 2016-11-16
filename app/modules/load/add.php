@@ -428,8 +428,9 @@ case 'loadfile':
                                             copyright_archive(HOME.'/upload/files/'.$folder.$filename);
 
                                             DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
+
                                             // Обработка видео
-                                            if ($ext == 'mp4') {
+                                            if ($ext == 'mp4') { // TODO проверять по mime-type и поддержку обработки
 
                                                 $ffconfig = [
                                                     'ffmpeg.binaries'  => '/usr/bin/ffmpeg',

@@ -191,10 +191,12 @@ case 'view':
 
             echo App::bbCode($downs['text']).'<br /><br />';
 
-            if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
-                echo 'Скриншот:<br />';
+            if ($ext != 'mp4') {
+                if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
+                    echo 'Скриншот:<br />';
 
-                echo '<a href="/upload/screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
+                    echo '<a href="/upload/screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
+                }
             }
 
             if (!empty($downs['author'])) {
