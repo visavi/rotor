@@ -191,10 +191,12 @@ case 'view':
 
             echo App::bbCode($downs['text']).'<br /><br />';
 
-            if ($ext != 'mp4') {
-                if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
-                    echo 'Скриншот:<br />';
+            $poster = '';
+            if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
+                $poster = ' poster="/upload/screen/'.$folder.$downs['screen'].'"';
 
+                if ($ext != 'mp4') {
+                    echo 'Скриншот:<br />';
                     echo '<a href="/upload/screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
                 }
             }
@@ -224,7 +226,7 @@ case 'view':
                     <?php } ?>
 
                     <?php if ($ext == 'mp4') { ?>
-                        <video src="/upload/files/<?= $folder.$downs['link'] ?>" width="320" height="240" poster="/upload/screen/<?= $folder.$downs['screen'] ?>"></video>
+                        <video src="/upload/files/<?= $folder.$downs['link'] ?>" width="320" height="240"<?= $poster ?>></video>
                     <?php } ?>
 
                 <?php
