@@ -140,15 +140,24 @@ if ($udata = is_user()) {
     $log = $udata['login'];
     $config['themes'] = $udata['themes'];
 
-    if ($udata['ban'] == 1) {
+    // Забанен
+    if ($udata['ban']) {
         if (!strsearch(App::server('PHP_SELF'), ['/ban', '/rules', '/logout'])) {
             redirect('/ban?log='.$log);
         }
     }
 
+    // Подтверждение регистрации
     if ($config['regkeys'] > 0 && $udata['confirmreg'] > 0 && empty($udata['ban'])) {
         if (!strsearch(App::server('PHP_SELF'), ['/key', '/login'])) {
             redirect('/key?log='.$log);
+        }
+    }
+
+    // Просрочен кредит
+    if ($udata['sumcredit'] > 0 && SITETIME > $udata['timecredit'] && empty($udata['ban'])) {
+        if (!strstr(App::server('PHP_SELF'), '/games/credit')) {
+            redirect('/games/credit?log='.$log);
         }
     }
 
@@ -176,6 +185,17 @@ if ($udata = is_user()) {
     }
 }
 
+// Сайт закрыт для всех
+if ($config['closedsite'] == 2 && !is_admin() && !strsearch(App::server('PHP_SELF'), ['/closed', '/login'])) {
+    redirect('/closed');
+}
+
+// Сайт закрыт для гостей
+if ($config['closedsite'] == 1 && !is_user() && !strsearch(App::server('PHP_SELF'), ['/login', '/register', '/lostpassword', '/captcha'])) {
+    notice('Для входа на сайт необходимо авторизоваться!');
+    redirect('/login');
+}
+
 $browser_detect = new Mobile_Detect();
 
 // ------------------------ Автоопределение системы -----------------------------//
@@ -193,18 +213,8 @@ if (!is_user() || empty($config['themes'])) {
     }
 }
 
-if (empty($config['themes']) || ! file_exists(HOME.'/themes/'.$config['themes'])) {
+if (empty($config['themes']) || !file_exists(HOME.'/themes/'.$config['themes'])) {
     $config['themes'] = 'default';
 }
 
 Registry::set('config', $config);
-
-
-/*if ($config['closedsite'] == 2 && !is_admin() && !strsearch($php_self, array('/pages/closed.php', '/input.php'))) {
-    redirect('/pages/closed.php');
-}
-
-if ($config['closedsite'] == 1 && !is_user() && !strsearch($php_self, array('/pages/login.php', '/pages/registration.php', '/mail/lostpassword.php', '/input.php'))) {
-    notice('Для входа на сайт необходимо авторизоваться!');
-    redirect('/login');
-}*/

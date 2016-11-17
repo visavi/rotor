@@ -194,6 +194,6 @@ break;
 
 endswitch;
 
-echo '<i class="fa fa-money"></i> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
 App::view($config['themes'].'/foot');

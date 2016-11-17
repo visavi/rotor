@@ -121,4 +121,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы совершать операции, необходимо');
 }
 
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
+
 App::view($config['themes'].'/foot');

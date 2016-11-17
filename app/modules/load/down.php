@@ -189,7 +189,7 @@ case 'view':
                 echo '<a href="/upload/files/'.$folder.$downs['link'].'">'.resize_image('upload/files/'.$folder, $downs['link'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br />';
             }
 
-            echo App::bbCode($downs['text']).'<br /><br />';
+            echo '<div class="message">'.App::bbCode($downs['text']).'</div><br />';
 
             $poster = '';
             if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
@@ -446,7 +446,7 @@ case 'comments':
                         echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.App::bbCode($data['text']).'<br />';
+                    echo '<div class="message">'.App::bbCode($data['text']).'<br />';
 
                     if (is_admin() || empty($config['anonymity'])) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
