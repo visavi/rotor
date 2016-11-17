@@ -149,7 +149,7 @@ if ($udata = is_user()) {
 
     // Подтверждение регистрации
     if ($config['regkeys'] > 0 && $udata['confirmreg'] > 0 && empty($udata['ban'])) {
-        if (!strsearch(App::server('PHP_SELF'), ['/key', '/login'])) {
+        if (!strsearch(App::server('PHP_SELF'), ['/key', '/login', '/logout'])) {
             redirect('/key?log='.$log);
         }
     }

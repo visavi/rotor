@@ -34,7 +34,7 @@ if (is_admin([101])) {
                     echo '<b><span style="color:#ff0000">Новые файлы и новые параметры файлов:</span></b><br /><br />';
                     if ($count_arr1 > 0) {
                         foreach($arr1 as $val) {
-                            echo check($val).'<br />';
+                            echo '<i class="fa fa-plus-circle text-success"></i> '.check($val).'<br />';
                         }
                         echo '<br />';
                     } else {
@@ -44,7 +44,7 @@ if (is_admin([101])) {
                     echo '<b><span style="color:#ff0000">Удаленные файлы и старые параметры файлов:</span></b><br /><br />';
                     if ($count_arr2 > 0) {
                         foreach($arr2 as $val) {
-                            echo check($val).'<br />';
+                            echo '<i class="fa fa-minus-circle text-danger"></i> '.check($val).'<br />';
                         }
                         echo '<br />';
                     } else {

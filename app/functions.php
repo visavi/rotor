@@ -421,15 +421,13 @@ function scan_check($dirname) {
         $arr['totaldirs'] = 0;
     }
 
-    $no_check = explode(',', $config['nocheck']);
+    $files = preg_grep('/^([^.])/', scandir($dirname));
 
-    $dirs = array_diff(scandir($dirname), [".", ".."]);
-
-    foreach ($dirs as $file) {
+    foreach ($files as $file) {
         if (is_file($dirname.'/'.$file)) {
             $ext = getExtension($file);
 
-            if (!in_array($ext, $no_check)) {
+            if (!in_array($ext, explode(',',App::setting('nocheck')) )) {
                 $arr['files'][] = $dirname.'/'.$file.' - '.date_fixed(filemtime($dirname.'/'.$file), 'j.m.Y / H:i').' - '.read_file($dirname.'/'.$file);
                 $arr['totalfiles']++;
             }

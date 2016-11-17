@@ -26,53 +26,51 @@ if (is_admin([101]) && $log == $config['nickname']) {
     ############################################################################################
         case 'index':
 
-            $arrfiles = [];
-            $globfiles = glob(STORAGE."/main/*.dat");
-            foreach ($globfiles as $filename) {
-                $arrfiles[] = basename($filename);
-            }
+            $dir = Request::input('dir');
 
-            $total = count($arrfiles);
+            $arrfiles = [];
+
+            $files = preg_grep('/^([^.])/', scandir(APP.'/views/'.$dir));
+
+ /*           foreach ($globfiles as $filename) {
+                $arrfiles[] = basename($filename);
+            }*/
+            $total = count($files);
 
             if ($total > 0) {
-                if ($start < 0 || $start > $total) {
-                    $start = 0;
-                }
-                if ($total < $start + $config['editfiles']) {
-                    $end = $total;
-                } else {
-                    $end = $start + $config['editfiles'];
-                }
-                for ($i = $start; $i < $end; $i++) {
-                    $filename = str_replace('.dat', '', $arrfiles[$i]);
-                    $size = formatsize(filesize(STORAGE."/main/$arrfiles[$i]"));
-                    $strok = count(file(STORAGE."/main/$arrfiles[$i]"));
 
-                    if ($arrfiles[$i] == 'index.dat') {
-                        echo '<div class="b"><i class="fa fa-pencil"></i> ';
-                        echo '<b><a href="/"><span style="color:#ff0000">'.$arrfiles[$i].'</span></a></b> ('.$size.')<br />';
-                        echo '<a href="/admin/files?act=edit&amp;file='.$arrfiles[$i].'">Редактировать</a> | ';
-                        echo '<a href="/admin/files?act=obzor&amp;file='.$arrfiles[$i].'">Просмотр</a></div>';
-                        echo '<div>Кол. строк: '.$strok.'<br />';
-                        echo 'Изменен: '.date_fixed(filemtime(STORAGE."/main/$arrfiles[$i]")).'</div>';
+                show_title($dir ? $dir : 'Редактирование страниц');
+
+                if(!empty($dir)) {
+                    $dir .= '/';
+                }
+
+                foreach ($files as $file) {
+
+                    if (is_dir(APP.'/views/'.$file)) {
+                        echo '<i class="fa fa-folder-o"></i> <b><a href="/admin/files?dir='.$file.'">'.$file.'</a></b><hr />';
                     } else {
-                        echo '<div class="b"><i class="fa fa-pencil"></i> ';
-                        echo '<b><a href="/page/'.$filename.'">'.$arrfiles[$i].'</a></b> ('.$size.')<br />';
-                        echo '<a href="/admin/files?act=edit&amp;file='.$arrfiles[$i].'">Редактировать</a> | ';
-                        echo '<a href="/admin/files?act=obzor&amp;file='.$arrfiles[$i].'">Просмотр</a> | ';
-                        echo '<a href="/admin/files?act=poddel&amp;file='.$arrfiles[$i].'">Удалить</a></div>';
-                        echo '<div>Кол. строк: '.$strok.'<br />';
-                        echo 'Изменен: '.date_fixed(filemtime(STORAGE."/main/$arrfiles[$i]")).'</div>';
+
+                        $size = formatsize(filesize(APP.'/views/'.$dir.$file));
+                        $strok = count(file(APP.'/views/'.$dir.$file));
+
+                        echo '<div class="pull-right"><a href="/admin/files?act=edit&amp;file=' . $file . '"><i class="fa fa-pencil"></i></a> ';
+                        echo '<a href="/admin/files?act=poddel&amp;file=' . $file . '"><i class="fa fa-remove"></i></a></div>';
+
+                        echo '<i class="fa fa-file-o"></i> ';
+                        echo '<b>'.$file.'</b> (' . $size . ')<br />';
+                        echo 'Кол. строк: ' . $strok . '<br />';
+                        echo 'Изменен: ' . date_fixed(filemtime(APP.'/views/'.$dir.$file)) . '<hr />';
                     }
                 }
 
-                page_strnavigation('/admin/files?', $config['editfiles'], $start, $total);
-
-                echo 'Всего файлов: <b>'.(int)$total.'</b><br /><br />';
             } else {
-                show_error('Файлов еще нет!');
+                show_error('Файлов нет!');
             }
 
+            if ($dir) {
+                echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files">Вернуться</a><br />';
+            }
             echo'<i class="fa fa-file-o"></i> <a href="/admin/files?act=new">Создать</a><br />';
         break;
 

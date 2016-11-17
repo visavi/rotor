@@ -32,3 +32,6 @@ if ($target && is_callable($target)) {
     App::abort(404);
 }
 if (isset($_SESSION['input'])) unset($_SESSION['input']);
+
+
+/// $config['editfiles'] удалить

@@ -183,6 +183,6 @@ break;
 
 endswitch;
 
-render('includes/back', ['link' => '/admin/', 'title' => 'В админку', 'icon' => 'panel.gif']);
+render('includes/back', ['link' => '/admin', 'title' => 'В админку', 'icon' => 'fa-wrench']);
 
 App::view($config['themes'].'/foot');

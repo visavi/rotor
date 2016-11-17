@@ -70,7 +70,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
                     echo '<i class="fa fa-times"></i> <b><a href="/admin/delusers?act=del&amp;deldate='.$deldate.'&amp;point='.$point.'&amp;uid='.$_SESSION['token'].'">Удалить пользователей</a></b><br /><br />';
                 } else {
-                    show_error('Пользователи для удаления отсутсвуют!');
+                    show_error('Пользователи для удаления отсутствуют!');
                 }
             } else {
                 show_error('Ошибка! Указанно недопустимое время для удаления!');
@@ -105,7 +105,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
                         echo 'Пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней, успешно удалены!<br />';
                         echo 'Было удалено пользователей: <b>'.$total.'</b><br /><br />';
                     } else {
-                        show_error('Пользователи для удаления отсутсвуют!');
+                        show_error('Пользователи для удаления отсутствуют!');
                     }
                 } else {
                     show_error('Ошибка! Указанно недопустимое время для удаления!');

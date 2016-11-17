@@ -37,7 +37,7 @@ case 'index':
 
         while ($data = $invitations -> fetch()) {
 
-            echo '<div class="b"><input type="checkbox" name="del[]" value="'.$data['id'].'" /> <b>'.$data['key'].'</b></div>';
+            echo '<div class="b"><input type="checkbox" name="del[]" value="'.$data['id'].'" /> <b>'.$data['hash'].'</b></div>';
             echo '<div>Владелец: '.profile($data['user']).'<br />';
 
             if (!empty($data['invited'])) {
