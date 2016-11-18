@@ -72,7 +72,8 @@ if (is_admin([101]) && $log == $config['nickname']) {
         case 'edit':
 
             $subdir = !empty($dir) ? $dir.'/' : '';
-
+            
+            // TODO переделать if (preg_match('|^[a-z0-9_\-/]+$|i', $file and $dir)) {
             if (preg_match('|^[a-z0-9_\.\-]+$|i', $file)) {
                 if (file_exists(APP.'/views/'.$subdir.$file)) {
 
@@ -172,7 +173,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
             $newfile = check(Request::input('newfile'));
 
             $subdir = !empty($dir) ? $dir.'/' : '';
-            
+
             if ($token == $_SESSION['token']) {
                 if (is_writeable(APP.'/views/'.$subdir)) {
                     if (preg_match('|^[a-z0-9_\-]+$|i', $newfile)) {
