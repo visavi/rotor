@@ -499,11 +499,153 @@ class App
 
                 $_SESSION['login'] = $user['login'];
                 $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
-                $_SESSION['ip'] = Registry::get('ip');
+                $_SESSION['ip'] = App::getClientIp();
 
                 self::setFlash('success', 'Добро пожаловать, '.$user['login'].'!');
                 self::redirect('/');
             }
         }
+    }
+
+    /**
+     * Постраничная навигация
+     * @param  array $page массив данных
+     * @return string  сформированный блок с кнопками страниц
+     */
+    public static function pagination($page)
+    {
+        if ($page['total'] > 0) {
+
+            if (empty($page['crumbs'])) $page['crumbs'] = 3;
+
+            $url = array_except($_GET, 'page');
+            $request = $url ? '&'.http_build_query($url) : null;
+
+            $pages = [];
+            $pg_cnt = ceil($page['total'] / $page['limit']);
+            $idx_fst = max($page['current'] - $page['crumbs'], 1);
+            $idx_lst = min($page['current'] + $page['crumbs'], $pg_cnt);
+
+            if ($page['current'] != 1) {
+                $pages[] = [
+                    'page' => $page['current'] - 1,
+                    'title' => 'Предыдущая',
+                    'name' => '«',
+                ];
+            }
+
+            if ($page['current'] > $page['crumbs'] + 1) {
+                $pages[] = [
+                    'page' => 1,
+                    'title' => '1 страница',
+                    'name' => 1,
+                ];
+                if ($page['current'] != $page['crumbs'] + 2) {
+                    $pages[] = [
+                        'separator' => true,
+                        'name' => ' ... ',
+                    ];
+                }
+            }
+
+            for ($i = $idx_fst; $i <= $idx_lst; $i++) {
+                if ($i == $page['current']) {
+                    $pages[] = [
+                        'current' => true,
+                        'name' => $i,
+                    ];
+                } else {
+                    $pages[] = [
+                        'page' => $i,
+                        'title' => $i.' страница',
+                        'name' => $i,
+                    ];
+                }
+            }
+
+            if ($page['current'] < $pg_cnt - $page['crumbs']) {
+                if ($page['current'] != $pg_cnt - $page['crumbs'] - 1) {
+                    $pages[] = [
+                        'separator' => true,
+                        'name' => ' ... ',
+                    ];
+                }
+                $pages[] = [
+                    'page' => $pg_cnt,
+                    'title' => $pg_cnt . ' страница',
+                    'name' => $pg_cnt,
+                ];
+            }
+
+            if ($page['current'] != $pg_cnt) {
+                $pages[] = [
+                    'page' => $page['current'] + 1,
+                    'title' => 'Следующая',
+                    'name' => '»',
+                ];
+            }
+
+            self::view('app._pagination', compact('pages', 'request'));
+        }
+    }
+
+    // ----------------------- Вывод страниц в форуме ------------------------//
+    public static function forumPagination($topic) {
+
+        if ($topic->postCount()) {
+
+            $pages = [];
+            $link = '/topic/'.$topic->id;
+
+            $pg_cnt = ceil($topic->postCount() / Setting::get('posts_per_page'));
+
+            for ($i = 1; $i <= 5; $i++) {
+                if ($i <= $pg_cnt) {
+                    $pages[] = [
+                        'page' => $i,
+                        'title' => $i.' страница',
+                        'name' => $i,
+                    ];
+                }
+            }
+
+            if (5 < $pg_cnt) {
+
+                if (6 < $pg_cnt) {
+                    $pages[] = array(
+                        'separator' => true,
+                        'name' => ' ... ',
+                    );
+                }
+
+                $pages[] = array(
+                    'page' => $pg_cnt,
+                    'title' => $pg_cnt.' страница',
+                    'name' => $pg_cnt,
+                );
+            }
+
+            self::view('forum._pagination', compact('pages', 'link'));
+        }
+    }
+
+    /**
+     * Обработчик постраничной навигации
+     * @param  integer $limit элементов на страницу
+     * @param  integer $total всего элементов
+     * @return array          массив подготовленных данных
+     */
+    public static function paginate($limit, $total)
+    {
+        $current = Request::input('page');
+        if ($current < 1) $current = 1;
+
+        if ($total && $current * $limit >= $total) {
+            $current = ceil($total / $limit);
+        }
+
+        $offset = intval(($current * $limit) - $limit);
+
+        return compact('current', 'offset', 'limit', 'total');
     }
 }

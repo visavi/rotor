@@ -1,21 +1,9 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
-}
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
-if (isset($_GET['id'])) {
-    $id = abs(intval($_GET['id']));
-} else {
-    $id = 0;
-}
+$act = check(Request::input('act', 'index'));
+$page = abs(intval(Request::input('page')));
+$id = abs(intval(Request::input('id')));
 
 if (is_admin()) {
     show_title('Управление гостевой');
@@ -26,18 +14,17 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            echo '<a href="/book?start='.$start.'">Обзор</a><br /><hr />';
+            echo '<a href="/book?page='.$page.'">Обзор</a><br /><hr />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM guest;");
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryguest = DB::run() -> query("SELECT * FROM guest ORDER BY time DESC LIMIT ".$start.", ".$config['bookpost'].";");
+                $page = App::paginate(App::setting('bookpost'), $total);
 
-                echo '<form action="/admin/book?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                $queryguest = DB::run() -> query("SELECT * FROM guest ORDER BY time DESC LIMIT ".$page['offset'].", ".$config['bookpost'].";");
+
+                echo '<form action="/admin/book?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryguest -> fetch()) {
 
@@ -56,8 +43,8 @@ if (is_admin()) {
                     echo '</div>';
 
                     echo '<div class="right">';
-                    echo '<a href="/admin/book?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
-                    echo '<a href="/admin/book?act=reply&amp;id='.$data['id'].'&amp;start='.$start.'">Ответить</a></div>';
+                    echo '<a href="/admin/book?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a> / ';
+                    echo '<a href="/admin/book?act=reply&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Ответить</a></div>';
 
                     echo '<div>'.App::bbCode($data['text']).'<br />';
 
@@ -75,9 +62,9 @@ if (is_admin()) {
                 }
                 echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
 
-                page_strnavigation('/admin/book?', $config['bookpost'], $start, $total);
+                App::pagination($page);
 
-                echo 'Всего сообщений: <b>'.(int)$total.'</b><br /><br />';
+                echo 'Всего сообщений: <b>'.$total.'</b><br /><br />';
 
                 if (is_admin([101])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/book?act=prodel">Очистить</a><br />';
@@ -101,7 +88,7 @@ if (is_admin()) {
                 echo '<div>Сообщение: '.App::bbCode($data['text']).'</div><hr />';
 
                 echo '<div class="form">';
-                echo '<form action="/admin/book?id='.$id.'&amp;act=addreply&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/book?id='.$id.'&amp;act=addreply&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Cообщение:<br />';
                 echo '<textarea cols="25" rows="5" name="reply">'.$data['reply'].'</textarea>';
                 echo '<br /><input type="submit" value="Ответить" /></form></div><br />';
@@ -109,7 +96,7 @@ if (is_admin()) {
                 show_error('Ошибка! Сообщения для ответа не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -128,7 +115,7 @@ if (is_admin()) {
                         DB::run() -> query("UPDATE guest SET reply=? WHERE id=?", [$reply, $id]);
 
                         notice('Ответ успешно добавлен!');
-                        redirect("/admin/book?start=$start");
+                        redirect("/admin/book?page=$page");
                     } else {
                         show_error('Ошибка! Сообщения для ответа не существует!');
                     }
@@ -139,8 +126,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?act=reply&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/book?start='.$start.'">В гостевую</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?act=reply&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/book?page='.$page.'">В гостевую</a><br />';
         break;
 
         ############################################################################################
@@ -157,7 +144,7 @@ if (is_admin()) {
                 echo '<i class="fa fa-pencil"></i> <b>'.nickname($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br /><br />';
 
                 echo '<div class="form">';
-                echo '<form action="/admin/book?act=addedit&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/book?act=addedit&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Cообщение:<br />';
                 echo '<textarea cols="50" rows="5" name="msg">'.$data['text'].'</textarea><br /><br />';
                 echo '<input type="submit" value="Изменить" /></form></div><br />';
@@ -165,7 +152,7 @@ if (is_admin()) {
                 show_error('Ошибка! Сообщения для редактирования не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -184,7 +171,7 @@ if (is_admin()) {
                         DB::run() -> query("UPDATE guest SET text=?, edit=?, edit_time=? WHERE id=?", [$msg, $log, SITETIME, $id]);
 
                         notice('Сообщение успешно отредактировано!');
-                        redirect("/admin/book?start=$start");
+                        redirect("/admin/book?page=$page");
                     } else {
                         show_error('Ошибка! Сообщения для редактирования не существует!');
                     }
@@ -195,7 +182,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -217,7 +204,7 @@ if (is_admin()) {
                     DB::run() -> query("DELETE FROM guest WHERE id IN (".$del.");");
 
                     notice('Выбранные сообщения успешно удалены!');
-                    redirect("/admin/book?start=$start");
+                    redirect("/admin/book?page=$page");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные сообщения!');
                 }
@@ -225,7 +212,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################

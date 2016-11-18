@@ -180,7 +180,7 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы совершать операции, необходимо');
 }
 
-echo '<i class="fa fa-bar-chart"></i> <a href="/games/ivebank">Статистика вкладов</a><br />';
+echo '<i class="fa fa-bar-chart"></i> <a href="/games/livebank">Статистика вкладов</a><br />';
 echo '<i class="fa fa-money"></i> <a href="/games/credit">Выдача кредитов</a><br />';
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 

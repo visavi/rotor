@@ -1,7 +1,5 @@
 <?php
 
-$start = abs(intval(Request::input('start', 0)));
-
 switch ($act):
 /**
  * Главная страница
@@ -9,16 +7,11 @@ switch ($act):
 case 'index':
 
     $total = DBM::run()->count('guest');
+    $page = App::paginate(App::setting('bookpost'), $total);
 
-    if ($total > 0 && $start >= $total) {
-        $start = last_page($total, $config['bookpost']);
-    }
+    $posts = DBM::run()->select('guest', null, App::setting('bookpost'), $page['offset'], ['time'=>'DESC']);
 
-    $page = floor(1 + $start / $config['bookpost']);
-
-    $posts = DBM::run()->select('guest', null, $config['bookpost'], $start, ['time'=>'DESC']);
-
-    App::view('book/index', compact('posts', 'start', 'total', 'page'));
+    App::view('book/index', compact('posts', 'total', 'page'));
 break;
 
 /**
@@ -136,6 +129,7 @@ case 'complaint':
     if (! Request::ajax()) App::redirect('/');
 
     $token = check(Request::input('token'));
+    $page = abs(intval(Request::input('page')));
     $id = abs(intval(Request::input('id')));
 
     $validation = new Validation();
@@ -158,7 +152,7 @@ case 'complaint':
             'text'    => $data['text'],
             'time'    => $data['time'],
             'addtime' => SITETIME,
-            'link'    => '/book?start='.$start,
+            'link'    => '/book?page='.$page,
         ]);
 
         exit(json_encode(['status' => 'success']));

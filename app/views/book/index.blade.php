@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Гостевая книга (Стр. '.$page.') - @parent')
+@section('title', 'Гостевая книга (Стр. '.$page['current'].') - @parent')
 
 @section('content')
 
@@ -11,10 +11,9 @@
     <a href="/tags">Теги</a>
 
     <?php if (is_admin()):?>
-        / <a href="/admin/book?start=<?=$start?>">Управление</a>
+        / <a href="/admin/book?page=<?=$page['current']?>">Управление</a>
     <?php endif;?>
     <hr />
-
 
     <?php if ($total > 0): ?>
         <?php foreach ($posts as $data): ?>
@@ -28,7 +27,7 @@
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <noindex><a href="#" onclick="return sendComplaint(this)" data-type="/book" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $start }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
+                            <noindex><a href="#" onclick="return sendComplaint(this)" data-type="/book" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
                         </div>
 
                     <?php endif; ?>
@@ -66,7 +65,7 @@
             </div>
         <?php endforeach; ?>
 
-        <?php page_strnavigation('/book?', $config['bookpost'], $start, $total); ?>
+        <?php App::pagination($page) ?>
 
     <?php else: ?>
         <?php show_error('Сообщений нет, будь первым!'); ?>
