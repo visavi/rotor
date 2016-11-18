@@ -25,16 +25,17 @@ if (is_admin([101]) && $log == $config['nickname']) {
     ##                                    Главная страница                                    ##
     ############################################################################################
         case 'index':
-
             $dir = Request::input('dir');
-
-            $arrfiles = [];
 
             $files = preg_grep('/^([^.])/', scandir(APP.'/views/'.$dir));
 
- /*           foreach ($globfiles as $filename) {
-                $arrfiles[] = basename($filename);
-            }*/
+            usort($files, function($a, $b) {
+                if (is_file(APP.'/views/'.$a) && is_file(APP.'/views/'.$b)) {
+                    return 0;
+                }
+                return (is_dir(APP.'/views/'.$a)) ? -1 : 1;
+            });
+
             $total = count($files);
 
             if ($total > 0) {
@@ -45,25 +46,27 @@ if (is_admin([101]) && $log == $config['nickname']) {
                     $dir .= '/';
                 }
 
+                echo '<ul class="list-group">';
                 foreach ($files as $file) {
 
                     if (is_dir(APP.'/views/'.$file)) {
-                        echo '<i class="fa fa-folder-o"></i> <b><a href="/admin/files?dir='.$file.'">'.$file.'</a></b><hr />';
+                        echo '<li class="list-group-item"><i class="fa fa-folder-o"></i> <b><a href="/admin/files?dir='.$file.'">'.$file.'</a></b><br />';
+                        echo 'Файлов: '.count(array_diff(scandir(APP.'/views/'.$file), ['.', '..'])).'</li>';
                     } else {
 
                         $size = formatsize(filesize(APP.'/views/'.$dir.$file));
                         $strok = count(file(APP.'/views/'.$dir.$file));
 
-                        echo '<div class="pull-right"><a href="/admin/files?act=edit&amp;file=' . $file . '"><i class="fa fa-pencil"></i></a> ';
-                        echo '<a href="/admin/files?act=poddel&amp;file=' . $file . '"><i class="fa fa-remove"></i></a></div>';
+                        echo '<li class="list-group-item"><div class="pull-right">';
+                        echo '<a href="/admin/files?act=del&amp;file='.$file.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
 
                         echo '<i class="fa fa-file-o"></i> ';
-                        echo '<b>'.$file.'</b> (' . $size . ')<br />';
-                        echo 'Кол. строк: ' . $strok . '<br />';
-                        echo 'Изменен: ' . date_fixed(filemtime(APP.'/views/'.$dir.$file)) . '<hr />';
+                        echo '<b><a href="/admin/files?act=edit&amp;file=' . $file . '">'.$file.'</a></b> (' . $size . ')<br />';
+                        echo 'Строк: ' . $strok . ' / ';
+                        echo 'Изменен: ' . date_fixed(filemtime(APP.'/views/'.$dir.$file)) . '</li>';
                     }
                 }
-
+                echo '</ul>';
             } else {
                 show_error('Файлов нет!');
             }
@@ -75,45 +78,15 @@ if (is_admin([101]) && $log == $config['nickname']) {
         break;
 
         ############################################################################################
-        ##                                      Обзор файла                                       ##
-        ############################################################################################
-        case 'obzor':
-
-            if (preg_match('|^[a-z0-9_\.\-]+$|i', $file)) {
-                if (file_exists(STORAGE."/main/$file")) {
-                    echo '<b>Просмотр файла '.$file.'</b><br />';
-
-                    $opis = file_get_contents(STORAGE."/main/$file");
-                    $count = count(file(STORAGE."/main/$file"));
-
-                    echo 'Строк: '.(int)$count.'<br /><br />';
-
-                    echo '<pre class="prettyprint linenums">'.check($opis).'</pre><br />';
-
-                    echo '<i class="fa fa-pencil"></i> <a href="/admin/files?act=edit&amp;file='.$file.'">Редактировать</a><br />';
-                    echo '<i class="fa fa-times"></i> <a href="/admin/files?act=poddel&amp;file='.$file.'">Удалить</a><br />';
-                } else {
-                    show_error('Ошибка! Данного файла не существует!');
-                }
-            } else {
-                show_error('Ошибка! Недопустимое название страницы!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files">Вернуться</a><br />';
-        break;
-
-        ############################################################################################
         ##                             Подготовка к редактированию                                ##
         ############################################################################################
         case 'edit':
 
             if (preg_match('|^[a-z0-9_\.\-]+$|i', $file)) {
-                if (file_exists(STORAGE."/main/$file")) {
-                    $filename = str_replace(".dat", "", $file);
+                if (file_exists(APP.'/views/'.$file)) {
 
-                    if (is_writeable(STORAGE."/main/$file")) {
-                        $mainfile = file_get_contents(STORAGE."/main/$file");
-                        $mainfile = str_replace('&amp;', '&', $mainfile);
+                    if (is_writeable(APP.'/views/'.$file)) {
+                        $mainfile = file_get_contents(APP.'/views/'.$file);
 
                         echo '<div class="form" id="form">';
                         echo '<b>Редактирование файла '.$file.'</b><br />';
@@ -134,7 +107,6 @@ if (is_admin([101]) && $log == $config['nickname']) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files">Вернуться</a><br />';
-            echo '<i class="fa fa-check-circle"></i> <a href="/page/'.$filename.'">Просмотр</a><br />';
         break;
 
         ############################################################################################
@@ -147,20 +119,14 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
             if ($uid == $_SESSION['token']) {
                 if (preg_match('|^[a-z0-9_\.\-]+$|i', $file)) {
-                    if (file_exists(STORAGE.'/main/'.$file)) {
-                        $msg = str_replace('&', '&amp;', $msg);
-                        $msg = str_replace('&amp;&amp;', '&&', $msg);
+                    if (file_exists(APP.'/views/'.$file)) {
+/*                        $msg = str_replace('&', '&amp;', $msg);
+                        $msg = str_replace('&amp;&amp;', '&&', $msg);*/
 
-                        $fp = fopen(STORAGE.'/main/'.$file, "a+");
-                        flock ($fp, LOCK_EX);
-                        ftruncate($fp, 0);
-                        fputs ($fp, $msg);
-                        fflush($fp);
-                        flock ($fp, LOCK_UN);
-                        fclose($fp);
+                        file_put_contents(APP.'/views/'.$file, $msg);
 
                         notice('Файл успешно отредактирован!');
-                        redirect ("/admin/files?act=edit&file=$file");
+                        //redirect ("/admin/files?act=edit&file=$file");
 
                     } else {
                         show_error('Ошибка! Данного файла не существует!');
@@ -182,10 +148,10 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
             echo '<b>Создание нового файла</b><br /><br />';
 
-            if (is_writeable(STORAGE."/main")) {
+            if (is_writeable(APP.'/views')) {
                 echo '<div class="form"><form action="/admin/files?act=addnew&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Название файла:<br />';
-                echo '<input type="text" name="newfile" maxlength="20" /><br /><br />';
+                echo '<input type="text" name="newfile" maxlength="30" /><br /><br />';
                 echo '<input value="Создать файл" type="submit" /></form></div>';
                 echo '<br />Разрешены латинские символы и цифры, а также знаки дефис и нижнее подчеркивание<br /><br />';
             } else {
@@ -205,17 +171,13 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
             if ($uid == $_SESSION['token']) {
                 if (preg_match('|^[a-z0-9_\-]+$|i', $newfile)) {
-                    if (!file_exists(STORAGE.'/main/'.$newfile.'.dat')) {
-                        $fp = fopen(STORAGE.'/main/'.$newfile.'.dat', "a+");
-                        flock ($fp, LOCK_EX);
-                        fputs ($fp, '');
-                        fflush($fp);
-                        flock ($fp, LOCK_UN);
-                        fclose($fp);
-                        chmod(STORAGE.'/main/'.$newfile.'.dat', 0666);
+                    if (!file_exists(APP.'/views/'.$newfile.'.blade.php')) {
+
+                        file_put_contents(APP.'/views/'.$newfile.'.blade.php', '');
+                        chmod(APP.'/views/'.$newfile.'.blade.php', 0666);
 
                         notice('Новый файл успешно создан!');
-                        redirect ('/admin/files?act=edit&file='.$newfile.'.dat');
+                        redirect ('/admin/files?act=edit&file='.$newfile.'.blade.php');
 
                     } else {
                         show_error('Ошибка! Файл с данным названием уже существует!');
@@ -231,25 +193,6 @@ if (is_admin([101]) && $log == $config['nickname']) {
         break;
 
         ############################################################################################
-        ##                                  Подготовка к удалению                                 ##
-        ############################################################################################
-        case 'poddel':
-
-            if (preg_match('|^[a-z0-9_\.\-]+$|i', $file)) {
-                if (file_exists(STORAGE."/main/$file")) {
-                    echo 'Вы подтверждаете что хотите удалить файл <b>'.$file.'</b><br />';
-                    echo '<i class="fa fa-times"></i> <b><a href="/admin/files?act=del&amp;file='.$file.'&amp;uid='.$_SESSION['token'].'">Удалить</a></b><br /><br />';
-                } else {
-                    show_error('Ошибка! Данного файла не существует!');
-                }
-            } else {
-                show_error('Ошибка! Недопустимое название страницы!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files">Вернуться</a><br />';
-        break;
-
-        ############################################################################################
         ##                                     Удаление файла                                     ##
         ############################################################################################
         case 'del':
@@ -258,17 +201,14 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
             if ($uid == $_SESSION['token']) {
                 if (preg_match('|^[a-z0-9_\.\-]+$|i', $file)) {
-                    if (file_exists(STORAGE."/main/$file")) {
-                        if ($file != 'index.dat') {
-                            if (unlink (STORAGE."/main/$file")) {
-                                notice('Файл успешно удален!');
-                                redirect ('/admin/files');
+                    if (file_exists(APP.'/views/'.$file)) {
 
-                            } else {
-                                show_error('Ошибка! Не удалось удалить файл!');
-                            }
+                        if (unlink(APP.'/views/'.$file)) {
+                            notice('Файл успешно удален!');
+                            redirect ('/admin/files');
+
                         } else {
-                            show_error('Ошибка! Запрещено удалять главный файл!');
+                            show_error('Ошибка! Не удалось удалить файл!');
                         }
                     } else {
                         show_error('Ошибка! Данного файла не существует!');
