@@ -1,7 +1,7 @@
 @include(App::setting('themes').'.index' )
 
 <div style="text-align:center">
-    <?php include_once (STORAGE.'/advert/top_all.dat'); ?>
+    @include('advert.top_all')
 
     <?= show_advertuser(); /* Реклама за игровые деньги */ ?>
 </div>

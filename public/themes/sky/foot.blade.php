@@ -64,7 +64,7 @@ echo '<div class="art-Block">
                                 <div class="art-BlockContent">
                                     <div class="art-BlockContent-body">
                                         <div>';
-include (STORAGE.'/main/recent.dat');
+include (APP.'/views/main/recent.blade.php');
 echo '</div>
                                     </div>
                                 </div>

@@ -1,5 +1,6 @@
 <?php
-include_once (STORAGE.'/advert/forum.dat');
+
+include_once (APP.'/views/advert/forum.blade.php');
 
 $forums = DBM::run()->select('forums', null, null, null, ['sort'=>'ASC']);
 

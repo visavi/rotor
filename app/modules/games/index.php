@@ -1,6 +1,6 @@
 <?php
 App::view($config['themes'].'/index');
 
-include (STORAGE."/main/games.dat");
+include (APP.'/views/main/games.blade.php');
 
 App::view($config['themes'].'/foot');

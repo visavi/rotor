@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <?php include_once (STORAGE.'/advert/top.dat'); ?>
+    @include('advert.top')
 
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> (<?=stats_news()?>)<br /> <?=last_news()?>
 
@@ -62,5 +62,5 @@
     </div>
     <?php include_once(APP.'/includes/calendar.php') ?>
 
-    <?php include_once (STORAGE.'/advert/bottom.dat'); ?>
+    @include('advert.bottom')
 @stop

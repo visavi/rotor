@@ -15,14 +15,14 @@ if (!empty($params['page'])){
         $page = $page.'/index';
     }
 
-    if (! file_exists(APP.'/modules/files/'.$page.'.dat')) {
+    if (! file_exists(APP.'/views/files/'.$page.'.blade.php')) {
         App::abort('default', 'Ошибка! Данной страницы не существует!');
     }
 
-    include_once (APP.'/modules/files/'.$page.'.dat');
+    include_once (APP.'/views/files/'.$page.'.blade.php');
 
 } else {
-	include_once (STORAGE.'/main/files.dat');
+	include_once (APP.'/views/files/index.blade.php');
 }
 
 App::view($config['themes'].'/foot');

@@ -82,9 +82,9 @@ if (is_user()){
 
 			<?php
 			if (is_user()) {
-				include (STORAGE.'/main/menu.dat');
+				include (APP.'/views/main/menu.blade.php');
 			} else {
-				include (STORAGE.'/main/recent.dat');
+				include (APP.'/views/main/recent.blade.php');
 			}
 			?>
 		</div>

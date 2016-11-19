@@ -5,10 +5,10 @@ if (! preg_match('|^[a-z0-9_\-]+$|i', $act)) {
     App::abort(404);
 }
 
-if (! file_exists(STORAGE.'/main/'.$act.'.dat') || (! is_user() && $act == 'menu')){
+if (! file_exists(APP.'/views/main/'.$act.'.blade.php') || (! is_user() && $act == 'menu')){
     App::abort(404);
 }
 
-include (STORAGE.'/main/'.$act.'.dat');
+include (APP.'/views/main/'.$act.'.blade.php');
 
 App::view($config['themes'].'/foot');

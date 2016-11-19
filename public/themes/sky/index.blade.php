@@ -130,7 +130,7 @@ header("Content-type:text/html; charset=utf-8");
     </div>
 <?php endif; ?>
 
-  <?php include (STORAGE.'/main/menu.dat'); ?>
+  <?php include (APP.'/views/main/menu.blade.php'); ?>
 
 <?php else: ?>
 
