@@ -52,7 +52,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
                         echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;file='.$file.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
 
                         echo '<i class="fa fa-file-o"></i> ';
-                        echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.rtrim($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br />';
+                        echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.basename($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br />';
                         echo 'Строк: ' . $strok . ' / ';
                         echo 'Изменен: ' . date_fixed(filemtime(APP.'/views/'.$path.$file)) . '</li>';
                     }
