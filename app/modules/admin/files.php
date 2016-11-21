@@ -5,7 +5,11 @@ $act = check(Request::input('act', 'index'));
 $file = check(Request::input('file'));
 $path = check(Request::input('path'));
 
-if (!file_exists(APP.'/views/'.$path) || !is_dir(APP.'/views/'.$path)) {
+if (
+    !file_exists(APP.'/views/'.$path) ||
+    !is_dir(APP.'/views/'.$path) ||
+    strpos($path, '.') !== false
+) {
     $path = '';
 }
 
@@ -45,10 +49,10 @@ if (is_admin([101]) && $log == $config['nickname']) {
                         $strok = count(file(APP.'/views/'.$path.$file));
 
                         echo '<li class="list-group-item"><div class="pull-right">';
-                        echo '<a href="/admin/files?act=del&amp;file='.$file.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
+                        echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;file='.$file.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
 
                         echo '<i class="fa fa-file-o"></i> ';
-                        echo '<b><a href="/admin/files?act=edit&amp;file='.$path.$file.'">'.$file.'</a></b> (' . $size . ')<br />';
+                        echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.rtrim($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br />';
                         echo 'Строк: ' . $strok . ' / ';
                         echo 'Изменен: ' . date_fixed(filemtime(APP.'/views/'.$path.$file)) . '</li>';
                     }
@@ -69,17 +73,33 @@ if (is_admin([101]) && $log == $config['nickname']) {
         ############################################################################################
         case 'edit':
 
-            // TODO переделать if (preg_match('|^[a-z0-9_\-/]+$|i', $file and $dir)) {
-            if (preg_match('|^[a-z0-9_\.\-/]+$|i', $file)) {
-                if (file_exists(APP.'/views/'.$file)) {
+            if (preg_match('|^[a-z0-9_\-/]+$|i', $path) && preg_match('|^[a-z0-9_\-/]+$|i', $file)) {
+                if (file_exists(APP.'/views/'.$path.$file.'.blade.php')) {
+                    if (is_writeable(APP.'/views/'.$path.$file.'.blade.php')) {
 
-                    if (is_writeable(APP.'/views/'.$file)) {
-                        $mainfile = file_get_contents(APP.'/views/'.$file);
+                        if (Request::isMethod('post')) {
+                            $token = check(Request::input('token'));
+                            $msg = Request::input('msg');
+
+                            if ($token == $_SESSION['token']) {
+
+                                file_put_contents(APP.'/views/'.$path.$file.'.blade.php', $msg);
+
+                                notice('Файл успешно сохранен!');
+                                redirect ("/admin/files?act=edit&path=$path&file=$file");
+
+                            } else {
+                                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                            }
+                        }
+
+                        $mainfile = file_get_contents(APP.'/views/'.$path.$file.'.blade.php');
 
                         echo '<div class="form" id="form">';
                         echo '<b>Редактирование файла '.$file.'</b><br />';
 
-                        echo '<form action="/admin/files?act=editfile&amp;file='.$file.'&amp;token='.$_SESSION['token'].'" name="form" method="post">';
+                        echo '<form method="post">';
+                        echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
                         echo '<textarea id="markItUpHtml" cols="90" rows="30" name="msg">'.check($mainfile).'</textarea><br />';
                         echo '<input type="submit" value="Редактировать" /></form></div><br />';
@@ -95,36 +115,6 @@ if (is_admin([101]) && $log == $config['nickname']) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br />';
-        break;
-
-        ############################################################################################
-        ##                                  Редактирование файла                                  ##
-        ############################################################################################
-        case 'editfile':
-
-            $token = check(Request::input('token'));
-            $msg = Request::input('msg');
-
-            if ($token == $_SESSION['token']) {
-                if (preg_match('|^[a-z0-9_\.\-/]+$|i', $file)) {
-                    if (file_exists(APP.'/views/'.$file)) {
-
-                        file_put_contents(APP.'/views/'.$file, $msg);
-
-                        notice('Файл успешно сохранен!');
-                        redirect ("/admin/files?act=edit&file=$file");
-
-                    } else {
-                        show_error('Ошибка! Данного файла не существует!');
-                    }
-                } else {
-                    show_error('Ошибка! Недопустимое название страницы!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?act=edit&amp;file='.$file.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
