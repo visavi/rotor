@@ -10,7 +10,6 @@ define('PCLZIP_TEMPORARY_DIR', STORAGE.'/temp/');
 define('VERSION', '6.0.0');
 
 require_once BASEDIR.'/vendor/autoload.php';
-require_once APP.'/functions.php';
 
 if (! env('APP_ENV')) {
     $dotenv = new Dotenv\Dotenv(BASEDIR);
@@ -26,19 +25,6 @@ if (env('APP_DEBUG')) {
     });
     $whoops->register();
 }
-
-// -------- Автозагрузка классов ---------- //
-function autoloader($class) {
-
-	$class = str_replace('\\', '/', $class);
-	if (file_exists(APP.'/classes/'.$class.'.php')) {
-		include_once APP.'/classes/'.$class.'.php';
-	}
-}
-
-spl_autoload_register('autoloader');
-
-include_once APP.'/routes.php';
 
 DBM::run()->config(env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'), env('DB_PORT'));
 

@@ -1,10 +1,9 @@
 @extends('layout')
 
-@section('title', e($topics['title'].' (Стр. '.$page.')').' - @parent')
-@section('description', e('Обсуждение темы: '.$topics['title'].' (Стр. '.$page.')'))
+@section('title', e($topics['title'].' (Стр. '.$page['current'].')').' - @parent')
+@section('description', e('Обсуждение темы: '.$topics['title'].' (Стр. '.$page['current'].')'))
 
 @section('content')
-
     <h1>{{ $topics['title'] }}</h1>
     <a href="/forum">Форум</a> /
 
@@ -45,31 +44,31 @@
 
     <?php if (is_admin()): ?>
         <?php if (empty($topics['closed'])): ?>
-            <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a> /
         <?php else: ?>
-            <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Открыть</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Открыть</a> /
         <?php endif; ?>
 
         <?php if (empty($topics['locked'])): ?>
-            <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Закрепить</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Закрепить</a> /
         <?php else: ?>
-            <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid=<?=$tid?>&amp;start=<?=$start?>&amp;uid=<?=$_SESSION['token']?>">Открепить</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Открепить</a> /
         <?php endif; ?>
 
-        <a href="/admin/forum?act=edittopic&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Изменить</a> /
+        <a href="/admin/forum?act=edittopic&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>">Изменить</a> /
         <a href="/admin/forum?act=movetopic&amp;tid=<?=$tid?>">Переместить</a> /
         <a href="/admin/forum?act=deltopics&amp;fid=<?=$topics['forum_id']?>&amp;del=<?=$tid?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
-        <a href="/admin/forum?act=topic&amp;tid=<?=$tid?>&amp;start=<?=$start?>">Управление</a><br />
+        <a href="/admin/forum?act=topic&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>">Управление</a><br />
     <?php endif; ?>
 
     <?php if (!empty($topics['is_moder'])): ?>
-        <form action="/topic/<?=$tid?>/delete?start=<?=$start?>" method="post">
+        <form action="/topic/<?=$tid?>/delete?page=<?=$page['current']?>" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
     <?php endif; ?>
 
-    <?php if ($total > 0): ?>
+    <?php if ($page['total'] > 0): ?>
         <?php foreach ($topics['posts'] as $key=>$data): ?>
-            <?php $num = ($start + $key + 1); ?>
+            <?php $num = ($page['offset'] + $key + 1); ?>
             <div class="post">
             <div class="b" id="post_<?=$data['id']?>">
 
@@ -81,13 +80,13 @@
                         <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
                         <noindex>
-                            <a href="#" onclick="return sendComplaint(this)" data-type="/topic" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $start }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="/topic" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         </noindex>
 
                     <?php endif; ?>
 
                     <?php if (($log == $data['user'] && $data['time'] + 600 > SITETIME) || !empty($topics['is_moder'])): ?>
-                        <a href="/topic/<?=$tid?>/<?=$data['id']?>/edit?start=<?=$start?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                        <a href="/topic/<?=$tid?>/<?=$data['id']?>/edit?page=<?=$page['current']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         <?php if (!empty($topics['is_moder'])): ?>
                         <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
                         <?php endif; ?>
@@ -141,7 +140,7 @@
         </form>
     <?php endif; ?>
 
-    <?php page_strnavigation('/topic/'.$tid.'?', $config['forumpost'], $start, $total); ?>
+    <?php App::pagination($page) ?>
 
     <?php if (is_user()): ?>
         <?php if (empty($topics['closed'])): ?>

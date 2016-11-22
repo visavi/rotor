@@ -1,6 +1,5 @@
 <?php
 
-$start = abs(intval(Request::input('start', 0)));
 $fid  = isset($params['fid']) ? abs(intval($params['fid'])) : 0;
 
 switch ($act):
@@ -15,10 +14,6 @@ case 'index':
             App::abort('default', 'Данного раздела не существует!');
         }
 
-        $page = floor(1 + $start / $config['forumtem']);
-        $config['header'] = $forums['title'];
-        $config['newtitle'] = $forums['title'].' (Стр. '.$page.')';
-
         if (!empty($forums['parent'])) {
             $forums['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$forums['parent']]);
         }
@@ -27,15 +22,12 @@ case 'index':
         $forums['subforums'] = $querysub -> fetchAll();
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `forum_id`=?;", [$fid]);
+        $page = App::paginate(App::setting('forumtem'), $total);
 
-        if ($total > 0 && $start >= $total) {
-            $start = last_page($total, $config['forumtem']);
-        }
-
-        $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `locked` DESC, `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", [$fid]);
+        $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `locked` DESC, `last_time` DESC LIMIT ".$page['offset'].", ".App::setting('forumtem').";", [$fid]);
         $forums['topics'] = $querytopic->fetchAll();
 
-        App::view('forum/forum', compact('forums', 'fid', 'start', 'total'));
+        App::view('forum/forum', compact('forums', 'fid', 'page'));
 
 break;
 

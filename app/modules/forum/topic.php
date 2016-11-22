@@ -1,6 +1,5 @@
 <?php
 
-$start = abs(intval(Request::input('start', 0)));
 $tid  = isset($params['tid']) ? abs(intval($params['tid'])) : 0;
 
 switch ($act):
@@ -20,10 +19,10 @@ case 'index':
     }
 
     if (is_user()) {
-        $topics['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `topic`=? AND `user`=? LIMIT 1;", [$tid, $log]);
+        $topics['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$tid, $log]);
 
         if (!empty($topics['bookmark']) && $topics['posts'] > $topics['bookmark']['posts']) {
-            DB::run() -> query("UPDATE `bookmarks` SET `posts`=? WHERE `topic`=? AND `user`=? LIMIT 1;", [$topics['posts'], $tid, $log]);
+            DB::run() -> query("UPDATE `bookmarks` SET `posts`=? WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$topics['posts'], $tid, $log]);
         }
     }
 
@@ -34,14 +33,9 @@ case 'index':
     }
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
+    $page = App::paginate(App::setting('forumpost'), $total);
 
-    if ($total > 0 && $start >= $total) {
-        $start = last_page($total, $config['forumpost']);
-    }
-
-    $page = floor(1 + $start / $config['forumpost']);
-
-    $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['forumpost'].";", [$tid]);
+    $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['forumpost'].";", [$tid]);
 
     $topics['posts'] = $querypost->fetchAll();
 
@@ -63,8 +57,9 @@ case 'index':
             $topics['files'][$file['post_id']][] = $file;
         }
     }
+
     // ------------------------------------- //
-    App::view('forum/topic', compact('topics', 'tid', 'start', 'total', 'page'));
+    App::view('forum/topic', compact('topics', 'tid', 'page'));
 
 break;
 
@@ -180,7 +175,7 @@ case 'create':
         App::setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/topic/'.$tid);
+    App::redirect('/topic/'.$tid.'/end');
 break;
 
 ############################################################################################
@@ -192,6 +187,7 @@ case 'complaint':
 
     $token = check(Request::input('token'));
     $id    = abs(intval(Request::input('id')));
+    $page = abs(intval(Request::input('page')));
 
     $validation = new Validation();
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -212,7 +208,7 @@ case 'complaint':
             'text'    => $data['text'],
             'time'    => $data['time'],
             'addtime' => SITETIME,
-            'link'    => '/topic/'.$data['topic_id'].'?start='.$start,
+            'link'    => '/topic/'.$data['topic_id'].'?page='.$page,
         ]);
 
         exit(json_encode(['status' => 'success']));
@@ -229,6 +225,7 @@ case 'delete':
 
     $token = check(Request::input('token'));
     $del   = intar(Request::input('del'));
+    $page = abs(intval(Request::input('page')));
 
     $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 
@@ -267,7 +264,7 @@ case 'delete':
         App::setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/topic/'.$tid.'?start='.$start);
+    App::redirect('/topic/'.$tid.'?page='.$page);
 break;
 
 ############################################################################################
@@ -369,6 +366,7 @@ break;
 case 'editpost':
 
     $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
+    $page = abs(intval(Request::input('page')));
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения сообщения!');
 
@@ -426,7 +424,7 @@ case 'editpost':
             }
 
             App::setFlash('success', 'Сообщение успешно отредактировано!');
-            App::redirect('/topic/'.$tid.'?start='.$start);
+            App::redirect('/topic/'.$tid.'?page='.$page);
 
         } else {
             App::setInput(Request::all());
@@ -437,7 +435,7 @@ case 'editpost':
     $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=?;", [$id]);
     $files = $queryfiles->fetchAll();
 
-    App::view('forum/topic_edit_post', compact('post', 'files', 'start'));
+    App::view('forum/topic_edit_post', compact('post', 'files', 'page'));
 
 break;
 
@@ -455,8 +453,8 @@ case 'viewpost':
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    $end = floor(($querytopic - 1) / $config['forumpost']) * $config['forumpost'];
-    App::redirect('/topic/'.$tid.'?start='.$end.'#post_'.$id);
+    $end = ceil($querytopic / $config['forumpost']);
+    App::redirect('/topic/'.$tid.'?page='.$end.'#post_'.$id);
 break;
 
 ############################################################################################
@@ -470,8 +468,8 @@ case 'end':
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    $end = floor(($topic['posts'] - 1) / $config['forumpost']) * $config['forumpost'];
-    App::redirect('/topic/'.$tid.'?start='.$end);
+    $end = ceil($topic['posts'] / $config['forumpost']);
+    App::redirect('/topic/'.$tid.'?page='.$end);
 break;
 
 endswitch;

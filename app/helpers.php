@@ -1701,10 +1701,10 @@ function strsearch($str, $arr) {
     return false;
 }
 
-// --------------- Функция определения последней страницы -----------------//
+/*// --------------- Функция определения последней страницы -----------------//
 function last_page($total, $posts) {
     return floor(($total - 1) / $posts) * $posts;
-}
+}*/
 
 // ------------- Функция кэширования админских ссылок -------------//
 function cache_admin_links($cache=10800) {
@@ -2125,4 +2125,15 @@ function cache_functions($cache=10800) {
     }
 
     return unserialize(file_get_contents(STORAGE.'/temp/functions.dat'));
+}
+
+// ------------- Кеширование пользовательских функций -------------//
+$functions = cache_functions();
+
+if (!empty($functions)) {
+    foreach ($functions as $file) {
+        if (file_exists(APP.'/functions/'.$file)) {
+            include_once (APP.'/functions/'.$file);
+        }
+    }
 }

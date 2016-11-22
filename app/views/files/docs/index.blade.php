@@ -86,7 +86,6 @@
 - <a href="/files/docs/addmail">addmail</a><br />
 - <a href="/files/docs/page_jumpnavigation">page_jumpnavigation</a><br />
 - <a href="/files/docs/page_strnavigation">page_strnavigation</a><br />
-- forum_navigation<br />
 - stats_blog<br />
 - stats_forum<br />
 - stats_guest<br />

@@ -4,6 +4,9 @@
 
 @section('content')
     <h1>Список новых тем</h1>
+
+    <a href="/forum">Форум</a>
+
     <?php foreach ($topics as $data): ?>
         <div class="b">
 
@@ -22,13 +25,12 @@
         </div>
 
         <div>
-            Страницы:
-            <?php forum_navigation('/topic/'.$data['id'].'?', $config['forumpost'], $data['posts']); ?>
+            <?= App::forumPagination($data)?>
             Форум: <a href="/forum/<?=$data['forum_id']?>"><?=$data['forum_title']?></a><br />
             Автор: <?=nickname($data['author'])?> / Посл.: <?=nickname($data['last_user'])?> (<?=date_fixed($data['last_time'])?>)
         </div>
 
     <?php endforeach; ?>
 
-    <?php page_strnavigation('/forum/new/themes?', $config['forumtem'], $start, $total); ?>
+    <?php App::pagination($page) ?>
 @stop

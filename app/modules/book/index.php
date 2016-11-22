@@ -11,7 +11,7 @@ case 'index':
 
     $posts = DBM::run()->select('guest', null, App::setting('bookpost'), $page['offset'], ['time'=>'DESC']);
 
-    App::view('book/index', compact('posts', 'total', 'page'));
+    App::view('book/index', compact('posts', 'page'));
 break;
 
 /**

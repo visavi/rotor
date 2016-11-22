@@ -1,6 +1,5 @@
 <?php
 
-$start = abs(intval(Request::input('start', 0)));
 $tid  = isset($params['tid']) ? abs(intval($params['tid'])) : 0;
 
 if (! is_user()) {
@@ -14,17 +13,12 @@ switch ($act):
 case 'index':
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `bookmarks` WHERE `user`=?;", [$log]);
+    $page = App::paginate(App::setting('forumtem'), $total);
 
-    if ($total > 0 && $start >= $total) {
-        $start = last_page($total, $config['forumtem']);
-    }
-
-    $querytopic = DB::run() -> query("SELECT `topics`.*, `bookmarks`.* FROM `bookmarks` LEFT JOIN `topics` ON `bookmarks`.`topic`=`topics`.`id` WHERE `user`=?  ORDER BY `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", [$log]);
+    $querytopic = DB::run() -> query("SELECT `bookmarks`.posts book_posts, `topics`.* FROM `bookmarks` LEFT JOIN `topics` ON `bookmarks`.`topic_id`=`topics`.`id` WHERE `user`=?  ORDER BY `last_time` DESC LIMIT ".$page['offset'].", ".$config['forumtem'].";", [$log]);
     $topics = $querytopic->fetchAll();
 
-    App::view('forum/bookmark', compact('topics', 'start', 'total'));
-
-    page_strnavigation('/forum/bookmark?', $config['forumtem'], $start, $total);
+    App::view('forum/bookmark', compact('topics', 'page'));
 break;
 
 ############################################################################################
@@ -45,13 +39,13 @@ case 'perform':
 
     if ($validation->run()) {
 
-        $bookmark = DB::run()->querySingle("SELECT `id` FROM `bookmarks` WHERE `topic`=? AND `user`=? LIMIT 1;", [$tid, $log]);
+        $bookmark = DB::run()->querySingle("SELECT `id` FROM `bookmarks` WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$tid, $log]);
 
         if ($bookmark) {
-            DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic`=? AND `user`=?;", [$tid, $log]);
+            DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic_id`=? AND `user`=?;", [$tid, $log]);
             exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
         } else {
-            DB::run()->query("INSERT INTO `bookmarks` (`user`, `topic`, `forum`, `posts`) VALUES (?, ?, ?, ?);", [$log, $tid, $topic['forum_id'], $topic['posts']]);
+            DB::run()->query("INSERT INTO `bookmarks` (`user`, `topic_id`, `forum_id`, `posts`) VALUES (?, ?, ?, ?);", [$log, $tid, $topic['forum_id'], $topic['posts']]);
             exit(json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']));
         }
 
@@ -67,6 +61,7 @@ case 'delete':
 
     $token = check(Request::input('token'));
     $topicIds = intar(Request::input('del'));
+    $page = abs(intval(Request::input('page')));
 
     $validation = new Validation();
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -82,9 +77,9 @@ case 'delete':
         App::setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/forum/bookmark?start='.$start);
+    App::redirect('/forum/bookmark?page='.$page);
 
-    render('includes/back', ['link' => '/bookmark?start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/bookmark?page='.$page, 'title' => 'Вернуться']);
 break;
 
 endswitch;

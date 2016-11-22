@@ -1,6 +1,5 @@
 <?php
 
-$start = abs(intval(Request::input('start', 0)));
 $user = check(Request::input('user', $log));
 
 switch ($act):
@@ -13,14 +12,12 @@ case 'themes':
         App::abort('default', 'Созданных тем еще нет!');
     }
 
-    if ($start >= $total) {
-        $start = last_page($total, $config['forumtem']);
-    }
+    $page = App::paginate(App::setting('forumtem'), $total);
 
-    $querytopic = DB::run() -> query("SELECT `t`.*, f.`title` forum_title FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE t.`author`=? ORDER BY t.`last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";", [$user]);
+    $querytopic = DB::run() -> query("SELECT `t`.*, f.`title` forum_title FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE t.`author`=? ORDER BY t.`last_time` DESC LIMIT ".$page['offset'].", ".$config['forumtem'].";", [$user]);
     $topics = $querytopic->fetchAll();
 
-    App::view('forum/active_themes', compact('topics', 'user', 'start', 'total'));
+    App::view('forum/active_themes', compact('topics', 'user', 'page'));
 break;
 
 ############################################################################################
@@ -33,14 +30,12 @@ case 'posts':
         App::abort('default', 'Созданных сообщений еще нет!');
     }
 
-    if ($start >= $total) {
-        $start = last_page($total, $config['forumpost']);
-    }
+    $page = App::paginate(App::setting('forumpost'), $total);
 
-    $querypost = DB::run() -> query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['forumpost'].";", [$user]);
+    $querypost = DB::run() -> query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['forumpost'].";", [$user]);
     $posts = $querypost->fetchAll();
 
-    App::view('forum/active_posts', compact('posts', 'user', 'start', 'total'));
+    App::view('forum/active_posts', compact('posts', 'user', 'page'));
 break;
 
 ############################################################################################

@@ -6,6 +6,8 @@
 
     <h1>Список сообщений {{ $user }}</h1>
 
+    <a href="/forum">Форум</a>
+
     <?php foreach ($posts as $data): ?>
         <div class="post">
             <div class="b">
@@ -30,5 +32,5 @@
         </div>
     <?php endforeach; ?>
 
-    <?php page_strnavigation('/forum/active/posts?user='.$user.'&amp;', $config['forumpost'], $start, $total); ?>
+    <?php App::pagination($page) ?>
 @stop

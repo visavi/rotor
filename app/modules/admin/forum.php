@@ -305,7 +305,7 @@ if (is_admin()) {
                             DB::run() -> query("DELETE FROM `posts` WHERE `forum_id`=?;", [$fid]);
                             DB::run() -> query("DELETE FROM `topics` WHERE `forum_id`=?;", [$fid]);
                             DB::run() -> query("DELETE FROM `forums` WHERE `id`=?;", [$fid]);
-                            DB::run() -> query("DELETE FROM `bookmarks` WHERE `forum`=?;", [$fid]);
+                            DB::run() -> query("DELETE FROM `bookmarks` WHERE `forum_id`=?;", [$fid]);
 
                             notice('Раздел успешно удален!');
                             redirect("/admin/forum");
@@ -372,7 +372,9 @@ if (is_admin()) {
                         echo '<a href="/admin/forum?act=edittopic&amp;tid='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
                         echo '<a href="/admin/forum?act=movetopic&amp;tid='.$data['id'].'&amp;start='.$start.'">Переместить</a></div>';
 
-                        echo '<div>Страницы: ';
+                        echo '<div>';
+                        App::forumPagination($data);
+
                         forum_navigation('/admin/forum?act=topic&amp;tid='.$data['id'].'&amp;', $config['forumpost'], $data['posts']);
                         echo 'Сообщение: '.nickname($data['last_user']).' ('.date_fixed($data['last_time']).')</div>';
                     }
@@ -555,7 +557,7 @@ if (is_admin()) {
 
                         DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$newlast['id'], $newlast['title'], $newlast['last_user'], $newlast['last_time'], $newlast['forum_id']]);
                         // Обновление закладок
-                        DB::run() -> query("UPDATE `bookmarks` SET `forum`=? WHERE `topic`=?;", [$section, $tid]);
+                        DB::run() -> query("UPDATE `bookmarks` SET `forum_id`=? WHERE `topic_id`=?;", [$section, $tid]);
 
                         notice('Тема успешно перемещена!');
                         redirect("/admin/forum?act=forum&fid=$section");
@@ -604,7 +606,7 @@ if (is_admin()) {
                     $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `topic_id` IN (".$delId.");");
 
                     // Удаление закладок
-                    DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic` IN (".$delId.");");
+                    DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic_id` IN (".$delId.");");
 
                     // Обновление счетчиков
                     DB::run() -> query("UPDATE `forums` SET `topics`=`topics`-?, `posts`=`posts`-? WHERE `id`=?;", [$deltopics, $delposts, $fid]);

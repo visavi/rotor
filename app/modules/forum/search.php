@@ -1,6 +1,5 @@
 <?php
 
-$start   = abs(intval(Request::input('start', 0)));
 $fid     = isset($params['fid']) ? abs(intval($params['fid'])) : 0;
 $find    = check(Request::input('find'));
 $type    = abs(intval(Request::input('type')));
@@ -73,16 +72,14 @@ if (empty($find)) {
             $total = count($_SESSION['forumfindres']);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['forumtem']);
-                }
+                $page = App::paginate(App::setting('forumtem'), $total);
 
                 $result = implode(',', $_SESSION['forumfindres']);
 
-                $querytopic = DB::run()->query("SELECT * FROM `topics` WHERE `id` IN (" . $result . ") ORDER BY `last_time` DESC LIMIT " . $start . ", " . $config['forumtem'] . ";");
+                $querytopic = DB::run()->query("SELECT * FROM `topics` WHERE `id` IN (" . $result . ") ORDER BY `last_time` DESC LIMIT " . $page['offset'] . ", " . $config['forumtem'] . ";");
                 $topics = $querytopic->fetchAll();
 
-                App::view('forum/search_topics', compact('topics', 'start', 'total', 'find', 'type', 'where', 'section', 'period'));
+                App::view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
 
             } else {
                 App::setInput(Request::all());
@@ -109,16 +106,14 @@ if (empty($find)) {
             $total = count($_SESSION['forumfindres']);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['forumpost']);
-                }
+                $page = App::paginate(App::setting('forumpost'), $total);
 
                 $result = implode(',', $_SESSION['forumfindres']);
 
-                $querypost = DB::run()->query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE `id` IN (" . $result . ") ORDER BY `time` DESC LIMIT " . $start . ", " . $config['forumpost'] . ";");
+                $querypost = DB::run()->query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE posts.`id` IN (" . $result . ") ORDER BY `time` DESC LIMIT " . $page['offset'] . ", " . $config['forumpost'] . ";");
                 $posts = $querypost->fetchAll();
 
-                App::view('forum/search_posts', compact('posts', 'start', 'total', 'find', 'type', 'where', 'section', 'period'));
+                App::view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
 
             } else {
                 App::setInput(Request::all());

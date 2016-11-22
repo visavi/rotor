@@ -5,6 +5,8 @@
 @section('content')
     <h1>Список новых сообщений</h1>
 
+    <a href="/forum">Форум</a>
+
     <?php foreach ($posts as $data): ?>
         <div class="b">
             <i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['topic_id']?>/<?=$data['id']?>"><?=$data['title']?></a></b>
@@ -22,5 +24,5 @@
         </div>
     <?php endforeach; ?>
 
-    <?php page_strnavigation('/forum/new/posts?', $config['forumpost'], $start, $total); ?>
+    <?php App::pagination($page) ?>
 @stop

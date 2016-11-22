@@ -1,7 +1,5 @@
 <?php
 
-$start = abs(intval(Request::input('start', 0)));
-
 switch ($act):
 ############################################################################################
 ##                                     Последние темы                                     ##
@@ -16,14 +14,13 @@ case 'themes':
 	if ($total > 100) {
 		$total = 100;
 	}
-	if ($start >= $total) {
-		$start = last_page($total, $config['forumtem']);
-	}
 
-	$querytopic = DB::run() -> query("SELECT `t`.*, f.`title` forum_title FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` ORDER BY `last_time` DESC LIMIT ".$start.", ".$config['forumtem'].";");
+    $page = App::paginate(App::setting('forumtem'), $total);
+
+	$querytopic = DB::run() -> query("SELECT `t`.*, f.`title` forum_title FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` ORDER BY `last_time` DESC LIMIT ".$page['offset'].", ".$config['forumtem'].";");
 	$topics = $querytopic->fetchAll();
 
-	App::view('forum/new_themes', compact('topics', 'start', 'total'));
+	App::view('forum/new_themes', compact('topics', 'page'));
 break;
 
 ############################################################################################
@@ -39,14 +36,13 @@ case 'posts':
 	if ($total > 100) {
 		$total = 100;
 	}
-	if ($start >= $total) {
-		$start = last_page($total, $config['forumpost']);
-	}
 
-	$querypost = DB::run() -> query("SELECT `posts`.*, `title`, `posts` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['forumpost'].";");
+    $page = App::paginate(App::setting('forumpost'), $total);
+
+	$querypost = DB::run() -> query("SELECT `posts`.*, `title`, `posts` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['forumpost'].";");
 	$posts = $querypost->fetchAll();
 
-	App::view('forum/new_posts', compact('posts', 'start', 'total'));
+	App::view('forum/new_posts', compact('posts', 'page'));
 break;
 
 endswitch;

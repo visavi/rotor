@@ -592,12 +592,12 @@ class App
     // ----------------------- Вывод страниц в форуме ------------------------//
     public static function forumPagination($topic) {
 
-        if ($topic->postCount()) {
+        if ($topic['posts']) {
 
             $pages = [];
-            $link = '/topic/'.$topic->id;
+            $link = '/topic/'.$topic['id'];
 
-            $pg_cnt = ceil($topic->postCount() / Setting::get('posts_per_page'));
+            $pg_cnt = ceil($topic['posts'] / App::setting('forumpost'));
 
             for ($i = 1; $i <= 5; $i++) {
                 if ($i <= $pg_cnt) {

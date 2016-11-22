@@ -15,7 +15,7 @@
     <?php endif;?>
     <hr />
 
-    <?php if ($total > 0): ?>
+    <?php if ($page['total'] > 0): ?>
         <?php foreach ($posts as $data): ?>
             <div class="post">
                 <div class="b">

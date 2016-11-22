@@ -34,5 +34,21 @@
         "post-create-project-cmd": [
             "php -r \"copy('.env.example', '.env');\""
         ]
+    },
+    "autoload": {
+        "psr-4": {
+            "": [
+                "app/classes/"
+            ]
+        },
+        "files": [
+            "app/routes.php",
+            "app/helpers.php"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "6.1-dev"
+        }
     }
 }
