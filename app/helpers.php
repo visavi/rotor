@@ -974,44 +974,6 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
     }
 }
 
-// ----------------------- Вывод страниц в форуме ------------------------//
-function forum_navigation($url, $posts, $total) {
-    if ($total > 0) {
-
-        $pages = [];
-        $last_page = ceil($total / $posts);
-        $last_start = $last_page * $posts - $posts;
-        $max = $posts * 5;
-
-        for($i = 0; $i < $max;) {
-            if ($i < $total && $i >= 0) {
-                $pages[] = [
-                    'start' => $i,
-                    'name' => floor(1 + $i / $posts),
-                ];
-            }
-            $i += $posts;
-        }
-
-        if ($max < $total) {
-
-            if ($max + $posts < $total) {
-                $pages[] = [
-                    'separator' => true,
-                    'name' => ' ... ',
-                ];
-            }
-
-            $pages[] = [
-                'start' => $last_start,
-                'name' => $last_page,
-            ];
-        }
-
-        render('includes/pagination_forum', compact('pages', 'url'));
-    }
-}
-
 // --------------------- Функция вывода навигации в галерее ------------------------//
 function photo_navigation($id) {
 
