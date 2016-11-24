@@ -26,24 +26,29 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
             $files = preg_grep('/^([^.])/', scandir(APP.'/views/'.$path.$file));
 
-            usort($files, function($a, $b) {
-                if (is_file(APP.'/views/'.$a) && is_file(APP.'/views/'.$b)) {
+            usort($files, function($a, $b) use($path) {
+                if (is_file(APP.'/views/'.$path.$a) && is_file(APP.'/views/'.$path.$b)) {
                     return 0;
                 }
-                return (is_dir(APP.'/views/'.$a)) ? -1 : 1;
+                return (is_dir(APP.'/views/'.$path.$a)) ? -1 : 1;
             });
 
             $total = count($files);
 
-            if ($total > 0) {
+            show_title($path ? $path : 'Редактирование страниц');
 
-                show_title($path ? $path : 'Редактирование страниц');
+            if ($total > 0) {
 
                 echo '<ul class="list-group">';
                 foreach ($files as $file) {
 
                     if (is_dir(APP.'/views/'.$path.$file)) {
-                        echo '<li class="list-group-item"><i class="fa fa-folder-o"></i> <b><a href="/admin/files?path='.$path.$file.'/">'.$file.'</a></b><br />';
+                        echo '<li class="list-group-item">';
+                        echo '<div class="pull-right">';
+
+                        echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.$file.'&amp;type=dir&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить эту директорию\')"><i class="fa fa-remove"></i></a></div>';
+
+                        echo '<i class="fa fa-folder-o"></i> <b><a href="/admin/files?path='.$path.$file.'/">'.$file.'</a></b><br />';
                         echo 'Объектов: '.count(array_diff(scandir(APP.'/views/'.$path.$file), ['.', '..'])).'</li>';
                     } else {
 
@@ -51,7 +56,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
                         $strok = count(file(APP.'/views/'.$path.$file));
 
                         echo '<li class="list-group-item"><div class="pull-right">';
-                        echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;file='.$file.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
+                        echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.basename($file, '.blade.php').'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
 
                         echo '<i class="fa fa-file-o"></i> ';
                         echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.basename($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br />';
@@ -75,7 +80,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
         ############################################################################################
         case 'edit':
 
-            if (preg_match('|^[a-z0-9_\-/]+$|i', $path) && preg_match('|^[a-z0-9_\-/]+$|i', $file)) {
+            if (preg_match('|^[a-z0-9_\-/]+$|', $path) && preg_match('|^[a-z0-9_\-/]+$|', $file)) {
                 if (file_exists(APP.'/views/'.$path.$file.'.blade.php')) {
                     if (is_writeable(APP.'/views/'.$path.$file.'.blade.php')) {
 
@@ -126,80 +131,70 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
             echo '<b>Создание нового файла</b><br /><br />';
 
-            if (is_writeable(APP.'/views')) {
+            if (is_writeable(APP.'/views/'.$path)) {
+
+                if (Request::isMethod('post')) {
+                    $token = check(Request::input('token'));
+                    $name = check(Request::input('name'));
+                    $type = check(Request::input('type'));
+
+                    if ($token == $_SESSION['token']) {
+                        if (preg_match('|^[a-z0-9_\-]+$|', $name)) {
+
+                            if ($type == 'file') {
+                                if (!file_exists(APP .'/views/'.$path.$name.'.blade.php')) {
+
+                                    file_put_contents(APP.'/views/'.$path.$name.'.blade.php', '');
+                                    chmod(APP.'/views/'.$path.$name.'.blade.php', 0666);
+
+                                    notice('Новый файл успешно создан!');
+                                    redirect('/admin/files?act=edit&file='.$name.'&path='.$path);
+
+                                } else {
+                                    show_error('Ошибка! Файл с данным названием уже существует!');
+                                }
+                            } else {
+                                if (!file_exists(APP .'/views/'.$path.$name)) {
+                                    $old = umask(0);
+                                    mkdir(APP .'/views/'.$path.$name, 0777, true);
+                                    umask($old);
+
+                                    notice('Новая директория успешно создана!');
+                                    redirect('/admin/files?path='.$path.$name.'/');
+                                } else {
+                                    show_error('Ошибка! Категория с данным названием уже существует!');
+                                }
+                            }
+
+                        } else {
+                            show_error('Ошибка! Недопустимое название файла или директории!');
+                        }
+                    } else {
+                        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    }
+                }
 
                 echo '<div class="form">';
-                echo '<form action="/admin/files?act=addnew&amp;path='.$path.'" method="post">';
+                echo '<form action="/admin/files?act=new&amp;path='.$path.'" method="post">';
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
-                echo '<input type="hidden" name="object" value="dir" />';
+                echo '<input type="hidden" name="type" value="dir" />';
                 echo 'Название директории:<br />';
                 echo '<input type="text" name="name" maxlength="30" /><br />';
                 echo '<input value="Создать директорию" type="submit" /></form></div><br />';
 
                 echo '<div class="form">';
-                echo '<form action="/admin/files?act=addnew&amp;path='.$path.'" method="post">';
+                echo '<form action="/admin/files?act=new&amp;path='.$path.'" method="post">';
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
-                echo '<input type="hidden" name="object" value="file" />';
+                echo '<input type="hidden" name="type" value="file" />';
                 echo 'Название файла (без расширения):<br />';
                 echo '<input type="text" name="name" maxlength="30" /><br />';
                 echo '<input value="Создать файл" type="submit" /></form></div>';
                 echo '<br />Разрешены латинские символы и цифры, а также знаки дефис и нижнее подчеркивание<br /><br />';
             } else {
-                show_error('Директория недоступна для создания файлов!');
+                show_error('Директория '.$path.' недоступна для записи!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br />';
-        break;
-
-        ############################################################################################
-        ##                                      Создание файла                                    ##
-        ############################################################################################
-        case 'addnew':
-
-            $token = check(Request::input('token'));
-            $name = check(Request::input('name'));
-            $object = check(Request::input('object'));
-
-            if ($token == $_SESSION['token']) {
-                if (is_writeable(APP.'/views/'.$path)) {
-                    if (preg_match('|^[a-z0-9_\-]+$|', $name)) {
-
-                        if ($object == 'file') {
-                            if (!file_exists(APP .'/views/'.$path.$name.'.blade.php')) {
-
-                                file_put_contents(APP.'/views/'.$path.$name.'.blade.php', '');
-                                chmod(APP.'/views/'.$path.$name.'.blade.php', 0666);
-
-                                notice('Новый файл успешно создан!');
-                                redirect('/admin/files?act=edit&file='.$name.'&path='.$path);
-
-                            } else {
-                                show_error('Ошибка! Файл с данным названием уже существует!');
-                            }
-                        } else {
-                            if (!file_exists(APP .'/views/'.$path.$name)) {
-                                $old = umask(0);
-                                mkdir(APP .'/views/'.$path.$name, 0777, true);
-                                umask($old);
-
-                                notice('Новая директория успешно создана!');
-                                redirect('/admin/files?path='.$path.$name);
-                            } else {
-                                show_error('Ошибка! Категория с данным названием уже существует!');
-                            }
-                        }
-
-                    } else {
-                        show_error('Ошибка! Недопустимое название файла!');
-                    }
-                } else {
-                    show_error('Директория недоступна для создания файлов!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?act=new&amp;path='.$path.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -207,32 +202,47 @@ if (is_admin([101]) && $log == $config['nickname']) {
         ############################################################################################
         case 'del':
 
-            $token = check($_GET['token']);
-
-            $subdir = !empty($dir) ? $dir.'/' : '';
+            $token = check(Request::input('token'));
+            $name = check(Request::input('name'));
+            $type = check(Request::input('type'));
 
             if ($token == $_SESSION['token']) {
-                if (preg_match('|^[a-z0-9_\.\-]+$|i', $file)) {
-                    if (file_exists(APP.'/views/'.$subdir.$file)) {
+                if (is_writeable(APP.'/views/'.$path)) {
+                    if (preg_match('|^[a-z0-9_\-]+$|', $name)) {
 
-                        if (unlink(APP.'/views/'.$subdir.$file)) {
-                            notice('Файл успешно удален!');
-                            redirect ('/admin/files?dir='.$dir);
-
+                        if ($type == 'dir') {
+                            if (file_exists(APP .'/views/'.$path.$name)) {
+                                removeDir(APP . '/views/' . $path . $name);
+                                notice('Директория успешно удалена!');
+                                redirect('/admin/files?path=' . $path);
+                            } else {
+                                show_error('Ошибка! Данного директории не существует!');
+                            }
                         } else {
-                            show_error('Ошибка! Не удалось удалить файл!');
+                            if (file_exists(APP .'/views/'.$path.$name.'.blade.php')) {
+
+                                if (unlink(APP .'/views/'.$path.$name.'.blade.php')) {
+                                    notice('Файл успешно удален!');
+                                    redirect ('/admin/files?path='.$path);
+
+                                } else {
+                                    show_error('Ошибка! Не удалось удалить файл!');
+                                }
+                            } else {
+                                show_error('Ошибка! Данного файла не существует!');
+                            }
                         }
                     } else {
-                        show_error('Ошибка! Данного файла не существует!');
+                        show_error('Ошибка! Недопустимое название страницы!');
                     }
                 } else {
-                    show_error('Ошибка! Недопустимое название страницы!');
+                    show_error('Директория '.$path.' недоступна для записи!');
                 }
             } else {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br />';
         break;
 
     endswitch;
