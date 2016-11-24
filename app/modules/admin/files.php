@@ -9,7 +9,7 @@ if (
     !file_exists(APP.'/views/'.$path) ||
     !is_dir(APP.'/views/'.$path) ||
     strpos($path, '.') !== false ||
-
+    starts_with($path, '/') ||
     !ends_with($path, '/')
 ) {
     $path = '';
