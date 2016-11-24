@@ -9,7 +9,7 @@ if (
     !file_exists(APP.'/views/'.$path) ||
     !is_dir(APP.'/views/'.$path) ||
     strpos($path, '.') !== false ||
-    starts_with($path, '/') ||
+
     !ends_with($path, '/')
 ) {
     $path = '';
@@ -80,7 +80,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
         ############################################################################################
         case 'edit':
 
-            if (preg_match('|^[a-z0-9_\-/]+$|', $path) && preg_match('|^[a-z0-9_\-/]+$|', $file)) {
+            if ((empty($path) || preg_match('|^[a-z0-9_\-/]$|+', $path)) && preg_match('|^[a-z0-9_\-/]+$|', $file)) {
                 if (file_exists(APP.'/views/'.$path.$file.'.blade.php')) {
                     if (is_writeable(APP.'/views/'.$path.$file.'.blade.php')) {
 
@@ -110,6 +110,8 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
                         echo '<textarea id="markItUpHtml" cols="90" rows="30" name="msg">'.check($mainfile).'</textarea><br />';
                         echo '<input type="submit" value="Редактировать" /></form></div><br />';
+
+                        echo '<p class="help-block">Нажмите Ctrl+Enter для перевода строки, Shift+Enter для вставки линии</p>';
 
                     } else {
                         show_error('Ошибка! Файл недоступен для записи!');
