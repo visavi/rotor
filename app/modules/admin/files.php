@@ -8,7 +8,7 @@ $path = check(Request::input('path'));
 if (
     !file_exists(APP.'/views/'.$path) ||
     !is_dir(APP.'/views/'.$path) ||
-    strpos($path, '.') !== false ||
+    str_contains($path, '.') ||
     starts_with($path, '/') ||
     !ends_with($path, '/')
 ) {

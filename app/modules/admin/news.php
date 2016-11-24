@@ -1,9 +1,8 @@
 <?php
 App::view($config['themes'].'/index');
 
-$act   = check(Request::input('act', 'index'));
-$id    = abs(intval(Request::input('id', 0)));
-$start = abs(intval(Request::input('start', 0)));
+$act = check(Request::input('act', 'index'));
+$id  = abs(intval(Request::input('id', 0)));
 
 if (is_admin([101, 102])) {
     show_title('Управление новостями');
@@ -19,13 +18,11 @@ case 'index':
     $total = DB::run() -> querySingle("SELECT count(*) FROM `news`;");
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = last_page($total, $config['postnews']);
-        }
+        $page = App::paginate(App::setting('postnews'), $total);
 
-        $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postnews'].";");
+        $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postnews'].";");
 
-        echo '<form action="/admin/news?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+        echo '<form action="/admin/news?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
         while ($data = $querynews -> fetch()) {
 
@@ -36,7 +33,7 @@ case 'index':
 
             echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small><br />';
             echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-            echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
+            echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
                 echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
@@ -59,7 +56,7 @@ case 'index':
 
         echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-        page_strnavigation('/admin/news?', $config['postnews'], $start, $total);
+        App::pagination($page);
 
         echo 'Всего новостей: <b>'.(int)$total.'</b><br /><br />';
     } else {
@@ -77,6 +74,8 @@ break;
 ##                          Подготовка к редактированию новости                           ##
 ############################################################################################
 case 'edit':
+    $page  = abs(intval(Request::input('page', 1)));
+
     $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($datanews)) {
@@ -84,7 +83,7 @@ case 'edit':
         echo '<b><big>Редактирование</big></b><br /><br />';
 
         echo '<div class="form cut">';
-        echo '<form action="/admin/news?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+        echo '<form action="/admin/news?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
         echo 'Заголовок:<br />';
         echo '<input type="text" name="title" size="50" maxlength="50" value="'.$datanews['title'].'" /><br />';
         echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$datanews['text'].'</textarea><br />';
@@ -110,7 +109,7 @@ case 'edit':
         show_error('Ошибка! Выбранная новость не существует, возможно она была удалена!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -123,6 +122,7 @@ case 'change':
     $title = (isset($_POST['title'])) ? check($_POST['title']) : '';
     $closed = (empty($_POST['closed'])) ? 0 : 1;
     $top = (empty($_POST['top'])) ? 0 : 1;
+    $page = abs(intval(Request::input('page', 1)));
 
     $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
@@ -162,14 +162,14 @@ case 'change':
         // ---------------------------------------------------------------------------------//
 
         notice('Новость успешно отредактирована!');
-        redirect("/admin/news?start=$start");
+        redirect("/admin/news?page=$page");
 
     } else {
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?start='.$start.'">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?page='.$page.'">К новостям</a><br />';
 break;
 
 ############################################################################################
@@ -285,6 +285,7 @@ case 'del':
 
     $uid = check($_GET['uid']);
     $del = (isset($_REQUEST['del'])) ? intar($_REQUEST['del']) : 0;
+    $page  = abs(intval(Request::input('page', 1)));
 
     if ($uid == $_SESSION['token']) {
         if (!empty($del)) {
@@ -305,7 +306,7 @@ case 'del':
                 DB::run() -> query("DELETE FROM `commnews` WHERE `id` IN (".$del.");");
 
                 notice('Выбранные новости успешно удалены!');
-                redirect("/admin/news?start=$start");
+                redirect("/admin/news?page=$page");
 
             } else {
                 show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с изображениями!');
@@ -317,7 +318,7 @@ case 'del':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br />';
 break;
 
 endswitch;

@@ -1,8 +1,6 @@
 <?php
 App::view($config['themes'].'/index');
 
-$start = abs(intval(Request::input('start', 0)));
-
 show_title('Список последних комментариев');
 
 switch ($act):
@@ -17,11 +15,9 @@ switch ($act):
             if ($total > 100) {
                 $total = 100;
             }
-            if ($start >= $total) {
-                $start = last_page($total, $config['postnews']);
-            }
+            $page = App::paginate(App::setting('postnews'), $total);
 
-            $querynews = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `news` ON `comments`.`relate_id`=`news`.`id` WHERE relate_type='news' ORDER BY comments.`time` DESC LIMIT ".$start.", ".$config['postnews'].";");
+            $querynews = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `news` ON `comments`.`relate_id`=`news`.`id` WHERE relate_type='news' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['postnews'].";");
 
             while ($data = $querynews -> fetch()) {
                 echo '<div class="b">';
@@ -39,7 +35,7 @@ switch ($act):
                 echo '</div>';
             }
 
-            page_strnavigation('/news/allcomments?', $config['postnews'], $start, $total);
+            App::pagination($page);
         } else {
             show_error('Комментарии не найдены!');
         }
@@ -50,14 +46,15 @@ switch ($act):
     ############################################################################################
     case 'viewcomm':
 
-		$id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
+        $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
         $nid  = isset($params['nid']) ? abs(intval($params['nid'])) : 0;
 
         $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `id`<=? ORDER BY `time` ASC LIMIT 1;", ['news', $nid, $id]);
         if (!empty($querycomm)) {
-            $end = floor(($querycomm - 1) / $config['postnews']) * $config['postnews'];
 
-            redirect('/news/'.$nid.'/comments?start='.$end.'#comment_'.$id);
+            $end = ceil($querycomm / $config['postnews']);
+
+            redirect('/news/'.$nid.'/comments?page='.$end.'#comment_'.$id);
 
         } else {
             show_error('Ошибка! Комментариев к данной новости не существует!');

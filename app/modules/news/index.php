@@ -2,7 +2,6 @@
 App::view($config['themes'].'/index');
 
 $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
-$start = abs(intval(Request::input('start', 0)));
 
 switch ($act):
 ############################################################################################
@@ -16,16 +15,12 @@ case 'index':
     }
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `news`;");
+    $page = App::paginate(App::setting('postnews'), $total);
 
-    $page = floor(1 + $start / $config['postnews']);
-    $config['description'] = 'Список новостей (Стр. '.$page.')';
+    $config['description'] = 'Список новостей (Стр. '.$page['current'].')';
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = last_page($total, $config['postnews']);
-        }
-
-        $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postnews'].";");
+        $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postnews'].";");
 
         while ($data = $querynews -> fetch()) {
             echo '<div class="b">';
@@ -46,7 +41,7 @@ case 'index':
             echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
         }
 
-        page_strnavigation('/news?', $config['postnews'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('Новостей еще нет!');
     }
@@ -150,27 +145,24 @@ case 'comments':
     $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($datanews)) {
-        $config['newtitle'] = 'Комментарии - '.$datanews['title'];
 
-        $page = floor(1 + $start / $config['postnews']);
-        $config['description'] = 'Комментарии - '.$datanews['title'].' (Стр. '.$page.')';
+        $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['news', $id]);
+        $page = App::paginate(App::setting('postnews'), $total);
+
+        $config['newtitle'] = 'Комментарии - '.$datanews['title'];
+        $config['description'] = 'Комментарии - '.$datanews['title'].' (Стр. '.$page['current'].')';
 
         echo '<h1><a href="/news/'.$datanews['id'].'">'.$datanews['title'].'</a></h1>';
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['news', $id]);
-
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = last_page($total, $config['postnews']);
-            }
 
             $is_admin = is_admin();
             if ($is_admin) {
-                echo '<form action="/news/'.$id.'/delete?start='.$start.'" method="post">';
+                echo '<form action="/news/'.$id.'/delete?page='.$page['current'].'" method="post">';
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
             }
 
-            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postnews'].";", ['news', $id]);
+            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postnews'].";", ['news', $id]);
 
             while ($data = $querycomm -> fetch()) {
 
@@ -198,7 +190,7 @@ case 'comments':
                 echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
             }
 
-            page_strnavigation('/news/'.$id.'/comments?', $config['postnews'], $start, $total);
+            App::pagination($page);
         }
 
         if (empty($datanews['closed'])) {
@@ -237,6 +229,7 @@ case 'create':
 
     $msg   = check(Request::input('msg'));
     $token = check(Request::input('token'));
+    $page  = abs(intval(Request::input('page', 1)));
 
     if (is_user()) {
 
@@ -276,7 +269,7 @@ case 'create':
         show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/'.$id.'/comments?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/'.$id.'/comments?page='.$page.'">Вернуться</a><br />';
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
 break;
 
@@ -287,6 +280,7 @@ case 'delete':
 
     $token = check(Request::input('token'));
     $del   = intar(Request::input('del'));
+    $page  = abs(intval(Request::input('page', 1)));
 
     if (is_admin()) {
         if ($token == $_SESSION['token']) {
@@ -299,7 +293,7 @@ case 'delete':
                 DB::run() -> query("UPDATE `news` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                 notice('Выбранные комментарии успешно удалены!');
-                redirect('/news/'.$id.'/comments?start='.$start);
+                redirect('/news/'.$id.'/comments?page='.$page);
 
             } else {
                 show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
@@ -311,7 +305,7 @@ case 'delete':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/'.$id.'/comments?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/'.$id.'/comments?page='.$page.'">Вернуться</a><br />';
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
 break;
 
@@ -324,9 +318,9 @@ case 'end':
 
     if (!empty($query)) {
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = last_page($total_comments, $config['postnews']);
+        $end = ceil($total_comments / $config['postnews']);
 
-        redirect('/news/'.$id.'/comments?start='.$end);
+        redirect('/news/'.$id.'/comments?page='.$end);
 
     } else {
         show_error('Ошибка! Данной новости не существует!');
