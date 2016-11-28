@@ -4,7 +4,7 @@
 
 <b><big>Редактирование</big></b><br /><br />
 
-<div class="form">
+<div class="form next">
 	<form action="/blog/blog?act=changeblog&amp;id=<?=$blogs['id']?>&amp;uid=<?=$_SESSION['token']?>" method="post">
 
 		Раздел:<br />

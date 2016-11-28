@@ -16,11 +16,7 @@ if (isset($_GET['cid'])) {
 } else {
     $cid = 0;
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
     show_title('Управление блогами');
@@ -244,16 +240,17 @@ if (is_admin()) {
                 $config['newtitle'] = $cats['name'];
 
                 echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Статей: '.$cats['count'].')';
-                echo ' (<a href="/blog/blog?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
+                echo ' (<a href="/blog/blog?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
                 echo '<hr />';
 
                 $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `category_id`=?;", [$cid]);
+                $page = App::paginate(App::setting('blogpost'), $total);
 
                 if ($total > 0) {
 
                     $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$cid]);
 
-                    echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                     while ($data = $queryblog -> fetch()) {
 
@@ -262,8 +259,8 @@ if (is_admin()) {
 
                         echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
 
-                        echo '<a href="/admin/blog?act=editblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
-                        echo '<a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;start='.$start.'">Переместить</a></div>';
+                        echo '<a href="/admin/blog?act=editblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a> / ';
+                        echo '<a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Переместить</a></div>';
 
                         echo '<div>Автор: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
                         echo 'Просмотров: '.$data['visits'].'<br />';
@@ -294,8 +291,8 @@ if (is_admin()) {
             if (!empty($blogs)) {
                 echo '<b><big>Редактирование</big></b><br /><br />';
 
-                echo '<div class="form">';
-                echo '<form action="/admin/blog?act=addeditblog&amp;cid='.$cid.'&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<div class="form next">';
+                echo '<form action="/admin/blog?act=addeditblog&amp;cid='.$cid.'&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 echo 'Заголовок:<br />';
                 echo '<input type="text" name="title" size="50" maxlength="50" value="'.$blogs['title'].'" /><br />';
@@ -311,7 +308,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной статьи не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog">Категории</a><br />';
         break;
 
@@ -337,7 +334,7 @@ if (is_admin()) {
                                     DB::run() -> query("UPDATE `blogs` SET `title`=?, `text`=?, `user`=?, `tags`=? WHERE `id`=?;", [$title, $text, $user, $tags, $id]);
 
                                     notice('Статья успешно отредактирована!');
-                                    redirect("/admin/blog?act=blog&cid=$cid&start=$start");
+                                    redirect("/admin/blog?act=blog&cid=$cid&page=$page");
 
                                 } else {
                                     show_error('Ошибка! Данной статьи не существует!');
@@ -358,8 +355,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=editblog&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">В раздел</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=editblog&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;page='.$page.'">В раздел</a><br />';
         break;
 
         ############################################################################################
@@ -375,7 +372,7 @@ if (is_admin()) {
                 $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
                 $cats = $querycats -> fetchAll();
 
-                if (count($cats) > 0) {
+                if (count($cats) > 1) {
                     echo '<div class="form">';
                     echo '<form action="/admin/blog?act=addmoveblog&amp;cid='.$blogs['category_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -391,6 +388,8 @@ if (is_admin()) {
 
                     echo '</select>';
                     echo '<input type="submit" value="Переместить" /></form></div><br />';
+                } elseif(count($cats) == 1) {
+                    show_error('Нет разделов для перемещения!');
                 } else {
                     show_error('Ошибка! Разделы блогов еще не созданы!');
                 }
@@ -398,7 +397,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной статьи не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -461,7 +460,7 @@ if (is_admin()) {
                     DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-? WHERE `id`=?", [$delblogs, $cid]);
 
                     notice('Выбранные статьи успешно удалены!');
-                    redirect("/admin/blog?act=blog&cid=$cid&start=$start");
+                    redirect("/admin/blog?act=blog&cid=$cid&page=$page");
 
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные статьи для удаления!');
@@ -470,7 +469,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;

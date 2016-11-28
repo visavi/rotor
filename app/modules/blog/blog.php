@@ -57,13 +57,15 @@ case 'view':
         $text = preg_split('|\[nextpage\](<br * /?>)*|', $blogs['text'], -1, PREG_SPLIT_NO_EMPTY);
 
         $total = count($text);
+        $page = App::paginate(1, $total);
+
         if ($total > 0) {
             $config['newtitle'] = $blogs['title'];
             $config['keywords'] = $blogs['tags'];
             $config['description'] = strip_str($blogs['text']);
 
             // --------------
-            if (empty($start)) {
+            if ($page['current'] == 1) {
                 $queryreads = DB::run() -> querySingle("SELECT `ip` FROM `readblog` WHERE `blog`=? AND `ip`=? LIMIT 1;", [$id, App::getClientIp()]);
 
                 if (empty($queryreads)) {
@@ -73,22 +75,22 @@ case 'view':
                     DB::run() -> query("UPDATE `blogs` SET `visits`=`visits`+1 WHERE `id`=? LIMIT 1;", [$id]);
                 }
             }
-var_dump()
+
             $end = ($total < $page['offset'] + 1) ? $total : $page['offset'] + 1;
 
             for ($i = $page['offset']; $i < $end; $i++) {
                 $blogs['text'] = App::bbCode($text[$i]).'<br />';
             }
 
-            $tags = preg_split('/[\s]*[,][\s]*/', $blogs['tags']);
+            $tagsList = preg_split('/[\s]*[,][\s]*/', $blogs['tags']);
 
-            $arrtags = '';
-            foreach($tags as $key => $value) {
+            $tags = '';
+            foreach($tagsList as $key => $value) {
                 $comma = (empty($key)) ? '' : ', ';
-                $arrtags .= $comma.'<a href="/blog/tags?act=search&amp;tags='.urlencode($value).'">'.$value.'</a>';
+                $tags .= $comma.'<a href="/blog/tags?act=search&amp;tags='.urlencode($value).'">'.$value.'</a>';
             }
 
-            render('blog/blog_view', ['blogs' => $blogs, 'tags' => $arrtags, 'start' => $start, 'total' => $total]);
+            render('blog/blog_view', compact('blogs', 'tags', 'page'));
 
         } else {
             show_error('Текста статьи еще нет!');
@@ -376,13 +378,14 @@ case 'comments':
         $config['newtitle'] = 'Комментарии - '.$blogs['title'];
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['blog', $id]);
+        $page = App::paginate(App::setting('blogcomm'), $total);
 
         if ($total > 0) {
 
             $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['blogcomm'].";", ['blog', $id]);
             $comments = $querycomm -> fetchAll();
 
-            render('blog/blog_comments', ['blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'start' => $start]);
+            render('blog/blog_comments', ['blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'page' => $page]);
 
             App::pagination($page);
         } else {
@@ -467,10 +470,10 @@ case 'spam':
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         notice('Жалоба успешно отправлена!');
-                        redirect("/blog/blog?act=comments&id=$id&start=$start");
+                        redirect("/blog/blog?act=comments&id=$id&page=$page");
 
                     } else {
                         show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
@@ -488,7 +491,7 @@ case 'spam':
         show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -511,7 +514,7 @@ case 'reply':
         show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -534,7 +537,7 @@ case 'quote':
         show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -552,7 +555,7 @@ case 'edit':
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
 
-                render('blog/blog_edit', ['post' => $post, 'pid' => $pid, 'start' => $start]);
+                render('blog/blog_edit', ['post' => $post, 'pid' => $pid, 'page' => $page]);
             } else {
                 show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
             }
@@ -563,7 +566,7 @@ case 'edit':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;apage='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -587,7 +590,7 @@ case 'editpost':
                         DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'blog', $pid]);
 
                         notice('Сообщение успешно отредактировано!');
-                       redirect("/blog/blog?act=comments&id=$id&start=$start");
+                       redirect("/blog/blog?act=comments&id=$id&page=$page");
 
                     } else {
                         show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
@@ -605,7 +608,7 @@ case 'editpost':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/blog/blog?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -629,7 +632,7 @@ case 'del':
                 DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                 notice('Выбранные комментарии успешно удалены!');
-                redirect("/blog/blog?act=comments&id=$id&start=$start");
+                redirect("/blog/blog?act=comments&id=$id&page=$page");
 
             } else {
                 show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
@@ -641,7 +644,7 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -654,9 +657,9 @@ case 'end':
     if (!empty($query['total_comments'])) {
 
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = last_page($total_comments, $config['blogpost']);
+        $end = ceil($total_comments / $config['blogpost']);
 
-        redirect("/blog/blog?act=comments&id=$id&start=$end");
+        redirect("/blog/blog?act=comments&id=$id&page=$end");
 
     } else {
         show_error('Ошибка! Комментарий к данной статье не существует!');

@@ -209,7 +209,7 @@ if ($act == 'add') {
                 }
                 // --------------------------------------------------------------------------//
                 if ($config['magnik'] == 1) {
-                    if (!empty($data[8]) && stristr($msg, $data[8])) {
+                    if (!empty($data[8]) && stristr(utf_lower($msg), $data[8])) {
                         $unifile = unifile(STORAGE."/chat/chat.dat", 9);
                         $text = no_br('Молодец ' . nickname($log) . '! Правильный ответ [b]' . $data[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
 
