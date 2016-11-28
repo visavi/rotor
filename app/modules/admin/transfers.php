@@ -17,11 +17,8 @@ if (is_admin([101, 102, 103])) {
             $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers`;");
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$start.", ".$config['listtransfers'].";");
+                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listtransfers'].";");
 
                 while ($data = $querytrans -> fetch()) {
                     echo '<div class="b">';
@@ -39,7 +36,7 @@ if (is_admin([101, 102, 103])) {
                     echo '</div>';
                 }
 
-                page_strnavigation('/admin/transfers?', $config['listtransfers'], $start, $total);
+                App::pagination($page);
 
                 echo '<div class="form">';
                 echo '<b>Поиск по пользователю:</b><br />';
@@ -67,11 +64,8 @@ if (is_admin([101, 102, 103])) {
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `user`=?;", [$uz]);
 
                 if ($total > 0) {
-                    if ($start >= $total) {
-                        $start = 0;
-                    }
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listtransfers'].";", [$uz]);
+                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listtransfers'].";", [$uz]);
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
@@ -88,7 +82,7 @@ if (is_admin([101, 102, 103])) {
                         echo '</div>';
                     }
 
-                    page_strnavigation('/admin/transfers?act=view&amp;uz='.$uz.'&amp;', $config['listtransfers'], $start, $total);
+                    App::pagination($page);
 
                     echo 'Всего операций: <b>'.$total.'</b><br /><br />';
 

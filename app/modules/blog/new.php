@@ -22,12 +22,12 @@ case 'blogs':
             $start = last_page($total, $config['blogpost']);
         }
 
-        $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+        $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
         $blogs = $queryblog->fetchAll();
 
         render('blog/new_blogs', ['blogs' => $blogs]);
 
-        page_strnavigation('/blog/new?act=blogs&amp;', $config['blogpost'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('Опубликованных статей еще нет!');
     }
@@ -49,12 +49,12 @@ case 'comments':
             $start = last_page($total, $config['blogpost']);
         }
 
-        $querycomment = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' ORDER BY comments.`time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+        $querycomment = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
         $comments = $querycomment->fetchAll();
 
         render('blog/new_comments', ['comments' => $comments]);
 
-        page_strnavigation('/blog/new?act=comments&amp;', $config['blogpost'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('Комментарии не найдены!');
     }

@@ -92,11 +92,9 @@ case 'index':
             $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [$cid, 1]);
+
+                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [$cid, 1]);
 
                 $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
@@ -118,7 +116,7 @@ case 'index':
                     echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
                 }
 
-                page_strnavigation('/load/down?cid='.$cid.'&amp;sort='.$sort.'&amp;', $config['downlist'], $start, $total);
+                App::pagination($page);
             } else {
                 if (empty($cats['closed'])) {
                     show_error('В данном разделе еще нет файлов!');
@@ -413,16 +411,14 @@ case 'comments':
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['down', $id]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
+
 
                 $is_admin = is_admin();
                 if ($is_admin) {
                     echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['downcomm'].";", ['down', $id]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['downcomm'].";", ['down', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -458,7 +454,7 @@ case 'comments':
                     echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
                 }
 
-                page_strnavigation('/load/down?act=comments&amp;id='.$id.'&amp;', $config['downcomm'], $start, $total);
+                App::pagination($page);
             } else {
                 show_error('Комментариев еще нет!');
             }

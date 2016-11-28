@@ -17,11 +17,8 @@ case 'files':
         if ($total > 100) {
             $total = 100;
         }
-        if ($start >= $total) {
-            $start = 0;
-        }
 
-        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
+        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1]);
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -36,7 +33,7 @@ case 'files':
             echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
         }
 
-        page_strnavigation('/load/new?act=files&amp;', $config['downlist'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('Опубликованных файлов еще нет!');
     }
@@ -54,11 +51,8 @@ case 'comments':
         if ($total > 100) {
             $total = 100;
         }
-        if ($start >= $total) {
-            $start = 0;
-        }
 
-        $querydown = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `downs` ON `comments`.`relate_id`=`downs`.`id` WHERE relate_type='down' ORDER BY comments.`time` DESC LIMIT ".$start.", ".$config['downlist'].";");
+        $querydown = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `downs` ON `comments`.`relate_id`=`downs`.`id` WHERE relate_type='down' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
 
         while ($data = $querydown -> fetch()) {
             echo '<div class="b">';
@@ -76,7 +70,7 @@ case 'comments':
             echo '</div>';
         }
 
-        page_strnavigation('/load/new?act=comments&amp;', $config['downlist'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('Комментарии не найдены!');
     }

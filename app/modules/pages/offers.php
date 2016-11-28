@@ -90,11 +90,8 @@ switch ($act):
         echo '<hr />';
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = 0;
-            }
 
-            $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['postoffers'].";", [$type]);
+            $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['postoffers'].";", [$type]);
 
             while ($data = $queryoffers -> fetch()) {
                 echo '<div class="b">';
@@ -118,7 +115,7 @@ switch ($act):
                 echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
             }
 
-            page_strnavigation('/offers?type='.$type.'&amp;sort='.$sort.'&amp;', $config['postoffers'], $start, $total);
+            App::pagination($page);
 
             echo 'Всего записей: <b>'.$total.'</b><br /><br />';
         } else {
@@ -343,9 +340,6 @@ switch ($act):
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
                 $is_admin = is_admin();
 
@@ -353,7 +347,7 @@ switch ($act):
                     echo '<form action="/offers?act=delcomm&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postcommoffers'].";", ['offer', $id]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postcommoffers'].";", ['offer', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -379,7 +373,7 @@ switch ($act):
                     echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
                 }
 
-                page_strnavigation('/offers?act=comments&amp;id='.$id.'&amp;', $config['postcommoffers'], $start, $total);
+                App::pagination($page);
             } else {
                 show_error('Комментариев еще нет!');
             }

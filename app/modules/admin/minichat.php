@@ -2,8 +2,8 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : "";
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
 
@@ -14,7 +14,7 @@ if (is_admin()) {
     ############################################################################################
     if ($act == 'index') {
         echo '<a href="/admin/minichat?rand=' . mt_rand(100, 990) . '">Обновить</a> / ';
-        echo '<a href="/chat?start=' . $start . '">Обзор</a><br /><hr />';
+        echo '<a href="/chat?page=' . $page . '">Обзор</a><br /><hr />';
 
         if (! file_exists(STORAGE."/chat/chat.dat")){
             touch(STORAGE."/chat/chat.dat");
@@ -24,18 +24,18 @@ if (is_admin()) {
         $file = array_reverse($file);
         $total = count($file);
 
-        if ($total > 0) {
-            echo '<form action="/admin/minichat?act=del&amp;start=' . $start . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
+        $page = App::paginate(App::setting('chatpost'), $total);
 
-            if ($start < 0 || $start > $total) {
-                $start = 0;
-            }
-            if ($total < $start + $config['chatpost']) {
+        if ($total > 0) {
+            echo '<form action="/admin/minichat?act=del&amp;page=' . $page['current'] . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
+
+            if ($total < $page['offset'] + $config['chatpost']) {
                 $end = $total;
             } else {
-                $end = $start + $config['chatpost'];
+                $end = $page['offset'] + $config['chatpost'];
             }
-            for ($i = $start; $i < $end; $i++) {
+
+            for ($i = $page['offset']; $i < $end; $i++) {
                 $data = explode("|", $file[$i]);
 
                 $num = $total - $i - 1;
@@ -66,7 +66,7 @@ if (is_admin()) {
 
                 echo '<b>' . $anketa . '</b> ' . user_title($data[1]) . ' ' . $useronline . ' <small> (' . date_fixed($data[3]) . ')</small><br />';
                 echo '<input type="checkbox" name="del[]" value="' . $num . '" /> ';
-                echo '<a href="/admin/minichat?act=edit&amp;id=' . $num . '&amp;start=' . $start . '">Редактировать</a>';
+                echo '<a href="/admin/minichat?act=edit&amp;id=' . $num . '&amp;page=' . $page['current'] . '">Редактировать</a>';
 
                 echo '</div><div>' . App::bbCode($data[0]) . '<br />';
                 echo '<span style="color:#cc00cc"><small>(' . $data[4] . ', ' . $data[5] . ')</small></span></div>';
@@ -74,7 +74,7 @@ if (is_admin()) {
 
             echo '<br /><input type="submit" value="Удалить выбранное" /></form><br />';
 
-            page_strnavigation('/admin/minichat?', $config['chatpost'], $start, $total);
+            App::pagination($page);
 
             echo '<p>Всего сообщений: <b>' . (int)$total . '</b></p>';
 
@@ -130,7 +130,7 @@ if (is_admin()) {
                 delete_lines(STORAGE."/chat/chat.dat", $del);
 
                 notice('Выбранные сообщения успешно удалены!');
-                redirect("/admin/minichat?start=$start");
+                redirect("/admin/minichat?page=$page");
 
             } else {
                 show_error('Ошибка удаления! Отсутствуют выбранные сообщения');
@@ -139,7 +139,7 @@ if (is_admin()) {
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?start=' . $start . '">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?page=' . $page . '">Вернуться</a><br />';
     }
 
     ############################################################################################
@@ -155,7 +155,7 @@ if (is_admin()) {
 
                 $config['header'] = 'Редактирование сообщения';
 
-                echo '<div class="form"><form action="/admin/minichat?act=addedit&amp;id=' . $id . '&amp;start=' . $start . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
+                echo '<div class="form"><form action="/admin/minichat?act=addedit&amp;id=' . $id . '&amp;page=' . $page . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
 
                 echo '<i class="fa fa-pencil"></i> <b>' . nickname($data[1]) . '</b> <small>(' . date_fixed($data[3]) . ')</small><br />';
 
@@ -168,7 +168,7 @@ if (is_admin()) {
             show_error('Ошибка! Не выбрано сообщение для редактирования!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?start=' . $start . '">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?page=' . $page . '">Вернуться</a><br />';
     }
     # ###########################################################################################
     # #                                 Изменение сообщения                                    ##
@@ -191,7 +191,7 @@ if (is_admin()) {
                         replace_lines(STORAGE."/chat/chat.dat", $id, $text);
 
                         notice('Сообщение успешно отредактировано!');
-                        redirect("/admin/minichat?start=$start");
+                        redirect("/admin/minichat?page=$page");
 
                     } else {
                         show_error('Ошибка! Сообщения для редактирования не существует!');
@@ -206,7 +206,7 @@ if (is_admin()) {
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?act=edit&amp;id=' . $id . '&amp;start=' . $start . '">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?act=edit&amp;id=' . $id . '&amp;page=' . $page . '">Вернуться</a><br />';
     }
     // -------------------------------- КОНЦОВКА ----------------------------------//
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';

@@ -19,12 +19,12 @@ case 'blogs':
             $start = last_page($total, $config['blogpost']);
         }
 
-        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$uz]);
+        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$uz]);
         $blogs = $queryblogs -> fetchAll();
 
         render('blog/active_blogs', ['blogs' => $blogs]);
 
-        page_strnavigation('/blog/active?act=blogs&amp;uz='.$uz.'&amp;', $config['blogpost'], $start, $total);
+        App::pagination($page);
 
         echo 'Всего статей: <b>'.$total.'</b><br /><br />';
     } else {
@@ -47,12 +47,12 @@ case 'comments':
 
         $is_admin = is_admin();
 
-        $querycomments = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' AND comments.`user`=? ORDER BY comments.`time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$uz]);
+        $querycomments = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' AND comments.`user`=? ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$uz]);
         $comments = $querycomments -> fetchAll();
 
         render('blog/active_comments', ['comments' => $comments, 'start' => $start]);
 
-        page_strnavigation('/blog/active?act=comments&amp;uz='.$uz.'&amp;', $config['blogpost'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('Комментарии не найдены!');
     }

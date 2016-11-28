@@ -18,11 +18,8 @@ switch ($act):
     case 'index':
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = 0;
-            }
 
-            $queryonline = DB::run() -> query("SELECT * FROM `online` WHERE `user`<>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['onlinelist'].";", ['']);
+            $queryonline = DB::run() -> query("SELECT * FROM `online` WHERE `user`<>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['onlinelist'].";", ['']);
 
             while ($data = $queryonline -> fetch()) {
                 echo '<div class="b">';
@@ -33,7 +30,7 @@ switch ($act):
                 }
             }
 
-            page_strnavigation('/online?', $config['onlinelist'], $start, $total);
+            App::pagination($page);
         } else {
             show_error('Авторизованных пользователей нет!');
         }
@@ -49,11 +46,8 @@ switch ($act):
         $total = $total_all;
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = 0;
-            }
 
-            $queryonline = DB::run() -> query("SELECT * FROM `online` ORDER BY `time` DESC LIMIT ".$start.", ".$config['onlinelist'].";");
+            $queryonline = DB::run() -> query("SELECT * FROM `online` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['onlinelist'].";");
 
             while ($data = $queryonline -> fetch()) {
                 if (empty($data['user'])) {
@@ -69,7 +63,7 @@ switch ($act):
                 }
             }
 
-            page_strnavigation('/online/all?', $config['onlinelist'], $start, $total);
+            App::pagination($page);
         } else {
             show_error('На сайте никого нет!');
         }

@@ -33,7 +33,7 @@ case 'index':
 
     echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-    page_strnavigation('/admin/smiles?', $config['smilelist'], $start, $total);
+    App::pagination($page);
 
     echo 'Всего cмайлов: <b>'.$total.'</b><br /><br />';
 

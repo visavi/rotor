@@ -24,11 +24,8 @@ if (is_admin([101])) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM admlog;");
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";");
+                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['loglist'].";");
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -39,7 +36,7 @@ if (is_admin([101])) {
                     echo '<small><span style="color:#cc00cc">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
-                page_strnavigation('/admin/logadmin?', $config['loglist'], $start, $total);
+                App::pagination($page);
 
                 echo '<i class="fa fa-times"></i> <a href="/admin/logadmin?act=del&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br />';
             } else {

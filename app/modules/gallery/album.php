@@ -6,11 +6,6 @@ if (empty($_GET['uz'])) {
 } else {
     $uz = check($_GET['uz']);
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
 } else {
@@ -25,16 +20,13 @@ switch ($act):
         show_title('Альбомы пользователей');
 
         $total = DB::run() -> querySingle("select COUNT(DISTINCT `user`) from `photo`");
+        $page = App::paginate(App::setting('photogroup'), $total);
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = last_page($total, $config['photogroup']);
-            }
 
-            $page = floor(1 + $start / $config['photogroup']);
-            $config['newtitle'] = 'Альбомы пользователей (Стр. '.$page.')';
+            $config['newtitle'] = 'Альбомы пользователей (Стр. '.$page['current'].')';
 
-            $queryphoto = DB::run() -> query("SELECT COUNT(*) AS cnt, SUM(`comments`) AS comments, `user` FROM `photo` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$start.", ".$config['photogroup'].";");
+            $queryphoto = DB::run() -> query("SELECT COUNT(*) AS cnt, SUM(`comments`) AS comments, `user` FROM `photo` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".$config['photogroup'].";");
 
             while ($data = $queryphoto -> fetch()) {
 
@@ -42,7 +34,7 @@ switch ($act):
                 echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data['user'].'">'.nickname($data['user']).'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
             }
 
-            page_strnavigation('/gallery/album?', $config['photogroup'], $start, $total);
+            App::pagination($page);
 
             echo 'Всего альбомов: <b>'.$total.'</b><br /><br />';
 
@@ -59,30 +51,27 @@ switch ($act):
         show_title('Список всех фотографий '.nickname($uz));
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `user`=?;", [$uz]);
+        $page = App::paginate(App::setting('fotolist'), $total);
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = last_page($total, $config['fotolist']);
-            }
 
-            $page = floor(1 + $start / $config['fotolist']);
-            $config['newtitle'] = 'Список всех фотографий '.nickname($uz).' (Стр. '.$page.')';
+            $config['newtitle'] = 'Список всех фотографий '.nickname($uz).' (Стр. '.$page['current'].')';
 
-            $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['fotolist'].";", [$uz]);
+            $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";", [$uz]);
 
             $moder = ($log == $uz) ? 1 : 0;
 
             while ($data = $queryphoto -> fetch()) {
                 echo '<div class="b"><i class="fa fa-picture-o"></i> ';
-                echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).')<br />';
+                echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).')<br />';
 
                 if (!empty($moder)) {
-                    echo '<a href="/gallery?act=edit&amp;gid='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
-                    echo '<a href="/gallery?act=delphoto&amp;gid='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+                    echo '<a href="/gallery?act=edit&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a> / ';
+                    echo '<a href="/gallery?act=delphoto&amp;gid='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
                 }
 
                 echo '</div><div>';
-                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
+                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
 
                 if (!empty($data['text'])){
                     echo App::bbCode($data['text']).'<br />';
@@ -93,7 +82,7 @@ switch ($act):
                 echo '</div>';
             }
 
-            page_strnavigation('/gallery/album?act=photo&amp;uz='.$uz.'&amp;', $config['fotolist'], $start, $total);
+            App::pagination($page);
 
             echo 'Всего фотографий: <b>'.$total.'</b><br /><br />';
         } else {

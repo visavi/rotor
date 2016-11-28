@@ -32,11 +32,8 @@ if (is_admin()) {
             }
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['chatpost']);
-                }
 
-                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$start.", ".$config['chatpost'].";");
+                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['chatpost'].";");
 
                 while ($data = $querychat -> fetch()) {
                     echo '<div class="b">';
@@ -66,7 +63,7 @@ if (is_admin()) {
                     echo '</div>';
                 }
 
-                page_strnavigation('/admin/chat?', $config['chatpost'], $start, $total);
+                App::pagination($page);
             } else {
                 show_error('Сообщений нет, будь первым!');
             }

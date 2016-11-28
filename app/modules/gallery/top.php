@@ -1,11 +1,8 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
+
 if (isset($_GET['sort'])) {
     $sort = check($_GET['sort']);
 } else {
@@ -41,20 +38,18 @@ if ($order == 'comments') {
 echo '<hr />';
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `photo`;");
+$page = App::paginate(App::setting('fotolist'), $total);
 
 if ($total > 0) {
-    if ($start >= $total) {
-        $start = last_page($total, $config['fotolist']);
-    }
 
-    $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['fotolist'].";");
+    $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";");
 
     while ($data = $queryphoto -> fetch()) {
 
         echo '<div class="b"><i class="fa fa-picture-o"></i> ';
-        echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).') ('.format_num($data['rating']).')</div>';
+        echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).') ('.format_num($data['rating']).')</div>';
 
-        echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;start='.$start.'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a>';
+        echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a>';
 
         echo '<br />'.App::bbCode($data['text']).'<br />';
 
@@ -64,7 +59,7 @@ if ($total > 0) {
         echo '</div>';
     }
 
-    page_strnavigation('/gallery/top?sort='.$sort.'&amp;', $config['fotolist'], $start, $total);
+    App::pagination($page);
 } else {
     show_error('Загруженных фотографий еще нет!');
 }

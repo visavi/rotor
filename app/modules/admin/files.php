@@ -80,7 +80,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
         ############################################################################################
         case 'edit':
 
-            if ((empty($path) || preg_match('|^[a-z0-9_\-/]+$|', $path)) && preg_match('|^[a-z0-9_\-/]+$|', $file)) {
+            if ((preg_match('#^([a-z0-9_\-/]+|)$#', $path)) && preg_match('#^[a-z0-9_\-/]+$#', $file)) {
                 if (file_exists(APP.'/views/'.$path.$file.'.blade.php')) {
                     if (is_writeable(APP.'/views/'.$path.$file.'.blade.php')) {
 

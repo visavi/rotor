@@ -18,11 +18,8 @@ case 'index':
     $total = DB::run() -> querySingle("SELECT count(*) FROM `events`;");
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = last_page($total, $config['postevents']);
-        }
 
-        $queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postevents'].";");
+        $queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postevents'].";");
 
         echo '<form action="/admin/events?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -57,7 +54,7 @@ case 'index':
 
         echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-        page_strnavigation('/admin/events?', $config['postevents'], $start, $total);
+        App::pagination($page);
 
         echo 'Всего событий: <b>'.(int)$total.'</b><br /><br />';
     } else {

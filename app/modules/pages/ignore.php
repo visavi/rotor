@@ -24,11 +24,8 @@ if (is_user()) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$log]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['ignorlist']);
-                }
 
-                $queryignor = DB::run() -> query("SELECT * FROM ignoring WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['ignorlist'].";", [$log]);
+                $queryignor = DB::run() -> query("SELECT * FROM ignoring WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['ignorlist'].";", [$log]);
 
                 echo '<form action="/ignore?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -52,7 +49,7 @@ if (is_user()) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/ignore?', $config['ignorlist'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего в игноре: <b>'.(int)$total.'</b><br />';
             } else {

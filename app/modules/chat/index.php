@@ -7,8 +7,8 @@ $config['magnik'] = 1; // Умник включен
 $config['botnik'] = 1; // Бот включен
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $name = (isset($_GET['name'])) ? '[b]' . check($_GET['name']) . '[/b], ' : '';
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Мини-чат');
 
@@ -17,7 +17,7 @@ if ($act == 'index') {
     echo '<a href="#form">Написать</a>';
 
     if (is_admin()) {
-        echo ' / <a href="/admin/minichat?start=' . $start . '">Управление</a>';
+        echo ' / <a href="/admin/minichat?page=' . $page . '">Управление</a>';
     }
     echo '<hr />';
 
@@ -29,6 +29,8 @@ if ($act == 'index') {
     $file = file(STORAGE."/chat/chat.dat");
     $file = array_reverse($file);
     $total = count($file);
+
+    $page = App::paginate(App::setting('chatpost'), $total);
 
     if ($total > 0) {
 
@@ -106,15 +108,12 @@ if ($act == 'index') {
             }
         }
 
-        if ($start < 0 || $start >= $total) {
-        $start = 0;
-        }
-        if ($total < $start + $config['chatpost']) {
-        $end = $total;
+        if ($total < $page['offset'] + $config['chatpost']) {
+            $end = $total;
         } else {
-        $end = $start + $config['chatpost'];
+            $end = $page['offset'] + $config['chatpost'];
         }
-        for ($i = $start; $i < $end; $i++) {
+        for ($i = $page['offset']; $i < $end; $i++) {
             $data = explode("|", $file[$i]);
 
             $useronline = user_online($data[1]);
@@ -144,7 +143,7 @@ if ($act == 'index') {
             }
         }
 
-        page_strnavigation('/chat?', $config['chatpost'], $start, $total);
+        App::pagination($page);
 
     } else {
         show_error('Сообщений нет, будь первым!');

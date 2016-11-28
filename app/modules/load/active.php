@@ -24,7 +24,7 @@ case 'files':
             $start = 0;
         }
 
-        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1, $uz]);
+        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1, $uz]);
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -40,7 +40,7 @@ case 'files':
             echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
         }
 
-        page_strnavigation('/load/active?act=files&amp;uz='.$uz.'&amp;', $config['downlist'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('Опубликованных файлов не найдено!');
     }
@@ -61,7 +61,7 @@ case 'comments':
 
         $is_admin = is_admin();
 
-        $querypost = DB::run() -> query("SELECT `c`.*, `title`, `comments` FROM `comments` c LEFT JOIN `downs` d ON `c`.`relate_id`=`d`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$start.", ".$config['downlist'].";", ['down', $uz]);
+        $querypost = DB::run() -> query("SELECT `c`.*, `title`, `comments` FROM `comments` c LEFT JOIN `downs` d ON `c`.`relate_id`=`d`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", ['down', $uz]);
 
         while ($data = $querypost -> fetch()) {
             echo '<div class="b">';
@@ -84,7 +84,7 @@ case 'comments':
             echo '</div>';
         }
 
-        page_strnavigation('/load/active?act=comments&amp;uz='.$uz.'&amp;', $config['downlist'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('Комментарии не найдены!');
     }

@@ -4,7 +4,7 @@ $links = [
     ['url' => '/gallery/comments?act=comments', 'label' => 'Мои комментарии', 'show' => is_user()],
     ['url' => '/gallery/album', 'label' => 'Все альбомы'],
     ['url' => '/gallery/comments', 'label' => 'Все комментарии'],
-    ['url' => '/admin/gallery?start='.$start, 'label' => 'Управление', 'show' => is_admin()],
+    ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => is_admin()],
 ];
 
 render('includes/link', ['links' => $links]);
@@ -14,12 +14,12 @@ render('includes/link', ['links' => $links]);
     <?php foreach($photos as $data): ?>
 
         <div class="b"><i class="fa fa-picture-o"></i>
-            <b><a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;start=<?= $start ?>"><?= $data['title'] ?></a></b>
+            <b><a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;page=<?= $page['current'] ?>"><?= $data['title'] ?></a></b>
             (<?= read_file(HOME.'/upload/pictures/'.$data['link']) ?>) (Рейтинг: <?= format_num($data['rating']) ?>)
         </div>
 
         <div>
-            <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;start=<?= $start ?>"><?= resize_image('upload/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]) ?></a><br />
+            <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;page=<?= $page['current'] ?>"><?= resize_image('upload/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]) ?></a><br />
 
             <?php if (!empty($data['text'])): ?>
                 <?php App::bbCode($data['text']) ?><br />
@@ -31,7 +31,7 @@ render('includes/link', ['links' => $links]);
         </div>
     <?php endforeach; ?>
 
-    <?php page_strnavigation('/gallery?', App::setting('fotolist'), $start, $total); ?>
+    <?php App::pagination($page) ?>
 
     Всего фотографий: <b><?= $total ?></b><br /><br />
 

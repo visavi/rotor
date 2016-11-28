@@ -45,11 +45,7 @@ if (is_admin([101, 102])) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
             if ($total > 0) {
 
-                if ($start >= $total) {
-                    $start = 0;
-                }
-
-                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$start.", ".$config['userlist'].";");
+                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".$config['userlist'].";");
 
                 while ($data = $queryusers -> fetch()) {
                     if (empty($data['email'])) {
@@ -61,7 +57,7 @@ if (is_admin([101, 102])) {
                     echo 'Зарегистрирован: '.date_fixed($data['joined']).'</div>';
                 }
 
-                page_strnavigation('/admin/users?', $config['userlist'], $start, $total);
+                App::pagination($page);
 
 
             } else {
@@ -90,11 +86,8 @@ if (is_admin([101, 102])) {
                 $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE LOWER(`login`) ".$search.";");
 
                 if ($total > 0) {
-                    if ($start >= $total) {
-                        $start = 0;
-                    }
 
-                    $queryuser = DB::run() -> query("SELECT `login`, `nickname`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$start.", ".$config['usersearch'].";");
+                    $queryuser = DB::run() -> query("SELECT `login`, `nickname`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".$config['usersearch'].";");
 
                     while ($data = $queryuser -> fetch()) {
 
@@ -107,7 +100,7 @@ if (is_admin([101, 102])) {
                         echo user_online($data['login']).' ('.points($data['point']).')<br />';
                     }
 
-                    page_strnavigation('/admin/users?act=sort&amp;q='.$q.'&amp;', $config['usersearch'], $start, $total);
+                    App::pagination($page);
 
                     echo 'Найдено совпадений: '.$total.'<br /><br />';
                 } else {

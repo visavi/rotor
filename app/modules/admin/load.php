@@ -705,11 +705,8 @@ case 'down':
         $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = 0;
-            }
 
-            $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [$cid, 1]);
+            $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [$cid, 1]);
 
             $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
@@ -747,7 +744,7 @@ case 'down':
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
             }
 
-            page_strnavigation('/admin/load?act=down&amp;cid='.$cid.'&amp;', $config['downlist'], $start, $total);
+            App::pagination($page);
         } else {
             if (empty($cats['closed'])) {
                 show_error('В данном разделе еще нет файлов!');

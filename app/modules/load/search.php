@@ -86,15 +86,12 @@ case "search":
             $total = count($_SESSION['loadfindres']);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
                 echo 'Найдено совпадений: <b>'.$total.'</b><br /><br />';
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -109,7 +106,7 @@ case "search":
                     echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 
-                page_strnavigation('/load/search?act=search&amp;find='.urlencode($find).'&amp;type='.$type.'&amp;where='.$where.'&amp;', $config['downlist'], $start, $total);
+                App::pagination($page);
             } else {
                 show_error('По вашему запросу ничего не найдено!');
             }
@@ -130,15 +127,12 @@ case "search":
             $total = count($_SESSION['loadfindres']);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
                 echo 'Найдено совпадений: <b>'.$total.'</b><br /><br />';
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -159,7 +153,7 @@ case "search":
                     echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 
-                page_strnavigation('/load/search?act=search&amp;find='.urlencode($find).'&amp;type='.$type.'&amp;where='.$where.'&amp;', $config['downlist'], $start, $total);
+                App::pagination($page);
             } else {
                 show_error('По вашему запросу ничего не найдено!');
             }

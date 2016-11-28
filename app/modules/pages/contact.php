@@ -24,11 +24,8 @@ if (is_user()) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", [$log]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['contactlist']);
-                }
 
-                $querycontact = DB::run() -> query("SELECT * FROM `contact` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['contactlist'].";", [$log]);
+                $querycontact = DB::run() -> query("SELECT * FROM `contact` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['contactlist'].";", [$log]);
 
                 echo '<form action="/contact?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -53,7 +50,7 @@ if (is_user()) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/contact?', $config['contactlist'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего в контактах: <b>'.(int)$total.'</b><br />';
             } else {

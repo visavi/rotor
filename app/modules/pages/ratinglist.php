@@ -30,11 +30,8 @@ switch ($act):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = 0;
-            }
 
-            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `money` DESC, `login` ASC LIMIT ".$start.", ".$config['userlist'].";");
+            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `money` DESC, `login` ASC LIMIT ".$page['offset'].", ".$config['userlist'].";");
 
             $i = 0;
             while ($data = $queryusers -> fetch()) {
@@ -49,7 +46,7 @@ switch ($act):
                 }
             }
 
-            page_strnavigation('/ratinglist?', $config['userlist'], $start, $total);
+            App::pagination($page);
 
             echo '<div class="form">';
             echo '<b>Поиск пользователя:</b><br />';

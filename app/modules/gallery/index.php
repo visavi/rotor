@@ -2,7 +2,6 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
 $gid = (isset($_GET['gid'])) ? abs(intval($_GET['gid'])) : 0;
 
@@ -16,31 +15,28 @@ case 'index':
 
     $photos = [];
     $total = DB::run() -> querySingle("SELECT count(*) FROM `photo`;");
+    $page = App::paginate(App::setting('fotolist'), $total);
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = last_page($total, $config['fotolist']);
-        }
 
-        $page = floor(1 + $start / $config['fotolist']);
-        $config['newtitle'] = 'Галерея сайта (Стр. '.$page.')';
+        $config['newtitle'] = 'Галерея сайта (Стр. '.$page['current'].')';
 
-        $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$start.", ".$config['fotolist'].";");
+        $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";");
         $photos = $queryphoto->fetchAll();
-
     }
 
-    render('gallery/index', ['photos' => $photos, 'start' => $start, 'total' => $total]);
+    render('gallery/index', compact('photos', 'page', 'total'));
 break;
 
     ############################################################################################
     ##                             Просмотр полной фотографии                                 ##
     ############################################################################################
     case 'view':
+        $page = abs(intval(Request::input('page')));
 
         $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
-        render('gallery/view', ['photo' => $photo, 'start' => $start]);
+        render('gallery/view', compact('photo', 'page'));
 
     break;
 
@@ -120,7 +116,7 @@ break;
             show_login('Вы не авторизованы, чтобы добавить фотографию, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?page='.$page.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -193,6 +189,7 @@ break;
     ##                                 Редактирование фото                                    ##
     ############################################################################################
     case 'edit':
+        $page = abs(intval(Request::input('page', 1)));
 
         if (is_user()) {
             $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", [$gid, $log]);
@@ -200,7 +197,7 @@ break;
             if (!empty($photo)) {
 
                 echo '<div class="form">';
-                echo '<form action="/gallery?act=change&amp;gid='.$gid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/gallery?act=change&amp;gid='.$gid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Название: <br /><input type="text" name="title" value="'.$photo['title'].'" /><br />';
                 echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br />';
 
@@ -216,7 +213,7 @@ break;
             show_login('Вы не авторизованы, чтобы редактировать фотографию, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;uz='.$uz.'&amp;start='.$start.'">Альбом</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;uz='.$uz.'&amp;page='.$page.'">Альбом</a><br />';
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br />';
     break;
 
@@ -229,6 +226,7 @@ break;
         $title = check($_POST['title']);
         $text = (!empty($_POST['text'])) ? check($_POST['text']) : '';
         $closed = (empty($_POST['closed'])) ? 0 : 1;
+        $page = abs(intval(Request::input('page', 1)));
 
         if ($uid == $_SESSION['token']) {
             if (is_user()) {
@@ -243,7 +241,7 @@ break;
                             DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", [$title, $text, $closed, $gid]);
 
                             notice('Фотография успешно отредактирована!');
-                            redirect("/gallery/album?act=photo&uz=$uz&start=$start");
+                            redirect("/gallery/album?act=photo&uz=$uz&page=$page");
 
                         } else {
                             show_error('Ошибка! Слишком длинное описание (Необходимо до 1000 символов)!');
@@ -261,7 +259,7 @@ break;
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery?act=edit&amp;gid='.$gid.'&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery?act=edit&amp;gid='.$gid.'&amp;page='.$page.'">Вернуться</a><br />';
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br />';
     break;
 
@@ -280,18 +278,15 @@ break;
             echo '<a href="/gallery?act=comments&amp;gid='.$gid.'&amp;rand='.mt_rand(100, 999).'">Обновить</a><hr />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['gallery', $gid]);
+            $page = App::paginate(App::setting('postgallery'), $total);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['postgallery']);
-                }
-
                 $is_admin = is_admin();
                 if ($is_admin) {
-                    echo '<form action="/gallery?act=delcomm&amp;gid='.$gid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/gallery?act=delcomm&amp;gid='.$gid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postgallery'].";", ['gallery', $gid]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postgallery'].";", ['gallery', $gid]);
 
                 while ($data = $querycomm -> fetch()) {
 
@@ -306,7 +301,7 @@ break;
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
                     if ($log == $data['user'] && $data['time'] + 600 > SITETIME) {
-                        echo '<div class="right"><a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
+                        echo '<div class="right"><a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
                     echo '<div>'.App::bbCode($data['text']).'<br />';
@@ -322,7 +317,7 @@ break;
                     echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
                 }
 
-                page_strnavigation('/gallery?act=comments&amp;gid='.$gid.'&amp;', $config['postgallery'], $start, $total);
+                App::pagination($page);
             }
 
             if (empty($photo['closed'])) {
@@ -415,6 +410,7 @@ break;
     case 'editcomm':
 
         $cid = abs(intval($_GET['cid']));
+        $page = abs(intval(Request::input('page', 1)));
 
         if (is_user()) {
             $comm = DB::run() -> queryFetch("SELECT `c`.*, `p`.`closed` FROM `comments` c LEFT JOIN `photo` p ON `c`.`relate_id`=`p`.`id` WHERE relate_type=? AND c.`id`=? AND c.`user`=? LIMIT 1;", ['gallery', $cid, $log]);
@@ -426,7 +422,7 @@ break;
                         echo '<i class="fa fa-pencil"></i> <b>'.nickname($comm['user']).'</b> <small>('.date_fixed($comm['time']).')</small><br /><br />';
 
                         echo '<div class="form">';
-                        echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['relate_id'].'&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                        echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['relate_id'].'&amp;cid='.$cid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                         echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$comm['text'].'</textarea><br />';
                         echo '<input type="submit" value="Редактировать" /></form></div><br />';
 
@@ -443,7 +439,7 @@ break;
             show_login('Вы не авторизованы, чтобы редактировать комментарии, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=comments&amp;gid='.$gid.'&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=comments&amp;gid='.$gid.'&amp;page='.$page.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -454,6 +450,7 @@ break;
         $uid = check($_GET['uid']);
         $cid = abs(intval($_GET['cid']));
         $msg = check($_POST['msg']);
+        $page = abs(intval(Request::input('page', 1)));
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
@@ -469,7 +466,7 @@ break;
                                 DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?;", [$msg, 'gallery', $cid]);
 
                                 notice('Комментарий успешно отредактирован!');
-                                redirect("/gallery?act=comments&gid=$gid&start=$start");
+                                redirect("/gallery?act=comments&gid=$gid&page=$page");
 
                             } else {
                                 show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!');
@@ -490,7 +487,7 @@ break;
             show_login('Вы не авторизованы, чтобы редактировать комментарии, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -505,6 +502,8 @@ break;
             $del = 0;
         }
 
+        $page = abs(intval(Request::input('page', 1)));
+
         if (is_admin()) {
             if ($uid == $_SESSION['token']) {
                 if (!empty($del)) {
@@ -514,7 +513,7 @@ break;
                     DB::run() -> query("UPDATE photo SET comments=comments-? WHERE id=?;", [$delcomments, $gid]);
 
                     notice('Выбранные комментарии успешно удалены!');
-                    redirect("/gallery?act=comments&gid=$gid&start=$start");
+                    redirect("/gallery?act=comments&gid=$gid&page=$page");
 
                 } else {
                     show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
@@ -535,6 +534,7 @@ break;
     case 'delphoto':
 
         $uid = check($_GET['uid']);
+        $page = abs(intval(Request::input('page', 1)));
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
@@ -548,7 +548,7 @@ break;
                             unlink_image('upload/pictures/', $querydel['link']);
 
                             notice('Фотография успешно удалена!');
-                            redirect("/gallery/album?act=photo&start=$start");
+                            redirect("/gallery/album?act=photo&page=$page");
 
                         } else {
                             show_error('Ошибка! Запрещено удалять фотографии к которым имеются комментарии!');
@@ -566,7 +566,7 @@ break;
             show_login('Вы не авторизованы, чтобы удалять фотографии, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery/album?act=photo&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery/album?act=photo&amp;page='.$page.'">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -579,9 +579,9 @@ break;
         if (!empty($query)) {
 
             $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-            $end = last_page($total_comments, $config['postgallery']);
+            $end = ceil($total_comments / $config['postgallery']);
 
-            redirect("/gallery?act=comments&gid=$gid&start=$end");
+            redirect("/gallery?act=comments&gid=$gid&page=$end");
 
         } else {
             show_error('Ошибка! Комментарий к данному изображению не существует!');
@@ -618,7 +618,7 @@ break;
     * }
     *
     * notice('Выбранные фотографии успешно удалены!');
-    * redirect("/gallery?act=album&start=$start");
+    * redirect("/gallery?act=album&page=$page");
     *
     * } else {show_error('Ошибка! Данных фотографий не существует или вы не автор этих фотографий!');}
     * } else {show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с фотографиями!');}
@@ -626,7 +626,7 @@ break;
     * } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
     * } else {show_login('Вы не авторизованы, чтобы удалять фотографии, необходимо');}
     *
-    * echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=album&amp;start='.$start.'">Вернуться</a><br />';
+    * echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=album&amp;page='.$page.'">Вернуться</a><br />';
     * break;
     */
 

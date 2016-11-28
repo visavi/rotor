@@ -28,11 +28,8 @@ switch ($act):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = 0;
-            }
 
-            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['allvotes'].";", [1]);
+            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['allvotes'].";", [1]);
 
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
@@ -41,7 +38,7 @@ switch ($act):
                 echo 'Всего голосов: '.$data['count'].'</div>';
             }
 
-            page_strnavigation('/votes/history?', $config['allvotes'], $start, $total);
+            App::pagination($page);
         } else {
             show_error('Голосований в архиве еще нет!');
         }

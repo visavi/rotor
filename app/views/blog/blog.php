@@ -3,7 +3,7 @@
 <i class="fa fa-folder-open"></i> <b><?=$cats['name']?></b> (Статей: <?=$cats['count']?>)
 
 <?php if (is_admin()): ?>
-	(<a href="/admin/blog?act=blog&amp;cid=<?=$cats['id']?>&amp;start=<?=$start?>">Управление</a>)
+	(<a href="/admin/blog?act=blog&amp;cid=<?=$cats['id']?>&amp;page=<?=$page['current']?>">Управление</a>)
 <?php endif; ?>
 <hr />
 

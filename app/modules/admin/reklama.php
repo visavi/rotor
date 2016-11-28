@@ -24,11 +24,8 @@ if (is_admin()) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `rekuser` WHERE `time`>?;", [SITETIME]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['rekuserpost'].";", [SITETIME]);
+                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['rekuserpost'].";", [SITETIME]);
 
                 echo '<form action="/admin/reklama?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -57,7 +54,7 @@ if (is_admin()) {
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/reklama?', $config['rekuserpost'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего ссылок: <b>'.$total.'</b><br /><br />';
             } else {

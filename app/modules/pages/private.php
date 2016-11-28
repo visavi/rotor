@@ -41,7 +41,7 @@ if (is_user()) {
                     $start = last_page($total, $config['privatpost']);
                 }
 
-                $querypriv = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['privatpost'].";", [$log]);
+                $querypriv = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
 
                 echo '<form action="/private?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -65,7 +65,7 @@ if (is_user()) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/private?', $config['privatpost'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Объем ящика: <b>'.$config['limitmail'].'</b><br /><br />';
@@ -95,7 +95,7 @@ if (is_user()) {
                     $start = last_page($total, $config['privatpost']);
                 }
 
-                $querypriv = DB::run() -> query("SELECT * FROM `outbox` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['privatpost'].";", [$log]);
+                $querypriv = DB::run() -> query("SELECT * FROM `outbox` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
 
                 echo '<form action="/private?act=outdel&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -116,7 +116,7 @@ if (is_user()) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/private?act=output&amp;', $config['privatpost'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Объем ящика: <b>'.$config['limitoutmail'].'</b><br /><br />';
@@ -146,7 +146,7 @@ if (is_user()) {
                     $start = last_page($total, $config['privatpost']);
                 }
 
-                $querypriv = DB::run() -> query("SELECT * FROM `trash` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['privatpost'].";", [$log]);
+                $querypriv = DB::run() -> query("SELECT * FROM `trash` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
 
                 while ($data = $querypriv -> fetch()) {
                     echo '<div class="b">';
@@ -161,7 +161,7 @@ if (is_user()) {
                     echo '<a href="/ignore?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">Игнор</a></div>';
                 }
 
-                page_strnavigation('/private?act=trash&amp;', $config['privatpost'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего писем: <b>'.(int)$total.'</b><br />';
                 echo 'Срок хранения: <b>'.$config['expiresmail'].'</b><br /><br />';
@@ -530,11 +530,8 @@ if (is_user()) {
                     $total = array_sum($total -> fetchAll(PDO::FETCH_COLUMN));
 
                     if ($total > 0) {
-                        if ($start >= $total) {
-                            $start = last_page($total, $config['privatpost']);
-                        }
 
-                        $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT * FROM `outbox` WHERE `user`=? AND `author`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['privatpost'].";", [$log, $uz, $uz, $log]);
+                        $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT * FROM `outbox` WHERE `user`=? AND `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log, $uz, $uz, $log]);
 
                         while ($data = $queryhistory -> fetch()) {
                             echo '<div class="b">';
@@ -543,7 +540,7 @@ if (is_user()) {
                             echo '<div>'.App::bbCode($data['text']).'</div>';
                         }
 
-                        page_strnavigation('/private?act=history&amp;uz='.$uz.'&amp;', $config['privatpost'], $start, $total);
+                        App::pagination($page);
 
                         if (!user_privacy($uz) || is_admin() || is_contact($uz, $log)){
 

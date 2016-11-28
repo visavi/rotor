@@ -9,9 +9,6 @@ show_title('Список смайлов');
 $total = DBM::run()->count('smiles');
 
 if ($total > 0) {
-	if ($start >= $total) {
-		$start = 0;
-	}
 
 	$smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => intval($start), 'limit' => intval($config['smilelist'])]);
 
@@ -19,7 +16,7 @@ if ($total > 0) {
 		echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
 	}
 
-	page_strnavigation('/smiles?', $config['smilelist'], $start, $total);
+    App::pagination($page);
 
 	echo 'Всего cмайлов: <b>'.$total.'</b><br /><br />';
 } else {

@@ -8,11 +8,8 @@ show_title('Список свежих загрузок');
 $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-3600 * 120]);
 
 if ($total > 0) {
-    if ($start >= $total) {
-        $start = 0;
-    }
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$start.", ".$config['downlist'].";", [1, SITETIME-3600 * 120]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1, SITETIME-3600 * 120]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -38,7 +35,7 @@ if ($total > 0) {
         echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
     }
 
-    page_strnavigation('/load/fresh?', $config['downlist'], $start, $total);
+    App::pagination($page);
 
     echo '<i class="fa fa-file text-success"></i> - Самая свежая загрузка<br />';
     echo '<i class="fa fa-file text-warning"></i> - Более дня назад<br />';

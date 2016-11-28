@@ -45,7 +45,7 @@ if ($total > 0) {
         $start = 0;
     }
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$start.", ".$config['downlist'].";", [1]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -64,7 +64,7 @@ if ($total > 0) {
         echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
     }
 
-    page_strnavigation('/load/top?sort='.$sort.'&amp;', $config['downlist'], $start, $total);
+    App::pagination($page);
 } else {
     show_error('Опубликованных файлов еще нет!');
 }

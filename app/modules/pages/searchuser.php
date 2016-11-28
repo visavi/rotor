@@ -52,11 +52,8 @@ switch ($act):
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE lower(`login`) ".$search.";");
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryuser = DB::run() -> query("SELECT `login`, `nickname`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$start.", ".$config['usersearch'].";");
+                $queryuser = DB::run() -> query("SELECT `login`, `nickname`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".$config['usersearch'].";");
                 while ($data = $queryuser -> fetch()) {
 
                     echo user_gender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
@@ -66,7 +63,7 @@ switch ($act):
                     echo user_online($data['login']).' ('.points($data['point']).')<br />';
                 }
 
-                page_strnavigation('/searchuser?act=sort&amp;q='.$q.'&amp;', $config['usersearch'], $start, $total);
+                App::pagination($page);
 
                 echo 'Найдено совпадений: '.$total.'<br /><br />';
             } else {

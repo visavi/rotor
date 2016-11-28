@@ -6,11 +6,6 @@ if (empty($_GET['uz'])) {
 } else {
     $uz = check($_GET['uz']);
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
 } else {
@@ -25,16 +20,12 @@ switch ($act):
         show_title('Список всех комментариев');
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=?;", ['gallery']);
+        $page = App::paginate(App::setting('postgallery'), $total);
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = last_page($total, $config['postgallery']);
-            }
+            $config['newtitle'] = 'Список всех комментариев (Стр. '.$page['current'].')';
 
-            $page = floor(1 + $start / $config['postgallery']);
-            $config['newtitle'] = 'Список всех комментариев (Стр. '.$page.')';
-
-            $querycomm = DB::run() -> query("SELECT `comments`.*, `title` FROM `comments` LEFT JOIN `photo` ON `comments`.`relate_id`=`photo`.`id` WHERE relate_type='gallery' ORDER BY comments.`time` DESC LIMIT ".$start.", ".$config['postgallery'].";");
+            $querycomm = DB::run() -> query("SELECT `comments`.*, `title` FROM `comments` LEFT JOIN `photo` ON `comments`.`relate_id`=`photo`.`id` WHERE relate_type='gallery' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['postgallery'].";");
 
             while ($data = $querycomm -> fetch()) {
 
@@ -52,7 +43,7 @@ switch ($act):
                 echo '</div>';
             }
 
-            page_strnavigation('/gallery/comments?', $config['postgallery'], $start, $total);
+            App::pagination($page);
 
         } else {
             show_error('Комментариев еще нет!');
@@ -66,23 +57,19 @@ switch ($act):
         show_title('Список всех комментариев '.nickname($uz));
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['gallery', $uz]);
+        $page = App::paginate(App::setting('postgallery'), $total);
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = last_page($total, $config['postgallery']);
-            }
+            $config['newtitle'] = 'Список всех комментариев '.nickname($uz).' (Стр. '.$page['current'].')';
 
-            $page = floor(1 + $start / $config['postgallery']);
-            $config['newtitle'] = 'Список всех комментариев '.nickname($uz).' (Стр. '.$page.')';
-
-            $querycomm = DB::run() -> query("SELECT `c`.*, `title` FROM `comments` c LEFT JOIN `photo` p ON `c`.`relate_id`=`p`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$start.", ".$config['postgallery'].";", ['gallery', $uz]);
+            $querycomm = DB::run() -> query("SELECT `c`.*, `title` FROM `comments` c LEFT JOIN `photo` p ON `c`.`relate_id`=`p`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".$config['postgallery'].";", ['gallery', $uz]);
 
             while ($data = $querycomm -> fetch()) {
 
                 echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b>';
 
                 if (is_admin()) {
-                    echo ' — <a href="/gallery/comments?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+                    echo ' — <a href="/gallery/comments?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
                 }
 
                 echo '</div>';
@@ -98,7 +85,7 @@ switch ($act):
                 echo '</div>';
             }
 
-            page_strnavigation('/gallery/comments?act=comments&amp;uz='.$uz.'&amp;', $config['postgallery'], $start, $total);
+            App::pagination($page);
 
         } else {
             show_error('Комментариев еще нет!');
@@ -126,7 +113,7 @@ switch ($act):
         if (!empty($querycomm)) {
             $end = floor(($querycomm - 1) / $config['postgallery']) * $config['postgallery'];
 
-            redirect("/gallery?act=comments&gid=$gid&start=$end");
+            redirect("/gallery?act=comments&gid=$gid&page=$end");
         } else {
             show_error('Ошибка! Комментарий к данному изображению не существует!');
         }
@@ -153,7 +140,7 @@ switch ($act):
                     DB::run() -> query("UPDATE `photo` SET `comments`=`comments`-? WHERE `id`=?;", [1, $photo]);
 
                     notice('Комментарий успешно удален!');
-                    redirect("/gallery/comments?act=comments&uz=$uz&start=$start");
+                    redirect("/gallery/comments?act=comments&uz=$uz&page=$page");
                 } else {
                     show_error('Ошибка! Данного комментария не существует!');
                 }
@@ -164,7 +151,7 @@ switch ($act):
             show_error('Ошибка! Удалять комментарии могут только модераторы!');
         }
 
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/comments?act=comments&amp;uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/comments?act=comments&amp;uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
     break;
 
 endswitch;

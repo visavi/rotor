@@ -25,11 +25,8 @@ if (is_admin([101, 102])) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `ban`;");
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$start.", ".$config['ipbanlist'].";");
+                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['ipbanlist'].";");
 
                 echo '<form action="/admin/ipban?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -51,7 +48,7 @@ if (is_admin([101, 102])) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/ipban?', $config['ipbanlist'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего заблокировано: <b>'.$total.'</b><br /><br />';
             } else {

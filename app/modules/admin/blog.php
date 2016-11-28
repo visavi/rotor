@@ -250,11 +250,8 @@ if (is_admin()) {
                 $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `category_id`=?;", [$cid]);
 
                 if ($total > 0) {
-                    if ($start >= $total) {
-                        $start = 0;
-                    }
 
-                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$cid]);
+                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$cid]);
 
                     echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -276,7 +273,7 @@ if (is_admin()) {
 
                     echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                    page_strnavigation('/admin/blog?act=blog&amp;cid='.$cid.'&amp;', $config['blogpost'], $start, $total);
+                    App::pagination($page);
                 } else {
                     show_error('В данном разделе еще нет статей!');
                 }

@@ -33,11 +33,8 @@ if (is_admin([101, 102, 103])) {
             echo '<b>Форум</b> ('.$total.') / <a href="/admin/spam?act=guest">Гостевая ('.$totalguest.')</a> / <a href="/admin/spam?act=privat">Приват ('.$totalpriv.')</a> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$start.", ".$config['spamlist'].";", [1]);
+                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [1]);
 
                 echo '<form action="/admin/spam?act=del&amp;ref=forum&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -55,7 +52,7 @@ if (is_admin([101, 102, 103])) {
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/spam?act=forum&amp;', $config['spamlist'], $start, $total);
+                App::pagination($page);
 
                 if (is_admin([101, 102])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
@@ -80,11 +77,8 @@ if (is_admin([101, 102, 103])) {
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <b>Гостевая</b> ('.$total.') / <a href="/admin/spam?act=privat">Приват ('.$totalpriv.')</a> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$start.", ".$config['spamlist'].";", [2]);
+                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [2]);
 
                 echo '<form action="/admin/spam?act=del&amp;ref=guest&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -102,7 +96,7 @@ if (is_admin([101, 102, 103])) {
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/spam?act=guest&amp;', $config['spamlist'], $start, $total);
+                App::pagination($page);
 
                 if (is_admin([101, 102])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
@@ -127,11 +121,8 @@ if (is_admin([101, 102, 103])) {
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <b>Приват ('.$total.')</b> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$start.", ".$config['spamlist'].";", [3]);
+                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [3]);
 
                 echo '<form action="/admin/spam?act=del&amp;ref=privat&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -148,7 +139,7 @@ if (is_admin([101, 102, 103])) {
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/spam?act=privat&amp;', $config['spamlist'], $start, $total);
+                App::pagination($page);
 
                 if (is_admin([101, 102])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
@@ -173,11 +164,8 @@ if (is_admin([101, 102, 103])) {
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <b>Стена</b> ('.$total.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$start.", ".$config['spamlist'].";", [4]);
+                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [4]);
 
                 echo '<form action="/admin/spam?act=del&amp;ref=wall&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -195,7 +183,7 @@ if (is_admin([101, 102, 103])) {
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/spam?act=wall&amp;', $config['spamlist'], $start, $total);
+                App::pagination($page);
 
                 if (is_admin([101, 102])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
@@ -220,11 +208,8 @@ if (is_admin([101, 102, 103])) {
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <b>Загрузки</b> ('.$total.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$start.", ".$config['spamlist'].";", [5]);
+                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [5]);
 
                 echo '<form action="/admin/spam?act=del&amp;ref=load&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -242,7 +227,7 @@ if (is_admin([101, 102, 103])) {
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/spam?act=load&amp;', $config['spamlist'], $start, $total);
+                App::pagination($page);
 
                 if (is_admin([101, 102])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
@@ -267,11 +252,8 @@ if (is_admin([101, 102, 103])) {
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <b>Блоги</b> ('.$total.')<br /><br />';
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$start.", ".$config['spamlist'].";", [6]);
+                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [6]);
 
                 echo '<form action="/admin/spam?act=del&amp;ref=blog&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
@@ -289,7 +271,7 @@ if (is_admin([101, 102, 103])) {
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/spam?act=blog&amp;', $config['spamlist'], $start, $total);
+                App::pagination($page);
 
                 if (is_admin([101, 102])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';

@@ -29,11 +29,8 @@ if (is_admin()) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [0]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$start.", ".$config['downlist'].";", [0]);
+                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".$config['downlist'].";", [0]);
 
                 echo '<form action="/admin/newload?act=deldown&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -66,7 +63,7 @@ if (is_admin()) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/newload?', $config['downlist'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего файлов: <b>'.$total.'</b><br /><br />';
             } else {

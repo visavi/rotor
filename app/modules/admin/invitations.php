@@ -27,11 +27,8 @@ case 'index':
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `invite` WHERE `used`=?;", [$used]);
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = 0;
-        }
 
-        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listinvite'].";", [$used]);
+        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listinvite'].";", [$used]);
 
         echo '<form action="/admin/invitations?act=del&amp;used='.$used.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -49,7 +46,7 @@ case 'index':
 
         echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-        page_strnavigation('/admin/invitations?used='.$used.'&amp;', $config['listinvite'], $start, $total);
+        App::pagination($page);
 
         echo 'Всего ключей: <b>'.$total.'</b><br /><br />';
 

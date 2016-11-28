@@ -28,13 +28,10 @@ if (is_admin()) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `photo`;");
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
                 echo '<form action="/admin/gallery?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-                $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$start.", ".$config['fotolist'].";");
+                $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";");
 
                 while ($data = $queryphoto -> fetch()) {
                     echo '<div class="b">';
@@ -57,7 +54,7 @@ if (is_admin()) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/gallery?', $config['fotolist'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего фотографий: <b>'.$total.'</b><br /><br />';
             } else {

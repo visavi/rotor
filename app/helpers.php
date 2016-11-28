@@ -893,7 +893,8 @@ function sendMail($to, $subject, $body, $params = []) {
 }
 
 // ----------------------- Постраничная навигация ------------------------//
-function page_strnavigation($url, $posts, $start, $total, $range = 3) {
+//@deprecated использовать App::paginate
+/*function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 
     if ($total > 0) {
         $pages = [];
@@ -972,7 +973,7 @@ function page_strnavigation($url, $posts, $start, $total, $range = 3) {
 
         render('includes/pagination', compact('pages', 'url'));
     }
-}
+}*/
 
 // --------------------- Функция вывода навигации в галерее ------------------------//
 function photo_navigation($id) {

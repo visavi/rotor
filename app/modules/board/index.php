@@ -105,10 +105,9 @@ if ($act == "board"){
                     echo '<small>('.date_fixed($data[3]).')</small></div>';
                     echo 'Текст объявления: '.$data[2].'<br />';
                     echo 'Автор объявления: '.profile($data[1]).'<br />';
-
                 }
 
-                page_strnavigation('/board?act=board&amp;id='.$id.'&amp;', $config['boardspost'], $start, $total);
+                App::pagination($page);
 
                 echo '<p>Всего объявлений: <b>'.(int)$total.'</b></p>';
 

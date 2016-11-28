@@ -58,7 +58,7 @@ case 'index':
                             }
                         }
 
-                        page_strnavigation('/load/zip?id='.$id.'&amp;', $config['ziplist'], $start, $total);
+                        App::pagination($page);
 
                         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['name'].'</a><br />';
                     } else {

@@ -105,7 +105,7 @@ if ($act=="board")  {
                     }
                     echo '<br /><input type="submit" value="Удалить выбранное" /></form><br />';
 
-                    page_strnavigation('/admin/board?act=board&amp;id='.$id.'&amp;', $config['boardspost'], $start, $total);
+                    App::pagination($page);
 
                     echo '<p>Всего объявлений: <b>'.(int)$total.'</b></p>';
 

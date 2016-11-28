@@ -58,11 +58,8 @@ if (is_admin([101, 102, 103])) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", [0]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$start.", ".$config['reglist'].";", [0]);
+                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".$config['reglist'].";", [0]);
 
                 echo '<form action="/admin/reglist?act=choice&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -86,7 +83,7 @@ if (is_admin([101, 102, 103])) {
 
                 echo '<input type="submit" value="Выполнить" /></form>';
 
-                page_strnavigation('/admin/reglist?', $config['reglist'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего ожидающих: <b>'.(int)$total.'</b><br /><br />';
             } else {

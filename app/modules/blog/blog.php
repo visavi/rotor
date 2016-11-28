@@ -2,10 +2,10 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Блоги');
 $config['newtitle'] = 'Блоги - Список статей';
@@ -22,21 +22,18 @@ case 'index':
         if (!empty($cats)) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `category_id`=?;", [$cid]);
+            $page = App::paginate(App::setting('blogpost'), $total);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['blogpost']);
-                }
 
-                $page = floor(1 + $start / $config['blogpost']);
-                $config['newtitle'] = $cats['name'].' (Стр. '.$page.')';
+                $config['newtitle'] = $cats['name'].' (Стр. '.$page['current'].')';
 
-                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";", [$cid]);
+                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$cid]);
                 $blogs = $queryblog->fetchAll();
 
-                render('blog/blog', ['blogs' => $blogs, 'cats' => $cats, 'start' => $start]);
+                render('blog/blog', compact('blogs', 'cats', 'page'));
 
-                page_strnavigation('/blog/blog?cid='.$cid.'&amp;', $config['blogpost'], $start, $total);
+                App::pagination($page);
 
             } else {
                 show_error('Статей еще нет, будь первым!');
@@ -76,13 +73,10 @@ case 'view':
                     DB::run() -> query("UPDATE `blogs` SET `visits`=`visits`+1 WHERE `id`=? LIMIT 1;", [$id]);
                 }
             }
-            // --------------
-            if ($start < 0 || $start >= $total) {
-                $start = 0;
-            }
-            $end = ($total < $start + 1) ? $total : $start + 1;
+var_dump()
+            $end = ($total < $page['offset'] + 1) ? $total : $page['offset'] + 1;
 
-            for ($i = $start; $i < $end; $i++) {
+            for ($i = $page['offset']; $i < $end; $i++) {
                 $blogs['text'] = App::bbCode($text[$i]).'<br />';
             }
 
@@ -210,16 +204,13 @@ case 'blogs':
     $total = DB::run() -> querySingle("select COUNT(DISTINCT `user`) from `blogs`");
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = last_page($total, $config['bloggroup']);
-        }
 
-        $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$start.", ".$config['bloggroup'].";");
+        $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".$config['bloggroup'].";");
         $blogs = $queryblogs -> fetchAll();
 
         render('blog/blog_blogs', ['blogs' => $blogs, 'total' => $total]);
 
-        page_strnavigation('/blog/blog?act=blogs&amp;', $config['bloggroup'], $start, $total);
+        App::pagination($page);
 
     } else {
         show_error('Статей еще нет!');
@@ -387,16 +378,13 @@ case 'comments':
         $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['blog', $id]);
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = last_page($total, $config['blogcomm']);
-            }
 
-            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['blogcomm'].";", ['blog', $id]);
+            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['blogcomm'].";", ['blog', $id]);
             $comments = $querycomm -> fetchAll();
 
             render('blog/blog_comments', ['blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'start' => $start]);
 
-            page_strnavigation('/blog/blog?act=comments&amp;id='.$id.'&amp;', $config['blogcomm'], $start, $total);
+            App::pagination($page);
         } else {
             show_error('Комментариев еще нет!');
         }

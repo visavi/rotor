@@ -64,11 +64,8 @@ if (is_admin([101, 102])) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `blacklist` WHERE `type`=?;", [$type]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['blacklist'].";", [$type]);
+                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blacklist'].";", [$type]);
 
                 echo '<form action="/admin/blacklist?act=del&amp;page='.$page.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -82,7 +79,8 @@ if (is_admin([101, 102])) {
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/blacklist?page='.$page.'&amp;', $config['blacklist'], $start, $total);
+                App::pagination($page);
+
             } else {
                 show_error('Cписок еще пуст!');
             }

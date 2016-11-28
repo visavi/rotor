@@ -30,11 +30,8 @@ if (is_admin([101, 102])) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [404]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", [404]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['loglist'].";", [404]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -44,7 +41,7 @@ if (is_admin([101, 102])) {
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
-                page_strnavigation('/admin/logs?act=404&amp;', $config['loglist'], $start, $total);
+                App::pagination($page);
 
                 if (is_admin([101])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/logs?act=clear&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br />';
@@ -64,11 +61,8 @@ if (is_admin([101, 102])) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [403]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", [403]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['loglist'].";", [403]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -78,7 +72,7 @@ if (is_admin([101, 102])) {
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
-                page_strnavigation('/admin/logs?act=403&amp;', $config['loglist'], $start, $total);
+                App::pagination($page);
             } else {
                 show_error('Записей еще нет!');
             }
@@ -94,11 +88,8 @@ if (is_admin([101, 102])) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [666]);
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loglist'].";", [666]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['loglist'].";", [666]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -108,7 +99,7 @@ if (is_admin([101, 102])) {
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
-                page_strnavigation('/admin/logs?act=666&amp;', $config['loglist'], $start, $total);
+                App::pagination($page);
             } else {
                 show_error('Записей еще нет!');
             }

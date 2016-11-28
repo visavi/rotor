@@ -16,11 +16,8 @@ if (is_admin([101, 102, 103])) {
             $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist`;");
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$start.", ".$config['listbanhist'].";");
+                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listbanhist'].";");
 
                 echo '<form action="/admin/banhist?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -56,7 +53,7 @@ if (is_admin([101, 102, 103])) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/banhist?', $config['listbanhist'], $start, $total);
+                App::pagination($page);
 
                 echo '<div class="form">';
                 echo '<b>Поиск по пользователю:</b><br />';
@@ -81,11 +78,8 @@ if (is_admin([101, 102, 103])) {
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
 
                 if ($total > 0) {
-                    if ($start >= $total) {
-                        $start = 0;
-                    }
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", [$uz]);
+                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listbanhist'].";", [$uz]);
 
                     echo '<form action="/admin/banhist?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -120,7 +114,7 @@ if (is_admin([101, 102, 103])) {
 
                     echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                    page_strnavigation('/admin/banhist?act=view&amp;uz='.$uz.'&amp;', $config['listbanhist'], $start, $total);
+                    App::pagination($page);
 
                     echo 'Всего действий: <b>'.$total.'</b><br /><br />';
 

@@ -16,11 +16,8 @@ switch ($act):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `bank`;");
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = 0;
-            }
 
-            $queryvklad = DB::run() -> query("SELECT * FROM `bank` ORDER BY `sum` DESC, `user` ASC LIMIT ".$start.", ".$config['vkladlist'].";");
+            $queryvklad = DB::run() -> query("SELECT * FROM `bank` ORDER BY `sum` DESC, `user` ASC LIMIT ".$page['offset'].", ".$config['vkladlist'].";");
 
             $i = 0;
             while ($data = $queryvklad -> fetch()) {
@@ -38,7 +35,7 @@ switch ($act):
                 echo 'Посл. операция: '.date_fixed($data['time']).'</div>';
             }
 
-            page_strnavigation('/games/livebank?', $config['vkladlist'], $start, $total);
+            App::pagination($page);
 
             echo '<div class="form">';
             echo '<b>Поиск пользователя:</b><br />';

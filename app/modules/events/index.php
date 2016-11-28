@@ -21,16 +21,13 @@ case 'index':
 	$config['description'] = 'Список событий (Стр. '.$page.')';
 
 	if ($total > 0) {
-		if ($start >= $total) {
-			$start = last_page($total, $config['postevents']);
-		}
 
-		$queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$start.", ".$config['postevents'].";");
+		$queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postevents'].";");
 		$events = $queryevents->fetchAll();
 
 		render('events/index', ['events' => $events]);
 
-		page_strnavigation('/events?', $config['postevents'], $start, $total);
+        App::pagination($page);
 	} else {
 		show_error('Событий еще нет!');
 	}
@@ -352,16 +349,13 @@ case 'comments':
 		$total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['event', $id]);
 
 		if ($total > 0) {
-			if ($start >= $total) {
-				$start = last_page($total, $config['postevents']);
-			}
 
 			$is_admin = is_admin();
 			if ($is_admin) {
 				echo '<form action="/events?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 			}
 
-			$querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$start.", ".$config['postevents'].";", ['event', $id]);
+			$querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postevents'].";", ['event', $id]);
 
 			while ($data = $querycomm -> fetch()) {
 
@@ -389,7 +383,7 @@ case 'comments':
 				echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
 			}
 
-			page_strnavigation('/events?act=comments&amp;id='.$id.'&amp;', $config['postevents'], $start, $total);
+            App::pagination($page);
 
 		} else {
 			show_error('Комментариев еще нет!');

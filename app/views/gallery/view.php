@@ -3,10 +3,10 @@
 
     <?php
     $links = [
-        ['url' => '/admin/gallery?act=edit&amp;start='.$start.'&amp;gid='.$photo['id'], 'label' => 'Редактировать', 'show' => is_admin()],
-        ['url' => '/admin/gallery?act=del&amp;del='.$photo['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => is_admin()],
-        ['url' => '/gallery?act=edit&amp;gid='.$photo['id'].'&amp;start='.$start, 'label' => 'Редактировать', 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
-        ['url' => '/gallery?act=delphoto&amp;gid='.$photo['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
+        ['url' => '/admin/gallery?act=edit&amp;page='.$page.'&amp;gid='.$photo['id'], 'label' => 'Редактировать', 'show' => is_admin()],
+        ['url' => '/admin/gallery?act=del&amp;del='.$photo['id'].'&amp;page='.$page.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => is_admin()],
+        ['url' => '/gallery?act=edit&amp;gid='.$photo['id'].'&amp;page='.$page, 'label' => 'Редактировать', 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
+        ['url' => '/gallery?act=delphoto&amp;gid='.$photo['id'].'&amp;page='.$page.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
     ];
 
     render('includes/link', ['links' => $links]);

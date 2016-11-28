@@ -63,18 +63,15 @@ case 'search':
         $total = count($_SESSION['findresult']);
 
         if ($total > 0) {
-            if ($start >= $total) {
-                $start = last_page($total, $config['blogpost']);
-            }
 
             $result = implode(',', $_SESSION['findresult']);
 
-            $queryblog = DB::run() -> query("SELECT `blogs`.*, `id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$start.", ".$config['blogpost'].";");
+            $queryblog = DB::run() -> query("SELECT `blogs`.*, `id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
             $blogs = $queryblog -> fetchAll();
 
             render('blog/tags_search', ['blogs' => $blogs, 'tags' => $tags, 'total' => $total]);
 
-            page_strnavigation('/blog/tags?act=search&amp;tags='.urlencode($tags).'&amp;', $config['blogpost'], $start, $total);
+            App::pagination($page);
         } else {
             show_error('По вашему запросу ничего не найдено!');
         }

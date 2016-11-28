@@ -11,11 +11,8 @@ if ($total > 0) {
     if ($total > $config['lastusers']) {
         $total = $config['lastusers'];
     }
-    if ($start >= $total) {
-        $start = 0;
-    }
 
-    $queryvisit = DB::run() -> query("SELECT * FROM `visit` ORDER BY `nowtime` DESC LIMIT ".$start.", ".$config['showuser'].";");
+    $queryvisit = DB::run() -> query("SELECT * FROM `visit` ORDER BY `nowtime` DESC LIMIT ".$page['offset'].", ".$config['showuser'].";");
 
     while ($data = $queryvisit -> fetch()) {
 
@@ -32,7 +29,7 @@ if ($total > 0) {
         echo 'Переходов: '.$data['count'].'</div>';
     }
 
-    page_strnavigation('/who?', $config['showuser'], $start, $total);
+    App::pagination($page);
 } else {
     show_error('Пользователей еще нет!');
 }

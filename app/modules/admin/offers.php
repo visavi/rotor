@@ -46,11 +46,8 @@ if (is_admin([101, 102])) {
             echo ' / <a href="/offers?type='.$type.'&amp;start='.$start.'">Обзор</a><hr />';
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
-                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$start.", ".$config['postoffers'].";", [$type]);
+                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".$config['postoffers'].";", [$type]);
 
                 echo '<form action="/admin/offers?act=del&amp;type='.$type.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -81,7 +78,7 @@ if (is_admin([101, 102])) {
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
-                page_strnavigation('/admin/offers?type='.$type.'&amp;', $config['postoffers'], $start, $total);
+                App::pagination($page);
 
                 echo 'Всего записей: <b>'.$total.'</b><br /><br />';
             } else {

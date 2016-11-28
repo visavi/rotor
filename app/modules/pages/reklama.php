@@ -17,9 +17,6 @@ case 'index':
 
     $total = DBM::run()->count('rekuser', ['time' => ['>', SITETIME]]);
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = 0;
-        }
 
         $reklama = DBM::run()->select('rekuser', [
             'time' => ['>', SITETIME],
@@ -45,7 +42,7 @@ case 'index':
             }
         }
 
-        page_strnavigation('/reklama?act=all&amp;', $config['rekuserpost'], $start, $total);
+        App::pagination($page);
 
         echo 'Всего ссылок: <b>'.$total.'</b><br /><br />';
     } else {

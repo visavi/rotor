@@ -26,9 +26,6 @@ if (!empty($queryuser)) {
             }
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = 0;
-                }
 
                 $is_admin = is_admin();
 
@@ -38,7 +35,7 @@ if (!empty($queryuser)) {
                     echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['wallpost'].";", [$uz]);
+                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['wallpost'].";", [$uz]);
 
                 while ($data = $querywall -> fetch()) {
                     echo '<div class="b">';
@@ -65,7 +62,7 @@ if (!empty($queryuser)) {
                     echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
                 }
 
-                page_strnavigation('/wall?uz='.$uz.'&amp;', $config['wallpost'], $start, $total);
+                App::pagination($page);
             } else {
                 show_error('Записок еще нет!');
             }

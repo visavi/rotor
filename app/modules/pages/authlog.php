@@ -20,11 +20,8 @@ if (is_user()) {
     ############################################################################################
     $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [$log]);
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = 0;
-        }
 
-        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$start.", ".$config['loginauthlist'].";", [$log]);
+        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['loginauthlist'].";", [$log]);
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';
@@ -44,7 +41,7 @@ if (is_user()) {
             echo '</span></div>';
         }
 
-        page_strnavigation('/authlog?', $config['loginauthlist'], $start, $total);
+        App::pagination($page);
     } else {
         show_error('История авторизаций отсутствует');
     }

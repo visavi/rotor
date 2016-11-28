@@ -18,11 +18,8 @@ if (is_user()) {
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = 0;
-        }
 
-        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=time` DESC LIMIT ".$start.", ".$config['listbanhist'].";", [$uz]);
+        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=time` DESC LIMIT ".$page['offset'].", ".$config['listbanhist'].";", [$uz]);
 
         while ($data = $queryhist -> fetch()) {
             echo '<div class="b">';
@@ -48,7 +45,7 @@ if (is_user()) {
             echo '</div>';
         }
 
-        page_strnavigation('/banhist?uz='.$uz.'&amp;', $config['listbanhist'], $start, $total);
+        App::pagination($page);
 
         echo 'Всего действий: <b>'.$total.'</b><br /><br />';
     } else {

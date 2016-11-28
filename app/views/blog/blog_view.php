@@ -17,7 +17,7 @@
 
 <?=$blogs['text']?>
 
-<?php page_strnavigation('/blog/blog?act=view&amp;id='.$blogs['id'].'&amp;', 1, $start, $total); ?>
+<?php App::pagination($page); ?>
 
 Автор статьи: <?=profile($blogs['user'])?> (<?=date_fixed($blogs['time'])?>)<br />
 

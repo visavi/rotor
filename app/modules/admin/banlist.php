@@ -13,11 +13,8 @@ if (is_admin([101, 102, 103])) {
     $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", [1, SITETIME]);
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = 0;
-        }
 
-        $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `ban`=? AND `timeban`>? ORDER BY `timelastban` DESC LIMIT ".$start.", ".$config['reglist'].";", [1, SITETIME]);
+        $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `ban`=? AND `timeban`>? ORDER BY `timelastban` DESC LIMIT ".$page['offset'].", ".$config['reglist'].";", [1, SITETIME]);
 
         while ($data = $queryusers -> fetch()) {
             echo '<div class="b">';
@@ -29,7 +26,7 @@ if (is_admin([101, 102, 103])) {
             echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=edit&amp;uz='.$data['login'].'">Редактировать</a></div>';
         }
 
-        page_strnavigation('/admin/banlist?', $config['banlist'], $start, $total);
+        App::pagination($page);
 
         echo 'Всего забанено: <b>'.$total.'</b><br /><br />';
 
