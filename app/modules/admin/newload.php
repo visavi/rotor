@@ -6,16 +6,12 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['id'])) {
     $id = abs(intval($_GET['id']));
 } else {
     $id = 0;
 }
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
     show_title('Просмотр новых файлов');
@@ -27,12 +23,13 @@ if (is_admin()) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [0]);
+            $page = App::paginate(App::setting('downlist'), $total);
 
             if ($total > 0) {
 
                 $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".$config['downlist'].";", [0]);
 
-                echo '<form action="/admin/newload?act=deldown&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/newload?act=deldown&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $querynew -> fetch()) {
                     echo '<div class="b">';
@@ -437,7 +434,7 @@ if (is_admin()) {
                     }
 
                     notice('Выбранные файлы успешно удалены!');
-                    redirect("/admin/newload?start=$start");
+                    redirect("/admin/newload?page=$page");
 
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные файлы!');
@@ -446,7 +443,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;
