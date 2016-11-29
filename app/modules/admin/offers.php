@@ -5,11 +5,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['id'])) {
     $id = abs(intval($_GET['id']));
 } else {
@@ -20,6 +15,7 @@ if (isset($_GET['type'])) {
 } else {
     $type = 0;
 }
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102])) {
     show_title('Предложения и проблемы');
@@ -34,6 +30,7 @@ if (is_admin([101, 102])) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type]);
             $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type2]);
+            $page = App::paginate(App::setting('postoffers'), $total);
 
             echo '<i class="fa fa-book"></i> ';
 
@@ -43,13 +40,13 @@ if (is_admin([101, 102])) {
                 echo '<a href="/admin/offers?type=0">Предложения</a> ('.$total2.') / <b>Проблемы</b> ('.$total.')';
             }
 
-            echo ' / <a href="/offers?type='.$type.'&amp;start='.$start.'">Обзор</a><hr />';
+            echo ' / <a href="/offers?type='.$type.'&amp;page='.$page['current'].'">Обзор</a><hr />';
 
             if ($total > 0) {
 
                 $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".$config['postoffers'].";", [$type]);
 
-                echo '<form action="/admin/offers?act=del&amp;type='.$type.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/offers?act=del&amp;type='.$type.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryoffers -> fetch()) {
                     echo '<div class="b">';
@@ -317,7 +314,7 @@ if (is_admin([101, 102])) {
                     DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id` IN (".$del.");");
 
                     notice('Выбранные пункты успешно удалены!');
-                    redirect("/admin/offers?type=$type&start=$start");
+                    redirect("/admin/offers?type=$type&page=$page");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные предложения или проблемы!');
                 }
@@ -325,7 +322,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################

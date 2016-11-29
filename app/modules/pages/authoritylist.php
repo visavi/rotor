@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['uz'])) {
     $uz = check($_GET['uz']);
 } elseif (isset($_POST['uz'])) {
@@ -18,6 +13,7 @@ if (isset($_GET['uz'])) {
 } else {
     $uz = "";
 }
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Рейтинг авторитетов');
 
@@ -28,6 +24,7 @@ switch ($act):
     case 'index':
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
+        $page = App::paginate(App::setting('avtorlist'), $total);
 
         if ($total > 0) {
 
@@ -37,12 +34,12 @@ switch ($act):
             while ($data = $queryusers -> fetch()) {
                 ++$i;
 
-                echo '<div class="b">'.($start + $i).'. '.user_gender($data['login']);
+                echo '<div class="b">'.($page['offset'] + $i).'. '.user_gender($data['login']);
 
                 if ($uz == $data['login']) {
-                    echo '<b><big>'.profile($data['login'], '#ff0000').'</big></b> (Авторитет: '.($data['rating']).')</div>';
+                    echo ' <b><big>'.profile($data['login'], '#ff0000').'</big></b> (Авторитет: '.($data['rating']).')</div>';
                 } else {
-                    echo '<b>'.profile($data['login']).'</b> (Авторитет: '.($data['rating']).')</div>';
+                    echo ' <b>'.profile($data['login']).'</b> (Авторитет: '.($data['rating']).')</div>';
                 }
 
                 echo '<div>Плюсов: '.$data['posrating'].' / Минусов: '.$data['negrating'].'<br />';
@@ -53,7 +50,7 @@ switch ($act):
 
             echo '<div class="form">';
             echo '<b>Поиск пользователя:</b><br />';
-            echo '<form action="/authoritylist?act=search&amp;start='.$start.'" method="post">';
+            echo '<form action="/authoritylist?act=search&amp;page='.$page['current'].'" method="post">';
             echo '<input type="text" name="uz" value="'.$log.'" />';
             echo '<input type="submit" value="Искать" /></form></div><br />';
 
@@ -80,12 +77,11 @@ switch ($act):
                         $rat = $key + 1;
                     }
                 }
-
                 if (!empty($rat)) {
-                    $page = floor(($rat - 1) / $config['avtorlist']) * $config['avtorlist'];
+                    $end = ceil($rat / $config['avtorlist']);
 
                     notice('Позиция в рейтинге: '.$rat);
-                    redirect("/authoritylist?start=$page&uz=$queryuser");
+                    redirect("/authoritylist?page=$end&uz=$queryuser");
                 } else {
                     show_error('Пользователь с данным логином не найден!');
                 }
@@ -96,7 +92,7 @@ switch ($act):
             show_error('Ошибка! Вы не ввели логин или ник пользователя');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/authoritylist?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/authoritylist?page='.$page.'">Вернуться</a><br />';
     break;
 
 endswitch;

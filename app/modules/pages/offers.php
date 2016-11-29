@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['sort'])) {
     $sort = check($_GET['sort']);
 } else {
@@ -26,6 +21,7 @@ if (isset($_GET['type'])) {
 } else {
     $type = 0;
 }
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Предложения и проблемы');
 
@@ -39,6 +35,8 @@ switch ($act):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type]);
         $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type2]);
 
+        $page = App::paginate(App::setting('postoffers'), $total);
+
         echo '<i class="fa fa-book"></i> ';
 
         if (empty($type)) {
@@ -48,7 +46,7 @@ switch ($act):
         }
 
         if (is_admin([101, 102])) {
-            echo ' / <a href="/admin/offers?type='.$type.'&amp;start='.$start.'">Управление</a>';
+            echo ' / <a href="/admin/offers?type='.$type.'&amp;page='.$page['current'].'">Управление</a>';
         }
 
         switch ($sort) {
@@ -338,13 +336,14 @@ switch ($act):
             echo '<a href="/offers?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
+            $page = App::paginate(App::setting('postcommoffers'), $total);
 
             if ($total > 0) {
 
                 $is_admin = is_admin();
 
                 if ($is_admin) {
-                    echo '<form action="/offers?act=delcomm&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/offers?act=delcomm&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
                 $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postcommoffers'].";", ['offer', $id]);
@@ -590,7 +589,7 @@ switch ($act):
                     DB::run() -> query("UPDATE `offers` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                     notice('Выбранные комментарии успешно удалены!');
-                    redirect("/offers?act=comments&id=$id&start=$start");
+                    redirect("/offers?act=comments&id=$id&page=$page");
                 } else {
                     show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
                 }
@@ -613,9 +612,9 @@ switch ($act):
 
         if (!empty($query)) {
             $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-            $end = last_page($total_comments, $config['postcommoffers']);
+            $end = ceil($total_comments / $config['postcommoffers']);
 
-            redirect("/offers?act=comments&id=$id&start=$end");
+            redirect("/offers?act=comments&id=$id&page=$end");
         } else {
             show_error('Ошибка! Данного предложения или проблемы не существует!');
         }

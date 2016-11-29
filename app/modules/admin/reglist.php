@@ -6,11 +6,7 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102, 103])) {
     show_title('Ожидающие регистрации');
@@ -56,12 +52,13 @@ if (is_admin([101, 102, 103])) {
             }
             // --------------------------------------------------------//
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", [0]);
+            $page = App::paginate(App::setting('reglist'), $total);
 
             if ($total > 0) {
 
                 $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".$config['reglist'].";", [0]);
 
-                echo '<form action="/admin/reglist?act=choice&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/reglist?act=choice&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryusers -> fetch()) {
                     if (empty($data['email'])) {
@@ -115,7 +112,7 @@ if (is_admin([101, 102, 103])) {
                             DB::run() -> query("UPDATE `users` SET `confirmreg`=?, `confirmregkey`=? WHERE `login` IN ('".$arrayusers."');", [0, '']);
 
                             notice('Выбранные аккаунты успешно одобрены!');
-                            redirect("/admin/reglist?start=$start");
+                            redirect("/admin/reglist?page=$page");
                         }
                         // ----------------------------------- Запрет регистрации -------------------------------------//
                         if ($choice == 2) {
@@ -125,7 +122,7 @@ if (is_admin([101, 102, 103])) {
                             }
 
                             notice('Выбранные пользователи успешно удалены!');
-                            redirect("/admin/reglist?start=$start");
+                            redirect("/admin/reglist?page=$page");
                         }
                     } else {
                         show_error('Ошибка! Отсутствуют выбранные пользователи!');
@@ -137,7 +134,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reglist?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reglist?page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;

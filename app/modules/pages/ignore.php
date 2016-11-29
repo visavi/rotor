@@ -1,16 +1,12 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
 } else {
     $act = 'index';
 }
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Игнор-лист');
 
@@ -22,12 +18,13 @@ if (is_user()) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$log]);
+            $page = App::paginate(App::setting('ignorlist'), $total);
 
             if ($total > 0) {
 
                 $queryignor = DB::run() -> query("SELECT * FROM ignoring WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['ignorlist'].";", [$log]);
 
-                echo '<form action="/ignore?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/ignore?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryignor -> fetch()) {
                     echo '<div class="b">';
@@ -56,7 +53,7 @@ if (is_user()) {
                 show_error('Игнор-лист пуст!');
             }
 
-            echo '<br /><div class="form"><form method="post" action="/ignore?act=add&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">';
+            echo '<br /><div class="form"><form method="post" action="/ignore?act=add&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'">';
             echo '<b>Логин юзера:</b><br /><input name="uz" />';
             echo '<input value="Добавить" type="submit" /></form></div><br />';
             break;
@@ -98,7 +95,7 @@ if (is_user()) {
                                     }
 
                                     notice('Пользователь успешно отправлен в игнор!');
-                                    redirect("/ignore?start=$start");
+                                    redirect("/ignore?page=$page");
 
                                 } else {
                                     show_error('Ошибка! Данный пользователь уже есть в игнор-листе!');
@@ -119,7 +116,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -140,7 +137,7 @@ if (is_user()) {
                     echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['name']).'</b> '.user_online($data['name']).':<br /><br />';
 
                     echo '<div class="form">';
-                    echo '<form method="post" action="/ignore?act=editnote&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">';
+                    echo '<form method="post" action="/ignore?act=editnote&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'">';
                     echo 'Заметка:<br />';
                     echo '<textarea cols="25" rows="5" name="msg">'.$data['text'].'</textarea><br />';
                     echo '<input value="Редактировать" type="submit" /></form></div><br />';
@@ -151,7 +148,7 @@ if (is_user()) {
                 show_error('Ошибка! Не выбран пользователь для добавления заметки!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -172,7 +169,7 @@ if (is_user()) {
                         DB::run() -> query("UPDATE ignoring SET `text`=? WHERE `id`=? AND `user`=?;", [$msg, $id, $log]);
 
                         notice('Заметка успешно отредактирована!');
-                        redirect("/ignore?start=$start");
+                        redirect("/ignore?page=$page");
 
                     } else {
                         show_error('Ошибка! Слишком длинная заметка (не более 1000 символов)!');
@@ -184,8 +181,8 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?act=note&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/ignore?start='.$start.'">К спискам</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?act=note&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/ignore?page='.$page.'">К спискам</a><br />';
         break;
 
         ############################################################################################
@@ -206,7 +203,7 @@ if (is_user()) {
                     DB::run() -> query("DELETE FROM ignoring WHERE `id` IN (".$del.") AND `user`=?;", [$log]);
 
                     notice('Выбранные пользователи успешно удалены из игнора!');
-                    redirect("/ignore?start=$start");
+                    redirect("/ignore?page=$page");
 
                 } else {
                     show_error('Ошибка! Не выбраны пользователи для удаления!');
@@ -215,7 +212,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;

@@ -6,16 +6,12 @@ if (empty($_GET['uz'])) {
 } else {
     $uz = check(strval($_GET['uz']));
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 
 if (is_user()) {
     show_title('История банов '.nickname($uz));
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
+    $page = App::paginate(App::setting('listbanhist'), $total);
 
     if ($total > 0) {
 
