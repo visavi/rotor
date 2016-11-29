@@ -3,7 +3,7 @@ App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Интернет события');
 
@@ -17,8 +17,9 @@ case 'index':
 
 	$total = DB::run() -> querySingle("SELECT count(*) FROM `events`;");
 
-	$page = floor(1 + $start / $config['postevents']);
-	$config['description'] = 'Список событий (Стр. '.$page.')';
+    $page = App::paginate(App::setting('postevents'), $total);
+
+	$config['description'] = 'Список событий (Стр. '.$page['current'].')';
 
 	if ($total > 0) {
 
@@ -339,20 +340,20 @@ case 'comments':
 	if (!empty($dataevent)) {
 		$config['newtitle'] = 'Комментарии - '.$dataevent['title'];
 
-		$page = floor(1 + $start / $config['postevents']);
-		$config['description'] = 'Комментарии - '.$dataevent['title'].' (Стр. '.$page.')';
-
 		echo '<i class="fa fa-file-o"></i> <b><a href="/events?act=read&amp;id='.$dataevent['id'].'">'.$dataevent['title'].'</a></b><br /><br />';
 
 		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
 
 		$total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['event', $id]);
 
+        $page = App::paginate(App::setting('postevents'), $total);
+        $config['description'] = 'Комментарии - '.$dataevent['title'].' (Стр. '.$page['current'].')';
+
 		if ($total > 0) {
 
 			$is_admin = is_admin();
 			if ($is_admin) {
-				echo '<form action="/events?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+				echo '<form action="/events?act=del&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 			}
 
 			$querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postevents'].";", ['event', $id]);
@@ -457,7 +458,7 @@ case 'addcomment':
 		show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
 	}
 
-	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
 break;
 
@@ -479,7 +480,7 @@ case 'del':
 				DB::run() -> query("UPDATE `events` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
 				notice('Выбранные комментарии успешно удалены!');
-				redirect("/events?act=comments&id=$id&start=$start");
+				redirect("/events?act=comments&id=$id&page=$page");
 
 			} else {
 				show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
@@ -491,7 +492,7 @@ case 'del':
 		show_error('Ошибка! Удалять комментарии могут только модераторы!');
 	}
 
-	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
 break;
 
@@ -504,9 +505,9 @@ case 'end':
 
 	if (!empty($query)) {
 		$total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-		$end = last_page($total_comments, $config['postevents']);
+		$end = ceil($total_comments / $config['postevents']);
 
-		redirect("/events?act=comments&id=$id&start=$end");
+		redirect("/events?act=comments&id=$id&page=$end");
 
 	} else {
 		show_error('Ошибка! Данного события не существует!');

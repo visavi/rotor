@@ -2,8 +2,8 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()){
 
@@ -76,13 +76,18 @@ if ($act=="board")  {
                 $lines = array_reverse($lines);
                 $total = count($lines);
 
-                if ($total>0) {
-                    echo '<form action="/admin/board?act=deltop&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                $page = App::paginate(App::setting('boardspost'), $total);
 
-                    if ($start < 0 || $start > $total){$start = 0;}
-                    if ($total < $start + $config['boardspost']){ $end = $total; }
-                    else {$end = $start + $config['boardspost']; }
-                    for ($i = $start; $i < $end; $i++){
+                if ($total>0) {
+                    echo '<form action="/admin/board?act=deltop&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+
+                    if ($total < $page['offset'] + $config['boardspost']){
+                        $end = $total;
+                    } else {
+                        $end = $page['offset'] + $config['boardspost'];
+                    }
+
+                    for ($i = $page['offset']; $i < $end; $i++){
 
                     $data = explode("|",$lines[$i]);
 
@@ -97,7 +102,7 @@ if ($act=="board")  {
                     echo '<input type="checkbox" name="del[]" value="'.$num.'" /> ';
 
                     echo '<i class="fa fa-folder-open"></i> '.($i+1).'. ';
-                    echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;start='.$start.'">'.$data[0].'</a></b> ';
+                    echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;page='.$page['current'].'">'.$data[0].'</a></b> ';
                     echo '(<small>'.date_fixed($data[3]).'</small>)</div>';
                     echo '<div>Текст объявления: '.$data[2].'<br />';
                     echo 'Автор объявления: '.profile($data[1]).'</div>';
@@ -312,13 +317,13 @@ if ($act=="deltop") {
             delete_lines(STORAGE."/board/$id.dat", $del);
 
             notice('Объявление успешно удалено!');
-            redirect("/admin/board?act=board&id=$id&start=$start");
+            redirect("/admin/board?act=board&id=$id&page=$page");
 
             } else {show_error('Ошибка! Отсутствуют выбранные объявления!');}
         } else {show_error('Ошибка! Не выбрана рубрика для удаления!');}
     } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board?act=board&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board?act=board&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 }
 
 //----------------------- Концовка -------------------------//

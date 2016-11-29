@@ -1,18 +1,13 @@
 <?php
 App::view($config['themes'].'/index');
 
-$config['spamlist'] = 10;
-
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
 } else {
     $act = 'forum';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102, 103])) {
     show_title('Список жалоб');
@@ -32,11 +27,13 @@ if (is_admin([101, 102, 103])) {
 
             echo '<b>Форум</b> ('.$total.') / <a href="/admin/spam?act=guest">Гостевая ('.$totalguest.')</a> / <a href="/admin/spam?act=privat">Приват ('.$totalpriv.')</a> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
+            $page = App::paginate(App::setting('spamlist'), $total);
+
             if ($total > 0) {
 
                 $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [1]);
 
-                echo '<form action="/admin/spam?act=del&amp;ref=forum&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/spam?act=del&amp;ref=forum&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
@@ -76,11 +73,12 @@ if (is_admin([101, 102, 103])) {
 
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <b>Гостевая</b> ('.$total.') / <a href="/admin/spam?act=privat">Приват ('.$totalpriv.')</a> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
+            $page = App::paginate(App::setting('spamlist'), $total);
             if ($total > 0) {
 
                 $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [2]);
 
-                echo '<form action="/admin/spam?act=del&amp;ref=guest&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/spam?act=del&amp;ref=guest&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
@@ -120,11 +118,12 @@ if (is_admin([101, 102, 103])) {
 
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <b>Приват ('.$total.')</b> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
+            $page = App::paginate(App::setting('spamlist'), $total);
             if ($total > 0) {
 
                 $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [3]);
 
-                echo '<form action="/admin/spam?act=del&amp;ref=privat&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/spam?act=del&amp;ref=privat&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
@@ -163,11 +162,12 @@ if (is_admin([101, 102, 103])) {
 
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <b>Стена</b> ('.$total.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
+            $page = App::paginate(App::setting('spamlist'), $total);
             if ($total > 0) {
 
                 $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [4]);
 
-                echo '<form action="/admin/spam?act=del&amp;ref=wall&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/spam?act=del&amp;ref=wall&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
@@ -207,11 +207,12 @@ if (is_admin([101, 102, 103])) {
 
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <b>Загрузки</b> ('.$total.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
 
+            $page = App::paginate(App::setting('spamlist'), $total);
             if ($total > 0) {
 
                 $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [5]);
 
-                echo '<form action="/admin/spam?act=del&amp;ref=load&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/spam?act=del&amp;ref=load&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
@@ -251,11 +252,12 @@ if (is_admin([101, 102, 103])) {
 
             echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <b>Блоги</b> ('.$total.')<br /><br />';
 
+            $page = App::paginate(App::setting('spamlist'), $total);
             if ($total > 0) {
 
                 $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [6]);
 
-                echo '<form action="/admin/spam?act=del&amp;ref=blog&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/spam?act=del&amp;ref=blog&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
@@ -301,7 +303,7 @@ if (is_admin([101, 102, 103])) {
                     DB::run() -> query("DELETE FROM `spam` WHERE `id` IN (".$del.");");
 
                     notice('Выбранные жалобы успешно удалены!');
-                    redirect("/admin/spam?act=$ref&start=$start");
+                    redirect("/admin/spam?act=$ref&page=$page");
 
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные жалобы!');
@@ -310,7 +312,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/spam?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/spam?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################

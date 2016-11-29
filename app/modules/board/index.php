@@ -2,9 +2,9 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $bid = (isset($_GET['bid'])) ? abs(intval($_GET['bid'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Доска объявлений');
 
@@ -86,12 +86,16 @@ if ($act == "board"){
             $files = array_reverse($files);
             $total = count($files);
 
+            $page = App::paginate(App::setting('boardspost'), $total);
             if ($total>0) {
 
-                if ($start < 0 || $start >= $total){$start = 0;}
-                if ($total < $start + $config['boardspost']){ $end = $total; }
-                else {$end = $start + $config['boardspost']; }
-                for ($i = $start; $i < $end; $i++){
+                if ($total < $page['offset'] + $config['boardspost']){
+                    $end = $total;
+                } else {
+                    $end = $page['offset'] + $config['boardspost'];
+                }
+
+                for ($i = $page['offset']; $i < $end; $i++){
 
                     $data = explode("|",$files[$i]);
 
@@ -101,7 +105,7 @@ if ($act == "board"){
 
                     echo '<div class="b">';
                     echo '<i class="fa fa-folder-open"></i> '.($i+1).'. ';
-                    echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;start='.$start.'">'.$data[0].'</a></b> ';
+                    echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;page='.$page['current'].'">'.$data[0].'</a></b> ';
                     echo '<small>('.date_fixed($data[3]).')</small></div>';
                     echo 'Текст объявления: '.$data[2].'<br />';
                     echo 'Автор объявления: '.profile($data[1]).'<br />';
@@ -216,4 +220,4 @@ echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=new&amp;id='.$
 
 echo '<i class="fa fa-home"></i> <a href="/">На главную</a><br />';
 
-
+App::view($config['themes'].'/foot');

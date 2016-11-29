@@ -3,7 +3,7 @@ App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
     show_title('Управление событиями');
@@ -16,12 +16,13 @@ case 'index':
     echo '<div class="form"><a href="/events">Обзор событий</a></div>';
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `events`;");
+    $page = App::paginate(App::setting('postevents'), $total);
 
     if ($total > 0) {
 
         $queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postevents'].";");
 
-        echo '<form action="/admin/events?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+        echo '<form action="/admin/events?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
         while ($data = $queryevents -> fetch()) {
             echo '<div class="b">';
@@ -31,7 +32,7 @@ case 'index':
 
             echo '<b><a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small><br />';
             echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-            echo '<a href="/admin/events?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
+            echo '<a href="/admin/events?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
                 echo '<div class="img"><a href="/upload/events/'.$data['image'].'">'.resize_image('upload/events/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
@@ -79,7 +80,7 @@ case 'edit':
         echo '<b><big>Редактирование</big></b><br /><br />';
 
         echo '<div class="form cut">';
-        echo '<form action="/admin/events?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+        echo '<form action="/admin/events?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
         echo 'Заголовок:<br />';
         echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['title'].'" /><br />';
         echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br />';
@@ -104,7 +105,7 @@ case 'edit':
         show_error('Ошибка! Выбранного события не существует, возможно оно было удалено!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -162,8 +163,8 @@ case 'change':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?start='.$start.'">К событиям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?page='.$page.'">К событиям</a><br />';
 break;
 
 ############################################################################################
@@ -217,7 +218,7 @@ case 'del':
                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `event_id` IN (".$del.");", ['event']);
 
                 notice('Выбранные события успешно удалены!');
-                redirect("/admin/events?start=$start");
+                redirect("/admin/events?page=$page");
 
                 } else {
                 show_error('Ошибка! Не установлены атрибуты доступа на директорию с изображениями!');
@@ -229,7 +230,7 @@ case 'del':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?page='.$page.'">Вернуться</a><br />';
 break;
 
 endswitch;
