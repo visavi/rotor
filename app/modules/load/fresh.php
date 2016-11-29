@@ -1,11 +1,10 @@
 <?php
 App::view($config['themes'].'/index');
 
-$start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0;
-
 show_title('Список свежих загрузок');
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-3600 * 120]);
+$page = App::paginate(App::setting('downlist'), $total);
 
 if ($total > 0) {
 

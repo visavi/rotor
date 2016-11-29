@@ -2,7 +2,6 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 
 show_title('Поиск в файлах');
 
@@ -84,6 +83,7 @@ case "search":
             }
 
             $total = count($_SESSION['loadfindres']);
+            $page = App::paginate(App::setting('downlist'), $total);
 
             if ($total > 0) {
 
@@ -91,7 +91,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -125,6 +125,7 @@ case "search":
             }
 
             $total = count($_SESSION['loadfindres']);
+            $page = App::paginate(App::setting('downlist'), $total);
 
             if ($total > 0) {
 
@@ -132,7 +133,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';

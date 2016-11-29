@@ -1,7 +1,6 @@
 <?php
 App::view($config['themes'].'/index');
 
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $sort = isset($_GET['sort']) ? check($_GET['sort']) : 'loads';
 
 switch ($sort) {
@@ -39,11 +38,9 @@ if ($order == 'comments') {
 echo '<hr />';
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [1]);
+$page = App::paginate(App::setting('downlist'), $total);
 
 if ($total > 0) {
-    if ($start >= $total) {
-        $start = 0;
-    }
 
     $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1]);
 

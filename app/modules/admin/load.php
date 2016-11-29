@@ -4,7 +4,7 @@ App::view($config['themes'].'/index');
 $id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 $cid = isset($_GET['cid']) ? abs(intval($_GET['cid'])) : 0;
 $act = isset($_GET['act']) ? check($_GET['act']) : 'index';
-$start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102])) {
 show_title('Управление загрузками');
@@ -688,13 +688,13 @@ case 'down':
         $config['newtitle'] = $cats['name'];
 
         echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
-        echo ' (<a href="/load/down?cid='.$cid.'&amp;start='.$start.'">Обзор</a>)';
+        echo ' (<a href="/load/down?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
         echo '<hr />';
 
         $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `parent`=?;", [$cid]);
         $sub = $querysub -> fetchAll();
 
-        if (count($sub) > 0 && $start == 0) {
+        if (count($sub) > 0 && $page == 1) {
             foreach($sub as $subdata) {
                 echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                 echo '<b><a href="/admin/load?act=down&amp;cid='.$subdata['id'].'">'.$subdata['name'].'</a></b> ('.$subdata['count'].')</div>';
@@ -703,6 +703,7 @@ case 'down':
         }
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
+        $page = App::paginate(App::setting('downlist'), $total);
 
         if ($total > 0) {
 
@@ -713,7 +714,7 @@ case 'down':
             $is_admin = (is_admin([101]) && $log == $config['nickname']);
 
             if ($is_admin) {
-                echo '<form action="/admin/load?act=deldown&amp;cid='.$cid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/load?act=deldown&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
             }
 
              while ($data = $querydown -> fetch()) {
@@ -727,8 +728,8 @@ case 'down':
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                 }
 
-                echo '<a href="/admin/load?act=editdown&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a> / ';
-                echo '<a href="/admin/load?act=movedown&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;start='.$start.'">Переместить</a></div>';
+                echo '<a href="/admin/load?act=editdown&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a> / ';
+                echo '<a href="/admin/load?act=movedown&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Переместить</a></div>';
 
                 echo '<div>';
 
@@ -1211,7 +1212,7 @@ case 'movedown':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -1291,7 +1292,7 @@ case 'deldown':
                     }
 
                     notice('Выбранные файлы успешно удалены!');
-                    redirect("/admin/load?act=down&cid=$cid&start=$start");
+                    redirect("/admin/load?act=down&cid=$cid&page=$page");
                 } else {
                     show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
                 }
@@ -1305,7 +1306,7 @@ case 'deldown':
         show_error('Ошибка! Удалять файлы могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 endswitch;

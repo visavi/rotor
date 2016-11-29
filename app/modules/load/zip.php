@@ -3,7 +3,7 @@ App::view($config['themes'].'/index');
 
 $id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 $act = isset($_GET['act']) ? check($_GET['act']) : 'index';
-$start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Просмотр архива');
 
@@ -26,21 +26,19 @@ case 'index':
 
                     sort($list);
 
+                    $page = App::paginate(App::setting('ziplist'), $total);
                     if ($total > 0) {
                         echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
                         echo 'Всего файлов: '.$total.'<hr />';
 
                         $arrext = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg'];
 
-                        if ($start < 0 || $start >= $total) {
-                            $start = 0;
-                        }
-                        if ($total < $start + $config['ziplist']) {
+                        if ($total < $page['offset'] + $config['ziplist']) {
                             $end = $total;
                         } else {
-                            $end = $start + $config['ziplist'];
+                            $end = $page['offset'] + $config['ziplist'];
                         }
-                        for ($i = $start; $i < $end; $i++) {
+                        for ($i = $page['offset']; $i < $end; $i++) {
                             if ($list[$i]['folder'] == 1) {
                                 $filename = substr($list[$i]['filename'], 0, -1);
                                 echo '<i class="fa fa-folder-open-o"></i> <b>Директория '.$filename.'</b><br />';
@@ -50,7 +48,7 @@ case 'index':
                                 echo icons($ext).' ';
 
                                 if (in_array($ext, $arrext)) {
-                                    echo '<a href="/load/zip?act=preview&amp;id='.$id.'&amp;view='.$list[$i]['index'].'&amp;start='.$start.'">'.$list[$i]['filename'].'</a>';
+                                    echo '<a href="/load/zip?act=preview&amp;id='.$id.'&amp;view='.$list[$i]['index'].'&amp;page='.$page['current'].'">'.$list[$i]['filename'].'</a>';
                                 } else {
                                     echo $list[$i]['filename'];
                                 }
@@ -138,7 +136,7 @@ case 'preview':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/zip?id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/zip?id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 endswitch;

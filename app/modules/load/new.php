@@ -2,7 +2,7 @@
 App::view($config['themes'].'/index');
 
 $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
-$start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 switch ($act):
 ############################################################################################
@@ -12,12 +12,12 @@ case 'files':
     show_title('Список новых файлов');
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [1]);
+    if ($total > 100) {
+        $total = 100;
+    }
+    $page = App::paginate(App::setting('downlist'), $total);
 
     if ($total > 0) {
-        if ($total > 100) {
-            $total = 100;
-        }
-
         $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1]);
 
         while ($data = $querydown -> fetch()) {
@@ -47,11 +47,13 @@ case 'comments':
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=?;", ['down']);
 
-    if ($total > 0) {
-        if ($total > 100) {
-            $total = 100;
-        }
+    if ($total > 100) {
+        $total = 100;
+    }
 
+    $page = App::paginate(App::setting('downlist'), $total);
+
+    if ($total > 0) {
         $querydown = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `downs` ON `comments`.`relate_id`=`downs`.`id` WHERE relate_type='down' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
 
         while ($data = $querydown -> fetch()) {
@@ -95,9 +97,9 @@ case 'viewcomm':
     $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `id`<=? AND `relate_id`=? ORDER BY `time` ASC LIMIT 1;", ['down', $cid, $id]);
 
     if (!empty($querycomm)) {
-        $end = floor(($querycomm - 1) / $config['downlist']) * $config['downlist'];
+        $end = ceil($querycomm / $config['downlist']);
 
-        redirect("/load/down?act=comments&id=$id&start=$end");
+        redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
         show_error('Ошибка! Комментарий к данному файлу не существует!');
     }

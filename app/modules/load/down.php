@@ -5,7 +5,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $sort = (isset($_GET['sort'])) ? check($_GET['sort']) : 'date';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Загрузки');
 
@@ -37,7 +37,7 @@ case 'index':
             echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
 
             if (is_admin([101, 102])) {
-                echo ' (<a href="/admin/load?act=down&amp;cid='.$cid.'&amp;start='.$start.'">Управление</a>)';
+                echo ' (<a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Управление</a>)';
             }
 
             switch ($sort) {
@@ -81,7 +81,7 @@ case 'index':
             $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `parent`=?;", [$cid]);
             $sub = $querysub -> fetchAll();
 
-            if (count($sub) > 0 && $start == 0) {
+            if (count($sub) > 0 && $page == 1) {
                 foreach($sub as $subdata) {
                     echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                     echo '<b><a href="/load/down?cid='.$subdata['id'].'">'.$subdata['name'].'</a></b> ('.$subdata['count'].')</div>';
@@ -90,6 +90,7 @@ case 'index':
             }
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
+            $page = App::paginate(App::setting('downlist'), $total);
 
             if ($total > 0) {
 
@@ -409,13 +410,14 @@ case 'comments':
             echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['down', $id]);
+            $page = App::paginate(App::setting('downcomm'), $total);
 
             if ($total > 0) {
 
 
                 $is_admin = is_admin();
                 if ($is_admin) {
-                    echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
                 $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['downcomm'].";", ['down', $id]);
@@ -433,13 +435,13 @@ case 'comments':
 
                     if (!empty($log) && $log != $data['user']) {
                         echo '<div class="right">';
-                        echo '<a href="/load/down?act=reply&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Отв</a> / ';
-                        echo '<a href="/load/down?act=quote&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Цит</a> / ';
-                        echo '<noindex><a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
+                        echo '<a href="/load/down?act=reply&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Отв</a> / ';
+                        echo '<a href="/load/down?act=quote&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Цит</a> / ';
+                        echo '<noindex><a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                     }
 
                     if ($log == $data['user'] && $data['time'] + 600 > SITETIME) {
-                        echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
+                        echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
                     echo '<div class="message">'.App::bbCode($data['text']).'<br />';
@@ -550,10 +552,10 @@ case 'spam':
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;start='.$start]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         notice('Жалоба успешно отправлена!');
-                        redirect("/load/down?act=comments&id=$id&start=$start");
+                        redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
                         show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
                     }
@@ -570,7 +572,7 @@ case 'spam':
         show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -601,7 +603,7 @@ case 'reply':
         show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -628,7 +630,7 @@ case 'quote':
         show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -649,7 +651,7 @@ case 'edit':
                 echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['user']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                 echo '<div class="form">';
-                echo '<form action="/load/down?act=editpost&amp;id='.$post['relate_id'].'&amp;pid='.$pid.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/load/down?act=editpost&amp;id='.$post['relate_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Редактирование сообщения:<br />';
                 echo '<textarea cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br />';
                 echo '<input type="submit" value="Редактировать" /></form></div><br />';
@@ -663,7 +665,7 @@ case 'edit':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -688,7 +690,7 @@ case 'editpost':
                         DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'down', $pid]);
 
                         notice('Сообщение успешно отредактировано!');
-                        redirect("/load/down?act=comments&id=$id&start=$start");
+                        redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
                         show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                     }
@@ -705,7 +707,7 @@ case 'editpost':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -729,7 +731,7 @@ case 'del':
                 DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                 notice('Выбранные комментарии успешно удалены!');
-                redirect("/load/down?act=comments&id=$id&start=$start");
+                redirect("/load/down?act=comments&id=$id&page=$page");
             } else {
                 show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
             }
@@ -740,7 +742,7 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -753,9 +755,9 @@ case 'end':
     if (!empty($query)) {
 
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = last_page($total_comments, $config['downcomm']);
+        $end = ceil($total_comments / $config['downcomm']);
 
-        redirect("/load/down?act=comments&id=$id&start=$end");
+        redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
         show_error('Ошибка! Данного файла не существует!');
     }
