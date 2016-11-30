@@ -6,11 +6,7 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102])) {
     show_title('IP-бан панель');
@@ -23,16 +19,17 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=666">История автобанов</a><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `ban`;");
+            $page = App::paginate(App::setting('ipbanlist'), $total);
 
             if ($total > 0) {
 
                 $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['ipbanlist'].";");
 
-                echo '<form action="/admin/ipban?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/ipban?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" />';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
                     echo '<i class="fa fa-file-o"></i> <b>'.$data['ip'].'</b></div>';
 
                     echo '<div>Добавлено: ';
@@ -56,7 +53,7 @@ if (is_admin([101, 102])) {
             }
 
             echo '<div class="form">';
-            echo '<form action="/admin/ipban?act=add&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+            echo '<form action="/admin/ipban?act=add&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo 'IP-адрес:<br />';
             echo '<input type="text" name="ips" />';
             echo '<input value="Добавить" type="submit" /></form></div><br />';
@@ -85,7 +82,7 @@ if (is_admin([101, 102])) {
                         save_ipban();
 
                         notice('IP успешно занесен в список!');
-                        redirect("/admin/ipban?start=$start");
+                        redirect("/admin/ipban?page=$page");
                     } else {
                         show_error('Ошибка! Введенный IP уже имеетеся в списке!');
                     }
@@ -119,7 +116,7 @@ if (is_admin([101, 102])) {
                     save_ipban();
 
                     notice('Выбранные IP успешно удалены из списка!');
-                    redirect("/admin/ipban?start=$start");
+                    redirect("/admin/ipban?page=$page");
                 } else {
                     echo '<i class="fa fa-times"></i> <b>Ошибка удаления! Отсутствуют выбранные IP</b><br />';
                 }
@@ -127,7 +124,7 @@ if (is_admin([101, 102])) {
                 echo '<i class="fa fa-times"></i> <b>Ошибка! Неверный идентификатор сессии, повторите действие!</b><br />';
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -151,7 +148,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Очищать бан-лист могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban?page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;

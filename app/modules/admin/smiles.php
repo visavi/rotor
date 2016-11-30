@@ -3,7 +3,7 @@ App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 if (! is_admin([101, 102])) redirect('/admin/');
 
@@ -16,19 +16,16 @@ switch ($act):
 case 'index':
 
     $total = DBM::run()->count('smiles');
+    $page = App::paginate(App::setting('smilelist'), $total);
 
-    if ($total > 0 && $start >= $total) {
-        $start = last_page($total, $config['smilelist']);
-    }
+    $smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => $page['offset'], 'limit' => intval($config['smilelist'])]);
 
-    $smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => intval($start), 'limit' => intval($config['smilelist'])]);
-
-    echo '<form action="/admin/smiles?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+    echo '<form action="/admin/smiles?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
     foreach($smiles as $smile) {
         echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
 
-        echo '<input type="checkbox" name="del[]" value="'.$smile['id'].'" /> <a href="/admin/smiles?act=edit&amp;id='.$smile['id'].'&amp;start='.$start.'">Редактировать</a><br />';
+        echo '<input type="checkbox" name="del[]" value="'.$smile['id'].'" /> <a href="/admin/smiles?act=edit&amp;id='.$smile['id'].'&amp;page='.$page['current'].'">Редактировать</a><br />';
     }
 
     echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -39,7 +36,7 @@ case 'index':
 
     //show_error('Смайлы еще не загружены!');
 
-    echo '<i class="fa fa-upload"></i> <a href="/admin/smiles?act=add&amp;start='.$start.'">Загрузить</a><br />';
+    echo '<i class="fa fa-upload"></i> <a href="/admin/smiles?act=add&amp;page='.$page['current'].'">Загрузить</a><br />';
 break;
 
 /**
@@ -50,7 +47,7 @@ case 'add':
     $config['newtitle'] = 'Добавление смайла';
 
     echo '<div class="form">';
-    echo '<form action="/admin/smiles?act=load&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+    echo '<form action="/admin/smiles?act=load&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
 
     echo 'Прикрепить смайл:<br /><input type="file" name="smile" /><br />';
     echo 'Код смайла: <br /><input type="text" name="code" /> <i>Код смайла должен начинаться со знака двоеточия</i><br />';
@@ -60,7 +57,7 @@ case 'add':
     echo 'Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png, bmp<br />';
     echo 'Весом не более '.formatsize($config['smilemaxsize']).' и размером до '.$config['smilemaxweight'].' px<br /><br />';
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br />';
 break;
 
 /**
@@ -131,7 +128,7 @@ case 'load':
         show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
     }
 
-    render('includes/back', ['link' => '/admin/smiles?act=add&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/admin/smiles?act=add&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 /**
@@ -146,7 +143,7 @@ case 'edit':
         echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
 
         echo '<div class="form">';
-        echo '<form action="/admin/smiles?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+        echo '<form action="/admin/smiles?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
         echo 'Код смайла:<br />';
         echo '<input type="text" name="code" value="'.$smile['code'].'" /> <i>Код смайла должен начинаться со знака двоеточия</i><br />';
         echo '<input type="submit" value="Изменить" /></form></div><br />';
@@ -154,7 +151,7 @@ case 'edit':
         show_error('Ошибка! Смайла для редактирования не существует!');
     }
 
-    render('includes/back', ['link' => '/admin/smiles?start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/admin/smiles?page='.$page, 'title' => 'Вернуться']);
 break;
 
 /**
@@ -187,14 +184,14 @@ case 'change':
         clearCache();
 
         notice('Смайл успешно отредактирован!');
-        redirect("/admin/smiles?start=$start");
+        redirect("/admin/smiles?page=$page");
 
 
     } else {
         show_error($validation->getErrors());
     }
 
-    render('includes/back', ['link' => '/admin/smiles?act=edit&amp;id='.$id.'&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/admin/smiles?act=edit&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 /**
@@ -223,7 +220,7 @@ case 'del':
                 clearCache();
 
                 notice('Выбранные смайлы успешно удалены!');
-                redirect("/admin/smiles?start=$start");
+                redirect("/admin/smiles?page=$page");
 
             } else {
                 show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
@@ -235,7 +232,7 @@ case 'del':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    render('includes/back', ['link' => '/admin/smiles?start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/admin/smiles?page='.$page, 'title' => 'Вернуться']);
 break;
 
 endswitch;

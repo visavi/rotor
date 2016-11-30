@@ -15,12 +15,6 @@ if (isset($_POST['uz'])) {
     $uz = '';
 }
 
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
-
 if (is_admin([101, 102])) {
     show_title('Управление пользователями');
 
@@ -43,6 +37,8 @@ if (is_admin([101, 102])) {
             echo '<b>Cписок последних зарегистрированных</b><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
+            $page = App::paginate(App::setting('userlist'), $total);
+
             if ($total > 0) {
 
                 $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".$config['userlist'].";");
@@ -84,6 +80,7 @@ if (is_admin([101, 102])) {
                 }
 
                 $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE LOWER(`login`) ".$search.";");
+                $page = App::paginate(App::setting('usersearch'), $total);
 
                 if ($total > 0) {
 
@@ -146,7 +143,7 @@ if (is_admin([101, 102])) {
                     }
 
                     echo 'Новый пароль: (Oставьте пустым если не надо менять)<br />';
-                    echo '<input type="text" name="pass" maxlength="20" /><br />';
+                    echo '<input type="text" name="password" maxlength="30" /><br />';
                     echo 'Страна:<br />';
                     echo '<input type="text" name="country" maxlength="30" value="'.$user['country'].'" /><br />';
                     echo 'Откуда:<br />';
@@ -239,7 +236,7 @@ if (is_admin([101, 102])) {
                 $level = intval($_POST['level']);
             }
 
-            $pass = check($_POST['passwors']);
+            $pass = check($_POST['password']);
             $email = check($_POST['email']);
             $joined = check($_POST['joined']);
             $name = check($_POST['name']);
@@ -264,62 +261,59 @@ if (is_admin([101, 102])) {
 
                 if (!empty($user)) {
                     if ($log == $config['nickname'] || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
-                        if (empty($pass) || preg_match('|^[a-z0-9\-]+$|i', $pass)) {
-                            if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
-                                if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
-                                    if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $joined)) {
-                                        if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
-                                            if ($gender == 1 || $gender == 2) {
-                                                if (utf_strlen($info) <= 1000) {
-                                                    if ($log == $config['nickname']) {
-                                                        $access = $level;
-                                                    } else {
-                                                        $access = $user['level'];
-                                                    }
 
-                                                    if (!empty($pass)) {
-                                                        echo '<b><span style="color:#ff0000">Внимание! Вы изменили пароль пользователя!</span></b><br />';
-                                                        echo 'Не забудьте ему напомнить его новый пароль: <b>'.$pass.'</b><br /><br />';
-                                                        $mdpass = password_hash($pass, PASSWORD_BCRYPT);
-                                                    } else {
-                                                        $mdpass = $user['password'];
-                                                    }
-
-                                                    list($uday, $umonth, $uyear) = explode(".", $joined);
-                                                    $joined = mktime('0', '0', '0', $umonth, $uday, $uyear);
-
-                                                    $name = utf_substr($name, 0, 20);
-                                                    $country = utf_substr($country, 0, 30);
-                                                    $city = utf_substr($city, 0, 50);
-                                                    $rating = $posrating - $negrating;
-
-                                                    DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `avatar`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz]);
-
-                                                    save_title();
-                                                    save_nickname();
-                                                    save_money();
-
-                                                    echo '<i class="fa fa-check"></i> <b>Данные пользователя успешно изменены!</b><br /><br />';
+                        if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
+                            if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
+                                if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $joined)) {
+                                    if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
+                                        if ($gender == 1 || $gender == 2) {
+                                            if (utf_strlen($info) <= 1000) {
+                                                if ($log == $config['nickname']) {
+                                                    $access = $level;
                                                 } else {
-                                                    show_error('Ошибка! Слишком большая информация в графе о себе, не более 1000 символов!');
+                                                    $access = $user['level'];
                                                 }
+
+                                                if (!empty($pass)) {
+                                                    echo '<b><span style="color:#ff0000">Внимание! Вы изменили пароль пользователя!</span></b><br />';
+                                                    echo 'Не забудьте ему напомнить его новый пароль: <b>'.$pass.'</b><br /><br />';
+                                                    $mdpass = password_hash($pass, PASSWORD_BCRYPT);
+                                                } else {
+                                                    $mdpass = $user['password'];
+                                                }
+
+                                                list($uday, $umonth, $uyear) = explode(".", $joined);
+                                                $joined = mktime('0', '0', '0', $umonth, $uday, $uyear);
+
+                                                $name = utf_substr($name, 0, 20);
+                                                $country = utf_substr($country, 0, 30);
+                                                $city = utf_substr($city, 0, 50);
+                                                $rating = $posrating - $negrating;
+
+                                                DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `avatar`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz]);
+
+                                                save_title();
+                                                save_nickname();
+                                                save_money();
+
+                                                echo '<i class="fa fa-check"></i> <b>Данные пользователя успешно изменены!</b><br /><br />';
                                             } else {
-                                                show_error('Ошибка! Вы не указали пол пользователя!');
+                                                show_error('Ошибка! Слишком большая информация в графе о себе, не более 1000 символов!');
                                             }
                                         } else {
-                                            show_error('Ошибка! Недопустимая дата дня рождения, необходим формат (дд.мм.гггг)!');
+                                            show_error('Ошибка! Вы не указали пол пользователя!');
                                         }
                                     } else {
-                                        show_error('Ошибка! Недопустимая дата регистрации, необходим формат (дд.мм.гггг)!');
+                                        show_error('Ошибка! Недопустимая дата дня рождения, необходим формат (дд.мм.гггг)!');
                                     }
                                 } else {
-                                    show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                                    show_error('Ошибка! Недопустимая дата регистрации, необходим формат (дд.мм.гггг)!');
                                 }
                             } else {
-                                show_error('Ошибка! Вы ввели неверный адрес e-mail, необходим формат name@site.domen!');
+                                show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
                             }
                         } else {
-                            show_error('Ошибка! Недопустимые символы в пароле. Разрешены знаки латинского алфавита, цифры и дефис!');
+                            show_error('Ошибка! Вы ввели неверный адрес e-mail, необходим формат name@site.domen!');
                         }
                     } else {
                         show_error('Ошибка! У вас недостаточно прав для редактирования этого профиля!');

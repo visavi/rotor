@@ -7,22 +7,17 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (isset($_GET['page'])) {
-    $page = check($_GET['page']);
+if (isset($_GET['main'])) {
+    $main = check($_GET['main']);
 } else {
-    $page = 'mail';
+    $main = 'mail';
 }
-
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102])) {
     show_title('Черный список');
 
-    switch ($page) {
+    switch ($main) {
         case 'login':
             $type = 2;
             $placeholder = '';
@@ -53,7 +48,7 @@ if (is_admin([101, 102])) {
 
     echo '<hr />'; */
 
-    echo 'Запрещенные: <a href="/admin/blacklist"'.(($type == 1) ? ' style="font-weight: bold;"' : '').'>E-mail</a> / <a href="/admin/blacklist?page=login"'.(($type == 2) ? ' style="font-weight: bold;"' : '').'>Логины</a> / <a href="/admin/blacklist?page=domain"'.(($type == 3) ? ' style="font-weight: bold;"' : '').'>Домены</a><hr />';
+    echo 'Запрещенные: <a href="/admin/blacklist"'.(($type == 1) ? ' style="font-weight: bold;"' : '').'>E-mail</a> / <a href="/admin/blacklist?main=login"'.(($type == 2) ? ' style="font-weight: bold;"' : '').'>Логины</a> / <a href="/admin/blacklist?main=domain"'.(($type == 3) ? ' style="font-weight: bold;"' : '').'>Домены</a><hr />';
 
     switch ($act):
     ############################################################################################
@@ -62,12 +57,13 @@ if (is_admin([101, 102])) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `blacklist` WHERE `type`=?;", [$type]);
+            $page = App::paginate(App::setting('blacklist'), $total);
 
             if ($total > 0) {
 
                 $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blacklist'].";", [$type]);
 
-                echo '<form action="/admin/blacklist?act=del&amp;page='.$page.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/blacklist?act=del&amp;main='.$main.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryblack -> fetch()) {
                     echo '<div class="b">';
@@ -86,7 +82,7 @@ if (is_admin([101, 102])) {
             }
 
             echo '<div class="form">';
-            echo '<form action="/admin/blacklist?act=add&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
+            echo '<form action="/admin/blacklist?act=add&amp;main='.$main.'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo '<b>Запись:</b><br />';
             echo '<input name="value" type="text" maxlength="100" value="'.$placeholder.'" />';
             echo '<input type="submit" value="Добавить" /></form></div><br />';
@@ -104,9 +100,9 @@ if (is_admin([101, 102])) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($value) && utf_strlen($value) <= 100) {
-                    if ($page != 'mail' || preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $value)) {
-                        if ($page != 'login' || preg_match('|^[a-z0-9\-]+$|', $value)) {
-                            if ($page != 'domain' || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $value)) {
+                    if ($main != 'mail' || preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $value)) {
+                        if ($main != 'login' || preg_match('|^[a-z0-9\-]+$|', $value)) {
+                            if ($main != 'domain' || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $value)) {
 
                                 $value = str_replace('http://', '', $value);
 
@@ -115,7 +111,7 @@ if (is_admin([101, 102])) {
                                     DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [$type, $value, $log, SITETIME]);
 
                                     notice('Запись успешно добавлена в черный список!');
-                                    redirect("/admin/blacklist?page=$page&start=$start");
+                                    redirect("/admin/blacklist?main=$main");
 
                                 } else {
                                     show_error('Ошибка! Данная запись уже имеется в списках!');
@@ -136,7 +132,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?page='.$page.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.page.'">Вернуться</a><br />';
         break;
 
 
@@ -159,7 +155,7 @@ if (is_admin([101, 102])) {
                     DB::run() -> query("DELETE FROM `blacklist` WHERE `type`=? AND `id` IN (".$del.");", [$type]);
 
                     notice('Выбранные записи успешно удалены!');
-                    redirect("/admin/blacklist?page=$page&start=$start");
+                    redirect("/admin/blacklist?main=$main&page=$page");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные записи для удаления!');
                 }
@@ -167,7 +163,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?page='.$page.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;

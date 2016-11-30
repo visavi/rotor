@@ -135,7 +135,7 @@ switch ($act):
         echo '<a href="/offers?type=1">Проблемы</a> ('.$total2.')';
 
         if (is_admin([101, 102])) {
-            echo ' / <a href="/admin//offers?act=view&amp;id='.$id.'">Управление</a>';
+            echo ' / <a href="/admin/offers?act=view&amp;id='.$id.'">Управление</a>';
         }
         echo '<hr />';
 

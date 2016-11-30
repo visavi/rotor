@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = '404';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 
 if (is_admin([101, 102])) {
     show_title('Просмотр лог-файлов');
@@ -28,6 +23,7 @@ if (is_admin([101, 102])) {
             echo '<b>Ошибки 404</b> | <a href="/admin/logs?act=403">Ошибки 403</a> | <a href="/admin/logs?act=666">Автобаны</a><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [404]);
+            $page = App::paginate(App::setting('loglist'), $total);
 
             if ($total > 0) {
 
@@ -59,6 +55,7 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <b>Ошибки 403</b> | <a href="/admin/logs?act=666">Автобаны</a><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [403]);
+            $page = App::paginate(App::setting('loglist'), $total);
 
             if ($total > 0) {
 
@@ -86,6 +83,7 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <a href="/admin/logs?act=403">Ошибки 403</a> | <b>Автобаны</b><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [666]);
+            $page = App::paginate(App::setting('loglist'), $total);
 
             if ($total > 0) {
 
