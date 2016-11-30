@@ -6,11 +6,7 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
     show_title('Админ-чат');
@@ -26,6 +22,7 @@ if (is_admin()) {
             echo '<a href="/tags">Теги</a><hr />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
+            $page = App::paginate(App::setting('chatpost'), $total);
 
             if (App::user('newchat') != stats_newchat()) {
                 DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), $log]);
@@ -44,12 +41,12 @@ if (is_admin()) {
 
                     if ($log != $data['user']) {
                         echo '<div class="right">';
-                        echo '<a href="/admin/chat?act=reply&amp;id='.$data['id'].'&amp;start='.$start.'">Отв</a> / ';
-                        echo '<a href="/admin/chat?act=quote&amp;id='.$data['id'].'&amp;start='.$start.'">Цит</a></div>';
+                        echo '<a href="/admin/chat?act=reply&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Отв</a> / ';
+                        echo '<a href="/admin/chat?act=quote&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Цит</a></div>';
                     }
 
                     if ($log == $data['user'] && $data['time'] + 600 > SITETIME) {
-                        echo '<div class="right"><a href="/admin/chat?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a></div>';
+                        echo '<div class="right"><a href="/admin/chat?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
                     echo '<div>'.App::bbCode($data['text']).'<br />';
@@ -140,7 +137,7 @@ if (is_admin()) {
                 show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -156,14 +153,14 @@ if (is_admin()) {
 
             if (!empty($post)) {
                 echo '<div class="form">';
-                echo '<form action="/admin/chat?act=add&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/chat?act=add&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['user']).'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
                 echo '<input type="submit" value="Ответить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -181,7 +178,7 @@ if (is_admin()) {
                     echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['user']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                     echo '<div class="form">';
-                    echo '<form action="/admin/chat?act=editpost&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/admin/chat?act=editpost&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br />';
                     echo '<input type="submit" value="Редактировать" /></form></div><br />';
                 } else {
@@ -191,7 +188,7 @@ if (is_admin()) {
                 show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -213,7 +210,7 @@ if (is_admin()) {
                             DB::run() -> query("UPDATE `chat` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=? LIMIT 1;", [$msg, $log, SITETIME, $id]);
 
                             notice('Сообщение успешно отредактировано!');
-                            redirect ("/admin/chat?start=$start");
+                            redirect ("/admin/chat?page=$page");
 
                         } else {
                             show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
@@ -228,8 +225,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/chat?start='.$start.'">В админ-чат</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/chat?page='.$page.'">В админ-чат</a><br />';
         break;
 
         ############################################################################################

@@ -2078,25 +2078,3 @@ function env($key, $default = null)
     }
     return $value;
 }
-
-// ------------- Функция кэширования пользовательских функций -------------//
-function cache_functions($cache=10800) {
-    if (@filemtime(STORAGE.'/temp/functions.dat') < time()-$cache) {
-        $files = array_diff(scandir(APP.'/functions'), ['.', '..']);
-
-        file_put_contents(STORAGE.'/temp/functions.dat', serialize($files), LOCK_EX);
-    }
-
-    return unserialize(file_get_contents(STORAGE.'/temp/functions.dat'));
-}
-
-// ------------- Кеширование пользовательских функций -------------//
-$functions = cache_functions();
-
-if (!empty($functions)) {
-    foreach ($functions as $file) {
-        if (file_exists(APP.'/functions/'.$file)) {
-            include_once (APP.'/functions/'.$file);
-        }
-    }
-}

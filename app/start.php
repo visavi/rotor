@@ -206,4 +206,9 @@ if (empty($config['themes']) || !file_exists(HOME.'/themes/'.$config['themes']))
     $config['themes'] = 'default';
 }
 
+$files = glob(APP.'/functions/*.php');
+foreach ($files as $file) {
+    require_once $file;
+}
+
 Registry::set('config', $config);
