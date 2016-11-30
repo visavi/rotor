@@ -13,7 +13,7 @@
 
     if ($user['ban'] == 1 && $user['timeban'] > SITETIME) {
     echo '<div class="form">';
-        echo '<b><span style="color:#ff0000">Внимание, юзер находится в бане!</span></b><br />';
+        echo '<b><span style="color:#ff0000">Внимание, пользователь забанен!</span></b><br />';
         echo 'До окончания бана осталось '.formattime($user['timeban'] - SITETIME).'<br />';
         echo 'Причина: '.App::bbCode($user['reasonban']).'</div>';
     }

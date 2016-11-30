@@ -2,7 +2,7 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102, 103])) {
     show_title('История банов');
@@ -14,12 +14,13 @@ if (is_admin([101, 102, 103])) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist`;");
+            $page = App::paginate(App::setting('listbanhist'), $total);
 
             if ($total > 0) {
 
                 $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listbanhist'].";");
 
-                echo '<form action="/admin/banhist?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/banhist?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryhist -> fetch()) {
                     echo '<div class="b">';
@@ -76,12 +77,13 @@ if (is_admin([101, 102, 103])) {
 
             if (user($uz)) {
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
+                $page = App::paginate(App::setting('listbanhist'), $total);
 
                 if ($total > 0) {
 
                     $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listbanhist'].";", [$uz]);
 
-                    echo '<form action="/admin/banhist?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/admin/banhist?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
@@ -146,7 +148,7 @@ if (is_admin([101, 102, 103])) {
                     DB::run() -> query("DELETE FROM `banhist` WHERE `id` IN (".$del.");");
 
                     notice('Выбранные баны успешно удалены!');
-                    redirect("/admin/banhist?start=$start");
+                    redirect("/admin/banhist?page=$page");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные баны!');
                 }
@@ -154,7 +156,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/banhist?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/banhist?page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;

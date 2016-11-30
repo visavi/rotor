@@ -1,16 +1,11 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
-
 if (is_admin([101, 102, 103])) {
     show_title('Список забаненых');
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", [1, SITETIME]);
+    $page = App::paginate(App::setting('reglist'), $total);
 
     if ($total > 0) {
 

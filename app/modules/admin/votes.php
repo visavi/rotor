@@ -11,11 +11,7 @@ if (isset($_GET['id'])) {
 } else {
     $id = 0;
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102, 103])) {
     show_title('Управление голосованием');
@@ -303,6 +299,7 @@ if (is_admin([101, 102, 103])) {
         case 'history':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
+            $page = App::paginate(App::setting('allvotes'), $total);
 
             if ($total > 0) {
 
@@ -310,7 +307,7 @@ if (is_admin([101, 102, 103])) {
 
                 while ($data = $queryvote -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b><br />';
+                    echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b><br />';
 
                     echo '<a href="/admin/votes?act=action&amp;do=open&amp;id='.$data['id'].'&amp;uid='.$_SESSION['token'].'">Открыть</a>';
 

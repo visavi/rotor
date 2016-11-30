@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['uz'])) {
     $uz = check($_GET['uz']);
 } elseif (isset($_POST['uz'])) {
@@ -18,6 +13,7 @@ if (isset($_GET['uz'])) {
 } else {
     $uz = "";
 }
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Список пользователей');
 
@@ -28,6 +24,7 @@ switch ($act):
     case 'index':
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
+        $page = App::paginate(App::setting('userlist'), $total);
 
         if ($total > 0) {
 
@@ -41,9 +38,9 @@ switch ($act):
                 echo '<div class="img">'.user_avatars($data['login']).'</div>';
 
                 if ($uz == $data['login']) {
-                    echo ($start + $i).'. <b><big>'.profile($data['login'], '#ff0000').'</big></b> ';
+                    echo ($page['offset'] + $i).'. <b><big>'.profile($data['login'], '#ff0000').'</big></b> ';
                 } else {
-                    echo ($start + $i).'. <b>'.profile($data['login']).'</b> ';
+                    echo ($page['offset'] + $i).'. <b>'.profile($data['login']).'</b> ';
                 }
                 echo '('.points($data['point']).')<br />';
                 echo user_title($data['login']).' '.user_online($data['login']);
@@ -60,7 +57,7 @@ switch ($act):
 
             echo '<div class="form">';
             echo '<b>Поиск пользователя:</b><br />';
-            echo '<form action="/userlist?act=search&amp;start='.$start.'" method="post">';
+            echo '<form action="/userlist?act=search&amp;page='.$page['current'].'" method="post">';
             echo '<input type="text" name="uz" value="'.$log.'" />';
             echo '<input type="submit" value="Искать" /></form></div><br />';
 
@@ -89,10 +86,10 @@ switch ($act):
                 }
 
                 if (!empty($rat)) {
-                    $page = floor(($rat - 1) / $config['userlist']) * $config['userlist'];
+                    $end = ceil($rat / $config['userlist']);
 
                     notice('Позиция в рейтинге: '.$rat);
-                    redirect("/userlist?start=$page&uz=$queryuser");
+                    redirect("/userlist?page=$end&uz=$queryuser");
                 } else {
                     show_error('Пользователь с данным логином не найден!');
                 }

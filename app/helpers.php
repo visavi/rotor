@@ -51,7 +51,7 @@ function unlink_image($dir, $image) {
 // ------------------- Функция полного удаления юзера --------------------//
 function delete_users($user) {
     if (!empty($user)){
-        $userpic = DB::run() -> query("SELECT picture, avatar FROM users WHERE login=? LIMIT 1;", [$user]);
+        $userpic = DBM::run()->selectFirst('users', ['login' => $user]);
 
         unlink_image('upload/photos/', $userpic['picture']);
         unlink_image('upload/avatars/', $userpic['avatar']);

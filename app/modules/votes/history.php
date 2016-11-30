@@ -11,11 +11,7 @@ if (isset($_GET['id'])) {
 } else {
     $id = 0;
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
 
 switch ($act):
 ############################################################################################
@@ -26,6 +22,7 @@ switch ($act):
         show_title('История голосований');
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
+        $page = App::paginate(App::setting('allvotes'), $total);
 
         if ($total > 0) {
 
@@ -33,7 +30,7 @@ switch ($act):
 
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
-                echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;start='.$start.'">'.$data['title'].'</a></b></div>';
+                echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b></div>';
                 echo '<div>Создано: '.date_fixed($data['time']).'<br />';
                 echo 'Всего голосов: '.$data['count'].'</div>';
             }
@@ -93,7 +90,7 @@ switch ($act):
             show_error('Ошибка! Данного голосования не существует!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes/history?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes/history?page='.$page.'">Вернуться</a><br />';
     break;
 
 endswitch;

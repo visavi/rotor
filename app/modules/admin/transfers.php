@@ -1,9 +1,7 @@
 <?php
 App::view($config['themes'].'/index');
 
-$config['listtransfers'] = 10;
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 
 if (is_admin([101, 102, 103])) {
     show_title('Денежные операции');
@@ -15,6 +13,7 @@ if (is_admin([101, 102, 103])) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers`;");
+            $page = App::paginate(App::setting('listtransfers'), $total);
 
             if ($total > 0) {
 
@@ -62,6 +61,7 @@ if (is_admin([101, 102, 103])) {
             if (user($uz)) {
 
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `user`=?;", [$uz]);
+                $page = App::paginate(App::setting('listtransfers'), $total);
 
                 if ($total > 0) {
 

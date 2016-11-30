@@ -2,8 +2,8 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $used = (!empty($_GET['used'])) ? 1  : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102, 103])) {
     show_title('Приглашения');
@@ -25,12 +25,13 @@ case 'index':
     }
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `invite` WHERE `used`=?;", [$used]);
+    $page = App::paginate(App::setting('listinvite'), $total);
 
     if ($total > 0) {
 
         $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listinvite'].";", [$used]);
 
-        echo '<form action="/admin/invitations?act=del&amp;used='.$used.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+        echo '<form action="/admin/invitations?act=del&amp;used='.$used.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
         while ($data = $invitations -> fetch()) {
 
@@ -130,7 +131,6 @@ case 'send':
 
     if ($uid == $_SESSION['token']) {
         if (user($user)) {
-
 
             $dbr = DB::run() -> prepare("INSERT INTO `invite` (hash, `user`, `time`) VALUES (?, ?, ?);");
 
@@ -252,7 +252,7 @@ case 'del':
             DB::run() -> query("DELETE FROM `invite` WHERE `id` IN (".$del.");");
 
             notice('Выбранные ключи успешно удалены!');
-            redirect("/admin/invitations?used=$used&start=$start");
+            redirect("/admin/invitations?used=$used&page=$page");
 
         } else {
             show_error('Ошибка! Отсутствуют выбранные ключи!');
