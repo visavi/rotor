@@ -14,7 +14,7 @@ if (is_user()) {
     # ###########################################################################################
     case "index":
 
-        echo '<img src="/images/naperstki/1.gif" alt="image" /><br /><br />';
+        echo '<img src="/assets/img/naperstki/1.gif" alt="image" /><br /><br />';
         echo '<b><a href="/games/naperstki?act=choice">Играть</a></b><br /><br />';
         echo 'В наличии: ' . moneys($udata['money']) . '<br /><br />';
         echo '<i class="fa fa-question-circle"></i> <a href="/games/naperstki?act=faq">Правила</a><br />';
@@ -28,9 +28,9 @@ if (is_user()) {
             unset($_SESSION['naperstki']);
         }
 
-        echo '<a href="/games/naperstki?act=go&amp;thimble=1&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a> ';
-        echo '<a href="/games/naperstki?act=go&amp;thimble=2&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a> ';
-        echo '<a href="/games/naperstki?act=go&amp;thimble=3&amp;rand=' . $rand . '"><img src="/images/naperstki/2.gif" alt="image" /></a><br /><br />';
+        echo '<a href="/games/naperstki?act=go&amp;thimble=1&amp;rand=' . $rand . '"><img src="/assets/img/naperstki/2.gif" alt="image" /></a> ';
+        echo '<a href="/games/naperstki?act=go&amp;thimble=2&amp;rand=' . $rand . '"><img src="/assets/img/naperstki/2.gif" alt="image" /></a> ';
+        echo '<a href="/games/naperstki?act=go&amp;thimble=3&amp;rand=' . $rand . '"><img src="/assets/img/naperstki/2.gif" alt="image" /></a><br /><br />';
 
         echo 'Выберите наперсток в котором может находится шарик<br />';
 
@@ -54,21 +54,21 @@ if (is_user()) {
                 $rand_thimble = mt_rand(1, 3);
 
                 if ($rand_thimble == 1) {
-                    echo '<img src="/images/naperstki/3.gif" alt="image" /> ';
+                    echo '<img src="/assets/img/naperstki/3.gif" alt="image" /> ';
                 } else {
-                    echo '<img src="/images/naperstki/2.gif" alt="image" /> ';
+                    echo '<img src="/assets/img/naperstki/2.gif" alt="image" /> ';
                 }
 
                 if ($rand_thimble == 2) {
-                    echo '<img src="/images/naperstki/3.gif" alt="image" /> ';
+                    echo '<img src="/assets/img/naperstki/3.gif" alt="image" /> ';
                 } else {
-                    echo '<img src="/images/naperstki/2.gif" alt="image" /> ';
+                    echo '<img src="/assets/img/naperstki/2.gif" alt="image" /> ';
                 }
 
                 if ($rand_thimble == 3) {
-                    echo '<img src="/images/naperstki/3.gif" alt="image" />';
+                    echo '<img src="/assets/img/naperstki/3.gif" alt="image" />';
                 } else {
-                    echo '<img src="/images/naperstki/2.gif" alt="image" />';
+                    echo '<img src="/assets/img/naperstki/2.gif" alt="image" />';
                 }
                 // ------------------------------ Выигрыш ----------------------------//
                 if ($thimble == $rand_thimble) {

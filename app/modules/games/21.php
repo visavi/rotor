@@ -123,7 +123,7 @@ if (is_user()) {
                 echo '<br /><b>Ваши карты:</b><br />';
 
                 foreach($_SESSION['cards'] as $value) {
-                    echo '<img src="/images/cards/'.$value.'.gif" alt="" /> ';
+                    echo '<img src="/assets/img/cards/'.$value.'.gif" alt="" /> ';
                 }
 
                 echo '<br />'.cards_points($_SESSION['uscore']).'<br /><br />';
@@ -199,7 +199,7 @@ if (is_user()) {
                         echo '<b>Карты банкира:</b><br />';
 
                         foreach($_SESSION['bankircards'] as $bvalue) {
-                            echo '<img src="/images/cards/'.$bvalue.'.gif" alt="" /> ';
+                            echo '<img src="/assets/img/cards/'.$bvalue.'.gif" alt="" /> ';
                         }
 
                         echo '<br />'.cards_points($_SESSION['bscore']).'<br /><br />';
@@ -234,15 +234,15 @@ if (is_user()) {
             echo 'В игре участвуют двое - Вы и Банкир, на кону - двойная ставка (Ваша ставка и ставка Банкира). Взяв карты, Вы подсчитываете суммарное количество их очков.<br /><br />';
 
             echo '<b>Очки считаются следующим образом:</b><br />';
-            echo '<img src="/images/cards/2.gif" alt="" /> шестерка - 6 очков<br />';
-            echo '<img src="/images/cards/6.gif" alt="" /> семерка - 7 очков<br />';
-            echo '<img src="/images/cards/10.gif" alt="" /> восьмерка - 8 очков<br />';
-            echo '<img src="/images/cards/14.gif" alt="" /> девятка - 9 очков<br />';
-            echo '<img src="/images/cards/18.gif" alt="" /> десятка - 10 очков<br />';
-            echo '<img src="/images/cards/22.gif" alt="" /> валет - 2 очков<br />';
-            echo '<img src="/images/cards/26.gif" alt="" /> дама - 3 очков<br />';
-            echo '<img src="/images/cards/30.gif" alt="" /> король - 4 очков<br />';
-            echo '<img src="/images/cards/34.gif" alt="" /> туз - 11 очков.<br /><br />';
+            echo '<img src="/assets/img/cards/2.gif" alt="" /> шестерка - 6 очков<br />';
+            echo '<img src="/assets/img/cards/6.gif" alt="" /> семерка - 7 очков<br />';
+            echo '<img src="/assets/img/cards/10.gif" alt="" /> восьмерка - 8 очков<br />';
+            echo '<img src="/assets/img/cards/14.gif" alt="" /> девятка - 9 очков<br />';
+            echo '<img src="/assets/img/cards/18.gif" alt="" /> десятка - 10 очков<br />';
+            echo '<img src="/assets/img/cards/22.gif" alt="" /> валет - 2 очков<br />';
+            echo '<img src="/assets/img/cards/26.gif" alt="" /> дама - 3 очков<br />';
+            echo '<img src="/assets/img/cards/30.gif" alt="" /> король - 4 очков<br />';
+            echo '<img src="/assets/img/cards/34.gif" alt="" /> туз - 11 очков.<br /><br />';
 
             echo 'Сумма очков не зависит от масти карт.<br />';
             echo 'Для взятия очередной карты нужно нажать кнопку <b>Взять карту</b>.<br />';

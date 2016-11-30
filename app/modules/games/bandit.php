@@ -14,9 +14,9 @@ if (is_user()) {
 
             echo 'Любишь азарт? А выигрывая, чувствуешь адреналин? Играй и получай призы<br /><br />';
 
-            echo '<img src="/images/bandit/1.gif" alt="image" /> <img src="/images/bandit/2.gif" alt="image" /> <img src="/images/bandit/3.gif" alt="image" /><br />';
-            echo '<img src="/images/bandit/7.gif" alt="image" /> <img src="/images/bandit/7.gif" alt="image" /> <img src="/images/bandit/7.gif" alt="image" /><br />';
-            echo '<img src="/images/bandit/4.gif" alt="image" /> <img src="/images/bandit/5.gif" alt="image" /> <img src="/images/bandit/6.gif" alt="image" /><br />';
+            echo '<img src="/assets/img/bandit/1.gif" alt="image" /> <img src="/assets/img/bandit/2.gif" alt="image" /> <img src="/assets/img/bandit/3.gif" alt="image" /><br />';
+            echo '<img src="/assets/img/bandit/7.gif" alt="image" /> <img src="/assets/img/bandit/7.gif" alt="image" /> <img src="/assets/img/bandit/7.gif" alt="image" /><br />';
+            echo '<img src="/assets/img/bandit/4.gif" alt="image" /> <img src="/assets/img/bandit/5.gif" alt="image" /> <img src="/assets/img/bandit/6.gif" alt="image" /><br />';
 
             echo '<br /><b><a href="bandit?act=go">Играть</a></b><br />';
 
@@ -44,9 +44,9 @@ if (is_user()) {
 
                 $rand = mt_rand(100, 999);
 
-                echo '<img src="/images/bandit/' . $num1 . '.gif" alt="image" /> <img src="/images/bandit/' . $num2 . '.gif" alt="image" /> <img src="/images/bandit/' . $num3 . '.gif" alt="image" /><br />';
-                echo '<img src="/images/bandit/' . $num4 . '.gif" alt="image" /> <img src="/images/bandit/' . $num5 . '.gif" alt="image" /> <img src="/images/bandit/' . $num6 . '.gif" alt="image" /><br />';
-                echo '<img src="/images/bandit/' . $num7 . '.gif" alt="image" /> <img src="/images/bandit/' . $num8 . '.gif" alt="image" /> <img src="/images/bandit/' . $num9 . '.gif" alt="image" /><br /><br />';
+                echo '<img src="/assets/img/bandit/' . $num1 . '.gif" alt="image" /> <img src="/assets/img/bandit/' . $num2 . '.gif" alt="image" /> <img src="/assets/img/bandit/' . $num3 . '.gif" alt="image" /><br />';
+                echo '<img src="/assets/img/bandit/' . $num4 . '.gif" alt="image" /> <img src="/assets/img/bandit/' . $num5 . '.gif" alt="image" /> <img src="/assets/img/bandit/' . $num6 . '.gif" alt="image" /><br />';
+                echo '<img src="/assets/img/bandit/' . $num7 . '.gif" alt="image" /> <img src="/assets/img/bandit/' . $num8 . '.gif" alt="image" /> <img src="/assets/img/bandit/' . $num9 . '.gif" alt="image" /><br /><br />';
                 // ------------------------------- линии -----------------------------------//
                 $sum = 0;
 
@@ -358,18 +358,18 @@ if (is_user()) {
             echo 'Комбинации картинок считаются по вертикали, горизонтали и даже по диагонали<br /><br />';
             echo 'Список выигрышных комбинаций:<br />';
 
-            echo '<img src="/images/bandit/1.gif" alt="image" /> * 3 вишенки = ' . moneys(10) . ' средний ряд/столбец  (5 - нижний или верхний ряд/столбец)<br />';
-            echo '<img src="/images/bandit/2.gif" alt="image" /> * 3 апельсина = ' . moneys(15) . ' средний ряд/столбец  (10 - нижний или верхний ряд/столбец)<br />';
-            echo '<img src="/images/bandit/3.gif" alt="image" /> * 3 винограда = ' . moneys(25) . ' средний ряд/столбец  (15 - нижний или верхний ряд/столбец)<br />';
-            echo '<img src="/images/bandit/4.gif" alt="image" /> * 3 Банана = ' . moneys(35) . ' средний ряд/столбец  (25 - нижний или верхний ряд/столбец)<br />';
-            echo '<img src="/images/bandit/5.gif" alt="image" /> * 3 Яблока = ' . moneys(50) . ' средний ряд/столбец  (30 - нижний или верхний ряд/столбец)<br />';
-            echo '<img src="/images/bandit/6.gif" alt="image" /> * 3 BAR = ' . moneys(100) . ' по диагонали<br />';
-            echo '<img src="/images/bandit/6.gif" alt="image" /> * 3 BAR = ' . moneys(70) . ' средний ряд/столбец  (50 - нижний или верхний ряд/столбец)<br />';
-            echo '<img src="/images/bandit/8.gif" alt="image" /> * 3 $$$ = ' . moneys(100) . ' средний ряд/столбец  (60 - нижний или верхний ряд/столбец)<br />';
-            echo '<img src="/images/bandit/8.gif" alt="image" /> * 3 $$$ = ' . moneys(150) . ' по диагонали<br />';
-            echo '<img src="/images/bandit/7.gif" alt="image" /> * 3 777 = ' . moneys(177) . ' средний столбец  (100 - правый или левый столбец)<br />';
-            echo '<img src="/images/bandit/7.gif" alt="image" /> * 3 777 = ' . moneys(250) . ' по диагонали<br />';
-            echo '<img src="/images/bandit/7.gif" alt="image" /> * 3 777 = ' . moneys(777) . ' средний ряд  (177 - нижний или верхний ряд)<br /><br />';
+            echo '<img src="/assets/img/bandit/1.gif" alt="image" /> * 3 вишенки = ' . moneys(10) . ' средний ряд/столбец  (5 - нижний или верхний ряд/столбец)<br />';
+            echo '<img src="/assets/img/bandit/2.gif" alt="image" /> * 3 апельсина = ' . moneys(15) . ' средний ряд/столбец  (10 - нижний или верхний ряд/столбец)<br />';
+            echo '<img src="/assets/img/bandit/3.gif" alt="image" /> * 3 винограда = ' . moneys(25) . ' средний ряд/столбец  (15 - нижний или верхний ряд/столбец)<br />';
+            echo '<img src="/assets/img/bandit/4.gif" alt="image" /> * 3 Банана = ' . moneys(35) . ' средний ряд/столбец  (25 - нижний или верхний ряд/столбец)<br />';
+            echo '<img src="/assets/img/bandit/5.gif" alt="image" /> * 3 Яблока = ' . moneys(50) . ' средний ряд/столбец  (30 - нижний или верхний ряд/столбец)<br />';
+            echo '<img src="/assets/img/bandit/6.gif" alt="image" /> * 3 BAR = ' . moneys(100) . ' по диагонали<br />';
+            echo '<img src="/assets/img/bandit/6.gif" alt="image" /> * 3 BAR = ' . moneys(70) . ' средний ряд/столбец  (50 - нижний или верхний ряд/столбец)<br />';
+            echo '<img src="/assets/img/bandit/8.gif" alt="image" /> * 3 $$$ = ' . moneys(100) . ' средний ряд/столбец  (60 - нижний или верхний ряд/столбец)<br />';
+            echo '<img src="/assets/img/bandit/8.gif" alt="image" /> * 3 $$$ = ' . moneys(150) . ' по диагонали<br />';
+            echo '<img src="/assets/img/bandit/7.gif" alt="image" /> * 3 777 = ' . moneys(177) . ' средний столбец  (100 - правый или левый столбец)<br />';
+            echo '<img src="/assets/img/bandit/7.gif" alt="image" /> * 3 777 = ' . moneys(250) . ' по диагонали<br />';
+            echo '<img src="/assets/img/bandit/7.gif" alt="image" /> * 3 777 = ' . moneys(777) . ' средний ряд  (177 - нижний или верхний ряд)<br /><br />';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="bandit">В игру</a><br />';
             break;

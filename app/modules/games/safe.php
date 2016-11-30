@@ -13,7 +13,7 @@ if (!$log){
 switch ($act):
 
 case 'index':
-    echo '<img src="/images/safe/safe-closed.png" alt="сейф"/><br />';
+    echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
     echo 'Ну что '.nickname($log).', взломаем?<br />';
     echo 'У тебя '.moneys($udata['money']).'<br />';
 
@@ -55,7 +55,7 @@ case 'vzlom':
         }
 
         echo nickname($log).', не торопись! Просто хорошо подумай. <br />';
-        echo '<br /><img src="/images/safe/safe-closed.png" alt="сейф"/><br />';
+        echo '<br /><img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
 
         if (!$_SESSION['code'] || !$_SESSION['go']){
             notice('Нееее.... такое тут не канает!');
@@ -63,7 +63,7 @@ case 'vzlom':
         } else {
 
             if ($_SESSION['try']==0) {
-                echo '<img src="/images/safe/safe-closed.png" alt="сейф"/><br />';
+                echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
                 echo '<br />Попытки закончились. A взломать сейф так и не получилось...
                 Возможно, в другой раз тебе повезёт больше...<br />';
                 echo '<br />&raquo; <a href="/games/safe">Ещё разок</a>';
@@ -148,7 +148,7 @@ case 'vzlom1':
         if ($k4==$_SESSION['s4']){$d4=$_SESSION['s4'];}
 
         if ($k1==$_SESSION['s1'] && $k2==$_SESSION['s2'] && $k3==$_SESSION['s3'] && $k4==$_SESSION['s4']) {
-            echo '<img src="/images/safe/safe-open.png" alt="сейф"/><br />';
+            echo '<img src="/assets/img/safe/safe-open.png" alt="сейф"/><br />';
             echo '<br />ПОЗДРАВЛЯЮ! СЕЙФ УСПЕШНО ВЗЛОМАН!<br />
             <font color="red">НА ВАШ СЧЁТ ПЕРЕВЕДЕНЫ 1000$</font><br />';
 
@@ -159,7 +159,7 @@ case 'vzlom1':
         } else {
 
             if (empty($_SESSION['try'])) {
-                echo '<img src="/images/safe/safe-closed.png" alt="сейф"/><br />';
+                echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
                 echo '<font color="red">Щифp был:</font><br />';
                 echo '<b>'.$_SESSION['s1'].'-'.$_SESSION['s2'].'-'.$_SESSION['s3'].'-'.$_SESSION['s4'].'</b>';
 
@@ -169,7 +169,7 @@ case 'vzlom1':
                 unset($_SESSION['go'], $_SESSION['try']);
             } else {
 
-                echo '<img src="/images/safe/safe-closed.png" alt="сейф"/><br />';
+                echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
                 echo ''.nickname($log).', не торопись! Просто хорошо подумай. <br />';
                 echo 'Попыток осталось: <font color="red"><big>'.$_SESSION['try'].'</big></font><br />';
                 echo 'Комбинация сейфа:<br />';

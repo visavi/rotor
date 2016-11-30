@@ -14,7 +14,7 @@ if (is_user()) {
         # ###########################################################################################
         case "index":
 
-            echo '<img src="/images/kosti/6.gif" alt="image" />  и <img src="/images/kosti/6.gif" alt="image" />.<br /><br />';
+            echo '<img src="/assets/img/kosti/6.gif" alt="image" />  и <img src="/assets/img/kosti/6.gif" alt="image" />.<br /><br />';
 
             echo '<b><a href="/games/kosti?act=go&amp;rand=' . $rand . '">Играть</a></b><br /><br />';
 
@@ -34,10 +34,10 @@ if (is_user()) {
                 $num4 = mt_rand(1, 5);
 
                 echo 'Ваши кости:<br />';
-                echo '<img src="/images/kosti/' . $num3 . '.gif" alt="image" />  и <img src="/images/kosti/' . $num4 . '.gif" alt="image" />.<br /><br />';
+                echo '<img src="/assets/img/kosti/' . $num3 . '.gif" alt="image" />  и <img src="/assets/img/kosti/' . $num4 . '.gif" alt="image" />.<br /><br />';
 
                 echo 'У банкира выпало:<br />';
-                echo '<img src="/images/kosti/' . $num1 . '.gif" alt="image" />  и <img src="/images/kosti/' . $num2 . '.gif" alt="image" />.<br /><br />';
+                echo '<img src="/assets/img/kosti/' . $num1 . '.gif" alt="image" />  и <img src="/assets/img/kosti/' . $num2 . '.gif" alt="image" />.<br /><br />';
 
                 $num_bank = $num1 + $num2;
                 $num_user = $num3 + $num4;
