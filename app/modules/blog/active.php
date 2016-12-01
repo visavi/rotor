@@ -2,8 +2,8 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'blogs';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
+$page = abs(intval(Request::input('page', 1)));
 
 switch ($act):
 ############################################################################################
@@ -13,16 +13,14 @@ case 'blogs':
     show_title('Список всех статей '.$uz);
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `user`=?;", [$uz]);
+    $page = App::paginate(App::setting('blogpost'), $total);
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = last_page($total, $config['blogpost']);
-        }
 
         $queryblogs = DB::run() -> query("SELECT * FROM `blogs` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$uz]);
         $blogs = $queryblogs -> fetchAll();
 
-        render('blog/active_blogs', ['blogs' => $blogs]);
+        render('blog/active_blogs', compact('blogs'));
 
         App::pagination($page);
 
@@ -39,18 +37,16 @@ case 'comments':
     show_title('Список всех комментариев '.$uz);
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['blog', $uz]);
+    $page = App::paginate(App::setting('blogpost'), $total);
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = last_page($total, $config['blogpost']);
-        }
 
         $is_admin = is_admin();
 
         $querycomments = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' AND comments.`user`=? ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$uz]);
         $comments = $querycomments -> fetchAll();
 
-        render('blog/active_comments', ['comments' => $comments, 'start' => $start]);
+        render('blog/active_comments', compact('comments', 'page'));
 
         App::pagination($page);
     } else {
@@ -74,7 +70,7 @@ case 'del':
                 DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $blogs]);
 
                 notice('Комментарий успешно удален!');
-                redirect("/blog/active?act=comments&uz=$uz&start=$start");
+                redirect("/blog/active?act=comments&uz=$uz&page=$page");
 
             } else {
                 show_error('Ошибка! Данного комментария не существует!');
@@ -86,7 +82,7 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    render('includes/back', ['link' => '/blog/active?act=comments&amp;uz='.$uz.'&amp;start='.$start, 'title' => 'Вернуться']);
+    render('includes/back', ['link' => '/blog/active?act=comments&amp;uz='.$uz.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 endswitch;

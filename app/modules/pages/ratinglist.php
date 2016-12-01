@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 if (isset($_GET['uz'])) {
     $uz = check($_GET['uz']);
 } elseif (isset($_POST['uz'])) {
@@ -18,6 +13,7 @@ if (isset($_GET['uz'])) {
 } else {
     $uz = "";
 }
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Рейтинг толстосумов');
 
@@ -28,6 +24,7 @@ switch ($act):
     case 'index':
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
+        $page = App::paginate(App::setting('userlist'), $total);
 
         if ($total > 0) {
 
@@ -37,12 +34,12 @@ switch ($act):
             while ($data = $queryusers -> fetch()) {
                 ++$i;
 
-                echo '<div class="b">'.($start + $i).'. '.user_gender($data['login']);
+                echo '<div class="b">'.($page['offset'] + $i).'. '.user_gender($data['login']);
 
                 if ($uz == $data['login']) {
-                    echo '<b><big>'.profile($data['login'], '#ff0000').'</big></b> ('.moneys($data['money']).')</div>';
+                    echo ' <b><big>'.profile($data['login'], '#ff0000').'</big></b> ('.moneys($data['money']).')</div>';
                 } else {
-                    echo '<b>'.profile($data['login']).'</b> ('.moneys($data['money']).')</div>';
+                    echo ' <b>'.profile($data['login']).'</b> ('.moneys($data['money']).')</div>';
                 }
             }
 
@@ -50,7 +47,7 @@ switch ($act):
 
             echo '<div class="form">';
             echo '<b>Поиск пользователя:</b><br />';
-            echo '<form action="/ratinglist?act=search&amp;start='.$start.'" method="post">';
+            echo '<form action="/ratinglist?act=search&amp;page='.$page['current'].'" method="post">';
             echo '<input type="text" name="uz" value="'.$log.'" />';
             echo '<input type="submit" value="Искать" /></form></div><br />';
 
@@ -79,10 +76,10 @@ switch ($act):
                 }
 
                 if (!empty($rat)) {
-                    $page = floor(($rat - 1) / $config['userlist']) * $config['userlist'];
+                    $end = ceil($rat / $config['userlist']);
 
                     notice('Позиция в рейтинге: '.$rat);
-                    redirect("/ratinglist?start=$page&uz=$queryuser");
+                    redirect("/ratinglist?page=$end&uz=$queryuser");
                 } else {
                     show_error('Пользователь с данным логином не найден!');
                 }
@@ -93,7 +90,7 @@ switch ($act):
             show_error('Ошибка! Вы не ввели логин или ник пользователя');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ratinglist?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ratinglist?page='.$page.'">Вернуться</a><br />';
     break;
 
 endswitch;

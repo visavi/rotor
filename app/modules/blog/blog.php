@@ -204,13 +204,14 @@ case 'blogs':
     $config['newtitle'] = 'Статьи пользователей';
 
     $total = DB::run() -> querySingle("select COUNT(DISTINCT `user`) from `blogs`");
+    $page = App::paginate(App::setting('bloggroup'), $total);
 
     if ($total > 0) {
 
         $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".$config['bloggroup'].";");
         $blogs = $queryblogs -> fetchAll();
 
-        render('blog/blog_blogs', ['blogs' => $blogs, 'total' => $total]);
+        render('blog/blog_blogs', compact('blogs', 'total'));
 
         App::pagination($page);
 

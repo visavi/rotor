@@ -11,7 +11,7 @@
     <div class="b">
         <i class="fa fa-comment fa-lg text-muted"></i> <b><a href="/page/recent">Общение</a></b>
     </div>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/book">Гостевая книга</a> (<?=stats_guest()?>)<br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a class="index" href="/book">Гостевая книга</a> (<?=stats_guest()?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> (<?=stats_gallery()?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes">Голосования</a> (<?=stats_votes()?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> (<?=stats_offers()?>)<br />

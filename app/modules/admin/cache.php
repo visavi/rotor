@@ -1,8 +1,6 @@
 <?php
 App::view($config['themes'].'/index');
 
-$start = abs(intval(Request::input('start', 0)));
-
 if (is_admin([101])) {
 show_title('Очистка кэша');
 

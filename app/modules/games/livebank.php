@@ -2,7 +2,6 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $uz = (isset($_REQUEST['uz'])) ? check($_REQUEST['uz']) : '';
 
 show_title('Статистика вкладов');
@@ -14,6 +13,7 @@ switch ($act):
     case 'index':
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `bank`;");
+        $page = App::paginate(App::setting('vkladlist'), $total);
 
         if ($total > 0) {
 
@@ -23,7 +23,7 @@ switch ($act):
             while ($data = $queryvklad -> fetch()) {
                 ++$i;
 
-                echo '<div class="b">'.($start + $i).'. '.user_gender($data['user']).' ';
+                echo '<div class="b">'.($page['offset'] + $i).'. '.user_gender($data['user']).' ';
 
                 if ($uz == $data['user']) {
                     echo '<b><big>'.profile($data['user'], '#ff0000').'</big></b> ('.moneys($data['sum']).')</div>';
@@ -39,7 +39,7 @@ switch ($act):
 
             echo '<div class="form">';
             echo '<b>Поиск пользователя:</b><br />';
-            echo '<form action="/games/livebank?act=search&amp;start='.$start.'" method="post">';
+            echo '<form action="/games/livebank?act=search&amp;page='.$page['current'].'" method="post">';
             echo '<input type="text" name="uz" value="'.$log.'" />';
             echo '<input type="submit" value="Искать" /></form></div><br />';
 
@@ -68,10 +68,10 @@ switch ($act):
                 }
 
                 if (!empty($rat)) {
-                    $page = floor(($rat - 1) / $config['vkladlist']) * $config['vkladlist'];
+                    $end = ceil($rat / $config['vkladlist']);
 
                     notice('Позиция в рейтинге: '.$rat);
-                    redirect("/games/livebank?start=$page&uz=$queryuser");
+                    redirect("/games/livebank?page=$end&uz=$queryuser");
                 } else {
                     show_error('Пользователь с данным логином не найден!');
                 }
@@ -82,7 +82,7 @@ switch ($act):
             show_error('Ошибка! Вы не ввели логин или ник пользователя');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/livebank?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/livebank?page='.$page.'">Вернуться</a><br />';
     break;
 
 endswitch;

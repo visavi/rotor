@@ -6,11 +6,7 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
+$page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
     show_title('Пользовательская реклама');
@@ -22,12 +18,13 @@ if (is_admin()) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `rekuser` WHERE `time`>?;", [SITETIME]);
+            $page = App::paginate(App::setting('rekuserpost'), $total);
 
             if ($total > 0) {
 
                 $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['rekuserpost'].";", [SITETIME]);
 
-                echo '<form action="/admin/reklama?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/reklama?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                 while ($data = $queryrek -> fetch()) {
                     echo '<div class="b">';
@@ -35,7 +32,7 @@ if (is_admin()) {
                     echo '<b><a href="'.$data['site'].'">'.$data['name'].'</a></b> ('.profile($data['user']).')<br />';
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<a href="/admin/reklama?act=edit&amp;id='.$data['id'].'&amp;start='.$start.'">Редактировать</a>';
+                    echo '<a href="/admin/reklama?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a>';
                     echo '</div>';
 
                     echo 'Истекает: '.date_fixed($data['time']).'<br />';
@@ -77,7 +74,7 @@ if (is_admin()) {
                 echo '<b><big>Редактирование заголовка</big></b><br /><br />';
 
                 echo '<div class="form">';
-                echo '<form action="/admin/reklama?act=change&amp;id='.$id.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/reklama?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Адрес сайта:<br />';
                 echo '<input name="site" type="text" value="'.$data['site'].'" maxlength="50" /><br />';
 
@@ -102,7 +99,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной ссылки не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -129,7 +126,7 @@ if (is_admin()) {
                                     save_advertuser();
 
                                     notice('Рекламная ссылка успешно изменена!');
-                                    redirect("/admin/reklama?start=$start");
+                                    redirect("/admin/reklama?page=$page");
                                 } else {
                                     show_error('Ошибка! Редактируемой ссылки не существует!');
                                 }
@@ -149,7 +146,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?act=edit&amp;id='.$id.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -172,7 +169,7 @@ if (is_admin()) {
                     save_advertuser();
 
                     notice('Выбранные ссылки успешно удалены!');
-                    redirect("/admin/reklama?start=$start");
+                    redirect("/admin/reklama?page=$page");
                 } else {
                     show_error('Ошибка! Не выбраны ссылки для удаления!');
                 }
@@ -180,7 +177,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;

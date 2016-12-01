@@ -1,7 +1,6 @@
 <?php
 App::view($config['themes'].'/index');
 
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $sort = (isset($_GET['sort'])) ? check($_GET['sort']) : 'visits';
 
 switch ($sort) {
@@ -17,16 +16,14 @@ switch ($sort) {
 show_title('Топ популярных блогов');
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs`;");
+$page = App::paginate(App::setting('blogpost'), $total);
 
 if ($total > 0) {
-    if ($start >= $total) {
-        $start = last_page($total, $config['blogpost']);
-    }
 
     $queryblog = DB::run() -> query("SELECT `b`.*, `name` FROM `blogs` b LEFT JOIN `catsblog` cb ON `b`.`category_id`=`cb`.`id` ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
     $blogs = $queryblog->fetchAll();
 
-    render('blog/top', ['blogs' => $blogs, 'order' => $order]);
+    render('blog/top', compact('blogs', 'order'));
 
     App::pagination($page);
 } else {

@@ -1,8 +1,6 @@
 <?php
 App::view($config['themes'].'/index');
 
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
-
 show_title('Кто-где');
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `visit`;");
@@ -11,6 +9,7 @@ if ($total > 0) {
     if ($total > $config['lastusers']) {
         $total = $config['lastusers'];
     }
+    $page = App::paginate(App::setting('showuser'), $total);
 
     $queryvisit = DB::run() -> query("SELECT * FROM `visit` ORDER BY `nowtime` DESC LIMIT ".$page['offset'].", ".$config['showuser'].";");
 

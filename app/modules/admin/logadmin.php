@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 
 if (is_admin([101])) {
     show_title('Админ-логи');
@@ -22,6 +17,7 @@ if (is_admin([101])) {
         case "index":
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM admlog;");
+            $page = App::paginate(App::setting('loglist'), $total);
 
             if ($total > 0) {
 

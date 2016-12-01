@@ -892,89 +892,6 @@ function sendMail($to, $subject, $body, $params = []) {
     return $mailer->send($message);
 }
 
-// ----------------------- Постраничная навигация ------------------------//
-//@deprecated использовать App::paginate
-/*function page_strnavigation($url, $posts, $start, $total, $range = 3) {
-
-    if ($total > 0) {
-        $pages = [];
-
-        $pg_cnt = ceil($total / $posts);
-        $cur_page = ceil(($start + 1) / $posts);
-        $idx_fst = max($cur_page - $range, 1);
-        $idx_lst = min($cur_page + $range, $pg_cnt);
-
-        if ($cur_page != 1) {
-            $pages[] = [
-                'start' => (($cur_page - 2) * $posts),
-                'title' => 'Назад',
-                'name' => '&laquo;',
-            ];
-        }
-
-        if (($start - $posts) >= 0) {
-            if ($cur_page > ($range + 1)) {
-
-                $pages[] = [
-                    'start' => 0,
-                    'title' => '1 страница',
-                    'name' => 1,
-                ];
-                if ($cur_page != ($range + 2)) {
-                    $pages[] = [
-                        'separator' => true,
-                        'name' => ' ... ',
-                    ];
-                }
-            }
-        }
-
-        for ($i = $idx_fst; $i <= $idx_lst; $i++) {
-            $offset_page = ($i - 1) * $posts;
-            if ($i == $cur_page) {
-
-                $pages[] = [
-                    'current' => true,
-                    'name' => $i,
-                ];
-            } else {
-
-                $pages[] = [
-                    'start' => $offset_page,
-                    'title' => $i.' страница',
-                    'name' => $i,
-                ];
-            }
-        }
-
-        if (($start + $posts) < $total) {
-            if ($cur_page < ($pg_cnt - $range)) {
-                if ($cur_page != ($pg_cnt - $range - 1)) {
-                    $pages[] = [
-                        'separator' => true,
-                        'name' => ' ... ',
-                    ];
-                }
-                $pages[] = [
-                    'start' => ($pg_cnt - 1) * $posts,
-                    'title' => $pg_cnt . ' страница',
-                    'name' => $pg_cnt,
-                ];
-            }
-        }
-
-        if ($cur_page != $pg_cnt) {
-            $pages[] = [
-                'start' => $cur_page * $posts,
-                'title' => 'Вперед',
-                'name' => '&raquo;',
-            ];
-        }
-
-        render('includes/pagination', compact('pages', 'url'));
-    }
-}*/
-
 // --------------------- Функция вывода навигации в галерее ------------------------//
 function photo_navigation($id) {
 
@@ -1483,7 +1400,7 @@ function recentphotos($show = 5) {
 
     if (is_array($photos) && count($photos) > 0) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'" class="gallery">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br />';
@@ -1792,6 +1709,7 @@ function include_style(){
     echo '<link rel="stylesheet" href="/assets/css/toastr.min.css" type="text/css" />'."\r\n";
     echo '<link rel="stylesheet" href="/assets/js/mediaelement/mediaelementplayer.min.css" />'."\r\n";
     echo '<link rel="stylesheet" href="/assets/js/mediaelement/mejs-skins.css" />'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/js/colorbox/colorbox.css" />'."\r\n";
     echo '<link rel="stylesheet" href="/assets/css/app.css" type="text/css" />'."\r\n";
 }
 
@@ -1805,6 +1723,7 @@ function include_javascript(){
     echo '<script type="text/javascript" src="/assets/js/bootbox.min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/toastr.min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/mediaelement/mediaelement-and-player.min.js"></script>'."\r\n";
+    echo '<script type="text/javascript" src="/assets/js/colorbox/jquery.colorbox-min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/app.js"></script>'."\r\n";
 }
 

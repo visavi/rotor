@@ -2,7 +2,6 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
 
 show_title('Стена сообщений');
@@ -19,6 +18,7 @@ if (!empty($queryuser)) {
             echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.nickname($uz).'</b><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
+            $page = App::paginate(App::setting('wallpost'), $total);
 
             if ($uz == $log && $udata['newwall'] > 0) {
                 echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.$udata['newwall'].'</span></b></div>';
@@ -30,9 +30,9 @@ if (!empty($queryuser)) {
                 $is_admin = is_admin();
 
                 if ($is_admin) {
-                    echo '<form action="/wall?act=del&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/wall?act=del&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 } elseif ($uz == $log) {
-                    echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
                 $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['wallpost'].";", [$uz]);
@@ -52,7 +52,7 @@ if (!empty($queryuser)) {
                         echo '<div class="right">';
                         echo '<a href="/private?act=submit&amp;uz='.$data['login'].'">Приват</a> / ';
                         echo '<a href="/wall?uz='.$data['login'].'">Стена</a> / ';
-                        echo '<noindex><a href="/wall?act=spam&amp;id='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
+                        echo '<noindex><a href="/wall?act=spam&amp;id='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                     }
 
                     echo '<div>'.App::bbCode($data['text']).'</div>';
@@ -151,10 +151,10 @@ if (!empty($queryuser)) {
 
                         if (empty($queryspam)) {
                             if (is_flood($log)) {
-                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;start='.$start]);
+                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;page='.$page]);
 
                                 notice('Жалоба успешно отправлена!');
-                                redirect("/wall?uz=$uz&start=$start");
+                                redirect("/wall?uz=$uz&page=$page");
                             } else {
                                 show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
                             }
@@ -171,7 +171,7 @@ if (!empty($queryuser)) {
                 show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -194,7 +194,7 @@ if (!empty($queryuser)) {
                         $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [$log]);
 
                         notice('Выбранные записи успешно удалены!');
-                        redirect("/wall?uz=$uz&start=$start");
+                        redirect("/wall?uz=$uz&page=$page");
                     } else {
                         show_error('Ошибка! Отстутствуют выбранные сообщения для удаления!');
                     }
@@ -205,7 +205,7 @@ if (!empty($queryuser)) {
                 show_error('Ошибка! Нельзя удалять записи на чужой стене!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -228,7 +228,7 @@ if (!empty($queryuser)) {
                         $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.");");
 
                         notice('Выбранные записи успешно удалены!');
-                        redirect("/wall?uz=$uz&start=$start");
+                        redirect("/wall?uz=$uz&page=$page");
                     } else {
                         show_error('Ошибка! Отстутствуют выбранные сообщения для удаления!');
                     }
@@ -239,7 +239,7 @@ if (!empty($queryuser)) {
                 show_error('Ошибка! Удалять записи могут только модераторы!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
     endswitch;

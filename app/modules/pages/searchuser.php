@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 
 show_title('Поиск пользователей');
 
@@ -50,6 +45,7 @@ switch ($act):
             }
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE lower(`login`) ".$search.";");
+            $page = App::paginate(App::setting('usersearch'), $total);
 
             if ($total > 0) {
 

@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 
 show_title('История моих авторизаций');
 
@@ -19,6 +14,8 @@ if (is_user()) {
     ##                                   История авторизаций                                  ##
     ############################################################################################
     $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [$log]);
+    $page = App::paginate(App::setting('loginauthlist'), $total);
+
     if ($total > 0) {
 
         $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['loginauthlist'].";", [$log]);

@@ -1,8 +1,6 @@
 <?php
 App::view($config['themes'].'/index');
 
-$start = abs(intval(Request::input('start', 0)));
-
 show_title('Реклама на сайте');
 
 if (!empty($config['rekusershow'])) {
@@ -16,11 +14,13 @@ case 'index':
     $config['newtitle'] = 'Список всех ссылок';
 
     $total = DBM::run()->count('rekuser', ['time' => ['>', SITETIME]]);
+    $page = App::paginate(App::setting('rekuserpost'), $total);
+
     if ($total > 0) {
 
         $reklama = DBM::run()->select('rekuser', [
             'time' => ['>', SITETIME],
-        ], $config['rekuserpost'], $start, ['time'=>'DESC']);
+        ], $config['rekuserpost'], $page['offset'], ['time'=>'DESC']);
 
         foreach($reklama as $data) {
             echo '<div class="b">';
@@ -61,7 +61,7 @@ case 'create':
         if ($udata['point'] >= 50) {
 
             if (Request::isMethod('post')) {
-                $uid = !empty($_GET['uid']) ? check($_GET['uid']) : 0;
+                $token = !empty($_POST['token']) ? check($_POST['token']) : 0;
                 $site = isset($_POST['site']) ? check($_POST['site']) : '';
                 $name = isset($_POST['name']) ? check($_POST['name']) : '';
                 $color = isset($_POST['color']) ? check($_POST['color']) : '';
@@ -70,7 +70,7 @@ case 'create':
 
                 $validation = new Validation();
 
-                $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                     -> addRule('max', [$udata['point'], 50], 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
                     -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
                     -> addRule('regex', [$site, '|^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'], 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)

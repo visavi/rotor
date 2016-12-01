@@ -2,15 +2,15 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 
 show_title('Список смайлов');
 
 $total = DBM::run()->count('smiles');
+$page = App::paginate(App::setting('smilelist'), $total);
 
 if ($total > 0) {
 
-	$smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => intval($start), 'limit' => intval($config['smilelist'])]);
+	$smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => $page['offset'], 'limit' => intval($config['smilelist'])]);
 
 	foreach($smiles as $smile) {
 		echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';

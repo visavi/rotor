@@ -2,8 +2,8 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $uz = (isset($_REQUEST['uz'])) ? check($_REQUEST['uz']) : '';
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Приватные сообщения');
 
@@ -15,6 +15,7 @@ if (is_user()) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `user`=?;", [$log]);
+            $page = App::paginate(App::setting('privatpost'), $total);
 
             $intotal = DB::run() -> query("SELECT count(*) FROM `outbox` WHERE `author`=? UNION ALL SELECT count(*) FROM `trash` WHERE `user`=?;", [$log, $log]);
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
@@ -37,13 +38,10 @@ if (is_user()) {
             }
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['privatpost']);
-                }
 
                 $querypriv = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
 
-                echo '<form action="/private?act=del&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/private?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
@@ -60,7 +58,7 @@ if (is_user()) {
                     echo '<a href="/private?act=history&amp;uz='.$data['author'].'">История</a> / ';
                     echo '<a href="/contact?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">В контакт</a> / ';
                     echo '<a href="/ignore?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">Игнор</a> / ';
-                    echo '<noindex><a href="/private?act=spam&amp;id='.$data['id'].'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
+                    echo '<noindex><a href="/private?act=spam&amp;id='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                 }
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -82,6 +80,7 @@ if (is_user()) {
         case 'output':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `outbox` WHERE `author`=?;", [$log]);
+            $page = App::paginate(App::setting('privatpost'), $total);
 
             $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `trash` WHERE `user`=?;", [$log, $log]);
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
@@ -91,13 +90,10 @@ if (is_user()) {
             echo '<a href="/private?act=trash">Корзина ('.$intotal[1].')</a><hr />';
 
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['privatpost']);
-                }
 
                 $querypriv = DB::run() -> query("SELECT * FROM `outbox` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
 
-                echo '<form action="/private?act=outdel&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/private?act=outdel&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
@@ -133,6 +129,7 @@ if (is_user()) {
         case 'trash':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `trash` WHERE `user`=?;", [$log]);
+            $page = App::paginate(App::setting('privatpost'), $total);
 
             $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `author`=?;", [$log, $log]);
             $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
@@ -142,9 +139,6 @@ if (is_user()) {
 
             echo '<b>Корзина ('.$total.')</b><hr />';
             if ($total > 0) {
-                if ($start >= $total) {
-                    $start = last_page($total, $config['privatpost']);
-                }
 
                 $querypriv = DB::run() -> query("SELECT * FROM `trash` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
 
@@ -356,7 +350,7 @@ if (is_user()) {
                             DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, link) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, '']);
 
                             notice('Жалоба успешно отправлена!');
-                            redirect("/private?start=$start");
+                            redirect("/private?page=$page");
 
                         } else {
                             show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
@@ -371,7 +365,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -399,7 +393,7 @@ if (is_user()) {
                     save_usermail(60);
 
                     notice('Выбранные сообщения успешно удалены!');
-                    redirect("/private?start=$start");
+                    redirect("/private?page=$page");
 
                 } else {
                     show_error('Ошибка удаления! Отсутствуют выбранные сообщения');
@@ -408,7 +402,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -430,7 +424,7 @@ if (is_user()) {
                     DB::run() -> query("DELETE FROM `outbox` WHERE `id` IN (".$del.") AND `author`=?;", [$log]);
 
                     notice('Выбранные сообщения успешно удалены!');
-                    redirect("/private?act=output&start=$start");
+                    redirect("/private?act=output&page=$page");
 
                 } else {
                     show_error('Ошибка удаления! Отсутствуют выбранные сообщения');
@@ -439,7 +433,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?act=output&amp;start='.$start.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?act=output&amp;page='.$page.'">Вернуться</a><br />';
         break;
 
         ############################################################################################
@@ -528,6 +522,7 @@ if (is_user()) {
                     $total = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `user`=? AND `author`=?;", [$log, $uz, $uz, $log]);
 
                     $total = array_sum($total -> fetchAll(PDO::FETCH_COLUMN));
+                    $page = App::paginate(App::setting('privatpost'), $total);
 
                     if ($total > 0) {
 

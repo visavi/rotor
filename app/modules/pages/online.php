@@ -1,8 +1,6 @@
 <?php
 App::view($config['themes'].'/index');
 
-$start = abs(intval(Request::input('start', 0)));
-
 show_title('Кто в онлайне');
 
 $total_all = DB::run() -> querySingle("SELECT count(*) FROM `online`;");
@@ -17,6 +15,7 @@ switch ($act):
 ############################################################################################
     case 'index':
 
+        $page = App::paginate(App::setting('onlinelist'), $total);
         if ($total > 0) {
 
             $queryonline = DB::run() -> query("SELECT * FROM `online` WHERE `user`<>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['onlinelist'].";", ['']);
@@ -44,6 +43,7 @@ switch ($act):
     case 'all':
 
         $total = $total_all;
+        $page = App::paginate(App::setting('onlinelist'), $total);
 
         if ($total > 0) {
 

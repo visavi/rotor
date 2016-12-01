@@ -13,7 +13,7 @@
     ?>
 
     <div>
-        <a href="/upload/pictures/<?= $photo['link'] ?>"><img  class="img-responsive" src="/upload/pictures/<?= $photo['link'] ?>" alt="image" /></a><br />
+        <a href="/upload/pictures/<?= $photo['link'] ?>" class="gallery"><img  class="img-responsive" src="/upload/pictures/<?= $photo['link'] ?>" alt="image" /></a><br />
 
         <?php if (!empty($photo['text'])): ?>
             <?= App::bbCode($photo['text']) ?><br />

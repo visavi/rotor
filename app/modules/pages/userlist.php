@@ -100,7 +100,7 @@ switch ($act):
             show_error('Ошибка! Вы не ввели логин или ник пользователя');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/userlist?start='.$start.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/userlist?page='.$page.'">Вернуться</a><br />';
     break;
 
 endswitch;

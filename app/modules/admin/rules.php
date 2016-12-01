@@ -6,11 +6,6 @@ if (isset($_GET['act'])) {
 } else {
     $act = 'index';
 }
-if (isset($_GET['start'])) {
-    $start = abs(intval($_GET['start']));
-} else {
-    $start = 0;
-}
 
 if (is_admin([101, 102])) {
     show_title('Правила сайта');

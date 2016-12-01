@@ -38,6 +38,12 @@ $(document).ready(function(){
     });
 
     $('video,audio').mediaelementplayer();
+
+    $('a.gallery').colorbox({rel: function(){
+        return $(this).data('group');
+    },
+        current: 'Фото {current} из {total}',
+    });
 });
 
 /* Вывод уведомлений */

@@ -2,7 +2,6 @@
 App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$start = (isset($_GET['start'])) ? abs(intval($_GET['start'])) : 0;
 $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
 
 show_title('Блоги');

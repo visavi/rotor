@@ -185,7 +185,7 @@ case 'view':
             $ext = getExtension($downs['link']);
 
             if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-                echo '<a href="/upload/files/'.$folder.$downs['link'].'">'.resize_image('upload/files/'.$folder, $downs['link'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br />';
+                echo '<a href="/upload/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('upload/files/'.$folder, $downs['link'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br />';
             }
 
             echo '<div class="message">'.App::bbCode($downs['text']).'</div><br />';
@@ -196,7 +196,7 @@ case 'view':
 
                 if ($ext != 'mp4') {
                     echo 'Скриншот:<br />';
-                    echo '<a href="/upload/screen/'.$folder.$downs['screen'].'">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
+                    echo '<a href="/upload/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
                 }
             }
 

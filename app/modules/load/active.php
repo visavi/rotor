@@ -3,7 +3,7 @@ App::view($config['themes'].'/index');
 
 $uz = empty($_GET['uz']) ? check($log) : check($_GET['uz']);
 $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
-$start = isset($_GET['start']) ? abs(intval($_GET['start'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 switch ($act):
 ############################################################################################
@@ -18,11 +18,9 @@ case 'files':
     echo '<b>Проверенные</b><hr />';
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [1, $uz]);
+    $page = App::paginate(App::setting('downlist'), $total);
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = 0;
-        }
 
         $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1, $uz]);
 
@@ -53,11 +51,9 @@ case 'comments':
     show_title('Список всех комментариев');
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['down', $uz]);
+    $page = App::paginate(App::setting('downlist'), $total);
 
     if ($total > 0) {
-        if ($start >= $total) {
-            $start = 0;
-        }
 
         $is_admin = is_admin();
 
@@ -69,7 +65,7 @@ case 'comments':
             echo '<i class="fa fa-comment"></i> <b><a href="/load/active?act=viewcomm&amp;id='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')';
 
             if ($is_admin) {
-                echo ' — <a href="/load/active?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;start='.$start.'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+                echo ' — <a href="/load/active?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
             }
 
             echo '</div>';
@@ -109,9 +105,9 @@ case 'viewcomm':
     $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `id`<=? AND `relate_id`=? ORDER BY `time` ASC LIMIT 1;", ['down', $cid, $id]);
 
     if (!empty($querycomm)) {
-        $end = floor(($querycomm - 1) / $config['downlist']) * $config['downlist'];
+        $end = ceil($querycomm / $config['downlist']);
 
-        redirect("/load/down?act=comments&id=$id&start=$end");
+        redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
         show_error('Ошибка! Комментарий к данному файлу не существует!');
     }
@@ -137,7 +133,7 @@ case 'del':
                 DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $downs]);
 
                 notice('Комментарий успешно удален!');
-                redirect("/load/active?act=comments&uz=$uz&start=$start");
+                redirect("/load/active?act=comments&uz=$uz&page=$page");
             } else {
                 show_error('Ошибка! Данного комментария не существует!');
             }
@@ -148,7 +144,7 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/active?act=comments&amp;uz='.$uz.'&amp;start='.$start.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/active?act=comments&amp;uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
 break;
 
 endswitch;
