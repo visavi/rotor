@@ -5,9 +5,18 @@ require __DIR__.'/bootstrap.php';
 session_name('SID');
 session_start();
 
-############################################################################################
-##                                 Проверка на ip-бан                                     ##
-############################################################################################
+if (!file_exists(STORAGE.'/temp/setting.dat')) {
+    $settings = DBM::run()->select('setting');
+    $config = array_pluck($settings, 'value', 'name');
+    file_put_contents(STORAGE.'/temp/setting.dat', serialize($config), LOCK_EX);
+}
+$config = unserialize(file_get_contents(STORAGE.'/temp/setting.dat'));
+
+date_default_timezone_set($config['timezone']);
+
+/**
+ * Проверка на ip-бан
+ */
 if (file_exists(STORAGE.'/temp/ipban.dat')) {
     $arrbanip = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
 } else {
@@ -28,12 +37,13 @@ if (is_array($arrbanip) && count($arrbanip) > 0) {
 
         if ($ipmatch == 4 && Request::path() != 'banip') {
             redirect('/banip');
-        } //бан по IP
+        }
     }
 }
-############################################################################################
-##                                 Счетчик запросов                                       ##
-############################################################################################
+
+/**
+ * Счетчик запросов
+ */
 if (!empty($config['doslimit'])) {
     if (is_writeable(STORAGE.'/antidos')) {
         $dosfiles = glob(STORAGE.'/antidos/*.dat');
@@ -72,9 +82,9 @@ if (!empty($config['doslimit'])) {
     }
 }
 
-############################################################################################
-##                               Авторизация по cookies                                   ##
-############################################################################################
+/**
+ * Авторизация по кукам
+ */
 if (empty($_SESSION['login']) && empty($_SESSION['password'])) {
     if (isset($_COOKIE['login']) && isset($_COOKIE['password'])) {
         $unlog = check($_COOKIE['login']);
@@ -103,7 +113,9 @@ if (empty($_SESSION['login']) && empty($_SESSION['password'])) {
     }
 }
 
-// ---------------------- Установка сессионных переменных -----------------------//
+/**
+ * Установка сессионных переменных
+ */
 $log = '';
 if (empty($_SESSION['protect'])) {
     $_SESSION['protect'] = rand(1000, 9999);
@@ -119,9 +131,10 @@ if (!isset($_SESSION['token'])) {
     }
 }
 ob_start('ob_processing');
-############################################################################################
-##                                     Авторизация                                        ##
-############################################################################################
+
+/**
+ * Операции с пользователями
+ */
 if ($udata = is_user()) {
 
     Registry::set('user', $udata);
@@ -185,9 +198,11 @@ if ($config['closedsite'] == 1 && !is_user() && !strsearch(App::server('PHP_SELF
     redirect('/login');
 }
 
+/**
+ * Автоопределение системы
+ */
 $browser_detect = new Mobile_Detect();
 
-// ------------------------ Автоопределение системы -----------------------------//
 if (!is_user() || empty($config['themes'])) {
     if (!empty($config['touchthemes'])) {
         if ($browser_detect->isTablet()) {
