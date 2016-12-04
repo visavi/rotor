@@ -17,7 +17,7 @@ if (!empty($blog)) {
 
     header("Content-Encoding: none");
     header("Content-type:application/rss+xml; charset=utf-8");
-    die(render('blog/rss', ['blog' => $blog, 'comments' => $comments]));
+    die(render('blog/rss', compact('blog', 'comments')));
 
 } else {
     show_error('Ошибка! Выбранная вами статья не существует, возможно она была удалена!');
