@@ -1,6 +1,6 @@
 <i class="fa fa-pencil"></i> <b><a href="/blog/blog?act=view&amp;id=<?=$blogs['id']?>"><?=$blogs['title']?></a></b><br /><br />
 
-<a href="/blog/blog?act=comments&amp;id=<?=$blogs['id']?>&amp;rand=<?=mt_rand(100, 999)?>">Обновить</a> / <a href="/blog/rss?id=<?=$blogs['id']?>">RSS-лента</a><hr />
+<a href="/blog/blog?act=comments&amp;id=<?=$blogs['id']?>&amp;rand=<?=mt_rand(100, 999)?>">Обновить</a> / <a href="/blog/<?=$blogs['id']?>/rss">RSS-лента</a><hr />
 
 <?php if ($is_admin): ?>
 	<form action="/blog/blog?act=del&amp;id=<?=$blogs['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>" method="post">

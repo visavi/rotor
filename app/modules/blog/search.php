@@ -133,6 +133,6 @@ endswitch;
     show_login('Вы не авторизованы, чтобы использовать поиск, необходимо');
 }
 
-render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif']);
+render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
 App::view($config['themes'].'/foot');

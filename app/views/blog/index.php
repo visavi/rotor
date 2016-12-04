@@ -19,4 +19,5 @@
 <a href="/blog/tags">Облако тегов</a> /
 <a href="/blog/search">Поиск</a> /
 <a href="/blog/blog?act=blogs">Все статьи</a> /
-<a href="/blog/blog?act=new">Написать</a><br />
+<a href="/blog/blog?act=new">Написать</a> /
+<a href="/blog/rss">RSS</a><br />

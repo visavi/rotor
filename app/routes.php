@@ -17,10 +17,11 @@ $router->map('GET|POST', '/blog/active', '/modules/blog/active.php');
 $router->map('GET|POST', '/blog/new',    '/modules/blog/new.php');
 $router->map('GET|POST', '/blog/blog',   '/modules/blog/blog.php');
 $router->map('GET|POST', '/blog/print',  '/modules/blog/print.php');
-$router->map('GET|POST', '/blog/rss',    '/modules/blog/rss.php');
 $router->map('GET|POST', '/blog/search', '/modules/blog/search.php');
 $router->map('GET|POST', '/blog/tags',   '/modules/blog/tags.php');
 $router->map('GET|POST', '/blog/top',    '/modules/blog/top.php');
+$router->map('GET',      '/blog/[i:id]/rss', '/modules/blog/rss.php@comments');
+$router->map('GET',      '/blog/rss',    '/modules/blog/rss.php');
 
 $router->map('GET', '/news', '/modules/news/index.php', 'news');
 $router->map('GET', '/news/[i:id]', '/modules/news/index.php@view');
@@ -47,7 +48,8 @@ $router->map('POST', '/forum/bookmark/[delete|perform:action]', '/modules/forum/
 $router->map('GET|POST', '/forum/[create:action]', '/modules/forum/forum.php');
 $router->map('GET', '/topic/[i:tid]', '/modules/forum/topic.php');
 $router->map('GET', '/topic/[i:tid]/[i:id]', '/modules/forum/topic.php@viewpost');
-$router->map('GET', '/topic/[i:tid]/rss', '/modules/forum/rss.php');
+$router->map('GET', '/forum/rss', '/modules/forum/rss.php');
+$router->map('GET', '/topic/[i:tid]/rss', '/modules/forum/rss.php@posts');
 $router->map('GET', '/topic/[i:tid]/print', '/modules/forum/print.php');
 $router->map('GET', '/topic/[i:tid]/[end|close:action]', '/modules/forum/topic.php');
 $router->map('POST', '/topic/[i:tid]/[create|delete|complaint:action]', '/modules/forum/topic.php');

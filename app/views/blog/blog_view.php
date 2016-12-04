@@ -1,4 +1,4 @@
-<a href="/blog">Блоги</a> / <a href="/blog/blog?cid=<?=$blogs['category_id']?>"><?=$blogs['name']?></a> / <a href="/blog/print?id=<?=$blogs['id']?>">Скачать</a> / <a href="/blog/rss?id=<?=$blogs['id']?>">RSS-лента</a>
+<a href="/blog">Блоги</a> / <a href="/blog/blog?cid=<?=$blogs['category_id']?>"><?=$blogs['name']?></a> / <a href="/blog/print?id=<?=$blogs['id']?>">Скачать</a> / <a href="/blog/<?=$blogs['id']?>/rss">RSS-лента</a>
 
 <?php if ($blogs['user'] == App::getUsername()): ?>
 	 / <a href="/blog/blog?act=editblog&amp;id=<?=$blogs['id']?>">Изменить</a>

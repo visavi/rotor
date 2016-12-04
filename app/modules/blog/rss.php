@@ -1,28 +1,58 @@
 <?php
 App::view($config['themes'].'/index');
 
-$id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
+switch ($act):
+/**
+ * RSS всех блогов
+ */
+case 'index':
+    show_title('RSS блогов');
 
-show_title('RSS комментарии');
+    $blogs = DBM::run()->select('blogs', null, 15, null, ['time' => 'DESC']);
 
-$blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
+    if ($blogs) {
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
 
-if (!empty($blog)) {
-    $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 15;", ['blog', $id]);
-    $comments = $querycomm->fetchAll();
-
-    while (ob_get_level()) {
-        ob_end_clean();
+        header("Content-Encoding: none");
+        header("Content-type:application/rss+xml; charset=utf-8");
+        die(render('blog/rss', compact('blogs')));
+    } else {
+        show_error('Ошибка! Нет блогов для отображения!');
     }
 
-    header("Content-Encoding: none");
-    header("Content-type:application/rss+xml; charset=utf-8");
-    die(render('blog/rss', compact('blog', 'comments')));
+    render('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+break;
 
-} else {
-    show_error('Ошибка! Выбранная вами статья не существует, возможно она была удалена!');
-}
+/**
+ * RSS комментариев к блогу
+ */
+case 'comments':
 
-render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif']);
+    show_title('RSS комментарии');
+
+    $id = isset($params['id']) ? abs(intval($params['id'])) : 0;
+    $blog = DBM::run()->selectFirst('blogs', ['id' => $id]);
+
+    if ($blog) {
+        $comments = DBM::run()->select('comments', ['relate_type' => 'blog', 'relate_id' => $id], 15, null, ['time' => 'DESC']);
+
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        header("Content-Encoding: none");
+        header("Content-type:application/rss+xml; charset=utf-8");
+        die(render('blog/rss_comments', compact('blog', 'comments')));
+
+    } else {
+        show_error('Ошибка! Выбранная вами статья не существует, возможно она была удалена!');
+    }
+
+    render('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+
+break;
+endswitch;
 
 App::view($config['themes'].'/foot');

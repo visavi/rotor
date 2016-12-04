@@ -51,7 +51,7 @@ break;
 ############################################################################################
 case 'view':
 
-    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` b LEFT JOIN `catsblog` cb ON b.`category_id`=cb.`id` WHERE b.`id`=? LIMIT 1;", [$id]);
+    $blogs = DB::run() -> queryFetch("SELECT b.*, cb.name FROM `blogs` b LEFT JOIN `catsblog` cb ON b.`category_id`=cb.`id` WHERE b.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($blogs)) {
         $text = preg_split('|\[nextpage\](<br * /?>)*|', $blogs['text'], -1, PREG_SPLIT_NO_EMPTY);
@@ -128,7 +128,7 @@ case 'editblog':
     }
 
     render('includes/back', ['link' => '/blog/blog/?act=view&amp;id='.$id, 'title' => 'Вернуться']);
-    render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif']);
+    render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
 break;
 
@@ -193,7 +193,7 @@ case 'changeblog':
     }
 
     render('includes/back', ['link' => '/blog/blog?act=editblog&amp;id='.$id, 'title' => 'Вернуться']);
-    render('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'К статье', 'icon' => 'reload.gif']);
+    render('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'К статье', 'icon' => 'fa-arrow-circle-up']);
 break;
 
 ############################################################################################
@@ -403,7 +403,7 @@ case 'comments':
     }
 
     render('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'Вернуться']);
-    render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif']);
+    render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 break;
 
 ############################################################################################

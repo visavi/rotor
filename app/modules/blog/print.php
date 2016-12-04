@@ -22,6 +22,6 @@ if (!empty($blog)) {
     show_error('Ошибка! Выбранная вами статья не существует, возможно она была удалена!');
 }
 
-render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'reload.gif']);
+render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
 App::view($config['themes'].'/foot');

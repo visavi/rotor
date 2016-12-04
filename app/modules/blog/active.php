@@ -87,6 +87,6 @@ break;
 
 endswitch;
 
-render('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'reload.gif']);
+render('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'fa-arrow-circle-up']);
 
 App::view($config['themes'].'/foot');
