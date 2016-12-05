@@ -3,7 +3,7 @@
 class App
 {
     /**
-     * Данные роутов
+     * Возвращает данные роутов
      * @param $key
      * @return object данные роутов
      */
@@ -15,7 +15,7 @@ class App
     }
 
     /**
-     * Получает текущую страницу
+     * Возвращает текущую страницу
      * @param null $url
      * @return string текущая страница
      */
@@ -29,7 +29,7 @@ class App
     }
 
     /**
-     * Метод подключения шаблонов
+     * Возвращает подключенный шаблон
      * @param $template
      * @param  array $params массив параметров
      * @param  boolean $return выводить или возвращать код
@@ -53,7 +53,7 @@ class App
     }
 
     /**
-     * Метод вывода страницы с ошибками
+     * Сохраняет страницы с ошибками
      * @param  integer $code    код ошибки
      * @param  string  $message текст ошибки
      * @return string  сформированная страница с ошибкой
@@ -86,7 +86,7 @@ class App
 
 
     /**
-     * Метод переадресации
+     * Переадресовывает пользователя
      * @param  string  $url адрес переадресации
      * @param  boolean $permanent постоянное перенаправление
      */
@@ -101,7 +101,7 @@ class App
     }
 
     /**
-     * Запись flash уведомления
+     * Сохраняет flash уведомления
      * @param string $status статус уведомления
      * @param array $message массив с уведомлениями
      */
@@ -111,7 +111,7 @@ class App
     }
 
     /**
-     * Вывод flash уведомления
+     * Возвращает flash уведомления
      * @return string сформированный блок с уведомлениями
      * @internal param array $errors массив уведомлений
      */
@@ -121,7 +121,7 @@ class App
     }
 
     /**
-     * Запись POST данных введенных пользователем
+     * Сохраняет POST данные введенных пользователем
      * @param array $data массив полей
      */
     public static function setInput($data)
@@ -130,7 +130,7 @@ class App
     }
 
     /**
-     * Вывод значения из POST данных
+     * Возвращает значение из POST данных
      * @param string $name имя поля
      * @param string $default
      * @return string сохраненный текст
@@ -141,7 +141,7 @@ class App
     }
 
     /**
-     * Подсветка блока с полем для ввода сообщения
+     * Подсвечивает блок с полем для ввода сообщения
      * @param string $field имя поля
      * @return string CSS класс ошибки
      */
@@ -151,7 +151,7 @@ class App
     }
 
     /**
-     * Выводит блок с текстом ошибки
+     * Возвращает блок с текстом ошибки
      * @param  string $field имя поля
      * @return string блоки ошибки
      */
@@ -205,7 +205,7 @@ class App
     }*/
 
     /**
-     * Форматирование даты
+     * Возвращает форматированную дату
      * @param string $format отформатированная дата
      * @param mixed  $date временная метки или дата
      * @return string отформатированная дата
@@ -220,7 +220,7 @@ class App
     }
 
     /**
-     * Получение расширения файла
+     * Возвращает расширение файла
      * @param  string $filename имя файла
      * @return string расширение
      */
@@ -230,7 +230,7 @@ class App
     }
 
     /**
-     * Красивый вывод размера файла
+     * Возвращает размер файла
      * @param  string  $filename путь к файлу
      * @param  integer $decimals кол. чисел после запятой
      * @return string            форматированный вывод размера
@@ -247,7 +247,7 @@ class App
     }
 
     /**
-     * Склонение чисел
+     * Склоняет числа
      * @param  integer $num  число
      * @param  array   $forms массив склоняемых слов (один, два, много)
      * @return string  форматированная строка
@@ -261,7 +261,7 @@ class App
     }
 
     /**
-     * Метод валидации дат
+     * Валидирует даты
      * @param  string $date   дата
      * @param  string $format формат даты
      * @return boolean        результат валидации
@@ -273,7 +273,7 @@ class App
     }
 
     /**
-     * Обработка BB-кодов
+     * Обрабатывает BB-код
      * @param  string  $text  Необработанный текст
      * @param  boolean $parse Обрабатывать или вырезать код
      * @return string         Обработанный текст
@@ -291,7 +291,7 @@ class App
     }
 
     /**
-     * Определение браузера
+     * Определяет браузер
      * @param null $userAgent
      * @return string браузер и версия браузера
      */
@@ -306,7 +306,7 @@ class App
     }
 
     /**
-     * Определение IP пользователя
+     * Определяет IP пользователя
      * @return string IP пользователя
      */
     public static function getClientIp()
@@ -330,61 +330,7 @@ class App
     }
 
     /**
-     * Метод обработки массивов
-     * @param  array $array необработанный массив
-     * @return array обработанный массив
-     */
-    public static function arrayPrepare($array)
-    {
-        $array_prepare = [];
-        if ( is_array($array) )
-        {
-            foreach($array as $property => $keys) {
-                if (is_array($keys)) {
-                    foreach($keys as $key => $value) {
-                        $array_prepare[$key][$property] = $value;
-                    }
-                } else {
-                    $array_prepare[$property] = $keys;
-                }
-            }
-        }
-        return $array_prepare;
-    }
-
-    /**
-     * Собирает из коллекции составной массив ключ->значение
-     * @param  object|array $enumerable  массив массивов или объектов
-     * @param  string $key ключ
-     * @param  string $val значение
-     * @return array составной массив
-     */
-    public static function arrayAssoc($enumerable, $key, $val)
-    {
-        $ret = [];
-        foreach ($enumerable as $value)
-        {
-            if (is_array($value))
-                $ret[$value[$key]] = $value[$val];
-            else
-                $ret[$value->$key] = $value->$val;
-        }
-        return $ret;
-    }
-
-    /**
-     * Обрезка строк по символам
-     * @param  string  $str  Строка
-     * @param  integer $size количество символов
-     * @return string        обработанная строка
-     */
-    public static function cropStr($str, $size)
-    {
-        return mb_substr($str, 0, mb_strrpos(mb_substr($str, 0, $size, 'utf-8'), ' ', 'utf-8'), 'utf-8');
-    }
-
-    /**
-     * Получает данные пользователя по ключу
+     * Возвращает данные пользователя по ключу
      * @param  string $key ключ массива
      * @return string      данные
      */
@@ -398,7 +344,7 @@ class App
     }
 
     /**
-     * Получает настройки сайта по ключу
+     * Возвращает настройки сайта по ключу
      * @param  string $key ключ массива
      * @return string      данные
      */
@@ -412,7 +358,7 @@ class App
     }
 
     /**
-     * Авторизация пользователя
+     * Авторизует пользователя
      * @param  string  $login    Логин или никнэйм
      * @param  string  $password Пароль пользователя
      * @param  boolean $remember Запомнить пароль
@@ -474,7 +420,7 @@ class App
     }
 
     /**
-     * Авторизация через социальные сети
+     * Авторизует через социальные сети
      * @param string $token идентификатор Ulogin
      */
     public static function socialLogin($token)
@@ -508,9 +454,9 @@ class App
     }
 
     /**
-     * Постраничная навигация
-     * @param  array $page массив данных
-     * @return string  сформированный блок с кнопками страниц
+     * Генерирует постраничную навигация
+     * @param  array  $page массив данных
+     * @return string       сформированный блок
      */
     public static function pagination($page)
     {
@@ -589,7 +535,11 @@ class App
         }
     }
 
-    // ----------------------- Вывод страниц в форуме ------------------------//
+    /**
+     * Генерирует постраничную навигация для форума
+     * @param  array  $topic массив данных
+     * @return string       сформированный блок
+     */
     public static function forumPagination($topic) {
 
         if ($topic['posts']) {
@@ -630,7 +580,7 @@ class App
     }
 
     /**
-     * Обработчик постраничной навигации
+     * Обрабатывает постраничную навигацию
      * @param  integer $limit элементов на страницу
      * @param  integer $total всего элементов
      * @return array          массив подготовленных данных
@@ -647,5 +597,22 @@ class App
         $offset = intval(($current * $limit) - $limit);
 
         return compact('current', 'offset', 'limit', 'total');
+    }
+
+    /**
+     * Устанавливает права доступа на папки
+     */
+    public static function install()
+    {
+        $storage = glob(dirname(__DIR__)."/storage/*", GLOB_ONLYDIR);
+        $uploads = glob(dirname(dirname(__DIR__))."/public/upload/*", GLOB_ONLYDIR);
+
+        $dirs = array_merge($storage, $uploads);
+
+        foreach ($dirs as $dir) {
+            $old = umask(0);
+            chmod ($dir, 0777);
+            umask($old);
+        }
     }
 }

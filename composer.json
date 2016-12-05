@@ -1,5 +1,5 @@
 {
-    "name": "visavi/rotor",
+    "name": "visavi/rotorcms4",
     "description": "RotorCMS",
     "keywords": ["cms", "wap", "rotor"],
     "homepage": "http://visavi.net",
@@ -32,6 +32,7 @@
     },
     "scripts": {
         "post-create-project-cmd": [
+            "App::install",
             "php -r \"copy('.env.example', '.env');\""
         ]
     },
