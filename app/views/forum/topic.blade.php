@@ -83,6 +83,9 @@
                             <a href="#" onclick="return sendComplaint(this)" data-type="/topic" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         </noindex>
 
+                        <br />
+                        <a href="#" onclick="return changeRating();" data-id="{{ $data['id'] }}" data-relate="post" data-vote="minus"><i class="fa fa-minus"></i></a> <strong class="text-success">+4</strong> <a href="#" onclick="return changeRating();" data-id="{{ $data['id'] }}" data-relate="post" data-vote="plus"><i class="fa fa-plus"></i></a>
+
                     <?php endif; ?>
 
                     <?php if (($log == $data['user'] && $data['time'] + 600 > SITETIME) || !empty($topics['is_moder'])): ?>
@@ -99,7 +102,9 @@
                 <?=user_title($data['user'])?> <?=user_online($data['user'])?>
             </div>
 
-            <div class="message"><?=App::bbCode($data['text'])?></div>
+            <div class="message">
+                <?=App::bbCode($data['text'])?>
+            </div>
 
             <?php if (!empty($topics['files'])): ?>
                 <?php if (isset($topics['files'][$data['id']])): ?>

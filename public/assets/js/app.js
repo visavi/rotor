@@ -184,3 +184,10 @@ function deletePost(el) {
 
     return false;
 }
+
+/* Изменение рейтинга */
+function changeRating() {
+    notify('success', 'Изменено');
+
+    return false;
+}
