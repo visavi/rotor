@@ -7,7 +7,7 @@ if (! is_admin()) {
 
 show_title('Панель управления');
 ?>
-<i class="fa fa-key fa-lg"></i> <b>Версия <?= VERSION ?></b><br /><br />
+<i class="fa fa-key fa-lg"></i> <b>Версия <?= VERSION ?>.<?= App::setting('buildversion') ?></b><br /><br />
 
 <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/chat">Админ-чат</a> (<?=stats_chat()?>)<br />

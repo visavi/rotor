@@ -6,7 +6,7 @@
 
     <?php foreach ($topics as $topic): ?>
         <?php $topic['text'] = App::bbCode($topic['text']); ?>
-        <?php $topic['text'] = str_replace('/upload/smiles', $config['home'].'/upload/smiles', $topic['text']); ?>
+        <?php $topic['text'] = str_replace('/uploads/smiles', $config['home'].'/uploads/smiles', $topic['text']); ?>
         <?php $topic['text'] = htmlspecialchars($topic['text']); ?>
         <?php $topic['title'] = htmlspecialchars($topic['title']); ?>
 

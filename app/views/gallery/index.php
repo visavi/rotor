@@ -15,11 +15,11 @@ render('includes/link', ['links' => $links]);
 
         <div class="b"><i class="fa fa-picture-o"></i>
             <b><a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;page=<?= $page['current'] ?>"><?= $data['title'] ?></a></b>
-            (<?= read_file(HOME.'/upload/pictures/'.$data['link']) ?>) (Рейтинг: <?= format_num($data['rating']) ?>)
+            (<?= read_file(HOME.'/uploads/pictures/'.$data['link']) ?>) (Рейтинг: <?= format_num($data['rating']) ?>)
         </div>
 
         <div>
-            <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;page=<?= $page['current'] ?>"><?= resize_image('upload/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]) ?></a><br />
+            <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;page=<?= $page['current'] ?>"><?= resize_image('uploads/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]) ?></a><br />
 
             <?php if (!empty($data['text'])): ?>
                 <?php App::bbCode($data['text']) ?><br />

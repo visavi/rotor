@@ -35,7 +35,7 @@ case 'index':
             echo '<a href="/admin/events?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
-                echo '<div class="img"><a href="/upload/events/'.$data['image'].'">'.resize_image('upload/events/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
+                echo '<div class="img"><a href="/uploads/events/'.$data['image'].'">'.resize_image('uploads/events/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
             }
 
             if (!empty($data['top'])){
@@ -85,10 +85,10 @@ case 'edit':
         echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['title'].'" /><br />';
         echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br />';
 
-        if (!empty($dataevent['image']) && file_exists(HOME.'/upload/events/'.$dataevent['image'])){
+        if (!empty($dataevent['image']) && file_exists(HOME.'/uploads/events/'.$dataevent['image'])){
 
-            echo '<a href="/upload/events/'.$dataevent['image'].'">'.resize_image('upload/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br />';
-            echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/upload/events/'.$dataevent['image']).')<br /><br />';
+            echo '<a href="/uploads/events/'.$dataevent['image'].'">'.resize_image('uploads/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br />';
+            echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/uploads/events/'.$dataevent['image']).')<br /><br />';
         }
 
         echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
@@ -139,10 +139,10 @@ case 'change':
 
                 // Удаление старой картинки
                 if (!empty($dataevent['image'])) {
-                    unlink_image('upload/events/', $dataevent['image']);
+                    unlink_image('uploads/events/', $dataevent['image']);
                 }
 
-                $handle -> process(HOME.'/upload/events/');
+                $handle -> process(HOME.'/uploads/events/');
 
                 if ($handle -> processed) {
 
@@ -201,7 +201,7 @@ case 'del':
 
     if ($uid == $_SESSION['token']) {
         if (!empty($del)) {
-            if (is_writeable(HOME.'/upload/events')){
+            if (is_writeable(HOME.'/uploads/events')){
 
                 $del = implode(',', $del);
 
@@ -210,7 +210,7 @@ case 'del':
 
                 if (count($arr_image)>0){
                     foreach ($arr_image as $delete){
-                        unlink_image('upload/events/', $delete['image']);
+                        unlink_image('uploads/events/', $delete['image']);
                     }
                 }
 

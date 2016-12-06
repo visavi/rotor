@@ -42,8 +42,8 @@ function unlink_image($dir, $image) {
             unlink(HOME.'/'.$dir.$image);
         }
 
-        if (file_exists(HOME.'/upload/thumbnail/'.$prename)) {
-            unlink(HOME.'/upload/thumbnail/'.$prename);
+        if (file_exists(HOME.'/uploads/thumbnail/'.$prename)) {
+            unlink(HOME.'/uploads/thumbnail/'.$prename);
         }
     }
 }
@@ -53,8 +53,8 @@ function delete_users($user) {
     if (!empty($user)){
         $userpic = DBM::run()->selectFirst('users', ['login' => $user]);
 
-        unlink_image('upload/photos/', $userpic['picture']);
-        unlink_image('upload/avatars/', $userpic['avatar']);
+        unlink_image('uploads/photos/', $userpic['picture']);
+        unlink_image('uploads/avatars/', $userpic['avatar']);
 
         DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", [$user]);
         DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", [$user]);
@@ -86,7 +86,7 @@ function delete_album($user) {
                 DB::run() -> query("DELETE FROM `photo` WHERE `id`=?;", [$delete['id']]);
                 DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", [$delete['id']]);
 
-                unlink_image('upload/pictures/', $delete['link']);
+                unlink_image('uploads/pictures/', $delete['link']);
             }
         }
     }
@@ -528,8 +528,8 @@ function user_avatars($login) {
         $arravat = unserialize(file_get_contents(STORAGE."/temp/avatars.dat"));
     }
 
-    if (isset($arravat[$login]) && file_exists(HOME.'/upload/avatars/'.$arravat[$login])) {
-        return '<a href="/user/'.$login.'"><img src="/upload/avatars/'.$arravat[$login].'" alt="" /></a> ';
+    if (isset($arravat[$login]) && file_exists(HOME.'/uploads/avatars/'.$arravat[$login])) {
+        return '<a href="/user/'.$login.'"><img src="/uploads/avatars/'.$arravat[$login].'" alt="" /></a> ';
     }
 
     return '<a href="/user/'.$login.'"><img src="/assets/img/images/avatar_default.png" alt="" /></a> ';
@@ -1400,7 +1400,7 @@ function recentphotos($show = 5) {
 
     if (is_array($photos) && count($photos) > 0) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'" class="gallery">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'" class="gallery">'.resize_image('uploads/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br />';
@@ -1440,7 +1440,7 @@ function recentfiles($show = 5) {
     if (is_array($files) && count($files) > 0) {
         foreach ($files as $file){
 
-            $filesize = (!empty($file['link'])) ? read_file(HOME.'/upload/files/'.$file['link']) : 0;
+            $filesize = (!empty($file['link'])) ? read_file(HOME.'/uploads/files/'.$file['link']) : 0;
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['id'].'">'.$file['title'].'</a> ('.$filesize.')<br />';
         }
     }
@@ -1642,7 +1642,7 @@ function resize_image($dir, $name, $size, $params = []) {
             return '<img src="/'.$dir.$name.'"'.$strParams.' />';
         }
 
-        if (!file_exists(HOME.'/upload/thumbnail/'.$prename.$name) || filesize(HOME.'/upload/thumbnail/'.$prename.$name) < 18) {
+        if (!file_exists(HOME.'/uploads/thumbnail/'.$prename.$name) || filesize(HOME.'/uploads/thumbnail/'.$prename.$name) < 18) {
 
             $handle = new upload(HOME.'/'.$dir.$name);
 
@@ -1654,10 +1654,10 @@ function resize_image($dir, $name, $size, $params = []) {
                 $handle -> image_y = $size;
                 $handle -> image_x = $size;
                 $handle -> file_overwrite = true;
-                $handle -> process(HOME.'/upload/thumbnail/');
+                $handle -> process(HOME.'/uploads/thumbnail/');
             }
         }
-        return '<img src="/upload/thumbnail/'.$prename.'"'.$strParams.' />';
+        return '<img src="/uploads/thumbnail/'.$prename.'"'.$strParams.' />';
     }
 
     return '<img src="/assets/img/images/photo.jpg" alt="nophoto" />';

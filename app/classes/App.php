@@ -601,11 +601,12 @@ class App
 
     /**
      * Устанавливает права доступа на папки
+     * @return void
      */
     public static function install()
     {
-        $storage = glob(dirname(__DIR__)."/storage/*", GLOB_ONLYDIR);
-        $uploads = glob(dirname(dirname(__DIR__))."/public/upload/*", GLOB_ONLYDIR);
+        $storage = glob(dirname(__DIR__).'/storage/*', GLOB_ONLYDIR);
+        $uploads = glob(dirname(dirname(__DIR__)).'/public/uploads/*', GLOB_ONLYDIR);
 
         $dirs = array_merge($storage, $uploads);
 

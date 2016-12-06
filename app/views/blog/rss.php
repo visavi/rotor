@@ -17,7 +17,7 @@
 
         <?php foreach ($blogs as $blog): ?>
             <?php $blog['text'] = App::bbCode($blog['text']); ?>
-            <?php $blog['text'] = str_replace('/upload/smiles', App::setting('home').'/upload/smiles', $blog['text']); ?>
+            <?php $blog['text'] = str_replace('/uploads/smiles', App::setting('home').'/uploads/smiles', $blog['text']); ?>
             <?php $blog['title'] = htmlspecialchars($blog['title']); ?>
             <?php $blog['text'] = htmlspecialchars($blog['text']); ?>
 

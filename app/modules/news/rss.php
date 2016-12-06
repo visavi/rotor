@@ -18,7 +18,7 @@
         <?php $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT 15;"); ?>
         <?php while ($news = $querynews -> fetch()): ?>
             <?php $news['text'] = App::bbCode($news['text']); ?>
-            <?php $news['text'] = str_replace(['/upload/smiles', '[cut]'], [App::setting('home').'/upload/smiles', ''], $news['text']); ?>
+            <?php $news['text'] = str_replace(['/uploads/smiles', '[cut]'], [App::setting('home').'/uploads/smiles', ''], $news['text']); ?>
             <?php $news['text'] = htmlspecialchars($news['text']); ?>
 
             <item>

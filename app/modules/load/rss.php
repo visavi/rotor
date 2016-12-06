@@ -32,7 +32,7 @@ if (!empty($down)) {
 
         while ($data = $querycomm -> fetch()) {
             $data['text'] = App::bbCode($data['text']);
-            $data['text'] = str_replace('/upload/smiles', $config['home'].'/upload/smiles', $data['text']);
+            $data['text'] = str_replace('/uploads/smiles', $config['home'].'/uploads/smiles', $data['text']);
             $data['text'] = htmlspecialchars($data['text']);
 
             echo '<item><title>'.$down['title'].'</title><link>'.$config['home'].'/load/down?act=comments&amp;id='.$down['id'].'</link>';

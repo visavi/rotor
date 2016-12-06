@@ -22,9 +22,9 @@
     echo '<div class="info">Должность: <b>'.user_status($user['level']).'</b></div>';
     }
 
-    if (!empty($user['picture']) && file_exists(HOME.'/upload/photos/'.$user['picture'])) {
-    echo '<a class="pull-right" href="/upload/photos/'.$user['picture'].'">';
-        echo resize_image('upload/photos/', $user['picture'], $config['previewsize'], ['alt' => nickname($user['login']), 'class' => 'img-responsive img-rounded']).'</a>';
+    if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture'])) {
+    echo '<a class="pull-right" href="/uploads/photos/'.$user['picture'].'">';
+        echo resize_image('uploads/photos/', $user['picture'], $config['previewsize'], ['alt' => nickname($user['login']), 'class' => 'img-responsive img-rounded']).'</a>';
     } else {
     echo '<img src="/assets/img/images/photo.jpg" alt="Фото" class="pull-right img-responsive img-rounded" />';
     }

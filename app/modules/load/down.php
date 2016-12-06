@@ -101,7 +101,7 @@ case 'index':
 
                 while ($data = $querydown -> fetch()) {
 
-                    $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
+                    $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b">';
                     echo '<i class="fa fa-file-o"></i> ';
@@ -168,7 +168,7 @@ case 'view':
 
             echo '<a href="/load/down?cid='.$downs['id'].'">'.$downs['name'].'</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><br /><br />';
 
-            $filesize = (!empty($downs['link'])) ? read_file(HOME.'/upload/files/'.$folder.$downs['link']) : 0;
+            $filesize = (!empty($downs['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$downs['link']) : 0;
             echo '<i class="fa fa-file-o"></i> <b>'.$downs['title'].'</b> ('.$filesize.')';
 
             if (is_admin([101, 102])) {
@@ -185,18 +185,18 @@ case 'view':
             $ext = getExtension($downs['link']);
 
             if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-                echo '<a href="/upload/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('upload/files/'.$folder, $downs['link'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br />';
+                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('uploads/files/'.$folder, $downs['link'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br />';
             }
 
             echo '<div class="message">'.App::bbCode($downs['text']).'</div><br />';
 
             $poster = '';
-            if (!empty($downs['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$downs['screen'])) {
-                $poster = ' poster="/upload/screen/'.$folder.$downs['screen'].'"';
+            if (!empty($downs['screen']) && file_exists(HOME.'/uploads/screen/'.$folder.$downs['screen'])) {
+                $poster = ' poster="/uploads/screen/'.$folder.$downs['screen'].'"';
 
                 if ($ext != 'mp4') {
                     echo 'Скриншот:<br />';
-                    echo '<a href="/upload/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('upload/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
+                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('uploads/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
                 }
             }
 
@@ -216,16 +216,16 @@ case 'view':
             echo 'Добавлено: '.profile($downs['user']).' ('.date_fixed($downs['time']).')<hr />';
 
             // -----------------------------------------------------------//
-            if (!empty($downs['link']) && file_exists(HOME.'/upload/files/'.$folder.$downs['link'])) {
+            if (!empty($downs['link']) && file_exists(HOME.'/uploads/files/'.$folder.$downs['link'])) {
 
                 if ($ext == 'mp3' || $ext == 'mp4') {?>
 
                     <?php if ($ext == 'mp3') { ?>
-                        <audio src="/upload/files/<?= $folder.$downs['link'] ?>"></audio><br/>
+                        <audio src="/uploads/files/<?= $folder.$downs['link'] ?>"></audio><br/>
                     <?php } ?>
 
                     <?php if ($ext == 'mp4') { ?>
-                        <video src="/upload/files/<?= $folder.$downs['link'] ?>" width="320" height="240"<?= $poster ?>></video>
+                        <video src="/uploads/files/<?= $folder.$downs['link'] ?>" width="320" height="240"<?= $poster ?>></video>
                     <?php } ?>
 
                 <?php
@@ -274,7 +274,7 @@ case 'view':
 
                 if (is_user()) {
                     echo '<br />Скопировать адрес:<br />';
-                    echo '<input name="text" size="40" value="'.$config['home'].'/upload/files/'.$folder.$downs['link'].'" /><br />';
+                    echo '<input name="text" size="40" value="'.$config['home'].'/uploads/files/'.$folder.$downs['link'].'" /><br />';
                 }
 
                 echo '<br />';
@@ -310,7 +310,7 @@ case 'load':
 
                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
-                if (file_exists('upload/files/'.$folder.$downs['link'])) {
+                if (file_exists('uploads/files/'.$folder.$downs['link'])) {
                     $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", [$id, App::getClientIp()]);
                     if (empty($queryloads)) {
                         $expiresloads = SITETIME + 3600 * $config['expiresloads'];
@@ -320,7 +320,7 @@ case 'load':
                         DB::run() -> query("UPDATE downs SET loads=loads+1, last_load=? WHERE id=?", [SITETIME, $id]);
                     }
 
-                    redirect("/upload/files/".$folder.$downs['link']);
+                    redirect("/uploads/files/".$folder.$downs['link']);
                 } else {
                     show_error('Ошибка! Файла для скачивания не существует!');
                 }

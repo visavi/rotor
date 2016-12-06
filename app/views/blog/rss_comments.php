@@ -17,7 +17,7 @@
 
         <?php foreach ($comments as $data): ?>
             <?php $data['text'] = App::bbCode($data['text']); ?>
-            <?php $data['text'] = str_replace('/upload/smiles', App::setting('home').'/upload/smiles', $data['text']); ?>
+            <?php $data['text'] = str_replace('/uploads/smiles', App::setting('home').'/uploads/smiles', $data['text']); ?>
             <?php $data['text'] = htmlspecialchars($data['text']); ?>
 
             <item>

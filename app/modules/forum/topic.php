@@ -132,20 +132,20 @@ case 'create':
                                 $filename = utf_substr($filename, 0, 45).'.'.$ext;
                             }
 
-                            if (!file_exists(HOME.'/upload/forum/'.$topics['id'])){
+                            if (!file_exists(HOME.'/uploads/forum/'.$topics['id'])){
                                 $old = umask(0);
-                                mkdir(HOME.'/upload/forum/'.$topics['id'], 0777, true);
+                                mkdir(HOME.'/uploads/forum/'.$topics['id'], 0777, true);
                                 umask($old);
                             }
 
                             $num = 0;
                             $hash = $lastid.'.'.$ext;
-                            while(file_exists(HOME.'/upload/forum/'.$topics['id'].'/'.$hash)){
+                            while(file_exists(HOME.'/uploads/forum/'.$topics['id'].'/'.$hash)){
                                 $num++;
                                 $hash = $lastid.'_'.$num.'.'.$ext;
                             }
 
-                            move_uploaded_file($_FILES['file']['tmp_name'], HOME.'/upload/forum/'.$topics['id'].'/'.$hash);
+                            move_uploaded_file($_FILES['file']['tmp_name'], HOME.'/uploads/forum/'.$topics['id'].'/'.$hash);
 
                             DB::run() -> query("INSERT INTO `files_forum` (`topic_id`, `post_id`, `hash`, `name`, `size`, `user`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$topics['id'], $lastid, $hash, $filename, $filesize, $log, SITETIME]);
 
@@ -248,8 +248,8 @@ case 'delete':
 
         if (!empty($files)){
             foreach ($files as $file){
-                if (file_exists(HOME.'/upload/forum/'.$topic['id'].'/'.$file)){
-                    unlink(HOME.'/upload/forum/'.$topic['id'].'/'.$file);
+                if (file_exists(HOME.'/uploads/forum/'.$topic['id'].'/'.$file)){
+                    unlink(HOME.'/uploads/forum/'.$topic['id'].'/'.$file);
                 }
             }
             DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id` IN (".$del.");");
@@ -415,8 +415,8 @@ case 'editpost':
 
                 if (!empty($files)){
                     foreach ($files as $file){
-                        if (file_exists(HOME.'/upload/forum/'.$file['id'].'/'.$file['hash'])){
-                            unlink(HOME.'/upload/forum/'.$file['id'].'/'.$file['hash']);
+                        if (file_exists(HOME.'/uploads/forum/'.$file['id'].'/'.$file['hash'])){
+                            unlink(HOME.'/uploads/forum/'.$file['id'].'/'.$file['hash']);
                         }
                     }
                     DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$id]);

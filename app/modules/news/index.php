@@ -28,7 +28,7 @@ case 'index':
             echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small></div>';
 
             if (!empty($data['image'])) {
-                echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
+                echo '<div class="img"><a href="/uploads/news/'.$data['image'].'">'.resize_image('uploads/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
             }
 
             if(stristr($data['text'], '[cut]')) {
@@ -72,7 +72,7 @@ case 'view':
 
         if (!empty($data['image'])) {
 
-            echo '<div class="img"><a href="/upload/news/'.$data['image'].'">'.resize_image('upload/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
+            echo '<div class="img"><a href="/uploads/news/'.$data['image'].'">'.resize_image('uploads/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
         }
 
         $data['text'] = str_replace('[cut]', '', $data['text']);

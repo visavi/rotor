@@ -148,7 +148,7 @@ break;
                                 $handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $lastid);
                                 if ($handle) {
 
-                                    $handle -> process(HOME.'/upload/pictures/');
+                                    $handle -> process(HOME.'/uploads/pictures/');
                                     if ($handle -> processed) {
 
                                         DB::run() -> query("UPDATE `photo` SET `link`=? WHERE `id`=?;", [$handle -> file_dst_name, $lastid]);
@@ -538,14 +538,14 @@ break;
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
-                if (is_writeable(HOME.'/upload/pictures')) {
+                if (is_writeable(HOME.'/uploads/pictures')) {
                     $querydel = DB::run() -> queryFetch("SELECT `id`, `link`, `comments` FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", [$gid, $log]);
                     if (!empty($querydel)) {
                         if (empty($querydel['comments'])) {
                             DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$querydel['id']]);
                             DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['gallery', $querydel['id']]);
 
-                            unlink_image('upload/pictures/', $querydel['link']);
+                            unlink_image('uploads/pictures/', $querydel['link']);
 
                             notice('Фотография успешно удалена!');
                             redirect("/gallery/album?act=photo&page=$page");
@@ -605,7 +605,7 @@ break;
     *
     * $del = implode(',', $del);
     *
-    * if (is_writeable(HOME.'/upload/pictures')){
+    * if (is_writeable(HOME.'/uploads/pictures')){
     *
     * $querydel = DB::run()->query("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.") AND `user`=?;", array($log));
     * $arr_photo = $querydel->fetchAll();
@@ -614,7 +614,7 @@ break;
     * foreach ($arr_photo as $delete){
     * DB::run()->query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", array($delete['id']));
     * DB::run()->query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", array('gallery', $delete['id']));
-    * if (file_exists(HOME.'/upload/pictures/'.$delete['link'])) {unlink(HOME.'/upload/pictures/'.$delete['link']);}
+    * if (file_exists(HOME.'/uploads/pictures/'.$delete['link'])) {unlink(HOME.'/uploads/pictures/'.$delete['link']);}
     * }
     *
     * notice('Выбранные фотографии успешно удалены!');

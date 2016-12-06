@@ -84,14 +84,14 @@ case 'newimport':
     $config['newtitle'] = 'FTP-импорт';
 
     if (is_admin([101])) {
-        if (file_exists(HOME.'/upload/loader')) {
+        if (file_exists(HOME.'/uploads/loader')) {
             $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
             $downs = $querydown -> fetchAll();
 
             if (count($downs) > 0) {
                 echo 'Для импорта необходимо загрузить файлы через FTP в папку load/loader, после этого здесь вам нужно выбрать категорию в которую переместить файлы, отметить нужные файлы и нажать импортировать<br /><br />';
 
-                $files = array_diff(scandir(HOME.'/upload/loader'), ['.', '..', '.htaccess']);
+                $files = array_diff(scandir(HOME.'/uploads/loader'), ['.', '..', '.htaccess']);
 
                 $total = count($files);
                 if ($total > 0) {
@@ -161,7 +161,7 @@ case 'addimport':
 
     if ($uid == $_SESSION['token']) {
         if (!empty($cid)) {
-            if (is_writeable(HOME.'/upload/files')) {
+            if (is_writeable(HOME.'/uploads/files')) {
                 $total = count($files);
                 if ($total > 0) {
                     $downs = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
@@ -175,30 +175,30 @@ case 'addimport':
                                     $ext = getExtension($filename);
                                     if (in_array($ext, explode(',', $config['allowextload']), true)) {
                                         if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $filename)) {
-                                            if (filesize(HOME.'/upload/loader/'.$file) > 0 && filesize(HOME.'/upload/loader/'.$file) <= $config['fileupload']) {
+                                            if (filesize(HOME.'/uploads/loader/'.$file) > 0 && filesize(HOME.'/uploads/loader/'.$file) <= $config['fileupload']) {
 
                                                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
                                                 $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$file]);
                                                 if (empty($downlink)) {
 
-                                                    if (file_exists(HOME.'/upload/loader/'.$file.'.txt')) {
-                                                        $text = file_get_contents(HOME.'/upload/loader/'.$file.'.txt');
+                                                    if (file_exists(HOME.'/uploads/loader/'.$file.'.txt')) {
+                                                        $text = file_get_contents(HOME.'/uploads/loader/'.$file.'.txt');
                                                     } else {
                                                         $text = 'Нет описания';
                                                     }
 
-                                                    if (file_exists(HOME.'/upload/loader/'.$file.'.JPG')) {
-                                                        rename(HOME.'/upload/loader/'.$file.'.JPG', HOME.'/upload/screen/'.$folder.$filename.'.jpg');
+                                                    if (file_exists(HOME.'/uploads/loader/'.$file.'.JPG')) {
+                                                        rename(HOME.'/uploads/loader/'.$file.'.JPG', HOME.'/uploads/screen/'.$folder.$filename.'.jpg');
                                                         $screen = $filename.'.jpg';
-                                                    } elseif (file_exists(HOME.'/upload/loader/'.$file.'.GIF')) {
-                                                        rename(HOME.'/upload/loader/'.$file.'.GIF', HOME.'/upload/screen/'.$folder.$filename.'.gif');
+                                                    } elseif (file_exists(HOME.'/uploads/loader/'.$file.'.GIF')) {
+                                                        rename(HOME.'/uploads/loader/'.$file.'.GIF', HOME.'/uploads/screen/'.$folder.$filename.'.gif');
                                                         $screen = $filename.'.gif';
                                                     } else {
                                                         $screen = '';
                                                     }
 
-                                                    rename(HOME.'/upload/loader/'.$file, HOME.'/upload/files/'.$folder.$filename);
+                                                    rename(HOME.'/uploads/loader/'.$file, HOME.'/uploads/files/'.$folder.$filename);
 
                                                     DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$cid]);
                                                     DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $file, $text, $filename, $log, $screen, SITETIME, 1]);
@@ -508,44 +508,44 @@ case 'addeditcats':
 
                             foreach ($downs as $down) {
 
-                                if (! empty($down['link']) && file_exists(HOME.'/upload/files/'.$cat['folder'].'/'.$down['link'])) {
-                                    rename(HOME.'/upload/files/'.$cat['folder'].'/'.$down['link'], HOME.'/upload/files/'.$down['link']);
+                                if (! empty($down['link']) && file_exists(HOME.'/uploads/files/'.$cat['folder'].'/'.$down['link'])) {
+                                    rename(HOME.'/uploads/files/'.$cat['folder'].'/'.$down['link'], HOME.'/uploads/files/'.$down['link']);
                                 }
 
-                                if (! empty($down['screen']) && file_exists(HOME.'/upload/screen/'.$cat['folder'].'/'.$down['screen'])) {
+                                if (! empty($down['screen']) && file_exists(HOME.'/uploads/screen/'.$cat['folder'].'/'.$down['screen'])) {
 
-                                    rename(HOME.'/upload/screen/'.$cat['folder'].'/'.$down['screen'], HOME.'/upload/screen/'.$down['screen']);
-                                    unlink_image('upload/screen/'.$cat['folder'], $down['screen']);
+                                    rename(HOME.'/uploads/screen/'.$cat['folder'].'/'.$down['screen'], HOME.'/uploads/screen/'.$down['screen']);
+                                    unlink_image('uploads/screen/'.$cat['folder'], $down['screen']);
                                 }
                             }
 
-                            removeDir(HOME.'/upload/files/'.$cat['folder']);
-                            removeDir(HOME.'/upload/screen/'.$cat['folder']);
+                            removeDir(HOME.'/uploads/files/'.$cat['folder']);
+                            removeDir(HOME.'/uploads/screen/'.$cat['folder']);
                             $renameDir = true;
                         }
 
-                        if (! empty($folder) && ! file_exists(HOME.'/upload/files/'.$folder) && $cat['folder'] != $folder) {
+                        if (! empty($folder) && ! file_exists(HOME.'/uploads/files/'.$folder) && $cat['folder'] != $folder) {
 
-                            if (! empty($cat['folder']) && file_exists(HOME.'/upload/files/'.$cat['folder'])){
-                                rename(HOME.'/upload/files/'.$cat['folder'], HOME.'/upload/files/'.$folder);
-                                rename(HOME.'/upload/screen/'.$cat['folder'], HOME.'/upload/screen/'.$folder);
+                            if (! empty($cat['folder']) && file_exists(HOME.'/uploads/files/'.$cat['folder'])){
+                                rename(HOME.'/uploads/files/'.$cat['folder'], HOME.'/uploads/files/'.$folder);
+                                rename(HOME.'/uploads/screen/'.$cat['folder'], HOME.'/uploads/screen/'.$folder);
                             } else {
                                 $old = umask(0);
-                                mkdir(HOME.'/upload/files/'.$folder, 0777, true);
-                                mkdir(HOME.'/upload/screen/'.$folder, 0777, true);
+                                mkdir(HOME.'/uploads/files/'.$folder, 0777, true);
+                                mkdir(HOME.'/uploads/screen/'.$folder, 0777, true);
                                 umask($old);
 
                                 foreach ($downs as $down) {
 
-                                    if (! empty($down['link']) && file_exists(HOME.'/upload/files/'.$down['link'])) {
+                                    if (! empty($down['link']) && file_exists(HOME.'/uploads/files/'.$down['link'])) {
 
-                                        rename(HOME.'/upload/files/'.$down['link'], HOME.'/upload/files/'.$folder.'/'.$down['link']);
+                                        rename(HOME.'/uploads/files/'.$down['link'], HOME.'/uploads/files/'.$folder.'/'.$down['link']);
                                     }
 
-                                    if (! empty($down['screen']) && file_exists(HOME.'/upload/screen/'.$down['screen'])) {
+                                    if (! empty($down['screen']) && file_exists(HOME.'/uploads/screen/'.$down['screen'])) {
 
-                                        rename(HOME.'/upload/screen/'.$down['screen'], HOME.'/upload/screen/'.$folder.'/'.$down['screen']);
-                                        unlink_image('upload/screen/', $down['screen']);
+                                        rename(HOME.'/uploads/screen/'.$down['screen'], HOME.'/uploads/screen/'.$folder.'/'.$down['screen']);
+                                        unlink_image('uploads/screen/', $down['screen']);
                                     }
                                 }
 
@@ -621,7 +621,7 @@ case 'delcats':
 
             if (!empty($downs['id'])) {
                 if (empty($downs['subcnt'])) {
-                    if (is_writeable(HOME.'/upload/files')) {
+                    if (is_writeable(HOME.'/uploads/files')) {
                         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
                         $querydel = DB::run() -> query("SELECT `link`, `screen` FROM `downs` WHERE `category_id`=?;", [$cid]);
@@ -632,16 +632,16 @@ case 'delcats':
                         DB::run() -> query("DELETE FROM `cats` WHERE `id`=?;", [$cid]);
 
                         foreach ($arr_script as $delfile) {
-                            if (!empty($delfile['link']) && file_exists(HOME.'/upload/files/'.$folder.$delfile['link'])) {
-                                unlink(HOME.'/upload/files/'.$folder.$delfile['link']);
+                            if (!empty($delfile['link']) && file_exists(HOME.'/uploads/files/'.$folder.$delfile['link'])) {
+                                unlink(HOME.'/uploads/files/'.$folder.$delfile['link']);
                             }
 
-                            unlink_image('upload/screen/'.$folder, $delfile['screen']);
+                            unlink_image('uploads/screen/'.$folder, $delfile['screen']);
                         }
 
                         if (! empty($folder)) {
-                            removeDir(HOME.'/upload/files/'.$folder);
-                            removeDir(HOME.'/upload/screen/'.$folder);
+                            removeDir(HOME.'/uploads/files/'.$folder);
+                            removeDir(HOME.'/uploads/screen/'.$folder);
                         }
 
                         notice('Раздел успешно удален!');
@@ -718,7 +718,7 @@ case 'down':
             }
 
              while ($data = $querydown -> fetch()) {
-                $filesize = (!empty($data['link'])) ? read_file(HOME.'/upload/files/'.$folder.$data['link']) : 0;
+                $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
                 echo '<div class="b">';
                 echo '<i class="fa fa-file-o"></i> ';
@@ -799,7 +799,7 @@ case 'editdown':
         } else {
             $folder = $new['folder'] ? $new['folder'].'/' : '';
 
-            echo '<i class="fa fa-download"></i> <b><a href="/upload/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['link']).') (<a href="/admin/load?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/admin/load?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
 
             $ext = getExtension($new['link']);
             if (! in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
@@ -811,8 +811,8 @@ case 'editdown':
                     echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br /><input type="file" name="screen" /><br />';
                     echo '<input value="Загрузить" type="submit" /></form></div><br />';
                 } else {
-                    echo '<i class="fa fa-picture-o"></i> <b><a href="/upload/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                    echo resize_image('upload/screen/'.$folder, $new['screen'], $config['previewsize']).'<br />';
+                    echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+                    echo resize_image('uploads/screen/'.$folder, $new['screen'], $config['previewsize']).'<br />';
                 }
             }
         }
@@ -875,7 +875,7 @@ case 'changedown':
                                             $downtitle = DB::run() -> querySingle("SELECT `title` FROM `downs` WHERE `title`=? AND `id`<>? LIMIT 1;", [$title, $id]);
                                             if (empty($downtitle)) {
 
-                                                if (!empty($loadfile) && $loadfile != $new['link'] && file_exists(HOME.'/upload/files/'.$folder.$new['link'])) {
+                                                if (!empty($loadfile) && $loadfile != $new['link'] && file_exists(HOME.'/uploads/files/'.$folder.$new['link'])) {
 
                                                     $oldext = getExtension($new['link']);
                                                     $newext = getExtension($loadfile);
@@ -883,13 +883,13 @@ case 'changedown':
                                                     if ($oldext == $newext) {
 
                                                         $screen = $new['screen'];
-                                                        rename(HOME.'/upload/files/'.$folder.$new['link'], HOME.'/upload/files/'.$folder.$loadfile);
+                                                        rename(HOME.'/uploads/files/'.$folder.$new['link'], HOME.'/uploads/files/'.$folder.$loadfile);
 
-                                                        if (!empty($new['screen']) && file_exists(HOME.'/upload/screen/'.$folder.$new['screen'])) {
+                                                        if (!empty($new['screen']) && file_exists(HOME.'/uploads/screen/'.$folder.$new['screen'])) {
 
                                                             $screen = $loadfile.'.'.getExtension($new['screen']);
-                                                            rename(HOME.'/upload/screen/'.$folder.$new['screen'], HOME.'/upload/screen/'.$folder.$screen);
-                                                            unlink_image('upload/screen/'.$folder, $new['screen']);
+                                                            rename(HOME.'/uploads/screen/'.$folder.$new['screen'], HOME.'/uploads/screen/'.$folder.$screen);
+                                                            unlink_image('uploads/screen/'.$folder, $new['screen']);
                                                         }
                                                         DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", [$loadfile, $screen, $id]);
                                                     }
@@ -962,10 +962,10 @@ case 'copyfile':
 
                             $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                             if (empty($downlink)) {
-                                if (@copy($loadfile, HOME.'/upload/files/'.$folder.$filename)) {
-                                    @chmod(HOME.'/upload/files/'.$folder.$filename, 0666);
+                                if (@copy($loadfile, HOME.'/uploads/files/'.$folder.$filename)) {
+                                    @chmod(HOME.'/uploads/files/'.$folder.$filename, 0666);
 
-                                    copyright_archive(HOME.'/upload/files/'.$folder.$filename);
+                                    copyright_archive(HOME.'/uploads/files/'.$folder.$filename);
 
                                     DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
@@ -1024,10 +1024,10 @@ case 'loadfile':
                                 $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                                 if (empty($downlink)) {
 
-                                    move_uploaded_file($_FILES['loadfile']['tmp_name'], HOME.'/upload/files/'.$folder.$filename);
-                                    @chmod(HOME.'/upload/files/'.$folder.$filename, 0666);
+                                    move_uploaded_file($_FILES['loadfile']['tmp_name'], HOME.'/uploads/files/'.$folder.$filename);
+                                    @chmod(HOME.'/uploads/files/'.$folder.$filename, 0666);
 
-                                    copyright_archive(HOME.'/upload/files/'.$folder.$filename);
+                                    copyright_archive(HOME.'/uploads/files/'.$folder.$filename);
 
                                     DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
@@ -1078,7 +1078,7 @@ case 'loadscreen':
                 if ($handle) {
                     $folder = $down['folder'] ? $down['folder'].'/' : '';
 
-                    $handle -> process(HOME.'/upload/screen/'.$folder);
+                    $handle -> process(HOME.'/uploads/screen/'.$folder);
                     if ($handle -> processed) {
 
                         DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$handle -> file_dst_name, $id]);
@@ -1115,11 +1115,11 @@ case 'delfile':
     if (!empty($link)) {
         $folder = $link['folder'] ? $link['folder'].'/' : '';
 
-        if (!empty($link['link']) && file_exists(HOME.'/upload/files/'.$folder.$link['link'])) {
-            unlink(HOME.'/upload/files/'.$folder.$link['link']);
+        if (!empty($link['link']) && file_exists(HOME.'/uploads/files/'.$folder.$link['link'])) {
+            unlink(HOME.'/uploads/files/'.$folder.$link['link']);
         }
 
-        unlink_image('upload/screen/'.$folder, $link['screen']);
+        unlink_image('uploads/screen/'.$folder, $link['screen']);
 
         DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
@@ -1141,7 +1141,7 @@ case 'delscreen':
     if (!empty($screen)) {
         $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
-        unlink_image('upload/screen/'.$folder, $screen['screen']);
+        unlink_image('uploads/screen/'.$folder, $screen['screen']);
 
         DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
@@ -1164,7 +1164,7 @@ case 'movedown':
     if (!empty($downs)) {
         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
-        echo '<i class="fa fa-download"></i> <b>'.$downs['title'].'</b> ('.read_file(HOME.'/upload/files/'.$folder.$downs['link']).')<br /><br />';
+        echo '<i class="fa fa-download"></i> <b>'.$downs['title'].'</b> ('.read_file(HOME.'/uploads/files/'.$folder.$downs['link']).')<br /><br />';
 
         $querycats = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
         $cats = $querycats -> fetchAll();
@@ -1235,7 +1235,7 @@ case 'addmovedown':
                 $folderFrom = $downFrom['folder'] ? $downFrom['folder'].'/' : '';
                 $folderTo = $catsTo['folder'] ? $catsTo['folder'].'/' : '';
 
-                rename(HOME.'/upload/files/'.$folderFrom.$downFrom['link'], HOME.'/upload/files/'.$folderTo.$downFrom['link']);
+                rename(HOME.'/uploads/files/'.$folderFrom.$downFrom['link'], HOME.'/uploads/files/'.$folderTo.$downFrom['link']);
 
                 DB::run() -> query("UPDATE `downs` SET `category_id`=? WHERE `id`=?;", [$section, $id]);
                 DB::run() -> query("UPDATE `comments` SET `relate_category_id`=? WHERE relate_type=? AND `relate_id`=?;", ['down', $section, $id]);
@@ -1272,7 +1272,7 @@ case 'deldown':
             if ($del > 0) {
                 $del = implode(',', $del);
 
-                if (is_writeable(HOME.'/upload/files')) {
+                if (is_writeable(HOME.'/uploads/files')) {
 
                     $querydel = DB::run() -> query("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id` IN (".$del.");");
                     $arr_script = $querydel -> fetchAll();
@@ -1284,11 +1284,11 @@ case 'deldown':
 
                     foreach ($arr_script as $delfile) {
                         $folder = $delfile['folder'] ? $delfile['folder'].'/' : '';
-                        if (!empty($delfile['link']) && file_exists(HOME.'/upload/files/'.$folder.$delfile['link'])) {
-                            unlink(HOME.'/upload/files/'.$folder.$delfile['link']);
+                        if (!empty($delfile['link']) && file_exists(HOME.'/uploads/files/'.$folder.$delfile['link'])) {
+                            unlink(HOME.'/uploads/files/'.$folder.$delfile['link']);
                         }
 
-                        unlink_image('upload/screen/'.$folder, $delfile['screen']);
+                        unlink_image('uploads/screen/'.$folder, $delfile['screen']);
                     }
 
                     notice('Выбранные файлы успешно удалены!');

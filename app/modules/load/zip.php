@@ -19,7 +19,7 @@ case 'index':
             if (getExtension($downs['link']) == 'zip') {
                 $config['newtitle'] = 'Просмотр архива - '.$downs['title'];
 
-                $zip = new PclZip('upload/files/'.$downs['link']);
+                $zip = new PclZip('uploads/files/'.$downs['link']);
                 if (($list = $zip -> listContent()) != 0) {
                     $intotal = $zip -> properties();
                     $total = $intotal['nb'];
@@ -87,7 +87,7 @@ case 'preview':
 
     if (! empty($downs) && $view !== '') {
         if (!empty($downs['active'])) {
-            $zip = new PclZip('upload/files/'.$downs['link']);
+            $zip = new PclZip('uploads/files/'.$downs['link']);
 
             $content = $zip -> extract(PCLZIP_OPT_BY_INDEX, $view, PCLZIP_OPT_EXTRACT_AS_STRING);
             if (!empty($content)) {

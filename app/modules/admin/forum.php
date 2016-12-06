@@ -291,8 +291,8 @@ if (is_admin()) {
                                 $delId = implode(',', $topics);
 
                                 foreach($topics as $delDir){
-                                    removeDir(HOME.'/upload/forum/'.$delDir);
-                                    array_map('unlink', glob(HOME.'/upload/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                                    removeDir(HOME.'/uploads/forum/'.$delDir);
+                                    array_map('unlink', glob(HOME.'/uploads/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
                                 }
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
                             }
@@ -589,8 +589,8 @@ if (is_admin()) {
 
                     // ------ Удаление загруженных файлов -------//
                     foreach($del as $delDir){
-                        removeDir(HOME.'/upload/forum/'.$delDir);
-                        array_map('unlink', glob(HOME.'/upload/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                        removeDir(HOME.'/uploads/forum/'.$delDir);
+                        array_map('unlink', glob(HOME.'/uploads/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
                     }
                     DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
                     // ------ Удаление загруженных файлов -------//
@@ -792,7 +792,7 @@ if (is_admin()) {
                                         $ext = getExtension($file['hash']);
                                         echo icons($ext).' ';
 
-                                        echo '<a href="/upload/forum/'.$file['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
+                                        echo '<a href="/uploads/forum/'.$file['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
                                     }
                                     echo '</div>';
                                 }
@@ -870,8 +870,8 @@ if (is_admin()) {
 
                     if (!empty($files)){
                         foreach ($files as $file){
-                            if (file_exists(HOME.'/upload/forum/'.$topics['id'].'/'.$file)){
-                                unlink_image('upload/forum/', $topics['id'].'/'.$file);
+                            if (file_exists(HOME.'/uploads/forum/'.$topics['id'].'/'.$file)){
+                                unlink_image('uploads/forum/', $topics['id'].'/'.$file);
                             }
                         }
                     }
@@ -920,7 +920,7 @@ if (is_admin()) {
                     echo '<i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br />';
                     foreach ($files as $file){
                         echo '<input type="checkbox" name="delfile[]" value="'.$file['id'].'" /> ';
-                        echo '<a href="/upload/forum/'.$file['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
+                        echo '<a href="/uploads/forum/'.$file['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
                     }
                     echo '<br />';
                 }
@@ -964,8 +964,8 @@ if (is_admin()) {
 
                             if (!empty($files)){
                                 foreach ($files as $file){
-                                    if (file_exists(HOME.'/upload/forum/'.$file['topic_id'].'/'.$file['hash'])){
-                                        unlink_image('upload/forum/', $file['topic_id'].'/'.$file['hash']);
+                                    if (file_exists(HOME.'/uploads/forum/'.$file['topic_id'].'/'.$file['hash'])){
+                                        unlink_image('uploads/forum/', $file['topic_id'].'/'.$file['hash']);
                                     }
                                 }
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$pid]);

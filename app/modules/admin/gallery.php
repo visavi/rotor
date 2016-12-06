@@ -33,11 +33,11 @@ if (is_admin()) {
                 while ($data = $queryphoto -> fetch()) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-picture-o"></i> ';
-                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).')<br />';
+                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/uploads/pictures/'.$data['link']).')<br />';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
+                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
 
                     if (!empty($data['text'])){
                         echo App::bbCode($data['text']).'<br />';
@@ -152,7 +152,7 @@ if (is_admin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    if (is_writeable(HOME.'/upload/pictures')) {
+                    if (is_writeable(HOME.'/uploads/pictures')) {
                         $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.");");
                         $arr_photo = $querydel -> fetchAll();
 
@@ -161,7 +161,7 @@ if (is_admin()) {
                                 DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$delete['id']]);
                                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['gallery', $delete['id']]);
 
-                                unlink_image('upload/pictures/', $delete['link']);
+                                unlink_image('uploads/pictures/', $delete['link']);
                             }
 
                             notice('Выбранные фотографии успешно удалены!');

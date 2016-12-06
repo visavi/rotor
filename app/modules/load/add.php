@@ -105,12 +105,12 @@ case 'waiting':
             echo '<div>';
             echo 'Категория: '.$data['name'].'<br />';
             if (!empty($data['link'])) {
-                echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/upload/files/'.$data['link']).')<br />';
+                echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/uploads/files/'.$data['link']).')<br />';
             } else {
                 echo 'Файл: <span style="color:#ff0000">Не загружен</span><br />';
             }
             if (!empty($data['screen'])) {
-                echo 'Скрин: '.$data['screen'].' ('.read_file(HOME.'/upload/files/'.$data['screen']).')<br />';
+                echo 'Скрин: '.$data['screen'].' ('.read_file(HOME.'/uploads/files/'.$data['screen']).')<br />';
             } else {
                 echo 'Скрин: <span style="color:#ff0000">Не загружен</span><br />';
             }
@@ -238,7 +238,7 @@ case 'view':
 
                     } else {
 
-                        echo '<i class="fa fa-download"></i> <b><a href="/upload/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/upload/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
 
                         $ext = getExtension($new['link']);
                         if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
@@ -253,8 +253,8 @@ case 'view':
                                 echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px</div><br /><br />';
 
                             } else {
-                                echo '<i class="fa fa-picture-o"></i> <b><a href="/upload/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/upload/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                                echo resize_image('upload/screen/'.$folder, $new['screen'], $config['previewsize']).'<br />';
+                                echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
+                                echo resize_image('uploads/screen/'.$folder, $new['screen'], $config['previewsize']).'<br />';
                             }
                         }
                     }
@@ -408,7 +408,7 @@ case 'loadfile':
         if ($down['user'] == $log) {
             if (empty($down['active'])) {
                 if (empty($down['link'])) {
-                    if (is_writeable(HOME.'/upload/files/'.$folder)) {
+                    if (is_writeable(HOME.'/uploads/files/'.$folder)) {
                     if (isset($_FILES['loadfile']) && is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
                         $filename = check(strtolower($_FILES['loadfile']['name']));
 
@@ -422,10 +422,10 @@ case 'loadfile':
                                         $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                                         if (empty($downlink)) {
 
-                                            move_uploaded_file($_FILES['loadfile']['tmp_name'], HOME.'/upload/files/'.$folder.$filename);
-                                            @chmod(HOME.'/upload/files/'.$folder.$filename, 0666);
+                                            move_uploaded_file($_FILES['loadfile']['tmp_name'], HOME.'/uploads/files/'.$folder.$filename);
+                                            @chmod(HOME.'/uploads/files/'.$folder.$filename, 0666);
 
-                                            copyright_archive(HOME.'/upload/files/'.$folder.$filename);
+                                            copyright_archive(HOME.'/uploads/files/'.$folder.$filename);
 
                                             DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
@@ -441,29 +441,29 @@ case 'loadfile':
 
                                                 $ffmpeg = FFMpeg\FFMpeg::create($ffconfig);
 
-                                                $video = $ffmpeg->open(HOME.'/upload/files/'.$folder.$filename);
+                                                $video = $ffmpeg->open(HOME.'/uploads/files/'.$folder.$filename);
 
                                                 // Сохраняем скрин с 10 секунды
                                                 $video
                                                     ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
-                                                    ->save(HOME.'/upload/screen/'.$folder.'/'.$filename.'.jpg');
+                                                    ->save(HOME.'/uploads/screen/'.$folder.'/'.$filename.'.jpg');
 
                                                 DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$filename.'.jpg', $id]);
 
                                                 // Перекодируем видео в h264
                                                 $ffprobe = FFMpeg\FFProbe::create($ffconfig);
                                                 $codec = $ffprobe
-                                                    ->streams(HOME.'/upload/files/'.$folder.$filename)
+                                                    ->streams(HOME.'/uploads/files/'.$folder.$filename)
                                                     ->videos()
                                                     ->first()
                                                     ->get('codec_name');
 
                                                 if ($codec != 'h264') {
                                                     $format = new FFMpeg\Format\Video\X264('libmp3lame', 'libx264');
-                                                    $video->save($format, HOME.'/upload/files/'.$folder.'/convert-'.$filename);
+                                                    $video->save($format, HOME.'/uploads/files/'.$folder.'/convert-'.$filename);
                                                     rename(
-                                                        HOME.'/upload/files/'.$folder.'/convert-'.$filename,
-                                                        HOME.'/upload/files/'.$folder.'/'.$filename
+                                                        HOME.'/uploads/files/'.$folder.'/convert-'.$filename,
+                                                        HOME.'/uploads/files/'.$folder.'/'.$filename
                                                     );
                                                 }
                                             }
@@ -527,7 +527,7 @@ case 'loadscreen':
                         if ($handle) {
                             $folder = $down['folder'] ? $down['folder'].'/' : '';
 
-                            $handle -> process(HOME.'/upload/screen/'.$folder);
+                            $handle -> process(HOME.'/uploads/screen/'.$folder);
                             if ($handle -> processed) {
 
                                 DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$handle -> file_dst_name, $id]);
@@ -573,12 +573,12 @@ case 'delfile':
             if (empty($link['active'])) {
                 $folder = $link['folder'] ? $link['folder'].'/' : '';
 
-                if (!empty($link['link']) && file_exists(HOME.'/upload/files/'.$folder.$link['link'])) {
-                    unlink(HOME.'/upload/files/'.$folder.$link['link']);
+                if (!empty($link['link']) && file_exists(HOME.'/uploads/files/'.$folder.$link['link'])) {
+                    unlink(HOME.'/uploads/files/'.$folder.$link['link']);
                 }
 
-                unlink_image('upload/files/'.$folder, $link['link']);
-                unlink_image('upload/screen/'.$folder, $link['screen']);
+                unlink_image('uploads/files/'.$folder, $link['link']);
+                unlink_image('uploads/screen/'.$folder, $link['screen']);
 
                 DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
@@ -610,7 +610,7 @@ case 'delscreen':
             if (empty($screen['active'])) {
                 $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
-                unlink_image('upload/screen/'.$folder, $screen['screen']);
+                unlink_image('uploads/screen/'.$folder, $screen['screen']);
 
                 DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 

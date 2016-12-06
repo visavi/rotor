@@ -23,7 +23,7 @@ case 'index':
     echo '<form action="/admin/smiles?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
     foreach($smiles as $smile) {
-        echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
+        echo '<img src="/uploads/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
 
         echo '<input type="checkbox" name="del[]" value="'.$smile['id'].'" /> <a href="/admin/smiles?act=edit&amp;id='.$smile['id'].'&amp;page='.$page['current'].'">Редактировать</a><br />';
     }
@@ -70,7 +70,7 @@ case 'load':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
 
-    if (is_writeable(HOME.'/upload/smiles')){
+    if (is_writeable(HOME.'/uploads/smiles')){
 
         $smile = DBM::run()->selectFirst('smiles', ['code' => $code]);
 
@@ -99,7 +99,7 @@ case 'load':
                 $handle -> image_max_height = $config['smilemaxweight']; // px
                 $handle -> image_min_width = $config['smileminweight'];   // px
                 $handle -> image_min_height = $config['smileminweight'];  // px
-                $handle -> process(HOME.'/upload/smiles/');
+                $handle -> process(HOME.'/uploads/smiles/');
 
                 if ($handle -> processed) {
 
@@ -140,7 +140,7 @@ case 'edit':
 
     if (! empty($smile)) {
         echo '<b><big>Редактирование смайла</big></b><br /><br />';
-        echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
+        echo '<img src="/uploads/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
 
         echo '<div class="form">';
         echo '<form action="/admin/smiles?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -203,7 +203,7 @@ case 'del':
 
     if ($uid == $_SESSION['token']) {
         if (! empty($del)) {
-            if (is_writeable(HOME.'/upload/smiles')){
+            if (is_writeable(HOME.'/uploads/smiles')){
 
                 $del = implode(',', $del);
 
@@ -211,8 +211,8 @@ case 'del':
 
                 if (count($arr_smiles)>0){
                     foreach ($arr_smiles as $delfile) {
-                        if (file_exists(HOME.'/upload/smiles/'.$delfile['name'])) {
-                            unlink(HOME.'/upload/smiles/'.$delfile['name']);
+                        if (file_exists(HOME.'/uploads/smiles/'.$delfile['name'])) {
+                            unlink(HOME.'/uploads/smiles/'.$delfile['name']);
                         }
                     }
                 }

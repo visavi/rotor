@@ -21,7 +21,7 @@
                 <i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br />
                 <?php foreach ($files as $file): ?>
                     <input type="checkbox" name="delfile[]" value="<?=$file['id']?>" />
-                    <a href="<?= HOME ?>/upload/forum/<?=$file['topic_id']?>/<?=$file['hash']?>" target="_blank"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
+                    <a href="<?= HOME ?>/uploads/forum/<?=$file['topic_id']?>/<?=$file['hash']?>" target="_blank"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
                 <?php endforeach; ?>
                 <br />
             <?php endif; ?>

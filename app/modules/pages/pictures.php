@@ -47,14 +47,14 @@ if (is_user()) {
                             $userpic = DB::run()->querySingle("SELECT picture, avatar FROM users WHERE login=? LIMIT 1;", [$log]);
 
                             if (!empty($userpic['picture'])){
-                                unlink_image('upload/photos/', $userpic['picture']);
-                                unlink_image('upload/avatars/', $userpic['avatar']);
+                                unlink_image('uploads/photos/', $userpic['picture']);
+                                unlink_image('uploads/avatars/', $userpic['avatar']);
 
                                 DB::run()->query("UPDATE `users` SET `picture`=?, `avatar`=? WHERE `login`=?;", ['', '', $log]);
                             }
 
                             //-------- Генерируем аватар ----------//
-                            $handle->process(HOME.'/upload/photos/');
+                            $handle->process(HOME.'/uploads/photos/');
                             $picture = $handle -> file_dst_name;
 
                             $handle->file_new_name_body = $log;
@@ -66,7 +66,7 @@ if (is_user()) {
                             $handle->image_convert = 'png';
                             $handle->file_overwrite = true;
 
-                            $handle->process(HOME.'/upload/avatars/');
+                            $handle->process(HOME.'/uploads/avatars/');
                             $avatar = $handle -> file_dst_name;
 
                             if ($handle->processed) {
@@ -111,7 +111,7 @@ if (is_user()) {
 
                 if (!empty($userpic)){
 
-                    unlink_image('upload/photos/', $userpic);
+                    unlink_image('uploads/photos/', $userpic);
                     DB::run() -> query("UPDATE `users` SET `picture`=? WHERE `login`=?", ['', $log]);
 
                     notice('Фотография успешно удалена!');

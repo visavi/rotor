@@ -1,6 +1,6 @@
 <?php
 
-$imagecache = '/upload/counters/counter31.gif';
+$imagecache = '/uploads/counters/counter31.gif';
 if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != date_fixed(SITETIME, "dmY")){
 
 	$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);

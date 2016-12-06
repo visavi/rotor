@@ -13,7 +13,7 @@
     ?>
 
     <div>
-        <a href="/upload/pictures/<?= $photo['link'] ?>" class="gallery"><img  class="img-responsive" src="/upload/pictures/<?= $photo['link'] ?>" alt="image" /></a><br />
+        <a href="/uploads/pictures/<?= $photo['link'] ?>" class="gallery"><img  class="img-responsive" src="/uploads/pictures/<?= $photo['link'] ?>" alt="image" /></a><br />
 
         <?php if (!empty($photo['text'])): ?>
             <?= App::bbCode($photo['text']) ?><br />
@@ -21,7 +21,7 @@
 
         Рейтинг: <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=down&amp;uid=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-down"></i></a> <big><b><?= format_num($photo['rating']) ?></b></big> <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=up&amp;uid=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-up"></i></a><br />
 
-        Размер: <?= read_file(HOME.'/upload/pictures/'.$photo['link']) ?><br />
+        Размер: <?= read_file(HOME.'/uploads/pictures/'.$photo['link']) ?><br />
         Добавлено: <?= profile($photo['user'])?> (<?= date_fixed($photo['time']) ?>)<br />
         <a href="/gallery?act=comments&amp;gid=<?= $photo['id'] ?> ">Комментарии</a> (<?= $photo['comments'] ?>)
         <a href="/gallery?act=end&amp;gid=<?= $photo['id'] ?>">&raquo;</a>

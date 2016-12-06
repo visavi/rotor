@@ -22,9 +22,9 @@ case 'index':
 	echo '<form method="post" action="/profile?act=edit&amp;uid='.$_SESSION['token'].'">';
 
 	echo '<div class="pull-right">';
-	if (!empty($udata['picture']) && file_exists(HOME.'/upload/photos/'.$udata['picture'])) {
-		echo '<a href="/upload/photos/'.$udata['picture'].'">';
-		echo resize_image('upload/photos/', $udata['picture'], $config['previewsize'], ['alt' => nickname($udata['login']), 'class' => 'img-responsive img-rounded']).'</a>';
+	if (!empty($udata['picture']) && file_exists(HOME.'/uploads/photos/'.$udata['picture'])) {
+		echo '<a href="/uploads/photos/'.$udata['picture'].'">';
+		echo resize_image('uploads/photos/', $udata['picture'], $config['previewsize'], ['alt' => nickname($udata['login']), 'class' => 'img-responsive img-rounded']).'</a>';
 		echo '<a href="/pictures">Изменить</a> / <a href="/pictures?act=del&amp;uid='.$_SESSION['token'].'">Удалить</a>';
 	} else {
 		echo '<img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />';

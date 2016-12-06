@@ -1,6 +1,6 @@
 <?php show_title('Функция unlink_image'); ?>
 
-Удаляет картинку, а также кэшированное изображение сохраненное в директории upload/thumbnail, с проверкой имеется ли картинка в данных директориях (Доступно с версии 2.6.0)<br /><br />
+Удаляет картинку, а также кэшированное изображение сохраненное в директории uploads/thumbnail, с проверкой имеется ли картинка в данных директориях (Доступно с версии 2.6.0)<br /><br />
 
 <pre class="d">
 <b>unlink_image</b>(
@@ -19,8 +19,8 @@
 
 <?php
 echo App::bbCode(check('[code]<?php
-unlink_image("upload/photos/", "Vantuz.gif");
-/* Удаляет файл Vantuz.gif сначала в директории upload/photos, а затем в upload/thumbnail */
+unlink_image("uploads/photos/", "Vantuz.gif");
+/* Удаляет файл Vantuz.gif сначала в директории uploads/photos, а затем в uploads/thumbnail */
 ?>[/code]'));
 ?>
 

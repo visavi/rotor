@@ -1,8 +1,7 @@
 <?php
-include_once __DIR__.'/../app/bootstrap.php';
+include_once __DIR__.'/../../app/bootstrap.php';
 
-$app = require BASEDIR . '/vendor/robmorgan/phinx/app/phinx.php';
-
+$app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);
 
 $wrap->setOption('configuration', BASEDIR.'/phinx.php');

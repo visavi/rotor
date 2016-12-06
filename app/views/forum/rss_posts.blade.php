@@ -6,7 +6,7 @@
 
     <?php foreach ($posts as $data): ?>
         <?php $data['text'] = App::bbCode($data['text']); ?>
-        <?php $data['text'] = str_replace('/upload/smiles', $config['home'].'/upload/smiles', $data['text']); ?>
+        <?php $data['text'] = str_replace('/uploads/smiles', $config['home'].'/uploads/smiles', $data['text']); ?>
         <?php $data['text'] = htmlspecialchars($data['text']); ?>
 
         <item>

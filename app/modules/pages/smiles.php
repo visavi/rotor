@@ -13,7 +13,7 @@ if ($total > 0) {
 	$smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => $page['offset'], 'limit' => intval($config['smilelist'])]);
 
 	foreach($smiles as $smile) {
-		echo '<img src="/upload/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
+		echo '<img src="/uploads/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
 	}
 
     App::pagination($page);

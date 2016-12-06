@@ -15,5 +15,5 @@
 <?php endif; ?>
 
 <?php if (App::setting('incount') == 5): ?>
-	<a href="/counter"><img src="/upload/counters/counter.png?<?= date_fixed(SITETIME, "dmYHi") ?>" alt="counter" /></a><br />
+	<a href="/counter"><img src="/uploads/counters/counter.png?<?= date_fixed(SITETIME, "dmYHi") ?>" alt="counter" /></a><br />
 <?php endif; ?>

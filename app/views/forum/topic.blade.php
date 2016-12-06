@@ -109,9 +109,9 @@
 
 
                         <?= icons($ext) ?>
-                        <a href="/upload/forum/<?=$topics['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
+                        <a href="/uploads/forum/<?=$topics['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
                         <?php if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])): ?>
-                            <a href="/upload/forum/<?=$topics['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('upload/forum/', $topics['id'].'/'.$file['hash'], $config['previewsize'], ['alt' => $file['name']]) ?></a><br />
+                            <a href="/uploads/forum/<?=$topics['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topics['id'].'/'.$file['hash'], $config['previewsize'], ['alt' => $file['name']]) ?></a><br />
                         <?php endif; ?>
                     <?php endforeach; ?>
                     </div>

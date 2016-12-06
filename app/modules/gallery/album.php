@@ -63,7 +63,7 @@ switch ($act):
 
             while ($data = $queryphoto -> fetch()) {
                 echo '<div class="b"><i class="fa fa-picture-o"></i> ';
-                echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/upload/pictures/'.$data['link']).')<br />';
+                echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/uploads/pictures/'.$data['link']).')<br />';
 
                 if (!empty($moder)) {
                     echo '<a href="/gallery?act=edit&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a> / ';
@@ -71,7 +71,7 @@ switch ($act):
                 }
 
                 echo '</div><div>';
-                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('upload/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
+                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
 
                 if (!empty($data['text'])){
                     echo App::bbCode($data['text']).'<br />';

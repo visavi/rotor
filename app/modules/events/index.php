@@ -55,7 +55,7 @@ case 'read':
 
 		if (!empty($data['image'])) {
 
-			echo '<div class="img"><a href="/upload/events/'.$data['image'].'">'.resize_image('upload/events/', $data['image'], 75, $data['title']).'</a></div>';
+			echo '<div class="img"><a href="/uploads/events/'.$data['image'].'">'.resize_image('uploads/events/', $data['image'], 75, $data['title']).'</a></div>';
 		}
 
 		$data['text'] = str_replace('[cut]', '', $data['text']);
@@ -185,7 +185,7 @@ case 'addevent':
 				$handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $lastid);
 				if ($handle) {
 
-					$handle -> process(HOME.'/upload/events/');
+					$handle -> process(HOME.'/uploads/events/');
 
 					if ($handle -> processed) {
 						DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
@@ -236,9 +236,9 @@ case 'editevent':
 			echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['title'].'" /><br />';
 			echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br />';
 
-			if (!empty($dataevent['image']) && file_exists(HOME.'/upload/events/'.$dataevent['image'])){
-				echo '<a href="/upload/events/'.$dataevent['image'].'">'.resize_image('upload/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br />';
-				echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/upload/events/'.$dataevent['image']).')<br /><br />';
+			if (!empty($dataevent['image']) && file_exists(HOME.'/uploads/events/'.$dataevent['image'])){
+				echo '<a href="/uploads/events/'.$dataevent['image'].'">'.resize_image('uploads/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br />';
+				echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/uploads/events/'.$dataevent['image']).')<br /><br />';
 			}
 
 			echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
@@ -301,10 +301,10 @@ case 'changeevent':
 
 					// Удаление старой картинки
 					if (!empty($dataevent['image'])) {
-						unlink_image('upload/events/', $dataevent['image']);
+						unlink_image('uploads/events/', $dataevent['image']);
 					}
 
-					$handle -> process(HOME.'/upload/events/');
+					$handle -> process(HOME.'/uploads/events/');
 
 					if ($handle -> processed) {
 						DB::run() -> query("UPDATE `events` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
