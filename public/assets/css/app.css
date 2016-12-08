@@ -99,3 +99,15 @@ blockquote {
 .audiojs .play-pause {
   width: auto;
 }
+
+.post-rating-up.active {
+  color: #fff;
+  background-color: #78c062;
+  padding: 0 3px;
+}
+
+.post-rating-down.active {
+  color: #fff;
+  background-color: #f75c48;
+  padding: 0 3px;
+}

@@ -186,8 +186,34 @@ function deletePost(el) {
 }
 
 /* Изменение рейтинга */
-function changeRating() {
-    notify('success', 'Изменено');
+function changeRating(el) {
 
+    $.ajax({
+        data: {
+            id: $(el).data('id'),
+            type: $(el).data('type'),
+            vote: $(el).data('vote'),
+            token: $(el).data('token')
+        },
+        dataType: 'JSON', type: 'POST', url: '/ajax/rating',
+        success: function(data) {
+
+            if (data.status == 'error'){
+                return false;
+            }
+
+            if (data.status == 'success'){
+                rating = $(el).closest('.js-rating').find('span');
+
+                $(el).closest('.js-rating').find('a').removeClass('active');
+
+                if (! data.cancel) {
+                    $(el).addClass('active');
+                }
+
+                rating.text(data.count);
+            }
+        }
+    });
     return false;
 }

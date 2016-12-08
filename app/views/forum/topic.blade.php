@@ -82,10 +82,6 @@
                         <noindex>
                             <a href="#" onclick="return sendComplaint(this)" data-type="/topic" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         </noindex>
-
-                        <br />
-                        <a href="#" onclick="return changeRating();" data-id="{{ $data['id'] }}" data-relate="post" data-vote="minus"><i class="fa fa-minus"></i></a> <strong class="text-success">+4</strong> <a href="#" onclick="return changeRating();" data-id="{{ $data['id'] }}" data-relate="post" data-vote="plus"><i class="fa fa-plus"></i></a>
-
                     <?php endif; ?>
 
                     <?php if (($log == $data['user'] && $data['time'] + 600 > SITETIME) || !empty($topics['is_moder'])): ?>
@@ -94,6 +90,16 @@
                         <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
                         <?php endif; ?>
                     <?php endif; ?>
+
+                    <div class="js-rating">
+                        @unless ($log == $data['user'])
+                            <a class="post-rating-down<?= $data['vote'] == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="post" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
+                        @endunless
+                        <span>{{ $data['rating'] }}</span>
+                        @unless ($log == $data['user'])
+                            <a class="post-rating-up<?= $data['vote'] == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="post" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
+                        @endunless
+                    </div>
                 </div>
 
                 <div class="img"><?=user_avatars($data['user'])?></div>

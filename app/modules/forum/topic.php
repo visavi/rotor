@@ -35,9 +35,12 @@ case 'index':
     $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
     $page = App::paginate(App::setting('forumpost'), $total);
 
-    $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['forumpost'].";", [$tid]);
+    $querypost = DB::run() -> query("SELECT p.*, pl.vote FROM `posts` p LEFT JOIN pollings pl ON p.id = pl.relate_id AND relate_type = 'post' AND pl.user=? WHERE `topic_id`=? ORDER BY p.`time` ASC LIMIT ".$page['offset'].", ".$config['forumpost'].";", [$log, $tid]);
 
+
+   // var_dump($querypost->fetchAll());
     $topics['posts'] = $querypost->fetchAll();
+
 
     // ----- Получение массива файлов ----- //
     $ipdpost = [];
@@ -438,7 +441,6 @@ case 'editpost':
     App::view('forum/topic_edit_post', compact('post', 'files', 'page'));
 
 break;
-
 
 ############################################################################################
 ##                                     Переход к сообщению                                ##

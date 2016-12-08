@@ -78,6 +78,7 @@ $router->map('GET', '/captcha', '/modules/gallery/protect.php', 'captcha');
 $router->map('GET', '/online/[all:action]?', '/modules/pages/online.php', 'online');
 
 $router->map('POST', '/ajax/bbcode', '/modules/ajax/bbcode.php');
+$router->map('POST', '/ajax/rating', '/modules/ajax/rating.php');
 
 $router->map('GET|POST', '/wall',     '/modules/pages/wall.php', 'wall');
 $router->map('GET|POST', '/setting',  '/modules/pages/setting.php');
