@@ -13,6 +13,7 @@ $router->map('POST', '/book/[complaint|add:action]', '/modules/book/index.php');
 $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php');
 
 $router->map('GET', '/sitemap.xml', '/modules/pages/sitemap.php');
+$router->map('GET', '/sitemap/[a:action].xml', '/modules/pages/sitemap.php');
 
 $router->map('GET',      '/blog',        '/modules/blog/index.php', 'blog');
 $router->map('GET|POST', '/blog/active', '/modules/blog/active.php');
