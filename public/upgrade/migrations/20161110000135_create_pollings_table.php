@@ -9,7 +9,7 @@ class CreatePollingsTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('pollings');
+        $table = $this->table('pollings', ['collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('relate_type', 'enum', ['values' => ['blog', 'down', 'offer', 'gallery']])
             ->addColumn('relate_id', 'integer', ['signed' => false])
             ->addColumn('user', 'string', ['limit' => 20])
