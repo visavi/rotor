@@ -1,12 +1,16 @@
 User-agent: *
 Allow: /
 Crawl-delay: 1
-Clean-param: rand
-Disallow: /input.php
-Disallow: /pages/login.php
-Disallow: /pages/registration.php
-Disallow: /pages/index.php?act=menu
-Disallow: /pages/index.php?act=partners
-Disallow: /pages/index.php?act=stat
-Disallow: /votes/
-Disallow: /mail/
+Disallow: /api
+Disallow: /admin
+Disallow: /login
+Disallow: /logout
+Disallow: /register
+Disallow: /menu
+Disallow: /mail
+Disallow: /lostpassword
+Disallow: /unsubscribe
+Disallow: /captcha
+Disallow: /online
+
+Sitemap: /sitemap.xml
