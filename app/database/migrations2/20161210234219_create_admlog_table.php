@@ -11,8 +11,8 @@ class CreateAdmlogTable extends AbstractMigration
     {
         $table = $this->table('admlog', ['collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
-            ->addColumn('request', 'string', ['null' => true])
-            ->addColumn('referer', 'string', ['null' => true])
+            ->addColumn('request', 'string', ['default' => ''])
+            ->addColumn('referer', 'string', ['default' => ''])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('brow', 'string', ['limit' => 25])
             ->addColumn('time', 'integer')
