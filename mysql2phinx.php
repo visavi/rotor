@@ -52,7 +52,7 @@ function getTableMigration($table, $mysqli, $indent)
 
     $output = array();
     $output[] = $ind . '// Migration for table ' . $table;
-    $output[] = $ind . '$table = $this->table(\'' . $table . '\');';
+    $output[] = $ind . '$table = $this->table(\'' . $table . '\', [\'collation\' => \'utf8mb4_unicode_ci\']);';
     $output[] = $ind . '$table';
 
     foreach (getColumns($table, $mysqli) as $column) {
@@ -100,6 +100,7 @@ function getIndexMigrations($indexes, $indent)
             $keyedindexes[$key] = array();
             $keyedindexes[$key]['columns'] = array();
             $keyedindexes[$key]['unique'] = $index['Non_unique'] !== '1';
+            $keyedindexes[$key]['fulltext'] = $index['Index_type'] === 'FULLTEXT';
         }
 
         $keyedindexes[$key]['columns'][] = $index['Column_name'];
@@ -107,15 +108,42 @@ function getIndexMigrations($indexes, $indent)
 
     $output = [];
 
-    foreach ($keyedindexes as $index) {
-        if (is_array($index['columns'])) {
-            $columns = '[\'' . implode('\', \'', $index['columns']) . '\']';
+    foreach ($keyedindexes as $key_name=>$index) {
+
+        if (count($index['columns']) > 1) {
+            $columns = "['" . implode("', '", $index['columns']) . "']";
         } else {
-            $columns = '\'' . $index['columns'] . '\'';
+            $columns = "'" . current($index['columns']) . "'";
+        }
+        $needs_comma = false;
+        $options = [];
+        $options[] = '[';
+        // Support for unique indexes
+        if ($index['unique']) {
+            $options[] =  "'unique' => true";
+            $needs_comma = true;
+        }
+        // Support for full text indexes
+        if ($index['fulltext']) {
+            if ($needs_comma === true) {
+                $options[] = ', ';
+            }
+            $options[] = "'type' => 'fulltext'";
+            $needs_comma = true;
         }
 
-        $options = $index['unique'] ? '[\'unique\' => true]' : '';
-        $output[] = $ind . '->addIndex(' . $columns . ', ' . $options . ')';
+        if (implode($index['columns']) != $key_name) {
+            // Support for named indexes
+            if ($needs_comma === true) {
+                $options[] = ', ';
+            }
+            $options[] = "'name' => '" . $key_name . "'";
+        }
+        $options[] = ']';
+
+        $opt = (implode($options) != "[]") ? ', '.implode($options) : '';
+
+        $output[] = $ind . '->addIndex(' . $columns . $opt . ')';
     }
 
     return implode(PHP_EOL, $output);
@@ -178,7 +206,7 @@ function getPhinxColumnType($columndata)
             return 'string';
 
         default:
-            return '[' . $type . ']';
+            return $type;
     }
 }
 
@@ -247,7 +275,7 @@ function getPhinxColumnAttibutes($phinxtype, $columndata)
 
     // default value
     if ($columndata['Default'] !== null) {
-        $default = is_int($columndata['Default']) ? $columndata['Default'] : '\'' . $columndata['Default'] . '\'';
+        $default = is_numeric($columndata['Default']) ? $columndata['Default'] : '\'' . $columndata['Default'] . '\'';
         $attributes[] = '\'default\' => ' . $default;
     }
 
