@@ -217,21 +217,21 @@ class InitialMigration extends AbstractMigration
         $table
             ->addColumn('category_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('title', 'string', ['limit' => 100])
-            ->addColumn('text', 'longtext', ['null' => true])
+            ->addColumn('text', 'text', ['null' => true])
             ->addColumn('link', 'string', ['limit' => 50])
             ->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('author', 'string', ['limit' => 50])
-            ->addColumn('site', 'string', ['limit' => 50, 'default' => ''])
-            ->addColumn('screen', 'string', ['limit' => 50, 'default' => ''])
-            ->addColumn('time', 'integer', ['signed' => false, 'default' => 0])
+            ->addColumn('site', 'string', ['limit' => 50, 'null' => true])
+            ->addColumn('screen', 'string', ['limit' => 50, 'null' => true])
+            ->addColumn('time', 'integer')
             ->addColumn('comments', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
             ->addColumn('rating', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
             ->addColumn('rated', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
             ->addColumn('loads', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
-            ->addColumn('last_load', 'integer', ['signed' => false, 'default' => 0])
-            ->addColumn('app', 'boolean', ['signed' => false, 'default' => 0])
-            ->addColumn('notice', 'longtext', ['null' => true])
-            ->addColumn('active', 'boolean', ['signed' => false, 'default' => 0])
+            ->addColumn('last_load', 'integer', ['default' => 0])
+            ->addColumn('app', 'boolean', ['default' => 0])
+            ->addColumn('notice', 'text', ['null' => true])
+            ->addColumn('active', 'boolean', ['default' => 0])
             ->addIndex('category_id')
             ->addIndex('time')
             ->addIndex('text', ['type' => 'fulltext'])
@@ -348,21 +348,6 @@ class InitialMigration extends AbstractMigration
             ->addColumn('time', 'integer', ['signed' => false])
             ->addIndex('time')
             ->addIndex('user')
-            ->create();
-
-
-        // Migration for table input
-        $table = $this->table('input', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('input_id', 'integer', ['signed' => false])
-            ->addColumn('input_mail', 'string', ['limit' => 50])
-            ->addColumn('input_code', 'string', ['limit' => 25])
-            ->addColumn('input_ip', 'string', ['limit' => 20])
-            ->addColumn('input_brow', 'string', ['limit' => 25])
-            ->addColumn('input_time', 'integer', ['signed' => false])
-            ->addColumn('input_user', 'string', ['limit' => 20])
-            ->addColumn('input_cms', 'boolean', ['signed' => false])
-            ->addIndex('input_id', ['unique' => true, 'name' => 'PRIMARY'])
             ->create();
 
 
