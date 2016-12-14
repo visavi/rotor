@@ -9,7 +9,7 @@ class CreateBankTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('bank2', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('bank', ['collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('sum', 'integer', ['signed' => false, 'default' => 0])
             ->addColumn('oper', 'integer', ['signed' => false, 'default' => 0])

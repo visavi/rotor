@@ -38,8 +38,9 @@ header("Content-type:text/html; charset=utf-8");
 
                 <?= $wrap->getStatus(); ?>
                 <a style="font-size: 18px" href="?act=upgrade">Перейти к обновлению</a>
+            <?php elseif($_GET['act'] == 'rollback'): ?>
+                <?= $wrap->getRollback(); ?>
             <?php else: ?>
-
                 <?= $wrap->getMigrate(); ?>
                 <p style="font-size: 20px">Удалите директории install и upgrade</p>
 

@@ -81,7 +81,10 @@ function getColumnMigration($column, $columndata, $indent)
 
     $phinxtype = getPhinxColumnType($columndata);
     $columnattributes = getPhinxColumnAttibutes($phinxtype, $columndata);
-    $output = $ind . '->addColumn(\'' . $column . '\', \'' . $phinxtype . '\', ' . $columnattributes . ')';
+
+    $opt = ($columnattributes != "[]") ? ', '.$columnattributes : '';
+
+    $output = $ind . '->addColumn(\'' . $column . '\', \'' . $phinxtype . '\'' . $opt . ')';
     return $output;
 }
 
@@ -178,6 +181,8 @@ function getPhinxColumnType($columndata)
 
     switch($type) {
         case 'tinyint':
+        case 'boolean':
+            return 'boolean';
         case 'smallint':
         case 'int':
         case 'mediumint':
@@ -219,8 +224,9 @@ function getPhinxColumnAttibutes($phinxtype, $columndata)
     // limit / length
     $limit = 0;
     switch (getMySQLColumnType($columndata)) {
+        case 'bollean':
         case 'tinyint':
-            $limit = 'MysqlAdapter::INT_TINY';
+            $limit = '1';
             break;
 
         case 'smallint':
@@ -254,7 +260,9 @@ function getPhinxColumnAttibutes($phinxtype, $columndata)
             }
     }
     if ($limit) {
-        $attributes[] = '\'limit\' => ' . $limit;
+        if (($phinxtype == 'string' && $limit != 255) || $phinxtype == 'integer' && $limit != 11) {
+            $attributes[] = '\'limit\' => ' . $limit;
+        }
     }
 
     // unsigned

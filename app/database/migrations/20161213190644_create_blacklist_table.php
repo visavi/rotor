@@ -9,10 +9,10 @@ class CreateBlacklistTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('blacklist2', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('blacklist', ['collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('type', 'boolean')
             ->addColumn('value', 'string', ['limit' => 100])
-            ->addColumn('user', 'string', ['limit' => 20, 'default' => ''])
+            ->addColumn('user', 'string', ['limit' => 20, 'null' => true])
             ->addColumn('time', 'integer')
             ->addIndex('type')
             ->addIndex('value')
