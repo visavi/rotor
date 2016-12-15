@@ -9,7 +9,7 @@
 	string dir,
 	string name,
 	int size,
-	string alt = ""
+	array params = []
 );
 </pre><br />
 
@@ -18,14 +18,14 @@
 <b>dir</b> - Директория с оригинальным изображением<br />
 <b>name</b> - Имя файла оригинального изображения<br />
 <b>size</b> - Размер уменьшения картинки, можно взять из настроек в админке $config['previewsize']<br />
-<b>alt</b> - Подпись к картинке, по умолчанию подпись отсутствует<br /><br />
+<b>params</b> - Массив параметров<br /><br />
 
 
 <b>Примеры использования</b><br />
 
 <?php
 echo App::bbCode(check('[code]<?php
-echo resize_image(\'/uploads/pictures/\', $data[\'link\'], $config[\'previewsize\'], $data[\'title\']);
+echo resize_image(\'/uploads/pictures/\', $data[\'link\'], $config[\'previewsize\'], [\'alt\' = $data[\'title\']]);
  /* Функция вернет уменьшенную картинку <img src="/uploads/thumbnail/upload_pictures_1350.jpg" alt="Название"/> */
 ?>[/code]'));
 ?>

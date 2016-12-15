@@ -55,7 +55,7 @@ case 'read':
 
 		if (!empty($data['image'])) {
 
-			echo '<div class="img"><a href="/uploads/events/'.$data['image'].'">'.resize_image('uploads/events/', $data['image'], 75, $data['title']).'</a></div>';
+			echo '<div class="img"><a href="/uploads/events/'.$data['image'].'">'.resize_image('uploads/events/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
 		}
 
 		$data['text'] = str_replace('[cut]', '', $data['text']);
