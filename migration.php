@@ -10,8 +10,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table admlog
         $table = $this->table('admlog', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('request', 'string', ['null' => true])
             ->addColumn('referer', 'string', ['null' => true])
             ->addColumn('ip', 'string', ['limit' => 15])
@@ -22,15 +21,13 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table antimat
         $table = $this->table('antimat', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('string', 'string', ['limit' => 100])
+        $table->addColumn('string', 'string', ['limit' => 100])
             ->create();
 
 
         // Migration for table ban
         $table = $this->table('ban', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('ip', 'string', ['limit' => 15])
+        $table->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('user', 'string', ['limit' => 20, 'null' => true])
             ->addColumn('time', 'integer')
             ->addIndex('ip', ['unique' => true])
@@ -39,8 +36,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table banhist
         $table = $this->table('banhist', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('send', 'string', ['limit' => 20])
             ->addColumn('type', 'boolean', ['default' => 0])
             ->addColumn('reason', 'text', ['null' => true])
@@ -53,8 +49,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table bank
         $table = $this->table('bank', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('sum', 'integer', ['signed' => false, 'default' => 0])
             ->addColumn('oper', 'integer', ['signed' => false, 'default' => 0])
             ->addColumn('time', 'integer')
@@ -64,8 +59,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table blacklist
         $table = $this->table('blacklist', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('type', 'boolean')
+        $table->addColumn('type', 'boolean')
             ->addColumn('value', 'string', ['limit' => 100])
             ->addColumn('user', 'string', ['limit' => 20, 'null' => true])
             ->addColumn('time', 'integer')
@@ -76,8 +70,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table blogs
         $table = $this->table('blogs', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('category_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
+        $table->addColumn('category_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('title', 'string', ['limit' => 50])
             ->addColumn('text', 'text', ['null' => true])
@@ -94,8 +87,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table bookmarks
         $table = $this->table('bookmarks', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('posts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
@@ -104,11 +96,9 @@ class InitialMigration extends AbstractMigration
             ->addIndex('user')
             ->create();
 
-
         // Migration for table cats
         $table = $this->table('cats', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('sort', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
+        $table->addColumn('sort', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('parent', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('name', 'string', ['limit' => 100])
             ->addColumn('count', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
@@ -119,8 +109,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table catsblog
         $table = $this->table('catsblog', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('sort', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
+        $table->addColumn('sort', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('name', 'string', ['limit' => 100])
             ->addColumn('count', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
             ->create();
@@ -128,8 +117,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table changemail
         $table = $this->table('changemail', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('mail', 'string', ['limit' => 50])
             ->addColumn('hash', 'string', ['limit' => 25])
             ->addColumn('time', 'integer')
@@ -138,8 +126,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table chat
         $table = $this->table('chat', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('brow', 'string', ['limit' => 25])
@@ -152,8 +139,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table comments
         $table = $this->table('comments', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('relate_type', 'enum', ['values' => array('blog','event','down','news','offer','gallery')])
             ->addColumn('relate_category_id', 'integer', ['signed' => false])
             ->addColumn('relate_id', 'integer', ['signed' => false])
@@ -168,8 +154,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table contact
         $table = $this->table('contact', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('name', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('time', 'integer')
@@ -180,8 +165,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table counter
         $table = $this->table('counter', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('hours', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+        $table->addColumn('hours', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('days', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('allhosts', 'integer', ['signed' => false])
             ->addColumn('allhits', 'integer', ['signed' => false])
@@ -194,8 +178,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table counter24
         $table = $this->table('counter24', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('hour', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+        $table->addColumn('hour', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('hosts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('hits', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addIndex('hour', ['unique' => true])
@@ -204,8 +187,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table counter31
         $table = $this->table('counter31', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('days', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+        $table->addColumn('days', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('hosts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('hits', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addIndex('days', ['unique' => true])
@@ -214,8 +196,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table downs
         $table = $this->table('downs', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('category_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
+        $table->addColumn('category_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('title', 'string', ['limit' => 100])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('link', 'string', ['limit' => 50])
@@ -241,8 +222,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table error
         $table = $this->table('error', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('num', 'integer', ['limit' => MysqlAdapter::INT_SMALL])
+        $table->addColumn('num', 'integer', ['limit' => MysqlAdapter::INT_SMALL])
             ->addColumn('request', 'string', ['null' => true])
             ->addColumn('referer', 'string', ['null' => true])
             ->addColumn('username', 'string', ['limit' => 20, 'null' => true])
@@ -255,8 +235,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table events
         $table = $this->table('events', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('title', 'string', ['limit' => 100])
+        $table->addColumn('title', 'string', ['limit' => 100])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('author', 'string', ['limit' => 20])
             ->addColumn('image', 'string', ['limit' => 30, 'null' => true])
@@ -270,8 +249,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table files_forum
         $table = $this->table('files_forum', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+        $table->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('post_id', 'integer', ['signed' => false])
             ->addColumn('hash', 'string', ['limit' => 40])
             ->addColumn('name', 'string', ['limit' => 60])
@@ -287,8 +265,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table flood
         $table = $this->table('flood', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('page', 'string', ['limit' => 30])
             ->addColumn('time', 'integer')
             ->addIndex('user')
@@ -297,8 +274,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table forums
         $table = $this->table('forums', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('sort', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
+        $table->addColumn('sort', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('parent', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('title', 'string', ['limit' => 50])
             ->addColumn('desc', 'string', ['limit' => 100, 'null' => true])
@@ -314,8 +290,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table guest
         $table = $this->table('guest', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('brow', 'string', ['limit' => 25])
@@ -329,8 +304,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table ignoring
         $table = $this->table('ignoring', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('name', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('time', 'integer')
@@ -341,8 +315,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table inbox
         $table = $this->table('inbox', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('author', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('time', 'integer')
@@ -353,8 +326,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table invite
         $table = $this->table('invite', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('hash', 'string', ['limit' => 15])
+        $table->addColumn('hash', 'string', ['limit' => 15])
             ->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('invited', 'string', ['limit' => 20, 'null' => true])
             ->addColumn('used', 'boolean', ['default' => 0])
@@ -367,8 +339,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table loads
         $table = $this->table('loads', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('down', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+        $table->addColumn('down', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('time', 'integer')
             ->create();
@@ -376,8 +347,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table login
         $table = $this->table('login', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('brow', 'string', ['limit' => 25])
             ->addColumn('time', 'integer')
@@ -389,8 +359,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table lotinfo
         $table = $this->table('lotinfo', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('date', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
+        $table->addColumn('date', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('sum', 'integer', ['signed' => false, 'default' => 0])
             ->addColumn('newnum', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('oldnum', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
@@ -400,8 +369,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table lotusers
         $table = $this->table('lotusers', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('num', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('time', 'integer')
             ->create();
@@ -409,8 +377,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table migrations
         $table = $this->table('migrations', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('version', 'bigint')
+        $table->addColumn('version', 'bigint')
             ->addColumn('migration_name', 'string', ['limit' => 100, 'null' => true])
             ->addColumn('start_time', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('end_time', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
@@ -421,8 +388,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table news
         $table = $this->table('news', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('title', 'string', ['limit' => 100])
+        $table->addColumn('title', 'string', ['limit' => 100])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('author', 'string', ['limit' => 20])
             ->addColumn('image', 'string', ['limit' => 30, 'null' => true])
@@ -436,8 +402,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table note
         $table = $this->table('note', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('edit', 'string', ['limit' => 20])
             ->addColumn('time', 'integer')
@@ -447,8 +412,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table notebook
         $table = $this->table('notebook', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('time', 'integer')
             ->addIndex('user', ['unique' => true])
@@ -457,8 +421,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table notice
         $table = $this->table('notice', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('name', 'string', ['limit' => 100])
+        $table->addColumn('name', 'string', ['limit' => 100])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('user', 'string', ['limit' => 20, 'null' => true])
             ->addColumn('time', 'integer')
@@ -468,8 +431,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table offers
         $table = $this->table('offers', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('type', 'boolean', ['default' => 0])
+        $table->addColumn('type', 'boolean', ['default' => 0])
             ->addColumn('title', 'string', ['limit' => 50])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('user', 'string', ['limit' => 20])
@@ -488,8 +450,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table online
         $table = $this->table('online', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('ip', 'string', ['limit' => 15])
+        $table->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('brow', 'string', ['limit' => 25])
             ->addColumn('time', 'integer')
             ->addColumn('user', 'string', ['limit' => 20, 'null' => true])
@@ -501,8 +462,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table outbox
         $table = $this->table('outbox', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('author', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('time', 'integer')
@@ -513,8 +473,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table photo
         $table = $this->table('photo', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('title', 'string', ['limit' => 50])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('link', 'string', ['limit' => 30])
@@ -529,8 +488,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table pollings
         $table = $this->table('pollings', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('relate_type', 'string', ['limit' => 20])
+        $table->addColumn('relate_type', 'string', ['limit' => 20])
             ->addColumn('relate_id', 'integer')
             ->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('vote', 'boolean', ['default' => 1])
@@ -541,8 +499,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table posts
         $table = $this->table('posts', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
+        $table->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
@@ -561,8 +518,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table rating
         $table = $this->table('rating', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('login', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('vote', 'boolean', ['default' => 0])
@@ -573,8 +529,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table readblog
         $table = $this->table('readblog', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('blog', 'integer', ['signed' => false])
+        $table->addColumn('blog', 'integer', ['signed' => false])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('time', 'integer')
             ->create();
@@ -582,8 +537,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table rekuser
         $table = $this->table('rekuser', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('site', 'string', ['limit' => 50])
+        $table->addColumn('site', 'string', ['limit' => 50])
             ->addColumn('name', 'string', ['limit' => 50])
             ->addColumn('color', 'string', ['limit' => 10, 'null' => true])
             ->addColumn('bold', 'boolean', ['default' => 0])
@@ -594,16 +548,14 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table rules
         $table = $this->table('rules', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('text', 'text', ['null' => true])
+        $table->addColumn('text', 'text', ['null' => true])
             ->addColumn('time', 'integer')
             ->create();
 
 
         // Migration for table setting
         $table = $this->table('setting', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('name', 'string', ['limit' => 25])
+        $table->addColumn('name', 'string', ['limit' => 25])
             ->addColumn('value', 'string')
             ->addIndex('name', ['unique' => true, 'name' => 'PRIMARY'])
             ->create();
@@ -611,8 +563,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table smiles
         $table = $this->table('smiles', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('cats', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
+        $table->addColumn('cats', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('name', 'string', ['limit' => 100])
             ->addColumn('code', 'string', ['limit' => 20])
             ->addIndex('cats')
@@ -622,8 +573,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table socials
         $table = $this->table('socials', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 128])
+        $table->addColumn('user', 'string', ['limit' => 128])
             ->addColumn('network', 'string')
             ->addColumn('uid', 'string')
             ->addIndex('user')
@@ -632,8 +582,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table spam
         $table = $this->table('spam', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('relate', 'boolean')
+        $table->addColumn('relate', 'boolean')
             ->addColumn('idnum', 'integer', ['signed' => false])
             ->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('login', 'string', ['limit' => 20])
@@ -648,8 +597,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table status
         $table = $this->table('status', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('topoint', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+        $table->addColumn('topoint', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('point', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('name', 'string', ['limit' => 50])
             ->addColumn('color', 'string', ['limit' => 10, 'null' => true])
@@ -660,8 +608,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table topics
         $table = $this->table('topics', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
+        $table->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('title', 'string', ['limit' => 50])
             ->addColumn('author', 'string', ['limit' => 20])
             ->addColumn('closed', 'boolean', ['default' => 0])
@@ -680,8 +627,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table transfers
         $table = $this->table('transfers', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('login', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('summ', 'integer', ['signed' => false, 'default' => 0])
@@ -694,8 +640,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table trash
         $table = $this->table('trash', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('author', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('time', 'integer')
@@ -707,8 +652,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table users
         $table = $this->table('users', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('login', 'string', ['limit' => 20])
+        $table->addColumn('login', 'string', ['limit' => 20])
             ->addColumn('password', 'string', ['limit' => 128])
             ->addColumn('email', 'string', ['limit' => 50])
             ->addColumn('joined', 'integer')
@@ -776,8 +720,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table visit
         $table = $this->table('visit', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('self', 'string', ['limit' => 100, 'null' => true])
             ->addColumn('page', 'string', ['limit' => 100, 'null' => true])
             ->addColumn('ip', 'string', ['limit' => 15])
@@ -790,8 +733,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table vote
         $table = $this->table('vote', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('title', 'string', ['limit' => 100])
+        $table->addColumn('title', 'string', ['limit' => 100])
             ->addColumn('count', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->addColumn('closed', 'boolean', ['default' => 0])
             ->addColumn('time', 'integer')
@@ -800,8 +742,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table voteanswer
         $table = $this->table('voteanswer', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('vote_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
+        $table->addColumn('vote_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('option', 'string', ['limit' => 50])
             ->addColumn('result', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
             ->create();
@@ -809,8 +750,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table votepoll
         $table = $this->table('votepoll', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('vote_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
+        $table->addColumn('vote_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('time', 'integer')
             ->create();
@@ -818,8 +758,7 @@ class InitialMigration extends AbstractMigration
 
         // Migration for table wall
         $table = $this->table('wall', ['collation' => 'utf8mb4_unicode_ci']);
-        $table
-            ->addColumn('user', 'string', ['limit' => 20])
+        $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('login', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])
             ->addColumn('time', 'integer')
