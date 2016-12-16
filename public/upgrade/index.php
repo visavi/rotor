@@ -43,8 +43,6 @@ header("Content-type:text/html; charset=utf-8");
             <?php else: ?>
                 <?= $wrap->getMigrate(); ?>
                 <p style="font-size: 20px">Удалите директории install и upgrade</p>
-
-                <p>Если вы выполняете обновления</p>
             <?php endif; ?>
         </span>
     </pre>
