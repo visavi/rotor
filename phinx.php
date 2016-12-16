@@ -1,8 +1,8 @@
 <?php
 return [
     'paths' => [
-        'migrations' => 'app/database/migrations',
-        'seeds' => 'app/database/seeds',
+        'migrations' => APP.'/database/migrations',
+        'seeds' => APP.'/database/seeds',
     ],
     'environments' => [
         'default_migration_table' => 'migrations',

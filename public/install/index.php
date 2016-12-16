@@ -251,9 +251,130 @@ header("Content-type:text/html; charset=utf-8");
             </span>
         </pre>
 
-        <p style="font-size: 20px">Установка завершена</p>
-        <p style="font-size: 20px">Удалите директории install и upgrade</p>
+        <p><a style="font-size: 18px" href="?act=account">Создать администратора</a></p>
+    <?php elseif($_GET['act'] == 'account'): ?>
+
+        <h1>Шаг 5 - создание администратора</h1>
+
+        Прежде чем перейти к администрированию вашего сайта, необходимо создать аккаунт администратора.<br />
+        Перед тем как нажимать кнопку Создать, убедитесь, что на предыдущей странице нет уведомлений об ошибках, иначе процесс не сможет быть завершен удачно.<br />
+        После окончания инсталляции необходимо удалить директории <b>install</b> и <b>upgrade</b> со всем содержимым навсегда, пароль и остальные данные вы сможете поменять в своем профиле<br /><br />
+
+        <?php
+            $servername = isset($_SERVER['HTTP_HOST']) ? htmlspecialchars($_SERVER['HTTP_HOST']) : htmlspecialchars($_SERVER['SERVER_NAME']);
+            $servername = 'http://'.$servername;
+
+        $login = isset($_POST['login']) ? htmlspecialchars($_POST['login']) : '';
+        $password = isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '';
+        $password2 = isset($_POST['password2']) ? ($_POST['password2']) : '';
+        $email = isset($_POST['email']) ? strtolower(htmlspecialchars($_POST['email'])) : '';
+        $site = isset($_POST['site']) ? utf_lower(htmlspecialchars($_POST['site'])) : $servername;
+        ?>
+
+        <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
+            <?php
+            if (strlen($login) <= 20 && strlen($login) >= 3) {
+            if (preg_match('|^[a-z0-9\-]+$|i', $login)) {
+            if ($password == $password2) {
+            if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email)) {
+            if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
+
+            // Проверка логина или ника на существование
+            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($login), strtolower($login)]);
+            if (!$reglogin) {
+
+            // Проверка email на существование
+            $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$email]);
+            if (!$regmail) {
+
+                $registration = DBM::run()->insert('users', [
+                    'login' => $login,
+                    'password' => password_hash($password, PASSWORD_BCRYPT),
+                    'email' => $email,
+                    'joined' => SITETIME,
+                    'level' => 101,
+                    'gender' => 1,
+                    'themes' => 0,
+                    'point' => 500,
+                    'money' => 1000000,
+                    'info'  => 'Администратор сайта',
+                    'status' => 'Администратор',
+                ]);
+
+                DBM::run()->update('setting', ['value' => $login], ['name' => 'nickname']);
+                DBM::run()->update('setting', ['value' => $email], ['name' => 'emails']);
+                DBM::run()->update('setting', ['value' => $site], ['name' => 'home']);
+                DBM::run()->update('setting', ['value' => $site.'/assets/img/images/logo.png'], ['name' => 'logotip']);
+
+                save_setting();
+
+                // -------------- Приват ---------------//
+                $textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
+                $rek = DBM::run()->insert('inbox', [
+                    'user'  => $login,
+                    'author'  => 'Vantuz',
+                    'text' => $textpriv,
+                    'time' => SITETIME,
+                ]);
+
+                // -------------- Новость ---------------//
+                $textnews = 'Добро пожаловать на демонстрационную страницу движка RotorCMS'.PHP_EOL.'RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. RotorCMS является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью RotorCMS является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок RotorCMS вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
+
+                $rek = DBM::run()->insert('news', [
+                    'title'  => 'Добро пожаловать!',
+                    'text'  => $textnews,
+                    'author' => $login,
+                    'time' => SITETIME,
+                ]);
+
+            redirect('?act=finish');
+
+
+            } else {echo '<b>Ошибка! Указанный вами адрес e-mail уже используется в системе!</b><br /><br />';}
+            } else {echo '<b>Ошибка! Пользователь с данным логином или ником уже зарегистрирован!</b><br /><br />';}
+            } else {echo '<b>Ошибка! Неправильный адрес сайта, необходим формата http://my_site.domen</b><br /><br />';}
+            } else {echo '<b>Ошибка! Неправильный адрес email, необходим формат name@site.domen</b><br /><br />';}
+            } else {echo '<b>Ошибка! Веденные пароли отличаются друг от друга</b><br /><br />';}
+            } else {echo '<b>Ошибка! Недопустимые символы в логине. Разрешены только знаки латинского алфавита и цифры!</b><br /><br />';}
+            } else {echo '<b>Ошибка! Слишком длинный или короткий логин (От 3 до 20 символов)</b><br /><br />';}
+
+            ?>
+        <?php endif; ?>
+
+        <div class="form">
+           <form method="post">
+                Логин (max20):<br />
+                <input class="form-control" name="login" maxlength="20" value="<?= $login ?>" /><br />
+                Пароль(max20):<br />
+                <input class="form-control" name="password" type="password" maxlength="50" /><br />
+                Повторите пароль:<br />
+                <input class="form-control" name="password2" type="password" maxlength="50" /><br />
+                Адрес e-mail:<br />
+                <input class="form-control" name="email" maxlength="100" value="<?= $email ?>" /><br />
+                Адрес сайта:<br />
+                <input name="site" value="<?= $site ?>" maxlength="100" /><br /><br />
+               <button type="submit" class="btn btn-primary">Создать</button>
+            </form>
+        </div><br />
+
+        Внимание, в поле логин разрешены только знаки латинского алфавита, цифры и знак дефис<br />
+        Все поля обязательны для заполнения<br />
+        E-mail будет нужен для восстановления пароля, пишите только свои данные<br />
+        Не нажимайте кнопку дважды, подождите до тех пор, пока процесс не завершится<br />
+        В поле ввода адреса сайта необходимо ввести адрес в который у вас распакован движок, если это поддомен или папка, то необходимо указать ее, к примеру http://wap.visavi.net<br /><br />
+
+
     <?php else: ?>
+
+        <h1>Установка завершена</h1>
+
+        <p>
+            Поздравляем Вас, RotorCMS был успешно установлен на Ваш сервер. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br /><br />
+            Аккаунт администратора создан<br /><br />
+            <a href="/">Перейти на главную страницу сайта</a><br />
+        </p>
+        <p style="font-size: 20px">Удалите директории install и upgrade</p>
+
 
     <?php endif; ?>
 
