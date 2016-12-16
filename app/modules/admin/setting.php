@@ -213,13 +213,13 @@ if (is_admin([101])) {
                 echo '<input name="invite" id="invite" type="checkbox" value="1"'.$checked.' title="Для регистрация необходимо ввести специальный пригласительный ключ" /> <label for="invite">Регистрация по приглашениям</label><br />';
 
                 $checked = ($setting['regmail'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="regmail" type="checkbox" value="1"'.$checked.' /> Запрос email при регистрации<br />';
+                echo '<input name="regmail" type="checkbox" value="1"'.$checked.' /> Подтверждение email при регистрации<br />';
 
                 $checked = ($setting['anonymity'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="anonymity" type="checkbox" value="1"'.$checked.' /> Анонимность пользователей<br />';
+                echo '<input name="anonymity" type="checkbox" value="1"'.$checked.' /> Скрывать IP для пользователей<br />';
 
                 $checked = ($setting['session'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="session" type="checkbox" value="1"'.$checked.' /> Контроль сессий<br />';
+                echo '<input name="session" type="checkbox" value="1"'.$checked.' /> Привязка IP к сессиям<br />';
 
                 echo '<input value="Изменить" type="submit" /></form></div><br />';
             } else {
@@ -862,8 +862,6 @@ if (is_admin([101])) {
             echo 'Пользователей в юзерлисте:<br /><input name="userlist" maxlength="2" value="'.$setting['userlist'].'" /><br />';
             echo 'Пользователей в кто-где:<br /><input name="showuser" maxlength="2" value="'.$setting['showuser'].'" /><br />';
             echo 'Сохраняется истории в кто-где:<br /><input name="lastusers" maxlength="3" value="'.$setting['lastusers'].'" /><br />';
-            echo 'Сайтов в кто-откуда<br /><input name="showref" maxlength="3" value="'.$setting['showref'].'" /><br />';
-            echo 'Сохраняется истории в кто-откуда:<br /><input name="referer" maxlength="3" value="'.$setting['referer'].'" /><br />';
             echo 'Пользователей в онлайне:<br /><input name="onlinelist" maxlength="2" value="'.$setting['onlinelist'].'" /><br />';
             echo 'Смайлов на стр.:<br /><input name="smilelist" maxlength="2" value="'.$setting['smilelist'].'" /><br />';
             echo 'Юзеров в рейтинге авторитетов на стр.:<br /><input name="avtorlist" maxlength="2" value="'.$setting['avtorlist'].'" /><br />';
@@ -872,7 +870,6 @@ if (is_admin([101])) {
             echo 'Листинг истории банов пользователя:<br /><input name="listbanhist" maxlength="2" value="'.$setting['listbanhist'].'" /><br />';
             echo 'Юзеров в поиске пользователей:<br /><input name="usersearch" maxlength="2" value="'.$setting['usersearch'].'" /><br />';
             echo 'Листинг в IP-бан панеле:<br /><input name="ipbanlist" maxlength="2" value="'.$setting['ipbanlist'].'" /><br />';
-            echo 'Заголовков на страницу:<br /><input name="headlines" maxlength="2" value="'.$setting['headlines'].'" /><br />';
             echo 'Файлов в редакторе админки:<br /><input name="editfiles" maxlength="2" value="'.$setting['editfiles'].'" /><br />';
             echo 'Просмотр логов на страницу:<br /><input name="loglist" maxlength="2" value="'.$setting['loglist'].'" /><br />';
             echo 'Данных на страницу в черном списке:<br /><input name="blacklist" maxlength="2" value="'.$setting['blacklist'].'" /><br />';
@@ -895,14 +892,12 @@ if (is_admin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['showref'] != "" && $_POST['referer'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['headlines'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "" && $_POST['listtransfers'] != "") {
+                if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "" && $_POST['listtransfers'] != "") {
 
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['userlist']), 'userlist');
                     $dbr -> execute(intval($_POST['showuser']), 'showuser');
                     $dbr -> execute(intval($_POST['lastusers']), 'lastusers');
-                    $dbr -> execute(intval($_POST['showref']), 'showref');
-                    $dbr -> execute(intval($_POST['referer']), 'referer');
                     $dbr -> execute(intval($_POST['onlinelist']), 'onlinelist');
                     $dbr -> execute(intval($_POST['smilelist']), 'smilelist');
                     $dbr -> execute(intval($_POST['avtorlist']), 'avtorlist');
@@ -911,7 +906,6 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['listbanhist']), 'listbanhist');
                     $dbr -> execute(intval($_POST['usersearch']), 'usersearch');
                     $dbr -> execute(intval($_POST['ipbanlist']), 'ipbanlist');
-                    $dbr -> execute(intval($_POST['headlines']), 'headlines');
                     $dbr -> execute(intval($_POST['editfiles']), 'editfiles');
                     $dbr -> execute(intval($_POST['loglist']), 'loglist');
                     $dbr -> execute(intval($_POST['blacklist']), 'blacklist');

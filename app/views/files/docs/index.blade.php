@@ -65,7 +65,6 @@
 - stats_gallery<br />
 - stats_allnews<br />
 - stats_blacklist<br />
-- stats_headlines<br />
 - stats_navigation<br />
 - stats_antimat<br />
 - stats_smiles<br />

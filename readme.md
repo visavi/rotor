@@ -51,7 +51,7 @@ RotorCMS 6.0
 
 Откат последней миграции `php rotor rollback` или `php rotor rollback -t 20120103083322` для отдельной миграции
 
-Создание сида `php rotor seed:create UserSeeder`
+Создание сида `php rotor seed:create UsersSeeder`
 
 Выполнение сида `php rotor seed:run` или `php rotor seed:run -s UsersSeeder` для отдельного сида
 
