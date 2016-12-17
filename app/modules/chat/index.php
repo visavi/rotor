@@ -156,7 +156,9 @@ if ($act == 'index') {
         echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $name . '</textarea><br />';
         echo '<input type="submit" value="Добавить" /></form></div>';
     } else {
+        echo '<div id="form">';
         show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+        echo '</div>';
     }
 }
 

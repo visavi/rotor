@@ -1009,10 +1009,13 @@ case 'loadfile':
 
     if (!empty($down)) {
         if (empty($down['link'])) {
+
+            $folder = $down['folder'] ? $down['folder'].'/' : '';
+
+            if (is_writable(HOME.'/uploads/files/'.$folder)) {
             if (is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
                 $filename = check(strtolower($_FILES['loadfile']['name']));
 
-                $folder = $down['folder'] ? $down['folder'].'/' : '';
 
                 if (strlen($filename) <= 50) {
                     if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
@@ -1050,6 +1053,9 @@ case 'loadfile':
                 }
             } else {
                 show_error('Ошибка! Не удалось загрузить файл!');
+            }
+            } else {
+                show_error('Директория uploads/files/'.$folder.' недоступна для записи!');
             }
         } else {
             show_error('Ошибка! Файл уже загружен!');

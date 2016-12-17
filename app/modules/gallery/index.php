@@ -4,6 +4,7 @@ App::view($config['themes'].'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
 $gid = (isset($_GET['gid'])) ? abs(intval($_GET['gid'])) : 0;
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Галерея сайта');
 
@@ -32,7 +33,6 @@ break;
     ##                             Просмотр полной фотографии                                 ##
     ############################################################################################
     case 'view':
-        $page = abs(intval(Request::input('page')));
 
         $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
@@ -116,7 +116,7 @@ break;
             show_login('Вы не авторизованы, чтобы добавить фотографию, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?page='.$page.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Вернуться</a><br />';
     break;
 
     ############################################################################################
@@ -189,7 +189,6 @@ break;
     ##                                 Редактирование фото                                    ##
     ############################################################################################
     case 'edit':
-        $page = abs(intval(Request::input('page', 1)));
 
         if (is_user()) {
             $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", [$gid, $log]);
@@ -226,7 +225,6 @@ break;
         $title = check($_POST['title']);
         $text = (!empty($_POST['text'])) ? check($_POST['text']) : '';
         $closed = (empty($_POST['closed'])) ? 0 : 1;
-        $page = abs(intval(Request::input('page', 1)));
 
         if ($uid == $_SESSION['token']) {
             if (is_user()) {
@@ -410,7 +408,6 @@ break;
     case 'editcomm':
 
         $cid = abs(intval($_GET['cid']));
-        $page = abs(intval(Request::input('page', 1)));
 
         if (is_user()) {
             $comm = DB::run() -> queryFetch("SELECT `c`.*, `p`.`closed` FROM `comments` c LEFT JOIN `photo` p ON `c`.`relate_id`=`p`.`id` WHERE relate_type=? AND c.`id`=? AND c.`user`=? LIMIT 1;", ['gallery', $cid, $log]);
@@ -450,7 +447,6 @@ break;
         $uid = check($_GET['uid']);
         $cid = abs(intval($_GET['cid']));
         $msg = check($_POST['msg']);
-        $page = abs(intval(Request::input('page', 1)));
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
@@ -502,8 +498,6 @@ break;
             $del = 0;
         }
 
-        $page = abs(intval(Request::input('page', 1)));
-
         if (is_admin()) {
             if ($uid == $_SESSION['token']) {
                 if (!empty($del)) {
@@ -534,7 +528,6 @@ break;
     case 'delphoto':
 
         $uid = check($_GET['uid']);
-        $page = abs(intval(Request::input('page', 1)));
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {

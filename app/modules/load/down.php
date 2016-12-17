@@ -225,7 +225,7 @@ case 'view':
                     <?php } ?>
 
                     <?php if ($ext == 'mp4') { ?>
-                        <video src="/uploads/files/<?= $folder.$downs['link'] ?>" width="320" height="240"<?= $poster ?>></video>
+                        <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/<?= $folder.$downs['link'] ?>" <?= $poster ?>></video>
                     <?php } ?>
 
                 <?php
