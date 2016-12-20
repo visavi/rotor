@@ -277,7 +277,7 @@ header("Content-type:text/html; charset=utf-8");
             if (preg_match('|^[a-z0-9\-]+$|i', $login)) {
             if ($password == $password2) {
             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email)) {
-            if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
+            if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
 
             // Проверка логина или ника на существование
             $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($login), strtolower($login)]);

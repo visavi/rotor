@@ -116,7 +116,7 @@ if (is_admin()) {
             $bold = (empty($_POST['bold'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=])+)+$#iu', $site)) {
+                if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=])+)+$#iu', $site)) {
                     if (utf_strlen($site) >= 5 && utf_strlen($site) <= 50) {
                         if (utf_strlen($name) >= 5 && utf_strlen($name) <= 35) {
                             if (preg_match('|^#+[A-f0-9]{6}$|', $color) || empty($color)) {

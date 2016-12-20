@@ -421,7 +421,7 @@ define ('DBPASS', '$dbpass');
                     if (preg_match('|^[a-z0-9\-]+$|i', $password)) {
                         if ($password == $password2) {
                             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mail)) {
-                                if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
+                                if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
                                     try {
                                         $db = new PDO('mysql:host=' . DBHOST . ';port=' . DBPORT . ';dbname=' . DBNAME, DBUSER, DBPASS);
                                         $db -> setAttribute(PDO :: ATTR_ERRMODE, PDO :: ERRMODE_EXCEPTION);

@@ -263,7 +263,7 @@ if (is_admin([101, 102])) {
                     if ($log == $config['nickname'] || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
 
                         if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
-                            if (preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
+                            if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
                                 if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $joined)) {
                                     if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
                                         if ($gender == 1 || $gender == 2) {

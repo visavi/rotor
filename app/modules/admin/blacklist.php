@@ -102,7 +102,7 @@ if (is_admin([101, 102])) {
                 if (!empty($value) && utf_strlen($value) <= 100) {
                     if ($main != 'mail' || preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $value)) {
                         if ($main != 'login' || preg_match('|^[a-z0-9\-]+$|', $value)) {
-                            if ($main != 'domain' || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $value)) {
+                            if ($main != 'domain' || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $value)) {
 
                                 $value = str_replace('http://', '', $value);
 

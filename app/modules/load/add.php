@@ -145,7 +145,7 @@ case 'add':
                 if (utf_strlen($text) >= 50 && utf_strlen($text) <= 5000) {
                     if (utf_strlen($author) <= 50) {
                         if (utf_strlen($site) <= 50) {
-                            if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
+                            if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                                 $downs = DBM::run()->selectFirst('cats', ['id' => $cid]);
                                 if (!empty($downs)) {
                                     if (empty($downs['closed'])) {
@@ -336,7 +336,7 @@ case 'edit':
             if (utf_strlen($text) >= 50 && utf_strlen($text) <= 5000) {
                 if (utf_strlen($author) <= 50) {
                     if (utf_strlen($site) <= 50) {
-                        if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
+                        if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                             $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
                             if (!empty($new)) {
                                 if (empty($downs['closed'])) {

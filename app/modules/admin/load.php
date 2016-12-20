@@ -321,7 +321,7 @@ case 'addfile':
                 if (utf_strlen($text) >= 10 && utf_strlen($text) < 5000) {
                     if (utf_strlen($author) <= 50) {
                         if (utf_strlen($site) <= 50) {
-                            if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
+                            if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                                 $downs = DBM::run()->selectFirst('cats', ['id' => $cid]);
                                 if (!empty($downs)) {
                                     if (empty($downs['closed'])) {
@@ -859,7 +859,7 @@ case 'changedown':
             if (utf_strlen($text) >= 10 && utf_strlen($text) <= 5000) {
                 if (utf_strlen($author) <= 50) {
                     if (utf_strlen($site) <= 50) {
-                        if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
+                        if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                             if (strlen($loadfile) <= 50) {
                                 if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $loadfile)) {
 

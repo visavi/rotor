@@ -194,7 +194,7 @@ if (is_admin()) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) < 50) {
                     if (utf_strlen($text) >= 10 && utf_strlen($text) < 5000) {
                         if (utf_strlen($author) <= 50) {
-                            if (empty($site) || preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
+                            if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                                 if (strlen($link) <= 50) {
                                     if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $link)) {
 

@@ -344,7 +344,7 @@ class Validation
             return true;
         }
 
-        if (!preg_match('#^http://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $var)) {
+        if (!preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $var)) {
             $this->addError($label);
         }
     }
