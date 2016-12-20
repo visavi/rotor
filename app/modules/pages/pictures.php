@@ -107,12 +107,17 @@ if (is_user()) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                $userpic = DB::run() -> querySingle("SELECT `picture` FROM `users` WHERE `login`=? LIMIT 1;", [$log]);
+                $user = DBM::run()->selectFirst('users', ['login' => $log]);
 
-                if (!empty($userpic)){
+                if ($user && $user['picture']){
 
-                    unlink_image('uploads/photos/', $userpic);
-                    DB::run() -> query("UPDATE `users` SET `picture`=? WHERE `login`=?", ['', $log]);
+                    unlink_image('uploads/photos/', $user['picture']);
+                    unlink_image('uploads/avatars/', $user['avatar']);
+
+                    DBM::run()->update('users', [
+                        'picture' => null,
+                        'avatar' => null,
+                    ], ['login' => $log]);
 
                     notice('Фотография успешно удалена!');
                     redirect("/profile");
