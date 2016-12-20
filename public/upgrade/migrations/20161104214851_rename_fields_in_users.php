@@ -71,7 +71,13 @@ class RenameFieldsInUsers extends AbstractMigration
         $table->renameColumn('users_privacy', 'privacy');
         $table->renameColumn('users_apikey', 'apikey');
         $table->renameColumn('users_subscribe', 'subscribe');
-        $table->renameColumn('users_sumcredit', 'sumcredit');
-        $table->renameColumn('users_timecredit', 'timecredit');
+
+        if ($table->hasColumn('users_sumcredit')) {
+            $table->renameColumn('users_sumcredit', 'sumcredit');
+        }
+
+        if ($table->hasColumn('users_timecredit')) {
+            $table->renameColumn('users_timecredit', 'timecredit');
+        }
     }
 }

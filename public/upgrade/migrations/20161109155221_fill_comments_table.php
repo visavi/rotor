@@ -12,6 +12,8 @@ class FillCommentsTable extends AbstractMigration
         $comments = $this->fetchAll('SELECT * from commblog');
         $rows = [];
         foreach($comments as $comment) {
+            $comment['ip'] = substr($comment['ip'] , 0, 15);
+
             $rows[] = [
                 'user' => $comment['author'],
                 'relate_type' => 'blog',
@@ -30,6 +32,8 @@ class FillCommentsTable extends AbstractMigration
         $comments = $this->fetchAll('SELECT * from commevents');
         $rows = [];
         foreach($comments as $comment) {
+            $comment['ip'] = substr($comment['ip'] , 0, 15);
+
             $rows[] = [
                 'user' => $comment['author'],
                 'relate_type' => 'event',
@@ -48,6 +52,8 @@ class FillCommentsTable extends AbstractMigration
         $comments = $this->fetchAll('SELECT * from commload');
         $rows = [];
         foreach($comments as $comment) {
+            $comment['ip'] = substr($comment['ip'] , 0, 15);
+
             $rows[] = [
                 'user' => $comment['author'],
                 'relate_type' => 'down',
@@ -66,6 +72,8 @@ class FillCommentsTable extends AbstractMigration
         $comments = $this->fetchAll('SELECT * from commnews');
         $rows = [];
         foreach($comments as $comment) {
+            $comment['ip'] = substr($comment['ip'] , 0, 15);
+
             $rows[] = [
                 'user' => $comment['author'],
                 'relate_type' => 'news',
@@ -84,6 +92,8 @@ class FillCommentsTable extends AbstractMigration
         $comments = $this->fetchAll('SELECT * from commoffers');
         $rows = [];
         foreach($comments as $comment) {
+            $comment['ip'] = substr($comment['ip'] , 0, 15);
+
             $rows[] = [
                 'user' => $comment['user'],
                 'relate_type' => 'offer',
@@ -102,6 +112,8 @@ class FillCommentsTable extends AbstractMigration
         $comments = $this->fetchAll('SELECT * from commphoto');
         $rows = [];
         foreach($comments as $comment) {
+            $comment['ip'] = substr($comment['ip'] , 0, 15);
+
             $rows[] = [
                 'user' => $comment['user'],
                 'relate_type' => 'gallery',

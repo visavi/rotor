@@ -9,9 +9,12 @@ class ChangeFieldsInBank extends AbstractMigration
      */
     public function up()
     {
-        $users = $this->table('bank');
-        $users->changeColumn('time', 'integer')
-            ->save();
+        $table = $this->table('bank');
+        if ($table->exists()) {
+            $users = $this->table('bank');
+            $users->changeColumn('time', 'integer')
+                ->save();
+        }
     }
 
     /**

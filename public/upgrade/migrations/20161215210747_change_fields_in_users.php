@@ -43,8 +43,11 @@ class ChangeFieldsInUsers extends AbstractMigration
             ->changeColumn('privacy', 'boolean', ['default' => 0])
             ->changeColumn('apikey', 'string', ['limit' => 32, 'null' => true])
             ->changeColumn('subscribe', 'string', ['limit' => 32, 'null' => true])
-            ->changeColumn('timecredit', 'integer', ['default' => 0])
             ->save();
+
+            if ($users->hasColumn('users_sumcredit')) {
+                $users->changeColumn('timecredit', 'integer', ['default' => 0]);
+            }
     }
 
     /**

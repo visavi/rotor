@@ -9,10 +9,13 @@ class ChangeFieldsInLotinfo extends AbstractMigration
      */
     public function up()
     {
-        $users = $this->table('lotinfo');
-        $users
-            ->changeColumn('winners', 'string', ['null' => true])
-            ->save();
+        $exists = $this->hasTable('lotinfo');
+        if ($exists) {
+            $users = $this->table('lotinfo');
+            $users
+                ->changeColumn('winners', 'string', ['null' => true])
+                ->save();
+        }
     }
 
     /**

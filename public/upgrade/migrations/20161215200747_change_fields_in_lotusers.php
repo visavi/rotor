@@ -9,10 +9,13 @@ class ChangeFieldsInLotusers extends AbstractMigration
      */
     public function up()
     {
-        $users = $this->table('lotusers');
-        $users
-            ->changeColumn('time', 'integer')
-            ->save();
+        $exists = $this->hasTable('lotusers');
+        if ($exists) {
+            $users = $this->table('lotusers');
+            $users
+                ->changeColumn('time', 'integer')
+                ->save();
+        }
     }
 
     /**

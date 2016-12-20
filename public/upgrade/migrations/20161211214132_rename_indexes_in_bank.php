@@ -10,9 +10,12 @@ class RenameIndexesInBank extends AbstractMigration
     public function up()
     {
         $table = $this->table('bank');
-        $table->removeIndexByName('bank_user');
-        $table->addIndex('user', ['unique' => true])
-            ->save();
+        if ($table->exists()) {
+            $table = $this->table('bank');
+            $table->removeIndexByName('bank_user');
+            $table->addIndex('user', ['unique' => true])
+                ->save();
+        }
     }
 
     /**
@@ -21,8 +24,11 @@ class RenameIndexesInBank extends AbstractMigration
     public function down()
     {
         $table = $this->table('bank');
-        $table->removeIndexByName('user');
-        $table->addIndex('user', ['unique' => true, 'name' => 'bank_user'])
-            ->save();
+        if ($table->exists()) {
+            $table = $this->table('bank');
+            $table->removeIndexByName('user');
+            $table->addIndex('user', ['unique' => true, 'name' => 'bank_user'])
+              ->save();
+        }
     }
 }
