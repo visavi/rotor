@@ -46,7 +46,8 @@ class ChangeFieldsInUsers extends AbstractMigration
             ->save();
 
             if ($users->hasColumn('users_sumcredit')) {
-                $users->changeColumn('timecredit', 'integer', ['default' => 0]);
+                $users->changeColumn('timecredit', 'integer', ['default' => 0])
+                    ->save();
             }
     }
 

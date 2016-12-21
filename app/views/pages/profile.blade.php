@@ -1,0 +1,105 @@
+@extends('layout')
+
+@section('title', 'Мой профиль - @parent')
+
+@section('content')
+
+    <h1>Мой профиль</h1>
+
+    <i class="fa fa-book"></i>
+    <a href="/user/{{ App::getUsername() }}">Моя анкета</a> /
+    <b>Мой профиль</b> /
+    <a href="/account">Мои данные</a> /
+    <a href="/setting">Настройки</a><hr />
+
+    <div class="form">
+        <form method="post" action="/profile">
+            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
+
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-md-6 col-md-push-6">
+                        <div class="pull-right">
+                            @if (!empty($udata['picture']) && file_exists(HOME.'/uploads/photos/'.$udata['picture']))
+                                <a href="/uploads/photos/{{ $udata['picture'] }}">
+                                    {!! resize_image('uploads/photos/', $udata['picture'], $config['previewsize'], ['alt' => nickname($udata['login']), 'class' => 'img-responsive img-rounded']) !!}
+                                </a>
+                                <a href="/pictures">Изменить</a> / <a href="/pictures?act=del&amp;uid={{ $_SESSION['token'] }}">Удалить</a>
+                            @else
+                                <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />
+                                <a href="/pictures">Загрузить фото</a>
+                            @endif
+                            </div>
+                        </div>
+
+                    <div class="col-md-6 col-md-pull-6">
+
+                        <div class="form-group{{ App::hasError('msg') }}">
+                            <label for="inputName">Имя:</label>
+                            <input class="form-control" id="inputName" name="name" maxlength="20" value="{{ App::getInput('name', $udata['name']) }}">
+                            {!! App::textError('name') !!}
+                        </div>
+
+                        <div class="form-group{{ App::hasError('country') }}">
+                            <label for="inputCountry">Страна:</label>
+                            <input class="form-control" id="inputCountry" name="country" maxlength="30" value="{{ App::getInput('country', $udata['country']) }}">
+                            {!! App::textError('country') !!}
+                        </div>
+
+                        <div class="form-group{{ App::hasError('city') }}">
+                            <label for="inputCity">Город:</label>
+                            <input class="form-control" id="inputCity" name="city" maxlength="50" value="{{ App::getInput('city', $udata['city']) }}">
+                            {!! App::textError('city') !!}
+                        </div>
+
+                        <div class="form-group{{ App::hasError('icq') }}">
+                            <label for="inputIcq">ICQ:</label>
+                            <input class="form-control" id="inputIcq" name="icq" maxlength="10" value="{{ App::getInput('icq', $udata['icq']) }}">
+                            {!! App::textError('icq') !!}
+                        </div>
+
+                        <div class="form-group{{ App::hasError('skype') }}">
+                            <label for="inputSkype">Skype:</label>
+                            <input class="form-control" id="inputSkype" name="skype" maxlength="32" value="{{ App::getInput('skype', $udata['skype']) }}">
+                            {!! App::textError('skype') !!}
+                        </div>
+
+                        <div class="form-group{{ App::hasError('site') }}">
+                            <label for="inputSite">Сайт:</label>
+                            <input class="form-control" id="inputSite" name="site" maxlength="50" value="{{ App::getInput('site', $udata['site']) }}">
+                            {!! App::textError('site') !!}
+                        </div>
+
+
+                        <div class="form-group{{ App::hasError('birthday') }}">
+                            <label for="inputBirthday">Дата рождения (дд.мм.гггг):</label>
+                            <input class="form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ App::getInput('birthday', $udata['birthday']) }}">
+                            {!! App::textError('birthday') !!}
+                        </div>
+
+                        <div class="form-group{{ App::hasError('gender') }}">
+                            <label for="inputGender">Пол:</label>
+                            <select class="form-control" id="inputGender" name="gender">
+                                <?php $selected = (App::getInput('gender', $udata['gender']) == 1) ? ' selected' : ''; ?>
+                                <option value="1"{{ $selected }}>Мужской</option>
+                                    <?php $selected = (App::getInput('gender', $udata['gender']) == 2) ? ' selected' : ''; ?>
+                                <option value="2"{{ $selected }}>Женский</option>
+                            </select>
+                            {!! App::textError('gender') !!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group{{ App::hasError('info') }}">
+                            <label for="markItUp">О себе:</label>
+                            <textarea class="form-control" id="markItUp" cols="25" rows="5" name="info">{{ App::getInput('info', $udata['info']) }}</textarea>
+                            {!! App::textError('info') !!}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Изменить</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+@stop
