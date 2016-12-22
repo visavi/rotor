@@ -200,7 +200,7 @@ case 'answer':
         $validation -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
             -> addRule('not_empty', $answer, 'Не введен ответ на секретный вопрос для восстановления!')
             -> addRule('not_empty', $user['secquest'], 'У данного пользователя не установлен секретный вопрос!')
-            -> addRule('bool', password_verify($answer, $user['secanswer']), 'Ответ на секретный вопрос не совпадает с данными в профиле!');
+            -> addRule('equal', [md5(md5($answer)), $user['secanswer']], 'Ответ на секретный вопрос не совпадает с данными в профиле!');
 
         if ($validation->run()) {
 
