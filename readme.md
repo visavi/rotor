@@ -63,16 +63,15 @@ RotorCMS 6.0
 
 ```
 rewrite ^/(.*)/$ /$1 permanent;
+```
+необходимую для удаление слешей в конце пути и запрета просмотра php файлов
 
-
+```
 location ~* /(assets|themes|uploads)/.*\.php$ {
         deny all;
 }
 ```
-
-необходимую для удаление слешей в конце пути и запрета просмотра php файлов
-
-В секции server -> location необходимо заменить строку
+В секции location / необходимо заменить строку
 
 ```
 try_files $uri $uri/ =404
@@ -81,6 +80,21 @@ try_files $uri $uri/ =404
 
 try_files $uri /index.php?$query_string;
 ```
+
+Секция location ~ \.php$ должна быть примерно такого вида
+
+```
+fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+или
+fastcgi_pass unix:/run/php/php5-fpm.sock;
+
+try_files $uri /index.php =404;
+fastcgi_split_path_info ^(.+\.php)(/.+)$;
+fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+fastcgi_index index.php;
+include fastcgi.conf;
+```
+
 ### Настройки apache
 
 Создайте файл .htaccess и пропишите в него следующий код

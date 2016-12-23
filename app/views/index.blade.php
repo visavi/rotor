@@ -19,12 +19,6 @@
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games">Игры и развлечения</a><br />
 
     <div class="b">
-        <i class="fa fa-hashtag fa-lg text-muted"></i>
-        <b><a href="/events">События</a></b> (<?=stats_events()?>)
-    </div>
-    <?=recentevents()?>
-
-    <div class="b">
         <i class="fa fa-forumbee fa-lg text-muted"></i>
         <b><a href="/forum">Форум</a></b> (<?=stats_forum()?>)
     </div>
@@ -40,6 +34,12 @@
         <b><a href="/blog">Блоги</a></b> (<?=stats_blog()?>)
     </div>
     <?=recentblogs()?>
+
+    <div class="b">
+        <i class="fa fa-hashtag fa-lg text-muted"></i>
+        <b><a href="/events">События</a></b> (<?=stats_events()?>)
+    </div>
+    <?=recentevents()?>
 
     <div class="b">
         <i class="fa fa-cog fa-lg text-muted"></i>

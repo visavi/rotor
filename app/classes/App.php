@@ -58,26 +58,34 @@ class App
      * @param  string  $message текст ошибки
      * @return string  сформированная страница с ошибкой
      */
-    public static function abort($code, $message = '')
+    public static function abort($code, $message = null)
     {
         if ($code == 403) {
             header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
-
-            if (App::setting('errorlog')) {
-                DB::run()->query("INSERT INTO `error` (`num`, `request`, `referer`, `username`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [403, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getUsername(), App::getClientIp(), App::getUserAgent(), SITETIME]);
-
-                DB::run()->query("DELETE FROM `error` WHERE `num`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT " . App::setting('maxlogdat') . ") AS del);", [403, 403]);
-            }
         }
 
         if ($code == 404) {
             header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
+        }
 
-            if (App::setting('errorlog')) {
-                DB::run()->query("INSERT INTO `error` (`num`, `request`, `referer`, `username`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [404, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getUsername(), App::getClientIp(), App::getUserAgent(), SITETIME]);
+        if (App::setting('errorlog') && in_array($code, [403, 404])) {
 
-                DB::run()->query("DELETE FROM `error` WHERE `num`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT " . App::setting('maxlogdat') . ") AS del);", [404, 404]);
-            }
+            DBM::run()->insert('error', [
+                'num' => $code,
+                'request' => utf_substr(App::server('REQUEST_URI'), 0, 200),
+                'referer' => utf_substr(App::server('HTTP_REFERER'), 0, 200),
+                'username' => App::getUsername(),
+                'ip' => App::getClientIp(),
+                'brow' => App::getUserAgent(),
+                'time' => SITETIME,
+            ]);
+
+            DBM::run()->execute("DELETE FROM error 
+                    WHERE num=:num AND time < (SELECT MIN(time) 
+                    FROM (
+                        SELECT time FROM error WHERE num=:num ORDER BY time DESC LIMIT :limit
+                    ) AS del);
+                ", ['limit' => (int)App::setting('maxlogdat'), 'num' => $code]);
         }
 
         exit(self::view('errors.'.$code, compact('message')));
@@ -615,5 +623,24 @@ class App
             chmod ($dir, 0777);
             umask($old);
         }
+    }
+
+    public static function imageBase64($path, array $params = [])
+    {
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+
+        if (! isset($params['class'])) {
+            $params['class'] = 'img-responsive';
+        }
+
+        $strParams = [];
+        foreach ($params as $key => $param) {
+            $strParams[] = $key.'="'.$param.'"';
+        }
+
+        $strParams = implode(' ', $strParams);
+
+        return '<img src="data:image/'.$type.';base64,'.base64_encode($data).'"'.$strParams.'>';
     }
 }

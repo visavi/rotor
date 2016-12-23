@@ -22,7 +22,7 @@
                     <div class="col-md-6 col-md-push-6">
                         <div class="pull-right">
                             @if (!empty($udata['picture']) && file_exists(HOME.'/uploads/photos/'.$udata['picture']))
-                                <a href="/uploads/photos/{{ $udata['picture'] }}">
+                                <a class="gallery" href="/uploads/photos/{{ $udata['picture'] }}">
                                     {!! resize_image('uploads/photos/', $udata['picture'], $config['previewsize'], ['alt' => nickname($udata['login']), 'class' => 'img-responsive img-rounded']) !!}
                                 </a>
                                 <a href="/pictures">Изменить</a> / <a href="/pictures?act=del&amp;uid={{ $_SESSION['token'] }}">Удалить</a>

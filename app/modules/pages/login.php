@@ -8,6 +8,10 @@ switch ($act):
 ############################################################################################
 case 'index':
 
+    if (is_user()) {
+        App::abort('403', 'Вы уже авторизованы!');
+    }
+
     $cooklog = (isset($_COOKIE['login'])) ? check($_COOKIE['login']): '';
     if (Request::isMethod('post')) {
         if (Request::has('login') && Request::has('pass')) {

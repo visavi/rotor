@@ -1,5 +1,4 @@
 <?php
-App::view($config['themes'].'/index');
 
 if (!empty($params['page'])){
 
@@ -19,10 +18,7 @@ if (!empty($params['page'])){
         App::abort('default', 'Ошибка! Данной страницы не существует!');
     }
 
-    include_once (APP.'/views/files/'.$page.'.blade.php');
-
+    App::view('files/layout', compact('page'));
 } else {
-	include_once (APP.'/views/files/index.blade.php');
+    App::view('files/index');
 }
-
-App::view($config['themes'].'/foot');

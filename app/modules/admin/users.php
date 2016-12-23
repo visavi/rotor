@@ -168,8 +168,6 @@ if (is_admin([101, 102])) {
                     echo '<input type="text" name="money" value="'.$user['money'].'" /><br />';
                     echo 'Особый статус:<br />';
                     echo '<input type="text" name="status" maxlength="25" value="'.$user['status'].'" /><br />';
-                    echo 'Аватар:<br />';
-                    echo '<input type="text" name="avatar" value="'.$user['avatar'].'" /><br />';
                     echo 'Авторитет (плюсы):<br />';
                     echo '<input type="text" name="posrating" value="'.$user['posrating'].'" /><br />';
                     echo 'Авторитет (минусы):<br />';
@@ -252,7 +250,6 @@ if (is_admin([101, 102])) {
             $point = intval($_POST['point']);
             $money = intval($_POST['money']);
             $status = check($_POST['status']);
-            $avatar = check($_POST['avatar']);
             $posrating = intval($_POST['posrating']);
             $negrating = intval($_POST['negrating']);
 
@@ -290,7 +287,7 @@ if (is_admin([101, 102])) {
                                                 $city = utf_substr($city, 0, 50);
                                                 $rating = $posrating - $negrating;
 
-                                                DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `avatar`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $avatar, $rating, $posrating, $negrating, $uz]);
+                                                DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=? `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
 
                                                 save_title();
                                                 save_nickname();

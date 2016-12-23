@@ -6,141 +6,163 @@
 
     <h1>{!! user_avatars($user['login']).nickname($user['login']) !!}<small>{{ user_visit($user['login']) }}</small></h1>
 
-<?php
-    if ($user['confirmreg'] == 1) {
-    echo '<b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br />';
-    }
+    @if ($user['confirmreg'] == 1)
+        <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br />
+    @endif
 
-    if ($user['ban'] == 1 && $user['timeban'] > SITETIME) {
-    echo '<div class="form">';
-        echo '<b><span style="color:#ff0000">Внимание, пользователь забанен!</span></b><br />';
-        echo 'До окончания бана осталось '.formattime($user['timeban'] - SITETIME).'<br />';
-        echo 'Причина: '.App::bbCode($user['reasonban']).'</div>';
-    }
+    @if ($user['ban'] == 1 && $user['timeban'] > SITETIME)
+        <div class="form">
+            <b><span style="color:#ff0000">Внимание, пользователь забанен!</span></b><br />
+            До окончания бана осталось {{ formattime($user['timeban'] - SITETIME) }}<br />
+            Причина: {{ App::bbCode($user['reasonban']) }}
+        </div>
+    @endif
 
-    if ($user['level'] >= 101 && $user['level'] <= 105) {
-    echo '<div class="info">Должность: <b>'.user_status($user['level']).'</b></div>';
-    }
+    @if ($user['level'] >= 101 && $user['level'] <= 105)
+        <div class="alert alert-info">Должность: <b>{{ user_status($user['level']) }}</b></div>
+    @endif
 
-    if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture'])) {
-    echo '<a class="pull-right" href="/uploads/photos/'.$user['picture'].'">';
-        echo resize_image('uploads/photos/', $user['picture'], $config['previewsize'], ['alt' => nickname($user['login']), 'class' => 'img-responsive img-rounded']).'</a>';
-    } else {
-    echo '<img src="/assets/img/images/photo.jpg" alt="Фото" class="pull-right img-responsive img-rounded" />';
-    }
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 col-md-push-6">
+                <div class="pull-right">
 
-    echo 'Cтатус: <b><a href="/statusfaq">'.user_title($user['login']).'</a></b><br />';
+                    @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
+                        <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
+                            {!! resize_image('uploads/photos/', $user['picture'], $config['previewsize'], ['alt' => nickname($user['login']), 'class' => 'img-responsive img-rounded']) !!}</a>
+                    @else
+                        <img src="/assets/img/images/photo.jpg" alt="Фото" class="pull-right img-responsive img-rounded" />
+                    @endif
+                </div>
+            </div>
 
-    echo user_gender($user['login']).'Пол: ';
-    echo ($user['gender'] == 1) ? 'Мужской <br />' : 'Женский<br />';
+            <div class="col-md-6 col-md-pull-6">
 
-    echo 'Логин: <b>'.$user['login'].'</b><br />';
-    if (!empty($user['nickname'])) {
-    echo 'Ник: <b>'.$user['nickname'].'</b><br />';
-    }
-    if (!empty($user['name'])) {
-    echo 'Имя: <b>'.$user['name'].'<br /></b>';
-    }
-    if (!empty($user['country'])) {
-    echo 'Страна: <b>'.$user['country'].'<br /></b>';
-    }
-    if (!empty($user['city'])) {
-    echo 'Откуда: '.$user['city'].'<br />';
-    }
-    if (!empty($user['birthday'])) {
-    echo 'Дата рождения: '.$user['birthday'].'<br />';
-    }
-    if (!empty($user['icq'])) {
-    echo 'ICQ: '.$user['icq'].' <br />';
-    }
-    if (!empty($user['skype'])) {
-    echo 'Skype: '.$user['skype'].' <br />';
-    }
 
-    echo 'Всего посeщений: '.$user['visits'].'<br />';
-    echo 'Сообщений на форуме: '.$user['allforum'].'<br />';
-    echo 'Сообщений в гостевой: '.$user['allguest'].'<br />';
-    echo 'Комментариев: '.$user['allcomments'].'<br />';
-    echo 'Актив: '.points($user['point']).' <br />';
-    echo 'Денег: '.moneys($user['money']).'<br />';
+                Cтатус: <b><a href="/statusfaq">{!! user_title($user['login']) !!}</a></b><br />
 
-    if (!empty($user['themes'])) {
-    echo 'Используемый скин: '.$user['themes'].'<br />';
-    }
-    echo 'Дата регистрации: '.date_fixed($user['joined'], 'j F Y').'<br />';
+                {!! user_gender($user['login']) !!}
+                Пол:
+                {{  ($user['gender'] == 1) ? 'Мужской' : 'Женский' }}<br />
 
-    $invite = DB::run() -> queryFetch("SELECT * FROM `invite` WHERE `invited`=?;", [$user['login']]);
-    if (!empty($invite)){
-    echo 'Зарегистрирован по приглашению: '.profile($invite['user']).'<br />';
-    }
+                Логин: <b>{{ $user['login'] }}</b><br />
+                @if (!empty($user['nickname']))
+                    Ник: <b>{{  $user['nickname'] }}</b><br />
+                @endif
 
-    echo 'Последняя авторизация: '.date_fixed($user['timelastlogin']).'<br />';
+                @if (!empty($user['name']))
+                    Имя: <b>{{  $user['name'] }}<br /></b>
+                @endif
 
-    echo '<a href="/banhist?uz='.$user['login'].'">Строгих нарушений: '.$user['totalban'].'</a><br />';
+                @if (!empty($user['country']))
+                    Страна: <b>{{ $user['country'] }}<br /></b>
+                @endif
 
-    echo '<a href="/rathist?uz='.$user['login'].'">Авторитет: <b>'.format_num($user['rating']).'</b> (+'.$user['posrating'].'/-'.$user['negrating'].')</a><br />';
+                @if (!empty($user['city']))
+                    Откуда: {{ $user['city'] }}<br />
+                @endif
 
-    if (is_user() && $log != $user['login']) {
-    echo '[ <a href="/rating?uz='.$user['login'].'&amp;vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> / ';
-    echo '<a href="/rating?uz='.$user['login'].'&amp;vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br />';
-    }
+                @if (!empty($user['birthday']))
+                    Дата рождения: {{  $user['birthday'] }}<br />
+                @endif
 
-    echo '<b><a href="/forum/active/themes?user='.$user['login'].'">Форум</a></b> (<a href="/forum/active/posts?user='.$user['login'].'">Сообщ.</a>) / ';
-    echo '<b><a href="/load/active?act=files&amp;uz='.$user['login'].'">Загрузки</a></b> (<a href="/load/active?act=comments&amp;uz='.$user['login'].'">комм.</a>) / ';
-    echo '<b><a href="/blog/active?act=blogs&amp;uz='.$user['login'].'">Блоги</a></b> (<a href="/blog/active?act=comments&amp;uz='.$user['login'].'">комм.</a>) / ';
-    echo '<b><a href="/gallery/album?act=photo&amp;uz='.$user['login'].'">Галерея</a></b> (<a href="/gallery/comments?act=comments&amp;uz='.$user['login'].'">комм.</a>)<br />';
+                @if (!empty($user['icq']))
+                    ICQ: {{  $user['icq'] }}<br />
+                @endif
 
-    if (!empty($user['info'])) {
-    echo '<div class="hiding"><b>О себе</b>:<br />'.App::bbCode($user['info']).'</div>';
-    }
+                @if (!empty($user['skype']))
+                    Skype: {{ $user['skype'] }}<br />
+                @endif
 
-    if (is_admin()) {
-    $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `user`=? LIMIT 1;", [$user['login']]);
+                Всего посeщений: {{ $user['visits'] }}<br />
+                Сообщений на форуме: {{ $user['allforum'] }}<br />
+                Сообщений в гостевой: {{ $user['allguest'] }}<br />
+                Комментариев: {{ $user['allcomments'] }}<br />
+                Актив: {{ points($user['point']) }}<br />
+                Денег: {{ moneys($user['money']) }}<br />
 
-    echo '<div class="form">';
-        echo '<i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/'.$user['login'].'/note">Изменить</a>)<br />';
+                @if (!empty($user['themes']))
+                Используемый скин: {{ $user['themes'] }}<br />
+                @endif
+                Дата регистрации: {{ date_fixed($user['joined'], 'j F Y') }}<br />
 
-        if (!empty($usernote['text'])) {
-        echo App::bbCode($usernote['text']).'<br />';
-        echo 'Изменено: '.profile($usernote['edit']).' ('.date_fixed($usernote['time']).')<br />';
-        } else {
-        echo'Записей еще нет!<br />';
-        }
+                <?php $invite = DBM::run()->selectFirst('invite', ['invited' => $user['login']]); ?>
+                @if (!empty($invite))
+                    Зарегистрирован по приглашению: {!! profile($invite['user']) !!}<br />
+                @endif
 
-        echo '</div>';
-    }
+                Последняя авторизация: {{ date_fixed($user['timelastlogin']) }}<br />
 
-    echo '<div class="act">';
-        echo '<i class="fa fa-sticky-note"></i> <a href="/wall?uz='.$user['login'].'">Стена сообщений</a> ('.user_wall($user['login']).')<br />';
+                <a href="/banhist?uz={{ $user['login'] }}">Строгих нарушений: {{ $user['totalban'] }}</a><br />
 
-        if ($user['login'] != $log) {
-        echo '<i class="fa fa-address-book"></i> Добавить в ';
-        echo '<a href="/contact?act=add&amp;uz='.$user['login'].'&amp;uid='.$_SESSION['token'].'">контакт</a> / ';
-        echo '<a href="/ignore?act=add&amp;uz='.$user['login'].'&amp;uid='.$_SESSION['token'].'">игнор</a><br />';
-        echo '<i class="fa fa-envelope"></i> <a href="/private?act=submit&amp;uz='.$user['login'].'">Отправить сообщение</a><br />';
+                <a href="/rathist?uz={{ $user['login'] }}">Авторитет: <b>{{ format_num($user['rating']) }}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br />
 
-        echo '<i class="fa fa-money"></i> <a href="/games/transfer?uz='.$user['login'].'">Перечислить денег</a><br />';
+                @if (is_user() && $log != $user['login'])
+                [ <a href="/rating?uz={{ $user['login'] }}&amp;vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
+                <a href="/rating?uz={{ $user['login'] }}&amp;vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br />
+                @endif
 
-        if (!empty($user['site'])) {
-        echo '<i class="fa fa-home"></i> <a href="'.$user['site'].'">Перейти на сайт '.$user['login'].'</a><br />';
-        }
+            </div>
 
-        if (is_admin([101, 102, 103])) {
-        if (!empty($config['invite'])) {
-        echo '<i class="fa fa-ban"></i> <a href="/admin/invitations?act=send&amp;user='.$user['login'].'&amp;uid='.$_SESSION['token'].'">Отправить инвайт</a><br />';
-        }
-        echo '<i class="fa fa-ban"></i> <a href="/admin/ban?act=edit&amp;uz='.$user['login'].'">Бан / Разбан</a><br />';
-        }
+            <div class="col-md-12">
 
-        if (is_admin([101, 102])) {
-        echo '<i class="fa fa-wrench"></i> <a href="/admin/users?act=edit&amp;uz='.$user['login'].'">Редактировать</a><br />';
-        }
-        } else {
-        echo '<i class="fa fa-user-circle-o"></i> <a href="/profile">Мой профиль</a><br />';
-        echo '<i class="fa fa-cog"></i> <a href="/account">Мои данные</a><br />';
-        echo '<i class="fa fa-wrench"></i> <a href="/setting">Настройки</a><br />';
-        }
+                @if (!empty($user['info']))
+                    <div class="alert alert-warning"><b>О себе</b>:<br />{!! App::bbCode($user['info']) !!}</div>
+                @endif
 
-        echo '</div>';
-    ?>
+                <b><a href="/forum/active/themes?user={{ $user['login'] }}">Форум</a></b> (<a href="/forum/active/posts?user={{ $user['login'] }}">Сообщ.</a>) /
+                <b><a href="/load/active?act=files&amp;uz={{ $user['login'] }}">Загрузки</a></b> (<a href="/load/active?act=comments&amp;uz={{ $user['login'] }}">комм.</a>) /
+                <b><a href="/blog/active?act=blogs&amp;uz={{ $user['login'] }}">Блоги</a></b> (<a href="/blog/active?act=comments&amp;uz={{ $user['login'] }}">комм.</a>) /
+                <b><a href="/gallery/album?act=photo&amp;uz={{ $user['login'] }}">Галерея</a></b> (<a href="/gallery/comments?act=comments&amp;uz={{ $user['login'] }}">комм.</a>)<br />
+            </div>
+        </div>
+    </div>
+
+    @if (is_admin())
+        <?php $usernote = DBM::run()->selectFirst('note', ['user' => $user['login']]); ?>
+    <div class="alert alert-success">
+        <i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/{{ $user['login'] }}/note">Изменить</a>)<br />
+
+        @if (!empty($usernote['text']))
+            {!! App::bbCode($usernote['text']) !!}<br />
+            Изменено: {!! profile($usernote['edit']) !!} ({{ date_fixed($usernote['time']) }})<br />
+        @else
+            Записей еще нет!<br />
+        @endif
+
+        </div>
+    @endif
+
+    <div class="alert alert-info">
+        <i class="fa fa-sticky-note"></i> <a href="/wall?uz={{ $user['login'] }}">Стена сообщений</a> ({{ user_wall($user['login']) }})<br />
+
+        @if ($user['login'] != $log)
+            <i class="fa fa-address-book"></i> Добавить в
+            <a href="/contact?act=add&amp;uz={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">контакт</a> /
+            <a href="/ignore?act=add&amp;uz={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">игнор</a><br />
+            <i class="fa fa-envelope"></i> <a href="/private?act=submit&amp;uz={{ $user['login'] }}">Отправить сообщение</a><br />
+
+            <i class="fa fa-money"></i> <a href="/games/transfer?uz={{ $user['login'] }}">Перечислить денег</a><br />
+
+            @if (!empty($user['site']))
+                <i class="fa fa-home"></i> <a href="{{ $user['site'] }}">Перейти на сайт {{ $user['login'] }}</a><br />
+            @endif
+
+            @if (is_admin([101, 102, 103]))
+                @if (!empty($config['invite']))
+                    <i class="fa fa-ban"></i> <a href="/admin/invitations?act=send&amp;user={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">Отправить инвайт</a><br />
+                @endif
+            <i class="fa fa-ban"></i> <a href="/admin/ban?act=edit&amp;uz={{ $user['login'] }}">Бан / Разбан</a><br />
+            @endif
+
+            @if (is_admin([101, 102]))
+                <i class="fa fa-wrench"></i> <a href="/admin/users?act=edit&amp;uz={{ $user['login'] }}">Редактировать</a><br />
+            @endif
+        @else
+        <i class="fa fa-user-circle-o"></i> <a href="/profile">Мой профиль</a><br />
+        <i class="fa fa-cog"></i> <a href="/account">Мои данные</a><br />
+        <i class="fa fa-wrench"></i> <a href="/setting">Настройки</a><br />
+        @endif
+
+    </div>
 @stop
