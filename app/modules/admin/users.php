@@ -168,9 +168,9 @@ if (is_admin([101, 102])) {
                     echo '<input type="text" name="money" value="'.$user['money'].'" /><br />';
                     echo 'Особый статус:<br />';
                     echo '<input type="text" name="status" maxlength="25" value="'.$user['status'].'" /><br />';
-                    echo 'Авторитет (плюсы):<br />';
+                    echo 'Репутация (плюсы):<br />';
                     echo '<input type="text" name="posrating" value="'.$user['posrating'].'" /><br />';
-                    echo 'Авторитет (минусы):<br />';
+                    echo 'Репутация (минусы):<br />';
                     echo '<input type="text" name="negrating" value="'.$user['negrating'].'" /><br />';
                     echo 'Скин:<br />';
                     echo '<input type="text" name="themes" value="'.$user['themes'].'" /><br />';

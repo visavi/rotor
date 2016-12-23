@@ -15,7 +15,7 @@ if (isset($_GET['uz'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Рейтинг авторитетов');
+show_title('Рейтинг репутации');
 
 switch ($act):
 ############################################################################################
@@ -37,9 +37,9 @@ switch ($act):
                 echo '<div class="b">'.($page['offset'] + $i).'. '.user_gender($data['login']);
 
                 if ($uz == $data['login']) {
-                    echo ' <b><big>'.profile($data['login'], '#ff0000').'</big></b> (Авторитет: '.($data['rating']).')</div>';
+                    echo ' <b><big>'.profile($data['login'], '#ff0000').'</big></b> (Репутация: '.($data['rating']).')</div>';
                 } else {
-                    echo ' <b>'.profile($data['login']).'</b> (Авторитет: '.($data['rating']).')</div>';
+                    echo ' <b>'.profile($data['login']).'</b> (Репутация: '.($data['rating']).')</div>';
                 }
 
                 echo '<div>Плюсов: '.$data['posrating'].' / Минусов: '.$data['negrating'].'<br />';

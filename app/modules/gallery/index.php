@@ -138,20 +138,25 @@ break;
                         if (utf_strlen($text) <= 1000) {
                             if (is_flood($log)) {
 
-                                $text = antimat($text);
+                                $handle = upload_image(
+                                    $_FILES['photo'],
+                                    $config['filesize'],
+                                    $config['fileupfoto'],
+                                    uniqid()
+                                );
 
-                                DB::run() -> query("INSERT INTO `photo` (`user`, `title`, `text`, `link`, `time`, `closed`) VALUES (?, ?, ?, ?, ?, ?);", [$log, $title, $text, '', SITETIME, $closed]);
-
-                                $lastid = DB::run() -> lastInsertId();
-
-                                // ------------------------------------------------------//
-                                $handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $lastid);
                                 if ($handle) {
-
                                     $handle -> process(HOME.'/uploads/pictures/');
                                     if ($handle -> processed) {
 
-                                        DB::run() -> query("UPDATE `photo` SET `link`=? WHERE `id`=?;", [$handle -> file_dst_name, $lastid]);
+                                        $rek = DBM::run()->insert('photo', [
+                                            'user'  => $log,
+                                            'title'  => $title,
+                                            'text' => antimat($text),
+                                            'link' => $handle->file_dst_name,
+                                            'time' => SITETIME,
+                                            'closed' => $closed,
+                                        ]);
 
                                         $handle -> clean();
 
@@ -159,7 +164,7 @@ break;
                                         redirect("/gallery");
 
                                     } else {
-                                        show_error($handle -> error);
+                                        show_error($handle->error);
                                     }
                                 } else {
                                     show_error('Ошибка! Не удалось загрузить изображение!');

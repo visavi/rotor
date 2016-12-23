@@ -864,7 +864,7 @@ if (is_admin([101])) {
             echo 'Сохраняется истории в кто-где:<br /><input name="lastusers" maxlength="3" value="'.$setting['lastusers'].'" /><br />';
             echo 'Пользователей в онлайне:<br /><input name="onlinelist" maxlength="2" value="'.$setting['onlinelist'].'" /><br />';
             echo 'Смайлов на стр.:<br /><input name="smilelist" maxlength="2" value="'.$setting['smilelist'].'" /><br />';
-            echo 'Юзеров в рейтинге авторитетов на стр.:<br /><input name="avtorlist" maxlength="2" value="'.$setting['avtorlist'].'" /><br />';
+            echo 'Юзеров в рейтинге репутации на стр.:<br /><input name="avtorlist" maxlength="2" value="'.$setting['avtorlist'].'" /><br />';
             echo 'Юзеров в рейтинге долгожителей:<br /><input name="lifelist" maxlength="2" value="'.$setting['lifelist'].'" /><br />';
             echo 'Юзеров в списке забаненных:<br /><input name="banlist" maxlength="2" value="'.$setting['banlist'].'" /><br />';
             echo 'Листинг истории банов пользователя:<br /><input name="listbanhist" maxlength="2" value="'.$setting['listbanhist'].'" /><br />';
@@ -1017,7 +1017,7 @@ if (is_admin([101])) {
         * echo '<form method="post" action="/admin/setting?act=editnine&amp;uid='.$_SESSION['token'].'">';
         *
         * echo 'Кеш в юзерлисте: <br /><input name="userlistcache" maxlength="2" value="'.$setting['userlistcache'].'" /><br />';
-        * echo 'Рейтинг авторитетов: <br /><input name="avtorlistcache" maxlength="2" value="'.$setting['avtorlistcache'].'" /><br />';
+        * echo 'Рейтинг репутации: <br /><input name="avtorlistcache" maxlength="2" value="'.$setting['avtorlistcache'].'" /><br />';
         * echo 'Рейтинг толстосумов: <br /><input name="raitinglistcache" maxlength="2" value="'.$setting['raitinglistcache'].'" /><br />';
         * echo 'Поиск пользователей: <br /><input name="usersearchcache" maxlength="2" value="'.$setting['usersearchcache'].'" /><br />';
         * echo 'Рейтинг долгожителей: <br /><input name="lifelistcache" maxlength="2" value="'.$setting['lifelistcache'].'" /><br />';
@@ -1159,7 +1159,7 @@ if (is_admin([101])) {
 
             echo 'Актива для изменения ника: <br /><input name="editnickpoint" maxlength="4" value="'.$setting['editnickpoint'].'" /><br />';
             echo 'Актива для перечисления денег: <br /><input name="sendmoneypoint" maxlength="4" value="'.$setting['sendmoneypoint'].'" /><br />';
-            echo 'Актива для изменения авторитета: <br /><input name="editratingpoint" maxlength="4" value="'.$setting['editratingpoint'].'" /><br />';
+            echo 'Актива для изменения репутации: <br /><input name="editratingpoint" maxlength="4" value="'.$setting['editratingpoint'].'" /><br />';
             echo 'Актива для изменения тем форума: <br /><input name="editforumpoint" maxlength="4" value="'.$setting['editforumpoint'].'" /><br />';
             echo 'Актива для скрытия рекламы: <br /><input name="advertpoint" maxlength="4" value="'.$setting['advertpoint'].'" /><br /><hr />';
 
