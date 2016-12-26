@@ -870,7 +870,6 @@ if (is_admin([101])) {
             echo 'Листинг истории банов пользователя:<br /><input name="listbanhist" maxlength="2" value="'.$setting['listbanhist'].'" /><br />';
             echo 'Юзеров в поиске пользователей:<br /><input name="usersearch" maxlength="2" value="'.$setting['usersearch'].'" /><br />';
             echo 'Листинг в IP-бан панеле:<br /><input name="ipbanlist" maxlength="2" value="'.$setting['ipbanlist'].'" /><br />';
-            echo 'Файлов в редакторе админки:<br /><input name="editfiles" maxlength="2" value="'.$setting['editfiles'].'" /><br />';
             echo 'Просмотр логов на страницу:<br /><input name="loglist" maxlength="2" value="'.$setting['loglist'].'" /><br />';
             echo 'Данных на страницу в черном списке:<br /><input name="blacklist" maxlength="2" value="'.$setting['blacklist'].'" /><br />';
             echo 'Пользователей в списке ожидающих:<br /><input name="reglist" maxlength="2" value="'.$setting['reglist'].'" /><br />';
@@ -892,7 +891,7 @@ if (is_admin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['editfiles'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "" && $_POST['listtransfers'] != "") {
+                if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "" && $_POST['listtransfers'] != "") {
 
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['userlist']), 'userlist');
@@ -906,7 +905,6 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['listbanhist']), 'listbanhist');
                     $dbr -> execute(intval($_POST['usersearch']), 'usersearch');
                     $dbr -> execute(intval($_POST['ipbanlist']), 'ipbanlist');
-                    $dbr -> execute(intval($_POST['editfiles']), 'editfiles');
                     $dbr -> execute(intval($_POST['loglist']), 'loglist');
                     $dbr -> execute(intval($_POST['blacklist']), 'blacklist');
                     $dbr -> execute(intval($_POST['reglist']), 'reglist');

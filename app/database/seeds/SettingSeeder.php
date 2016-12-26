@@ -48,7 +48,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'downcomm', 'value' => 10],
             ['name'  => 'downlist', 'value' => 10],
             ['name'  => 'downupload', 'value' => 1],
-            ['name'  => 'editfiles', 'value' => 10],
             ['name'  => 'editforumpoint', 'value' => 500],
             ['name'  => 'editnickpoint', 'value' => 300],
             ['name'  => 'editratingpoint', 'value' => 150],

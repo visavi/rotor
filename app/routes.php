@@ -195,5 +195,6 @@ $router->map('GET|POST', '/admin/logadmin',    '/modules/admin/logadmin.php');
 $router->map('GET|POST', '/admin/notice',    '/modules/admin/notice.php');
 $router->map('GET|POST', '/admin/files',    '/modules/admin/files.php');
 $router->map('GET|POST', '/admin/delusers',    '/modules/admin/delusers.php');
+$router->map('GET',      '/admin/upgrade',    '/modules/admin/upgrade.php');
 
 Registry::set('router', $router->match());

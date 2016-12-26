@@ -100,10 +100,11 @@ class App
      */
     public static function redirect($url, $permanent = false)
     {
+        if (isset($_SESSION['captcha'])) $_SESSION['captcha'] = null;
+
         if ($permanent){
             header('HTTP/1.1 301 Moved Permanently');
         }
-        if (isset($_SESSION['captcha'])) $_SESSION['captcha'] = null;
 
         exit(header('Location: '.$url));
     }

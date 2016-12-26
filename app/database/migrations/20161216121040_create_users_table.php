@@ -59,7 +59,6 @@ class CreateUsersTable extends AbstractMigration
             ->addColumn('secquest', 'string', ['limit' => 50, 'null' => true])
             ->addColumn('secanswer', 'string', ['limit' => 40, 'null' => true])
             ->addColumn('timenickname', 'integer', ['default' => 0])
-            ->addColumn('ipbinding', 'boolean', ['default' => 0])
             ->addColumn('newchat', 'integer', ['signed' => false, 'default' => 0])
             ->addColumn('privacy', 'boolean', ['default' => 0])
             ->addColumn('apikey', 'string', ['limit' => 32, 'null' => true])

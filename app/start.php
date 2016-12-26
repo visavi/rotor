@@ -163,16 +163,6 @@ if ($udata = is_user()) {
         }
     }
 
-    // --------------------- Проверка соответствия ip-адреса ---------------------//
-    if (!empty($udata['ipbinding'])) {
-        if ($_SESSION['ip'] != App::getClientIp()) {
-            $_SESSION = [];
-            setcookie(session_name(), '', 0, '/', '');
-            session_destroy();
-            redirect(html_entity_decode(App::server('REQUEST_URI')));
-        }
-    }
-
     // ---------------------- Получение ежедневного бонуса -----------------------//
     if (isset($udata['timebonus']) && $udata['timebonus'] < time() - 82800) {  // Получение бонуса каждые 23 часа
         DB::run() -> query("UPDATE `users` SET `timebonus`=?, `money`=`money`+? WHERE `login`=? LIMIT 1;", [SITETIME, $config['bonusmoney'], $log]);

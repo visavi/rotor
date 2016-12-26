@@ -41,9 +41,6 @@ case 'index':
     }
     echo '</select> - '.date_fixed(SITETIME, 'H:i').'<br />';
 
-    $checked = ($udata['ipbinding'] == 1) ? ' checked="checked"' : '';
-    echo '<input name="ipbinding" id="ipbinding" type="checkbox" value="1"'.$checked.' title="IP привязывается к сессии, улучшается надежность" /> <label for="ipbinding">Привязка к IP</label><br />';
-
     $checked = ($udata['privacy'] == 1) ? ' checked="checked"' : '';
     echo '<input name="privacy" id="privacy" type="checkbox" value="1"'.$checked.' title="Писать в приват и на стену смогут только пользователи из контактов" /> <label for="privacy">Режим приватности</label><br />';
 
@@ -63,7 +60,6 @@ case 'edit':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $themes = (isset($_POST['themes'])) ? check($_POST['themes']) : '';
     $timezone = (isset($_POST['timezone'])) ? check($_POST['timezone']) : 0;
-    $ipbinding = (empty($_POST['ipbinding'])) ? 0 : 1;
     $privacy = (empty($_POST['privacy'])) ? 0 : 1;
     $subscribe = (! empty($_POST['subscribe'])) ? generate_password(32) : '';
 
@@ -79,7 +75,6 @@ case 'edit':
             $user = DBM::run()->update('users', [
                 'themes'      => $themes,
                 'timezone'    => $timezone,
-                'ipbinding'   => $ipbinding,
                 'privacy'     => $privacy,
                 'subscribe'   => $subscribe,
             ], [

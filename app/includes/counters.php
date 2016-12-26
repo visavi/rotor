@@ -5,8 +5,7 @@ $hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmm
 
 DB::run() -> query("DELETE FROM `online` WHERE `time`<?;", [SITETIME-$config['timeonline']]);
 
-$online = stats_online();
-if ($online[1] < 150 || is_user()) {
+if (is_user()) {
 	$newhost = 0;
 
 	if (is_user()) {
