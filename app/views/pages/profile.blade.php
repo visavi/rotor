@@ -77,17 +77,6 @@
                             <input class="form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ App::getInput('birthday', $udata['birthday']) }}">
                             {!! App::textError('birthday') !!}
                         </div>
-
-                        <div class="form-group{{ App::hasError('gender') }}">
-                            <label for="inputGender">Пол:</label>
-                            <select class="form-control" id="inputGender" name="gender">
-                                <?php $selected = (App::getInput('gender', $udata['gender']) == 1) ? ' selected' : ''; ?>
-                                <option value="1"{{ $selected }}>Мужской</option>
-                                    <?php $selected = (App::getInput('gender', $udata['gender']) == 2) ? ' selected' : ''; ?>
-                                <option value="2"{{ $selected }}>Женский</option>
-                            </select>
-                            {!! App::textError('gender') !!}
-                        </div>
                     </div>
 
                     <div class="col-md-12">

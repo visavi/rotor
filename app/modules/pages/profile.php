@@ -15,7 +15,6 @@ if (Request::isMethod('post')) {
     $skype = check(strtolower(Request::input('skype')));
     $site = check(Request::input('site'));
     $birthday = check(Request::input('birthday'));
-    $gender = intval(Request::input('gender'));
 
     $validation = new Validation();
 
@@ -24,7 +23,6 @@ if (Request::isMethod('post')) {
         ->addRule('regex', [$birthday, '#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#'], ['birthday' => 'Недопустимый формат даты рождения, необходим формат дд.мм.гггг!'], false)
         ->addRule('regex', [$icq, '#^[0-9]{5,10}$#'], ['icq' => 'Недопустимый формат ICQ, только цифры от 5 до 10 символов!'], false)
         ->addRule('regex', [$skype, '#^[a-z]{1}[0-9a-z\_\.\-]{5,31}$#'], ['skype' => 'Недопустимый формат Skype, только латинские символы от 6 до 32!'], false)
-        ->addRule('numeric', $gender, ['gender' => 'Вы не указали ваш пол!'], true, 1, 2)
         ->addRule('string', $info, ['info' => 'Слишком большая информация о себе, не более 1000 символов!'], true, 0, 1000);
 
     if ($validation->run()) {
@@ -33,7 +31,7 @@ if (Request::isMethod('post')) {
         $country = utf_substr($country, 0, 30);
         $city = utf_substr($city, 0, 50);
 
-        DB::run()->query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `gender`=?, `info`=? WHERE `login`=? LIMIT 1;", [$name, $country, $city, $icq, $skype, $site, $birthday, $gender, $info, $log]);
+        DB::run()->query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `info`=? WHERE `login`=? LIMIT 1;", [$name, $country, $city, $icq, $skype, $site, $birthday, $info, $log]);
 
         App::setFlash('success', 'Ваш профиль успешно изменен!');
         redirect("/profile");
