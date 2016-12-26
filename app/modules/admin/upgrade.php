@@ -14,9 +14,16 @@ $app->setVersion(VERSION);
 $wrap->setOption('configuration', BASEDIR.'/phinx.php');
 $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
+?>
 
-echo $wrap->getMigrate();
+<pre>
+    <span class="inner-pre" style="font-size: 11px">
+        <?= $wrap->getMigrate(); ?>
+    </span>
+</pre>
 
+
+<?php
 echo '<i class="fa fa-check"></i> <b>Обновления успешно установлены!</b><br />';
 
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';

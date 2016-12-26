@@ -16,30 +16,40 @@ switch ($act):
 case 'index':
 
     if (!empty($cid)) {
-        $cats = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
+        $cats = DBM::run()->queryFirst("
+          SELECT c.*, c2.id subcats_id, c2.name subcats_name FROM cats c 
+          LEFT JOIN cats c2 ON c.parent = c2.id 
+          WHERE c.id=:id LIMIT 1;",
+            ['id' => $cid]
+        );
 
-        if (!empty($cats)) {
-            $config['newtitle'] = $cats['name'];
+        if (!empty($cats)) {?>
 
-            echo '<a href="/load">Категории</a>';
+            <?php show_title($cats['name']); ?>
 
-            if (!empty($cats['parent'])) {
-                $podcats = DB::run() -> queryFetch("SELECT `id`, `name` FROM `cats` WHERE `id`=? LIMIT 1;", [$cats['parent']]);
-
-                echo ' / <a href="/load/down?cid='.$podcats['id'].'">'.$podcats['name'].'</a>';
-            }
-
-            if (empty($cats['closed'])) {
-                echo ' / <a href="/load/add?cid='.$cid.'">Добавить файл</a>';
-            }
-
-            echo '<br /><br />';
-            echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
-
+            <?php
             if (is_admin([101, 102])) {
-                echo ' (<a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Управление</a>)';
+                echo '<a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Управление</a>';
             }
+            ?>
 
+            <ol class="breadcrumb">
+                <li><a href="/load">Категории</a></li>
+
+            <?php if ($cats['subcats_id']): ?>
+                <li><a href="/load/down?cid=<?= $cats['subcats_id'] ?>"><?= $cats['subcats_name'] ?></a></ li>
+            <?php endif; ?>
+
+                <li class="active"><?= $cats['name'] ?></li>
+            </ol>
+
+            <?php if (is_user() && ! $cats['closed']): ?>
+                <div class="pull-right">
+                    <a class="btn btn-success" href="/load/add?cid='.$cid.'">Добавить файл</a>
+                </div>
+            <?php endif; ?>
+
+            <?php
             switch ($sort) {
                 case 'rated': $order = 'rated';
                     break;
@@ -75,8 +85,6 @@ case 'index':
             } else {
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=comm">Комментарии</a>';
             }
-
-            echo '<hr />';
 
             $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `parent`=?;", [$cid]);
             $sub = $querysub -> fetchAll();
@@ -149,34 +157,39 @@ break;
 ############################################################################################
 case 'view':
 
-    $downs = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
+    $downs = DBM::run() -> queryFirst("
+        SELECT d.*, c.name cats_name, c.folder cats_folder, c2.id subcats_id, c2.name subcats_name FROM downs d
+          LEFT JOIN cats c ON d.category_id=c.id
+          LEFT JOIN cats c2 ON c.parent = c2.id
+        WHERE d.`id`=:id LIMIT 1;",
+        ['id' => $id]
+    );
 
     if (!empty($downs)) {
         if (!empty($downs['active']) || $downs['user'] == $log) {
 
-            $config['newtitle'] = $downs['title'];
+            if (is_admin([101, 102])) {
+                echo ' <a href="/admin/load?act=editdown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Редактировать</a> / ';
+                echo '<a href="/admin/load?act=movedown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Переместить</a>';
+            }
+
+            show_title($downs['title']);
             $config['description'] = strip_str($downs['text']);
 
-            $folder = $downs['folder'] ? $downs['folder'].'/' : '';
+            $folder = $downs['cats_folder'] ? $downs['cats_folder'].'/' : '';
+?>
+            <ol class="breadcrumb">
+                <li><a href="/load">Категории</a></li>
 
-            echo '<a href="/load">Категории</a> / ';
+                <?php if ($downs['subcats_id']): ?>
+                    <li><a href="/load/down?cid=<?= $downs['subcats_id'] ?>"><?= $downs['subcats_name'] ?></a></li>
+                <?php endif; ?>
 
-            if (!empty($downs['parent'])) {
-                $podcats = DB::run() -> queryFetch("SELECT `id`, `name` FROM `cats` WHERE `id`=? LIMIT 1;", [$downs['parent']]);
-                echo '<a href="/load/down?cid='.$podcats['id'].'">'.$podcats['name'].'</a> / ';
-            }
-
-            echo '<a href="/load/down?cid='.$downs['id'].'">'.$downs['name'].'</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><br /><br />';
-
-            $filesize = (!empty($downs['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$downs['link']) : 0;
-            echo '<i class="fa fa-file-o"></i> <b>'.$downs['title'].'</b> ('.$filesize.')';
-
-            if (is_admin([101, 102])) {
-                echo ' (<a href="/admin/load?act=editdown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Редактировать</a> / ';
-                echo '<a href="/admin/load?act=movedown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Переместить</a>)';
-            }
-            echo '<hr />';
-
+                <li><a href="/load/down?cid=<?= $downs['id'] ?>"><?= $downs['cats_name'] ?></a></li>
+                <li class="active"><?= $downs['title'] ?></li>
+                <li class="active"><a href="/load/rss?id=<?= $id ?>">RSS-лента</a></li>
+            </ol>
+  <?php
             if (empty($downs['active']) && $downs['user'] == $log){
                 echo '<div class="info"><b>Внимание!</b> Данная загрузка добавлена, но еще требует модераторской проверки<br />';
                 echo '<i class="fa fa-pencil"></i> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br />';
@@ -235,6 +248,8 @@ case 'view':
                     echo '<i class="fa fa-archive"></i> <b><a href="/load/zip?id='.$id.'">Просмотреть архив</a></b><br />';
                 }
 
+                $filesize = (!empty($downs['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$downs['link']) : 0;
+
                 if (is_user()) {
                     echo '<i class="fa fa-download"></i> <b><a href="/load/down?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br />';
                 } else {
@@ -244,7 +259,7 @@ case 'view':
                     echo 'Проверочный код:<br /> ';
                     echo '<img src="/captcha" alt="" /><br />';
                     echo '<input name="provkod" size="6" maxlength="6" />';
-                    echo '<input type="submit" value="Скачать" /></form>';
+                    echo '<input type="submit" value="Скачать '.('.$filesize.').'" /></form>';
                     echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br />';
                 }
 
@@ -282,7 +297,7 @@ case 'view':
                 show_error('Файл еще не загружен!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['id'].'">'.$downs['name'].'</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['cats_name'].'</a><br />';
 
         } else {
             show_error('Ошибка! Данный файл еще не проверен модератором!');
