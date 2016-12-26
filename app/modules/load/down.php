@@ -259,7 +259,7 @@ case 'view':
                     echo 'Проверочный код:<br /> ';
                     echo '<img src="/captcha" alt="" /><br />';
                     echo '<input name="provkod" size="6" maxlength="6" />';
-                    echo '<input type="submit" value="Скачать '.('.$filesize.').'" /></form>';
+                    echo '<input type="submit" value="Скачать ('.$filesize.')" /></form>';
                     echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br />';
                 }
 
