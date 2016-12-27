@@ -12,5 +12,14 @@ Disallow: /lostpassword
 Disallow: /unsubscribe
 Disallow: /captcha
 Disallow: /online
+Disallow: /contact
+Disallow: /ignore
+Disallow: /profile
+Disallow: /pictures
+Disallow: /private
+Disallow: /setting
+Disallow: /notebook
+Disallow: /authlog
+Disallow: /key
 
 Sitemap: /sitemap.xml

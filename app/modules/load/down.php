@@ -45,8 +45,8 @@ case 'index':
 
             <?php if (is_user() && ! $cats['closed']): ?>
                 <div class="pull-right">
-                    <a class="btn btn-success" href="/load/add?cid='.$cid.'">Добавить файл</a>
-                </div>
+                    <a class="btn btn-success" href="/load/add?cid=<?= $cid ?>">Добавить файл</a>
+                </div><br />
             <?php endif; ?>
 
             <?php
@@ -185,7 +185,7 @@ case 'view':
                     <li><a href="/load/down?cid=<?= $downs['subcats_id'] ?>"><?= $downs['subcats_name'] ?></a></li>
                 <?php endif; ?>
 
-                <li><a href="/load/down?cid=<?= $downs['id'] ?>"><?= $downs['cats_name'] ?></a></li>
+                <li><a href="/load/down?cid=<?= $downs['category_id'] ?>"><?= $downs['cats_name'] ?></a></li>
                 <li class="active"><?= $downs['title'] ?></li>
                 <li class="active"><a href="/load/rss?id=<?= $id ?>">RSS-лента</a></li>
             </ol>
