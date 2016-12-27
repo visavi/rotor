@@ -1,5 +1,5 @@
-<h3>Поиск запроса &quot;<?=$tags?>&quot; в метках</h3>
-Найдено совпадений: <b><?=$total?></b><br />
+<h3>Поиск запроса &quot;<?= $tags ?>&quot; в метках</h3>
+Найдено совпадений: <b><?= $page['total'] ?></b><br />
 
 <?php foreach($blogs as $data): ?>
 
@@ -9,7 +9,7 @@
 	</div>
 
 	<div>
-		Категория: <a href="/blog/blog?cid=<?=$data['id']?>"><?=$data['name']?></a><br />
+		Категория: <a href="/blog/blog?cid=<?=$data['category_id']?>"><?=$data['name']?></a><br />
 		Просмотров: <?=$data['visits']?><br />
 		Метки: <?=$data['tags']?><br />
 		Автор: <?=profile($data['user'])?>  (<?=date_fixed($data['time'])?>)

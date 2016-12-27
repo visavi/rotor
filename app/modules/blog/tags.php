@@ -60,15 +60,16 @@ case 'search':
         }
 
         $total = count($_SESSION['findresult']);
+        $page = App::paginate(App::setting('blogpost'), $total);
 
         if ($total > 0) {
 
             $result = implode(',', $_SESSION['findresult']);
 
-            $queryblog = DB::run() -> query("SELECT `blogs`.*, `id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE `id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
+            $queryblog = DB::run() -> query("SELECT b.*, name FROM blogs b LEFT JOIN catsblog c ON b.category_id=c.id WHERE b.id IN (".$result.") ORDER BY time DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
             $blogs = $queryblog -> fetchAll();
 
-            render('blog/tags_search', ['blogs' => $blogs, 'tags' => $tags, 'total' => $total]);
+            render('blog/tags_search', compact('blogs', 'tags', 'page'));
 
             App::pagination($page);
         } else {

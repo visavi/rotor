@@ -3,12 +3,12 @@
 <div style="text-align:center">
     @include('advert.top_all')
 
-    <?= show_advertuser(); /* Реклама за игровые деньги */ ?>
+    <?= show_advertuser(); ?>
 </div>
 
-    {{ App::getFlash() }}
+{{ App::getFlash() }}
 
-    @yield('content')
+@yield('content')
 
-    @include('advert.bottom_all')
+@include('advert.bottom_all')
 @include(App::setting('themes').'.foot')
