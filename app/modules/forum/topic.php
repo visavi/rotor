@@ -114,7 +114,7 @@ case 'create':
             DB::run() -> query("UPDATE `forums` SET `posts`=`posts`+1, `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$tid, $topics['title'], $log, SITETIME, $topics['forum_id']]);
             // Обновление родительского форума
             if ($topics['parent'] > 0) {
-                DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$tid, $topics['title'], $log, SITETIME, $topics['forums_parent']]);
+                DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$tid, $topics['title'], $log, SITETIME, $topics['parent']]);
             }
         }
 

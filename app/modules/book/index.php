@@ -29,7 +29,7 @@ case 'add':
 
     /* Проерка для гостей */
     if (! is_user() && $config['bookadds']) {
-        $protect = check(Request::input('protect'));
+        $protect = check(strtolower(Request::input('protect')));
         $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
     } else {
         $validation->addRule('bool', is_user(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);

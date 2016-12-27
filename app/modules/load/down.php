@@ -257,8 +257,8 @@ case 'view':
                     echo '<form action="/load/down?act=load&amp;id='.$id.'" method="post">';
 
                     echo 'Проверочный код:<br /> ';
-                    echo '<img src="/captcha" alt="" /><br />';
-                    echo '<input name="provkod" size="6" maxlength="6" />';
+                    echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
+                    echo '<input name="protect" size="6" maxlength="6" />';
                     echo '<input type="submit" value="Скачать ('.$filesize.')" /></form>';
                     echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br />';
                 }
@@ -312,11 +312,9 @@ break;
 ############################################################################################
 case 'load':
 
-    if (isset($_POST['provkod'])) {
-        $provkod = check(strtolower($_POST['provkod']));
-    }
+    $protect = check(Request::input('protect'));
 
-    if (is_user() || $provkod == $_SESSION['protect']) {
+    if (is_user() || $protect == $_SESSION['protect']) {
 
         $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id`=? LIMIT 1;", [$id]);
 
