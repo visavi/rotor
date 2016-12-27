@@ -4,16 +4,15 @@
 
 @section('content')
 
+    <h1><?=$topic['title']?></h1>
 
-	<h2><?=$topic['title']?></h2>
+    <?php foreach ($posts as $key => $data): ?>
 
-	<?php foreach ($posts as $key => $data): ?>
+        <?=($key + 1)?>. <b><?=nickname($data['user'])?></b> (<?=date_fixed($data['time'])?>)<br />
+        <?=App::bbCode($data['text'])?>
+        <br /><br />
 
-		<?=($key + 1)?>. <b><?=nickname($data['user'])?></b> (<?=date_fixed($data['time'])?>)<br />
-		<?=App::bbCode($data['text'])?>
-		<br /><br />
+    <?php endforeach; ?>
 
-	<?php endforeach; ?>
-
-	URL: <a href="<?=$config['home']?>/topic/<?=$topic['id']?>"><?=$config['home']?>/topic/<?=$topic['id']?></a>
+    URL: <a href="<?=$config['home']?>/topic/<?=$topic['id']?>"><?=$config['home']?>/topic/<?=$topic['id']?></a>
 @stop

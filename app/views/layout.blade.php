@@ -10,4 +10,5 @@
 
     @yield('content')
 
+    @include('advert.bottom_all')
 @include(App::setting('themes').'.foot')

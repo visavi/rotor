@@ -307,11 +307,13 @@ class App
     public static function getUserAgent($userAgent = null)
     {
         $browser = new Browser();
-        if ($userAgent) $browser->setUserAgent($userAgent);
+        if ($userAgent) {
+            $browser->setUserAgent($userAgent);
+        }
 
         $brow = $browser->getBrowser();
         $version = implode('.', array_slice(explode('.', $browser->getVersion()), 0, 2));
-        return $version == 'unknown' ? $brow : $brow.' '.$version;
+        return mb_substr($version == 'unknown' ? $brow : $brow.' '.$version, 0, 25, 'utf-8');
     }
 
     /**

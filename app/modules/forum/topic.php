@@ -53,13 +53,15 @@ case 'index':
     if (!empty($ipdpost)) {
         $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id` IN (".$ipdpost.");");
         $files = $queryfiles->fetchAll();
-    }
-    if (!empty($files)){
-        $forumfiles = [];
-        foreach ($files as $file){
-            $topics['files'][$file['post_id']][] = $file;
+
+        if (!empty($files)){
+            $forumfiles = [];
+            foreach ($files as $file){
+                $topics['files'][$file['post_id']][] = $file;
+            }
         }
     }
+
 
     // ------------------------------------- //
     App::view('forum/topic', compact('topics', 'tid', 'page'));

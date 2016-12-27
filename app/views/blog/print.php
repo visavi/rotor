@@ -1,14 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE html>
+<html>
 <head>
-	<title><?=$blog['title']?></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title><?=$blog['title']?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-	<h1><?=$blog['title']?></h1>
+    <h1><?=$blog['title']?></h1>
 
-	<?=App::bbCode($blog['text'])?><br /><br />
+    <?=App::bbCode($blog['text'])?><br /><br />
 
-	URL: <a href="<?= App::setting('home') ?>/blog/blog?act=view&amp;id=<?=$blog['id']?>"><?= App::setting('home')?>/blog/blog?act=view&amp;id=<?=$blog['id']?></a>
+    URL: <a href="<?= App::setting('home') ?>/blog/blog?act=view&amp;id=<?=$blog['id']?>"><?= App::setting('home')?>/blog/blog?act=view&amp;id=<?=$blog['id']?></a>
 </body>
 </html>
