@@ -26,6 +26,8 @@ if (empty($find)) {
 
 } else {
 
+    $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
+
     if (!is_utf($find)) {
         $find = win_to_utf($find);
     }

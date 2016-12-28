@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function() {
 
     prettyPrint();
 
@@ -43,6 +43,18 @@ $(document).ready(function(){
         return $(this).data('group');
     },
         current: 'Фото {current} из {total}',
+    });
+
+    $("a.gallery").colorbox({
+        maxWidth: '95%',
+        maxHeight: '95%',
+        onComplete : function() {
+            $(this).colorbox.resize();
+        }
+    });
+
+    $(window).resize(function() {
+        $.colorbox.resize({width:"95%"});
     });
 });
 

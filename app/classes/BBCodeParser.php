@@ -153,7 +153,7 @@ class BBCodeParser {
 	 */
 	public function urlReplace($match)
 	{
-		$name   = isset($match[3]) ? $match[1] : $match[2];
+		$name   = (isset($match[3]) || empty($match[2])) ? $match[1] : $match[2];
 		$target = (strpos($match[1], $this->setting['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
 
 		return '<a href="'.$match[1].'"'.$target.'>'.rawurldecode($name).'</a>';

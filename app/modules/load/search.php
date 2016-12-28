@@ -42,6 +42,8 @@ case "search":
     $type = abs(intval($_GET['type']));
     $where = abs(intval($_GET['where']));
 
+    $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
+
     if (!is_utf($find)){
         $find = win_to_utf($find);
     }
