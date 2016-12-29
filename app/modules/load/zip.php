@@ -31,7 +31,7 @@ case 'index':
                         echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
                         echo 'Всего файлов: '.$total.'<hr />';
 
-                        $arrext = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg'];
+                        $arrext = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'env', 'gitignore', 'json', 'yml', 'md'];
 
                         if ($total < $page['offset'] + $config['ziplist']) {
                             $end = $total;
@@ -100,7 +100,7 @@ case 'preview':
 
                 echo '<b>'.$filename.'</b> ('.formatsize($content[0]['size']).')<hr />';
 
-                if (!preg_match("/\.(gif|png|bmp|wbmp|jpg|jpeg)$/", $filename)) {
+                if (!preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $filename)) {
                     if ($content[0]['size'] > 0) {
                         if (is_utf($filecontent)) {
                             echo '<pre class="prettyprint linenums">'.htmlspecialchars($filecontent).'</pre><br />';
