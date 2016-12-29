@@ -875,8 +875,8 @@ function sendMail($to, $subject, $body, $params = []) {
         ->setReturnPath($config['mailusername']);
 
     if (isset($params['unsubkey'])) {
-        $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$config['mailusername'].'>, <'.$config['home'].'/mail/unsubscribe?key='.$params['unsubkey'].'>');
-        $message->setBody($body.'<br /><br />Если вы не хотите получать эти эл. письма, пожалуйста, <a href="'.$config['home'].'/mail/unsubscribe?key='.$params['unsubkey'].'">откажитесь от подписки</a>', 'text/html');
+        $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$config['mailusername'].'>, <'.$config['home'].'/unsubscribe?key='.$params['unsubkey'].'>');
+        $message->setBody($body.'<br /><br />Если вы не хотите получать эти эл. письма, пожалуйста, <a href="'.$config['home'].'/unsubscribe?key='.$params['unsubkey'].'">откажитесь от подписки</a>', 'text/html');
     }
 
     if ($config['maildriver'] == 'smtp') {

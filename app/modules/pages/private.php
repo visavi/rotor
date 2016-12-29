@@ -284,7 +284,7 @@ if (is_user()) {
                                                     foreach ($deliveryUsers as $user) {
                                                         sendMail($user['email'],
                                                             $user['newprivat'].' непрочитанных сообщений ('.$config['title'].')',
-                                                            nl2br("Здравствуйте ".nickname($user['login'])."! \nУ вас имеются непрочитанные сообщения (".$user['newprivat']." шт.) на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages//private"),
+                                                            nl2br("Здравствуйте ".nickname($user['login'])."! \nУ вас имеются непрочитанные сообщения (".$user['newprivat']." шт.) на сайте ".$config['title']." \nПрочитать свои сообщения вы можете по адресу ".$config['home']."/pages/private"),
                                                             ['unsubkey' => $user['subscribe']]
                                                         );
 
