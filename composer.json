@@ -25,7 +25,8 @@
         "vlucas/phpdotenv": "^2.4",
         "robmorgan/phinx": "^0.6.5",
         "verot/class.upload.php": "^0.33.0",
-        "php-curl-class/php-curl-class": "^7.0"
+        "php-curl-class/php-curl-class": "^7.0",
+        "baryshev/tree-route": "^2.0"
     },
     "require-dev": {
         "filp/whoops": "^2.1"
@@ -44,6 +45,7 @@
         },
         "files": [
             "app/routes.php",
+            "app/routes2.php",
             "app/helpers.php"
         ]
     },

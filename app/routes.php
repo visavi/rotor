@@ -197,4 +197,5 @@ $router->map('GET|POST', '/admin/files',    '/modules/admin/files.php');
 $router->map('GET|POST', '/admin/delusers',    '/modules/admin/delusers.php');
 $router->map('GET',      '/admin/upgrade',    '/modules/admin/upgrade.php');
 
-Registry::set('router', $router->match());
+Registry::set('router', $router->getRoutes());
+//var_dump(Registry::get('router'));

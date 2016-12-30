@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_URI']) {
     if (isset($parse['path']) && isset($parse['query'])) {
 
         parse_str($parse['query'], $output);
-        
+
         if ($parse['path'] == '/forum/forum.php' && isset($output['fid']) && is_numeric($output['fid'])){
             redirect('/forum/'.$output['fid'], true);
         }

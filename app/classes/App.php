@@ -10,7 +10,9 @@ class App
     public static function router($key)
     {
         if (Registry::has('router')) {
-            return Registry::get('router')[$key];
+            $routes = Registry::get('router');
+
+            
         }
     }
 

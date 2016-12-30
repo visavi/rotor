@@ -211,7 +211,7 @@ if (empty($config['themes']) || !file_exists(HOME.'/themes/'.$config['themes']))
     $config['themes'] = 'default';
 }
 
-$files = glob(APP.'/functions/*.php');
+$files = glob(APP.'/plugins/*.php');
 foreach ($files as $file) {
     require_once $file;
 }
