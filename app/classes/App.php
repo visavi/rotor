@@ -112,7 +112,7 @@ class App
     /**
      * Сохраняет flash уведомления
      * @param string $status статус уведомления
-     * @param array $message массив с уведомлениями
+     * @param mixed $message массив или текст с уведомлениями
      */
     public static function setFlash($status, $message)
     {

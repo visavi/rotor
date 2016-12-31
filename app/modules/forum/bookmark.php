@@ -3,7 +3,7 @@
 $tid  = isset($params['tid']) ? abs(intval($params['tid'])) : 0;
 
 if (! is_user()) {
-    App::abort('Для управления закладками, необходимо авторизоваться!');
+    App::abort('default', 'Для управления закладками, необходимо авторизоваться!');
 }
 
 switch ($act):
