@@ -2,9 +2,13 @@
 $surprise['requiredPoint'] = 50;
 $surprise['requiredDate'] = '07.01';
 
-$surprise['money'] = 10000;
-$surprise['point'] = 150;
-$surprise['rating'] = 3;
+$surprise['money'] = [7000, 15000];
+$surprise['point'] = [100, 200];
+$surprise['rating'] = [2, 5];
+
+$surpriseMoney = mt_rand($surprise['money'][0], $surprise['money'][1]);
+$surprisePoint = mt_rand($surprise['point'][0], $surprise['point'][1]);
+$surpriseRating = mt_rand($surprise['rating'][0], $surprise['rating'][1]);
 
 $currentYear = date('Y');
 
@@ -27,14 +31,14 @@ if ($existSurprise) {
 }
 
 $user = DBM::run()->update('users', [
-    'point'     => ['+', $surprise['money']],
-    'money'     => ['+', $surprise['point']],
-    'posrating' => ['+', $surprise['rating']],
+    'point'     => ['+', $surpriseMoney],
+    'money'     => ['+', $surprisePoint],
+    'posrating' => ['+', $surpriseRating],
 ], [
     'login' => App::getUsername()
 ]);
 
-$text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.points($surprise['point']).PHP_EOL.moneys($surprise['money']).PHP_EOL.$surprise['rating'].' рейтинга репутации'.PHP_EOL.'Ура!!!';
+$text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.points($surprisePoint).PHP_EOL.moneys($surpriseMoney).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
 
 send_private(App::getUsername(), App::setting('nickname'), $text);
 
