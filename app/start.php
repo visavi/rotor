@@ -70,7 +70,16 @@ if (!empty($config['doslimit'])) {
             if (!empty($config['errorlog'])){
                 $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", [App::getClientIp()]);
                 if (empty($banip)) {
-                    DB::run() -> query("INSERT INTO `error` (`num`, `request`, `referer`, `username`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [666, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getUsername(), App::getClientIp(), App::getUserAgent(), SITETIME]);
+
+                    DBM::run()->insert('error', [
+                        'num' => 666,
+                        'request' => utf_substr(App::server('REQUEST_URI'), 0, 200),
+                        'referer' => utf_substr(App::server('HTTP_REFERER'), 0, 200),
+                        'username' => App::getUsername(),
+                        'ip' => App::getClientIp(),
+                        'brow' => App::getUserAgent(),
+                        'time' => SITETIME,
+                    ]);
 
                     DB::run() -> query("INSERT IGNORE INTO ban (`ip`, `time`) VALUES (?, ?);", [App::getClientIp(), SITETIME]);
                     save_ipban();
