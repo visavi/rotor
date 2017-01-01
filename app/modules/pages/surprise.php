@@ -2,9 +2,9 @@
 $surprise['requiredPoint'] = 50;
 $surprise['requiredDate'] = '07.01';
 
-$surprise['money'] = [7000, 15000];
-$surprise['point'] = [100, 200];
-$surprise['rating'] = [2, 5];
+$surprise['money'] = [10000, 20000];
+$surprise['point'] = [150, 250];
+$surprise['rating'] = [3, 7];
 
 $surpriseMoney = mt_rand($surprise['money'][0], $surprise['money'][1]);
 $surprisePoint = mt_rand($surprise['point'][0], $surprise['point'][1]);
@@ -31,8 +31,8 @@ if ($existSurprise) {
 }
 
 $user = DBM::run()->update('users', [
-    'point'     => ['+', $surpriseMoney],
-    'money'     => ['+', $surprisePoint],
+    'point'     => ['+', $surprisePoint],
+    'money'     => ['+', $surpriseMoney],
     'posrating' => ['+', $surpriseRating],
 ], [
     'login' => App::getUsername()
