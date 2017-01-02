@@ -1,6 +1,6 @@
 <?php
 $surprise['requiredPoint'] = 50;
-$surprise['requiredDate'] = '07.01';
+$surprise['requiredDate'] = '08.01';
 
 $surprise['money'] = [10000, 20000];
 $surprise['point'] = [150, 250];
@@ -33,6 +33,7 @@ if ($existSurprise) {
 $user = DBM::run()->update('users', [
     'point'     => ['+', $surprisePoint],
     'money'     => ['+', $surpriseMoney],
+    'rating'    => (abs(App::user('posrating')) - abs(App::user('negrating'))) + $surpriseRating,
     'posrating' => ['+', $surpriseRating],
 ], [
     'login' => App::getUsername()
