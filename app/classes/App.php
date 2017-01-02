@@ -301,7 +301,7 @@ class App
 
     /**
      * Определяет браузер
-     * @param null $userAgent
+     * @param string|null $userAgent
      * @return string браузер и версия браузера
      */
     public static function getUserAgent($userAgent = null)
@@ -326,6 +326,12 @@ class App
         return $ip == '::1' ? '127.0.0.1' : $ip;
     }
 
+    /**
+     * Возвращает серверные переменные
+     * @param string|null $key     ключ массива
+     * @param string|null $default значение по умолчанию
+     * @return mixed               данные
+     */
     public static function server($key = null, $default = null)
     {
         $server = Request::server($key, $default);
@@ -628,6 +634,12 @@ class App
         }
     }
 
+    /**
+     * Возвращает сформированный код base64 картинки
+     * @param string  $path   путь к картинке
+     * @param array   $params параметры
+     * @return string         сформированный код
+     */
     public static function imageBase64($path, array $params = [])
     {
         $type = pathinfo($path, PATHINFO_EXTENSION);
