@@ -137,8 +137,8 @@ case 'create':
 
                 if ($user['login']) {
 
-                    if (! user_privacy($user['login']) || is_contact($user['login'], $log)) {
-                        send_private($user['login'], $log, 'Пользователь ' . $log . ' ответил вам в теме [url=' . App::setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / App::setting('forumpost')) . ']' . $newTopic['title'] . '[/url]');
+                    if ($user['notify']) {
+                        send_private($user['login'], $log, 'Пользователь ' . $log . ' ответил вам в теме [url=' . App::setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / App::setting('forumpost')) . ']' . $newTopic['title'] . '[/url]'.PHP_EOL.'Текст сообщения: '.$msg);
                     }
                 }
             }
