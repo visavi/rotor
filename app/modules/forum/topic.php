@@ -133,10 +133,12 @@ case 'create':
                     continue;
                 }
 
-                if (user($user)) {
+                $user = DBM::run()->queryFirst('SELECT * FROM users WHERE login=:login OR nickname=:login LIMIT 1;', ['login' => $user]);
 
-                    if (! user_privacy($user) || is_contact($user, $log)) {
-                        send_private($user, $log, 'Пользователь ' . $log . ' ответил вам в теме [url=' . App::setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / App::setting('forumpost')) . ']' . $newTopic['title'] . '[/url]');
+                if ($user['login']) {
+
+                    if (! user_privacy($user['login']) || is_contact($user['login'], $log)) {
+                        send_private($user['login'], $log, 'Пользователь ' . $log . ' ответил вам в теме [url=' . App::setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / App::setting('forumpost')) . ']' . $newTopic['title'] . '[/url]');
                     }
                 }
             }
@@ -195,7 +197,6 @@ case 'create':
                 App::setFlash('danger', $fileError);
             }
         }
-        // -- Загрузка файла -- //
 
         App::setFlash('success', 'Сообщение успешно добавлено!');
 
