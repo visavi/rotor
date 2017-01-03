@@ -1,141 +1,115 @@
 <?php
-App::view($config['themes'].'/index');
 
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
+if (! is_user()) {
+    App::abort(403, 'Чтобы загружать фотографии необходимо авторизоваться');
 }
 
-show_title('Загрузка фотографии');
+switch ($act):
+/**
+ * Главная страница
+ */
+case 'index':
 
-if (is_user()) {
-    switch ($act):
-    ############################################################################################
-    ##                                    Главная страница                                    ##
-    ############################################################################################
-        case 'index':
+    if (Request::isMethod('post')) {
 
-            echo '<div class="form">';
-            echo '<form action="/pictures?act=upload&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-            echo 'Прикрепить фото:<br />';
-            echo '<input type="file" name="photo" /><br />';
-            echo '<input type="submit" value="Загрузить" /></form></div><br />';
+        $newName = uniqid();
+        $token   = check(Request::input('token'));
 
-            echo 'Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br />';
-            echo 'Весом не более '.formatsize($config['filesize']).' и размером от 100 до '.(int)$config['fileupfoto'].' px<br /><br />';
+        $validation = new Validation();
+        $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br />';
-        break;
+        $handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $newName);
+        if (! $handle) {
+            $validation -> addError(['photo' => 'Не удалось загрузить фотографию!']);
+        }
 
-        ############################################################################################
-        ##                                Загрузка фото и аватара                                 ##
-        ############################################################################################
-        case 'upload':
+        if ($validation->run()) {
 
-            $uid = check($_GET['uid']);
+            //-------- Удаляем старую фотку и аватар ----------//
+            $user = DBM::run()->selectFirst('users', ['login' => $log]);
 
-            if ($uid == $_SESSION['token']) {
-                if (is_uploaded_file($_FILES['photo']['tmp_name'])) {
-                    if (is_flood($log)) {
+            if (!empty($user['picture'])){
+                unlink_image('uploads/photos/', $user['picture']);
+                unlink_image('uploads/avatars/', $user['avatar']);
 
-                        // ------------------------------------------------------//
-                        $handle = upload_image($_FILES['photo'], $config['filesize'], $config['fileupfoto'], $log);
-                        if ($handle) {
-
-                            //-------- Удаляем старую фотку и аватар ----------//
-                            $userpic = DB::run()->querySingle("SELECT picture, avatar FROM users WHERE login=? LIMIT 1;", [$log]);
-
-                            if (!empty($userpic['picture'])){
-                                unlink_image('uploads/photos/', $userpic['picture']);
-                                unlink_image('uploads/avatars/', $userpic['avatar']);
-
-                                DB::run()->query("UPDATE `users` SET `picture`=?, `avatar`=? WHERE `login`=?;", ['', '', $log]);
-                            }
-
-                            //-------- Генерируем аватар ----------//
-                            $handle->process(HOME.'/uploads/photos/');
-                            $picture = $handle -> file_dst_name;
-
-                            $handle->file_new_name_body = $log;
-                            $handle->image_resize = true;
-                            $handle->image_ratio_crop      = true;
-                            $handle->image_y = 48;
-                            $handle->image_x = 48;
-                            $handle->image_watermark = false;
-                            $handle->image_convert = 'png';
-                            $handle->file_overwrite = true;
-
-                            $handle->process(HOME.'/uploads/avatars/');
-                            $avatar = $handle -> file_dst_name;
-
-                            if ($handle->processed) {
-
-                                DB::run()->query("UPDATE `users` SET `picture`=?, `avatar`=? WHERE `login`=?;", [$picture, $avatar, $log]);
-
-                                $handle->clean();
-
-                                save_avatar();
-
-                                notice('Фотография успешно загружена!');
-                                redirect("/profile");
-
-                            } else {
-                                show_error($handle -> error);
-                            }
-                        } else {
-                            show_error('Ошибка! Не удалось загрузить изображение!');
-                        }
-                    } else {
-                        show_error('Антифлуд! Вы слишком часто добавляете фотографии!');
-                    }
-                } else {
-                    show_error('Ошибка! Не удалось загрузить фотографию!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                DBM::run()->update('users', [
+                    'picture' => null,
+                    'avatar' => null,
+                ], ['login' => $log]);
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/pictures">Вернуться</a><br />';
-        break;
+            //-------- Генерируем аватар ----------//
+            $handle->process(HOME.'/uploads/photos/');
+            $picture = $handle -> file_dst_name;
 
-        ############################################################################################
-        ##                                  Удаление фото и аватара                               ##
-        ############################################################################################
-        case 'del':
+            $handle->file_new_name_body = $newName;
+            $handle->image_resize = true;
+            $handle->image_ratio_crop = true;
+            $handle->image_y = 48;
+            $handle->image_x = 48;
+            $handle->image_watermark = false;
+            $handle->image_convert = 'png';
+            $handle->file_overwrite = true;
 
-            $uid = check($_GET['uid']);
+            $handle->process(HOME.'/uploads/avatars/');
+            $avatar = $handle -> file_dst_name;
 
-            if ($uid == $_SESSION['token']) {
-                $user = DBM::run()->selectFirst('users', ['login' => $log]);
+            if ($handle->processed) {
 
-                if ($user && $user['picture']){
+                DBM::run()->update('users', [
+                    'picture' => $picture,
+                    'avatar' => $avatar,
+                ], ['login' => $log]);
 
-                    unlink_image('uploads/photos/', $user['picture']);
-                    unlink_image('uploads/avatars/', $user['avatar']);
+                $handle->clean();
 
-                    DBM::run()->update('users', [
-                        'picture' => null,
-                        'avatar' => null,
-                    ], ['login' => $log]);
-
-                    notice('Фотография успешно удалена!');
-                    redirect("/profile");
-
-                } else {
-                    show_error('Ошибка! Фотографии для удаления не существует!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                save_avatar();
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br />';
-        break;
+            App::setFlash('success', 'Фотография успешно загружена!');
+            App::redirect('/profile');
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
+        }
+    }
 
-    endswitch;
+    $user = DBM::run()->selectFirst('users', ['login' => App::getUsername()]);
+    App::view('pages/picture', compact('user'));
+break;
 
-} else {
-    show_login('Вы не авторизованы, чтобы загружать фотографии, необходимо');
-}
 
-App::view($config['themes'].'/foot');
+/**
+ * Удаление фото и аватара
+ */
+case 'delete':
+
+    $token = check(Request::input('token'));
+
+    $validation = new Validation();
+    $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
+
+    $user = DBM::run()->selectFirst('users', ['login' => $log]);
+    if (! $user || ! $user['picture']) {
+        $validation -> addError('Фотографии для удаления не существует!');
+    }
+
+    if ($validation->run()) {
+
+        unlink_image('uploads/photos/', $user['picture']);
+        unlink_image('uploads/avatars/', $user['avatar']);
+
+        DBM::run()->update('users', [
+            'picture' => null,
+            'avatar' => null,
+        ], ['login' => $log]);
+
+        App::setFlash('success', 'Фотография успешно удалена!');
+    } else {
+        App::setFlash('danger', $validation->getErrors());
+    }
+
+    App::redirect('/profile');
+
+break;
+endswitch;

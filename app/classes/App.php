@@ -126,16 +126,26 @@ class App
      */
     public static function getFlash()
     {
-        self::view('app._flash');
+        self::view('app/_flash');
     }
 
     /**
      * Сохраняет POST данные введенных пользователем
      * @param array $data массив полей
      */
-    public static function setInput($data)
+    public static function setInput(array $data)
     {
-        $_SESSION['input'] = $data;
+        $prepareData = [];
+        foreach($data as $key => $value) {
+
+            if (is_object($value)) {
+                continue;
+            }
+
+            $prepareData[$key] = $value;
+        }
+
+        $_SESSION['input'] = $prepareData;
     }
 
     /**
