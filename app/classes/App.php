@@ -61,11 +61,11 @@ class App
     public static function abort($code, $message = null)
     {
         if ($code == 403) {
-            header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
+            header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
         }
 
         if ($code == 404) {
-            header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
+            header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
         }
 
         if (App::setting('errorlog') && in_array($code, [403, 404])) {
@@ -103,7 +103,7 @@ class App
         if (isset($_SESSION['captcha'])) $_SESSION['captcha'] = null;
 
         if ($permanent){
-            header('HTTP/1.1 301 Moved Permanently');
+            header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
         }
 
         exit(header('Location: '.$url));

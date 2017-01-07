@@ -1,22 +1,25 @@
-<!DOCTYPE>
-<html>
-	<head>
-		<title>Вход на сайт запрещен!</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	</head>
-	<body>
-		<div>
-			<center><h2>Вас забанили по IP!<br />Вход на сайт запрещен!</h2></center>
-			<b>Возможные причины:</b><br />
-			1. Вы нарушили какие-либо правила сайта<br />
-			2. Превышена допустимая частота запросов с одного IP<br />
-			3. Вы всунулись туда, куда не положено<br />
-			4. Возможно у вас просто одинаковые IP с нарушителем<br /><br />
-			<b>Что теперь делать?</b><br />
-			Сменить браузер, войти с другого IP или с прокси-сервера и<br />
-			Попросить администрацию разбанить ваш IP<br /><br />
-			Если нет такой возможности остается только ждать, список забаненых IP очищают раз в 3-4 дня<br /><br />
-			<i class="fa fa-home"></i> <a href="/">На главную</a>
-		</div>
-	</body>
-</html>
+<?php
+header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
+
+$ban = DBM::run()->queryFirst(
+    'SELECT * FROM ban WHERE ip = :ip AND user IS NULL LIMIT 1;',
+    ['ip' => App::getClientIp()]
+);
+
+if (Request::isMethod('post')) {
+
+    $protect = check(Request::input('protect'));
+
+    if ($ban && $protect == $_SESSION['protect']) {
+
+        DBM::run()->delete('ban', ['ip' => App::getClientIp()]);
+        save_ipban();
+
+        App::setFlash('success', 'IP успешно разбанен!');
+        App::redirect('/');
+    }
+}
+
+
+App::view('pages/banip', compact('ban'));
+
