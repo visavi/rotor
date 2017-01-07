@@ -399,6 +399,7 @@ class App
 
             $user = DB::run()->queryFetch("SELECT `login`, `password` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [$login, $login]);
 
+
             /* Миграция старых паролей */
             if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
             {
@@ -406,7 +407,7 @@ class App
                     $user['password'] = password_hash($password, PASSWORD_BCRYPT);
                     DBM::run()->update('users', [
                         'password' => $user['password'],
-                    ], ['login' => $login]);
+                    ], ['login' => $user['login']]);
                 }
             }
 
