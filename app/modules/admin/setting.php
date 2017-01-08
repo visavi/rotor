@@ -943,7 +943,7 @@ if (is_admin([101])) {
             $checked = ($setting['errorlog'] == 1) ? ' checked="checked"' : '';
             echo '<input name="errorlog" type="checkbox" value="1"'.$checked.' /> Включить запись логов<br />';
 
-            echo 'Сохраняется информации в лог-файле:<br /><input name="maxlogdat" maxlength="3" value="'.$setting['maxlogdat'].'" /><br />';
+            echo 'Время хранения логов (Суток):<br /><input name="maxlogdat" maxlength="3" value="'.$setting['maxlogdat'].'" /><br />';
             echo 'Ключевые слова (keywords):<br /><input name="keywords" maxlength="250" value="'.$setting['keywords'].'" /><br />';
             echo 'Краткое описание (description):<br /><input name="description" maxlength="250" value="'.$setting['description'].'" /><br />';
             echo 'Не сканируемые расширения (через запятую):<br /><input name="nocheck" maxlength="100" value="'.$setting['nocheck'].'" /><br />';

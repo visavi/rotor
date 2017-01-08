@@ -106,7 +106,7 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'maxdowncomm', 'value' => 300],
             ['name'  => 'maxkommevents', 'value' => 500],
             ['name'  => 'maxkommnews', 'value' => 500],
-            ['name'  => 'maxlogdat', 'value' => 100],
+            ['name'  => 'maxlogdat', 'value' => 10],
             ['name'  => 'maxpostbook', 'value' => 500],
             ['name'  => 'maxpostchat', 'value' => 500],
             ['name'  => 'maxpostgallery', 'value' => 100],

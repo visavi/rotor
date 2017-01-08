@@ -80,12 +80,10 @@ class App
                 'time' => SITETIME,
             ]);
 
-            DBM::run()->execute("DELETE FROM error 
-                    WHERE num=:num AND time < (SELECT MIN(time) 
-                    FROM (
-                        SELECT time FROM error WHERE num=:num ORDER BY time DESC LIMIT :limit
-                    ) AS del);
-                ", ['limit' => (int)App::setting('maxlogdat'), 'num' => $code]);
+            DBM::run()->delete('error', [
+                'num' => $code,
+                'time' => ['<', SITETIME - 3600 * 24 * App::setting('maxlogdat')]]
+            );
         }
 
         exit(self::view('errors.'.$code, compact('message')));
