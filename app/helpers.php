@@ -1383,7 +1383,7 @@ function recentevents($show = 5) {
     if (is_array($events) && count($events) > 0) {
         foreach ($events as $data) {
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i> ';
-            echo '<a href="/events/?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].')<br />';
+            echo '<a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].')<br />';
         }
     }
 }
