@@ -137,7 +137,7 @@ case 'send':
             $listkeys = [];
 
             for($i = 0; $i < $keys; $i++) {
-                $key = generate_password(rand(12, 15));
+                $key = str_random(rand(12, 15));
                 $dbr -> execute($key, $user, SITETIME);
                 $listkeys[] = $key;
             }
@@ -184,7 +184,7 @@ case 'mailing':
                 $dbr = DB::run() -> prepare("INSERT INTO `invite` (hash, `user`, `time`) VALUES (?, ?, ?);");
 
                 foreach ($users as $user){
-                    $key = generate_password(rand(12, 15));
+                    $key = str_random(rand(12, 15));
                     $updateusers -> execute($user);
                     $insertprivat -> execute($user, $log, sprintf($text, $key), SITETIME);
                     $dbr -> execute($key, $user, SITETIME);
@@ -219,7 +219,7 @@ case 'generate':
             $dbr = DB::run() -> prepare("INSERT INTO `invite` (hash, `user`, `time`) VALUES (?, ?, ?);");
 
             for($i = 0; $i < $keys; $i++) {
-                $key = generate_password(rand(12, 15));
+                $key = str_random(rand(12, 15));
                 $dbr -> execute($key, $log, SITETIME);
             }
 

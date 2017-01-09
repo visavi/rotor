@@ -29,8 +29,8 @@ if (!empty($key)){
             'allprivat' => user_mail($user['login']),
             'newprivat' => $user['newprivat'],
             'status'    => user_title($user['login']),
-            'avatar'    => $config['home'].'/'.$user['avatar'],
-            'picture'   => $user['picture'],
+            'avatar'    => $config['home'].'/uploads/avatars/'.$user['avatar'],
+            'picture'   => $config['home'].'/uploads/photos/'.$user['picture'],
             'rating'    => $user['rating'],
             'lastlogin' => $user['timelastlogin'],
         ]);

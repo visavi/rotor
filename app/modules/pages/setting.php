@@ -82,7 +82,7 @@ case 'edit':
     $timezone   = check(Request::input('timezone'), 0);
     $privacy = Request::has('privacy') ? 1 : 0;
     $notify   = Request::has('notify') ? 1 : 0;
-    $subscribe = Request::has('subscribe') ? generate_password(32) : null;
+    $subscribe = Request::has('subscribe') ? str_random(32) : null;
 
     $validation = new Validation();
 

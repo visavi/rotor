@@ -133,7 +133,7 @@ case 'changemail':
 
     if ($validation->run()) {
 
-        $genkey = generate_password(rand(15,20));
+        $genkey = str_random(rand(15,20));
 
         sendMail($meil,
             'Изменение адреса электронной почты на сайте '.$config['title'],
@@ -361,7 +361,7 @@ case 'apikey':
 
     if ($uid == $_SESSION['token']) {
 
-        $key = generate_password();
+        $key = str_random();
 
         DB::run() -> query("UPDATE `users` SET `apikey`=? WHERE `login`=?;", [md5($log.$key), $log]);
 

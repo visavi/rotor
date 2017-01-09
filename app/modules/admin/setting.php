@@ -218,9 +218,6 @@ if (is_admin([101])) {
                 $checked = ($setting['anonymity'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="anonymity" type="checkbox" value="1"'.$checked.' /> Скрывать IP для пользователей<br />';
 
-                $checked = ($setting['session'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="session" type="checkbox" value="1"'.$checked.' /> Привязка IP к сессиям<br />';
-
                 echo '<input value="Изменить" type="submit" /></form></div><br />';
             } else {
                 show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
@@ -239,7 +236,6 @@ if (is_admin([101])) {
             $invite = (empty($_POST['invite'])) ? 0 : 1;
             $openreg = (empty($_POST['openreg'])) ? 0 : 1;
             $anonymity = (empty($_POST['anonymity'])) ? 0 : 1;
-            $session = (empty($_POST['session'])) ? 0 : 1;
             $regkeys = (isset($_POST['regkeys'])) ? abs(intval($_POST['regkeys'])) : 0;
             $closedsite = (isset($_POST['closedsite'])) ? abs(intval($_POST['closedsite'])) : 0;
 
@@ -265,7 +261,6 @@ if (is_admin([101])) {
                         $dbr -> execute($openreg, 'openreg');
                         $dbr -> execute($anonymity, 'anonymity');
                         $dbr -> execute($closedsite, 'closedsite');
-                        $dbr -> execute($session, 'session');
 
                         save_setting();
 

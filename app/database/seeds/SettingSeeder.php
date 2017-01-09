@@ -148,7 +148,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'sendmailpacket', 'value' => 20],
             ['name'  => 'sendmoneypoint', 'value' => 150],
             ['name'  => 'sendprivatmailday', 'value' => 3],
-            ['name'  => 'session', 'value' => 1],
             ['name'  => 'showuser', 'value' => 10],
             ['name'  => 'smilelist', 'value' => 10],
             ['name'  => 'smilemaxsize', 'value' => 10240],

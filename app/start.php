@@ -126,19 +126,16 @@ if (empty($_SESSION['login']) && empty($_SESSION['password'])) {
  * Установка сессионных переменных
  */
 $log = '';
-if (empty($_SESSION['protect'])) {
-    $_SESSION['protect'] = rand(1000, 9999);
-}
 if (empty($_SESSION['counton'])) {
     $_SESSION['counton'] = 0;
 }
-if (!isset($_SESSION['token'])) {
-    if (!empty($config['session'])){
-        $_SESSION['token'] = generate_password(6);
-    } else {
-        $_SESSION['token'] = 0;
-    }
+if (empty($_SESSION['token'])) {
+    $_SESSION['token'] = str_random(8);
 }
+if (empty($_SESSION['protect'])) {
+    $_SESSION['protect'] = mt_rand(1000, 99999);
+}
+
 ob_start('ob_processing');
 
 /**
@@ -153,21 +150,21 @@ if ($udata = is_user()) {
 
     // Забанен
     if ($udata['ban']) {
-        if (!strsearch(App::server('PHP_SELF'), ['/ban', '/rules', '/logout'])) {
+        if (! Request::is('ban', 'rules', 'logout')) {
             redirect('/ban?log='.$log);
         }
     }
 
     // Подтверждение регистрации
     if ($config['regkeys'] > 0 && $udata['confirmreg'] > 0 && empty($udata['ban'])) {
-        if (!strsearch(App::server('PHP_SELF'), ['/key', '/login', '/logout'])) {
+        if (! Request::is('key', 'login', 'logout')) {
             redirect('/key?log='.$log);
         }
     }
 
     // Просрочен кредит
     if ($udata['sumcredit'] > 0 && SITETIME > $udata['timecredit'] && empty($udata['ban'])) {
-        if (!strstr(App::server('PHP_SELF'), '/games/credit')) {
+        if (Request::path() != 'games/credit') {
             redirect('/games/credit?log='.$log);
         }
     }
@@ -179,7 +176,7 @@ if ($udata = is_user()) {
     }
 
     // ------------------ Запись текущей страницы для админов --------------------//
-    if (strstr(App::server('PHP_SELF'), '/admin')) {
+    if (Request::path() == 'admin') {
         DB::run() -> query("INSERT INTO `admlog` (`user`, `request`, `referer`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$log, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME]);
 
         DB::run() -> query("DELETE FROM `admlog` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `admlog` ORDER BY `time` DESC LIMIT 500) AS del);");
@@ -187,12 +184,12 @@ if ($udata = is_user()) {
 }
 
 // Сайт закрыт для всех
-if ($config['closedsite'] == 2 && !is_admin() && !strsearch(App::server('PHP_SELF'), ['/closed', '/login'])) {
+if ($config['closedsite'] == 2 && !is_admin() && ! Request::is('closed', 'login')) {
     redirect('/closed');
 }
 
 // Сайт закрыт для гостей
-if ($config['closedsite'] == 1 && !is_user() && !strsearch(App::server('PHP_SELF'), ['/login', '/register', '/lostpassword', '/captcha'])) {
+if ($config['closedsite'] == 1 && !is_user() && ! Request::is('register', 'login', 'lostpassword', 'captcha')) {
     notice('Для входа на сайт необходимо авторизоваться!');
     redirect('/login');
 }
