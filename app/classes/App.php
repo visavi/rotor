@@ -43,12 +43,12 @@ class App
 
         $params +=compact('config', 'log');
 
-        $blade = new Philo\Blade\Blade([APP.'/views', HOME.'/themes'], STORAGE.'/cache');
+        $blade = new Jenssegers\Blade\Blade([APP.'/views', HOME.'/themes'], STORAGE.'/cache');
 
         if ($return) {
-            return $blade->view()->make($template, $params)->render();
+            return $blade->render($template, $params);
         } else {
-            echo $blade->view()->make($template, $params)->render();
+            echo $blade->render($template, $params);
         }
     }
 

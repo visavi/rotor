@@ -14,7 +14,7 @@ class CreateBanhistTable extends AbstractMigration
             ->addColumn('send', 'string', ['limit' => 20])
             ->addColumn('type', 'boolean', ['default' => 0])
             ->addColumn('reason', 'text', ['null' => true])
-            ->addColumn('term', 'integer')
+            ->addColumn('term', 'integer', ['default' => 0])
             ->addColumn('time', 'integer')
             ->addIndex('time')
             ->addIndex('user')

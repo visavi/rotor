@@ -11,8 +11,7 @@
             <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error" />
         </div>
         <div class="col-md-8">
-            <h3>Ошибка!</h3>
-            <div class="lead">{{ $message }}</div>
+            <h3>{{ $message }}</h3>
         </div>
     </div>
 @stop

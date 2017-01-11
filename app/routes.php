@@ -8,6 +8,10 @@ $router->map( 'GET', '/', function() {
     App::view('index');
 });
 
+$router->map( 'GET', '/search', function() {
+    App::view('search/index');
+});
+
 $router->map('GET', '/book', '/modules/book/index.php', 'book');
 $router->map('POST', '/book/[complaint|add:action]', '/modules/book/index.php');
 $router->map('GET|POST', '/book/[edit:action]/[i:id]', '/modules/book/index.php');
