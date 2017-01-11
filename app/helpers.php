@@ -393,20 +393,6 @@ function rating_vote($rating) {
     return $output;
 }
 
-// ------------------ Функция генерирования паролей --------------------//
-function generate_password($length = "") {
-    if (empty($length)) {
-        $length = mt_rand(10, 12);
-    }
-    $salt = str_split('aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ0123456789');
-
-    $makepass = "";
-    for ($i = 0; $i < $length; $i++) {
-        $makepass .= $salt[array_rand($salt)];
-    }
-    return $makepass;
-}
-
 // --------------- Функция листинга всех файлов и папок ---------------//
 function scan_check($dirname) {
     global $arr, $config;
@@ -1383,7 +1369,7 @@ function recentevents($show = 5) {
     if (is_array($events) && count($events) > 0) {
         foreach ($events as $data) {
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i> ';
-            echo '<a href="/events/?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].')<br />';
+            echo '<a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].')<br />';
         }
     }
 }
@@ -1568,17 +1554,6 @@ function counter_string($files) {
         $count_lines = count($lines);
     }
     return $count_lines;
-}
-
-// ------------------- Функция поиска текста в массиве --------------------//
-function strsearch($str, $arr) {
-    foreach ($arr as $search) {
-        if (stristr($str, $search)) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 /*// --------------- Функция определения последней страницы -----------------//

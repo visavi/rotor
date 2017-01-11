@@ -19,7 +19,8 @@ case 'index':
     echo '<b>Настройки</b><hr />';
 
     echo '<div class="form">';
-    echo '<form method="post" action="setting?act=edit&amp;uid='.$_SESSION['token'].'">';
+    echo '<form method="post" action="setting?act=edit">';
+    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
 
     echo 'Wap-тема по умолчанию:<br />';
     echo '<select name="themes">';
@@ -41,15 +42,34 @@ case 'index':
     }
     echo '</select> - '.date_fixed(SITETIME, 'H:i').'<br />';
 
-    $checked = ($udata['privacy'] == 1) ? ' checked="checked"' : '';
-    echo '<input name="privacy" id="privacy" type="checkbox" value="1"'.$checked.' title="Писать в приват и на стену смогут только пользователи из контактов" /> <label for="privacy">Режим приватности</label><br />';
+?>
+    <?php $checked = ($udata['privacy'] == 1) ? ' checked="checked"' : ''; ?>
+    <div class="checkbox">
+        <label data-toggle="tooltip" title="Писать в приват и на стену смогут только пользователи из контактов">
+            <input name="privacy" type="checkbox" value="1"<?= $checked?>> Режим приватности
+        </label>
+    </div>
 
-    $checked = (! empty($udata['subscribe'])) ? ' checked="checked"' : '';
-    echo '<input name="subscribe" id="subscribe" type="checkbox" value="1"'.$checked.' title="Получение уведомлений с сайта на email" /> <label for="subscribe">Получать информационные письма</label><br />';
+    <?php $checked = ($udata['notify'] == 1) ? ' checked="checked"' : ''; ?>
+    <div class="checkbox">
+        <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения">
+            <input name="notify" type="checkbox" value="1"<?= $checked?>> Получать уведомления об ответах
+        </label>
+    </div>
 
-    echo '<input value="Изменить" type="submit" /></form></div><br />';
+    <?php $checked = (! empty($udata['subscribe'])) ? ' checked="checked"' : ''; ?>
+    <div class="checkbox">
+        <label data-toggle="tooltip" title="Получение информационных писем с сайта на email">
+            <input name="subscribe" type="checkbox" value="1"<?= $checked?>> Получать информационные письма
+        </label>
+    </div>
 
-    echo '* Значение всех полей (max.50)<br /><br />';
+    <button type="submit" class="btn btn-primary">Изменить</button>
+    </form></div><br />
+
+    * Значение всех полей (max.50)<br /><br />
+
+    <?php
 break;
 
 ############################################################################################
@@ -57,15 +77,16 @@ break;
 ############################################################################################
 case 'edit':
 
-    $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
-    $themes = (isset($_POST['themes'])) ? check($_POST['themes']) : '';
-    $timezone = (isset($_POST['timezone'])) ? check($_POST['timezone']) : 0;
-    $privacy = (empty($_POST['privacy'])) ? 0 : 1;
-    $subscribe = (! empty($_POST['subscribe'])) ? generate_password(32) : '';
+    $token   = check(Request::input('token'));
+    $themes   = check(Request::input('themes'));
+    $timezone   = check(Request::input('timezone'), 0);
+    $privacy = Request::has('privacy') ? 1 : 0;
+    $notify   = Request::has('notify') ? 1 : 0;
+    $subscribe = Request::has('subscribe') ? str_random(32) : null;
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('regex', [$themes, '|^[a-z0-9_\-]+$|i'], 'Недопустимое название темы!', true)
         -> addRule('regex', [$timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|'], 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!', true);
 
@@ -76,6 +97,7 @@ case 'edit':
                 'themes'      => $themes,
                 'timezone'    => $timezone,
                 'privacy'     => $privacy,
+                'notify'     => $notify,
                 'subscribe'   => $subscribe,
             ], [
                 'login' => $log

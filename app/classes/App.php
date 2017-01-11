@@ -3,16 +3,13 @@
 class App
 {
     /**
-     * Возвращает данные роутов
-     * @param $key
-     * @return object данные роутов
+     * Возвращает объект роутов
+     * @return object объект роутов
      */
-    public static function router($key)
+    public static function router()
     {
         if (Registry::has('router')) {
-            $routes = Registry::get('router');
-
-            
+            return Registry::get('router');
         }
     }
 
@@ -45,12 +42,12 @@ class App
 
         $params +=compact('config', 'log');
 
-        $blade = new Philo\Blade\Blade([APP.'/views', HOME.'/themes'], STORAGE.'/cache');
+        $blade = new Jenssegers\Blade\Blade([APP.'/views', HOME.'/themes'], STORAGE.'/cache');
 
         if ($return) {
-            return $blade->view()->make($template, $params)->render();
+            return $blade->render($template, $params);
         } else {
-            echo $blade->view()->make($template, $params)->render();
+            echo $blade->render($template, $params);
         }
     }
 
@@ -63,11 +60,11 @@ class App
     public static function abort($code, $message = null)
     {
         if ($code == 403) {
-            header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
+            header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
         }
 
         if ($code == 404) {
-            header($_SERVER["SERVER_PROTOCOL"].' 404 Not Found');
+            header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
         }
 
         if (App::setting('errorlog') && in_array($code, [403, 404])) {
@@ -82,12 +79,10 @@ class App
                 'time' => SITETIME,
             ]);
 
-            DBM::run()->execute("DELETE FROM error 
-                    WHERE num=:num AND time < (SELECT MIN(time) 
-                    FROM (
-                        SELECT time FROM error WHERE num=:num ORDER BY time DESC LIMIT :limit
-                    ) AS del);
-                ", ['limit' => (int)App::setting('maxlogdat'), 'num' => $code]);
+            DBM::run()->delete('error', [
+                'num' => $code,
+                'time' => ['<', SITETIME - 3600 * 24 * App::setting('maxlogdat')]]
+            );
         }
 
         exit(self::view('errors.'.$code, compact('message')));
@@ -105,7 +100,7 @@ class App
         if (isset($_SESSION['captcha'])) $_SESSION['captcha'] = null;
 
         if ($permanent){
-            header('HTTP/1.1 301 Moved Permanently');
+            header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
         }
 
         exit(header('Location: '.$url));
@@ -114,7 +109,7 @@ class App
     /**
      * Сохраняет flash уведомления
      * @param string $status статус уведомления
-     * @param array $message массив с уведомлениями
+     * @param mixed $message массив или текст с уведомлениями
      */
     public static function setFlash($status, $message)
     {
@@ -128,16 +123,26 @@ class App
      */
     public static function getFlash()
     {
-        self::view('app._flash');
+        self::view('app/_flash');
     }
 
     /**
      * Сохраняет POST данные введенных пользователем
      * @param array $data массив полей
      */
-    public static function setInput($data)
+    public static function setInput(array $data)
     {
-        $_SESSION['input'] = $data;
+        $prepareData = [];
+        foreach($data as $key => $value) {
+
+            if (is_object($value)) {
+                continue;
+            }
+
+            $prepareData[$key] = $value;
+        }
+
+        $_SESSION['input'] = $prepareData;
     }
 
     /**
@@ -303,7 +308,7 @@ class App
 
     /**
      * Определяет браузер
-     * @param null $userAgent
+     * @param string|null $userAgent
      * @return string браузер и версия браузера
      */
     public static function getUserAgent($userAgent = null)
@@ -328,6 +333,12 @@ class App
         return $ip == '::1' ? '127.0.0.1' : $ip;
     }
 
+    /**
+     * Возвращает серверные переменные
+     * @param string|null $key     ключ массива
+     * @param string|null $default значение по умолчанию
+     * @return mixed               данные
+     */
     public static function server($key = null, $default = null)
     {
         $server = Request::server($key, $default);
@@ -385,6 +396,7 @@ class App
 
             $user = DB::run()->queryFetch("SELECT `login`, `password` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [$login, $login]);
 
+
             /* Миграция старых паролей */
             if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
             {
@@ -392,7 +404,7 @@ class App
                     $user['password'] = password_hash($password, PASSWORD_BCRYPT);
                     DBM::run()->update('users', [
                         'password' => $user['password'],
-                    ], ['login' => $login]);
+                    ], ['login' => $user['login']]);
                 }
             }
 
@@ -630,6 +642,12 @@ class App
         }
     }
 
+    /**
+     * Возвращает сформированный код base64 картинки
+     * @param string  $path   путь к картинке
+     * @param array   $params параметры
+     * @return string         сформированный код
+     */
     public static function imageBase64($path, array $params = [])
     {
         $type = pathinfo($path, PATHINFO_EXTENSION);

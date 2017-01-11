@@ -2,15 +2,12 @@
 #---------------------------------------------#
 #      ********* RotorCMS *********           #
 #           Author  :  Vantuz                 #
-#            Email  :  visavi.net@mail.ru     #
+#            Email  :  admin@visavi.net       #
 #             Site  :  http://visavi.net      #
 #            Skype  :  vantuzilla             #
 #            Phone  :  +79167407574           #
 #---------------------------------------------#
 include_once __DIR__.'/../app/start.php';
-
-$params = App::router('params');
-$target = App::router('target');
 
 // Временно для переадресации старых ссылок
 if ($_SERVER['REQUEST_URI']) {
@@ -147,23 +144,25 @@ if ($_SERVER['REQUEST_URI']) {
             redirect('/user/'.$output['uz'], true);
         }
     }
+
 }
+$router = App::router()->match();
 
-if ($target && is_callable($target)) {
+if ($router['target'] && is_callable($router['target'])) {
 
-    call_user_func_array($target, $params);
+    call_user_func_array($router['target'], $router['params']);
 
-} elseif ($target) {
+} elseif ($router['target']) {
 
-    $target = explode('@', $target);
+    $target = explode('@', $router['target']);
 
     $act = isset($target[1]) ? $target[1] : 'index';
 
-    if (isset($params['action'])) {
-        $act = $params['action'];
+    if (isset($router['params']['action'])) {
+        $act = $router['params']['action'];
     }
 
-    include_once (APP.$target[0]);
+    include_once (APP.'/modules/'.$target[0]);
 
 } else {
     App::abort(404);

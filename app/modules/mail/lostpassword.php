@@ -109,7 +109,7 @@ case 'send':
 
         if ($validation->run()) {
 
-            $restkey = generate_password();
+            $restkey = str_random();
 
             DB::run() -> query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$restkey, SITETIME + 43200, $uz]);
             // ---------------- Инструкция по восстановлению пароля на E-mail --------------------------//
@@ -153,7 +153,7 @@ case 'restore':
 
         if ($validation->run()) {
 
-            $newpass = generate_password();
+            $newpass = str_random();
             $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);;
 
             DB::run() -> query("UPDATE `users` SET `password`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$hashnewpas, '', 0, $uz]);
@@ -204,7 +204,7 @@ case 'answer':
 
         if ($validation->run()) {
 
-            $newpass = generate_password();
+            $newpass = str_random();
             $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
 
             DB::run() -> query("UPDATE `users` SET `password`=?, `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$hashnewpas, '', 0, $uz]);

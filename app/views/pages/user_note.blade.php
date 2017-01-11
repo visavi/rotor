@@ -6,7 +6,7 @@
 
     <h1>Заметка для пользователя {{ $uz }}</h1>
     <div class="form">
-        <form action="/user/admin/note" method="post">
+        <form action="/user/{{ $uz }}/note" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ App::hasError('note') }}">

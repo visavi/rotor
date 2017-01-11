@@ -128,25 +128,4 @@ class FileUpload extends upload {
             parent::process($server_path);
         }
     }
-
-    /**
-     * Удаляет временное изображение
-     */
-    function clean()
-    {
-        $fieldName = array_search(
-            $this->file_src_pathname,
-            array_map(
-                function($data) {
-                    return $data['tmp_name'];
-                }, $_FILES
-            )
-        );
-
-        if (isset($_FILES[$fieldName])) {
-            unset($_FILES[$fieldName]);
-        }
-
-        parent::clean();
-    }
 }

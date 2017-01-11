@@ -287,7 +287,7 @@ if (is_admin([101, 102])) {
                                                 $city = utf_substr($city, 0, 50);
                                                 $rating = $posrating - $negrating;
 
-                                                DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=? `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
+                                                DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
 
                                                 save_title();
                                                 save_nickname();

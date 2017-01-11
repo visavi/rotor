@@ -37,7 +37,6 @@
 - rating_vote<br />
 - safe_encode<br />
 - safe_decode<br />
-- generate_password<br />
 - text_dump<br />
 - dump<br />
 - scan_check<br />
@@ -124,7 +123,6 @@
 - restatement<br />
 - write_files<br />
 - counter_string<br />
-- strsearch<br />
 
 - <a href="/files/docs/last_page">last_page</a><br />
 - <a href="/files/docs/cache_functions">cache_functions</a><br />

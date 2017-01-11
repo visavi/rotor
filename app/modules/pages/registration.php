@@ -78,7 +78,7 @@ if (Request::isMethod('post')) {
             $regmessage = "Добро пожаловать, " . $logs . " \nТеперь вы зарегистрированный пользователь сайта " . $config['home'] . " , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. \nВаши данные для входа на сайт \nЛогин: " . $logs . " \nПароль: " . $pars . " \n\nСсылка для входа на сайт: \n" . $config['home'] . "/login \nНадеемся вам понравится на нашем портале! \nС уважением администрация сайта \nЕсли это письмо попало к вам по ошибке, то просто проигнорируйте его \n\n";
 
             if ($config['regkeys'] == 1) {
-                $registration_key = generate_password();
+                $registration_key = str_random();
 
                 echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br />';
                 echo 'Мастер-ключ был выслан вам на почтовый ящик: ' . $meil . '</span></b><br /><br />';
@@ -110,7 +110,7 @@ if (Request::isMethod('post')) {
                 'timelastlogin' => SITETIME,
                 'confirmreg' => $config['regkeys'],
                 'confirmregkey' => $registration_key,
-                'subscribe' => generate_password(32),
+                'subscribe' => str_random(32),
             ]);
 
             // ------------------------------ Уведомление в приват ----------------------------------//

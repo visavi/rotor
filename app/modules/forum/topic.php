@@ -35,7 +35,7 @@ case 'index':
     $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
     $page = App::paginate(App::setting('forumpost'), $total);
 
-    $querypost = DB::run() -> query("SELECT p.*, pl.vote FROM `posts` p LEFT JOIN pollings pl ON p.id = pl.relate_id AND relate_type = 'post' AND pl.user=? WHERE `topic_id`=? ORDER BY p.`time` ASC LIMIT ".$page['offset'].", ".$config['forumpost'].";", [$log, $tid]);
+    $querypost = DB::run() -> query("SELECT p.*, pl.vote FROM `posts` p LEFT JOIN pollings pl ON p.id = pl.relate_id AND relate_type = 'post' AND pl.user=? WHERE `topic_id`=? ORDER BY p.`time` ASC LIMIT ".$page['offset'].", ".App::setting('forumpost').";", [$log, $tid]);
 
 
    // var_dump($querypost->fetchAll());
@@ -118,7 +118,33 @@ case 'create':
             }
         }
 
-        // -- Загрузка файла -- //
+        // Рассылка уведомлений в приват
+        $parseText = preg_replace('|\[quote(.*?)\](.*?)\[/quote\]|s', '', $msg);
+
+        preg_match_all('|\[b\](.*?)\[\/b\]|s', $parseText, $matches);
+
+        if (isset($matches[1])) {
+            $usersAnswer = array_unique($matches[1]);
+
+            $newTopic = DBM::run()->selectFirst('topics', ['id' => $tid]);
+            foreach($usersAnswer as $user) {
+
+                if ($user == $log) {
+                    continue;
+                }
+
+                $user = DBM::run()->queryFirst('SELECT * FROM users WHERE login=:login OR nickname=:login LIMIT 1;', ['login' => $user]);
+
+                if ($user['login']) {
+
+                    if ($user['notify']) {
+                        send_private($user['login'], $log, 'Пользователь ' . $log . ' ответил вам в теме [url=' . App::setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / App::setting('forumpost')) . '#post_'.$lastid.']' . $newTopic['title'] . '[/url]'.PHP_EOL.'Текст сообщения: '.$msg);
+                    }
+                }
+            }
+        }
+
+        // Загрузка файла
         if (!empty($_FILES['file']['name']) && !empty($lastid)) {
             if ($udata['point'] >= $config['forumloadpoints']){
                 if (is_uploaded_file($_FILES['file']['tmp_name'])) {
@@ -171,7 +197,6 @@ case 'create':
                 App::setFlash('danger', $fileError);
             }
         }
-        // -- Загрузка файла -- //
 
         App::setFlash('success', 'Сообщение успешно добавлено!');
 
@@ -457,7 +482,7 @@ case 'viewpost':
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    $end = ceil($querytopic / $config['forumpost']);
+    $end = ceil($querytopic / App::setting('forumpost'));
     App::redirect('/topic/'.$tid.'?page='.$end.'#post_'.$id);
 break;
 
@@ -472,7 +497,7 @@ case 'end':
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    $end = ceil($topic['posts'] / $config['forumpost']);
+    $end = ceil($topic['posts'] / App::setting('forumpost'));
     App::redirect('/topic/'.$tid.'?page='.$end);
 break;
 

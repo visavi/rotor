@@ -25,7 +25,7 @@
                                 <a class="gallery" href="/uploads/photos/{{ $udata['picture'] }}">
                                     {!! resize_image('uploads/photos/', $udata['picture'], $config['previewsize'], ['alt' => nickname($udata['login']), 'class' => 'img-responsive img-rounded']) !!}
                                 </a>
-                                <a href="/pictures">Изменить</a> / <a href="/pictures?act=del&amp;uid={{ $_SESSION['token'] }}">Удалить</a>
+                                <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
                             @else
                                 <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />
                                 <a href="/pictures">Загрузить фото</a>

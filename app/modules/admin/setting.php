@@ -218,9 +218,6 @@ if (is_admin([101])) {
                 $checked = ($setting['anonymity'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="anonymity" type="checkbox" value="1"'.$checked.' /> Скрывать IP для пользователей<br />';
 
-                $checked = ($setting['session'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="session" type="checkbox" value="1"'.$checked.' /> Привязка IP к сессиям<br />';
-
                 echo '<input value="Изменить" type="submit" /></form></div><br />';
             } else {
                 show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
@@ -239,7 +236,6 @@ if (is_admin([101])) {
             $invite = (empty($_POST['invite'])) ? 0 : 1;
             $openreg = (empty($_POST['openreg'])) ? 0 : 1;
             $anonymity = (empty($_POST['anonymity'])) ? 0 : 1;
-            $session = (empty($_POST['session'])) ? 0 : 1;
             $regkeys = (isset($_POST['regkeys'])) ? abs(intval($_POST['regkeys'])) : 0;
             $closedsite = (isset($_POST['closedsite'])) ? abs(intval($_POST['closedsite'])) : 0;
 
@@ -265,7 +261,6 @@ if (is_admin([101])) {
                         $dbr -> execute($openreg, 'openreg');
                         $dbr -> execute($anonymity, 'anonymity');
                         $dbr -> execute($closedsite, 'closedsite');
-                        $dbr -> execute($session, 'session');
 
                         save_setting();
 
@@ -943,7 +938,7 @@ if (is_admin([101])) {
             $checked = ($setting['errorlog'] == 1) ? ' checked="checked"' : '';
             echo '<input name="errorlog" type="checkbox" value="1"'.$checked.' /> Включить запись логов<br />';
 
-            echo 'Сохраняется информации в лог-файле:<br /><input name="maxlogdat" maxlength="3" value="'.$setting['maxlogdat'].'" /><br />';
+            echo 'Время хранения логов (Суток):<br /><input name="maxlogdat" maxlength="3" value="'.$setting['maxlogdat'].'" /><br />';
             echo 'Ключевые слова (keywords):<br /><input name="keywords" maxlength="250" value="'.$setting['keywords'].'" /><br />';
             echo 'Краткое описание (description):<br /><input name="description" maxlength="250" value="'.$setting['description'].'" /><br />';
             echo 'Не сканируемые расширения (через запятую):<br /><input name="nocheck" maxlength="100" value="'.$setting['nocheck'].'" /><br />';
