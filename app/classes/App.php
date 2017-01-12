@@ -3,17 +3,6 @@
 class App
 {
     /**
-     * Возвращает объект роутов
-     * @return object объект роутов
-     */
-    public static function router()
-    {
-        if (Registry::has('router')) {
-            return Registry::get('router');
-        }
-    }
-
-    /**
      * Возвращает текущую страницу
      * @param null $url
      * @return string текущая страница

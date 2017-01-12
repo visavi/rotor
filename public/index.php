@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_URI']) {
     }
 
 }
-$router = App::router()->match();
+$router = Registry::get('router')->match();
 
 if ($router['target'] && is_callable($router['target'])) {
 
