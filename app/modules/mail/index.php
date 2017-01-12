@@ -27,7 +27,7 @@ switch ($act):
         echo '<textarea cols="25" rows="5" name="body"></textarea><br />';
 
         echo 'Проверочный код:<br />';
-        echo '<img src="/captcha" alt="" /><br />';
+        echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
 
         echo '<input name="provkod" size="6" maxlength="6" /><br />';
         echo '<input value="Отправить" type="submit" /></form></div><br />';

@@ -20,7 +20,7 @@ break;
  */
 case 'posts':
 
-    $tid  = isset($params['tid']) ? abs(intval($params['tid'])) : 0;
+    $tid = param('tid');
 
     $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 

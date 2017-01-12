@@ -46,8 +46,8 @@ switch ($act):
     ############################################################################################
     case 'viewcomm':
 
-        $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
-        $nid  = isset($params['nid']) ? abs(intval($params['nid'])) : 0;
+        $id  = param('id');
+        $nid = param('nid');
 
         $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `id`<=? ORDER BY `time` ASC LIMIT 1;", ['news', $nid, $id]);
         if (!empty($querycomm)) {

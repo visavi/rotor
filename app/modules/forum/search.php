@@ -1,6 +1,6 @@
 <?php
 
-$fid     = isset($params['fid']) ? abs(intval($params['fid'])) : 0;
+$fid     = param('fid');
 $find    = check(Request::input('find'));
 $type    = abs(intval(Request::input('type')));
 $where   = abs(intval(Request::input('where')));

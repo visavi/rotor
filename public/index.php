@@ -25,6 +25,10 @@ if ($_SERVER['REQUEST_URI']) {
         redirect('/news/rss', true);
     }
 
+    if (isset($parse['path']) && ($parse['path'] == '/services/' || $parse['path'] == '/services')){
+        redirect('/files', true);
+    }
+
     if (isset($parse['path']) && isset($parse['query'])) {
 
         parse_str($parse['query'], $output);

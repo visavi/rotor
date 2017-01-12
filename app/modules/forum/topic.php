@@ -1,6 +1,6 @@
 <?php
 
-$tid  = isset($params['tid']) ? abs(intval($params['tid'])) : 0;
+$tid = param('tid');
 
 switch ($act):
 ############################################################################################
@@ -395,7 +395,7 @@ break;
 ############################################################################################
 case 'editpost':
 
-    $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
+    $id = param('id');
     $page = abs(intval(Request::input('page')));
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения сообщения!');
@@ -474,7 +474,7 @@ break;
 ############################################################################################
 case 'viewpost':
 
-    $id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
+    $id = param('id');
 
     $querytopic = DB::run() -> querySingle("SELECT COUNT(*) FROM `posts` WHERE `id`<=? AND `topic_id`=? ORDER BY `time` ASC LIMIT 1;", [$id, $tid]);
 

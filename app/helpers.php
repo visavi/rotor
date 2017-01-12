@@ -1972,3 +1972,16 @@ function env($key, $default = null)
     }
     return $value;
 }
+
+/**
+ * Возвращает параметры роутов
+ * @param  string $key     ключ параметра
+ * @param  mixed  $default значение по умолчанию
+ * @return mixed           найденный параметр
+ */
+function param($key, $default = null)
+{
+    $router = Registry::get('router')->match();
+    return isset($router['params'][$key]) ? $router['params'][$key] : $default;
+}
+

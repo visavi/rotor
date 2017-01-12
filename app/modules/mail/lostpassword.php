@@ -32,7 +32,7 @@ break;
 ############################################################################################
 case 'remind':
 
-    $uz = check(utf_lower(strval($_REQUEST['uz'])));
+    $uz = check(utf_lower(Request::input('uz')));
 
     if (!empty($uz)) {
 
@@ -51,7 +51,7 @@ case 'remind':
                 echo 'Введите e-mail:<br />';
                 echo '<input name="email" type="text" value="'.$email.'" maxlength="50" /><br />';
                 echo 'Проверочный код:<br /> ';
-                echo '<img src="/captcha" alt="" /><br />';
+                echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
                 echo '<input name="provkod" size="6" maxlength="6" /><br />';
                 echo '<input name="uz" type="hidden" value="'.$user['login'].'" />';
                 echo '<br /><input value="Восстановить" type="submit" /></form></div><br />';
@@ -66,7 +66,7 @@ case 'remind':
                 echo '<input name="answer" type="text" maxlength="30" /><br />';
 
                 echo 'Проверочный код:<br /> ';
-                echo '<img src="/captcha" alt="" /><br />';
+                echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
                 echo '<input name="provkod" size="6" maxlength="6" /><br />';
                 echo '<input name="uz" type="hidden" value="'.$user['login'].'" />';
                 echo '<br /><input value="Восстановить" type="submit" /></form></div><br />';
@@ -92,9 +92,9 @@ break;
 ############################################################################################
 case 'send':
 
-    $uz = check(strval($_POST['uz']));
-    $email = check(strval($_POST['email']));
-    $provkod = check($_POST['provkod']);
+    $uz = check(Request::input('uz'));
+    $email = check(Request::input('email'));
+    $provkod = check(Request::input('provkod'));
 
     $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
     if (! empty($user)) {
@@ -138,8 +138,8 @@ break;
 ############################################################################################
 case 'restore':
 
-    $uz = isset($_GET['uz']) ? check($_GET['uz']) : '';
-    $key = isset($_GET['key']) ? check($_GET['key']) : '';
+    $uz = check(Request::input('uz'));
+    $key = check(Request::input('key'));
 
     $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
     if (!empty($user)) {
@@ -188,9 +188,9 @@ break;
 ############################################################################################
 case 'answer':
 
-    $uz = check(strval($_POST['uz']));
-    $answer = check(strval($_POST['answer']));
-    $provkod = check($_POST['provkod']);
+    $uz = check(Request::input('uz'));
+    $answer = check(Request::input('answer'));
+    $provkod = check(Request::input('provkod'));
 
     $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
     if (!empty($user)) {

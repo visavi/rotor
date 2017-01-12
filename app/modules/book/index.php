@@ -76,7 +76,7 @@ break;
  * Подготовка к редактированию
  */
 case 'edit':
-    $id = isset($params['id']) ? abs(intval($params['id'])) : 0;
+    $id = param('id');
 
     if (! is_user()) App::abort(403);
 

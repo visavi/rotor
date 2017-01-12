@@ -1,7 +1,7 @@
 <?php
 App::view($config['themes'].'/index');
 
-$id  = isset($params['id']) ? abs(intval($params['id'])) : 0;
+$id = param('id');
 
 switch ($act):
 ############################################################################################

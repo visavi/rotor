@@ -1,6 +1,6 @@
 <?php
 
-$uz = isset($params['login']) ? check($params['login']) : check($log);
+$uz = check(param('login', $log));
 
 switch ($act):
 ############################################################################################

@@ -1,16 +1,8 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
-}
-if (isset($_GET['id'])) {
-    $id = abs(intval($_GET['id']));
-} else {
-    $id = 0;
-}
+$act = check(Request::input('act', 'index'));
+$id = abs(intval(Request::input('id')));
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
@@ -198,7 +190,7 @@ if (is_admin()) {
                                 if (strlen($link) <= 50) {
                                     if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $link)) {
 
-                                        $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+                                        $new = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id`=? LIMIT 1;", [$id]);
 
                                         $folder = $new['folder'] ? $new['folder'].'/' : '';
 
@@ -342,7 +334,7 @@ if (is_admin()) {
         ############################################################################################
         case 'delfile':
 
-            $link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+            $link = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id`=? LIMIT 1;", [$id]);
 
             $folder = $link['folder'] ? $link['folder'].'/' : '';
 
@@ -375,7 +367,7 @@ if (is_admin()) {
         ############################################################################################
         case 'delscreen':
 
-            $screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id`=? LIMIT 1;", [$id]);
+            $screen = DB::run() -> queryFetch("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id`=? LIMIT 1;", [$id]);
 
             $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
@@ -418,7 +410,7 @@ if (is_admin()) {
                     $del = implode(',', $del);
 
 
-                    $querydel = DB::run() -> query("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `id` IN (".$del.");");
+                    $querydel = DB::run() -> query("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$del.");");
                     $arr_files = $querydel -> fetchAll();
 
                     DB::run() -> query("DELETE FROM `downs` WHERE `id` IN (".$del.");");

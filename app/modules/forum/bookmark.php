@@ -1,6 +1,6 @@
 <?php
 
-$tid  = isset($params['tid']) ? abs(intval($params['tid'])) : 0;
+$tid = param('tid');
 
 if (! is_user()) {
     App::abort('default', 'Для управления закладками, необходимо авторизоваться!');

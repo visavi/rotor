@@ -1,10 +1,10 @@
 <?php
 App::view($config['themes'].'/index');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
-$id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
-$uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
+$act = check(Request::input('act', 'index'));
+$cid = abs(intval(Request::input('cid')));
+$id = abs(intval(Request::input('id')));
+$uz = check(Request::input('uz'));
 $page = abs(intval(Request::input('page', 1)));
 
 show_title('Блоги');
@@ -255,11 +255,11 @@ case 'addblog':
 
     $config['newtitle'] = 'Публикация новой статьи';
 
-    $uid = check($_GET['uid']);
-    $cid = abs(intval($_POST['cid']));
-    $title = check($_POST['title']);
-    $text = check($_POST['text']);
-    $tags = check($_POST['tags']);
+    $uid = check(Request::input('uid'));
+    $cid = abs(intval(Request::input('cid')));
+    $title = check(Request::input('title'));
+    $text = check(Request::input('text'));
+    $tags = check(Request::input('tags'));
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
@@ -317,8 +317,8 @@ break;
 ############################################################################################
 case 'vote':
 
-    $uid = check($_GET['uid']);
-    $vote = check($_GET['vote']);
+    $uid = check(Request::input('uid'));
+    $vote = check(Request::input('vote'));
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
@@ -411,9 +411,9 @@ break;
 ############################################################################################
 case 'add':
 
-    $uid = check($_GET['uid']);
-    $id = abs(intval($_GET['id']));
-    $msg = check($_POST['msg']);
+    $uid = check(Request::input('uid'));
+    $id = abs(intval(Request::input('id')));
+    $msg = check(Request::input('msg'));
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
@@ -459,8 +459,8 @@ break;
 ############################################################################################
 case 'spam':
 
-    $uid = check($_GET['uid']);
-    $pid = abs(intval($_GET['pid']));
+    $uid = check(Request::input('uid'));
+    $pid = abs(intval(Request::input('pid')));
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
@@ -500,8 +500,8 @@ break;
 ############################################################################################
 case 'reply':
 
-    $id = abs(intval($_GET['id']));
-    $pid = abs(intval($_GET['pid']));
+    $id = abs(intval(Request::input('id')));
+    $pid = abs(intval(Request::input('pid')));
 
     if (is_user()) {
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
@@ -523,7 +523,7 @@ break;
 ############################################################################################
 case 'quote':
 
-    $pid = abs(intval($_GET['pid']));
+    $pid = abs(intval(Request::input('pid')));
 
 
     if (is_user()) {
@@ -548,7 +548,7 @@ case 'edit':
 
     $config['newtitle'] = 'Редактирование сообщения';
 
-    $pid = abs(intval($_GET['pid']));
+    $pid = abs(intval(Request::input('pid')));
 
     if (is_user()) {
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['blog', $pid, $log]);
@@ -575,9 +575,9 @@ break;
 ############################################################################################
 case 'editpost':
 
-    $uid = check($_GET['uid']);
-    $pid = abs(intval($_GET['pid']));
-    $msg = check($_POST['msg']);
+    $uid = check(Request::input('uid'));
+    $pid = abs(intval(Request::input('pid')));
+    $msg = check(Request::input('msg'));
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
@@ -617,7 +617,8 @@ break;
 ############################################################################################
 case 'del':
 
-    $uid = check($_GET['uid']);
+    $uid = check(Request::input('uid'));
+
     if (isset($_POST['del'])) {
         $del = intar($_POST['del']);
     } else {

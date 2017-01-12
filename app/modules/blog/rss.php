@@ -32,7 +32,7 @@ case 'comments':
 
     show_title('RSS комментарии');
 
-    $id = isset($params['id']) ? abs(intval($params['id'])) : 0;
+    $id = param('id');
     $blog = DBM::run()->selectFirst('blogs', ['id' => $id]);
 
     if ($blog) {

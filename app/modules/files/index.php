@@ -1,8 +1,7 @@
 <?php
+$page = check(param('page'));
 
-if (!empty($params['page'])){
-
-    $page = check($params['page']);
+if (!empty($page)){
 
     if (! preg_match('|^[a-z0-9_\-/]+$|i', $page)) {
         App::abort('default', 'Недопустимое название страницы!');
