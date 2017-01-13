@@ -98,7 +98,7 @@ break;
  * Генерируем темы форума
  */
 case 'topics':
-    $topics = DBM::run()->select('topics', null, 25000);
+    $topics = DBM::run()->select('topics', null, 25000, null, ['last_time' => 'DESC']);
 
     $locs = [];
     foreach ($topics as $topic) {
