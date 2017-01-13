@@ -46,6 +46,7 @@
         <b><a href="/page">Сервисы сайта</a></b>
     </div>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/files/docs">Документация RotorCMS</a><br />
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/search">Поиск по сайту</a><br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/mail">Обратная связь</a><br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/board">Доска объявлений</a> (<?= stats_board() ?>)<br />
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> (<?=stats_users()?>)<br />
