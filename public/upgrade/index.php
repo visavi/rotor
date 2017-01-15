@@ -1,5 +1,15 @@
 <?php
-include_once __DIR__.'/../../app/bootstrap.php';
+$level = 0;
+$folder_level = '';
+while (!file_exists($folder_level.'app') && $level < 5) {
+    $folder_level .= '../';
+    ++$level;
+}
+unset($level);
+
+define('DIR', rtrim($folder_level, '/'));
+
+include_once DIR.'/app/bootstrap.php';
 
 $app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);
@@ -13,8 +23,8 @@ $wrap->setOption('environment', 'default');
 
 header("Content-type:text/html; charset=utf-8");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE>
+<html>
 <head>
     <title>
         Обновление RotorCMS

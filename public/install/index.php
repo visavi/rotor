@@ -1,6 +1,17 @@
 <?php
-include_once __DIR__.'/../../app/bootstrap.php';
-include_once __DIR__.'/../../app/helpers.php';
+
+$level = 0;
+$folder_level = '';
+while (!file_exists($folder_level.'app') && $level < 5) {
+    $folder_level .= '../';
+    ++$level;
+}
+unset($level);
+
+define('DIR', rtrim($folder_level, '/'));
+
+include_once DIR.'/app/bootstrap.php';
+include_once DIR.'/app/helpers.php';
 
 function parsePHPModules() {
     ob_start();
@@ -53,14 +64,14 @@ $wrap = new Phinx\Wrapper\TextWrapper($app);
 $app->setName('RotorCMS by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
-$wrap->setOption('configuration', __DIR__.'/../../phinx.php');
+$wrap->setOption('configuration', DIR.'/phinx.php');
 $wrap->setOption('parser', 'php');
 $wrap->setOption('environment', 'default');
 
 header("Content-type:text/html; charset=utf-8");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!DOCTYPE>
+<html>
 <head>
     <title>
         Обновление RotorCMS
@@ -115,7 +126,7 @@ header("Content-type:text/html; charset=utf-8");
 
         if (extension_loaded('pdo_mysql')) {
 
-            $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-');
+            $version = strtok(getModuleSetting('pdo_mysql', array('Client API version', 'PDO Driver for MySQL, client library version')), '-');
             echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
@@ -123,7 +134,7 @@ header("Content-type:text/html; charset=utf-8");
         }
 
         if (extension_loaded('openssl')) {
-            $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']);
+            $version = getModuleSetting('openssl', array('OpenSSL Library Version', 'OpenSSL Header Version'));
             echo '<i class="fa fa-plus-circle"></i> Расширение OpenSSL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Расширение OpenSSL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
@@ -138,7 +149,7 @@ header("Content-type:text/html; charset=utf-8");
         }
 
         if (extension_loaded('mbstring')) {
-            $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']);
+            $version = getModuleSetting('mbstring', array('oniguruma version', 'Multibyte regex (oniguruma) version'));
             echo '<i class="fa fa-plus-circle"></i> Расширение Mbstring ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Расширение Mbstring: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
@@ -154,7 +165,7 @@ header("Content-type:text/html; charset=utf-8");
         }
 
         if (extension_loaded('gd')) {
-            $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']);
+            $version = getModuleSetting('gd', array('GD headers Version', 'GD library Version'));
             echo '<i class="fa fa-plus-circle"></i> Библиотека GD ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
@@ -171,8 +182,8 @@ header("Content-type:text/html; charset=utf-8");
 
         echo '<br /><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
 
-        $storage = glob(dirname(dirname(__DIR__)).'/app/storage/*', GLOB_ONLYDIR);
-        $uploads = glob(dirname(__DIR__).'/uploads/*', GLOB_ONLYDIR);
+        $storage = glob(DIR.'/app/storage/*', GLOB_ONLYDIR);
+        $uploads = glob(DIR.'/uploads/*', GLOB_ONLYDIR);
 
         $dirs = array_merge($storage, $uploads);
 
@@ -194,7 +205,7 @@ header("Content-type:text/html; charset=utf-8");
             }
             $chmod_value = @decoct(@fileperms($dir)) % 1000;
 
-            echo '<i class="fa fa-check-circle"></i> '.basename(dirname($dir)).'/'.basename($dir) . ' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br />';
+            echo '<i class="fa fa-check-circle"></i> '.str_replace('../', '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br />';
         }
 
         echo '<br />Дополнительно можете выставить права на директории и файы с шаблонами внутри app/views<br /><br />';
@@ -301,10 +312,10 @@ header("Content-type:text/html; charset=utf-8");
                     'status' => 'Администратор',
                 ]);
 
-                DBM::run()->update('setting', ['value' => $login], ['name' => 'nickname']);
-                DBM::run()->update('setting', ['value' => $email], ['name' => 'emails']);
-                DBM::run()->update('setting', ['value' => $site], ['name' => 'home']);
-                DBM::run()->update('setting', ['value' => $site.'/assets/img/images/logo.png'], ['name' => 'logotip']);
+                DBM::run()->update('setting', array('value' => $login), array('name' => 'nickname'));
+                DBM::run()->update('setting', array('value' => $email), array('name' => 'emails'));
+                DBM::run()->update('setting', array('value' => $site), array('name' => 'home'));
+                DBM::run()->update('setting', array('value' => $site.'/assets/img/images/logo.png'), array('name' => 'logotip'));
 
                 save_setting();
 
