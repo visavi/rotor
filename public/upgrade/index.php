@@ -23,7 +23,7 @@ $wrap->setOption('environment', 'default');
 
 header("Content-type:text/html; charset=utf-8");
 ?>
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
 <head>
     <title>

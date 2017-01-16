@@ -1,4 +1,5 @@
 <?php
+ob_start();
 
 $level = 0;
 $folder_level = '';
@@ -70,7 +71,7 @@ $wrap->setOption('environment', 'default');
 
 header("Content-type:text/html; charset=utf-8");
 ?>
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
 <head>
     <title>
@@ -180,6 +181,8 @@ header("Content-type:text/html; charset=utf-8");
             $error_setting++;
         }
 
+        echo 'Для обработка видео желательно установить библиотеку FFmpeg<br />';
+
         echo '<br /><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
 
         $storage = glob(DIR.'/app/storage/*', GLOB_ONLYDIR);
@@ -223,6 +226,8 @@ header("Content-type:text/html; charset=utf-8");
                 echo 'Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br />';
                 echo 'Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br /><br />';
             }
+
+            echo '<span style="color:#ff0000">Внимание, база данных должна быть создана в кодировке utf8mb4_unicode_ci</span><br /><br />';
 
             echo '<p><a style="font-size: 18px" href="?act=status">Проверить статус</a></p><br />';
         } else {
