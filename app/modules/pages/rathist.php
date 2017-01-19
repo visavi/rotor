@@ -15,7 +15,7 @@ if (empty($_GET['uz'])) {
 show_title('История голосований '.nickname($uz));
 
 if (is_user()) {
-    $is_admin = is_admin();
+    $is_admin = is_admin([101]);
 
     $data = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
@@ -44,9 +44,9 @@ if (is_user()) {
                         }
 
                         if (empty($data['vote'])) {
-                            echo '<i class="fa fa-thumbs-down"></i> ';
+                            echo '<i class="fa fa-thumbs-down text-danger"></i> ';
                         } else {
-                            echo '<i class="fa fa-thumbs-up"></i> ';
+                            echo '<i class="fa fa-thumbs-up text-success"></i> ';
                         }
 
                         echo '<b>'.profile($data['user']).'</b> ('.date_fixed($data['time']).')</div>';
@@ -84,9 +84,9 @@ if (is_user()) {
                     foreach($rat as $data) {
                         echo '<div class="b">';
                         if (empty($data['vote'])) {
-                            echo '<i class="fa fa-thumbs-down"></i> ';
+                            echo '<i class="fa fa-thumbs-down text-danger"></i> ';
                         } else {
-                            echo '<i class="fa fa-thumbs-up"></i> ';
+                            echo '<i class="fa fa-thumbs-up text-success"></i> ';
                         }
 
                         echo '<b>'.profile($data['login']).'</b> ('.date_fixed($data['time']).')</div>';
@@ -119,7 +119,7 @@ if (is_user()) {
                     $del = 0;
                 }
 
-                if (is_admin()) {
+                if (is_admin([101])) {
                     if ($uid == $_SESSION['token']) {
                         if (!empty($del)) {
                             $del = implode(',', $del);

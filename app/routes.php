@@ -110,7 +110,7 @@ $router->map('GET|POST', '/banip',  'pages/banip.php');
 $router->map('GET|POST', '/razban',  'pages/razban.php');
 $router->map('GET|POST', '/banhist',  'pages/banhist.php');
 $router->map('GET|POST', '/statusfaq',  'pages/statusfaq.php');
-$router->map('GET|POST', '/rating',  'pages/rating.php');
+$router->map('GET|POST', '/user/[user:login]/[rating:action]', 'pages/rating.php');
 $router->map('GET|POST', '/ratinglist',  'pages/ratinglist.php');
 $router->map('GET|POST', '/key',  'pages/key.php');
 $router->map('GET|POST', '/faq',  'pages/faq.php');

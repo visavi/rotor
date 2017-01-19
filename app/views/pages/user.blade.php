@@ -98,8 +98,8 @@
                 <a href="/rathist?uz={{ $user['login'] }}">Репутация: <b>{!! format_num($user['rating']) !!}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br />
 
                 @if (is_user() && $log != $user['login'])
-                [ <a href="/rating?uz={{ $user['login'] }}&amp;vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
-                <a href="/rating?uz={{ $user['login'] }}&amp;vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br />
+                    [ <a href="/user/{{ $user['login'] }}/rating?vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
+                    <a href="/user/{{ $user['login'] }}/rating?vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br />
                 @endif
 
             </div>

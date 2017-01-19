@@ -11,7 +11,7 @@
             <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
 
             <div class="form-group{{ App::hasError('msg') }}">
-                <label for="inputText">Сообщение:</label>
+                <label for="markItUp">Сообщение:</label>
                 <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg', $post['text']) }}</textarea>
                 {!! App::textError('msg') !!}
             </div>
