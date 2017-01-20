@@ -3,12 +3,12 @@
 $days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 $hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
 
-DB::run() -> query("DELETE FROM `online` WHERE `time`<?;", [SITETIME-$config['timeonline']]);
+DB::run() -> query("DELETE FROM `online` WHERE `time`<?;", [SITETIME - $config['timeonline']]);
 
 $newhost = 0;
 
 if (is_user()) {
-    $queryonline = DB::run() -> querySingle("SELECT `id` FROM `online` WHERE `ip`=? OR `user`=? LIMIT 1;", [App::getClientIp(), App::getUsername()]);
+    $queryonline = DB::run() -> querySingle("SELECT `id` FROM `online` WHERE `user`=? OR `ip`=? LIMIT 1;", [App::getUsername(), App::getClientIp()]);
     if (empty($queryonline)) {
         DB::run() -> query("INSERT INTO `online` (`ip`, `brow`, `time`, `user`) VALUES (?, ?, ?, ?);", [App::getClientIp(), App::getUserAgent(), SITETIME, App::getUsername()]);
         $newhost = 1;
@@ -21,7 +21,7 @@ if (is_user()) {
         DB::run() -> query("INSERT INTO `online` (`ip`, `brow`, `time`) VALUES (?, ?, ?);", [App::getClientIp(), App::getUserAgent(), SITETIME]);
         $newhost = 1;
     } else {
-        DB::run() -> query("UPDATE `online` SET `brow`=?, `time`=?, `user`=? WHERE `id`=? LIMIT 1;", [App::getUserAgent(), SITETIME, '', $queryonline]);
+        DB::run() -> query("UPDATE `online` SET `brow`=?, `time`=? WHERE `id`=? LIMIT 1;", [App::getUserAgent(), SITETIME, $queryonline]);
     }
 }
 // -----------------------------------------------------------//
