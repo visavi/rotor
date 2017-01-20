@@ -17,8 +17,11 @@
                 <option value="0"{{ $selected }}>Минус</option>
             </select>
 
-            <label for="markItUp">Комментарий:</label>
-            <textarea class="form-control" id="markItUp" cols="25" rows="5" name="text"></textarea>
+            <div class="form-group{{ App::hasError('text') }}">
+                <label for="markItUp">Комментарий:</label>
+                <textarea class="form-control" id="markItUp" cols="25" rows="5" name="text">{{ App::getInput('text') }}</textarea>
+                {!! App::textError('text') !!}
+            </div>
 
             <button type="submit" class="btn btn-primary">Продолжить</button>
         </form>
