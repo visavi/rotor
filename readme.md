@@ -44,7 +44,7 @@ RotorCMS 6.1
 
 ### Требования
 
-Минимальная версия PHP необходимая для работы движка PHP 5.6.4 и MySQL 5.6
+Минимальная версия PHP необходимая для работы движка PHP 5.6.4 и MySQL 5.5
 
 ### Миграции и заполнение БД
 
@@ -116,11 +116,10 @@ include fastcgi.conf;
 
 ### Author
 Author: Vantuz  
-Email: visavi.net@mail.ru  
+Email: admin@visavi.net  
 Site: http://visavi.net  
 Skype: vantuzilla  
 Phone: +79167407574  
-
 
 ### License
 
