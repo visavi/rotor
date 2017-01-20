@@ -3,6 +3,7 @@ App::view($config['themes'].'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
+$page = abs(intval(Request::input('page', 1)));
 
 show_title('Стена сообщений');
 
