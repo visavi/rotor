@@ -9,7 +9,7 @@ class CreateSpamTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('spam', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('spam', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('relate', 'boolean')
             ->addColumn('idnum', 'integer', ['signed' => false])
             ->addColumn('user', 'string', ['limit' => 20])

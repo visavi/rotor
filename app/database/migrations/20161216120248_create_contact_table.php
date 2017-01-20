@@ -9,7 +9,7 @@ class CreateContactTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('contact', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('contact', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('name', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])

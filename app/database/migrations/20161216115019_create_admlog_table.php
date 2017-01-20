@@ -9,7 +9,7 @@ class CreateAdmlogTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('admlog', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('admlog', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('request', 'string', ['null' => true])
             ->addColumn('referer', 'string', ['null' => true])

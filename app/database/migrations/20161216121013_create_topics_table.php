@@ -10,7 +10,7 @@ class CreateTopicsTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('topics', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('topics', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('title', 'string', ['limit' => 50])
             ->addColumn('author', 'string', ['limit' => 20])

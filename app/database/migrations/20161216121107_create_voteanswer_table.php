@@ -10,7 +10,7 @@ class CreateVoteanswerTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('voteanswer', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('voteanswer', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('vote_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('option', 'string', ['limit' => 50])
             ->addColumn('result', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])

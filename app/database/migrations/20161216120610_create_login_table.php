@@ -9,7 +9,7 @@ class CreateLoginTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('login', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('login', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('brow', 'string', ['limit' => 25])

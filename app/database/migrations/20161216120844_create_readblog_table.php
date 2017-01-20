@@ -9,7 +9,7 @@ class CreateReadblogTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('readblog', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('readblog', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('blog', 'integer', ['signed' => false])
             ->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('time', 'integer')

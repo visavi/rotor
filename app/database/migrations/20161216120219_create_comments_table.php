@@ -9,7 +9,7 @@ class CreateCommentsTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('comments', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('comments', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('relate_type', 'enum', ['values' => array('blog','event','down','news','offer','gallery')])
             ->addColumn('relate_category_id', 'integer', ['signed' => false])

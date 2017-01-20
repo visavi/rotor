@@ -9,7 +9,7 @@ class CreateInviteTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('invite', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('invite', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('hash', 'string', ['limit' => 15])
             ->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('invited', 'string', ['limit' => 20, 'null' => true])

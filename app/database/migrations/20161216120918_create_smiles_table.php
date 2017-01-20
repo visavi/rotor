@@ -10,7 +10,7 @@ class CreateSmilesTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('smiles', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('smiles', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('cats', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('name', 'string', ['limit' => 100])
             ->addColumn('code', 'string', ['limit' => 20])

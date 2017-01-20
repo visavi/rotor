@@ -10,7 +10,7 @@ class CreatePostsTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('posts', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('posts', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
             ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('user', 'string', ['limit' => 20])

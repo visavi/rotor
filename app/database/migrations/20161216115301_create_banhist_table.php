@@ -9,7 +9,7 @@ class CreateBanhistTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('banhist', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('banhist', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('send', 'string', ['limit' => 20])
             ->addColumn('type', 'boolean', ['default' => 0])

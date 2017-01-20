@@ -10,7 +10,7 @@ class CreateCounterTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('counter', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('counter', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('hours', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('days', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('allhosts', 'integer', ['signed' => false])

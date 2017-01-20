@@ -10,7 +10,7 @@ class CreateBookmarksTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('bookmarks', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('bookmarks', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
             ->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])

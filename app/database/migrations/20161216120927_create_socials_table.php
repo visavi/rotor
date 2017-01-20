@@ -9,7 +9,7 @@ class CreateSocialsTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('socials', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('socials', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 128])
             ->addColumn('network', 'string')
             ->addColumn('uid', 'string')

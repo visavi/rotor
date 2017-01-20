@@ -9,7 +9,7 @@ class CreateOutboxTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('outbox', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('outbox', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('author', 'string', ['limit' => 20])
             ->addColumn('text', 'text', ['null' => true])

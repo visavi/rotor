@@ -10,7 +10,7 @@ class CreateOffersTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('offers', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('offers', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('type', 'boolean', ['default' => 0])
             ->addColumn('title', 'string', ['limit' => 50])
             ->addColumn('text', 'text', ['null' => true])

@@ -9,7 +9,7 @@ class CreateOnlineTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('online', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('online', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('ip', 'string', ['limit' => 15])
             ->addColumn('brow', 'string', ['limit' => 25])
             ->addColumn('time', 'integer')

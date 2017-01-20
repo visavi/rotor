@@ -9,7 +9,7 @@ class CreateFloodTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('flood', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('flood', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
             ->addColumn('page', 'string', ['limit' => 30])
             ->addColumn('time', 'integer')

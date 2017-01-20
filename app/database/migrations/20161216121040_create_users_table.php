@@ -10,7 +10,7 @@ class CreateUsersTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('users', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('users', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('login', 'string', ['limit' => 20])
             ->addColumn('password', 'string', ['limit' => 128])
             ->addColumn('email', 'string', ['limit' => 50])

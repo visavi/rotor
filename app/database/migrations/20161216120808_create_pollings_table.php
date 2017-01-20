@@ -9,7 +9,7 @@ class CreatePollingsTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('pollings', ['collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('pollings', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('relate_type', 'string', ['limit' => 20])
             ->addColumn('relate_id', 'integer')
             ->addColumn('user', 'string', ['limit' => 20])
