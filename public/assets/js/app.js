@@ -229,3 +229,10 @@ function changeRating(el) {
     });
     return false;
 }
+
+/* Показ формы создания голосования */
+function showVoteForm() {
+    $('.js-vote-form').toggle();
+
+    return false;
+}

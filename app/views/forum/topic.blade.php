@@ -1,34 +1,34 @@
 @extends('layout')
 
-@section('title', e($topics['title'].' (Стр. '.$page['current'].')').' - @parent')
-@section('description', e('Обсуждение темы: '.$topics['title'].' (Стр. '.$page['current'].')'))
+@section('title', e($topic['title'].' (Стр. '.$page['current'].')').' - @parent')
+@section('description', e('Обсуждение темы: '.$topic['title'].' (Стр. '.$page['current'].')'))
 
 @section('content')
-    <h1>{{ $topics['title'] }}</h1>
+    <h1>{{ $topic['title'] }}</h1>
     <a href="/forum">Форум</a> /
 
-    <?php if (!empty($topics['subparent'])): ?>
-        <a href="/forum/<?=$topics['subparent']['id']?>"><?=$topics['subparent']['title']?></a> /
+    <?php if (!empty($topic['subparent'])): ?>
+        <a href="/forum/<?=$topic['subparent']['id']?>"><?=$topic['subparent']['title']?></a> /
     <?php endif; ?>
 
-    <a href="/forum/<?=$topics['forum_id']?>"><?=$topics['forum_title']?></a> /
-    <a href="/topic/<?=$tid?>/print">Печать</a> / <a href="/topic/<?=$tid?>/rss">RSS-лента</a>
+    <a href="/forum/<?=$topic['forum_id']?>"><?=$topic['forum_title']?></a> /
+    <a href="/topic/<?=$topic['id']?>/print">Печать</a> / <a href="/topic/<?=$topic['id']?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
-        <?php if ($topics['author'] == $log && empty($topics['closed']) && App::user('point') >= $config['editforumpoint']): ?>
-           / <a href="/topic/<?= $tid ?>/close?token=<?=$_SESSION['token']?>">Закрыть</a>
-           / <a href="/topic/<?= $tid ?>/edit">Изменить</a>
+        <?php if ($topic['author'] == $log && empty($topic['closed']) && App::user('point') >= $config['editforumpoint']): ?>
+           / <a href="/topic/<?= $topic['id'] ?>/close?token=<?=$_SESSION['token']?>">Закрыть</a>
+           / <a href="/topic/<?= $topic['id'] ?>/edit">Изменить</a>
         <?php endif; ?>
 
-        <?php $bookmark = $topics['bookmark'] ? 'Из закладок' : 'В закладки'; ?>
-        / <a href="#" onclick="return bookmark(this)" data-tid="{{ $tid }}" data-token="{{ $_SESSION['token'] }}">{{ $bookmark }}</a>
+        <?php $bookmark = $topic['bookmark'] ? 'Из закладок' : 'В закладки'; ?>
+        / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic['id'] }}" data-token="{{ $_SESSION['token'] }}">{{ $bookmark }}</a>
     <?php endif; ?>
 
-    <?php if (!empty($topics['curator'])): ?>
+    <?php if (!empty($topic['curator'])): ?>
        <div>
             <span class="label label-info">
                 <i class="fa fa-wrench"></i> Кураторы темы:
-                <?php foreach ($topics['curator'] as $key => $curator): ?>
+                <?php foreach ($topic['curator'] as $key => $curator): ?>
                     <?php $comma = (empty($key)) ? '' : ', '; ?>
                     <?=$comma?><?=profile($curator)?>
                 <?php endforeach; ?>
@@ -36,38 +36,63 @@
         </div>
     <?php endif; ?>
 
-    <?php if (!empty($topics['note'])): ?>
-        <div class="info"><?=App::bbCode($topics['note'])?></div>
+    <?php if (!empty($topic['note'])): ?>
+        <div class="info"><?=App::bbCode($topic['note'])?></div>
     <?php endif; ?>
 
     <hr />
 
     <?php if (is_admin()): ?>
-        <?php if (empty($topics['closed'])): ?>
-            <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a> /
+        <?php if (empty($topic['closed'])): ?>
+            <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a> /
         <?php else: ?>
-            <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Открыть</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Открыть</a> /
         <?php endif; ?>
 
-        <?php if (empty($topics['locked'])): ?>
-            <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Закрепить</a> /
+        <?php if (empty($topic['locked'])): ?>
+            <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Закрепить</a> /
         <?php else: ?>
-            <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Открепить</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Открепить</a> /
         <?php endif; ?>
 
-        <a href="/admin/forum?act=edittopic&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>">Изменить</a> /
-        <a href="/admin/forum?act=movetopic&amp;tid=<?=$tid?>">Переместить</a> /
-        <a href="/admin/forum?act=deltopics&amp;fid=<?=$topics['forum_id']?>&amp;del=<?=$tid?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
-        <a href="/admin/forum?act=topic&amp;tid=<?=$tid?>&amp;page=<?=$page['current']?>">Управление</a><br />
+        <a href="/admin/forum?act=edittopic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Изменить</a> /
+        <a href="/admin/forum?act=movetopic&amp;tid=<?=$topic['id']?>">Переместить</a> /
+        <a href="/admin/forum?act=deltopics&amp;fid=<?=$topic['forum_id']?>&amp;del=<?=$topic['id']?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
+        <a href="/admin/forum?act=topic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Управление</a><br />
     <?php endif; ?>
 
-    <?php if (!empty($topics['is_moder'])): ?>
-        <form action="/topic/<?=$tid?>/delete?page=<?=$page['current']?>" method="post">
+    <?php if (!empty($topic['is_moder'])): ?>
+        <form action="/topic/<?=$topic['id']?>/delete?page=<?=$page['current']?>" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
     <?php endif; ?>
 
+    @if($vote['answers'])
+        <h3>{{ $vote['title'] }}</h3>
+
+        @if($vote['poll'] || $vote['closed'])
+            @foreach($vote['voted'] as $key => $data)
+                <?php $proc = round(($data * 100) / $vote['sum'], 1); ?>
+                <?php $maxproc = round(($data * 100) / $vote['max']); ?>
+
+                <b>{{ $key }}</b> (Голосов: {{ $data }})<br />
+                {!! App::progressBar($maxproc, $proc.'%') !!}
+            @endforeach
+        @else
+            <form action="/topic/{{ $topic['id'] }}/vote?page={{ $page['current'] }}" method="post">
+                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}" />
+                @foreach($vote['answers'] as $answer)
+                    <label><input name="poll" type="radio" value="{{ $answer['id'] }}" /> {{ $answer['answer'] }}</label><br />
+                @endforeach
+                <button type="submit" class="btn btn-primary">Голосовать</button>
+            </form><br />
+        @endif
+
+        Всего проголосовало: {{ $vote['sum'] }}
+    @endif
+
+
     <?php if ($page['total'] > 0): ?>
-        <?php foreach ($topics['posts'] as $key=>$data): ?>
+        <?php foreach ($topic['posts'] as $key=>$data): ?>
             <?php $num = ($page['offset'] + $key + 1); ?>
             <div class="post">
             <div class="b" id="post_<?=$data['id']?>">
@@ -84,9 +109,9 @@
                         </noindex>
                     <?php endif; ?>
 
-                    <?php if (($log == $data['user'] && $data['time'] + 600 > SITETIME) || !empty($topics['is_moder'])): ?>
-                        <a href="/topic/<?=$tid?>/<?=$data['id']?>/edit?page=<?=$page['current']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
-                        <?php if (!empty($topics['is_moder'])): ?>
+                    <?php if (($log == $data['user'] && $data['time'] + 600 > SITETIME) || !empty($topic['is_moder'])): ?>
+                        <a href="/topic/<?=$topic['id']?>/<?=$data['id']?>/edit?page=<?=$page['current']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                        <?php if (!empty($topic['is_moder'])): ?>
                         <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
                         <?php endif; ?>
                     <?php endif; ?>
@@ -112,17 +137,17 @@
                 <?=App::bbCode($data['text'])?>
             </div>
 
-            <?php if (!empty($topics['files'])): ?>
-                <?php if (isset($topics['files'][$data['id']])): ?>
+            <?php if (!empty($topic['files'])): ?>
+                <?php if (isset($topic['files'][$data['id']])): ?>
                     <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />
-                    <?php foreach ($topics['files'][$data['id']] as $file): ?>
+                    <?php foreach ($topic['files'][$data['id']] as $file): ?>
                         <?php $ext = getExtension($file['hash']); ?>
 
 
                         <?= icons($ext) ?>
-                        <a href="/uploads/forum/<?=$topics['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
+                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
                         <?php if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])): ?>
-                            <a href="/uploads/forum/<?=$topics['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topics['id'].'/'.$file['hash'], $config['previewsize'], ['alt' => $file['name']]) ?></a><br />
+                            <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], $config['previewsize'], ['alt' => $file['name']]) ?></a><br />
                         <?php endif; ?>
                     <?php endforeach; ?>
                     </div>
@@ -144,7 +169,7 @@
         <?php show_error('Сообщений еще нет, будь первым!'); ?>
     <?php endif; ?>
 
-    <?php if (!empty($topics['is_moder'])): ?>
+    <?php if (!empty($topic['is_moder'])): ?>
         <span class="pull-right">
             <button type="submit" class="btn btn-danger">Удалить выбранное</button>
         </span>
@@ -154,9 +179,9 @@
     <?php App::pagination($page) ?>
 
     <?php if (is_user()): ?>
-        <?php if (empty($topics['closed'])): ?>
+        <?php if (empty($topic['closed'])): ?>
             <div class="form">
-                <form action="/topic/<?=$tid?>/create" method="post" enctype="multipart/form-data">
+                <form action="/topic/<?=$topic['id']?>/create" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
 
                     <div class="form-group{{ App::hasError('msg') }}">
@@ -200,5 +225,5 @@
     <a href="/tags">Теги</a>  /
     <a href="/rules">Правила</a> /
     <a href="/forum/top/themes">Топ тем</a> /
-    <a href="/forum/search?fid=<?=$topics['forum_id']?>">Поиск</a><br />
+    <a href="/forum/search?fid=<?=$topic['forum_id']?>">Поиск</a><br />
 @stop

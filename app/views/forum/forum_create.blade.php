@@ -43,6 +43,33 @@
                 {!! App::textError('msg') !!}
             </div>
 
+            <?php $checkVote = App::getInput('vote') ? true : false; ?>
+            <?php $checked = $checkVote ? ' checked="checked"' : ''; ?>
+            <?php $display = $checkVote ? '' : ' style="display: none"'; ?>
+
+            <label>
+                <input name="vote" onchange="return showVoteForm();" type="checkbox"{!! $checked !!} /> Создать голосование
+            </label><br />
+
+            <div class="js-vote-form"{!! $display !!}>
+                <div class="form-group{{ App::hasError('question') }}">
+
+                    <label for="inputQuestion">Вопрос:</label>
+                    <input type="text" name="question" class="form-control" id="inputQuestion" value="{{ App::getInput('question') }}" maxlength="100" />
+                    {!! App::textError('question') !!}
+                </div>
+
+                <div class="form-group{{ App::hasError('answer') }}">
+
+                    <?php $answers = array_diff((array)App::getInput('answer'), ['']) ?>
+
+                    @for ($i=0; $i<10; $i++)
+                        <label for="inputAnswer{{ $i }}">Ответ {{ $i + 1 }}</label>
+                        <input type="text" name="answer[]" class="form-control" id="inputAnswer{{ $i }}" value="{{ isset($answers[$i]) ? $answers[$i] : '' }}" maxlength="50" />
+                    @endfor
+                    {!! App::textError('answer') !!}
+                </div>
+            </div>
             <button type="submit" class="btn btn-primary">Создать тему</button>
         </form>
     </div><br />

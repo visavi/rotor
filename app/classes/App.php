@@ -655,4 +655,21 @@ class App
 
         return '<img src="data:image/'.$type.';base64,'.base64_encode($data).'"'.$strParams.'>';
     }
+
+
+    /**
+     * Выводит прогресс-бар
+     * @param int  $percent
+     * @param bool $title
+     */
+    public static function progressBar($percent, $title = false)
+    {
+        if (! $title){
+            $title = $percent.'%';
+        }
+        echo '<div class="progress">
+            <div class="progress-bar progress-bar-striped active" style="width:'.$percent.'%;"></div>
+            <span class="progress-completed">'.$title.'</span>
+        </div>';
+    }
 }

@@ -75,6 +75,12 @@ addRule('string', $invite, 'Слишком длинный или коротки�
 </pre>
 Если передан required = false, то валидация сработает при пустой строке
 
+<h3 id="validateNumeric">validateNumeric</h3>
+<pre class="prettyprint linenums">
+addRule('numeric', $count, 'Слишком больше или маленькое число', true, 5, 5000)
+</pre>
+Если передан required = false, то валидация сработает при пустой строке
+
 <h3 id="validateMax">validateMax</h3>
 <pre class="prettyprint linenums">
 addRule('max', array($udata['point'], $config['eventpoint']), 'У вас недостаточно актива для создания события!')

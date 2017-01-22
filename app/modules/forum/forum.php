@@ -36,7 +36,7 @@ break;
 ############################################################################################
 case 'create':
 
-	$config['newtitle'] = 'Создание новой темы';
+    $config['newtitle'] = 'Создание новой темы';
 
     $fid = abs(intval(Request::input('fid')));
 
@@ -53,6 +53,9 @@ case 'create':
         $title = check(Request::input('title'));
         $msg = check(Request::input('msg'));
         $token = check(Request::input('token'));
+        $vote = Request::has('vote') ? 1 : 0;
+        $question = check(Request::input('question'));
+        $answers = check(Request::input('answer'));
 
         $forum = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", [$fid]);
 
@@ -64,7 +67,21 @@ case 'create':
             -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50)
             -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, $config['forumtextlength']);
 
-        /* Сделать проверку поиска похожей темы */
+        if ($vote) {
+            $validation->addRule('string', $question, ['question' => 'Слишком длинный или короткий текст вопроса!'], true, 5, 100);
+            $answers = array_diff($answers, ['']);
+
+            foreach ($answers as $answer) {
+                if (utf_strlen($answer) > 50) {
+                    $validation->addError(['answer' => 'Длина вариантов ответа не должна быть более 50 символов!']);
+                    break;
+                }
+            }
+
+            $validation->addRule('numeric', count($answers), ['answer' => 'Необходимо от 2 до 10 варианта ответов!'], true, 2, 10);
+        }
+
+        /* TODO: Сделать проверку поиска похожей темы */
 
         if ($validation->run()) {
 
@@ -84,6 +101,24 @@ case 'create':
             if ($forum['parent'] > 0) {
                 DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?", [$lastid, $title, $log, SITETIME, $forum['parent']]);
             }
+
+            // Создание голосования
+            $voteId = DBM::run()->insert('vote', [
+                'title' => $question,
+                'topic_id' => $lastid,
+                'time' => SITETIME,
+            ]);
+
+            $prepareAnswers = [];
+            foreach ($answers as $answer) {
+                $prepareAnswers[] = [$voteId, $answer];
+            }
+
+            DBM::run()->insertMultiple('voteanswer', [
+                'vote_id', 'answer'
+            ],
+                $prepareAnswers
+            );
 
             App::setFlash('success', 'Новая тема успешно создана!');
             App::redirect('/topic/'.$lastid);

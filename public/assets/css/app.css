@@ -111,3 +111,17 @@ blockquote {
   background-color: #f75c48;
   padding: 0 3px;
 }
+
+.progress {
+  position: relative;
+  max-width: 500px;
+  height: 15px;
+  margin-bottom: 10px;
+}
+
+.progress > .progress-completed {
+  color: #000;
+  font-size: 11px;
+  position: absolute;
+  right: 3px;
+}

@@ -58,6 +58,7 @@ $router->map('GET', '/topic/[i:tid]/[i:id]', 'forum/topic.php@viewpost');
 $router->map('GET', '/forum/rss', 'forum/rss.php');
 $router->map('GET', '/topic/[i:tid]/rss', 'forum/rss.php@posts');
 $router->map('GET', '/topic/[i:tid]/print', 'forum/print.php');
+$router->map('POST', '/topic/[i:tid]/vote', 'forum/topic.php@vote');
 $router->map('GET', '/topic/[i:tid]/[end|close:action]', 'forum/topic.php');
 $router->map('POST', '/topic/[i:tid]/[create|delete|complaint:action]', 'forum/topic.php');
 $router->map('POST', '/topic/[complaint:action]', 'forum/topic.php');

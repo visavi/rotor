@@ -93,11 +93,11 @@ if (is_admin([101, 102, 103])) {
                 if (utf_strlen($title) >= 3 && utf_strlen($title) <= 100) {
                     $answer = array_diff($answer, ['']);
 
-                    if (count($answer) > 0) {
+                    if (count($answer) > 1) {
                         DB::run() -> query("INSERT INTO `vote` (`title`, `time`) VALUES (?, ?);", [$title, SITETIME]);
                         $lastid = DB::run() -> lastInsertId();
 
-                        $dbr = DB::run() -> prepare("INSERT INTO `voteanswer` (`vote_id`, `option`) VALUES (?, ?);");
+                        $dbr = DB::run() -> prepare("INSERT INTO `voteanswer` (`vote_id`, `answer`) VALUES (?, ?);");
 
                         foreach ($answer as $data) {
                             $dbr -> execute($lastid, $data);
@@ -106,7 +106,7 @@ if (is_admin([101, 102, 103])) {
                         notice('Голосование успешно создано!');
                         redirect("/admin/votes");
                     } else {
-                        show_error('Ошибка! Отсутствуют варианты ответов!');
+                        show_error('Ошибка! Необходимо минимум 2 варианта ответов!');
                     }
                 } else {
                     show_error('Ошибка! Слишком длинный или короткий вопрос (от 3 до 100 символов)!');
@@ -138,7 +138,7 @@ if (is_admin([101, 102, 103])) {
 
                 for ($i = 0; $i < 10; $i++) {
                     if (!empty($answer[$i])) {
-                        echo '<span style="color:#ff0000">Ответ '.($i + 1).':</span><br /><input type="text" name="answer['.$answer[$i]['id'].']" maxlength="50" value="'.$answer[$i]['option'].'" /><br />';
+                        echo '<span style="color:#ff0000">Ответ '.($i + 1).':</span><br /><input type="text" name="answer['.$answer[$i]['id'].']" maxlength="50" value="'.$answer[$i]['answer'].'" /><br />';
                     } else {
                         echo 'Ответ '.($i + 1).':<br /><input type="text" name="newanswer[]" maxlength="50" /><br />';
                     }
@@ -170,7 +170,7 @@ if (is_admin([101, 102, 103])) {
                         if (!in_array('', $answer)) {
                             DB::run() -> query("UPDATE `vote` SET `title`=? WHERE `id`=?;", [$title, $id]);
 
-                            $dbr = DB::run() -> prepare("UPDATE `voteanswer` SET `option`=? WHERE `id`=?;");
+                            $dbr = DB::run() -> prepare("UPDATE `voteanswer` SET `answer`=? WHERE `id`=?;");
                             foreach ($answer as $key => $data) {
                                 $dbr -> execute($data, $key);
                             }
@@ -179,7 +179,7 @@ if (is_admin([101, 102, 103])) {
                                 $newanswer = check($_POST['newanswer']);
                                 $newanswer = array_diff($newanswer, ['']);
                                 if (count($newanswer) > 0) {
-                                    $dbr = DB::run() -> prepare("INSERT INTO `voteanswer` (`vote_id`, `option`) VALUES (?, ?);");
+                                    $dbr = DB::run() -> prepare("INSERT INTO `voteanswer` (`vote_id`, `answer`) VALUES (?, ?);");
                                     foreach ($newanswer as $data) {
                                         $dbr -> execute($id, $data);
                                     }

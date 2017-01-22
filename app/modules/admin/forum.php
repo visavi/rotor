@@ -285,16 +285,25 @@ if (is_admin()) {
 
                             // ------ Удаление загруженных файлов -------//
                             $querytopics = DB::run() -> query("SELECT `id` FROM `topics` WHERE `forum_id`=?;", [$fid]);
-                            $topics = $querytopics->fetchAll(PDO::FETCH_COLUMN);
+                            $topicIds = $querytopics->fetchAll(PDO::FETCH_COLUMN);
 
-                            if (!empty($topics)){
-                                $delId = implode(',', $topics);
+                            if (!empty($topicIds)){
+                                $delId = implode(',', $topicIds);
 
-                                foreach($topics as $delDir){
-                                    removeDir(HOME.'/uploads/forum/'.$delDir);
-                                    array_map('unlink', glob(HOME.'/uploads/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                                foreach($topicIds as $topicId){
+                                    removeDir(HOME.'/uploads/forum/'.$topicId);
+                                    array_map('unlink', glob(HOME.'/uploads/thumbnail/upload_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
                                 }
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
+
+                                $votes = DBM::run()->query("SELECT * FROM vote WHERE topic_id IN($delId);");
+                                $votesIds = implode(',', array_pluck($votes, 'id'));
+
+                                if ($votesIds) {
+                                    DBM::run()->execute("DELETE FROM vote WHERE id IN($votesIds);");
+                                    DBM::run()->execute("DELETE FROM voteanswer WHERE vote_id IN($votesIds);");
+                                    DBM::run()->execute("DELETE FROM votepoll WHERE vote_id IN($votesIds);");
+                                }
                             }
                             // ------ Удаление загруженных файлов -------//
 
@@ -588,12 +597,22 @@ if (is_admin()) {
                     $delId = implode(',', $del);
 
                     // ------ Удаление загруженных файлов -------//
-                    foreach($del as $delDir){
-                        removeDir(HOME.'/uploads/forum/'.$delDir);
-                        array_map('unlink', glob(HOME.'/uploads/thumbnail/upload_forum_'.$delDir.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                    foreach($del as $topicId){
+                        removeDir(HOME.'/uploads/forum/'.$topicId);
+                        array_map('unlink', glob(HOME.'/uploads/thumbnail/upload_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
                     }
+
                     DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
                     // ------ Удаление загруженных файлов -------//
+
+                    $votes = DBM::run()->query("SELECT * FROM vote WHERE topic_id IN($delId);");
+                    $votesIds = implode(',', array_pluck($votes, 'id'));
+
+                    if ($votesIds) {
+                        DBM::run()->execute("DELETE FROM vote WHERE id IN($votesIds);");
+                        DBM::run()->execute("DELETE FROM voteanswer WHERE vote_id IN($votesIds);");
+                        DBM::run()->execute("DELETE FROM votepoll WHERE vote_id IN($votesIds);");
+                    }
 
                     $deltopics = DB::run() -> exec("DELETE FROM `topics` WHERE `id` IN (".$delId.");");
                     $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `topic_id` IN (".$delId.");");
@@ -650,12 +669,32 @@ if (is_admin()) {
                     switch ($do):
                         case 'closed':
                             DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
+
+                            $vote = DBM::run()->selectFirst('vote', ['topic_id' => $tid]);
+
+                            if ($vote) {
+                                DBM::run()->update('vote', [
+                                    'closed' => 1,
+                                ], [
+                                    'id' => $vote['id']
+                                ]);
+
+                                DBM::run()->delete('votepoll', ['vote_id' => $vote['id']]);
+                            }
+
                             notice('Тема успешно закрыта!');
                             redirect("/admin/forum?act=topic&tid=$tid&page=$page");
                             break;
 
                         case 'open':
                             DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [0, $tid]);
+
+                            DBM::run()->update('vote', [
+                                'closed' => 0,
+                            ], [
+                                'topic_id' => $tid
+                            ]);
+
                             notice('Тема успешно открыта!');
                             redirect("/admin/forum?act=topic&tid=$tid&page=$page");
                             break;

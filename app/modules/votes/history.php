@@ -55,7 +55,7 @@ switch ($act):
 
                 echo '<i class="fa fa-briefcase"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
-                $queryanswer = DB::run() -> query("SELECT `option`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", [$id]);
+                $queryanswer = DB::run() -> query("SELECT `answer`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", [$id]);
                 $answer = $queryanswer -> fetchAssoc();
 
                 $total = count($answer);

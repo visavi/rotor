@@ -39,43 +39,38 @@ switch ($act):
     ##                                      Голосование                                       ##
     ############################################################################################
     case 'poll':
-        show_title('site.png', 'Голосование');
 
         $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
 
         if (!empty($votes)) {
             if (empty($votes['closed'])) {
-                $config['newtitle'] = $votes['title'];
 
-                echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
+                show_title($votes['title']);
+                $config['newtitle'] = $votes['title'];
 
                 $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `vote_id`=? ORDER BY `id`;", [$id]);
                 $answer = $queryanswer -> fetchAll();
 
-                $total = count($answer);
-                if ($total > 0) {
+                if ($answer) {
                     $polls = DB::run() -> querySingle("SELECT `id` FROM `votepoll` WHERE `vote_id`=? AND `user`=? LIMIT 1;", [$id, $log]);
 
                     if ((is_user() && empty($polls)) && empty($_GET['result'])) {
 
-
                         echo '<form action="/votes?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                         foreach($answer as $data) {
-                            echo '<input name="poll" type="radio" value="'.$data['id'].'" /> '.$data['option'].'<br />';
+                            echo '<input name="poll" type="radio" value="'.$data['id'].'" /> '.$data['answer'].'<br />';
                         }
 
                         echo '<br /><input type="submit" value="Голосовать" /></form><br />';
 
-                        echo 'Всего вариантов: <b>'.$total.'</b><br /><br />';
+                        echo 'Проголосовало: <b>'.$votes['count'].'</b><br /><br />';
                         echo '<i class="fa fa-history"></i> <a href="/votes?act=poll&amp;id='.$id.'&amp;result=show">Результаты</a><br />';
 
                     } else {
 
-                        $queryanswer = DB::run() -> query("SELECT `option`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", [$id]);
+                        $queryanswer = DB::run() -> query("SELECT `answer`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", [$id]);
                         $answer = $queryanswer -> fetchAssoc();
-
-                        $total = count($answer);
 
                         $sum = $votes['count'];
                         $max = max($answer);
@@ -92,10 +87,10 @@ switch ($act):
                             $maxproc = round(($data * 100) / $max);
 
                             echo '<b>'.$key.'</b> (Голосов: '.$data.')<br />';
-                            progress_bar($maxproc, $proc.'%').'<br /><br />';
+                            App::progressBar($maxproc, $proc.'%');
                         }
 
-                        echo 'Вариантов: <b>'.$total.'</b><br /><br />';
+                        echo 'Проголосовало: <b>'.$votes['count'].'</b><br /><br />';
 
                         if (!empty($_GET['result'])) {
                             echo '<i class="fa fa-bar-chart"></i> <a href="/votes?act=poll&amp;id='.$id.'">К вариантам</a><br />';

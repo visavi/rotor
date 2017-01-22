@@ -8,28 +8,28 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $topics = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON t.`forum_id`=f.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
+    $topic = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON t.`forum_id`=f.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
 
-    if (empty($topics)) {
+    if (empty($topic)) {
         App::abort('default', 'Данной темы не существует!');
     }
 
-    if (!empty($topics['parent'])) {
-        $topics['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$topics['parent']]);
+    if (!empty($topic['parent'])) {
+        $topic['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$topic['parent']]);
     }
 
     if (is_user()) {
-        $topics['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$tid, $log]);
+        $topic['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$tid, $log]);
 
-        if (!empty($topics['bookmark']) && $topics['posts'] > $topics['bookmark']['posts']) {
-            DB::run() -> query("UPDATE `bookmarks` SET `posts`=? WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$topics['posts'], $tid, $log]);
+        if (!empty($topic['bookmark']) && $topic['posts'] > $topic['bookmark']['posts']) {
+            DB::run() -> query("UPDATE `bookmarks` SET `posts`=? WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$topic['posts'], $tid, $log]);
         }
     }
 
     // --------------------------------------------------------------//
-    if (!empty($topics['moderators'])) {
-        $topics['curator'] = explode(',', $topics['moderators']);
-        $topics['is_moder'] = in_array($log, $topics['curator'], true) ? 1 : 0;
+    if (!empty($topic['moderators'])) {
+        $topic['curator'] = explode(',', $topic['moderators']);
+        $topic['is_moder'] = in_array($log, $topic['curator'], true) ? 1 : 0;
     }
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
@@ -39,12 +39,12 @@ case 'index':
 
 
    // var_dump($querypost->fetchAll());
-    $topics['posts'] = $querypost->fetchAll();
+    $topic['posts'] = $querypost->fetchAll();
 
 
     // ----- Получение массива файлов ----- //
     $ipdpost = [];
-    foreach ($topics['posts'] as $val) {
+    foreach ($topic['posts'] as $val) {
         $ipdpost[] = $val['id'];
     }
 
@@ -57,15 +57,29 @@ case 'index':
         if (!empty($files)){
             $forumfiles = [];
             foreach ($files as $file){
-                $topics['files'][$file['post_id']][] = $file;
+                $topic['files'][$file['post_id']][] = $file;
             }
         }
     }
 
+    // Голосование
+    $vote = DBM::run()->selectFirst('vote', ['topic_id' => $tid]);
+    if ($vote) {
 
-    // ------------------------------------- //
-    App::view('forum/topic', compact('topics', 'tid', 'page'));
+        $vote['poll'] = DBM::run()->selectFirst('votepoll', ['vote_id' => $vote['id'], 'user' => App::getUsername()]);
+        $vote['answers'] = DBM::run()->select('voteanswer', ['vote_id' => $vote['id']], null, null, ['id' => 'ASC']);
+        if ($vote['answers']) {
 
+            $vote['voted'] = array_pluck($vote['answers'], 'result', 'answer');
+            arsort($vote['voted']);
+
+            $max = max($vote['voted']);
+            $vote['sum'] = ($vote['count'] > 0) ? $vote['count'] : 1;
+            $vote['max'] = ($max > 0) ? $max : 1;
+        }
+    }
+
+    App::view('forum/topic', compact('topic', 'page', 'vote'));
 break;
 
 ############################################################################################
@@ -318,6 +332,18 @@ case 'close':
 
         DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
 
+        $vote = DBM::run()->selectFirst('vote', ['topic_id' => $tid]);
+
+        if ($vote) {
+            DBM::run()->update('vote', [
+                'closed' => 1,
+            ], [
+                'id' => $vote['id']
+            ]);
+
+            DBM::run()->delete('votepoll', ['vote_id' => $vote['id']]);
+        }
+
         App::setFlash('success', 'Тема успешно закрыта!');
     } else {
         App::setFlash('danger', $validation->getErrors());
@@ -467,6 +493,66 @@ case 'editpost':
 
     App::view('forum/topic_edit_post', compact('post', 'files', 'page'));
 
+break;
+
+############################################################################################
+##                                        Голосование                                     ##
+############################################################################################
+case 'vote':
+    if (! is_user()) App::abort(403, 'Авторизуйтесь для голосования!');
+
+    $vote = DBM::run()->selectFirst('vote', ['topic_id' => $tid]);
+    if (! $vote) {
+        App::abort(404, 'Голосование не найдено!');
+    }
+
+    $token = check(Request::input('token'));
+    $poll  = abs(intval(Request::input('poll')));
+    $page = abs(intval(Request::input('page')));
+
+    $validation = new Validation();
+    $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
+
+    if ($vote['closed']) {
+        $validation->addError('Данное голосование закрыто!');
+    }
+
+    $votePoll = DBM::run()->selectFirst('votepoll', ['vote_id' => $vote['id'], 'user' => App::getUsername()]);
+    if ($votePoll) {
+        $validation->addError('Вы уже проголосовали в этом опросе!');
+    }
+
+    $voteAnswer = DBM::run()->selectFirst('voteanswer', ['id' => $poll, 'vote_id' => $vote['id']]);
+    if (! $voteAnswer) {
+        $validation->addError('Вы не выбрали вариант ответа!');
+    }
+
+    if ($validation->run()) {
+
+        DBM::run()->update('vote', [
+            'count' => ['+', 1],
+        ], [
+            'id' => $vote['id']
+        ]);
+
+        DBM::run()->update('voteanswer', [
+            'result' => ['+', 1],
+        ], [
+            'id' => $voteAnswer['id']
+        ]);
+
+        DBM::run()->insert('votepoll', [
+            'vote_id' => $vote['id'],
+            'user' => App::getUsername(),
+            'time' => SITETIME,
+        ]);
+
+        App::setFlash('success', 'Ваш голос успешно принят!');
+    } else {
+        App::setFlash('danger', $validation->getErrors());
+    }
+
+    App::redirect('/topic/'.$tid.'?page='.$page);
 break;
 
 ############################################################################################
