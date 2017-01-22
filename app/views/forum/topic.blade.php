@@ -69,7 +69,7 @@
     @if($vote['answers'])
         <h3>{{ $vote['title'] }}</h3>
 
-        @if($vote['poll'] || $vote['closed'])
+        @if(! is_user() || $vote['poll'] || $vote['closed'])
             @foreach($vote['voted'] as $key => $data)
                 <?php $proc = round(($data * 100) / $vote['sum'], 1); ?>
                 <?php $maxproc = round(($data * 100) / $vote['max']); ?>
