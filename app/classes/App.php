@@ -668,7 +668,7 @@ class App
             $title = $percent.'%';
         }
         echo '<div class="progress">
-            <div class="progress-bar progress-bar-striped active" style="width:'.$percent.'%;"></div>
+            <div class="progress-bar progress-bar-warning" style="width:'.$percent.'%;"></div>
             <span class="progress-completed">'.$title.'</span>
         </div>';
     }
