@@ -471,7 +471,7 @@ case 'editpost':
                 if (!empty($files)){
                     foreach ($files as $file){
                         if (file_exists(HOME.'/uploads/forum/'.$file['topic_id'].'/'.$file['hash'])){
-                            unlink(HOME.'/uploads/forum/'.$file['topic_id'].'/'.$file['hash']);
+                            unlink_image('uploads/forum/', $file['topic_id'].'/'.$file['hash']);
                         }
                     }
                     DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$id]);
