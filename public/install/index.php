@@ -95,7 +95,7 @@ header("Content-type:text/html; charset=utf-8");
         <p>Для установки вам необходимо прописать данные от БД в файл .env</p>
 
         <?php
-        $keys = [
+        $keys = array(
             'APP_ENV',
             'DB_DRIVER',
             'DB_HOST',
@@ -104,7 +104,7 @@ header("Content-type:text/html; charset=utf-8");
             'DB_USERNAME',
             'SITE_ADMIN',
             'SITE_EMAIL',
-        ];
+        );
 
         foreach ($keys as $key) {
             echo $key.' - '.env($key).'<br />';
@@ -296,14 +296,14 @@ header("Content-type:text/html; charset=utf-8");
             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
 
             // Проверка логина или ника на существование
-            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($login), strtolower($login)]);
+            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($login), strtolower($login)));
             if (!$reglogin) {
 
             // Проверка email на существование
-            $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$email]);
+            $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", array($email));
             if (!$regmail) {
 
-                $registration = DBM::run()->insert('users', [
+                $registration = DBM::run()->insert('users', array(
                     'login' => $login,
                     'password' => password_hash($password, PASSWORD_BCRYPT),
                     'email' => $email,
@@ -315,7 +315,7 @@ header("Content-type:text/html; charset=utf-8");
                     'money' => 1000000,
                     'info'  => 'Администратор сайта',
                     'status' => 'Администратор',
-                ]);
+                ));
 
                 DBM::run()->update('setting', array('value' => $login), array('name' => 'nickname'));
                 DBM::run()->update('setting', array('value' => $email), array('name' => 'emails'));
@@ -326,22 +326,22 @@ header("Content-type:text/html; charset=utf-8");
 
                 // -------------- Приват ---------------//
                 $textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
-                $rek = DBM::run()->insert('inbox', [
+                $rek = DBM::run()->insert('inbox', array(
                     'user'  => $login,
                     'author'  => 'Vantuz',
                     'text' => $textpriv,
                     'time' => SITETIME,
-                ]);
+                ));
 
                 // -------------- Новость ---------------//
                 $textnews = 'Добро пожаловать на демонстрационную страницу движка RotorCMS'.PHP_EOL.'RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. RotorCMS является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью RotorCMS является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок RotorCMS вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
-                $rek = DBM::run()->insert('news', [
+                $rek = DBM::run()->insert('news', array(
                     'title'  => 'Добро пожаловать!',
                     'text'  => $textnews,
                     'author' => $login,
                     'time' => SITETIME,
-                ]);
+                ));
 
             redirect('?act=finish');
 
