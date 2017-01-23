@@ -465,14 +465,13 @@ case 'editpost':
             // ------ Удаление загруженных файлов -------//
             if ($delfile) {
                 $del = implode(',', $delfile);
-
-                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `id`=? AND `id` IN (".$del.");", [$id]);
+                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$id]);
                 $files = $queryfiles->fetchAll();
 
                 if (!empty($files)){
                     foreach ($files as $file){
-                        if (file_exists(HOME.'/uploads/forum/'.$file['id'].'/'.$file['hash'])){
-                            unlink(HOME.'/uploads/forum/'.$file['id'].'/'.$file['hash']);
+                        if (file_exists(HOME.'/uploads/forum/'.$file['topic_id'].'/'.$file['hash'])){
+                            unlink(HOME.'/uploads/forum/'.$file['topic_id'].'/'.$file['hash']);
                         }
                     }
                     DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$id]);

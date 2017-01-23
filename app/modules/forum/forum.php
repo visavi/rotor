@@ -103,22 +103,24 @@ case 'create':
             }
 
             // Создание голосования
-            $voteId = DBM::run()->insert('vote', [
-                'title' => $question,
-                'topic_id' => $lastid,
-                'time' => SITETIME,
-            ]);
+            if ($vote) {
+                $voteId = DBM::run()->insert('vote', [
+                    'title' => $question,
+                    'topic_id' => $lastid,
+                    'time' => SITETIME,
+                ]);
 
-            $prepareAnswers = [];
-            foreach ($answers as $answer) {
-                $prepareAnswers[] = [$voteId, $answer];
+                $prepareAnswers = [];
+                foreach ($answers as $answer) {
+                    $prepareAnswers[] = [$voteId, $answer];
+                }
+
+                DBM::run()->insertMultiple('voteanswer', [
+                    'vote_id', 'answer'
+                ],
+                    $prepareAnswers
+                );
             }
-
-            DBM::run()->insertMultiple('voteanswer', [
-                'vote_id', 'answer'
-            ],
-                $prepareAnswers
-            );
 
             App::setFlash('success', 'Новая тема успешно создана!');
             App::redirect('/topic/'.$lastid);

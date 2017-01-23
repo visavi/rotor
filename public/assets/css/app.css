@@ -114,7 +114,7 @@ blockquote {
 
 .progress {
   position: relative;
-  max-width: 500px;
+  max-width: 250px;
   height: 15px;
   margin-bottom: 10px;
 }
