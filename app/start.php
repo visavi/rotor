@@ -6,7 +6,7 @@ session_name('SID');
 session_start();
 
 if (!file_exists(STORAGE.'/temp/setting.dat')) {
-    $settings = DBM::run()->select('setting');
+    $settings = ORM::forTable('setting')->findMany();
     $config = array_pluck($settings, 'value', 'name');
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($config), LOCK_EX);
 }

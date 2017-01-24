@@ -26,10 +26,25 @@ if (env('APP_DEBUG')) {
     $whoops->register();
 }
 
-DBM::run()->config(
+/*DBM::run()->config(
     env('DB_HOST'),
     env('DB_DATABASE'),
     env('DB_USERNAME'),
     env('DB_PASSWORD'),
     env('DB_PORT')
-);
+);*/
+
+ORM::configure([
+    'connection_string' => env('DB_DRIVER').':host='.env('DB_HOST').';dbname='.env('DB_DATABASE').';port='.env('DB_PORT'),
+    'username' => env('DB_USERNAME'),
+    'password' => env('DB_PASSWORD'),
+    'driver_options' => [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'],
+    //'return_result_sets' => true,
+]);
+
+ORM::configure('logging', true);
+ORM::configure('logger', function($log_string, $query_time) {
+    echo $log_string . ' in ' . $query_time.'<br />';
+});
+
+

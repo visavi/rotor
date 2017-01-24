@@ -26,7 +26,8 @@
         "verot/class.upload.php": "^0.33.0",
         "php-curl-class/php-curl-class": "^7.1",
         "jenssegers/blade": "^1.1",
-        "visavi/cleanup": "^1.0"
+        "visavi/cleanup": "^1.0",
+        "j4mie/idiorm": "^1.5"
 
     },
     "require-dev": {

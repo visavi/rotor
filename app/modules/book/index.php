@@ -5,11 +5,14 @@ switch ($act):
  * Главная страница
  */
 case 'index':
-
-    $total = DBM::run()->count('guest');
+    $total = ORM::forTable('guest')->count();
     $page = App::paginate(App::setting('bookpost'), $total);
 
-    $posts = DBM::run()->select('guest', null, App::setting('bookpost'), $page['offset'], ['time'=>'DESC']);
+    $posts = ORM::forTable('guest')
+        ->order_by_desc('time')
+        ->limit(App::setting('bookpost'))
+        ->offset($page['offset'])
+        ->findMany();
 
     App::view('book/index', compact('posts', 'page'));
 break;
@@ -39,29 +42,34 @@ case 'add':
 
         $msg = antimat($msg);
 
-        if (is_user()) {
-            $bookscores = ($config['bookscores']) ? 1 : 0;
 
-            $user = DBM::run()->update('users', [
-                'allguest' => ['+', 1],
-                'point' => ['+', $bookscores],
-                'money' => ['+', 5],
-            ], [
-                'login' => $log
-            ]);
+        if (is_user()) {
+            $bookscores = (App::setting('bookscores')) ? 1 : 0;
+
+            $user = ORM::forTable('users')->where('login', App::getUsername())->findOne();
+            $user->allguest++;
+            $user->point++;
+            $user->money += 5;
+            $user->save();
         }
 
-        $username = is_user() ? $log : $config['guestsuser'];
+        $username = is_user() ? App::getUsername() : App::setting('guestsuser');
 
-        $guest = DBM::run()->insert('guest', [
-            'user' => $username,
-            'text' => $msg,
-            'ip'   => App::getClientIp(),
-            'brow' => App::getUserAgent(),
-            'time' => SITETIME,
-        ]);
+        $guest = ORM::forTable('guest')->create();
+        $guest->user = $username;
+        $guest->text = $msg;
+        $guest->ip = App::getClientIp();
+        $guest->brow = App::getUserAgent();
+        $guest->time = SITETIME;
+        $guest->save();
 
-        DBM::run()->execute("DELETE FROM `guest` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `guest` ORDER BY `time` DESC LIMIT :limit) AS del);", ['limit' => intval($config['maxpostbook'])]);
+        ORM::forTable('guest')->rawExecute('
+            DELETE FROM guest WHERE time < (
+                SELECT MIN(time) FROM (
+                    SELECT time FROM guest ORDER BY time DESC LIMIT '.App::setting('maxpostbook').'
+                ) AS del
+            );'
+        );
 
         App::setFlash('success', 'Сообщение успешно добавлено!');
     } else {
