@@ -48,7 +48,7 @@ if (env('APP_DEBUG')) {
     ORM::configure([
         'logging' => true,
         'logger'  => function ($query, $time) {
-            $logger = $query.' ('.round($time, 6).' сек.)'.PHP_EOL;
+            $logger = $query.' ('.number_format($time, 6).' сек.)'.PHP_EOL;
             file_put_contents(STORAGE.'/temp/logger.dat', $logger, FILE_APPEND);
         },
     ]);

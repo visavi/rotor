@@ -88,7 +88,7 @@ case 'edit':
 
     if (! is_user()) App::abort(403);
 
-    $post = ORM::forTable('guest')->findOne($id);
+    $post = ORM::forTable('guest')->where(['id' => $id, 'user' => App::getUsername()])->findOne();
 
     if (! $post) {
         App::abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
@@ -142,24 +142,24 @@ case 'complaint':
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
 
-    $data = DBM::run()->selectFirst('guest', ['id' => $id]);
+    $data = ORM::forTable('guest')->findOne($id);
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
-
-    $spam = DBM::run()->selectFirst('spam', ['relate' => 2, 'idnum' => $id]);
+    $spam = ORM::forTable('spam')->where(['relate' => 2, 'idnum' => $id])->findOne();
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
-        $spam = DBM::run()->insert('spam', [
-            'relate'     => 2,
-            'idnum'   => $data['id'],
-            'user'    => $log,
-            'login'   => $data['user'],
-            'text'    => $data['text'],
-            'time'    => $data['time'],
-            'addtime' => SITETIME,
-            'link'    => '/book?page='.$page,
-        ]);
+
+        $spam = ORM::forTable('spam')->create();
+        $spam->relate  = 2;
+        $spam->idnum   = $data['id'];
+        $spam->user    = App::getUsername();
+        $spam->login   = $data['user'];
+        $spam->text    = $data['text'];
+        $spam->time    = $data['time'];
+        $spam->addtime = SITETIME;
+        $spam->link    = '/book?page='.$page;
+        $spam->save();
 
         exit(json_encode(['status' => 'success']));
     } else {
