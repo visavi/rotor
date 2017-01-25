@@ -8,7 +8,7 @@ DB::run() -> query("DELETE FROM `online` WHERE `time`<?;", [SITETIME - $config['
 $newhost = 0;
 
 if (is_user()) {
-    $queryonline = DB::run() -> querySingle("SELECT `id` FROM `online` WHERE `user`=? OR `ip`=? LIMIT 1;", [App::getUsername(), App::getClientIp()]);
+    $queryonline = DB::run() -> querySingle("SELECT `id` FROM `online` WHERE `ip`=? OR `user`=? ORDER BY user=? desc LIMIT 1;", [App::getClientIp(), App::getUsername(), App::getUsername()]);
     if (empty($queryonline)) {
         DB::run() -> query("INSERT INTO `online` (`ip`, `brow`, `time`, `user`) VALUES (?, ?, ?, ?);", [App::getClientIp(), App::getUserAgent(), SITETIME, App::getUsername()]);
         $newhost = 1;
