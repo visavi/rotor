@@ -1855,10 +1855,17 @@ function notice($message, $status = 'success'){
 
 // ------------ Функция статистики производительности -----------//
 function perfomance(){
-    global $config;
 
-    if (is_admin() && !empty($config['performance'])){
-        render ('includes/perfomance');
+    if (is_admin() && App::setting('performance')){
+
+        $queries = [];
+        if (env('APP_DEBUG')) {
+            $file = STORAGE . '/temp/logger.dat';
+            $queries = array_filter(explode(PHP_EOL, file_get_contents($file)));
+            file_put_contents($file, '');
+        }
+
+        App::view('app/_perfomance', compact('queries'));
     }
 }
 

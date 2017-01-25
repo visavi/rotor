@@ -36,15 +36,20 @@ if (env('APP_DEBUG')) {
 
 ORM::configure([
     'connection_string' => env('DB_DRIVER').':host='.env('DB_HOST').';dbname='.env('DB_DATABASE').';port='.env('DB_PORT'),
-    'username' => env('DB_USERNAME'),
-    'password' => env('DB_PASSWORD'),
-    'driver_options' => [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'],
-    //'return_result_sets' => true,
+    'username'       => env('DB_USERNAME'),
+    'password'       => env('DB_PASSWORD'),
+    'logging'        => env('APP_DEBUG'),
+    'driver_options' => [
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'
+    ],
 ]);
 
-ORM::configure('logging', true);
-ORM::configure('logger', function($log_string, $query_time) {
-    echo $log_string . ' in ' . $query_time.'<br />';
-});
-
-
+if (env('APP_DEBUG')) {
+    ORM::configure([
+        'logging' => true,
+        'logger'  => function ($query, $time) {
+            $logger = $query.' ('.round($time, 6).' сек.)'.PHP_EOL;
+            file_put_contents(STORAGE.'/temp/logger.dat', $logger, FILE_APPEND);
+        },
+    ]);
+}

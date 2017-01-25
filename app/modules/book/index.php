@@ -88,7 +88,7 @@ case 'edit':
 
     if (! is_user()) App::abort(403);
 
-    $post = DBM::run()->selectFirst('guest', ['id' => $id, 'user' =>$log]);
+    $post = ORM::forTable('guest')->findOne($id);
 
     if (! $post) {
         App::abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
@@ -111,13 +111,11 @@ case 'edit':
 
             $msg = antimat($msg);
 
-            $guest = DBM::run()->update('guest', [
-                'text'      => $msg,
-                'edit'      => $log,
-                'edit_time' => SITETIME,
-            ], [
-                'id' => $id
-            ]);
+            $guest = ORM::forTable('guest')->findOne($id);
+            $guest->text = $msg;
+            $guest->edit = $log;
+            $guest->edit_time = SITETIME;
+            $guest->save();
 
             App::setFlash('success', 'Сообщение успешно отредактировано!');
             App::redirect('/book');

@@ -9,3 +9,11 @@
 
     <li data-toggle="tooltip" title="Загрузка страницы"><i class="fa fa-rocket"></i> <?= round(microtime(1) - STARTTIME, 4) ?> сек.</li>
 </ul>
+
+@if ($queries)
+<pre class="text-left prettyprint linenums">
+@foreach($queries as $key=> $query)
+{!! $query !!}
+@endforeach
+</pre>
+@endif
