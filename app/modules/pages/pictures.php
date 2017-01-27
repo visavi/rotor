@@ -26,16 +26,15 @@ case 'index':
         if ($validation->run()) {
 
             //-------- Удаляем старую фотку и аватар ----------//
-            $user = DBM::run()->selectFirst('users', ['login' => $log]);
+            $user = ORM::forTable('users')->findOne(App::getUserId());
 
             if (!empty($user['picture'])){
                 unlink_image('uploads/photos/', $user['picture']);
                 unlink_image('uploads/avatars/', $user['avatar']);
 
-                DBM::run()->update('users', [
-                    'picture' => null,
-                    'avatar' => null,
-                ], ['login' => $log]);
+                $user->picture = null;
+                $user->avatar = null;
+                $user->save();
             }
 
             //-------- Генерируем аватар ----------//
@@ -56,10 +55,10 @@ case 'index':
 
             if ($handle->processed) {
 
-                DBM::run()->update('users', [
-                    'picture' => $picture,
-                    'avatar' => $avatar,
-                ], ['login' => $log]);
+                $user = ORM::forTable('users')->findOne(App::getUserId());
+                $user->picture = $picture;
+                $user->avatar = $avatar;
+                $user->save();
 
                 $handle->clean();
 
@@ -73,8 +72,7 @@ case 'index':
             App::setFlash('danger', $validation->getErrors());
         }
     }
-
-    $user = DBM::run()->selectFirst('users', ['login' => App::getUsername()]);
+    $user = ORM::forTable('users')->where('login', App::getUsername())->findOne();
     App::view('pages/picture', compact('user'));
 break;
 
@@ -89,7 +87,7 @@ case 'delete':
     $validation = new Validation();
     $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-    $user = DBM::run()->selectFirst('users', ['login' => $log]);
+    $user = ORM::forTable('users')->findOne(App::getUserId());
     if (! $user || ! $user['picture']) {
         $validation -> addError('Фотографии для удаления не существует!');
     }
@@ -99,10 +97,9 @@ case 'delete':
         unlink_image('uploads/photos/', $user['picture']);
         unlink_image('uploads/avatars/', $user['avatar']);
 
-        DBM::run()->update('users', [
-            'picture' => null,
-            'avatar' => null,
-        ], ['login' => $log]);
+        $user->picture = null;
+        $user->avatar = null;
+        $user->save();
 
         App::setFlash('success', 'Фотография успешно удалена!');
     } else {

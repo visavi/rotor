@@ -338,9 +338,23 @@ class App
         return check($server);
     }
 
+    /**
+     * Возвращает логин пользователя
+     * @return string
+     */
     public static function getUsername()
     {
         return isset($_SESSION['login']) ? check($_SESSION['login']) : self::setting('guestsuser');
+    }
+
+
+    /**
+     * Возвращает ID пользователя
+     * @return int
+     */
+    public static function getUserId()
+    {
+        return isset($_SESSION['id']) ? intval($_SESSION['id']) : 0;
     }
 
     /**
@@ -384,8 +398,9 @@ class App
 
         if (!empty($login) && !empty($password)) {
 
-            $user = DB::run()->queryFetch("SELECT `login`, `password` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [$login, $login]);
-
+            $user = ORM::forTable('users')
+                ->whereRaw('LOWER(login) = ? OR LOWER(nickname) = ?', [$login, $login])
+                ->findOne();
 
             /* Миграция старых паролей */
             if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
@@ -407,9 +422,10 @@ class App
                     setcookie('password', md5($user['password'].env('APP_KEY')), time() + 3600 * 24 * 365, '/', $domain, null, true);
                 }
 
-                $_SESSION['ip'] = self::getClientIp();
+                $_SESSION['id'] = $user['id'];
                 $_SESSION['login'] = $user['login'];
                 $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
+                $_SESSION['ip'] = self::getClientIp();
 
                 // Сохранение привязки к соц. сетям
                 if (!empty($_SESSION['social'])) {
@@ -463,6 +479,7 @@ class App
                 setcookie('login', $user['login'], time() + 3600 * 24 * 365, '/', $domain);
                 setcookie('password', md5($user['password'].env('APP_KEY')), time() + 3600 * 24 * 365, '/', $domain, null, true);
 
+                $_SESSION['id'] = $user['id'];
                 $_SESSION['login'] = $user['login'];
                 $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
                 $_SESSION['ip'] = App::getClientIp();

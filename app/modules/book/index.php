@@ -46,7 +46,7 @@ case 'add':
         if (is_user()) {
             $bookscores = (App::setting('bookscores')) ? 1 : 0;
 
-            $user = ORM::forTable('users')->where('login', App::getUsername())->findOne();
+            $user = ORM::forTable('users')->findOne(App::getUserId());
             $user->allguest++;
             $user->point++;
             $user->money += 5;
@@ -88,7 +88,7 @@ case 'edit':
 
     if (! is_user()) App::abort(403);
 
-    $post = ORM::forTable('guest')->where(['id' => $id, 'user' => App::getUsername()])->findOne();
+    $post = ORM::forTable('guest')->where('user', App::getUsername())->findOne($id);
 
     if (! $post) {
         App::abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
@@ -111,11 +111,10 @@ case 'edit':
 
             $msg = antimat($msg);
 
-            $guest = ORM::forTable('guest')->findOne($id);
-            $guest->text = $msg;
-            $guest->edit = $log;
-            $guest->edit_time = SITETIME;
-            $guest->save();
+            $post->text = $msg;
+            $post->edit = $log;
+            $post->edit_time = SITETIME;
+            $post->save();
 
             App::setFlash('success', 'Сообщение успешно отредактировано!');
             App::redirect('/book');
