@@ -1,9 +1,9 @@
-<?php show_title('Class BBCodeParser'); ?>
+<?php show_title('Class BBCode'); ?>
 <b>Класс для обработки BB-кодов</b><br /><br />
 
 Пример
 <pre class="prettyprint linenums">
-$bbcode = new BBCodeParser($config);
+$bbcode = new BBCode($config);
 
 $bbcode->setParser('header', '/\[h1\](.*?)\[\/h1\]/s', '&lt;h1>$1&lt;/h1>');
 $bbcode->except('bold')->only('header', 'italic');

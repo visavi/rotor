@@ -26,14 +26,6 @@ if (env('APP_DEBUG')) {
     $whoops->register();
 }
 
-/*DBM::run()->config(
-    env('DB_HOST'),
-    env('DB_DATABASE'),
-    env('DB_USERNAME'),
-    env('DB_PASSWORD'),
-    env('DB_PORT')
-);*/
-
 ORM::configure([
     'connection_string' => env('DB_DRIVER').':host='.env('DB_HOST').';dbname='.env('DB_DATABASE').';port='.env('DB_PORT'),
     'username'       => env('DB_USERNAME'),

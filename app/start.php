@@ -68,20 +68,26 @@ if (!empty($config['doslimit'])) {
         if (counter_string(STORAGE.'/antidos/'.App::getClientIp().'.dat') > $config['doslimit']) {
 
             if (!empty($config['errorlog'])){
-                $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", [App::getClientIp()]);
-                if (empty($banip)) {
 
-                    DBM::run()->insert('error', [
-                        'num' => 666,
-                        'request' => utf_substr(App::server('REQUEST_URI'), 0, 200),
-                        'referer' => utf_substr(App::server('HTTP_REFERER'), 0, 200),
-                        'username' => App::getUsername(),
-                        'ip' => App::getClientIp(),
-                        'brow' => App::getUserAgent(),
-                        'time' => SITETIME,
-                    ]);
+                $banip = ORM::forTable('ban')->where('ip', App::getClientIp())->findOne();
 
-                    DB::run() -> query("INSERT IGNORE INTO ban (`ip`, `time`) VALUES (?, ?);", [App::getClientIp(), SITETIME]);
+                if (! $banip) {
+
+                    $error = ORM::forTable('error')->create();
+                    $error->num = 666;
+                    $error->request = utf_substr(App::server('REQUEST_URI'), 0, 200);
+                    $error->referer = utf_substr(App::server('HTTP_REFERER'), 0, 200);
+                    $error->username = App::getUsername();
+                    $error->ip = App::getClientIp();
+                    $error->brow = App::getUserAgent();
+                    $error->time = SITETIME;
+                    $error->save();
+
+                    ORM::forTable('ban')->rawExecute(
+                        "INSERT IGNORE INTO ban (`ip`, `time`) VALUES (:ip, :time);",
+                        ['ip' => App::getClientIp(), 'time' => SITETIME]
+                    );
+
                     save_ipban();
                 }
             }

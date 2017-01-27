@@ -31,6 +31,7 @@ class App
 
         $params +=compact('config', 'log');
 
+
         $blade = new Jenssegers\Blade\Blade([APP.'/views', HOME.'/themes'], STORAGE.'/cache');
 
         if ($return) {
@@ -58,20 +59,20 @@ class App
 
         if (App::setting('errorlog') && in_array($code, [403, 404])) {
 
-            DBM::run()->insert('error', [
-                'num' => $code,
-                'request' => utf_substr(App::server('REQUEST_URI'), 0, 200),
-                'referer' => utf_substr(App::server('HTTP_REFERER'), 0, 200),
-                'username' => App::getUsername(),
-                'ip' => App::getClientIp(),
-                'brow' => App::getUserAgent(),
-                'time' => SITETIME,
-            ]);
+            $error = ORM::forTable('error')->create();
+            $error->num = $code;
+            $error->request = utf_substr(App::server('REQUEST_URI'), 0, 200);
+            $error->referer = utf_substr(App::server('HTTP_REFERER'), 0, 200);
+            $error->username = App::getUsername();
+            $error->ip = App::getClientIp();
+            $error->brow = App::getUserAgent();
+            $error->time = SITETIME;
+            $error->save();
 
-            DBM::run()->delete('error', [
-                'num' => $code,
-                'time' => ['<', SITETIME - 3600 * 24 * App::setting('maxlogdat')]]
-            );
+            ORM::forTable('error')->
+                where('num', $code)->
+                whereLt('time', SITETIME - 3600 * 24 * App::setting('maxlogdat'))->
+                deleteMany();
         }
 
         exit(self::view('errors.'.$code, compact('message')));
@@ -285,9 +286,9 @@ class App
      */
     public static function bbCode($text, $parse = true)
     {
-        $bbcode = new BBCodeParser(self::setting());
+        $bbcode = new BBCode(self::setting());
 
-        if ( ! $parse) return $bbcode->clear($text);
+        if (! $parse) return $bbcode->clear($text);
 
         $text = $bbcode->parse($text);
         $text = $bbcode->parseSmiles($text);
@@ -391,9 +392,11 @@ class App
             {
                 if (md5(md5($password)) == $user['password']) {
                     $user['password'] = password_hash($password, PASSWORD_BCRYPT);
-                    DBM::run()->update('users', [
-                        'password' => $user['password'],
-                    ], ['login' => $user['login']]);
+
+                    $user = ORM::forTable('users')->where('login', $user['login'])->findOne();
+                    $user->password = $user['password'];
+                    $user->save();
+
                 }
             }
 
@@ -410,11 +413,12 @@ class App
 
                 // Сохранение привязки к соц. сетям
                 if (!empty($_SESSION['social'])) {
-                    DBM::run()->insert('socials', [
-                        'user'    => $user['login'],
-                        'network' => $_SESSION['social']->network,
-                        'uid'     => $_SESSION['social']->uid,
-                    ]);
+
+                    $social = ORM::forTable('socials')->create();
+                    $social->user = $user['login'];
+                    $social->network = $_SESSION['social']->network;
+                    $social->uid = $_SESSION['social']->uid;
+                    $social->save();
                 }
 
                 DB::run()->query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=?", [SITETIME, $user['login']]);
@@ -450,7 +454,9 @@ class App
         if ($network && empty($network->error)) {
             $_SESSION['social'] = $network;
 
-            $social = DBM::run()->selectFirst('socials', ['network' => $network->network, 'uid' => $network->uid]);
+            $social = ORM::forTable('socials')->
+                where(['network' => $network->network, 'uid' => $network->uid])->
+                findOne();
 
             if ($social && $user = user($social['user'])) {
 

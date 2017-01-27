@@ -1,10 +1,7 @@
 <?php
 header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
 
-$ban = DBM::run()->queryFirst(
-    'SELECT * FROM ban WHERE ip = :ip AND user IS NULL LIMIT 1;',
-    ['ip' => App::getClientIp()]
-);
+$ban = ORM::forTable('ban')->where('ip', App::getClientIp())->whereNull('user')->findOne();
 
 if (Request::isMethod('post')) {
 
@@ -12,7 +9,8 @@ if (Request::isMethod('post')) {
 
     if ($ban && $protect == $_SESSION['protect']) {
 
-        DBM::run()->delete('ban', ['ip' => App::getClientIp()]);
+        $ban = ORM::forTable('ban')->where('ip', App::getClientIp())->deleteMany();
+
         save_ipban();
 
         App::setFlash('success', 'IP успешно разбанен!');
@@ -20,6 +18,4 @@ if (Request::isMethod('post')) {
     }
 }
 
-
 App::view('pages/banip', compact('ban'));
-

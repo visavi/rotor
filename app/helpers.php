@@ -51,7 +51,7 @@ function unlink_image($dir, $image) {
 // ------------------- Функция полного удаления юзера --------------------//
 function delete_users($user) {
     if (!empty($user)){
-        $userpic = DBM::run()->selectFirst('users', ['login' => $user]);
+        $userpic = ORM::forTable('users')->where('login', $user)->findOne();
 
         unlink_image('uploads/photos/', $userpic['picture']);
         unlink_image('uploads/avatars/', $userpic['avatar']);
@@ -1112,7 +1112,7 @@ function stats_events() {
 // --------------------- Функция получения данных аккаунта  --------------------//
 function user($login) {
     if (! empty($login)) {
-        return DBM::run()->selectFirst('users', ['login'=>$login]);
+        return ORM::forTable('users')->where('login', $login)->findOne();
     }
     return false;
 }
@@ -1378,7 +1378,9 @@ function recentevents($show = 5) {
 function recentphotos($show = 5) {
     global $config;
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
-        $recent = DBM::run()->query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$show.";");
+
+        $recent = ORM::forTable('photo')->orderByDesc('time')->limit($show)->findMany();
+
         file_put_contents(STORAGE."/temp/recentphotos.dat", serialize($recent), LOCK_EX);
     }
 

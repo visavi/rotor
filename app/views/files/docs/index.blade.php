@@ -139,7 +139,7 @@
 <div class="b"><b>Стандартные классы</b></div>
 <a href="/files/docs/class_dbm">DBM</a><br />
 <a href="/files/docs/class_validation">Validation</a><br />
-<a href="/files/docs/class_bbcodeparser">BBCodeParser</a><br />
+<a href="/files/docs/class_bbcode">BBCode</a><br />
 <br />
 
 <div class="b"><b>Константы</b></div>
