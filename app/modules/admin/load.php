@@ -627,7 +627,7 @@ case 'delcats':
                         $querydel = DB::run() -> query("SELECT `link`, `screen` FROM `downs` WHERE `category_id`=?;", [$cid]);
                         $arr_script = $querydel -> fetchAll();
 
-                        DB::run() -> query("DELETE FROM `comments` WHERE `relate_category_id`=?;", ['down', $cid]);
+                        DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_category_id`=?;", ['down', $cid]);
                         DB::run() -> query("DELETE FROM `downs` WHERE `category_id`=?;", [$cid]);
                         DB::run() -> query("DELETE FROM `cats` WHERE `id`=?;", [$cid]);
 
