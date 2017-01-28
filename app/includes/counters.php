@@ -16,12 +16,12 @@ if (is_user()) {
         DB::run() -> query("UPDATE `online` SET `ip`=?, `brow`=?, `time`=?, `user`=? WHERE `id`=? LIMIT 1;", [App::getClientIp(), App::getUserAgent(), SITETIME, App::getUsername(), $queryonline]);
     }
 } else {
-    $queryonline = DB::run() -> querySingle("SELECT `id` FROM `online` WHERE `ip`=? LIMIT 1;", [App::getClientIp()]);
+    $queryonline = DB::run() -> querySingle("SELECT `id` FROM `online` WHERE `ip`=? ORDER BY user IS NULL desc LIMIT 1;", [App::getClientIp()]);
     if (empty($queryonline)) {
         DB::run() -> query("INSERT INTO `online` (`ip`, `brow`, `time`) VALUES (?, ?, ?);", [App::getClientIp(), App::getUserAgent(), SITETIME]);
         $newhost = 1;
     } else {
-        DB::run() -> query("UPDATE `online` SET `brow`=?, `time`=? WHERE `id`=? LIMIT 1;", [App::getUserAgent(), SITETIME, $queryonline]);
+        DB::run() -> query("UPDATE `online` SET `brow`=?, `time`=?, user=? WHERE `id`=? LIMIT 1;", [App::getUserAgent(), SITETIME, null, $queryonline]);
     }
 }
 // -----------------------------------------------------------//
