@@ -26,7 +26,7 @@ case 'index':
         if ($validation->run()) {
 
             //-------- Удаляем старую фотку и аватар ----------//
-            $user = ORM::forTable('users')->findOne(App::getUserId());
+            $user = User::find_one(App::getUserId());
 
             if (!empty($user['picture'])){
                 unlink_image('uploads/photos/', $user['picture']);
@@ -55,7 +55,7 @@ case 'index':
 
             if ($handle->processed) {
 
-                $user = ORM::forTable('users')->findOne(App::getUserId());
+                $user = User::find_one(App::getUserId());
                 $user->picture = $picture;
                 $user->avatar = $avatar;
                 $user->save();
@@ -72,7 +72,7 @@ case 'index':
             App::setFlash('danger', $validation->getErrors());
         }
     }
-    $user = ORM::forTable('users')->where('login', App::getUsername())->findOne();
+    $user = User::where('login', App::getUsername())->find_one();
     App::view('pages/picture', compact('user'));
 break;
 
@@ -87,7 +87,7 @@ case 'delete':
     $validation = new Validation();
     $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-    $user = ORM::forTable('users')->findOne(App::getUserId());
+    $user = User::find_one(App::getUserId());
     if (! $user || ! $user['picture']) {
         $validation -> addError('Фотографии для удаления не существует!');
     }

@@ -6,7 +6,7 @@ session_name('SID');
 session_start();
 
 if (!file_exists(STORAGE.'/temp/setting.dat')) {
-    $settings = ORM::forTable('setting')->findMany();
+    $settings = Setting::find_many();
     $config = array_pluck($settings, 'value', 'name');
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($config), LOCK_EX);
 }
@@ -69,11 +69,11 @@ if (!empty($config['doslimit'])) {
 
             if (!empty($config['errorlog'])){
 
-                $banip = ORM::forTable('ban')->where('ip', App::getClientIp())->findOne();
+                $banip = ORM::for_table('ban')->where('ip', App::getClientIp())->find_one();
 
                 if (! $banip) {
 
-                    $error = ORM::forTable('error')->create();
+                    $error = ORM::for_table('error')->create();
                     $error->num = 666;
                     $error->request = utf_substr(App::server('REQUEST_URI'), 0, 200);
                     $error->referer = utf_substr(App::server('HTTP_REFERER'), 0, 200);
@@ -83,7 +83,7 @@ if (!empty($config['doslimit'])) {
                     $error->time = SITETIME;
                     $error->save();
 
-                    ORM::forTable('ban')->rawExecute(
+                    ORM::for_table('ban')->raw_execute(
                         "INSERT IGNORE INTO ban (`ip`, `time`) VALUES (:ip, :time);",
                         ['ip' => App::getClientIp(), 'time' => SITETIME]
                     );
@@ -111,8 +111,8 @@ if (empty($_SESSION['login']) && empty($_SESSION['password'])) {
             if ($unlog == $checkuser['login'] && $unpar == md5($checkuser['password'].env('APP_KEY'))) {
                 session_regenerate_id(1);
 
-                $_SESSION['ip'] = App::getClientIp();
-                $_SESSION['login'] = $unlog;
+                $_SESSION['id'] = $checkuser['id'];
+                $_SESSION['login'] = $unlog; // TODO удалить
                 $_SESSION['password'] = md5(env('APP_KEY').$checkuser['password']);
 
                 $authorization = DB::run() -> querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$unlog, SITETIME-30]);

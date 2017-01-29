@@ -235,11 +235,11 @@ class BBCode {
         if (empty($list_smiles)) {
             if (! file_exists(STORAGE.'/temp/smiles.dat')) {
 
-                $smiles = ORM::forTable('smiles')
+                $smiles = ORM::for_table('smiles')
                     ->select(['code', 'name'])
                     ->order_by_expr('CHAR_LENGTH(code) DESC')
-                    ->findArray();
-                
+                    ->find_array();
+
                 file_put_contents(STORAGE.'/temp/smiles.dat', serialize($smiles));
             }
 

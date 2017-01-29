@@ -272,14 +272,15 @@ if (is_user()) {
                                                     DB::run() -> query("DELETE FROM `outbox` WHERE `author`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `outbox` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$config['limitoutmail'].") AS del);", [$log, $log]);
                                                     save_usermail(60);
 
-                                                    $deliveryUsers = DBM::run()->select('users', [
-                                                            'newprivat' => ['>', 0],
-                                                            'sendprivatmail' => 0,
-                                                            'timelastlogin' => ['<', SITETIME - 86400 * $config['sendprivatmailday']],
-                                                            'subscribe' => ['<>', ''],
-                                                            'email' => ['<>', ''],
-                                                            'confirmreg' => 0,
-                                                    ], $config['sendmailpacket'], null, ['timelastlogin'=>'ASC']);
+                                                    $deliveryUsers = User::where('sendprivatmail', 0)
+                                                        ->where('confirmreg', 0)
+                                                        ->where_gt('newprivat', 0)
+                                                        ->where_lt('timelastlogin', SITETIME - 86400 * $config['sendprivatmailday'])
+                                                        ->where_not_equal('subscribe', '')
+                                                        ->where_not_equal('email', '')
+                                                        ->order_by_asc('timelastlogin')
+                                                        ->limit(App::setting('sendmailpacket'))
+                                                        ->find_many();
 
                                                     foreach ($deliveryUsers as $user) {
                                                         sendMail($user['email'],

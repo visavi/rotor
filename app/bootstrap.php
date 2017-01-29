@@ -11,6 +11,14 @@ define('VERSION', '6.1');
 
 require_once BASEDIR.'/vendor/autoload.php';
 
+/**
+ * Регистрация классов
+ */
+$aliases = [
+    'ORM' => 'Granada\ORM',
+];
+AliasLoader::getInstance($aliases)->register();
+
 if (! env('APP_ENV')) {
     $dotenv = new Dotenv\Dotenv(BASEDIR);
     $dotenv->load();
@@ -35,13 +43,3 @@ ORM::configure([
         PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'
     ],
 ]);
-
-if (env('APP_DEBUG')) {
-    ORM::configure([
-        'logging' => true,
-        'logger'  => function ($query, $time) {
-            $logger = $query.' ('.number_format($time, 6).' сек.)'.PHP_EOL;
-            file_put_contents(STORAGE.'/temp/logger.dat', $logger, FILE_APPEND);
-        },
-    ]);
-}

@@ -5,14 +5,16 @@ switch ($act):
  * Главная страница
  */
 case 'index':
-    $total = ORM::forTable('guest')->count();
+
+    $total = Guest::count();
     $page = App::paginate(App::setting('bookpost'), $total);
 
-    $posts = ORM::forTable('guest')
+    $posts = Guest::limit(10)
         ->order_by_desc('time')
         ->limit(App::setting('bookpost'))
         ->offset($page['offset'])
-        ->findMany();
+        ->with('user')
+        ->find_many();
 
     App::view('book/index', compact('posts', 'page'));
 break;
@@ -42,28 +44,27 @@ case 'add':
 
         $msg = antimat($msg);
 
-
         if (is_user()) {
             $bookscores = (App::setting('bookscores')) ? 1 : 0;
 
-            $user = ORM::forTable('users')->findOne(App::getUserId());
+            $user = User::find_one(App::getUserId());
             $user->allguest++;
             $user->point++;
             $user->money += 5;
             $user->save();
         }
 
-        $username = is_user() ? App::getUsername() : App::setting('guestsuser');
+        $username = is_user() ? App::getUserId() : 0;
 
-        $guest = ORM::forTable('guest')->create();
-        $guest->user = $username;
+        $guest = Guest::create();
+        $guest->user_id = $username;
         $guest->text = $msg;
         $guest->ip = App::getClientIp();
         $guest->brow = App::getUserAgent();
         $guest->time = SITETIME;
         $guest->save();
 
-        ORM::forTable('guest')->rawExecute('
+        Guest::raw_execute('
             DELETE FROM guest WHERE time < (
                 SELECT MIN(time) FROM (
                     SELECT time FROM guest ORDER BY time DESC LIMIT '.App::setting('maxpostbook').'
@@ -88,7 +89,7 @@ case 'edit':
 
     if (! is_user()) App::abort(403);
 
-    $post = ORM::forTable('guest')->where('user', App::getUsername())->findOne($id);
+    $post = Guest::where('user', App::getUsername())->findOne($id);
 
     if (! $post) {
         App::abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
@@ -141,19 +142,19 @@ case 'complaint':
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
 
-    $data = ORM::forTable('guest')->findOne($id);
+    $data = Guest::find_one($id);
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
-    $spam = ORM::forTable('spam')->where(['relate' => 2, 'idnum' => $id])->findOne();
+    $spam = ORM::for_table('spam')->where(['relate' => 2, 'idnum' => $id])->find_one();
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
 
-        $spam = ORM::forTable('spam')->create();
+        $spam = ORM::for_table('spam')->create();
         $spam->relate  = 2;
         $spam->idnum   = $data['id'];
         $spam->user    = App::getUsername();
-        $spam->login   = $data['user'];
+        $spam->login   = $data['user_id'];
         $spam->text    = $data['text'];
         $spam->time    = $data['time'];
         $spam->addtime = SITETIME;

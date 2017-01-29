@@ -86,7 +86,7 @@
                 @endif
                 Дата регистрации: {{ date_fixed($user['joined'], 'j F Y') }}<br />
 
-                <?php $invite = DBM::run()->selectFirst('invite', ['invited' => $user['login']]); ?>
+                <?php $invite = ORM::for_table('invite')->where('invited', $user['login'])->find_one(); ?>
                 @if (!empty($invite))
                     Зарегистрирован по приглашению: {!! profile($invite['user']) !!}<br />
                 @endif
@@ -119,7 +119,7 @@
     </div>
 
     @if (is_admin())
-        <?php $usernote = DBM::run()->selectFirst('note', ['user' => $user['login']]); ?>
+        <?php $usernote = ORM::for_table('note')->where('user', $user['login'])->find_one(); ?>
     <div class="alert alert-success">
         <i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/{{ $user['login'] }}/note">Изменить</a>)<br />
 

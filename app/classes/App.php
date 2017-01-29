@@ -59,7 +59,7 @@ class App
 
         if (App::setting('errorlog') && in_array($code, [403, 404])) {
 
-            $error = ORM::forTable('error')->create();
+            $error = ORM::for_table('error')->create();
             $error->num = $code;
             $error->request = utf_substr(App::server('REQUEST_URI'), 0, 200);
             $error->referer = utf_substr(App::server('HTTP_REFERER'), 0, 200);
@@ -69,10 +69,10 @@ class App
             $error->time = SITETIME;
             $error->save();
 
-            ORM::forTable('error')->
+            ORM::for_table('error')->
                 where('num', $code)->
-                whereLt('time', SITETIME - 3600 * 24 * App::setting('maxlogdat'))->
-                deleteMany();
+                where_lt('time', SITETIME - 3600 * 24 * App::setting('maxlogdat'))->
+                delete_many();
         }
 
         exit(self::view('errors.'.$code, compact('message')));
@@ -398,9 +398,8 @@ class App
 
         if (!empty($login) && !empty($password)) {
 
-            $user = ORM::forTable('users')
-                ->whereRaw('LOWER(login) = ? OR LOWER(nickname) = ?', [$login, $login])
-                ->findOne();
+            $user = User::where_raw('LOWER(login) = ? OR LOWER(nickname) = ?', [$login, $login])
+                ->find_one();
 
             /* Миграция старых паролей */
             if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
@@ -408,10 +407,9 @@ class App
                 if (md5(md5($password)) == $user['password']) {
                     $user['password'] = password_hash($password, PASSWORD_BCRYPT);
 
-                    $user = ORM::forTable('users')->where('login', $user['login'])->findOne();
+                    $user = User::where('login', $user['login'])->find_one();
                     $user->password = $user['password'];
                     $user->save();
-
                 }
             }
 
@@ -423,14 +421,13 @@ class App
                 }
 
                 $_SESSION['id'] = $user['id'];
-                $_SESSION['login'] = $user['login'];
+                $_SESSION['login'] = $user['login']; // TODO Удалить
                 $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
-                $_SESSION['ip'] = self::getClientIp();
 
                 // Сохранение привязки к соц. сетям
                 if (!empty($_SESSION['social'])) {
 
-                    $social = ORM::forTable('socials')->create();
+                    $social = ORM::for_table('socials')->create();
                     $social->user = $user['login'];
                     $social->network = $_SESSION['social']->network;
                     $social->uid = $_SESSION['social']->uid;
@@ -470,9 +467,9 @@ class App
         if ($network && empty($network->error)) {
             $_SESSION['social'] = $network;
 
-            $social = ORM::forTable('socials')->
+            $social = ORM::for_table('socials')->
                 where(['network' => $network->network, 'uid' => $network->uid])->
-                findOne();
+                find_one();
 
             if ($social && $user = user($social['user'])) {
 
@@ -482,7 +479,6 @@ class App
                 $_SESSION['id'] = $user['id'];
                 $_SESSION['login'] = $user['login'];
                 $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
-                $_SESSION['ip'] = App::getClientIp();
 
                 self::setFlash('success', 'Добро пожаловать, '.$user['login'].'!');
                 self::redirect('/');

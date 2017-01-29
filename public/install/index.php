@@ -303,19 +303,20 @@ header("Content-type:text/html; charset=utf-8");
             $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", array($email));
             if (!$regmail) {
 
-                $registration = DBM::run()->insert('users', array(
-                    'login' => $login,
-                    'password' => password_hash($password, PASSWORD_BCRYPT),
-                    'email' => $email,
-                    'joined' => SITETIME,
-                    'level' => 101,
-                    'gender' => 1,
-                    'themes' => 0,
-                    'point' => 500,
-                    'money' => 1000000,
-                    'info'  => 'Администратор сайта',
-                    'status' => 'Администратор',
-                ));
+                $registration = User::create();
+                $registration->login = $login;
+                $registration->password = password_hash($password, PASSWORD_BCRYPT);
+                $registration->email = $email;
+                $registration->joined = SITETIME;
+                $registration->level = 101;
+                $registration->gender = 1;
+                $registration->themes = 0;
+                $registration->point = 500;
+                $registration->money = 1000000;
+                $registration->info = 'Администратор сайта';
+                $registration->status = 'Администратор';
+                $registration->save();
+
 
                 DBM::run()->update('setting', array('value' => $login), array('name' => 'nickname'));
                 DBM::run()->update('setting', array('value' => $email), array('name' => 'emails'));

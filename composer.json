@@ -27,8 +27,7 @@
         "php-curl-class/php-curl-class": "^7.1",
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.0",
-        "j4mie/idiorm": "^1.5"
-
+        "surt/granada": "dev-master"
     },
     "require-dev": {
         "filp/whoops": "^2.1"
@@ -42,7 +41,8 @@
     "autoload": {
         "psr-4": {
             "": [
-                "app/classes/"
+                "app/classes/",
+                "app/models/"
             ]
         },
         "files": [

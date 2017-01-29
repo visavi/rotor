@@ -17,13 +17,14 @@
 
     <?php if ($page['total'] > 0): ?>
         <?php foreach ($posts as $data): ?>
+
             <div class="post">
                 <div class="b">
 
-                    <?php if (!empty($log) && $log != $data['user']): ?>
+                    <?php if (is_user() && App::getUserId() != $data['user_id']): ?>
 
                         <div class="pull-right">
-                            <a href="#" onclick="return postReply('<?= nickname($data['user']) ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postReply('<?= $data->getUser()->login ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
@@ -32,26 +33,26 @@
 
                     <?php endif; ?>
 
-                    <?php if ($log == $data['user'] && $data['time'] + 600 > SITETIME): ?>
+                    <?php if (App::getUserId() == $data['id'] && $data['time'] + 600 > SITETIME): ?>
                         <div class="pull-right">
                             <a href="/book/edit/<?=$data['id']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         </div>
                     <?php endif; ?>
 
-                    <div class="img"><?=user_avatars($data['user'])?></div>
+                    <div class="img"><?=userAvatar($data->user)?></div>
 
-                    <?php if ($data['user'] == $config['guestsuser']): ?>
-                        <b><?=$data['user']?></b> <small>(<?=date_fixed($data['time'])?>)</small>
+                    <?php if (empty($data['user_id'])): ?>
+                        <b><?= App::setting('guestsuser') ?></b> <small>(<?=date_fixed($data['time'])?>)</small>
                     <?php else: ?>
-                        <b><?=profile($data['user'])?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
-                        <?=user_title($data['user'])?> <?=user_online($data['user'])?>
+                        <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
+                        <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->login)?>
                     <?php endif; ?>
                 </div>
 
                 <div class="message"><?=App::bbCode($data['text'])?></div>
 
                 <?php if (!empty($data['edit'])): ?>
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['edit'])?> (<?=date_fixed($data['edit_time'])?>)</small><br />
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data['edit'] ?> (<?=date_fixed($data['edit_time'])?>)</small><br />
                 <?php endif; ?>
 
                 <?php if (is_admin() || empty($config['anonymity'])): ?>

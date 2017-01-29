@@ -1,7 +1,7 @@
 <?php
 header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
 
-$ban = ORM::forTable('ban')->where('ip', App::getClientIp())->whereNull('user')->findOne();
+$ban = ORM::for_table('ban')->where('ip', App::getClientIp())->where_null('user')->find_one();
 
 if (Request::isMethod('post')) {
 
@@ -9,7 +9,7 @@ if (Request::isMethod('post')) {
 
     if ($ban && $protect == $_SESSION['protect']) {
 
-        $ban = ORM::forTable('ban')->where('ip', App::getClientIp())->deleteMany();
+        $ban = ORM::for_table('ban')->where('ip', App::getClientIp())->delete_Many();
 
         save_ipban();
 

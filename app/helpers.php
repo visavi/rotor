@@ -51,7 +51,7 @@ function unlink_image($dir, $image) {
 // ------------------- Функция полного удаления юзера --------------------//
 function delete_users($user) {
     if (!empty($user)){
-        $userpic = ORM::forTable('users')->where('login', $user)->findOne();
+        $userpic = User::where('login', $user)->find_one();
 
         unlink_image('uploads/photos/', $userpic['picture']);
         unlink_image('uploads/avatars/', $userpic['avatar']);
@@ -520,6 +520,22 @@ function user_avatars($login) {
 
     return '<a href="/user/'.$login.'"><img src="/assets/img/images/avatar_default.png" alt="" /></a> ';
 }
+
+
+// --------------- Функция вывода аватара пользователя ---------------//
+function userAvatar($user)
+{
+    if (! $user) {
+        return '<img src="/assets/img/images/avatar_guest.png" alt="" /> ';
+    }
+
+    if ($user->avatar && file_exists(HOME.'/uploads/avatars/'.$user->avatar)) {
+        return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$user->avatar.'" alt="" /></a> ';
+    }
+
+    return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt="" /></a> ';
+}
+
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
 function user_contact($login) {
@@ -1112,7 +1128,7 @@ function stats_events() {
 // --------------------- Функция получения данных аккаунта  --------------------//
 function user($login) {
     if (! empty($login)) {
-        return ORM::forTable('users')->where('login', $login)->findOne();
+        return User::where('login', $login)->find_one();
     }
     return false;
 }
@@ -1379,7 +1395,7 @@ function recentphotos($show = 5) {
     global $config;
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
 
-        $recent = ORM::forTable('photo')->orderByDesc('time')->limit($show)->findMany();
+        $recent = ORM::for_table('photo')->order_by_desc('time')->limit($show)->find_many();
 
         file_put_contents(STORAGE."/temp/recentphotos.dat", serialize($recent), LOCK_EX);
     }
@@ -1655,11 +1671,10 @@ function profile($login, $color = false, $nickname = true){
     global $config;
 
     if (!empty($login)){
-        $nickname = ($nickname) ? nickname($login) : $login;
         if ($color){
-            return '<a href="/user/'.$login.'"><span style="color:'.$color.'">'.$nickname.'</span></a>';
+            return '<a href="/user/'.$login.'"><span style="color:'.$color.'">'.$login.'</span></a>';
         } else {
-            return '<a href="/user/'.$login.'">'.$nickname.'</a>';
+            return '<a href="/user/'.$login.'">'.$login.'</a>';
         }
     }
     return $config['guestsuser'];
@@ -1860,12 +1875,7 @@ function perfomance(){
 
     if (is_admin() && App::setting('performance')){
 
-        $queries = [];
-        if (env('APP_DEBUG')) {
-            $file = STORAGE . '/temp/logger.dat';
-            $queries = array_filter(explode(PHP_EOL, file_get_contents($file)));
-            file_put_contents($file, '');
-        }
+        $queries = env('APP_DEBUG') ? Granada\ORM::get_query_log() : [];
 
         App::view('app/_perfomance', compact('queries'));
     }
