@@ -289,11 +289,9 @@ if (is_user()) {
                                                             ['unsubkey' => $user['subscribe']]
                                                         );
 
-                                                        $user = DBM::run()->update('users', [
-                                                            'sendprivatmail' => 1,
-                                                        ], [
-                                                            'login' => $user['login'],
-                                                        ]);
+                                                        $user = User::find_one($user['id']);
+                                                        $user->sendprivatmail = 1;
+                                                        $user->save();
                                                     }
                                                     notice('Ваше письмо успешно отправлено!');
                                                     redirect("/private");

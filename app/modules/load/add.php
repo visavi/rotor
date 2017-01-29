@@ -146,7 +146,9 @@ case 'add':
                     if (utf_strlen($author) <= 50) {
                         if (utf_strlen($site) <= 50) {
                             if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
-                                $downs = DBM::run()->selectFirst('cats', ['id' => $cid]);
+
+                                $downs = Category::find_one($cid);
+
                                 if (!empty($downs)) {
                                     if (empty($downs['closed'])) {
                                         $downtitle = DB::run() -> querySingle("SELECT `title` FROM `downs` WHERE `title`=? LIMIT 1;", [$title]);

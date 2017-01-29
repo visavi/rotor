@@ -63,17 +63,24 @@ case 'index':
     }
 
     // Голосование
-    $vote = DBM::run()->selectFirst('vote', ['topic_id' => $tid]);
+    $vote = Vote::where('topic_id', $tid)->find_one();
     if ($vote) {
+        $vote['poll'] = VotePoll::where('vote_id', $vote['id'])
+            ->where('user', App::getUsername())
+            ->find_one();
 
-        $vote['poll'] = DBM::run()->selectFirst('votepoll', ['vote_id' => $vote['id'], 'user' => App::getUsername()]);
-        $vote['answers'] = DBM::run()->select('voteanswer', ['vote_id' => $vote['id']], null, null, ['id' => 'ASC']);
+        $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
+            ->order_by_asc('id')
+            ->find_many();
+
         if ($vote['answers']) {
 
-            $vote['voted'] = array_pluck($vote['answers'], 'result', 'answer');
-            arsort($vote['voted']);
+            $results = array_pluck($vote['answers'], 'result', 'answer');
+            $max = max($results);
 
-            $max = max($vote['voted']);
+            arsort($results);
+
+            $vote['voted'] = $results;
             $vote['sum'] = ($vote['count'] > 0) ? $vote['count'] : 1;
             $vote['max'] = ($max > 0) ? $max : 1;
         }
@@ -140,14 +147,17 @@ case 'create':
         if (isset($matches[1])) {
             $usersAnswer = array_unique($matches[1]);
 
-            $newTopic = DBM::run()->selectFirst('topics', ['id' => $tid]);
-            foreach($usersAnswer as $user) {
+            $newTopic = Topic::find_one($tid);
+            foreach($usersAnswer as $login) {
 
-                if ($user == $log) {
+                if ($login == $log) {
                     continue;
                 }
 
-                $user = DBM::run()->queryFirst('SELECT * FROM users WHERE login=:login OR nickname=:login LIMIT 1;', ['login' => $user]);
+                $user = User::where_any_is([
+                    'login' => $login,
+                    'nickname' => $login,
+                ])->find_one();
 
                 if ($user['login']) {
 
@@ -500,7 +510,7 @@ break;
 case 'vote':
     if (! is_user()) App::abort(403, 'Авторизуйтесь для голосования!');
 
-    $vote = DBM::run()->selectFirst('vote', ['topic_id' => $tid]);
+    $vote = Vote::where('topic_id', $tid)->find_one();
     if (! $vote) {
         App::abort(404, 'Голосование не найдено!');
     }
@@ -516,35 +526,29 @@ case 'vote':
         $validation->addError('Данное голосование закрыто!');
     }
 
-    $votePoll = DBM::run()->selectFirst('votepoll', ['vote_id' => $vote['id'], 'user' => App::getUsername()]);
+    $votePoll = VotePoll::where('vote_id', $vote['id'])->where('user', App::getUsername())->find_one();
     if ($votePoll) {
         $validation->addError('Вы уже проголосовали в этом опросе!');
     }
 
-    $voteAnswer = DBM::run()->selectFirst('voteanswer', ['id' => $poll, 'vote_id' => $vote['id']]);
+    $voteAnswer = VoteAnswer::where('vote_id', $vote['id'])->find_one($poll);
     if (! $voteAnswer) {
         $validation->addError('Вы не выбрали вариант ответа!');
     }
 
     if ($validation->run()) {
 
-        DBM::run()->update('vote', [
-            'count' => ['+', 1],
-        ], [
-            'id' => $vote['id']
-        ]);
+        $vote->count++;
+        $vote->save();
 
-        DBM::run()->update('voteanswer', [
-            'result' => ['+', 1],
-        ], [
-            'id' => $voteAnswer['id']
-        ]);
+        $voteAnswer->result++;
+        $voteAnswer->save();
 
-        DBM::run()->insert('votepoll', [
-            'vote_id' => $vote['id'],
-            'user' => App::getUsername(),
-            'time' => SITETIME,
-        ]);
+        $votePoll = VotePoll::create();
+        $votePoll->vote_id = $vote['id'];
+        $votePoll->user = App::getUsername();
+        $votePoll->time = SITETIME;
+        $votePoll->save();
 
         App::setFlash('success', 'Ваш голос успешно принят!');
     } else {
@@ -576,7 +580,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $topic = DBM::run()->selectFirst('topics', ['id' => $tid]);
+    $topic = Topic::find_one($tid);
 
     if (empty($topic)) {
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');

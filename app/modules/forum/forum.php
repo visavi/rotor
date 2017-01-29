@@ -8,9 +8,8 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-		$forums = DBM::run()->selectFirst('forums', ['id' => $fid]);
-
-		if (!$forums) {
+        $forums = Forum::find_one($fid);
+        if (!$forums) {
             App::abort('default', 'Данного раздела не существует!');
         }
 
@@ -42,7 +41,7 @@ case 'create':
 
     if (! is_user()) App::abort(403);
 
-    $forums = DBM::run()->select('forums', null, null, null, ['sort'=>'ASC']);
+    $forums = Forum::order_by_asc('sort')->find_many();
 
     if (empty(count($forums))) {
         App::abort('default', 'Разделы форума еще не созданы!');
@@ -104,22 +103,23 @@ case 'create':
 
             // Создание голосования
             if ($vote) {
-                $voteId = DBM::run()->insert('vote', [
-                    'title' => $question,
-                    'topic_id' => $lastid,
-                    'time' => SITETIME,
-                ]);
+
+                $vote = Vote::create();
+                $vote->title = $question;
+                $vote->topic_id = $lastid;
+                $vote->time = SITETIME;
+                $vote->save();
+
 
                 $prepareAnswers = [];
                 foreach ($answers as $answer) {
-                    $prepareAnswers[] = [$voteId, $answer];
+                    $prepareAnswers[] = [
+                        'vote_id' => $vote->id,
+                        'answer' => $answer
+                    ];
                 }
 
-                DBM::run()->insertMultiple('voteanswer', [
-                    'vote_id', 'answer'
-                ],
-                    $prepareAnswers
-                );
+                VoteAnswer::insert($prepareAnswers);
             }
 
             App::setFlash('success', 'Новая тема успешно создана!');

@@ -9,8 +9,7 @@ case 'index':
     $total = Guest::count();
     $page = App::paginate(App::setting('bookpost'), $total);
 
-    $posts = Guest::limit(10)
-        ->order_by_desc('time')
+    $posts = Guest::order_by_desc('time')
         ->limit(App::setting('bookpost'))
         ->offset($page['offset'])
         ->with('user')
