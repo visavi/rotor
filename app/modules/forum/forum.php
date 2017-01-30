@@ -68,7 +68,7 @@ case 'create':
 
         if ($vote) {
             $validation->addRule('string', $question, ['question' => 'Слишком длинный или короткий текст вопроса!'], true, 5, 100);
-            $answers = array_diff($answers, ['']);
+            $answers = array_unique(array_diff($answers, ['']));
 
             foreach ($answers as $answer) {
                 if (utf_strlen($answer) > 50) {

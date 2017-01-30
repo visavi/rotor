@@ -15,12 +15,11 @@ switch ($act):
  */
 case 'index':
 
-    $total = DBM::run()->count('notice');
+    $total = Notice::count();
 
     if ($total > 0) {
 
-        $notices = DBM::run()->select('notice', null, null, null, ['id'=>'ASC']);
-
+        $notices = Notice::order_by_asc('id')->find_many();
         foreach ($notices as $notice) {
 
             echo '<div class="b">';
@@ -75,8 +74,7 @@ break;
  * Редактирование шаблона
  */
 case 'edit':
-    $notice = DBM::run()->selectFirst('notice', ['id' => $id]);
-
+    $notice = Notice::find_one($id);
     if (! empty($notice)) {
 
         if (! empty($notice['protect'])) {
@@ -121,29 +119,29 @@ case "save":
 
     if ($validation->run()) {
 
-        $notice = DBM::run()->selectFirst('notice', ['id' => $id]);
+        $notice = Notice::find_one($id);
 
         $note = [
             'name'    => $name,
-            'text'    => str_replace('&#37;', '%', $text),
+            'text'    => $text,
             'user'    => $log,
             'protect' => $protect,
             'time'    => SITETIME,
         ];
 
-        if (empty($notice)) {
+        if ($notice) {
 
-            $id = DBM::run()->insert('notice', $note);
+            $notice->set($note);
+            $notice->save();
 
         } else {
-
-            $note = DBM::run()->update('notice', $note,
-                ['id' => $id]
-            );
+            $notice = Notice::create();
+            $notice->set($note);
+            $notice->save();
         }
 
         notice('Шаблон успешно сохранен!');
-        redirect("/admin/notice?act=edit&id=$id");
+        redirect('/admin/notice?act=edit&id='.$notice->id);
 
     } else {
         show_error($validation->getErrors());
@@ -159,7 +157,7 @@ case 'del':
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
 
-    $notice = DBM::run()->selectFirst('notice', ['id' => $id]);
+    $notice = Notice::find_one($id);
 
     $validation = new Validation();
 
@@ -169,10 +167,10 @@ case 'del':
 
     if ($validation->run()) {
 
-        $delete = DBM::run()->delete('notice', ['id' => $id]);
+        $notice->delete();
 
         notice('Выбранный шаблон успешно удален!');
-        redirect("/admin/notice");
+        redirect('/admin/notice');
 
     } else {
         show_error($validation->getErrors());

@@ -13,14 +13,17 @@ case 'index':
 
     $config['newtitle'] = 'Список всех ссылок';
 
-    $total = DBM::run()->count('rekuser', ['time' => ['>', SITETIME]]);
+    $total = RekUser::where_gt('time', SITETIME)->count();
+
     $page = App::paginate(App::setting('rekuserpost'), $total);
 
     if ($total > 0) {
 
-        $reklama = DBM::run()->select('rekuser', [
-            'time' => ['>', SITETIME],
-        ], $config['rekuserpost'], $page['offset'], ['time'=>'DESC']);
+        $reklama = RekUser::where_gt('time', SITETIME)
+            ->limit($config['rekuserpost'])
+            ->offset($page['offset'])
+            ->order_by_desc('time')
+            ->find_many();
 
         foreach($reklama as $data) {
             echo '<div class="b">';
@@ -80,13 +83,13 @@ case 'create':
 
                 if ($validation->run()) {
 
-                    DBM::run()->delete('rekuser', ['time' => ['<', SITETIME]]);
+                    RekUser::where_lt('time', SITETIME)->delete_many();
 
-                    $total = DBM::run()->count('rekuser', ['time' => ['>', SITETIME]]);
+                    $total = RekUser::where_gt('time', SITETIME)->count();
 
                     if ($total < $config['rekusertotal']) {
 
-                        $rekuser = DBM::run()->selectFirst('rekuser', ['user' => $log]);
+                        $rekuser = RekUser::where('user', $log)->find_one();
 
                         if (empty($rekuser)) {
                             $price = $config['rekuserprice'];
@@ -101,20 +104,19 @@ case 'create':
 
                             if ($udata['money'] >= $price) {
 
-                                $rek = DBM::run()->insert('rekuser', [
+                                $reklama = RekUser::create();
+                                $reklama->set([
                                     'site'  => $site,
                                     'name'  => $name,
                                     'color' => $color,
                                     'bold' => $bold,
                                     'user' => $log,
                                     'time' => SITETIME + ($config['rekusertime'] * 3600),
-                                ]);
+                                ])->save();
 
-                                $user = DBM::run()->update('users', [
-                                    'money' => ['-', $price],
-                                ], [
-                                    'login' => $log
-                                ]);
+                                $user = User::find_one(App::getUserId());
+                                $user->money -= $price;
+                                $user->save();
 
                                 save_advertuser();
 
@@ -135,12 +137,11 @@ case 'create':
                 }
             }
 
-
-            $total = DBM::run()->count('rekuser', ['time' => ['>', SITETIME]]);
+            $total = RekUser::where_gt('time', SITETIME)->count();
 
             if ($total < $config['rekusertotal']) {
 
-                $rekuser = DBM::run()->selectFirst('rekuser', ['user' => $log, 'time' => ['>', SITETIME]]);
+                $rekuser = RekUser::where('user', $log)->where_gt('time', SITETIME)->find_one();
 
                 if (empty($rekuser)) {
                     echo 'У вас в наличии: <b>'.moneys($udata['money']).'</b><br /><br />';

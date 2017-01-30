@@ -71,16 +71,16 @@ case 'index':
 
         $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
             ->order_by_asc('id')
-            ->find_many();
-
+            ->find_array();
         if ($vote['answers']) {
 
-            $results = array_pluck($vote['answers'], 'result', 'answer');
+            $results = array_column($vote['answers'], 'result', 'answer');
             $max = max($results);
 
             arsort($results);
 
             $vote['voted'] = $results;
+
             $vote['sum'] = ($vote['count'] > 0) ? $vote['count'] : 1;
             $vote['max'] = ($max > 0) ? $max : 1;
         }
@@ -247,14 +247,16 @@ case 'complaint':
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
 
-    $data = DBM::run()->selectFirst('posts', ['id' => $id]);
+    $data = Post::find_one($id);
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
-    $spam = DBM::run()->selectFirst('spam', ['relate' => 1, 'idnum' => $id]);
+    $spam = Spam::where('relate', 1)->where('idnum', $id)->find_one();
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
-        $spam = DBM::run()->insert('spam', [
+        $spam = Spam::create();
+
+        $spam->set([
             'relate'     => 1,
             'idnum'   => $data['id'],
             'user'    => $log,
@@ -263,7 +265,7 @@ case 'complaint':
             'time'    => $data['time'],
             'addtime' => SITETIME,
             'link'    => '/topic/'.$data['topic_id'].'?page='.$page,
-        ]);
+        ])->save();
 
         exit(json_encode(['status' => 'success']));
     } else {
@@ -342,16 +344,13 @@ case 'close':
 
         DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
 
-        $vote = DBM::run()->selectFirst('vote', ['topic_id' => $tid]);
-
+        $vote = Vote::where('topic_id', $tid)->find_one();
         if ($vote) {
-            DBM::run()->update('vote', [
-                'closed' => 1,
-            ], [
-                'id' => $vote['id']
-            ]);
 
-            DBM::run()->delete('votepoll', ['vote_id' => $vote['id']]);
+            $vote->closed = 1;
+            $vote->save();
+
+            VotePoll::where('vote_id', $vote['id'])->delete_many();
         }
 
         App::setFlash('success', 'Тема успешно закрыта!');

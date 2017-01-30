@@ -97,7 +97,9 @@ if (Request::isMethod('post')) {
                 DB::run()->query("UPDATE `invite` SET `used`=?, `invited`=? WHERE `key`=? LIMIT 1;", [1, $logs, $invite]);
             }
 
-            $registration = DBM::run()->insert('users', [
+            $registration = User::create();
+
+            $registration->set([
                 'login' => $logs,
                 'password' => password_hash($pars, PASSWORD_BCRYPT),
                 'email' => $meil,
@@ -111,7 +113,7 @@ if (Request::isMethod('post')) {
                 'confirmreg' => $config['regkeys'],
                 'confirmregkey' => $registration_key,
                 'subscribe' => str_random(32),
-            ]);
+            ])->save();
 
             // ------------------------------ Уведомление в приват ----------------------------------//
             $textpriv = text_private(1, ['%USERNAME%' => $logs, '%SITENAME%' => $config['home']]);

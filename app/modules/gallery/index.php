@@ -149,14 +149,14 @@ break;
                                     $handle -> process(HOME.'/uploads/pictures/');
                                     if ($handle -> processed) {
 
-                                        $rek = DBM::run()->insert('photo', [
-                                            'user'  => $log,
-                                            'title'  => $title,
-                                            'text' => antimat($text),
-                                            'link' => $handle->file_dst_name,
-                                            'time' => SITETIME,
-                                            'closed' => $closed,
-                                        ]);
+                                        $photo = Photo::create();
+                                        $photo->user = $log;
+                                        $photo->title = $title;
+                                        $photo->text = antimat($text);
+                                        $photo->link = $handle->file_dst_name;
+                                        $photo->time = SITETIME;
+                                        $photo->closed = $closed;
+                                        $photo->save();
 
                                         $handle -> clean();
 

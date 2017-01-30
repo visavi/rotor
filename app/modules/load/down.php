@@ -16,12 +16,11 @@ switch ($act):
 case 'index':
 
     if (!empty($cid)) {
-        $cats = DBM::run()->queryFirst("
-          SELECT c.*, c2.id subcats_id, c2.name subcats_name FROM cats c 
+        $cats = Category::raw_query("SELECT c.*, c2.id subcats_id, c2.name subcats_name FROM cats c 
           LEFT JOIN cats c2 ON c.parent = c2.id 
           WHERE c.id=:id LIMIT 1;",
             ['id' => $cid]
-        );
+        )->find_one();
 
         if (!empty($cats)) {?>
 
@@ -157,13 +156,12 @@ break;
 ############################################################################################
 case 'view':
 
-    $downs = DBM::run() -> queryFirst("
-        SELECT d.*, c.name cats_name, c.folder cats_folder, c2.id subcats_id, c2.name subcats_name FROM downs d
+    $downs = Category::raw_query("SELECT d.*, c.name cats_name, c.folder cats_folder, c2.id subcats_id, c2.name subcats_name FROM downs d
           LEFT JOIN cats c ON d.category_id=c.id
           LEFT JOIN cats c2 ON c.parent = c2.id
         WHERE d.`id`=:id LIMIT 1;",
         ['id' => $id]
-    );
+    )->find_one();
 
     if (!empty($downs)) {
         if (!empty($downs['active']) || $downs['user'] == $log) {
