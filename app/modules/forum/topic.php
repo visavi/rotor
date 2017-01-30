@@ -537,10 +537,10 @@ case 'vote':
 
     if ($validation->run()) {
 
-        $vote->count++;
+        $vote->set_expr('count', 'count+1');
         $vote->save();
-
-        $voteAnswer->result++;
+        
+        $voteAnswer->set_expr('result', 'result+1');
         $voteAnswer->save();
 
         $votePoll = VotePoll::create();

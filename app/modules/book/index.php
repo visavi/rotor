@@ -47,9 +47,9 @@ case 'add':
             $bookscores = (App::setting('bookscores')) ? 1 : 0;
 
             $user = User::find_one(App::getUserId());
-            $user->allguest++;
-            $user->point++;
-            $user->money += 5;
+            $user->set_expr('allguest', 'allguest+1');
+            $user->set_expr('point', 'point+1');
+            $user->set_expr('money', 'money+5');
             $user->save();
         }
 
