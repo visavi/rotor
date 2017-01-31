@@ -1893,7 +1893,7 @@ function perfomance(){
 
     if (is_admin() && App::setting('performance')){
 
-        $queries = env('APP_DEBUG') ? Granada\ORM::get_query_log() : [];
+        $queries = env('APP_DEBUG') ? ORM::get_query_log() : [];
 
         App::view('app/_perfomance', compact('queries'));
     }

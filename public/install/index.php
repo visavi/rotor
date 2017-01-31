@@ -317,34 +317,38 @@ header("Content-type:text/html; charset=utf-8");
                 $registration->status = 'Администратор';
                 $registration->save();
 
-
-                DBM::run()->update('setting', array('value' => $login), array('name' => 'nickname'));
-                DBM::run()->update('setting', array('value' => $email), array('name' => 'emails'));
-                DBM::run()->update('setting', array('value' => $site), array('name' => 'home'));
-                DBM::run()->update('setting', array('value' => $site.'/assets/img/images/logo.png'), array('name' => 'logotip'));
+                $setting = ORM::get_db()->prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
+                $setting->execute(array($login, 'nickname'));
+                $setting->execute(array($email, 'emails'));
+                $setting->execute(array($site, 'home'));
 
                 save_setting();
 
                 // -------------- Приват ---------------//
                 $textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
-                $rek = DBM::run()->insert('inbox', array(
+
+                $inbox = Inbox::create();
+                $inbox->set(array(
                     'user'  => $login,
                     'author'  => 'Vantuz',
                     'text' => $textpriv,
                     'time' => SITETIME,
                 ));
+                $inbox->save();
 
                 // -------------- Новость ---------------//
                 $textnews = 'Добро пожаловать на демонстрационную страницу движка RotorCMS'.PHP_EOL.'RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. RotorCMS является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью RotorCMS является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок RotorCMS вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
-                $rek = DBM::run()->insert('news', array(
+                $news = News::create();
+                $news->set(array(
                     'title'  => 'Добро пожаловать!',
                     'text'  => $textnews,
                     'author' => $login,
                     'time' => SITETIME,
                 ));
+                $news->save();
 
-            redirect('?act=finish');
+                redirect('?act=finish');
 
 
             } else {echo '<b>Ошибка! Указанный вами адрес e-mail уже используется в системе!</b><br /><br />';}

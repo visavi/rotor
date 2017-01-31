@@ -24,30 +24,29 @@ if (App::user('point') < $surprise['requiredPoint']) {
     App::abort('default', 'Для того получения сюрприза необходимо '.points($surprise['requiredPoint']).'!');
 }
 
-$existSurprise = DBM::run()->selectFirst('surprise', ['user' => App::getUsername(), 'year' => $currentYear]);
-
+$existSurprise = Surprise::where('user', App::getUsername())->where('year', $currentYear)->find_one();
 if ($existSurprise) {
     App::abort('default', 'Сюрприз уже получен');
 }
 
-$user = DBM::run()->update('users', [
-    'point'     => ['+', $surprisePoint],
-    'money'     => ['+', $surpriseMoney],
-    'rating'    => (abs(App::user('posrating')) - abs(App::user('negrating'))) + $surpriseRating,
-    'posrating' => ['+', $surpriseRating],
-], [
-    'login' => App::getUsername()
-]);
+$user = User::find_one(App::getUserId());
+$user->set_expr('point', 'point + '.$surprisePoint);
+$user->set_expr('money', 'money + '.$surpriseMoney);
+$user->set_expr('rating', 'posrating - negrating + '.$surpriseRating);
+$user->set_expr('posrating', 'posrating + '.$surpriseRating);
+$user->save();
 
 $text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.points($surprisePoint).PHP_EOL.moneys($surpriseMoney).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
 
 send_private(App::getUsername(), App::setting('nickname'), $text);
 
-DBM::run()->insert('surprise', [
+$surprise = Surprise::create();
+$surprise->set([
     'user' => App::getUsername(),
     'year' => $currentYear,
     'time' => SITETIME,
 ]);
+$surprise->save();
 
 App::setFlash('success', 'Сюрприз успешно получен!');
 App::redirect('/');

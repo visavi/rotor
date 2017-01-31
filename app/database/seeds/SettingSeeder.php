@@ -93,7 +93,7 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'loginauthlist', 'value' => 10],
             ['name'  => 'loglist', 'value' => 10],
             ['name'  => 'logos', 'value' => 'Сайт на движке RotorCMS'],
-            ['name'  => 'logotip', 'value' => 'http://rotor.ll/assets/img/images/logo.png'],
+            ['name'  => 'logotip', 'value' => '/assets/img/images/logo.png'],
             ['name'  => 'maildriver', 'value' => 'sendmail'],
             ['name'  => 'mailhost', 'value' => 'smtp.yandex.ru'],
             ['name'  => 'mailpassword', 'value' => ''],
