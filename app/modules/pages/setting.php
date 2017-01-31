@@ -93,15 +93,15 @@ case 'edit':
     if ($validation->run()) {
         if (file_exists(HOME."/themes/$themes/index.php") || $themes==0) {
 
-            $user = DBM::run()->update('users', [
-                'themes'      => $themes,
-                'timezone'    => $timezone,
-                'privacy'     => $privacy,
-                'notify'     => $notify,
-                'subscribe'   => $subscribe,
-            ], [
-                'login' => $log
+            $user = User::find_one(App::getUserId());
+            $user->set([
+                'themes'    => $themes,
+                'timezone'  => $timezone,
+                'privacy'   => $privacy,
+                'notify'    => $notify,
+                'subscribe' => $subscribe,
             ]);
+            $user->save();
 
             notice('Настройки успешно изменены!');
             redirect("/setting");

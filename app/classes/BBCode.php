@@ -236,7 +236,7 @@ class BBCode {
             if (! file_exists(STORAGE.'/temp/smiles.dat')) {
 
                 $smiles = ORM::for_table('smiles')
-                    ->select(['code', 'name'])
+                    ->select_many('code', 'name')
                     ->order_by_expr('CHAR_LENGTH(code) DESC')
                     ->find_array();
 

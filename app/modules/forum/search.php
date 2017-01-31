@@ -9,7 +9,7 @@ $section = abs(intval(Request::input('section')));
 
 if (empty($find)) {
 
-    $forums = DBM::run()->select('forums', null, null, null, ['sort'=>'ASC']);
+    $forums = Forum::order_by_asc('sort')->find_many();
 
     if (empty(count($forums))) {
         App::abort('default', 'Разделы форума еще не созданы!');

@@ -15,10 +15,14 @@ switch ($act):
  */
 case 'index':
 
-    $total = DBM::run()->count('smiles');
+    $total = Smile::count();
     $page = App::paginate(App::setting('smilelist'), $total);
 
-    $smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => $page['offset'], 'limit' => intval($config['smilelist'])]);
+    $smiles = Smile::order_by_expr('CHAR_LENGTH(`code`) ASC')
+        ->order_by_asc('name')
+        ->limit(App::setting('smilelist'))
+        ->offset($page['offset'])
+        ->find_many();
 
     echo '<form action="/admin/smiles?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -72,8 +76,7 @@ case 'load':
 
     if (is_writeable(HOME.'/uploads/smiles')){
 
-        $smile = DBM::run()->selectFirst('smiles', ['code' => $code]);
-
+        $smile = Smile::where('code', $code)->find_one();
         $validation = new Validation();
 
         $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -103,11 +106,11 @@ case 'load':
 
                 if ($handle -> processed) {
 
-                    $smile = DBM::run()->insert('smiles', [
-                        'cats' => 1,
-                        'name' => $handle->file_dst_name,
-                        'code' => $code,
-                    ]);
+                    $smile = Smile::create();
+                    $smile->cats = 1;
+                    $smile->name = $handle->file_dst_name;
+                    $smile->code = $code;
+                    $smile->save();
 
                     $handle -> clean();
                     clearCache();
@@ -136,7 +139,7 @@ break;
  */
 case 'edit':
 
-    $smile = DBM::run()->selectFirst('smiles', ['id' => $id]);
+    $smile = Smile::find_one($id);
 
     if (! empty($smile)) {
         echo '<b><big>Редактирование смайла</big></b><br /><br />';
@@ -162,13 +165,12 @@ case 'change':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
 
-    $smile = DBM::run()->selectFirst('smiles', ['id' => $id]);
+    $smile = Smile::find_one($id);
 
-    $checkcode = DBM::run()->selectFirst('smiles', [
-        'code' => $code,
-        'id' => $id,
-    ]);
-    $checkcode = DBM::run()->queryFirst("SELECT `id` FROM `smiles` WHERE `code`=:code AND `id`<>:id LIMIT 1;", compact('code', 'id'));
+    $checkcode = Smile::select('id')
+        ->where('code', $code)
+        ->where_not_equal('id', $id)
+        ->find_one($id);
 
     $validation = new Validation();
 
@@ -180,7 +182,9 @@ case 'change':
 
     if ($validation->run()) {
 
-        $smile = DBM::run()->update('smiles', ['code' => $code], ['id' => $id]);
+        $smile->code = $code;
+        $smile->save();
+
         clearCache();
 
         notice('Смайл успешно отредактирован!');
@@ -205,9 +209,7 @@ case 'del':
         if (! empty($del)) {
             if (is_writeable(HOME.'/uploads/smiles')){
 
-                $del = implode(',', $del);
-
-                $arr_smiles = DBM::run()->query("SELECT `name` FROM `smiles` WHERE `id` IN(".$del.");");
+                $arr_smiles = Smile::select('name')->where_id_in($del)->find_many();
 
                 if (count($arr_smiles)>0){
                     foreach ($arr_smiles as $delfile) {
@@ -216,7 +218,8 @@ case 'del':
                         }
                     }
                 }
-                DBM::run()->execute("DELETE FROM `smiles` WHERE `id` IN (".$del.");");
+
+                Smile::where_id_in($del)->delete_many();
                 clearCache();
 
                 notice('Выбранные смайлы успешно удалены!');

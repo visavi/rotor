@@ -39,6 +39,7 @@ ORM::configure([
     'username'       => env('DB_USERNAME'),
     'password'       => env('DB_PASSWORD'),
     'logging'        => env('APP_DEBUG'),
+    'caching'        => true,
     'driver_options' => [
         PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'
     ],

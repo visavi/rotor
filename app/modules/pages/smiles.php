@@ -5,22 +5,26 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 show_title('Список смайлов');
 
-$total = DBM::run()->count('smiles');
+$total = Smile::count();
 $page = App::paginate(App::setting('smilelist'), $total);
 
 if ($total > 0) {
 
-	$smiles = DBM::run()->query("SELECT * FROM `smiles` ORDER BY CHAR_LENGTH(`code`) ASC LIMIT :start, :limit;", ['start' => $page['offset'], 'limit' => intval($config['smilelist'])]);
+    $smiles = Smile::order_by_expr('CHAR_LENGTH(`code`) ASC')
+        ->order_by_asc('name')
+        ->limit(App::setting('smilelist'))
+        ->offset($page['offset'])
+        ->find_many();
 
-	foreach($smiles as $smile) {
-		echo '<img src="/uploads/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
-	}
+    foreach($smiles as $smile) {
+        echo '<img src="/uploads/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
+    }
 
     App::pagination($page);
 
-	echo 'Всего cмайлов: <b>'.$total.'</b><br /><br />';
+    echo 'Всего cмайлов: <b>'.$total.'</b><br /><br />';
 } else {
-	show_error('Смайлы не найдены!');
+    show_error('Смайлы не найдены!');
 }
 
 App::view($config['themes'].'/foot');

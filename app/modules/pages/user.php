@@ -1,43 +1,52 @@
 <?php
 
-$uz = check(param('login', $log));
+$user = check(param('login', $log));
 
 switch ($act):
-############################################################################################
-##                                    Главная страница                                    ##
-############################################################################################
+/**
+ * Главная страница
+ */
 case 'index':
 
-    if (! $user = user($uz)) {
+    if (! $user = user($user)) {
         App::abort('default', 'Пользователя с данным логином не существует!');
     }
 
     App::view('pages/user', compact('user'));
 break;
 
-############################################################################################
-##                                      Редактирование                                    ##
-############################################################################################
+/**
+ * Заметка
+ */
 case 'note':
 
     if (! is_admin()) App::abort(403, 'Данная страница доступна только администрации!');
-    if (! user($uz)) App::abort('default', 'Пользователя с данным логином не существует!');
+    if (! user($user)) App::abort('default', 'Пользователя с данным логином не существует!');
+
+    $note = Note::where('user', $user)->find_one();
 
     if (Request::isMethod('post')) {
 
-        $note = check(Request::input('note'));
+        $notice = check(Request::input('notice'));
         $token = check(Request::input('token'));
 
         $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], ['note' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->addRule('string', $note, ['note' => 'Слишком большая заметка, не более 1000 символов!'], true, 0, 1000);
+        $validation->addRule('equal', [$token, $_SESSION['token']], ['notice' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->addRule('string', $notice, ['notice' => 'Слишком большая заметка, не более 1000 символов!'], true, 0, 1000);
 
         if ($validation->run()) {
 
-            DB::run()->query("INSERT INTO `note` (`user`, `text`, `edit`, `time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `text`=?, `edit`=?, `time`=?;", [$uz, $note, $log, SITETIME, $note, $log, SITETIME]);
+            $record = [
+                'user' => $user,
+                'text' => $notice,
+                'edit' => $log,
+                'time' => SITETIME,
+            ];
+
+            Note::saveNote($note, $record);
 
             App::setFlash('success', 'Заметка успешно сохранена!');
-            App::redirect('/user/'.$uz);
+            App::redirect('/user/'.$user);
 
         } else {
             App::setInput(Request::all());
@@ -45,9 +54,7 @@ case 'note':
         }
     }
 
-    $note = DBM::run()->selectFirst('note', ['user' => $uz]);
-
-    App::view('pages/user_note', compact('note', 'uz'));
+    App::view('pages/user_note', compact('note', 'user'));
 break;
 
 endswitch;

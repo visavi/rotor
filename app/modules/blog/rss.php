@@ -8,8 +8,7 @@ switch ($act):
 case 'index':
     show_title('RSS блогов');
 
-    $blogs = DBM::run()->select('blogs', null, 15, null, ['time' => 'DESC']);
-
+    $blogs = Blog::order_by_desc('time')->limit(15)->find_many();
     if ($blogs) {
         while (ob_get_level()) {
             ob_end_clean();
@@ -33,18 +32,16 @@ case 'comments':
     show_title('RSS комментарии');
 
     $id = param('id');
-    $blog = DBM::run()->selectFirst('blogs', ['id' => $id]);
+    $blog = Blog::with('lastComments')->find_one($id);
 
     if ($blog) {
-        $comments = DBM::run()->select('comments', ['relate_type' => 'blog', 'relate_id' => $id], 15, null, ['time' => 'DESC']);
-
         while (ob_get_level()) {
             ob_end_clean();
         }
 
         header("Content-Encoding: none");
         header("Content-type:application/rss+xml; charset=utf-8");
-        die(render('blog/rss_comments', compact('blog', 'comments')));
+        die(render('blog/rss_comments', compact('blog')));
 
     } else {
         show_error('Ошибка! Выбранная вами статья не существует, возможно она была удалена!');

@@ -236,7 +236,7 @@ if (is_admin([101, 102, 103])) {
             $bantime = abs(round($_POST['bantime'], 1));
             $bantype = check($_POST['bantype']);
             $reasonban = check($_POST['reasonban']);
-            $note = check($_POST['note']);
+            $notice = check($_POST['note']);
 
             if ($uid == $_SESSION['token']) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
@@ -257,7 +257,7 @@ if (is_admin([101, 102, 103])) {
                             if ($bantotaltime > 0) {
                                 if ($bantotaltime <= $config['maxbantime']) {
                                     if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
-                                        if (utf_strlen($note) <= 1000) {
+                                        if (utf_strlen($notice) <= 1000) {
 
                                             if ($bantotaltime > 720) {
                                                 $bancount = 1;
@@ -269,7 +269,16 @@ if (is_admin([101, 102, 103])) {
 
                                             DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, $log, 1, $reasonban, $bantotaltime * 60, SITETIME]);
 
-                                            DB::run() -> query("INSERT INTO `note` (`user`, `text`, `edit`, `time`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `text`=?, `edit`=?, `time`=?;", [$uz, $note, $log, SITETIME, $note, $log, SITETIME]);
+                                            $note = Note::where('user', $uz)->find_one();
+
+                                            $record = [
+                                                'user' => $uz,
+                                                'text' => $notice,
+                                                'edit' => $log,
+                                                'time' => SITETIME,
+                                            ];
+
+                                            Note::saveNote($note, $record);
 
                                             notice('Аккаунт успешно заблокирован!');
                                             redirect("/admin/ban?act=edit&uz=$uz");

@@ -13,20 +13,19 @@ if (! in_array($vote, [1, -1])) {
     exit(json_encode(['status' => 'error']));
 }
 
-DBM::run()->delete('pollings', ['relate_type' => 'post', 'time' => ['<', SITETIME]]);
+Polling::where('relate_type', 'post')
+    ->where_lt('time', SITETIME)
+    ->delete_many();
 
-$post = DBM::run()->selectFirst('posts', ['id' => $id, 'user' => ['<>', $log]]);
+$post = Post::where_not_equal('user', $log)->find_one($id);
 if (! $post) {
     exit(json_encode(['status' => 'error']));
 }
 
-$polling = DBM::run()->selectFirst(
-    'pollings', [
-        'relate_type' => 'post',
-        'relate_id' => $id,
-        'user' => $log,
-    ]
-);
+$polling = Polling::where('relate_type', 'post')
+    ->where('relate_id', $id)
+    ->where('user', $log)
+    ->find_one();
 
 $cancel = false;
 
@@ -34,25 +33,27 @@ if ($polling) {
     if ($polling['vote'] == $vote) {
         exit(json_encode(['status' => 'error']));
     } else {
-        DBM::run()->delete('pollings', ['relate_type' => 'post', 'relate_id' => $id, 'user' => $log]);
+
+        $polling->delete();
         $cancel = true;
     }
 } else {
 
-    $poll = DBM::run()->insert('pollings', [
+    $poll = Polling::create();
+    $poll->set([
         'relate_type' => $type,
         'relate_id' => $id,
         'user' => $log,
         'vote' => $vote,
         'time' => $expiresrating,
     ]);
+    $poll->save();
 }
 
-$post = DBM::run()->update(
-    'posts',
-    ['rating' => [($vote == '1') ? '+' : '-', 1]], ['id' => $id]
-);
+$operation = ($vote == '1') ? '+' : '-';
+$post->set_expr('rating', "rating $operation 1");
+$post->save();
 
-$post = DBM::run()->selectFirst('posts', ['id' => $id]);
+$post = Post::find_one($id);
 
 echo json_encode(['status' => 'success', 'cancel' => $cancel, 'count' => $post['rating']]);

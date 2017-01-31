@@ -603,9 +603,27 @@ function show_counter()
     $_SESSION['counton']++;
 
     if (is_user()) {
-        $visitPage = !empty($config['newtitle']) ? $config['newtitle'] : '';
+        $visitPage = !empty($config['newtitle']) ? $config['newtitle'] : null;
 
-        DB::run()->query("INSERT INTO `visit` (`user`, `self`, `ip`, `nowtime`, `page`)  VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `self`=?, `ip`=?, `count`=?, `nowtime`=?, `page`=?;", [App::getUsername(), App::server('PHP_SELF'), App::getClientIp(), SITETIME, $visitPage, App::server('PHP_SELF'), App::getClientIp(), $_SESSION['counton'], SITETIME, $visitPage]);
+        $visit = Visit::where('user', App::getUsername())->find_one();
+
+        $record = [
+            'self'    => App::server('PHP_SELF'),
+            'ip'      => App::getClientIp(),
+            'count'   => $_SESSION['counton'],
+            'nowtime' => SITETIME,
+            'page'    => $visitPage
+        ];
+
+        if ($visit) {
+            $visit->set($record);
+            $visit->save();
+        } else {
+            $visit = Visit::create();
+            $visit->user = App::getUsername();
+            $visit->set($record);
+            $visit->save();
+        }
     }
 
     include_once (APP."/includes/counters.php");
