@@ -1,12 +1,12 @@
 <?= '<?xml version="1.0" encoding="utf-8"?>' ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Комментарии - <?= $blog['title'] ?></title>
+        <title><?= $blog['title'] ?></title>
         <link><?= App::setting('home') ?>/</link>
-        <description>Комментарии - <?= App::setting('title') ?></description>
+        <description><?= App::setting('title') ?></description>
         <image>
             <url><?= App::setting('home') ?><?= App::setting('logotip') ?></url>
-            <title>Комментарии - <?= $blog['title'] ?></title>
+            <title><?= $blog['title'] ?></title>
             <link><?= App::setting('home') ?>/</link>
         </image>
         <managingEditor><?=App::setting('emails')?> (<?=App::setting('nickname')?>)</managingEditor>

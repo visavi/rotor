@@ -296,13 +296,13 @@ if (is_admin()) {
                                 }
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
 
-                                $votes = DBM::run()->query("SELECT * FROM vote WHERE topic_id IN($delId);");
-                                $votesIds = implode(',', array_pluck($votes, 'id'));
+                                $votes = Vote::where_in('topic_id', $topicIds)->find_array();
+                                $votesIds = array_column($votes, 'id');
 
                                 if ($votesIds) {
-                                    DBM::run()->execute("DELETE FROM vote WHERE id IN($votesIds);");
-                                    DBM::run()->execute("DELETE FROM voteanswer WHERE vote_id IN($votesIds);");
-                                    DBM::run()->execute("DELETE FROM votepoll WHERE vote_id IN($votesIds);");
+                                    Vote::where_id_in($votesIds)->delete_many();
+                                    VoteAnswer::where_in('vote_id', $votesIds)->delete_many();
+                                    VotePoll::where_in('vote_id', $votesIds)->delete_many();
                                 }
                             }
                             // ------ Удаление загруженных файлов -------//
@@ -605,13 +605,13 @@ if (is_admin()) {
                     DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
                     // ------ Удаление загруженных файлов -------//
 
-                    $votes = DBM::run()->query("SELECT * FROM vote WHERE topic_id IN($delId);");
-                    $votesIds = implode(',', array_pluck($votes, 'id'));
+                    $votes = Vote::where_in('topic_id', $del)->find_array();
+                    $votesIds = array_column($votes, 'id');
 
                     if ($votesIds) {
-                        DBM::run()->execute("DELETE FROM vote WHERE id IN($votesIds);");
-                        DBM::run()->execute("DELETE FROM voteanswer WHERE vote_id IN($votesIds);");
-                        DBM::run()->execute("DELETE FROM votepoll WHERE vote_id IN($votesIds);");
+                        Vote::where_id_in($votesIds)->delete_many();
+                        VoteAnswer::where_in('vote_id', $votesIds)->delete_many();
+                        VotePoll::where_in('vote_id', $votesIds)->delete_many();
                     }
 
                     $deltopics = DB::run() -> exec("DELETE FROM `topics` WHERE `id` IN (".$delId.");");
@@ -670,16 +670,12 @@ if (is_admin()) {
                         case 'closed':
                             DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
 
-                            $vote = DBM::run()->selectFirst('vote', ['topic_id' => $tid]);
-
+                            $vote = Vote::where('topic_id', $tid)->find_one();
                             if ($vote) {
-                                DBM::run()->update('vote', [
-                                    'closed' => 1,
-                                ], [
-                                    'id' => $vote['id']
-                                ]);
+                                $vote->closed = 1;
+                                $vote->save();
 
-                                DBM::run()->delete('votepoll', ['vote_id' => $vote['id']]);
+                                VotePoll::where('vote_id', $vote['id'])->delete_many();
                             }
 
                             notice('Тема успешно закрыта!');
@@ -689,11 +685,11 @@ if (is_admin()) {
                         case 'open':
                             DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [0, $tid]);
 
-                            DBM::run()->update('vote', [
-                                'closed' => 0,
-                            ], [
-                                'topic_id' => $tid
-                            ]);
+                            $vote = Vote::where('topic_id', $tid)->find_one();
+                            if ($vote) {
+                                $vote->closed = 0;
+                                $vote->save();
+                            }
 
                             notice('Тема успешно открыта!');
                             redirect("/admin/forum?act=topic&tid=$tid&page=$page");

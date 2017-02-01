@@ -9,7 +9,7 @@ if (Request::isMethod('post')) {
 
     if ($ban && $protect == $_SESSION['protect']) {
 
-        $ban = ORM::for_table('ban')->where('ip', App::getClientIp())->delete_Many();
+        ORM::for_table('ban')->where('ip', App::getClientIp())->delete_Many();
 
         save_ipban();
 

@@ -16,7 +16,7 @@
         "altorouter/altorouter": "~1.2",
         "cbschuld/browser.php": "dev-master",
         "gregwar/captcha": "^1.1",
-        "illuminate/http": "~5.3",
+        "illuminate/http": "~5.4",
         "mobiledetect/mobiledetectlib": "^2.8",
         "pclzip/pclzip": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.6",

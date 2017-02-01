@@ -1,22 +1,23 @@
 @extends('layout_rss')
 
-@section('title', 'Сообщения - '.$topic['title'].' - @parent')
+@section('title')
+    {{ $topic['title'] }} - @parent
+@stop
 
 @section('content')
 
-    <?php foreach ($posts as $data): ?>
+    @foreach ($posts as $data)
         <?php $data['text'] = App::bbCode($data['text']); ?>
         <?php $data['text'] = str_replace('/uploads/smiles', $config['home'].'/uploads/smiles', $data['text']); ?>
-        <?php $data['text'] = htmlspecialchars($data['text']); ?>
 
         <item>
-            <title><?= $topic['title'] ?></title>
-            <link><?= App::setting('home') ?>/topic/<?= $topic['id'] ?></link>
-            <description><?=$data['text']?> </description>
-            <author><?=nickname($data['user'])?></author>
-            <pubDate><?=date("r", $data['time'])?></pubDate>
+            <title>{{ $data['text'] }}</title>
+            <link>{{ App::setting('home') }}/topic/{{ $topic['id'] }}</link>
+            <description>{{ $topic['title'] }} </description>
+            <author>{{ nickname($data['user']) }}</author>
+            <pubDate>{{ date("r", $data['time']) }}</pubDate>
             <category>Сообщения</category>
-            <guid><?= App::setting('home') ?>/topic/<?=$topic['id']?>/<?=$data['id']?></guid>
+            <guid>{{ App::setting('home') }}/topic/{{ $topic['id'] }}/{{  $data['id'] }}</guid>
         </item>
-    <?php endforeach; ?>
+    @endforeach
 @stop

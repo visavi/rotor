@@ -8,18 +8,16 @@
                 {{ App::setting('title') }}
             @show
         </title>
-        <link><?= App::setting('home') ?></link>
-        <description>Сообщения RSS - <?= App::setting('title') ?></description>
+        <link>{{ App::setting('home') }}/</link>
+        <description>Сообщения RSS - {{ App::setting('title') }}</description>
         <image>
-            <url><?= App::setting('logotip')?></url>
-            <title>Сообщения RSS - <?= App::setting('title') ?></title>
-            <link><?= App::setting('home') ?></link>
+            <url>{{ App::setting('home') }}{{ App::setting('logotip') }}</url>
+            <title>Сообщения RSS - {{ App::setting('title') }}</title>
+            <link>{{ App::setting('home') }}/</link>
         </image>
-        <language>ru</language>
-        <copyright><?= App::setting('copy') ?></copyright>
-        <managingEditor><?= App::setting('emails') ?> (<?= App::setting('nickname') ?>)</managingEditor>
-        <webMaster><?= App::setting('emails')?> (<?= App::setting('nickname')?>)</webMaster>
-        <lastBuildDate><?=date("r", SITETIME)?></lastBuildDate>
+        <managingEditor>{{ App::setting('emails') }} ({{ App::setting('nickname') }})</managingEditor>
+        <webMaster>{{ App::setting('emails') }} ({{ App::setting('nickname') }})</webMaster>
+        <lastBuildDate>{{ date("r", SITETIME) }}</lastBuildDate>
 
             @yield('content')
 

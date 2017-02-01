@@ -10,14 +10,11 @@ show_title('Отписка от рассылки');
 
 if (! empty($key)) {
 
-    $user = DBM::run()->queryFirst("SELECT * FROM `users` WHERE BINARY `subscribe`=:key LIMIT 1;", compact('key'));
+    $user = User::where('subscribe', $key)->find_one();
     if ($user) {
 
-        $user = DBM::run()->update('users', [
-            'subscribe' => '',
-        ], [
-            'login' => $user['login']
-        ]);
+        $user->subscribe = null;
+        $user->save();
 
         echo '<i class="fa fa-check"></i> <b>Вы успешно отписались от рассылки!</b><br />';
 

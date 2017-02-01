@@ -28,7 +28,7 @@ break;
  * Генерируем блоги
  */
 case 'blogs':
-    $blogs = DBM::run()->query("SELECT b.*, MAX(c.time) last_time FROM blogs b LEFT JOIN comments c ON b.id = c.relate_id AND relate_type='blog' GROUP BY b.id;");
+    $blogs = Blog::raw_query("SELECT b.*, MAX(c.time) last_time FROM blogs b LEFT JOIN comments c ON b.id = c.relate_id AND relate_type='blog' GROUP BY b.id ORDER BY last_time DESC;")->find_many();
 
     $locs = [];
     foreach ($blogs as $blog) {
@@ -51,7 +51,7 @@ break;
  * Генерируем новости
  */
 case 'news':
-    $newses = DBM::run()->query("SELECT n.*, MAX(c.time) last_time FROM news n LEFT JOIN comments c ON n.id = c.relate_id AND relate_type='news' GROUP BY n.id;");
+    $newses = News::raw_query("SELECT n.*, MAX(c.time) last_time FROM news n LEFT JOIN comments c ON n.id = c.relate_id AND relate_type='news' GROUP BY n.id ORDER BY last_time DESC;")->find_many();
 
     $locs = [];
     foreach ($newses as $news) {
@@ -75,7 +75,8 @@ break;
  * Генерируем события
  */
 case 'events':
-    $events = DBM::run()->query("SELECT e.*, MAX(c.time) last_time FROM events e LEFT JOIN comments c ON e.id = c.relate_id AND relate_type='event' GROUP BY e.id;");
+    $events = Event::raw_query("SELECT e.*, MAX(c.time) last_time FROM events e LEFT JOIN comments c ON e.id = c.relate_id AND relate_type='event' GROUP BY e.id ORDER BY last_time DESC;")->find_many();
+
     $locs = [];
     foreach ($events as $event) {
 
@@ -98,7 +99,7 @@ break;
  * Генерируем темы форума
  */
 case 'topics':
-    $topics = DBM::run()->select('topics', null, 25000, null, ['last_time' => 'DESC']);
+    $topics = Topic::order_by_desc('last_time')->limit(25000)->find_many();
 
     $locs = [];
     foreach ($topics as $topic) {
@@ -120,7 +121,7 @@ break;
      * Генерируем загрузки
      */
     case 'downs':
-        $downs = DBM::run()->query("SELECT d.*, MAX(c.time) last_time FROM downs d LEFT JOIN comments c ON d.id = c.relate_id AND relate_type='down' GROUP BY d.id;");
+        $downs = Down::raw_query("SELECT d.*, MAX(c.time) last_time FROM downs d LEFT JOIN comments c ON d.id = c.relate_id AND relate_type='down' GROUP BY d.id ORDER BY last_time DESC;")->find_many();
 
         $locs = [];
         foreach ($downs as $down) {

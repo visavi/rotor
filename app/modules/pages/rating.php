@@ -19,7 +19,7 @@ if (App::user('point') < App::setting('editratingpoint')) {
     App::abort('default', 'Для изменения репутации необходимо набрать '.points($config['editratingpoint']).'!');
 }
 
-$getRating = DBM::run()->selectFirst('rating', ['user' => App::getUsername(), 'login' => $login]);
+$getRating = Rating::where('user', App::getUsername())->where('login', $login)->find_one();
 if ($getRating) {
     App::abort('default', 'Вы уже изменяли репутацию этому пользователю!');
 }
@@ -44,35 +44,33 @@ if (Request::isMethod('post')) {
 
         $text = antimat($text);
 
-        DBM::run()->insert('rating', [
+        $rating = Rating::create();
+        $rating->set([
             'user' => App::getUsername(),
             'login' => $login,
             'text' => $text,
             'vote' => $vote,
             'time' => SITETIME,
         ]);
+        $rating->save();
 
-        DBM::run()->delete('rating', [
-                'time' => ['<', SITETIME - 3600 * 24 * 365]]
-        );
+        Rating::where_lt('time', SITETIME - 3600 * 24 * 365)->delete_many();
 
         if ($vote == 1) {
-            $user = DBM::run()->update('users', [
-                'rating' => (abs($getUser['posrating']) - abs($getUser['negrating'])) + 1,
-                'posrating' => ['+', 1],
-            ], [
-                'login' => $login
-            ]);
+
+            $user = User::where('login', $login)->find_one();
+            $user->set_expr('rating', 'posrating - negrating + 1');
+            $user->set_expr('posrating', 'posrating + 1');
+            $user->save();
 
             $text = 'Пользователь [b]' . nickname(App::getUsername()) . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($getUser['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
         } else {
-            $user = DBM::run()->update('users', [
-                'rating' => (abs($getUser['posrating']) - abs($getUser['negrating'])) - 1,
-                'negrating' => ['+', 1],
-            ], [
-                'login' => $login
-            ]);
+
+            $user = User::where('login', $login)->find_one();
+            $user->set_expr('rating', 'posrating - negrating - 1');
+            $user->set_expr('negrating', 'negrating + 1');
+            $user->save();
 
             $text = 'Пользователь [b]' . nickname(App::getUsername()) . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($getUser['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
         }
