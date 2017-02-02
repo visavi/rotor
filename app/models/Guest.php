@@ -3,7 +3,7 @@
 class Guest extends BaseModel {
 
     /**
-     * Связь с моделью пользователей
+     * Возвращает пользователя
      * @return \Granada\ORM|null
      */
     public function user()

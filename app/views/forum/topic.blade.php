@@ -18,7 +18,7 @@
     <a href="/topic/<?=$topic['id']?>/print">Печать</a> / <a href="/topic/<?=$topic['id']?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
-        <?php if ($topic['author'] == $log && empty($topic['closed']) && App::user('point') >= $config['editforumpoint']): ?>
+        <?php if ($topic->getUser()->id == App::getUserId() && empty($topic['closed']) && App::user('point') >= $config['editforumpoint']): ?>
            / <a href="/topic/<?= $topic['id'] ?>/close?token=<?=$_SESSION['token']?>">Закрыть</a>
            / <a href="/topic/<?= $topic['id'] ?>/edit">Изменить</a>
         <?php endif; ?>

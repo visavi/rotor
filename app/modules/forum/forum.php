@@ -13,7 +13,7 @@ case 'index':
             App::abort('default', 'Данного раздела не существует!');
         }
 
-        if (!empty($forums['parent'])) {
+/*        if (!empty($forums['parent'])) {
             $forums['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$forums['parent']]);
         }
 
@@ -24,9 +24,24 @@ case 'index':
         $page = App::paginate(App::setting('forumtem'), $total);
 
         $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `locked` DESC, `last_time` DESC LIMIT ".$page['offset'].", ".App::setting('forumtem').";", [$fid]);
-        $forums['topics'] = $querytopic->fetchAll();
+        $forums['topics'] = $querytopic->fetchAll();*/
 
-        App::view('forum/forum', compact('forums', 'fid', 'page'));
+
+    $total = Topic::where('forum_id', $fid)->count();
+    $page = App::paginate(App::setting('forumtem'), $total);
+
+    $topics = Topic::where('forum_id', $fid)
+        ->order_by_desc('locked')
+        ->order_by_desc('last_time')
+        ->limit(App::setting('forumtem'))
+        ->offset($page['offset'])
+        ->with('user', 'countPost')
+        ->find_many();
+
+var_dump($topics, ORM::get_query_log()); exit;
+
+
+    App::view('forum/forum', compact('forums', 'fid', 'page'));
 
 break;
 

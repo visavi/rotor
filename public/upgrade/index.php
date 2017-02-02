@@ -37,7 +37,7 @@ header("Content-type:text/html; charset=utf-8");
 <body>
 
 <div class="cs" id="up">
-    <img src="/assets/img/images/logo.png" />
+    <a href="/"><img src="/assets/img/images/logo.png" /></a>
 </div>
 <div class="site">
     <pre>
