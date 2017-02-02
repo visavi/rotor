@@ -32,6 +32,20 @@ case 'index':
     }
     echo '</select><br />';
 
+    $langShort = [
+        'ru' => 'русский',
+        'en' => 'English',
+    ];
+
+    echo 'Язык:<br />';
+    echo '<select name="lang">';
+    $languages = glob(APP."/lang/*", GLOB_ONLYDIR);
+    foreach ($languages as $lang) {
+        $selected = ($udata['lang'] == basename($lang)) ? ' selected="selected"' : '';
+        echo '<option value="'.basename($lang).'"'.$selected.'>'.$langShort[basename($lang)].'</option>';
+    }
+    echo '</select><br />';
+
     $arrtimezone = range(-12, 12);
 
     echo 'Временной сдвиг:<br />';
