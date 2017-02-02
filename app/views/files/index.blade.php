@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Собственные страницы сайта - @parent')
+@section('title')
+    Собственные страницы сайта - @parent
+@stop
 
 @section('content')
 

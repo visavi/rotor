@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Изменение сообщения - @parent')
+@section('title')
+    Изменение сообщения - @parent
+@stop
 
 @section('content')
     <h1>Изменение сообщения</h1>

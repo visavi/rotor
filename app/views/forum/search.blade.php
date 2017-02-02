@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Поиск по форуму - @parent')
+@section('title')
+    Поиск по форуму - @parent
+@stop
 
 @section('content')
     <h1>Поиск по форуму</h1>

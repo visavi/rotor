@@ -1,10 +1,12 @@
 @extends('layout')
 
-@section('title', 'Гостевая книга (Стр. '.$page['current'].') - @parent')
+@section('title')
+    {{ trans('book.title', ['page' => $page['current']]) }} - @parent
+@stop
 
 @section('content')
 
-    <h1>Гостевая книга</h1>
+    <h1>{{ trans('book.header') }}</h1>
 
     <a href="/rules">Правила</a> /
     <a href="/smiles">Смайлы</a> /

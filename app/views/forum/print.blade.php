@@ -1,6 +1,8 @@
 @extends('layout_simple')
 
-@section('title', $topic['title'].' - @parent')
+@section('title')
+    {{ $topic['title'] }} - @parent
+@stop
 
 @section('content')
 

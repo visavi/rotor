@@ -691,4 +691,22 @@ class App
             <span class="progress-completed">'.$title.'</span>
         </div>';
     }
+
+    /**
+     * @param string $locale
+     * @param string $fallback
+     */
+    public static function translator($locale = 'ru', $fallback = 'en')
+    {
+        $translator = new \Illuminate\Translation\Translator(
+            new \Illuminate\Translation\FileLoader(
+                new \Illuminate\Filesystem\Filesystem(),
+                APP.'/lang'
+            ),
+            $locale
+        );
+        $translator->setFallback($fallback);
+
+        return $translator;
+    }
 }

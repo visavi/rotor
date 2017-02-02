@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', $forums['title'].' (Стр. '.$page['current'].') - @parent')
+@section('title')
+    {{ $forums['title'] }} (Стр. {{ $page['current'] }}) - @parent
+@stop
 
 @section('content')
 

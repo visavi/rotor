@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Изменения репутации пользователя '.$login.' - @parent')
+@section('title')
+    Изменения репутации пользователя {{ $login }} - @parent
+@stop
 
 @section('content')
 

@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Заметка для пользователя '.$user.' - @parent')
+@section('title')
+    Заметка для пользователя {{ $user }} - @parent
+@stop
 
 @section('content')
 

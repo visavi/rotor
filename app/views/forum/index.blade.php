@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Форум - @parent')
+@section('title')
+    Форум - @parent
+@stop
 
 @section('content')
 

@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Анкета пользователя '.e($user['login']).' - @parent')
+@section('title')
+    Анкета пользователя {{ $user['login'] }} - @parent
+@stop
 
 @section('content')
 

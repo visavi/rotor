@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Ошибка - @parent')
+@section('title')
+    Ошибка - @parent
+@stop
 
 @section('content')
 

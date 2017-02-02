@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Регистрация - @parent')
+@section('title')
+    Регистрация - @parent
+@stop
 
 @section('content')
 

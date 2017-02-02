@@ -16,28 +16,32 @@ if (is_admin()) {
 
             echo '<a href="/book?page='.$page.'">Обзор</a><br /><hr />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM guest;");
-
+            $total = Guest::count();
             if ($total > 0) {
 
                 $page = App::paginate(App::setting('bookpost'), $total);
 
-                $queryguest = DB::run() -> query("SELECT * FROM guest ORDER BY time DESC LIMIT ".$page['offset'].", ".$config['bookpost'].";");
+                $posts = Guest::order_by_desc('time')
+                    ->limit(App::setting('bookpost'))
+                    ->offset($page['offset'])
+                    ->with('user')
+                    ->find_many();
 
-                echo '<form action="/admin/book?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/book?act=del&amp;page='.$page['current'].'" method="post">';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
 
-                while ($data = $queryguest -> fetch()) {
+                foreach($posts as $data) {
 
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<div class="img">'.userAvatar($data->user).'</div>';
 
                     echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
 
-                    if ($data['user'] == $config['guestsuser']) {
-                        echo '<b>'.$data['user'].'</b> <small>('.date_fixed($data['time']).')</small>';
+                    if (empty($data['user_id'])) {
+                        echo '<b>'.$data->getUser()->login.'</b> <small>('.date_fixed($data['time']).')</small>';
                     } else {
-                        echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
-                        echo user_title($data['user']).' '.user_online($data['user']);
+                        echo '<b>'.profile($data->getUser()->login).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                        echo user_title($data->getUser()->login).' '.user_online($data->getUser()->login);
                     }
 
                     echo '</div>';
@@ -67,7 +71,7 @@ if (is_admin()) {
                 echo 'Всего сообщений: <b>'.$total.'</b><br /><br />';
 
                 if (is_admin([101])) {
-                    echo '<i class="fa fa-times"></i> <a href="/admin/book?act=prodel">Очистить</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/book?act=alldel&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы уверены что хотите удалить все сообщения?\')">Очистить</a><br />';
                 }
             } else {
                 show_error('Сообщений еще нет!');
@@ -79,18 +83,18 @@ if (is_admin()) {
         ############################################################################################
         case 'reply':
 
-            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE id=? LIMIT 1;", [$id]);
+            $post = Guest::with('user')->find_one($id);
 
-            if (!empty($data)) {
-                echo '<b><big>Добавление ответа</big></b><br /><br />';
+            if ($post) {
+                echo '<b>Добавление ответа</b><br /><br />';
 
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($data['user']).'</b> '.user_title($data['user']) . user_online($data['user']).' <small>('.date_fixed($data['time']).')</small></div>';
-                echo '<div>Сообщение: '.App::bbCode($data['text']).'</div><hr />';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->getUser()->login).'</b> '.user_title($post->getUser()->login) . user_online($post->getUser()->login).' <small>('.date_fixed($post['time']).')</small></div>';
+                echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?id='.$id.'&amp;act=addreply&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Cообщение:<br />';
-                echo '<textarea cols="25" rows="5" name="reply">'.$data['reply'].'</textarea>';
+                echo '<textarea cols="25" rows="5" name="reply">'.$post['reply'].'</textarea>';
                 echo '<br /><input type="submit" value="Ответить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Сообщения для ответа не существует!');
@@ -109,10 +113,13 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($reply) >= 5 && utf_strlen($reply) < $config['guesttextlength']) {
-                    $queryguest = DB::run() -> querySingle("SELECT id FROM guest WHERE id=? LIMIT 1;", [$id]);
-                    if (!empty($queryguest)) {
 
-                        DB::run() -> query("UPDATE guest SET reply=? WHERE id=?", [$reply, $id]);
+                    $post = Guest::find_one($id);
+
+                    if ($post) {
+
+                        $post->reply = $reply;
+                        $post->save();
 
                         notice('Ответ успешно добавлен!');
                         redirect("/admin/book?page=$page");
@@ -135,18 +142,18 @@ if (is_admin()) {
         ############################################################################################
         case 'edit':
 
-            $data = DB::run() -> queryFetch("SELECT * FROM guest WHERE id=? LIMIT 1;", [$id]);
+            $post = Guest::with('user')->find_one($id);
 
-            if (!empty($data)) {
+            if ($post) {
 
-                echo '<b><big>Редактирование сообщения</big></b><br /><br />';
+                echo '<b>Редактирование сообщения</b><br /><br />';
 
-                echo '<i class="fa fa-pencil"></i> <b>'.nickname($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.$post->getUser()->login.'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?act=addedit&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo 'Cообщение:<br />';
-                echo '<textarea cols="50" rows="5" name="msg">'.$data['text'].'</textarea><br /><br />';
+                echo '<textarea cols="50" rows="5" name="msg">'.$post['text'].'</textarea><br /><br />';
                 echo '<input type="submit" value="Изменить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Сообщения для редактирования не существует!');
@@ -165,10 +172,14 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
-                    $queryguest = DB::run() -> querySingle("SELECT id FROM guest WHERE id=? LIMIT 1;", [$id]);
-                    if (!empty($queryguest)) {
 
-                        DB::run() -> query("UPDATE guest SET text=?, edit=?, edit_time=? WHERE id=?", [$msg, $log, SITETIME, $id]);
+                    $post = Guest::find_one($id);
+                    if ($post) {
+
+                        $post->text = $msg;
+                        $post->edit = App::getUsername();
+                        $post->edit_time = SITETIME;
+                        $post->save();
 
                         notice('Сообщение успешно отредактировано!');
                         redirect("/admin/book?page=$page");
@@ -190,18 +201,13 @@ if (is_admin()) {
         ############################################################################################
         case 'del':
 
-            $uid = check($_GET['uid']);
-            if (isset($_POST['del'])) {
-                $del = intar($_POST['del']);
-            } else {
-                $del = 0;
-            }
+            $token = check(Request::input('token'));
+            $postIds = intar(Request::input('del'));
 
-            if ($uid == $_SESSION['token']) {
-                if (!empty($del)) {
-                    $del = implode(',', $del);
+            if ($token == $_SESSION['token']) {
+                if ($postIds) {
 
-                    DB::run() -> query("DELETE FROM guest WHERE id IN (".$del.");");
+                    Guest::where_id_in($postIds)->delete_many();
 
                     notice('Выбранные сообщения успешно удалены!');
                     redirect("/admin/book?page=$page");
@@ -216,16 +222,6 @@ if (is_admin()) {
         break;
 
         ############################################################################################
-        ##                                 Подтверждение очистки                                  ##
-        ############################################################################################
-        case 'prodel':
-            echo 'Вы уверены что хотите удалить все сообщения в гостевой?<br />';
-            echo '<i class="fa fa-times"></i> <b><a href="/admin/book?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book">Вернуться</a><br />';
-        break;
-
-        ############################################################################################
         ##                                   Очистка гостевой                                     ##
         ############################################################################################
         case 'alldel':
@@ -234,7 +230,7 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    DB::run() -> query("DELETE FROM guest;");
+                    Guest::delete_many();
 
                     notice('Гостевая книга успешно очищена!');
                     redirect("/admin/book");

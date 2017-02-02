@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Авторизация - @parent')
+@section('title')
+    Авторизация - @parent
+@stop
 
 @section('content')
 

@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Мой профиль - @parent')
+@section('title')
+    Мой профиль - @parent
+@stop
 
 @section('content')
 

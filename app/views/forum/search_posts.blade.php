@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Поиск запроса '.e($find).' - @parent')
+@section('title')
+    Поиск запроса {{ $find }} - @parent
+@stop
 
 @section('content')
 

@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Изменение темы - @parent')
+@section('title')
+    Изменение темы - @parent
+@stop
 
 @section('content')
 

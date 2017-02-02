@@ -1,6 +1,8 @@
 @extends('layout_simple')
 
-@section('title', 'Вас забанили по IP!')
+@section('title')
+    Вас забанили по IP!
+@stop
 
 @section('content')
 

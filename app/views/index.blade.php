@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Главная страница - @parent')
+@section('title')
+    Главная страница - @parent
+@stop
 
 @section('content')
 

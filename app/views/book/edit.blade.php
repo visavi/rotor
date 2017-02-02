@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Редактирование сообщения - @parent')
+@section('title')
+    Редактирование сообщения - @parent
+@stop
 
 @section('content')
 

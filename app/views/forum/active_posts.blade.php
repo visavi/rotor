@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Список сообщений '.e($user).' - @parent')
+@section('title')
+    Список сообщений {{ $user }} - @parent
+@stop
 
 @section('content')
 

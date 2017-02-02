@@ -1,6 +1,8 @@
 @extends('layout')
 
-@section('title', 'Топ популярных тем - @parent')
+@section('title')
+    Топ популярных тем - @parent
+@stop
 
 @section('content')
 
