@@ -6,19 +6,10 @@ class Topic extends BaseModel
     public static $_table = 'topics';
 
     /**
-     * Возвращает связь пользователей
-     * @return \Granada\ORM|null
-     */
-    public function user()
-    {
-        return $this->belongs_to('User', 'user_id');
-    }
-
-    /**
      * Возвращает количество сообщений в теме
      * @return \Granada\ORM|null
      */
-    public function CountPost() {
+    public function countPost() {
         return $this->has_one('Post', 'topic_id')
             ->select_raw('count(*) as count, topic_id')
             ->group_by('topic_id');
@@ -43,11 +34,17 @@ class Topic extends BaseModel
     }
 
     /**
-     * Возвращает объект пользователя
-     * @return \Granada\ORM
+     * Возвращает иконку в зависимости от статуса
+     * @return string иконка топика
      */
-    public function getUser()
+    public function getIcon()
     {
-        return $this->user ? $this->user : $this->factory('User');
+        if ($this->closed)
+            $icon = 'fa-lock';
+        elseif ($this->locked)
+            $icon = 'fa-thumb-tack';
+        else
+            $icon = 'fa-folder-open';
+        return $icon;
     }
 }

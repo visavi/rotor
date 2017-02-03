@@ -569,50 +569,6 @@ class App
     }
 
     /**
-     * Генерирует постраничную навигация для форума
-     * @param  array  $topic массив данных
-     * @return string       сформированный блок
-     */
-    public static function forumPagination($topic) {
-
-        if ($topic['posts']) {
-
-            $pages = [];
-            $link = '/topic/'.$topic['id'];
-
-            $pg_cnt = ceil($topic['posts'] / App::setting('forumpost'));
-
-            for ($i = 1; $i <= 5; $i++) {
-                if ($i <= $pg_cnt) {
-                    $pages[] = [
-                        'page' => $i,
-                        'title' => $i.' страница',
-                        'name' => $i,
-                    ];
-                }
-            }
-
-            if (5 < $pg_cnt) {
-
-                if (6 < $pg_cnt) {
-                    $pages[] = array(
-                        'separator' => true,
-                        'name' => ' ... ',
-                    );
-                }
-
-                $pages[] = array(
-                    'page' => $pg_cnt,
-                    'title' => $pg_cnt.' страница',
-                    'name' => $pg_cnt,
-                );
-            }
-
-            self::view('forum._pagination', compact('pages', 'link'));
-        }
-    }
-
-    /**
      * Обрабатывает постраничную навигацию
      * @param  integer $limit элементов на страницу
      * @param  integer $total всего элементов

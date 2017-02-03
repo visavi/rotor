@@ -1,43 +1,49 @@
 @extends('layout')
 
 @section('title')
-    {{ $forums['title'] }} (Стр. {{ $page['current'] }}) - @parent
+    {{ $forum['title'] }} (Стр. {{ $page['current'] }}) - @parent
 @stop
 
 @section('content')
 
-    <h1>{{ $forums['title'] }}</h1>
+    <h1>{{ $forum['title'] }}</h1>
 
     <a href="/forum">Форум</a>
 
-    @if (!empty($forums['subparent']))
-        / <a href="/forum/<?=$forums['subparent']['id']?>"><?=$forums['subparent']['title']?></a>
+    @if ($forum->parent)
+        / <a href="/forum/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a>
     @endif
 
-    / {{ $forums['title'] }}
+    / {{ $forum['title'] }}
 
     @if (is_admin())
-        / <a href="/admin/forum?act=forum&amp;fid=<?=$fid?>&amp;page=<?=$page['current']?>">Управление</a>
+        / <a href="/admin/forum?act=forum&amp;fid=<?= $forum->id ?>&amp;page=<?=$page['current']?>">Управление</a>
     @endif
 
-    @if (is_user() && empty($forums['closed']))
+    @if (is_user() && empty($forum['closed']))
         <div class="pull-right">
-            <a class="btn btn-success" href="/forum/create?fid={{ $fid }}">Создать тему</a>
+            <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
         </div>
     @endif
 
     <hr />
 
-    <?php if (count($forums['subforums']) > 0 && $page['current'] == 1): ?>
+    <?php if ($forum->children && $page['current'] == 1): ?>
         <div class="act">
 
-        <?php foreach ($forums['subforums'] as $subforum): ?>
-            <div class="b"><i class="fa fa-file-text-o fa-lg text-muted"></i>
-            <b><a href="/forum/<?=$subforum['id']?>"><?=$subforum['title']?></a></b> (<?=$subforum['topics']?>/<?=$subforum['posts']?>)</div>
+        <?php foreach ($forum->children as $child): ?>
 
-            <?php if ($subforum['last_id'] > 0): ?>
-                <div>Тема: <a href="/topic/<?=$subforum['last_id']?>/end"><?=$subforum['last_themes']?></a><br />
-                Сообщение: <?=nickname($subforum['last_user'])?> (<?=date_fixed($subforum['last_time'])?>)</div>
+            <div class="b"><i class="fa fa-file-text-o fa-lg text-muted"></i>
+            <b><a href="/forum/<?=$child['id']?>"><?=$child['title']?></a></b> (<?= $child->countTopic->count ?>/<?= $child->countPost->count ?>)</div>
+
+            <?= var_dump($child) ?>
+            <?php if ($child->lastTopic): ?>
+                <div>
+                    Тема: <a href="/topic/<?= $child->lastTopic->id ?>/end"><?= $child->lastTopic->title ?></a><br />
+                    @if ($child->lastTopic->lastPost)
+                        Сообщение: <?=$child->lastTopic->lastPost->getUser()->login ?> (<?=date_fixed($child->lastTopic->lastPost->time)?>)
+                    @endif
+                </div>
             <?php else: ?>
                 <div>Темы еще не созданы!</div>
             <?php endif; ?>
@@ -47,39 +53,30 @@
         <hr />
     <?php endif; ?>
 
-    <?php if ($page['total'] > 0): ?>
-        <?php foreach ($forums['topics'] as $topic): ?>
+    @if ($topics)
+        <?php foreach ($topics as $topic): ?>
             <div class="b" id="topic_<?=$topic['id']?>">
-
-                <?php
-                if ($topic['locked']) {
-                    $icon = 'fa-thumb-tack';
-                } elseif ($topic['closed']) {
-                    $icon = 'fa-lock';
-                } else {
-                    $icon = 'fa-folder-open';
-                }
-                ?>
-
-                <i class="fa <?=$icon?> text-muted"></i>
-                <b><a href="/topic/<?=$topic['id']?>"><?=$topic['title']?></a></b> (<?=$topic['posts']?>)
+                <i class="fa {{ $topic->getIcon() }} text-muted"></i>
+                <b><a href="/topic/<?=$topic['id']?>"><?=$topic['title']?></a></b> ({{ $topic->countPost->count }})
             </div>
             <div>
-                <?= App::forumPagination($topic)?>
-                Сообщение: <?=nickname($topic['last_user'])?> (<?=date_fixed($topic['last_time'])?>)
+                @if ($topic->lastPost)
+                    <?= Forum::pagination($topic)?>
+                    Сообщение: <?=nickname($topic->lastPost->getUser()->login)?> (<?=date_fixed($topic->lastPost->time)?>)
+                @endif
             </div>
         <?php endforeach; ?>
 
         <?php App::pagination($page) ?>
 
-    <?php elseif ($forums['closed']): ?>
+    @elseif ($forums['closed'])
         <?=show_error('В данном разделе запрещено создавать темы!')?>
-    <?php else: ?>
+    @else
         <?=show_error('Тем еще нет, будь первым!')?>
-    <?php endif; ?>
+    @endif
 
 
     <a href="/rules">Правила</a> /
     <a href="/forum/top/themes">Топ тем</a> /
-    <a href="/forum/search?fid=<?=$fid?>">Поиск</a><br />
+    <a href="/forum/search?fid=<?= $forum->id ?>">Поиск</a><br />
 @stop

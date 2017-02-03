@@ -9,8 +9,10 @@ class CreateAntimatTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('antimat', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
-        $table->addColumn('string', 'string', ['limit' => 100])
-            ->create();
+        if (! $this->hasTable('antimat')) {
+            $table = $this->table('antimat', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table->addColumn('string', 'string', ['limit' => 100])
+                ->create();
+        }
     }
 }

@@ -66,4 +66,21 @@
  */
 class BaseModel extends Granada\Granada {
 
+    /**
+     * Возвращает связь пользователей
+     * @return \Granada\ORM|null
+     */
+    public function user()
+    {
+        return $this->belongs_to('User', 'user_id');
+    }
+
+    /**
+     * Возвращает объект пользователя
+     * @return \Granada\ORM
+     */
+    public function getUser()
+    {
+        return $this->user ? $this->user : $this->factory('User');
+    }
 }

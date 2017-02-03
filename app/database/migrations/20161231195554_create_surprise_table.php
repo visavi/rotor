@@ -9,11 +9,13 @@ class CreateSurpriseTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('surprise', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
-        $table->addColumn('user', 'string', ['limit' => 20])
-            ->addColumn('year', 'year', ['limit' => 4])
-            ->addColumn('time', 'integer')
-            ->addIndex('user')
-            ->create();
+        if (! $this->hasTable('surprise')) {
+            $table = $this->table('surprise', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table->addColumn('user', 'string', ['limit' => 20])
+                ->addColumn('year', 'year', ['limit' => 4])
+                ->addColumn('time', 'integer')
+                ->addIndex('user')
+                ->create();
+        }
     }
 }

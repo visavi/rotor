@@ -9,15 +9,17 @@ class CreateVisitTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('visit', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
-        $table->addColumn('user', 'string', ['limit' => 20])
-            ->addColumn('self', 'string', ['limit' => 100, 'null' => true])
-            ->addColumn('page', 'string', ['limit' => 100, 'null' => true])
-            ->addColumn('ip', 'string', ['limit' => 15])
-            ->addColumn('count', 'integer', ['signed' => false, 'default' => 0])
-            ->addColumn('nowtime', 'integer', ['default' => 0])
-            ->addIndex('user', ['unique' => true])
-            ->addIndex('nowtime')
-            ->create();
+        if (! $this->hasTable('visit')) {
+            $table = $this->table('visit', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table->addColumn('user', 'string', ['limit' => 20])
+                ->addColumn('self', 'string', ['limit' => 100, 'null' => true])
+                ->addColumn('page', 'string', ['limit' => 100, 'null' => true])
+                ->addColumn('ip', 'string', ['limit' => 15])
+                ->addColumn('count', 'integer', ['signed' => false, 'default' => 0])
+                ->addColumn('nowtime', 'integer', ['default' => 0])
+                ->addIndex('user', ['unique' => true])
+                ->addIndex('nowtime')
+                ->create();
+        }
     }
 }

@@ -10,10 +10,12 @@ class CreateLoadsTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('loads', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
-        $table->addColumn('down', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-            ->addColumn('ip', 'string', ['limit' => 15])
-            ->addColumn('time', 'integer')
-            ->create();
+        if (! $this->hasTable('loads')) {
+            $table = $this->table('loads', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table->addColumn('down', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+                ->addColumn('ip', 'string', ['limit' => 15])
+                ->addColumn('time', 'integer')
+                ->create();
+        }
     }
 }

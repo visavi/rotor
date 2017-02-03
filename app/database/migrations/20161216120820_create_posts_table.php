@@ -10,21 +10,23 @@ class CreatePostsTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('posts', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
-        $table->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
-            ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-            ->addColumn('user', 'string', ['limit' => 20])
-            ->addColumn('text', 'text', ['null' => true])
-            ->addColumn('rating', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'default' => 0])
-            ->addColumn('time', 'integer')
-            ->addColumn('ip', 'string', ['limit' => 15])
-            ->addColumn('brow', 'string', ['limit' => 25])
-            ->addColumn('edit', 'string', ['limit' => 20, 'null' => true])
-            ->addColumn('edit_time', 'integer', ['default' => 0])
-            ->addIndex('forum_id')
-            ->addIndex(['topic_id', 'time'], ['name' => 'topic_time'])
-            ->addIndex('user')
-            ->addIndex('text', ['type' => 'fulltext'])
-            ->create();
+        if (! $this->hasTable('posts')) {
+            $table = $this->table('posts', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table->addColumn('forum_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
+                ->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+                ->addColumn('user', 'string', ['limit' => 20])
+                ->addColumn('text', 'text', ['null' => true])
+                ->addColumn('rating', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'default' => 0])
+                ->addColumn('time', 'integer')
+                ->addColumn('ip', 'string', ['limit' => 15])
+                ->addColumn('brow', 'string', ['limit' => 25])
+                ->addColumn('edit', 'string', ['limit' => 20, 'null' => true])
+                ->addColumn('edit_time', 'integer', ['default' => 0])
+                ->addIndex('forum_id')
+                ->addIndex(['topic_id', 'time'], ['name' => 'topic_time'])
+                ->addIndex('user')
+                ->addIndex('text', ['type' => 'fulltext'])
+                ->create();
+        }
     }
 }

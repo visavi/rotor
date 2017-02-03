@@ -14,35 +14,33 @@
     Новые: <a href="/forum/new/themes">темы</a>, <a href="/forum/new/posts">сообщения</a>
     <hr/>
 
-    @foreach($forums[0] AS $key => $data)
+    @foreach($forums as $forum)
         <div class="b">
             <i class="fa fa-file-text-o fa-lg text-muted"></i>
-            <b><a href="/forum/{{ $data['id'] }}">{{ $data['title'] }}</a></b>
-            ({{ $data['topics'] }}/{{ $data['posts'] }})
+            <b><a href="/forum/{{ $forum['id'] }}">{{ $forum['title'] }}</a></b>
+            ({{ $forum->countTopic->count }}/{{ $forum->countPost->count }})
 
-            @if (!empty($data['desc']))
+            @if (!empty($forum['desc']))
                 <br/>
-                <small>{{ $data['desc'] }}</small>
+                <small>{{ $forum['desc'] }}</small>
             @endif
-
         </div>
 
         <div>
-            @if (isset($forums[$key]))
-                @foreach($forums[$key] as $datasub)
-                    <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $datasub['id'] }}">{{ $datasub['title'] }}</a></b>
-                    ({{ $datasub['topics'] }}/{{ $datasub['posts'] }})<br/>
+            @if ($forum->children)
+                @foreach($forum->children as $child)
+                    <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $child['id'] }}">{{ $child['title'] }}</a></b>
+                    ({{ $child->countTopic->count }})<br/>
                 @endforeach
             @endif
 
-            @if ($data['last_id'] > 0)
-                Тема: <a href="/topic/{{ $data['last_id'] }}/end">{{ $data['last_themes'] }}</a>
+            @if ($forum->lastTopic->lastPost)
+                Тема: <a href="/topic/{{ $forum->lastTopic->id }}/end">{{ $forum->lastTopic->title }}</a>
                 <br/>
-                Сообщение: {{ nickname($data['last_user']) }} ({{ date_fixed($data['last_time']) }})
+                Сообщение: {{ $forum->lastTopic->lastPost->getUser()->login }} ({{ date_fixed($forum->lastTopic->lastPost->time) }})
             @else
                 Темы еще не созданы!
             @endif
-
         </div>
     @endforeach
 

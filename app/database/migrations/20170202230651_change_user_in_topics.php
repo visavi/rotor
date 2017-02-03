@@ -11,10 +11,10 @@ class ChangeUserInTopics extends AbstractMigration
     {
         $rows = $this->fetchAll('SELECT * FROM topics');
         foreach($rows as $row) {
-            $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['author'].'";');
+            $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['author'].'" LIMIT 1;');
 
             if ($user) {
-                $this->execute('UPDATE topics SET author="'.$user['id'].'" WHERE author = "'.$row['author'].'";');
+                $this->execute('UPDATE topics SET author="'.$user['id'].'" WHERE id = "'.$row['id'].'" LIMIT 1;');
             }
 
         }

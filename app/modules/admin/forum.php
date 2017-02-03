@@ -216,7 +216,7 @@ if (is_admin()) {
                                 $forums = DB::run() -> queryFetch("SELECT `id` FROM `forums` WHERE `parent`=? LIMIT 1;", [$fid]);
 
                                 if (empty($forums) || empty($parent)) {
-                                    DB::run() -> query("UPDATE `forums` SET sort=?, `parent`=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $title, $desc, $closed, $fid]);
+                                    DB::run() -> query("UPDATE `forums` SET sort=?, parent_id=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $title, $desc, $closed, $fid]);
 
                                     notice('Раздел успешно отредактирован!');
                                     redirect("/admin/forum");
@@ -250,7 +250,7 @@ if (is_admin()) {
         case 'prodelforum':
 
             if (is_admin([101])) {
-                $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.`parent` = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", [$fid]);
+                $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.parent_id = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", [$fid]);
 
                 if (!empty($forums['id'])) {
                     if (empty($forums['subcnt'])) {
@@ -278,7 +278,7 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.`parent` = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", [$fid]);
+                    $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.parent_id = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", [$fid]);
 
                     if (!empty($forums['id'])) {
                         if (empty($forums['subcnt'])) {
@@ -624,7 +624,7 @@ if (is_admin()) {
                     DB::run() -> query("UPDATE `forums` SET `topics`=`topics`-?, `posts`=`posts`-? WHERE `id`=?;", [$deltopics, $delposts, $fid]);
 
                     // ------------------------------------------------------------//
-                    $oldlast = DB::run() -> queryFetch("SELECT `t`.*, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE `t`.`forum_id`=? ORDER BY `t`.`last_time` DESC LIMIT 1;", [$fid]);
+                    $oldlast = DB::run() -> queryFetch("SELECT `t`.*, `f`.parent_id FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE `t`.`forum_id`=? ORDER BY `t`.`last_time` DESC LIMIT 1;", [$fid]);
 
 
                     if (empty($oldlast['id'])) {
@@ -725,7 +725,7 @@ if (is_admin()) {
         ############################################################################################
         case 'topic':
             if (!empty($tid)) {
-                $topic = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
+                $topic = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.parent_id FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
 
                 if (!empty($topic)) {
                     echo '<a href="/admin/forum">Форум</a> / ';

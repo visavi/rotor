@@ -10,13 +10,15 @@ class CreateStatusTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('status', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
-        $table->addColumn('topoint', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-            ->addColumn('point', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
-            ->addColumn('name', 'string', ['limit' => 50])
-            ->addColumn('color', 'string', ['limit' => 10, 'null' => true])
-            ->addIndex('point')
-            ->addIndex('topoint')
-            ->create();
+        if (! $this->hasTable('status')) {
+            $table = $this->table('status', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table->addColumn('topoint', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+                ->addColumn('point', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
+                ->addColumn('name', 'string', ['limit' => 50])
+                ->addColumn('color', 'string', ['limit' => 10, 'null' => true])
+                ->addIndex('point')
+                ->addIndex('topoint')
+                ->create();
+        }
     }
 }

@@ -8,41 +8,34 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-        $forums = Forum::find_one($fid);
-        if (!$forums) {
-            App::abort('default', 'Данного раздела не существует!');
-        }
+    $forum = Forum::with('parent',
+        ['children' => ['with' => 'countPost', 'countTopic']],
+        ['children' => ['with' => 'lastTopic.lastPost.user']]
+    )
+        ->find_one($fid);
+    if (!$forum) {
+        App::abort('default', 'Данного раздела не существует!');
+    }
 
-/*        if (!empty($forums['parent'])) {
-            $forums['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$forums['parent']]);
-        }
+    foreach ($forum->children as $child) {
 
-        $querysub = DB::run() -> query("SELECT * FROM `forums` WHERE `parent`=? ORDER BY sort ASC;", [$fid]);
-        $forums['subforums'] = $querysub -> fetchAll();
+        var_dump($child->lastTopic->lastPost->getUser()->login, $child->countTopic->count, $child->countPost->count);
+    }
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `topics` WHERE `forum_id`=?;", [$fid]);
-        $page = App::paginate(App::setting('forumtem'), $total);
-
-        $querytopic = DB::run() -> query("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `locked` DESC, `last_time` DESC LIMIT ".$page['offset'].", ".App::setting('forumtem').";", [$fid]);
-        $forums['topics'] = $querytopic->fetchAll();*/
-
+    var_dump(ORM::get_query_log()); exit;
 
     $total = Topic::where('forum_id', $fid)->count();
     $page = App::paginate(App::setting('forumtem'), $total);
 
     $topics = Topic::where('forum_id', $fid)
         ->order_by_desc('locked')
-        ->order_by_desc('last_time')
+        ->order_by_desc('time')
         ->limit(App::setting('forumtem'))
         ->offset($page['offset'])
-        ->with('user', 'countPost')
+        ->with('countPost', 'lastPost.user')
         ->find_many();
 
-var_dump($topics, ORM::get_query_log()); exit;
-
-
-    App::view('forum/forum', compact('forums', 'fid', 'page'));
-
+    App::view('forum/forum', compact('forum', 'topics', 'page'));
 break;
 
 ############################################################################################

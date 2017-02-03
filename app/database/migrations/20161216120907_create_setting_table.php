@@ -9,14 +9,16 @@ class CreateSettingTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('setting', [
-            'id' => false,
-            'primary_key' => 'name',
-            'engine' => 'MyISAM',
-            'collation' => 'utf8mb4_unicode_ci'
-        ]);
-        $table->addColumn('name', 'string', ['limit' => 25])
-            ->addColumn('value', 'string')
-            ->create();
+        if (! $this->hasTable('setting')) {
+            $table = $this->table('setting', [
+                'id' => false,
+                'primary_key' => 'name',
+                'engine' => 'MyISAM',
+                'collation' => 'utf8mb4_unicode_ci'
+            ]);
+            $table->addColumn('name', 'string', ['limit' => 25])
+                ->addColumn('value', 'string')
+                ->create();
+        }
     }
 }

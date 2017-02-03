@@ -12,10 +12,10 @@ class ChangeUserInGuest extends AbstractMigration
         $rows = $this->fetchAll('SELECT * FROM guest');
         foreach($rows as $row) {
             if (!empty($row['user'])) {
-                $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['user'].'";');
+                $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['user'].'" LIMIT 1;');
 
                 if ($user) {
-                    $this->execute('UPDATE guest SET user="'.$user['id'].'" WHERE user = "'.$row['user'].'";');
+                    $this->execute('UPDATE guest SET user="'.$user['id'].'" WHERE id = "'.$row['id'].'" LIMIT 1;');
                 }
             }
         }

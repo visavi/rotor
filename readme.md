@@ -1,4 +1,4 @@
-RotorCMS 6.1
+RotorCMS 7.0
 =========
 
 [![Latest Stable Version](https://poser.pugx.org/visavi/rotor/v/stable)](https://packagist.org/packages/visavi/rotor)

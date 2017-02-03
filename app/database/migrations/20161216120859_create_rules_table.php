@@ -9,9 +9,11 @@ class CreateRulesTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('rules', ['engine' => 'MyISAM',  'collation' => 'utf8mb4_unicode_ci']);
-        $table->addColumn('text', 'text', ['null' => true])
-            ->addColumn('time', 'integer')
-            ->create();
+        if (! $this->hasTable('rules')) {
+            $table = $this->table('rules', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table->addColumn('text', 'text', ['null' => true])
+                ->addColumn('time', 'integer')
+                ->create();
+        }
     }
 }
