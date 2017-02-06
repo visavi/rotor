@@ -10,13 +10,6 @@ case 'index':
 
     $forum = Forum::with('parent')->find_one($fid);
 
-    $users = User2::where('rating', '>', 100)->get();
-
-    foreach ($users as $user) {
-        var_dump($user['id']);
-    }
-
-    var_dump($users);
     if (!$forum) {
         App::abort('default', 'Данного раздела не существует!');
     }
