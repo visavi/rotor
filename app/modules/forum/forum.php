@@ -8,21 +8,23 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $forum = Forum::with('parent',
-        ['children' => ['with' => 'countPost', 'countTopic']],
-        ['children' => ['with' => 'lastTopic.lastPost.user']]
-    )
-        ->find_one($fid);
+    $forum = Forum::with('parent')->find_one($fid);
+
+    $users = User2::where('rating', '>', 100)->get();
+
+    foreach ($users as $user) {
+        var_dump($user['id']);
+    }
+
+    var_dump($users);
     if (!$forum) {
         App::abort('default', 'Данного раздела не существует!');
     }
 
-    foreach ($forum->children as $child) {
+    $forum->childrens = Forum::where('parent_id', $forum->id)
+        ->with('countPost', 'countTopic', 'lastTopic.lastPost.user')
+        ->find_many();
 
-        var_dump($child->lastTopic->lastPost->getUser()->login, $child->countTopic->count, $child->countPost->count);
-    }
-
-    var_dump(ORM::get_query_log()); exit;
 
     $total = Topic::where('forum_id', $fid)->count();
     $page = App::paginate(App::setting('forumtem'), $total);

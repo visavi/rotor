@@ -16,6 +16,7 @@ require_once BASEDIR.'/vendor/autoload.php';
  */
 $aliases = [
     'ORM' => 'Granada\ORM',
+    'Capsule' => 'Illuminate\Database\Capsule\Manager'
 ];
 AliasLoader::getInstance($aliases)->register();
 
@@ -33,6 +34,27 @@ if (env('APP_DEBUG')) {
     });
     $whoops->register();
 }
+
+$capsule = new Capsule();
+
+$capsule->addConnection([
+    'driver'    => env('DB_DRIVER'),
+    'host'      => env('DB_HOST'),
+    'database'  => env('DB_DATABASE'),
+    'username'  => env('DB_USERNAME'),
+    'password'  => env('DB_PASSWORD'),
+    'charset'   => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+]);
+
+// Set the event dispatcher used by Eloquent models... (optional)
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
+$capsule->setEventDispatcher(new Dispatcher(new Container));
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+
+
 
 ORM::configure([
     'connection_string' => env('DB_DRIVER').':host='.env('DB_HOST').';dbname='.env('DB_DATABASE').';port='.env('DB_PORT'),

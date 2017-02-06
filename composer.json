@@ -28,7 +28,8 @@
         "php-curl-class/php-curl-class": "^7.1",
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.0",
-        "surt/granada": "dev-master"
+        "surt/granada": "dev-master",
+        "illuminate/database": "^5.4"
     },
     "require-dev": {
         "filp/whoops": "^2.1"

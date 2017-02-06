@@ -28,15 +28,14 @@
 
     <hr />
 
-    <?php if ($forum->children && $page['current'] == 1): ?>
+    <?php if ($forum->childrens && $page['current'] == 1): ?>
         <div class="act">
 
-        <?php foreach ($forum->children as $child): ?>
+        <?php foreach ($forum->childrens as $child): ?>
 
             <div class="b"><i class="fa fa-file-text-o fa-lg text-muted"></i>
             <b><a href="/forum/<?=$child['id']?>"><?=$child['title']?></a></b> (<?= $child->countTopic->count ?>/<?= $child->countPost->count ?>)</div>
 
-            <?= var_dump($child) ?>
             <?php if ($child->lastTopic): ?>
                 <div>
                     Тема: <a href="/topic/<?= $child->lastTopic->id ?>/end"><?= $child->lastTopic->title ?></a><br />
