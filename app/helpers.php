@@ -946,10 +946,11 @@ function stats_blog() {
 // --------------------- Функция вывода статистики форума ------------------------//
 function stats_forum() {
     if (@filemtime(STORAGE."/temp/statforum.dat") < time()-600) {
-        $queryforum = DB::run() -> query("SELECT SUM(`topics`) FROM `forums` UNION ALL SELECT SUM(`posts`) FROM `forums`;");
-        $total = $queryforum -> fetchAll(PDO::FETCH_COLUMN);
 
-        file_put_contents(STORAGE."/temp/statforum.dat", (int)$total[0].'/'.(int)$total[1], LOCK_EX);
+        $topics = Topic::count();
+        $posts = Post::count();
+
+        file_put_contents(STORAGE."/temp/statforum.dat", $topics.'/'.$posts, LOCK_EX);
     }
 
     return file_get_contents(STORAGE."/temp/statforum.dat");
@@ -1432,17 +1433,15 @@ function recentphotos($show = 5) {
 // --------------- Функция кэширования последних тем форума -------------------//
 function recenttopics($show = 5) {
     if (@filemtime(STORAGE."/temp/recenttopics.dat") < time()-180) {
-        $querytopic = DB::run() -> query("SELECT * FROM `topics` ORDER BY `last_time` DESC LIMIT ".$show.";");
-        $recent = $querytopic -> fetchAll();
-
-        file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($recent), LOCK_EX);
+        $topics = NewTopic::orderBy('time', 'desc')->with('countPost')->limit($show)->get();
+        file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($topics), LOCK_EX);
     }
 
     $topics = unserialize(file_get_contents(STORAGE."/temp/recenttopics.dat"));
 
-    if (is_array($topics) && count($topics) > 0) {
+    if ($topics) {
         foreach ($topics as $topic) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic['posts'].')';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic->countPost->count.')';
             echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br />';
         }
     }
@@ -1893,7 +1892,7 @@ function perfomance(){
 
     if (is_admin() && App::setting('performance')){
 
-        $queries = env('APP_DEBUG') ? ORM::get_query_log() : [];
+        $queries = env('APP_DEBUG') ? getQueryLog() : [];
 
         App::view('app/_perfomance', compact('queries'));
     }
@@ -2048,4 +2047,22 @@ function trans($id, $replace = [], $locale = null)
 function trans_choice($id, $number, array $replace = [], $locale = null)
 {
     return App::translator()->transChoice($id, $number, $replace, $locale);
+}
+
+/**
+ * Возвращает форматированный список запросов
+ * @return array
+ */
+function getQueryLog()
+{
+    $queries = Capsule::getQueryLog();
+    $formattedQueries = [];
+    foreach ($queries as $query) {
+        $prep = $query['query'];
+        foreach ($query['bindings'] as $binding) {
+            $prep = preg_replace("#\?#", $binding, $prep, 1);
+        }
+        $formattedQueries[] = ['query' => $prep, 'time' => $query['time']];
+    }
+    return $formattedQueries;
 }

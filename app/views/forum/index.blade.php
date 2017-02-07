@@ -30,14 +30,14 @@
             @if ($forum->children)
                 @foreach($forum->children as $child)
                     <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $child['id'] }}">{{ $child['title'] }}</a></b>
-                    ({{ $child->countTopic->count }})<br/>
+                    ({{ $child->countTopic->count }}/{{ $child->countPost->count }})<br/>
                 @endforeach
             @endif
 
             @if ($forum->lastTopic->lastPost)
                 Тема: <a href="/topic/{{ $forum->lastTopic->id }}/end">{{ $forum->lastTopic->title }}</a>
                 <br/>
-                Сообщение: {{ $forum->lastTopic->lastPost->getUser()->login }} ({{ date_fixed($forum->lastTopic->lastPost->time) }})
+                Сообщение: {{ $forum->lastTopic->lastPost->user->login }} ({{ date_fixed($forum->lastTopic->lastPost->time) }})
             @else
                 Темы еще не созданы!
             @endif

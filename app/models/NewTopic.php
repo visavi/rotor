@@ -1,8 +1,6 @@
 <?php
 
-class NewTopic extends NewBaseModel
-{
-
+class NewTopic extends NewBaseModel {
     /**
      * The table associated with the model.
      *
@@ -16,24 +14,24 @@ class NewTopic extends NewBaseModel
      * @var bool
      */
     public $timestamps = false;
+
     /**
-     * Возвращает количество сообщений в теме
-     * @return \Granada\ORM|null
+     * Возвращает количество сообщений в разделе
      */
-/*    public function countPost() {
-        return $this->has_one('Post', 'topic_id')
-            ->select_raw('count(*) as count, topic_id')
-            ->group_by('topic_id');
-    }*/
+    public function countPost()
+    {
+        return $this->hasOne('NewPost', 'topic_id')
+            ->select(Capsule::raw('count(*) as count, topic_id'))
+            ->groupBy('topic_id');
+    }
 
     /**
      * Возвращает последнее сообщение
-     * @return \Granada\ORM|null
      */
-/*    public function lastPost()
+    public function lastPost()
     {
-        return $this->belongs_to('Post', 'last_post_id');
-    }*/
+        return $this->belongsTo('NewPost', 'last_post_id');
+    }
 
     /**
      * Возвращает раздел форума

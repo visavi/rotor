@@ -8,13 +8,13 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $forum = Forum::with('parent')->find_one($fid);
+    $forum = NewForum::with('parent')->find($fid);
 
     if (!$forum) {
         App::abort('default', 'Данного раздела не существует!');
     }
 
-    $forum->childrens = Forum::where('parent_id', $forum->id)
+    $forum->children = NewForum::where('parent_id', $forum->id)
         ->with('countPost', 'countTopic', 'lastTopic.lastPost.user')
         ->find_many();
 

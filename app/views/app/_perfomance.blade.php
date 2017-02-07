@@ -13,7 +13,7 @@
 @if ($queries)
 <pre class="text-left prettyprint linenums">
 @foreach($queries as $key=> $query)
-{!! $query !!}
+{{ $query['query'] }} ({{ $query['time'] /1000 }} сек.)
 @endforeach
 </pre>
 @endif

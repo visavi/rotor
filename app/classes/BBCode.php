@@ -34,7 +34,7 @@ class BBCode {
         ],
         'lineThrough' => [
             'pattern' => '/\[s\](.*?)\[\/s\]/s',
-            'replace' => '<strike>$1</strike>',
+            'replace' => '<del>$1</del>',
         ],
         'fontSize' => [
             'pattern' => '/\[size\=([1-5])\](.*?)\[\/size\]/s',
@@ -60,19 +60,19 @@ class BBCode {
             'iterate' => 3,
         ],
         'http' => [
-            'pattern' => '%\b((?<!(=|]))[\w-]+://[^\s()<>\[\]]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))%s',
+            'pattern' => '%\b(((?<!(=|]))\w+:)//[^\s()<>\[\]]+)%s',
             'callback' => 'urlReplace',
         ],
         'link' => [
-            'pattern' => '%\[url\](\b([\w-]+://[^\s()<>\[\]]+))\[/url\]%s',
+            'pattern' => '%\[url\]((\w+:)?//[^\s()<>\[\]]+)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'namedLink' => [
-            'pattern' => '%\[url\=\b([\w-]+://[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
+            'pattern' => '%\[url\=((\w+:)?//[^\s()<>\[\]]+)\](.*?)\[/url\]%s',
             'callback' => 'urlReplace',
         ],
         'image' => [
-            'pattern' => '%\[img\]\b([\w-]+://[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
+            'pattern' => '%\[img\]((\w+:)?//[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
             'replace' => '<img src="$1" class="img-responsive" alt="image">',
         ],
         'orderedList' => [
@@ -153,8 +153,16 @@ class BBCode {
      */
     public function urlReplace($match)
     {
-        $name   = (isset($match[3]) || empty($match[2])) ? $match[1] : $match[2];
-        $target = (strpos($match[1], $this->setting['home']) === false) ? ' target="_blank" rel="nofollow"' : '';
+        $name = isset($match[3]) ? $match[3] : $match[1];
+
+        $target = '';
+        if (strpos($match[1], $this->setting['home']) === false) {
+            $target = ' target="_blank" rel="nofollow"';
+        } else {
+            if (!empty($match[2])) {
+                $match[1] = str_replace($match[2], '', $match[1]);
+            }
+        }
 
         return '<a href="'.$match[1].'"'.$target.'>'.rawurldecode($name).'</a>';
     }
