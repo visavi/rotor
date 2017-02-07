@@ -23,7 +23,7 @@ function parsePHPModules() {
     $s = preg_replace('/<th[^>]*>([^<]+)<\/th>/', "<info>\\1</info>", $s);
     $s = preg_replace('/<td[^>]*>([^<]+)<\/td>/', "<info>\\1</info>", $s);
     $vTmp = preg_split('/(<h2[^>]*>[^<]+<\/h2>)/', $s, -1, PREG_SPLIT_DELIM_CAPTURE);
-    $vModules = array();
+    $vModules = [];
     for ($i = 1;$i < count($vTmp);$i++) {
         if (preg_match('/<h2[^>]*>([^<]+)<\/h2>/', $vTmp[$i], $vMat)) {
             $vName = trim($vMat[1]);
@@ -33,7 +33,7 @@ function parsePHPModules() {
                 $vPat3 = "/$vPat\s*$vPat\s*$vPat/";
                 $vPat2 = "/$vPat\s*$vPat/";
                 if (preg_match($vPat3, $vOne, $vMat)) {
-                    $vModules[$vName][trim($vMat[1])] = array(trim($vMat[2]), trim($vMat[3]));
+                    $vModules[$vName][trim($vMat[1])] = [trim($vMat[2]), trim($vMat[3])];
                 } elseif (preg_match($vPat2, $vOne, $vMat)) {
                     $vModules[$vName][trim($vMat[1])] = trim($vMat[2]);
                 }
@@ -95,7 +95,7 @@ header("Content-type:text/html; charset=utf-8");
         <p>Для установки вам необходимо прописать данные от БД в файл .env</p>
 
         <?php
-        $keys = array(
+        $keys = [
             'APP_ENV',
             'DB_DRIVER',
             'DB_HOST',
@@ -104,7 +104,7 @@ header("Content-type:text/html; charset=utf-8");
             'DB_USERNAME',
             'SITE_ADMIN',
             'SITE_EMAIL',
-        );
+        ];
 
         foreach ($keys as $key) {
             echo $key.' - '.env($key).'<br />';
@@ -127,7 +127,7 @@ header("Content-type:text/html; charset=utf-8");
 
         if (extension_loaded('pdo_mysql')) {
 
-            $version = strtok(getModuleSetting('pdo_mysql', array('Client API version', 'PDO Driver for MySQL, client library version')), '-');
+            $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-');
             echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
@@ -135,7 +135,7 @@ header("Content-type:text/html; charset=utf-8");
         }
 
         if (extension_loaded('openssl')) {
-            $version = getModuleSetting('openssl', array('OpenSSL Library Version', 'OpenSSL Header Version'));
+            $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']);
             echo '<i class="fa fa-plus-circle"></i> Расширение OpenSSL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Расширение OpenSSL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
@@ -150,7 +150,7 @@ header("Content-type:text/html; charset=utf-8");
         }
 
         if (extension_loaded('mbstring')) {
-            $version = getModuleSetting('mbstring', array('oniguruma version', 'Multibyte regex (oniguruma) version'));
+            $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']);
             echo '<i class="fa fa-plus-circle"></i> Расширение Mbstring ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Расширение Mbstring: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
@@ -166,7 +166,7 @@ header("Content-type:text/html; charset=utf-8");
         }
 
         if (extension_loaded('gd')) {
-            $version = getModuleSetting('gd', array('GD headers Version', 'GD library Version'));
+            $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']);
             echo '<i class="fa fa-plus-circle"></i> Библиотека GD ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
         } else {
             echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
@@ -296,11 +296,11 @@ header("Content-type:text/html; charset=utf-8");
             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
 
             // Проверка логина или ника на существование
-            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", array(strtolower($login), strtolower($login)));
+            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($login), strtolower($login)]);
             if (!$reglogin) {
 
             // Проверка email на существование
-            $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", array($email));
+            $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$email]);
             if (!$regmail) {
 
                 $registration = User::create();
@@ -318,9 +318,9 @@ header("Content-type:text/html; charset=utf-8");
                 $registration->save();
 
                 $setting = ORM::get_db()->prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                $setting->execute(array($login, 'nickname'));
-                $setting->execute(array($email, 'emails'));
-                $setting->execute(array($site, 'home'));
+                $setting->execute([$login, 'nickname']);
+                $setting->execute([$email, 'emails']);
+                $setting->execute([$site, 'home']);
 
                 save_setting();
 
@@ -328,24 +328,24 @@ header("Content-type:text/html; charset=utf-8");
                 $textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
                 $inbox = Inbox::create();
-                $inbox->set(array(
+                $inbox->set([
                     'user'  => $login,
                     'author'  => 'Vantuz',
                     'text' => $textpriv,
                     'time' => SITETIME,
-                ));
+                ]);
                 $inbox->save();
 
                 // -------------- Новость ---------------//
                 $textnews = 'Добро пожаловать на демонстрационную страницу движка RotorCMS'.PHP_EOL.'RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. RotorCMS является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью RotorCMS является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок RotorCMS вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
                 $news = News::create();
-                $news->set(array(
+                $news->set([
                     'title'  => 'Добро пожаловать!',
                     'text'  => $textnews,
                     'author' => $login,
                     'time' => SITETIME,
-                ));
+                ]);
                 $news->save();
 
                 redirect('?act=finish');

@@ -15,10 +15,11 @@
     <hr/>
 
     @foreach($forums as $forum)
+
         <div class="b">
             <i class="fa fa-file-text-o fa-lg text-muted"></i>
             <b><a href="/forum/{{ $forum['id'] }}">{{ $forum['title'] }}</a></b>
-            ({{ $forum->countTopic->count }}/{{ $forum->countPost->count }})
+
 
             @if (!empty($forum['desc']))
                 <br/>
@@ -34,10 +35,10 @@
                 @endforeach
             @endif
 
-            @if ($forum->lastTopic->lastPost)
-                Тема: <a href="/topic/{{ $forum->lastTopic->id }}/end">{{ $forum->lastTopic->title }}</a>
+            @if ($forum->getLastTopic()->lastPost)
+                Тема: <a href="/topic/{{ $forum->getLastTopic()->id }}/end">{{ $forum->getLastTopic()->title }}</a>
                 <br/>
-                Сообщение: {{ $forum->lastTopic->lastPost->user->login }} ({{ date_fixed($forum->lastTopic->lastPost->time) }})
+                Сообщение: {{ $forum->getLastTopic()->lastPost->user->login }} ({{ date_fixed($forum->getLastTopic()->lastPost->time) }})
             @else
                 Темы еще не созданы!
             @endif
