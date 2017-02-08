@@ -89,7 +89,7 @@ case 'edit':
 
     if (! is_user()) App::abort(403);
 
-    $post = Guest::where('user', App::getUsername())->findOne($id);
+    $post = Guest::where('user_id', App::getUserId())->find($id);
 
     if (! $post) {
         App::abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
@@ -142,15 +142,15 @@ case 'complaint':
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
 
-    $data = Guest::find_one($id);
+    $data = Guest::find($id);
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
-    $spam = ORM::for_table('spam')->where(['relate' => 2, 'idnum' => $id])->find_one();
+    $spam = Spam::where(['relate' => 2, 'idnum' => $id])->first();
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
 
-        $spam = ORM::for_table('spam')->create();
+        $spam = new Spam();
         $spam->relate  = 2;
         $spam->idnum   = $data['id'];
         $spam->user    = App::getUsername();

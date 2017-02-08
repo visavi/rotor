@@ -37,6 +37,6 @@ class ChangeUserInTopics extends AbstractMigration
         $table->changeColumn('user_id', 'string', ['limit' => 20])
             ->save();
 
-        $table->renameColumn('user_id', 'authors');
+        $table->renameColumn('user_id', 'author');
     }
 }

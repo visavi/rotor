@@ -27,6 +27,14 @@ class Topic extends BaseModel {
     }*/
 
     /**
+     * Возвращает последнее сообщение
+     */
+    public function getLastPost()
+    {
+        return $this->lastPost ? $this->lastPost : new Post();
+    }
+
+    /**
      * Возвращает иконку в зависимости от статуса
      * @return string иконка топика
      */

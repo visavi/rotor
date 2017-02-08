@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <i class="fa fa-pencil text-muted"></i> <b><?=profile($post['user'])?></b> (<?=date_fixed($post['time'])?>)<br /><br />
+    <i class="fa fa-pencil text-muted"></i> <b><?=profile($post->getUser()->login)?></b> (<?=date_fixed($post['time'])?>)<br /><br />
 
     <div class="form">
         <form action="/book/edit/<?= $id ?>" method="post">

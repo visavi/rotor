@@ -35,7 +35,7 @@
 
                     <?php endif; ?>
 
-                    <?php if (App::getUserId() == $data['id'] && $data['time'] + 600 > SITETIME): ?>
+                    <?php if (App::getUserId() == $data['user_id'] && $data['time'] + 600 > SITETIME): ?>
                         <div class="pull-right">
                             <a href="/book/edit/<?=$data['id']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         </div>

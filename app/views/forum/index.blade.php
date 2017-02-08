@@ -34,10 +34,10 @@
                 @endforeach
             @endif
 
-            @if ($forum->lastTopic->lastPost)
-                Тема: <a href="/topic/{{ $forum->lastTopic->id }}/end">{{ $forum->lastTopic->title }}</a>
+            @if ($forum->getLastTopic()->lastPost)
+                Тема: <a href="/topic/{{ $forum->getLastTopic()->id }}/end">{{ $forum->getLastTopic()->title }}</a>
                 <br/>
-                Сообщение: {{ $forum->lastTopic->lastPost->user->login }} ({{ date_fixed($forum->lastTopic->lastPost->time) }})
+                Сообщение: {{ $forum->getLastTopic()->getLastPost()->getUser()->login }} ({{ date_fixed($forum->getLastTopic()->getLastPost()->time) }})
             @else
                 Темы еще не созданы!
             @endif
