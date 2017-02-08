@@ -603,27 +603,19 @@ function show_counter()
     $_SESSION['counton']++;
 
     if (is_user()) {
+
         $visitPage = !empty($config['newtitle']) ? $config['newtitle'] : null;
 
-        $visit = Visit::where('user', App::getUsername())->find_one();
-
-        $record = [
-            'self'    => App::server('PHP_SELF'),
-            'ip'      => App::getClientIp(),
-            'count'   => $_SESSION['counton'],
-            'nowtime' => SITETIME,
-            'page'    => $visitPage
-        ];
-
-        if ($visit) {
-            $visit->set($record);
-            $visit->save();
-        } else {
-            $visit = Visit::create();
-            $visit->user = App::getUsername();
-            $visit->set($record);
-            $visit->save();
-        }
+        Visit::updateOrCreate(
+            ['user' => App::getUsername()],
+            [
+                'self'    => App::server('PHP_SELF'),
+                'page'    => $visitPage,
+                'ip'      => App::getClientIp(),
+                'count'   => $_SESSION['counton'],
+                'nowtime' => SITETIME,
+            ]
+        );
     }
 
     include_once (APP."/includes/counters.php");
@@ -1433,7 +1425,7 @@ function recentphotos($show = 5) {
 // --------------- Функция кэширования последних тем форума -------------------//
 function recenttopics($show = 5) {
     if (@filemtime(STORAGE."/temp/recenttopics.dat") < time()-180) {
-        $topics = NewTopic::orderBy('time', 'desc')->with('countPost')->limit($show)->get();
+        $topics = Topic::orderBy('time', 'desc')->limit($show)->get();
         file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($topics), LOCK_EX);
     }
 
@@ -1441,7 +1433,7 @@ function recenttopics($show = 5) {
 
     if ($topics) {
         foreach ($topics as $topic) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic->countPost->count.')';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic->posts.')';
             echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br />';
         }
     }
@@ -2060,6 +2052,7 @@ function getQueryLog()
     foreach ($queries as $query) {
         $prep = $query['query'];
         foreach ($query['bindings'] as $binding) {
+            $binding = is_int($binding) ? $binding : "'{$binding}'";
             $prep = preg_replace("#\?#", $binding, $prep, 1);
         }
         $formattedQueries[] = ['query' => $prep, 'time' => $query['time']];

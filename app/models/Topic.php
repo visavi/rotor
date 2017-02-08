@@ -1,37 +1,30 @@
 <?php
 
-class Topic extends BaseModel
-{
-
-    public static $_table = 'topics';
+class Topic extends BaseModel {
 
     /**
-     * Возвращает количество сообщений в теме
-     * @return \Granada\ORM|null
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
      */
-    public function countPost() {
-        return $this->has_one('Post', 'topic_id')
-            ->select_raw('count(*) as count, topic_id')
-            ->group_by('topic_id');
-    }
+    public $timestamps = false;
 
     /**
      * Возвращает последнее сообщение
-     * @return \Granada\ORM|null
      */
     public function lastPost()
     {
-        return $this->belongs_to('Post', 'last_post_id');
+        return $this->belongsTo('Post', 'last_post_id');
     }
 
     /**
      * Возвращает раздел форума
      * @return \Granada\ORM|null
      */
-    public function forum()
+/*    public function forum()
     {
         return $this->belongs_to('Forum', 'forum_id');
-    }
+    }*/
 
     /**
      * Возвращает иконку в зависимости от статуса

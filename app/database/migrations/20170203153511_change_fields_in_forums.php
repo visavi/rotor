@@ -11,8 +11,6 @@ class ChangeFieldsInForums extends AbstractMigration
     {
         $table = $this->table('forums');
         $table
-            ->removeColumn('topics')
-            ->removeColumn('posts')
             ->removeColumn('last_themes')
             ->removeColumn('last_user')
             ->removeColumn('last_time')
@@ -27,8 +25,6 @@ class ChangeFieldsInForums extends AbstractMigration
     {
         $table = $this->table('forums');
         $table
-            ->addColumn('topics', 'integer', ['signed' => false, 'default' => 0])
-            ->addColumn('posts', 'integer', ['signed' => false, 'default' => 0])
             ->addColumn('last_themes', 'string', ['limit' => 50, 'null' => true])
             ->addColumn('last_user', 'string', ['limit' => 20, 'null' => true])
             ->addColumn('last_time', 'integer', ['signed' => false, 'default' => 0])

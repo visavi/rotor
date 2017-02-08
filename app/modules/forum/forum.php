@@ -8,27 +8,27 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $forum = NewForum::with('parent')->find($fid);
+    $forum = Forum::with('parent')->find($fid);
 
     if (!$forum) {
         App::abort('default', 'Данного раздела не существует!');
     }
 
-    $forum->children = NewForum::where('parent_id', $forum->id)
-        ->with('countPost', 'countTopic', 'lastTopic.lastPost.user')
-        ->find_many();
-
+    $forum->children = Forum::where('parent_id', $forum->id)
+        ->with('lastTopic.lastPost.user')
+        ->get();
 
     $total = Topic::where('forum_id', $fid)->count();
+
     $page = App::paginate(App::setting('forumtem'), $total);
 
     $topics = Topic::where('forum_id', $fid)
-        ->order_by_desc('locked')
-        ->order_by_desc('time')
+        ->orderBy('locked', 'desc')
+        ->orderBy('time', 'desc')
         ->limit(App::setting('forumtem'))
         ->offset($page['offset'])
-        ->with('countPost', 'lastPost.user')
-        ->find_many();
+        ->with('lastPost.user')
+        ->get();
 
     App::view('forum/forum', compact('forum', 'topics', 'page'));
 break;

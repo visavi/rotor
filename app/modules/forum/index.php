@@ -2,12 +2,9 @@
 
 include_once (APP.'/views/advert/forum.blade.php');
 
-$forums = NewForum::where('parent_id', 0)
-    ->with('countTopic')
-    ->with('countPost')
-    ->with('children.countTopic')
-    ->with('children.countPost')
+$forums = Forum::where('parent_id', 0)
     ->with('lastTopic.lastPost.user')
+    ->with('children')
     ->orderBy('sort')
     ->get();
 

@@ -28,13 +28,13 @@
 
     <hr />
 
-    <?php if ($forum->childrens && $page['current'] == 1): ?>
+    <?php if (! $forum->children->isEmpty() && $page['current'] == 1): ?>
         <div class="act">
 
-        <?php foreach ($forum->childrens as $child): ?>
+        <?php foreach ($forum->children as $child): ?>
 
             <div class="b"><i class="fa fa-file-text-o fa-lg text-muted"></i>
-            <b><a href="/forum/<?=$child['id']?>"><?=$child['title']?></a></b> (<?= $child->countTopic->count ?>/<?= $child->countPost->count ?>)</div>
+            <b><a href="/forum/<?=$child['id']?>"><?=$child['title']?></a></b> (<?= $child->topics ?>/<?= $child->posts ?>)</div>
 
             <?php if ($child->lastTopic): ?>
                 <div>
@@ -56,7 +56,7 @@
         <?php foreach ($topics as $topic): ?>
             <div class="b" id="topic_<?=$topic['id']?>">
                 <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-                <b><a href="/topic/<?=$topic['id']?>"><?=$topic['title']?></a></b> ({{ $topic->countPost->count }})
+                <b><a href="/topic/<?=$topic['id']?>"><?=$topic['title']?></a></b> ({{ $topic->posts }})
             </div>
             <div>
                 @if ($topic->lastPost)

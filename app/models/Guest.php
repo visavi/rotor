@@ -3,20 +3,23 @@
 class Guest extends BaseModel {
 
     /**
-     * Возвращает пользователя
-     * @return \Granada\ORM|null
+     * The table associated with the model.
+     *
+     * @var string
      */
-    public function user()
-    {
-        return $this->belongs_to('User', 'user_id');
-    }
+    protected $table = 'guest';
 
     /**
-     * Возвращает объект пользователя
-     * @return User
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
      */
-    public function getUser()
-    {
-        return $this->user ? $this->user : $this->factory('User');
-    }
+    public $timestamps = false;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

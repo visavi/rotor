@@ -15,11 +15,10 @@
     <hr/>
 
     @foreach($forums as $forum)
-
         <div class="b">
             <i class="fa fa-file-text-o fa-lg text-muted"></i>
             <b><a href="/forum/{{ $forum['id'] }}">{{ $forum['title'] }}</a></b>
-
+            ({{ $forum->topics }}/{{ $forum->posts }})
 
             @if (!empty($forum['desc']))
                 <br/>
@@ -28,17 +27,17 @@
         </div>
 
         <div>
-            @if ($forum->children)
+            @if (! $forum->children->isEmpty())
                 @foreach($forum->children as $child)
                     <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $child['id'] }}">{{ $child['title'] }}</a></b>
-                    ({{ $child->countTopic->count }}/{{ $child->countPost->count }})<br/>
+                    ({{ $child->topics }}/{{ $child->posts }})<br/>
                 @endforeach
             @endif
 
-            @if ($forum->getLastTopic()->lastPost)
-                Тема: <a href="/topic/{{ $forum->getLastTopic()->id }}/end">{{ $forum->getLastTopic()->title }}</a>
+            @if ($forum->lastTopic->lastPost)
+                Тема: <a href="/topic/{{ $forum->lastTopic->id }}/end">{{ $forum->lastTopic->title }}</a>
                 <br/>
-                Сообщение: {{ $forum->getLastTopic()->lastPost->user->login }} ({{ date_fixed($forum->getLastTopic()->lastPost->time) }})
+                Сообщение: {{ $forum->lastTopic->lastPost->user->login }} ({{ date_fixed($forum->lastTopic->lastPost->time) }})
             @else
                 Темы еще не созданы!
             @endif

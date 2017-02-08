@@ -11,7 +11,6 @@ class ChangeEditFieldsInTopics extends AbstractMigration
     {
         $table = $this->table('topics');
         $table->addColumn('last_post_id', 'integer', ['default' => 0])
-            ->removeColumn('posts')
             ->removeColumn('last_user')
             ->renameColumn('last_time', 'time')
             ->save();
@@ -33,7 +32,6 @@ class ChangeEditFieldsInTopics extends AbstractMigration
     {
         $table = $this->table('topics');
         $table->removeColumn('last_post_id')
-            ->addColumn('posts', 'integer', ['signed' => false, 'default' => 0])
             ->addColumn('last_user', 'string', ['limit' => 20, 'null' => true])
             ->renameColumn('time', 'last_time')
             ->save();

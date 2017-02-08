@@ -9,11 +9,11 @@ case 'index':
     $total = Guest::count();
     $page = App::paginate(App::setting('bookpost'), $total);
 
-    $posts = Guest::order_by_desc('time')
+    $posts = Guest::orderBy('time', 'desc')
         ->limit(App::setting('bookpost'))
         ->offset($page['offset'])
         ->with('user')
-        ->find_many();
+        ->get();
 
     App::view('book/index', compact('posts', 'page'));
 break;
@@ -46,16 +46,17 @@ case 'add':
         if (is_user()) {
             $bookscores = (App::setting('bookscores')) ? 1 : 0;
 
-            $user = User::find_one(App::getUserId());
-            $user->set_expr('allguest', 'allguest+1');
-            $user->set_expr('point', 'point+1');
-            $user->set_expr('money', 'money+5');
-            $user->save();
+            $user = User::where('id', App::getUserId());
+            $user->update([
+                'allguest' => Capsule::raw('allguest + 1'),
+                'point' => Capsule::raw('point + 1'),
+                'money' => Capsule::raw('money + 5'),
+            ]);
         }
 
         $username = is_user() ? App::getUserId() : 0;
 
-        $guest = Guest::create();
+        $guest = new Guest();
         $guest->user_id = $username;
         $guest->text = $msg;
         $guest->ip = App::getClientIp();
@@ -63,7 +64,7 @@ case 'add':
         $guest->time = SITETIME;
         $guest->save();
 
-        Guest::raw_execute('
+        Capsule::raw('
             DELETE FROM guest WHERE time < (
                 SELECT MIN(time) FROM (
                     SELECT time FROM guest ORDER BY time DESC LIMIT '.App::setting('maxpostbook').'
