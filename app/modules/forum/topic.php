@@ -8,15 +8,30 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $topic = DB::run() -> queryFetch("SELECT `t`.*, `f`.`title` forum_title, `f`.`parent` FROM `topics` t LEFT JOIN `forums` f ON t.`forum_id`=f.`id` WHERE t.`id`=? LIMIT 1;", [$tid]);
+    $total = Post::where('topic_id', $tid)->count();
+    $page = App::paginate(App::setting('forumpost'), $total);
 
-    if (empty($topic)) {
+
+/*    $querypost = DB::run() -> query("SELECT p.*, pl.vote FROM `posts` p LEFT JOIN pollings pl ON p.id = pl.relate_id AND relate_type = 'post' AND pl.user=? WHERE `topic_id`=? ORDER BY p.`time` ASC LIMIT ".$page['offset'].", ".App::setting('forumpost').";", [$log, $tid]);*/
+
+    $topic = Topic::where('id', $tid)
+        ->with('forum.parent')
+        ->first();
+
+
+    $posts = Post::where('topic_id', $tid)
+        ->with('polling')
+        ->offset($page['offset'])
+        ->limit(App::setting('forumpost'))
+        ->orderBy('time', 'asc')
+        ->get();
+
+    if (! $topic) {
         App::abort('default', 'Данной темы не существует!');
     }
 
-    if (!empty($topic['parent'])) {
-        $topic['subparent'] = DB::run() -> queryFetch("SELECT `id`, `title` FROM `forums` WHERE `id`=? LIMIT 1;", [$topic['parent']]);
-    }
+    var_dump(getQueryLog(), $posts);
+    exit;
 
     if (is_user()) {
         $topic['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$tid, $log]);
@@ -539,7 +554,7 @@ case 'vote':
 
         $vote->set_expr('count', 'count+1');
         $vote->save();
-        
+
         $voteAnswer->set_expr('result', 'result+1');
         $voteAnswer->save();
 

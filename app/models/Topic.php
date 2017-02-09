@@ -19,12 +19,11 @@ class Topic extends BaseModel {
 
     /**
      * Возвращает раздел форума
-     * @return \Granada\ORM|null
      */
-/*    public function forum()
+    public function forum()
     {
-        return $this->belongs_to('Forum', 'forum_id');
-    }*/
+        return $this->belongsTo('Forum', 'forum_id');
+    }
 
     /**
      * Возвращает последнее сообщение

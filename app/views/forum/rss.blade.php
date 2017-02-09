@@ -14,7 +14,7 @@
             <title>{{ $topic['title'] }}</title>
             <link>{{ App::setting('home') }}/topic/{{ $topic['topic_id'] }}</link>
             <description>{{ $topic['text'] }} </description>
-            <author>{{ nickname($topic['user']) }}</author>
+            <author>{{ $topic->getLastPost()->getUser()->login }}</author>
             <pubDate>{{ date("r", $topic['time']) }}</pubDate>
             <category>Темы</category>
             <guid>{{ App::setting('home') }}/topic/{{ $topic['topic_id'] }}</guid>

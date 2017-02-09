@@ -54,7 +54,6 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 $capsule::connection()->enableQueryLog();
 
-
 ORM::configure([
     'connection_string' => env('DB_DRIVER').':host='.env('DB_HOST').';dbname='.env('DB_DATABASE').';port='.env('DB_PORT'),
     'username'       => env('DB_USERNAME'),

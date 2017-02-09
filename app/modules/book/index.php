@@ -64,7 +64,7 @@ case 'add':
         $guest->time = SITETIME;
         $guest->save();
 
-        Capsule::raw('
+        Capsule::delete('
             DELETE FROM guest WHERE time < (
                 SELECT MIN(time) FROM (
                     SELECT time FROM guest ORDER BY time DESC LIMIT '.App::setting('maxpostbook').'

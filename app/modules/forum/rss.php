@@ -6,9 +6,13 @@ switch ($act):
  */
 case 'index':
 
-    $topics = Forum::raw_query("SELECT t.title, t.last_time, t.closed, p.* from topics t join (SELECT topic_id, MAX(time) max from posts GROUP BY topic_id) as latest ON t.id = latest.topic_id LEFT JOIN posts p ON p.time = latest.max AND  p.topic_id = latest.topic_id WHERE closed = 0 ORDER BY `last_time` DESC LIMIT 15;")->find_many();
+    $topics = Topic::where('closed', 0)
+        ->with('lastPost.user')
+        ->orderBy('time', 'desc')
+        ->limit(15)
+        ->get();
 
-    if (empty($topics)) {
+    if ($topics->isEmpty()) {
         App::abort('default', 'Нет тем для отображения!');
     }
 
