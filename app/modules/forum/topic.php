@@ -11,16 +11,13 @@ case 'index':
     $total = Post::where('topic_id', $tid)->count();
     $page = App::paginate(App::setting('forumpost'), $total);
 
-
-/*    $querypost = DB::run() -> query("SELECT p.*, pl.vote FROM `posts` p LEFT JOIN pollings pl ON p.id = pl.relate_id AND relate_type = 'post' AND pl.user=? WHERE `topic_id`=? ORDER BY p.`time` ASC LIMIT ".$page['offset'].", ".App::setting('forumpost').";", [$log, $tid]);*/
-
     $topic = Topic::where('id', $tid)
         ->with('forum.parent')
+        ->with(['bookmark' => function($query) {$query->where('user_id', App::getUserId());}])
         ->first();
 
-
     $posts = Post::where('topic_id', $tid)
-        ->with('polling')
+        ->with('polling', 'files', 'user')
         ->offset($page['offset'])
         ->limit(App::setting('forumpost'))
         ->orderBy('time', 'asc')
@@ -30,63 +27,33 @@ case 'index':
         App::abort('default', 'Данной темы не существует!');
     }
 
-    var_dump(getQueryLog(), $posts);
-    exit;
-
     if (is_user()) {
-        $topic['bookmark'] = DB::run() -> queryFetch("SELECT * FROM `bookmarks` WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$tid, $log]);
-
-        if (!empty($topic['bookmark']) && $topic['posts'] > $topic['bookmark']['posts']) {
-            DB::run() -> query("UPDATE `bookmarks` SET `posts`=? WHERE `topic_id`=? AND `user`=? LIMIT 1;", [$topic['posts'], $tid, $log]);
+        if ($topic->bookmark && $topic['posts'] > $topic['bookmark']['posts']) {
+            Bookmark::where('topic_id', $tid)
+                ->where('user_id', App::getUserId())
+                ->update(['posts' => $topic['posts']]);
         }
     }
 
     // --------------------------------------------------------------//
-    if (!empty($topic['moderators'])) {
+/*    if (!empty($topic['moderators'])) {
         $topic['curator'] = explode(',', $topic['moderators']);
         $topic['is_moder'] = in_array($log, $topic['curator'], true) ? 1 : 0;
-    }
-
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
-    $page = App::paginate(App::setting('forumpost'), $total);
-
-    $querypost = DB::run() -> query("SELECT p.*, pl.vote FROM `posts` p LEFT JOIN pollings pl ON p.id = pl.relate_id AND relate_type = 'post' AND pl.user=? WHERE `topic_id`=? ORDER BY p.`time` ASC LIMIT ".$page['offset'].", ".App::setting('forumpost').";", [$log, $tid]);
-
-
-   // var_dump($querypost->fetchAll());
-    $topic['posts'] = $querypost->fetchAll();
-
-
-    // ----- Получение массива файлов ----- //
-    $ipdpost = [];
-    foreach ($topic['posts'] as $val) {
-        $ipdpost[] = $val['id'];
-    }
-
-    $ipdpost = implode(',', $ipdpost);
-
-    if (!empty($ipdpost)) {
-        $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id` IN (".$ipdpost.");");
-        $files = $queryfiles->fetchAll();
-
-        if (!empty($files)){
-            $forumfiles = [];
-            foreach ($files as $file){
-                $topic['files'][$file['post_id']][] = $file;
-            }
-        }
-    }
+    }*/
 
     // Голосование
-    $vote = Vote::where('topic_id', $tid)->find_one();
+    $vote = Vote::where('topic_id', $tid)->first();
+
     if ($vote) {
         $vote['poll'] = VotePoll::where('vote_id', $vote['id'])
             ->where('user', App::getUsername())
-            ->find_one();
+            ->first();
 
         $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
-            ->order_by_asc('id')
-            ->find_array();
+            ->orderBy('id')
+            ->get()
+            ->toArray();
+
         if ($vote['answers']) {
 
             $results = array_column($vote['answers'], 'result', 'answer');
@@ -101,7 +68,11 @@ case 'index':
         }
     }
 
-    App::view('forum/topic', compact('topic', 'page', 'vote'));
+/*    var_dump($vote);
+    var_dump(getQueryLog());
+    exit;*/
+
+    App::view('forum/topic', compact('topic', 'posts', 'page', 'vote'));
 break;
 
 ############################################################################################

@@ -25,4 +25,12 @@ class Post extends BaseModel {
     {
         return $this->morphOne('Polling', 'relate')->where('user_id', App::getUserId());
     }
+
+    /**
+     * Возвращает загруженные файлы
+     */
+    public function files()
+    {
+        return $this->hasMany('FileForum');
+    }
 }

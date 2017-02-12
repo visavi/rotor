@@ -26,6 +26,14 @@ class Topic extends BaseModel {
     }
 
     /**
+     * Возвращает закладку
+     */
+    public function bookmark()
+    {
+        return $this->hasOne('Bookmark');
+    }
+
+    /**
      * Возвращает последнее сообщение
      */
     public function getLastPost()

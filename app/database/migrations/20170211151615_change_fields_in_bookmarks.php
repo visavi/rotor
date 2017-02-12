@@ -2,14 +2,16 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class ChangeFieldsInPollings extends AbstractMigration
+class ChangeFieldsInBookmarks extends AbstractMigration
 {
     /**
      * Migrate Up.
      */
     public function up()
     {
-        $rows = $this->fetchAll('SELECT * FROM pollings');
+        $table = $this->table('bookmarks');
+
+        $rows = $this->fetchAll('SELECT * FROM bookmarks');
         foreach($rows as $row) {
 
             if (!empty($row['user'])) {
@@ -18,17 +20,14 @@ class ChangeFieldsInPollings extends AbstractMigration
 
             $userId = ! empty($user) ? $user['id'] : 0;
 
-            $this->execute('UPDATE pollings SET user="'.$userId.'" WHERE id = "'.$row['id'].'" LIMIT 1;');
+            $this->execute('UPDATE bookmarks SET user="'.$userId.'" WHERE id = "'.$row['id'].'" LIMIT 1;');
         }
 
-        $table = $this->table('pollings');
         $table
-            ->addColumn('updated_at', 'integer', ['null' => true])
             ->changeColumn('user', 'integer')
             ->save();
 
-        $table->renameColumn('user', 'user_id');
-        $table->renameColumn('time', 'created_at');
+         $table->renameColumn('user', 'user_id');
     }
 
     /**
@@ -36,11 +35,9 @@ class ChangeFieldsInPollings extends AbstractMigration
      */
     public function down()
     {
-        $table = $this->table('pollings');
+        $table = $this->table('bookmarks');
         $table
             ->renameColumn('user_id', 'user')
-            ->renameColumn('created_at', 'time')
-            ->removeColumn('updated_at')
             ->save();
     }
 }

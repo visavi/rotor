@@ -2,6 +2,11 @@
 
 class VoteAnswer extends BaseModel {
 
-    public static $_table = 'voteanswer';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'voteanswer';
 
 }

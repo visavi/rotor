@@ -4,17 +4,17 @@
     {{ $topic['title'] }} (Стр. {{ $page['current'] }}) - @parent
 @stop
 
-@section('description', e('Обсуждение темы: '.$topic['title'].' (Стр. '.$page['current'].')'))
+@section('description', 'Обсуждение темы: '.$topic['title'].' (Стр. '.$page['current'].')')
 
 @section('content')
     <h1>{{ $topic['title'] }}</h1>
     <a href="/forum">Форум</a> /
 
-    <?php if (!empty($topic['subparent'])): ?>
-        <a href="/forum/<?=$topic['subparent']['id']?>"><?=$topic['subparent']['title']?></a> /
+    <?php if ($topic->forum->parent): ?>
+        <a href="/forum/<?= $topic->forum->parent->id ?>"><?= $topic->forum->parent->title ?></a> /
     <?php endif; ?>
 
-    <a href="/forum/<?=$topic['forum_id']?>"><?=$topic['forum_title']?></a> /
+    <a href="/forum/<?= $topic->forum->id ?>"><?= $topic->forum->title ?></a> /
     <a href="/topic/<?=$topic['id']?>/print">Печать</a> / <a href="/topic/<?=$topic['id']?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
@@ -95,7 +95,7 @@
 
 
     <?php if ($page['total'] > 0): ?>
-        <?php foreach ($topic['posts'] as $key=>$data): ?>
+        <?php foreach ($posts as $key=>$data): ?>
             <?php $num = ($page['offset'] + $key + 1); ?>
             <div class="post">
             <div class="b" id="post_<?=$data['id']?>">
@@ -103,7 +103,7 @@
                 <div class="pull-right">
                     <?php if (!empty($log) && $log != $data['user']): ?>
 
-                        <a href="#" onclick="return postReply('<?= nickname($data['user']) ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="#" onclick="return postReply('<?= $data->getUser()->login ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                         <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
@@ -130,31 +130,28 @@
                     </div>
                 </div>
 
-                <div class="img"><?=user_avatars($data['user'])?></div>
+                <div class="img"><?=user_avatars($data->getUser()->login)?></div>
 
-                <?=$num?>. <b><?=profile($data['user'])?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
-                <?=user_title($data['user'])?> <?=user_online($data['user'])?>
+                <?=$num?>. <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
+                <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->login)?>
             </div>
 
             <div class="message">
                 <?=App::bbCode($data['text'])?>
             </div>
 
-            <?php if (!empty($topic['files'])): ?>
-                <?php if (isset($topic['files'][$data['id']])): ?>
-                    <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />
-                    <?php foreach ($topic['files'][$data['id']] as $file): ?>
-                        <?php $ext = getExtension($file['hash']); ?>
+            <?php if (! $data->files->isEmpty()): ?>
+                <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />
+                <?php foreach ($data->files as $file): ?>
+                    <?php $ext = getExtension($file['hash']); ?>
 
-
-                        <?= icons($ext) ?>
-                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
-                        <?php if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])): ?>
-                            <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], $config['previewsize'], ['alt' => $file['name']]) ?></a><br />
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
+                    <?= icons($ext) ?>
+                    <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
+                    <?php if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])): ?>
+                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], $config['previewsize'], ['alt' => $file['name']]) ?></a><br />
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                </div>
             <?php endif; ?>
 
             <?php if (!empty($data['edit'])): ?>
