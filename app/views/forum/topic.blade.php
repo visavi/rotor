@@ -101,7 +101,7 @@
             <div class="b" id="post_<?=$data['id']?>">
 
                 <div class="pull-right">
-                    <?php if (!empty($log) && $log != $data['user']): ?>
+                    <?php if (App::getUserId() != $data['user_id']): ?>
 
                         <a href="#" onclick="return postReply('<?= $data->getUser()->login ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
@@ -112,7 +112,7 @@
                         </noindex>
                     <?php endif; ?>
 
-                    <?php if (($log == $data['user'] && $data['time'] + 600 > SITETIME) || !empty($topic['is_moder'])): ?>
+                    <?php if ((App::getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME) || !empty($topic['is_moder'])): ?>
                         <a href="/topic/<?=$topic['id']?>/<?=$data['id']?>/edit?page=<?=$page['current']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         <?php if (!empty($topic['is_moder'])): ?>
                         <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
@@ -120,11 +120,11 @@
                     <?php endif; ?>
 
                     <div class="js-rating">
-                        @unless ($log == $data['user'])
+                        @unless (App::getUserId() == $data['user_id'])
                             <a class="post-rating-down<?= $data['vote'] == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="post" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                         @endunless
                         <span>{{ $data['rating'] }}</span>
-                        @unless ($log == $data['user'])
+                        @unless (App::getUserId() == $data['user_id'])
                             <a class="post-rating-up<?= $data['vote'] == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="post" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                         @endunless
                     </div>
@@ -132,7 +132,7 @@
 
                 <div class="img"><?=user_avatars($data->getUser()->login)?></div>
 
-                <?=$num?>. <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
+                <?=$num?>. <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
                 <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->login)?>
             </div>
 
@@ -154,8 +154,8 @@
                 </div>
             <?php endif; ?>
 
-            <?php if (!empty($data['edit'])): ?>
-                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?=nickname($data['edit'])?> (<?=date_fixed($data['edit_time'])?>)</small><br />
+            <?php if ($data['edit_user_id']): ?>
+                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br />
             <?php endif; ?>
 
             <?php if (is_admin() || empty($config['anonymity'])): ?>

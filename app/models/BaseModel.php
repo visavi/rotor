@@ -12,7 +12,6 @@ class BaseModel extends Illuminate\Database\Eloquent\Model {
 
     /**
      * Возвращает объект пользователя
-     * @return \Granada\ORM
      */
     public function getUser()
     {

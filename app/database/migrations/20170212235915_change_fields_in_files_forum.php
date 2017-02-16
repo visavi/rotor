@@ -27,7 +27,7 @@ class ChangeFieldsInFilesForum extends AbstractMigration
             ->save();
 
         $table->renameColumn('user', 'user_id');
-        $table->renameColumn('time', 'created_id');
+        $table->renameColumn('time', 'created_at');
     }
 
     /**
@@ -38,7 +38,7 @@ class ChangeFieldsInFilesForum extends AbstractMigration
         $table = $this->table('files_forum');
         $table
             ->renameColumn('user_id', 'user')
-            ->renameColumn('created_id', 'time')
+            ->renameColumn('created_at', 'time')
             ->save();
     }
 }

@@ -20,7 +20,7 @@ case 'index':
         ->with('polling', 'files', 'user')
         ->offset($page['offset'])
         ->limit(App::setting('forumpost'))
-        ->orderBy('time', 'asc')
+        ->orderBy('created_at', 'asc')
         ->get();
 
     if (! $topic) {
@@ -85,7 +85,7 @@ case 'create':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для добавления сообщения!');
 
-    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`parent` FROM `topics` LEFT JOIN `forums` ON `topics`.`forum_id`=`forums`.`id` WHERE `topics`.`id`=? LIMIT 1;", [$tid]);
+    $topics = DB::run() -> queryFetch("SELECT `topics`.*, `forums`.`parent_id` FROM `topics` LEFT JOIN `forums` ON `topics`.`forum_id`=`forums`.`id` WHERE `topics`.`id`=? LIMIT 1;", [$tid]);
 
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -102,26 +102,26 @@ case 'create':
 
         $msg = antimat($msg);
 
-        if ($log == $post['user'] && $post['time'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= $config['forumtextlength'])) {
+        if (App::getUserId() == $post['user_id'] && $post['created_at'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= $config['forumtextlength'])) {
 
-            $newpost = $post['text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['time']).' сек.[/size][/i]'."\n".$msg;
+            $newpost = $post['text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['created_at']).' сек.[/size][/i]'."\n".$msg;
 
             DB::run() -> query("UPDATE `posts` SET `text`=? WHERE `id`=? LIMIT 1;", [$newpost, $post['id']]);
             $lastid = $post['id'];
 
         } else {
 
-            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `forum_id`, `user`, `text`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$tid, $topics['forum_id'], $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
+            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `forum_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$tid, $topics['forum_id'], App::getUserId(), $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
             $lastid = DB::run() -> lastInsertId();
 
-            DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=? LIMIT 1;", [$log]);
+            DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=? LIMIT 1;", [App::getUserId()]);
 
-            DB::run() -> query("UPDATE `topics` SET `posts`=`posts`+1, `last_user`=?, `last_time`=? WHERE `id`=?;", [$log, SITETIME, $tid]);
+            DB::run() -> query("UPDATE `topics` SET `posts`=`posts`+1, `last_post_id`=? WHERE `id`=?;", [$lastid, $tid]);
 
-            DB::run() -> query("UPDATE `forums` SET `posts`=`posts`+1, `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$tid, $topics['title'], $log, SITETIME, $topics['forum_id']]);
+            DB::run() -> query("UPDATE `forums` SET `posts`=`posts`+1, `last_topic_id`=? WHERE `id`=?;", [$tid, $topics['forum_id']]);
             // Обновление родительского форума
-            if ($topics['parent'] > 0) {
-                DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$tid, $topics['title'], $log, SITETIME, $topics['parent']]);
+            if ($topics['parent_id'] > 0) {
+                DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$tid, $topics['parent_id']]);
             }
         }
 
@@ -133,17 +133,14 @@ case 'create':
         if (isset($matches[1])) {
             $usersAnswer = array_unique($matches[1]);
 
-            $newTopic = Topic::find_one($tid);
+            $newTopic = Topic::find($tid);
             foreach($usersAnswer as $login) {
 
                 if ($login == $log) {
                     continue;
                 }
 
-                $user = User::where_any_is([
-                    'login' => $login,
-                    'nickname' => $login,
-                ])->find_one();
+                $user = User::where('login', $login)->first();
 
                 if ($user['login']) {
 
@@ -188,7 +185,14 @@ case 'create':
 
                             move_uploaded_file($_FILES['file']['tmp_name'], HOME.'/uploads/forum/'.$topics['id'].'/'.$hash);
 
-                            DB::run() -> query("INSERT INTO `files_forum` (`topic_id`, `post_id`, `hash`, `name`, `size`, `user`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$topics['id'], $lastid, $hash, $filename, $filesize, $log, SITETIME]);
+                            $file = new FileForum();
+                            $file->topic_id = $topics['id'];
+                            $file->post_id = $lastid;
+                            $file->hash = $hash;
+                            $file->name = $filename;
+                            $file->size = $filesize;
+                            $file->user_id = App::getUserId();
+                            $file->save();
 
                         } else {
                             $fileError = 'Файл не загружен! Недопустимое расширение!';
@@ -395,7 +399,7 @@ case 'edit':
             DB::run() -> query("UPDATE `topics` SET `title`=? WHERE id=?;", [$title, $tid]);
 
             if ($post) {
-                DB::run()->query("UPDATE `posts` SET `user`=?, `text`=?, `ip`=?, `brow`=?, `edit`=?, `edit_time`=? WHERE `id`=?;", [$log, $msg, App::getClientIp(), App::getUserAgent(), $log, SITETIME, $post['id']]);
+                DB::run()->query("UPDATE `posts` SET `user_id`=?, `text`=?, `ip`=?, `brow`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [App::getUserId(), $msg, App::getClientIp(), App::getUserAgent(), App::getUserId(), SITETIME, $post['id']]);
             }
 
             App::setFlash('success', 'Тема успешно изменена!');
@@ -433,11 +437,11 @@ case 'editpost':
         App::abort('default', 'Редактирование невозможно, данная тема закрыта!');
     }
 
-    if (! $isModer && $post['user'] != $log) {
+    if (! $isModer && $post['user_id'] != App::getUserId()) {
         App::abort('default', 'Редактировать сообщения может только автор или кураторы темы!');
     }
 
-    if (! $isModer && $post['time'] + 600 < SITETIME) {
+    if (! $isModer && $post['created_at'] + 600 < SITETIME) {
         App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
     }
 
@@ -455,7 +459,7 @@ case 'editpost':
 
             $msg = antimat($msg);
 
-            DB::run() -> query("UPDATE `posts` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=?;", [$msg, $log, SITETIME, $id]);
+            DB::run() -> query("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, App::getUserId(), SITETIME, $id]);
 
             // ------ Удаление загруженных файлов -------//
             if ($delfile) {
@@ -565,7 +569,7 @@ break;
 ############################################################################################
 case 'end':
 
-    $topic = Topic::find_one($tid);
+    $topic = Topic::find($tid);
 
     if (empty($topic)) {
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
