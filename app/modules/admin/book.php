@@ -21,11 +21,11 @@ if (is_admin()) {
 
                 $page = App::paginate(App::setting('bookpost'), $total);
 
-                $posts = Guest::order_by_desc('time')
+                $posts = Guest::orderBy('created_at', 'desc')
                     ->limit(App::setting('bookpost'))
                     ->offset($page['offset'])
                     ->with('user')
-                    ->find_many();
+                    ->get();
 
                 echo '<form action="/admin/book?act=del&amp;page='.$page['current'].'" method="post">';
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
@@ -38,9 +38,9 @@ if (is_admin()) {
                     echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
 
                     if (empty($data['user_id'])) {
-                        echo '<b>'.$data->getUser()->login.'</b> <small>('.date_fixed($data['time']).')</small>';
+                        echo '<b>'.$data->getUser()->login.'</b> <small>('.date_fixed($data['created_at']).')</small>';
                     } else {
-                        echo '<b>'.profile($data->getUser()->login).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                        echo '<b>'.profile($data->getUser()->login).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
                         echo user_title($data->getUser()->login).' '.user_online($data->getUser()->login);
                     }
 
@@ -52,8 +52,8 @@ if (is_admin()) {
 
                     echo '<div>'.App::bbCode($data['text']).'<br />';
 
-                    if (!empty($data['edit'])) {
-                        echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.nickname($data['edit']).' ('.date_fixed($data['edit_time']).')</small><br />';
+                    if (!empty($data['edit_user_id'])) {
+                        echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.date_fixed($data['updated_at']).')</small><br />';
                     }
 
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -83,12 +83,12 @@ if (is_admin()) {
         ############################################################################################
         case 'reply':
 
-            $post = Guest::with('user')->find_one($id);
+            $post = Guest::with('user')->find($id);
 
             if ($post) {
                 echo '<b>Добавление ответа</b><br /><br />';
 
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->getUser()->login).'</b> '.user_title($post->getUser()->login) . user_online($post->getUser()->login).' <small>('.date_fixed($post['time']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->getUser()->login).'</b> '.user_title($post->getUser()->login) . user_online($post->getUser()->login).' <small>('.date_fixed($post['created_at']).')</small></div>';
                 echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr />';
 
                 echo '<div class="form">';
@@ -114,7 +114,7 @@ if (is_admin()) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($reply) >= 5 && utf_strlen($reply) < $config['guesttextlength']) {
 
-                    $post = Guest::find_one($id);
+                    $post = Guest::find($id);
 
                     if ($post) {
 
@@ -142,13 +142,13 @@ if (is_admin()) {
         ############################################################################################
         case 'edit':
 
-            $post = Guest::with('user')->find_one($id);
+            $post = Guest::with('user')->find($id);
 
             if ($post) {
 
                 echo '<b>Редактирование сообщения</b><br /><br />';
 
-                echo '<i class="fa fa-pencil"></i> <b>'.$post->getUser()->login.'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.$post->getUser()->login.'</b> <small>('.date_fixed($post['created_at']).')</small><br /><br />';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?act=addedit&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -173,12 +173,12 @@ if (is_admin()) {
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
 
-                    $post = Guest::find_one($id);
+                    $post = Guest::find($id);
                     if ($post) {
 
                         $post->text = $msg;
-                        $post->edit = App::getUsername();
-                        $post->edit_time = SITETIME;
+                        $post->edit_user_id = App::getUserId();
+                        $post->updated_at = SITETIME;
                         $post->save();
 
                         notice('Сообщение успешно отредактировано!');
@@ -207,7 +207,7 @@ if (is_admin()) {
             if ($token == $_SESSION['token']) {
                 if ($postIds) {
 
-                    Guest::where_id_in($postIds)->delete_many();
+                    Guest::whereIn('id', $postIds)->delete();
 
                     notice('Выбранные сообщения успешно удалены!');
                     redirect("/admin/book?page=$page");
@@ -230,7 +230,7 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    Guest::delete_many();
+                    Guest::truncate();
 
                     notice('Гостевая книга успешно очищена!');
                     redirect("/admin/book");

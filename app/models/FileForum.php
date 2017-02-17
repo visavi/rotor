@@ -10,11 +10,11 @@ class FileForum extends BaseModel {
     protected $table = 'files_forum';
 
     /**
-     * The storage format of the model's date columns.
+     * Indicates if the model should be timestamped.
      *
-     * @var string
+     * @var bool
      */
-    protected $dateFormat = 'U';
+    public $timestamps = false;
 
     /**
      * The attributes that aren't mass assignable.
@@ -22,12 +22,4 @@ class FileForum extends BaseModel {
      * @var array
      */
     protected $guarded = [];
-
-    /**
-     * Disable updated_at
-     */
-    public function setUpdatedAtAttribute($value)
-    {
-        // to Disable updated_at
-    }
 }

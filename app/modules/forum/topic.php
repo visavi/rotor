@@ -192,6 +192,7 @@ case 'create':
                             $file->name = $filename;
                             $file->size = $filesize;
                             $file->user_id = App::getUserId();
+                            $file->created_at = SITETIME;
                             $file->save();
 
                         } else {
@@ -237,25 +238,20 @@ case 'complaint':
     $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
 
-    $data = Post::find_one($id);
+    $data = Post::find($id);
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
-    $spam = Spam::where('relate', 1)->where('idnum', $id)->find_one();
+    $spam = Spam::where('relate_type', Post::class)->where('relate_id', $id)->first();
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
-        $spam = Spam::create();
-
-        $spam->set([
-            'relate'     => 1,
-            'idnum'   => $data['id'],
-            'user'    => $log,
-            'login'   => $data['user'],
-            'text'    => $data['text'],
-            'time'    => $data['time'],
-            'addtime' => SITETIME,
-            'link'    => '/topic/'.$data['topic_id'].'?page='.$page,
-        ])->save();
+        $spam = Spam::create([
+            'relate_type' => Post::class,
+            'relate_id'   => $data['id'],
+            'user_id'     => App::getUserId(),
+            'link'        => '/topic/'.$data['topic_id'].'?page='.$page,
+            'created_at'  => SITETIME,
+        ]);
 
         exit(json_encode(['status' => 'success']));
     } else {

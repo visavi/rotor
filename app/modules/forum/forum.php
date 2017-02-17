@@ -44,7 +44,10 @@ case 'create':
 
     if (! is_user()) App::abort(403);
 
-    $forums = Forum::order_by_asc('sort')->find_many();
+    $forums = Forum::where('parent_id', 0)
+        ->with('children')
+        ->orderBy('sort')
+        ->get();
 
     if (empty(count($forums))) {
         App::abort('default', 'Разделы форума еще не созданы!');
@@ -136,12 +139,7 @@ case 'create':
 
     $output = [];
 
-    foreach ($forums as $row) {
-        $i = $row['id'];
-        $p = $row['parent'];
-        $output[$p][$i] = $row;
-    }
-    App::view('forum/forum_create', ['forums' => $output, 'fid' => $fid]);
+    App::view('forum/forum_create', compact('forums', 'fid'));
     break;
 
 endswitch;

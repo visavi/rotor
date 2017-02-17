@@ -295,16 +295,16 @@ function user_title($login) {
 }
 
 // --------------- Функция кэширования ников -------------------//
-function save_nickname($time = 0) {
+/*function save_nickname($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/nickname.dat') < time() - $time) {
         $querynick = DB::run() -> query("SELECT `login`, `nickname` FROM `users` WHERE `nickname`<>?;", ['']);
         $allnick = $querynick -> fetchAssoc();
         file_put_contents(STORAGE.'/temp/nickname.dat', serialize($allnick), LOCK_EX);
     }
-}
+}*/
 
 // --------------- Функция русского ника -------------------//
-function nickname($login) {
+/*function nickname($login) {
     static $arrnick;
 
     if (empty($arrnick)) {
@@ -313,7 +313,7 @@ function nickname($login) {
     }
 
     return (isset($arrnick[$login])) ? $arrnick[$login] : $login;
-}
+}*/
 
 // --------------- Функция кэширования настроек -------------------//
 function save_setting() {
@@ -1139,7 +1139,7 @@ function stats_events() {
 // --------------------- Функция получения данных аккаунта  --------------------//
 function user($login) {
     if (! empty($login)) {
-        return User::where('login', $login)->find_one();
+        return User::where('login', $login)->first();
     }
     return false;
 }
@@ -1676,7 +1676,7 @@ function redirect($url, $permanent = false){
 }
 
 // ------------- Функция вывода ссылки на анкету -------------//
-function profile($login, $color = false, $nickname = true){
+function profile($login, $color = false){
     global $config;
 
     if (!empty($login)){

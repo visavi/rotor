@@ -61,7 +61,7 @@
             <div>
                 @if ($topic->lastPost)
                     <?= Forum::pagination($topic)?>
-                    Сообщение: <?=nickname($topic->lastPost->getUser()->login)?> (<?=date_fixed($topic->lastPost->time)?>)
+                    Сообщение: <?= $topic->lastPost->getUser()->login ?> (<?=date_fixed($topic->lastPost->time)?>)
                 @endif
             </div>
         <?php endforeach; ?>

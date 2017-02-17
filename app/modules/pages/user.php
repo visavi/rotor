@@ -23,7 +23,7 @@ case 'note':
     if (! is_admin()) App::abort(403, 'Данная страница доступна только администрации!');
     if (! user($user)) App::abort('default', 'Пользователя с данным логином не существует!');
 
-    $note = Note::where('user', $user)->find_one();
+    $note = Note::where('user', $user)->first();
 
     if (Request::isMethod('post')) {
 

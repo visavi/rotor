@@ -9,7 +9,7 @@ case 'index':
     $total = Guest::count();
     $page = App::paginate(App::setting('bookpost'), $total);
 
-    $posts = Guest::orderBy('time', 'desc')
+    $posts = Guest::orderBy('created_at', 'desc')
         ->limit(App::setting('bookpost'))
         ->offset($page['offset'])
         ->with('user')
@@ -61,13 +61,13 @@ case 'add':
         $guest->text = $msg;
         $guest->ip = App::getClientIp();
         $guest->brow = App::getUserAgent();
-        $guest->time = SITETIME;
+        $guest->created_at = SITETIME;
         $guest->save();
 
         Capsule::delete('
-            DELETE FROM guest WHERE time < (
-                SELECT MIN(time) FROM (
-                    SELECT time FROM guest ORDER BY time DESC LIMIT '.App::setting('maxpostbook').'
+            DELETE FROM guest WHERE created_at < (
+                SELECT MIN(created_at) FROM (
+                    SELECT created_at FROM guest ORDER BY created_at DESC LIMIT '.App::setting('maxpostbook').'
                 ) AS del
             );'
         );
@@ -95,7 +95,7 @@ case 'edit':
         App::abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
     }
 
-    if ($post['time'] + 600 < SITETIME) {
+    if ($post['created_at'] + 600 < SITETIME) {
         App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
     }
 
@@ -113,8 +113,8 @@ case 'edit':
             $msg = antimat($msg);
 
             $post->text = $msg;
-            $post->edit = $log;
-            $post->edit_time = SITETIME;
+            $post->edit_user_id = App::getUserId();
+            $post->updated_at = SITETIME;
             $post->save();
 
             App::setFlash('success', 'Сообщение успешно отредактировано!');
@@ -145,20 +145,17 @@ case 'complaint':
     $data = Guest::find($id);
     $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
 
-    $spam = Spam::where(['relate' => 2, 'idnum' => $id])->first();
+    $spam = Spam::where(['relate_type' => Guest::class, 'relate_id' => $id])->first();
     $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
 
     if ($validation->run()) {
 
         $spam = new Spam();
-        $spam->relate  = 2;
-        $spam->idnum   = $data['id'];
-        $spam->user    = App::getUsername();
-        $spam->login   = $data['user_id'];
-        $spam->text    = $data['text'];
-        $spam->time    = $data['time'];
-        $spam->addtime = SITETIME;
-        $spam->link    = '/book?page='.$page;
+        $spam->relate_type = Guest::class;
+        $spam->relate_id   = $data['id'];
+        $spam->user_id     = App::getUserId();
+        $spam->link        = '/book?page='.$page;
+        $spam->created_at  = SITETIME;
         $spam->save();
 
         exit(json_encode(['status' => 'success']));

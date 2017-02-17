@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>{!! user_avatars($user['login']).nickname($user['login']) !!} <small>{{ user_visit($user['login']) }}</small></h1>
+    <h1>{!! user_avatars($user['login']) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user['login']) }}</small></h1>
 
     @if ($user['confirmreg'] == 1)
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br />
@@ -31,7 +31,7 @@
 
                     @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
                         <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
-                            {!! resize_image('uploads/photos/', $user['picture'], $config['previewsize'], ['alt' => nickname($user['login']), 'class' => 'img-responsive img-rounded']) !!}</a>
+                            {!! resize_image('uploads/photos/', $user['picture'], $config['previewsize'], ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}</a>
                     @else
                         <img src="/assets/img/images/photo.jpg" alt="Фото" class="pull-right img-responsive img-rounded" />
                     @endif
@@ -48,9 +48,6 @@
                 {{  ($user['gender'] == 1) ? 'Мужской' : 'Женский' }}<br />
 
                 Логин: <b>{{ $user['login'] }}</b><br />
-                @if (!empty($user['nickname']))
-                    Ник: <b>{{  $user['nickname'] }}</b><br />
-                @endif
 
                 @if (!empty($user['name']))
                     Имя: <b>{{  $user['name'] }}<br /></b>

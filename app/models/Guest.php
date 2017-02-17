@@ -22,4 +22,20 @@ class Guest extends BaseModel {
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователей
+     */
+    public function editUser()
+    {
+        return $this->belongsTo('User', 'edit_user_id');
+    }
+
+    /**
+     * Возвращает объект пользователя
+     */
+    public function getEditUser()
+    {
+        return $this->editUser ? $this->editUser : new User();
+    }
 }

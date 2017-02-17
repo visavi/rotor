@@ -35,7 +35,7 @@
 
                     <?php endif; ?>
 
-                    <?php if (App::getUserId() == $data['user_id'] && $data['time'] + 600 > SITETIME): ?>
+                    <?php if (App::getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME): ?>
                         <div class="pull-right">
                             <a href="/book/edit/<?=$data['id']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         </div>
@@ -44,17 +44,17 @@
                     <div class="img"><?=userAvatar($data->user)?></div>
 
                     <?php if (empty($data['user_id'])): ?>
-                        <b><?= App::setting('guestsuser') ?></b> <small>(<?=date_fixed($data['time'])?>)</small>
+                        <b><?= App::setting('guestsuser') ?></b> <small>(<?=date_fixed($data['created_at'])?>)</small>
                     <?php else: ?>
-                        <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['time'])?>)</small><br />
+                        <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
                         <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->login)?>
                     <?php endif; ?>
                 </div>
 
                 <div class="message"><?=App::bbCode($data['text'])?></div>
 
-                <?php if (!empty($data['edit'])): ?>
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data['edit'] ?> (<?=date_fixed($data['edit_time'])?>)</small><br />
+                <?php if (!empty($data['edit_user_id'])): ?>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br />
                 <?php endif; ?>
 
                 <?php if (is_admin() || empty($config['anonymity'])): ?>
