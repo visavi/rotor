@@ -45,7 +45,7 @@ case 'create':
     if (! is_user()) App::abort(403);
 
     $forums = Forum::where('parent_id', 0)
-        ->with('children')
+        ->with('children', 'parent')
         ->orderBy('sort')
         ->get();
 
@@ -62,7 +62,7 @@ case 'create':
         $question = check(Request::input('question'));
         $answers = check(Request::input('answer'));
 
-        $forum = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", [$fid]);
+        $forum = Forum::find($fid);
 
         $validation = new Validation();
         $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -95,22 +95,25 @@ case 'create':
 
             DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
 
-            DB::run() -> query("INSERT INTO `topics` (`forum_id`, `title`, `author`, `posts`, `last_user`, `last_time`) VALUES (?, ?, ?, ?, ?, ?);", [$fid, $title, $log, 1, $log, SITETIME]);
+            DB::run() -> query("INSERT INTO `topics` (`forum_id`, `title`, `user_id`, `posts`, time) VALUES (?, ?, ?, ?, ?);", [$fid, $title, App::getUserId(), 1, SITETIME]);
 
             $lastid = DB::run() -> lastInsertId();
 
-            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `forum_id`, `user`, `text`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$lastid, $fid, $log, $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
+            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `forum_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$lastid, $fid, App::getUserId(), $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
+            $lastPostId = DB::run() -> lastInsertId();
 
-            DB::run() -> query("UPDATE `forums` SET `topics`=`topics`+1, `posts`=`posts`+1, `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?", [$lastid, $title, $log, SITETIME, $fid]);
+            Topic::where('id', $lastid)->update(['last_post_id' => $lastPostId]);
+
+            DB::run() -> query("UPDATE `forums` SET `topics`=`topics`+1, `posts`=`posts`+1, `last_topic_id`=? WHERE `id`=?", [$lastid, $fid]);
             // Обновление родительского форума
-            if ($forum['parent'] > 0) {
-                DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?", [$lastid, $title, $log, SITETIME, $forum['parent']]);
+            if ($forum->parent) {
+                DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?", [$lastid, $forum->parent->id]);
             }
 
             // Создание голосования
             if ($vote) {
 
-                $vote = Vote::create();
+                $vote = new Vote();
                 $vote->title = $question;
                 $vote->topic_id = $lastid;
                 $vote->time = SITETIME;
