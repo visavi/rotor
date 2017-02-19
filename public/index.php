@@ -172,3 +172,6 @@ if ($router['target'] && is_callable($router['target'])) {
     App::abort(404);
 }
 if (isset($_SESSION['input'])) unset($_SESSION['input']);
+
+
+// Удалить resmiles

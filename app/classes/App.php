@@ -285,7 +285,7 @@ class App
      */
     public static function bbCode($text, $parse = true)
     {
-        $bbcode = new BBCode(self::setting());
+        $bbcode = new BBCode();
 
         if (! $parse) return $bbcode->clear($text);
 

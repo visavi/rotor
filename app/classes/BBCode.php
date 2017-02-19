@@ -104,15 +104,6 @@ class BBCode {
     ];
 
     /**
-     * Конструктор
-     * @param string $setting настройки
-     */
-    public function __construct($setting)
-    {
-        $this->setting = $setting;
-    }
-
-    /**
      * Обрабатывает текст
      * @param  string $source текст содержаший BBCode
      * @return string         распарсенный текст
@@ -156,7 +147,7 @@ class BBCode {
         $name = isset($match[3]) ? $match[3] : $match[1];
 
         $target = '';
-        if (strpos($match[1], $this->setting['home']) === false) {
+        if (strpos($match[1], $_SERVER['SERVER_NAME']) === false) {
             $target = ' target="_blank" rel="nofollow"';
         } else {
             if (!empty($match[2])) {
@@ -238,30 +229,31 @@ class BBCode {
      */
     public function parseSmiles($source)
     {
-        static $list_smiles;
+        static $listSmiles;
 
-        if (empty($list_smiles)) {
+        if (empty($listSmiles)) {
             if (! file_exists(STORAGE.'/temp/smiles.dat')) {
 
-                $smiles = ORM::for_table('smiles')
-                    ->select_many('code', 'name')
-                    ->order_by_expr('CHAR_LENGTH(code) DESC')
-                    ->find_array();
+                $smiles = Smile::select('code', 'name')
+                    ->orderBy(Capsule::raw('CHAR_LENGTH(code)'), 'desc')
+                    ->get()
+                    ->toArray();
 
-                file_put_contents(STORAGE.'/temp/smiles.dat', serialize($smiles));
+                $smilesCode = array_column($smiles, 'code');
+                $smilesName = array_column($smiles, 'name');
+
+                $smilesName = array_map(
+                    function($smile) {
+                        return str_replace($smile, '<img src="/uploads/smiles/'.$smile.'" alt="'.$smile.'" />', $smile);
+                    }, $smilesName);
+
+                file_put_contents(STORAGE.'/temp/smiles.dat', serialize(['codes' => $smilesCode, 'names' => $smilesName]));
             }
 
-            $list_smiles = unserialize(file_get_contents(STORAGE.'/temp/smiles.dat'));
+            $listSmiles = unserialize(file_get_contents(STORAGE.'/temp/smiles.dat'));
         }
 
-        $count = 0;
-        foreach($list_smiles as $smile) {
-            $source = preg_replace('|'.preg_quote($smile['code']).'|', '<img src="/uploads/smiles/'.$smile['name'].'" alt="'.$smile['code'].'" /> ', $source, $this->setting['resmiles'] - $count, $cnt);
-            $count += $cnt;
-            if ($count >= $this->setting['resmiles']) break;
-        }
-
-        return $source;
+        return str_replace($listSmiles['codes'], $listSmiles['names'], $source);
     }
 
     /**
