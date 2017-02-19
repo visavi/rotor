@@ -41,7 +41,7 @@ if (is_admin()) {
                         echo '<b>'.$data->getUser()->login.'</b> <small>('.date_fixed($data['created_at']).')</small>';
                     } else {
                         echo '<b>'.profile($data->getUser()->login).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
-                        echo user_title($data->getUser()->login).' '.user_online($data->getUser()->login);
+                        echo user_title($data->getUser()->login).' '.user_online($data->getUser()->id);
                     }
 
                     echo '</div>';
@@ -88,7 +88,7 @@ if (is_admin()) {
             if ($post) {
                 echo '<b>Добавление ответа</b><br /><br />';
 
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->getUser()->login).'</b> '.user_title($post->getUser()->login) . user_online($post->getUser()->login).' <small>('.date_fixed($post['created_at']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->getUser()->login).'</b> '.user_title($post->getUser()->login) . user_online($post->getUser()->id).' <small>('.date_fixed($post['created_at']).')</small></div>';
                 echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr />';
 
                 echo '<div class="form">';

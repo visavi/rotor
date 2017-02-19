@@ -296,14 +296,14 @@ header("Content-type:text/html; charset=utf-8");
             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
 
             // Проверка логина или ника на существование
-            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($login), strtolower($login)]);
+            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($login)]);
             if (!$reglogin) {
 
             // Проверка email на существование
             $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$email]);
             if (!$regmail) {
 
-                $registration = User::create();
+                $registration = new User();
                 $registration->login = $login;
                 $registration->password = password_hash($password, PASSWORD_BCRYPT);
                 $registration->email = $email;
@@ -317,47 +317,42 @@ header("Content-type:text/html; charset=utf-8");
                 $registration->status = 'Администратор';
                 $registration->save();
 
-                $setting = ORM::get_db()->prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                $setting->execute([$login, 'nickname']);
-                $setting->execute([$email, 'emails']);
-                $setting->execute([$site, 'home']);
+                Setting::where('name', 'login')->update(['value' => $login]);
+                Setting::where('name', 'email')->update(['value' => $email]);
+                Setting::where('name', 'site')->update(['value' => $site]);
 
                 save_setting();
 
                 // -------------- Приват ---------------//
                 $textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
-                $inbox = Inbox::create();
-                $inbox->set([
-                    'user'  => $login,
-                    'author'  => 'Vantuz',
-                    'text' => $textpriv,
-                    'time' => SITETIME,
+                $inbox = Inbox::create([
+                    'user'   => $login,
+                    'author' => 'Vantuz',
+                    'text'   => $textpriv,
+                    'time'   => SITETIME,
                 ]);
-                $inbox->save();
 
                 // -------------- Новость ---------------//
                 $textnews = 'Добро пожаловать на демонстрационную страницу движка RotorCMS'.PHP_EOL.'RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. RotorCMS является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью RotorCMS является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок RotorCMS вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
-                $news = News::create();
-                $news->set([
+                $news = News::create([
                     'title'  => 'Добро пожаловать!',
                     'text'  => $textnews,
                     'author' => $login,
                     'time' => SITETIME,
                 ]);
-                $news->save();
 
                 redirect('?act=finish');
 
 
-            } else {echo '<b>Ошибка! Указанный вами адрес e-mail уже используется в системе!</b><br /><br />';}
-            } else {echo '<b>Ошибка! Пользователь с данным логином или ником уже зарегистрирован!</b><br /><br />';}
-            } else {echo '<b>Ошибка! Неправильный адрес сайта, необходим формата http://my_site.domen</b><br /><br />';}
-            } else {echo '<b>Ошибка! Неправильный адрес email, необходим формат name@site.domen</b><br /><br />';}
-            } else {echo '<b>Ошибка! Веденные пароли отличаются друг от друга</b><br /><br />';}
-            } else {echo '<b>Ошибка! Недопустимые символы в логине. Разрешены только знаки латинского алфавита и цифры!</b><br /><br />';}
-            } else {echo '<b>Ошибка! Слишком длинный или короткий логин (От 3 до 20 символов)</b><br /><br />';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Указанный вами адрес e-mail уже используется в системе!</p>';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Пользователь с данным логином или ником уже зарегистрирован!</p>';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес сайта, необходим формата http://my_site.domen</p>';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес email, необходим формат name@site.domen</p>';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Веденные пароли отличаются друг от друга</p>';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Недопустимые символы в логине. Разрешены только знаки латинского алфавита и цифры!</p>';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Слишком длинный или короткий логин (От 3 до 20 символов)</p>';}
 
             ?>
         <?php endif; ?>

@@ -1,13 +1,13 @@
 <?php
 
-class Inbox extends BaseModel {
+class Invite extends BaseModel {
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'inbox';
+    protected $table = 'invite';
 
     /**
      * Indicates if the model should be timestamped.

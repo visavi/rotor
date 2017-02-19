@@ -59,20 +59,19 @@ class App
 
         if (App::setting('errorlog') && in_array($code, [403, 404])) {
 
-            $error = ORM::for_table('error')->create();
-            $error->num = $code;
+            $error = new Log();
+            $error->code = $code;
             $error->request = utf_substr(App::server('REQUEST_URI'), 0, 200);
             $error->referer = utf_substr(App::server('HTTP_REFERER'), 0, 200);
-            $error->username = App::getUsername();
+            $error->user_id = App::getUserId();
             $error->ip = App::getClientIp();
             $error->brow = App::getUserAgent();
-            $error->time = SITETIME;
+            $error->created_at = SITETIME;
             $error->save();
 
-            ORM::for_table('error')->
-                where('num', $code)->
-                where_lt('time', SITETIME - 3600 * 24 * App::setting('maxlogdat'))->
-                delete_many();
+            Log::where('code', $code)
+                ->where('created_at',  '<',  SITETIME - 3600 * 24 * App::setting('maxlogdat'))
+                ->delete();
         }
 
         exit(self::view('errors.'.$code, compact('message')));

@@ -133,7 +133,7 @@
                 <div class="img"><?=user_avatars($data->getUser()->login)?></div>
 
                 <?=$num?>. <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
-                <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->login)?>
+                <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->id)?>
             </div>
 
             <div class="message">

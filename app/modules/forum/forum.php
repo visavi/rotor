@@ -140,8 +140,6 @@ case 'create':
         }
     }
 
-    $output = [];
-
     App::view('forum/forum_create', compact('forums', 'fid'));
     break;
 

@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Заметка для пользователя {{ $user }} - @parent
+    Заметка для пользователя {{ $user->login }} - @parent
 @stop
 
 @section('content')
 
-    <h1>Заметка для пользователя {{ $user }}</h1>
+    <h1>Заметка для пользователя {{ $user->login }}</h1>
     <div class="form">
-        <form action="/user/{{ $user }}/note" method="post">
+        <form action="/user/{{ $user->login }}/note" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ App::hasError('notice') }}">
@@ -22,5 +22,5 @@
     </div><br />
 
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/user/{{ $user }}">Вернуться</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/user/{{ $user->login }}">Вернуться</a><br />
 @stop

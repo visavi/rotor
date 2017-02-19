@@ -1,6 +1,6 @@
 <?php
 
-$user = check(param('login', $log));
+$login = check(param('login', $log));
 
 switch ($act):
 /**
@@ -8,7 +8,7 @@ switch ($act):
  */
 case 'index':
 
-    if (! $user = user($user)) {
+    if (! $user = user($login)) {
         App::abort('default', 'Пользователя с данным логином не существует!');
     }
 
@@ -20,10 +20,15 @@ break;
  */
 case 'note':
 
-    if (! is_admin()) App::abort(403, 'Данная страница доступна только администрации!');
-    if (! user($user)) App::abort('default', 'Пользователя с данным логином не существует!');
+    if (! is_admin()) {
+        App::abort(403, 'Данная страница доступна только администрации!');
+    }
 
-    $note = Note::where('user', $user)->first();
+    if (! $user = user($login)) {
+        App::abort('default', 'Пользователя с данным логином не существует!');
+    }
+
+    $note = Note::where('user_id', $user->id)->first();
 
     if (Request::isMethod('post')) {
 
@@ -37,16 +42,16 @@ case 'note':
         if ($validation->run()) {
 
             $record = [
-                'user' => $user,
-                'text' => $notice,
-                'edit' => $log,
-                'time' => SITETIME,
+                'user_id'      => $user->id,
+                'text'         => $notice,
+                'edit_user_id' => App::getUserId(),
+                'updated_at'   => SITETIME,
             ];
 
             Note::saveNote($note, $record);
 
             App::setFlash('success', 'Заметка успешно сохранена!');
-            App::redirect('/user/'.$user);
+            App::redirect('/user/'.$user->login);
 
         } else {
             App::setInput(Request::all());

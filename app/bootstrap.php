@@ -15,7 +15,6 @@ require_once BASEDIR.'/vendor/autoload.php';
  * Регистрация классов
  */
 $aliases = [
-    'ORM' => 'Granada\ORM',
     'Capsule' => 'Illuminate\Database\Capsule\Manager',
 ];
 AliasLoader::getInstance($aliases)->register();
@@ -35,7 +34,7 @@ if (env('APP_DEBUG')) {
     $whoops->register();
 }
 
-$capsule = new Illuminate\Database\Capsule\Manager();
+$capsule = new Capsule();
 
 $capsule->addConnection([
     'driver'    => env('DB_DRIVER'),
@@ -53,14 +52,3 @@ $capsule->setEventDispatcher(new Dispatcher(new Container));*/
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 $capsule::connection()->enableQueryLog();
-
-ORM::configure([
-    'connection_string' => env('DB_DRIVER').':host='.env('DB_HOST').';dbname='.env('DB_DATABASE').';port='.env('DB_PORT'),
-    'username'       => env('DB_USERNAME'),
-    'password'       => env('DB_PASSWORD'),
-    'logging'        => env('APP_DEBUG'),
-    'caching'        => true,
-    'driver_options' => [
-        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'
-    ],
-]);

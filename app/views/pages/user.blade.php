@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>{!! user_avatars($user['login']) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user['login']) }}</small></h1>
+    <h1>{!! user_avatars($user['login']) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user['id']) }}</small></h1>
 
     @if ($user['confirmreg'] == 1)
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br />
@@ -85,9 +85,9 @@
                 @endif
                 Дата регистрации: {{ date_fixed($user['joined'], 'j F Y') }}<br />
 
-                <?php $invite = ORM::for_table('invite')->where('invited', $user['login'])->find_one(); ?>
+                <?php $invite = Invite::where('invite_user_id', $user['id'])->first(); ?>
                 @if (!empty($invite))
-                    Зарегистрирован по приглашению: {!! profile($invite['user']) !!}<br />
+                    Зарегистрирован по приглашению: {!! profile($invite->getUser()->login) !!}<br />
                 @endif
 
                 Последняя авторизация: {{ date_fixed($user['timelastlogin']) }}<br />
@@ -118,13 +118,13 @@
     </div>
 
     @if (is_admin())
-        <?php $usernote = ORM::for_table('note')->where('user', $user['login'])->find_one(); ?>
+        <?php $usernote = Note::where('user_id', $user['id'])->first(); ?>
     <div class="alert alert-success">
         <i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/{{ $user['login'] }}/note">Изменить</a>)<br />
 
         @if (!empty($usernote['text']))
             {!! App::bbCode($usernote['text']) !!}<br />
-            Изменено: {!! profile($usernote['edit']) !!} ({{ date_fixed($usernote['time']) }})<br />
+            Изменено: {!! profile($usernote->getEditUser()->login) !!} ({{ date_fixed($usernote['updated_at']) }})<br />
         @else
             Записей еще нет!<br />
         @endif

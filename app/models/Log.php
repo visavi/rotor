@@ -1,13 +1,13 @@
 <?php
 
-class Inbox extends BaseModel {
+class Log extends BaseModel {
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'inbox';
+    protected $table = 'error';
 
     /**
      * Indicates if the model should be timestamped.

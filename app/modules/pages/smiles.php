@@ -9,12 +9,11 @@ $total = Smile::count();
 $page = App::paginate(App::setting('smilelist'), $total);
 
 if ($total > 0) {
-
-    $smiles = Smile::order_by_expr('CHAR_LENGTH(`code`) ASC')
-        ->order_by_asc('name')
+    $smiles = Smile::orderBy(Capsule::raw('CHAR_LENGTH(`code`)'))
+        ->orderBy('name')
         ->limit(App::setting('smilelist'))
         ->offset($page['offset'])
-        ->find_many();
+        ->get();
 
     foreach($smiles as $smile) {
         echo '<img src="/uploads/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';

@@ -47,7 +47,7 @@
                         <b><?= App::setting('guestsuser') ?></b> <small>(<?=date_fixed($data['created_at'])?>)</small>
                     <?php else: ?>
                         <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
-                        <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->login)?>
+                        <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->id)?>
                     <?php endif; ?>
                 </div>
 

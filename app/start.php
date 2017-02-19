@@ -6,7 +6,7 @@ session_name('SID');
 session_start();
 
 if (!file_exists(STORAGE.'/temp/setting.dat')) {
-    $settings = Setting::find_array();
+    $settings = Setting::all()->toArray();
     $config = array_column($settings, 'value', 'name');
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($config), LOCK_EX);
 }
@@ -73,14 +73,14 @@ if (!empty($config['doslimit'])) {
 
                 if (! $banip) {
 
-                    $error = ORM::for_table('error')->create();
-                    $error->num = 666;
+                    $error = new Log();
+                    $error->code = 666;
                     $error->request = utf_substr(App::server('REQUEST_URI'), 0, 200);
                     $error->referer = utf_substr(App::server('HTTP_REFERER'), 0, 200);
-                    $error->username = App::getUsername();
+                    $error->user_id = App::getUserId();
                     $error->ip = App::getClientIp();
                     $error->brow = App::getUserAgent();
-                    $error->time = SITETIME;
+                    $error->created_at = SITETIME;
                     $error->save();
 
                     ORM::for_table('ban')->raw_execute(
@@ -131,10 +131,6 @@ if (empty($_SESSION['login']) && empty($_SESSION['password'])) {
 /**
  * Установка сессионных переменных
  */
-$log = '';
-if (empty($_SESSION['counton'])) {
-    $_SESSION['counton'] = 0;
-}
 if (empty($_SESSION['token'])) {
     $_SESSION['token'] = str_random(8);
 }

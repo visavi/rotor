@@ -600,20 +600,18 @@ function show_counter()
 
     }
 
-    $_SESSION['counton']++;
-
     if (is_user()) {
 
         $visitPage = !empty($config['newtitle']) ? $config['newtitle'] : null;
 
         Visit::updateOrCreate(
-            ['user' => App::getUsername()],
+            ['user_id' => App::getUserId()],
             [
-                'self'    => App::server('PHP_SELF'),
-                'page'    => $visitPage,
-                'ip'      => App::getClientIp(),
-                'count'   => $_SESSION['counton'],
-                'nowtime' => SITETIME,
+                'self'       => App::server('PHP_SELF'),
+                'page'       => $visitPage,
+                'ip'         => App::getClientIp(),
+                'count'      => Capsule::raw('count + 1'),
+                'updated_at' => SITETIME,
             ]
         );
     }
@@ -738,44 +736,46 @@ function stats_invite() {
 }
 
 // --------------- Функция определение онлайн-статуса ---------------//
-function user_online($login) {
-    static $arrvisit;
+function user_online($userId) {
+    static $states;
 
-    $statwho = '<i class="fa fa-asterisk text-danger"></i>';
+    $online = '<i class="fa fa-asterisk text-danger"></i>';
 
-    if (empty($arrvisit)) {
+    if (empty($states)) {
         if (@filemtime(STORAGE."/temp/visit.dat") < time()-10) {
-            $queryvisit = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>?;", [SITETIME-600]);
-            $allvisits = $queryvisit -> fetchAll(PDO::FETCH_COLUMN);
-            file_put_contents(STORAGE."/temp/visit.dat", serialize($allvisits), LOCK_EX);
+
+            $visits = Visit::where('updated_at', '>', SITETIME-600)->get()->toArray();
+            $visits = array_column($visits, 'user_id');
+
+            file_put_contents(STORAGE."/temp/visit.dat", serialize($visits), LOCK_EX);
         }
 
-        $arrvisit = unserialize(file_get_contents(STORAGE."/temp/visit.dat"));
+        $states = unserialize(file_get_contents(STORAGE."/temp/visit.dat"));
     }
 
-    if (is_array($arrvisit) && in_array($login, $arrvisit)) {
-        $statwho = '<i class="fa fa-asterisk fa-spin text-success"></i>';
+    if (is_array($states) && in_array($userId, $states)) {
+        $online = '<i class="fa fa-asterisk fa-spin text-success"></i>';
     }
 
-    return $statwho;
+    return $online;
 }
 
 // --------------- Функция определение пола пользователя ---------------//
-function user_gender($login) {
+function user_gender($userId) {
     static $arrgender;
 
     $gender = 'male';
 
     if (empty($arrgender)) {
         if (@filemtime(STORAGE."/temp/gender.dat") < time()-600) {
-            $querygender = DB::run() -> query("SELECT `login` FROM `users` WHERE `gender`=?;", [2]);
+            $querygender = DB::run() -> query("SELECT `id` FROM `users` WHERE `gender`=?;", [2]);
             $allgender = $querygender -> fetchAll(PDO::FETCH_COLUMN);
             file_put_contents(STORAGE."/temp/gender.dat", serialize($allgender), LOCK_EX);
         }
         $arrgender = unserialize(file_get_contents(STORAGE."/temp/gender.dat"));
     }
 
-    if (in_array($login, $arrgender)) {
+    if (in_array($userId, $arrgender)) {
         $gender = 'female';
     }
 
@@ -794,10 +794,10 @@ function allonline() {
 }
 
 // ------------------ Функция определение последнего посещения ----------------//
-function user_visit($login) {
+function user_visit($userId) {
     $visit = '(Оффлайн)';
 
-    $queryvisit = DB::run() -> querySingle("SELECT `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", [$login]);
+    $queryvisit = DB::run() -> querySingle("SELECT `updated_at` FROM `visit` WHERE `user_id`=? LIMIT 1;", [$userId]);
     if (!empty($queryvisit)) {
         if ($queryvisit > SITETIME-600) {
             $visit = '(Сейчас на сайте)';
@@ -1148,13 +1148,12 @@ function user($login) {
 function is_user() {
     static $user = 0;
     if (empty($user)) {
-        if (isset($_SESSION['login']) && isset($_SESSION['password'])) {
-            $udata = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [check($_SESSION['login'])]);
+        if (isset($_SESSION['id']) && isset($_SESSION['password'])) {
 
-            if (!empty($udata)) {
-                if ($_SESSION['password'] == md5(env('APP_KEY').$udata['password'])) {
-                    $user = $udata;
-                }
+            $data = User::find(intval($_SESSION['id']));
+
+            if ($data && $_SESSION['password'] == md5(env('APP_KEY').$data['password'])) {
+                $user = $data;
             }
         }
     }
