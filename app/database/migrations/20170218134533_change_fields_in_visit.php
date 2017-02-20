@@ -9,8 +9,11 @@ class ChangeFieldsInVisit extends AbstractMigration
      */
     public function up()
     {
+        $table = $this->table('visit');
 
-        $this->execute('DELETE FROM visit WHERE user REGEXP \'^[0-9]+$\';');
+        $table
+            ->removeIndexByName('user')
+            ->save();
 
         $rows = $this->fetchAll('SELECT * FROM visit');
         foreach($rows as $row) {
@@ -19,18 +22,21 @@ class ChangeFieldsInVisit extends AbstractMigration
                 $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['user'].'" LIMIT 1;');
             }
 
-            $userId = ! empty($user) ? $user['id'] : 0;
-
-            $this->execute('UPDATE visit SET user="'.$userId.'" WHERE id = "'.$row['id'].'" LIMIT 1;');
+            if (! empty($user['id'])) {
+                $this->execute('UPDATE visit SET user="' . $user['id'] . '" WHERE id = "' . $row['id'] . '" LIMIT 1;');
+            } else {
+                $this->execute('DELETE FROM visit WHERE id = "' . $row['id'] . '" LIMIT 1;');
+            }
         }
 
-        $table = $this->table('visit');
         $table
             ->changeColumn('user', 'integer')
             ->save();
 
         $table->renameColumn('user', 'user_id');
         $table->renameColumn('nowtime', 'updated_at');
+
+        $table->addIndex('user_id', ['unique' => true])->save();
     }
 
     /**
@@ -42,6 +48,8 @@ class ChangeFieldsInVisit extends AbstractMigration
         $table
             ->renameColumn('user_id', 'user')
             ->renameColumn('updated_at', 'nowtime')
+            ->removeIndexByName('user_id')
+            ->addIndex('user', ['unique' => true])
             ->save();
 
     }

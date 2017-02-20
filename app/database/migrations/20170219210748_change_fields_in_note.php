@@ -9,8 +9,9 @@ class ChangeFieldsInNote extends AbstractMigration
      */
     public function up()
     {
-        $this->execute('DELETE FROM note WHERE user REGEXP \'^[0-9]+$\';');
-
+        $table = $this->table('note');
+        $table->removeIndexByName('user')->save();
+        
         $rows = $this->fetchAll('SELECT * FROM note');
         foreach($rows as $row) {
 
@@ -21,18 +22,18 @@ class ChangeFieldsInNote extends AbstractMigration
             if (!empty($row['user'])) {
                 $editUser = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['edit'].'" LIMIT 1;');
             }
-
-            $userId = ! empty($user) ? $user['id'] : 0;
             $editUserId = ! empty($editUser) ? $editUser['id'] : 0;
 
-            $this->execute('UPDATE note SET user="'.$userId.'", edit="'.$editUserId.'" WHERE id = "'.$row['id'].'" LIMIT 1;');
+            if (! empty($user['id'])) {
+                $this->execute('UPDATE note SET user="' . $user['id'] . '", edit="' . $editUserId . '" WHERE id = "' . $row['id'] . '" LIMIT 1;');
+            } else {
+                $this->execute('DELETE FROM note WHERE id = "' . $row['id'] . '" LIMIT 1;');
+            }
         }
 
-        $table = $this->table('note');
         $table
             ->changeColumn('user', 'integer')
             ->changeColumn('edit', 'integer')
-            ->removeIndexByName('user')
             ->save();
 
         $table->renameColumn('user', 'user_id');
