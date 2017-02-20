@@ -20,13 +20,13 @@
                 <select class="form-control" id="inputSection" name="section">
                     <option value="0">Не имеет значения</option>
 
-                    <?php foreach ($forums[0] as $key => $data): ?>
+                    <?php foreach ($forums as $data): ?>
                         <?php $selected = (App::getInput('section') == $data['id'] || $fid == $data['id']) ? ' selected' : ''; ?>
 
                         <option value="<?=$data['id']?>"<?=$selected?>><?=$data['title']?></option>
 
-                        <?php if (isset($forums[$key])): ?>
-                            <?php foreach($forums[$key] as $datasub): ?>
+                        <?php if ($data->children): ?>
+                            <?php foreach($data->children as $datasub): ?>
                                 <?php $selected = (App::getInput('section') == $data['id'] || $fid == $datasub['id']) ? ' selected' : ''; ?>
 
                                 <option value="<?=$datasub['id']?>"<?=$selected?>>– <?=$datasub['title']?></option>

@@ -46,7 +46,7 @@ case 'index':
 
     if ($vote) {
         $vote['poll'] = VotePoll::where('vote_id', $vote['id'])
-            ->where('user', App::getUsername())
+            ->where('user_id', App::getUserId())
             ->first();
 
         $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
@@ -67,10 +67,6 @@ case 'index':
             $vote['max'] = ($max > 0) ? $max : 1;
         }
     }
-
-/*    var_dump($vote);
-    var_dump(getQueryLog());
-    exit;*/
 
     App::view('forum/topic', compact('topic', 'posts', 'page', 'vote'));
 break;
@@ -316,27 +312,27 @@ case 'close':
 
     $token = check(Request::input('token'));
 
-    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
+    $topic = Topic::find($tid);
 
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
          -> addRule('bool', is_user(), 'Для закрытия тем необходимо авторизоваться')
          -> addRule('max', [App::user('point'), App::setting('editforumpoint')], 'Для закрытия тем вам необходимо набрать '.points(App::setting('editforumpoint')).'!')
         -> addRule('not_empty', $topic, 'Выбранная вами тема не существует, возможно она была удалена!')
-        -> addRule('equal', [$topic['author'], $log], 'Вы не автор данной темы!')
+        -> addRule('equal', [$topic['user_id'], App::getUserId()], 'Вы не автор данной темы!')
         -> addRule('empty', $topic['closed'], 'Данная тема уже закрыта!');
 
     if ($validation->run()) {
 
         DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
 
-        $vote = Vote::where('topic_id', $tid)->find_one();
+        $vote = Vote::where('topic_id', $tid)->first();
         if ($vote) {
 
             $vote->closed = 1;
             $vote->save();
 
-            VotePoll::where('vote_id', $vote['id'])->delete_many();
+            VotePoll::where('vote_id', $vote['id'])->delete();
         }
 
         App::setFlash('success', 'Тема успешно закрыта!');
@@ -358,12 +354,13 @@ case 'edit':
         App::abort('default', 'У вас недостаточно актива для изменения темы!');
     }
 
-    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
+    $topic = Topic::find($tid);
+
     if (empty($topic)) {
         App::abort('default', 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    if ($topic['author'] !== $log) {
+    if ($topic['user_id'] !== App::getUserId()) {
         App::abort('default', 'Изменение невозможно, вы не автор данной темы!');
     }
 
@@ -371,7 +368,9 @@ case 'edit':
         App::abort('default', ' Изменение невозможно, данная тема закрыта!');
     }
 
-    $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY id ASC LIMIT 1;", [$tid]);
+    $post = Post::where('topic_id', $tid)
+        ->orderBy('id')
+        ->first();
 
     if (Request::isMethod('post')) {
 
@@ -495,7 +494,7 @@ break;
 case 'vote':
     if (! is_user()) App::abort(403, 'Авторизуйтесь для голосования!');
 
-    $vote = Vote::where('topic_id', $tid)->find_one();
+    $vote = Vote::where('topic_id', $tid)->first();
     if (! $vote) {
         App::abort(404, 'Голосование не найдено!');
     }
@@ -511,28 +510,34 @@ case 'vote':
         $validation->addError('Данное голосование закрыто!');
     }
 
-    $votePoll = VotePoll::where('vote_id', $vote['id'])->where('user', App::getUsername())->find_one();
+    $votePoll = VotePoll::where('vote_id', $vote['id'])
+        ->where('user_id', App::getUserId())
+        ->first();
+
     if ($votePoll) {
         $validation->addError('Вы уже проголосовали в этом опросе!');
     }
 
-    $voteAnswer = VoteAnswer::where('vote_id', $vote['id'])->find_one($poll);
+    $voteAnswer = VoteAnswer::where('id', $poll)
+        ->where('vote_id', $vote['id'])
+        ->first();
+
     if (! $voteAnswer) {
         $validation->addError('Вы не выбрали вариант ответа!');
     }
 
     if ($validation->run()) {
 
-        $vote->set_expr('count', 'count+1');
+        $vote->count = Capsule::raw('count + 1');
         $vote->save();
 
-        $voteAnswer->set_expr('result', 'result+1');
+        $voteAnswer->result = Capsule::raw('result + 1');
         $voteAnswer->save();
 
-        $votePoll = VotePoll::create();
+        $votePoll = new VotePoll();
         $votePoll->vote_id = $vote['id'];
-        $votePoll->user = App::getUsername();
-        $votePoll->time = SITETIME;
+        $votePoll->user_id = App::getUserId();
+        $votePoll->created_at = SITETIME;
         $votePoll->save();
 
         App::setFlash('success', 'Ваш голос успешно принят!');

@@ -45,7 +45,7 @@ case 'create':
     if (! is_user()) App::abort(403);
 
     $forums = Forum::where('parent_id', 0)
-        ->with('children', 'parent')
+        ->with('children')
         ->orderBy('sort')
         ->get();
 

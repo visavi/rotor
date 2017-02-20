@@ -9,20 +9,16 @@ $section = abs(intval(Request::input('section')));
 
 if (empty($find)) {
 
-    $forums = Forum::order_by_asc('sort')->find_many();
+    $forums = Forum::where('parent_id', 0)
+        ->with('children')
+        ->orderBy('sort')
+        ->get();
 
     if (empty(count($forums))) {
         App::abort('default', 'Разделы форума еще не созданы!');
     }
 
-    $output = [];
-    foreach ($forums as $row) {
-        $i = $row['id'];
-        $p = $row['parent'];
-        $output[$p][$i] = $row;
-    }
-
-    App::view('forum/search', ['forums' => $output, 'fid' => $fid]);
+    App::view('forum/search', compact('forums', 'fid'));
 
 } else {
 
