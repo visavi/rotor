@@ -8,7 +8,7 @@ case 'index':
 
     $topics = Topic::where('closed', 0)
         ->with('lastPost.user')
-        ->orderBy('time', 'desc')
+        ->orderBy('created_at', 'desc')
         ->limit(15)
         ->get();
 
