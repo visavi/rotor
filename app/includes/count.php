@@ -5,7 +5,6 @@ $week_day = date('w');
 $arr_week = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
 
 $count = stats_counter();
-$online = stats_online();
 
 if (file_exists(STORAGE.'/temp/counter7.dat')) {
 	$host_data = unserialize(file_get_contents(STORAGE.'/temp/counter7.dat'));
@@ -19,12 +18,20 @@ $img = imagecreatefrompng(HOME.'/assets/img/images/counter.png');
 $color = imagecolorallocate($img, 0, 0, 0);
 $color2 = imagecolorallocate($img, 102, 102, 102);
 
-if ($online[1] >= 0 && $online[1] < 10) $pos = 65;
+$pos = 65;
 if ($online[1] >= 10 && $online[1] < 100) $pos = 52;
 if ($online[1] >= 100 && $online[1] < 200) $pos = 44;
 if ($online[1] >= 200 && $online[1] < 1000) $pos = 40;
 
-$colors = [[191, 109, 232], [87, 164, 246], [0, 203, 189], [0, 199, 68], [149, 217, 0], [255, 255, 0], [255, 181, 0]];
+$colors = [
+    [191, 109, 232],
+    [87, 164, 246],
+    [0, 203, 189],
+    [0, 199, 68],
+    [149, 217, 0],
+    [255, 255, 0],
+    [255, 181, 0]
+];
 
 $max = max($host_data);
 if ($max == 0) $max = 1;

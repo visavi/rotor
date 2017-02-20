@@ -3,8 +3,8 @@ App::view($config['themes'].'/index');
 
 show_title('Кто в онлайне');
 
-$total_all = DB::run() -> querySingle("SELECT count(*) FROM `online`;");
-$total = DB::run() -> querySingle("SELECT count(*) FROM `online` WHERE `user`<>?;", ['']);
+$total     = Online::whereNotNull('user_id')->count();
+$total_all = Online::count();
 
 echo 'Всего на сайте: <b>'.$total_all.'</b><br />';
 echo 'Зарегистрированных:  <b>'.$total.'</b><br /><br />';
@@ -18,11 +18,16 @@ switch ($act):
         $page = App::paginate(App::setting('onlinelist'), $total);
         if ($total > 0) {
 
-            $queryonline = DB::run() -> query("SELECT * FROM `online` WHERE `user`<>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['onlinelist'].";", ['']);
+            $online = Online::whereNotNull('user_id')
+                ->with('user')
+                ->orderBy('updated_at', 'desc')
+                ->offset($page['offset'])
+                ->limit($config['onlinelist'])
+                ->get();
 
-            while ($data = $queryonline -> fetch()) {
+            foreach ($online as $data) {
                 echo '<div class="b">';
-                echo user_gender($data['user']).' <b>'.profile($data['user']).'</b> (Время: '.date_fixed($data['time'], 'H:i:s').')</div>';
+                echo user_gender($data->getUser()->login).' <b>'.profile($data->getUser()->login).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
 
                 if (is_admin() || empty($config['anonymity'])) {
                     echo '<div><span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
@@ -47,15 +52,19 @@ switch ($act):
 
         if ($total > 0) {
 
-            $queryonline = DB::run() -> query("SELECT * FROM `online` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['onlinelist'].";");
+            $online = Online::with('user')
+                ->orderBy('updated_at', 'desc')
+                ->offset($page['offset'])
+                ->limit($config['onlinelist'])
+                ->get();
 
-            while ($data = $queryonline -> fetch()) {
+            foreach ($online as $data) {
                 if (empty($data['user'])) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-user-circle-o"></i> <b>'.$config['guestsuser'].'</b>  (Время: '.date_fixed($data['time'], 'H:i:s').')</div>';
+                    echo '<i class="fa fa-user-circle-o"></i> <b>'.$config['guestsuser'].'</b>  (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
                 } else {
                     echo '<div class="b">';
-                    echo user_gender($data['user']).' <b>'.profile($data['user']).'</b> (Время: '.date_fixed($data['time'], 'H:i:s').')</div>';
+                    echo user_gender($data->getUser()->login).' <b>'.profile($data->getUser()->login).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
                 }
 
                 if (is_admin() || empty($config['anonymity'])) {

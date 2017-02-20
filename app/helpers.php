@@ -555,8 +555,9 @@ function user_wall($login) {
 // ------------------ Функция подсчета пользователей онлайн -----------------//
 function stats_online($cache = 30) {
     if (@filemtime(STORAGE."/temp/online.dat") < time()-$cache) {
-        $queryonline = DB::run() -> query("SELECT count(*) FROM `online` WHERE `user`<>? UNION ALL SELECT count(*) FROM `online`;", ['']);
-        $online = $queryonline -> fetchAll(PDO::FETCH_COLUMN);
+
+        $online[0] = Online::whereNotNull('user_id')->count();
+        $online[1] = Online::count();
 
         include_once(APP.'/includes/count.php');
 
@@ -579,8 +580,7 @@ function show_online() {
 // ------------------ Функция подсчета посещений -----------------//
 function stats_counter() {
     if (@filemtime(STORAGE."/temp/counter.dat") < time()-10) {
-        $counts = DB::run() -> queryFetch("SELECT * FROM `counter`;");
-
+        $counts = Counter::count();
         file_put_contents(STORAGE."/temp/counter.dat", serialize($counts), LOCK_EX);
     }
 
