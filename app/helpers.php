@@ -294,27 +294,6 @@ function user_title($login) {
     return (isset($arrstat[$login])) ? $arrstat[$login] : $config['statusdef'];
 }
 
-// --------------- Функция кэширования ников -------------------//
-/*function save_nickname($time = 0) {
-    if (empty($time) || @filemtime(STORAGE.'/temp/nickname.dat') < time() - $time) {
-        $querynick = DB::run() -> query("SELECT `login`, `nickname` FROM `users` WHERE `nickname`<>?;", ['']);
-        $allnick = $querynick -> fetchAssoc();
-        file_put_contents(STORAGE.'/temp/nickname.dat', serialize($allnick), LOCK_EX);
-    }
-}*/
-
-// --------------- Функция русского ника -------------------//
-/*function nickname($login) {
-    static $arrnick;
-
-    if (empty($arrnick)) {
-        save_nickname(10800);
-        $arrnick = unserialize(file_get_contents(STORAGE."/temp/nickname.dat"));
-    }
-
-    return (isset($arrnick[$login])) ? $arrnick[$login] : $login;
-}*/
-
 // --------------- Функция кэширования настроек -------------------//
 function save_setting() {
     $queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");
@@ -1424,7 +1403,7 @@ function recentphotos($show = 5) {
 // --------------- Функция кэширования последних тем форума -------------------//
 function recenttopics($show = 5) {
     if (@filemtime(STORAGE."/temp/recenttopics.dat") < time()-180) {
-        $topics = Topic::orderBy('time', 'desc')->limit($show)->get();
+        $topics = Topic::orderBy('updated_at', 'desc')->limit($show)->get();
         file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($topics), LOCK_EX);
     }
 

@@ -10,25 +10,15 @@
 
     <p>Найдено совпадений в темах: <?=$page['total']?></p>
 
-    <?php foreach ($topics as $data): ?>
+    <?php foreach ($topics as $topic): ?>
         <div class="b">
 
-            <?php
-            if ($data['locked']) {
-                $icon = 'fa-thumb-tack';
-            } elseif ($data['closed']) {
-                $icon = 'fa-lock';
-            } else {
-                $icon = 'fa-folder-open';
-            }
-            ?>
-
-            <i class="fa <?=$icon?> text-muted"></i>
-            <b><a href="/topic/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=$data['posts']?>)
+            <i class="fa {{ $topic->getIcon() }} text-muted"></i>
+            <b><a href="/topic/<?=$topic['id']?>"><?=$topic['title']?></a></b> (<?=$topic['posts']?>)
         </div>
         <div>
-            <?= App::forumPagination($data)?>
-            Сообщение: <?=nickname($data['last_user'])?> (<?=date_fixed($data['last_time'])?>)
+            <?= Forum::pagination($topic)?>
+            Сообщение: <?=$topic->getLastPost()->getUser()->login?> (<?=date_fixed($topic->getLastPost()->created_at)?>)
         </div>
     <?php endforeach; ?>
 

@@ -19,8 +19,8 @@ case 'index':
 
     echo '<div class="form">';
     echo '<form method="post" action="/lostpassword?act=remind">';
-    echo 'Логин, ник или email:<br />';
-    echo '<input name="uz" type="text" maxlength="20" value="'.$cooklog.'" /><br />';
+    echo 'Логин или email:<br />';
+    echo '<input name="uz" type="text" maxlength="50" value="'.$cooklog.'" /><br />';
     echo '<input value="Продолжить" type="submit" /></form></div><br />';
 
     echo 'Если у вас установлен секретный вопрос, вам будет предложено на него ответить<br /><br />';
@@ -36,7 +36,7 @@ case 'remind':
 
     if (!empty($uz)) {
 
-        $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR `email`=? OR LOWER(`nickname`)=? LIMIT 1;", [$uz, $uz, $uz]);
+        $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR `email`=? LIMIT 1;", [$uz, $uz]);
 
         if (!empty($user)) {
 
@@ -115,7 +115,7 @@ case 'send':
             // ---------------- Инструкция по восстановлению пароля на E-mail --------------------------//
             sendMail($user['email'],
                 'Подтверждение восстановления пароля на сайте '.$config['title'],
-                nl2br("Здравствуйте, ".nickname($user['login'])." \nВами была произведена операция по восстановлению пароля на сайте ".$config['home']." \n\nДанные отправителя: \nIp: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nОтправлено: ".date('j.m.Y / H:i', SITETIME)."\n\nДля того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n".$config['home']."/lostpassword?act=restore&uz=".$user['login']."&key=".$restkey." \n\nЕсли это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его")
+                nl2br("Здравствуйте, ".$user['login']." \nВами была произведена операция по восстановлению пароля на сайте ".$config['home']." \n\nДанные отправителя: \nIp: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nОтправлено: ".date('j.m.Y / H:i', SITETIME)."\n\nДля того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n".$config['home']."/lostpassword?act=restore&uz=".$user['login']."&key=".$restkey." \n\nЕсли это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его")
             );
 
             echo '<i class="fa fa-check"></i> <b>Восстановление пароля инициализировано!</b><br /><br />';
@@ -171,7 +171,7 @@ case 'restore':
             // --------------------------- Восстановлению пароля на E-mail --------------------------//
             sendMail($user['email'],
                 'Восстановление пароля на сайте '.$config['title'],
-                nl2br("Здравствуйте, ".nickname($user['login'])." \nВаши новые данные для входа на на сайт ".$config['home']." \nЛогин: ".$user['login']." \nПароль: ".$newpass." \n\nЗапомните и постарайтесь больше не забывать данные \nПароль вы сможете поменять в своем профиле \nВсего наилучшего!")
+                nl2br("Здравствуйте, ".$user['login']." \nВаши новые данные для входа на на сайт ".$config['home']." \nЛогин: ".$user['login']." \nПароль: ".$newpass." \n\nЗапомните и постарайтесь больше не забывать данные \nПароль вы сможете поменять в своем профиле \nВсего наилучшего!")
             );
 
         } else {

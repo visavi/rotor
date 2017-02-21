@@ -21,7 +21,7 @@
             <item>
                 <title><?=$blog['text']?></title>
                 <link><?=App::setting('home')?>/blog/blog?act=comments&amp;id=<?=$blog['id']?></link>
-                <description><?=$data['title']?></description><author><?=nickname($data['user'])?></author>
+                <description><?=$data['title']?></description><author><?=$data['user']?></author>
                 <pubDate><?=date("r", $data['time'])?></pubDate>
                 <category>Комментарии</category>
                 <guid><?=App::setting('home')?>/blog/blog?act=comments&amp;id=<?=$blog['id']?>&amp;pid=<?=$data['id']?></guid>

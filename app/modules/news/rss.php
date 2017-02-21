@@ -24,7 +24,7 @@
             <item>
                 <title><?=$news['title']?></title>
                 <link><?=App::setting('home')?>/news/<?=$news['id']?></link>
-                <description><?=$news['text']?> </description><author><?=nickname($news['author'])?></author>
+                <description><?=$news['text']?> </description><author><?=$news['author']?></author>
                 <pubDate><?=date("r", $news['time'])?></pubDate>
                 <category>Новости</category>
                 <guid><?=App::setting('home')?>/news/<?=$news['id']?></guid>

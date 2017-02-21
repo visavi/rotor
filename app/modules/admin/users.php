@@ -25,7 +25,7 @@ if (is_admin([101, 102])) {
         case 'index':
 
             echo '<div class="form">';
-            echo 'Логин или ник пользователя:<br />';
+            echo 'Логин пользователя:<br />';
             echo '<form action="/admin/users?act=edit" method="post">';
             echo '<input type="text" name="uz" maxlength="20" />';
             echo '<input value="Редактировать" type="submit" /></form></div><br />';
@@ -84,15 +84,11 @@ if (is_admin([101, 102])) {
 
                 if ($total > 0) {
 
-                    $queryuser = DB::run() -> query("SELECT `login`, `nickname`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".$config['usersearch'].";");
+                    $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".$config['usersearch'].";");
 
                     while ($data = $queryuser -> fetch()) {
 
                         echo user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> ';
-
-                        if (!empty($data['nickname'])) {
-                            echo '(Ник: '.$data['nickname'].') ';
-                        }
 
                         echo user_online($data['login']).' ('.points($data['point']).')<br />';
                     }
@@ -115,7 +111,7 @@ if (is_admin([101, 102])) {
         ############################################################################################
         case 'edit':
 
-            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($uz), utf_lower($uz)]);
+            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($uz)]);
 
             if (!empty($user)) {
                 $uz = $user['login'];
@@ -160,8 +156,6 @@ if (is_admin([101, 102])) {
                     echo '<input type="text" name="icq" maxlength="10" value="'.$user['icq'].'" /><br />';
                     echo 'Имя пользователя:<br />';
                     echo '<input type="text" name="name" maxlength="20" value="'.$user['name'].'" /><br />';
-                    echo 'Ник пользователя:<br />';
-                    echo '<input type="text" name="nickname" maxlength="20" value="'.$user['nickname'].'" /><br />';
                     echo 'Актив:<br />';
                     echo '<input type="text" name="point" value="'.$user['point'].'" /><br />';
                     echo 'Деньги:<br />';
@@ -238,7 +232,6 @@ if (is_admin([101, 102])) {
             $email = check($_POST['email']);
             $joined = check($_POST['joined']);
             $name = check($_POST['name']);
-            $nickname = check($_POST['nickname']);
             $country = check($_POST['country']);
             $city = check($_POST['city']);
             $info = check($_POST['info']);
@@ -287,10 +280,9 @@ if (is_admin([101, 102])) {
                                                 $city = utf_substr($city, 0, 50);
                                                 $rating = $posrating - $negrating;
 
-                                                DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=?, `nickname`=?, `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $nickname, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
+                                                DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=? `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
 
                                                 save_title();
-                                                save_nickname();
                                                 save_money();
 
                                                 echo '<i class="fa fa-check"></i> <b>Данные пользователя успешно изменены!</b><br /><br />';

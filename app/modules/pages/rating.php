@@ -63,7 +63,7 @@ if (Request::isMethod('post')) {
             $user->set_expr('posrating', 'posrating + 1');
             $user->save();
 
-            $text = 'Пользователь [b]' . nickname(App::getUsername()) . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($getUser['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+            $text = 'Пользователь [b]' . App::getUsername() . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($getUser['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
         } else {
 
@@ -72,7 +72,7 @@ if (Request::isMethod('post')) {
             $user->set_expr('negrating', 'negrating + 1');
             $user->save();
 
-            $text = 'Пользователь [b]' . nickname(App::getUsername()) . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($getUser['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+            $text = 'Пользователь [b]' . App::getUsername() . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($getUser['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
         }
 
         send_private($login, App::getUsername(), $text);

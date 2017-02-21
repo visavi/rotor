@@ -54,13 +54,13 @@ switch ($act):
     ##                                  Вывод комментариев                                    ##
     ############################################################################################
     case 'comments':
-        show_title('Список всех комментариев '.nickname($uz));
+        show_title('Список всех комментариев '.$uz);
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['gallery', $uz]);
         $page = App::paginate(App::setting('postgallery'), $total);
 
         if ($total > 0) {
-            $config['newtitle'] = 'Список всех комментариев '.nickname($uz).' (Стр. '.$page['current'].')';
+            $config['newtitle'] = 'Список всех комментариев '.$uz.' (Стр. '.$page['current'].')';
 
             $querycomm = DB::run() -> query("SELECT `c`.*, `title` FROM `comments` c LEFT JOIN `photo` p ON `c`.`relate_id`=`p`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".$config['postgallery'].";", ['gallery', $uz]);
 

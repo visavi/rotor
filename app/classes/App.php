@@ -386,7 +386,7 @@ class App
 
     /**
      * Авторизует пользователя
-     * @param  string  $login    Логин или никнэйм
+     * @param  string  $login    Логин
      * @param  string  $password Пароль пользователя
      * @param  boolean $remember Запомнить пароль
      * @return boolean           Результат авторизации
@@ -397,8 +397,8 @@ class App
 
         if (!empty($login) && !empty($password)) {
 
-            $user = User::where_raw('LOWER(login) = ? OR LOWER(nickname) = ?', [$login, $login])
-                ->find_one();
+            $user = User::whereRaw('LOWER(login) = ?', [$login])
+                ->first();
 
             /* Миграция старых паролей */
             if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
@@ -406,7 +406,7 @@ class App
                 if (md5(md5($password)) == $user['password']) {
                     $user['password'] = password_hash($password, PASSWORD_BCRYPT);
 
-                    $user = User::where('login', $user['login'])->find_one();
+                    $user = User::where('login', $user['login'])->first();
                     $user->password = $user['password'];
                     $user->save();
                 }
@@ -426,7 +426,7 @@ class App
                 // Сохранение привязки к соц. сетям
                 if (!empty($_SESSION['social'])) {
 
-                    $social = ORM::for_table('socials')->create();
+                    $social = new Social();
                     $social->user = $user['login'];
                     $social->network = $_SESSION['social']->network;
                     $social->uid = $_SESSION['social']->uid;

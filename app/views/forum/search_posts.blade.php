@@ -10,14 +10,14 @@
 
     <p>Найдено совпадений в сообщениях: <?=$page['total']?></p>
 
-    <?php foreach ($posts as $data): ?>
+    <?php foreach ($posts as $post): ?>
 
         <div class="b">
-            <i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['topic_id']?>/<?=$data['id']?>"><?=$data['title']?></a></b>
+            <i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$post['topic_id']?>/<?=$post['id']?>"><?= $post->getTopic()->title ?></a></b>
         </div>
 
-        <div><?=App::bbCode($data['text'])?><br />
-            Написал: <?=profile($data['user'])?> <?=user_online($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />
+        <div><?=App::bbCode($post['text'])?><br />
+            Написал: <?=profile($post->getUser()->login)?> <?=user_online($post->getUser()->id)?> <small>(<?=date_fixed($post['created_at'])?>)</small><br />
         </div>
 
     <?php endforeach; ?>

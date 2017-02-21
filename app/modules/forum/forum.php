@@ -24,7 +24,7 @@ case 'index':
 
     $topics = Topic::where('forum_id', $fid)
         ->orderBy('locked', 'desc')
-        ->orderBy('time', 'desc')
+        ->orderBy('updated_at', 'desc')
         ->limit(App::setting('forumtem'))
         ->offset($page['offset'])
         ->with('lastPost.user')

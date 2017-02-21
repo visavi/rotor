@@ -49,4 +49,12 @@ class Post extends BaseModel {
     {
         return $this->hasMany('FileForum');
     }
+
+    /**
+     * Возвращает модель топика
+     */
+    public function getTopic()
+    {
+        return $this->topic ? $this->topic : new Topic();
+    }
 }

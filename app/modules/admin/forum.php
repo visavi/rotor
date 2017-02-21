@@ -70,7 +70,7 @@ if (is_admin()) {
                     // ----------------------------------------------------//
                     if ($data['last_id'] > 0) {
                         echo 'Тема: <a href="/admin/forum?act=topic&amp;tid='.$data['last_id'].'">'.$data['last_themes'].'</a><br />';
-                        echo 'Сообщение: '.nickname($data['last_user']).' ('.date_fixed($data['last_time']).')';
+                        echo 'Сообщение: '.$data['last_user'].' ('.date_fixed($data['last_time']).')';
                     } else {
                         echo 'Темы еще не созданы!';
                     }
@@ -378,7 +378,7 @@ if (is_admin()) {
                         echo '<div>';
                        /* App::forumPagination($data);*/
 
-                        echo 'Сообщение: '.nickname($data['last_user']).' ('.date_fixed($data['last_time']).')</div>';
+                        echo 'Сообщение: '.$data['last_user'].' ('.date_fixed($data['last_time']).')</div>';
                     }
 
                     echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -484,7 +484,7 @@ if (is_admin()) {
 
             $topics = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
             if (!empty($topics)) {
-                echo '<i class="fa fa-folder-open"></i> <b>'.$topics['title'].'</b> (Автор темы: '.nickname($topics['author']).')<br /><br />';
+                echo '<i class="fa fa-folder-open"></i> <b>'.$topics['title'].'</b> (Автор темы: '.$topics['author'].')<br /><br />';
 
                 $queryforum = DB::run() -> query("SELECT * FROM `forums` ORDER BY sort ASC;");
                 $forums = $queryforum -> fetchAll();
@@ -835,7 +835,7 @@ if (is_admin()) {
                             // --------------------------//
 
                             if (!empty($data['edit'])) {
-                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.nickname($data['edit']).' ('.date_fixed($data['edit_time']).')</small><br />';
+                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data['edit'].' ('.date_fixed($data['edit_time']).')</small><br />';
                             }
 
                             echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
@@ -941,7 +941,7 @@ if (is_admin()) {
             $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
             if (!empty($post)) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['user']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                 echo '<div class="form" id="form">';
                 echo '<form action="/admin/forum?act=addeditpost&amp;tid='.$post['topic_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';

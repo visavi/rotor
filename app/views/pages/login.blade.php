@@ -28,7 +28,7 @@
 
 
             <div class="form-group">
-                <label for="inputLogin">Логин или ник:</label>
+                <label for="inputLogin">Логин:</label>
                 <input class="form-control" name="login" id="inputLogin" maxlength="20" value="{{ App::getInput('login') }}" required>
 
                 <label for="inputPassword">Пароль:</label>

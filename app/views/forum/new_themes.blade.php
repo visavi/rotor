@@ -27,9 +27,9 @@
         </div>
 
         <div>
-            <?= App::forumPagination($data)?>
+            <?= Forum::pagination($data)?>
             Форум: <a href="/forum/<?=$data['forum_id']?>"><?=$data['forum_title']?></a><br />
-            Автор: <?=nickname($data['author'])?> / Посл.: <?=nickname($data['last_user'])?> (<?=date_fixed($data['last_time'])?>)
+            Автор: <?=$data['author']?> / Посл.: <?=$data['last_user']?> (<?=date_fixed($data['last_time'])?>)
         </div>
 
     <?php endforeach; ?>

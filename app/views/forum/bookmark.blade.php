@@ -12,30 +12,20 @@
     @if ($page['total'] > 0)
         <form action="/forum/bookmark/delete?page=<?=$page['current']?>" method="post">
             <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
-            <?php foreach ($topics as $data): ?>
+            <?php foreach ($topics as $topic): ?>
                 <div class="b">
-                    <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
+                    <input type="checkbox" name="del[]" value="<?=$topic['id']?>" />
 
-                    <?php
-                    if ($data['locked']) {
-                        $icon = 'fa-thumb-tack';
-                    } elseif ($data['closed']) {
-                        $icon = 'fa-lock';
-                    } else {
-                        $icon = 'fa-folder-open';
-                    }
-                    ?>
+                    <i class="fa <?=$topic->getTopic()->getIcon()?> text-muted"></i>
 
-                    <i class="fa <?=$icon?> text-muted"></i>
+                    <?php $newpost = ($topic['posts'] > $topic['book_posts']) ? '/<span style="color:#00cc00">+'.($topic['posts'] - $topic['book_posts']).'</span>' : ''; ?>
 
-                    <?php $newpost = ($data['posts'] > $data['book_posts']) ? '/<span style="color:#00cc00">+'.($data['posts'] - $data['book_posts']).'</span>' : ''; ?>
-
-                    <b><a href="/topic/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=$data['posts']?><?=$newpost?>)
+                    <b><a href="/topic/<?=$topic['id']?>"><?=$topic['title']?></a></b> (<?=$topic['posts']?><?=$newpost?>)
                 </div>
 
                 <div>
-                    <?= App::forumPagination($data)?>
-                    Автор: <?=nickname($data['author'])?> / Посл.: <?=nickname($data['last_user'])?> (<?=date_fixed($data['last_time'])?>)
+                    <?= Forum::pagination($topic)?>
+                    Автор: <?=$topic->getTopic()->getUser()->login?> / Посл.: <?=$topic->getTopic()->getLastPost()->getUser()->login?> (<?=date_fixed($topic->getTopic()->getLastPost()->created_at)?>)
                 </div>
             <?php endforeach; ?>
 

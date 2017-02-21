@@ -38,9 +38,9 @@ if (Request::isMethod('post')) {
         }
 
         if (!empty($logs)) {
-            // Проверка логина или ника на существование
-            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($logs), strtolower($logs)]);
-            $validation->addRule('empty', $reglogin, ['logs' => 'Пользователь с данным логином или ником уже зарегистрирован!']);
+            // Проверка логина на существование
+            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($logs)]);
+            $validation->addRule('empty', $reglogin, ['logs' => 'Пользователь с данным логином уже зарегистрирован!']);
 
             // Проверка логина в черном списке
             $blacklogin = DB::run()->querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($logs)]);
@@ -97,9 +97,7 @@ if (Request::isMethod('post')) {
                 DB::run()->query("UPDATE `invite` SET `used`=?, `invited`=? WHERE `key`=? LIMIT 1;", [1, $logs, $invite]);
             }
 
-            $registration = User::create();
-
-            $registration->set([
+            $registration = User::create([
                 'login' => $logs,
                 'password' => password_hash($pars, PASSWORD_BCRYPT),
                 'email' => $meil,
@@ -113,7 +111,7 @@ if (Request::isMethod('post')) {
                 'confirmreg' => $config['regkeys'],
                 'confirmregkey' => $registration_key,
                 'subscribe' => str_random(32),
-            ])->save();
+            ]);
 
             // ------------------------------ Уведомление в приват ----------------------------------//
             $textpriv = text_private(1, ['%USERNAME%' => $logs, '%SITENAME%' => $config['home']]);

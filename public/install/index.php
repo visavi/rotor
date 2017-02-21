@@ -295,7 +295,7 @@ header("Content-type:text/html; charset=utf-8");
             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email)) {
             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
 
-            // Проверка логина или ника на существование
+            // Проверка логина на существование
             $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($login)]);
             if (!$reglogin) {
 
@@ -347,7 +347,7 @@ header("Content-type:text/html; charset=utf-8");
 
 
             } else {echo '<p style="color: #ff0000">Ошибка! Указанный вами адрес e-mail уже используется в системе!</p>';}
-            } else {echo '<p style="color: #ff0000">Ошибка! Пользователь с данным логином или ником уже зарегистрирован!</p>';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Пользователь с данным логином уже зарегистрирован!</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес сайта, необходим формата http://my_site.domen</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес email, необходим формат name@site.domen</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Веденные пароли отличаются друг от друга</p>';}

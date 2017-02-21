@@ -27,8 +27,6 @@
 - user_status<br />
 - save_title<br />
 - user_title<br />
-- save_nickname<br />
-- nickname<br />
 - save_setting<br />
 - save_navigation<br />
 - save_ipban<br />

@@ -14,7 +14,7 @@ switch ($act):
 
 case 'index':
     echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
-    echo 'Ну что '.nickname($log).', взломаем?<br />';
+    echo 'Ну что '.$log.', взломаем?<br />';
     echo 'У тебя '.moneys($udata['money']).'<br />';
 
     $_SESSION['code'] = sprintf('%04d', mt_rand(0,9999));
@@ -54,7 +54,7 @@ case 'vzlom':
             $_SESSION['go'] = 'ok';
         }
 
-        echo nickname($log).', не торопись! Просто хорошо подумай. <br />';
+        echo $log.', не торопись! Просто хорошо подумай. <br />';
         echo '<br /><img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
 
         if (!$_SESSION['code'] || !$_SESSION['go']){
@@ -170,7 +170,7 @@ case 'vzlom1':
             } else {
 
                 echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
-                echo ''.nickname($log).', не торопись! Просто хорошо подумай. <br />';
+                echo ''.$log.', не торопись! Просто хорошо подумай. <br />';
                 echo 'Попыток осталось: <font color="red"><big>'.$_SESSION['try'].'</big></font><br />';
                 echo 'Комбинация сейфа:<br />';
                 echo '<b><font color="red">'.$d1.' '.$d2.' '.$d3.' '.$d4.'</font></b><br />';

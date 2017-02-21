@@ -24,7 +24,7 @@
             <item>
                 <title><?=$blog['title']?></title>
                 <link><?=App::setting('home')?>/blog/blog?act=view&amp;id=<?=$blog['id']?></link>
-                <description><?=$blog['text']?> </description><author><?=nickname($blog['user'])?></author>
+                <description><?=$blog['text']?> </description><author><?=$blog['user']?></author>
                 <pubDate><?=date("r", $blog['time'])?></pubDate>
                 <category>Блоги</category>
                 <guid><?=App::setting('home')?>/blog/blog?act=view&amp;id=<?=$blog['id']?></guid>

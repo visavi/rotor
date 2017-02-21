@@ -9,7 +9,7 @@
 
 <div class="form">
 	<form action="/blog/blog?act=add&amp;id=<?=$id?>&amp;uid=<?=$_SESSION['token']?>" method="post">
-		<textarea id="markItUp" cols="25" rows="5" name="msg">[b]<?=nickname($post['user'])?>[/b], </textarea><br />
+		<textarea id="markItUp" cols="25" rows="5" name="msg">[b]<?=$post['user']?>[/b], </textarea><br />
 		<input type="submit" value="Ответить" />
 	</form>
 </div><br />

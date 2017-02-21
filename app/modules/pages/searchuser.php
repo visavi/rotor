@@ -18,12 +18,12 @@ switch ($act):
 
         echo '<div class="form">';
         echo '<form method="post" action="/searchuser?act=search">';
-        echo 'Логин или ник юзера:<br /><input type="text" name="find" />';
+        echo 'Логин пользователя:<br /><input type="text" name="find" />';
         echo '<input value="Поиск" type="submit" /></form></div><br />';
 
         echo '<a href="/searchuser?act=sort&amp;q=1">0-9</a> / <a href="/searchuser?act=sort&amp;q=a">A</a> / <a href="/searchuser?act=sort&amp;q=b">B</a> / <a href="/searchuser?act=sort&amp;q=c">C</a> / <a href="/searchuser?act=sort&amp;q=d">D</a> / <a href="/searchuser?act=sort&amp;q=e">E</a> / <a href="/searchuser?act=sort&amp;q=f">F</a> / <a href="/searchuser?act=sort&amp;q=g">G</a> / <a href="/searchuser?act=sort&amp;q=h">H</a> / <a href="/searchuser?act=sort&amp;q=i">I</a> / <a href="/searchuser?act=sort&amp;q=j">J</a> / <a href="/searchuser?act=sort&amp;q=k">K</a> / <a href="/searchuser?act=sort&amp;q=l">L</a> / <a href="/searchuser?act=sort&amp;q=m">M</a> / <a href="/searchuser?act=sort&amp;q=n">N</a> / <a href="/searchuser?act=sort&amp;q=o">O</a> / <a href="/searchuser?act=sort&amp;q=p">P</a> / <a href="/searchuser?act=sort&amp;q=q">Q</a> / <a href="/searchuser?act=sort&amp;q=r">R</a> / <a href="/searchuser?act=sort&amp;q=s">S</a> / <a href="/searchuser?act=sort&amp;q=t">T</a> / <a href="/searchuser?act=sort&amp;q=u">U</a> / <a href="/searchuser?act=sort&amp;q=v">V</a> / <a href="/searchuser?act=sort&amp;q=w">W</a> / <a href="/searchuser?act=sort&amp;q=x">X</a> / <a href="/searchuser?act=sort&amp;q=y">Y</a> / <a href="/searchuser?act=sort&amp;q=z">Z</a><br /><br />';
 
-        echo 'Если результат поиска ничего не дал, тогда можно поискать по первым символам логина или ника<br />';
+        echo 'Если результат поиска ничего не дал, тогда можно поискать по первым символам логина<br />';
         echo 'В этом случае будет выдан результат похожий на введенный вами запрос<br /><br />';
     break;
 
@@ -49,13 +49,10 @@ switch ($act):
 
             if ($total > 0) {
 
-                $queryuser = DB::run() -> query("SELECT `login`, `nickname`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".$config['usersearch'].";");
+                $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".$config['usersearch'].";");
                 while ($data = $queryuser -> fetch()) {
 
                     echo user_gender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
-                    if (!empty($data['nickname'])) {
-                        echo '(Ник: '.$data['nickname'].') ';
-                    }
                     echo user_online($data['login']).' ('.points($data['point']).')<br />';
                 }
 
@@ -80,7 +77,7 @@ switch ($act):
         $find = check(strtolower($_POST['find']));
 
         if (utf_strlen($find)>=3 && utf_strlen($find)<=20) {
-            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? OR `nickname` LIKE ? ORDER BY `point` DESC LIMIT ".$config['usersearch'].";", ['%'.$find.'%', '%'.$find.'%']);
+            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? ORDER BY `point` DESC LIMIT ".$config['usersearch'].";", ['%'.$find.'%']);
 
             $result = $querysearch -> fetchAll();
             $total = count($result);

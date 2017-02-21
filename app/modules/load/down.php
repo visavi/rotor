@@ -605,7 +605,7 @@ case 'reply':
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo 'Сообщение:<br />';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.nickname($post['user']).'[/b], </textarea><br />';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br />';
             echo '<input type="submit" value="Ответить" /></form></div><br />';
         } else {
             show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
@@ -632,7 +632,7 @@ case 'quote':
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo 'Сообщение:<br />';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['user']).'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
             echo '<input type="submit" value="Цитировать" /></form></div><br />';
         } else {
             show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
@@ -659,7 +659,7 @@ case 'edit':
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['user']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                 echo '<div class="form">';
                 echo '<form action="/load/down?act=editpost&amp;id='.$post['relate_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';

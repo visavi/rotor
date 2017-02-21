@@ -66,7 +66,7 @@ switch ($act):
     case 'search':
 
         if (!empty($uz)) {
-            $queryuser = DB::run() -> querySingle("SELECT `login` FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($uz), utf_lower($uz)]);
+            $queryuser = DB::run() -> querySingle("SELECT `login` FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($uz)]);
 
             if (!empty($queryuser)) {
                 $queryrating = DB::run() -> query("SELECT `login` FROM `users` ORDER BY `rating` DESC, `login` ASC;");
@@ -89,7 +89,7 @@ switch ($act):
                 show_error('Пользователь с данным логином не зарегистрирован!');
             }
         } else {
-            show_error('Ошибка! Вы не ввели логин или ник пользователя');
+            show_error('Ошибка! Вы не ввели логин пользователя');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/authoritylist?page='.$page.'">Вернуться</a><br />';

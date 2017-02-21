@@ -8,7 +8,7 @@ if (empty($_GET['uz'])) {
 }
 
 if (is_user()) {
-    show_title('История банов '.nickname($uz));
+    show_title('История банов '.$uz);
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
     $page = App::paginate(App::setting('listbanhist'), $total);

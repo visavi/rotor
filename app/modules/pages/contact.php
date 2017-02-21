@@ -89,7 +89,7 @@ if (is_user()) {
                                 if (empty($ignorstr)) {
                                     DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$uz]);
                                     // ------------------------------Уведомление по привату------------------------//
-                                    $textpriv = 'Пользователь [b]'.nickname($log).'[/b] добавил вас в свой контакт-лист!';
+                                    $textpriv = 'Пользователь [b]'.$log.'[/b] добавил вас в свой контакт-лист!';
                                     DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $textpriv, SITETIME]);
                                 }
 
@@ -130,7 +130,7 @@ if (is_user()) {
                 $data = DB::run() -> queryFetch("SELECT * FROM contact WHERE id=? AND user=? LIMIT 1;", [$id, $log]);
 
                 if (!empty($data)) {
-                    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.nickname($data['name']).'</b> '.user_online($data['name']).':<br /><br />';
+                    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$data['name'].'</b> '.user_online($data['name']).':<br /><br />';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/contact?act=editnote&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'">';

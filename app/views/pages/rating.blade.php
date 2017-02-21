@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="b">{!! user_avatars($login) !!} <b>{{ nickname($login) }} </b> {{ user_visit($login) }}</div>
+    <div class="b">{!! user_avatars($login) !!} <b>{{ $login }} </b> {{ user_visit($login) }}</div>
 
     <div class="form">
         <form method="post">

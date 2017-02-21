@@ -40,7 +40,7 @@
                 <div>
                     Тема: <a href="/topic/<?= $child->lastTopic->id ?>/end"><?= $child->lastTopic->title ?></a><br />
                     @if ($child->lastTopic->lastPost)
-                        Сообщение: <?=$child->lastTopic->lastPost->getUser()->login ?> (<?=date_fixed($child->lastTopic->lastPost->time)?>)
+                        Сообщение: <?=$child->lastTopic->lastPost->getUser()->login ?> (<?=date_fixed($child->lastTopic->lastPost->created_at)?>)
                     @endif
                 </div>
             <?php else: ?>
@@ -61,7 +61,7 @@
             <div>
                 @if ($topic->lastPost)
                     <?= Forum::pagination($topic)?>
-                    Сообщение: <?= $topic->lastPost->getUser()->login ?> (<?=date_fixed($topic->lastPost->time)?>)
+                    Сообщение: <?= $topic->lastPost->getUser()->login ?> (<?=date_fixed($topic->lastPost->created_at)?>)
                 @endif
             </div>
         <?php endforeach; ?>

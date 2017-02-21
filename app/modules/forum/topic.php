@@ -555,13 +555,15 @@ case 'viewpost':
 
     $id = param('id');
 
-    $querytopic = DB::run() -> querySingle("SELECT COUNT(*) FROM `posts` WHERE `id`<=? AND `topic_id`=? ORDER BY `time` ASC LIMIT 1;", [$id, $tid]);
+    $countTopics = Post::where('id', '<=', $id)
+        ->where('topic_id', $tid)
+        ->count();
 
-    if (empty($querytopic)) {
+    if (! $countTopics) {
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    $end = ceil($querytopic / App::setting('forumpost'));
+    $end = ceil($countTopics / App::setting('forumpost'));
     App::redirect('/topic/'.$tid.'?page='.$end.'#post_'.$id);
 break;
 

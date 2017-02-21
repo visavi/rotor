@@ -157,7 +157,7 @@ if (is_admin()) {
 
                 echo '<div class="form"><form action="/admin/minichat?act=addedit&amp;id=' . $id . '&amp;page=' . $page . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
 
-                echo '<i class="fa fa-pencil"></i> <b>' . nickname($data[1]) . '</b> <small>(' . date_fixed($data[3]) . ')</small><br />';
+                echo '<i class="fa fa-pencil"></i> <b>' . $data[1] . '</b> <small>(' . date_fixed($data[3]) . ')</small><br />';
 
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $data[0] . '</textarea><br/>';
                 echo '<input type="submit" value="Изменить" /></form></div><br />';

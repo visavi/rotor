@@ -13,7 +13,6 @@ if (!empty($key)){
         echo json_encode([
             'login'     => $user['login'],
             'email'     => $user['email'],
-            'nickname'  => $user['nickname'],
             'name'      => $user['name'],
             'country'   => $user['country'],
             'city'      => $user['city'],

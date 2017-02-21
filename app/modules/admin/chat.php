@@ -52,7 +52,7 @@ if (is_admin()) {
                     echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     if (!empty($data['edit'])) {
-                        echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.nickname($data['edit']).' ('.date_fixed($data['edit_time']).')</small><br />';
+                        echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.$data['edit'].' ('.date_fixed($data['edit_time']).')</small><br />';
                     }
 
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -131,7 +131,7 @@ if (is_admin()) {
 
                 echo '<div class="form">';
                 echo '<form action="/admin/chat?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[b]'.nickname($post['user']).'[/b], </textarea><br />';
+                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br />';
                 echo '<input type="submit" value="Ответить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
@@ -154,7 +154,7 @@ if (is_admin()) {
             if (!empty($post)) {
                 echo '<div class="form">';
                 echo '<form action="/admin/chat?act=add&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.nickname($post['user']).'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
+                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
                 echo '<input type="submit" value="Ответить" /></form></div><br />';
             } else {
                 show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
@@ -175,7 +175,7 @@ if (is_admin()) {
             if (!empty($post)) {
                 if ($post['time'] + 600 > SITETIME) {
 
-                    echo '<i class="fa fa-pencil"></i> <b>'.nickname($post['user']).'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
+                    echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
 
                     echo '<div class="form">';
                     echo '<form action="/admin/chat?act=editpost&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';

@@ -31,7 +31,7 @@ switch ($act):
             while ($data = $queryphoto -> fetch()) {
 
                 echo '<i class="fa fa-picture-o"></i> ';
-                echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data['user'].'">'.nickname($data['user']).'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
+                echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data['user'].'">'.$data['user'].'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
             }
 
             App::pagination($page);
@@ -48,14 +48,14 @@ switch ($act):
     ############################################################################################
     case 'photo':
 
-        show_title('Список всех фотографий '.nickname($uz));
+        show_title('Список всех фотографий '.$uz);
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `user`=?;", [$uz]);
         $page = App::paginate(App::setting('fotolist'), $total);
 
         if ($total > 0) {
 
-            $config['newtitle'] = 'Список всех фотографий '.nickname($uz).' (Стр. '.$page['current'].')';
+            $config['newtitle'] = 'Список всех фотографий '.$uz.' (Стр. '.$page['current'].')';
 
             $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";", [$uz]);
 

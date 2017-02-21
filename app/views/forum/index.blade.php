@@ -37,7 +37,7 @@
             @if ($forum->getLastTopic()->lastPost)
                 Тема: <a href="/topic/{{ $forum->getLastTopic()->id }}/end">{{ $forum->getLastTopic()->title }}</a>
                 <br/>
-                Сообщение: {{ $forum->getLastTopic()->getLastPost()->getUser()->login }} ({{ date_fixed($forum->getLastTopic()->getLastPost()->time) }})
+                Сообщение: {{ $forum->getLastTopic()->getLastPost()->getUser()->login }} ({{ date_fixed($forum->getLastTopic()->getLastPost()->created_at) }})
             @else
                 Темы еще не созданы!
             @endif

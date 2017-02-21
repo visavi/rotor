@@ -36,7 +36,7 @@ if (!empty($down)) {
             $data['text'] = htmlspecialchars($data['text']);
 
             echo '<item><title>'.$down['title'].'</title><link>'.$config['home'].'/load/down?act=comments&amp;id='.$down['id'].'</link>';
-            echo '<description>'.$data['text'].' </description><author>'.nickname($data['user']).'</author>';
+            echo '<description>'.$data['text'].' </description><author>'.$data['user'].'</author>';
             echo '<pubDate>'.date("r", $data['time']).'</pubDate><category>Комментарии</category><guid>'.$config['home'].'/load/down?act=comments&amp;id='.$down['id'].'&amp;pid='.$data['id'].'</guid></item>';
         }
 

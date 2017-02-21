@@ -18,7 +18,7 @@ show_title('API интерфейс');
 
 Возвращает json
 <pre class="prettyprint linenums">
-{"login":"admin","email":"vantuzilla@yandex.ru","nickname":"","name":"Александр","country":"","city":"","site":"http:\/\/visavi.net","icq":"","skype":"","gender":"1","birthday":"","newwall":"0","point":"540","money":"110675","ban":"0","allprivat":"1","newprivat":"0","status":"<span style=\"color:#ff0000\">\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440<\/span>","avatar":"","picture":"","rating":"0","lastlogin":"1477663978"}
+{"login":"admin","email":"vantuzilla@yandex.ru","name":"Александр","country":"","city":"","site":"http:\/\/visavi.net","icq":"","skype":"","gender":"1","birthday":"","newwall":"0","point":"540","money":"110675","ban":"0","allprivat":"1","newprivat":"0","status":"<span style=\"color:#ff0000\">\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440<\/span>","avatar":"","picture":"","rating":"0","lastlogin":"1477663978"}
 </pre>
 
 <?php

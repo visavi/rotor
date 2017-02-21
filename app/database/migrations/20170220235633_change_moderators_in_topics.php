@@ -9,7 +9,7 @@ class ChangeModeratorsInTopics extends AbstractMigration
      */
     public function up()
     {
-/*        $table = $this->table('topics');
+        $table = $this->table('topics');
         $table
             ->changeColumn('time', 'integer', ['null' => true])
             ->addColumn('created_at', 'integer', ['null' => true])
@@ -20,7 +20,7 @@ class ChangeModeratorsInTopics extends AbstractMigration
         $table
             ->removeIndexByName('last_time')
             ->addIndex('updated_at')
-            ->save();*/
+            ->save();
 
         $rows = $this->fetchAll('SELECT * FROM topics');
         foreach($rows as $row) {

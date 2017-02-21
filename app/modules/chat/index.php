@@ -94,7 +94,7 @@ if ($act == 'index') {
                 $mmagshow = explode("|", end($mmagfi));
 
                 $unifile = unifile(STORAGE."/chat/chat.dat", 9);
-                $weltext = no_br($hellobots_well . ', ' . nickname($log) . '!|Настюха||' . SITETIME . '|SIE-S65|127.0.0.2|0|' . $mmagshow[7] . '|' . $mmagshow[8] . '|' . $unifile . '|');
+                $weltext = no_br($hellobots_well . ', ' . $log . '!|Настюха||' . SITETIME . '|SIE-S65|127.0.0.2|0|' . $mmagshow[7] . '|' . $mmagshow[8] . '|' . $unifile . '|');
 
                 write_files(STORAGE."/chat/chat.dat", "$weltext\r\n");
 
@@ -135,7 +135,7 @@ if ($act == 'index') {
             echo '<div class="b">';
             echo '<div class="img">' . $useravatars . '</div>';
 
-            echo '<b><a href="/chat?name=' . nickname($data[1]) . '#form">' . nickname($data[1]) . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
+            echo '<b><a href="/chat?name=' . $data[1] . '#form">' . $data[1] . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
             echo user_title($data[1]) . ' ' . $useronline . '</div>';
             echo '<div>' . App::bbCode($data[0]) . '<br />';
             if (is_admin() || empty($config['anonymity'])){
@@ -213,7 +213,7 @@ if ($act == 'add') {
                 if ($config['magnik'] == 1) {
                     if (!empty($data[8]) && stristr(utf_lower($msg), $data[8])) {
                         $unifile = unifile(STORAGE."/chat/chat.dat", 9);
-                        $text = no_br('Молодец ' . nickname($log) . '! Правильный ответ [b]' . $data[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
+                        $text = no_br('Молодец ' . $log . '! Правильный ответ [b]' . $data[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
 
                         write_files(STORAGE."/chat/chat.dat", "$text\r\n");
                     }

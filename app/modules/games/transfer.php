@@ -76,7 +76,7 @@ if (is_user()) {
 
                                             $comment = (!empty($msg)) ? $msg : 'Не указано';
                                             // ------------------------Уведомление по привату------------------------//
-                                            $textpriv = 'Пользователь [b]'.nickname($log).'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
+                                            $textpriv = 'Пользователь [b]'.$log.'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
 
                                             DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $textpriv, SITETIME]);
                                             // ------------------------ Запись логов ------------------------//

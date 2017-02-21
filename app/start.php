@@ -69,7 +69,7 @@ if (!empty($config['doslimit'])) {
 
             if (!empty($config['errorlog'])){
 
-                $banip = ORM::for_table('ban')->where('ip', App::getClientIp())->find_one();
+                $banip = Ban::where('ip', App::getClientIp())->first();
 
                 if (! $banip) {
 
@@ -83,9 +83,9 @@ if (!empty($config['doslimit'])) {
                     $error->created_at = SITETIME;
                     $error->save();
 
-                    ORM::for_table('ban')->raw_execute(
-                        "INSERT IGNORE INTO ban (`ip`, `time`) VALUES (:ip, :time);",
-                        ['ip' => App::getClientIp(), 'time' => SITETIME]
+                    Capsule::insert(
+                        "INSERT IGNORE INTO ban (`ip`, `time`) VALUES (?, ?);",
+                        [rand(), SITETIME]
                     );
 
                     save_ipban();

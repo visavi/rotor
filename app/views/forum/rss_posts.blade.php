@@ -14,8 +14,8 @@
             <title>{{ $data['text'] }}</title>
             <link>{{ App::setting('home') }}/topic/{{ $topic['id'] }}</link>
             <description>{{ $topic['title'] }} </description>
-            <author>{{ nickname($data['user']) }}</author>
-            <pubDate>{{ date("r", $data['time']) }}</pubDate>
+            <author>{{ $data['user'] }}</author>
+            <pubDate>{{ date("r", $data['created_at']) }}</pubDate>
             <category>Сообщения</category>
             <guid>{{ App::setting('home') }}/topic/{{ $topic['id'] }}/{{  $data['id'] }}</guid>
         </item>

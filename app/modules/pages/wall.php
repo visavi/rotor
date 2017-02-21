@@ -15,8 +15,8 @@ if (!empty($queryuser)) {
     ############################################################################################
         case 'index':
 
-            $config['newtitle'] = 'Стена пользователя '.nickname($uz);
-            echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.nickname($uz).'</b><br /><br />';
+            $config['newtitle'] = 'Стена пользователя '.$uz;
+            echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.$uz.'</b><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
             $page = App::paginate(App::setting('wallpost'), $total);

@@ -421,7 +421,7 @@ break;
                 if (empty($comm['closed'])) {
                     if ($comm['time'] + 600 > SITETIME) {
 
-                        echo '<i class="fa fa-pencil"></i> <b>'.nickname($comm['user']).'</b> <small>('.date_fixed($comm['time']).')</small><br /><br />';
+                        echo '<i class="fa fa-pencil"></i> <b>'.$comm['user'].'</b> <small>('.date_fixed($comm['time']).')</small><br /><br />';
 
                         echo '<div class="form">';
                         echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['relate_id'].'&amp;cid='.$cid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';

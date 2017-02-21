@@ -56,12 +56,16 @@ if (empty($find)) {
 
             if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
-                $searchsec = ($section > 0) ? "`forum_id`=" . $section . " AND" : '';
-                $searchper = ($period > 0) ? "`last_time`>" . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
+                $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
+                $searchper = ($period > 0) ? "updated_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
-                $querysearch = DB::run()->query("SELECT `id` FROM `topics` WHERE " . $searchsec . " " . $searchper . "  MATCH (`title`) AGAINST ('" . $findme . "' IN BOOLEAN MODE) LIMIT 100;");
+                $search = Topic::select('id')
+                ->whereRaw($searchsec .' '. $searchper .' MATCH (`title`) AGAINST (? IN BOOLEAN MODE)', [$findme])
+                ->limit(100)
+                ->get()
+                ->toArray();
 
-                $result = $querysearch->fetchAll(PDO::FETCH_COLUMN);
+                $result = array_column($search, 'id');
 
                 $_SESSION['forumfind'] = $forumfind;
                 $_SESSION['forumfindres'] = $result;
@@ -72,10 +76,12 @@ if (empty($find)) {
             if ($total > 0) {
                 $page = App::paginate(App::setting('forumtem'), $total);
 
-                $result = implode(',', $_SESSION['forumfindres']);
-
-                $querytopic = DB::run()->query("SELECT * FROM `topics` WHERE `id` IN (" . $result . ") ORDER BY `last_time` DESC LIMIT " . $page['offset'] . ", " . $config['forumtem'] . ";");
-                $topics = $querytopic->fetchAll();
+                $topics = Topic::whereIn('id', $_SESSION['forumfindres'])
+                    ->with('lastPost.user')
+                    ->orderBy('updated_at', 'desc')
+                    ->offset($page['offset'])
+                    ->limit($config['forumtem'])
+                    ->get();
 
                 App::view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
 
@@ -91,11 +97,16 @@ if (empty($find)) {
 
             if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
-                $searchsec = ($section > 0) ? "`forum_id`=" . $section . " AND" : '';
-                $searchper = ($period > 0) ? "`time`>" . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
+                $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
+                $searchper = ($period > 0) ? "created_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
-                $querysearch = DB::run()->query("SELECT `id` FROM `posts` WHERE " . $searchsec . " " . $searchper . "  MATCH (`text`) AGAINST ('" . $findme . "' IN BOOLEAN MODE) LIMIT 100;");
-                $result = $querysearch->fetchAll(PDO::FETCH_COLUMN);
+                $search = Post::select('id')
+                    ->whereRaw($searchsec .' '. $searchper .' MATCH (`text`) AGAINST (? IN BOOLEAN MODE)', [$findme])
+                    ->limit(100)
+                    ->get()
+                    ->toArray();
+
+                $result = array_column($search, 'id');
 
                 $_SESSION['forumfind'] = $forumfind;
                 $_SESSION['forumfindres'] = $result;
@@ -106,10 +117,12 @@ if (empty($find)) {
             if ($total > 0) {
                 $page = App::paginate(App::setting('forumpost'), $total);
 
-                $result = implode(',', $_SESSION['forumfindres']);
-
-                $querypost = DB::run()->query("SELECT `posts`.*, `title` FROM `posts` LEFT JOIN `topics` ON `posts`.`topic_id`=`topics`.`id` WHERE posts.`id` IN (" . $result . ") ORDER BY `time` DESC LIMIT " . $page['offset'] . ", " . $config['forumpost'] . ";");
-                $posts = $querypost->fetchAll();
+                $posts = Post::whereIn('id', $_SESSION['forumfindres'])
+                    ->with('user', 'topic')
+                    ->orderBy('created_at', 'desc')
+                    ->offset($page['offset'])
+                    ->limit($config['forumpost'])
+                    ->get();
 
                 App::view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
 

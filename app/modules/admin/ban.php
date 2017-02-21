@@ -24,7 +24,7 @@ if (is_admin([101, 102, 103])) {
         case 'index':
 
             echo '<div class="form">';
-            echo 'Логин или ник пользователя:<br />';
+            echo 'Логин пользователя:<br />';
             echo '<form method="post" action="/admin/ban?act=edit">';
             echo '<input type="text" name="uz" maxlength="20" />';
             echo '<input value="Редактировать" type="submit" /></form></div><br />';
@@ -37,7 +37,7 @@ if (is_admin([101, 102, 103])) {
         ############################################################################################
         case 'edit':
 
-            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR LOWER(`nickname`)=? LIMIT 1;", [strtolower($uz), utf_lower($uz)]);
+            $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($uz)]);
 
             if (!empty($user)) {
                 $uz = $user['login'];

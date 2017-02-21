@@ -10,7 +10,7 @@
 
     <div class="form">
         @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
-            {!! resize_image('uploads/photos/', $user['picture'], App::setting('previewsize'), ['alt' => nickname($user['login']), 'class' => 'img-responsive img-rounded']) !!}
+            {!! resize_image('uploads/photos/', $user['picture'], App::setting('previewsize'), ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}
         @else
             <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />
         @endif

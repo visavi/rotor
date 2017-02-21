@@ -27,7 +27,7 @@ if ($total > 0) {
         echo 'Выберите адресат:<br /><select name="uz">';
 
         foreach($arradmin as $value) {
-            echo '<option value="'.$value['login'].'"> '.nickname($value['login']).' </option>';
+            echo '<option value="'.$value['login'].'"> '.$value['login'].' </option>';
         }
         echo '</select><br />';
         echo 'Сообщение:<br />';

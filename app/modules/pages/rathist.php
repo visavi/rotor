@@ -12,7 +12,7 @@ if (empty($_GET['uz'])) {
     $uz = check(strval($_GET['uz']));
 }
 
-show_title('История голосований '.nickname($uz));
+show_title('История голосований '.$uz);
 
 if (is_user()) {
     $is_admin = is_admin([101]);

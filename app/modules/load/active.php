@@ -71,7 +71,7 @@ case 'comments':
             echo '</div>';
             echo '<div>'.App::bbCode($data['text']).'<br />';
 
-            echo 'Написал: '.nickname($data['user']).' <small>('.date_fixed($data['time']).')</small><br />';
+            echo 'Написал: '.$data['user'].' <small>('.date_fixed($data['time']).')</small><br />';
 
             if ($is_admin || empty($config['anonymity'])) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
