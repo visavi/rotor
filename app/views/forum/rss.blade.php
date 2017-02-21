@@ -12,12 +12,12 @@
 
         <item>
             <title>{{ $topic['title'] }}</title>
-            <link>{{ App::setting('home') }}/topic/{{ $topic['topic_id'] }}</link>
+            <link>{{ App::setting('home') }}/topic/{{ $topic['id'] }}</link>
             <description>{{ $topic['text'] }} </description>
             <author>{{ $topic->getLastPost()->getUser()->login }}</author>
             <pubDate>{{ date("r", $topic['updated_at']) }}</pubDate>
             <category>Темы</category>
-            <guid>{{ App::setting('home') }}/topic/{{ $topic['topic_id'] }}</guid>
+            <guid>{{ App::setting('home') }}/topic/{{ $topic['id'] }}</guid>
         </item>
     @endforeach
 @stop

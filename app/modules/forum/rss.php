@@ -8,7 +8,7 @@ case 'index':
 
     $topics = Topic::where('closed', 0)
         ->with('lastPost.user')
-        ->orderBy('created_at', 'desc')
+        ->orderBy('updated_at', 'desc')
         ->limit(15)
         ->get();
 
@@ -17,6 +17,7 @@ case 'index':
     }
 
     App::view('forum/rss', compact('topics'));
+    var_dump(getQueryLog()); exit;
 break;
 
 /**
@@ -26,17 +27,19 @@ case 'posts':
 
     $tid = param('tid');
 
-    $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
+    $topic = Topic::find($tid);
 
     if (empty($topic)) {
         App::abort('default', 'Данной темы не существует!');
     }
 
-    $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` DESC LIMIT 15;", [$tid]);
-    $posts = $querypost->fetchAll();
+    $posts = Post::where('topic_id', $tid)
+        ->orderBy('created_at', 'desc')
+        ->with('user')
+        ->limit(15)
+        ->get();
 
     App::view('forum/rss_posts', compact('topic', 'posts'));
-
 break;
 endswitch;
 
