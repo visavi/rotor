@@ -59,13 +59,11 @@ if (empty($find)) {
                 $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
                 $searchper = ($period > 0) ? "updated_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
-                $search = Topic::select('id')
+                $result = Topic::select('id')
                 ->whereRaw($searchsec .' '. $searchper .' MATCH (`title`) AGAINST (? IN BOOLEAN MODE)', [$findme])
                 ->limit(100)
-                ->get()
-                ->toArray();
-
-                $result = array_column($search, 'id');
+                ->pluck('id')
+                ->all();
 
                 $_SESSION['forumfind'] = $forumfind;
                 $_SESSION['forumfindres'] = $result;
@@ -100,13 +98,11 @@ if (empty($find)) {
                 $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
                 $searchper = ($period > 0) ? "created_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
-                $search = Post::select('id')
+                $result = Post::select('id')
                     ->whereRaw($searchsec .' '. $searchper .' MATCH (`text`) AGAINST (? IN BOOLEAN MODE)', [$findme])
                     ->limit(100)
-                    ->get()
-                    ->toArray();
-
-                $result = array_column($search, 'id');
+                    ->pluck('id')
+                    ->all();
 
                 $_SESSION['forumfind'] = $forumfind;
                 $_SESSION['forumfindres'] = $result;

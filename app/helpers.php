@@ -281,18 +281,23 @@ FROM `users` u LEFT JOIN `status` s ON u.`point` BETWEEN s.`topoint` AND s.`poin
     }
 }
 
-// ------------- Функция вывода статусов пользователей -----------//
-function user_title($login) {
-    global $config;
-    static $arrstat;
+function user_title($user) {
 
-    if (empty($arrstat)) {
-        save_title(3600);
-        $arrstat = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
+    global $config;
+    static $status;
+
+    if (! $user) {
+        return $config['statusdef'];
     }
 
-    return (isset($arrstat[$login])) ? $arrstat[$login] : $config['statusdef'];
+    if (empty($status)) {
+        save_title(3600);
+        $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
+    }
+
+    return isset($status[$user->id]) ? $status[$user->id] : $config['statusdef'];
 }
+// ------------- Функция вывода статусов пользователей -----------//
 
 // --------------- Функция кэширования настроек -------------------//
 function save_setting() {
@@ -473,31 +478,34 @@ function user_mail($login) {
 // --------------- Функция кэширования аватаров -------------------//
 function save_avatar($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/avatars.dat") < time() - $time) {
-        $queryavat = DB::run() -> query("SELECT `login`, `avatar` FROM `users` WHERE `avatar`<>?;", ['']);
-        $allavat = $queryavat -> fetchAssoc();
-        file_put_contents(STORAGE."/temp/avatars.dat", serialize($allavat), LOCK_EX);
+
+        $avatars = User::select('id', 'avatar')
+            ->where('avatar', '<>', '')
+            ->pluck('avatar', 'id')
+            ->all();
+
+        file_put_contents(STORAGE."/temp/avatars.dat", serialize($avatars), LOCK_EX);
     }
 }
 
 // --------------- Функция вывода аватара пользователя ---------------//
-function user_avatars($login) {
-    global $config;
-    static $arravat;
+function user_avatars($user) {
+    static $avatars;
 
-    if ($login == $config['guestsuser']) {
+    if (! $user) {
         return '<img src="/assets/img/images/avatar_guest.png" alt="" /> ';
     }
 
-    if (empty($arravat)) {
+    if (is_null($avatars)) {
         save_avatar(3600);
-        $arravat = unserialize(file_get_contents(STORAGE."/temp/avatars.dat"));
+        $avatars = unserialize(file_get_contents(STORAGE."/temp/avatars.dat"));
     }
 
-    if (isset($arravat[$login]) && file_exists(HOME.'/uploads/avatars/'.$arravat[$login])) {
-        return '<a href="/user/'.$login.'"><img src="/uploads/avatars/'.$arravat[$login].'" alt="" /></a> ';
+    if (isset($avatars[$user->id]) && file_exists(HOME.'/uploads/avatars/'.$avatars[$user->id])) {
+        return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$avatars[$user->id].'" alt="" /></a> ';
     }
 
-    return '<a href="/user/'.$login.'"><img src="/assets/img/images/avatar_default.png" alt="" /></a> ';
+    return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt="" /></a> ';
 }
 
 
@@ -552,7 +560,7 @@ function show_online() {
 
     if ($config['onlines'] == 1) {
         $online = stats_online();
-        render('includes/online', compact('online'));
+        App::view('includes/online', compact('online'));
     }
 }
 
@@ -600,7 +608,7 @@ function show_counter()
     if ($config['incount'] > 0) {
         $count = stats_counter();
 
-        render('includes/counter', compact('count'));
+        App::view('includes/counter', compact('count'));
     }
 }
 
@@ -715,24 +723,26 @@ function stats_invite() {
 }
 
 // --------------- Функция определение онлайн-статуса ---------------//
-function user_online($userId) {
-    static $states;
+function user_online($user) {
+    static $visits;
 
     $online = '<i class="fa fa-asterisk text-danger"></i>';
 
-    if (empty($states)) {
-        if (@filemtime(STORAGE."/temp/visit.dat") < time()-10) {
+    if (is_null($visits)) {
+        if (@filemtime(STORAGE."/temp/visit.dat") < time() - 10) {
 
-            $visits = Visit::where('updated_at', '>', SITETIME-600)->get()->toArray();
-            $visits = array_column($visits, 'user_id');
+            $visits = Visit::select('user_id')
+                ->where('updated_at', '>', SITETIME - 600)
+                ->pluck('user_id', 'user_id')
+                ->all();
 
             file_put_contents(STORAGE."/temp/visit.dat", serialize($visits), LOCK_EX);
         }
 
-        $states = unserialize(file_get_contents(STORAGE."/temp/visit.dat"));
+        $visits = unserialize(file_get_contents(STORAGE."/temp/visit.dat"));
     }
 
-    if (is_array($states) && in_array($userId, $states)) {
+    if ($user && isset($visits[$user->id])) {
         $online = '<i class="fa fa-asterisk fa-spin text-success"></i>';
     }
 
@@ -740,21 +750,25 @@ function user_online($userId) {
 }
 
 // --------------- Функция определение пола пользователя ---------------//
-function user_gender($userId) {
-    static $arrgender;
+function user_gender($user) {
+    static $genders;
 
     $gender = 'male';
 
-    if (empty($arrgender)) {
-        if (@filemtime(STORAGE."/temp/gender.dat") < time()-600) {
-            $querygender = DB::run() -> query("SELECT `id` FROM `users` WHERE `gender`=?;", [2]);
-            $allgender = $querygender -> fetchAll(PDO::FETCH_COLUMN);
-            file_put_contents(STORAGE."/temp/gender.dat", serialize($allgender), LOCK_EX);
+    if (is_null($genders)) {
+        if (@filemtime(STORAGE."/temp/gender.dat") < time() - 600) {
+
+            $genders = User::select('id')
+                ->where('gender', 2)
+                ->pluck('id', 'id')
+                ->all();
+
+            file_put_contents(STORAGE."/temp/gender.dat", serialize($genders), LOCK_EX);
         }
-        $arrgender = unserialize(file_get_contents(STORAGE."/temp/gender.dat"));
+        $genders = unserialize(file_get_contents(STORAGE."/temp/gender.dat"));
     }
 
-    if (in_array($userId, $arrgender)) {
+    if ($user && isset($genders[$user->id])){
         $gender = 'female';
     }
 
@@ -773,19 +787,20 @@ function allonline() {
 }
 
 // ------------------ Функция определение последнего посещения ----------------//
-function user_visit($userId) {
-    $visit = '(Оффлайн)';
+function user_visit($user) {
+    $state = '(Оффлайн)';
 
-    $queryvisit = DB::run() -> querySingle("SELECT `updated_at` FROM `visit` WHERE `user_id`=? LIMIT 1;", [$userId]);
-    if (!empty($queryvisit)) {
-        if ($queryvisit > SITETIME-600) {
-            $visit = '(Сейчас на сайте)';
+    $visit = Visit::select('updated_at')->where('user_id', $user->id)->first();
+
+    if ($visit) {
+        if ($visit['updated_at'] > SITETIME - 600) {
+            $state = '(Сейчас на сайте)';
         } else {
-            $visit = '(Последний визит: '.date_fixed($queryvisit).')';
+            $state = '(Последний визит: '.date_fixed($visit['updated_at']).')';
         }
     }
 
-    return $visit;
+    return $state;
 }
 
 // ---------- Функция обработки строк данных и ссылок ---------//
@@ -1166,7 +1181,7 @@ function show_title($header, $subheader = false) {
     $config['subheader'] = $subheader;
 
     if (empty($show)) {
-        echo $show = render('includes/title', [], true);
+        echo $show = App::view('includes/title', [], true);
     }
 
     return $config;
@@ -1561,11 +1576,6 @@ function counter_string($files) {
     return $count_lines;
 }
 
-/*// --------------- Функция определения последней страницы -----------------//
-function last_page($total, $posts) {
-    return floor(($total - 1) / $posts) * $posts;
-}*/
-
 // ------------- Функция кэширования админских ссылок -------------//
 function cache_admin_links($cache=10800) {
     if (@filemtime(STORAGE.'/temp/adminlinks.dat') < time()-$cache) {
@@ -1654,14 +1664,14 @@ function redirect($url, $permanent = false){
 }
 
 // ------------- Функция вывода ссылки на анкету -------------//
-function profile($login, $color = false){
+function profile($user, $color = false){
     global $config;
 
-    if (!empty($login)){
+    if ($user){
         if ($color){
-            return '<a href="/user/'.$login.'"><span style="color:'.$color.'">'.$login.'</span></a>';
+            return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$user->login.'</span></a>';
         } else {
-            return '<a href="/user/'.$login.'">'.$login.'</a>';
+            return '<a href="/user/'.$user->login.'">'.$user->login.'</a>';
         }
     }
     return $config['guestsuser'];
@@ -1866,61 +1876,6 @@ function perfomance(){
 
         App::view('app/_perfomance', compact('queries'));
     }
-}
-
-/**
- * @deprecated нужно использовать App::view($view, $params = array(), $return = false)
- * @param $view
- * @param array $params
- * @param bool $return
- * @return string
- */
-// ------------ Функция подключения шаблонов -----------//
-function render($view, $params = [], $return = false){
-
-    extract($params);
-
-    if ($return) {
-        ob_start();
-    }
-
-    if (file_exists(HOME.'/themes/'.App::setting('themes').'/views/'.$view.'.php')){
-        include (HOME.'/themes/'.App::setting('themes').'/views/'.$view.'.php');
-    } else {
-        include (APP.'/views/'.$view.'.php');
-    }
-
-    if ($return) {
-        return ob_get_clean();
-    }
-}
-
-// ------------ Подготовка массивов -----------//
-function prepare_array($array, $key = 'show') {
-    $prepared_array = [];
-
-    if (is_array($array) && count($array)) {
-        foreach ($array as &$el) {
-            if (isset($el[$key]) && $el[$key] == false) continue;
-                $prepared_array[] = $el;
-        }
-        return $prepared_array;
-    }
-    return false;
-}
-
-
-
-
-/**
- * Проверка является ли запрос AJAX
- * @return boolean результат проверки
- */
-function isAjaxRequest()
-{
-    return (
-        !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-        && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 }
 
 /**

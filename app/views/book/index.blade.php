@@ -46,8 +46,8 @@
                     <?php if (empty($data['user_id'])): ?>
                         <b><?= App::setting('guestsuser') ?></b> <small>(<?=date_fixed($data['created_at'])?>)</small>
                     <?php else: ?>
-                        <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
-                        <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->id)?>
+                        <b><?=profile($data->user)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
+                        <?=user_title($data->user)?> <?=user_online($data->user)?>
                     <?php endif; ?>
                 </div>
 

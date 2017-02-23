@@ -1,6 +1,6 @@
 <?php
 
-if (isAjaxRequest()){
+if (Request::ajax()){
     $message = isset($_POST['data']) ? check($_POST['data']) : '';
 ?>
     <!doctype html>

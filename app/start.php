@@ -6,8 +6,7 @@ session_name('SID');
 session_start();
 
 if (!file_exists(STORAGE.'/temp/setting.dat')) {
-    $settings = Setting::all()->toArray();
-    $config = array_column($settings, 'value', 'name');
+    $config = Setting::pluck('value', 'name')->all();
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($config), LOCK_EX);
 }
 $config = unserialize(file_get_contents(STORAGE.'/temp/setting.dat'));

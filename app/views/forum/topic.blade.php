@@ -130,10 +130,10 @@
                     </div>
                 </div>
 
-                <div class="img"><?=user_avatars($data->getUser()->login)?></div>
+                <div class="img"><?=user_avatars($data->user)?></div>
 
-                <?=$num?>. <b><?=profile($data->getUser()->login)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
-                <?=user_title($data->getUser()->login)?> <?=user_online($data->getUser()->id)?>
+                <?=$num?>. <b><?=profile($data->user)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
+                <?=user_title($data->user)?> <?=user_online($data->user)?>
             </div>
 
             <div class="message">

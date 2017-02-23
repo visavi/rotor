@@ -40,8 +40,8 @@ if (is_admin()) {
                     if (empty($data['user_id'])) {
                         echo '<b>'.$data->getUser()->login.'</b> <small>('.date_fixed($data['created_at']).')</small>';
                     } else {
-                        echo '<b>'.profile($data->getUser()->login).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
-                        echo user_title($data->getUser()->login).' '.user_online($data->getUser()->id);
+                        echo '<b>'.profile($data->user).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
+                        echo user_title($data->user).' '.user_online($data->user);
                     }
 
                     echo '</div>';
@@ -88,7 +88,7 @@ if (is_admin()) {
             if ($post) {
                 echo '<b>Добавление ответа</b><br /><br />';
 
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->getUser()->login).'</b> '.user_title($post->getUser()->login) . user_online($post->getUser()->id).' <small>('.date_fixed($post['created_at']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> '.user_title($post->user) . user_online($post->user).' <small>('.date_fixed($post['created_at']).')</small></div>';
                 echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr />';
 
                 echo '<div class="form">';

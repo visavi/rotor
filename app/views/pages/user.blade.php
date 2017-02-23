@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>{!! user_avatars($user['login']) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user['id']) }}</small></h1>
+    <h1>{!! user_avatars($user['login']) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user) }}</small></h1>
 
     @if ($user['confirmreg'] == 1)
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br />
@@ -41,9 +41,9 @@
             <div class="col-md-6 col-md-pull-6">
 
 
-                Cтатус: <b><a href="/statusfaq">{!! user_title($user['login']) !!}</a></b><br />
+                Cтатус: <b><a href="/statusfaq">{!! user_title($user) !!}</a></b><br />
 
-                {!! user_gender($user['login']) !!}
+                {!! user_gender($user) !!}
                 Пол:
                 {{  ($user['gender'] == 1) ? 'Мужской' : 'Женский' }}<br />
 
@@ -87,7 +87,7 @@
 
                 <?php $invite = Invite::where('invite_user_id', $user['id'])->first(); ?>
                 @if (!empty($invite))
-                    Зарегистрирован по приглашению: {!! profile($invite->getUser()->login) !!}<br />
+                    Зарегистрирован по приглашению: {!! profile($invite->user) !!}<br />
                 @endif
 
                 Последняя авторизация: {{ date_fixed($user['timelastlogin']) }}<br />
@@ -124,7 +124,7 @@
 
         @if (!empty($usernote['text']))
             {!! App::bbCode($usernote['text']) !!}<br />
-            Изменено: {!! profile($usernote->getEditUser()->login) !!} ({{ date_fixed($usernote['updated_at']) }})<br />
+            Изменено: {!! profile($usernote->editUser) !!} ({{ date_fixed($usernote['updated_at']) }})<br />
         @else
             Записей еще нет!<br />
         @endif
