@@ -1,11 +1,18 @@
 <?php
 
 class Polling extends BaseModel {
-    
+
     /**
-     * The storage format of the model's date columns.
+     * Indicates if the model should be timestamped.
      *
-     * @var string
+     * @var bool
      */
-    protected $dateFormat = 'U';
+    public $timestamps = false;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

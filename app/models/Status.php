@@ -1,13 +1,13 @@
 <?php
 
-class FileForum extends BaseModel {
+class Status extends BaseModel {
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'files_forum';
+    protected $table = 'status';
 
     /**
      * Indicates if the model should be timestamped.
@@ -22,4 +22,5 @@ class FileForum extends BaseModel {
      * @var array
      */
     protected $guarded = [];
+
 }

@@ -1,13 +1,6 @@
 <?php
 
-class Photo extends BaseModel {
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'photo';
+class File extends BaseModel {
 
     /**
      * Indicates if the model should be timestamped.

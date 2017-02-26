@@ -15,5 +15,4 @@ class User extends BaseModel {
      * @var array
      */
     protected $guarded = [];
-
 }

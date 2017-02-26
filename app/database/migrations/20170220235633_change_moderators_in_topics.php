@@ -18,7 +18,7 @@ class ChangeModeratorsInTopics extends AbstractMigration
         $table->renameColumn('time', 'updated_at');
 
         $table
-            ->removeIndexByName('last_time')
+            ->removeIndexByName('time')
             ->addIndex('updated_at')
             ->save();
 

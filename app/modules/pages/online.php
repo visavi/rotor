@@ -27,7 +27,7 @@ switch ($act):
 
             foreach ($online as $data) {
                 echo '<div class="b">';
-                echo user_gender($data->getUser()->login).' <b>'.profile($data->getUser()->login).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
+                echo user_gender($data->user).' <b>'.profile($data->user).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
 
                 if (is_admin() || empty($config['anonymity'])) {
                     echo '<div><span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
@@ -64,7 +64,7 @@ switch ($act):
                     echo '<i class="fa fa-user-circle-o"></i> <b>'.$config['guestsuser'].'</b>  (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
                 } else {
                     echo '<div class="b">';
-                    echo user_gender($data->getUser()->login).' <b>'.profile($data->getUser()->login).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
+                    echo user_gender($data->user).' <b>'.profile($data->user).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
                 }
 
                 if (is_admin() || empty($config['anonymity'])) {

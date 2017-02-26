@@ -13,19 +13,19 @@ if (! in_array($vote, [1, -1])) {
     exit(json_encode(['status' => 'error']));
 }
 
-Polling::where('relate_type', 'post')
-    ->where_lt('time', SITETIME)
-    ->delete_many();
+Polling::where('relate_type', $type)
+    ->where('created_at', '<', SITETIME)
+    ->delete();
 
-$post = Post::where_not_equal('user', $log)->find_one($id);
+$post = Post::where('user_id', '<>', App::getUserId())->find($id);
 if (! $post) {
     exit(json_encode(['status' => 'error']));
 }
 
-$polling = Polling::where('relate_type', 'post')
+$polling = Polling::where('relate_type', $type)
     ->where('relate_id', $id)
-    ->where('user', $log)
-    ->find_one();
+    ->where('user_id', App::getUserId())
+    ->first();
 
 $cancel = false;
 
@@ -39,21 +39,18 @@ if ($polling) {
     }
 } else {
 
-    $poll = Polling::create();
-    $poll->set([
+    $poll = Polling::create([
         'relate_type' => $type,
         'relate_id' => $id,
-        'user' => $log,
+        'user_id' => App::getUserId(),
         'vote' => $vote,
-        'time' => $expiresrating,
+        'created_at' => $expiresrating,
     ]);
-    $poll->save();
 }
 
 $operation = ($vote == '1') ? '+' : '-';
-$post->set_expr('rating', "rating $operation 1");
-$post->save();
 
-$post = Post::find_one($id);
+$post->update(['rating' => Capsule::raw("rating $operation 1")]);
+$post = Post::find($id);
 
 echo json_encode(['status' => 'success', 'cancel' => $cancel, 'count' => $post['rating']]);

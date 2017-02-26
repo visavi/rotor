@@ -51,7 +51,7 @@ function unlink_image($dir, $image) {
 // ------------------- Функция полного удаления юзера --------------------//
 function delete_users($user) {
     if (!empty($user)){
-        $userpic = User::where('login', $user)->find_one();
+        $userpic = User::where('login', $user)->first();
 
         unlink_image('uploads/photos/', $userpic['picture']);
         unlink_image('uploads/avatars/', $userpic['avatar']);
@@ -259,25 +259,28 @@ function user_status($level) {
 // ---------------- Функция кэширования статусов ------------------//
 function save_title($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
-        $querylevel = DB::run() -> query("SELECT u.`login`, u.`status`, s.`name`, s.`color`
-FROM `users` u LEFT JOIN `status` s ON u.`point` BETWEEN s.`topoint` AND s.`point` WHERE u.`point`>?;", [0]);
 
-        $allstat = [];
-        while ($row = $querylevel -> fetch()) {
-            if (!empty($row['status'])) {
-                $allstat[$row['login']] = '<span style="color:#ff0000">'.$row['status'].'</span>';
+    $users = User::select('users.id', 'users.status', 'status.name', 'status.color')
+        ->leftJoin('status', 'users.point', 'between', Capsule::raw('status.topoint and status.point'))
+        ->where('users.point', '>', 0)
+        ->get();
+
+        $statuses = [];
+        foreach ($users as $user) {
+            if (! empty($user['status'])) {
+                $statuses[$user['id']] = '<span style="color:#ff0000">'.$user['status'].'</span>';
                 continue;
             }
 
-            if (!empty($row['color'])) {
-                $allstat[$row['login']] = '<span style="color:'.$row['color'].'">'.$row['name'].'</span>';
+            if (! empty($user['color'])) {
+                $statuses[$user['id']] = '<span style="color:'.$user['color'].'">'.$user['name'].'</span>';
                 continue;
             }
 
-            $allstat[$row['login']] = $row['name'];
+            $statuses[$user['id']] = $user['name'];
         }
 
-        file_put_contents(STORAGE.'/temp/status.dat', serialize($allstat), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/status.dat', serialize($statuses), LOCK_EX);
     }
 }
 
@@ -290,11 +293,10 @@ function user_title($user) {
         return $config['statusdef'];
     }
 
-    if (empty($status)) {
+    if (is_null($status)) {
         save_title(3600);
         $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
     }
-
     return isset($status[$user->id]) ? $status[$user->id] : $config['statusdef'];
 }
 // ------------- Функция вывода статусов пользователей -----------//
@@ -778,9 +780,13 @@ function user_gender($user) {
 // --------------- Функция вывода пользователей онлайн ---------------//
 function allonline() {
     if (@filemtime(STORAGE."/temp/allonline.dat") < time()-30) {
-        $queryvisit = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>? ORDER BY `nowtime` DESC;", [SITETIME-600]);
-        $allvisits = $queryvisit -> fetchAll(PDO::FETCH_COLUMN);
-        file_put_contents(STORAGE."/temp/allonline.dat", serialize($allvisits), LOCK_EX);
+        $visits = Visit::select('user_id')
+            ->where('updated_at', '>', SITETIME - 600)
+            ->orderBy('updated_at', 'desc')
+            ->pluck('user_id')
+            ->all();
+
+        file_put_contents(STORAGE."/temp/allonline.dat", serialize($visits), LOCK_EX);
     }
 
     return unserialize(file_get_contents(STORAGE."/temp/allonline.dat"));
@@ -1399,7 +1405,7 @@ function recentphotos($show = 5) {
     global $config;
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
 
-        $recent = ORM::for_table('photo')->order_by_desc('time')->limit($show)->find_many();
+        $recent = Photo::orderBy('time', 'desc')->limit($show)->get();
 
         file_put_contents(STORAGE."/temp/recentphotos.dat", serialize($recent), LOCK_EX);
     }

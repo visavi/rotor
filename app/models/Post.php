@@ -9,6 +9,12 @@ class Post extends BaseModel {
      */
     public $timestamps = false;
 
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
     /**
      * Возвращает связь пользователей
@@ -43,11 +49,19 @@ class Post extends BaseModel {
     }
 
     /**
+     * Возвращает объект голосований
+     */
+    public function getPolling()
+    {
+        return $this->polling ? $this->polling : new Polling();
+    }
+
+    /**
      * Возвращает загруженные файлы
      */
     public function files()
     {
-        return $this->hasMany('FileForum');
+        return $this->morphMany('File', 'relate');
     }
 
     /**

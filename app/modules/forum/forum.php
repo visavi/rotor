@@ -95,7 +95,7 @@ case 'create':
 
             DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
 
-            DB::run() -> query("INSERT INTO `topics` (`forum_id`, `title`, `user_id`, `posts`, time) VALUES (?, ?, ?, ?, ?);", [$fid, $title, App::getUserId(), 1, SITETIME]);
+            DB::run() -> query("INSERT INTO `topics` (`forum_id`, `title`, `user_id`, `posts`, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?);", [$fid, $title, App::getUserId(), 1, SITETIME, SITETIME]);
 
             $lastid = DB::run() -> lastInsertId();
 

@@ -36,10 +36,10 @@ case 'index':
     }
 
     // --------------------------------------------------------------//
-/*    if (!empty($topic['moderators'])) {
-        $topic['curator'] = explode(',', $topic['moderators']);
-        $topic['is_moder'] = in_array($log, $topic['curator'], true) ? 1 : 0;
-    }*/
+    if (!empty($topic['moderators'])) {
+        $topic['curators'] = User::whereIn('id', explode(',', $topic['moderators']))->get();
+        $topic['isModer'] = $topic['curators']->where('id', App::getUserId())->isNotEmpty();
+    }
 
     // Голосование
     $vote = Vote::where('topic_id', $tid)->first();
@@ -51,12 +51,11 @@ case 'index':
 
         $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
             ->orderBy('id')
-            ->get()
-            ->toArray();
+            ->get();
 
         if ($vote['answers']) {
 
-            $results = array_column($vote['answers'], 'result', 'answer');
+            $results = array_pluck($vote['answers'], 'result', 'answer');
             $max = max($results);
 
             arsort($results);
@@ -107,7 +106,7 @@ case 'create':
 
         } else {
 
-            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `forum_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$tid, $topics['forum_id'], App::getUserId(), $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
+            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$tid, App::getUserId(), $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
             $lastid = DB::run() -> lastInsertId();
 
             DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=? LIMIT 1;", [App::getUserId()]);
@@ -181,9 +180,9 @@ case 'create':
 
                             move_uploaded_file($_FILES['file']['tmp_name'], HOME.'/uploads/forum/'.$topics['id'].'/'.$hash);
 
-                            $file = new FileForum();
-                            $file->topic_id = $topics['id'];
-                            $file->post_id = $lastid;
+                            $file = new File();
+                            $file->relate_type = Post::class;
+                            $file->relate_id = $lastid;
                             $file->hash = $hash;
                             $file->name = $filename;
                             $file->size = $filesize;
@@ -281,7 +280,7 @@ case 'delete':
         $del = implode(',', $del);
 
         // ------ Удаление загруженных файлов -------//
-        $queryfiles = DB::run() -> query("SELECT `hash` FROM `files_forum` WHERE `post_id` IN (".$del.");");
+        $queryfiles = DB::run() -> query("SELECT `hash` FROM `files` WHERE `relate_id` IN (".$del.") AND relate_type=?;", [Post::class]);
         $files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
 
         if (!empty($files)){
@@ -290,7 +289,7 @@ case 'delete':
                     unlink(HOME.'/uploads/forum/'.$topic['id'].'/'.$file);
                 }
             }
-            DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id` IN (".$del.");");
+            DB::run() -> query("DELETE FROM `files` WHERE `relate_id` IN (".$del.")  AND relate_type=?;", [Post::class]);
         }
 
         $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `id` IN (".$del.") AND `topic_id`=".$tid.";");
@@ -459,16 +458,16 @@ case 'editpost':
             // ------ Удаление загруженных файлов -------//
             if ($delfile) {
                 $del = implode(',', $delfile);
-                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$id]);
+                $queryfiles = DB::run() -> query("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$id, Post::class]);
                 $files = $queryfiles->fetchAll();
 
                 if (!empty($files)){
                     foreach ($files as $file){
-                        if (file_exists(HOME.'/uploads/forum/'.$file['topic_id'].'/'.$file['hash'])){
-                            unlink_image('uploads/forum/', $file['topic_id'].'/'.$file['hash']);
+                        if (file_exists(HOME.'/uploads/forum/'.$post['topic_id'].'/'.$file['hash'])){
+                            unlink_image('uploads/forum/', $post['topic_id'].'/'.$file['hash']);
                         }
                     }
-                    DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$id]);
+                    DB::run() -> query("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$id, Post::class]);
                 }
             }
 
@@ -481,7 +480,7 @@ case 'editpost':
         }
     }
 
-    $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=?;", [$id]);
+    $queryfiles = DB::run() -> query("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=?;", [$id, Post::class]);
     $files = $queryfiles->fetchAll();
 
     App::view('forum/topic_edit_post', compact('post', 'files', 'page'));

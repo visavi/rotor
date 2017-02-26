@@ -27,11 +27,11 @@
         / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic['id'] }}" data-token="{{ $_SESSION['token'] }}">{{ $bookmark }}</a>
     <?php endif; ?>
 
-    <?php if (!empty($topic['curator'])): ?>
+    <?php if (!empty($topic['curators'])): ?>
        <div>
             <span class="label label-info">
                 <i class="fa fa-wrench"></i> Кураторы темы:
-                <?php foreach ($topic['curator'] as $key => $curator): ?>
+                <?php foreach ($topic['curators'] as $key => $curator): ?>
                     <?php $comma = (empty($key)) ? '' : ', '; ?>
                     <?=$comma?><?=profile($curator)?>
                 <?php endforeach; ?>
@@ -64,7 +64,7 @@
         <a href="/admin/forum?act=topic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Управление</a><br />
     <?php endif; ?>
 
-    <?php if (!empty($topic['is_moder'])): ?>
+    <?php if (!empty($topic['isModer'])): ?>
         <form action="/topic/<?=$topic['id']?>/delete?page=<?=$page['current']?>" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
     <?php endif; ?>
@@ -112,20 +112,20 @@
                         </noindex>
                     <?php endif; ?>
 
-                    <?php if ((App::getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME) || !empty($topic['is_moder'])): ?>
+                    <?php if ((App::getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME) || !empty($topic['isModer'])): ?>
                         <a href="/topic/<?=$topic['id']?>/<?=$data['id']?>/edit?page=<?=$page['current']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
-                        <?php if (!empty($topic['is_moder'])): ?>
+                        <?php if (!empty($topic['isModer'])): ?>
                         <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
                         <?php endif; ?>
                     <?php endif; ?>
 
                     <div class="js-rating">
                         @unless (App::getUserId() == $data['user_id'])
-                            <a class="post-rating-down<?= $data['vote'] == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="post" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
+                            <a class="post-rating-down<?= $data->getPolling()->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="Post" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                         @endunless
                         <span>{{ $data['rating'] }}</span>
                         @unless (App::getUserId() == $data['user_id'])
-                            <a class="post-rating-up<?= $data['vote'] == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="post" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
+                            <a class="post-rating-up<?= $data->getPolling()->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="Post" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                         @endunless
                     </div>
                 </div>
@@ -169,7 +169,7 @@
         <?php show_error('Сообщений еще нет, будь первым!'); ?>
     <?php endif; ?>
 
-    <?php if (!empty($topic['is_moder'])): ?>
+    <?php if (!empty($topic['isModer'])): ?>
         <span class="pull-right">
             <button type="submit" class="btn btn-danger">Удалить выбранное</button>
         </span>

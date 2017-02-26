@@ -27,7 +27,7 @@
         </div>
 
         <div>
-            @if (! $forum->children->isEmpty())
+            @if ($forum->children->isNotEmpty())
                 @foreach($forum->children as $child)
                     <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $child['id'] }}">{{ $child['title'] }}</a></b>
                     ({{ $child->topics }}/{{ $child->posts }})<br/>

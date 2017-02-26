@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>{!! user_avatars($user['login']) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user) }}</small></h1>
+    <h1>{!! user_avatars($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user) }}</small></h1>
 
     @if ($user['confirmreg'] == 1)
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br />
