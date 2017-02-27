@@ -16,8 +16,13 @@ case 'index':
         ->with(['bookmark' => function($query) {$query->where('user_id', App::getUserId());}])
         ->first();
 
-    $posts = Post::where('topic_id', $tid)
-        ->with('polling', 'files', 'user')
+    $posts = Post::select('posts.*', 'pollings.vote')
+        ->where('topic_id', $tid)
+        ->leftJoin ('pollings', function($join) {
+            $join->on('posts.id', '=', 'pollings.relate_id')
+            ->where('pollings.relate_type', '=', Post::class);
+        })
+        ->with('files', 'user')
         ->offset($page['offset'])
         ->limit(App::setting('forumpost'))
         ->orderBy('created_at', 'asc')

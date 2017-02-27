@@ -41,22 +41,6 @@ class Post extends BaseModel {
     }
 
     /**
-     * Получает голоса за посты
-     */
-    public function polling()
-    {
-        return $this->morphOne('Polling', 'relate')->where('user_id', App::getUserId());
-    }
-
-    /**
-     * Возвращает объект голосований
-     */
-    public function getPolling()
-    {
-        return $this->polling ? $this->polling : new Polling();
-    }
-
-    /**
      * Возвращает загруженные файлы
      */
     public function files()

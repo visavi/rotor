@@ -121,11 +121,11 @@
 
                     <div class="js-rating">
                         @unless (App::getUserId() == $data['user_id'])
-                            <a class="post-rating-down<?= $data->getPolling()->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="Post" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
+                            <a class="post-rating-down<?= $data->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="Post" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                         @endunless
                         <span>{{ $data['rating'] }}</span>
                         @unless (App::getUserId() == $data['user_id'])
-                            <a class="post-rating-up<?= $data->getPolling()->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="Post" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
+                            <a class="post-rating-up<?= $data->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="Post" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                         @endunless
                     </div>
                 </div>

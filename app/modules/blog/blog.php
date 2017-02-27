@@ -211,7 +211,7 @@ case 'blogs':
         $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".$config['bloggroup'].";");
         $blogs = $queryblogs -> fetchAll();
 
-        App::view(('blog/blog_blogs', compact('blogs', 'total'));
+        App::view('blog/blog_blogs', compact('blogs', 'total'));
 
         App::pagination($page);
 
@@ -609,7 +609,7 @@ case 'editpost':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    App::view(('includes/back', ['link' => '/blog/blog?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################

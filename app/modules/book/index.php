@@ -12,7 +12,7 @@ case 'index':
     $posts = Guest::orderBy('created_at', 'desc')
         ->limit(App::setting('bookpost'))
         ->offset($page['offset'])
-        ->with('user')
+        ->with('user', 'editUser')
         ->get();
 
     App::view('book/index', compact('posts', 'page'));
