@@ -23,7 +23,7 @@
            / <a href="/topic/<?= $topic['id'] ?>/edit">Изменить</a>
         <?php endif; ?>
 
-        <?php $bookmark = $topic['bookmark'] ? 'Из закладок' : 'В закладки'; ?>
+        <?php $bookmark = $topic['bookmark_posts'] ? 'Из закладок' : 'В закладки'; ?>
         / <a href="#" onclick="return bookmark(this)" data-tid="{{ $topic['id'] }}" data-token="{{ $_SESSION['token'] }}">{{ $bookmark }}</a>
     <?php endif; ?>
 

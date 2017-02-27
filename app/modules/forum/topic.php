@@ -11,18 +11,22 @@ case 'index':
     $total = Post::where('topic_id', $tid)->count();
     $page = App::paginate(App::setting('forumpost'), $total);
 
-    $topic = Topic::where('id', $tid)
+    $topic = Topic::select('topics.*', 'bookmarks.posts as bookmark_posts')
+        ->where('topics.id', $tid)
+        ->leftJoin('bookmarks', function($join){
+            $join->on('topics.id', '=', 'bookmarks.topic_id')
+                ->where('bookmarks.user_id', '=', App::getUserId());
+        })
         ->with('forum.parent')
-        ->with(['bookmark' => function($query) {$query->where('user_id', App::getUserId());}])
         ->first();
 
     $posts = Post::select('posts.*', 'pollings.vote')
         ->where('topic_id', $tid)
         ->leftJoin ('pollings', function($join) {
             $join->on('posts.id', '=', 'pollings.relate_id')
-            ->where('pollings.relate_type', '=', Post::class);
+                ->where('pollings.relate_type', '=', Post::class);
         })
-        ->with('files', 'user')
+        ->with('files', 'user', 'editUser')
         ->offset($page['offset'])
         ->limit(App::setting('forumpost'))
         ->orderBy('created_at', 'asc')
@@ -33,7 +37,7 @@ case 'index':
     }
 
     if (is_user()) {
-        if ($topic->bookmark && $topic['posts'] > $topic['bookmark']['posts']) {
+        if ($topic->bookmark && $topic['posts'] > $topic['bookmark_posts']) {
             Bookmark::where('topic_id', $tid)
                 ->where('user_id', App::getUserId())
                 ->update(['posts' => $topic['posts']]);
