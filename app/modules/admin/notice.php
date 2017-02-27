@@ -67,7 +67,7 @@ case 'new':
 
     echo '<input type="submit" value="Сохранить" /></form></div><br />';
 
-    render('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
 break;
 
 /**
@@ -98,7 +98,7 @@ case 'edit':
         show_error('Ошибка! Шаблона для редактирования не существует!');
     }
 
-    render('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
 break;
 
 /**
@@ -147,7 +147,7 @@ case "save":
         show_error($validation->getErrors());
     }
 
-    render('includes/back', ['link' => '/admin/notice?act=edit&amp;id='.$id, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/admin/notice?act=edit&amp;id='.$id, 'title' => 'Вернуться']);
 break;
 
 /**
@@ -176,11 +176,11 @@ case 'del':
         show_error($validation->getErrors());
     }
 
-    render('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
 break;
 
 endswitch;
 
-render('includes/back', ['link' => '/admin', 'title' => 'В админку', 'icon' => 'fa-wrench']);
+App::view('includes/back', ['link' => '/admin', 'title' => 'В админку', 'icon' => 'fa-wrench']);
 
 App::view($config['themes'].'/foot');

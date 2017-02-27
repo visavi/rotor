@@ -13,7 +13,7 @@ $config['newtitle'] = 'Блоги - Список разделов';
 
     if (count($blogs) > 0) {
 
-        render('blog/index', ['blogs' => $blogs]);
+        App::view('blog/index', ['blogs' => $blogs]);
 
     } else {
         show_error('Разделы блогов еще не созданы!');

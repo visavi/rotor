@@ -37,7 +37,7 @@ header('Content-type:text/html; charset=utf-8');
                 <?= $config['logos'] ?>
             </div>
 
-            <?php render('includes/menu'); ?>
+            <?php App::view('includes/menu'); ?>
 
             <div class="site">
-<?= render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= App::view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

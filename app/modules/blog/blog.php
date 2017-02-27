@@ -31,7 +31,7 @@ case 'index':
                 $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$cid]);
                 $blogs = $queryblog->fetchAll();
 
-                render('blog/blog', compact('blogs', 'cats', 'page'));
+                App::view('blog/blog', compact('blogs', 'cats', 'page'));
 
                 App::pagination($page);
 
@@ -90,7 +90,7 @@ case 'view':
                 $tags .= $comma.'<a href="/blog/tags?act=search&amp;tags='.urlencode($value).'">'.$value.'</a>';
             }
 
-            render('blog/blog_view', compact('blogs', 'tags', 'page'));
+            App::view('blog/blog_view', compact('blogs', 'tags', 'page'));
 
         } else {
             show_error('Текста статьи еще нет!');
@@ -99,7 +99,7 @@ case 'view':
         show_error('Ошибка! Данной статьи не существует!');
     }
 
-    render('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 break;
 
 ############################################################################################
@@ -115,7 +115,7 @@ case 'editblog':
                 $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
                 $cats = $querycats -> fetchAll();
 
-                render('blog/blog_editblog', ['blogs' => $blogs, 'cats' => $cats]);
+                App::view('blog/blog_editblog', ['blogs' => $blogs, 'cats' => $cats]);
 
             } else {
                 show_error('Ошибка! Изменение невозможно, вы не автор данной статьи!');
@@ -127,8 +127,8 @@ case 'editblog':
         show_login('Вы не авторизованы, чтобы редактировать статьи, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog/?act=view&amp;id='.$id, 'title' => 'Вернуться']);
-    render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
+    App::view('includes/back', ['link' => '/blog/blog/?act=view&amp;id='.$id, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
 break;
 
@@ -192,8 +192,8 @@ case 'changeblog':
         show_login('Вы не авторизованы, чтобы редактировать статьи, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=editblog&amp;id='.$id, 'title' => 'Вернуться']);
-    render('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'К статье', 'icon' => 'fa-arrow-circle-up']);
+    App::view('includes/back', ['link' => '/blog/blog?act=editblog&amp;id='.$id, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'К статье', 'icon' => 'fa-arrow-circle-up']);
 break;
 
 ############################################################################################
@@ -211,7 +211,7 @@ case 'blogs':
         $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".$config['bloggroup'].";");
         $blogs = $queryblogs -> fetchAll();
 
-        render('blog/blog_blogs', compact('blogs', 'total'));
+        App::view(('blog/blog_blogs', compact('blogs', 'total'));
 
         App::pagination($page);
 
@@ -219,7 +219,7 @@ case 'blogs':
         show_error('Статей еще нет!');
     }
 
-    render('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 break;
 
 ############################################################################################
@@ -236,7 +236,7 @@ case 'new':
 
         if (count($cats) > 0) {
 
-            render('blog/blog_new', ['cats' => $cats, 'cid' => $cid]);
+            App::view('blog/blog_new', ['cats' => $cats, 'cid' => $cid]);
 
         } else {
             show_error('Категории блогов еще не созданы!');
@@ -245,7 +245,7 @@ case 'new':
         show_login('Вы не авторизованы, для создания новой статьи, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 break;
 
 ############################################################################################
@@ -309,7 +309,7 @@ case 'addblog':
         show_login('Вы не авторизованы, для создания новой статьи, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=new&amp;cid='.$cid, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=new&amp;cid='.$cid, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -365,7 +365,7 @@ case 'vote':
         show_login('Вы не авторизованы, для голосования за статьи, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -386,7 +386,7 @@ case 'comments':
             $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['blogcomm'].";", ['blog', $id]);
             $comments = $querycomm -> fetchAll();
 
-            render('blog/blog_comments', ['blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'page' => $page]);
+            App::view('blog/blog_comments', ['blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'page' => $page]);
 
             App::pagination($page);
         } else {
@@ -394,7 +394,7 @@ case 'comments':
         }
 
         if (is_user()) {
-            render('blog/blog_comments_form', ['blogs' => $blogs]);
+            App::view('blog/blog_comments_form', ['blogs' => $blogs]);
         } else {
             show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
         }
@@ -402,8 +402,8 @@ case 'comments':
         show_error('Ошибка! Данной статьи не существует!');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'Вернуться']);
-    render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
+    App::view('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 break;
 
 ############################################################################################
@@ -451,7 +451,7 @@ case 'add':
         show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -492,7 +492,7 @@ case 'spam':
         show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -507,7 +507,7 @@ case 'reply':
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
 
         if (!empty($post)) {
-            render('blog/blog_reply', ['post' => $post, 'id' => $id]);
+            App::view('blog/blog_reply', ['post' => $post, 'id' => $id]);
         } else {
             show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
         }
@@ -515,7 +515,7 @@ case 'reply':
         show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -530,7 +530,7 @@ case 'quote':
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
 
         if (!empty($post)) {
-            render('blog/blog_quote', ['post' => $post, 'id' => $id]);
+            App::view('blog/blog_quote', ['post' => $post, 'id' => $id]);
         } else {
             show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
         }
@@ -538,7 +538,7 @@ case 'quote':
         show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -556,7 +556,7 @@ case 'edit':
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
 
-                render('blog/blog_edit', ['post' => $post, 'pid' => $pid, 'page' => $page]);
+                App::view('blog/blog_edit', ['post' => $post, 'pid' => $pid, 'page' => $page]);
             } else {
                 show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
             }
@@ -567,7 +567,7 @@ case 'edit':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;apage='.$page, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;apage='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -609,7 +609,7 @@ case 'editpost':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page, 'title' => 'Вернуться']);
+    App::view(('includes/back', ['link' => '/blog/blog?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -646,7 +646,7 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    render('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 ############################################################################################
@@ -667,7 +667,7 @@ case 'end':
         show_error('Ошибка! Комментарий к данной статье не существует!');
     }
 
-    render('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 break;
 
 endswitch;

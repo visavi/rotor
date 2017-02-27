@@ -26,7 +26,7 @@ case 'index':
         $photos = $queryphoto->fetchAll();
     }
 
-    render('gallery/index', compact('photos', 'page', 'total'));
+    App::view('gallery/index', compact('photos', 'page', 'total'));
 break;
 
     ############################################################################################
@@ -36,7 +36,7 @@ break;
 
         $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
-        render('gallery/view', compact('photo', 'page'));
+        App::view('gallery/view', compact('photo', 'page'));
 
     break;
 

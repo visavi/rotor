@@ -200,7 +200,7 @@ header("Content-type:text/html; charset=utf-8");
                         <div class="art-Post-inner">
 
 <div class="art-PostMetadataHeader">
-<?= render('includes/note'); ?>
+<?= App::view('includes/note'); ?>
 </div>
 
 

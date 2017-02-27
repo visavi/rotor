@@ -82,4 +82,4 @@ if (is_user()){
         </div>
         <div id="main">
             <div class="body_center">
-<?= render('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= App::view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

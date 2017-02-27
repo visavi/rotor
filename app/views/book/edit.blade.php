@@ -22,5 +22,5 @@
         </form>
     </div><br />
 
-    <?php render('includes/back', ['link' => '/book', 'title' => 'Вернуться']); ?>
+    <?php App::view('includes/back', ['link' => '/book', 'title' => 'Вернуться']); ?>
 @stop

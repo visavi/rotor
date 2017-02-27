@@ -20,7 +20,7 @@ case 'blogs':
         $queryblogs = DB::run() -> query("SELECT * FROM `blogs` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$uz]);
         $blogs = $queryblogs -> fetchAll();
 
-        render('blog/active_blogs', compact('blogs'));
+        App::view('blog/active_blogs', compact('blogs'));
 
         App::pagination($page);
 
@@ -46,7 +46,7 @@ case 'comments':
         $querycomments = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' AND comments.`user`=? ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$uz]);
         $comments = $querycomments -> fetchAll();
 
-        render('blog/active_comments', compact('comments', 'page'));
+        App::view('blog/active_comments', compact('comments', 'page'));
 
         App::pagination($page);
     } else {
@@ -82,11 +82,11 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    render('includes/back', ['link' => '/blog/active?act=comments&amp;uz='.$uz.'&amp;page='.$page, 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/active?act=comments&amp;uz='.$uz.'&amp;page='.$page, 'title' => 'Вернуться']);
 break;
 
 endswitch;
 
-render('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'fa-arrow-circle-up']);
+App::view('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'fa-arrow-circle-up']);
 
 App::view($config['themes'].'/foot');

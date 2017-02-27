@@ -7,7 +7,7 @@ $links = [
     ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => is_admin()],
 ];
 
-render('includes/link', ['links' => $links]);
+App::view('includes/link', ['links' => $links]);
 ?>
 
 <?php if ($total > 0): ?>
@@ -45,5 +45,5 @@ $links = [
     ['url' => '/gallery?act=addphoto', 'label' => 'Добавить фото'],
 ];
 
-render('includes/link', ['links' => $links]);
+App::view('includes/link', ['links' => $links]);
 ?>

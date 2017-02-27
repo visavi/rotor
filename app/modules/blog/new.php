@@ -21,7 +21,7 @@ case 'blogs':
         $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
         $blogs = $queryblog->fetchAll();
 
-        render('blog/new_blogs', compact('blogs'));
+        App::view('blog/new_blogs', compact('blogs'));
 
         App::pagination($page);
     } else {
@@ -46,7 +46,7 @@ case 'comments':
         $querycomment = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
         $comments = $querycomment->fetchAll();
 
-        render('blog/new_comments', compact('comments'));
+        App::view('blog/new_comments', compact('comments'));
 
         App::pagination($page);
     } else {
@@ -56,6 +56,6 @@ break;
 
 endswitch;
 
-render('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'fa-arrow-circle-up']);
+App::view('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'fa-arrow-circle-up']);
 
 App::view($config['themes'].'/foot');

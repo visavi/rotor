@@ -704,6 +704,6 @@ endswitch;
     show_login('Вы не авторизованы, для добавления файла, необходимо');
 }
 
-render('includes/back', ['link' => '/load/', 'title' => 'Категории']);
+App::view('includes/back', ['link' => '/load/', 'title' => 'Категории']);
 
 App::view($config['themes'].'/foot');

@@ -9,7 +9,7 @@
         ['url' => '/gallery?act=delphoto&amp;gid='.$photo['id'].'&amp;page='.$page.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
     ];
 
-    render('includes/link', ['links' => $links]);
+    App::view('includes/link', ['links' => $links]);
     ?>
 
     <div>

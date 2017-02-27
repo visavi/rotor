@@ -32,7 +32,7 @@ case 'index':
     $max = max($arraytags);
     $min = min($arraytags);
 
-    render('blog/tags', ['tags' => $arraytags, 'max' => $max, 'min' => $min]);
+    App::view('blog/tags', ['tags' => $arraytags, 'max' => $max, 'min' => $min]);
 break;
 
 ############################################################################################
@@ -69,7 +69,7 @@ case 'search':
             $queryblog = DB::run() -> query("SELECT b.*, name FROM blogs b LEFT JOIN catsblog c ON b.category_id=c.id WHERE b.id IN (".$result.") ORDER BY time DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
             $blogs = $queryblog -> fetchAll();
 
-            render('blog/tags_search', compact('blogs', 'tags', 'page'));
+            App::view('blog/tags_search', compact('blogs', 'tags', 'page'));
 
             App::pagination($page);
         } else {
@@ -79,11 +79,11 @@ case 'search':
         show_error('Ошибка! Необходимо не менее 2-х символов в запросе!');
     }
 
-    render('includes/back', ['link' => '/blog/tags', 'title' => 'Облако', 'icon' => 'balloon.gif']);
+    App::view('includes/back', ['link' => '/blog/tags', 'title' => 'Облако', 'icon' => 'balloon.gif']);
 break;
 
 endswitch;
 
-render('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 
 App::view($config['themes'].'/foot');

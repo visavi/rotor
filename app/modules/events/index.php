@@ -7,7 +7,7 @@ $page = abs(intval(Request::input('page', 1)));
 
 show_title('Интернет события');
 
-render('events/menu', ['act' => $act, 'is_admin' => is_admin(), 'is_user' => is_user()]);
+App::view('events/menu', ['act' => $act, 'is_admin' => is_admin(), 'is_user' => is_user()]);
 
 switch ($act):
 ############################################################################################
@@ -26,7 +26,7 @@ case 'index':
 		$queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postevents'].";");
 		$events = $queryevents->fetchAll();
 
-		render('events/index', ['events' => $events]);
+        App::view('events/index', ['events' => $events]);
 
         App::pagination($page);
 	} else {

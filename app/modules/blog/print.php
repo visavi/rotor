@@ -16,12 +16,12 @@ if (!empty($blog)) {
 
     header("Content-Encoding: none");
     header('Content-type:text/html; charset=utf-8');
-    die(render('blog/print', ['blog' => $blog]));
+    die(App::view('blog/print', ['blog' => $blog]));
 
 } else {
     show_error('Ошибка! Выбранная вами статья не существует, возможно она была удалена!');
 }
 
-render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
+App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
 App::view($config['themes'].'/foot');

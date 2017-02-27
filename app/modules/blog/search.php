@@ -11,7 +11,7 @@ switch ($act):
 ##                                    Главная поиска                                      ##
 ############################################################################################
 case 'index':
-    render('blog/search');
+    App::view('blog/search');
 break;
 
 ############################################################################################
@@ -75,7 +75,7 @@ case 'search':
                     $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
                     $blogs = $queryblog -> fetchAll();
 
-                    render('blog/search_title', compact('blogs', 'find', 'total'));
+                    App::view('blog/search_title', compact('blogs', 'find', 'total'));
 
                     App::pagination($page);
                 } else {
@@ -110,7 +110,7 @@ case 'search':
                     $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
                     $blogs = $queryblog -> fetchAll();
 
-                    render('blog/search_text', compact('blogs', 'find', 'total'));
+                    App::view('blog/search_text', compact('blogs', 'find', 'total'));
 
                     App::pagination($page);
                 } else {
@@ -124,7 +124,7 @@ case 'search':
         show_error('Ошибка! Запрос должен содержать не более 50 символов!');
     }
 
-    render('includes/back', ['link' => '/blog/search', 'title' => 'Вернуться']);
+    App::view('includes/back', ['link' => '/blog/search', 'title' => 'Вернуться']);
 break;
 
 endswitch;
@@ -133,6 +133,6 @@ endswitch;
     show_login('Вы не авторизованы, чтобы использовать поиск, необходимо');
 }
 
-render('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
+App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
 App::view($config['themes'].'/foot');
