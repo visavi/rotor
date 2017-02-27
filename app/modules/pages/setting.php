@@ -107,15 +107,14 @@ case 'edit':
     if ($validation->run()) {
         if (file_exists(HOME."/themes/$themes/index.php") || $themes==0) {
 
-            $user = User::find_one(App::getUserId());
-            $user->set([
+            $user = User::find(App::getUserId());
+            $user->update([
                 'themes'    => $themes,
                 'timezone'  => $timezone,
                 'privacy'   => $privacy,
                 'notify'    => $notify,
                 'subscribe' => $subscribe,
             ]);
-            $user->save();
 
             notice('Настройки успешно изменены!');
             redirect("/setting");

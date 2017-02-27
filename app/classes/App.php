@@ -648,8 +648,9 @@ class App
     }
 
     /**
-     * @param string $locale
-     * @param string $fallback
+     * @param  string $locale
+     * @param  string $fallback
+     * @return \Illuminate\Translation\Translator
      */
     public static function translator($locale = 'ru', $fallback = 'en')
     {

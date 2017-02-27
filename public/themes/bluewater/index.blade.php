@@ -34,7 +34,7 @@ header("Content-type:text/html; charset=utf-8");
 <?php
 if (is_user()){
 
-    echo user_gender($log).profile($log);
+    echo user_gender(App::user()).profile(App::user());
     if (is_admin()){
 
         echo ' | <a href="/admin">Админ-панель</a>';

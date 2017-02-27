@@ -1,7 +1,7 @@
 <div class="menu">
 <?php if (is_user()): ?>
-	<?= user_gender(App::getUsername()) ?>
-	<?= profile(App::getUsername()) ?> &bull;
+	<?= user_gender(App::user()) ?>
+	<?= profile(App::user()) ?> &bull;
 	<?php if (is_admin()): ?>
 		<a href="/admin">Панель</a> &bull;
 		<?php if (stats_spam()>0): ?>
