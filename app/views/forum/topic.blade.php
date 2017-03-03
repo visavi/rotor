@@ -47,20 +47,20 @@
 
     <?php if (is_admin()): ?>
         <?php if (empty($topic['closed'])): ?>
-            <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Закрыть</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;token=<?=$_SESSION['token']?>">Закрыть</a> /
         <?php else: ?>
-            <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Открыть</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=open&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;token=<?=$_SESSION['token']?>">Открыть</a> /
         <?php endif; ?>
 
         <?php if (empty($topic['locked'])): ?>
-            <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Закрепить</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=locked&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;token=<?=$_SESSION['token']?>">Закрепить</a> /
         <?php else: ?>
-            <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Открепить</a> /
+            <a href="/admin/forum?act=acttopic&amp;do=unlocked&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>&amp;token=<?=$_SESSION['token']?>">Открепить</a> /
         <?php endif; ?>
 
         <a href="/admin/forum?act=edittopic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Изменить</a> /
         <a href="/admin/forum?act=movetopic&amp;tid=<?=$topic['id']?>">Переместить</a> /
-        <a href="/admin/forum?act=deltopics&amp;fid=<?=$topic['forum_id']?>&amp;del=<?=$topic['id']?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
+        <a href="/admin/forum?act=deltopics&amp;fid=<?=$topic['forum_id']?>&amp;del=<?=$topic['id']?>&amp;token=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
         <a href="/admin/forum?act=topic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Управление</a><br />
     <?php endif; ?>
 
