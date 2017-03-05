@@ -267,7 +267,7 @@ if (is_admin()) {
 
                                 foreach($topicIds as $topicId){
                                     removeDir(HOME.'/uploads/forum/'.$topicId);
-                                    array_map('unlink', glob(HOME.'/uploads/thumbnail/upload_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                                    array_map('unlink', glob(HOME.'/uploads/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
                                 }
                                 DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
 
@@ -558,13 +558,7 @@ if (is_admin()) {
         case 'deltopics':
 
             $token = isset($_GET['token']) ? check($_GET['token']) : '';
-            if (isset($_POST['del'])) {
-                $del = intar($_POST['del']);
-            } elseif (isset($_GET['del'])) {
-                $del = [abs(intval($_GET['del']))];
-            } else {
-                $del = 0;
-            }
+            $del = intar(Request::input('del'));
 
             if ($token == $_SESSION['token']) {
                 if (!empty($del)) {
@@ -573,19 +567,29 @@ if (is_admin()) {
                     // ------ Удаление загруженных файлов -------//
                     foreach($del as $topicId){
                         removeDir(HOME.'/uploads/forum/'.$topicId);
-                        array_map('unlink', glob(HOME.'/uploads/thumbnail/upload_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                        array_map('unlink', glob(HOME.'/uploads/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+
+                        $delPosts = Post::where('topic_id', $topicId)
+                            ->join('files', function($join){
+                                $join->on('posts.id', '=', 'files.relate_id')
+                                    ->where('files.relate_type', '=', Post::class);
+                            })
+                            ->pluck('posts.id')
+                            ->all();
                     }
 
-                    DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
+                    if ($delPosts) {
+                        $delPostIds = implode(',', $delPosts);
+                        DB::run()->query("DELETE FROM `files` WHERE relate_type=? AND `relate_id` IN (" . $delPostIds . ");", [Post::class]);
+                    }
                     // ------ Удаление загруженных файлов -------//
 
-                    $votes = Vote::where_in('topic_id', $del)->find_array();
-                    $votesIds = array_column($votes, 'id');
+                    $votesIds = Vote::whereIn('topic_id', $del)->pluck('id')->all();
 
                     if ($votesIds) {
-                        Vote::where_id_in($votesIds)->delete_many();
-                        VoteAnswer::where_in('vote_id', $votesIds)->delete_many();
-                        VotePoll::where_in('vote_id', $votesIds)->delete_many();
+                        Vote::whereIn('id', $votesIds)->delete();
+                        VoteAnswer::whereIn('vote_id', $votesIds)->delete();
+                        VotePoll::whereIn('vote_id', $votesIds)->delete();
                     }
 
                     $deltopics = DB::run() -> exec("DELETE FROM `topics` WHERE `id` IN (".$delId.");");
@@ -598,21 +602,17 @@ if (is_admin()) {
                     DB::run() -> query("UPDATE `forums` SET `topics`=`topics`-?, `posts`=`posts`-? WHERE `id`=?;", [$deltopics, $delposts, $fid]);
 
                     // ------------------------------------------------------------//
-                    $oldlast = DB::run() -> queryFetch("SELECT `t`.*, `f`.parent_id FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE `t`.`forum_id`=? ORDER BY `t`.`last_time` DESC LIMIT 1;", [$fid]);
-
+                    $oldlast = DB::run() -> queryFetch("SELECT `t`.id, `f`.parent_id FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE `t`.`forum_id`=? ORDER BY `t`.`updated_at` DESC LIMIT 1;", [$fid]);
 
                     if (empty($oldlast['id'])) {
                         $oldlast['id'] = 0;
-                        $oldlast['title'] = '';
-                        $oldlast['last_user'] = '';
-                        $oldlast['last_time'] = 0;
                     }
 
-                    DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $fid]);
+                    DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $fid]);
 
                     // Обновление родительского форума
-                    if (! empty($oldlast['parent'])) {
-                        DB::run() -> query("UPDATE `forums` SET `last_id`=?, `last_themes`=?, `last_user`=?, `last_time`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['title'], $oldlast['last_user'], $oldlast['last_time'], $oldlast['parent']]);
+                    if (! empty($oldlast['parent_id'])) {
+                        DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['parent_id']]);
                     }
 
                     notice('Выбранные темы успешно удалены!');
@@ -644,12 +644,12 @@ if (is_admin()) {
                         case 'closed':
                             DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
 
-                            $vote = Vote::where('topic_id', $tid)->find_one();
+                            $vote = Vote::where('topic_id', $tid)->first();
                             if ($vote) {
                                 $vote->closed = 1;
                                 $vote->save();
 
-                                VotePoll::where('vote_id', $vote['id'])->delete_many();
+                                VotePoll::where('vote_id', $vote['id'])->delete();
                             }
 
                             notice('Тема успешно закрыта!');
@@ -659,7 +659,7 @@ if (is_admin()) {
                         case 'open':
                             DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [0, $tid]);
 
-                            $vote = Vote::where('topic_id', $tid)->find_one();
+                            $vote = Vote::where('topic_id', $tid)->first();
                             if ($vote) {
                                 $vote->closed = 0;
                                 $vote->save();
@@ -715,7 +715,7 @@ if (is_admin()) {
                     echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$topic['title'].'</b>';
 
                     if (!empty($topic['moderators'])) {
-                        $moderators = explode(',', $topic['moderators']);
+                        $moderators = User::whereIn('id', explode(',', $topic['moderators']))->get();
 
                         echo '<br />Кураторы темы: ';
                         foreach ($moderators as $mkey => $mval) {
@@ -751,27 +751,19 @@ if (is_admin()) {
                     if ($total > 0) {
                         $page = App::paginate(App::setting('forumpost'), $total);
 
-                        $querypost = DB::run() -> query("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['forumpost'].";", [$tid]);
-                        $posts = $querypost->fetchAll();
 
-                        // ----- Получение массива файлов ----- //
-                        $ipdpost = [];
-                        foreach ($posts as $val) {
-                            $ipdpost[] = $val['id'];
-                        }
 
-                        $ipdpost = implode(',', $ipdpost);
-
-                        $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id` IN (".$ipdpost.");");
-                        $files = $queryfiles->fetchAll();
-
-                        if (!empty($files)){
-                            $forumfiles = [];
-                            foreach ($files as $file){
-                                $forumfiles[$file['post_id']][] = $file;
-                            }
-                        }
-                        // ------------------------------------- //
+                        $posts = Post::select('posts.*', 'pollings.vote')
+                            ->where('topic_id', $tid)
+                            ->leftJoin ('pollings', function($join) {
+                                $join->on('posts.id', '=', 'pollings.relate_id')
+                                    ->where('pollings.relate_type', '=', Post::class);
+                            })
+                            ->with('files', 'user', 'editUser')
+                            ->offset($page['offset'])
+                            ->limit(App::setting('forumpost'))
+                            ->orderBy('created_at', 'asc')
+                            ->get();
 
                         echo '<form action="/admin/forum?act=delposts&amp;tid='.$tid.'&amp;page='.$page['current'].'&amp;token='.$_SESSION['token'].'" method="post">';
 
@@ -784,32 +776,31 @@ if (is_admin()) {
 
                             echo '<div class="b">';
 
-                            echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                            echo '<div class="img">'.user_avatars($data->user).'</div>';
                             echo '<span class="imgright"><a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Ред.</a> <input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
 
 
-                            echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.date_fixed($data['time']).')</small><br />';
-                            echo user_title($data['user']).' '.user_online($data['user']).'</div>';
+                            echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.date_fixed($data['created_at']).')</small><br />';
+                            echo user_title($data->user).' '.user_online($data->user).'</div>';
 
                             echo '<div>'.App::bbCode($data['text']).'<br />';
 
                             // -- Прикрепленные файлы -- //
-                            if (!empty($forumfiles)) {
-                                if (isset($forumfiles[$data['id']])){
-                                    echo '<div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />';
-                                    foreach ($forumfiles[$data['id']] as $file){
-                                        $ext = getExtension($file['hash']);
-                                        echo icons($ext).' ';
+                            if ($data->files->isNotEmpty()) {
+                                echo '<div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />';
+                                foreach ($data->files as $file){
+                                    $ext = getExtension($file['hash']);
+                                    echo icons($ext).' ';
 
-                                        echo '<a href="/uploads/forum/'.$file['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
-                                    }
-                                    echo '</div>';
+                                    echo '<a href="/uploads/forum/'.$data['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
                                 }
+                                echo '</div>';
+
                             }
                             // --------------------------//
 
-                            if (!empty($data['edit'])) {
-                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data['edit'].' ('.date_fixed($data['edit_time']).')</small><br />';
+                            if (!empty($data['updated_at'])) {
+                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.date_fixed($data['updated_at']).')</small><br />';
                             }
 
                             echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
@@ -862,11 +853,7 @@ if (is_admin()) {
         case 'delposts':
 
             $token = check($_GET['token']);
-            if (isset($_POST['del'])) {
-                $del = intar($_POST['del']);
-            } else {
-                $del = 0;
-            }
+            $del = intar(Request::input('del'));
 
             if ($token == $_SESSION['token']) {
                 if (!empty($del)) {
@@ -879,9 +866,7 @@ if (is_admin()) {
 
                     if (!empty($files)){
                         foreach ($files as $file){
-                            if (file_exists(HOME.'/uploads/forum/'.$topics['id'].'/'.$file)){
-                                unlink_image('uploads/forum/', $topics['id'].'/'.$file);
-                            }
+                            unlink_image('uploads/forum/', $topics['id'].'/'.$file);
                         }
                     }
 
@@ -912,24 +897,22 @@ if (is_admin()) {
 
             $pid = abs(intval($_GET['pid']));
 
-            $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
+            $post = Post::where('id', $pid)->with('files')->first();
+
             if (!empty($post)) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> <small>('.date_fixed($post['created_at']).')</small><br /><br />';
 
                 echo '<div class="form" id="form">';
                 echo '<form action="/admin/forum?act=addeditpost&amp;tid='.$post['topic_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'" method="post">';
                 echo 'Редактирование сообщения:<br />';
                 echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$post['text'].'</textarea><br />';
 
-                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=?;", [$pid]);
-                $files = $queryfiles->fetchAll();
-
-                if (!empty($files)){
+                if ($post->files->isNotEmpty()){
                     echo '<i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br />';
-                    foreach ($files as $file){
+                    foreach ($post->files as $file){
                         echo '<input type="checkbox" name="delfile[]" value="'.$file['id'].'" /> ';
-                        echo '<a href="/uploads/forum/'.$file['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
+                        echo '<a href="/uploads/forum/'.$post['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
                     }
                     echo '<br />';
                 }
@@ -947,37 +930,29 @@ if (is_admin()) {
         ############################################################################################
         case 'addeditpost':
 
-            $token = check($_GET['token']);
-            $pid = abs(intval($_GET['pid']));
-            $msg = check($_POST['msg']);
-
-            if (isset($_POST['delfile'])) {
-                $del = intar($_POST['delfile']);
-            } else {
-                $del = 0;
-            }
+            $pid     = abs(intval(Request::input('pid')));
+            $token   = check(Request::input('token'));
+            $msg     = check(Request::input('msg'));
+            $delfile = intar(Request::input('delfile'));
 
             if ($token == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
                     $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
                     if (!empty($post)) {
 
-                        DB::run() -> query("UPDATE `posts` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=?;", [$msg, $log, SITETIME, $pid]);
+                        DB::run() -> query("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, App::getUserId(), SITETIME, $pid]);
 
                         // ------ Удаление загруженных файлов -------//
-                        if (!empty($del)) {
-                            $del = implode(',', $del);
-
-                            $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$pid]);
+                        if ($delfile) {
+                            $del = implode(',', $delfile);
+                            $queryfiles = DB::run() -> query("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$pid, Post::class]);
                             $files = $queryfiles->fetchAll();
 
                             if (!empty($files)){
                                 foreach ($files as $file){
-                                    if (file_exists(HOME.'/uploads/forum/'.$file['topic_id'].'/'.$file['hash'])){
-                                        unlink_image('uploads/forum/', $file['topic_id'].'/'.$file['hash']);
-                                    }
+                                    unlink_image('uploads/forum/', $post['topic_id'].'/'.$file['hash']);
                                 }
-                                DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id`=? AND `id` IN (".$del.");", [$pid]);
+                                DB::run() -> query("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$pid, Post::class]);
                             }
                         }
                         // ------ Удаление загруженных файлов -------//

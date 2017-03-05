@@ -99,7 +99,7 @@ case 'create':
 
             $lastid = DB::run() -> lastInsertId();
 
-            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `forum_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$lastid, $fid, App::getUserId(), $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
+            DB::run() -> query("INSERT INTO `posts` (`topic_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$lastid, App::getUserId(), $msg, SITETIME, App::getClientIp(), App::getUserAgent()]);
             $lastPostId = DB::run() -> lastInsertId();
 
             Topic::where('id', $lastid)->update(['last_post_id' => $lastPostId]);

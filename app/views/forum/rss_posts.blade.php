@@ -12,7 +12,7 @@
 
         <item>
             <title>{{ $data['text'] }}</title>
-            <link>{{ App::setting('home') }}/topic/{{ $topic['id'] }}</link>
+            <link>{{ App::setting('home') }}/topic/{{ $topic['id'] }}/{{  $data['id'] }}</link>
             <description>{{ $topic['title'] }} </description>
             <author>{{ $data->getUser()->login }}</author>
             <pubDate>{{ date("r", $data['created_at']) }}</pubDate>

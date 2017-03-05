@@ -275,7 +275,7 @@ case 'delete':
 
     $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 
-    $isModer = in_array($log, explode(',', $topic['moderators'], true)) ? true : false;
+    $isModer = in_array(App::getUserId(), explode(',', $topic['moderators'], true)) ? true : false;
 
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -294,9 +294,7 @@ case 'delete':
 
         if (!empty($files)){
             foreach ($files as $file){
-                if (file_exists(HOME.'/uploads/forum/'.$topic['id'].'/'.$file)){
-                    unlink(HOME.'/uploads/forum/'.$topic['id'].'/'.$file);
-                }
+                unlink_image('uploads/forum/', $topic['id'].'/'.$file);
             }
             DB::run() -> query("DELETE FROM `files` WHERE `relate_id` IN (".$del.")  AND relate_type=?;", [Post::class]);
         }
@@ -428,9 +426,11 @@ case 'editpost':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения сообщения!');
 
-    $post = DB::run() -> queryFetch("SELECT p.*, moderators, closed FROM `posts` p LEFT JOIN `topics` t ON `p`.`topic_id`=`t`.`id` WHERE p.`id`=? LIMIT 1;", [$id]);
+    $post = Post::select('posts.*', 'moderators', 'closed')
+        ->leftJoin('topics', 'posts.topic_id', '=', 'topics.id')
+        ->where('posts.id', $id)->first();
 
-    $isModer = in_array($log, explode(',', $post['moderators'], true)) ? true : false;
+    $isModer = in_array(App::getUserId(), explode(',', $post['moderators'], true)) ? true : false;
 
     if (empty($post)) {
         App::abort('default', 'Данного сообщения не существует!');
@@ -472,9 +472,7 @@ case 'editpost':
 
                 if (!empty($files)){
                     foreach ($files as $file){
-                        if (file_exists(HOME.'/uploads/forum/'.$post['topic_id'].'/'.$file['hash'])){
-                            unlink_image('uploads/forum/', $post['topic_id'].'/'.$file['hash']);
-                        }
+                        unlink_image('uploads/forum/', $post['topic_id'].'/'.$file['hash']);
                     }
                     DB::run() -> query("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$id, Post::class]);
                 }

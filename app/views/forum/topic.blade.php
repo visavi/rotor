@@ -64,11 +64,6 @@
         <a href="/admin/forum?act=topic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Управление</a><br />
     <?php endif; ?>
 
-    <?php if (!empty($topic['isModer'])): ?>
-        <form action="/topic/<?=$topic['id']?>/delete?page=<?=$page['current']?>" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-    <?php endif; ?>
-
     @if($vote['answers'])
         <h3>{{ $vote['title'] }}</h3>
 
@@ -93,6 +88,10 @@
         Всего проголосовало: {{ $vote['count'] }}
     @endif
 
+    <?php if ($topic['isModer']): ?>
+    <form action="/topic/<?=$topic['id']?>/delete?page=<?=$page['current']?>" method="post">
+        <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+        <?php endif; ?>
 
     <?php if ($page['total'] > 0): ?>
         <?php foreach ($posts as $key=>$data): ?>
@@ -112,9 +111,9 @@
                         </noindex>
                     <?php endif; ?>
 
-                    <?php if ((App::getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME) || !empty($topic['isModer'])): ?>
+                    <?php if ((App::getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME) || $topic['isModer']): ?>
                         <a href="/topic/<?=$topic['id']?>/<?=$data['id']?>/edit?page=<?=$page['current']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
-                        <?php if (!empty($topic['isModer'])): ?>
+                        <?php if ($topic['isModer']): ?>
                         <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
                         <?php endif; ?>
                     <?php endif; ?>
@@ -169,7 +168,7 @@
         <?php show_error('Сообщений еще нет, будь первым!'); ?>
     <?php endif; ?>
 
-    <?php if (!empty($topic['isModer'])): ?>
+    <?php if ($topic['isModer']): ?>
         <span class="pull-right">
             <button type="submit" class="btn btn-danger">Удалить выбранное</button>
         </span>
