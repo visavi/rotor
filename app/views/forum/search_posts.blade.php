@@ -17,7 +17,7 @@
         </div>
 
         <div><?=App::bbCode($post['text'])?><br />
-            Написал: <?=profile($post->getUser()->login)?> <?=user_online($post->getUser()->id)?> <small>(<?=date_fixed($post['created_at'])?>)</small><br />
+            Написал: <?=profile($post->user)?> <?=user_online($post->user)?> <small>(<?=date_fixed($post['created_at'])?>)</small><br />
         </div>
 
     <?php endforeach; ?>

@@ -34,6 +34,14 @@ class Topic extends BaseModel {
     }
 
     /**
+     * Возвращает модель форума
+     */
+    public function getForum()
+    {
+        return $this->forum ? $this->forum : new Forum();
+    }
+
+    /**
      * Возвращает иконку в зависимости от статуса
      * @return string иконка топика
      */

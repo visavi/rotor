@@ -77,5 +77,6 @@
 
     <a href="/rules">Правила</a> /
     <a href="/forum/top/themes">Топ тем</a> /
+    <a href="/forum/top/posts">Топ постов</a> /
     <a href="/forum/search?fid=<?= $forum->id ?>">Поиск</a><br />
 @stop

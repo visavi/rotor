@@ -10,11 +10,11 @@
     <h1>{{ $topic['title'] }}</h1>
     <a href="/forum">Форум</a> /
 
-    <?php if ($topic->forum->parent): ?>
-        <a href="/forum/<?= $topic->forum->parent->id ?>"><?= $topic->forum->parent->title ?></a> /
+    <?php if ($topic->getForum()->parent): ?>
+        <a href="/forum/<?= $topic->getForum()->parent->id ?>"><?= $topic->getForum()->parent->title ?></a> /
     <?php endif; ?>
 
-    <a href="/forum/<?= $topic->forum->id ?>"><?= $topic->forum->title ?></a> /
+    <a href="/forum/<?= $topic->getForum()->id ?>"><?= $topic->getForum()->title ?></a> /
     <a href="/topic/<?=$topic['id']?>/print">Печать</a> / <a href="/topic/<?=$topic['id']?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
@@ -224,5 +224,6 @@
     <a href="/tags">Теги</a>  /
     <a href="/rules">Правила</a> /
     <a href="/forum/top/themes">Топ тем</a> /
+    <a href="/forum/top/posts">Топ постов</a> /
     <a href="/forum/search?fid=<?=$topic['forum_id']?>">Поиск</a><br />
 @stop

@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Список новых сообщений - @parent
+    Топ популярных постов - @parent
 @stop
 
 @section('content')
-    <h1>Список новых сообщений</h1>
+    <h1>Топ популярных постов</h1>
 
     <a href="/forum">Форум</a>
 
     <?php foreach ($posts as $data): ?>
         <div class="b">
             <i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['topic_id']?>/<?=$data['id']?>"><?= $data->getTopic()->title ?></a></b>
-            (<?= $data->getTopic()->posts ?>)
+            (Рейтинг: <?= $data->rating ?>)
         </div>
         <div>
             <?=App::bbCode($data['text'])?><br />

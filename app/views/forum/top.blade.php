@@ -12,24 +12,13 @@
 
     <?php foreach ($topics as $data): ?>
         <div class="b">
-
-            <?php
-            if ($data['locked']) {
-                $icon = 'fa-thumb-tack';
-            } elseif ($data['closed']) {
-                $icon = 'fa-lock';
-            } else {
-                $icon = 'fa-folder-open';
-            }
-            ?>
-
-            <i class="fa <?=$icon?> text-muted"></i>
+            <i class="fa <?= $data->getIcon() ?> text-muted"></i>
             <b><a href="/topic/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=$data['posts']?>)
         </div>
         <div>
-            <?= App::forumPagination($data)?>
-            Автор: <?=$data['author']?><br />
-            Сообщение: <?=$data['last_user']?> (<?=date_fixed($data['last_time'])?>)
+            <?= Forum::pagination($data)?>
+            Автор: <?=$data->getUser()->login ?><br />
+            Сообщение: <?= $data->getLastPost()->getUser()->login ?> (<?=date_fixed($data->getLastPost()->created_at)?>)
         </div>
     <?php endforeach; ?>
 

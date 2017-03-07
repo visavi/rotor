@@ -44,5 +44,5 @@
         </div>
     @endforeach
 
-    <br/><a href="/rules">Правила</a> / <a href="/forum/top/themes">Топ тем</a> / <a href="/forum/search">Поиск</a> / <a href="/forum/rss">RSS</a><br/>
+    <br/><a href="/rules">Правила</a> / <a href="/forum/top/themes">Топ тем</a> / <a href="/forum/top/posts">Топ постов</a> /<a href="/forum/search">Поиск</a> / <a href="/forum/rss">RSS</a><br/>
 @stop

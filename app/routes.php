@@ -47,7 +47,7 @@ $router->map('GET', '/forum', 'forum/index.php', 'forum');
 $router->map('GET', '/forum/[i:fid]', 'forum/forum.php');
 $router->map('GET', '/forum/new/[posts|themes:action]', 'forum/new.php');
 $router->map('GET', '/forum/active/[posts|themes:action]', 'forum/active.php');
-$router->map('GET', '/forum/top/themes', 'forum/top.php');
+$router->map('GET', '/forum/top/[posts|themes:action]', 'forum/top.php');
 $router->map('GET', '/forum/search', 'forum/search.php');
 $router->map('GET', '/forum/bookmark', 'forum/bookmark.php');
 $router->map('POST', '/forum/active/[delete:action]', 'forum/active.php');

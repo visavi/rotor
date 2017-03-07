@@ -37,7 +37,7 @@ case 'index':
     }
 
     if (is_user()) {
-        if ($topic->bookmark && $topic['posts'] > $topic['bookmark_posts']) {
+        if ($topic['posts'] > $topic['bookmark_posts']) {
             Bookmark::where('topic_id', $tid)
                 ->where('user_id', App::getUserId())
                 ->update(['posts' => $topic['posts']]);
