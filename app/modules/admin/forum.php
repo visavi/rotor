@@ -465,7 +465,7 @@ if (is_admin()) {
             $topic = Topic::find($tid);
 
             if (!empty($topic)) {
-                echo '<i class="fa fa-folder-open"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic['author'].')<br /><br />';
+                echo '<i class="fa fa-folder-open"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic->getUser()->login.')<br /><br />';
 
                 $forums = Forum::where('parent_id', 0)
                     ->with('children')
@@ -474,10 +474,12 @@ if (is_admin()) {
 
                 if (count($forums) > 1) {
 
-                    echo '<div class="form"><form action="/admin/forum?act=addmovetopic&amp;fid='.$topic['forum_id'].'&amp;tid='.$tid.'&amp;token='.$_SESSION['token'].'" method="post">';
+                    echo '<div class="form">';
+                    echo '<form action="/admin/forum?act=addmovetopic&amp;fid='.$topic['forum_id'].'&amp;tid='.$tid.'&amp;token='.$_SESSION['token'].'" method="post">';
 
-                    echo 'Выберите раздел для перемещения:<br />';
-                    echo '<select name="section">';
+
+                    echo '<label for="inputSection">Раздел</label>';
+                    echo '<select class="form-control" id="inputSection" name="section">';
 
                     foreach ($forums as $forum) {
                         if ($topic['forum_id'] != $forum['id']) {
@@ -487,7 +489,7 @@ if (is_admin()) {
 
                         if ($forum->children->isNotEmpty()) {
                             foreach($forum->children as $datasub) {
-                                if ($topic['id'] != $datasub['id']) {
+                                if ($topic['forum_id'] != $datasub['id']) {
                                     $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
                                     echo '<option value="'.$datasub['id'].'"'.$disabled.'>– '.$datasub['title'].'</option>';
                                 }
@@ -497,7 +499,7 @@ if (is_admin()) {
 
                     echo '</select>';
 
-                    echo '<input type="submit" value="Переместить" /></form></div><br />';
+                    echo '<button type="submit" class="btn btn-primary">Переместить</button></form></div><br />';
                 } elseif(count($forums) == 1) {
                     show_error('Нет разделов для перемещения!');
                 }else {
