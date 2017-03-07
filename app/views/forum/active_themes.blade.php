@@ -1,36 +1,25 @@
 @extends('layout')
 
 @section('title')
-    Список тем {{ $user }} - @parent
+    Список тем {{ $user->login }} - @parent
 @stop
 
 @section('content')
 
-    <h1>Список тем {{ $user }}</h1>
+    <h1>Список тем {{ $user->login }}</h1>
 
     <a href="/forum">Форум</a>
 
     <?php foreach ($topics as $data): ?>
         <div class="b">
-
-            <?php
-            if ($data['locked']) {
-                $icon = 'fa-thumb-tack';
-            } elseif ($data['closed']) {
-                $icon = 'fa-lock';
-            } else {
-                $icon = 'fa-folder-open';
-            }
-            ?>
-
-            <i class="fa <?=$icon?> text-muted"></i>
+            <i class="fa {{ $data->getIcon() }} text-muted"></i>
             <b><a href="/topic/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=$data['posts']?>)
         </div>
 
         <div>
             <?= Forum::pagination($data)?>
-            Форум: <a href="/forum/<?=$data['forum_id']?>"><?=$data['forum_title']?></a><br />
-            Автор: <?=$data['author']?> / Посл.: <?=$data['last_user']?> (<?=date_fixed($data['last_time'])?>)
+            Форум: <a href="/forum/<?= $data->forum->id ?>"><?= $data->forum->title ?></a><br />
+            Автор: <?= $data->getUser()->login ?> / Посл.: <?= $data->getLastPost()->getUser()->login ?> (<?=date_fixed($data->getLastPost()->created_at)?>)
         </div>
 
     <?php endforeach; ?>

@@ -1528,9 +1528,9 @@ function fn_close($fp, $method) {
 function restatement($mode) {
     switch ($mode) {
         case 'forum':
-            DB::run() -> query("UPDATE `forums` SET `topics`=(SELECT count(*) FROM `topics` WHERE `forums`.`id`=`topics`.`forum_id`);");
-            DB::run() -> query("UPDATE `forums` SET `posts`=(SELECT count(*) FROM `posts` WHERE `forums`.`id`=`posts`.`forum_id`);");
             DB::run() -> query("UPDATE `topics` SET `posts`=(SELECT count(*) FROM `posts` WHERE `topics`.`id`=`posts`.`topic_id`);");
+            DB::run() -> query("UPDATE `forums` SET `topics`=(SELECT count(*) FROM `topics` WHERE `forums`.`id`=`topics`.`forum_id`);");
+            DB::run() -> query("UPDATE `forums` SET `posts`=(SELECT SUM(posts) FROM `topics` WHERE `forums`.`id`=`topics`.`forum_id`);");
             break;
 
         case 'blog':
