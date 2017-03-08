@@ -1,282 +1,72 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'forum';
-}
-
+$act = check(Request::input('act', 'index'));
+$type = check(Request::input('type'));
 $page = abs(intval(Request::input('page', 1)));
+
+
+$types = [
+    'post'  => Post::class,
+    'guest' => Guest::class,
+];
+
+$type = isset($types[$type]) ? $type : 'post';
 
 if (is_admin([101, 102, 103])) {
     show_title('Список жалоб');
+
+    $total = Spam::select(Capsule::raw("
+        SUM(relate_type='".Guest::class."') guest,
+        SUM(relate_type='".Post::class."') post
+    "))->first();
 
     switch ($act):
     ############################################################################################
     ##                                         Форум                                          ##
     ############################################################################################
-        case 'forum':
+        case 'index':
+            echo '<a href="/admin/spam?type=post">Форум</a> ('.$total['post'].') / <a href="/admin/spam?type=guest">Гостевая</a> ('.$total['guest'].') / <a href="/admin/spam?type=privat">Приват</a> ('.$total['inbox'].') / <a href="/admin/spam?type=wall">Стена</a> ('.$total['wall'].') / <a href="/admin/spam?type=load">Загрузки</a> ('.$total['load'].') / <a href="/admin/spam?type=blog">Блоги</a> ('.$total['blog'].')<br /><br />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [1]);
-            $totalguest = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [2]);
-            $totalpriv = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [3]);
-            $totalwall = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [4]);
-            $totalload = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [5]);
-            $totalblog = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [6]);
+            $page = App::paginate(App::setting('spamlist'), $total['post']);
+            if ($page['total'] > 0) {
 
-            echo '<b>Форум</b> ('.$total.') / <a href="/admin/spam?act=guest">Гостевая ('.$totalguest.')</a> / <a href="/admin/spam?act=privat">Приват ('.$totalpriv.')</a> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
+                $records = Spam::where('relate_type', $types[$type])
+                    ->orderBy('created_at', 'desc')
+                    ->offset($page['offset'])
+                    ->limit(App::setting('spamlist'))
+                    ->with('relate.user', 'user')
+                    ->get();
 
-            $page = App::paginate(App::setting('spamlist'), $total);
-
-            if ($total > 0) {
-
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [1]);
-
-                echo '<form action="/admin/spam?act=del&amp;ref=forum&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/spam?act=del&amp;type='.$type.'&amp;page='.$page['current'].'" method="post">';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
 
-                while ($data = $queryban -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
+                foreach($records as $data) {
 
-                    echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
-                    echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
+                    if ($data->relate){
+                        echo '<div class="b">';
+                        echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                        echo '<i class="fa fa-file-o"></i> <b>'.profile($data->relate->user).'</b> <small>('.date_fixed($data->relate->created_at, "d.m.y / H:i:s").')</small></div>';
+                        echo '<div>'.App::bbCode($data->relate->text).'</div>';
+                    } else {
+                        echo '<div class="b">';
+                        echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                        echo '<i class="fa fa-file-o"></i> <b>Сообщение не найдено</b>';
+                        echo '</div>';
+                    }
+
+                    echo '<div><a href="'.$data['link'].'">Перейти к сообщению</a><br />';
+                    echo 'Жалоба: '.profile($data->user).' ('.date_fixed($data['created_at']).')</div>';
                 }
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
                 App::pagination($page);
 
                 if (is_admin([101, 102])) {
-                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
-                }
-            } else {
-                show_error('Жалоб еще нет!');
-            }
-        break;
-
-        ############################################################################################
-        ##                                         Гостевая                                       ##
-        ############################################################################################
-        case 'guest':
-
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [2]);
-            $totalforum = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [1]);
-            $totalpriv = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [3]);
-            $totalwall = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [4]);
-            $totalload = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [5]);
-            $totalblog = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [6]);
-
-            echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <b>Гостевая</b> ('.$total.') / <a href="/admin/spam?act=privat">Приват ('.$totalpriv.')</a> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
-
-            $page = App::paginate(App::setting('spamlist'), $total);
-            if ($total > 0) {
-
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [2]);
-
-                echo '<form action="/admin/spam?act=del&amp;ref=guest&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<div class="form">';
-                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
-                echo '</div>';
-
-                while ($data = $queryban -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
-
-                    echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
-                    echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
-                }
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
-
-                App::pagination($page);
-
-                if (is_admin([101, 102])) {
-                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
-                }
-            } else {
-                show_error('Жалоб еще нет!');
-            }
-        break;
-
-        ############################################################################################
-        ##                                           Приват                                       ##
-        ############################################################################################
-        case 'privat':
-
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [3]);
-            $totalforum = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [1]);
-            $totalguest = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [2]);
-            $totalwall = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [4]);
-            $totalload = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [5]);
-            $totalblog = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [6]);
-
-            echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <b>Приват ('.$total.')</b> / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
-
-            $page = App::paginate(App::setting('spamlist'), $total);
-            if ($total > 0) {
-
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [3]);
-
-                echo '<form action="/admin/spam?act=del&amp;ref=privat&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<div class="form">';
-                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
-                echo '</div>';
-
-                while ($data = $queryban -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
-
-                    echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
-                }
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
-
-                App::pagination($page);
-
-                if (is_admin([101, 102])) {
-                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
-                }
-            } else {
-                show_error('Жалоб еще нет!');
-            }
-        break;
-
-        ############################################################################################
-        ##                                    Стена сообщений                                     ##
-        ############################################################################################
-        case 'wall':
-
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [4]);
-            $totalforum = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [1]);
-            $totalguest = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [2]);
-            $totalpriv = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [3]);
-            $totalload = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [5]);
-            $totalblog = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [6]);
-
-            echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <b>Стена</b> ('.$total.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
-
-            $page = App::paginate(App::setting('spamlist'), $total);
-            if ($total > 0) {
-
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [4]);
-
-                echo '<form action="/admin/spam?act=del&amp;ref=wall&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<div class="form">';
-                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
-                echo '</div>';
-
-                while ($data = $queryban -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
-
-                    echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
-                    echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
-                }
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
-
-                App::pagination($page);
-
-                if (is_admin([101, 102])) {
-                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
-                }
-            } else {
-                show_error('Жалоб еще нет!');
-            }
-        break;
-
-        ############################################################################################
-        ##                                Комментарии в Загрузках                                 ##
-        ############################################################################################
-        case 'load':
-
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [5]);
-            $totalforum = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [1]);
-            $totalguest = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [2]);
-            $totalpriv = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [3]);
-            $totalwall = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [4]);
-            $totalblog = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [6]);
-
-            echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <b>Загрузки</b> ('.$total.') / <a href="/admin/spam?act=blog">Блоги</a> ('.$totalblog.')<br /><br />';
-
-            $page = App::paginate(App::setting('spamlist'), $total);
-            if ($total > 0) {
-
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [5]);
-
-                echo '<form action="/admin/spam?act=del&amp;ref=load&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<div class="form">';
-                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
-                echo '</div>';
-
-                while ($data = $queryban -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
-
-                    echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
-                    echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
-                }
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
-
-                App::pagination($page);
-
-                if (is_admin([101, 102])) {
-                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
-                }
-            } else {
-                show_error('Жалоб еще нет!');
-            }
-        break;
-
-        ############################################################################################
-        ##                                 Комментарии в блогах                                   ##
-        ############################################################################################
-        case 'blog':
-
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [6]);
-            $totalforum = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [1]);
-            $totalguest = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [2]);
-            $totalpriv = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [3]);
-            $totalwall = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [4]);
-            $totalload = DB::run() -> querySingle("SELECT count(*) FROM `spam` WHERE relate=?;", [5]);
-
-            echo '<a href="/admin/spam?act=forum">Форум ('.$totalforum.')</a> / <a href="/admin/spam?act=guest">Гостевая</a> ('.$totalguest.') / <a href="/admin/spam?act=privat">Приват</a> ('.$totalpriv.') / <a href="/admin/spam?act=wall">Стена</a> ('.$totalwall.') / <a href="/admin/spam?act=load">Загрузки</a> ('.$totalload.') / <b>Блоги</b> ('.$total.')<br /><br />';
-
-            $page = App::paginate(App::setting('spamlist'), $total);
-            if ($total > 0) {
-
-                $queryban = DB::run() -> query("SELECT * FROM `spam` WHERE relate=? ORDER BY `addtime` DESC LIMIT ".$page['offset'].", ".$config['spamlist'].";", [6]);
-
-                echo '<form action="/admin/spam?act=del&amp;ref=blog&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<div class="form">';
-                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
-                echo '</div>';
-
-                while ($data = $queryban -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time'], "d.m.y / H:i:s").')</small></div>';
-                    echo '<div>Сообщение: '.App::bbCode($data['text']).'<br />';
-
-                    echo '<a href="'.$data['link'].'">Перейти к сообщению</a><br />';
-                    echo 'Жалоба: '.profile($data['user']).' ('.date_fixed($data['addtime']).')</div>';
-                }
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
-
-                App::pagination($page);
-
-                if (is_admin([101, 102])) {
-                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;uid='.$_SESSION['token'].'">Очистить</a><br />';
+                    echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;token='.$_SESSION['token'].'">Очистить</a><br />';
                 }
             } else {
                 show_error('Жалоб еще нет!');
@@ -288,22 +78,17 @@ if (is_admin([101, 102, 103])) {
         ############################################################################################
         case "del":
 
-            $uid = check($_GET['uid']);
-            $ref = check($_GET['ref']);
-            if (isset($_POST['del'])) {
-                $del = intar($_POST['del']);
-            } else {
-                $del = 0;
-            }
+            $token = check(Request::input('token'));
+            $del = intar(Request::input('del'));
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
                     DB::run() -> query("DELETE FROM `spam` WHERE `id` IN (".$del.");");
 
                     notice('Выбранные жалобы успешно удалены!');
-                    redirect("/admin/spam?act=$ref&page=$page");
+                    redirect("/admin/spam?type=$type&page=$page");
 
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные жалобы!');
@@ -320,9 +105,9 @@ if (is_admin([101, 102, 103])) {
         ############################################################################################
         case 'clear':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (is_admin([101, 102])) {
                     DB::run() -> query("TRUNCATE `spam`;");
 

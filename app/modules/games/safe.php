@@ -92,24 +92,24 @@ case 'vzlom1':
     $k3 = isset($_POST['k3']) ? intval($_POST['k3']) : 0;
     $k4 = isset($_POST['k4']) ? intval($_POST['k4']) : 0;
 
-    if ($k1==$_SESSION['s1'] || $k1==$_SESSION['s2'] || $k1==$_SESSION['s3'] || $k1==$_SESSION['s4'] ){$g1="*";}
-    else {$g1="-";}
-    if ($k2==$_SESSION['s1'] || $k2==$_SESSION['s2'] || $k2==$_SESSION['s3'] || $k2==$_SESSION['s4'] ){$g2="*";}
-    else {$g2="-";}
-    if ($k3==$_SESSION['s1'] || $k3==$_SESSION['s2'] || $k3==$_SESSION['s3'] || $k3==$_SESSION['s4'] ){$g3="*";}
-    else {$g3="-";}
-    if ($k4==$_SESSION['s1'] || $k4==$_SESSION['s2'] || $k4==$_SESSION['s3'] || $k4==$_SESSION['s4'] ){$g4="*";}
-    else {$g4="-";}
-    if ($k1==$_SESSION['s1']){$g1=$_SESSION['s1'];}
-    if ($k2==$_SESSION['s2']){$g2=$_SESSION['s2'];}
-    if ($k3==$_SESSION['s3']){$g3=$_SESSION['s3'];}
-    if ($k4==$_SESSION['s4']){$g4=$_SESSION['s4'];}
-
     if (empty($_SESSION['go'])){
         echo'<br /><font color="red">Нее... такой фокус тут не канает...</font><br />';
         notice('нееее... такое тут не канает!');
         redirect("/games/safe");exit;
     }else{
+
+        if ($k1==$_SESSION['s1'] || $k1==$_SESSION['s2'] || $k1==$_SESSION['s3'] || $k1==$_SESSION['s4'] ){$g1="*";}
+        else {$g1="-";}
+        if ($k2==$_SESSION['s1'] || $k2==$_SESSION['s2'] || $k2==$_SESSION['s3'] || $k2==$_SESSION['s4'] ){$g2="*";}
+        else {$g2="-";}
+        if ($k3==$_SESSION['s1'] || $k3==$_SESSION['s2'] || $k3==$_SESSION['s3'] || $k3==$_SESSION['s4'] ){$g3="*";}
+        else {$g3="-";}
+        if ($k4==$_SESSION['s1'] || $k4==$_SESSION['s2'] || $k4==$_SESSION['s3'] || $k4==$_SESSION['s4'] ){$g4="*";}
+        else {$g4="-";}
+        if ($k1==$_SESSION['s1']){$g1=$_SESSION['s1'];}
+        if ($k2==$_SESSION['s2']){$g2=$_SESSION['s2'];}
+        if ($k3==$_SESSION['s3']){$g3=$_SESSION['s3'];}
+        if ($k4==$_SESSION['s4']){$g4=$_SESSION['s4'];}
 
         $_SESSION['try']--;
 

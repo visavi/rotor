@@ -23,4 +23,11 @@ class Spam extends BaseModel {
      */
     protected $guarded = [];
 
+    /**
+     * Возвращает связанные сообщения
+     */
+    public function relate()
+    {
+        return $this->morphTo('relate');
+    }
 }
