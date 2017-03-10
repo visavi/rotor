@@ -253,43 +253,25 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($token == $_SESSION['token']) {
-                    $forums = DB::run() -> queryFetch("SELECT `f1`.*, count(`f2`.`id`) AS `subcnt` FROM `forums` `f1` LEFT JOIN `forums` `f2` ON `f2`.parent_id = `f1`.`id` WHERE `f1`.`id`=? GROUP BY `id` LIMIT 1;", [$fid]);
 
-                    if (!empty($forums['id'])) {
-                        if (empty($forums['subcnt'])) {
+                    $forum = Forum::where('id', $fid)
+                        ->with('children')
+                        ->first();
 
-                            // ------ Удаление загруженных файлов -------//
-                            $querytopics = DB::run() -> query("SELECT `id` FROM `topics` WHERE `forum_id`=?;", [$fid]);
-                            $topicIds = $querytopics->fetchAll(PDO::FETCH_COLUMN);
+                    if ($forum) {
+                        if ($forum->children->isEmpty()) {
 
-                            if (!empty($topicIds)){
-                                $delId = implode(',', $topicIds);
+                            $topic = Topic::where('forum_id', $fid)->first();
+                            if (! $topic) {
 
-                                foreach($topicIds as $topicId){
-                                    removeDir(HOME.'/uploads/forum/'.$topicId);
-                                    array_map('unlink', glob(HOME.'/uploads/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
-                                }
-                                DB::run() -> query("DELETE FROM `files_forum` WHERE `topic_id` IN (".$delId.");");
+                                $forum->delete();
 
-                                $votes = Vote::where_in('topic_id', $topicIds)->find_array();
-                                $votesIds = array_column($votes, 'id');
+                                notice('Раздел успешно удален!');
+                                redirect("/admin/forum");
 
-                                if ($votesIds) {
-                                    Vote::where_id_in($votesIds)->delete_many();
-                                    VoteAnswer::where_in('vote_id', $votesIds)->delete_many();
-                                    VotePoll::where_in('vote_id', $votesIds)->delete_many();
-                                }
+                            } else {
+                                show_error('Ошибка! В данном разделе имеются темы!');
                             }
-                            // ------ Удаление загруженных файлов -------//
-
-                            DB::run() -> query("DELETE FROM `posts` WHERE `forum_id`=?;", [$fid]);
-                            DB::run() -> query("DELETE FROM `topics` WHERE `forum_id`=?;", [$fid]);
-                            DB::run() -> query("DELETE FROM `forums` WHERE `id`=?;", [$fid]);
-                            DB::run() -> query("DELETE FROM `bookmarks` WHERE `forum_id`=?;", [$fid]);
-
-                            notice('Раздел успешно удален!');
-                            redirect("/admin/forum");
-
                         } else {
                             show_error('Ошибка! Данный раздел имеет подфорумы!');
                         }
@@ -561,7 +543,6 @@ if (is_admin()) {
 
             $token = isset($_GET['token']) ? check($_GET['token']) : '';
             $del = intar(Request::input('del'));
-
             if ($token == $_SESSION['token']) {
                 if (!empty($del)) {
                     $delId = implode(',', $del);
@@ -571,18 +552,19 @@ if (is_admin()) {
                         removeDir(HOME.'/uploads/forum/'.$topicId);
                         array_map('unlink', glob(HOME.'/uploads/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
 
+                        // Выбирает files.id только если они есть в posts
                         $delPosts = Post::where('topic_id', $topicId)
                             ->join('files', function($join){
                                 $join->on('posts.id', '=', 'files.relate_id')
                                     ->where('files.relate_type', '=', Post::class);
                             })
-                            ->pluck('posts.id')
+                            ->pluck('files.id')
                             ->all();
-                    }
 
-                    if ($delPosts) {
-                        $delPostIds = implode(',', $delPosts);
-                        DB::run()->query("DELETE FROM `files` WHERE relate_type=? AND `relate_id` IN (" . $delPostIds . ");", [Post::class]);
+                        if ($delPosts) {
+                            $delFilesIds = implode(',', $delPosts);
+                            DB::run()->query("DELETE FROM `files` WHERE `id` IN (" . $delFilesIds . ");");
+                        }
                     }
                     // ------ Удаление загруженных файлов -------//
 
