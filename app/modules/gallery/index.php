@@ -14,17 +14,17 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    $photos = [];
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `photo`;");
+
+    $total = Photo::count();
     $page = App::paginate(App::setting('fotolist'), $total);
 
-    if ($total > 0) {
+    $config['newtitle'] = 'Галерея сайта (Стр. '.$page['current'].')';
 
-        $config['newtitle'] = 'Галерея сайта (Стр. '.$page['current'].')';
-
-        $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";");
-        $photos = $queryphoto->fetchAll();
-    }
+    $photos = Photo::orderBy('created_at', 'desc')
+        ->offset($page['offset'])
+        ->limit($config['fotolist'])
+        ->with('user')
+        ->get();
 
     App::view('gallery/index', compact('photos', 'page', 'total'));
 break;
@@ -34,8 +34,7 @@ break;
     ############################################################################################
     case 'view':
 
-        $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
-
+        $photo = Photo::find($gid);
         App::view('gallery/view', compact('photo', 'page'));
 
     break;
@@ -45,11 +44,11 @@ break;
     ############################################################################################
     case 'vote':
 
-        $uid = check($_GET['uid']);
-        $vote = check($_GET['vote']);
+        $token = check(Request::input('token'));
+        $vote = check(Request::input('vote'));
 
         if (is_user()) {
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if ($vote == 'up' || $vote == 'down') {
 
                     $score = ($vote == 'up') ? 1 : -1;
@@ -57,14 +56,14 @@ break;
                     $data = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
                     if (!empty($data)) {
-                        if ($log != $data['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['gallery', $gid, $log]);
+                        if (App::getUserId() != $data['user_id']) {
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user_id`=? LIMIT 1;", ['gallery', $gid, App::getUserId()]);
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * $config['photoexprated'];
 
-                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['gallery', SITETIME]);
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['gallery', $gid, $log, $expiresrated]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND created_at<?;", ['gallery', SITETIME]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user_id`, `created_at`) VALUES (?, ?, ?, ?);", ['gallery', $gid, App::getUserId(), $expiresrated]);
                                 DB::run() -> query("UPDATE `photo` SET `rating`=`rating`+? WHERE `id`=?;", [$score, $gid]);
 
                                 notice('Ваша оценка принята! Рейтинг фотографии: '.format_num($data['rating'] + $score));
@@ -101,7 +100,8 @@ break;
 
         if (is_user()) {
             echo '<div class="form">';
-            echo '<form action="/gallery?act=add&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+            echo '<form action="/gallery?act=add" method="post" enctype="multipart/form-data">';
+            echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
             echo 'Прикрепить фото:<br /><input type="file" name="photo" /><br />';
             echo 'Название: <br /><input type="text" name="title" /><br />';
             echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text"></textarea><br />';
@@ -126,17 +126,17 @@ break;
 
         $config['newtitle'] = 'Результат добавления';
 
-        $uid = check($_GET['uid']);
-        $title = check($_POST['title']);
-        $text = (!empty($_POST['text'])) ? check($_POST['text']) : '';
-        $closed = (empty($_POST['closed'])) ? 0 : 1;
+        $token = check(Request::input('token'));
+        $title = check(Request::input('title'));
+        $text = check(Request::input('text'));
+        $closed = Request::has('closed') ? 1 : 0;
 
         if (is_user()) {
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (is_uploaded_file($_FILES['photo']['tmp_name'])) {
                     if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                         if (utf_strlen($text) <= 1000) {
-                            if (is_flood($log)) {
+                            if (is_flood(App::getUserId())) {
 
                                 $handle = upload_image(
                                     $_FILES['photo'],
@@ -149,12 +149,12 @@ break;
                                     $handle -> process(HOME.'/uploads/pictures/');
                                     if ($handle -> processed) {
 
-                                        $photo = Photo::create();
-                                        $photo->user = $log;
+                                        $photo = new Photo();
+                                        $photo->user_id = App::getUserId();
                                         $photo->title = $title;
                                         $photo->text = antimat($text);
                                         $photo->link = $handle->file_dst_name;
-                                        $photo->time = SITETIME;
+                                        $photo->created_at = SITETIME;
                                         $photo->closed = $closed;
                                         $photo->save();
 
@@ -196,12 +196,13 @@ break;
     case 'edit':
 
         if (is_user()) {
-            $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", [$gid, $log]);
+            $photo = Photo::where('user_id', App::getUserId())->find($gid);
 
             if (!empty($photo)) {
 
                 echo '<div class="form">';
-                echo '<form action="/gallery?act=change&amp;gid='.$gid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/gallery?act=change&amp;gid='.$gid.'&amp;page='.$page.'" method="post">';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 echo 'Название: <br /><input type="text" name="title" value="'.$photo['title'].'" /><br />';
                 echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br />';
 
@@ -226,14 +227,14 @@ break;
     ############################################################################################
     case 'change':
 
-        $uid = check($_GET['uid']);
-        $title = check($_POST['title']);
-        $text = (!empty($_POST['text'])) ? check($_POST['text']) : '';
-        $closed = (empty($_POST['closed'])) ? 0 : 1;
+        $token = check(Request::input('token'));
+        $title = check(Request::input('title'));
+        $text = check(Request::input('text'));
+        $closed = Request::has('closed') ? 1 : 0;
 
-        if ($uid == $_SESSION['token']) {
+        if ($token == $_SESSION['token']) {
             if (is_user()) {
-                $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", [$gid, $log]);
+                $photo = Photo::where('user_id', App::getUserId())->find($gid);
 
                 if (!empty($photo)) {
                     if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
@@ -271,39 +272,44 @@ break;
     ############################################################################################
     case 'comments':
 
-        $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
-
-        if (!empty($photo)) {
+        $photo = Photo::find($gid);
+        if ($photo) {
             $config['newtitle'] = 'Комментарии - '.$photo['title'];
 
-            echo '<i class="fa fa-picture-o"></i> <b><a href="/gallery?act=view&amp;gid='.$photo['id'].'">'.$photo['title'].'</a></b><br /><br />';
+            echo '<i class="fa fa-picture-o"></i> <b><a href="/gallery?act=view&amp;gid='.$photo['id'].'">'.$photo['title'].'</a></b><hr />';
 
-            echo '<a href="/gallery?act=comments&amp;gid='.$gid.'&amp;rand='.mt_rand(100, 999).'">Обновить</a><hr />';
-
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['gallery', $gid]);
+            $total = Comment::where('relate_type', 'Gallery')
+                ->where('relate_id', $gid)
+                ->count();
             $page = App::paginate(App::setting('postgallery'), $total);
 
             if ($total > 0) {
                 $is_admin = is_admin();
                 if ($is_admin) {
-                    echo '<form action="/gallery?act=delcomm&amp;gid='.$gid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/gallery?act=delcomm&amp;gid='.$gid.'&amp;page='.$page['current'].'" method="post">';
+                    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postgallery'].";", ['gallery', $gid]);
+                $comments = Comment::where('relate_type', 'Gallery')
+                    ->where('relate_id', $gid)
+                    ->offset($page['offset'])
+                    ->limit($page['limit'])
+                    ->orderBy('created_at')
+                    ->get();
 
-                while ($data = $querycomm -> fetch()) {
+                foreach ($comments as $data) {
 
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<div class="img">'.user_avatars($data->user).'</div>';
 
                     if ($is_admin) {
                         echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
                     }
 
-                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
-                    echo user_title($data['user']).' '.user_online($data['user']).'</div>';
+                    echo '<b>'.profile($data->user).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
+                    echo user_title($data->user).' '.user_online($data->user).'</div>';
 
-                    if ($log == $data['user'] && $data['time'] + 600 > SITETIME) {
+                    if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME) {
                         echo '<div class="right"><a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
@@ -331,7 +337,8 @@ break;
 
                 if (is_user()) {
                     echo '<div class="form">';
-                    echo '<form action="/gallery?act=addcomm&amp;gid='.$gid.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/gallery?act=addcomm&amp;gid='.$gid.'" method="post">';
+                    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
                     echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
                     echo '<input type="submit" value="Написать" /></form></div><br />';
@@ -359,13 +366,13 @@ break;
     ############################################################################################
     case 'addcomm':
 
-        $uid = check($_GET['uid']);
-        $msg = check($_POST['msg']);
+        $token = check(Request::input('token'));
+        $msg = check(Request::input('msg'));
 
         $config['newtitle'] = 'Добавление комментария';
 
         if (is_user()) {
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
                     $data = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
@@ -374,12 +381,12 @@ break;
                             if (is_flood($log)) {
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['gallery', 0, $gid, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
+                                DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", ['gallery', $gid, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".$config['maxpostgallery'].") AS del);", ['gallery', $gid, 'gallery', $gid]);
+                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".$config['maxpostgallery'].") AS del);", ['gallery', $gid, 'gallery', $gid]);
 
                                 DB::run() -> query("UPDATE `photo` SET `comments`=`comments`+1 WHERE `id`=?;", [$gid]);
-                                DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
+                                DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=?", [App::getUserId()]);
 
                                 notice('Комментарий успешно добавлен!');
                                 redirect("/gallery?act=end&gid=$gid");
@@ -412,19 +419,25 @@ break;
     ############################################################################################
     case 'editcomm':
 
-        $cid = abs(intval($_GET['cid']));
+        $cid = abs(intval(Request::input('cid')));
 
         if (is_user()) {
-            $comm = DB::run() -> queryFetch("SELECT `c`.*, `p`.`closed` FROM `comments` c LEFT JOIN `photo` p ON `c`.`relate_id`=`p`.`id` WHERE relate_type=? AND c.`id`=? AND c.`user`=? LIMIT 1;", ['gallery', $cid, $log]);
+            $comm = Comment::select('comments.*', 'photo.closed')
+                ->where('relate_type', 'gallery')
+                ->where('comments.id', $cid)
+                ->where('comments.user_id', App::getUserId())
+                ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+                ->first();
 
             if (!empty($comm)) {
                 if (empty($comm['closed'])) {
-                    if ($comm['time'] + 600 > SITETIME) {
+                    if ($comm['created_at'] + 600 > SITETIME) {
 
-                        echo '<i class="fa fa-pencil"></i> <b>'.$comm['user'].'</b> <small>('.date_fixed($comm['time']).')</small><br /><br />';
+                        echo '<i class="fa fa-pencil"></i> <b>'.$comm->getUser()->login.'</b> <small>('.date_fixed($comm['created_at']).')</small><br /><br />';
 
                         echo '<div class="form">';
-                        echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['relate_id'].'&amp;cid='.$cid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                        echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['relate_id'].'&amp;cid='.$cid.'&amp;page='.$page.'" method="post">';
+                        echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                         echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$comm['text'].'</textarea><br />';
                         echo '<input type="submit" value="Редактировать" /></form></div><br />';
 
@@ -449,18 +462,24 @@ break;
     ############################################################################################
     case 'changecomm':
 
-        $uid = check($_GET['uid']);
-        $cid = abs(intval($_GET['cid']));
-        $msg = check($_POST['msg']);
+        $cid = abs(intval(Request::input('cid')));
+        $msg = check(Request::input('msg'));
+        $token = check(Request::input('token'));
 
         if (is_user()) {
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
-                    $comm = DB::run() -> queryFetch("SELECT `c`.*, `p`.`closed` FROM `comments` c LEFT JOIN `photo` p ON `c`.`relate_id`=`p`.`id` WHERE relate_type=? AND c.`id`=? AND c.`user`=? LIMIT 1;", ['gallery', $cid, $log]);
+
+                    $comm = Comment::select('comments.*', 'photo.closed')
+                        ->where('relate_type', 'gallery')
+                        ->where('comments.id', $cid)
+                        ->where('comments.user_id', App::getUserId())
+                        ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+                        ->first();
 
                     if (!empty($comm)) {
                         if (empty($comm['closed'])) {
-                            if ($comm['time'] + 600 > SITETIME) {
+                            if ($comm['created_at'] + 600 > SITETIME) {
 
                                 $msg = antimat($msg);
 
@@ -496,15 +515,11 @@ break;
     ############################################################################################
     case 'delcomm':
 
-        $uid = check($_GET['uid']);
-        if (isset($_POST['del'])) {
-            $del = intar($_POST['del']);
-        } else {
-            $del = 0;
-        }
+        $token = check(Request::input('token'));
+        $del   = intar(Request::input('del'));
 
         if (is_admin()) {
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
@@ -532,12 +547,12 @@ break;
     ############################################################################################
     case 'delphoto':
 
-        $uid = check($_GET['uid']);
+        $token = check(Request::input('token'));
 
         if (is_user()) {
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (is_writeable(HOME.'/uploads/pictures')) {
-                    $querydel = DB::run() -> queryFetch("SELECT `id`, `link`, `comments` FROM `photo` WHERE `id`=? AND `user`=? LIMIT 1;", [$gid, $log]);
+                    $querydel = DB::run() -> queryFetch("SELECT `id`, `link`, `comments` FROM `photo` WHERE `id`=? AND `user_id`=? LIMIT 1;", [$gid, App::getUserId()]);
                     if (!empty($querydel)) {
                         if (empty($querydel['comments'])) {
                             DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$querydel['id']]);
@@ -587,47 +602,6 @@ break;
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
     break;
-
-    ############################################################################################
-    ##                                   Удаление фотографий                                  ##
-    ############################################################################################
-    /**
-    * case 'delphoto':
-    *
-    * $uid = check($_GET['uid']);
-    * if (isset($_POST['del'])) {$del = intar($_POST['del']);} else {$del = 0;}
-    *
-    * if (is_user()){
-    * if ($uid==$_SESSION['token']){
-    * if (!empty($del)){
-    *
-    * $del = implode(',', $del);
-    *
-    * if (is_writeable(HOME.'/uploads/pictures')){
-    *
-    * $querydel = DB::run()->query("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.") AND `user`=?;", array($log));
-    * $arr_photo = $querydel->fetchAll();
-    *
-    * if (count($arr_photo)>0){
-    * foreach ($arr_photo as $delete){
-    * DB::run()->query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", array($delete['id']));
-    * DB::run()->query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", array('gallery', $delete['id']));
-    * if (file_exists(HOME.'/uploads/pictures/'.$delete['link'])) {unlink(HOME.'/uploads/pictures/'.$delete['link']);}
-    * }
-    *
-    * notice('Выбранные фотографии успешно удалены!');
-    * redirect("/gallery?act=album&page=$page");
-    *
-    * } else {show_error('Ошибка! Данных фотографий не существует или вы не автор этих фотографий!');}
-    * } else {show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с фотографиями!');}
-    * } else {show_error('Ошибка! Отсутствуют выбранные фотографии!');}
-    * } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
-    * } else {show_login('Вы не авторизованы, чтобы удалять фотографии, необходимо');}
-    *
-    * echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=album&amp;page='.$page.'">Вернуться</a><br />';
-    * break;
-    */
-
 endswitch;
 
 App::view($config['themes'].'/foot');

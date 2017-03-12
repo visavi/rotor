@@ -154,5 +154,4 @@ class AliasLoader {
     {
         static::$instance = $loader;
     }
-
 }

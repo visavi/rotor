@@ -8,9 +8,14 @@
         ['url' => '/gallery?act=edit&amp;gid='.$photo['id'].'&amp;page='.$page, 'label' => 'Редактировать', 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
         ['url' => '/gallery?act=delphoto&amp;gid='.$photo['id'].'&amp;page='.$page.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
     ];
-
-    App::view('includes/link', ['links' => $links]);
     ?>
+
+    <ol class="breadcrumb">
+        <?php foreach ($links as $link): ?>
+            <?php if (isset($link['show']) && $link['show'] == false) continue; ?>
+            <li><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></ li>
+        <?php endforeach; ?>
+    </ol>
 
     <div>
         <a href="/uploads/pictures/<?= $photo['link'] ?>" class="gallery"><img  class="img-responsive" src="/uploads/pictures/<?= $photo['link'] ?>" alt="image" /></a><br />
@@ -19,7 +24,7 @@
             <?= App::bbCode($photo['text']) ?><br />
         <?php endif; ?>
 
-        Рейтинг: <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=down&amp;uid=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-down"></i></a> <big><b><?= format_num($photo['rating']) ?></b></big> <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=up&amp;uid=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-up"></i></a><br />
+        Рейтинг: <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=down&amp;token=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-down"></i></a> <big><b><?= format_num($photo['rating']) ?></b></big> <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=up&amp;token=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-up"></i></a><br />
 
         Размер: <?= read_file(HOME.'/uploads/pictures/'.$photo['link']) ?><br />
         Добавлено: <?= profile($photo['user'])?> (<?= date_fixed($photo['time']) ?>)<br />

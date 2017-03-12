@@ -6,10 +6,13 @@ $links = [
     ['url' => '/gallery/comments', 'label' => 'Все комментарии'],
     ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => is_admin()],
 ];
-
-App::view('includes/link', ['links' => $links]);
 ?>
-
+<ol class="breadcrumb">
+    <?php foreach ($links as $link): ?>
+        <?php if (isset($link['show']) && $link['show'] == false) continue; ?>
+        <li><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></ li>
+    <?php endforeach; ?>
+</ol>
 <?php if ($total > 0): ?>
     <?php foreach($photos as $data): ?>
 
@@ -22,10 +25,10 @@ App::view('includes/link', ['links' => $links]);
             <a href="/gallery?act=view&amp;gid=<?= $data['id'] ?>&amp;page=<?= $page['current'] ?>"><?= resize_image('uploads/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]) ?></a><br />
 
             <?php if (!empty($data['text'])): ?>
-                <?php App::bbCode($data['text']) ?><br />
+                <?= App::bbCode($data['text']) ?><br />
             <?php endif; ?>
 
-            Добавлено: <?= profile($data['user']) ?> (<?= date_fixed($data['time']) ?>)<br />
+            Добавлено: <?= profile($data->user) ?> (<?= date_fixed($data['created_at']) ?>)<br />
             <a href="/gallery?act=comments&amp;gid=<?= $data['id'] ?>">Комментарии</a> (<?= $data['comments'] ?>)
             <a href="/gallery?act=end&amp;gid=<?= $data['id'] ?>">&raquo;</a>
         </div>
@@ -44,6 +47,10 @@ $links = [
     ['url' => '/gallery/top', 'label' => 'Топ фото'],
     ['url' => '/gallery?act=addphoto', 'label' => 'Добавить фото'],
 ];
-
-App::view('includes/link', ['links' => $links]);
 ?>
+<ol class="breadcrumb">
+    <?php foreach ($links as $link): ?>
+        <?php if (isset($link['show']) && $link['show'] == false) continue; ?>
+        <li><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></ li>
+    <?php endforeach; ?>
+</ol>

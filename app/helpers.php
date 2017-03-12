@@ -670,8 +670,8 @@ function stats_ipbanned() {
 // --------------- Функция вывода количества фотографий --------------------//
 function stats_gallery() {
     if (@filemtime(STORAGE."/temp/statgallery.dat") < time()-900) {
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `photo`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `time`>?;", [SITETIME-86400 * 3]);
+        $total = Photo::count();
+        $totalnew = Photo::where('created_at', '>', SITETIME-86400 * 3)->count();
 
         if (empty($totalnew)) {
             $stat = $total;
@@ -1617,7 +1617,7 @@ function resize_image($dir, $name, $size, $params = []) {
 
     if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
 
-        $prename = str_replace('/', '_' ,$dir.$name);
+        $prename = str_replace('/', '_', $dir.$name);
         $newname = substr($prename, 0, strrpos($prename, '.'));
         $imgsize = getimagesize(HOME.'/'.$dir.$name);
 
