@@ -1614,7 +1614,6 @@ function show_admin_links($level = 0) {
 
 // ------------- Функция кэширования уменьшенных изображений -------------//
 function resize_image($dir, $name, $size, $params = []) {
-
     if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
 
         $prename = str_replace('/', '_', $dir.$name);
@@ -1638,8 +1637,7 @@ function resize_image($dir, $name, $size, $params = []) {
             return '<img src="/'.$dir.$name.'"'.$strParams.' />';
         }
 
-        if (!file_exists(HOME.'/uploads/thumbnail/'.$prename.$name) || filesize(HOME.'/uploads/thumbnail/'.$prename.$name) < 18) {
-
+        if (!file_exists(HOME.'/uploads/thumbnail/'.$prename) || filesize(HOME.'/uploads/thumbnail/'.$prename) < 18) {
             $handle = new upload(HOME.'/'.$dir.$name);
 
             if ($handle -> uploaded) {
