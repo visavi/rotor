@@ -1,16 +1,9 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (empty($_GET['uz'])) {
-    $uz = check($log);
-} else {
-    $uz = check($_GET['uz']);
-}
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
-}
+
+$act = check(Request::input('act', 'index'));
+$uz = check(Request::input('uz'));
 
 switch ($act):
 ############################################################################################
@@ -19,19 +12,29 @@ switch ($act):
     case 'index':
         show_title('Альбомы пользователей');
 
-        $total = DB::run() -> querySingle("select COUNT(DISTINCT `user`) from `photo`");
+        $total = Photo::distinct('user_id')
+            ->join('users', 'photo.user_id', '=', 'users.id')
+            ->count('user_id');
+
         $page = App::paginate(App::setting('photogroup'), $total);
 
         if ($total > 0) {
 
             $config['newtitle'] = 'Альбомы пользователей (Стр. '.$page['current'].')';
 
-            $queryphoto = DB::run() -> query("SELECT COUNT(*) AS cnt, SUM(`comments`) AS comments, `user` FROM `photo` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".$config['photogroup'].";");
+            $albums = Photo::select('user_id', 'login')
+                ->selectRaw('count(*) as cnt, sum(comments) as comments')
+                ->join('users', 'photo.user_id', '=', 'users.id')
+                ->offset($page['offset'])
+                ->limit($page['limit'])
+                ->groupBy('user_id')
+                ->orderBy('cnt', 'desc')
+                ->get();
 
-            while ($data = $queryphoto -> fetch()) {
+            foreach($albums as $data) {
 
                 echo '<i class="fa fa-picture-o"></i> ';
-                echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data['user'].'">'.$data['user'].'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
+                echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data->login.'">'.$data->login.'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
             }
 
             App::pagination($page);
@@ -50,18 +53,25 @@ switch ($act):
 
         show_title('Список всех фотографий '.$uz);
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `photo` WHERE `user`=?;", [$uz]);
+        $user = User::where('login', $uz)->first();
+
+        $total = Photo::where('user_id', $user->id)->count();
+
         $page = App::paginate(App::setting('fotolist'), $total);
 
         if ($total > 0) {
 
             $config['newtitle'] = 'Список всех фотографий '.$uz.' (Стр. '.$page['current'].')';
 
-            $queryphoto = DB::run() -> query("SELECT * FROM `photo` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";", [$uz]);
+            $photos = Photo::where('user_id', $user->id)
+                ->offset($page['offset'])
+                ->limit($page['limit'])
+                ->orderBy('created_at', 'desc')
+                ->get();
 
-            $moder = ($log == $uz) ? 1 : 0;
+            $moder = (App::getUserId() == $user->id) ? 1 : 0;
 
-            while ($data = $queryphoto -> fetch()) {
+            foreach ($photos as $data) {
                 echo '<div class="b"><i class="fa fa-picture-o"></i> ';
                 echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/uploads/pictures/'.$data['link']).')<br />';
 
@@ -77,7 +87,7 @@ switch ($act):
                     echo App::bbCode($data['text']).'<br />';
                 }
 
-                echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
+                echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['created_at']).')<br />';
                 echo '<a href="/gallery?act=comments&amp;gid='.$data['id'].'">Комментарии</a> ('.$data['comments'].')';
                 echo '</div>';
             }
