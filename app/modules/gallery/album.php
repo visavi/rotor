@@ -55,6 +55,10 @@ switch ($act):
 
         $user = User::where('login', $uz)->first();
 
+        if (! $user) {
+            App::abort('default', 'Пользователь не найден!');
+        }
+
         $total = Photo::where('user_id', $user->id)->count();
 
         $page = App::paginate(App::setting('fotolist'), $total);

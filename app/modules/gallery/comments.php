@@ -1,16 +1,8 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (empty($_GET['uz'])) {
-    $uz = check($log);
-} else {
-    $uz = check($_GET['uz']);
-}
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
-}
+$act = check(Request::input('act', 'index'));
+$uz = check(Request::input('uz'));
 
 switch ($act):
     ############################################################################################
@@ -19,22 +11,30 @@ switch ($act):
     case 'index':
         show_title('Список всех комментариев');
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=?;", ['gallery']);
+
+        $total = Comment::where('relate_type', 'Gallery')->count();
         $page = App::paginate(App::setting('postgallery'), $total);
 
         if ($total > 0) {
             $config['newtitle'] = 'Список всех комментариев (Стр. '.$page['current'].')';
 
-            $querycomm = DB::run() -> query("SELECT `comments`.*, `title` FROM `comments` LEFT JOIN `photo` ON `comments`.`relate_id`=`photo`.`id` WHERE relate_type='gallery' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".$config['postgallery'].";");
+            $comments = Comment::select('comments.*', 'title')
+                ->where('relate_type', 'Gallery')
+                ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+                ->offset($page['offset'])
+                ->limit($page['limit'])
+                ->orderBy('comments.created_at')
+                ->with('user')
+                ->get();
 
-            while ($data = $querycomm -> fetch()) {
+            foreach ($comments as $data) {
 
                 echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b>';
                 echo '</div>';
 
 
                 echo '<div>'.App::bbCode($data['text']).'<br />';
-                echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -56,27 +56,44 @@ switch ($act):
     case 'comments':
         show_title('Список всех комментариев '.$uz);
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['gallery', $uz]);
+        $user = User::where('login', $uz)->first();
+
+        if (! $user) {
+            App::abort('default', 'Пользователь не найден!');
+        }
+
+        $total = Comment::where('relate_type', 'Gallery')
+            ->where('user_id', $user->id)
+            ->count();
+
         $page = App::paginate(App::setting('postgallery'), $total);
 
         if ($total > 0) {
             $config['newtitle'] = 'Список всех комментариев '.$uz.' (Стр. '.$page['current'].')';
 
-            $querycomm = DB::run() -> query("SELECT `c`.*, `title` FROM `comments` c LEFT JOIN `photo` p ON `c`.`relate_id`=`p`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".$config['postgallery'].";", ['gallery', $uz]);
+            $comments = Comment::select('comments.*', 'title')
+                ->where('relate_type', 'Gallery')
+                ->where('comments.user_id', $user->id)
+                ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+                ->offset($page['offset'])
+                ->limit($page['limit'])
+                ->orderBy('comments.created_at')
+                ->with('user')
+                ->get();
 
-            while ($data = $querycomm -> fetch()) {
+            foreach ($comments as $data) {
 
                 echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b>';
 
                 if (is_admin()) {
-                    echo ' — <a href="/gallery/comments?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>';
+                    echo ' — <a href="/gallery/comments?act=del&amp;id='.$data['id'].'&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;token='.$_SESSION['token'].'">Удалить</a>';
                 }
 
                 echo '</div>';
 
 
                 echo '<div>'.App::bbCode($data['text']).'<br />';
-                echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
 
                 if (is_admin() || empty($config['anonymity'])) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -97,21 +114,17 @@ switch ($act):
     ############################################################################################
     case 'viewcomm':
 
-        if (isset($_GET['gid'])) {
-            $gid = abs(intval($_GET['gid']));
-        } else {
-            $gid = 0;
-        }
-        if (isset($_GET['cid'])) {
-            $cid = abs(intval($_GET['cid']));
-        } else {
-            $cid = 0;
-        }
+        $gid = abs(intval(Request::input('gid')));
+        $cid = abs(intval(Request::input('cid')));
 
-        $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `id`<=? AND `relate_id`=? ORDER BY `time` ASC LIMIT 1;", ['gallery', $cid, $gid]);
+        $total = Comment::where('relate_type', 'Gallery')
+            ->where('relate_id', $gid)
+            ->where('id', '<=', $cid)
+            ->orderBy('created_at')
+            ->count();
 
-        if (!empty($querycomm)) {
-            $end = floor(($querycomm - 1) / $config['postgallery']) * $config['postgallery'];
+        if ($total) {
+            $end = ceil($total / App::setting('postgallery'));
 
             redirect("/gallery?act=comments&gid=$gid&page=$end");
         } else {
@@ -124,20 +137,25 @@ switch ($act):
     ############################################################################################
     case 'del':
 
-        $uid = check($_GET['uid']);
-        if (isset($_GET['id'])) {
-            $id = abs(intval($_GET['id']));
-        } else {
-            $id = 0;
-        }
+        $token = check(Request::input('token'));
+        $id = abs(intval(Request::input('id')));
+        $page = abs(intval(Request::input('page', 1)));
 
         if (is_admin()) {
-            if ($uid == $_SESSION['token']) {
-                $photo = DB::run() -> querySingle("SELECT `relate_id` FROM `comments` WHERE relate_type=? AND `id`=?;", ['gallery', $id]);
+            if ($token == $_SESSION['token']) {
 
-                if (!empty($photo)) {
-                    DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `id`=? AND `relate_id`=?;", ['', $id, $photo]);
-                    DB::run() -> query("UPDATE `photo` SET `comments`=`comments`-? WHERE `id`=?;", [1, $photo]);
+                $comment = Comment::where('relate_type', 'Gallery')
+                    ->where('id', $id)
+                    ->first();
+
+                if ($comment) {
+
+                    $comment->delete();
+
+                    Photo::where('id', $comment->relate_id)
+                        ->update([
+                            'comments' => Capsule::raw('comments - 1'),
+                        ]);
 
                     notice('Комментарий успешно удален!');
                     redirect("/gallery/comments?act=comments&uz=$uz&page=$page");

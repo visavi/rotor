@@ -1,11 +1,7 @@
 <?php
 App::view($config['themes'].'/index');
 
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
-}
+$act = check(Request::input('act', 'index'));
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
@@ -21,16 +17,21 @@ if (is_admin()) {
             echo '<a href="/gallery?act=addphoto">Добавить фото</a> / ';
             echo '<a href="/gallery?page='.$page.'">Обзор</a><hr />';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `photo`;");
+            $total = Photo::count();
             $page = App::paginate(App::setting('fotolist'), $total);
+
 
             if ($total > 0) {
 
-                echo '<form action="/admin/gallery?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/gallery?act=del&amp;page='.$page['current'].'" method="post">';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
+                $photos = Photo::orderBy('created_at', 'desc')
+                    ->offset($page['offset'])
+                    ->limit($config['fotolist'])
+                    ->with('user')
+                    ->get();
 
-                $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";");
-
-                while ($data = $queryphoto -> fetch()) {
+                foreach ($photos as $data) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-picture-o"></i> ';
                     echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/uploads/pictures/'.$data['link']).')<br />';
@@ -59,7 +60,7 @@ if (is_admin()) {
             }
 
             if (is_admin([101])) {
-                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br />';
             }
         break;
 
@@ -68,14 +69,15 @@ if (is_admin()) {
         ############################################################################################
         case 'edit':
 
-            $gid = abs(intval($_GET['gid']));
+            $gid = abs(intval(Request::input('gid')));
 
             $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
             if (!empty($photo)) {
 
                 echo '<div class="form">';
-                echo '<form action="/admin/gallery?act=change&amp;gid='.$gid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/admin/gallery?act=change&amp;gid='.$gid.'&amp;page='.$page.'" method="post">';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 echo 'Название: <br /><input type="text" name="title" value="'.$photo['title'].'" /><br />';
                 echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br />';
 
@@ -96,13 +98,13 @@ if (is_admin()) {
         ############################################################################################
         case 'change':
 
-            $uid = check($_GET['uid']);
-            $gid = abs(intval($_GET['gid']));
-            $title = check($_POST['title']);
-            $text = check($_POST['text']);
-            $closed = (empty($_POST['closed'])) ? 0 : 1;
+            $token = check(Request::input('token'));
+            $gid = abs(intval(Request::input('gid')));
+            $title = check(Request::input('title'));
+            $text = check(Request::input('text'));
+            $closed = Request::has('closed') ? 1 : 0;
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
                 if (!empty($photo)) {
@@ -138,17 +140,10 @@ if (is_admin()) {
         ############################################################################################
         case 'del':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
+            $del = intar(Request::input('del'));
 
-            if (isset($_POST['del'])) {
-                $del = intar($_POST['del']);
-            } elseif (isset($_GET['del'])) {
-                $del = [abs(intval($_GET['del']))];
-            } else {
-                $del = 0;
-            }
-
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
@@ -159,7 +154,7 @@ if (is_admin()) {
                         if (count($arr_photo) > 0) {
                             foreach ($arr_photo as $delete) {
                                 DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$delete['id']]);
-                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['gallery', $delete['id']]);
+                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['Gallery', $delete['id']]);
 
                                 unlink_image('uploads/pictures/', $delete['link']);
                             }
@@ -188,10 +183,10 @@ if (is_admin()) {
         ############################################################################################
         case 'restatement':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
 
             if (is_admin([101])) {
-                if ($uid == $_SESSION['token']) {
+                if ($token == $_SESSION['token']) {
                     restatement('gallery');
 
                     notice('Комментарии успешно пересчитаны!');

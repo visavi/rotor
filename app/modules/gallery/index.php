@@ -1,9 +1,9 @@
 <?php
 App::view($config['themes'].'/index');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
-$gid = (isset($_GET['gid'])) ? abs(intval($_GET['gid'])) : 0;
+$act = check(Request::input('act', 'index'));
+$uz = check(Request::input('uz'));
+$gid = abs(intval(Request::input('gid')));
 $page = abs(intval(Request::input('page', 1)));
 
 show_title('Галерея сайта');
@@ -295,6 +295,7 @@ break;
                     ->offset($page['offset'])
                     ->limit($page['limit'])
                     ->orderBy('created_at')
+                    ->with('user')
                     ->get();
 
                 foreach ($comments as $data) {
