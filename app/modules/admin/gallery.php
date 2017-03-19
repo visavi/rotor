@@ -13,7 +13,6 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            echo '<a href="gallery?page='.$page.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / ';
             echo '<a href="/gallery?act=addphoto">Добавить фото</a> / ';
             echo '<a href="/gallery?page='.$page.'">Обзор</a><hr />';
 

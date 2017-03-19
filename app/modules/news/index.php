@@ -14,18 +14,22 @@ case 'index':
         echo '<div class="form"><a href="/admin/news">Управление новостями</a></div>';
     }
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `news`;");
+    $total = News::count();
     $page = App::paginate(App::setting('postnews'), $total);
 
     $config['description'] = 'Список новостей (Стр. '.$page['current'].')';
 
     if ($total > 0) {
-        $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postnews'].";");
 
-        while ($data = $querynews -> fetch()) {
+        $news = News::orderBy('created_at')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
+
+        foreach ($news as $data) {
             echo '<div class="b">';
             echo $data['closed'] == 0 ? '<i class="fa fa-plus-square-o"></i> ' : '<i class="fa fa-minus-square-o"></i> ';
-            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small></div>';
+            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['created_at']).')</small></div>';
 
             if (!empty($data['image'])) {
                 echo '<div class="img"><a href="/uploads/news/'.$data['image'].'">'.resize_image('uploads/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
@@ -36,7 +40,7 @@ case 'index':
             }
 
             echo '<div>'.App::bbCode($data['text']).'</div>';
-            echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'<br />';
+            echo '<div style="clear:both;">Добавлено: '.profile($data->user).'<br />';
             echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ('.$data['comments'].') ';
             echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
         }
@@ -55,7 +59,7 @@ break;
 ############################################################################################
 case 'view':
 
-    $data = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
+    $data = News::find($id);
 
     if (!empty($data)) {
 
@@ -68,7 +72,7 @@ case 'view':
         $config['description'] = strip_str($data['text']);
 
         echo '<div class="b"><i class="fa fa-file-o"></i> ';
-        echo '<b>'.$data['title'].'</b><small> ('.date_fixed($data['time']).')</small></div>';
+        echo '<b>'.$data['title'].'</b><small> ('.date_fixed($data['created_at']).')</small></div>';
 
         if (!empty($data['image'])) {
 
@@ -82,16 +86,21 @@ case 'view':
         if ($data['comments'] > 0) {
             echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
 
-            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 5;", ['news', $id]);
-            $comments = $querycomm -> fetchAll();
-            $comments = array_reverse($comments);
+            $comments = Comment::where('relate_type', News::class)
+                ->where('relate_id', $id)
+                ->limit(5)
+                ->orderBy('created_at', 'desc')
+                ->with('user')
+                ->get();
+
+            $comments = $comments->reverse();
 
             foreach ($comments as $comm) {
                 echo '<div class="b">';
                 echo '<div class="img">'.user_avatars($comm['user']).'</div>';
 
                 echo '<b>'.profile($comm['user']).'</b>';
-                echo '<small> ('.date_fixed($comm['time']).')</small><br />';
+                echo '<small> ('.date_fixed($comm['created_at']).')</small><br />';
                 echo user_title($comm['user']).' '.user_online($comm['user']).'</div>';
 
                 echo '<div>'.App::bbCode($comm['text']).'<br />';
@@ -142,11 +151,14 @@ break;
 ##                                     Комментарии                                        ##
 ############################################################################################
 case 'comments':
-    $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
+    $datanews = News::find($id);
 
     if (!empty($datanews)) {
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['news', $id]);
+        $total = Comment::where('relate_type', News::class)
+            ->where('relate_id', $id)
+            ->count();
+
         $page = App::paginate(App::setting('postnews'), $total);
 
         $config['newtitle'] = 'Комментарии - '.$datanews['title'];
@@ -162,9 +174,15 @@ case 'comments':
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
             }
 
-            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postnews'].";", ['news', $id]);
+            $comments = Comment::where('relate_type', News::class)
+                ->where('relate_id', $id)
+                ->offset($page['offset'])
+                ->limit($page['limit'])
+                ->orderBy('created_at')
+                ->with('user')
+                ->get();
 
-            while ($data = $querycomm -> fetch()) {
+            foreach ($comments as $data) {
 
                 echo '<div class="b" id="comment_'.$data['id'].'"">';
                 echo '<div class="img">'.user_avatars($data['user']).'</div>';
@@ -174,7 +192,7 @@ case 'comments':
                 }
 
                 echo '<b>'.profile($data['user']).'</b>';
-                echo '<small> ('.date_fixed($data['time']).')</small><br />';
+                echo '<small> ('.date_fixed($data['created_at']).')</small><br />';
                 echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
                 echo '<div>'.App::bbCode($data['text']).'<br />';
