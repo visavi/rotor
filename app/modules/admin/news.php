@@ -15,23 +15,27 @@ case 'index':
 
     echo '<div class="form"><a href="/news">Обзор новостей</a></div>';
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `news`;");
+    $total = News::count();
+    $page = App::paginate(App::setting('postnews'), $total);
 
     if ($total > 0) {
-        $page = App::paginate(App::setting('postnews'), $total);
 
-        $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postnews'].";");
+        $news = News::orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->with('user')
+            ->get();
 
         echo '<form action="/admin/news?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-        while ($data = $querynews -> fetch()) {
+        foreach ($news as $data) {
 
             echo '<div class="b">';
 
             $icon = (empty($data['closed'])) ? 'unlock' : 'lock';
             echo '<i class="fa fa-'.$icon.'"></i> ';
 
-            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small><br />';
+            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['created_at']).')</small><br />';
             echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
             echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
@@ -49,7 +53,7 @@ case 'index':
 
             echo '<div>'.App::bbCode($data['text']).'</div>';
 
-            echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'<br />';
+            echo '<div style="clear:both;">Добавлено: '.profile($data['user']).'<br />';
             echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ('.$data['comments'].') ';
             echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
         }
@@ -177,7 +181,7 @@ break;
 ############################################################################################
 case 'add':
 
-    echo '<b><big>Создание новости</big></b><br /><br />';
+    echo '<h3>Создание новости</h3>';
 
     echo '<div class="form cut">';
     echo '<form action="/admin/news?act=addnews&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
@@ -214,7 +218,7 @@ case 'addnews':
 
     if ($validation->run()) {
 
-        DB::run() -> query("INSERT INTO `news` (`title`, `text`, `author`, `time`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, $log, SITETIME, 0, $closed, $top]);
+        DB::run() -> query("INSERT INTO `news` (`title`, `text`, `user_id`, `created_at`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, App::getUserId(), SITETIME, 0, $closed, $top]);
 
         $lastid = DB::run() -> lastInsertId();
 
@@ -225,23 +229,19 @@ case 'addnews':
         }
 
         // ---------------------------- Загрузка изображения -------------------------------//
-        if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-            $handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $lastid);
-            if ($handle) {
+        $handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $lastid);
+        if ($handle) {
 
-                $handle -> process(HOME.'/uploads/news/');
+            $handle -> process(HOME.'/uploads/news/');
 
-                if ($handle -> processed) {
-                    DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
-                    $handle -> clean();
+            if ($handle -> processed) {
+                DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
 
-                } else {
-                    notice($handle->error, 'danger');
-                    redirect("/admin/news?act=edit&id=$lastid");
-                }
+            } else {
+                notice($handle->error, 'danger');
+                redirect("/admin/news?act=edit&id=$lastid");
             }
         }
-        // ---------------------------------------------------------------------------------//
 
         notice('Новость успешно добавлена!');
         redirect("/admin/news");

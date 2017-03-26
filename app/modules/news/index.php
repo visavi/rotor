@@ -21,9 +21,10 @@ case 'index':
 
     if ($total > 0) {
 
-        $news = News::orderBy('created_at')
+        $news = News::orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
+            ->with('user')
             ->get();
 
         foreach ($news as $data) {
@@ -265,9 +266,9 @@ case 'create':
 
             $msg = antimat($msg);
 
-            DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['news', 0, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
+            DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", ['news', $id, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommnews'].") AS del);", ['news', $id, 'news', $id]);
+            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".$config['maxkommnews'].") AS del);", ['news', $id, 'news', $id]);
 
             DB::run() -> query("UPDATE `news` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
             DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
@@ -332,19 +333,15 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", ['news', $id]);
+    $news = News::find($id);
 
-    if (!empty($query)) {
-        $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = ceil($total_comments / $config['postnews']);
-
-        redirect('/news/'.$id.'/comments?page='.$end);
-
-    } else {
-        show_error('Ошибка! Данной новости не существует!');
+    if (empty($news)) {
+        App::abort(404, 'Ошибка! Данной новости не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
+    $end = ceil($news['comments'] / App::setting('postnews'));
+    App::redirect('/news/'.$id.'/comments?page='.$end);
+
 break;
 
 endswitch;

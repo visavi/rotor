@@ -15,8 +15,8 @@
         <webMaster><?=App::setting('emails')?> (<?=App::setting('nickname')?>)</webMaster>
         <lastBuildDate><?=date("r", SITETIME)?></lastBuildDate>
 
-        <?php $querynews = DB::run() -> query("SELECT * FROM `news` ORDER BY `id` DESC LIMIT 15;"); ?>
-        <?php while ($news = $querynews -> fetch()): ?>
+        <?php $newses = News::orderBy('created_at', 'desc')->limit(15)->get(); ?>
+        <?php foreach($newses as $news): ?>
             <?php $news['text'] = App::bbCode($news['text']); ?>
             <?php $news['text'] = str_replace(['/uploads/smiles', '[cut]'], [App::setting('home').'/uploads/smiles', ''], $news['text']); ?>
             <?php $news['text'] = htmlspecialchars($news['text']); ?>
@@ -24,12 +24,13 @@
             <item>
                 <title><?=$news['title']?></title>
                 <link><?=App::setting('home')?>/news/<?=$news['id']?></link>
-                <description><?=$news['text']?> </description><author><?=$news['author']?></author>
-                <pubDate><?=date("r", $news['time'])?></pubDate>
+                <description><?=$news['text']?> </description>
+                <author><?=$news->getUser()->login?></author>
+                <pubDate><?=date("r", $news['created_at'])?></pubDate>
                 <category>Новости</category>
                 <guid><?=App::setting('home')?>/news/<?=$news['id']?></guid>
             </item>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
 
     </channel>
 </rss>
