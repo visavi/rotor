@@ -687,7 +687,7 @@ function stats_gallery() {
 
 // --------------- Функция вывода количества новостей--------------------//
 function stats_allnews() {
-    return DB::run() -> querySingle("SELECT count(*) FROM `news`;");
+    return News::count();
 }
 
 // ---------- Функция вывода записей в черном списке ------------//
@@ -1079,10 +1079,10 @@ function stats_news() {
     if (@filemtime(STORAGE."/temp/statnews.dat") < time()-900) {
         $stat = 0;
 
-        $data = DB::run() -> queryFetch("SELECT `time` FROM `news` ORDER BY `id` DESC LIMIT 1;");
+        $news = News::orderBy('created_at', 'desc')->first();
 
-        if ($data > 0) {
-            $stat = date_fixed($data['time'], "d.m.y");
+        if ($news) {
+            $stat = date_fixed($news['created_at'], "d.m.y");
             if ($stat == 'Сегодня') {
                 $stat = '<span style="color:#ff0000">Сегодня</span>';
             }
@@ -1100,8 +1100,10 @@ function last_news() {
 
     if ($config['lastnews'] > 0) {
 
-        $query = DB::run()->query("SELECT * FROM `news` WHERE `top`=? ORDER BY `time` DESC LIMIT ".$config['lastnews'].";", [1]);
-        $news = $query->fetchAll();
+        $news = News::where('top', 1)
+            ->orderBy('created_at', 'desc')
+            ->limit(App::setting('lastnews'))
+            ->get();
 
         $total = count($news);
 

@@ -7,10 +7,11 @@ $cal_year = date_fixed(SITETIME, "Y");
 $array_news = [];
 $array_komm = [];
 
-$querynews = DB::run() -> query("SELECT `id`, `time` FROM `news` WHERE EXTRACT(YEAR_MONTH FROM FROM_UNIXTIME(`time`))=EXTRACT(YEAR_MONTH FROM NOW());");
+$news = News::whereRaw('EXTRACT(YEAR_MONTH FROM FROM_UNIXTIME(`created_at`))=EXTRACT(YEAR_MONTH FROM NOW())')
+    ->get();
 
-while ($data = $querynews -> fetch()) {
-    $arrday = date_fixed($data['time'], 'j');
+foreach($news as $data) {
+    $arrday = date_fixed($data['created_at'], 'j');
     $array_news[] = $arrday;
     $array_komm[$arrday] = $data['id'];
 }
