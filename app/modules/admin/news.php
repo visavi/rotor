@@ -26,7 +26,8 @@ case 'index':
             ->with('user')
             ->get();
 
-        echo '<form action="/admin/news?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+        echo '<form action="/admin/news?act=del&amp;page='.$page['current'].'" method="post">';
+        echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
         foreach ($news as $data) {
 
@@ -70,7 +71,7 @@ case 'index':
     echo '<i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br />';
 
     if (is_admin([101])) {
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br />';
     }
 break;
 
@@ -87,7 +88,8 @@ case 'edit':
         echo '<b><big>Редактирование</big></b><br /><br />';
 
         echo '<div class="form cut">';
-        echo '<form action="/admin/news?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+        echo '<form action="/admin/news?act=change&amp;id='.$id.'&amp;page='.$page.'" method="post" enctype="multipart/form-data">';
+        echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
         echo 'Заголовок:<br />';
         echo '<input type="text" name="title" size="50" maxlength="50" value="'.$datanews['title'].'" /><br />';
         echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$datanews['text'].'</textarea><br />';
@@ -121,7 +123,7 @@ break;
 ############################################################################################
 case 'change':
 
-    $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
+    $token = check(Request::input('token'));
     $msg = (isset($_POST['msg'])) ? check($_POST['msg']) : '';
     $title = (isset($_POST['title'])) ? check($_POST['title']) : '';
     $closed = (empty($_POST['closed'])) ? 0 : 1;
@@ -132,7 +134,7 @@ case 'change':
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('not_empty', $datanews, 'Выбранной новости не существует, возможно она была удалена!')
         -> addRule('string', $title, 'Слишком длинный или короткий заголовок новости!', true, 5, 50)
         -> addRule('string', $msg, 'Слишком длинный или короткий текст новости!', true, 5, 10000);
@@ -156,7 +158,6 @@ case 'change':
                 if ($handle -> processed) {
 
                     DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
-                    $handle -> clean();
 
                 } else {
                     notice($handle->error, 'danger');
@@ -184,7 +185,8 @@ case 'add':
     echo '<h3>Создание новости</h3>';
 
     echo '<div class="form cut">';
-    echo '<form action="/admin/news?act=addnews&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
+    echo '<form action="/admin/news?act=addnews" method="post" enctype="multipart/form-data">';
+    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
     echo 'Заголовок:<br />';
     echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
     echo '<textarea id="markItUp" cols="50" rows="10" name="msg"></textarea><br />';
@@ -203,7 +205,7 @@ break;
 ############################################################################################
 case 'addnews':
 
-    $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
+    $token = check(Request::input('token'));
     $msg = (isset($_POST['msg'])) ? check($_POST['msg']) : '';
     $title = (isset($_POST['title'])) ? check($_POST['title']) : '';
     $top = (empty($_POST['top'])) ? 0 : 1;
@@ -212,7 +214,7 @@ case 'addnews':
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
         -> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
@@ -259,10 +261,10 @@ break;
 ############################################################################################
 case 'restatement':
 
-    $uid = check($_GET['uid']);
+    $token = check(Request::input('token'));
 
     if (is_admin([101])) {
-        if ($uid == $_SESSION['token']) {
+        if ($token == $_SESSION['token']) {
             restatement('news');
 
             notice('Комментарии успешно пересчитаны!');
@@ -283,11 +285,11 @@ break;
 ############################################################################################
 case 'del':
 
-    $uid = check($_GET['uid']);
-    $del = (isset($_REQUEST['del'])) ? intar($_REQUEST['del']) : 0;
+    $token = check(Request::input('token'));
+    $del = intar(Request::input('del'));
     $page  = abs(intval(Request::input('page', 1)));
 
-    if ($uid == $_SESSION['token']) {
+    if ($token == $_SESSION['token']) {
         if (!empty($del)) {
             if (is_writeable(HOME.'/uploads/news')){
 
@@ -303,7 +305,7 @@ case 'del':
                 }
 
                 DB::run() -> query("DELETE FROM `news` WHERE `id` IN (".$del.");");
-                DB::run() -> query("DELETE FROM `commnews` WHERE `id` IN (".$del.");");
+                DB::run() -> query("DELETE FROM `comments` WHERE relate_type = 'News' AND `relate_id` IN (".$del.");");
 
                 notice('Выбранные новости успешно удалены!');
                 redirect("/admin/news?page=$page");
