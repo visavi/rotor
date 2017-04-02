@@ -23,12 +23,13 @@ if (file_exists(STORAGE.'/temp/ipban.dat')) {
 }
 
 if (is_array($arrbanip) && count($arrbanip) > 0) {
+
     foreach($arrbanip as $ipdata) {
         $ipmatch = 0;
         $ipsplit = explode('.', App::getClientIp());
         $dbsplit = explode('.', $ipdata);
 
-        for($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             if ($ipsplit[$i] == $dbsplit[$i] || $dbsplit[$i] == '*') {
                 $ipmatch += 1;
             }
@@ -43,8 +44,9 @@ if (is_array($arrbanip) && count($arrbanip) > 0) {
 /**
  * Счетчик запросов
  */
-if (!empty($config['doslimit'])) {
+if (App::setting('doslimit')) {
     if (is_writeable(STORAGE.'/antidos')) {
+
         $dosfiles = glob(STORAGE.'/antidos/*.dat');
         foreach ($dosfiles as $filename) {
             $array_filemtime = @filemtime($filename);
@@ -83,8 +85,8 @@ if (!empty($config['doslimit'])) {
                     $error->save();
 
                     Capsule::insert(
-                        "INSERT IGNORE INTO ban (`ip`, `time`) VALUES (?, ?);",
-                        [rand(), SITETIME]
+                        "INSERT IGNORE INTO ban (`ip`, `created_at`) VALUES (?, ?);",
+                        [App::getClientIp(), SITETIME]
                     );
 
                     save_ipban();

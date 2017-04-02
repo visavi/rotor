@@ -19,14 +19,17 @@ case 'index':
 
     if ($total > 0) {
 
-        $notices = Notice::order_by_asc('id')->find_many();
+        $notices = Notice::orderBy('id')
+            ->with('user')
+            ->get();
+
         foreach ($notices as $notice) {
 
             echo '<div class="b">';
 
             echo '<i class="fa fa-envelope"></i> <b><a href="/admin/notice?act=edit&amp;id='.$notice['id'].'">'.$notice['name'].'</a></b>';
             if (empty($notice['protect'])) {
-                echo ' (<a href="/admin/notice?act=del&amp;id='.$notice['id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a>)';
+                echo ' (<a href="/admin/notice?act=del&amp;id='.$notice['id'].'&amp;token='.$_SESSION['token'].'">Удалить</a>)';
             } else {
                 echo ' (Системный шаблон)';
             }
@@ -34,11 +37,9 @@ case 'index':
 
             echo '<div>Изменено: ';
 
-            if (!empty($notice['user'])){
-                echo profile($notice['user']);
-            }
+            echo profile($notice['user']);
 
-            echo ' ('.date_fixed($notice['time']).')';
+            echo ' ('.date_fixed($notice['updated_at']).')';
 
             echo '</div>';
         }
@@ -58,8 +59,8 @@ case 'new':
     show_title('Новый шаблон');
 
     echo '<div class="form">';
-    echo '<form action="/admin/notice?act=save&amp;uid='.$_SESSION['token'].'" method="post">';
-
+    echo '<form action="/admin/notice?act=save" method="post">';
+    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
     echo 'Название: <br />';
     echo '<input type="text" name="name" maxlength="100" size="50" /><br />';
     echo '<textarea id="markItUp" cols="35" rows="20" name="text"></textarea><br />';
@@ -74,16 +75,16 @@ break;
  * Редактирование шаблона
  */
 case 'edit':
-    $notice = Notice::find_one($id);
-    if (! empty($notice)) {
+    $notice = Notice::find($id);
+    if ($notice) {
 
-        if (! empty($notice['protect'])) {
+        if ($notice['protect']) {
             echo '<div class="info"><i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b></div><br />';
         }
 
         echo '<div class="form">';
-        echo '<form action="/admin/notice?act=save&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-
+        echo '<form action="/admin/notice?act=save&amp;id='.$id.'" method="post">';
+        echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
         echo 'Название: <br />';
         echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['name'].'" /><br />';
         echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['text'].'</textarea><br />';
@@ -104,41 +105,34 @@ break;
 /**
  * Сохранение шаблона
  */
-case "save":
+case 'save':
 
-    $uid = ! empty($_GET['uid']) ? check($_GET['uid']) : 0;
+    $token = check(Request::input('token'));
     $name = isset($_POST['name']) ? check($_POST['name']) : '';
     $text = isset($_POST['text']) ? check($_POST['text']) : '';
     $protect = ! empty($_POST['protect']) ? 1 : 0;
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('string', $name, 'Слишком длинный или короткий заголовок шаблона!', true, 5, 100)
         -> addRule('string', $text, 'Слишком длинный или короткий текст шаблона!', true, 10, 65000);
 
     if ($validation->run()) {
 
-        $notice = Notice::find_one($id);
-
         $note = [
-            'name'    => $name,
-            'text'    => $text,
-            'user'    => $log,
-            'protect' => $protect,
-            'time'    => SITETIME,
+            'name'       => $name,
+            'text'       => $text,
+            'user_id'    => App::getUserId(),
+            'protect'    => $protect,
+            'created_at' => SITETIME,
+            'updated_at' => SITETIME,
         ];
 
-        if ($notice) {
-
-            $notice->set($note);
-            $notice->save();
-
-        } else {
-            $notice = Notice::create();
-            $notice->set($note);
-            $notice->save();
-        }
+        $notice = Notice::updateOrCreate(
+            ['id' => $id],
+            $note
+        );
 
         notice('Шаблон успешно сохранен!');
         redirect('/admin/notice?act=edit&id='.$notice->id);
@@ -155,13 +149,13 @@ break;
  */
 case 'del':
 
-    $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
+    $token = check(Request::input('token'));
 
-    $notice = Notice::find_one($id);
+    $notice = Notice::find($id);
 
     $validation = new Validation();
 
-    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('not_empty', $notice, 'Не найден шаблон для удаления!')
         -> addRule('empty', $notice['protect'], 'Запрещено удалять защищенный шаблон!');
 
