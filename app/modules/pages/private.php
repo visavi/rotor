@@ -1,8 +1,8 @@
 <?php
 App::view($config['themes'].'/index');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$uz = (isset($_REQUEST['uz'])) ? check($_REQUEST['uz']) : '';
+$act  = check(Request::input('act', 'index'));
+$uz   = check(Request::input('uz'));
 $page = abs(intval(Request::input('page', 1)));
 
 show_title('Приватные сообщения');
@@ -14,61 +14,69 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `inbox` WHERE `user`=?;", [$log]);
+            $total = Inbox::where('user_id', App::getUserId())->count();
             $page = App::paginate(App::setting('privatpost'), $total);
 
-            $intotal = DB::run() -> query("SELECT count(*) FROM `outbox` WHERE `author`=? UNION ALL SELECT count(*) FROM `trash` WHERE `user`=?;", [$log, $log]);
-            $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
+            $totalOutbox = Outbox::where('user_id', App::getUserId())->count();
+            $totalTrash = Trash::where('user_id', App::getUserId())->count();
 
             echo '<i class="fa fa-envelope"></i> <b>Входящие ('.$total.')</b> / ';
-            echo '<a href="/private?act=output">Отправленные ('.$intotal[0].')</a> / ';
-            echo '<a href="/private?act=trash">Корзина ('.$intotal[1].')</a><hr />';
+            echo '<a href="/private?act=output">Отправленные ('.$totalOutbox.')</a> / ';
+            echo '<a href="/private?act=trash">Корзина ('.$totalTrash.')</a><hr />';
 
-            if ($udata['newprivat'] > 0) {
-                echo '<div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: '.(int)$udata['newprivat'].'</span></b></div>';
-                DB::run() -> query("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `login`=? LIMIT 1;", [0, 0, $log]);
+            if (App::user('newprivat') > 0) {
+                echo '<div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: '.App::user('newprivat').'</span></b></div>';
+                DB::run() -> query("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `user_id`=? LIMIT 1;", [0, 0, App::getUserId()]);
             }
 
-            if ($total >= ($config['limitmail'] - ($config['limitmail'] / 10)) && $total < $config['limitmail']) {
+            if ($total >= (App::setting('limitmail') - (App::setting('limitmail') / 10)) && $total < App::setting('limitmail')) {
                 echo '<div style="text-align:center"><b><span style="color:#ff0000">Ваш ящик почти заполнен, необходимо очистить или удалить старые сообщения!</span></b></div>';
             }
 
-            if ($total >= $config['limitmail']) {
+            if ($total >= App::setting('limitmail')) {
                 echo '<div style="text-align:center"><b><span style="color:#ff0000">Ваш ящик переполнен, вы не сможете получать письма пока не очистите его!</span></b></div>';
             }
 
             if ($total > 0) {
 
-                $querypriv = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
+                $messages = Inbox::where('user_id', App::getUserId())
+                    ->orderBy('created_at', 'desc')
+                    ->offset($page['offset'])
+                    ->limit($page['limit'])
+                    ->with('author')
+                    ->get();
 
-                echo '<form action="/private?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/private?act=del&amp;page='.$page['current'].'" method="post">';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
-                while ($data = $querypriv -> fetch()) {
+
+               foreach($messages as $data) {
+
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['author']).'</div>';
-                    echo '<b>'.profile($data['author']).'</b>  ('.date_fixed($data['time']).')<br />';
-                    echo user_title($data['author']).' '.user_online($data['author']).'</div>';
+                    echo '<div class="img">'.user_avatars($data->author).'</div>';
+                    echo '<b>'.profile($data->author).'</b>  ('.date_fixed($data['created_at']).')<br />';
+                    echo user_title($data->author).' '.user_online($data->author).'</div>';
 
                     echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<a href="/private?act=submit&amp;uz='.$data['author'].'">Ответить</a> / ';
-                    echo '<a href="/private?act=history&amp;uz='.$data['author'].'">История</a> / ';
-                    echo '<a href="/contact?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">В контакт</a> / ';
-                    echo '<a href="/ignore?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">Игнор</a> / ';
-                    echo '<noindex><a href="/private?act=spam&amp;id='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
+                    echo '<a href="/private?act=submit&amp;uz='.$data->getAuthor()->login.'">Ответить</a> / ';
+                    echo '<a href="/private?act=history&amp;uz='.$data->getAuthor()->login.'">История</a> / ';
+                    echo '<a href="/contact?act=add&amp;uz='.$data->getAuthor()->login.'&amp;token='.$_SESSION['token'].'">В контакт</a> / ';
+                    echo '<a href="/ignore?act=add&amp;uz='.$data->getAuthor()->login.'&amp;token='.$_SESSION['token'].'">Игнор</a> / ';
+                    echo '<noindex><a href="/private?act=spam&amp;id='.$data['id'].'&amp;page='.$page['current'].'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                 }
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
                 App::pagination($page);
 
-                echo 'Всего писем: <b>'.(int)$total.'</b><br />';
-                echo 'Объем ящика: <b>'.$config['limitmail'].'</b><br /><br />';
+                echo 'Всего писем: <b>'.$total.'</b><br />';
+                echo 'Объем ящика: <b>'.App::setting('limitmail').'</b><br /><br />';
 
-                echo '<i class="fa fa-times"></i> <a href="/private?act=alldel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/private?act=alldel&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Входящих писем еще нет!');
             }
@@ -79,45 +87,53 @@ if (is_user()) {
         ############################################################################################
         case 'output':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `outbox` WHERE `author`=?;", [$log]);
+            $total = Outbox::where('user_id', App::getUserId())->count();
             $page = App::paginate(App::setting('privatpost'), $total);
 
-            $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `trash` WHERE `user`=?;", [$log, $log]);
-            $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
+            $totalInbox = Inbox::where('user_id', App::getUserId())->count();
+            $totalTrash = Trash::where('user_id', App::getUserId())->count();
 
-            echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
+            echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$totalInbox.')</a> / ';
             echo '<b>Отправленные ('.$total.')</b> / ';
-            echo '<a href="/private?act=trash">Корзина ('.$intotal[1].')</a><hr />';
+            echo '<a href="/private?act=trash">Корзина ('.$totalTrash.')</a><hr />';
 
             if ($total > 0) {
 
-                $querypriv = DB::run() -> query("SELECT * FROM `outbox` WHERE `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
+                $messages = Outbox::where('user_id', App::getUserId())
+                    ->orderBy('created_at', 'desc')
+                    ->offset($page['offset'])
+                    ->limit($page['limit'])
+                    ->with('recipient')
+                    ->get();
 
-                echo '<form action="/private?act=outdel&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/private?act=outdel&amp;page='.$page['current'].'" method="post">';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 echo '<div class="form">';
                 echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
-                while ($data = $querypriv -> fetch()) {
+
+                foreach($messages as $data) {
+
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
-                    echo '<b>'.profile($data['user']).'</b>  ('.date_fixed($data['time']).')<br />';
-                    echo user_title($data['user']).' '.user_online($data['user']).'</div>';
+                    echo '<div class="img">'.user_avatars($data['recipient']).'</div>';
+                    echo '<b>'.profile($data['recipient']).'</b>  ('.date_fixed($data['created_at']).')<br />';
+                    echo user_title($data['recipient']).' '.user_online($data['recipient']).'</div>';
 
                     echo '<div>'.App::bbCode($data['text']).'<br />';
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-                    echo '<a href="/private?act=submit&amp;uz='.$data['user'].'">Написать еще</a> / ';
-                    echo '<a href="/private?act=history&amp;uz='.$data['user'].'">История</a></div>';
+                    echo '<a href="/private?act=submit&amp;uz='.$data->getRecipient()->login.'">Написать еще</a> / ';
+                    echo '<a href="/private?act=history&amp;uz='.$data->getRecipient()->login.'">История</a></div>';
                 }
 
                 echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
 
                 App::pagination($page);
 
-                echo 'Всего писем: <b>'.(int)$total.'</b><br />';
-                echo 'Объем ящика: <b>'.$config['limitoutmail'].'</b><br /><br />';
+                echo 'Всего писем: <b>'.$total.'</b><br />';
+                echo 'Объем ящика: <b>'.App::setting('limitmail').'</b><br /><br />';
 
-                echo '<i class="fa fa-times"></i> <a href="/private?act=alloutdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/private?act=alloutdel&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Отправленных писем еще нет!');
             }
@@ -128,21 +144,28 @@ if (is_user()) {
         ############################################################################################
         case 'trash':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `trash` WHERE `user`=?;", [$log]);
+            $total = Trash::where('user_id', App::getUserId())->count();
             $page = App::paginate(App::setting('privatpost'), $total);
 
-            $intotal = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `author`=?;", [$log, $log]);
-            $intotal = $intotal -> fetchAll(PDO::FETCH_COLUMN);
+            $totalInbox = Inbox::where('user_id', App::getUserId())->count();
+            $totalOutbox = Outbox::where('user_id', App::getUserId())->count();
 
-            echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$intotal[0].')</a> / ';
-            echo '<a href="/private?act=output">Отправленные ('.$intotal[1].')</a> / ';
+            echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$totalInbox.')</a> / ';
+            echo '<a href="/private?act=output">Отправленные ('.$totalOutbox.')</a> / ';
 
             echo '<b>Корзина ('.$total.')</b><hr />';
+
             if ($total > 0) {
 
-                $querypriv = DB::run() -> query("SELECT * FROM `trash` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log]);
+                $messages = Trash::where('user_id', App::getUserId())
+                    ->orderBy('created_at', 'desc')
+                    ->offset($page['offset'])
+                    ->limit($page['limit'])
+                    ->with('author')
+                    ->get();
 
-                while ($data = $querypriv -> fetch()) {
+                foreach($messages as $data) {
+
                     echo '<div class="b">';
                     echo '<div class="img">'.user_avatars($data['author']).'</div>';
                     echo '<b>'.profile($data['author']).'</b>  ('.date_fixed($data['time']).')<br />';
@@ -150,17 +173,17 @@ if (is_user()) {
 
                     echo '<div>'.App::bbCode($data['text']).'<br />';
 
-                    echo '<a href="/private?act=submit&amp;uz='.$data['author'].'">Ответить</a> / ';
-                    echo '<a href="/contact?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">В контакт</a> / ';
-                    echo '<a href="/ignore?act=add&amp;uz='.$data['author'].'&amp;uid='.$_SESSION['token'].'">Игнор</a></div>';
+                    echo '<a href="/private?act=submit&amp;uz='.$data->getAuthor()->login.'">Ответить</a> / ';
+                    echo '<a href="/contact?act=add&amp;uz='.$data->getAuthor()->login.'&amp;token='.$_SESSION['token'].'">В контакт</a> / ';
+                    echo '<a href="/ignore?act=add&amp;uz='.$data->getAuthor()->login.'&amp;token='.$_SESSION['token'].'">Игнор</a></div>';
                 }
 
                 App::pagination($page);
 
-                echo 'Всего писем: <b>'.(int)$total.'</b><br />';
-                echo 'Срок хранения: <b>'.$config['expiresmail'].'</b><br /><br />';
+                echo 'Всего писем: <b>'.$total.'</b><br />';
+                echo 'Срок хранения: <b>'.App::setting('expiresmail').'</b><br /><br />';
 
-                echo '<i class="fa fa-times"></i> <a href="/private?act=alltrashdel&amp;uid='.$_SESSION['token'].'">Очистить ящик</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/private?act=alltrashdel&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
             } else {
                 show_error('Удаленных писем еще нет!');
             }
@@ -174,7 +197,8 @@ if (is_user()) {
             if (empty($uz)) {
 
                 echo '<div class="form">';
-                echo '<form action="/private?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo '<form action="/private?act=send" method="post">';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
                 echo 'Введите логин:<br />';
                 echo '<input type="text" name="uz" maxlength="20" /><br />';
@@ -217,7 +241,8 @@ if (is_user()) {
                     }
 
                     echo '<div class="form">';
-                    echo '<form action="/private?act=send&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                    echo '<form action="/private?act=send&amp;uz='.$uz.'" method="post">';
+                    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
                     echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
 
@@ -242,12 +267,12 @@ if (is_user()) {
         ############################################################################################
         case 'send':
 
-            $uid = !empty($_GET['uid']) ? check($_GET['uid']) : 0;
+            $token = check(Request::input('token'));
             $msg = isset($_POST['msg']) ? check($_POST['msg']) : '';
             $uz = isset($_POST['uzcon']) ? check($_POST['uzcon']) : $uz;
             $provkod = isset($_POST['provkod']) ? check(strtolower($_POST['provkod'])) : '';
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (!empty($uz)) {
                     if ($uz != $log) {
                         if (!user_privacy($uz) || is_admin() || is_contact($uz, $log)){
@@ -336,10 +361,10 @@ if (is_user()) {
         ############################################################################################
         case 'spam':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
             $id = abs(intval($_GET['id']));
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 $data = DB::run() -> queryFetch("SELECT * FROM `inbox` WHERE `user`=? AND `id`=? LIMIT 1;", [$log, $id]);
                 if (!empty($data)) {
                     $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [3, $id]);
@@ -372,14 +397,14 @@ if (is_user()) {
         ############################################################################################
         case 'del':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
             if (isset($_POST['del'])) {
                 $del = intar($_POST['del']);
             } else {
                 $del = 0;
             }
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
                     $deltrash = SITETIME + 86400 * $config['expiresmail'];
@@ -409,14 +434,14 @@ if (is_user()) {
         ############################################################################################
         case 'outdel':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
             if (isset($_POST['del'])) {
                 $del = intar($_POST['del']);
             } else {
                 $del = 0;
             }
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if ($del > 0) {
                     $del = implode(',', $del);
 
@@ -440,9 +465,9 @@ if (is_user()) {
         ############################################################################################
         case 'alldel':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 if (empty($udata['newprivat'])) {
                     $deltrash = SITETIME + 86400 * $config['expiresmail'];
 
@@ -471,9 +496,9 @@ if (is_user()) {
         ############################################################################################
         case 'alloutdel':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", [$log]);
 
                 notice('Ящик успешно очищен!');
@@ -491,9 +516,9 @@ if (is_user()) {
         ############################################################################################
         case 'alltrashdel':
 
-            $uid = check($_GET['uid']);
+            $token = check(Request::input('token'));
 
-            if ($uid == $_SESSION['token']) {
+            if ($token == $_SESSION['token']) {
                 DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", [$log]);
 
                 notice('Ящик успешно очищен!');
@@ -539,7 +564,9 @@ if (is_user()) {
                         if (!user_privacy($uz) || is_admin() || is_contact($uz, $log)){
 
                             echo '<br /><div class="form">';
-                            echo '<form action="/private?act=send&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                            echo '<form action="/private?act=send&amp;uz='.$uz.'" method="post">';
+                            echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
+
                             echo 'Сообщение:<br />';
                             echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
 

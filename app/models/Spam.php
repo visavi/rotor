@@ -1,7 +1,7 @@
 <?php
 
-class Spam extends BaseModel {
-
+class Spam extends BaseModel
+{
     /**
      * The table associated with the model.
      *

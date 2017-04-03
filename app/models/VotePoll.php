@@ -1,7 +1,7 @@
 <?php
 
-class VotePoll extends BaseModel {
-
+class VotePoll extends BaseModel
+{
     /**
      * The table associated with the model.
      *

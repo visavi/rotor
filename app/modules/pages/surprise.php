@@ -1,14 +1,10 @@
 <?php
 $surprise['requiredPoint'] = 50;
-$surprise['requiredDate'] = '08.01';
+$surprise['requiredDate'] = '10.01';
 
-$surprise['money'] = [10000, 20000];
-$surprise['point'] = [150, 250];
-$surprise['rating'] = [3, 7];
-
-$surpriseMoney = mt_rand($surprise['money'][0], $surprise['money'][1]);
-$surprisePoint = mt_rand($surprise['point'][0], $surprise['point'][1]);
-$surpriseRating = mt_rand($surprise['rating'][0], $surprise['rating'][1]);
+$surpriseMoney = mt_rand(10000, 20000);
+$surprisePoint = mt_rand(150, 250);
+$surpriseRating = mt_rand(3, 7);
 
 $currentYear = date('Y');
 
@@ -16,7 +12,7 @@ if (! is_user()) {
     App::abort('default', 'Для того чтобы получить сюрприз, необходимо авторизоваться!');
 }
 
-if (date('d.m') > $surprise['requiredDate']) {
+if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {
     App::abort('default', 'Срок получения сюрприза уже закончился!');
 }
 
@@ -24,29 +20,32 @@ if (App::user('point') < $surprise['requiredPoint']) {
     App::abort('default', 'Для того получения сюрприза необходимо '.points($surprise['requiredPoint']).'!');
 }
 
-$existSurprise = Surprise::where('user', App::getUsername())->where('year', $currentYear)->find_one();
+$existSurprise = Surprise::where('user_id', App::getUserId())
+    ->where('year', $currentYear)
+    ->first();
+
 if ($existSurprise) {
     App::abort('default', 'Сюрприз уже получен');
 }
 
-$user = User::find_one(App::getUserId());
-$user->set_expr('point', 'point + '.$surprisePoint);
-$user->set_expr('money', 'money + '.$surpriseMoney);
-$user->set_expr('rating', 'posrating - negrating + '.$surpriseRating);
-$user->set_expr('posrating', 'posrating + '.$surpriseRating);
-$user->save();
+
+$user = User::find(App::getUserId());
+$user->update([
+    'point' => Capsule::raw('point + '.$surprisePoint),
+    'money' => Capsule::raw('money + '.$surpriseMoney),
+    'rating' => Capsule::raw('posrating - negrating + '.$surpriseRating),
+    'posrating' => Capsule::raw('posrating + '.$surpriseRating),
+]);
 
 $text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.points($surprisePoint).PHP_EOL.moneys($surpriseMoney).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
 
 send_private(App::getUsername(), App::setting('nickname'), $text);
 
-$surprise = Surprise::create();
-$surprise->set([
-    'user' => App::getUsername(),
+$surprise = Surprise::create([
+    'user_id' => App::getUserId(),
     'year' => $currentYear,
-    'time' => SITETIME,
+    'created_at' => SITETIME,
 ]);
-$surprise->save();
 
 App::setFlash('success', 'Сюрприз успешно получен!');
 App::redirect('/');

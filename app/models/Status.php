@@ -1,7 +1,7 @@
 <?php
 
-class Status extends BaseModel {
-
+class Status extends BaseModel
+{
     /**
      * The table associated with the model.
      *

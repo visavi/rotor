@@ -1,7 +1,7 @@
 <?php
 
-class Setting extends BaseModel {
-
+class Setting extends BaseModel
+{
     /**
      * The table associated with the model.
      *

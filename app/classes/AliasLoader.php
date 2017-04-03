@@ -1,7 +1,7 @@
 <?php
 
-class AliasLoader {
-
+class AliasLoader
+{
     /**
      * The array of class aliases.
      *

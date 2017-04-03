@@ -1,7 +1,7 @@
 <?php
 
-class Smile extends BaseModel {
-
+class Smile extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *

@@ -1,7 +1,7 @@
 <?php
 
-class File extends BaseModel {
-
+class File extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *

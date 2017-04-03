@@ -1,7 +1,7 @@
 <?php
 
-class BaseModel extends Illuminate\Database\Eloquent\Model {
-
+class BaseModel extends Illuminate\Database\Eloquent\Model
+{
     /**
      * Возвращает связь пользователей
      */

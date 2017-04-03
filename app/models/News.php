@@ -1,7 +1,7 @@
 <?php
 
-class News extends BaseModel {
-
+class News extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *

@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request as HttpRequest;
 
-class Request {
+class Request
+{
     public static function __callStatic($method, $args)
     {
         $request = HttpRequest::createFromGlobals();

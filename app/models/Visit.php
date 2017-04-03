@@ -1,7 +1,7 @@
 <?php
 
-class Visit extends BaseModel {
-
+class Visit extends BaseModel
+{
     /**
      * The table associated with the model.
      *

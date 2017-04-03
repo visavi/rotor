@@ -1,7 +1,7 @@
 <?php
 
-class Photo extends BaseModel {
-
+class Photo extends BaseModel
+{
     /**
      * The table associated with the model.
      *

@@ -1,7 +1,18 @@
 <?php
 
-class Down extends BaseModel {
+class Down extends BaseModel
+{
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
-    public static $_table = 'downs';
-
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

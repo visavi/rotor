@@ -5,8 +5,8 @@
  * @link    http://visavi.net
  * @author  Alexander Grigorev <visavi.net@mail.ru>
  */
-class BBCode {
-
+class BBCode
+{
     /**
      * @var array
      */

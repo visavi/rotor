@@ -1,7 +1,7 @@
 <?php
 
-class User extends BaseModel {
-
+class User extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *

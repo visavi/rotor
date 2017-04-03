@@ -1,7 +1,26 @@
 <?php
 
-class Category extends BaseModel {
+class Category extends BaseModel
+{
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'cats';
 
-    public static $_table = 'cats';
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
 }

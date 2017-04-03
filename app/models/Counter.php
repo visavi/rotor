@@ -1,7 +1,7 @@
 <?php
 
-class Counter extends BaseModel {
-
+class Counter extends BaseModel
+{
     /**
      * The table associated with the model.
      *

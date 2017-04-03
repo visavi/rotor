@@ -1,7 +1,7 @@
 <?php
 
-class Social extends BaseModel {
-
+class Social extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *

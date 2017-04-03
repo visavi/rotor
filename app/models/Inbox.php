@@ -1,7 +1,7 @@
 <?php
 
-class Inbox extends BaseModel {
-
+class Inbox extends BaseModel
+{
     /**
      * The table associated with the model.
      *
@@ -22,4 +22,20 @@ class Inbox extends BaseModel {
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователей
+     */
+    public function author()
+    {
+        return $this->belongsTo('User', 'author_id');
+    }
+
+    /**
+     * Возвращает объект пользователя
+     */
+    public function getAuthor()
+    {
+        return $this->author ? $this->author : new User();
+    }
 }

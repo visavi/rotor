@@ -1,7 +1,7 @@
 <?php
 
-class Online extends BaseModel {
-
+class Online extends BaseModel
+{
     /**
      * The table associated with the model.
      *

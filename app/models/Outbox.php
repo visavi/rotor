@@ -1,13 +1,13 @@
 <?php
 
-class Guest extends BaseModel
+class Outbox extends BaseModel
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'guest';
+    protected $table = 'outbox';
 
     /**
      * Indicates if the model should be timestamped.
@@ -26,16 +26,16 @@ class Guest extends BaseModel
     /**
      * Возвращает связь пользователей
      */
-    public function editUser()
+    public function recipient()
     {
-        return $this->belongsTo('User', 'edit_user_id');
+        return $this->belongsTo('User', 'recipient_id');
     }
 
     /**
      * Возвращает объект пользователя
      */
-    public function getEditUser()
+    public function getRecipient()
     {
-        return $this->editUser ? $this->editUser : new User();
+        return $this->recipient ? $this->recipient : new User();
     }
 }

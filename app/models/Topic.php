@@ -1,7 +1,7 @@
 <?php
 
-class Topic extends BaseModel {
-
+class Topic extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *

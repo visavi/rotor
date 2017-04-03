@@ -1,13 +1,13 @@
 <?php
 
-class Guest extends BaseModel
+class Trash extends BaseModel
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'guest';
+    protected $table = 'trash';
 
     /**
      * Indicates if the model should be timestamped.
@@ -26,16 +26,16 @@ class Guest extends BaseModel
     /**
      * Возвращает связь пользователей
      */
-    public function editUser()
+    public function author()
     {
-        return $this->belongsTo('User', 'edit_user_id');
+        return $this->belongsTo('User', 'author_id');
     }
 
     /**
      * Возвращает объект пользователя
      */
-    public function getEditUser()
+    public function getAuthor()
     {
-        return $this->editUser ? $this->editUser : new User();
+        return $this->author ? $this->author : new User();
     }
 }

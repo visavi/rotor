@@ -1,7 +1,7 @@
 <?php
 
-class Invite extends BaseModel {
-
+class Invite extends BaseModel
+{
     /**
      * The table associated with the model.
      *

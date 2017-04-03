@@ -1,6 +1,7 @@
 <?php
 // ---------------------------- Класс для работы с базами данных -------------------------------//
-class PDO_ extends PDO {
+class PDO_ extends PDO
+{
     static $counter = 0;
 
     function __construct($dsn, $username, $password) {

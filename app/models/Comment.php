@@ -1,7 +1,7 @@
 <?php
 
-class Comment extends BaseModel {
-
+class Comment extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *
@@ -15,5 +15,4 @@ class Comment extends BaseModel {
      * @var array
      */
     protected $guarded = [];
-
 }

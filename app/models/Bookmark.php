@@ -1,6 +1,7 @@
 <?php
 
-class Bookmark extends BaseModel {
+class Bookmark extends BaseModel
+{
 
     /**
      * Indicates if the model should be timestamped.
@@ -31,5 +32,4 @@ class Bookmark extends BaseModel {
     {
         return $this->topic ? $this->topic : new Topic();
     }
-
 }

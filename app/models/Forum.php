@@ -1,7 +1,7 @@
 <?php
 
-class Forum extends BaseModel {
-
+class Forum extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *

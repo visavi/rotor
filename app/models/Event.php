@@ -1,6 +1,18 @@
 <?php
 
-class Event extends BaseModel {
+class Event extends BaseModel
+{
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
-    public static $_table = 'events';
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

@@ -1,7 +1,7 @@
 <?php
 
-class Log extends BaseModel {
-
+class Log extends BaseModel
+{
     /**
      * The table associated with the model.
      *

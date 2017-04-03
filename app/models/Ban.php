@@ -1,7 +1,7 @@
 <?php
 
-class Ban extends BaseModel {
-
+class Ban extends BaseModel
+{
     /**
      * The table associated with the model.
      *

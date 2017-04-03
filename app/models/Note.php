@@ -1,7 +1,7 @@
 <?php
 
-class Note extends BaseModel {
-
+class Note extends BaseModel
+{
     /**
      * The table associated with the model.
      *

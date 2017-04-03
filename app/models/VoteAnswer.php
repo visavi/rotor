@@ -1,7 +1,7 @@
 <?php
 
-class VoteAnswer extends BaseModel {
-
+class VoteAnswer extends BaseModel
+{
     /**
      * The table associated with the model.
      *

@@ -1,7 +1,7 @@
 <?php
 
-class Polling extends BaseModel {
-
+class Polling extends BaseModel
+{
     /**
      * Indicates if the model should be timestamped.
      *
