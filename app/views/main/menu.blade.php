@@ -5,10 +5,10 @@ if (isset($act) && $act=='menu'){
 ?>
 
 <div class="b"><i class="fa fa-envelope fa-lg text-muted"></i> <b>Почта / Контакты</b></div>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/private">Сообщения</a> (<?=user_mail(App::getUsername())?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/private">Сообщения</a> (<?=user_mail(App::user())?>)<br />
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/private?act=submit">Отправить письмо</a><br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/ignore">Игнор-лист</a> (<?=user_ignore(App::getUsername())?>)<br />
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/contact">Контакт-лист</a> (<?=user_contact(App::getUsername())?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/ignore">Игнор-лист</a> (<?=user_ignore(App::user())?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/contact">Контакт-лист</a> (<?=user_contact(App::user())?>)<br />
 
 <div class="b"><i class="fa fa-wrench fa-lg text-muted"></i> <b>Анкета / Настройки</b></div>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/user/<?= App::getUsername() ?>">Моя анкета</a><br />

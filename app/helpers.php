@@ -464,17 +464,21 @@ function user_money($login) {
 // --------------- Функция сохранения количества писем ---------------//
 function save_usermail($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/usermail.dat") < time() - $time) {
-        $querymail = DB::run() -> query("SELECT `user`, COUNT(*) FROM `inbox` GROUP BY `user`;");
-        $arrmail = $querymail -> fetchAssoc();
-        file_put_contents(STORAGE."/temp/usermail.dat", serialize($arrmail), LOCK_EX);
+
+        $messages = Inbox::select('user_id', Capsule::raw('count(*) as total'))
+            ->groupBy('user_id')
+            ->pluck('total', 'user_id')
+            ->all();
+
+        file_put_contents(STORAGE."/temp/usermail.dat", serialize($messages), LOCK_EX);
     }
 }
 
 // --------------- Функция подсчета писем у юзера ---------------//
-function user_mail($login) {
+function user_mail($user) {
     save_usermail(3600);
     $arrmail = unserialize(file_get_contents(STORAGE."/temp/usermail.dat"));
-    return (isset($arrmail[$login])) ? $arrmail[$login] : 0;
+    return (isset($arrmail[$user->id])) ? $arrmail[$user->id] : 0;
 }
 
 // --------------- Функция кэширования аватаров -------------------//
@@ -527,13 +531,15 @@ function userAvatar($user)
 
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
-function user_contact($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", [$login]);
+function user_contact($user)
+{
+    return Contact::where('user_id', $user->id)->count();
 }
 
 // --------------- Функция подсчета человек в игнор-листе ---------------//
-function user_ignore($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$login]);
+function user_ignore($user)
+{
+    return Ignore::where('user_id', $user->id)->count();
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
@@ -795,6 +801,10 @@ function allonline() {
 // ------------------ Функция определение последнего посещения ----------------//
 function user_visit($user) {
     $state = '(Оффлайн)';
+
+    if ( ! $user) {
+        return $state;
+    }
 
     $visit = Visit::select('updated_at')->where('user_id', $user->id)->first();
 
@@ -1821,10 +1831,10 @@ function is_ignore($login, $ignore){
 }
 
 // ----- Функция определения приватности у пользователя -----//
-function user_privacy($login){
+/*function user_privacy($user){
     $privacy = DB::run() -> querySingle("SELECT `privacy` FROM `users` WHERE `login`=? LIMIT 1;", [$login]);
     return ($privacy) ? true : false;
-}
+}*/
 
 // ----- Функция рекурсивного удаления директории -----//
 function removeDir($dir){

@@ -180,3 +180,4 @@ if (isset($_SESSION['input'])) unset($_SESSION['input']);
 // setting.editnickpoint
 // setting.includenick
 // удалить из inbox, outbox, trash записи с user_id = 0
+// users.privacy

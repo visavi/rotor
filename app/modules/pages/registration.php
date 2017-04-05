@@ -24,7 +24,7 @@ if (Request::isMethod('post')) {
         $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
             ->addRule('regex', [$logs, '|^[a-z0-9\-]+$|i'], ['logs' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'], true)
             ->addRule('email', $meil, ['meil' => 'Вы ввели неверный адрес e-mail, необходим формат name@site.domen!'], $config['regmail'])
-            ->addRule('string', $invite, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], $config['invite'], 15, 20)
+            ->addRule('string', $invite, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], $config['invite'], 12, 15)
             ->addRule('string', $logs, ['logs' => 'Слишком длинный или короткий логин!'], true, 3, 20)
             ->addRule('string', $pars, ['pars' => 'Слишком длинный или короткий пароль!'], true, 6, 20)
             ->addRule('equal', [$pars, $pars2], ['pars2' => 'Ошибка! Введенные пароли отличаются друг от друга!']);
@@ -63,7 +63,7 @@ if (Request::isMethod('post')) {
 
         // Проверка пригласительного ключа
         if (!empty($config['invite'])) {
-            $invitation = DB::run()->querySingle("SELECT `id` FROM `invite` WHERE `key`=? AND `used`=? LIMIT 1;", [$invite, 0]);
+            $invitation = DB::run()->querySingle("SELECT `id` FROM `invite` WHERE `hash`=? AND `used`=? LIMIT 1;", [$invite, 0]);
             $validation->addRule('not_empty', $invitation, ['invite' => 'Ключ приглашения недействителен!']);
         }
 
