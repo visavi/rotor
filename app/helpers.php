@@ -1849,13 +1849,13 @@ function removeDir($dir){
 }
 
 // ----- Функция отправки приватного сообщения -----//
-function send_private($login, $sender, $text, $time = SITETIME){
-    if (user($login)) {
+function send_private($userId, $authorId, $text, $time = SITETIME){
+    if (User::find($userId)) {
 
-        DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);",
-        [$login, $sender, $text, $time]);
+        DB::run() -> query("INSERT INTO `inbox` (`user_id`, `author_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);",
+        [$userId, $authorId, $text, $time]);
 
-        DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;", [$login]);
+        DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `id`=? LIMIT 1;", [$userId]);
 
         save_usermail();
         return true;

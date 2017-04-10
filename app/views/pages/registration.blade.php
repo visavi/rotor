@@ -12,7 +12,7 @@
     Длина логина должна быть от 3 до 20 символов<br />
     Логин должен состоять только из знаков латинского алфавита и цифр, допустим знак дефиса!<br />
 
-    @if ($config['regkeys'] == 1 && ! empty($config['regmail']))
+    @if ($config['regkeys'] == 1)
         <i class="fa fa-pencil text-muted"></i> <span style="color:#ff0000"><b>Включено подтверждение регистрации!</b> Вам на почтовый ящик будет выслан мастер-ключ, который необходим для подтверждения регистрации!</span><br />
     @endif
 
@@ -63,13 +63,12 @@
                 {!! App::textError('pars2') !!}
             </div>
 
-            @if (!empty($config['regmail']))
-                <div class="form-group{{ App::hasError('meil') }}">
-                    <label for="inputEmail">Email:</label>
-                    <input class="form-control" name="meil" id="inputEmail" maxlength="50" value="{{ App::getInput('meil') }}" required>
-                    {!! App::textError('meil') !!}
-                </div>
-            @endif
+
+            <div class="form-group{{ App::hasError('meil') }}">
+                <label for="inputEmail">Email:</label>
+                <input class="form-control" name="meil" id="inputEmail" maxlength="50" value="{{ App::getInput('meil') }}" required>
+                {!! App::textError('meil') !!}
+            </div>
 
             @if (!empty($config['invite']))
                 <div class="form-group{{ App::hasError('invite') }}">

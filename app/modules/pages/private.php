@@ -28,7 +28,7 @@ case 'index':
 
     if (App::user('newprivat') > 0) {
         echo '<div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: '.App::user('newprivat').'</span></b></div>';
-        DB::run() -> query("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `user_id`=? LIMIT 1;", [0, 0, App::getUserId()]);
+        DB::run() -> query("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `id`=? LIMIT 1;", [0, 0, App::getUserId()]);
     }
 
     if ($total >= (App::setting('limitmail') - (App::setting('limitmail') / 10)) && $total < App::setting('limitmail')) {
@@ -58,18 +58,29 @@ case 'index':
 
             echo '<div class="b">';
             echo '<div class="img">'.user_avatars($data->author).'</div>';
-            echo '<b>'.profile($data->author).'</b>  ('.date_fixed($data['created_at']).')<br />';
-            echo user_title($data->author).' '.user_online($data->author).'</div>';
+            if ($data->author) {
+                echo '<b>' . profile($data->author) . '</b>  (' . date_fixed($data['created_at']) . ')<br />';
+                echo user_title($data->author) . ' ' . user_online($data->author);
+            } else {
+                echo '<b>Система</b>';
+            }
 
+            echo '</div>';
             echo '<div>'.App::bbCode($data['text']).'<br />';
 
             echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-            echo '<a href="/private?act=submit&amp;uz='.$data->getAuthor()->login.'">Ответить</a> / ';
-            echo '<a href="/private?act=history&amp;uz='.$data->getAuthor()->login.'">История</a> / ';
-            echo '<a href="/contact?act=add&amp;uz='.$data->getAuthor()->login.'&amp;token='.$_SESSION['token'].'">В контакт</a> / ';
-            echo '<a href="/ignore?act=add&amp;uz='.$data->getAuthor()->login.'&amp;token='.$_SESSION['token'].'">Игнор</a> / ';
 
-            echo '<noindex><a href="#" onclick="return sendComplaint(this)" data-type="/private" data-id="'.$data['id'].'" data-token="'.$_SESSION['token'].'" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex></div>';
+           if ($data->author) {
+
+               echo '<a href="/private?act=submit&amp;uz=' . $data->getAuthor()->login . '">Ответить</a> / ';
+               echo '<a href="/private?act=history&amp;uz=' . $data->getAuthor()->login . '">История</a> / ';
+               echo '<a href="/contact?act=add&amp;uz=' . $data->getAuthor()->login . '&amp;token=' . $_SESSION['token'] . '">В контакт</a> / ';
+               echo '<a href="/ignore?act=add&amp;uz=' . $data->getAuthor()->login . '&amp;token=' . $_SESSION['token'] . '">Игнор</a> / ';
+
+               echo '<noindex><a href="#" onclick="return sendComplaint(this)" data-type="/private" data-id="' . $data['id'] . '" data-token="' . $_SESSION['token'] . '" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>';
+           }
+
+           echo '</div>';
         }
 
         echo '<br /><input type="submit" value="Удалить выбранное" /></form>';

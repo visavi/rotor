@@ -212,8 +212,6 @@ if (is_admin([101])) {
                 $checked = ($setting['invite'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="invite" id="invite" type="checkbox" value="1"'.$checked.' title="Для регистрация необходимо ввести специальный пригласительный ключ" /> <label for="invite">Регистрация по приглашениям</label><br />';
 
-                $checked = ($setting['regmail'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="regmail" type="checkbox" value="1"'.$checked.' /> Подтверждение email при регистрации<br />';
 
                 $checked = ($setting['anonymity'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="anonymity" type="checkbox" value="1"'.$checked.' /> Скрывать IP для пользователей<br />';
@@ -232,7 +230,6 @@ if (is_admin([101])) {
         case 'editone':
 
             $uid = check($_GET['uid']);
-            $regmail = (empty($_POST['regmail'])) ? 0 : 1;
             $invite = (empty($_POST['invite'])) ? 0 : 1;
             $openreg = (empty($_POST['openreg'])) ? 0 : 1;
             $anonymity = (empty($_POST['anonymity'])) ? 0 : 1;
@@ -256,7 +253,6 @@ if (is_admin([101])) {
                         $dbr -> execute(check($_POST['webthemes']), 'webthemes');
                         $dbr -> execute(check($_POST['touchthemes']), 'touchthemes');
                         $dbr -> execute($regkeys, 'regkeys');
-                        $dbr -> execute($regmail, 'regmail');
                         $dbr -> execute($invite, 'invite');
                         $dbr -> execute($openreg, 'openreg');
                         $dbr -> execute($anonymity, 'anonymity');
