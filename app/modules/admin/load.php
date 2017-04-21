@@ -201,7 +201,7 @@ case 'addimport':
                                                     rename(HOME.'/uploads/loader/'.$file, HOME.'/uploads/files/'.$folder.$filename);
 
                                                     DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$cid]);
-                                                    DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $file, $text, $filename, $log, $screen, SITETIME, 1]);
+                                                    DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $file, $text, $filename, App::getUsername(), $screen, SITETIME, 1]);
 
                                                     $count++;
                                                 }
@@ -329,7 +329,7 @@ case 'addfile':
                                         if (empty($downtitle)) {
 
                                             DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$cid]);
-                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', $log, $author, $site, '', SITETIME, 1]);
+                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', App::getUsername(), $author, $site, '', SITETIME, 1]);
 
                                             $lastid = DB::run() -> lastInsertId();
 
@@ -615,7 +615,7 @@ case 'delcats':
 
     $uid = check($_GET['uid']);
 
-    if (is_admin([101]) && $log == App::setting('nickname')) {
+    if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
         if ($uid == $_SESSION['token']) {
             $downs = DB::run() -> queryFetch("SELECT `c1`.*, count(`c2`.`id`) AS `subcnt` FROM `cats` `c1` LEFT JOIN `cats` `c2` ON `c2`.`parent` = `c1`.`id` WHERE `c1`.`id`=? GROUP BY `id` LIMIT 1;", [$cid]);
 
@@ -711,7 +711,7 @@ case 'down':
 
             $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
-            $is_admin = (is_admin([101]) && $log == App::setting('nickname'));
+            $is_admin = (is_admin([101]) && App::getUsername() == App::setting('nickname'));
 
             if ($is_admin) {
                 echo '<form action="/admin/load?act=deldown&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -1273,7 +1273,7 @@ case 'deldown':
     $uid = check($_GET['uid']);
     $del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
 
-    if (is_admin([101]) && $log == App::setting('nickname')) {
+    if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
         if ($uid == $_SESSION['token']) {
             if ($del > 0) {
                 $del = implode(',', $del);

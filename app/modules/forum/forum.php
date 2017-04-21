@@ -68,7 +68,7 @@ case 'create':
         $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
             -> addRule('not_empty', $forum, ['fid' => 'Раздела для новой темы не существует!'])
             -> addRule('empty', $forum['closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
-            -> addRule('equal', [is_flood($log), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!'])
+            -> addRule('equal', [is_flood(App::getUsername()), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!'])
             -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50)
             -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, App::setting('forumtextlength'));
 
@@ -93,7 +93,7 @@ case 'create':
             $title = antimat($title);
             $msg = antimat($msg);
 
-            DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
+            DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
             DB::run() -> query("INSERT INTO `topics` (`forum_id`, `title`, `user_id`, `posts`, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?);", [$fid, $title, App::getUserId(), 1, SITETIME, SITETIME]);
 

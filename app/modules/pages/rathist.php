@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'received';
 }
 if (empty($_GET['uz'])) {
-    $uz = check($log);
+    $uz = check(App::getUsername());
 } else {
     $uz = check(strval($_GET['uz']));
 }

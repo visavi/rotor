@@ -47,7 +47,7 @@ if (is_user()) {
 
                         if (!empty($key)) {
                             if ($key == App::user('confirmregkey')) {
-                                DB::run() -> query("UPDATE users SET confirmreg=?, confirmregkey=? WHERE login=?;", [0, '', $log]);
+                                DB::run() -> query("UPDATE users SET confirmreg=?, confirmregkey=? WHERE login=?;", [0, '', App::getUsername()]);
 
                                 echo 'Мастер-код подтвержден, теперь вы можете войти на сайт!<br /><br />';
                                 echo '<i class="fa fa-check"></i> <b><a href="/">Вход на сайт!</a></b><br /><br />';
@@ -63,7 +63,7 @@ if (is_user()) {
 
                 endswitch;
             } else {
-                echo 'Добро пожаловать, <b>'.check($log).'!</b><br />';
+                echo 'Добро пожаловать, <b>'.check(App::getUsername()).'!</b><br />';
                 echo 'Ваш аккаунт еще не прошел проверку администрацией<br />';
                 echo 'Если после авторизации вы видите эту страницу, значит ваш профиль еще не активирован!<br /><br />';
                 echo '<i class="fa fa-times"></i> <a href="/logout">Выход</a><br />';

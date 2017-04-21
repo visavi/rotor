@@ -13,12 +13,12 @@ if (is_user()) {
     ############################################################################################
     ##                                   История авторизаций                                  ##
     ############################################################################################
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [$log]);
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [App::getUsername()]);
     $page = App::paginate(App::setting('loginauthlist'), $total);
 
     if ($total > 0) {
 
-        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loginauthlist').";", [$log]);
+        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loginauthlist').";", [App::getUsername()]);
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';

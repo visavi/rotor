@@ -13,7 +13,7 @@ if (is_user()) {
         case 'index':
 
             echo 'В наличии: '.moneys(App::user('money')).'<br />';
-            echo 'В банке: '.moneys(user_bankmoney($log)).'<br /><br />';
+            echo 'В банке: '.moneys(user_bankmoney(App::getUsername())).'<br /><br />';
             // --------------------- Вычисление если долг ---------------------------//
             if (App::user('sumcredit') > 0) {
                 echo '<b><span style="color:#ff0000">Сумма долга составляет: '.moneys(App::user('sumcredit')).'</span></b><br />';
@@ -30,7 +30,7 @@ if (is_user()) {
                     echo '<b><span style="color:#ff0000">Внимание! Время погашения кредита просрочено!</span></b><br />';
                     echo 'Начислен штраф в сумме 1%, у вас списано '.points($delpoint).'<br /><br />';
 
-                    DB::run() -> query("UPDATE `users` SET `point`=`point`-?, `timecredit`=?, `sumcredit`=round(`sumcredit`*1.01) WHERE `login`=? LIMIT 1;", [$delpoint, SITETIME + 86400, $log]);
+                    DB::run() -> query("UPDATE `users` SET `point`=`point`-?, `timecredit`=?, `sumcredit`=round(`sumcredit`*1.01) WHERE `login`=? LIMIT 1;", [$delpoint, SITETIME + 86400, App::getUsername()]);
                 }
             }
 
@@ -70,9 +70,9 @@ if (is_user()) {
                                 if (empty(App::user('sumcredit'))) {
                                     $sumcredit = $gold + (($gold * App::setting('percentkredit')) / 100);
 
-                                    DB::run() -> query("UPDATE `users` SET `money`=`money`+?, `sumcredit`=?, `timecredit`=? WHERE `login`=? LIMIT 1;", [$gold, $sumcredit, SITETIME + 432000, $log]);
+                                    DB::run() -> query("UPDATE `users` SET `money`=`money`+?, `sumcredit`=?, `timecredit`=? WHERE `login`=? LIMIT 1;", [$gold, $sumcredit, SITETIME + 432000, App::getUsername()]);
 
-                                    $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [$log]);
+                                    $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [App::getUsername()]);
 
                                     echo 'Cредства успешно перечислены вам в карман!<br />';
                                     echo 'Количество денег на руках: <b>'.moneys($allmoney).'</b><br /><br />';
@@ -93,9 +93,9 @@ if (is_user()) {
                         if (App::user('sumcredit') > 0) {
                             if (App::user('sumcredit') == $gold) {
                                 if ($gold <= App::user('money')) {
-                                    DB::run() -> query("UPDATE `users` SET `money`=`money`-?, `sumcredit`=?, `timecredit`=? WHERE `login`=? LIMIT 1;", [$gold, 0, 0, $log]);
+                                    DB::run() -> query("UPDATE `users` SET `money`=`money`-?, `sumcredit`=?, `timecredit`=? WHERE `login`=? LIMIT 1;", [$gold, 0, 0, App::getUsername()]);
 
-                                    $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [$log]);
+                                    $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [App::getUsername()]);
 
                                     echo 'Поздравляем! Кредит успешно погашен, благодорим за сотрудничество!<br />';
                                     echo 'Остаток денег на руках: <b>'.moneys($allmoney).'</b><br /><br />';

@@ -330,12 +330,12 @@ if (is_user()) {
                     $sum += "150";
                 }
 
-                DB::run()->query("UPDATE users SET money=money-5 WHERE login=?", [$log]);
+                DB::run()->query("UPDATE users SET money=money-5 WHERE login=?", [App::getUsername()]);
 
                 if ($sum > 0) {
                     echo 'Ваш выигрыш составил: <b>' . (int)$sum . '</b><br /><br />';
 
-                    DB::run()->query("UPDATE users SET money=money+? WHERE login=?", [$sum, $log]);
+                    DB::run()->query("UPDATE users SET money=money+? WHERE login=?", [$sum, App::getUsername()]);
                 }
 
                 echo '<b><a href="bandit?act=go&amp;rand=' . $rand . '">Играть</a></b><br />';
@@ -343,7 +343,7 @@ if (is_user()) {
                 show_error('Вы не можете играть т.к. на вашем счету недостаточно средств');
             }
 
-            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", [$log]);
+            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", [App::getUsername()]);
 
             echo 'В наличии ' . moneys($allmoney) . '<br /><br />';
 

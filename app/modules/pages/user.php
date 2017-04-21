@@ -1,6 +1,6 @@
 <?php
 
-$login = check(param('login', $log));
+$login = check(param('login', App::getUsername()));
 
 switch ($act):
 /**

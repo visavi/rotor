@@ -257,7 +257,7 @@ case 'create':
         $validation = new Validation();
 
         $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            -> addRule('equal', [is_flood($log), true], 'Антифлуд! Разрешается комментировать раз в '.flood_period().' сек!')
+            -> addRule('equal', [is_flood(App::getUsername()), true], 'Антифлуд! Разрешается комментировать раз в '.flood_period().' сек!')
             -> addRule('not_empty', $data, 'Выбранной новости не существует, возможно она было удалена!')
             -> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
             -> addRule('empty', $data['closed'], 'Комментирование данной новости запрещено!');
@@ -271,7 +271,7 @@ case 'create':
             DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".App::setting('maxkommnews').") AS del);", ['news', $id, 'news', $id]);
 
             DB::run() -> query("UPDATE `news` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
-            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
+            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
             notice('Комментарий успешно добавлен!');
 

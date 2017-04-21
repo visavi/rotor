@@ -107,7 +107,7 @@ break;
 ##                                       Список ключей                                    ##
 ############################################################################################
 case 'list':
-    $invitations = DB::run() -> query("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [$log, 0]);
+    $invitations = DB::run() -> query("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [App::getUsername(), 0]);
     $invite = $invitations -> fetchAll(PDO::FETCH_COLUMN);
     $total = count($invite);
 
@@ -143,7 +143,7 @@ case 'send':
             }
 
             $text = 'Вы получили пригласительные ключи в количестве '.count($listkeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listkeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на этот сайт!';
-            send_private($user, $log, $text);
+            send_private($user, App::getUsername(), $text);
 
             notice('Ключи успешно отправлены!');
             redirect("/admin/invitations");
@@ -171,7 +171,7 @@ case 'mailing':
             $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
             $users = $query->fetchAll(PDO::FETCH_COLUMN);
 
-            $users = array_diff($users, [$log]);
+            $users = array_diff($users, [App::getUsername()]);
             $total = count($users);
 
             // Рассылка сообщений с подготовкой запросов
@@ -186,7 +186,7 @@ case 'mailing':
                 foreach ($users as $user){
                     $key = str_random(rand(12, 15));
                     $updateusers -> execute($user);
-                    $insertprivat -> execute($user, $log, sprintf($text, $key), SITETIME);
+                    $insertprivat -> execute($user, App::getUsername(), sprintf($text, $key), SITETIME);
                     $dbr -> execute($key, $user, SITETIME);
                 }
 
@@ -220,7 +220,7 @@ case 'generate':
 
             for($i = 0; $i < $keys; $i++) {
                 $key = str_random(rand(12, 15));
-                $dbr -> execute($key, $log, SITETIME);
+                $dbr -> execute($key, App::getUsername(), SITETIME);
             }
 
             notice('Ключи успешно сгенерированы!');

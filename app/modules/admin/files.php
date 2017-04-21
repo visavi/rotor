@@ -15,7 +15,7 @@ if (
     $path = '';
 }
 
-if (is_admin([101]) && $log == App::setting('nickname')) {
+if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
     //show_title('Редактирование страниц');
 
     switch ($act):

@@ -17,12 +17,12 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$log]);
+            $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [App::getUsername()]);
             $page = App::paginate(App::setting('ignorlist'), $total);
 
             if ($total > 0) {
 
-                $queryignor = DB::run() -> query("SELECT * FROM ignoring WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('ignorlist').";", [$log]);
+                $queryignor = DB::run() -> query("SELECT * FROM ignoring WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('ignorlist').";", [App::getUsername()]);
 
                 echo '<form action="/ignore?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -73,25 +73,25 @@ if (is_user()) {
             }
 
             if ($uid == $_SESSION['token']) {
-                if ($uz != $log) {
+                if ($uz != App::getUsername()) {
                     $queryuser = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
                     if (!empty($queryuser)) {
 
                         if ($queryuser['level']<101 || $queryuser['level']>105){
 
-                            $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$log]);
+                            $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [App::getUsername()]);
                             if ($total <= App::setting('limitignore')) {
                                 // ------------------------ Проверка на существование ------------------------//
-                                if (!is_ignore($log, $uz)){
+                                if (!is_ignore(App::getUsername(), $uz)){
 
-                                    DB::run() -> query("INSERT INTO ignoring (`user`, `name`, `time`) VALUES (?, ?, ?);", [$log, $uz, SITETIME]);
+                                    DB::run() -> query("INSERT INTO ignoring (`user`, `name`, `time`) VALUES (?, ?, ?);", [App::getUsername(), $uz, SITETIME]);
                                     // ----------------------------- Проверка на игнор ----------------------------//
-                                    $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
+                                    $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, App::getUsername()]);
                                     if (empty($ignorstr)) {
                                         DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$uz]);
                                         // ------------------------------Уведомление по привату------------------------//
-                                        $textpriv = 'Пользователь [b]'.$log.'[/b] добавил вас в свой игнор-лист!';
-                                        DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $textpriv, SITETIME]);
+                                        $textpriv = 'Пользователь [b]'.App::getUsername().'[/b] добавил вас в свой игнор-лист!';
+                                        DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, App::getUsername(), $textpriv, SITETIME]);
                                     }
 
                                     notice('Пользователь успешно отправлен в игнор!');
@@ -131,7 +131,7 @@ if (is_user()) {
             }
 
             if ($id > 0) {
-                $data = DB::run() -> queryFetch("SELECT * FROM ignoring WHERE `id`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                $data = DB::run() -> queryFetch("SELECT * FROM ignoring WHERE `id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
 
                 if (!empty($data)) {
                     echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$data['name'].'</b> '.user_online($data['name']).':<br /><br />';
@@ -166,7 +166,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($id > 0) {
                     if (utf_strlen($msg) < 1000) {
-                        DB::run() -> query("UPDATE ignoring SET `text`=? WHERE `id`=? AND `user`=?;", [$msg, $id, $log]);
+                        DB::run() -> query("UPDATE ignoring SET `text`=? WHERE `id`=? AND `user`=?;", [$msg, $id, App::getUsername()]);
 
                         notice('Заметка успешно отредактирована!');
                         redirect("/ignore?page=$page");
@@ -200,7 +200,7 @@ if (is_user()) {
             if ($uid == $_SESSION['token']) {
                 if ($del > 0) {
                     $del = implode(',', $del);
-                    DB::run() -> query("DELETE FROM ignoring WHERE `id` IN (".$del.") AND `user`=?;", [$log]);
+                    DB::run() -> query("DELETE FROM ignoring WHERE `id` IN (".$del.") AND `user`=?;", [App::getUsername()]);
 
                     notice('Выбранные пользователи успешно удалены из игнора!');
                     redirect("/ignore?page=$page");

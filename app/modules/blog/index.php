@@ -2,7 +2,7 @@
 App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
+$uz = (empty($_GET['uz'])) ? check(App::getUsername()) : check($_GET['uz']);
 
 //show_title('Блоги');
 //App::setting('newtitle') = 'Блоги - Список разделов';

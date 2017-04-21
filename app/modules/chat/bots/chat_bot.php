@@ -171,7 +171,7 @@ if ($mssg == "") {
 
 if ($mssg == "") {
     if ((stristr($msg, 'www.')) or (stristr($msg, '.ru')) or (stristr($msg, '.net')) or (stristr($msg, 'wap.')) or (stristr($msg, '.com')) or (stristr($msg, 'chat')) or (stristr($msg, '.spb')) or (stristr($msg, 'http://')) or (stristr($msg, '.msk'))) {
-        $answers = [$log . ', за рекламу получишь бан', $log . ',  кто-то щас пострадает', $log . ', для этого есть раздел афиша'];
+        $answers = [App::getUsername() . ', за рекламу получишь бан', App::getUsername() . ',  кто-то щас пострадает', App::getUsername() . ', для этого есть раздел афиша'];
         $answernumber = array_rand($answers);
         $mssg = $answers[$answernumber];
     }

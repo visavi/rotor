@@ -95,7 +95,7 @@ case 'create':
     $validation -> addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
         -> addRule('not_empty', $topics, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
         -> addRule('empty', $topics['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
-        -> addRule('equal', [is_flood($log), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!'])
+        -> addRule('equal', [is_flood(App::getUsername()), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!'])
         -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, App::setting('forumtextlength'));
 
         // Проверка сообщения на схожесть
@@ -140,7 +140,7 @@ case 'create':
             $newTopic = Topic::find($tid);
             foreach($usersAnswer as $login) {
 
-                if ($login == $log) {
+                if ($login == App::getUsername()) {
                     continue;
                 }
 
@@ -149,7 +149,7 @@ case 'create':
                 if ($user['login']) {
 
                     if ($user['notify']) {
-                        send_private($user['login'], $log, 'Пользователь ' . $log . ' ответил вам в теме [url=' . App::setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / App::setting('forumpost')) . '#post_'.$lastid.']' . $newTopic['title'] . '[/url]'.PHP_EOL.'Текст сообщения: '.$msg);
+                        send_private($user['login'], App::getUsername(), 'Пользователь ' . App::getUsername() . ' ответил вам в теме [url=' . App::setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / App::setting('forumpost')) . '#post_'.$lastid.']' . $newTopic['title'] . '[/url]'.PHP_EOL.'Текст сообщения: '.$msg);
                     }
                 }
             }

@@ -46,7 +46,7 @@ switch ($act):
         $provkod = isset($_POST['provkod']) ? check(strtolower($_POST['provkod'])) : '';
 
         if (is_user()) {
-            $name = $log;
+            $name = App::getUsername();
 
             if (!empty(App::user('email'))) {
                 $umail = App::user('email');

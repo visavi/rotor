@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin([101]) && $log == App::setting('nickname')) {
+if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
     //show_title('Очистка базы юзеров');
 
     switch ($act):

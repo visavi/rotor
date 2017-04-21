@@ -164,7 +164,7 @@ case 'view':
     )->find_one();
 
     if (!empty($downs)) {
-        if (!empty($downs['active']) || $downs['user'] == $log) {
+        if (!empty($downs['active']) || $downs['user'] == App::getUsername()) {
 
             if (is_admin([101, 102])) {
                 echo ' <a href="/admin/load?act=editdown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Редактировать</a> / ';
@@ -188,7 +188,7 @@ case 'view':
                 <li class="active"><a href="/load/rss?id=<?= $id ?>">RSS-лента</a></li>
             </ol>
   <?php
-            if (empty($downs['active']) && $downs['user'] == $log){
+            if (empty($downs['active']) && $downs['user'] == App::getUsername()){
                 echo '<div class="info"><b>Внимание!</b> Данная загрузка добавлена, но еще требует модераторской проверки<br />';
                 echo '<i class="fa fa-pencil"></i> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br />';
             }
@@ -367,14 +367,14 @@ case 'vote':
 
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
-                        if ($log != $downs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['down', $id, $log]);
+                        if (App::getUsername() != $downs['user']) {
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['down', $id, App::getUsername()]);
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * App::setting('expiresrated');
 
                                 DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['down', SITETIME]);
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, $log, $expiresrated]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, App::getUsername(), $expiresrated]);
                                 DB::run() -> query("UPDATE `downs` SET `rating`=`rating`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
 
                                 echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br />';
@@ -444,14 +444,14 @@ case 'comments':
                     echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    if (!empty($log) && $log != $data['user']) {
+                    if (!empty(App::getUsername()) && App::getUsername() != $data['user']) {
                         echo '<div class="right">';
                         echo '<a href="/load/down?act=reply&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Отв</a> / ';
                         echo '<a href="/load/down?act=quote&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Цит</a> / ';
                         echo '<noindex><a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
                     }
 
-                    if ($log == $data['user'] && $data['time'] + 600 > SITETIME) {
+                    if (App::getUsername() == $data['user'] && $data['time'] + 600 > SITETIME) {
                         echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
@@ -511,16 +511,16 @@ case 'add':
 
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
-                        if (is_flood($log)) {
+                        if (is_flood(App::getUsername())) {
 
                             $msg = antimat($msg);
 
-                            DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
+                            DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
                             DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".App::setting('maxdowncomm').") AS del);", ['down', $id, 'down', $id]);
 
                             DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
-                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
+                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
                             notice('Сообщение успешно добавлено!');
                             redirect("/load/down?act=end&id=$id");
@@ -562,8 +562,8 @@ case 'spam':
                 $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [5, $pid]);
 
                 if (empty($queryspam)) {
-                    if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, App::setting('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
+                    if (is_flood(App::getUsername())) {
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], App::getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, App::setting('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&page=$page");
@@ -654,7 +654,7 @@ case 'edit':
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, $log]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, App::getUsername()]);
 
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
@@ -691,7 +691,7 @@ case 'editpost':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, $log]);
+                $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, App::getUsername()]);
 
                 if (!empty($post)) {
                     if ($post['time'] + 600 > SITETIME) {

@@ -1,7 +1,7 @@
 <?php
 App::view(App::setting('themes').'/index');
 
-$uz = empty($_GET['uz']) ? check($log) : check($_GET['uz']);
+$uz = empty($_GET['uz']) ? check(App::getUsername()) : check($_GET['uz']);
 $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
 $page = abs(intval(Request::input('page', 1)));
 

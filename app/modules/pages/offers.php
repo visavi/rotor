@@ -159,15 +159,15 @@ switch ($act):
 
             echo '</div>';
 
-            if ($queryoff['status'] <= 1 && $log == $queryoff['user']) {
+            if ($queryoff['status'] <= 1 && App::getUsername() == $queryoff['user']) {
                 echo '<div class="right"><a href="/offers?act=edit&amp;id='.$id.'">Редактировать</a></div>';
             }
 
             echo '<div>'.App::bbCode($queryoff['text']).'<br />';
             echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br />';
 
-            if ($queryoff['status'] <= 1 && $log != $queryoff['user']) {
-                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, $log]);
+            if ($queryoff['status'] <= 1 && App::getUsername() != $queryoff['user']) {
+                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, App::getUsername()]);
 
                 if (empty($queryrated)) {
                     echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br />';
@@ -241,7 +241,7 @@ switch ($act):
     case 'edit':
 
         if (is_user()) {
-            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, $log]);
+            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
             if (!empty($queryoff)) {
                 if ($queryoff['status'] <= 1) {
 
@@ -285,7 +285,7 @@ switch ($act):
 
         if ($uid == $_SESSION['token']) {
             if (is_user()) {
-                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
                         if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
@@ -417,11 +417,11 @@ switch ($act):
                     $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryoff)) {
                         if (empty($queryoff['closed'])) {
-                            if (is_flood($log)) {
+                            if (is_flood(App::getUsername())) {
 
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
+                                DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
                                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `id`=? ORDER BY `time` DESC LIMIT ".App::setting('maxpostoffers').") AS del);", [$id, 'offer', $id, 'offer']);
 
@@ -463,13 +463,13 @@ switch ($act):
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
-                        if ($log != $queryoff['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, $log]);
+                        if (App::getUsername() != $queryoff['user']) {
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, App::getUsername()]);
                             if (empty($queryrated)) {
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, $log, SITETIME]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, App::getUsername(), SITETIME]);
                                 DB::run() -> query("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", [$id]);
                             } else {
-                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, $log]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, App::getUsername()]);
                                 if ($queryoff['votes'] > 0) {
                                     DB::run() -> query("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", [$id]);
                                 }
@@ -537,15 +537,15 @@ switch ($act):
             if (App::user('point') >= App::setting('addofferspoint')) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                     if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
-                        if (is_flood($log)) {
+                        if (is_flood(App::getUsername())) {
 
                             $title = antimat($title);
                             $text = antimat($text);
 
-                            DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, $log, 1, SITETIME]);
+                            DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, App::getUsername(), 1, SITETIME]);
                             $lastid = DB::run() -> lastInsertId();
 
-                            DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, $log, SITETIME]);
+                            DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, App::getUsername(), SITETIME]);
 
                             notice('Сообщение успешно добавлено!');
                             redirect("/offers?act=view&type=$types&id=$lastid");

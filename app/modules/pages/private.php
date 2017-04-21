@@ -299,7 +299,7 @@ case 'send':
                                     ->first();
 
                                 if ( ! $ignoring) {
-                                    if (is_flood($log)) {
+                                    if (is_flood(App::getUsername())) {
 
                                         $msg = antimat($msg);
 
@@ -376,13 +376,13 @@ case 'complaint':
     $id = abs(intval($_GET['id']));
 
     if ($token == $_SESSION['token']) {
-        $data = DB::run() -> queryFetch("SELECT * FROM `inbox` WHERE `user`=? AND `id`=? LIMIT 1;", [$log, $id]);
+        $data = DB::run() -> queryFetch("SELECT * FROM `inbox` WHERE `user`=? AND `id`=? LIMIT 1;", [App::getUsername(), $id]);
         if (!empty($data)) {
             $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [3, $id]);
 
             if (empty($queryspam)) {
-                if (is_flood($log)) {
-                    DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, link) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [3, $data['id'], $log, $data['author'], $data['text'], $data['time'], SITETIME, '']);
+                if (is_flood(App::getUsername())) {
+                    DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, link) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [3, $data['id'], App::getUsername(), $data['author'], $data['text'], $data['time'], SITETIME, '']);
 
                     notice('Жалоба успешно отправлена!');
                     redirect("/private?page=$page");
@@ -422,9 +422,9 @@ case 'del':
 
             DB::run() -> query("DELETE FROM `trash` WHERE `del`<?;", [SITETIME]);
 
-            DB::run() -> query("INSERT INTO `trash` (`user`, `author`, `text`, `time`, `del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", [$deltrash, $log]);
+            DB::run() -> query("INSERT INTO `trash` (`user`, `author`, `text`, `time`, `del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", [$deltrash, App::getUsername()]);
 
-            DB::run() -> query("DELETE FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", [$log]);
+            DB::run() -> query("DELETE FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", [App::getUsername()]);
             save_usermail(60);
 
             notice('Выбранные сообщения успешно удалены!');
@@ -456,7 +456,7 @@ case 'outdel':
         if ($del > 0) {
             $del = implode(',', $del);
 
-            DB::run() -> query("DELETE FROM `outbox` WHERE `id` IN (".$del.") AND `author`=?;", [$log]);
+            DB::run() -> query("DELETE FROM `outbox` WHERE `id` IN (".$del.") AND `author`=?;", [App::getUsername()]);
 
             notice('Выбранные сообщения успешно удалены!');
             redirect("/private?act=output&page=$page");
@@ -484,9 +484,9 @@ case 'alldel':
 
             DB::run() -> query("DELETE FROM `trash` WHERE `del`<?;", [SITETIME]);
 
-            DB::run() -> query("INSERT INTO `trash` (`user`, `author`, `text`, `time`, `del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `user`=?;", [$deltrash, $log]);
+            DB::run() -> query("INSERT INTO `trash` (`user`, `author`, `text`, `time`, `del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `user`=?;", [$deltrash, App::getUsername()]);
 
-            DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", [$log]);
+            DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", [App::getUsername()]);
             save_usermail(60);
 
             notice('Ящик успешно очищен!');
@@ -510,7 +510,7 @@ case 'alloutdel':
     $token = check(Request::input('token'));
 
     if ($token == $_SESSION['token']) {
-        DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", [$log]);
+        DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", [App::getUsername()]);
 
         notice('Ящик успешно очищен!');
         redirect("/private?act=output");
@@ -530,7 +530,7 @@ case 'alltrashdel':
     $token = check(Request::input('token'));
 
     if ($token == $_SESSION['token']) {
-        DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", [$log]);
+        DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", [App::getUsername()]);
 
         notice('Ящик успешно очищен!');
         redirect("/private?act=trash");
@@ -551,17 +551,17 @@ case 'history':
     echo '<a href="/private?act=output">Отправленные</a> / ';
     echo '<a href="/private?act=trash">Корзина</a><hr />';
 
-    if ($uz != $log) {
+    if ($uz != App::getUsername()) {
         $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
         if (!empty($queryuser)) {
-            $total = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `user`=? AND `author`=?;", [$log, $uz, $uz, $log]);
+            $total = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `user`=? AND `author`=?;", [App::getUsername(), $uz, $uz, App::getUsername()]);
 
             $total = array_sum($total -> fetchAll(PDO::FETCH_COLUMN));
             $page = App::paginate(App::setting('privatpost'), $total);
 
             if ($total > 0) {
 
-                $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT * FROM `outbox` WHERE `user`=? AND `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('privatpost').";", [$log, $uz, $uz, $log]);
+                $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT * FROM `outbox` WHERE `user`=? AND `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('privatpost').";", [App::getUsername(), $uz, $uz, App::getUsername()]);
 
                 while ($data = $queryhistory -> fetch()) {
                     echo '<div class="b">';
@@ -572,7 +572,7 @@ case 'history':
 
                 App::pagination($page);
 
-                if (!user_privacy($uz) || is_admin() || is_contact($uz, $log)){
+                if (!user_privacy($uz) || is_admin() || is_contact($uz, App::getUsername())){
 
                     echo '<br /><div class="form">';
                     echo '<form action="/private?act=send&amp;uz='.$uz.'" method="post">';

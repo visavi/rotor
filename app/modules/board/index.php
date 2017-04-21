@@ -202,7 +202,7 @@ if ($act == "add"){
 
                     $unifile = unifile(STORAGE."/board/$id.dat", 5);
 
-                    $text = no_br($zag.'|'.$log.'|'.$msg.'|'.SITETIME.'|'.$deltime.'|'.$unifile.'|'.$id.'|');
+                    $text = no_br($zag.'|'.App::getUsername().'|'.$msg.'|'.SITETIME.'|'.$deltime.'|'.$unifile.'|'.$id.'|');
 
                     write_files(STORAGE."/board/$id.dat", "$text\r\n", 0, 0666);
 

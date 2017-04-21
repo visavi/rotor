@@ -43,13 +43,13 @@ if (is_user()) {
                 $num_user = $num3 + $num4;
                 // ------------------------------ Выигрыш банкира ----------------------------//
                 if ($num_bank > $num_user) {
-                    DB::run()->query("UPDATE users SET money=money-5 WHERE login=?", [$log]);
+                    DB::run()->query("UPDATE users SET money=money-5 WHERE login=?", [App::getUsername()]);
 
                     echo '<b>Банкир выиграл!</b>';
                 }
                 // ------------------------------ Выигрыш пользователя ----------------------------//
                 if ($num_bank < $num_user) {
-                    DB::run()->query("UPDATE users SET money=money+10 WHERE login=?", [$log]);
+                    DB::run()->query("UPDATE users SET money=money+10 WHERE login=?", [App::getUsername()]);
 
                     echo '<b>Вы выиграли!</b>';
                 }
@@ -61,7 +61,7 @@ if (is_user()) {
                 echo '<br /><br />';
                 echo '<b><a href="/games/kosti?act=go&amp;rand=' . $rand . '">Играть</a></b><br /><br />';
 
-                $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", [$log]);
+                $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", [App::getUsername()]);
 
                 echo 'У вас в наличии: ' . moneys($allmoney) . '<br /><br />';
             } else {

@@ -59,7 +59,7 @@ if (is_user()) {
                         if (empty($_SESSION['stavka'])) {
                             $_SESSION['stavka'] = $mn;
 
-                            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [$mn, $log]);
+                            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [$mn, App::getUsername()]);
                             save_money(60);
 
                             redirect("21?act=game&rand=$randgame");
@@ -182,12 +182,12 @@ if (is_user()) {
 
                 if (isset($win)) {
                     if (empty($win)) {
-                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$_SESSION['stavka'], $log]);
+                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$_SESSION['stavka'], App::getUsername()]);
                         save_money(60);
                         echo '<b><span style="color:#ffa500">Ничья</span></b><br />';
                         echo 'Ставка в размере '.moneys($_SESSION['stavka']).' возвращена вам на счет<br /><br />';
                     } elseif ($win == 1) {
-                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$_SESSION['stavka'] * 2, $log]);
+                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$_SESSION['stavka'] * 2, App::getUsername()]);
                         save_money(60);
 
                         echo '<b><span style="color:#00cc00">Вы выиграли</span></b><br />';

@@ -97,11 +97,11 @@ if (is_user()) {
 
             if ($bilet > 0 && $bilet <= 100) {
                 if (App::user('money') >= 50) {
-                    $querysum = DB::run() -> querySingle("SELECT `id` FROM `lotusers` WHERE `user`=? LIMIT 1;", [$log]);
+                    $querysum = DB::run() -> querySingle("SELECT `id` FROM `lotusers` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
                     if (empty($querysum)) {
                         DB::run() -> query("UPDATE `lotinfo` SET `sum`=`sum`+50 WHERE `id`=?;", [1]);
-                        DB::run() -> query("INSERT INTO `lotusers` (`user`, `num`, `time`) VALUES (?, ?, ?);", [$log, $bilet, SITETIME]);
-                        DB::run() -> query("UPDATE users SET `money`=`money`-50 WHERE `login`=?", [$log]);
+                        DB::run() -> query("INSERT INTO `lotusers` (`user`, `num`, `time`) VALUES (?, ?, ?);", [App::getUsername(), $bilet, SITETIME]);
+                        DB::run() -> query("UPDATE users SET `money`=`money`-50 WHERE `login`=?", [App::getUsername()]);
 
                         echo '<b>Билет успешно приобретен!</b><br />';
                         echo 'Результат розыгрыша станет известным после полуночи!<br /><br />';

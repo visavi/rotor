@@ -89,7 +89,7 @@ case 'create':
 
                     if ($total < App::setting('rekusertotal')) {
 
-                        $rekuser = RekUser::where('user', $log)->find_one();
+                        $rekuser = RekUser::where('user', App::getUsername())->find_one();
 
                         if (empty($rekuser)) {
                             $price = App::setting('rekuserprice');
@@ -110,7 +110,7 @@ case 'create':
                                     'name'  => $name,
                                     'color' => $color,
                                     'bold' => $bold,
-                                    'user' => $log,
+                                    'user' => App::getUsername(),
                                     'time' => SITETIME + (App::setting('rekusertime') * 3600),
                                 ])->save();
 
@@ -141,7 +141,7 @@ case 'create':
 
             if ($total < App::setting('rekusertotal')) {
 
-                $rekuser = RekUser::where('user', $log)->where_gt('time', SITETIME)->find_one();
+                $rekuser = RekUser::where('user', App::getUsername())->where_gt('time', SITETIME)->find_one();
 
                 if (empty($rekuser)) {
                     echo 'У вас в наличии: <b>'.moneys(App::user('money')).'</b><br /><br />';

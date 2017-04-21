@@ -48,7 +48,7 @@ if (! is_admin()) {
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br />
         <?=show_admin_links(101);?>
 
-        <?php if ($log == App::setting('nickname')) {?>
+        <?php if (App::getUsername() == App::setting('nickname')) {?>
             <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br />
             <?php show_admin_links();?>
         <?php }?>

@@ -49,7 +49,7 @@ if (is_user()) {
 
             $daytime = round(((SITETIME - App::user('timelastban')) / 3600) / 24);
             if (App::user('totalban') > 0 && $daytime >= 30 && App::user('money') >= 100000) {
-                DB::run() -> query("UPDATE users SET timelastban=?, totalban=totalban-1, money=money-? WHERE login=?", [SITETIME, 100000, $log]);
+                DB::run() -> query("UPDATE users SET timelastban=?, totalban=totalban-1, money=money-? WHERE login=?", [SITETIME, 100000, App::getUsername()]);
 
                 echo 'Нарушение успешно списано, с вашего счета списано <b>'.moneys(100000).'</b><br />';
                 echo 'Следующее нарушение вы сможете снять не ранее чем через 30 суток<br /><br />';

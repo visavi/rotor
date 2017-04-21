@@ -12,7 +12,7 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", [$log]);
+            $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
             if (!empty($databank)) {
                 echo '<b>Выписка по счету</b><br />';
                 echo 'На руках: '.moneys(App::user('money')).'<br />';
@@ -85,17 +85,17 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($provkod == $_SESSION['protect']) {
-                    $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", [$log]);
+                    $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
                     if (!empty($databank)) {
                         if ($databank['sum'] > 0 && $databank['sum'] <= App::setting('maxsumbank')) {
                             if ($databank['time'] < SITETIME) {
                                 $percent = percent_bank($databank['sum']);
 
                                 if (empty($oper)) {
-                                    DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=?", [$percent, $log]);
-                                    DB::run() -> query("UPDATE `bank` SET `oper`=`oper`+1, `time`=? WHERE `user`=?", [SITETIME + 43200, $log]);
+                                    DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=?", [$percent, App::getUsername()]);
+                                    DB::run() -> query("UPDATE `bank` SET `oper`=`oper`+1, `time`=? WHERE `user`=?", [SITETIME + 43200, App::getUsername()]);
                                 } else {
-                                    DB::run() -> query("UPDATE `bank` SET `sum`=`sum`+?, `oper`=`oper`+1, `time`=? WHERE `user`=?", [$percent, SITETIME + 43200, $log]);
+                                    DB::run() -> query("UPDATE `bank` SET `sum`=`sum`+?, `oper`=`oper`+1, `time`=? WHERE `user`=?", [$percent, SITETIME + 43200, App::getUsername()]);
                                 }
                                 echo '<b>Продление счета успешно завершено, получено c процентов: '.moneys($percent).'</b><br /><br />';
                             } else {
@@ -129,11 +129,11 @@ if (is_user()) {
                 //show_title('Снятие со счета');
 
                 if ($gold > 0) {
-                    $querysum = DB::run() -> querySingle("SELECT `sum` FROM `bank` WHERE `user`=? LIMIT 1;", [$log]);
+                    $querysum = DB::run() -> querySingle("SELECT `sum` FROM `bank` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
                     if (!empty($querysum)) {
                         if ($gold <= $querysum) {
-                            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=?", [$gold, $log]);
-                            DB::run() -> query("UPDATE `bank` SET `sum`=`sum`-?, `time`=? WHERE `user`=?", [$gold, SITETIME + 43200, $log]);
+                            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=?", [$gold, App::getUsername()]);
+                            DB::run() -> query("UPDATE `bank` SET `sum`=`sum`-?, `time`=? WHERE `user`=?", [$gold, SITETIME + 43200, App::getUsername()]);
 
                             echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно списана с вашего счета<br /><br />';
                         } else {
@@ -152,13 +152,13 @@ if (is_user()) {
 
                 if ($gold > 0) {
                     if ($gold <= App::user('money')) {
-                        DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?", [$gold, $log]);
+                        DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?", [$gold, App::getUsername()]);
 
-                        $querybank = DB::run() -> querySingle("SELECT `id` FROM `bank` WHERE `user`=? LIMIT 1;", [$log]);
+                        $querybank = DB::run() -> querySingle("SELECT `id` FROM `bank` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
                         if (!empty($querybank)) {
-                            DB::run() -> query("UPDATE `bank` SET `sum`=`sum`+?, `time`=? WHERE `user`=?", [$gold, SITETIME + 43200, $log]);
+                            DB::run() -> query("UPDATE `bank` SET `sum`=`sum`+?, `time`=? WHERE `user`=?", [$gold, SITETIME + 43200, App::getUsername()]);
                         } else {
-                            DB::run() -> query("INSERT INTO `bank` (`user`, `sum`, `time`) VALUES (?, ?, ?);", [$log, $gold, SITETIME + 43200]);
+                            DB::run() -> query("INSERT INTO `bank` (`user`, `sum`, `time`) VALUES (?, ?, ?);", [App::getUsername(), $gold, SITETIME + 43200]);
                         }
 
                         echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно зачислена на ваш счет<br />';

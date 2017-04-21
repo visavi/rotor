@@ -379,7 +379,7 @@ break;
 
                     if (!empty($data)) {
                         if (empty($data['closed'])) {
-                            if (is_flood($log)) {
+                            if (is_flood(App::getUsername())) {
                                 $msg = antimat($msg);
 
                                 DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", ['gallery', $gid, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);

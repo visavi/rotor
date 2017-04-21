@@ -2,7 +2,7 @@
 App::view(App::setting('themes').'/index');
 
 if (empty($_GET['uz'])) {
-    $uz = check($log);
+    $uz = check(App::getUsername());
 } else {
     $uz = check(strval($_GET['uz']));
 }

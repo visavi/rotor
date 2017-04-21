@@ -91,10 +91,10 @@ case 'waiting':
     echo '<b>Ожидающие</b> / ';
     echo '<a href="/load/active">Проверенные</a><hr />';
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [0, $log]);
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [0, App::getUsername()]);
 
     if ($total > 0) {
-        $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC;", [0, $log]);
+        $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC;", [0, App::getUsername()]);
 
         while ($data = $querynew -> fetch()) {
             echo '<div class="b">';
@@ -155,7 +155,7 @@ case 'add':
                                         if (empty($downtitle)) {
 
                                             //DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `category_id`=?", array($cid));
-                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', $log, $author, $site, '', SITETIME]);
+                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', App::getUsername(), $author, $site, '', SITETIME]);
 
                                             $lastid = DB::run() -> lastInsertId();
 
@@ -212,7 +212,7 @@ case 'view':
     if (!empty($new)) {
         $downs = DB::run() -> query("SELECT `id`, `parent`, `name` FROM `cats` WHERE `closed`=0 ORDER BY `sort` ASC;") -> fetchAll();
         if (count($downs) > 0) {
-            if ($new['user'] == $log) {
+            if ($new['user'] == App::getUsername()) {
                 if (empty($new['active'])) {
 
                     $folder = $new['folder'] ? $new['folder'].'/' : '';
@@ -342,7 +342,7 @@ case 'edit':
                             $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
                             if (!empty($new)) {
                                 if (empty($downs['closed'])) {
-                                    if ($new['user'] == $log) {
+                                    if ($new['user'] == App::getUsername()) {
                                         if (empty($new['active'])) {
 
                                             $categories = DB::run() -> querySingle("SELECT `id` FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
@@ -407,7 +407,7 @@ case 'loadfile':
     $folder = $down['folder'] ? $down['folder'].'/' : '';
 
     if (!empty($down)) {
-        if ($down['user'] == $log) {
+        if ($down['user'] == App::getUsername()) {
             if (empty($down['active'])) {
                 if (empty($down['link'])) {
                     if (is_writeable(HOME.'/uploads/files/'.$folder)) {
@@ -522,7 +522,7 @@ case 'loadscreen':
     $down = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($down)) {
-        if ($down['user'] == $log) {
+        if ($down['user'] == App::getUsername()) {
             if (empty($down['active'])) {
                 if (empty($down['screen'])) {
                     if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
@@ -574,7 +574,7 @@ case 'delfile':
     $link = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($link)) {
-        if ($link['user'] == $log) {
+        if ($link['user'] == App::getUsername()) {
             if (empty($link['active'])) {
                 $folder = $link['folder'] ? $link['folder'].'/' : '';
 
@@ -611,7 +611,7 @@ case 'delscreen':
     $screen = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($screen)) {
-        if ($screen['user'] == $log) {
+        if ($screen['user'] == App::getUsername()) {
             if (empty($screen['active'])) {
                 $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 

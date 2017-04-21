@@ -5,7 +5,7 @@ App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-if (!$log){
+if (!App::getUsername()){
     notice('Гостям сюда нельзя!');
     redirect('/');
 }
@@ -14,7 +14,7 @@ switch ($act):
 
 case 'index':
     echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
-    echo 'Ну что '.$log.', взломаем?<br />';
+    echo 'Ну что '.App::getUsername().', взломаем?<br />';
     echo 'У тебя '.moneys(App::user('money')).'<br />';
 
     $_SESSION['code'] = sprintf('%04d', mt_rand(0,9999));
@@ -50,11 +50,11 @@ case 'vzlom':
     }else{
 
         if (empty($_SESSION['go']) || !$_SESSION['try']){
-            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [App::setting('safeattempt'), $log]);
+            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [App::setting('safeattempt'), App::getUsername()]);
             $_SESSION['go'] = 'ok';
         }
 
-        echo $log.', не торопись! Просто хорошо подумай. <br />';
+        echo App::getUsername().', не торопись! Просто хорошо подумай. <br />';
         echo '<br /><img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
 
         if (!$_SESSION['code'] || !$_SESSION['go']){
@@ -152,7 +152,7 @@ case 'vzlom1':
             echo '<br />ПОЗДРАВЛЯЮ! СЕЙФ УСПЕШНО ВЗЛОМАН!<br />
             <font color="red">НА ВАШ СЧЁТ ПЕРЕВЕДЕНЫ 1000$</font><br />';
 
-            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [App::setting('safesum'), $log]);
+            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [App::setting('safesum'), App::getUsername()]);
             unset($_SESSION['go'], $_SESSION['try']);
 
             echo'&raquo; <a href="/games/safe">Ещё взломать?</a><br /><br />';
@@ -170,7 +170,7 @@ case 'vzlom1':
             } else {
 
                 echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
-                echo ''.$log.', не торопись! Просто хорошо подумай. <br />';
+                echo ''.App::getUsername().', не торопись! Просто хорошо подумай. <br />';
                 echo 'Попыток осталось: <font color="red"><big>'.$_SESSION['try'].'</big></font><br />';
                 echo 'Комбинация сейфа:<br />';
                 echo '<b><font color="red">'.$d1.' '.$d2.' '.$d3.' '.$d4.'</font></b><br />';

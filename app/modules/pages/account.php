@@ -128,7 +128,7 @@ case 'changemail':
     $validation -> addRule('empty', $blackmail, 'Указанный вами адрес email занесен в черный список!');
 
     DB::run() -> query("DELETE FROM `changemail` WHERE `time`<?;", [SITETIME]);
-    $changemail = DB::run() -> querySingle("SELECT `id` FROM `changemail` WHERE `user`=? LIMIT 1;", [$log]);
+    $changemail = DB::run() -> querySingle("SELECT `id` FROM `changemail` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
     $validation -> addRule('empty', $changemail, 'Вы уже отправили код подтверждения на новый адрес почты!');
 
     if ($validation->run()) {
@@ -137,10 +137,10 @@ case 'changemail':
 
         sendMail($meil,
             'Изменение адреса электронной почты на сайте '.App::setting('title'),
-            nl2br("Здравствуйте, ".$log." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".App::setting('home')."/account?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течение суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо")
+            nl2br("Здравствуйте, ".App::getUsername()." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".App::setting('home')."/account?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течение суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо")
         );
 
-        DB::run() -> query("INSERT INTO `changemail` (`user`, `mail`, hash, `time`) VALUES (?, ?, ?, ?);", [$log, $meil, $genkey, SITETIME + 86400]);
+        DB::run() -> query("INSERT INTO `changemail` (`user`, `mail`, hash, `time`) VALUES (?, ?, ?, ?);", [App::getUsername(), $meil, $genkey, SITETIME + 86400]);
 
         notice('На новый адрес почты отправлено письмо для подтверждения!');
         redirect("/account");
@@ -160,7 +160,7 @@ case 'editmail':
     $key = (isset($_GET['key'])) ? check(strval($_GET['key'])) : '';
 
     DB::run() -> query("DELETE FROM `changemail` WHERE `time`<?;", [SITETIME]);
-    $armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, $log]);
+    $armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, App::getUsername()]);
 
     $validation = new Validation();
 
@@ -176,8 +176,8 @@ case 'editmail':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], $log]);
-        DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, $log]);
+        DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], App::getUsername()]);
+        DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, App::getUsername()]);
 
         notice('Адрес электронной почты успешно изменен!');
         redirect("/account");
@@ -214,7 +214,7 @@ case 'editstatus':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", [$status, $cost, $log]);
+        DB::run() -> query("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", [$status, $cost, App::getUsername()]);
         save_title();
 
         notice('Ваш статус успешно изменен!');
@@ -256,7 +256,7 @@ break;
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `nickname`=?, `timenickname`=? WHERE `login`=? LIMIT 1;", [$nickname, SITETIME + 86400, $log]);
+        DB::run() -> query("UPDATE `users` SET `nickname`=?, `timenickname`=? WHERE `login`=? LIMIT 1;", [$nickname, SITETIME + 86400, App::getUsername()]);
         save_nickname();
 
         notice('Ваш ник успешно изменен!');
@@ -295,7 +295,7 @@ case 'editsec':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `secquest`=?, `secanswer`=? WHERE `login`=? LIMIT 1;", [$secquest, $secanswer, $log]);
+        DB::run() -> query("UPDATE `users` SET `secquest`=?, `secanswer`=? WHERE `login`=? LIMIT 1;", [$secquest, $secanswer, App::getUsername()]);
 
         notice('Секретный вопрос и ответ успешно изменены!');
         redirect("/account");
@@ -324,7 +324,7 @@ case 'editpass':
         -> addRule('equal', [$newpass, $newpass2], 'Новые пароли не одинаковые!')
         -> addRule('string', $newpass, 'Слишком длинный или короткий новый пароль!', true, 6, 20)
         -> addRule('regex', [$newpass, '|^[a-z0-9\-]+$|i'], 'Недопустимые символы в пароле, разрешены знаки латинского алфавита, цифры и дефис!', true)
-        -> addRule('not_equal', [$log, $newpass], 'Пароль и логин должны отличаться друг от друга!');
+        -> addRule('not_equal', [App::getUsername(), $newpass], 'Пароль и логин должны отличаться друг от друга!');
 
     if (ctype_digit($newpass)) {
         $validation -> addError('Запрещен пароль состоящий только из цифр, используйте буквы!');
@@ -332,12 +332,12 @@ case 'editpass':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), $log]);
+        DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), App::getUsername()]);
 
         if (! empty(App::user('email'))){
             sendMail(App::user('email'),
                 'Изменение пароля на сайте '.App::setting('title'),
-                nl2br("Здравствуйте, ".$log." \nВами была произведена операция по изменению пароля \n\nВаш новый пароль: ".$newpass." \nСохраните его в надежном месте \n\nДанные инициализации: \nIP: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nВремя: ".date('j.m.y / H:i', SITETIME))
+                nl2br("Здравствуйте, ".App::getUsername()." \nВами была произведена операция по изменению пароля \n\nВаш новый пароль: ".$newpass." \nСохраните его в надежном месте \n\nДанные инициализации: \nIP: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nВремя: ".date('j.m.y / H:i', SITETIME))
             );
         }
 
@@ -363,7 +363,7 @@ case 'apikey':
 
         $key = str_random();
 
-        DB::run() -> query("UPDATE `users` SET `apikey`=? WHERE `login`=?;", [md5($log.$key), $log]);
+        DB::run() -> query("UPDATE `users` SET `apikey`=? WHERE `login`=?;", [md5(App::getUsername().$key), App::getUsername()]);
 
         notice('Новый ключ успешно сгенерирован!');
         redirect("/account");

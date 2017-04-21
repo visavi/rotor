@@ -336,7 +336,7 @@ function flood_period()
 }
 
 // ------------------------- Функция антифлуда ------------------------------//
-function is_flood($log, $period = 0) {
+function is_flood($login, $period = 0) {
 
     $period = empty($period) ? flood_period() : $period;
 
@@ -344,10 +344,10 @@ function is_flood($log, $period = 0) {
 
     DB::run() -> query("DELETE FROM `flood` WHERE `time`<?;", [SITETIME]);
 
-    $queryflood = DB::run() -> querySingle("SELECT `id` FROM `flood` WHERE `user`=? AND `page`=? LIMIT 1;", [$log, App::server('PHP_SELF')]);
+    $queryflood = DB::run() -> querySingle("SELECT `id` FROM `flood` WHERE `user`=? AND `page`=? LIMIT 1;", [$login, App::server('PHP_SELF')]);
 
     if (empty($queryflood)) {
-        DB::run() -> query("INSERT INTO `flood` (`user`, `page`, `time`) VALUES (?, ?, ?);", [$log, App::server('PHP_SELF'), SITETIME + $period]);
+        DB::run() -> query("INSERT INTO `flood` (`user`, `page`, `time`) VALUES (?, ?, ?);", [$login, App::server('PHP_SELF'), SITETIME + $period]);
 
         return true;
     }

@@ -72,12 +72,12 @@ if (is_user()) {
                 }
                 // ------------------------------ Выигрыш ----------------------------//
                 if ($thimble == $rand_thimble) {
-                    DB::run()->query("UPDATE users SET money=money+100 WHERE login=?", [$log]);
+                    DB::run()->query("UPDATE users SET money=money+100 WHERE login=?", [App::getUsername()]);
 
                     echo '<br /><b>Вы выиграли!</b><br />';
                     // ------------------------------ Проигрыш ----------------------------//
                 } else {
-                    DB::run()->query("UPDATE users SET money=money-50 WHERE login=?", [$log]);
+                    DB::run()->query("UPDATE users SET money=money-50 WHERE login=?", [App::getUsername()]);
 
                     echo '<br /><b>Вы проиграли!</b><br />';
                 }
@@ -87,7 +87,7 @@ if (is_user()) {
 
             echo '<br /><b><a href="/games/naperstki?act=choice&amp;rand=' . $rand . '">К выбору</a></b><br /><br />';
 
-            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", [$log]);
+            $allmoney = DB::run()->querySingle("SELECT money FROM users WHERE login=?;", [App::getUsername()]);
             echo 'У вас в наличии: ' . moneys($allmoney) . '<br /><br />';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/naperstki">Вернуться</a><br />';

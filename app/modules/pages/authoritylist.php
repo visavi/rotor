@@ -51,7 +51,7 @@ switch ($act):
             echo '<div class="form">';
             echo '<b>Поиск пользователя:</b><br />';
             echo '<form action="/authoritylist?act=search&amp;page='.$page['current'].'" method="post">';
-            echo '<input type="text" name="uz" value="'.$log.'" />';
+            echo '<input type="text" name="uz" value="'.App::getUsername().'" />';
             echo '<input type="submit" value="Искать" /></form></div><br />';
 
             echo 'Всего пользователей: <b>'.$total.'</b><br /><br />';

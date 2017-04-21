@@ -142,27 +142,26 @@ if ($udata = is_user()) {
 
     Registry::set('user', $udata);
 
-    $log = App::user('login');
     $setting['themes'] = App::user('themes');
 
     // Забанен
     if (App::user('ban')) {
         if (! Request::is('ban', 'rules', 'logout')) {
-            redirect('/ban?log='.$log);
+            redirect('/ban?log='.App::getUsername());
         }
     }
 
     // Подтверждение регистрации
     if (App::setting('regkeys') > 0 && App::user('confirmreg') > 0 && empty(App::user('ban'))) {
         if (! Request::is('key', 'login', 'logout')) {
-            redirect('/key?log='.$log);
+            redirect('/key?log='.App::getUsername());
         }
     }
 
     // Просрочен кредит
     if (App::user('sumcredit') > 0 && SITETIME > App::user('timecredit') && empty(App::user('ban'))) {
         if (Request::path() != 'games/credit') {
-            redirect('/games/credit?log='.$log);
+            redirect('/games/credit?log='.App::getUsername());
         }
     }
 
@@ -180,7 +179,7 @@ if ($udata = is_user()) {
 
     // ------------------ Запись текущей страницы для админов --------------------//
     if (Request::path() == 'admin') {
-        DB::run() -> query("INSERT INTO `admlog` (`user`, `request`, `referer`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$log, App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME]);
+        DB::run() -> query("INSERT INTO `admlog` (`user`, `request`, `referer`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [App::getUsername(), App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME]);
 
         DB::run() -> query("DELETE FROM `admlog` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `admlog` ORDER BY `time` DESC LIMIT 500) AS del);");
     }

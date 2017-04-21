@@ -89,7 +89,7 @@ if ($act == 'index') {
                 $mmagshow = explode("|", end($mmagfi));
 
                 $unifile = unifile(STORAGE."/chat/chat.dat", 9);
-                $weltext = no_br($hellobots_well . ', ' . $log . '!|Настюха||' . SITETIME . '|SIE-S65|127.0.0.2|0|' . $mmagshow[7] . '|' . $mmagshow[8] . '|' . $unifile . '|');
+                $weltext = no_br($hellobots_well . ', ' . App::getUsername() . '!|Настюха||' . SITETIME . '|SIE-S65|127.0.0.2|0|' . $mmagshow[7] . '|' . $mmagshow[8] . '|' . $unifile . '|');
 
                 write_files(STORAGE."/chat/chat.dat", "$weltext\r\n");
 
@@ -170,7 +170,7 @@ if ($act == 'add') {
     if (is_user()) {
         if (utf_strlen($msg) > 3 && utf_strlen($msg) < 1000) {
 
-            if (is_flood($log)) {
+            if (is_flood(App::getUsername())) {
 
                 $msg = antimat($msg);
 
@@ -182,7 +182,7 @@ if ($act == 'add') {
                 if (!isset($data[7])) $data[7] = '';
                 if (!isset($data[8])) $data[8] = '';
 
-                $text = no_br($msg . '|' . $log . '||' . SITETIME . '|' . App::getUserAgent() . '|' . App::getClientIp() . '|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
+                $text = no_br($msg . '|' . App::getUsername() . '||' . SITETIME . '|' . App::getUserAgent() . '|' . App::getClientIp() . '|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
 
                 write_files(STORAGE."/chat/chat.dat", "$text\r\n");
 
@@ -191,7 +191,7 @@ if ($act == 'add') {
                     delete_lines(STORAGE."/chat/chat.dat", [0, 1, 2, 3, 4]);
                 }
 
-                DB::run() -> query("UPDATE `users` SET `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
+                DB::run() -> query("UPDATE `users` SET `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
                 // --------------------------------------------------------------------------//
                 if (App::setting('botnik') == 1) {
@@ -208,7 +208,7 @@ if ($act == 'add') {
                 if (App::setting('magnik') == 1) {
                     if (!empty($data[8]) && stristr(utf_lower($msg), $data[8])) {
                         $unifile = unifile(STORAGE."/chat/chat.dat", 9);
-                        $text = no_br('Молодец ' . $log . '! Правильный ответ [b]' . $data[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
+                        $text = no_br('Молодец ' . App::getUsername() . '! Правильный ответ [b]' . $data[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
 
                         write_files(STORAGE."/chat/chat.dat", "$text\r\n");
                     }

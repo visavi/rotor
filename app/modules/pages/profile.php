@@ -31,7 +31,7 @@ if (Request::isMethod('post')) {
         $country = utf_substr($country, 0, 30);
         $city = utf_substr($city, 0, 50);
 
-        DB::run()->query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `info`=? WHERE `login`=? LIMIT 1;", [$name, $country, $city, $icq, $skype, $site, $birthday, $info, $log]);
+        DB::run()->query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `info`=? WHERE `login`=? LIMIT 1;", [$name, $country, $city, $icq, $skype, $site, $birthday, $info, App::getUsername()]);
 
         App::setFlash('success', 'Ваш профиль успешно изменен!');
         redirect("/profile");

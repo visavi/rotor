@@ -195,7 +195,7 @@ if (is_admin([101, 102])) {
 
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, $log, SITETIME, $id]);
+                            DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, App::getUsername(), SITETIME, $id]);
 
                             if ($queryoff['status'] >= 2) {
                                 DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);

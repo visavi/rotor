@@ -2,7 +2,7 @@
 App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
+$uz = (empty($_GET['uz'])) ? check(App::getUsername()) : check($_GET['uz']);
 $page = abs(intval(Request::input('page', 1)));
 
 //show_title('Стена сообщений');
@@ -21,9 +21,9 @@ if (!empty($queryuser)) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
             $page = App::paginate(App::setting('wallpost'), $total);
 
-            if ($uz == $log && App::user('newwall') > 0) {
+            if ($uz == App::getUsername() && App::user('newwall') > 0) {
                 echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.App::user('newwall').'</span></b></div>';
-                DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, $log]);
+                DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, App::getUsername()]);
             }
 
             if ($total > 0) {
@@ -32,7 +32,7 @@ if (!empty($queryuser)) {
 
                 if ($is_admin) {
                     echo '<form action="/wall?act=del&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                } elseif ($uz == $log) {
+                } elseif ($uz == App::getUsername()) {
                     echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
@@ -42,14 +42,14 @@ if (!empty($queryuser)) {
                     echo '<div class="b">';
                     echo '<div class="img">'.user_avatars($data['login']).'</div>';
 
-                    if ($is_admin || $uz == $log) {
+                    if ($is_admin || $uz == App::getUsername()) {
                         echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
                     }
 
                     echo '<b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
                     echo user_title($data['login']).' '.user_online($data['login']).'</div>';
 
-                    if ($uz == $log && $log != $data['login']) {
+                    if ($uz == App::getUsername() && App::getUsername() != $data['login']) {
                         echo '<div class="right">';
                         echo '<a href="/private?act=submit&amp;uz='.$data['login'].'">Приват</a> / ';
                         echo '<a href="/wall?uz='.$data['login'].'">Стена</a> / ';
@@ -59,7 +59,7 @@ if (!empty($queryuser)) {
                     echo '<div>'.App::bbCode($data['text']).'</div>';
                 }
 
-                if ($is_admin || $uz == $log) {
+                if ($is_admin || $uz == App::getUsername()) {
                     echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
                 }
 
@@ -69,7 +69,7 @@ if (!empty($queryuser)) {
             }
 
             if (is_user()) {
-                if (!user_privacy($uz) || $uz == $log || is_admin() || is_contact($uz, $log)){
+                if (!user_privacy($uz) || $uz == App::getUsername() || is_admin() || is_contact($uz, App::getUsername())){
                     echo '<div class="form">';
                     echo '<form action="/wall?act=add&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo 'Сообщение:<br />';
@@ -94,20 +94,20 @@ if (!empty($queryuser)) {
             $msg = check($_POST['msg']);
 
             if (is_user()) {
-                if ($uz == $log || is_admin() || is_contact($uz, $log)){
+                if ($uz == App::getUsername() || is_admin() || is_contact($uz, App::getUsername())){
                     if ($uid == $_SESSION['token']) {
                         if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
+                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, App::getUsername()]);
                             if (empty($ignorstr)) {
-                                if (is_flood($log)) {
+                                if (is_flood(App::getUsername())) {
 
                                     $msg = antimat($msg);
 
-                                    if ($uz != $log) {
+                                    if ($uz != App::getUsername()) {
                                         DB::run() -> query("UPDATE `users` SET `newwall`=`newwall`+1 WHERE `login`=?", [$uz]);
                                     }
 
-                                    DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $msg, SITETIME]);
+                                    DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, App::getUsername(), $msg, SITETIME]);
 
                                     DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".App::setting('wallmaxpost').") AS del);", [$uz, $uz]);
 
@@ -145,14 +145,14 @@ if (!empty($queryuser)) {
 
             if (is_user()) {
                 if ($uid == $_SESSION['token']) {
-                    $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", [$log, $id]);
+                    $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", [App::getUsername(), $id]);
 
                     if (!empty($data)) {
                         $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [4, $id]);
 
                         if (empty($queryspam)) {
-                            if (is_flood($log)) {
-                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, App::setting('home').'/wall?uz='.$uz.'&amp;page='.$page]);
+                            if (is_flood(App::getUsername())) {
+                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], App::getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, App::setting('home').'/wall?uz='.$uz.'&amp;page='.$page]);
 
                                 notice('Жалоба успешно отправлена!');
                                 redirect("/wall?uz=$uz&page=$page");
@@ -187,12 +187,12 @@ if (!empty($queryuser)) {
                 $del = 0;
             }
 
-            if ($uz == $log) {
+            if ($uz == App::getUsername()) {
                 if ($uid == $_SESSION['token']) {
                     if (!empty($del)) {
                         $del = implode(',', $del);
 
-                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [$log]);
+                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [App::getUsername()]);
 
                         notice('Выбранные записи успешно удалены!');
                         redirect("/wall?uz=$uz&page=$page");

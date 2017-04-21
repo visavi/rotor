@@ -65,22 +65,22 @@ if (is_user()) {
                 if ($money > 0) {
                     if (App::user('point') >= App::setting('sendmoneypoint')) {
                         if ($money <= App::user('money')) {
-                            if ($uz != $log) {
+                            if ($uz != App::getUsername()) {
                                 if ($msg <= 1000) {
                                     $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
                                     if (!empty($queryuser)) {
-                                        $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, $log]);
+                                        $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, App::getUsername()]);
                                         if (empty($ignorstr)) {
-                                            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?;", [$money, $log]);
+                                            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?;", [$money, App::getUsername()]);
                                             DB::run() -> query("UPDATE `users` SET `money`=`money`+?, `newprivat`=`newprivat`+1 WHERE `login`=?;", [$money, $uz]);
 
                                             $comment = (!empty($msg)) ? $msg : 'Не указано';
                                             // ------------------------Уведомление по привату------------------------//
-                                            $textpriv = 'Пользователь [b]'.$log.'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
+                                            $textpriv = 'Пользователь [b]'.App::getUsername().'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
 
-                                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $textpriv, SITETIME]);
+                                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, App::getUsername(), $textpriv, SITETIME]);
                                             // ------------------------ Запись логов ------------------------//
-                                            DB::run() -> query("INSERT INTO `transfers` (`user`, `login`, `text`, `summ`, `time`) VALUES (?, ?, ?, ?, ?);", [$log, $uz, $comment, $money, SITETIME]);
+                                            DB::run() -> query("INSERT INTO `transfers` (`user`, `login`, `text`, `summ`, `time`) VALUES (?, ?, ?, ?, ?);", [App::getUsername(), $uz, $comment, $money, SITETIME]);
 
                                             DB::run() -> query("DELETE FROM `transfers` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `transfers` ORDER BY `time` DESC LIMIT 1000) AS del);");
 

@@ -52,7 +52,7 @@ switch ($act):
                 $answer = $queryanswer -> fetchAll();
 
                 if ($answer) {
-                    $polls = DB::run() -> querySingle("SELECT `id` FROM `votepoll` WHERE `vote_id`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                    $polls = DB::run() -> querySingle("SELECT `id` FROM `votepoll` WHERE `vote_id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
 
                     if ((is_user() && empty($polls)) && empty($_GET['result'])) {
 
@@ -134,12 +134,12 @@ switch ($act):
                             $queryanswer = DB::run() -> querySingle("SELECT `vote_id` FROM `voteanswer` WHERE `id`=? AND `vote_id`=?  LIMIT 1;", [$poll, $id]);
                             if (!empty($queryanswer)) {
 
-                                $polls = DB::run() -> querySingle("SELECT `id` FROM `votepoll` WHERE `vote_id`=? AND `user`=? LIMIT 1;", [$id, $log]);
+                                $polls = DB::run() -> querySingle("SELECT `id` FROM `votepoll` WHERE `vote_id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
                                 if (empty($polls)) {
 
                                     DB::run() -> query("UPDATE `vote` SET `count`=`count`+1 WHERE `id`=?;", [$id]);
                                     DB::run() -> query("UPDATE `voteanswer` SET `result`=`result`+1 WHERE `id`=?;", [$poll]);
-                                    DB::run() -> query("INSERT INTO `votepoll` (`vote_id`, `user`, `time`) VALUES (?, ?, ?);", [$id, $log, SITETIME]);
+                                    DB::run() -> query("INSERT INTO `votepoll` (`vote_id`, `user`, `time`) VALUES (?, ?, ?);", [$id, App::getUsername(), SITETIME]);
 
                                     notice('Ваш голос успешно принят!');
                                     redirect("/votes?act=poll&id=$id");
