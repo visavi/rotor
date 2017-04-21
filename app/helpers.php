@@ -11,9 +11,8 @@ function maketime($time) {
 }
 
 // --------------------------- Функция временного сдвига -----------------------------//
-function date_fixed($timestamp, $format = "d.m.y / H:i") {
-    global $udata;
-
+function date_fixed($timestamp, $format = "d.m.y / H:i")
+{
     if (!is_numeric($timestamp)) {
         $timestamp = SITETIME;
     }
@@ -127,41 +126,43 @@ function points($sum)
 }
 
 // ------------------ Функция перекодировки из UTF в WIN --------------------//
-function utf_to_win($str) {
-    if (function_exists('mb_convert_encoding')) return mb_convert_encoding($str, 'windows-1251', 'utf-8');
-    if (function_exists('iconv')) return iconv('utf-8', 'windows-1251', $str);
-
-    $utf8win1251 = ["А" => "\xC0", "Б" => "\xC1", "В" => "\xC2", "Г" => "\xC3", "Д" => "\xC4", "Е" => "\xC5", "Ё" => "\xA8", "Ж" => "\xC6", "З" => "\xC7", "И" => "\xC8", "Й" => "\xC9", "К" => "\xCA", "Л" => "\xCB", "М" => "\xCC",
-        "Н" => "\xCD", "О" => "\xCE", "П" => "\xCF", "Р" => "\xD0", "С" => "\xD1", "Т" => "\xD2", "У" => "\xD3", "Ф" => "\xD4", "Х" => "\xD5", "Ц" => "\xD6", "Ч" => "\xD7", "Ш" => "\xD8", "Щ" => "\xD9", "Ъ" => "\xDA",
-        "Ы" => "\xDB", "Ь" => "\xDC", "Э" => "\xDD", "Ю" => "\xDE", "Я" => "\xDF", "а" => "\xE0", "б" => "\xE1", "в" => "\xE2", "г" => "\xE3", "д" => "\xE4", "е" => "\xE5", "ё" => "\xB8", "ж" => "\xE6", "з" => "\xE7",
-        "и" => "\xE8", "й" => "\xE9", "к" => "\xEA", "л" => "\xEB", "м" => "\xEC", "н" => "\xED", "о" => "\xEE", "п" => "\xEF", "р" => "\xF0", "с" => "\xF1", "т" => "\xF2", "у" => "\xF3", "ф" => "\xF4", "х" => "\xF5",
-        "ц" => "\xF6", "ч" => "\xF7", "ш" => "\xF8", "щ" => "\xF9", "ъ" => "\xFA", "ы" => "\xFB", "ь" => "\xFC", "э" => "\xFD", "ю" => "\xFE", "я" => "\xFF"];
-
-    return strtr($str, $utf8win1251);
+function utf_to_win($str)
+{
+    return mb_convert_encoding($str, 'windows-1251', 'utf-8');
 }
 
 // ------------------ Функция перекодировки из WIN в UTF --------------------//
-function win_to_utf($str) {
-    if (function_exists('mb_convert_encoding')) return mb_convert_encoding($str, 'utf-8', 'windows-1251');
-    if (function_exists('iconv')) return iconv('windows-1251', 'utf-8', $str);
-
-    $win1251utf8 = ["\xC0" => "А", "\xC1" => "Б", "\xC2" => "В", "\xC3" => "Г", "\xC4" => "Д", "\xC5" => "Е", "\xA8" => "Ё", "\xC6" => "Ж", "\xC7" => "З", "\xC8" => "И", "\xC9" => "Й", "\xCA" => "К", "\xCB" => "Л", "\xCC" => "М",
-        "\xCD" => "Н", "\xCE" => "О", "\xCF" => "П", "\xD0" => "Р", "\xD1" => "С", "\xD2" => "Т", "\xD3" => "У", "\xD4" => "Ф", "\xD5" => "Х", "\xD6" => "Ц", "\xD7" => "Ч", "\xD8" => "Ш", "\xD9" => "Щ", "\xDA" => "Ъ",
-        "\xDB" => "Ы", "\xDC" => "Ь", "\xDD" => "Э", "\xDE" => "Ю", "\xDF" => "Я", "\xE0" => "а", "\xE1" => "б", "\xE2" => "в", "\xE3" => "г", "\xE4" => "д", "\xE5" => "е", "\xB8" => "ё", "\xE6" => "ж", "\xE7" => "з",
-        "\xE8" => "и", "\xE9" => "й", "\xEA" => "к", "\xEB" => "л", "\xEC" => "м", "\xED" => "н", "\xEE" => "о", "\xEF" => "п", "\xF0" => "р", "\xF1" => "с", "\xF2" => "т", "\xF3" => "у", "\xF4" => "ф", "\xF5" => "х",
-        "\xF6" => "ц", "\xF7" => "ч", "\xF8" => "ш", "\xF9" => "щ", "\xFA" => "ъ", "\xFB" => "ы", "\xFC" => "ь", "\xFD" => "э", "\xFE" => "ю", "\xFF" => "я"];
-
-    return strtr($str, $win1251utf8);
+function win_to_utf($str)
+{
+    return mb_convert_encoding($str, 'utf-8', 'windows-1251');
 }
 
 // ------------------ Функция преобразования в нижний регистр для UTF ------------------//
-function utf_lower($str) {
-    if (function_exists('mb_strtolower')) return mb_strtolower($str, 'utf-8');
+function utf_lower($str)
+{
+    return mb_strtolower($str, 'utf-8');
+}
 
-    $arraytolower = ['А' => 'а', 'Б' => 'б', 'В' => 'в', 'Г' => 'г', 'Д' => 'д', 'Е' => 'е', 'Ё' => 'ё', 'Ж' => 'ж', 'З' => 'з', 'И' => 'и', 'Й' => 'й', 'К' => 'к', 'Л' => 'л', 'М' => 'м', 'Н' => 'н', 'О' => 'о', 'П' => 'п', 'Р' => 'р', 'С' => 'с', 'Т' => 'т', 'У' => 'у', 'Ф' => 'ф', 'Х' => 'х', 'Ц' => 'ц', 'Ч' => 'ч', 'Ш' => 'ш', 'Щ' => 'щ', 'Ь' => 'ь', 'Ъ' => 'ъ', 'Ы' => 'ы', 'Э' => 'э', 'Ю' => 'ю', 'Я' => 'я',
-        'A' => 'a', 'B' => 'b', 'C' => 'c', 'D' => 'd', 'E' => 'e', 'I' => 'i', 'F' => 'f', 'G' => 'g', 'H' => 'h', 'J' => 'j', 'K' => 'k', 'L' => 'l', 'M' => 'm', 'N' => 'n', 'O' => 'o', 'P' => 'p', 'Q' => 'q', 'R' => 'r', 'S' => 's', 'T' => 't', 'U' => 'u', 'V' => 'v', 'W' => 'w', 'X' => 'x', 'Y' => 'y', 'Z' => 'z'];
+// ---------- Аналог функции substr для UTF-8 ---------//
+function utf_substr($str, $offset, $length = null)
+{
+    if ($length === null) {
+        $length = utf_strlen($str);
+    }
 
-    return strtr($str, $arraytolower);
+    return mb_substr($str, $offset, $length, 'utf-8');
+}
+
+// ---------------------- Аналог функции strlen для UTF-8 -----------------------//
+function utf_strlen($str)
+{
+    return mb_strlen($str, 'utf-8');
+}
+
+// ----------------------- Функция определения кодировки ------------------------//
+function is_utf($str)
+{
+    return mb_check_encoding($str, 'utf-8');
 }
 
 // ----------------------- Функция экранирования основных знаков --------------------------//
@@ -818,52 +819,6 @@ function check_string($string) {
     return $string;
 }
 
-// ---------- Аналог функции substr для UTF-8 ---------//
-function utf_substr($str, $offset, $length = null) {
-    if ($length === null) {
-        $length = utf_strlen($str);
-    }
-    if (function_exists('mb_substr')) return mb_substr($str, $offset, $length, 'utf-8');
-    if (function_exists('iconv_substr')) return iconv_substr($str, $offset, $length, 'utf-8');
-
-    $str = utf_to_win($str);
-    $str = substr($str, $offset, $length);
-    return win_to_utf($str);
-}
-
-// ---------------------- Аналог функции strlen для UTF-8 -----------------------//
-function utf_strlen($str) {
-    if (function_exists('mb_strlen')) return mb_strlen($str, 'utf-8');
-    if (function_exists('iconv_strlen')) return iconv_strlen($str, 'utf-8');
-    if (function_exists('utf8_decode')) return strlen(utf8_decode($str));
-    return strlen(utf_to_win($str));
-}
-
-// ----------------------- Функция определения кодировки ------------------------//
-function is_utf($str) {
-    $len = strlen($str);
-    for($i = 0; $i < $len; $i++) {
-        $c = ord($str[$i]);
-        if ($c > 128) {
-            if (($c >= 254)) return false;
-            elseif ($c >= 252) $bits = 6;
-            elseif ($c >= 248) $bits = 5;
-            elseif ($c >= 240) $bits = 4;
-            elseif ($c >= 224) $bits = 3;
-            elseif ($c >= 192) $bits = 2;
-            else return false;
-            if (($i + $bits) > $len) return false;
-            while ($bits > 1) {
-                $i++;
-                $b = ord($str[$i]);
-                if ($b < 128 || $b > 191) return false;
-                $bits--;
-            }
-        }
-    }
-    return true;
-}
-
 /**
  * Отправка уведомления на email
  * @param  mixed   $to      Получатель
@@ -1172,7 +1127,6 @@ function is_admin($access = []) {
     }
 
     if (is_user()) {
-        global $udata;
         if (in_array(App::user('level'), $access)) {
             return true;
         }

@@ -2,6 +2,7 @@
 
 require __DIR__.'/bootstrap.php';
 
+ob_start();
 session_name('SID');
 session_start();
 
@@ -133,14 +134,12 @@ if (empty($_SESSION['protect'])) {
     $_SESSION['protect'] = mt_rand(1000, 99999);
 }
 
-//ob_start('ob_processing');
-
 /**
  * Операции с пользователями
  */
-if ($udata = is_user()) {
+if ($user = is_user()) {
 
-    Registry::set('user', $udata);
+    Registry::set('user', $user);
 
     $setting['themes'] = App::user('themes');
 
@@ -201,13 +200,12 @@ if (App::setting('closedsite') == 1 && !is_user() && ! Request::is('register', '
  */
 $browser_detect = new Mobile_Detect();
 
-if (! is_user() || empty(App::setting('themes'))) {
+if (! is_user() || empty($setting['themes'])) {
     if (! empty(App::setting('touchthemes'))) {
         if ($browser_detect->isTablet()) {
             $setting['themes'] = App::setting('touchthemes');
         }
     }
-
     if (! empty(App::setting('webthemes'))) {
         if (! $browser_detect->isMobile() && ! $browser_detect->isTablet()) {
             $setting['themes'] = App::setting('webthemes');
