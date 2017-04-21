@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -7,12 +7,12 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-show_title('Подтверждение регистрации');
+//show_title('Подтверждение регистрации');
 
 if (is_user()) {
-    if (!empty($config['regkeys'])) {
-        if (!empty($udata['confirmreg'])) {
-            if ($udata['confirmreg'] == 1) {
+    if (!empty(App::setting('regkeys'))) {
+        if (!empty(App::user('confirmreg'))) {
+            if (App::user('confirmreg') == 1) {
                 switch ($act):
                 ############################################################################################
                 ##                                    Главная страница                                    ##
@@ -46,7 +46,7 @@ if (is_user()) {
                         }
 
                         if (!empty($key)) {
-                            if ($key == $udata['confirmregkey']) {
+                            if ($key == App::user('confirmregkey')) {
                                 DB::run() -> query("UPDATE users SET confirmreg=?, confirmregkey=? WHERE login=?;", [0, '', $log]);
 
                                 echo 'Мастер-код подтвержден, теперь вы можете войти на сайт!<br /><br />';
@@ -78,4 +78,4 @@ if (is_user()) {
     show_error('Ошибка! Для подтверждение регистрации  необходимо быть авторизованным!');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,6 +1,6 @@
 </div>
 <div class="c" id="down">
-    <a href="<?= $config['home'] ?>"><?= $config['copy'] ?></a><br/>
+    <a href="<?= App::setting('home') ?>"><?= App::setting('copy') ?></a><br/>
     <?= show_counter() ?>
     <?= show_online() ?>
 </div>

@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : "";
@@ -7,7 +7,7 @@ $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
 
-    show_title('Управление мини-чатом');
+    //show_title('Управление мини-чатом');
 
     ############################################################################################
     ##                                    Главная страница                                    ##
@@ -29,10 +29,10 @@ if (is_admin()) {
         if ($total > 0) {
             echo '<form action="/admin/minichat?act=del&amp;page=' . $page['current'] . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
 
-            if ($total < $page['offset'] + $config['chatpost']) {
+            if ($total < $page['offset'] + App::setting('chatpost')) {
                 $end = $total;
             } else {
-                $end = $page['offset'] + $config['chatpost'];
+                $end = $page['offset'] + App::setting('chatpost');
             }
 
             for ($i = $page['offset']; $i < $end; $i++) {
@@ -153,7 +153,7 @@ if (is_admin()) {
 
                 $data[0] = yes_br($data[0]);
 
-                $config['header'] = 'Редактирование сообщения';
+                //App::setting('header') = 'Редактирование сообщения';
 
                 echo '<div class="form"><form action="/admin/minichat?act=addedit&amp;id=' . $id . '&amp;page=' . $page . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
 
@@ -215,4 +215,4 @@ if (is_admin()) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

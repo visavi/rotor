@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Игнор-лист');
+//show_title('Игнор-лист');
 
 if (is_user()) {
     switch ($act):
@@ -22,7 +22,7 @@ if (is_user()) {
 
             if ($total > 0) {
 
-                $queryignor = DB::run() -> query("SELECT * FROM ignoring WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['ignorlist'].";", [$log]);
+                $queryignor = DB::run() -> query("SELECT * FROM ignoring WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('ignorlist').";", [$log]);
 
                 echo '<form action="/ignore?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -80,7 +80,7 @@ if (is_user()) {
                         if ($queryuser['level']<101 || $queryuser['level']>105){
 
                             $total = DB::run() -> querySingle("SELECT count(*) FROM ignoring WHERE `user`=?;", [$log]);
-                            if ($total <= $config['limitignore']) {
+                            if ($total <= App::setting('limitignore')) {
                                 // ------------------------ Проверка на существование ------------------------//
                                 if (!is_ignore($log, $uz)){
 
@@ -101,7 +101,7 @@ if (is_user()) {
                                     show_error('Ошибка! Данный пользователь уже есть в игнор-листе!');
                                 }
                             } else {
-                                show_error('Ошибка! В игнор-листе разрешено не более '.$config['limitignore'].' пользователей!');
+                                show_error('Ошибка! В игнор-листе разрешено не более '.App::setting('limitignore').' пользователей!');
                             }
                         } else {
                             show_error('Ошибка! Запрещено добавлять в игнор администрацию сайта!');
@@ -224,4 +224,4 @@ if (is_user()) {
 echo '<i class="fa fa-users"></i> <a href="/contact">Контакт-лист</a><br />';
 echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -15,7 +15,7 @@ if (isset($_GET['uz'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Рейтинг толстосумов');
+//show_title('Рейтинг толстосумов');
 
 switch ($act):
 ############################################################################################
@@ -28,7 +28,7 @@ switch ($act):
 
         if ($total > 0) {
 
-            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `money` DESC, `login` ASC LIMIT ".$page['offset'].", ".$config['userlist'].";");
+            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `money` DESC, `login` ASC LIMIT ".$page['offset'].", ".App::setting('userlist').";");
 
             $i = 0;
             while ($data = $queryusers -> fetch()) {
@@ -76,7 +76,7 @@ switch ($act):
                 }
 
                 if (!empty($rat)) {
-                    $end = ceil($rat / $config['userlist']);
+                    $end = ceil($rat / App::setting('userlist'));
 
                     notice('Позиция в рейтинге: '.$rat);
                     redirect("/ratinglist?page=$end&uz=$queryuser");
@@ -95,4 +95,4 @@ switch ($act):
 
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

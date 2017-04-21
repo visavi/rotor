@@ -1,7 +1,7 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('Взлом сейфа');
+//show_title('Взлом сейфа');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -15,7 +15,7 @@ switch ($act):
 case 'index':
     echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
     echo 'Ну что '.$log.', взломаем?<br />';
-    echo 'У тебя '.moneys($udata['money']).'<br />';
+    echo 'У тебя '.moneys(App::user('money')).'<br />';
 
     $_SESSION['code'] = sprintf('%04d', mt_rand(0,9999));
 
@@ -30,12 +30,12 @@ case 'index':
     echo 'Всё готово для совершения взлома! Перейдите по ссылке Лoмaть ceйф!<br />';
 
     echo 'Попробуй вскрыть наш сейф.
-    <br />В сейфе тебя ждёт: '.moneys($config['safesum']).' (плaтишь 1 paз зa 5 пoпытoк)<br />
-    За попытку взлома ты заплатишь '.moneys($config['safeattempt']).'. Ну это чтобы купить себе необходимое для взлома оборудование.<br />
+    <br />В сейфе тебя ждёт: '.moneys(App::setting('safesum')).' (плaтишь 1 paз зa 5 пoпытoк)<br />
+    За попытку взлома ты заплатишь '.moneys(App::setting('safeattempt')).'. Ну это чтобы купить себе необходимое для взлома оборудование.<br />
     У тебя будет только 5 попыток чтобы подобрать код из 4-х цифр.<br />
     Если тебя это устраивает, то ВПЕРЁД!<br />';
 
-    if($udata['money']<$config['safeattempt']){
+    if(App::user('money')<App::setting('safeattempt')){
         echo 'У тебя не достаточно денег!';
     }else{
         echo '&#187; <a href="/games/safe?act=vzlom">Лoмaть ceйф</a><br /><br />';
@@ -44,13 +44,13 @@ break;
 
 case 'vzlom':
 
-    if ($udata['money'] < $config['safeattempt']) {
+    if (App::user('money') < App::setting('safeattempt')) {
             notice('У тебя нет таких денег!');
             redirect('/games/safe');
     }else{
 
         if (empty($_SESSION['go']) || !$_SESSION['try']){
-            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [$config['safeattempt'], $log]);
+            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [App::setting('safeattempt'), $log]);
             $_SESSION['go'] = 'ok';
         }
 
@@ -152,7 +152,7 @@ case 'vzlom1':
             echo '<br />ПОЗДРАВЛЯЮ! СЕЙФ УСПЕШНО ВЗЛОМАН!<br />
             <font color="red">НА ВАШ СЧЁТ ПЕРЕВЕДЕНЫ 1000$</font><br />';
 
-            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$config['safesum'], $log]);
+            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [App::setting('safesum'), $log]);
             unset($_SESSION['go'], $_SESSION['try']);
 
             echo'&raquo; <a href="/games/safe">Ещё взломать?</a><br /><br />';
@@ -196,4 +196,4 @@ endswitch;
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

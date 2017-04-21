@@ -1,10 +1,10 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 if (is_admin([101])) {
-    show_title('Настройки сайта');
+    //show_title('Настройки сайта');
 
     $queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");
     $setting = $queryset -> fetchAssoc();
@@ -15,7 +15,7 @@ if (is_admin([101])) {
     ############################################################################################
         case 'index':
 
-            if ($log == $config['nickname']) {
+            if ($log == App::setting('nickname')) {
                 echo'<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setzero">Администраторская</a><br />';
 
                 echo'<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setone">Основные настройки</a><br />';
@@ -44,7 +44,7 @@ if (is_admin([101])) {
         ##                          Форма администраторских настроек                              ##
         ############################################################################################
         case 'setzero':
-            if ($log == $config['nickname']) {
+            if ($log == App::setting('nickname')) {
                 echo '<b>Администраторская</b><br /><hr />';
 
                 echo '<div class="form">';
@@ -75,11 +75,11 @@ if (is_admin([101])) {
             $mail = check($_POST['emails']);
             $pass = check($_POST['pass']);
 
-            if ($log == $config['nickname']) {
+            if ($log == App::setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     if (!empty($login) && !empty($mail) && !empty($pass)) {
 
-                        if (password_verify($pass, $udata['password'])) {
+                        if (password_verify($pass, App::user('password'))) {
                             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mail)) {
 
                                 $queryuser = DB::run()->queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$login]);
@@ -125,7 +125,7 @@ if (is_admin([101])) {
         ############################################################################################
         case 'setone':
 
-            if ($log == $config['nickname']) {
+            if ($log == App::setting('nickname')) {
                 echo '<b>Основные настройки</b><br /><hr />';
 
                 echo '<div class="form">';
@@ -207,14 +207,13 @@ if (is_admin([101])) {
                 echo '</select><br />';
 
                 $checked = ($setting['openreg'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="openreg" type="checkbox" value="1"'.$checked.' /> Разрешить регистрацию<br />';
+                echo '<input name="openreg" id="openreg" type="checkbox" value="1"'.$checked.' /> <label for="openreg">Разрешить регистрацию</label><br />';
 
                 $checked = ($setting['invite'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="invite" id="invite" type="checkbox" value="1"'.$checked.' title="Для регистрация необходимо ввести специальный пригласительный ключ" /> <label for="invite">Регистрация по приглашениям</label><br />';
 
-
                 $checked = ($setting['anonymity'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="anonymity" type="checkbox" value="1"'.$checked.' /> Скрывать IP для пользователей<br />';
+                echo '<input name="anonymity" id="anonymity" type="checkbox" value="1"'.$checked.' /> <label for="anonymity">Скрывать IP для пользователей</label><br />';
 
                 echo '<input value="Изменить" type="submit" /></form></div><br />';
             } else {
@@ -236,7 +235,7 @@ if (is_admin([101])) {
             $regkeys = (isset($_POST['regkeys'])) ? abs(intval($_POST['regkeys'])) : 0;
             $closedsite = (isset($_POST['closedsite'])) ? abs(intval($_POST['closedsite'])) : 0;
 
-            if ($log == $config['nickname']) {
+            if ($log == App::setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
 
@@ -283,7 +282,7 @@ if (is_admin([101])) {
 
             echo '<b>Настройки почты и рассылок</b><br /><hr />';
 
-            if ($log == $config['nickname']) {
+            if ($log == App::setting('nickname')) {
                 echo '<div class="form">';
                 echo '<form method="post" action="/admin/setting?act=editmail&amp;uid='.$_SESSION['token'].'">';
 
@@ -340,7 +339,7 @@ if (is_admin([101])) {
 
             $uid = check($_GET['uid']);
             $mailusername = ! empty($_POST['mailsecurity']) ? check($_POST['mailusername']) : '';
-            if ($log == $config['nickname']) {
+            if ($log == App::setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     if (empty($mailusername ) || preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mailusername)) {
                         if ($_POST['maildriver'] != "" && $_POST['mailhost'] != "" && $_POST['mailport'] != "" && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
@@ -1278,7 +1277,7 @@ if (is_admin([101])) {
 
             $checked = ($setting['copyfoto'] == 1) ? ' checked="checked"' : '';
             echo '<input name="copyfoto" type="checkbox" value="1"'.$checked.' /> Наложение копирайта<br />';
-            echo '<img src="/assets/img/images/watermark.png" alt="watermark" title="'.$config['home'].'/assets/img/images/watermark.png" /><br />';
+            echo '<img src="/assets/img/images/watermark.png" alt="watermark" title="'.App::setting('home').'/assets/img/images/watermark.png" /><br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
@@ -1431,4 +1430,4 @@ if (is_admin([101])) {
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

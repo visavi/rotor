@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -16,7 +16,7 @@ if (isset($_POST['uz'])) {
 }
 
 if (is_admin([101, 102])) {
-    show_title('Управление пользователями');
+    //show_title('Управление пользователями');
 
     switch ($act):
     ############################################################################################
@@ -41,7 +41,7 @@ if (is_admin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".$config['userlist'].";");
+                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".App::setting('userlist').";");
 
                 while ($data = $queryusers -> fetch()) {
                     if (empty($data['email'])) {
@@ -84,7 +84,7 @@ if (is_admin([101, 102])) {
 
                 if ($total > 0) {
 
-                    $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".$config['usersearch'].";");
+                    $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".App::setting('usersearch').";");
 
                     while ($data = $queryuser -> fetch()) {
 
@@ -118,7 +118,7 @@ if (is_admin([101, 102])) {
 
                 echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br /><br />';
 
-                if ($log == $config['nickname'] || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                if ($log == App::setting('nickname') || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
                     if ($user['login'] == $log) {
                         echo '<b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br /><br />';
                     }
@@ -126,7 +126,7 @@ if (is_admin([101, 102])) {
                     echo '<div class="form">';
                     echo '<form method="post" action="/admin/users?act=upgrade&amp;uz='.$user['login'].'&amp;uid='.$_SESSION['token'].'">';
 
-                    if ($log == $config['nickname']) {
+                    if ($log == App::setting('nickname')) {
                         $arr_access = [101, 102, 103, 105, 107];
 
                         echo 'Уровень доступа:<br />';
@@ -250,7 +250,7 @@ if (is_admin([101, 102])) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
-                    if ($log == $config['nickname'] || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                    if ($log == App::setting('nickname') || $log == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
 
                         if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
                             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
@@ -258,7 +258,7 @@ if (is_admin([101, 102])) {
                                     if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
                                         if ($gender == 1 || $gender == 2) {
                                             if (utf_strlen($info) <= 1000) {
-                                                if ($log == $config['nickname']) {
+                                                if ($log == App::setting('nickname')) {
                                                     $access = $level;
                                                 } else {
                                                     $access = $user['level'];
@@ -477,4 +477,4 @@ if (is_admin([101, 102])) {
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

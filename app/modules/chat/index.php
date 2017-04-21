@@ -1,16 +1,11 @@
 <?php
-App::view($config['themes'].'/index');
-
-$config['chatpost'] = 10;
-$config['shutnik'] = 1; // Шутник включен
-$config['magnik'] = 1; // Умник включен
-$config['botnik'] = 1; // Бот включен
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $name = (isset($_GET['name'])) ? '[b]' . check($_GET['name']) . '[/b], ' : '';
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Мини-чат');
+//show_title('Мини-чат');
 
 if ($act == 'index') {
 
@@ -36,7 +31,7 @@ if ($act == 'index') {
 
         if (is_user()) {
             // --------------------------генерация анекдота------------------------------------------------//
-            if ($config['shutnik'] == 1) {
+            if (App::setting('shutnik') == 1) {
                 $anfi = file(APP."/modules/chat/bots/chat_shut.php");
                 $an_rand = array_rand($anfi);
                 $anshow = trim($anfi[$an_rand]);
@@ -52,7 +47,7 @@ if ($act == 'index') {
                 }
             }
             // ------------------------------- Ответ на вопрос ----------------------------------//
-            if ($config['magnik'] == 1) {
+            if (App::setting('magnik') == 1) {
             $mmagfi = file(STORAGE."/chat/chat.dat");
             $mmagshow = explode("|", end($mmagfi));
 
@@ -84,7 +79,7 @@ if ($act == 'index') {
             }
             }
             // ----------------------------  Подключение бота  -----------------------------------------//
-            if ($config['botnik'] == 1) {
+            if (App::setting('botnik') == 1) {
             if (empty($_SESSION['botochat'])) {
                 $hellobots = ['Приветик', 'Здравствуй', 'Хай', 'Добро пожаловать', 'Салют', 'Hello', 'Здарова'];
                 $hellobots_rand = array_rand($hellobots);
@@ -103,15 +98,15 @@ if ($act == 'index') {
             }
 
             $countstr = counter_string(STORAGE."/chat/chat.dat");
-            if ($countstr >= $config['maxpostchat']) {
+            if ($countstr >= App::setting('maxpostchat')) {
             delete_lines(STORAGE."/chat/chat.dat", [0, 1, 2, 3, 4]);
             }
         }
 
-        if ($total < $page['offset'] + $config['chatpost']) {
+        if ($total < $page['offset'] + App::setting('chatpost')) {
             $end = $total;
         } else {
-            $end = $page['offset'] + $config['chatpost'];
+            $end = $page['offset'] + App::setting('chatpost');
         }
         for ($i = $page['offset']; $i < $end; $i++) {
             $data = explode("|", $file[$i]);
@@ -138,7 +133,7 @@ if ($act == 'index') {
             echo '<b><a href="/chat?name=' . $data[1] . '#form">' . $data[1] . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
             echo user_title($data[1]) . ' ' . $useronline . '</div>';
             echo '<div>' . App::bbCode($data[0]) . '<br />';
-            if (is_admin() || empty($config['anonymity'])){
+            if (is_admin() || empty(App::setting('anonymity'))){
                 echo '<span class="data">(' . $data[4] . ', ' . $data[5] . ')</span></div>';
             }
         }
@@ -169,8 +164,8 @@ if ($act == 'add') {
 
     $msg = check($_POST['msg']);
 
-    $config['header'] = 'Добавление сообщения';
-    $config['newtitle'] = 'Мини-чат - Добавление сообщения';
+    //App::setting('header') = 'Добавление сообщения';
+    //App::setting('newtitle') = 'Мини-чат - Добавление сообщения';
 
     if (is_user()) {
         if (utf_strlen($msg) > 3 && utf_strlen($msg) < 1000) {
@@ -192,14 +187,14 @@ if ($act == 'add') {
                 write_files(STORAGE."/chat/chat.dat", "$text\r\n");
 
                 $countstr = counter_string(STORAGE."/chat/chat.dat");
-                if ($countstr >= $config['maxpostchat']) {
+                if ($countstr >= App::setting('maxpostchat')) {
                     delete_lines(STORAGE."/chat/chat.dat", [0, 1, 2, 3, 4]);
                 }
 
                 DB::run() -> query("UPDATE `users` SET `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
 
                 // --------------------------------------------------------------------------//
-                if ($config['botnik'] == 1) {
+                if (App::setting('botnik') == 1) {
                     include_once APP."/modules/chat/bots/chat_bot.php";
 
                     if ($mssg != "") {
@@ -210,7 +205,7 @@ if ($act == 'add') {
                     }
                 }
                 // --------------------------------------------------------------------------//
-                if ($config['magnik'] == 1) {
+                if (App::setting('magnik') == 1) {
                     if (!empty($data[8]) && stristr(utf_lower($msg), $data[8])) {
                         $unifile = unifile(STORAGE."/chat/chat.dat", 9);
                         $text = no_br('Молодец ' . $log . '! Правильный ответ [b]' . $data[8] . '[/b]! Следующий вопрос через 1 минуту|Вундер-киндер||' . SITETIME . '|Opera|127.0.0.3|0|' . (SITETIME + 60) . '||' . $unifile . '|');
@@ -242,4 +237,4 @@ echo '<a href="/tags">Теги</a><br /><br />';
 
 echo '<i class="fa fa-home"></i> <a href="/">На главную</a>';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

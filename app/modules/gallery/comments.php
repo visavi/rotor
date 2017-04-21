@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $uz = check(Request::input('uz'));
@@ -9,14 +9,14 @@ switch ($act):
     ##                                   Вывод всех комментариев                              ##
     ############################################################################################
     case 'index':
-        show_title('Список всех комментариев');
+        //show_title('Список всех комментариев');
 
 
         $total = Comment::where('relate_type', 'Gallery')->count();
         $page = App::paginate(App::setting('postgallery'), $total);
 
         if ($total > 0) {
-            $config['newtitle'] = 'Список всех комментариев (Стр. '.$page['current'].')';
+            //App::setting('newtitle') = 'Список всех комментариев (Стр. '.$page['current'].')';
 
             $comments = Comment::select('comments.*', 'title')
                 ->where('relate_type', 'Gallery')
@@ -36,7 +36,7 @@ switch ($act):
                 echo '<div>'.App::bbCode($data['text']).'<br />';
                 echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
 
-                if (is_admin() || empty($config['anonymity'])) {
+                if (is_admin() || empty(App::setting('anonymity'))) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
@@ -54,7 +54,7 @@ switch ($act):
     ##                                  Вывод комментариев                                    ##
     ############################################################################################
     case 'comments':
-        show_title('Список всех комментариев '.$uz);
+        //show_title('Список всех комментариев '.$uz);
 
         $user = User::where('login', $uz)->first();
 
@@ -69,7 +69,7 @@ switch ($act):
         $page = App::paginate(App::setting('postgallery'), $total);
 
         if ($total > 0) {
-            $config['newtitle'] = 'Список всех комментариев '.$uz.' (Стр. '.$page['current'].')';
+            //App::setting('newtitle') = 'Список всех комментариев '.$uz.' (Стр. '.$page['current'].')';
 
             $comments = Comment::select('comments.*', 'title')
                 ->where('relate_type', 'Gallery')
@@ -95,7 +95,7 @@ switch ($act):
                 echo '<div>'.App::bbCode($data['text']).'<br />';
                 echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
 
-                if (is_admin() || empty($config['anonymity'])) {
+                if (is_admin() || empty(App::setting('anonymity'))) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
@@ -176,4 +176,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

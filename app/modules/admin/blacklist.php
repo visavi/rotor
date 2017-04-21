@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -15,7 +15,7 @@ if (isset($_GET['main'])) {
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102])) {
-    show_title('Черный список');
+    //show_title('Черный список');
 
     switch ($main) {
         case 'login':
@@ -61,7 +61,7 @@ if (is_admin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blacklist'].";", [$type]);
+                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blacklist').";", [$type]);
 
                 echo '<form action="/admin/blacklist?act=del&amp;main='.$main.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -174,4 +174,4 @@ if (is_admin([101, 102])) {
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

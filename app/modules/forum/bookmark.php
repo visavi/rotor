@@ -21,7 +21,7 @@ case 'index':
         ->with('topic.user', 'topic.lastPost.user')
         ->orderBy('updated_at', 'desc')
         ->offset($page['offset'])
-        ->limit($config['forumtem'])
+        ->limit(App::setting('forumtem'))
         ->get();
 
     App::view('forum/bookmark', compact('topics', 'page'));

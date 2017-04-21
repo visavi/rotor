@@ -1,10 +1,10 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 if (is_admin([101, 102, 103])) {
-    show_title('Денежные операции');
+    //show_title('Денежные операции');
 
     switch ($act):
     ############################################################################################
@@ -17,7 +17,7 @@ if (is_admin([101, 102, 103])) {
 
             if ($total > 0) {
 
-                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listtransfers'].";");
+                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('listtransfers').";");
 
                 while ($data = $querytrans -> fetch()) {
                     echo '<div class="b">';
@@ -65,7 +65,7 @@ if (is_admin([101, 102, 103])) {
 
                 if ($total > 0) {
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listtransfers'].";", [$uz]);
+                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('listtransfers').";", [$uz]);
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
@@ -104,4 +104,4 @@ if (is_admin([101, 102, 103])) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

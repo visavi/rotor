@@ -1,12 +1,12 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
 if (is_user()) {
-if (is_admin() || $config['downupload'] == 1) {
+if (is_admin() || App::setting('downupload') == 1) {
 
 switch ($act):
 /**
@@ -14,13 +14,13 @@ switch ($act):
  */
 case 'index':
 
-    show_title('Публикация нового файла');
+    //show_title('Публикация нового файла');
 
     echo '<i class="fa fa-book"></i> <b>Публикация</b> / ';
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<a href="/load/active">Проверенные</a><hr />';
 
-    if ($config['home'] == 'http://visavi.net') {
+    if (App::setting('home') == 'http://visavi.net') {
         echo '<div class="info">';
         echo '<i class="fa fa-question-circle"></i> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
         echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br />';
@@ -85,7 +85,7 @@ break;
  */
 case 'waiting':
 
-    show_title('Список ожидающих модерации файлов');
+    //show_title('Список ожидающих модерации файлов');
 
     echo '<i class="fa fa-book"></i> <a href="/load/add">Публикация</a> / ';
     echo '<b>Ожидающие</b> / ';
@@ -130,7 +130,7 @@ break;
  */
 case 'add':
 
-    show_title('Публикация нового файла');
+    //show_title('Публикация нового файла');
 
     $uid = check($_GET['uid']);
     $cid = abs(intval($_POST['cid']));
@@ -201,7 +201,7 @@ break;
  */
 case 'view':
 
-    show_title('Редактирование ожидающего файла');
+    //show_title('Редактирование ожидающего файла');
 
     echo '<i class="fa fa-book"></i> <a href="/load/add">Публикация</a> / ';
     echo '<b><a href="/load/add?act=waiting">Ожидающие</a></b> / ';
@@ -233,10 +233,10 @@ case 'view':
                         echo '<b><big>Загрузка файла</big></b><br /><br />';
                         echo '<div class="info">';
                         echo '<form action="/load/add?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-                        echo 'Прикрепить файл* ('.$config['allowextload'].'):<br /><input type="file" name="loadfile" /><br />';
+                        echo 'Прикрепить файл* ('.App::setting('allowextload').'):<br /><input type="file" name="loadfile" /><br />';
                         echo '<input value="Загрузить" type="submit" /></form><br />';
 
-                        echo 'Максимальный вес файла: '.formatsize($config['fileupload']).'</div><br />';
+                        echo 'Максимальный вес файла: '.formatsize(App::setting('fileupload')).'</div><br />';
 
                     } else {
 
@@ -251,12 +251,12 @@ case 'view':
                                 echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br /><input type="file" name="screen" /><br />';
                                 echo '<input value="Загрузить" type="submit" /></form><br />';
 
-                                echo 'Максимальный вес скриншота: '.formatsize($config['screenupload']).'<br />';
-                                echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px</div><br /><br />';
+                                echo 'Максимальный вес скриншота: '.formatsize(App::setting('screenupload')).'<br />';
+                                echo 'Требуемый размер скриншота: от 100 до '.App::setting('screenupsize').' px</div><br /><br />';
 
                             } else {
                                 echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                                echo resize_image('uploads/screen/'.$folder, $new['screen'], $config['previewsize']).'<br />';
+                                echo resize_image('uploads/screen/'.$folder, $new['screen'], App::setting('previewsize')).'<br />';
                             }
                         }
                     }
@@ -324,7 +324,7 @@ break;
  */
 case 'edit':
 
-    show_title('Редактирование ожидающего файла');
+    //show_title('Редактирование ожидающего файла');
 
     $uid = check($_GET['uid']);
     $cid = abs(intval($_POST['cid']));
@@ -400,7 +400,7 @@ break;
  * Загрузка файла
  */
 case 'loadfile':
-    show_title('Загрузка файла');
+    //show_title('Загрузка файла');
 
     $down = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
@@ -412,15 +412,17 @@ case 'loadfile':
                 if (empty($down['link'])) {
                     if (is_writeable(HOME.'/uploads/files/'.$folder)) {
                     if (isset($_FILES['loadfile']) && is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
+
                         $filename = check(strtolower($_FILES['loadfile']['name']));
+                        $isVideo  = strstr($_FILES['loadfile']['type'], "video/") ? true : false;
 
                         if (strlen($filename) <= 50) {
                             if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
 
                                 $ext = getExtension($filename);
 
-                                if (in_array($ext, explode(',', $config['allowextload']), true)) {
-                                    if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
+                                if (in_array($ext, explode(',', App::setting('allowextload')), true)) {
+                                    if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= App::setting('fileupload')) {
                                         $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                                         if (empty($downlink)) {
 
@@ -432,40 +434,41 @@ case 'loadfile':
                                             DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
                                             // Обработка видео
-                                            if ($ext == 'mp4') { // TODO проверять по mime-type и поддержку обработки
+                                            if ($isVideo && env('FFMPEG_ENABLED')) {
 
                                                 $ffconfig = [
-                                                    'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
-                                                    'ffprobe.binaries' => '/usr/bin/ffprobe',
+                                                    'ffmpeg.binaries'  => env('FFMPEG_PATH'),
+                                                    'ffprobe.binaries' => env('FFPROBE_PATH'),
                                                     'timeout'          => 3600,
                                                     'ffmpeg.threads'   => 4,
                                                 ];
 
                                                 $ffmpeg = FFMpeg\FFMpeg::create($ffconfig);
 
-                                                $video = $ffmpeg->open(HOME.'/uploads/files/'.$folder.$filename);
+                                                $video = $ffmpeg->open(HOME . '/uploads/files/' . $folder . $filename);
 
-                                                // Сохраняем скрин с 10 секунды
-                                                $video
-                                                    ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(10))
-                                                    ->save(HOME.'/uploads/screen/'.$folder.'/'.$filename.'.jpg');
+                                                // Сохраняем скрин с 5 секунды
+                                                $frame = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(5));
+                                                $frame->save(HOME . '/uploads/screen/' . $folder . '/' . $filename . '.jpg');
 
-                                                DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$filename.'.jpg', $id]);
+                                                if (file_exists(HOME . '/uploads/screen/' . $folder . '/' . $filename . '.jpg')) {
+                                                    DB::run()->query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$filename . '.jpg', $id]);
+                                                }
 
                                                 // Перекодируем видео в h264
                                                 $ffprobe = FFMpeg\FFProbe::create($ffconfig);
                                                 $codec = $ffprobe
-                                                    ->streams(HOME.'/uploads/files/'.$folder.$filename)
+                                                    ->streams(HOME . '/uploads/files/' . $folder . $filename)
                                                     ->videos()
                                                     ->first()
                                                     ->get('codec_name');
 
-                                                if ($codec != 'h264') {
+                                                if ($ext == 'mp4' && $codec != 'h264') {
                                                     $format = new FFMpeg\Format\Video\X264('libmp3lame', 'libx264');
-                                                    $video->save($format, HOME.'/uploads/files/'.$folder.'/convert-'.$filename);
+                                                    $video->save($format, HOME . '/uploads/files/' . $folder . '/convert-' . $filename);
                                                     rename(
-                                                        HOME.'/uploads/files/'.$folder.'/convert-'.$filename,
-                                                        HOME.'/uploads/files/'.$folder.'/'.$filename
+                                                        HOME . '/uploads/files/' . $folder . '/convert-' . $filename,
+                                                        HOME . '/uploads/files/' . $folder . '/' . $filename
                                                     );
                                                 }
                                             }
@@ -477,7 +480,7 @@ case 'loadfile':
                                             show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                                         }
                                     } else {
-                                        show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize($config['fileupload']).'!');
+                                        show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize(App::setting('fileupload')).'!');
                                     }
                                 } else {
                                     show_error('Ошибка! Недопустимое расширение файла!');
@@ -514,7 +517,7 @@ break;
  * Загрузка скриншота
  */
 case 'loadscreen':
-    show_title('Загрузка скриншота');
+    //show_title('Загрузка скриншота');
 
     $down = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
@@ -525,7 +528,7 @@ case 'loadscreen':
                     if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
                         // ------------------------------------------------------//
-                        $handle = upload_image($_FILES['screen'], $config['screenupload'], $config['screenupsize'],  $down['link']);
+                        $handle = upload_image($_FILES['screen'], App::setting('screenupload'), App::setting('screenupsize'),  $down['link']);
                         if ($handle) {
                             $folder = $down['folder'] ? $down['folder'].'/' : '';
 
@@ -636,9 +639,9 @@ break;
  * Правила
  */
 case 'rules':
-    if ($config['home'] == 'http://visavi.net') {
+    if (App::setting('home') == 'http://visavi.net') {
 
-        show_title('Правила оформления скриптов');
+        //show_title('Правила оформления скриптов');
 
         echo '<b><span style="color:#ff0000">Внимание! Запрещено выкладывать платные скрипты или скрипты не предназначенные для свободного распространения.<br />
 Запрещено размещать скрипты накрутчиков, скрипты для спама, взлома или любые вредоносные скрипты</span></b><br /><br />';
@@ -678,9 +681,9 @@ case 'rules':
 
         echo '<b>Ограничения:</b><br />';
         echo 'К загрузке допускаются архивы в формате zip, скриншоты можно загружать в форматах jpg, jpeg, gif и png<br />';
-        echo 'Максимальный вес архива: '.formatsize($config['fileupload']).'<br />';
-        echo 'Максимальный вес скриншота: '.formatsize($config['screenupload']).'<br />';
-        echo 'Требуемый размер скриншота: от 100 до '.$config['screenupsize'].' px<br /><br />';
+        echo 'Максимальный вес архива: '.formatsize(App::setting('fileupload')).'<br />';
+        echo 'Максимальный вес скриншота: '.formatsize(App::setting('screenupload')).'<br />';
+        echo 'Требуемый размер скриншота: от 100 до '.App::setting('screenupsize').' px<br /><br />';
 
         echo '<b>Рекомендации:</b><br />';
         echo 'Чем лучше вы оформите скрипт при публикации, тем быстрее он будет проверен и размещен в архиве<br />';
@@ -706,4 +709,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/load/', 'title' => 'Категории']);
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

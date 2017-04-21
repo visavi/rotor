@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('Реклама на сайте');
+//show_title('Реклама на сайте');
 
-if (!empty($config['rekusershow'])) {
+if (!empty(App::setting('rekusershow'))) {
 switch ($act):
 ############################################################################################
 ##                                    Главная страница                                    ##
@@ -11,7 +11,7 @@ switch ($act):
 
 case 'index':
 
-    $config['newtitle'] = 'Список всех ссылок';
+    //App::setting('newtitle') = 'Список всех ссылок';
 
     $total = RekUser::where_gt('time', SITETIME)->count();
 
@@ -20,7 +20,7 @@ case 'index':
     if ($total > 0) {
 
         $reklama = RekUser::where_gt('time', SITETIME)
-            ->limit($config['rekuserpost'])
+            ->limit(App::setting('rekuserpost'))
             ->offset($page['offset'])
             ->order_by_desc('time')
             ->find_many();
@@ -61,7 +61,7 @@ case 'index':
 case 'create':
 
     if (is_user()) {
-        if ($udata['point'] >= 50) {
+        if (App::user('point') >= 50) {
 
             if (Request::isMethod('post')) {
                 $token = !empty($_POST['token']) ? check($_POST['token']) : 0;
@@ -74,7 +74,7 @@ case 'create':
                 $validation = new Validation();
 
                 $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                    -> addRule('max', [$udata['point'], 50], 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
+                    -> addRule('max', [App::user('point'), 50], 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
                     -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
                     -> addRule('regex', [$site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'], 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)
                     -> addRule('string', $site, 'Слишком длинный или короткий адрес ссылки!', true, 5, 50)
@@ -87,22 +87,22 @@ case 'create':
 
                     $total = RekUser::where_gt('time', SITETIME)->count();
 
-                    if ($total < $config['rekusertotal']) {
+                    if ($total < App::setting('rekusertotal')) {
 
                         $rekuser = RekUser::where('user', $log)->find_one();
 
                         if (empty($rekuser)) {
-                            $price = $config['rekuserprice'];
+                            $price = App::setting('rekuserprice');
 
                             if (!empty($color)) {
-                                $price = $price + $config['rekuseroptprice'];
+                                $price = $price + App::setting('rekuseroptprice');
                             }
 
                             if (!empty($bold)) {
-                                $price = $price + $config['rekuseroptprice'];
+                                $price = $price + App::setting('rekuseroptprice');
                             }
 
-                            if ($udata['money'] >= $price) {
+                            if (App::user('money') >= $price) {
 
                                 $reklama = RekUser::create();
                                 $reklama->set([
@@ -111,7 +111,7 @@ case 'create':
                                     'color' => $color,
                                     'bold' => $bold,
                                     'user' => $log,
-                                    'time' => SITETIME + ($config['rekusertime'] * 3600),
+                                    'time' => SITETIME + (App::setting('rekusertime') * 3600),
                                 ])->save();
 
                                 $user = User::find_one(App::getUserId());
@@ -139,12 +139,12 @@ case 'create':
 
             $total = RekUser::where_gt('time', SITETIME)->count();
 
-            if ($total < $config['rekusertotal']) {
+            if ($total < App::setting('rekusertotal')) {
 
                 $rekuser = RekUser::where('user', $log)->where_gt('time', SITETIME)->find_one();
 
                 if (empty($rekuser)) {
-                    echo 'У вас в наличии: <b>'.moneys($udata['money']).'</b><br /><br />';
+                    echo 'У вас в наличии: <b>'.moneys(App::user('money')).'</b><br /><br />';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/reklama/create">';
@@ -173,8 +173,8 @@ case 'create':
 
                     echo '<br /><input value="Купить" type="submit" /></form></div><br />';
 
-                    echo 'Стоимость размещения ссылки '.moneys($config['rekuserprice']).' за '.$config['rekusertime'].' часов<br />';
-                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys($config['rekuseroptprice']).'<br />';
+                    echo 'Стоимость размещения ссылки '.moneys(App::setting('rekuserprice')).' за '.App::setting('rekusertime').' часов<br />';
+                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys(App::setting('rekuseroptprice')).'<br />';
                     echo 'Ссылка прокручивается на всех страницах сайта с другими ссылками пользователей<br />';
                     echo 'В названии ссылки запрещено использовать любые ненормативные и матные слова<br />';
                     echo 'Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br />';
@@ -203,4 +203,4 @@ endswitch;
     show_error('Показ и размещение рекламы запрещено администрацией сайта!');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

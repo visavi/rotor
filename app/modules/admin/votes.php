@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102, 103])) {
-    show_title('Управление голосованием');
+    //show_title('Управление голосованием');
 
     switch ($act):
     ############################################################################################
@@ -303,7 +303,7 @@ if (is_admin([101, 102, 103])) {
 
             if ($total > 0) {
 
-                $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['allvotes'].";", [1]);
+                $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('allvotes').";", [1]);
 
                 while ($data = $queryvote -> fetch()) {
                     echo '<div class="b">';
@@ -336,4 +336,4 @@ if (is_admin([101, 102, 103])) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

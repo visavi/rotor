@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $currhour = date("G", SITETIME);
 $currday = date("j", SITETIME);
@@ -164,4 +164,4 @@ switch ($act):
 
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

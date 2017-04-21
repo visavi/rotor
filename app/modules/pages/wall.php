@@ -1,11 +1,11 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $uz = (empty($_GET['uz'])) ? check($log) : check($_GET['uz']);
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Стена сообщений');
+//show_title('Стена сообщений');
 
 $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 if (!empty($queryuser)) {
@@ -15,14 +15,14 @@ if (!empty($queryuser)) {
     ############################################################################################
         case 'index':
 
-            $config['newtitle'] = 'Стена пользователя '.$uz;
+            //App::setting('newtitle') = 'Стена пользователя '.$uz;
             echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.$uz.'</b><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
             $page = App::paginate(App::setting('wallpost'), $total);
 
-            if ($uz == $log && $udata['newwall'] > 0) {
-                echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.$udata['newwall'].'</span></b></div>';
+            if ($uz == $log && App::user('newwall') > 0) {
+                echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.App::user('newwall').'</span></b></div>';
                 DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, $log]);
             }
 
@@ -36,7 +36,7 @@ if (!empty($queryuser)) {
                     echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['wallpost'].";", [$uz]);
+                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('wallpost').";", [$uz]);
 
                 while ($data = $querywall -> fetch()) {
                     echo '<div class="b">';
@@ -109,7 +109,7 @@ if (!empty($queryuser)) {
 
                                     DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, $log, $msg, SITETIME]);
 
-                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$config['wallmaxpost'].") AS del);", [$uz, $uz]);
+                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".App::setting('wallmaxpost').") AS del);", [$uz, $uz]);
 
                                     notice('Запись успешно добавлена!');
                                     redirect("/wall?uz=$uz");
@@ -152,7 +152,7 @@ if (!empty($queryuser)) {
 
                         if (empty($queryspam)) {
                             if (is_flood($log)) {
-                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, $config['home'].'/wall?uz='.$uz.'&amp;page='.$page]);
+                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], $log, $data['login'], $data['text'], $data['time'], SITETIME, App::setting('home').'/wall?uz='.$uz.'&amp;page='.$page]);
 
                                 notice('Жалоба успешно отправлена!');
                                 redirect("/wall?uz=$uz&page=$page");
@@ -249,4 +249,4 @@ if (!empty($queryuser)) {
     show_error('Ошибка! Пользователь с данным логином  не зарегистрирован!');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

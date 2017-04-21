@@ -1,4 +1,4 @@
-<?php show_title('Документация RotorCMS'); ?>
+<?php //show_title('Документация RotorCMS'); ?>
 
 <div class="b"><b>Стандартные функции</b></div>
 - <a href="/files/docs/maketime">maketime</a><br />

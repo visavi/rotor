@@ -16,7 +16,7 @@ if (App::getUsername() == $login) {
 }
 
 if (App::user('point') < App::setting('editratingpoint')) {
-    App::abort('default', 'Для изменения репутации необходимо набрать '.points($config['editratingpoint']).'!');
+    App::abort('default', 'Для изменения репутации необходимо набрать '.points(App::setting('editratingpoint')).'!');
 }
 
 $getRating = Rating::where('user', App::getUsername())->where('login', $login)->find_one();

@@ -1,11 +1,11 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (! is_admin()) {
     redirect ('/');
 }
 
-show_title('Панель управления');
+//show_title('Панель управления');
 ?>
 <i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">Версия <?= VERSION ?>.<?= App::setting('buildversion') ?></a></b><br /><br />
 
@@ -48,13 +48,13 @@ show_title('Панель управления');
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br />
         <?=show_admin_links(101);?>
 
-        <?php if ($log == $config['nickname']) {?>
+        <?php if ($log == App::setting('nickname')) {?>
             <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br />
             <?php show_admin_links();?>
         <?php }?>
     <?php }?>
 
-    <?php if ($admin = user($config['nickname'])) {?>
+    <?php if ($admin = user(App::setting('nickname'))) {?>
         <?php if ($admin['level'] != 101) {?>
 
             <br /><div class="b"><b><span style="color:#ff0000">Внимание!!! Cуперадминистратор не имеет достаточных прав!</span></b><br />
@@ -65,15 +65,15 @@ show_title('Панель управления');
     <?php } else {?>
 
         <br /><div class="b"><b><span style="color:#ff0000">Внимание!!! Отсутствует профиль суперадмина</span></b><br />
-        Профиль администратора <b><?=$config['nickname']?></b> не задействован на сайте</div>
+        Профиль администратора <b><?=App::setting('nickname')?></b> не задействован на сайте</div>
 
     <?php }?>
 
-    <?php if (file_exists(BASEDIR.'/install') && !empty($config['nickname'])) {?>
+    <?php if (file_exists(BASEDIR.'/install') && !empty(App::setting('nickname'))) {?>
 
         <br /><div class="b"><b><span style="color:#ff0000">Внимание!!! Необходимо удалить директорию install</span></b><br />
         Наличие этой директории может нарушить безопасность сайта. Удалите ее прямо сейчас!</div>
 
     <?php }?>
 
-<?php App::view($config['themes'].'/foot'); ?>
+<?php App::view(App::setting('themes').'/foot'); ?>

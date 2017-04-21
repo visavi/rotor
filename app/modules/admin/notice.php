@@ -1,12 +1,12 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
 if (! is_admin([101])) redirect('/admin/');
 
-show_title('Шаблоны писем');
+//show_title('Шаблоны писем');
 
 switch ($act):
 
@@ -56,7 +56,7 @@ break;
  * Coздание шаблона
  */
 case 'new':
-    show_title('Новый шаблон');
+    //show_title('Новый шаблон');
 
     echo '<div class="form">';
     echo '<form action="/admin/notice?act=save" method="post">';
@@ -177,4 +177,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/admin', 'title' => 'В админку', 'icon' => 'fa-wrench']);
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

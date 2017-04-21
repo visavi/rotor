@@ -38,7 +38,7 @@ break;
 ############################################################################################
 case 'create':
 
-    $config['newtitle'] = 'Создание новой темы';
+    //App::setting('newtitle') = 'Создание новой темы';
 
     $fid = abs(intval(Request::input('fid')));
 
@@ -70,7 +70,7 @@ case 'create':
             -> addRule('empty', $forum['closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
             -> addRule('equal', [is_flood($log), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!'])
             -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50)
-            -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, $config['forumtextlength']);
+            -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, App::setting('forumtextlength'));
 
         if ($vote) {
             $validation->addRule('string', $question, ['question' => 'Слишком длинный или короткий текст вопроса!'], true, 5, 100);

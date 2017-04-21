@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $type = check(Request::input('type'));
@@ -14,7 +14,7 @@ $types = [
 $type = isset($types[$type]) ? $type : 'post';
 
 if (is_admin([101, 102, 103])) {
-    show_title('Список жалоб');
+    //show_title('Список жалоб');
 
     $total = Spam::select(Capsule::raw("
         SUM(relate_type='".Guest::class."') guest,
@@ -132,4 +132,4 @@ if (is_admin([101, 102, 103])) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

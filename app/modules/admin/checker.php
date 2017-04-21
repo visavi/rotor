@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 
 if (is_admin([101])) {
-    show_title('Сканирование сайта');
+    //show_title('Сканирование сайта');
 
     switch ($act):
     ############################################################################################
@@ -61,7 +61,7 @@ if (is_admin([101])) {
             }
 
             echo 'Сканирование системы позволяет узнать какие файлы или папки менялись в течение определенного времени<br />';
-            echo 'Внимание сервис не учитывает некоторые расширения файлов: '.$config['nocheck'].'<br /><br />';
+            echo 'Внимание сервис не учитывает некоторые расширения файлов: '.App::setting('nocheck').'<br /><br />';
 
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/checker?act=skan&amp;uid='.$_SESSION['token'].'">Сканировать</a><br />';
         break;
@@ -100,4 +100,4 @@ if (is_admin([101])) {
 	redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

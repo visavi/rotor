@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $file = check(Request::input('file'));
@@ -15,8 +15,8 @@ if (
     $path = '';
 }
 
-if (is_admin([101]) && $log == $config['nickname']) {
-    show_title('Редактирование страниц');
+if (is_admin([101]) && $log == App::setting('nickname')) {
+    //show_title('Редактирование страниц');
 
     switch ($act):
     ############################################################################################
@@ -35,7 +35,7 @@ if (is_admin([101]) && $log == $config['nickname']) {
 
             $total = count($files);
 
-            show_title($path ? $path : 'Редактирование страниц');
+            //show_title($path ? $path : 'Редактирование страниц');
 
             if ($total > 0) {
 
@@ -255,4 +255,4 @@ if (is_admin([101]) && $log == $config['nickname']) {
 	redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

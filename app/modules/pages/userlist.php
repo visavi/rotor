@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -15,7 +15,7 @@ if (isset($_GET['uz'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Список пользователей');
+//show_title('Список пользователей');
 
 switch ($act):
 ############################################################################################
@@ -28,7 +28,7 @@ switch ($act):
 
         if ($total > 0) {
 
-            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `point` DESC, `login` ASC LIMIT ".$page['offset'].", ".$config['userlist'].";");
+            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `point` DESC, `login` ASC LIMIT ".$page['offset'].", ".App::setting('userlist').";");
 
             $i = 0;
             while ($data = $queryusers -> fetch()) {
@@ -86,7 +86,7 @@ switch ($act):
                 }
 
                 if (!empty($rat)) {
-                    $end = ceil($rat / $config['userlist']);
+                    $end = ceil($rat / App::setting('userlist'));
 
                     notice('Позиция в рейтинге: '.$rat);
                     redirect("/userlist?page=$end&uz=$queryuser");
@@ -107,4 +107,4 @@ endswitch;
 
 echo '<i class="fa fa-users"></i> <a href="/onlinewho">Новички</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

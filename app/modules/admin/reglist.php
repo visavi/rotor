@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -9,7 +9,7 @@ if (isset($_GET['act'])) {
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102, 103])) {
-    show_title('Ожидающие регистрации');
+    //show_title('Ожидающие регистрации');
 
     switch ($act):
     ############################################################################################
@@ -17,17 +17,17 @@ if (is_admin([101, 102, 103])) {
     ############################################################################################
         case "index":
 
-            if ($config['regkeys'] == 0) {
+            if (App::setting('regkeys') == 0) {
                 echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Подтверждение регистрации отключено!</span></b><br /><br />';
             }
-            if ($config['regkeys'] == 1) {
+            if (App::setting('regkeys') == 1) {
                 echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включено автоматическое подтверждение регистраций!</span></b><br /><br />';
             }
-            if ($config['regkeys'] == 2) {
+            if (App::setting('regkeys') == 2) {
                 echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включена модерация регистраций!</span></b><br /><br />';
             }
             // --------------- Удаление не подтвердивших регистрацию -----------//
-            if ($config['regkeys'] == 1) {
+            if (App::setting('regkeys') == 1) {
                 $querydeluser = DB::run() -> query("SELECT `login` FROM `users` WHERE `confirmreg`>? AND `joined`<?;", [0, SITETIME-86400]);
                 $arrdelusers = $querydeluser -> fetchAll(PDO::FETCH_COLUMN);
 
@@ -56,7 +56,7 @@ if (is_admin([101, 102, 103])) {
 
             if ($total > 0) {
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".$config['reglist'].";", [0]);
+                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".App::setting('reglist').";", [0]);
 
                 echo '<form action="/admin/reglist?act=choice&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -145,4 +145,4 @@ if (is_admin([101, 102, 103])) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

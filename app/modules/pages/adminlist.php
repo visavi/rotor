@@ -1,7 +1,7 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('Администрация сайта');
+//show_title('Администрация сайта');
 ############################################################################################
 ##                                     Вывод администрации                                ##
 ############################################################################################
@@ -33,7 +33,7 @@ if ($total > 0) {
         echo 'Сообщение:<br />';
         echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
 
-        if ($udata['point'] < $config['privatprotect']) {
+        if (App::user('point') < App::setting('privatprotect')) {
             echo 'Проверочный код:<br /> ';
             echo '<img src="/captcha" alt="" /><br />';
             echo '<input name="provkod" size="6" maxlength="6" /><br />';
@@ -45,4 +45,4 @@ if ($total > 0) {
     show_error('Администрации еще нет!');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

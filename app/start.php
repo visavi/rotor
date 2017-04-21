@@ -5,13 +5,7 @@ require __DIR__.'/bootstrap.php';
 session_name('SID');
 session_start();
 
-if (!file_exists(STORAGE.'/temp/setting.dat')) {
-    $config = Setting::pluck('value', 'name')->all();
-    file_put_contents(STORAGE.'/temp/setting.dat', serialize($config), LOCK_EX);
-}
-$config = unserialize(file_get_contents(STORAGE.'/temp/setting.dat'));
-
-date_default_timezone_set($config['timezone']);
+date_default_timezone_set(App::setting('timezone'));
 
 /**
  * Проверка на ip-бан
@@ -66,9 +60,9 @@ if (App::setting('doslimit')) {
         $write = time().'|'.App::server('REQUEST_URI').'|'.App::server('HTTP_REFERER').'|'.App::getUserAgent().'|'.App::getUsername().'|';
         write_files(STORAGE.'/antidos/'.App::getClientIp().'.dat', $write."\r\n", 0, 0666);
         // ----------------------- Автоматическая блокировка ------------------------//
-        if (counter_string(STORAGE.'/antidos/'.App::getClientIp().'.dat') > $config['doslimit']) {
+        if (counter_string(STORAGE.'/antidos/'.App::getClientIp().'.dat') > App::setting('doslimit')) {
 
-            if (!empty($config['errorlog'])){
+            if (!empty(App::setting('errorlog'))){
 
                 $banip = Ban::where('ip', App::getClientIp())->first();
 
@@ -139,7 +133,7 @@ if (empty($_SESSION['protect'])) {
     $_SESSION['protect'] = mt_rand(1000, 99999);
 }
 
-ob_start('ob_processing');
+//ob_start('ob_processing');
 
 /**
  * Операции с пользователями
@@ -148,34 +142,40 @@ if ($udata = is_user()) {
 
     Registry::set('user', $udata);
 
-    $log = $udata['login'];
-    $config['themes'] = $udata['themes'];
+    $log = App::user('login');
+    $setting['themes'] = App::user('themes');
 
     // Забанен
-    if ($udata['ban']) {
+    if (App::user('ban')) {
         if (! Request::is('ban', 'rules', 'logout')) {
             redirect('/ban?log='.$log);
         }
     }
 
     // Подтверждение регистрации
-    if ($config['regkeys'] > 0 && $udata['confirmreg'] > 0 && empty($udata['ban'])) {
+    if (App::setting('regkeys') > 0 && App::user('confirmreg') > 0 && empty(App::user('ban'))) {
         if (! Request::is('key', 'login', 'logout')) {
             redirect('/key?log='.$log);
         }
     }
 
     // Просрочен кредит
-    if ($udata['sumcredit'] > 0 && SITETIME > $udata['timecredit'] && empty($udata['ban'])) {
+    if (App::user('sumcredit') > 0 && SITETIME > App::user('timecredit') && empty(App::user('ban'))) {
         if (Request::path() != 'games/credit') {
             redirect('/games/credit?log='.$log);
         }
     }
 
     // ---------------------- Получение ежедневного бонуса -----------------------//
-    if (isset($udata['timebonus']) && $udata['timebonus'] < time() - 82800) {  // Получение бонуса каждые 23 часа
-        DB::run() -> query("UPDATE `users` SET `timebonus`=?, `money`=`money`+? WHERE `login`=? LIMIT 1;", [SITETIME, $config['bonusmoney'], $log]);
-        notice('Получен ежедневный бонус '.moneys($config['bonusmoney']).'!');
+    if (App::user('timebonus') < time() - 82800) {
+
+        $user = User::where('id', App::getUserId());
+        $user->update([
+            'timebonus' => SITETIME,
+            'money' => Capsule::raw('money + '.App::setting('bonusmoney')),
+        ]);
+
+        notice('Получен ежедневный бонус '.moneys(App::setting('bonusmoney')).'!');
     }
 
     // ------------------ Запись текущей страницы для админов --------------------//
@@ -187,12 +187,12 @@ if ($udata = is_user()) {
 }
 
 // Сайт закрыт для всех
-if ($config['closedsite'] == 2 && !is_admin() && ! Request::is('closed', 'login')) {
+if (App::setting('closedsite') == 2 && !is_admin() && ! Request::is('closed', 'login')) {
     redirect('/closed');
 }
 
 // Сайт закрыт для гостей
-if ($config['closedsite'] == 1 && !is_user() && ! Request::is('register', 'login', 'lostpassword', 'captcha')) {
+if (App::setting('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'lostpassword', 'captcha')) {
     notice('Для входа на сайт необходимо авторизоваться!');
     redirect('/login');
 }
@@ -202,22 +202,22 @@ if ($config['closedsite'] == 1 && !is_user() && ! Request::is('register', 'login
  */
 $browser_detect = new Mobile_Detect();
 
-if (!is_user() || empty($config['themes'])) {
-    if (!empty($config['touchthemes'])) {
+if (! is_user() || empty(App::setting('themes'))) {
+    if (! empty(App::setting('touchthemes'))) {
         if ($browser_detect->isTablet()) {
-            $config['themes'] = $config['touchthemes'];
+            $setting['themes'] = App::setting('touchthemes');
         }
     }
 
-    if (!empty($config['webthemes'])) {
-        if (!$browser_detect->isMobile() && !$browser_detect->isTablet()) {
-            $config['themes'] = $config['webthemes'];
+    if (! empty(App::setting('webthemes'))) {
+        if (! $browser_detect->isMobile() && ! $browser_detect->isTablet()) {
+            $setting['themes'] = App::setting('webthemes');
         }
     }
 }
 
-if (empty($config['themes']) || !file_exists(HOME.'/themes/'.$config['themes'])) {
-    $config['themes'] = 'default';
+if (empty($setting['themes']) || ! file_exists(HOME.'/themes/'.$setting['themes'])) {
+    $setting['themes'] = 'default';
 }
 
 $files = glob(APP.'/plugins/*.php');
@@ -225,4 +225,7 @@ foreach ($files as $file) {
     require_once $file;
 }
 
-Registry::set('config', $config);
+if (isset($setting)) {
+    $setting = array_merge(Registry::get('setting'), $setting);
+    Registry::set('setting', $setting);
+}

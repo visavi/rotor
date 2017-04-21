@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -14,7 +14,7 @@ if (isset($_GET['uz'])) {
     $uz = "";
 }
 
-show_title('Перевод денег');
+//show_title('Перевод денег');
 
 if (is_user()) {
 
@@ -24,9 +24,9 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            echo 'В наличии: '.moneys($udata['money']).'<br /><br />';
+            echo 'В наличии: '.moneys(App::user('money')).'<br /><br />';
 
-            if ($udata['point'] >= $config['sendmoneypoint']) {
+            if (App::user('point') >= App::setting('sendmoneypoint')) {
                 if (empty($uz)) {
                     echo '<div class="form">';
                     echo '<form action="/games/transfer?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -48,7 +48,7 @@ if (is_user()) {
                     echo '<input type="submit" value="Перевести" /></form></div><br />';
                 }
             } else {
-                show_error('Ошибка! Для перевода денег вам необходимо набрать '.points($config['sendmoneypoint']).'!');
+                show_error('Ошибка! Для перевода денег вам необходимо набрать '.points(App::setting('sendmoneypoint')).'!');
             }
         break;
 
@@ -63,8 +63,8 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($money > 0) {
-                    if ($udata['point'] >= $config['sendmoneypoint']) {
-                        if ($money <= $udata['money']) {
+                    if (App::user('point') >= App::setting('sendmoneypoint')) {
+                        if ($money <= App::user('money')) {
                             if ($uz != $log) {
                                 if ($msg <= 1000) {
                                     $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
@@ -103,7 +103,7 @@ if (is_user()) {
                             show_error('Ошибка! Недостаточно средств для перевода такого количества денег!');
                         }
                     } else {
-                        show_error('Ошибка! Для перевода денег вам необходимо набрать '.points($config['sendmoneypoint']).'!');
+                        show_error('Ошибка! Для перевода денег вам необходимо набрать '.points(App::setting('sendmoneypoint')).'!');
                     }
                 } else {
                     show_error('Ошибка! Перевод невозможен указана неверная сумма!');
@@ -123,4 +123,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

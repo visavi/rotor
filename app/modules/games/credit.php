@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Выдача кредитов');
+//show_title('Выдача кредитов');
 
 if (is_user()) {
     switch ($act):
@@ -12,19 +12,19 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            echo 'В наличии: '.moneys($udata['money']).'<br />';
+            echo 'В наличии: '.moneys(App::user('money')).'<br />';
             echo 'В банке: '.moneys(user_bankmoney($log)).'<br /><br />';
             // --------------------- Вычисление если долг ---------------------------//
-            if ($udata['sumcredit'] > 0) {
-                echo '<b><span style="color:#ff0000">Сумма долга составляет: '.moneys($udata['sumcredit']).'</span></b><br />';
+            if (App::user('sumcredit') > 0) {
+                echo '<b><span style="color:#ff0000">Сумма долга составляет: '.moneys(App::user('sumcredit')).'</span></b><br />';
 
-                if (SITETIME < $udata['timecredit']) {
-                    echo 'До истечения срока кредита осталось <b>'.formattime($udata['timecredit'] - SITETIME).'</b><br /><br />';
+                if (SITETIME < App::user('timecredit')) {
+                    echo 'До истечения срока кредита осталось <b>'.formattime(App::user('timecredit') - SITETIME).'</b><br /><br />';
                 } else {
-                    if ($udata['point'] >= 10) {
+                    if (App::user('point') >= 10) {
                         $delpoint = 10;
                     } else {
-                        $delpoint = $udata['point'];
+                        $delpoint = App::user('point');
                     }
 
                     echo '<b><span style="color:#ff0000">Внимание! Время погашения кредита просрочено!</span></b><br />';
@@ -43,12 +43,12 @@ if (is_user()) {
             echo '</select><br />';
             echo '<input type="submit" value="Продолжить" /></form></div><br />';
 
-            echo'Минимальная сумма кредита '.moneys($config['minkredit']).'<br />';
-            echo'Максимальная сумма кредита равна '.moneys($config['maxkredit']).'<br /><br />';
+            echo'Минимальная сумма кредита '.moneys(App::setting('minkredit')).'<br />';
+            echo'Максимальная сумма кредита равна '.moneys(App::setting('maxkredit')).'<br /><br />';
 
-            echo '<b>Условия кредита</b><br />Независимо от суммы кредита банк берет '.(int)$config['percentkredit'].'% за операцию, кредит выдается на 5 дней<br />';
+            echo '<b>Условия кредита</b><br />Независимо от суммы кредита банк берет '.(int)App::setting('percentkredit').'% за операцию, кредит выдается на 5 дней<br />';
             echo 'Каждый просроченный день увеличивает сумму на 1% и у вас списывается '.points(10).'<br />';
-            echo 'Кредит выдается пользователям у которых не менее '.points($config['creditpoint']).'<br /><br />';
+            echo 'Кредит выдается пользователям у которых не менее '.points(App::setting('creditpoint')).'<br /><br />';
         break;
 
         ############################################################################################
@@ -60,15 +60,15 @@ if (is_user()) {
             $oper = (int)$_POST['oper'];
 
             if ($oper == 1 || $oper == 2) {
-                if ($gold >= $config['minkredit']) {
+                if ($gold >= App::setting('minkredit')) {
                     // -------------------------- Выдача кредитов -----------------------------//
                     if ($oper == 1) {
                         echo '<b>Получение кредита</b><br />';
 
-                        if ($gold <= $config['maxkredit']) {
-                            if ($udata['point'] >= $config['creditpoint']) {
-                                if (empty($udata['sumcredit'])) {
-                                    $sumcredit = $gold + (($gold * $config['percentkredit']) / 100);
+                        if ($gold <= App::setting('maxkredit')) {
+                            if (App::user('point') >= App::setting('creditpoint')) {
+                                if (empty(App::user('sumcredit'))) {
+                                    $sumcredit = $gold + (($gold * App::setting('percentkredit')) / 100);
 
                                     DB::run() -> query("UPDATE `users` SET `money`=`money`+?, `sumcredit`=?, `timecredit`=? WHERE `login`=? LIMIT 1;", [$gold, $sumcredit, SITETIME + 432000, $log]);
 
@@ -83,16 +83,16 @@ if (is_user()) {
                                 show_error('Ошибка! Ваш статус не позволяет вам получать кредит!');
                             }
                         } else {
-                            show_error('Ошибка! Операции более чем с '.moneys($config['maxkredit']).' не проводятся!');
+                            show_error('Ошибка! Операции более чем с '.moneys(App::setting('maxkredit')).' не проводятся!');
                         }
                     }
                     // -------------------------- Погашение кредитов -----------------------------//
                     if ($oper == 2) {
                         echo '<b>Погашение кредита</b><br />';
 
-                        if ($udata['sumcredit'] > 0) {
-                            if ($udata['sumcredit'] == $gold) {
-                                if ($gold <= $udata['money']) {
+                        if (App::user('sumcredit') > 0) {
+                            if (App::user('sumcredit') == $gold) {
+                                if ($gold <= App::user('money')) {
                                     DB::run() -> query("UPDATE `users` SET `money`=`money`-?, `sumcredit`=?, `timecredit`=? WHERE `login`=? LIMIT 1;", [$gold, 0, 0, $log]);
 
                                     $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [$log]);
@@ -110,7 +110,7 @@ if (is_user()) {
                         }
                     }
                 } else {
-                    show_error('Операции менее чем с '.moneys($config['minkredit']).' не проводятся!');
+                    show_error('Операции менее чем с '.moneys(App::setting('minkredit')).' не проводятся!');
                 }
             } else {
                 show_error('Ошибка! Не выбрана операция!');
@@ -128,4 +128,4 @@ if (is_user()) {
 echo '<i class="fa fa-money"></i> <a href="/games/bank">Банк</a><br />';
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

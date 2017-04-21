@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Однорукий бандит');
+//show_title('Однорукий бандит');
 
 if (is_user()) {
     switch ($act):
@@ -20,7 +20,7 @@ if (is_user()) {
 
             echo '<br /><b><a href="bandit?act=go">Играть</a></b><br />';
 
-            echo 'В наличии ' . moneys($udata['money']) . '<br /><br />';
+            echo 'В наличии ' . moneys(App::user('money')) . '<br /><br />';
 
             echo '<i class="fa fa-question-circle"></i> <a href="bandit?act=faq">Правила игры</a><br />';
             break;
@@ -28,7 +28,7 @@ if (is_user()) {
         # #                                           Игра                                         ##
         # ###########################################################################################
         case "go":
-            if ($udata['money'] >= 5) {
+            if (App::user('money') >= 5) {
                 $num1 = mt_rand(1, 8);
                 $num2 = mt_rand(1, 8);
                 $num3 = mt_rand(1, 8);
@@ -381,4 +381,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

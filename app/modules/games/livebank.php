@@ -1,10 +1,10 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $uz = (isset($_REQUEST['uz'])) ? check($_REQUEST['uz']) : '';
 
-show_title('Статистика вкладов');
+//show_title('Статистика вкладов');
 
 switch ($act):
 ############################################################################################
@@ -17,7 +17,7 @@ switch ($act):
 
         if ($total > 0) {
 
-            $queryvklad = DB::run() -> query("SELECT * FROM `bank` ORDER BY `sum` DESC, `user` ASC LIMIT ".$page['offset'].", ".$config['vkladlist'].";");
+            $queryvklad = DB::run() -> query("SELECT * FROM `bank` ORDER BY `sum` DESC, `user` ASC LIMIT ".$page['offset'].", ".App::setting('vkladlist').";");
 
             $i = 0;
             while ($data = $queryvklad -> fetch()) {
@@ -68,7 +68,7 @@ switch ($act):
                 }
 
                 if (!empty($rat)) {
-                    $end = ceil($rat / $config['vkladlist']);
+                    $end = ceil($rat / App::setting('vkladlist'));
 
                     notice('Позиция в рейтинге: '.$rat);
                     redirect("/games/livebank?page=$end&uz=$queryuser");
@@ -90,4 +90,4 @@ endswitch;
 echo '<i class="fa fa-money"></i> <a href="/games/bank">В банк</a><br />';
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

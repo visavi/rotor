@@ -1,6 +1,6 @@
 <?php
 if (isset($act) && $act=='menu'){
-    show_title('Мое меню');
+    //show_title('Мое меню');
 }
 ?>
 

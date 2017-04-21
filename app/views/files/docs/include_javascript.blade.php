@@ -1,4 +1,4 @@
-<?php show_title('Функция include_javascript'); ?>
+<?php //show_title('Функция include_javascript'); ?>
 
 Функция проверяет, включена ли у пользователя в настройках опция вывода Javascript, если да, то подключается библиотека Jquery и некоторые вспомогательные jquery-плагины
 <br />

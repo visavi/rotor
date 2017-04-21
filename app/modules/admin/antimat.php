@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 
 if (is_admin([101, 102, 103])) {
-    show_title('Управление антиматом');
+    //show_title('Управление антиматом');
 
     switch ($act):
     ############################################################################################
@@ -149,4 +149,4 @@ if (is_admin([101, 102, 103])) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

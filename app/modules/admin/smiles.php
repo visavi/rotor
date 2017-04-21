@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
@@ -7,7 +7,7 @@ $page = abs(intval(Request::input('page', 1)));
 
 if (! is_admin([101, 102])) redirect('/admin/');
 
-show_title('Управление смайлами');
+//show_title('Управление смайлами');
 
 switch ($act):
 /**
@@ -48,7 +48,7 @@ break;
  */
 case 'add':
 
-    $config['newtitle'] = 'Добавление смайла';
+    //App::setting('newtitle') = 'Добавление смайла';
 
     echo '<div class="form">';
     echo '<form action="/admin/smiles?act=load&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
@@ -59,7 +59,7 @@ case 'add':
     echo '<input type="submit" value="Загрузить" /></form></div><br />';
 
     echo 'Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png, bmp<br />';
-    echo 'Весом не более '.formatsize($config['smilemaxsize']).' и размером до '.$config['smilemaxweight'].' px<br /><br />';
+    echo 'Весом не более '.formatsize(App::setting('smilemaxsize')).' и размером до '.App::setting('smilemaxweight').' px<br /><br />';
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br />';
 break;
@@ -69,7 +69,7 @@ break;
  */
 case 'load':
 
-    $config['newtitle'] = 'Результат добавления';
+    //App::setting('newtitle') = 'Результат добавления';
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
@@ -97,11 +97,11 @@ case 'load':
                 //$handle -> file_overwrite = true;
 
                 $handle -> ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
-                $handle -> file_max_size = $config['smilemaxsize'];  // byte
-                $handle -> image_max_width = $config['smilemaxweight'];  // px
-                $handle -> image_max_height = $config['smilemaxweight']; // px
-                $handle -> image_min_width = $config['smileminweight'];   // px
-                $handle -> image_min_height = $config['smileminweight'];  // px
+                $handle -> file_max_size = App::setting('smilemaxsize');  // byte
+                $handle -> image_max_width = App::setting('smilemaxweight');  // px
+                $handle -> image_max_height = App::setting('smilemaxweight'); // px
+                $handle -> image_min_width = App::setting('smileminweight');   // px
+                $handle -> image_min_height = App::setting('smileminweight');  // px
                 $handle -> process(HOME.'/uploads/smiles/');
 
                 if ($handle -> processed) {
@@ -242,4 +242,4 @@ endswitch;
 
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

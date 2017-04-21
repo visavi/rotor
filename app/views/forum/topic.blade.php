@@ -18,7 +18,7 @@
     <a href="/topic/<?=$topic['id']?>/print">Печать</a> / <a href="/topic/<?=$topic['id']?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
-        <?php if ($topic->getUser()->id == App::getUserId() && empty($topic['closed']) && App::user('point') >= $config['editforumpoint']): ?>
+        <?php if ($topic->getUser()->id == App::getUserId() && empty($topic['closed']) && App::user('point') >= App::setting('editforumpoint')): ?>
            / <a href="/topic/<?= $topic['id'] ?>/close?token=<?=$_SESSION['token']?>">Закрыть</a>
            / <a href="/topic/<?= $topic['id'] ?>/edit">Изменить</a>
         <?php endif; ?>
@@ -147,7 +147,7 @@
                     <?= icons($ext) ?>
                     <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
                     <?php if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])): ?>
-                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], $config['previewsize'], ['alt' => $file['name']]) ?></a><br />
+                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], App::setting('previewsize'), ['alt' => $file['name']]) ?></a><br />
                     <?php endif; ?>
                 <?php endforeach; ?>
                 </div>
@@ -157,7 +157,7 @@
                 <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br />
             <?php endif; ?>
 
-            <?php if (is_admin() || empty($config['anonymity'])): ?>
+            <?php if (is_admin() || empty(App::setting('anonymity'))): ?>
                 <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
             <?php endif; ?>
 
@@ -189,7 +189,7 @@
                         {!! App::textError('msg') !!}
                     </div>
 
-                    <?php if (App::user('point') >= $config['forumloadpoints']): ?>
+                    <?php if (App::user('point') >= App::setting('forumloadpoints')): ?>
                         <div class="js-attach-form" style="display: none;">
 
                             <label class="btn btn-sm btn-default" for="inputFile">
@@ -199,8 +199,8 @@
                             <span class='label label-info' id="upload-file-info"></span>
 
                             <div class="info">
-                                Максимальный вес файла: <b><?=round($config['forumloadsize']/1024)?></b> Kb<br />
-                                Допустимые расширения: <?=str_replace(',', ', ', $config['forumextload'])?>
+                                Максимальный вес файла: <b><?=round(App::setting('forumloadsize')/1024)?></b> Kb<br />
+                                Допустимые расширения: <?=str_replace(',', ', ', App::setting('forumextload'))?>
                             </div><br />
                         </div>
 

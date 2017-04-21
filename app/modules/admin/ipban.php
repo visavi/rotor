@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -9,7 +9,7 @@ if (isset($_GET['act'])) {
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102])) {
-    show_title('IP-бан панель');
+    //show_title('IP-бан панель');
 
     switch ($act):
     ############################################################################################
@@ -23,7 +23,7 @@ if (is_admin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['ipbanlist'].";");
+                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('ipbanlist').";");
 
                 echo '<form action="/admin/ipban?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -159,4 +159,4 @@ if (is_admin([101, 102])) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

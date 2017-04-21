@@ -1,4 +1,4 @@
-<?php show_title('Функция makestime'); ?>
+<?php //show_title('Функция makestime'); ?>
 
 Функция переводит количество секунд в удобный формат времени, для вывода времени до 1 дня можно использовать функцию <a href="/files/docs/maketime">maketime</a><br /><br />
 

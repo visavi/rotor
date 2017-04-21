@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -12,7 +12,7 @@ if (empty($_GET['uz'])) {
     $uz = check(strval($_GET['uz']));
 }
 
-show_title('История голосований '.$uz);
+//show_title('История голосований '.$uz);
 
 if (is_user()) {
     $is_admin = is_admin([101]);
@@ -152,4 +152,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/user/'.$uz.'">В анкету</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

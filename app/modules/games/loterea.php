@@ -1,8 +1,8 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Лотерея');
+//show_title('Лотерея');
 
 $rand = mt_rand(1, 100);
 $newtime = date("d", SITETIME);
@@ -21,7 +21,7 @@ if (is_user()) {
                 $arrwinners = $querywin -> fetchAll(PDO::FETCH_COLUMN);
 
                 $winusers = '';
-                $jackpot = (empty($datalot['sum'])) ? $config['jackpot'] : $datalot['sum'];
+                $jackpot = (empty($datalot['sum'])) ? App::setting('jackpot') : $datalot['sum'];
                 $oldnum = (empty($datalot['newnum'])) ? 0 : $datalot['newnum'];
                 $wincount = count($arrwinners);
 
@@ -31,14 +31,14 @@ if (is_user()) {
                     foreach ($arrwinners as $winuz) {
                         if (check_user($winuz)) {
                             $textpriv = 'Поздравляем! Вы сорвали Джек-пот в лотерее и выиграли '.moneys($winmoneys);
-                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$winuz, $config['nickname'], $textpriv, SITETIME]);
+                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$winuz, App::setting('nickname'), $textpriv, SITETIME]);
 
                             DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `money`=`money`+? WHERE `login`=?", [$winmoneys, $winuz]);
                         }
                     }
 
                     $winusers = implode(',', $arrwinners);
-                    $jackpot = $config['jackpot'];
+                    $jackpot = App::setting('jackpot');
                 }
 
                 DB::run() -> query("REPLACE INTO `lotinfo` (`id`, `date`, `sum`, `newnum`, `oldnum`, `winners`) VALUES (?, ?, ?, ?, ?, ?);", [1, $newtime, $jackpot, $rand, $oldnum, $winusers]);
@@ -83,7 +83,7 @@ if (is_user()) {
 
             echo 'В этом туре участвуют: '.$total.'<br />';
             echo 'Cтоимость билета '.moneys(50).'<br />';
-            echo 'В наличии: '.moneys($udata['money']).'<br /><br />';
+            echo 'В наличии: '.moneys(App::user('money')).'<br /><br />';
 
             echo '<i class="fa fa-users"></i> <a href="/games/loterea?act=show">Участники</a><br />';
         break;
@@ -96,7 +96,7 @@ if (is_user()) {
             $bilet = abs(intval($_POST['bilet']));
 
             if ($bilet > 0 && $bilet <= 100) {
-                if ($udata['money'] >= 50) {
+                if (App::user('money') >= 50) {
                     $querysum = DB::run() -> querySingle("SELECT `id` FROM `lotusers` WHERE `user`=? LIMIT 1;", [$log]);
                     if (empty($querysum)) {
                         DB::run() -> query("UPDATE `lotinfo` SET `sum`=`sum`+50 WHERE `id`=?;", [1]);
@@ -123,7 +123,7 @@ if (is_user()) {
         ##                                   Просмотр участников                                  ##
         ############################################################################################
         case "show":
-            show_title('Список участников купивших билеты');
+            //show_title('Список участников купивших билеты');
 
             $queryusers = DB::run() -> query("SELECT * FROM `lotusers` ORDER BY `time` DESC;");
             $lotusers = $queryusers -> fetchAll();
@@ -153,4 +153,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

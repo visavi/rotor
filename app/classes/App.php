@@ -26,12 +26,6 @@ class App
      */
     public static function view($template, $params = [], $return = false)
     {
-        $log    = static::user('login');
-        $config = self::setting();
-
-        $params +=compact('config', 'log');
-
-
         $blade = new Jenssegers\Blade\Blade([APP.'/views', HOME.'/themes'], STORAGE.'/cache');
 
         if ($return) {
@@ -377,11 +371,22 @@ class App
      */
     public static function setting($key = null)
     {
-        if (Registry::has('config')) {
-            if (empty($key)) return Registry::get('config');
+        if (! Registry::has('setting')) {
 
-            return isset(Registry::get('config')[$key]) ? Registry::get('config')[$key] : '';
+            if (! file_exists(STORAGE.'/temp/setting.dat')) {
+                $setting = Setting::pluck('value', 'name')->all();
+                file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
+            }
+            $setting = unserialize(file_get_contents(STORAGE.'/temp/setting.dat'));
+
+            Registry::set('setting', $setting);
         }
+
+        if (empty($key)) {
+            return Registry::get('setting');
+        }
+
+        return isset(Registry::get('setting')[$key]) ? Registry::get('setting')[$key] : null;
     }
 
     /**

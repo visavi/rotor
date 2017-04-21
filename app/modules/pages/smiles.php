@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Список смайлов');
+//show_title('Список смайлов');
 
 $total = Smile::count();
 $page = App::paginate(App::setting('smilelist'), $total);
@@ -26,4 +26,4 @@ if ($total > 0) {
     show_error('Смайлы не найдены!');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

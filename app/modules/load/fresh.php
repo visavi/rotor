@@ -1,14 +1,14 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('Свежие загрузки');
+//show_title('Свежие загрузки');
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-3600 * 120]);
 $page = App::paginate(App::setting('downlist'), $total);
 
 if ($total > 0) {
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1, SITETIME-3600 * 120]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";", [1, SITETIME-3600 * 120]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -47,4 +47,4 @@ if ($total > 0) {
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

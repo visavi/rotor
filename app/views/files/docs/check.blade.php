@@ -1,4 +1,4 @@
-<?php show_title('Функция check'); ?>
+<?php //show_title('Функция check'); ?>
 
 Фильтрует данные путём замены служебных символов и тегов на html сущности. Используется для обработки GET и POST запросов,  также применяется для фильтрация массивов.<br />
 Данные дополнительно обрабатывается функцией <a href="http://ru2.php.net/manual/ru/function.stripslashes.php">stripslashes</a>  (Удаление экранирования символов) и <a href="http://ru2.php.net/manual/ru/function.trim.php">trim</a> (Удаление пробелов в начале и конце строки)<br /><br />

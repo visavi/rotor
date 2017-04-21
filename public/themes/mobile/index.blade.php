@@ -32,9 +32,9 @@ header('Content-type:text/html; charset=utf-8');
         <td width="580">
 
             <div class="a" id="up">
-                <!-- <a href="/"><span class="logotype"><?= $config['title'] ?></span></a><br /> -->
-                <a href="/"><img src="<?= $config['logotip'] ?>" alt="<?= $config['title'] ?>"/></a><br/>
-                <?= $config['logos'] ?>
+                <!-- <a href="/"><span class="logotype"><?= App::setting('title') ?></span></a><br /> -->
+                <a href="/"><img src="<?= App::setting('logotip') ?>" alt="<?= App::setting('title') ?>"/></a><br/>
+                <?= App::setting('logos') ?>
             </div>
 
             <?php App::view('includes/menu'); ?>

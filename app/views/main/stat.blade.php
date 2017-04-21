@@ -1,6 +1,6 @@
 <?php
 if (isset($act) && $act=='stat'){
-	show_title('Статистика сайта');
+	//show_title('Статистика сайта');
 }
 ?>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/ratinglist">Рейтинг толстосумов</a><br />

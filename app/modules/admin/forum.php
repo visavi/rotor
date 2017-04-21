@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -19,7 +19,7 @@ if (isset($_GET['tid'])) {
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
-    show_title('Управление форумом');
+    //show_title('Управление форумом');
 
     switch ($act):
     ############################################################################################
@@ -809,8 +809,8 @@ if (is_admin()) {
                         echo '<div class="js-attach-form" style="display: none;">
                             Прикрепить файл:<br /><input type="file" name="file" /><br />
                             <div class="info">
-                                Максимальный вес файла: <b>'.round($config['forumloadsize']/1024).'</b> Kb<br />
-                                Допустимые расширения: '.str_replace(',', ', ', $config['forumextload']).'
+                                Максимальный вес файла: <b>'.round(App::setting('forumloadsize')/1024).'</b> Kb<br />
+                                Допустимые расширения: '.str_replace(',', ', ', App::setting('forumextload')).'
                             </div><br />
                         </div>';
 
@@ -920,7 +920,7 @@ if (is_admin()) {
             $delfile = intar(Request::input('delfile'));
 
             if ($token == $_SESSION['token']) {
-                if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= $config['forumtextlength']) {
+                if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= App::setting('forumtextlength')) {
                     $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
                     if (!empty($post)) {
 
@@ -966,4 +966,4 @@ if (is_admin()) {
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (function_exists('set_time_limit')) {
     set_time_limit(600);
@@ -12,7 +12,7 @@ if (isset($_GET['act'])) {
 }
 
 if (is_admin([101])) {
-    show_title('Backup базы данных');
+    //show_title('Backup базы данных');
 
     switch ($act):
     ############################################################################################
@@ -222,4 +222,4 @@ if (is_admin([101])) {
 	redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

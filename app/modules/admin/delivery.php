@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 
 if (is_admin([101])) {
-    show_title('Рассылка приватных сообщений');
+    //show_title('Рассылка приватных сообщений');
 
     switch ($act):
     ############################################################################################
@@ -110,4 +110,4 @@ if (is_admin([101])) {
 	redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

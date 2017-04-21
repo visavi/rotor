@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 
 $act = check(Request::input('act', 'index'));
@@ -10,7 +10,7 @@ switch ($act):
 ##                                  Вывод комментариев                                    ##
 ############################################################################################
     case 'index':
-        show_title('Альбомы пользователей');
+        //show_title('Альбомы пользователей');
 
         $total = Photo::distinct('user_id')
             ->join('users', 'photo.user_id', '=', 'users.id')
@@ -20,7 +20,7 @@ switch ($act):
 
         if ($total > 0) {
 
-            $config['newtitle'] = 'Альбомы пользователей (Стр. '.$page['current'].')';
+            //App::setting('newtitle') = 'Альбомы пользователей (Стр. '.$page['current'].')';
 
             $albums = Photo::select('user_id', 'login')
                 ->selectRaw('count(*) as cnt, sum(comments) as comments')
@@ -51,7 +51,7 @@ switch ($act):
     ############################################################################################
     case 'photo':
 
-        show_title('Список всех фотографий '.$uz);
+        //show_title('Список всех фотографий '.$uz);
 
         $user = User::where('login', $uz)->first();
 
@@ -65,7 +65,7 @@ switch ($act):
 
         if ($total > 0) {
 
-            $config['newtitle'] = 'Список всех фотографий '.$uz.' (Стр. '.$page['current'].')';
+            //App::setting('newtitle') = 'Список всех фотографий '.$uz.' (Стр. '.$page['current'].')';
 
             $photos = Photo::where('user_id', $user->id)
                 ->offset($page['offset'])
@@ -85,7 +85,7 @@ switch ($act):
                 }
 
                 echo '</div><div>';
-                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a><br />';
+                echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]).'</a><br />';
 
                 if (!empty($data['text'])){
                     echo App::bbCode($data['text']).'<br />';
@@ -110,4 +110,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

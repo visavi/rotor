@@ -1,11 +1,11 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $rand = mt_rand(100, 999);
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Кости');
+//show_title('Кости');
 
 if (is_user()) {
     switch ($act):
@@ -18,7 +18,7 @@ if (is_user()) {
 
             echo '<b><a href="/games/kosti?act=go&amp;rand=' . $rand . '">Играть</a></b><br /><br />';
 
-            echo 'У вас в наличии: ' . moneys($udata['money']) . '<br /><br />';
+            echo 'У вас в наличии: ' . moneys(App::user('money')) . '<br /><br />';
 
             echo '<i class="fa fa-question-circle"></i> <a href="/games/kosti?act=faq">Правила</a><br />';
             break;
@@ -27,7 +27,7 @@ if (is_user()) {
         # ###########################################################################################
         case "go":
 
-            if ($udata['money'] >= 5) {
+            if (App::user('money') >= 5) {
                 $num1 = mt_rand(2, 6);
                 $num2 = mt_rand(1, 6);
                 $num3 = mt_rand(1, 6);
@@ -91,4 +91,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

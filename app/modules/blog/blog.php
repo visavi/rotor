@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $cid = abs(intval(Request::input('cid')));
@@ -7,8 +7,8 @@ $id = abs(intval(Request::input('id')));
 $uz = check(Request::input('uz'));
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Блоги');
-$config['newtitle'] = 'Блоги - Список статей';
+//show_title('Блоги');
+//App::setting('newtitle') = 'Блоги - Список статей';
 
 switch ($act):
 ############################################################################################
@@ -26,9 +26,9 @@ case 'index':
 
             if ($total > 0) {
 
-                $config['newtitle'] = $cats['name'].' (Стр. '.$page['current'].')';
+                //App::setting('newtitle') = $cats['name'].' (Стр. '.$page['current'].')';
 
-                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";", [$cid]);
+                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";", [$cid]);
                 $blogs = $queryblog->fetchAll();
 
                 App::view('blog/blog', compact('blogs', 'cats', 'page'));
@@ -60,16 +60,16 @@ case 'view':
         $page = App::paginate(1, $total);
 
         if ($total > 0) {
-            $config['newtitle'] = $blogs['title'];
-            $config['keywords'] = $blogs['tags'];
-            $config['description'] = strip_str($blogs['text']);
+            //App::setting('newtitle') = $blogs['title'];
+            //App::setting('keywords') = $blogs['tags'];
+            //App::setting('description') =  strip_str($blogs['text']);
 
             // --------------
             if ($page['current'] == 1) {
                 $queryreads = DB::run() -> querySingle("SELECT `ip` FROM `readblog` WHERE `blog`=? AND `ip`=? LIMIT 1;", [$id, App::getClientIp()]);
 
                 if (empty($queryreads)) {
-                    $expiresread = SITETIME + 3600 * $config['blogexpread'];
+                    $expiresread = SITETIME + 3600 * App::setting('blogexpread');
                     DB::run() -> query("DELETE FROM `readblog` WHERE `time`<?;", [SITETIME]);
                     DB::run() -> query("INSERT INTO `readblog` (`blog`, `ip`, `time`) VALUES (?, ?, ?);", [$id, App::getClientIp(), $expiresread]);
                     DB::run() -> query("UPDATE `blogs` SET `visits`=`visits`+1 WHERE `id`=? LIMIT 1;", [$id]);
@@ -146,7 +146,7 @@ case 'changeblog':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                if (utf_strlen($text) >= 100 && utf_strlen($text) <= $config['maxblogpost']) {
+                if (utf_strlen($text) >= 100 && utf_strlen($text) <= App::setting('maxblogpost')) {
                     if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
                         $querycats = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cats]);
                         if (!empty($cats)) {
@@ -180,7 +180,7 @@ case 'changeblog':
                         show_error('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
                     }
                 } else {
-                    show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.$config['maxblogpost'].' символов)!');
+                    show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.App::setting('maxblogpost').' символов)!');
                 }
             } else {
                 show_error('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
@@ -201,14 +201,14 @@ break;
 ############################################################################################
 case 'blogs':
 
-    $config['newtitle'] = 'Статьи пользователей';
+    //App::setting('newtitle') = 'Статьи пользователей';
 
     $total = DB::run() -> querySingle("select COUNT(DISTINCT `user`) from `blogs`");
     $page = App::paginate(App::setting('bloggroup'), $total);
 
     if ($total > 0) {
 
-        $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".$config['bloggroup'].";");
+        $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".App::setting('bloggroup').";");
         $blogs = $queryblogs -> fetchAll();
 
         App::view('blog/blog_blogs', compact('blogs', 'total'));
@@ -227,7 +227,7 @@ break;
 ############################################################################################
 case 'new':
 
-    $config['newtitle'] = 'Публикация новой статьи';
+    //App::setting('newtitle') = 'Публикация новой статьи';
 
     if (is_user()) {
 
@@ -253,7 +253,7 @@ break;
 ############################################################################################
 case 'addblog':
 
-    $config['newtitle'] = 'Публикация новой статьи';
+    //App::setting('newtitle') = 'Публикация новой статьи';
 
     $uid = check(Request::input('uid'));
     $cid = abs(intval(Request::input('cid')));
@@ -265,7 +265,7 @@ case 'addblog':
         if ($uid == $_SESSION['token']) {
             if (!empty($cid)) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($text) >= 100 && utf_strlen($text) <= $config['maxblogpost']) {
+                    if (utf_strlen($text) >= 100 && utf_strlen($text) <= App::setting('maxblogpost')) {
                         if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
                             $blogs = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
                             if (!empty($blogs)) {
@@ -294,7 +294,7 @@ case 'addblog':
                             show_error('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.$config['maxblogpost'].' символов)!');
+                        show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.App::setting('maxblogpost').' символов)!');
                     }
                 } else {
                     show_error('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
@@ -322,7 +322,7 @@ case 'vote':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            if ($udata['point'] >= $config['blogvotepoint']){
+            if (App::user('point') >= App::setting('blogvotepoint')){
                 if ($vote == 'up' || $vote == 'down') {
 
                     $score = ($vote == 'up') ? 1 : -1;
@@ -334,7 +334,7 @@ case 'vote':
                             $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['blog', $id, $log]);
 
                             if (empty($queryrated)) {
-                                $expiresrated = SITETIME + 3600 * $config['blogexprated'];
+                                $expiresrated = SITETIME + 3600 * App::setting('blogexprated');
 
                                 DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['blog', SITETIME]);
                                 DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['blog', $id, $log, $expiresrated]);
@@ -356,7 +356,7 @@ case 'vote':
                     show_error('Ошибка! Необходимо проголосовать за или против статьи!');
                 }
             } else {
-                show_error('Ошибка! У вас недостаточно актива для голосования (Необходимо '.points($config['blogvotepoint']).')!');
+                show_error('Ошибка! У вас недостаточно актива для голосования (Необходимо '.points(App::setting('blogvotepoint')).')!');
             }
         } else {
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -376,14 +376,14 @@ case 'comments':
     $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($blogs)) {
-        $config['newtitle'] = 'Комментарии - '.$blogs['title'];
+        //App::setting('newtitle') = 'Комментарии - '.$blogs['title'];
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['blog', $id]);
         $page = App::paginate(App::setting('blogcomm'), $total);
 
         if ($total > 0) {
 
-            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['blogcomm'].";", ['blog', $id]);
+            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".App::setting('blogcomm').";", ['blog', $id]);
             $comments = $querycomm -> fetchAll();
 
             App::view('blog/blog_comments', ['blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'page' => $page]);
@@ -427,7 +427,7 @@ case 'add':
 
                         DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['blog', $queryblog, $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                        DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE `relate_type`=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".$config['maxblogcomm'].") AS del);", ['blog', $id, 'blog', $id]);
+                        DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE `relate_type`=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".App::setting('maxblogcomm').") AS del);", ['blog', $id, 'blog', $id]);
 
                         DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
                         DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
@@ -471,7 +471,7 @@ case 'spam':
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, $config['home'].'/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, App::setting('home').'/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/blog/blog?act=comments&id=$id&page=$page");
@@ -546,7 +546,7 @@ break;
 ############################################################################################
 case 'edit':
 
-    $config['newtitle'] = 'Редактирование сообщения';
+    //App::setting('newtitle') = 'Редактирование сообщения';
 
     $pid = abs(intval(Request::input('pid')));
 
@@ -659,7 +659,7 @@ case 'end':
     if (!empty($query['total_comments'])) {
 
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = ceil($total_comments / $config['blogpost']);
+        $end = ceil($total_comments / App::setting('blogpost'));
 
         redirect("/blog/blog?act=comments&id=$id&page=$end");
 
@@ -672,4 +672,4 @@ break;
 
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

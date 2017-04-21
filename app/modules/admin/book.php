@@ -1,12 +1,12 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $page = abs(intval(Request::input('page')));
 $id = abs(intval(Request::input('id')));
 
 if (is_admin()) {
-    show_title('Управление гостевой');
+    //show_title('Управление гостевой');
 
     switch ($act):
     ############################################################################################
@@ -112,7 +112,7 @@ if (is_admin()) {
             $reply = check($_POST['reply']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($reply) >= 5 && utf_strlen($reply) < $config['guesttextlength']) {
+                if (utf_strlen($reply) >= 5 && utf_strlen($reply) < App::setting('guesttextlength')) {
 
                     $post = Guest::find($id);
 
@@ -171,7 +171,7 @@ if (is_admin()) {
             $msg = check($_POST['msg']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < $config['guesttextlength']) {
+                if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < App::setting('guesttextlength')) {
 
                     $post = Guest::find($id);
                     if ($post) {
@@ -252,4 +252,4 @@ if (is_admin()) {
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

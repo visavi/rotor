@@ -1,12 +1,12 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $used = (!empty($_GET['used'])) ? 1  : 0;
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102, 103])) {
-    show_title('Приглашения');
+    //show_title('Приглашения');
 
 switch ($act):
 ############################################################################################
@@ -14,7 +14,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    if (empty($config['invite'])) {
+    if (empty(App::setting('invite'))) {
         echo '<i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br /><br />';
     }
 
@@ -29,7 +29,7 @@ case 'index':
 
     if ($total > 0) {
 
-        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['listinvite'].";", [$used]);
+        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('listinvite').";", [$used]);
 
         echo '<form action="/admin/invitations?act=del&amp;used='.$used.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -272,4 +272,4 @@ endswitch;
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

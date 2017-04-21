@@ -1,11 +1,11 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $rand = mt_rand(100, 999);
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Наперстки');
+//show_title('Наперстки');
 
 if (is_user()) {
     switch ($act):
@@ -16,7 +16,7 @@ if (is_user()) {
 
         echo '<img src="/assets/img/naperstki/1.gif" alt="image" /><br /><br />';
         echo '<b><a href="/games/naperstki?act=choice">Играть</a></b><br /><br />';
-        echo 'В наличии: ' . moneys($udata['money']) . '<br /><br />';
+        echo 'В наличии: ' . moneys(App::user('money')) . '<br /><br />';
         echo '<i class="fa fa-question-circle"></i> <a href="/games/naperstki?act=faq">Правила</a><br />';
         break;
     # ###########################################################################################
@@ -34,7 +34,7 @@ if (is_user()) {
 
         echo 'Выберите наперсток в котором может находится шарик<br />';
 
-        echo 'В наличии: ' . moneys($udata['money']) . '<br /><br />';
+        echo 'В наличии: ' . moneys(App::user('money')) . '<br /><br />';
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/naperstki">Вернуться</a><br />';
         break;
@@ -47,7 +47,7 @@ if (is_user()) {
         if (!isset($_SESSION['naperstki'])) {
             $_SESSION['naperstki'] = 0;
         }
-        if ($udata['money'] >= 50) {
+        if (App::user('money') >= 50) {
             if ($_SESSION['naperstki'] < 3) {
                 $_SESSION['naperstki']++;
 
@@ -116,4 +116,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

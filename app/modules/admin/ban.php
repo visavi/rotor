@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -15,7 +15,7 @@ if (isset($_POST['uz'])) {
 }
 
 if (is_admin([101, 102, 103])) {
-    show_title('Бан/Разбан');
+    //show_title('Бан/Разбан');
 
     switch ($act):
     ############################################################################################
@@ -79,7 +79,7 @@ if (is_admin([101, 102, 103])) {
 
                             echo 'Подсчет нарушений производится при бане более чем на 12 часов<br />';
                             echo 'При общем числе нарушений более пяти, профиль пользователя удаляется<br />';
-                            echo 'Максимальное время бана '.round($config['maxbantime'] / 1440).' суток<br />';
+                            echo 'Максимальное время бана '.round(App::setting('maxbantime') / 1440).' суток<br />';
                             echo 'Внимание! Постарайтесь как можно подробнее описать причину бана<br /><br />';
                         } else {
                             echo '<b><span style="color:#ff0000">Внимание! Пользователь превысил лимит банов</span></b><br />';
@@ -189,7 +189,7 @@ if (is_admin([101, 102, 103])) {
                             }
 
                             if ($bantotaltime > 0) {
-                                if ($bantotaltime <= $config['maxbantime']) {
+                                if ($bantotaltime <= App::setting('maxbantime')) {
                                     if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
                                         if (utf_strlen($note) <= 1000) {
 
@@ -206,7 +206,7 @@ if (is_admin([101, 102, 103])) {
                                         show_error('Ошибка! Слишком длинная или короткая причина бана!');
                                     }
                                 } else {
-                                    show_error('Ошибка! Максимальное время бана '.round($config['maxbantime'] / 1440).' суток!');
+                                    show_error('Ошибка! Максимальное время бана '.round(App::setting('maxbantime') / 1440).' суток!');
                                 }
                             } else {
                                 show_error('Ошибка! Вы не указали время бана!');
@@ -255,7 +255,7 @@ if (is_admin([101, 102, 103])) {
                             }
 
                             if ($bantotaltime > 0) {
-                                if ($bantotaltime <= $config['maxbantime']) {
+                                if ($bantotaltime <= App::setting('maxbantime')) {
                                     if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
                                         if (utf_strlen($notice) <= 1000) {
 
@@ -289,7 +289,7 @@ if (is_admin([101, 102, 103])) {
                                         show_error('Ошибка! Слишком длинная или короткая причина бана!');
                                     }
                                 } else {
-                                    show_error('Ошибка! Максимальное время бана '.round($config['maxbantime'] / 1440).' суток!');
+                                    show_error('Ошибка! Максимальное время бана '.round(App::setting('maxbantime') / 1440).' суток!');
                                 }
                             } else {
                                 show_error('Ошибка! Вы не указали время бана!');
@@ -400,4 +400,4 @@ if (is_admin([101, 102, 103])) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Письмо Администратору');
+//show_title('Письмо Администратору');
 
 switch ($act):
 ############################################################################################
@@ -18,7 +18,7 @@ switch ($act):
             echo 'Ваше имя:<br /><input name="name" maxlength="20" /><br />';
             echo 'Ваш E-mail:<br /><input name="umail" maxlength="50" /><br />';
         } else {
-            if (empty($udata['email'])) {
+            if (empty(App::user('email'))) {
                 echo 'Ваш E-mail:<br /><input name="umail" maxlength="50" /><br />';
             }
         }
@@ -48,8 +48,8 @@ switch ($act):
         if (is_user()) {
             $name = $log;
 
-            if (!empty($udata['email'])) {
-                $umail = $udata['email'];
+            if (!empty(App::user('email'))) {
+                $umail = App::user('email');
             }
         }
 
@@ -58,8 +58,8 @@ switch ($act):
                 if (utf_strlen($body) >= 5 && utf_strlen($body) <= 10000) {
                     if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $umail)) {
 
-                        if (sendMail($config['emails'],
-                                'Письмо с сайта '.$config['title'],
+                        if (sendMail(App::setting('emails'),
+                                'Письмо с сайта '.App::setting('title'),
                                 nl2br(html_entity_decode($body, ENT_QUOTES)).'<br /><br />IP: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Отправлено: '.date_fixed(SITETIME, 'j.m.Y / H:i'),
                                 ['from' => [$umail => $name]]
                             )) {
@@ -88,4 +88,4 @@ switch ($act):
 
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

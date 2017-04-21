@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
 } else {
@@ -18,7 +18,7 @@ if (isset($_GET['type'])) {
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102])) {
-    show_title('Предложения и проблемы');
+    //show_title('Предложения и проблемы');
 
     switch ($act):
     ############################################################################################
@@ -44,7 +44,7 @@ if (is_admin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".$config['postoffers'].";", [$type]);
+                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".App::setting('postoffers').";", [$type]);
 
                 echo '<form action="/admin/offers?act=del&amp;type='.$type.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -101,7 +101,7 @@ if (is_admin([101, 102])) {
 
             $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
             if (!empty($queryoff)) {
-                $config['newtitle'] = $queryoff['title'];
+                //App::setting('newtitle') = $queryoff['title'];
 
                 echo '<div class="b">';
                 echo '<i class="fa fa-file-o"></i> ';
@@ -356,4 +356,4 @@ if (is_admin([101, 102])) {
 	redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

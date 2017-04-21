@@ -12,7 +12,7 @@
 	2. Создайте в ней директорию с произвольным латинским названием (к примеру library)<br />
 	3. Положите в созданную директорию обычный файл с расширением .blade.php (к примеру index.blade.php)<br />
 	4. Напишите любой текст на этой странице, это может быть как html код, так и php<br />
-	5. Теперь попробуйте перейти на созданную станицу, введите в браузере <?= $config['home'] ?>/files?page=library<br />
+	5. Теперь попробуйте перейти на созданную станицу, введите в браузере <?= App::setting('home') ?>/files?page=library<br />
 	6. Если страница отобразилась, значит вы все сделали правильно<br />
 
 	<div class="help-block">
@@ -22,16 +22,16 @@
 
 	<pre class="prettyprint linenums">
 	&lt;?php
-		show_title('Новый заголовок страницы');
+		//show_title('Новый заголовок страницы');
 	?&gt;
 	</pre>
 
-		Дополнительно можно указать произвольные ключевые слова и описание заполнив переменные $config['keywords'] и $config['description']
+		Дополнительно можно указать произвольные ключевые слова и описание заполнив переменные App::setting('keywords') и App::setting('description')
 
 	<pre class="prettyprint linenums">
 	&lt;?php
-		$config['keywords']    = 'Ключевые слова';
-		$config['description'] = 'Описание страницы';
+		App::setting('keywords')    = 'Ключевые слова';
+		//App::setting('description') =  'Описание страницы';
 	?&gt;
 	</pre>
 	</div>

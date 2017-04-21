@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $sort = isset($_GET['sort']) ? check($_GET['sort']) : 'loads';
 
@@ -13,7 +13,7 @@ switch ($sort) {
 ############################################################################################
 ##                                       Топ тем                                          ##
 ############################################################################################
-show_title('Топ популярных файлов');
+//show_title('Топ популярных файлов');
 
 echo 'Сортировать: ';
 
@@ -42,7 +42,7 @@ $page = App::paginate(App::setting('downlist'), $total);
 
 if ($total > 0) {
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [1]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";", [1]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -68,4 +68,4 @@ if ($total > 0) {
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

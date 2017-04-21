@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Контакт-лист');
+//show_title('Контакт-лист');
 
 if (is_user()) {
     switch ($act):
@@ -22,7 +22,7 @@ if (is_user()) {
 
             if ($total > 0) {
 
-                $querycontact = DB::run() -> query("SELECT * FROM `contact` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['contactlist'].";", [$log]);
+                $querycontact = DB::run() -> query("SELECT * FROM `contact` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('contactlist').";", [$log]);
 
                 echo '<form action="/contact?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -79,7 +79,7 @@ if (is_user()) {
                     if (!empty($queryuser)) {
 
                         $total = DB::run() -> querySingle("SELECT count(*) FROM `contact` WHERE `user`=?;", [$log]);
-                        if ($total <= $config['limitcontact']) {
+                        if ($total <= App::setting('limitcontact')) {
                             // ------------------------ Проверка на существование ------------------------//
                             if (!is_contact($log, $uz)){
 
@@ -100,7 +100,7 @@ if (is_user()) {
                                 show_error('Ошибка! Данный пользователь уже есть в контакт-листе!');
                             }
                         } else {
-                            show_error('Ошибка! В контакт-листе разрешено не более '.$config['limitcontact'].' пользователей!');
+                            show_error('Ошибка! В контакт-листе разрешено не более '.App::setting('limitcontact').' пользователей!');
                         }
                     } else {
                         show_error('Ошибка! Данного адресата не существует!');
@@ -220,4 +220,4 @@ if (is_user()) {
 echo '<i class="fa fa-ban"></i> <a href="/ignore">Игнор-лист</a><br />';
 echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

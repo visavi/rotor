@@ -1,5 +1,5 @@
 <?php if (!empty($photo)): ?>
-    <?php show_title($photo['title']); ?>
+    <?php //show_title($photo['title']); ?>
 
     <?php
     $links = [

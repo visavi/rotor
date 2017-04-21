@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -9,7 +9,7 @@ if (isset($_GET['act'])) {
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
-    show_title('Пользовательская реклама');
+    //show_title('Пользовательская реклама');
 
     switch ($act):
     ############################################################################################
@@ -22,7 +22,7 @@ if (is_admin()) {
 
             if ($total > 0) {
 
-                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['rekuserpost'].";", [SITETIME]);
+                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('rekuserpost').";", [SITETIME]);
 
                 echo '<form action="/admin/reklama?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -64,7 +64,7 @@ if (is_admin()) {
         ############################################################################################
         case 'edit':
 
-            $config['newtitle'] = 'Редактирование ссылки';
+            //App::setting('newtitle') = 'Редактирование ссылки';
 
             $id = abs(intval($_GET['id']));
 
@@ -188,4 +188,4 @@ if (is_admin()) {
     redirect("/");
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

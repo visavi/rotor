@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -17,7 +17,7 @@ switch ($act):
 ##                                    Главная страница                                    ##
 ############################################################################################
     case 'index':
-        show_title('Голосования');
+        //show_title('Голосования');
 
         $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC;", [0]);
         $votes = $queryvote -> fetchAll();
@@ -45,8 +45,8 @@ switch ($act):
         if (!empty($votes)) {
             if (empty($votes['closed'])) {
 
-                show_title($votes['title']);
-                $config['newtitle'] = $votes['title'];
+                //show_title($votes['title']);
+                //App::setting('newtitle') = $votes['title'];
 
                 $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `vote_id`=? ORDER BY `id`;", [$id]);
                 $answer = $queryanswer -> fetchAll();
@@ -115,7 +115,7 @@ switch ($act):
     ##                                      Голосование                                       ##
     ############################################################################################
     case 'vote':
-        show_title('Голосование');
+        //show_title('Голосование');
 
         $uid = check($_GET['uid']);
         if (isset($_POST['poll'])) {
@@ -174,12 +174,12 @@ switch ($act):
     ##                                      Голосование                                       ##
     ############################################################################################
     case 'voters':
-        show_title('Последние проголосовавшие');
+        //show_title('Последние проголосовавшие');
 
         $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($votes)) {
 
-            $config['newtitle'] = $votes['title'];
+            //App::setting('newtitle') = $votes['title'];
 
             echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
@@ -204,4 +204,4 @@ endswitch;
 
 echo '<i class="fa fa-briefcase"></i> <a href="/votes/history">Архив голосований</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

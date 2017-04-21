@@ -1,7 +1,7 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('Список последних комментариев');
+//show_title('Список последних комментариев');
 
 switch ($act):
 ############################################################################################
@@ -35,7 +35,7 @@ switch ($act):
 
                 echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['created_at']).')</small><br />';
 
-                if (is_admin() || empty($config['anonymity'])) {
+                if (is_admin() || empty(App::setting('anonymity'))) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
@@ -76,4 +76,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

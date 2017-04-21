@@ -1,4 +1,4 @@
-<?php show_title('Функция addmail'); ?>
+<?php //show_title('Функция addmail'); ?>
 
 Функция для отправки писем на E-mail, отсылает письма через стандартную функцию <a href="http://ru.php.net/manual/ru/function.mail.php">mail()</a>, данные отправляются в кодировке UTF-8<br /><br />
 

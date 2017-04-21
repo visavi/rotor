@@ -25,8 +25,8 @@ header("Content-type:text/html; charset=utf-8");
 
 <div id="wrap">
     <div id="header">
-        <h1 id="logo-text"><a href="/"><?= $config['title'] ?></a></h1>
-        <p id="slogan"><?= $config['logos'] ?></p>
+        <h1 id="logo-text"><a href="/"><?= App::setting('title') ?></a></h1>
+        <p id="slogan"><?= App::setting('logos') ?></p>
 
         <div id="header-links">
             <p>

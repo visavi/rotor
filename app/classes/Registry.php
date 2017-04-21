@@ -27,7 +27,7 @@ class Registry
 
     static public function has($name)
     {
-        if ( ! isset(self::getInstance()->registry[$name])) {
+        if (! isset(self::getInstance()->registry[$name])) {
             return false;
         }
 

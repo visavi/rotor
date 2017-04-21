@@ -1,7 +1,7 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('Кто в онлайне');
+//show_title('Кто в онлайне');
 
 $total     = Online::whereNotNull('user_id')->count();
 $total_all = Online::count();
@@ -22,14 +22,14 @@ switch ($act):
                 ->with('user')
                 ->orderBy('updated_at', 'desc')
                 ->offset($page['offset'])
-                ->limit($config['onlinelist'])
+                ->limit(App::setting('onlinelist'))
                 ->get();
 
             foreach ($online as $data) {
                 echo '<div class="b">';
                 echo user_gender($data->user).' <b>'.profile($data->user).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
 
-                if (is_admin() || empty($config['anonymity'])) {
+                if (is_admin() || empty(App::setting('anonymity'))) {
                     echo '<div><span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
                 }
             }
@@ -55,19 +55,19 @@ switch ($act):
             $online = Online::with('user')
                 ->orderBy('updated_at', 'desc')
                 ->offset($page['offset'])
-                ->limit($config['onlinelist'])
+                ->limit(App::setting('onlinelist'))
                 ->get();
 
             foreach ($online as $data) {
                 if (empty($data['user'])) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-user-circle-o"></i> <b>'.$config['guestsuser'].'</b>  (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
+                    echo '<i class="fa fa-user-circle-o"></i> <b>'.App::setting('guestsuser').'</b>  (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
                 } else {
                     echo '<div class="b">';
                     echo user_gender($data->user).' <b>'.profile($data->user).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
                 }
 
-                if (is_admin() || empty($config['anonymity'])) {
+                if (is_admin() || empty(App::setting('anonymity'))) {
                     echo '<div><span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
                 }
             }
@@ -82,4 +82,4 @@ switch ($act):
 
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
@@ -7,7 +7,7 @@ $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()){
 
-show_title('Доска объявлений');
+//show_title('Доска объявлений');
 ############################################################################################
 ##                                    Главная страница                                    ##
 ############################################################################################
@@ -64,8 +64,8 @@ if ($act=="board")  {
         $string = search_string(STORAGE."/board/database.dat", $id, 2);
         if ($string) {
 
-            $config['header'] = $string[0];
-            $config['subheader'] = $string[1];
+            //App::setting('header') = $string[0];
+            //App::setting('header') = $string[1];
 
             echo '<a href="/admin/board">Объявления</a> / ';
             echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a> / ';
@@ -81,10 +81,10 @@ if ($act=="board")  {
                 if ($total>0) {
                     echo '<form action="/admin/board?act=deltop&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-                    if ($total < $page['offset'] + $config['boardspost']){
+                    if ($total < $page['offset'] + App::setting('boardspost')){
                         $end = $total;
                     } else {
-                        $end = $page['offset'] + $config['boardspost'];
+                        $end = $page['offset'] + App::setting('boardspost');
                     }
 
                     for ($i = $page['offset']; $i < $end; $i++){
@@ -333,4 +333,4 @@ echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />'
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

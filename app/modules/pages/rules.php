@@ -1,14 +1,14 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('Правила сайта');
+//show_title('Правила сайта');
 
 $rules = DB::run() -> queryFetch("SELECT * FROM `rules`;");
 
 if (!empty($rules)) {
     $rules['text'] = str_replace(
         ['%SITENAME%', '%MAXBAN%'],
-        [$config['title'], round($config['maxbantime'] / 1440)],
+        [App::setting('title'), round(App::setting('maxbantime') / 1440)],
         $rules['text']
     );
 
@@ -17,4 +17,4 @@ if (!empty($rules)) {
     show_error('Правила сайта еще не установлены!');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,4 +1,4 @@
-<?php show_title('Функция cache_admin_links'); ?>
+<?php //show_title('Функция cache_admin_links'); ?>
 
 Функция кэширует ссылки на дополнительные админские страницы<br />
 Является вспомогательной для функции вывода ссылок <a href="/files/docs/show_admin_links">show_admin_links</a><br />

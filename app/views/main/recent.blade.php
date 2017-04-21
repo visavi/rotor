@@ -1,6 +1,6 @@
 <?php
 if (isset($act) && $act == 'recent') {
-	show_title('Последняя активность');
+	//show_title('Последняя активность');
 }
 
 echo '<div class="b"><i class="fa fa-forumbee fa-lg text-muted"></i> <b>Последние темы</b></div>';

@@ -45,7 +45,7 @@ if (empty($find)) {
             $findme = "\"$find\"";
         }
 
-        $config['newtitle'] = $find . ' - Результаты поиска';
+        //App::setting('newtitle') = $find . ' - Результаты поиска';
 
         $wheres = (empty($where)) ? 'topics' : 'posts';
 
@@ -78,7 +78,7 @@ if (empty($find)) {
                     ->with('lastPost.user')
                     ->orderBy('updated_at', 'desc')
                     ->offset($page['offset'])
-                    ->limit($config['forumtem'])
+                    ->limit(App::setting('forumtem'))
                     ->get();
 
                 App::view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
@@ -117,7 +117,7 @@ if (empty($find)) {
                     ->with('user', 'topic')
                     ->orderBy('created_at', 'desc')
                     ->offset($page['offset'])
-                    ->limit($config['forumpost'])
+                    ->limit(App::setting('forumpost'))
                     ->get();
 
                 App::view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));

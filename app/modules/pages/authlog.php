@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-show_title('История моих авторизаций');
+//show_title('История моих авторизаций');
 
 if (is_user()) {
     ############################################################################################
@@ -18,7 +18,7 @@ if (is_user()) {
 
     if ($total > 0) {
 
-        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['loginauthlist'].";", [$log]);
+        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loginauthlist').";", [$log]);
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';
@@ -48,4 +48,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/menu">Вернуться</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
-show_title('Блоги - Печать страницы');
+//show_title('Блоги - Печать страницы');
 
 $blog = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
 
@@ -24,4 +24,4 @@ if (!empty($blog)) {
 
 App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

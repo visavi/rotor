@@ -1,12 +1,12 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $uz = check(Request::input('uz'));
 $gid = abs(intval(Request::input('gid')));
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Галерея сайта');
+//show_title('Галерея сайта');
 
 switch ($act):
 ############################################################################################
@@ -18,11 +18,11 @@ case 'index':
     $total = Photo::count();
     $page = App::paginate(App::setting('fotolist'), $total);
 
-    $config['newtitle'] = 'Галерея сайта (Стр. '.$page['current'].')';
+    //App::setting('newtitle') = 'Галерея сайта (Стр. '.$page['current'].')';
 
     $photos = Photo::orderBy('created_at', 'desc')
         ->offset($page['offset'])
-        ->limit($config['fotolist'])
+        ->limit(App::setting('fotolist'))
         ->with('user')
         ->get();
 
@@ -60,7 +60,7 @@ break;
                             $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user_id`=? LIMIT 1;", ['gallery', $gid, App::getUserId()]);
 
                             if (empty($queryrated)) {
-                                $expiresrated = SITETIME + 3600 * $config['photoexprated'];
+                                $expiresrated = SITETIME + 3600 * App::setting('photoexprated');
 
                                 DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND created_at<?;", ['gallery', SITETIME]);
                                 DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user_id`, `created_at`) VALUES (?, ?, ?, ?);", ['gallery', $gid, App::getUserId(), $expiresrated]);
@@ -96,7 +96,7 @@ break;
     ############################################################################################
     case 'addphoto':
 
-        $config['newtitle'] = 'Добавление фотографии';
+        //App::setting('newtitle') = 'Добавление фотографии';
 
         if (is_user()) {
             echo '<div class="form">';
@@ -111,7 +111,7 @@ break;
             echo '<input type="submit" value="Добавить" /></form></div><br />';
 
             echo 'Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br />';
-            echo 'Весом не более '.formatsize($config['filesize']).' и размером от 100 до '.(int)$config['fileupfoto'].' px<br /><br />';
+            echo 'Весом не более '.formatsize(App::setting('filesize')).' и размером от 100 до '.(int)App::setting('fileupfoto').' px<br /><br />';
         } else {
             show_login('Вы не авторизованы, чтобы добавить фотографию, необходимо');
         }
@@ -124,7 +124,7 @@ break;
     ############################################################################################
     case 'add':
 
-        $config['newtitle'] = 'Результат добавления';
+        //App::setting('newtitle') = 'Результат добавления';
 
         $token = check(Request::input('token'));
         $title = check(Request::input('title'));
@@ -140,8 +140,8 @@ break;
 
                                 $handle = upload_image(
                                     $_FILES['photo'],
-                                    $config['filesize'],
-                                    $config['fileupfoto'],
+                                    App::setting('filesize'),
+                                    App::setting('fileupfoto'),
                                     uniqid()
                                 );
 
@@ -274,7 +274,7 @@ break;
 
         $photo = Photo::find($gid);
         if ($photo) {
-            $config['newtitle'] = 'Комментарии - '.$photo['title'];
+            //App::setting('newtitle') = 'Комментарии - '.$photo['title'];
 
             echo '<i class="fa fa-picture-o"></i> <b><a href="/gallery?act=view&amp;gid='.$photo['id'].'">'.$photo['title'].'</a></b><hr />';
 
@@ -316,7 +316,7 @@ break;
 
                     echo '<div>'.App::bbCode($data['text']).'<br />';
 
-                    if (is_admin() || empty($config['anonymity'])) {
+                    if (is_admin() || empty(App::setting('anonymity'))) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                     }
 
@@ -370,7 +370,7 @@ break;
         $token = check(Request::input('token'));
         $msg = check(Request::input('msg'));
 
-        $config['newtitle'] = 'Добавление комментария';
+        //App::setting('newtitle') = 'Добавление комментария';
 
         if (is_user()) {
             if ($token == $_SESSION['token']) {
@@ -384,7 +384,7 @@ break;
 
                                 DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", ['gallery', $gid, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".$config['maxpostgallery'].") AS del);", ['gallery', $gid, 'gallery', $gid]);
+                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".App::setting('maxpostgallery').") AS del);", ['gallery', $gid, 'gallery', $gid]);
 
                                 DB::run() -> query("UPDATE `photo` SET `comments`=`comments`+1 WHERE `id`=?;", [$gid]);
                                 DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=?", [App::getUserId()]);
@@ -593,7 +593,7 @@ break;
         if (!empty($query)) {
 
             $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-            $end = ceil($total_comments / $config['postgallery']);
+            $end = ceil($total_comments / App::setting('postgallery'));
 
             redirect("/gallery?act=comments&gid=$gid&page=$end");
 
@@ -605,4 +605,4 @@ break;
     break;
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

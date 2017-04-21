@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Поиск в файлах');
+//show_title('Поиск в файлах');
 
 if (is_user()) {
 switch ($act):
@@ -12,7 +12,7 @@ switch ($act):
 ############################################################################################
 case "index":
 
-    $config['newtitle'] = 'Поиск в файлах';
+    //App::setting('newtitle') = 'Поиск в файлах';
 
     echo '<div class="form"><form action="/load/search?act=search" method="get">';
     echo '<input type="hidden" name="act" value="search" />';
@@ -65,7 +65,7 @@ case "search":
             $findme = "\"$find\"";
         }
 
-        $config['newtitle'] = $find.' - Результаты поиска';
+        //App::setting('newtitle') = $find.' - Результаты поиска';
 
         $wheres = (empty($where)) ? 'title' : 'text';
 
@@ -93,7 +93,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -135,7 +135,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -177,4 +177,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -19,14 +19,14 @@ switch ($act):
 ############################################################################################
     case 'index':
 
-        show_title('История голосований');
+        //show_title('История голосований');
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
         $page = App::paginate(App::setting('allvotes'), $total);
 
         if ($total > 0) {
 
-            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['allvotes'].";", [1]);
+            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('allvotes').";", [1]);
 
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
@@ -45,13 +45,13 @@ switch ($act):
     ##                                      Голосование                                       ##
     ############################################################################################
     case 'result':
-        show_title('Результаты голосований');
+        //show_title('Результаты голосований');
 
         $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
 
         if (!empty($votes)) {
             if (!empty($votes['closed'])) {
-                $config['newtitle'] = $votes['title'];
+                //App::setting('newtitle') = $votes['title'];
 
                 echo '<i class="fa fa-briefcase"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
@@ -97,4 +97,4 @@ endswitch;
 
 echo '<i class="fa fa-bar-chart"></i> <a href="/votes">Список голосований</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

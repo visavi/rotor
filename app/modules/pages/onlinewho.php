@@ -1,7 +1,7 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('Онлайн пользователей');
+//show_title('Онлайн пользователей');
 
 $daytime = date("d", SITETIME);
 $montime = date("d.m", SITETIME);
@@ -58,4 +58,4 @@ if ($total > 0) {
 
 echo '<i class="fa fa-users"></i> <a href="/who">Kто-где?</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -8,7 +8,7 @@
 
     @foreach ($topics as $topic)
         <?php $topic['text'] = App::bbCode($topic['text']); ?>
-        <?php $topic['text'] = str_replace('/uploads/smiles', $config['home'].'/uploads/smiles', $topic['text']); ?>
+        <?php $topic['text'] = str_replace('/uploads/smiles', App::setting('home').'/uploads/smiles', $topic['text']); ?>
 
         <item>
             <title>{{ $topic['title'] }}</title>

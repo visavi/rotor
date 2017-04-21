@@ -26,7 +26,7 @@
 
                 Написал: <?=$data->getUser()->login?> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
 
-                <?php if (is_admin() || empty($config['anonymity'])): ?>
+                <?php if (is_admin() || empty(App::setting('anonymity'))): ?>
                     <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
                 <?php endif; ?>
 

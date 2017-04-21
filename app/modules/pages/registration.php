@@ -4,7 +4,7 @@ if (is_user()) {
     App::abort('403', 'Вы уже регистрировались, запрещено создавать несколько аккаунтов!');
 }
 
-if (! $config['openreg']) {
+if (! App::setting('openreg')) {
     App::abort('default', 'Регистрация временно приостановлена, пожалуйста зайдите позже!');
 }
 
@@ -14,7 +14,7 @@ if (Request::isMethod('post')) {
         $pars = trim(Request::input('pars'));
         $pars2 = trim(Request::input('pars2'));
         $protect = check(strtolower(Request::input('protect')));
-        $invite = (!empty($config['invite'])) ? check(Request::input('invite')) : '';
+        $invite = (!empty(App::setting('invite'))) ? check(Request::input('invite')) : '';
         $meil = strtolower(check(Request::input('meil')));
         $domain = utf_substr(strrchr($meil, '@'), 1);
         $gender = Request::input('gender') == 1 ? 1 : 2;
@@ -24,7 +24,7 @@ if (Request::isMethod('post')) {
         $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
             ->addRule('regex', [$logs, '|^[a-z0-9\-]+$|i'], ['logs' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'], true)
             ->addRule('email', $meil, ['meil' => 'Вы ввели неверный адрес e-mail, необходим формат name@site.domen!'], true)
-            ->addRule('string', $invite, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], $config['invite'], 12, 15)
+            ->addRule('string', $invite, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], App::setting('invite'), 12, 15)
             ->addRule('string', $logs, ['logs' => 'Слишком длинный или короткий логин!'], true, 3, 20)
             ->addRule('string', $pars, ['pars' => 'Слишком длинный или короткий пароль!'], true, 6, 20)
             ->addRule('equal', [$pars, $pars2], ['pars2' => 'Ошибка! Введенные пароли отличаются друг от друга!']);
@@ -60,7 +60,7 @@ if (Request::isMethod('post')) {
         $validation->addRule('empty', $blackmail, ['meil' => 'Указанный вами адрес email занесен в черный список!']);
 
         // Проверка пригласительного ключа
-        if (!empty($config['invite'])) {
+        if (!empty(App::setting('invite'))) {
             $invitation = DB::run()->querySingle("SELECT `id` FROM `invite` WHERE `hash`=? AND `used`=? LIMIT 1;", [$invite, 0]);
             $validation->addRule('not_empty', $invitation, ['invite' => 'Ключ приглашения недействителен!']);
         }
@@ -70,25 +70,25 @@ if (Request::isMethod('post')) {
 
 
             // --- Уведомление о регистрации на E-mail ---//
-            $regmessage = "Добро пожаловать, " . $logs . " \nТеперь вы зарегистрированный пользователь сайта " . $config['home'] . " , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. \nВаши данные для входа на сайт \nЛогин: " . $logs . " \nПароль: " . $pars . " \n\nСсылка для входа на сайт: \n" . $config['home'] . "/login \nНадеемся вам понравится на нашем портале! \nС уважением администрация сайта \nЕсли это письмо попало к вам по ошибке, то просто проигнорируйте его \n\n";
+            $regmessage = "Добро пожаловать, " . $logs . " \nТеперь вы зарегистрированный пользователь сайта " . App::setting('home') . " , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. \nВаши данные для входа на сайт \nЛогин: " . $logs . " \nПароль: " . $pars . " \n\nСсылка для входа на сайт: \n" . App::setting('home') . "/login \nНадеемся вам понравится на нашем портале! \nС уважением администрация сайта \nЕсли это письмо попало к вам по ошибке, то просто проигнорируйте его \n\n";
 
-            if ($config['regkeys'] == 1) {
+            if (App::setting('regkeys') == 1) {
                 $registration_key = str_random();
 
                 echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br />';
                 echo 'Мастер-ключ был выслан вам на почтовый ящик: ' . $meil . '</span></b><br /><br />';
 
-                $regmessage .= "Внимание! \nДля подтверждения регистрации необходимо в течение 24 часов ввести мастер-ключ! \nВаш мастер-ключ: " . $registration_key . " \nВведите его после авторизации на сайте \nИли перейдите по прямой ссылке: \n\n" . $config['home'] . "/key?act=inkey&key=" . $registration_key . " \n\nЕсли в течение 24 часов вы не подтвердите регистрацию, ваш профиль будет автоматически удален";
+                $regmessage .= "Внимание! \nДля подтверждения регистрации необходимо в течение 24 часов ввести мастер-ключ! \nВаш мастер-ключ: " . $registration_key . " \nВведите его после авторизации на сайте \nИли перейдите по прямой ссылке: \n\n" . App::setting('home') . "/key?act=inkey&key=" . $registration_key . " \n\nЕсли в течение 24 часов вы не подтвердите регистрацию, ваш профиль будет автоматически удален";
             }
 
-            if ($config['regkeys'] == 2) {
+            if (App::setting('regkeys') == 2) {
                 echo '<b><span style="color:#ff0000">Внимание! Ваш аккаунт будет активирован только после проверки администрацией!</span></b><br /><br />';
 
                 $regmessage .= "Внимание! \nВаш аккаунт будет активирован только после проверки администрацией! \nПроверить статус активации вы сможете после авторизации на сайте";
             }
 
             // Активация пригласительного ключа
-            if (!empty($config['invite'])) {
+            if (!empty(App::setting('invite'))) {
                 DB::run()->query("UPDATE `invite` SET `used`=?, `invited`=? WHERE `key`=? LIMIT 1;", [1, $logs, $invite]);
             }
 
@@ -101,17 +101,17 @@ if (Request::isMethod('post')) {
                 'gender' => $gender,
                 'themes' => 0,
                 'point' => 0,
-                'money' => $config['registermoney'],
+                'money' => App::setting('registermoney'),
                 'timelastlogin' => SITETIME,
-                'confirmreg' => $config['regkeys'],
+                'confirmreg' => App::setting('regkeys'),
                 'confirmregkey' => $registration_key,
                 'subscribe' => str_random(32),
             ]);
 
             // ----- Уведомление в приват ----//
-            $textpriv = text_private(1, ['%USERNAME%' => $logs, '%SITENAME%' => $config['home']]);
+            $textpriv = text_private(1, ['%USERNAME%' => $logs, '%SITENAME%' => App::setting('home')]);
             send_private($user->id, 0, $textpriv);
-            sendMail($meil, 'Регистрация на сайте ' . $config['title'], nl2br($regmessage));
+            sendMail($meil, 'Регистрация на сайте ' . App::setting('title'), nl2br($regmessage));
 
             App::login($logs, $pars);
 

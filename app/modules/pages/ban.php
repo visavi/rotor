@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -7,11 +7,11 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-show_title('Бан пользователя');
+//show_title('Бан пользователя');
 
 if (is_user()) {
-    if ($udata['ban'] == 1) {
-        if ($udata['timeban'] > SITETIME) {
+    if (App::user('ban') == 1) {
+        if (App::user('timeban') > SITETIME) {
             switch ($act):
             ############################################################################################
             ##                                    Главная страница                                    ##
@@ -19,19 +19,19 @@ if (is_user()) {
                 case 'index':
 
                     echo '<i class="fa fa-times"></i> <b>Вас забанили</b><br /><br />';
-                    echo '<b><span style="color:#ff0000">Причина бана: '.App::bbCode($udata['reasonban']).'</span></b><br /><br />';
+                    echo '<b><span style="color:#ff0000">Причина бана: '.App::bbCode(App::user('reasonban')).'</span></b><br /><br />';
 
-                    echo 'До окончания бана осталось <b>'.formattime($udata['timeban'] - SITETIME).'</b><br /><br />';
+                    echo 'До окончания бана осталось <b>'.formattime(App::user('timeban') - SITETIME).'</b><br /><br />';
 
                     echo 'Чтобы не терять время зря, рекомендуем вам ознакомиться с <b><a href="/rules">Правилами сайта</a></b><br /><br />';
 
-                    echo 'Общее число строгих нарушений: <b>'.$udata['totalban'].'</b><br />';
+                    echo 'Общее число строгих нарушений: <b>'.App::user('totalban').'</b><br />';
                     echo 'Внимание, максимальное количество нарушений: <b>5</b><br />';
                     echo 'При превышении лимита нарушений ваш профиль автоматически удаляется<br />';
                     echo 'Востановление профиля или данных после этого будет невозможным<br />';
                     echo 'Будьте внимательны, старайтесь не нарушать больше правил<br /><br />';
                     // --------------------------------------------------//
-                    if ($config['addbansend'] == 1 && $udata['explainban'] == 1) {
+                    if (App::setting('addbansend') == 1 && App::user('explainban') == 1) {
                         echo '<div class="form">';
                         echo '<form method="post" action="/ban?act=send">';
                         echo 'Объяснение:<br />';
@@ -50,20 +50,20 @@ if (is_user()) {
 
                     $msg = check($_POST['msg']);
 
-                    if ($config['addbansend'] == 1) {
-                        if ($udata['explainban'] == 1) {
+                    if (App::setting('addbansend') == 1) {
+                        if (App::user('explainban') == 1) {
                             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                                $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$udata['loginsendban']]);
+                                $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [App::user('loginsendban')]);
                                 if (!empty($queryuser)) {
 
                                     $msg = antimat($msg);
 
                                     $textpriv = 'Объяснение нарушения: '.$msg;
 
-                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$udata['loginsendban'], $log, $textpriv, SITETIME]);
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [App::user('loginsendban'), $log, $textpriv, SITETIME]);
 
                                     DB::run() -> query("UPDATE `users` SET `explainban`=? WHERE `login`=?;", [0, $log]);
-                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?;", [$udata['loginsendban']]);
+                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?;", [App::user('loginsendban')]);
 
                                     notice('Объяснение успешно отправлено!');
                                     redirect("/ban");
@@ -91,7 +91,7 @@ if (is_user()) {
         ############################################################################################
         } else {
             echo '<i class="fa fa-check"></i> <b>Срок бана закончился!</b><br /><br />';
-            echo '<b><span style="color:#ff0000">Причина бана: '.App::bbCode($udata['reasonban']).'</span></b><br /><br />';
+            echo '<b><span style="color:#ff0000">Причина бана: '.App::bbCode(App::user('reasonban')).'</span></b><br /><br />';
 
             echo 'Поздравляем!!! Время вашего бана вышло, постарайтесь вести себя достойно и не нарушать правила сайта<br /><br />';
 
@@ -109,4 +109,4 @@ if (is_user()) {
     show_error('Ошибка! Вы не авторизованы!');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

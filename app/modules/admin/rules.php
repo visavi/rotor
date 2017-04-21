@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 
 if (is_admin([101, 102])) {
-    show_title('Правила сайта');
+    //show_title('Правила сайта');
 
     switch ($act):
     ############################################################################################
@@ -19,7 +19,7 @@ if (is_admin([101, 102])) {
             $rules = DB::run() -> queryFetch("SELECT * FROM `rules`;");
 
             if (!empty($rules)) {
-                $rules['text'] = str_replace(['%SITENAME%', '%MAXBAN%'], [$config['title'], round($config['maxbantime'] / 1440)], $rules['text']);
+                $rules['text'] = str_replace(['%SITENAME%', '%MAXBAN%'], [App::setting('title'), round(App::setting('maxbantime') / 1440)], $rules['text']);
 
                 echo App::bbCode($rules['text']).'<hr />';
 
@@ -86,4 +86,4 @@ if (is_admin([101, 102])) {
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

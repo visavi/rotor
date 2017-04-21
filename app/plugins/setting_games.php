@@ -1,23 +1,24 @@
 <?php
 
-$config['vkladlist'] = 10;			// Число вкладчиков на странице
+$setting['vkladlist']     = 10;     // Число вкладчиков на странице
+$setting['jackpot']       = 10000;  // Сумма выигрыша в лотереи
+$setting['ochkostavka']   = 1000;   // Максимальная сумма ставки в $setting[
+$setting['hiprize']       = 100;    // Сумма выигрыша в игре Угадай число
+$setting['hipopytka']     = 5;      // Количество попыток
+$setting['hisumma']       = 5;      // Цена за попытку у$setting[
+$setting['maxsumbank']    = 1000000;	// Максимальная сумма хран$setting[
+$setting['minkredit']     = 1000;   // Минимальная сумма кредита
+$setting['maxkredit']     = 100000; // Максимальная сумма кредита
+$setting['percentkredit'] = 10;     // Процента при максимальной сумме
+$setting['creditpoint']	  = 150;    // Количество баллов для вз$setting[
+$setting['safesum']       = 1000;   // Всего денег в сейфе
+$setting['safeattempt']   = 100;    // Цена попытки взлома сейфа
 
-$config['jackpot'] = 10000;			// Сумма выигрыша в лотереи
-$config['ochkostavka'] = 1000;		// Максимальная сумма ставки в игре 21 очко
 
-$config['hiprize'] = 100;     		// Сумма выигрыша в игре Угадай число
-$config['hipopytka'] = 5;			// Количество попыток
-$config['hisumma'] = 5;				// Цена за попытку угадать число
-
-$config['maxsumbank'] = 1000000;	// Максимальная сумма хранения в банке
-
-$config['minkredit'] = 1000;		// Минимальная сумма кредита
-$config['maxkredit'] = 100000;		// Максимальная сумма кредита
-$config['percentkredit'] = 10;		// Процента при максимальной сумме
-$config['creditpoint']	= 150;		// Количество баллов для взятия кредита
-
-$config['safesum'] = 1000;			// Всего денег в сейфе
-$config['safeattempt'] = 100;		// Цена попытки взлома сейфа
+$setting['chatpost']      = 10; // Количество постов на страницу
+$setting['shutnik']       = 1;  // Шутник включен
+$setting['magnik']        = 1;  // Умник включен
+$setting['botnik']        = 1;  // Бот включен
 
 // --------------- Функция подсчета карт в игре ---------------//
 function cards_score($str) {

@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 $cid = isset($_GET['cid']) ? abs(intval($_GET['cid'])) : 0;
@@ -7,7 +7,7 @@ $act = isset($_GET['act']) ? check($_GET['act']) : 'index';
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin([101, 102])) {
-show_title('Управление загрузками');
+//show_title('Управление загрузками');
 
 switch ($act):
 ############################################################################################
@@ -81,7 +81,7 @@ break;
 ##                                      FTP-импорт                                        ##
 ############################################################################################
 case 'newimport':
-    $config['newtitle'] = 'FTP-импорт';
+    //App::setting('newtitle') = 'FTP-импорт';
 
     if (is_admin([101])) {
         if (file_exists(HOME.'/uploads/loader')) {
@@ -173,9 +173,9 @@ case 'addimport':
                             if (strlen($filename) <= 50) {
                                 if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
                                     $ext = getExtension($filename);
-                                    if (in_array($ext, explode(',', $config['allowextload']), true)) {
+                                    if (in_array($ext, explode(',', App::setting('allowextload')), true)) {
                                         if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $filename)) {
-                                            if (filesize(HOME.'/uploads/loader/'.$file) > 0 && filesize(HOME.'/uploads/loader/'.$file) <= $config['fileupload']) {
+                                            if (filesize(HOME.'/uploads/loader/'.$file) > 0 && filesize(HOME.'/uploads/loader/'.$file) <= App::setting('fileupload')) {
 
                                                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
@@ -243,7 +243,7 @@ break;
 ##                                    Добавление файла                                    ##
 ############################################################################################
 case 'newfile':
-    $config['newtitle'] = 'Публикация нового файла';
+    //App::setting('newtitle') = 'Публикация нового файла';
 
     $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
     $downs = $querydown -> fetchAll();
@@ -306,7 +306,7 @@ break;
 ############################################################################################
 case 'addfile':
 
-    $config['newtitle'] = 'Публикация нового файла';
+    //App::setting('newtitle') = 'Публикация нового файла';
 
     $uid = check($_GET['uid']);
     $cid = abs(intval($_POST['cid']));
@@ -615,7 +615,7 @@ case 'delcats':
 
     $uid = check($_GET['uid']);
 
-    if (is_admin([101]) && $log == $config['nickname']) {
+    if (is_admin([101]) && $log == App::setting('nickname')) {
         if ($uid == $_SESSION['token']) {
             $downs = DB::run() -> queryFetch("SELECT `c1`.*, count(`c2`.`id`) AS `subcnt` FROM `cats` `c1` LEFT JOIN `cats` `c2` ON `c2`.`parent` = `c1`.`id` WHERE `c1`.`id`=? GROUP BY `id` LIMIT 1;", [$cid]);
 
@@ -685,7 +685,7 @@ case 'down':
 
     echo '<br /><br />';
     if ($cats > 0) {
-        $config['newtitle'] = $cats['name'];
+        //App::setting('newtitle') = $cats['name'];
 
         echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
         echo ' (<a href="/load/down?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
@@ -707,11 +707,11 @@ case 'down':
 
         if ($total > 0) {
 
-            $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [$cid, 1]);
+            $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";", [$cid, 1]);
 
             $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
-            $is_admin = (is_admin([101]) && $log == $config['nickname']);
+            $is_admin = (is_admin([101]) && $log == App::setting('nickname'));
 
             if ($is_admin) {
                 echo '<form action="/admin/load?act=deldown&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -769,7 +769,7 @@ break;
 ############################################################################################
 case 'editdown':
 
-    $config['newtitle'] = 'Редактирование файла';
+    //App::setting('newtitle') = 'Редактирование файла';
 
     $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
@@ -788,7 +788,7 @@ case 'editdown':
 
             echo '<div class="form">';
             echo '<form action="/admin/load?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-            echo 'Прикрепить файл* ('.$config['allowextload'].'):<br /><input type="file" name="loadfile" /><br />';
+            echo 'Прикрепить файл* ('.App::setting('allowextload').'):<br /><input type="file" name="loadfile" /><br />';
             echo '<input value="Загрузить" type="submit" /></form></div><br />';
 
             echo '<div class="form">';
@@ -812,7 +812,7 @@ case 'editdown':
                     echo '<input value="Загрузить" type="submit" /></form></div><br />';
                 } else {
                     echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                    echo resize_image('uploads/screen/'.$folder, $new['screen'], $config['previewsize']).'<br />';
+                    echo resize_image('uploads/screen/'.$folder, $new['screen'], App::setting('previewsize')).'<br />';
                 }
             }
         }
@@ -941,7 +941,7 @@ break;
 ##                                   Импорт файла                                         ##
 ############################################################################################
 case 'copyfile':
-    show_title('Импорт файла');
+    //show_title('Импорт файла');
 
     $loadfile = check($_POST['loadfile']);
 
@@ -958,7 +958,7 @@ case 'copyfile':
 
                         $ext = getExtension($filename);
 
-                        if (in_array($ext, explode(',', $config['allowextload']), true)) {
+                        if (in_array($ext, explode(',', App::setting('allowextload')), true)) {
 
                             $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                             if (empty($downlink)) {
@@ -1003,7 +1003,7 @@ break;
 ##                                   Загрузка файла                                       ##
 ############################################################################################
 case 'loadfile':
-    show_title('Загрузка файла');
+    //show_title('Загрузка файла');
 
     $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
@@ -1022,8 +1022,8 @@ case 'loadfile':
 
                         $ext = getExtension($filename);
 
-                        if (in_array($ext, explode(',', $config['allowextload']), true)) {
-                            if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= $config['fileupload']) {
+                        if (in_array($ext, explode(',', App::setting('allowextload')), true)) {
+                            if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= App::setting('fileupload')) {
                                 $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                                 if (empty($downlink)) {
 
@@ -1040,7 +1040,7 @@ case 'loadfile':
                                     show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                                 }
                             } else {
-                                show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize($config['fileupload']).'!');
+                                show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize(App::setting('fileupload')).'!');
                             }
                         } else {
                             show_error('Ошибка! Недопустимое расширение файла!');
@@ -1071,7 +1071,7 @@ break;
 ##                                   Загрузка скриншота                                   ##
 ############################################################################################
 case 'loadscreen':
-    show_title('Загрузка скриншота');
+    //show_title('Загрузка скриншота');
 
     $down = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
@@ -1080,7 +1080,7 @@ case 'loadscreen':
             if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
                 // ------------------------------------------------------//
-                $handle = upload_image($_FILES['screen'], $config['screenupload'], $config['screenupsize'], $down['link']);
+                $handle = upload_image($_FILES['screen'], App::setting('screenupload'), App::setting('screenupsize'), $down['link']);
                 if ($handle) {
                     $folder = $down['folder'] ? $down['folder'].'/' : '';
 
@@ -1273,7 +1273,7 @@ case 'deldown':
     $uid = check($_GET['uid']);
     $del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
 
-    if (is_admin([101]) && $log == $config['nickname']) {
+    if (is_admin([101]) && $log == App::setting('nickname')) {
         if ($uid == $_SESSION['token']) {
             if ($del > 0) {
                 $del = implode(',', $del);
@@ -1323,4 +1323,4 @@ echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />'
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

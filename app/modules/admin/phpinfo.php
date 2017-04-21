@@ -1,8 +1,8 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (is_admin([101, 102])) {
-    show_title('PHP-info');
+    //show_title('PHP-info');
 
     echo 'PHP version: <b>'.phpversion().'</b><br />';
 
@@ -56,4 +56,4 @@ if (is_admin([101, 102])) {
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

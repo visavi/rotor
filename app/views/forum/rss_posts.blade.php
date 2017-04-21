@@ -8,7 +8,7 @@
 
     @foreach ($posts as $data)
         <?php $data['text'] = App::bbCode($data['text']); ?>
-        <?php $data['text'] = str_replace('/uploads/smiles', $config['home'].'/uploads/smiles', $data['text']); ?>
+        <?php $data['text'] = str_replace('/uploads/smiles', App::setting('home').'/uploads/smiles', $data['text']); ?>
 
         <item>
             <title>{{ $data['text'] }}</title>

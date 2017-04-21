@@ -1,11 +1,11 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $id  = abs(intval(Request::input('id', 0)));
 
 if (is_admin([101, 102])) {
-    show_title('Управление новостями');
+    //show_title('Управление новостями');
 
 switch ($act):
 ############################################################################################
@@ -145,7 +145,7 @@ case 'change':
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-            $handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $id);
+            $handle = upload_image($_FILES['image'], App::setting('filesize'), App::setting('fileupfoto'), $id);
             if ($handle) {
 
                 // Удаление старой картинки
@@ -225,13 +225,13 @@ case 'addnews':
         $lastid = DB::run() -> lastInsertId();
 
         // Выводим на главную если там нет новостей
-        if (!empty($top) && empty($config['lastnews'])) {
+        if (!empty($top) && empty(App::setting('lastnews'))) {
             DB::run() -> query("UPDATE `setting` SET `value`=? WHERE `name`=?;", [1, 'lastnews']);
             save_setting();
         }
 
         // ---------------------------- Загрузка изображения -------------------------------//
-        $handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $lastid);
+        $handle = upload_image($_FILES['image'], App::setting('filesize'), App::setting('fileupfoto'), $lastid);
         if ($handle) {
 
             $handle -> process(HOME.'/uploads/news/');
@@ -331,4 +331,4 @@ echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />'
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

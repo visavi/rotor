@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Мои настройки');
+//show_title('Мои настройки');
 
 if (is_user()) {
 switch ($act):
@@ -27,7 +27,7 @@ case 'index':
     echo '<option value="0">Автоматически</option>';
     $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
     foreach ($globthemes as $themes) {
-        $selected = ($udata['themes'] == basename($themes)) ? ' selected="selected"' : '';
+        $selected = (App::user('themes') == basename($themes)) ? ' selected="selected"' : '';
         echo '<option value="'.basename($themes).'"'.$selected.'>'.basename($themes).'</option>';
     }
     echo '</select><br />';
@@ -41,7 +41,7 @@ case 'index':
     echo '<select name="lang">';
     $languages = glob(APP."/lang/*", GLOB_ONLYDIR);
     foreach ($languages as $lang) {
-        $selected = ($udata['lang'] == basename($lang)) ? ' selected="selected"' : '';
+        $selected = (App::user('lang') == basename($lang)) ? ' selected="selected"' : '';
         echo '<option value="'.basename($lang).'"'.$selected.'>'.$langShort[basename($lang)].'</option>';
     }
     echo '</select><br />';
@@ -51,27 +51,27 @@ case 'index':
     echo 'Временной сдвиг:<br />';
     echo '<select name="timezone">';
     foreach($arrtimezone as $zone) {
-        $selected = ($udata['timezone'] == $zone) ? ' selected="selected"' : '';
+        $selected = (App::user('timezone') == $zone) ? ' selected="selected"' : '';
         echo '<option value="'.$zone.'"'.$selected.'>'.$zone.'</option>';
     }
     echo '</select> - '.date_fixed(SITETIME, 'H:i').'<br />';
 
 ?>
-    <?php $checked = ($udata['privacy'] == 1) ? ' checked="checked"' : ''; ?>
+    <?php $checked = (App::user('privacy') == 1) ? ' checked="checked"' : ''; ?>
     <div class="checkbox">
         <label data-toggle="tooltip" title="Писать в приват и на стену смогут только пользователи из контактов">
             <input name="privacy" type="checkbox" value="1"<?= $checked?>> Режим приватности
         </label>
     </div>
 
-    <?php $checked = ($udata['notify'] == 1) ? ' checked="checked"' : ''; ?>
+    <?php $checked = (App::user('notify') == 1) ? ' checked="checked"' : ''; ?>
     <div class="checkbox">
         <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения">
             <input name="notify" type="checkbox" value="1"<?= $checked?>> Получать уведомления об ответах
         </label>
     </div>
 
-    <?php $checked = (! empty($udata['subscribe'])) ? ' checked="checked"' : ''; ?>
+    <?php $checked = (! empty(App::user('subscribe'))) ? ' checked="checked"' : ''; ?>
     <div class="checkbox">
         <label data-toggle="tooltip" title="Получение информационных писем с сайта на email">
             <input name="subscribe" type="checkbox" value="1"<?= $checked?>> Получать информационные письма
@@ -134,4 +134,4 @@ endswitch;
     show_login('Вы не авторизованы, чтобы изменять настройки, необходимо');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

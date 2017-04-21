@@ -1,6 +1,6 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 include (APP.'/views/main/games.blade.php');
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

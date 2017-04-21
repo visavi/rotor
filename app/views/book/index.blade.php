@@ -57,7 +57,7 @@
                     <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br />
                 <?php endif; ?>
 
-                <?php if (is_admin() || empty($config['anonymity'])): ?>
+                <?php if (is_admin() || empty(App::setting('anonymity'))): ?>
                     <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
                 <?php endif; ?>
 
@@ -89,7 +89,7 @@
             </form>
         </div><br />
 
-    <?php elseif ($config['bookadds'] == 1): ?>
+    <?php elseif (App::setting('bookadds') == 1): ?>
 
         <div class="form">
             <form action="book/add" method="post">

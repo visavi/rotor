@@ -1,5 +1,5 @@
 <?php
-show_title('Игры и развлечения');
+//show_title('Игры и развлечения');
 ?>
 
 <div class="b"><i class="fa fa-university fa-lg text-muted"></i> <b>Банк</b></div>

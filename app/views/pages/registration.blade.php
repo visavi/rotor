@@ -12,15 +12,15 @@
     Длина логина должна быть от 3 до 20 символов<br />
     Логин должен состоять только из знаков латинского алфавита и цифр, допустим знак дефиса!<br />
 
-    @if ($config['regkeys'] == 1)
+    @if (App::setting('regkeys') == 1)
         <i class="fa fa-pencil text-muted"></i> <span style="color:#ff0000"><b>Включено подтверждение регистрации!</b> Вам на почтовый ящик будет выслан мастер-ключ, который необходим для подтверждения регистрации!</span><br />
     @endif
 
-    @if ($config['regkeys'] == 2)
+    @if (App::setting('regkeys') == 2)
         <i class="fa fa-pencil text-muted"></i> <span style="color:#ff0000"><b>Включена модерация регистрации!</b> Ваш аккаунт будет активирован только после проверки администрацией!</span><br />
     @endif
 
-    @if (!empty($config['invite']))
+    @if (!empty(App::setting('invite')))
         <i class="fa fa-pencil text-muted"></i> <span style="color:#ff0000"><b>Включена регистрация по приглашениям!</b> Регистрация пользователей возможна только по специальным пригласительным ключам</span><br />
     @endif
 
@@ -63,14 +63,13 @@
                 {!! App::textError('pars2') !!}
             </div>
 
-
             <div class="form-group{{ App::hasError('meil') }}">
                 <label for="inputEmail">Email:</label>
                 <input class="form-control" name="meil" id="inputEmail" maxlength="50" value="{{ App::getInput('meil') }}" required>
                 {!! App::textError('meil') !!}
             </div>
 
-            @if (!empty($config['invite']))
+            @if (!empty(App::setting('invite')))
                 <div class="form-group{{ App::hasError('invite') }}">
                     <label for="inputInvite">Пригласительный ключ:</label>
                     <input class="form-control" name="invite" id="inputInvite" maxlength="32" value="{{ App::getInput('invite') }}" required>

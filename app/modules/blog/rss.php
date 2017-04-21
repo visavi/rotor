@@ -1,12 +1,12 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 switch ($act):
 /**
  * RSS всех блогов
  */
 case 'index':
-    show_title('RSS блогов');
+    //show_title('RSS блогов');
 
     $blogs = Blog::order_by_desc('time')->limit(15)->find_many();
     if ($blogs) {
@@ -29,7 +29,7 @@ break;
  */
 case 'comments':
 
-    show_title('RSS комментарии');
+    //show_title('RSS комментарии');
 
     $id = param('id');
     $blog = Blog::with('lastComments')->find_one($id);
@@ -52,4 +52,4 @@ case 'comments':
 break;
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

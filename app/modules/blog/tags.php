@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -9,8 +9,8 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    show_title('Облако тегов');
-    $config['newtitle'] = 'Блоги - Облако тегов';
+    //show_title('Облако тегов');
+    //App::setting('newtitle') = 'Блоги - Облако тегов';
 
     if (@filemtime(STORAGE."/temp/tagcloud.dat") < time()-3600) {
         $querytag = DB::run() -> query("SELECT `tags` FROM `blogs`;");
@@ -40,8 +40,8 @@ break;
 ############################################################################################
 case 'search':
 
-    show_title('Поиск по тегам');
-    $config['newtitle'] = 'Блоги - Поиск по тегам';
+    //show_title('Поиск по тегам');
+    //App::setting('newtitle') = 'Блоги - Поиск по тегам';
 
     $tags = (isset($_GET['tags'])) ? check($_GET['tags']) : '';
 
@@ -86,4 +86,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

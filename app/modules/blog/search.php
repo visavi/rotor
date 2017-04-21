@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-show_title('Поиск в блогах');
+//show_title('Поиск в блогах');
 
 if (is_user()) {
 switch ($act):
@@ -40,7 +40,7 @@ case 'search':
         array_splice($arrfind, 3);
 
         if (count($arrfind) > 0) {
-            $config['newtitle'] = $find.' - Результаты поиска';
+            //App::setting('newtitle') = $find.' - Результаты поиска';
 
             $types = (empty($type)) ? 'AND' : 'OR';
             $wheres = (empty($where)) ? 'title' : 'text';
@@ -72,7 +72,7 @@ case 'search':
 
                     $result = implode(',', $_SESSION['blogfindres']);
 
-                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
+                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
                     $blogs = $queryblog -> fetchAll();
 
                     App::view('blog/search_title', compact('blogs', 'find', 'total'));
@@ -107,7 +107,7 @@ case 'search':
 
                     $result = implode(',', $_SESSION['blogfindres']);
 
-                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['blogpost'].";");
+                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
                     $blogs = $queryblog -> fetchAll();
 
                     App::view('blog/search_text', compact('blogs', 'find', 'total'));
@@ -135,4 +135,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
@@ -7,7 +7,7 @@ $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $sort = (isset($_GET['sort'])) ? check($_GET['sort']) : 'date';
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Загрузки');
+//show_title('Загрузки');
 
 switch ($act):
 ############################################################################################
@@ -24,7 +24,7 @@ case 'index':
 
         if (!empty($cats)) {?>
 
-            <?php show_title($cats['name']); ?>
+            <?php //show_title($cats['name']); ?>
 
             <?php
             if (is_admin([101, 102])) {
@@ -102,7 +102,7 @@ case 'index':
             if ($total > 0) {
 
 
-                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['downlist'].";", [$cid, 1]);
+                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";", [$cid, 1]);
 
                 $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
@@ -171,8 +171,8 @@ case 'view':
                 echo '<a href="/admin/load?act=movedown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Переместить</a>';
             }
 
-            show_title($downs['title']);
-            $config['description'] = strip_str($downs['text']);
+            //show_title($downs['title']);
+            //App::setting('description') =  strip_str($downs['text']);
 
             $folder = $downs['cats_folder'] ? $downs['cats_folder'].'/' : '';
 ?>
@@ -196,7 +196,7 @@ case 'view':
             $ext = getExtension($downs['link']);
 
             if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('uploads/files/'.$folder, $downs['link'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br />';
+                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('uploads/files/'.$folder, $downs['link'], App::setting('previewsize'), ['alt' => $downs['title']]).'</a><br />';
             }
 
             echo '<div class="message">'.App::bbCode($downs['text']).'</div><br />';
@@ -207,7 +207,7 @@ case 'view':
 
                 if ($ext != 'mp4') {
                     echo 'Скриншот:<br />';
-                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('uploads/screen/'.$folder, $downs['screen'], $config['previewsize'], ['alt' => $downs['title']]).'</a><br /><br />';
+                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('uploads/screen/'.$folder, $downs['screen'], App::setting('previewsize'), ['alt' => $downs['title']]).'</a><br /><br />';
                 }
             }
 
@@ -287,7 +287,7 @@ case 'view':
 
                 if (is_user()) {
                     echo '<br />Скопировать адрес:<br />';
-                    echo '<input name="text" size="40" value="'.$config['home'].'/uploads/files/'.$folder.$downs['link'].'" /><br />';
+                    echo '<input name="text" size="40" value="'.App::setting('home').'/uploads/files/'.$folder.$downs['link'].'" /><br />';
                 }
 
                 echo '<br />';
@@ -324,7 +324,7 @@ case 'load':
                 if (file_exists('uploads/files/'.$folder.$downs['link'])) {
                     $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", [$id, App::getClientIp()]);
                     if (empty($queryloads)) {
-                        $expiresloads = SITETIME + 3600 * $config['expiresloads'];
+                        $expiresloads = SITETIME + 3600 * App::setting('expiresloads');
 
                         DB::run() -> query("DELETE FROM loads WHERE time<?;", [SITETIME]);
                         DB::run() -> query("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, App::getClientIp(), $expiresloads]);
@@ -371,7 +371,7 @@ case 'vote':
                             $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['down', $id, $log]);
 
                             if (empty($queryrated)) {
-                                $expiresrated = SITETIME + 3600 * $config['expiresrated'];
+                                $expiresrated = SITETIME + 3600 * App::setting('expiresrated');
 
                                 DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['down', SITETIME]);
                                 DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, $log, $expiresrated]);
@@ -414,7 +414,7 @@ case 'comments':
 
     if (!empty($downs)) {
         if (!empty($downs['active'])) {
-            $config['newtitle'] = 'Комментарии - '.$downs['title'];
+            //App::setting('newtitle') = 'Комментарии - '.$downs['title'];
 
             echo '<i class="fa fa-file-o"></i> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['title'].'</a></b><br /><br />';
 
@@ -431,7 +431,7 @@ case 'comments':
                     echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['downcomm'].";", ['down', $id]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".App::setting('downcomm').";", ['down', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -457,7 +457,7 @@ case 'comments':
 
                     echo '<div class="message">'.App::bbCode($data['text']).'<br />';
 
-                    if (is_admin() || empty($config['anonymity'])) {
+                    if (is_admin() || empty(App::setting('anonymity'))) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                     }
                     echo '</div>';
@@ -517,7 +517,7 @@ case 'add':
 
                             DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, $log, SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".$config['maxdowncomm'].") AS del);", ['down', $id, 'down', $id]);
+                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".App::setting('maxdowncomm').") AS del);", ['down', $id, 'down', $id]);
 
                             DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
                             DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
@@ -563,7 +563,7 @@ case 'spam':
 
                 if (empty($queryspam)) {
                     if (is_flood($log)) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, $config['home'].'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], $log, $data['user'], $data['text'], $data['time'], SITETIME, App::setting('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         notice('Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&page=$page");
@@ -649,7 +649,7 @@ break;
 ############################################################################################
 case 'edit':
 
-    $config['newtitle'] = 'Редактирование сообщения';
+    //App::setting('newtitle') = 'Редактирование сообщения';
 
     $pid = abs(intval($_GET['pid']));
 
@@ -766,7 +766,7 @@ case 'end':
     if (!empty($query)) {
 
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = ceil($total_comments / $config['downcomm']);
+        $end = ceil($total_comments / App::setting('downcomm'));
 
         redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
@@ -779,4 +779,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

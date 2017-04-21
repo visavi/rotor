@@ -17,7 +17,7 @@ function date_fixed($timestamp, $format = "d.m.y / H:i") {
     if (!is_numeric($timestamp)) {
         $timestamp = SITETIME;
     }
-    $shift = $udata['timezone'] * 3600;
+    $shift = App::user('timezone') * 3600;
     $datestamp = date($format, $timestamp + $shift);
 
     $today = date("d.m.y", SITETIME + $shift);
@@ -93,11 +93,10 @@ function delete_album($user) {
 }
 
 // --------------- Функция правильного окончания для денег -------------------//
-function moneys($sum) {
-    global $config;
-
+function moneys($sum)
+{
     $sum = (int)$sum;
-    $money = explode(',', $config['moneyname']);
+    $money = explode(',', App::setting('moneyname'));
     if (count($money) == 3) {
         $str1 = abs($sum) % 100;
         $str2 = $sum % 10;
@@ -111,11 +110,10 @@ function moneys($sum) {
 }
 
 // --------------- Функция правильного окончания для актива -------------------//
-function points($sum) {
-    global $config;
-
+function points($sum)
+{
     $sum = (int)$sum;
-    $score = explode(',', $config['scorename']);
+    $score = explode(',', App::setting('scorename'));
     if (count($score) == 3) {
         $str1 = abs($sum) % 100;
         $str2 = $sum % 10;
@@ -236,10 +234,9 @@ function antimat($str) {
 }
 
 // ------------------ Функция должности юзера --------------------//
-function user_status($level) {
-    global $config;
-
-    $name = explode(',', $config['statusname']);
+function user_status($level)
+{
+    $name = explode(',', App::setting('statusname'));
 
     switch ($level) {
         case '101': $status = $name[0];
@@ -284,28 +281,26 @@ function save_title($time = 0) {
     }
 }
 
-function user_title($user) {
-
-    global $config;
+function user_title($user)
+{
     static $status;
 
     if (! $user) {
-        return $config['statusdef'];
+        return App::setting('statusdef');
     }
 
     if (is_null($status)) {
         save_title(3600);
         $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
     }
-    return isset($status[$user->id]) ? $status[$user->id] : $config['statusdef'];
+    return isset($status[$user->id]) ? $status[$user->id] : App::setting('statusdef');
 }
 // ------------- Функция вывода статусов пользователей -----------//
 
 // --------------- Функция кэширования настроек -------------------//
 function save_setting() {
-    $queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");
-    $config = $queryset -> fetchAssoc();
-    file_put_contents(STORAGE."/temp/setting.dat", serialize($config), LOCK_EX);
+    $setting = Setting::pluck('value', 'name')->all();
+    file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
 }
 
 // --------------- Функция кэширования забаненных IP -------------------//
@@ -317,22 +312,21 @@ function save_ipban() {
 }
 
 // ------------------------- Функция времени антифлуда ------------------------------//
-function flood_period() {
-    global $config, $udata;
+function flood_period()
+{
+    $period = App::setting('floodstime');
 
-    $period = $config['floodstime'];
-
-    if ($udata['point'] < 50) {
-        $period = round($config['floodstime'] * 2);
+    if (App::user('point') < 50) {
+        $period = round(App::setting('floodstime') * 2);
     }
-    if ($udata['point'] >= 500) {
-        $period = round($config['floodstime'] / 2);
+    if (App::user('point') >= 500) {
+        $period = round(App::setting('floodstime') / 2);
     }
-    if ($udata['point'] >= 1000) {
-        $period = round($config['floodstime'] / 3);
+    if (App::user('point') >= 1000) {
+        $period = round(App::setting('floodstime') / 3);
     }
-    if ($udata['point'] >= 5000) {
-        $period = round($config['floodstime'] / 6);
+    if (App::user('point') >= 5000) {
+        $period = round(App::setting('floodstime') / 6);
     }
     if (is_admin()) {
         $period = 0;
@@ -381,7 +375,7 @@ function rating_vote($rating) {
 
 // --------------- Функция листинга всех файлов и папок ---------------//
 function scan_check($dirname) {
-    global $arr, $config;
+    global $arr;
 
     if (empty($arr['files'])) {
         $arr['files'] = [];
@@ -563,10 +557,9 @@ function stats_online($cache = 30) {
 }
 
 // ------------------ Функция вывода пользователей онлайн -----------------//
-function show_online() {
-    global $config;
-
-    if ($config['onlines'] == 1) {
+function show_online()
+{
+    if (App::setting('onlines') == 1) {
         $online = stats_online();
         App::view('includes/online', compact('online'));
     }
@@ -585,8 +578,6 @@ function stats_counter() {
 // ------------------ Функция вывода счетчика посещений -----------------//
 function show_counter()
 {
-    global $config;
-
     /*
      * @TODO Временно, убрать после вывода в шаблоны
      */
@@ -597,13 +588,13 @@ function show_counter()
 
     if (is_user()) {
 
-        $visitPage = !empty($config['newtitle']) ? $config['newtitle'] : null;
+        //$visitPage = !empty(App::setting('newtitle')) ? App::setting('newtitle') : null;
 
         Visit::updateOrCreate(
             ['user_id' => App::getUserId()],
             [
                 'self'       => App::server('PHP_SELF'),
-                'page'       => $visitPage,
+                'page'       => null, //$visitPage,
                 'ip'         => App::getClientIp(),
                 'count'      => Capsule::raw('count + 1'),
                 'updated_at' => SITETIME,
@@ -613,7 +604,7 @@ function show_counter()
 
     include_once (APP."/includes/counters.php");
 
-    if ($config['incount'] > 0) {
+    if (App::setting('incount') > 0) {
         $count = stats_counter();
 
         App::view('includes/counter', compact('count'));
@@ -881,12 +872,14 @@ function is_utf($str) {
  * @param  array   $params Дополнительные параметры
  * @return boolean  Результат отправки
  */
-function sendMail($to, $subject, $body, $params = []) {
-    global $config;
+function sendMail($to, $subject, $body, $params = [])
+{
 
     if (empty($params['from'])) {
-        $config['mailusername'] = !empty($config['mailusername']) ? $config['mailusername'] : $config['emails'];
-        $params['from'] = [$config['mailusername'] => $config['nickname']];
+
+        $mailusername = ! empty(App::setting('mailusername')) ? App::setting('mailusername') : App::setting('emails');
+
+        $params['from'] = [$mailusername => App::setting('nickname')];
     }
 
     $message = Swift_Message::newInstance()
@@ -894,18 +887,18 @@ function sendMail($to, $subject, $body, $params = []) {
         ->setSubject($subject)
         ->setBody($body, 'text/html')
         ->setFrom($params['from'])
-        ->setReturnPath($config['mailusername']);
+        ->setReturnPath($mailusername);
 
     if (isset($params['unsubkey'])) {
-        $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$config['mailusername'].'>, <'.$config['home'].'/unsubscribe?key='.$params['unsubkey'].'>');
-        $message->setBody($body.'<br /><br />Если вы не хотите получать эти эл. письма, пожалуйста, <a href="'.$config['home'].'/unsubscribe?key='.$params['unsubkey'].'">откажитесь от подписки</a>', 'text/html');
+        $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$mailusername.'>, <'.App::setting('home').'/unsubscribe?key='.$params['unsubkey'].'>');
+        $message->setBody($body.'<br /><br />Если вы не хотите получать эти эл. письма, пожалуйста, <a href="'.App::setting('home').'/unsubscribe?key='.$params['unsubkey'].'">откажитесь от подписки</a>', 'text/html');
     }
 
-    if ($config['maildriver'] == 'smtp') {
-        $mailsecurity = ! empty($config['mailsecurity']) ? $config['mailsecurity'] : null;
-        $transport = Swift_SmtpTransport::newInstance($config['mailhost'], $config['mailport'], $mailsecurity)
-            ->setUsername($config['mailusername'])
-            ->setPassword($config['mailpassword']);
+    if (App::setting('maildriver') == 'smtp') {
+        $mailsecurity = ! empty(App::setting('mailsecurity')) ? App::setting('mailsecurity') : null;
+        $transport = Swift_SmtpTransport::newInstance(App::setting('mailhost'), App::setting('mailport'), $mailsecurity)
+            ->setUsername($mailusername)
+            ->setPassword(App::setting('mailpassword'));
     } else {
         $transport = new Swift_MailTransport();
     }
@@ -959,12 +952,13 @@ function stats_forum() {
 }
 
 // --------------------- Функция вывода статистики гостевой ------------------------//
-function stats_guest() {
+function stats_guest()
+{
     if (@filemtime(STORAGE."/temp/statguest.dat") < time()-600) {
-        global $config;
+
         $total = DB::run() -> querySingle("SELECT count(*) FROM `guest`;");
 
-        if ($total > ($config['maxpostbook']-10)) {
+        if ($total > (App::setting('maxpostbook') - 10)) {
             $stat = DB::run() -> querySingle("SELECT MAX(`id`) FROM `guest`;");
         } else {
             $stat = $total;
@@ -978,11 +972,10 @@ function stats_guest() {
 
 // -------------------- Функция вывода статистики админ-чата -----------------------//
 function stats_chat() {
-    global $config;
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
 
-    if ($total > ($config['chatpost']-10)) {
+    if ($total > (App::setting('chatpost') - 10)) {
         $total = DB::run() -> querySingle("SELECT MAX(`id`) FROM `chat`;");
     }
 
@@ -1105,10 +1098,9 @@ function stats_news() {
 }
 
 // --------------------------- Функция вывода новостей -------------------------//
-function last_news() {
-    global $config;
-
-    if ($config['lastnews'] > 0) {
+function last_news()
+{
+    if (App::setting('lastnews') > 0) {
 
         $news = News::where('top', 1)
             ->orderBy('created_at', 'desc')
@@ -1181,28 +1173,12 @@ function is_admin($access = []) {
 
     if (is_user()) {
         global $udata;
-        if (in_array($udata['level'], $access)) {
+        if (in_array(App::user('level'), $access)) {
             return true;
         }
     }
 
     return false;
-}
-
-// ------------------------- Функция вывода заголовков ------------------------//
-function show_title($header, $subheader = false) {
-    global $config;
-    static $show;
-
-    $config['newtitle'] = $header;
-    $config['header'] = $header;
-    $config['subheader'] = $subheader;
-
-    if (empty($show)) {
-        echo $show = App::view('includes/title', [], true);
-    }
-
-    return $config;
 }
 
 // ------------------------- Функция вывода ошибок ------------------------//
@@ -1213,28 +1189,6 @@ function show_error($errors) {
 // ------------------------- Функция вывода предупреждения ------------------------//
 function show_login($notice) {
     App::view('includes/login', compact('notice'));
-}
-
-// ------------------------- Функция замены заголовков ------------------------//
-/**
- * @deprecated
- * Используется только для совместимости со старыми страницами
- * @param $str
- * @return mixed
- */
-function ob_processing($str)
-{
-    global $config;
-
-    if (isset($config['newtitle'])) {
-        $str = str_replace('<title>', '<title>'.$config['newtitle'].' - ', $str);
-    }
-
-    //TODO: Удалить после переделки всех шаблонов
-    $str = str_replace('%HEADER%',  isset($config['header']) ? $config['header'] : '', $str);
-    $str = str_replace('%SUBHEADER%', isset($config['subheader']) ? $config['subheader'] : '', $str);
-
-    return $str;
 }
 
 // ------------------ Функция вывода иконки расширения --------------------//
@@ -1317,10 +1271,9 @@ function strip_str($str, $words = 20) {
 }
 
 // ------------------ Функция вывода пользовательской рекламы --------------------//
-function show_advertuser() {
-    global $config;
-
-    if (!empty($config['rekusershow'])) {
+function show_advertuser()
+{
+    if (!empty(App::setting('rekusershow'))) {
         if (@filemtime(STORAGE."/temp/rekuser.dat") < time()-1800) {
             save_advertuser();
         }
@@ -1329,15 +1282,14 @@ function show_advertuser() {
         $total = count($datafile);
 
         if ($total > 0) {
-            if ($config['rekusershow'] > $total) {
-                $config['rekusershow'] = $total;
-            }
 
-            $quot_rand = array_rand($datafile, $config['rekusershow']);
+            $rekusershow = (App::setting('rekusershow') > $total) ? $total : App::setting('rekusershow');
 
-            if ($config['rekusershow'] > 1) {
+            $quot_rand = array_rand($datafile, $rekusershow);
+
+            if ($rekusershow > 1) {
                 $result = [];
-                for($i = 0; $i < $config['rekusershow']; $i++) {
+                for($i = 0; $i < $rekusershow; $i++) {
                     $result[] = $datafile[$quot_rand[$i]];
                 }
                 $result = implode('<br />', $result);
@@ -1413,8 +1365,8 @@ function recentevents($show = 5) {
 }
 
 // --------------------------- Функция показа фотографий ---------------------------//
-function recentphotos($show = 5) {
-    global $config;
+function recentphotos($show = 5)
+{
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
 
         $recent = Photo::orderBy('time', 'desc')->limit($show)->get();
@@ -1426,7 +1378,7 @@ function recentphotos($show = 5) {
 
     if (is_array($photos) && count($photos) > 0) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br />';
@@ -1680,9 +1632,8 @@ function redirect($url, $permanent = false){
 }
 
 // ------------- Функция вывода ссылки на анкету -------------//
-function profile($user, $color = false){
-    global $config;
-
+function profile($user, $color = false)
+{
     if ($user){
         if ($color){
             return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$user->login.'</span></a>';
@@ -1690,7 +1641,7 @@ function profile($user, $color = false){
             return '<a href="/user/'.$user->login.'">'.$user->login.'</a>';
         }
     }
-    return $config['guestsuser'];
+    return App::setting('guestsuser');
 }
 
 // ------------- Функция вывода рейтинга -------------//
@@ -1760,18 +1711,16 @@ function copyright_archive($filename){
 }
 
 // ------------- Функция загрузки и обработки изображений -------------//
-function upload_image($file, $weight, $size, $new_name = false){
-
-    global $config;
-
+function upload_image($file, $weight, $size, $new_name = false)
+{
     $handle = new FileUpload($file);
 
     if ($handle->uploaded) {
         $handle -> image_resize = true;
         $handle -> image_ratio = true;
         $handle -> image_ratio_no_zoom_in = true;
-        $handle -> image_y = $config['screensize'];
-        $handle -> image_x = $config['screensize'];
+        $handle -> image_y = App::setting('screensize');
+        $handle -> image_x = App::setting('screensize');
         $handle -> file_overwrite = true;
 
         if ($handle->file_src_name_ext == 'png' ||
@@ -1781,7 +1730,7 @@ function upload_image($file, $weight, $size, $new_name = false){
         if (!empty($new_name)) {
             $handle -> file_new_name_body = $new_name;
         }
-        if (!empty($config['copyfoto'])) {
+        if (!empty(App::setting('copyfoto'))) {
             $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
             $handle -> image_watermark_position = 'BR';
         }

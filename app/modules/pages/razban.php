@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-show_title('Исправительная');
+//show_title('Исправительная');
 
 if (is_user()) {
     switch ($act):
@@ -21,19 +21,19 @@ if (is_user()) {
             echo 'Снять нарушение можно раз в месяц при условии, что с вашего последнего бана вы не нарушали правил и были добросовестным участником сайта<br />';
             echo 'Также вы должны будете выплатить банку штраф в размере '.moneys(100000).'<br />';
             echo 'Если с момента вашего последнего бана прошло менее месяца или у вас нет на руках суммы для штрафа, тогда строгое нарушение снять не удастся<br /><br />';
-            echo 'Общее число строгих нарушений: <b>'.$udata['totalban'].'</b><br />';
+            echo 'Общее число строгих нарушений: <b>'.App::user('totalban').'</b><br />';
 
-            $daytime = round(((SITETIME - $udata['timelastban']) / 3600) / 24);
+            $daytime = round(((SITETIME - App::user('timelastban')) / 3600) / 24);
 
-            if ($udata['timelastban'] > 0 && $udata['totalban'] > 0) {
+            if (App::user('timelastban') > 0 && App::user('totalban') > 0) {
                 echo 'Суток прошедших с момента последнего нарушения: <b>'.$daytime.'</b><br />';
             } else {
                 echo 'Дата последнего нарушения не указана<br />';
             }
 
-            echo 'Денег на руках: <b>'.moneys($udata['money']).'</b><br /><br />';
+            echo 'Денег на руках: <b>'.moneys(App::user('money')).'</b><br /><br />';
 
-            if ($udata['totalban'] > 0 && $daytime >= 30 && $udata['money'] >= 100000) {
+            if (App::user('totalban') > 0 && $daytime >= 30 && App::user('money') >= 100000) {
                 echo '<i class="fa fa-check"></i> <b><a href="/razban?act=go">Снять нарушение</a></b><br />';
                 echo 'У вас имеется возможность снять нарушение<br /><br />';
             } else {
@@ -47,8 +47,8 @@ if (is_user()) {
         ############################################################################################
         case "go":
 
-            $daytime = round(((SITETIME - $udata['timelastban']) / 3600) / 24);
-            if ($udata['totalban'] > 0 && $daytime >= 30 && $udata['money'] >= 100000) {
+            $daytime = round(((SITETIME - App::user('timelastban')) / 3600) / 24);
+            if (App::user('totalban') > 0 && $daytime >= 30 && App::user('money') >= 100000) {
                 DB::run() -> query("UPDATE users SET timelastban=?, totalban=totalban-1, money=money-? WHERE login=?", [SITETIME, 100000, $log]);
 
                 echo 'Нарушение успешно списано, с вашего счета списано <b>'.moneys(100000).'</b><br />';
@@ -67,4 +67,4 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы снять нарушение, необходимо');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

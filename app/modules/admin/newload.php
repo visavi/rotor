@@ -1,12 +1,12 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $id = abs(intval(Request::input('id')));
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
-    show_title('Просмотр новых файлов');
+    //show_title('Просмотр новых файлов');
 
     switch ($act):
     ############################################################################################
@@ -19,7 +19,7 @@ if (is_admin()) {
 
             if ($total > 0) {
 
-                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".$config['downlist'].";", [0]);
+                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".App::setting('downlist').";", [0]);
 
                 echo '<form action="/admin/newload?act=deldown&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -75,7 +75,7 @@ if (is_admin()) {
 
                     if (count($downs) > 0) {
 
-                        if (is_admin([101]) && $log == $config['nickname']) {
+                        if (is_admin([101]) && $log == App::setting('nickname')) {
                             echo '<a href="/admin/newload?act=allow&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете публикацию файла?\')">Опубликовать</a> / ';
                         }
 
@@ -91,7 +91,7 @@ if (is_admin()) {
 
                         if (!empty($new['screen'])) {
                             echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                            echo resize_image('uploads/screen/'.$folder, $new['screen'], $config['previewsize']).'<br />';
+                            echo resize_image('uploads/screen/'.$folder, $new['screen'], App::setting('previewsize')).'<br />';
                         } else {
                             echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br />';
                         }
@@ -227,7 +227,7 @@ if (is_admin()) {
                                                             if (!empty($notice) && $notice != $new['notice']) {
                                                                 // ------------------------Уведомление по привату------------------------//
                                                                 if (user($new['user'])) {
-                                                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.$config['home'].'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
+                                                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.App::setting('home').'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
 
                                                                     DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], $log, $textpriv, SITETIME]);
 
@@ -288,7 +288,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101]) && $log == $config['nickname']) {
+            if (is_admin([101]) && $log == App::setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
@@ -301,7 +301,7 @@ if (is_admin()) {
                                 DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$new['category_id']]);
 
                                 if (user($new['user'])) {
-                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.$config['home'].'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
+                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.App::setting('home').'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
 
                                     DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], $log, $textpriv, SITETIME]);
                                     DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
@@ -446,4 +446,4 @@ if (is_admin()) {
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

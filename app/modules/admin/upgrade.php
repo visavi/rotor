@@ -1,9 +1,9 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (is_admin()) {
 
-show_title('Апгрейд системы');
+//show_title('Апгрейд системы');
 
 $app  = new Phinx\Console\PhinxApplication();
 $wrap = new Phinx\Wrapper\TextWrapper($app);
@@ -32,4 +32,4 @@ echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />'
     redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 
 if (is_admin([101])) {
-    show_title('Админ-логи');
+    //show_title('Админ-логи');
 
     switch ($act):
     ############################################################################################
@@ -21,7 +21,7 @@ if (is_admin([101])) {
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['loglist'].";");
+                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loglist').";");
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -67,4 +67,4 @@ if (is_admin([101])) {
 	redirect('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

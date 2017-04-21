@@ -25,7 +25,7 @@ header("Content-type:text/html; charset=utf-8");
     <tr>
         <td class="t1">
             <a href="/">
-                <img src="/themes/toonel/img/logo.gif" alt="<?= $config['title'] ?>"/>
+                <img src="/themes/toonel/img/logo.gif" alt="<?= App::setting('title') ?>"/>
             </a>
         </td>
         <td class="t2"></td>

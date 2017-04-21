@@ -1,11 +1,11 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Интернет события');
+//show_title('Интернет события');
 
 App::view('events/menu', ['act' => $act, 'is_admin' => is_admin(), 'is_user' => is_user()]);
 
@@ -19,11 +19,11 @@ case 'index':
 
     $page = App::paginate(App::setting('postevents'), $total);
 
-	$config['description'] = 'Список событий (Стр. '.$page['current'].')';
+	//App::setting('description') =  'Список событий (Стр. '.$page['current'].')';
 
 	if ($total > 0) {
 
-		$queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['postevents'].";");
+		$queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('postevents').";");
 		$events = $queryevents->fetchAll();
 
         App::view('events/index', ['events' => $events]);
@@ -47,8 +47,8 @@ case 'read':
 			echo '<a href="/admin/events?act=del&amp;del='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данное событие?\')">Удалить</a></div>';
 		}
 
-		$config['newtitle'] = $data['title'];
-		$config['description'] = strip_str($data['text']);
+		//App::setting('newtitle') = $data['title'];
+		//App::setting('description') =  strip_str($data['text']);
 
 		echo '<div class="b"><i class="fa fa-file-o"></i> ';
 		echo '<b>'.$data['title'].'</b><small> ('.date_fixed($data['time']).')</small></div>';
@@ -80,7 +80,7 @@ case 'read':
 
 				echo '<div>'.App::bbCode($comm['text']).'<br />';
 
-				if (is_admin() || empty($config['anonymity'])) {
+				if (is_admin() || empty(App::setting('anonymity'))) {
 					echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
 				}
 
@@ -124,7 +124,7 @@ break;
 ############################################################################################
 case 'new':
 	if (is_user()) {
-		if ($udata['point'] >= $config['eventpoint']){
+		if (App::user('point') >= App::setting('eventpoint')){
 			echo '<b><big>Добавление события</big></b><br /><br />';
 
 			echo '<div class="form cut">';
@@ -133,7 +133,7 @@ case 'new':
 			echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
 			echo '<textarea id="markItUp" cols="50" rows="10" name="msg"></textarea><br />';
 			echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
-			echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize($config['filesize']).' и '.$config['fileupfoto'].'px)</i><br /><br />';
+			echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(App::setting('filesize')).' и '.App::setting('fileupfoto').'px)</i><br /><br />';
 
 			if (is_admin()){
 				echo '<input name="top" type="checkbox" value="1" /> Вывести на главную<br />';
@@ -143,7 +143,7 @@ case 'new':
 
 			echo 'Рекомендация! Для обрезки события используйте тег [cut]<br />';
 		} else {
-			show_error('Ошибка! У вас недостаточно актива для создания события (Необходимо '.points($config['eventpoint']).')!');
+			show_error('Ошибка! У вас недостаточно актива для создания события (Необходимо '.points(App::setting('eventpoint')).')!');
 		}
 	} else {
 		show_login('Вы не авторизованы, для создания события, необходимо');
@@ -168,7 +168,7 @@ case 'addevent':
 
 		$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
 			-> addRule('equal', [is_flood(App::getUsername()), true], 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!')
-			-> addRule('max', [$udata['point'], $config['eventpoint']], 'У вас недостаточно актива для создания события!')
+			-> addRule('max', [App::user('point'), App::setting('eventpoint')], 'У вас недостаточно актива для создания события!')
 			-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 			-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
 
@@ -182,7 +182,7 @@ case 'addevent':
 
 			// ---------------------------- Загрузка изображения -------------------------------//
 			if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-				$handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $lastid);
+				$handle = upload_image($_FILES['image'], App::setting('filesize'), App::setting('fileupfoto'), $lastid);
 				if ($handle) {
 
 					$handle -> process(HOME.'/uploads/events/');
@@ -242,7 +242,7 @@ case 'editevent':
 			}
 
 			echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
-			echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize($config['filesize']).' и '.$config['fileupfoto'].'px)</i><br /><br />';
+			echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(App::setting('filesize')).' и '.App::setting('fileupfoto').'px)</i><br /><br />';
 
 			if (is_admin()){
 				$checked = ($dataevent['closed'] == 1) ? ' checked="checked"' : '';
@@ -296,7 +296,7 @@ case 'changeevent':
 
 			// ---------------------------- Загрузка изображения -------------------------------//
 			if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-				$handle = upload_image($_FILES['image'], $config['filesize'], $config['fileupfoto'], $id);
+				$handle = upload_image($_FILES['image'], App::setting('filesize'), App::setting('fileupfoto'), $id);
 				if ($handle) {
 
 					// Удаление старой картинки
@@ -338,7 +338,7 @@ case 'comments':
 	$dataevent = DB::run() -> queryFetch("SELECT * FROM `events` WHERE `id`=? LIMIT 1;", [$id]);
 
 	if (!empty($dataevent)) {
-		$config['newtitle'] = 'Комментарии - '.$dataevent['title'];
+		//App::setting('newtitle') = 'Комментарии - '.$dataevent['title'];
 
 		echo '<i class="fa fa-file-o"></i> <b><a href="/events?act=read&amp;id='.$dataevent['id'].'">'.$dataevent['title'].'</a></b><br /><br />';
 
@@ -347,7 +347,7 @@ case 'comments':
 		$total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['event', $id]);
 
         $page = App::paginate(App::setting('postevents'), $total);
-        $config['description'] = 'Комментарии - '.$dataevent['title'].' (Стр. '.$page['current'].')';
+        //App::setting('description') =  'Комментарии - '.$dataevent['title'].' (Стр. '.$page['current'].')';
 
 		if ($total > 0) {
 
@@ -356,7 +356,7 @@ case 'comments':
 				echo '<form action="/events?act=del&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 			}
 
-			$querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".$config['postevents'].";", ['event', $id]);
+			$querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".App::setting('postevents').";", ['event', $id]);
 
 			while ($data = $querycomm -> fetch()) {
 
@@ -373,7 +373,7 @@ case 'comments':
 
 				echo '<div>'.App::bbCode($data['text']).'<br />';
 
-				if (is_admin() || empty($config['anonymity'])) {
+				if (is_admin() || empty(App::setting('anonymity'))) {
 					echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
 				}
 
@@ -438,7 +438,7 @@ case 'addcomment':
 
 			DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['event', 0, $id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-			DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".$config['maxkommevents'].") AS del);", ['event', $id, 'event', $id]);
+			DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".App::setting('maxkommevents').") AS del);", ['event', $id, 'event', $id]);
 
 			DB::run() -> query("UPDATE `events` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 			DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
@@ -505,7 +505,7 @@ case 'end':
 
 	if (!empty($query)) {
 		$total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-		$end = ceil($total_comments / $config['postevents']);
+		$end = ceil($total_comments / App::setting('postevents'));
 
 		redirect("/events?act=comments&id=$id&page=$end");
 
@@ -518,4 +518,4 @@ break;
 
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

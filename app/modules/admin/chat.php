@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -9,7 +9,7 @@ if (isset($_GET['act'])) {
 $page = abs(intval(Request::input('page', 1)));
 
 if (is_admin()) {
-    show_title('Админ-чат');
+    //show_title('Админ-чат');
 
     switch ($act):
     ############################################################################################
@@ -30,7 +30,7 @@ if (is_admin()) {
 
             if ($total > 0) {
 
-                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['chatpost'].";");
+                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('chatpost').";");
 
                 while ($data = $querychat -> fetch()) {
                     echo '<div class="b">';
@@ -97,7 +97,7 @@ if (is_admin()) {
                         DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [$log, $msg, App::getClientIp(), App::getUserAgent(), SITETIME]);
                     }
 
-                    DB::run() -> query("DELETE FROM `chat` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `chat` ORDER BY `time` DESC LIMIT ".$config['maxpostchat'].") AS del);");
+                    DB::run() -> query("DELETE FROM `chat` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `chat` ORDER BY `time` DESC LIMIT ".App::setting('maxpostchat').") AS del);");
 
                     DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), $log]);
 
@@ -270,4 +270,4 @@ if (is_admin()) {
     redirect ('/');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

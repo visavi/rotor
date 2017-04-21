@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (! isset($act)) {
     $act  = check(Request::input('act', 'index'));
@@ -7,7 +7,7 @@ if (! isset($act)) {
 $uz   = check(Request::input('uz'));
 $page = abs(intval(Request::input('page', 1)));
 
-show_title('Приватные сообщения');
+//show_title('Приватные сообщения');
 
 if (is_user()) {
 switch ($act):
@@ -256,7 +256,7 @@ case 'submit':
 
         echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
 
-        if ($udata['point'] < $config['privatprotect']) {
+        if (App::user('point') < App::setting('privatprotect')) {
             echo 'Проверочный код:<br />';
             echo '<img src="/captcha" alt="" /><br />';
             echo '<input name="provkod" size="6" maxlength="6" /><br />';
@@ -418,7 +418,7 @@ case 'del':
     if ($token == $_SESSION['token']) {
         if (!empty($del)) {
             $del = implode(',', $del);
-            $deltrash = SITETIME + 86400 * $config['expiresmail'];
+            $deltrash = SITETIME + 86400 * App::setting('expiresmail');
 
             DB::run() -> query("DELETE FROM `trash` WHERE `del`<?;", [SITETIME]);
 
@@ -479,8 +479,8 @@ case 'alldel':
     $token = check(Request::input('token'));
 
     if ($token == $_SESSION['token']) {
-        if (empty($udata['newprivat'])) {
-            $deltrash = SITETIME + 86400 * $config['expiresmail'];
+        if (empty(App::user('newprivat'))) {
+            $deltrash = SITETIME + 86400 * App::setting('expiresmail');
 
             DB::run() -> query("DELETE FROM `trash` WHERE `del`<?;", [SITETIME]);
 
@@ -561,7 +561,7 @@ case 'history':
 
             if ($total > 0) {
 
-                $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT * FROM `outbox` WHERE `user`=? AND `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".$config['privatpost'].";", [$log, $uz, $uz, $log]);
+                $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT * FROM `outbox` WHERE `user`=? AND `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('privatpost').";", [$log, $uz, $uz, $log]);
 
                 while ($data = $queryhistory -> fetch()) {
                     echo '<div class="b">';
@@ -581,7 +581,7 @@ case 'history':
                     echo 'Сообщение:<br />';
                     echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
 
-                    if ($udata['point'] < $config['privatprotect']) {
+                    if (App::user('point') < App::setting('privatprotect')) {
                         echo 'Проверочный код:<br /> ';
                         echo '<img src="/captcha" alt="" /><br />';
                         echo '<input name="provkod" size="6" maxlength="6" /><br />';
@@ -618,4 +618,4 @@ echo '<i class="fa fa-search"></i> <a href="/searchuser">Поиск контак
 echo '<i class="fa fa-envelope"></i> <a href="/private?act=submit">Написать письмо</a><br />';
 echo '<i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

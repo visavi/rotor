@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $id = param('id');
 
@@ -8,7 +8,7 @@ switch ($act):
 ##                                    Главная страница                                    ##
 ############################################################################################
 case 'index':
-    show_title('Новости сайта');
+    //show_title('Новости сайта');
 
     if (is_admin([101, 102])){
         echo '<div class="form"><a href="/admin/news">Управление новостями</a></div>';
@@ -17,7 +17,7 @@ case 'index':
     $total = News::count();
     $page = App::paginate(App::setting('postnews'), $total);
 
-    $config['description'] = 'Список новостей (Стр. '.$page['current'].')';
+    //App::setting('description') =  'Список новостей (Стр. '.$page['current'].')';
 
     if ($total > 0) {
 
@@ -69,8 +69,8 @@ case 'view':
             echo '<a href="/admin/news?act=del&amp;del='.$id.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данную новость?\')">Удалить</a></div>';
         }
 
-        $config['newtitle'] = $data['title'];
-        $config['description'] = strip_str($data['text']);
+        //App::setting('newtitle') = $data['title'];
+        //App::setting('description') =  strip_str($data['text']);
 
         echo '<div class="b"><i class="fa fa-file-o"></i> ';
         echo '<b>'.$data['title'].'</b><small> ('.date_fixed($data['created_at']).')</small></div>';
@@ -106,7 +106,7 @@ case 'view':
 
                 echo '<div>'.App::bbCode($comm['text']).'<br />';
 
-                if (is_admin() || empty($config['anonymity'])) {
+                if (is_admin() || empty(App::setting('anonymity'))) {
                     echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
                 }
 
@@ -162,8 +162,8 @@ case 'comments':
 
         $page = App::paginate(App::setting('postnews'), $total);
 
-        $config['newtitle'] = 'Комментарии - '.$datanews['title'];
-        $config['description'] = 'Комментарии - '.$datanews['title'].' (Стр. '.$page['current'].')';
+        //App::setting('newtitle') = 'Комментарии - '.$datanews['title'];
+        //App::setting('description') =  'Комментарии - '.$datanews['title'].' (Стр. '.$page['current'].')';
 
         echo '<h1><a href="/news/'.$datanews['id'].'">'.$datanews['title'].'</a></h1>';
 
@@ -198,7 +198,7 @@ case 'comments':
 
                 echo '<div>'.App::bbCode($data['text']).'<br />';
 
-                if (is_admin() || empty($config['anonymity'])) {
+                if (is_admin() || empty(App::setting('anonymity'))) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
@@ -268,7 +268,7 @@ case 'create':
 
             DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", ['news', $id, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".$config['maxkommnews'].") AS del);", ['news', $id, 'news', $id]);
+            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".App::setting('maxkommnews').") AS del);", ['news', $id, 'news', $id]);
 
             DB::run() -> query("UPDATE `news` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
             DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [$log]);
@@ -346,4 +346,4 @@ break;
 
 endswitch;
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

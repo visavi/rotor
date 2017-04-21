@@ -96,7 +96,7 @@ case 'create':
         -> addRule('not_empty', $topics, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
         -> addRule('empty', $topics['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
         -> addRule('equal', [is_flood($log), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!'])
-        -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, $config['forumtextlength']);
+        -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, App::setting('forumtextlength'));
 
         // Проверка сообщения на схожесть
         $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `id` DESC LIMIT 1;", [$tid]);
@@ -106,7 +106,7 @@ case 'create':
 
         $msg = antimat($msg);
 
-        if (App::getUserId() == $post['user_id'] && $post['created_at'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= $config['forumtextlength'])) {
+        if (App::getUserId() == $post['user_id'] && $post['created_at'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= App::setting('forumtextlength'))) {
 
             $newpost = $post['text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['created_at']).' сек.[/size][/i]'."\n".$msg;
 
@@ -157,15 +157,15 @@ case 'create':
 
         // Загрузка файла
         if (!empty($_FILES['file']['name']) && !empty($lastid)) {
-            if ($udata['point'] >= $config['forumloadpoints']){
+            if (App::user('point') >= App::setting('forumloadpoints')){
                 if (is_uploaded_file($_FILES['file']['tmp_name'])) {
 
                     $filename = check($_FILES['file']['name']);
                     $filename = (!is_utf($filename)) ? utf_lower(win_to_utf($filename)) : utf_lower($filename);
                     $filesize = $_FILES['file']['size'];
 
-                    if ($filesize > 0 && $filesize <= $config['forumloadsize']) {
-                        $arrext = explode(',', $config['forumextload']);
+                    if ($filesize > 0 && $filesize <= App::setting('forumloadsize')) {
+                        $arrext = explode(',', App::setting('forumextload'));
                         $ext = getExtension($filename);
 
                         if (in_array($ext, $arrext, true)) {
@@ -203,7 +203,7 @@ case 'create':
                             $fileError = 'Файл не загружен! Недопустимое расширение!';
                         }
                     } else {
-                        $fileError = 'Файл не загружен! Максимальный размер '.formatsize($config['forumloadsize']).'!';
+                        $fileError = 'Файл не загружен! Максимальный размер '.formatsize(App::setting('forumloadsize')).'!';
                     }
                 } else {
                     $fileError = 'Ошибка! Не удалось загрузить файл!';
@@ -356,7 +356,7 @@ case 'edit':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения темы!');
 
-    if ($udata['point'] < $config['editforumpoint']) {
+    if (App::user('point') < App::setting('editforumpoint')) {
         App::abort('default', 'У вас недостаточно актива для изменения темы!');
     }
 
@@ -390,7 +390,7 @@ case 'edit':
             -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50);
 
         if ($post) {
-            $validation->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, $config['forumtextlength']);
+            $validation->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, App::setting('forumtextlength'));
         }
         if ($validation->run()) {
 
@@ -456,7 +456,7 @@ case 'editpost':
 
         $validation = new Validation();
         $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, $config['forumtextlength']);
+            -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, App::setting('forumtextlength'));
 
         if ($validation->run()) {
 

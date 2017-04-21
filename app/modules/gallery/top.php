@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 $page = abs(intval(Request::input('page', 1)));
 
@@ -19,7 +19,7 @@ switch ($sort) {
 ############################################################################################
 ##                                       Топ фото                                         ##
 ############################################################################################
-show_title('Топ популярных фотографий');
+//show_title('Топ популярных фотографий');
 
 echo 'Сортировать: ';
 
@@ -42,14 +42,14 @@ $page = App::paginate(App::setting('fotolist'), $total);
 
 if ($total > 0) {
 
-    $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".$config['fotolist'].";");
+    $queryphoto = DB::run() -> query("SELECT * FROM `photo` ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".App::setting('fotolist').";");
 
     while ($data = $queryphoto -> fetch()) {
 
         echo '<div class="b"><i class="fa fa-picture-o"></i> ';
         echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/uploads/pictures/'.$data['link']).') ('.format_num($data['rating']).')</div>';
 
-        echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], $config['previewsize'], ['alt' => $data['title']]).'</a>';
+        echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]).'</a>';
 
         echo '<br />'.App::bbCode($data['text']).'<br />';
 
@@ -66,4 +66,4 @@ if ($total > 0) {
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery">Галерея</a><br />';
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

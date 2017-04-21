@@ -16,5 +16,5 @@
 
     <?php endforeach; ?>
 
-    URL: <a href="<?=$config['home']?>/topic/<?=$topic['id']?>"><?=$config['home']?>/topic/<?=$topic['id']?></a>
+    URL: <a href="<?=App::setting('home')?>/topic/<?=$topic['id']?>"><?=App::setting('home')?>/topic/<?=$topic['id']?></a>
 @stop

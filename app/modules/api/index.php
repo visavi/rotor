@@ -1,7 +1,7 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
-show_title('API интерфейс');
+//show_title('API интерфейс');
 ?>
 
 <i class="fa fa-cog"></i> <b><a href="/api">api</a></b> - Главная страница с описанием интерфейса<br />
@@ -22,4 +22,4 @@ show_title('API интерфейс');
 </pre>
 
 <?php
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');

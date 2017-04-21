@@ -1,4 +1,4 @@
-<?php show_title('Class BBCode'); ?>
+<?php //show_title('Class BBCode'); ?>
 <b>Класс для обработки BB-кодов</b><br /><br />
 
 Пример

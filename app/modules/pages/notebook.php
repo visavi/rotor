@@ -1,5 +1,5 @@
 <?php
-App::view($config['themes'].'/index');
+App::view(App::setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-show_title('Блокнот');
+//show_title('Блокнот');
 
 if (is_user()) {
     switch ($act):
@@ -84,4 +84,4 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы сохранять заметки, необходимо');
 }
 
-App::view($config['themes'].'/foot');
+App::view(App::setting('themes').'/foot');
