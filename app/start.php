@@ -163,9 +163,8 @@ if ($user = is_user()) {
             redirect('/games/credit?log='.App::getUsername());
         }
     }
-
     // ---------------------- Получение ежедневного бонуса -----------------------//
-    if (App::user('timebonus') < time() - 82800) {
+    if (App::user('timebonus') < SITETIME - 82800) {
 
         $user = User::where('id', App::getUserId());
         $user->update([

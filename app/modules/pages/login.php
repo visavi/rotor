@@ -47,8 +47,8 @@ break;
 case 'logout':
 
     $_SESSION = [];
-    setcookie('password', '', time() - 3600, '/', $domain, null, true);
-    setcookie(session_name(), '', time() - 3600, '/', '');
+    setcookie('password', '', SITETIME - 3600, '/', $domain, null, true);
+    setcookie(session_name(), '', SITETIME - 3600, '/', '');
     session_destroy();
 
     App::redirect('/');

@@ -1,9 +1,6 @@
 <?php
 App::view(App::setting('themes').'/index');
 
-if (! isset($act)) {
-    $act  = check(Request::input('act', 'index'));
-}
 $uz   = check(Request::input('uz'));
 $page = abs(intval(Request::input('page', 1)));
 
@@ -23,8 +20,8 @@ case 'index':
     $totalTrash = Trash::where('user_id', App::getUserId())->count();
 
     echo '<i class="fa fa-envelope"></i> <b>Входящие ('.$total.')</b> / ';
-    echo '<a href="/private?act=output">Отправленные ('.$totalOutbox.')</a> / ';
-    echo '<a href="/private?act=trash">Корзина ('.$totalTrash.')</a><hr />';
+    echo '<a href="/private/output">Отправленные ('.$totalOutbox.')</a> / ';
+    echo '<a href="/private/trash">Корзина ('.$totalTrash.')</a><hr />';
 
     if (App::user('newprivat') > 0) {
         echo '<div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: '.App::user('newprivat').'</span></b></div>';
@@ -72,8 +69,8 @@ case 'index':
 
            if ($data->author) {
 
-               echo '<a href="/private?act=submit&amp;uz=' . $data->getAuthor()->login . '">Ответить</a> / ';
-               echo '<a href="/private?act=history&amp;uz=' . $data->getAuthor()->login . '">История</a> / ';
+               echo '<a href="/private/send?user=' . $data->getAuthor()->login . '">Ответить</a> / ';
+               echo '<a href="/private/history?user=' . $data->getAuthor()->login . '">История</a> / ';
                echo '<a href="/contact?act=add&amp;uz=' . $data->getAuthor()->login . '&amp;token=' . $_SESSION['token'] . '">В контакт</a> / ';
                echo '<a href="/ignore?act=add&amp;uz=' . $data->getAuthor()->login . '&amp;token=' . $_SESSION['token'] . '">Игнор</a> / ';
 
@@ -90,7 +87,7 @@ case 'index':
         echo 'Всего писем: <b>'.$total.'</b><br />';
         echo 'Объем ящика: <b>'.App::setting('limitmail').'</b><br /><br />';
 
-        echo '<i class="fa fa-times"></i> <a href="/private?act=alldel&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
+        echo '<i class="fa fa-times"></i> <a href="/private/alldel?token='.$_SESSION['token'].'">Очистить ящик</a><br />';
     } else {
         show_error('Входящих писем еще нет!');
     }
@@ -109,7 +106,7 @@ case 'output':
 
     echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$totalInbox.')</a> / ';
     echo '<b>Отправленные ('.$total.')</b> / ';
-    echo '<a href="/private?act=trash">Корзина ('.$totalTrash.')</a><hr />';
+    echo '<a href="/private/trash">Корзина ('.$totalTrash.')</a><hr />';
 
     if ($total > 0) {
 
@@ -136,8 +133,8 @@ case 'output':
             echo '<div>'.App::bbCode($data['text']).'<br />';
 
             echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
-            echo '<a href="/private?act=submit&amp;uz='.$data->getRecipient()->login.'">Написать еще</a> / ';
-            echo '<a href="/private?act=history&amp;uz='.$data->getRecipient()->login.'">История</a></div>';
+            echo '<a href="/private/send?user='.$data->getRecipient()->login.'">Написать еще</a> / ';
+            echo '<a href="/private/history?user='.$data->getRecipient()->login.'">История</a></div>';
         }
 
         echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
@@ -147,7 +144,7 @@ case 'output':
         echo 'Всего писем: <b>'.$total.'</b><br />';
         echo 'Объем ящика: <b>'.App::setting('limitmail').'</b><br /><br />';
 
-        echo '<i class="fa fa-times"></i> <a href="/private?act=alloutdel&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
+        echo '<i class="fa fa-times"></i> <a href="/private/alloutdel?token='.$_SESSION['token'].'">Очистить ящик</a><br />';
     } else {
         show_error('Отправленных писем еще нет!');
     }
@@ -165,7 +162,7 @@ case 'trash':
     $totalOutbox = Outbox::where('user_id', App::getUserId())->count();
 
     echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$totalInbox.')</a> / ';
-    echo '<a href="/private?act=output">Отправленные ('.$totalOutbox.')</a> / ';
+    echo '<a href="/private/output">Отправленные ('.$totalOutbox.')</a> / ';
 
     echo '<b>Корзина ('.$total.')</b><hr />';
 
@@ -187,7 +184,7 @@ case 'trash':
 
             echo '<div>'.App::bbCode($data['text']).'<br />';
 
-            echo '<a href="/private?act=submit&amp;uz='.$data->getAuthor()->login.'">Ответить</a> / ';
+            echo '<a href="/private/send?user='.$data->getAuthor()->login.'">Ответить</a> / ';
             echo '<a href="/contact?act=add&amp;uz='.$data->getAuthor()->login.'&amp;token='.$_SESSION['token'].'">В контакт</a> / ';
             echo '<a href="/ignore?act=add&amp;uz='.$data->getAuthor()->login.'&amp;token='.$_SESSION['token'].'">Игнор</a></div>';
         }
@@ -197,26 +194,117 @@ case 'trash':
         echo 'Всего писем: <b>'.$total.'</b><br />';
         echo 'Срок хранения: <b>'.App::setting('expiresmail').'</b><br /><br />';
 
-        echo '<i class="fa fa-times"></i> <a href="/private?act=alltrashdel&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
+        echo '<i class="fa fa-times"></i> <a href="/private/alltrashdel?token='.$_SESSION['token'].'">Очистить ящик</a><br />';
     } else {
         show_error('Удаленных писем еще нет!');
     }
 break;
 
 ############################################################################################
-##                                   Отправка привата                                     ##
+##                                   Отправка сообщений                                   ##
 ############################################################################################
-case 'submit':
+case 'send':
 
-    $user = ! empty($uz) ? User::where('login', $uz)->first() : null;
+    $login = check(Request::input('user'));
+
+    if (! empty(Request::input('contact'))) {
+        $login = check(Request::input('contact'));
+    }
+
+    $user = ! empty($user) ? User::where('login', $login)->first() : null;
+
+    if (Request::isMethod('post')) {
+
+        $token = check(Request::input('token'));
+        $msg = check(Request::input('msg'));
+        $provkod = check(Request::input('provkod'));
+
+        if ($token == $_SESSION['token']) {
+            if ($user) {
+                if ($user->id != App::getUserId()) {
+                    if (App::user('point') >= App::setting('privatprotect') || $provkod == $_SESSION['protect']) {
+                        if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
+
+                            $totalInbox = Inbox::where('user_id', $user->id)->count();
+
+                            if ($totalInbox < App::setting('limitmail')) {
+
+                                // -------- Проверка на игнор -----------//
+                                $ignoring = Ignore::where('user_id', $user->id)
+                                    ->where('ignore_id', App::getUserId())
+                                    ->first();
+
+                                if (!$ignoring) {
+                                    if (is_flood(App::getUsername())) {
+
+                                        $msg = antimat($msg);
+
+                                        DB::run()->query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `id`=? LIMIT 1;", [$user->id]);
+                                        DB::run()->query("INSERT INTO `inbox` (`user_id`, `author_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [$user->id, App::getUserId(), $msg, SITETIME]);
+
+                                        DB::run()->query("INSERT INTO `outbox` (`user_id`, `recipient_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [App::getUserId(), $user->id, $msg, SITETIME]);
+
+                                        DB::run()->query("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . App::setting('limitoutmail') . ") AS del);", [App::getUserId(), App::getUserId()]);
+                                        save_usermail(60);
+
+                                        $deliveryUsers = User::where('sendprivatmail', 0)
+                                            ->where('confirmreg', 0)
+                                            ->where('newprivat', '>', 0)
+                                            ->where('timelastlogin', '<', SITETIME - 86400 * App::setting('sendprivatmailday'))
+                                            ->where('subscribe', '<>', '')
+                                            ->where('email', '<>', '')
+                                            ->orderBy('timelastlogin')
+                                            ->limit(App::setting('sendmailpacket'))
+                                            ->get();
+
+                                        foreach ($deliveryUsers as $deliveryUser) {
+                                            sendMail($deliveryUser['email'],
+                                                $deliveryUser['newprivat'] . ' непрочитанных сообщений (' . App::setting('title') . ')',
+                                                nl2br("Здравствуйте " . $deliveryUser['login'] . "! \nУ вас имеются непрочитанные сообщения (" . $deliveryUser['newprivat'] . " шт.) на сайте " . App::setting('title') . " \nПрочитать свои сообщения вы можете по адресу " . App::setting('home') . "/private"),
+                                                ['unsubkey' => $deliveryUser['subscribe']]
+                                            );
+
+                                            $user = User::where('id', $deliveryUser->id);
+                                            $user->update(['sendprivatmail' => 1]);
+                                        }
+
+                                        notice('Ваше письмо успешно отправлено!');
+                                        redirect("/private");
+
+                                    } else {
+                                        show_error('Антифлуд! Разрешается отправлять сообщения раз в ' . flood_period() . ' секунд!');
+                                    }
+                                } else {
+                                    show_error('Ошибка! Вы внесены в игнор-лист получателя!');
+                                }
+                            } else {
+                                show_error('Ошибка! Ящик получателя переполнен!');
+                            }
+                        } else {
+                            show_error('Ошибка! Слишком длинное или короткое сообщение!');
+                        }
+                    } else {
+                        show_error('Ошибка! Проверочное число не совпало с данными на картинке!');
+                    }
+                } else {
+                    show_error('Ошибка! Нельзя отправлять письмо самому себе!');
+                }
+            } else {
+                show_error('Ошибка! Пользователь не найден!');
+            }
+        } else {
+            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        }
+    }
+
 
     if ($user) {
 
         echo '<i class="fa fa-envelope"></i> Сообщение для <b>' . profile($user) . '</b> ' . user_visit($user) . ':<br />';
-        echo '<i class="fa fa-history"></i> <a href="/private?act=history&amp;uz=' . $user->login . '">История переписки</a><br /><br />';
+        echo '<i class="fa fa-history"></i> <a href="/private/history?user=' . $user->login . '">История переписки</a><br /><br />';
 
         echo '<div class="form">';
-        echo '<form action="/private?act=send&amp;uz='.$uz.'" method="post">';
+        echo '<form action="/private/send?user='.$user->login.'" method="post">';
         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
         echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
@@ -232,11 +320,11 @@ case 'submit':
     } else {
 
         echo '<div class="form">';
-        echo '<form action="/private?act=send" method="post">';
+        echo '<form action="/private/send" method="post">';
         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
         echo 'Введите логин:<br />';
-        echo '<input type="text" name="uz" maxlength="20" /><br />';
+        echo '<input type="text" name="user" maxlength="20" /><br />';
 
         $contacts = Contact::where('user_id', App::getUserId())
             ->rightJoin('users', 'contact.contact_id', '=', 'users.id')
@@ -267,103 +355,7 @@ case 'submit':
         echo 'Введите логин или выберите пользователя из своего контакт-листа<br />';
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private">Вернуться</a><br />';
-break;
 
-############################################################################################
-##                                   Отправка сообщений                                   ##
-############################################################################################
-case 'send':
-
-    $token   = check(Request::input('token'));
-    $msg     = check(Request::input('msg'));
-    $uz      = check(Request::input('contact', $uz));
-    $provkod = check(Request::input('provkod'));
-
-    if ($token == $_SESSION['token']) {
-        if (!empty($uz)) {
-
-            $user = User::where('login', $uz)->first();
-            if ($user) {
-                if ($user->id != App::getUserId()) {
-                    if (App::user('point') >= App::setting('privatprotect') || $provkod == $_SESSION['protect']) {
-                        if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-
-                            $totalInbox = Inbox::where('user_id', $user->id)->count();
-
-                            if ($totalInbox < App::setting('limitmail')) {
-
-                                // -------- Проверка на игнор -----------//
-                                $ignoring = Ignore::where('user_id', $user->id)
-                                    ->where('ignore_id', App::getUserId())
-                                    ->first();
-
-                                if ( ! $ignoring) {
-                                    if (is_flood(App::getUsername())) {
-
-                                        $msg = antimat($msg);
-
-                                        DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `id`=? LIMIT 1;", [$user->id]);
-                                        DB::run() -> query("INSERT INTO `inbox` (`user_id`, `author_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [$user->id, App::getUserId(), $msg, SITETIME]);
-
-                                        DB::run() -> query("INSERT INTO `outbox` (`user_id`, `recipient_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [App::getUserId(), $user->id, $msg, SITETIME]);
-
-                                        DB::run() -> query("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT ".App::setting('limitoutmail').") AS del);", [App::getUserId(), App::getUserId()]);
-                                        save_usermail(60);
-
-                                        $deliveryUsers = User::where('sendprivatmail', 0)
-                                            ->where('confirmreg', 0)
-                                            ->where('newprivat', '>', 0)
-                                            ->where('timelastlogin', '<', SITETIME - 86400 * App::setting('sendprivatmailday'))
-                                            ->where('subscribe', '<>', '')
-                                            ->where('email', '<>', '')
-                                            ->orderBy('timelastlogin')
-                                            ->limit(App::setting('sendmailpacket'))
-                                            ->get();
-
-                                        foreach ($deliveryUsers as $deliveryUser) {
-                                            sendMail($deliveryUser['email'],
-                                                $deliveryUser['newprivat'].' непрочитанных сообщений ('.App::setting('title').')',
-                                                nl2br("Здравствуйте ".$deliveryUser['login']."! \nУ вас имеются непрочитанные сообщения (".$deliveryUser['newprivat']." шт.) на сайте ".App::setting('title')." \nПрочитать свои сообщения вы можете по адресу ".App::setting('home')."/private"),
-                                                ['unsubkey' => $deliveryUser['subscribe']]
-                                            );
-
-                                            $user = User::where('id', $deliveryUser->id);
-                                            $user->update(['sendprivatmail' => 1]);
-                                        }
-
-                                        notice('Ваше письмо успешно отправлено!');
-                                        redirect("/private");
-
-                                    } else {
-                                        show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
-                                    }
-                                } else {
-                                    show_error('Ошибка! Вы внесены в игнор-лист получателя!');
-                                }
-                            } else {
-                                show_error('Ошибка! Ящик получателя переполнен!');
-                            }
-                        } else {
-                            show_error('Ошибка! Слишком длинное или короткое сообщение!');
-                        }
-                    } else {
-                        show_error('Ошибка! Проверочное число не совпало с данными на картинке!');
-                    }
-                } else {
-                    show_error('Ошибка! Нельзя отправлять письмо самому себе!');
-                }
-            } else {
-                show_error('Ошибка! Пользователь не найден!');
-            }
-        } else {
-            show_error('Ошибка! Вы не ввели логин пользователя!');
-        }
-    } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?act=submit&amp;uz='.$uz.'">Вернуться</a><br />';
     echo '<i class="fa fa-arrow-circle-up"></i> <a href="/private">К письмам</a><br />';
 break;
 
@@ -468,7 +460,7 @@ case 'outdel':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?act=output&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private/output?page='.$page.'">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -519,7 +511,7 @@ case 'alloutdel':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?act=output">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private/output">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -539,7 +531,7 @@ case 'alltrashdel':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?act=trash">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private/trash">Вернуться</a><br />';
 break;
 
 ############################################################################################
@@ -548,8 +540,8 @@ break;
 case 'history':
 
     echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие</a> / ';
-    echo '<a href="/private?act=output">Отправленные</a> / ';
-    echo '<a href="/private?act=trash">Корзина</a><hr />';
+    echo '<a href="/private/output">Отправленные</a> / ';
+    echo '<a href="/private/trash">Корзина</a><hr />';
 
     if ($uz != App::getUsername()) {
         $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
@@ -615,7 +607,7 @@ endswitch;
 }
 
 echo '<i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br />';
-echo '<i class="fa fa-envelope"></i> <a href="/private?act=submit">Написать письмо</a><br />';
+echo '<i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br />';
 echo '<i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br />';
 
 App::view(App::setting('themes').'/foot');

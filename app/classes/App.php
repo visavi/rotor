@@ -211,7 +211,7 @@ class App
      */
     public static function date($format, $date = null)
     {
-        $date = (is_null($date)) ? time() : strtotime($date);
+        $date = (is_null($date)) ? SITETIME : strtotime($date);
 
         $eng = ['January','February','March','April','May','June','July','August','September','October','November','December'];
         $rus = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
@@ -420,8 +420,8 @@ class App
             if ($user && password_verify($password, $user['password'])) {
 
                 if ($remember) {
-                    setcookie('login', $user['login'], time() + 3600 * 24 * 365, '/', $domain);
-                    setcookie('password', md5($user['password'].env('APP_KEY')), time() + 3600 * 24 * 365, '/', $domain, null, true);
+                    setcookie('login', $user['login'], SITETIME + 3600 * 24 * 365, '/', $domain);
+                    setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
                 }
 
                 $_SESSION['id'] = $user['id'];
@@ -477,8 +477,8 @@ class App
 
             if ($social && $user = user($social['user'])) {
 
-                setcookie('login', $user['login'], time() + 3600 * 24 * 365, '/', $domain);
-                setcookie('password', md5($user['password'].env('APP_KEY')), time() + 3600 * 24 * 365, '/', $domain, null, true);
+                setcookie('login', $user['login'], SITETIME + 3600 * 24 * 365, '/', $domain);
+                setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
 
                 $_SESSION['id'] = $user['id'];
                 $_SESSION['login'] = $user['login'];
