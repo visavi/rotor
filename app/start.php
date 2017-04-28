@@ -165,6 +165,7 @@ if ($user = is_user()) {
     }
     // ---------------------- Получение ежедневного бонуса -----------------------//
     if (App::user('timebonus') < SITETIME - 82800) {
+        var_dump(date('Y-m-d H:i:s', $user['timebonus']), App::getUserId());
 
         $user = User::where('id', App::getUserId());
         $user->update([
