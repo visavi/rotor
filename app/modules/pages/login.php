@@ -21,7 +21,7 @@ case 'index':
             $remember = Request::input('remember');
 
             if ($user = App::login($login, $pass, $remember)) {
-                notice('Добро пожаловать, '.$login.'!');
+                notice('Добро пожаловать, '.$user->login.'!');
 
                 if ($return) {
                     App::redirect($return);

@@ -2,16 +2,16 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class ChangeUserInTrash extends AbstractMigration
+class ChangeUserInChat extends AbstractMigration
 {
     /**
      * Migrate Up.
      */
     public function up()
     {
-        $table = $this->table('trash');
+        $table = $this->table('chat');
 
-        $rows = $this->fetchAll('SELECT * FROM trash');
+        $rows = $this->fetchAll('SELECT * FROM chat');
         foreach($rows as $row) {
 
             $user = 0;
@@ -20,29 +20,27 @@ class ChangeUserInTrash extends AbstractMigration
             }
             $userId = ! empty($user) ? $user['id'] : 0;
 
-            $author = 0;
-            if (!empty($row['author'])) {
-                $author = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['author'].'" LIMIT 1;');
+            $editUser = 0;
+            if (!empty($row['edit'])) {
+                $editUser = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['edit'].'" LIMIT 1;');
             }
-            $authorId = ! empty($author) ? $author['id'] : 0;
+            $editUserId = ! empty($editUser) ? $editUser['id'] : 0;
 
-            $this->execute('UPDATE trash SET user="'.$userId.'", author="'.$authorId.'" WHERE id = "'.$row['id'].'" LIMIT 1;');
+            $this->execute('UPDATE chat SET user="'.$userId.'", edit="'.$editUserId.'" WHERE id = "'.$row['id'].'" LIMIT 1;');
         }
 
         $table
             ->changeColumn('user', 'integer')
-            ->changeColumn('author', 'integer')
+            ->changeColumn('edit', 'integer')
             ->save();
 
         $table->renameColumn('user', 'user_id');
-        $table->renameColumn('author', 'author_id');
+        $table->renameColumn('edit', 'edit_user_id');
         $table->renameColumn('time', 'created_at');
-        $table->renameColumn('del', 'deleted_at');
+        $table->renameColumn('edit_time', 'updated_at');
 
         $table
-            ->removeIndexByName('user')
             ->removeIndexByName('time')
-            ->addIndex('user_id')
             ->addIndex('created_at')
             ->save();
     }
@@ -52,18 +50,16 @@ class ChangeUserInTrash extends AbstractMigration
      */
     public function down()
     {
-        $table = $this->table('trash');
+        $table = $this->table('chat');
         $table
             ->renameColumn('user_id', 'user')
-            ->renameColumn('author_id', 'author')
+            ->renameColumn('edit_user_id', 'edit')
             ->renameColumn('created_at', 'time')
-            ->renameColumn('deleted_at', 'del')
+            ->renameColumn('updated_at', 'edit_time')
             ->save();
 
         $table
-            ->removeIndexByName('user_id')
             ->removeIndexByName('created_at')
-            ->addIndex('user')
             ->addIndex('time')
             ->save();
     }

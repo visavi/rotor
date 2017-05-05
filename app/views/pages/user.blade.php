@@ -133,7 +133,7 @@
     @endif
 
     <div class="alert alert-info">
-        <i class="fa fa-sticky-note"></i> <a href="/wall?uz={{ $user['login'] }}">Стена сообщений</a> ({{ user_wall($user['login']) }})<br />
+        <i class="fa fa-sticky-note"></i> <a href="/wall?uz={{ $user['login'] }}">Стена сообщений</a> ({{ user_wall($user) }})<br />
 
         @if ($user['login'] != App::getUsername())
             <i class="fa fa-address-book"></i> Добавить в

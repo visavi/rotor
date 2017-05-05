@@ -538,8 +538,8 @@ function user_ignore($user)
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
-function user_wall($login) {
-    return DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$login]);
+function user_wall($user) {
+    return Wall::where('user_id', $user->id)->count();
 }
 
 // ------------------ Функция подсчета пользователей онлайн -----------------//
@@ -1258,7 +1258,7 @@ function show_advertuser()
 
 // --------------- Функция кэширования пользовательской рекламы -------------------//
 function save_advertuser() {
-    $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>?;", [SITETIME]);
+    $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `created_at`>?;", [SITETIME]);
     $data = $queryrek -> fetchAll();
 
     $arraylink = [];
@@ -1625,7 +1625,7 @@ function include_style(){
 
 // ------------- Подключение javascript -------------//
 function include_javascript(){
-    echo '<script type="text/javascript" src="/assets/js/jquery-3.1.1.min.js"></script>'."\r\n";
+    echo '<script type="text/javascript" src="/assets/js/jquery-3.2.1.min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/prettify.js"></script>'."\r\n";
     echo '<script type="text/javascript" src="/assets/js/markitup/jquery.markitup.js"></script>'."\r\n";

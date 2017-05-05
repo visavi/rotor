@@ -101,24 +101,33 @@ if (empty($_SESSION['login']) && empty($_SESSION['password'])) {
         $unlog = check($_COOKIE['login']);
         $unpar = check($_COOKIE['password']);
 
-        $checkuser = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$unlog]);
+        $user = User::where('login', $unlog)->first();
 
-        if (!empty($checkuser)) {
-            if ($unlog == $checkuser['login'] && $unpar == md5($checkuser['password'].env('APP_KEY'))) {
+        if ($user) {
+            if ($unlog == $user->login && $unpar == md5($user->password.env('APP_KEY'))) {
                 session_regenerate_id(1);
 
-                $_SESSION['id'] = $checkuser['id'];
-                $_SESSION['login'] = $unlog; // TODO удалить
-                $_SESSION['password'] = md5(env('APP_KEY').$checkuser['password']);
+                $_SESSION['id'] = $user->id;
+                $_SESSION['password'] = md5(env('APP_KEY').$user->password);
 
-                $authorization = DB::run() -> querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$unlog, SITETIME-30]);
+                $authorization = Login::where('user_id', $user->id)
+                    ->where('created_at', '>', SITETIME - 30)
+                    ->first();
 
-                if (empty($authorization)) {
-                    DB::run() -> query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?);", [$unlog, App::getClientIp(), App::getUserAgent(), SITETIME]);
-                    DB::run() -> query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$unlog, $unlog]);
+                if (! $authorization) {
+
+                    Login::create([
+                        'user_id' => $user->id,
+                        'ip' => App::getClientIp(),
+                        'brow' => App::getUserAgent(),
+                        'created_at' => SITETIME,
+                    ]);
                 }
 
-                DB::run() -> query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=? LIMIT 1;", [SITETIME, $unlog]);
+                $user->update([
+                    'visits' => Capsule::raw('visits + 1'),
+                    'timelastlogin' => SITETIME
+                ]);
             }
         }
     }
@@ -178,9 +187,9 @@ if ($user = is_user()) {
 
     // ------------------ Запись текущей страницы для админов --------------------//
     if (Request::path() == 'admin') {
-        DB::run() -> query("INSERT INTO `admlog` (`user`, `request`, `referer`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [App::getUsername(), App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME]);
+        DB::run() -> query("INSERT INTO `admlog` (`user_id`, `request`, `referer`, `ip`, `brow`, `created_at`) VALUES (?, ?, ?, ?, ?, ?);", [App::getUserId(), App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME]);
 
-        DB::run() -> query("DELETE FROM `admlog` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `admlog` ORDER BY `time` DESC LIMIT 500) AS del);");
+        DB::run() -> query("DELETE FROM `admlog` WHERE `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `admlog` ORDER BY `created_at` DESC LIMIT 500) AS del);");
     }
 }
 

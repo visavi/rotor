@@ -14,11 +14,13 @@ class ChangeUserInInbox extends AbstractMigration
         $rows = $this->fetchAll('SELECT * FROM inbox');
         foreach($rows as $row) {
 
+            $user = 0;
             if (!empty($row['user'])) {
                 $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['user'].'" LIMIT 1;');
             }
             $userId = ! empty($user) ? $user['id'] : 0;
 
+            $author = 0;
             if (!empty($row['author'])) {
                 $author = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['author'].'" LIMIT 1;');
             }

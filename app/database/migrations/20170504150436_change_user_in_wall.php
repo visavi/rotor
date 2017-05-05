@@ -2,16 +2,16 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class ChangeUserInTrash extends AbstractMigration
+class ChangeUserInWall extends AbstractMigration
 {
     /**
      * Migrate Up.
      */
     public function up()
     {
-        $table = $this->table('trash');
+        $table = $this->table('wall');
 
-        $rows = $this->fetchAll('SELECT * FROM trash');
+        $rows = $this->fetchAll('SELECT * FROM wall');
         foreach($rows as $row) {
 
             $user = 0;
@@ -21,27 +21,25 @@ class ChangeUserInTrash extends AbstractMigration
             $userId = ! empty($user) ? $user['id'] : 0;
 
             $author = 0;
-            if (!empty($row['author'])) {
-                $author = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['author'].'" LIMIT 1;');
+            if (!empty($row['login'])) {
+                $author = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['login'].'" LIMIT 1;');
             }
             $authorId = ! empty($author) ? $author['id'] : 0;
 
-            $this->execute('UPDATE trash SET user="'.$userId.'", author="'.$authorId.'" WHERE id = "'.$row['id'].'" LIMIT 1;');
+            $this->execute('UPDATE wall SET user="'.$userId.'", login="'.$authorId.'" WHERE id = "'.$row['id'].'" LIMIT 1;');
         }
 
         $table
             ->changeColumn('user', 'integer')
-            ->changeColumn('author', 'integer')
+            ->changeColumn('login', 'integer')
             ->save();
 
         $table->renameColumn('user', 'user_id');
-        $table->renameColumn('author', 'author_id');
+        $table->renameColumn('login', 'author_id');
         $table->renameColumn('time', 'created_at');
-        $table->renameColumn('del', 'deleted_at');
 
         $table
             ->removeIndexByName('user')
-            ->removeIndexByName('time')
             ->addIndex('user_id')
             ->addIndex('created_at')
             ->save();
@@ -52,19 +50,17 @@ class ChangeUserInTrash extends AbstractMigration
      */
     public function down()
     {
-        $table = $this->table('trash');
+        $table = $this->table('wall');
         $table
             ->renameColumn('user_id', 'user')
-            ->renameColumn('author_id', 'author')
+            ->renameColumn('author_id', 'login')
             ->renameColumn('created_at', 'time')
-            ->renameColumn('deleted_at', 'del')
             ->save();
 
         $table
-            ->removeIndexByName('user_id')
             ->removeIndexByName('created_at')
+            ->removeIndexByName('user_id')
             ->addIndex('user')
-            ->addIndex('time')
             ->save();
     }
 }

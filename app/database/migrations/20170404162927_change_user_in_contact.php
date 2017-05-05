@@ -14,11 +14,13 @@ class ChangeUserInContact extends AbstractMigration
         $rows = $this->fetchAll('SELECT * FROM contact');
         foreach($rows as $row) {
 
+            $user = 0;
             if (!empty($row['user'])) {
                 $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['user'].'" LIMIT 1;');
             }
             $userId = ! empty($user) ? $user['id'] : 0;
 
+            $contact = 0;
             if (!empty($row['name'])) {
                 $contact = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['name'].'" LIMIT 1;');
             }

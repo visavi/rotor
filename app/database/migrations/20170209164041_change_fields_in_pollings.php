@@ -12,6 +12,7 @@ class ChangeFieldsInPollings extends AbstractMigration
         $rows = $this->fetchAll('SELECT * FROM pollings');
         foreach($rows as $row) {
 
+            $user = 0;
             if (!empty($row['user'])) {
                 $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['user'].'" LIMIT 1;');
             }

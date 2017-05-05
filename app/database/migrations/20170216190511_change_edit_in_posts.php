@@ -13,7 +13,8 @@ class ChangeEditInPosts extends AbstractMigration
         $rows = $this->fetchAll('SELECT * FROM posts');
         foreach($rows as $row) {
 
-            if (!empty($row['user'])) {
+            $user = 0;
+            if (!empty($row['edit'])) {
                 $user = $this->fetchRow('SELECT id FROM users WHERE login = "'.$row['edit'].'" LIMIT 1;');
             }
 

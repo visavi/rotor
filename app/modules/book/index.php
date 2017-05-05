@@ -46,7 +46,7 @@ case 'add':
         if (is_user()) {
             $bookscores = (App::setting('bookscores')) ? 1 : 0;
 
-            $user = User::find(App::getUserId());
+            $user = User::where('id', App::getUserId());
             $user->update([
                 'allguest' => Capsule::raw('allguest + 1'),
                 'point' => Capsule::raw('point + 1'),

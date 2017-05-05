@@ -424,28 +424,46 @@ class App
                     setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
                 }
 
-                $_SESSION['id'] = $user['id'];
-                $_SESSION['login'] = $user['login']; // TODO Удалить
-                $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
+                $_SESSION['id'] = $user->id;
+                $_SESSION['password'] = md5(env('APP_KEY').$user->password);
 
                 // Сохранение привязки к соц. сетям
                 if (!empty($_SESSION['social'])) {
 
                     $social = new Social();
-                    $social->user = $user['login'];
+                    $social->user = $user->login;
                     $social->network = $_SESSION['social']->network;
                     $social->uid = $_SESSION['social']->uid;
                     $social->save();
                 }
 
-                DB::run()->query("UPDATE `users` SET `visits`=`visits`+1, `timelastlogin`=? WHERE `login`=?", [SITETIME, $user['login']]);
+                $authorization = Login::where('user_id', $user->id)
+                    ->where('created_at', '>', SITETIME - 30)
+                    ->first();
 
-                $authorization = DB::run()->querySingle("SELECT `id` FROM `login` WHERE `user`=? AND `time`>? LIMIT 1;", [$user['login'], SITETIME - 30]);
+                if (! $authorization) {
 
-                if (empty($authorization)) {
-                    DB::run()->query("INSERT INTO `login` (`user`, `ip`, `brow`, `time`, `type`) VALUES (?, ?, ?, ?, ?);", [$user['login'], self::getClientIp(), self::getUserAgent(), SITETIME, 1]);
-                    DB::run()->query("DELETE FROM `login` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT 50) AS del);", [$user['login'], $user['login']]);
+                    Login::create([
+                        'user_id' => $user->id,
+                        'ip' => self::getClientIp(),
+                        'brow' => self::getUserAgent(),
+                        'created_at' => SITETIME,
+                        'type' => 1,
+                    ]);
+
+                    Capsule::delete('
+                        DELETE FROM login WHERE created_at < (
+                            SELECT MIN(created_at) FROM (
+                                SELECT created_at FROM guest ORDER BY created_at DESC LIMIT 50
+                            ) AS del
+                        );'
+                    );
                 }
+
+                $user->update([
+                    'visits' => Capsule::raw('visits + 1'),
+                    'timelastlogin' => SITETIME
+                ]);
 
                 return $user;
             }
