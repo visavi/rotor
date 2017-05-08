@@ -23,12 +23,12 @@
     }
 
     echo '<i class="fa fa-envelope"></i> <b>Входящие ('.$page['total'].')</b> / ';
-    echo '<a href="/private/output">Отправленные ('.$page['totalOutbox'].')</a> / ';
+    echo '<a href="/private/outbox">Отправленные ('.$page['totalOutbox'].')</a> / ';
     echo '<a href="/private/trash">Корзина ('.$page['totalTrash'].')</a><hr />';
 
     if ($messages->isNotEmpty()) {
 
-    echo '<form action="/private?act=del&amp;page='.$page['current'].'" method="post">';
+        echo '<form action="/private/delete?page='.$page['current'].'" method="post">';
         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
         echo '<div class="form">';
             echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
@@ -70,7 +70,7 @@
     echo 'Всего писем: <b>'.$page['total'].'</b><br />';
     echo 'Объем ящика: <b>'.App::setting('limitmail').'</b><br /><br />';
 
-    echo '<i class="fa fa-times"></i> <a href="/private/alldel?token='.$_SESSION['token'].'">Очистить ящик</a><br />';
+    echo '<i class="fa fa-times"></i> <a href="/private/clear?token='.$_SESSION['token'].'">Очистить ящик</a><br />';
     } else {
     show_error('Входящих писем еще нет!');
     }

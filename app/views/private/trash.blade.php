@@ -11,7 +11,7 @@
     <?php
 
     echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие ('.$page['totalInbox'].')</a> / ';
-    echo '<a href="/private/output">Отправленные ('.$page['totalOutbox'].')</a> / ';
+    echo '<a href="/private/outbox">Отправленные ('.$page['totalOutbox'].')</a> / ';
 
     echo '<b>Корзина ('.$page['total'].')</b><hr />';
 
@@ -33,10 +33,10 @@
 
         App::pagination($page);
 
-        echo 'Всего писем: <b>'.$total.'</b><br />';
-        echo 'Срок хранения: <b>'.App::setting('expiresmail').'</b><br /><br />';
+        echo 'Всего писем: <b>'.$page['total'].'</b><br />';
+        echo 'Срок хранения (дней): <b>'.App::setting('expiresmail').'</b><br /><br />';
 
-        echo '<i class="fa fa-times"></i> <a href="/private/alltrashdel?token='.$_SESSION['token'].'">Очистить ящик</a><br />';
+        echo '<i class="fa fa-times"></i> <a href="/private/clear?type=trash&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
     } else {
         show_error('Удаленных писем еще нет!');
     }

@@ -337,7 +337,7 @@ class App
      */
     public static function getUsername()
     {
-        return isset($_SESSION['login']) ? check($_SESSION['login']) : self::setting('guestsuser');
+        return self::user('login') ? self::user('login') : self::setting('guestsuser');
     }
 
 

@@ -24,7 +24,8 @@ case 'index':
         ->where('topic_id', $tid)
         ->leftJoin ('pollings', function($join) {
             $join->on('posts.id', '=', 'pollings.relate_id')
-                ->where('pollings.relate_type', '=', Post::class);
+                ->where('pollings.relate_type', Post::class)
+                ->where('pollings.user_id', App::getUserId());
         })
         ->with('files', 'user', 'editUser')
         ->offset($page['offset'])

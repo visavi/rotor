@@ -616,7 +616,7 @@ if (is_admin([101])) {
 
             echo 'Кол. писем во входящих:<br /><input name="limitmail" maxlength="3" value="'.$setting['limitmail'].'" /><br />';
             echo 'Кол. писем в отправленных:<br /><input name="limitoutmail" maxlength="3" value="'.$setting['limitoutmail'].'" /><br />';
-            echo 'Срок хранения удаленных писем:<br /><input name="expiresmail" maxlength="2" value="'.$setting['expiresmail'].'" /><br />';
+            echo 'Срок хранения удаленных писем (дней):<br /><input name="expiresmail" maxlength="2" value="'.$setting['expiresmail'].'" /><br />';
             echo 'Писем в привате на стр.:<br /><input name="privatpost" maxlength="2" value="'.$setting['privatpost'].'" /><br />';
             echo 'Порог выключения защитной картинки:<br /><input name="privatprotect" maxlength="4" value="'.$setting['privatprotect'].'" /><br />';
             echo 'Листинг в контакт-листе:<br /><input name="contactlist" maxlength="2" value="'.$setting['contactlist'].'" /><br />';

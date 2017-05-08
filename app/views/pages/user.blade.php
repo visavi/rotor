@@ -139,7 +139,7 @@
             <i class="fa fa-address-book"></i> Добавить в
             <a href="/contact?act=add&amp;uz={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">контакт</a> /
             <a href="/ignore?act=add&amp;uz={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">игнор</a><br />
-            <i class="fa fa-envelope"></i> <a href="/private?act=submit&amp;uz={{ $user['login'] }}">Отправить сообщение</a><br />
+            <i class="fa fa-envelope"></i> <a href="/private/send?user={{ $user['login'] }}">Отправить сообщение</a><br />
 
             <i class="fa fa-money"></i> <a href="/games/transfer?uz={{ $user['login'] }}">Перечислить денег</a><br />
 

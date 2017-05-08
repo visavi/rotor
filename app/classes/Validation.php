@@ -108,7 +108,7 @@ class Validation
     /**
      * add a rule to the validation rules array
      * @param string $type The type of variable
-     * @param string $var The variable
+     * @param mixed $var The variable
      * @param mixed $label The label of variable
      * @param bool $required If the field is required
      * @param int $min The minimum length or range

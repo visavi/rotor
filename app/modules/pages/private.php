@@ -1,6 +1,5 @@
 <?php
 
-$uz   = check(Request::input('uz'));
 $page = abs(intval(Request::input('page', 1)));
 
 if (! is_user()) App::abort(403);
@@ -37,7 +36,7 @@ break;
 ############################################################################################
 ##                                 Исходящие сообщения                                    ##
 ############################################################################################
-case 'output':
+case 'outbox':
 
     $total = Outbox::where('user_id', App::getUserId())->count();
     $page = App::paginate(App::setting('privatpost'), $total);
@@ -52,7 +51,7 @@ case 'output':
     $page['totalInbox'] = Inbox::where('user_id', App::getUserId())->count();
     $page['totalTrash'] = Trash::where('user_id', App::getUserId())->count();
 
-    App::view('private/output', compact('messages', 'page'));
+    App::view('private/outbox', compact('messages', 'page'));
 break;
 
 ############################################################################################
@@ -206,147 +205,73 @@ break;
 
 /* Удаление сообщений */
 case 'delete':
-
-
-break;
-
-############################################################################################
-##                                 Удаление сообщений                                     ##
-############################################################################################
-case 'del':
-
     $token = check(Request::input('token'));
-    if (isset($_POST['del'])) {
-        $del = intar($_POST['del']);
-    } else {
-        $del = 0;
-    }
+    $type = check(Request::input('type'));
+    $del = intar(Request::input('del'));
 
-    if ($token == $_SESSION['token']) {
-        if (!empty($del)) {
-            $del = implode(',', $del);
+    $validation = new Validation();
+    $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+        ->addRule('bool', $del, 'Ошибка удаления! Отсутствуют выбранные сообщения');
+
+    if ($validation->run()) {
+
+        $del = implode(',', $del);
+
+        if ($type == 'outbox') {
+            DB::run() -> query("DELETE FROM `outbox` WHERE `id` IN (".$del.") AND `user_id`=?;", [App::getUserId()]);
+        } else {
             $deltrash = SITETIME + 86400 * App::setting('expiresmail');
 
-            DB::run() -> query("DELETE FROM `trash` WHERE `del`<?;", [SITETIME]);
+            DB::run() -> query("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
 
-            DB::run() -> query("INSERT INTO `trash` (`user`, `author`, `text`, `time`, `del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", [$deltrash, App::getUsername()]);
+            DB::run() -> query("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `id` IN (".$del.") AND `user_id`=?;", [$deltrash, App::getUserId()]);
 
-            DB::run() -> query("DELETE FROM `inbox` WHERE `id` IN (".$del.") AND `user`=?;", [App::getUsername()]);
+            DB::run() -> query("DELETE FROM `inbox` WHERE `id` IN (".$del.") AND `user_id`=?;", [App::getUserId()]);
             save_usermail(60);
-
-            notice('Выбранные сообщения успешно удалены!');
-            redirect("/private?page=$page");
-
-        } else {
-            show_error('Ошибка удаления! Отсутствуют выбранные сообщения');
         }
+
+        App::setFlash('success', 'Выбранные сообщения успешно удалены!');
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::setFlash('danger', $validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private?page='.$page.'">Вернуться</a><br />';
+    $type = $type ? '/'.$type : '';
+    App::redirect('/private'.$type.'?page='.$page);
 break;
 
-############################################################################################
-##                           Удаление отправленных сообщений                              ##
-############################################################################################
-case 'outdel':
-
+/* Очистка сообщений */
+case 'clear':
     $token = check(Request::input('token'));
-    if (isset($_POST['del'])) {
-        $del = intar($_POST['del']);
-    } else {
-        $del = 0;
-    }
+    $type = check(Request::input('type'));
 
-    if ($token == $_SESSION['token']) {
-        if ($del > 0) {
-            $del = implode(',', $del);
+    $validation = new Validation();
+    $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+        ->addRule('empty', App::user('newprivat'), 'У вас имеются непрочитанные сообщения!');
 
-            DB::run() -> query("DELETE FROM `outbox` WHERE `id` IN (".$del.") AND `author`=?;", [App::getUsername()]);
+    if ($validation->run()) {
 
-            notice('Выбранные сообщения успешно удалены!');
-            redirect("/private?act=output&page=$page");
-
+        if ($type == 'outbox') {
+            DB::run() -> query("DELETE FROM `outbox` WHERE `user_id`=?;", [App::getUserId()]);
+        } elseif ($type == 'trash') {
+            DB::run()->query("DELETE FROM `trash` WHERE `user_id`=?;", [App::getUserId()]);
         } else {
-            show_error('Ошибка удаления! Отсутствуют выбранные сообщения');
-        }
-    } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private/output?page='.$page.'">Вернуться</a><br />';
-break;
-
-############################################################################################
-##                                   Очистка входящих сообщений                           ##
-############################################################################################
-case 'alldel':
-
-    $token = check(Request::input('token'));
-
-    if ($token == $_SESSION['token']) {
-        if (empty(App::user('newprivat'))) {
             $deltrash = SITETIME + 86400 * App::setting('expiresmail');
 
-            DB::run() -> query("DELETE FROM `trash` WHERE `del`<?;", [SITETIME]);
+            DB::run() -> query("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
 
-            DB::run() -> query("INSERT INTO `trash` (`user`, `author`, `text`, `time`, `del`) SELECT `user`, `author`, `text`, `time`, ? FROM `inbox` WHERE `user`=?;", [$deltrash, App::getUsername()]);
+            DB::run() -> query("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `user_id`=?;", [$deltrash, App::getUserId()]);
 
-            DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", [App::getUsername()]);
+            DB::run() -> query("DELETE FROM `inbox` WHERE `user_id`=?;", [App::getUserId()]);
             save_usermail(60);
-
-            notice('Ящик успешно очищен!');
-            redirect("/private");
-
-        } else {
-            show_error('Ошибка! У вас имеются непрочитанные сообщения!');
         }
+
+        App::setFlash('success', 'Ящик успешно очищен!');
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::setFlash('danger', $validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private">Вернуться</a><br />';
-break;
-
-############################################################################################
-##                           Очистка отправленных сообщений                               ##
-############################################################################################
-case 'alloutdel':
-
-    $token = check(Request::input('token'));
-
-    if ($token == $_SESSION['token']) {
-        DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", [App::getUsername()]);
-
-        notice('Ящик успешно очищен!');
-        redirect("/private?act=output");
-
-    } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private/output">Вернуться</a><br />';
-break;
-
-############################################################################################
-##                              Очистка удаленных сообщений                               ##
-############################################################################################
-case 'alltrashdel':
-
-    $token = check(Request::input('token'));
-
-    if ($token == $_SESSION['token']) {
-        DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", [App::getUsername()]);
-
-        notice('Ящик успешно очищен!');
-        redirect("/private?act=trash");
-
-    } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/private/trash">Вернуться</a><br />';
+    $type = $type ? '/'.$type : '';
+    App::redirect('/private/'.$type.'?page='.$page);
 break;
 
 ############################################################################################
@@ -354,61 +279,37 @@ break;
 ############################################################################################
 case 'history':
 
-    if ($uz != App::getUsername()) {
-        $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
-        if (!empty($queryuser)) {
-            $total = DB::run() -> query("SELECT count(*) FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT count(*) FROM `outbox` WHERE `user`=? AND `author`=?;", [App::getUsername(), $uz, $uz, App::getUsername()]);
+    $login = check(Request::input('user'));
 
-            $total = array_sum($total -> fetchAll(PDO::FETCH_COLUMN));
-            $page = App::paginate(App::setting('privatpost'), $total);
-
-            if ($total > 0) {
-
-                $queryhistory = DB::run() -> query("SELECT * FROM `inbox` WHERE `user`=? AND `author`=? UNION ALL SELECT * FROM `outbox` WHERE `user`=? AND `author`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('privatpost').";", [App::getUsername(), $uz, $uz, App::getUsername()]);
-
-                while ($data = $queryhistory -> fetch()) {
-                    echo '<div class="b">';
-                    echo user_avatars($data['author']);
-                    echo '<b>'.profile($data['author']).'</b> '.user_online($data['author']).' ('.date_fixed($data['time']).')</div>';
-                    echo '<div>'.App::bbCode($data['text']).'</div>';
-                }
-
-                App::pagination($page);
-
-                if (!user_privacy($uz) || is_admin() || is_contact($uz, App::getUsername())){
-
-                    echo '<br /><div class="form">';
-                    echo '<form action="/private?act=send&amp;uz='.$uz.'" method="post">';
-                    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-
-                    echo 'Сообщение:<br />';
-                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
-
-                    if (App::user('point') < App::setting('privatprotect')) {
-                        echo 'Проверочный код:<br /> ';
-                        echo '<img src="/captcha" alt="" /><br />';
-                        echo '<input name="provkod" size="6" maxlength="6" /><br />';
-                    }
-
-                    echo '<input value="Быстрый ответ" type="submit" /></form></div><br />';
-
-                } else {
-                    show_error('Включен режим приватности, писать могут только пользователи из контактов!');
-                }
-
-                echo 'Всего писем: <b>'.(int)$total.'</b><br /><br />';
-
-            } else {
-                show_error('История переписки отсутствует!');
-            }
-        } else {
-            show_error('Ошибка! Данного адресата не существует!');
-        }
-    } else {
-        show_error('Ошибка! Отсутствует переписка с самим собой!');
+    if (! $user = user($login)) {
+        App::abort('default', 'Пользователя с данным логином не существует!');
     }
 
-    App::view('private/history', compact('messages'));
+    if ($user->id == App::getUserId()) {
+        App::abort('default', 'Отсутствует переписка с самим собой!');
+    }
+
+    $totalInbox = Inbox::where('user_id', App::getUserId())->where('author_id', $user->id)->count();
+    $totalOutbox = Outbox::where('user_id', App::getUserId())->where('recipient_id', $user->id)->count();
+
+    $total = $totalInbox + $totalOutbox;
+
+    $page = App::paginate(App::setting('privatpost'), $total);
+
+    $outbox = Outbox::select('id', 'user_id', 'user_id as author_id', 'text', 'created_at')
+        ->where('user_id', App::getUserId())
+        ->where('recipient_id', $user->id);
+
+    $messages = Inbox::where('user_id', App::getUserId())
+        ->where('author_id', $user->id)
+        ->unionAll($outbox)
+        ->orderBy('created_at', 'desc')
+        ->offset($page['offset'])
+        ->limit($page['limit'])
+        ->with('author')
+        ->get();
+
+    App::view('private/history', compact('messages', 'page', 'user'));
 break;
 
 endswitch;

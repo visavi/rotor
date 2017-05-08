@@ -27,7 +27,7 @@
             echo '<input name="provkod" size="6" maxlength="6" /><br />';
         }
 
-        echo '<input value="Отправить" type="submit" /></form></div><br />';
+        echo '<button type="submit" class="btn btn-primary">Отправить</button></form></div><br />';
 
     } else {
 
@@ -62,7 +62,7 @@
             echo '<input name="provkod" size="6" maxlength="6" /><br />';
         }
 
-        echo '<input value="Отправить" type="submit" /></form></div><br />';
+        echo '<button type="submit" class="btn btn-primary">Отправить</button></form></div><br />';
 
         echo 'Введите логин или выберите пользователя из своего контакт-листа<br />';
     }

@@ -939,7 +939,7 @@ function stats_chat() {
 
 // ------------------ Функция вывода времени последнего сообщения --------------------//
 function stats_newchat() {
-    return intval(DB::run() -> querySingle("SELECT MAX(`time`) FROM `chat`;"));
+    return intval(DB::run() -> querySingle("SELECT MAX(`created_at`) FROM `chat`;"));
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//

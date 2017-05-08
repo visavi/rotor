@@ -80,8 +80,8 @@ class DB {
 
             try {
                 self::$instance = new PDO_('mysql:host='.env('DB_HOST').';port='.env('DB_PORT').';dbname='.env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
-                self::$instance->exec('SET CHARACTER SET utf8');
                 self::$instance->exec('SET NAMES utf8mb4');
+                self::$instance->exec('SET CHARACTER SET utf8');
             }
 
             catch (PDOException $e) {

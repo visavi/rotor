@@ -89,7 +89,7 @@ $router->map('POST', '/ajax/rating', 'ajax/rating.php');
 $router->map('GET|POST', '/wall',     'pages/wall.php', 'wall');
 $router->map('GET|POST', '/setting',  'pages/setting.php');
 
-$router->map('GET', '/private/[output|trash|history:action]?', 'pages/private.php');
+$router->map('GET', '/private/[outbox|trash|history|clear:action]?', 'pages/private.php');
 $router->map('POST', '/private/[complaint|delete:action]', 'pages/private.php');
 $router->map('GET|POST', '/private/[send:action]', 'pages/private.php');
 

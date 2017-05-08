@@ -4,7 +4,7 @@
  * Дополнительно реализовано, расширеные подсказки в ошибках
  * Возможность загрузки файлов, только определенных расширений
  */
-class FileUpload extends uploa
+class FileUpload extends upload
 {
 
     function translate($str, $tokens = [])
