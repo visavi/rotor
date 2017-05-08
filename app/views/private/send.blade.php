@@ -18,9 +18,11 @@
         echo '<div class="form">';
         echo '<form action="/private/send?user='.$user->login.'" method="post">';
         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
+?>
 
-        echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
-
+        <label for="markItUp">Сообщение:</label>
+        <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
+<?php
         if (App::user('point') < App::setting('privatprotect')) {
             echo 'Проверочный код:<br />';
             echo '<img src="/captcha" alt="" /><br />';
@@ -34,18 +36,21 @@
         echo '<div class="form">';
         echo '<form action="/private/send" method="post">';
         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
+?>
 
-        echo 'Введите логин:<br />';
-        echo '<input type="text" name="user" maxlength="20" /><br />';
+<label for="inputLogin">Логин:</label>
+<input class="form-control" name="user" id="inputLogin" maxlength="20" value="{{ App::getInput('user') }}">
 
+    <?php
         $contacts = Contact::where('user_id', App::getUserId())
             ->rightJoin('users', 'contact.contact_id', '=', 'users.id')
             ->orderBy('users.login')
             ->get();
 
         if (count($contacts) > 0) {
-            echo 'Или выберите из списка:<br />';
-            echo '<select name="contact">';
+            echo '<label for="inputContact">Или выберите из списка</label>';
+            echo '<select class="form-control" id="inputContact" name="contact">';
+
             echo '<option value="0">Список контактов</option>';
 
             foreach($contacts as $data) {
@@ -53,8 +58,12 @@
             }
             echo '</select><br />';
         }
+?>
 
-        echo '<textarea cols="25" rows="5" name="msg" id="markItUp"></textarea><br />';
+
+    <label for="markItUp">Сообщение:</label>
+    <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg') }}</textarea>
+<?php
 
         if (App::user('point') < App::setting('privatprotect')) {
             echo 'Проверочный код:<br />';
