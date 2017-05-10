@@ -12,14 +12,14 @@ switch ($act):
         //show_title('Список всех комментариев');
 
 
-        $total = Comment::where('relate_type', 'Gallery')->count();
+        $total = Comment::where('relate_type', Photo::class)->count();
         $page = App::paginate(App::setting('postgallery'), $total);
 
         if ($total > 0) {
             //App::setting('newtitle') = 'Список всех комментариев (Стр. '.$page['current'].')';
 
             $comments = Comment::select('comments.*', 'title')
-                ->where('relate_type', 'Gallery')
+                ->where('relate_type', Photo::class)
                 ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
                 ->offset($page['offset'])
                 ->limit($page['limit'])
@@ -62,7 +62,7 @@ switch ($act):
             App::abort('default', 'Пользователь не найден!');
         }
 
-        $total = Comment::where('relate_type', 'Gallery')
+        $total = Comment::where('relate_type', Photo::class)
             ->where('user_id', $user->id)
             ->count();
 
@@ -72,7 +72,7 @@ switch ($act):
             //App::setting('newtitle') = 'Список всех комментариев '.$uz.' (Стр. '.$page['current'].')';
 
             $comments = Comment::select('comments.*', 'title')
-                ->where('relate_type', 'Gallery')
+                ->where('relate_type', Photo::class)
                 ->where('comments.user_id', $user->id)
                 ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
                 ->offset($page['offset'])
@@ -117,7 +117,7 @@ switch ($act):
         $gid = abs(intval(Request::input('gid')));
         $cid = abs(intval(Request::input('cid')));
 
-        $total = Comment::where('relate_type', 'Gallery')
+        $total = Comment::where('relate_type', Photo::class)
             ->where('relate_id', $gid)
             ->where('id', '<=', $cid)
             ->orderBy('created_at')
@@ -144,7 +144,7 @@ switch ($act):
         if (is_admin()) {
             if ($token == $_SESSION['token']) {
 
-                $comment = Comment::where('relate_type', 'Gallery')
+                $comment = Comment::where('relate_type', Photo::class)
                     ->where('id', $id)
                     ->first();
 

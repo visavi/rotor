@@ -443,8 +443,8 @@ if (is_admin([101, 102])) {
                         }
 
                         if (!empty($delcommphoto)) {
-                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['gallery', $uz]);
-                            restatement('gallery');
+                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", [Photo::class, $uz]);
+                            restatement('photo');
                         }
 
                         if (!empty($delcommnews)) {

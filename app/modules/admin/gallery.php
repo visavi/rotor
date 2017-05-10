@@ -153,7 +153,7 @@ if (is_admin()) {
                         if (count($arr_photo) > 0) {
                             foreach ($arr_photo as $delete) {
                                 DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$delete['id']]);
-                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['Gallery', $delete['id']]);
+                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", [Photo::class, $delete['id']]);
 
                                 unlink_image('uploads/pictures/', $delete['link']);
                             }
@@ -186,7 +186,7 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($token == $_SESSION['token']) {
-                    restatement('gallery');
+                    restatement('photo');
 
                     notice('Комментарии успешно пересчитаны!');
                     redirect("/admin/gallery");

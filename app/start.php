@@ -12,25 +12,28 @@ date_default_timezone_set(App::setting('timezone'));
  * Проверка на ip-бан
  */
 if (file_exists(STORAGE.'/temp/ipban.dat')) {
-    $arrbanip = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
+    $ipBan = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
 } else {
-    $arrbanip = save_ipban();
+    $ipBan = save_ipban();
 }
 
-if (is_array($arrbanip) && count($arrbanip) > 0) {
+//$ipBan = ipBan();
 
-    foreach($arrbanip as $ipdata) {
-        $ipmatch = 0;
-        $ipsplit = explode('.', App::getClientIp());
-        $dbsplit = explode('.', $ipdata);
+if (is_array($ipBan) && count($ipBan) > 0) {
 
-        for ($i = 0; $i < 4; $i++) {
-            if ($ipsplit[$i] == $dbsplit[$i] || $dbsplit[$i] == '*') {
-                $ipmatch += 1;
+    $ipSplit = explode('.', App::getClientIp());
+
+    foreach($ipBan as $ip) {
+        $matches = 0;
+        $dbSplit = explode('.', $ip);
+
+        foreach($ipSplit as $key => $split) {
+            if (isset($dbSplit[$key]) && ($split == $dbSplit[$key] || $dbSplit[$key] == '*')) {
+                $matches += 1;
             }
         }
 
-        if ($ipmatch == 4 && ! Request::is('banip', 'captcha')) {
+        if ($matches == 4 && ! Request::is('banip', 'captcha')) {
             redirect('/banip');
         }
     }
@@ -69,15 +72,16 @@ if (App::setting('doslimit')) {
 
                 if (! $banip) {
 
-                    $error = new Log();
-                    $error->code = 666;
-                    $error->request = utf_substr(App::server('REQUEST_URI'), 0, 200);
-                    $error->referer = utf_substr(App::server('HTTP_REFERER'), 0, 200);
-                    $error->user_id = App::getUserId();
-                    $error->ip = App::getClientIp();
-                    $error->brow = App::getUserAgent();
-                    $error->created_at = SITETIME;
-                    $error->save();
+                    Log::create([
+                        'code'       => 666,
+                        'request'    => utf_substr(App::server('REQUEST_URI'), 0, 200),
+                        'referer'    => utf_substr(App::server('HTTP_REFERER'), 0, 200),
+                        'user_id'    => App::getUserId(),
+                        'ip'         => App::getClientIp(),
+                        'brow'       => App::getUserAgent(),
+                        'created_at' => SITETIME,
+
+                    ]);
 
                     Capsule::insert(
                         "INSERT IGNORE INTO ban (`ip`, `created_at`) VALUES (?, ?);",
@@ -186,10 +190,24 @@ if ($user = is_user()) {
     }
 
     // ------------------ Запись текущей страницы для админов --------------------//
-    if (Request::path() == 'admin') {
-        DB::run() -> query("INSERT INTO `admlog` (`user_id`, `request`, `referer`, `ip`, `brow`, `created_at`) VALUES (?, ?, ?, ?, ?, ?);", [App::getUserId(), App::server('REQUEST_URI'), App::server('HTTP_REFERER'), App::getClientIp(), App::getUserAgent(), SITETIME]);
+    if (Request::segment(1) == 'admin') {
 
-        DB::run() -> query("DELETE FROM `admlog` WHERE `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `admlog` ORDER BY `created_at` DESC LIMIT 500) AS del);");
+        Admlog::create([
+            'user_id'    => App::getUserId(),
+            'request'    => App::server('REQUEST_URI'),
+            'referer'    => App::server('HTTP_REFERER'),
+            'ip'         => App::getClientIp(),
+            'brow'       => App::getUserAgent(),
+            'created_at' => SITETIME,
+        ]);
+
+        Capsule::delete('
+            DELETE FROM admlog WHERE created_at < (
+                SELECT MIN(created_at) FROM (
+                    SELECT created_at FROM admlog ORDER BY created_at DESC LIMIT 500
+                ) AS del
+            );'
+        );
     }
 }
 

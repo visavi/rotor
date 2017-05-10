@@ -48,42 +48,43 @@ function unlink_image($dir, $image) {
 }
 
 // ------------------- Функция полного удаления юзера --------------------//
-function delete_users($user) {
-    if (!empty($user)){
-        $userpic = User::where('login', $user)->first();
+function delete_users($user)
+{
+    if ($user){
 
-        unlink_image('uploads/photos/', $userpic['picture']);
-        unlink_image('uploads/avatars/', $userpic['avatar']);
+        unlink_image('uploads/photos/', $user['picture']);
+        unlink_image('uploads/avatars/', $user['avatar']);
 
-        DB::run() -> query("DELETE FROM `inbox` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `outbox` WHERE `author`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `trash` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `contact` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM ignoring WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `rating` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `visit` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `wall` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `notebook` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `banhist` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `note` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `bookmarks` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `login` WHERE `user`=?;", [$user]);
-        DB::run() -> query("DELETE FROM `invite` WHERE `user`=? OR `invited`=?;", [$user, $user]);
-        DB::run() -> query("DELETE FROM `users` WHERE `login`=?;", [$user]);
+        DB::run() -> query("DELETE FROM `inbox` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `outbox` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `trash` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `contact` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM ignoring WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `rating` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `visit` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `wall` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `notebook` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `banhist` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `note` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `bookmarks` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `login` WHERE `user_id`=?;", [$user->id]);
+        DB::run() -> query("DELETE FROM `invite` WHERE `user_id`=? OR `invite_user_id`=?;", [$user->id, $user->id]);
+
+        $user->delete();
     }
 }
 
 // ------------------- Функция удаления фотоальбома юзера --------------------//
-function delete_album($user) {
-
-    if (!empty($user)){
-        $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `user`=?;", [$user]);
+function delete_album($user)
+{
+    if ($user){
+        $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `user_id`=?;", [$user->id]);
         $arr_photo = $querydel -> fetchAll();
 
         if (count($arr_photo) > 0) {
             foreach ($arr_photo as $delete) {
                 DB::run() -> query("DELETE FROM `photo` WHERE `id`=?;", [$delete['id']]);
-                DB::run() -> query("DELETE FROM `commphoto` WHERE `gid`=?;", [$delete['id']]);
+                DB::run() -> query("DELETE FROM `comments` WHERE `relate_type`=? AND relate_id=?;", [Photo::class, $delete['id']]);
 
                 unlink_image('uploads/pictures/', $delete['link']);
             }
@@ -1465,8 +1466,8 @@ function restatement($mode) {
             DB::run() -> query("UPDATE `news` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='News' AND `news`.`id`=`comments`.`relate_id`);");
             break;
 
-        case 'gallery':
-            DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='Gallery' AND `photo`.`id`=`comments`.`relate_id`);");
+        case 'photo':
+            DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type=".Photo::class." AND `photo`.`id`=`comments`.`relate_id`);");
             break;
 
         case 'events':

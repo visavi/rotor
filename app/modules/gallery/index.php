@@ -57,13 +57,13 @@ break;
 
                     if (!empty($data)) {
                         if (App::getUserId() != $data['user_id']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user_id`=? LIMIT 1;", ['gallery', $gid, App::getUserId()]);
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user_id`=? LIMIT 1;", [Photo::class, $gid, App::getUserId()]);
 
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * App::setting('photoexprated');
 
-                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND created_at<?;", ['gallery', SITETIME]);
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user_id`, `created_at`) VALUES (?, ?, ?, ?);", ['gallery', $gid, App::getUserId(), $expiresrated]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND created_at<?;", [Photo::class, SITETIME]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user_id`, `created_at`) VALUES (?, ?, ?, ?);", [Photo::class, $gid, App::getUserId(), $expiresrated]);
                                 DB::run() -> query("UPDATE `photo` SET `rating`=`rating`+? WHERE `id`=?;", [$score, $gid]);
 
                                 notice('Ваша оценка принята! Рейтинг фотографии: '.format_num($data['rating'] + $score));
@@ -278,7 +278,7 @@ break;
 
             echo '<i class="fa fa-picture-o"></i> <b><a href="/gallery?act=view&amp;gid='.$photo['id'].'">'.$photo['title'].'</a></b><hr />';
 
-            $total = Comment::where('relate_type', 'Gallery')
+            $total = Comment::where('relate_type', Photo::class)
                 ->where('relate_id', $gid)
                 ->count();
             $page = App::paginate(App::setting('postgallery'), $total);
@@ -290,7 +290,7 @@ break;
                     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 }
 
-                $comments = Comment::where('relate_type', 'Gallery')
+                $comments = Comment::where('relate_type', Photo::class)
                     ->where('relate_id', $gid)
                     ->offset($page['offset'])
                     ->limit($page['limit'])
@@ -382,9 +382,9 @@ break;
                             if (is_flood(App::getUsername())) {
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", ['gallery', $gid, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
+                                DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [Photo::class, $gid, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".App::setting('maxpostgallery').") AS del);", ['gallery', $gid, 'gallery', $gid]);
+                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".App::setting('maxpostgallery').") AS del);", [Photo::class, $gid, Photo::class, $gid]);
 
                                 DB::run() -> query("UPDATE `photo` SET `comments`=`comments`+1 WHERE `id`=?;", [$gid]);
                                 DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=?", [App::getUserId()]);
@@ -424,7 +424,7 @@ break;
 
         if (is_user()) {
             $comm = Comment::select('comments.*', 'photo.closed')
-                ->where('relate_type', 'gallery')
+                ->where('relate_type', Photo::class)
                 ->where('comments.id', $cid)
                 ->where('comments.user_id', App::getUserId())
                 ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
@@ -472,7 +472,7 @@ break;
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
 
                     $comm = Comment::select('comments.*', 'photo.closed')
-                        ->where('relate_type', 'gallery')
+                        ->where('relate_type', Photo::class)
                         ->where('comments.id', $cid)
                         ->where('comments.user_id', App::getUserId())
                         ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
@@ -484,7 +484,7 @@ break;
 
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?;", [$msg, 'gallery', $cid]);
+                                DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?;", [$msg, Photo::class, $cid]);
 
                                 notice('Комментарий успешно отредактирован!');
                                 redirect("/gallery?act=comments&gid=$gid&page=$page");
@@ -524,7 +524,7 @@ break;
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    $delcomments = DB::run() -> exec("DELETE FROM comments WHERE relate_type='gallery' AND id IN (".$del.") AND relate_id=".$gid.";");
+                    $delcomments = DB::run() -> exec("DELETE FROM comments WHERE relate_type=Photo::class AND id IN (".$del.") AND relate_id=".$gid.";");
                     DB::run() -> query("UPDATE photo SET comments=comments-? WHERE id=?;", [$delcomments, $gid]);
 
                     notice('Выбранные комментарии успешно удалены!');
@@ -557,7 +557,7 @@ break;
                     if (!empty($querydel)) {
                         if (empty($querydel['comments'])) {
                             DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$querydel['id']]);
-                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['gallery', $querydel['id']]);
+                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", [Photo::class, $querydel['id']]);
 
                             unlink_image('uploads/pictures/', $querydel['link']);
 
@@ -588,7 +588,7 @@ break;
     ############################################################################################
     case 'end':
 
-        $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", ['gallery', $gid]);
+        $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", [Photo::class, $gid]);
 
         if (!empty($query)) {
 
