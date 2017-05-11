@@ -4,6 +4,7 @@ class App
 {
     /**
      * Возвращает текущую страницу
+     *
      * @param null $url
      * @return string текущая страница
      */
@@ -18,6 +19,7 @@ class App
 
     /**
      * Возвращает подключенный шаблон
+     *
      * @param $template
      * @param  array $params массив параметров
      * @param  boolean $return выводить или возвращать код
@@ -37,6 +39,7 @@ class App
 
     /**
      * Сохраняет страницы с ошибками
+     *
      * @param  integer $code    код ошибки
      * @param  string  $message текст ошибки
      * @return string  сформированная страница с ошибкой
@@ -75,6 +78,7 @@ class App
 
     /**
      * Переадресовывает пользователя
+     *
      * @param  string  $url адрес переадресации
      * @param  boolean $permanent постоянное перенаправление
      */
@@ -91,6 +95,7 @@ class App
 
     /**
      * Сохраняет flash уведомления
+     *
      * @param string $status статус уведомления
      * @param mixed $message массив или текст с уведомлениями
      */
@@ -101,6 +106,7 @@ class App
 
     /**
      * Возвращает flash уведомления
+     *
      * @return string сформированный блок с уведомлениями
      * @internal param array $errors массив уведомлений
      */
@@ -111,6 +117,7 @@ class App
 
     /**
      * Сохраняет POST данные введенных пользователем
+     *
      * @param array $data массив полей
      */
     public static function setInput(array $data)
@@ -130,6 +137,7 @@ class App
 
     /**
      * Возвращает значение из POST данных
+     *
      * @param string $name имя поля
      * @param string $default
      * @return string сохраненный текст
@@ -141,6 +149,7 @@ class App
 
     /**
      * Подсвечивает блок с полем для ввода сообщения
+     *
      * @param string $field имя поля
      * @return string CSS класс ошибки
      */
@@ -151,6 +160,7 @@ class App
 
     /**
      * Возвращает блок с текстом ошибки
+     *
      * @param  string $field имя поля
      * @return string блоки ошибки
      */
@@ -164,6 +174,7 @@ class App
 
     /**
      * Проверяет является ли email валидным
+     *
      * @param  string  $email адрес email
      * @return boolean результат проверки
      */
@@ -174,6 +185,7 @@ class App
 
     /**
      * Отправка уведомления на email
+     *
      * @param  mixed   $to      Получатель
      * @param  string  $subject Тема письма
      * @param  string  $body    Текст сообщения
@@ -205,6 +217,7 @@ class App
 
     /**
      * Возвращает форматированную дату
+     *
      * @param string $format отформатированная дата
      * @param mixed  $date временная метки или дата
      * @return string отформатированная дата
@@ -220,6 +233,7 @@ class App
 
     /**
      * Возвращает расширение файла
+     *
      * @param  string $filename имя файла
      * @return string расширение
      */
@@ -230,6 +244,7 @@ class App
 
     /**
      * Возвращает размер файла
+     *
      * @param  string  $filename путь к файлу
      * @param  integer $decimals кол. чисел после запятой
      * @return string            форматированный вывод размера
@@ -247,6 +262,7 @@ class App
 
     /**
      * Склоняет числа
+     *
      * @param  integer $num  число
      * @param  array   $forms массив склоняемых слов (один, два, много)
      * @return string  форматированная строка
@@ -261,6 +277,7 @@ class App
 
     /**
      * Валидирует даты
+     *
      * @param  string $date   дата
      * @param  string $format формат даты
      * @return boolean        результат валидации
@@ -273,24 +290,26 @@ class App
 
     /**
      * Обрабатывает BB-код
+     *
      * @param  string  $text  Необработанный текст
      * @param  boolean $parse Обрабатывать или вырезать код
      * @return string         Обработанный текст
      */
     public static function bbCode($text, $parse = true)
     {
-        $bbcode = new BBCode();
+        $bbCode = new BBCode();
 
-        if (! $parse) return $bbcode->clear($text);
+        if (! $parse) return $bbCode->clear($text);
 
-        $text = $bbcode->parse($text);
-        $text = $bbcode->parseSmiles($text);
+        $text = $bbCode->parse($text);
+        $text = $bbCode->parseSmiles($text);
 
         return $text;
     }
 
     /**
      * Определяет браузер
+     *
      * @param string|null $userAgent
      * @return string браузер и версия браузера
      */
@@ -308,6 +327,7 @@ class App
 
     /**
      * Определяет IP пользователя
+     *
      * @return string IP пользователя
      */
     public static function getClientIp()
@@ -318,6 +338,7 @@ class App
 
     /**
      * Возвращает серверные переменные
+     *
      * @param string|null $key     ключ массива
      * @param string|null $default значение по умолчанию
      * @return mixed               данные
@@ -333,6 +354,7 @@ class App
 
     /**
      * Возвращает логин пользователя
+     *
      * @return string
      */
     public static function getUsername()
@@ -340,9 +362,9 @@ class App
         return self::user('login') ? self::user('login') : self::setting('guestsuser');
     }
 
-
     /**
      * Возвращает ID пользователя
+     *
      * @return int
      */
     public static function getUserId()
@@ -352,6 +374,7 @@ class App
 
     /**
      * Возвращает данные пользователя по ключу
+     *
      * @param  string $key ключ массива
      * @return string      данные
      */
@@ -366,6 +389,7 @@ class App
 
     /**
      * Возвращает настройки сайта по ключу
+     *
      * @param  string $key ключ массива
      * @return string      данные
      */
@@ -391,6 +415,7 @@ class App
 
     /**
      * Авторизует пользователя
+     *
      * @param  string  $login    Логин
      * @param  string  $password Пароль пользователя
      * @param  boolean $remember Запомнить пароль
@@ -474,6 +499,7 @@ class App
 
     /**
      * Авторизует через социальные сети
+     *
      * @param string $token идентификатор Ulogin
      */
     public static function socialLogin($token)
@@ -499,7 +525,6 @@ class App
                 setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
 
                 $_SESSION['id'] = $user['id'];
-                $_SESSION['login'] = $user['login'];
                 $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
 
                 self::setFlash('success', 'Добро пожаловать, '.$user['login'].'!');
@@ -510,6 +535,7 @@ class App
 
     /**
      * Генерирует постраничную навигация
+     *
      * @param  array  $page массив данных
      * @return string       сформированный блок
      */
@@ -592,6 +618,7 @@ class App
 
     /**
      * Обрабатывает постраничную навигацию
+     *
      * @param  integer $limit элементов на страницу
      * @param  integer $total всего элементов
      * @return array          массив подготовленных данных
@@ -612,6 +639,7 @@ class App
 
     /**
      * Устанавливает права доступа на папки
+     *
      * @return void
      */
     public static function install()
@@ -630,6 +658,7 @@ class App
 
     /**
      * Возвращает сформированный код base64 картинки
+     *
      * @param string  $path   путь к картинке
      * @param array   $params параметры
      * @return string         сформированный код
@@ -656,6 +685,7 @@ class App
 
     /**
      * Выводит прогресс-бар
+     *
      * @param int  $percent
      * @param bool $title
      */
@@ -671,6 +701,8 @@ class App
     }
 
     /**
+     * Инициализирует языковую локализацию
+     *
      * @param  string $locale
      * @param  string $fallback
      * @return \Illuminate\Translation\Translator
@@ -687,5 +719,23 @@ class App
         $translator->setFallback($fallback);
 
         return $translator;
+    }
+
+    /**
+     * Выводит список забаненных ip
+     *
+     * @param  boolean $save нужно ли сбросить кеш
+     * @return array         массив IP
+     */
+    public static function ipBan($save = false)
+    {
+        if (! $save && file_exists(STORAGE.'/temp/ipban.dat')) {
+            $ipBan = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
+        } else {
+            $ipBan = Ban::pluck('ip')->all();
+            file_put_contents(STORAGE."/temp/ipban.dat", serialize($ipBan), LOCK_EX);
+        }
+
+        return $ipBan;
     }
 }

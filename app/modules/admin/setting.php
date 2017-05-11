@@ -1062,8 +1062,6 @@ if (is_admin([101])) {
             echo '<div class="form">';
             echo '<form method="post" action="/admin/setting?act=editten&amp;uid='.$_SESSION['token'].'">';
 
-            echo 'Замена смайлов в сообщениях:<br /><input name="resmiles" maxlength="2" value="'.$setting['resmiles'].'" /><br /><hr />';
-
             echo '<b>Captcha</b><br />';
             echo 'Допустимые символы [a-z0-9]:<br /><input name="captcha_symbols" maxlength="26" value="'.$setting['captcha_symbols'].'" /><br />';
 
@@ -1098,35 +1096,31 @@ if (is_admin([101])) {
             $captcha_interpolation = (empty($_POST['captcha_interpolation'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['resmiles'] != "") {
-                    if (preg_match('|^[a-z0-9]+$|', $captcha_symbols)) {
-                        if (preg_match('|^[4-6]{1}+$|', $captcha_maxlength)) {
-                            if (preg_match('|^[0-9]{1,}+$|', $captcha_offset)) {
 
-                                $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                                $dbr -> execute(intval($_POST['resmiles']), 'resmiles');
-                                $dbr -> execute($captcha_symbols, 'captcha_symbols');
-                                $dbr -> execute($captcha_maxlength, 'captcha_maxlength');
-                                $dbr -> execute($captcha_angle, 'captcha_angle');
-                                $dbr -> execute($captcha_offset, 'captcha_offset');
-                                $dbr -> execute($captcha_distortion, 'captcha_distortion');
-                                $dbr -> execute($captcha_interpolation, 'captcha_interpolation');
-                                save_setting();
+                if (preg_match('|^[a-z0-9]+$|', $captcha_symbols)) {
+                    if (preg_match('|^[4-6]{1}+$|', $captcha_maxlength)) {
+                        if (preg_match('|^[0-9]{1,}+$|', $captcha_offset)) {
 
-                                notice('Настройки сайта успешно изменены!');
-                                redirect("/admin/setting?act=setten");
+                            $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
+                            $dbr -> execute($captcha_symbols, 'captcha_symbols');
+                            $dbr -> execute($captcha_maxlength, 'captcha_maxlength');
+                            $dbr -> execute($captcha_angle, 'captcha_angle');
+                            $dbr -> execute($captcha_offset, 'captcha_offset');
+                            $dbr -> execute($captcha_distortion, 'captcha_distortion');
+                            $dbr -> execute($captcha_interpolation, 'captcha_interpolation');
+                            save_setting();
 
-                            } else {
-                                show_error('Ошибка! Амплитуда колебаний может быть от 0 до 8!');
-                            }
+                            notice('Настройки сайта успешно изменены!');
+                            redirect("/admin/setting?act=setten");
+
                         } else {
-                            show_error('Ошибка! Максимальное количество символов может быть от 4 до 6!');
+                            show_error('Ошибка! Амплитуда колебаний может быть от 0 до 8!');
                         }
                     } else {
-                        show_error('Ошибка! Недопустимые символы в captcha!');
+                        show_error('Ошибка! Максимальное количество символов может быть от 4 до 6!');
                     }
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    show_error('Ошибка! Недопустимые символы в captcha!');
                 }
             } else {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -1145,7 +1139,6 @@ if (is_admin([101])) {
             echo '<div class="form">';
             echo '<form method="post" action="/admin/setting?act=editeleven&amp;uid='.$_SESSION['token'].'">';
 
-            echo 'Актива для изменения ника: <br /><input name="editnickpoint" maxlength="4" value="'.$setting['editnickpoint'].'" /><br />';
             echo 'Актива для перечисления денег: <br /><input name="sendmoneypoint" maxlength="4" value="'.$setting['sendmoneypoint'].'" /><br />';
             echo 'Актива для изменения репутации: <br /><input name="editratingpoint" maxlength="4" value="'.$setting['editratingpoint'].'" /><br />';
             echo 'Актива для изменения тем форума: <br /><input name="editforumpoint" maxlength="4" value="'.$setting['editforumpoint'].'" /><br />';
@@ -1176,10 +1169,9 @@ if (is_admin([101])) {
             $editstatus = (empty($_POST['editstatus'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['editnickpoint'] != "" && $_POST['sendmoneypoint'] != "" && $_POST['editratingpoint'] != "" && $_POST['editforumpoint'] != "" && $_POST['editnickpoint'] != "" && $_POST['editstatuspoint'] != "" && $_POST['editstatusmoney'] != "" && $_POST['bonusmoney'] != "" && $_POST['registermoney'] != "") {
+                if ($_POST['sendmoneypoint'] != "" && $_POST['editratingpoint'] != "" && $_POST['editforumpoint'] != "" && $_POST['editstatuspoint'] != "" && $_POST['editstatusmoney'] != "" && $_POST['bonusmoney'] != "" && $_POST['registermoney'] != "") {
 
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                    $dbr -> execute(intval($_POST['editnickpoint']), 'editnickpoint');
                     $dbr -> execute(intval($_POST['sendmoneypoint']), 'sendmoneypoint');
                     $dbr -> execute(intval($_POST['editratingpoint']), 'editratingpoint');
                     $dbr -> execute(intval($_POST['editforumpoint']), 'editforumpoint');

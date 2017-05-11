@@ -305,14 +305,6 @@ function save_setting() {
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
 }
 
-// --------------- Функция кэширования забаненных IP -------------------//
-function save_ipban() {
-    $querybanip = DB::run() -> query("SELECT `ip` FROM `ban`;");
-    $arrbanip = $querybanip -> fetchAll(PDO::FETCH_COLUMN);
-    file_put_contents(STORAGE."/temp/ipban.dat", serialize($arrbanip), LOCK_EX);
-    return $arrbanip;
-}
-
 // ------------------------- Функция времени антифлуда ------------------------------//
 function flood_period()
 {
@@ -1817,7 +1809,7 @@ function clearCache()
     }
 
     // Авто-кэширование данных
-    save_ipban();
+    App::ipBan(true);
 
     return true;
 }

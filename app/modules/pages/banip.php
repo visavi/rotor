@@ -13,7 +13,7 @@ if (Request::isMethod('post')) {
 
         $ban->delete();
 
-        save_ipban();
+        App::ipBan(true);
 
         App::setFlash('success', 'IP успешно разбанен!');
         App::redirect('/');

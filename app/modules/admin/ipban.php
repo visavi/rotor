@@ -79,7 +79,7 @@ if (is_admin([101, 102])) {
                     $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", [$ips]);
                     if (empty($banip)) {
                         DB::run() -> query("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, App::getUsername(), SITETIME]);
-                        save_ipban();
+                        App::ipBan(true);
 
                         notice('IP успешно занесен в список!');
                         redirect("/admin/ipban?page=$page");
@@ -113,7 +113,7 @@ if (is_admin([101, 102])) {
                     $del = implode(',', $del);
 
                     DB::run() -> query("DELETE FROM `ban` WHERE `id` IN (".$del.");");
-                    save_ipban();
+                    App::ipBan(true);
 
                     notice('Выбранные IP успешно удалены из списка!');
                     redirect("/admin/ipban?page=$page");
@@ -137,7 +137,7 @@ if (is_admin([101, 102])) {
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("TRUNCATE `ban`;");
-                    save_ipban();
+                    App::ipBan(true);
 
                     notice('Список IP успешно очищен!');
                     redirect("/admin/ipban");

@@ -341,7 +341,7 @@ case 'editpass':
             );
         }
 
-        unset($_SESSION['login'], $_SESSION['password']);
+        unset($_SESSION['id'], $_SESSION['password']);
 
         notice('Пароль успешно изменен!');
         redirect("/login");

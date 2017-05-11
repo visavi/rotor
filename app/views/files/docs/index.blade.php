@@ -29,7 +29,6 @@
 - user_title<br />
 - save_setting<br />
 - save_navigation<br />
-- save_ipban<br />
 - flood_period<br />
 - is_flood<br />
 - rating_vote<br />

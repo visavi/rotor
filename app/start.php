@@ -11,15 +11,7 @@ date_default_timezone_set(App::setting('timezone'));
 /**
  * Проверка на ip-бан
  */
-if (file_exists(STORAGE.'/temp/ipban.dat')) {
-    $ipBan = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
-} else {
-    $ipBan = save_ipban();
-}
-
-//$ipBan = ipBan();
-
-if (is_array($ipBan) && count($ipBan) > 0) {
+if ($ipBan = App::ipBan()) {
 
     $ipSplit = explode('.', App::getClientIp());
 
@@ -88,7 +80,7 @@ if (App::setting('doslimit')) {
                         [App::getClientIp(), SITETIME]
                     );
 
-                    save_ipban();
+                    App::ipBan(true);
                 }
             }
 
@@ -100,15 +92,16 @@ if (App::setting('doslimit')) {
 /**
  * Авторизация по кукам
  */
-if (empty($_SESSION['login']) && empty($_SESSION['password'])) {
+if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
     if (isset($_COOKIE['login']) && isset($_COOKIE['password'])) {
-        $unlog = check($_COOKIE['login']);
-        $unpar = check($_COOKIE['password']);
 
-        $user = User::where('login', $unlog)->first();
+        $cookLogin = check($_COOKIE['login']);
+        $cookPass = check($_COOKIE['password']);
+
+        $user = User::where('login', $cookLogin)->first();
 
         if ($user) {
-            if ($unlog == $user->login && $unpar == md5($user->password.env('APP_KEY'))) {
+            if ($cookLogin == $user->login && $cookPass == md5($user->password.env('APP_KEY'))) {
                 session_regenerate_id(1);
 
                 $_SESSION['id'] = $user->id;
