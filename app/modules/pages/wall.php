@@ -69,15 +69,13 @@ if (!empty($queryuser)) {
             }
 
             if (is_user()) {
-                if (!user_privacy($uz) || $uz == App::getUsername() || is_admin() || is_contact($uz, App::getUsername())){
-                    echo '<div class="form">';
-                    echo '<form action="/wall?act=add&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo 'Сообщение:<br />';
-                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
-                    echo '<input type="submit" value="Написать" /></form></div><br />';
-                } else {
-                    show_error('Включен режим приватности, писать могут только пользователи из контактов!');
-                }
+
+                echo '<div class="form">';
+                echo '<form action="/wall?act=add&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
+                echo 'Сообщение:<br />';
+                echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
+                echo '<input type="submit" value="Написать" /></form></div><br />';
+
             } else {
                 show_login('Вы не авторизованы, чтобы написать на стене, необходимо');
             }

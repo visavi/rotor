@@ -1701,36 +1701,32 @@ function getExtension($filename){
 }
 
 // ----- Функция определения входит ли пользователь в контакты -----//
-function is_contact($login, $contact){
+function isContact($user, $contactUser){
 
-    if (user($contact)) {
-        $check_contact = DB::run() -> queryFetch("SELECT * FROM `contact` WHERE `user`=? AND `name`=? LIMIT 1;", [$login, $contact]);
+    $isContact = Contact::where('user_id', $user->id)
+        ->where('contact_id', $contactUser->id)
+        ->first();
 
-        if (!empty($check_contact)){
-            return true;
-        }
+    if ($isContact) {
+        return true;
     }
+
     return false;
 }
 
 // ----- Функция определения входит ли пользователь в игнор -----//
-function is_ignore($login, $ignore){
+function isIgnore($user, $ignoreUser){
 
-    if (user($ignore)) {
-        $check_ignore = DB::run() -> queryFetch("SELECT * FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$login, $ignore]);
+    $isIgnore = Ignore::where('user_id', $user->id)
+        ->where('ignore_id', $ignoreUser->id)
+        ->first();
 
-        if (!empty($check_ignore)){
-            return true;
-        }
+    if ($isIgnore) {
+        return true;
     }
+
     return false;
 }
-
-// ----- Функция определения приватности у пользователя -----//
-/*function user_privacy($user){
-    $privacy = DB::run() -> querySingle("SELECT `privacy` FROM `users` WHERE `login`=? LIMIT 1;", [$login]);
-    return ($privacy) ? true : false;
-}*/
 
 // ----- Функция рекурсивного удаления директории -----//
 function removeDir($dir){

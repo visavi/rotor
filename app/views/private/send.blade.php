@@ -13,7 +13,11 @@
     if ($user) {
 
         echo '<i class="fa fa-envelope"></i> Сообщение для <b>' . profile($user) . '</b> ' . user_visit($user) . ':<br />';
-        echo '<i class="fa fa-history"></i> <a href="/private/history?user=' . $user->login . '">История переписки</a><br /><br />';
+        echo '<i class="fa fa-history"></i> <a href="/private/history?user=' . $user->login . '">История переписки</a><br />';
+
+        if (isIgnore(App::user(), $user)) {
+            echo '<b><span style="color:#ff0000">Внимание, данный пользователь находится в игнор-листе!</span></b><br />';
+        }
 
         echo '<div class="form">';
         echo '<form action="/private/send?user='.$user->login.'" method="post">';

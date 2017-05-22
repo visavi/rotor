@@ -93,8 +93,14 @@ $router->map('GET', '/private/[outbox|trash|history|clear:action]?', 'pages/priv
 $router->map('POST', '/private/[complaint|delete:action]', 'pages/private.php');
 $router->map('GET|POST', '/private/[send:action]', 'pages/private.php');
 
-$router->map('GET|POST', '/ignore',   'pages/ignore.php');
-$router->map('GET|POST', '/contact',  'pages/contact.php');
+$router->map('GET', '/ignore',   'pages/ignore.php');
+$router->map('GET|POST', '/ignore/[note:action]/[i:id]',  'pages/ignore.php');
+$router->map('POST', '/ignore/[create|delete:action]',  'pages/ignore.php');
+
+$router->map('GET', '/contact',  'pages/contact.php');
+$router->map('GET|POST', '/contact/[note:action]/[i:id]',  'pages/contact.php');
+$router->map('POST', '/contact/[create|delete:action]',  'pages/contact.php');
+
 $router->map('GET|POST', '/profile',  'pages/profile.php');
 $router->map('GET|POST', '/account',  'pages/account.php');
 $router->map('GET|POST', '/offers',   'pages/offers.php');
