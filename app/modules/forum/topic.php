@@ -276,7 +276,7 @@ case 'delete':
 
     $topic = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 
-    $isModer = in_array(App::getUserId(), explode(',', $topic['moderators'], true)) ? true : false;
+    $isModer = in_array(App::getUserId(), explode(',', $topic['moderators'])) ? true : false;
 
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
