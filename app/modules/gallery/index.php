@@ -66,8 +66,8 @@ break;
                                 DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user_id`, `created_at`) VALUES (?, ?, ?, ?);", [Photo::class, $gid, App::getUserId(), $expiresrated]);
                                 DB::run() -> query("UPDATE `photo` SET `rating`=`rating`+? WHERE `id`=?;", [$score, $gid]);
 
-                                notice('Ваша оценка принята! Рейтинг фотографии: '.format_num($data['rating'] + $score));
-                                redirect("/gallery?act=view&gid=$gid");
+                                App::setFlash('success', 'Ваша оценка принята! Рейтинг фотографии: '.format_num($data['rating'] + $score));
+                                App::redirect("/gallery?act=view&gid=$gid");
 
                             } else {
                                 show_error('Ошибка! Вы уже оценивали данную фотографию!');
@@ -160,8 +160,8 @@ break;
 
                                         $handle -> clean();
 
-                                        notice('Фотография успешно загружена!');
-                                        redirect("/gallery");
+                                        App::setFlash('success', 'Фотография успешно загружена!');
+                                        App::redirect("/gallery");
 
                                     } else {
                                         show_error($handle->error);
@@ -244,8 +244,8 @@ break;
 
                             DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", [$title, $text, $closed, $gid]);
 
-                            notice('Фотография успешно отредактирована!');
-                            redirect("/gallery/album?act=photo&uz=$uz&page=$page");
+                            App::setFlash('success', 'Фотография успешно отредактирована!');
+                            App::redirect("/gallery/album?act=photo&uz=$uz&page=$page");
 
                         } else {
                             show_error('Ошибка! Слишком длинное описание (Необходимо до 1000 символов)!');
@@ -389,8 +389,8 @@ break;
                                 DB::run() -> query("UPDATE `photo` SET `comments`=`comments`+1 WHERE `id`=?;", [$gid]);
                                 DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=?", [App::getUserId()]);
 
-                                notice('Комментарий успешно добавлен!');
-                                redirect("/gallery?act=end&gid=$gid");
+                                App::setFlash('success', 'Комментарий успешно добавлен!');
+                                App::redirect("/gallery?act=end&gid=$gid");
 
                             } else {
                                 show_error('Антифлуд! Разрешается отправлять комментарии раз в '.flood_period().' секунд!');
@@ -486,8 +486,8 @@ break;
 
                                 DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?;", [$msg, Photo::class, $cid]);
 
-                                notice('Комментарий успешно отредактирован!');
-                                redirect("/gallery?act=comments&gid=$gid&page=$page");
+                                App::setFlash('success', 'Комментарий успешно отредактирован!');
+                                App::redirect("/gallery?act=comments&gid=$gid&page=$page");
 
                             } else {
                                 show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!');
@@ -527,8 +527,8 @@ break;
                     $delcomments = DB::run() -> exec("DELETE FROM comments WHERE relate_type=Photo::class AND id IN (".$del.") AND relate_id=".$gid.";");
                     DB::run() -> query("UPDATE photo SET comments=comments-? WHERE id=?;", [$delcomments, $gid]);
 
-                    notice('Выбранные комментарии успешно удалены!');
-                    redirect("/gallery?act=comments&gid=$gid&page=$page");
+                    App::setFlash('success', 'Выбранные комментарии успешно удалены!');
+                    App::redirect("/gallery?act=comments&gid=$gid&page=$page");
 
                 } else {
                     show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
@@ -561,8 +561,8 @@ break;
 
                             unlink_image('uploads/pictures/', $querydel['link']);
 
-                            notice('Фотография успешно удалена!');
-                            redirect("/gallery/album?act=photo&page=$page");
+                            App::setFlash('success', 'Фотография успешно удалена!');
+                            App::redirect("/gallery/album?act=photo&page=$page");
 
                         } else {
                             show_error('Ошибка! Запрещено удалять фотографии к которым имеются комментарии!');
@@ -595,7 +595,7 @@ break;
             $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
             $end = ceil($total_comments / App::setting('postgallery'));
 
-            redirect("/gallery?act=comments&gid=$gid&page=$end");
+            App::redirect("/gallery?act=comments&gid=$gid&page=$end");
 
         } else {
             show_error('Ошибка! Комментарий к данному изображению не существует!');

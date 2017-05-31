@@ -147,7 +147,7 @@ case 'index':
         }
         echo '<br />';
     } else {
-        redirect("/load");
+        App::redirect("/load");
     }
 break;
 
@@ -331,7 +331,7 @@ case 'load':
                         DB::run() -> query("UPDATE downs SET loads=loads+1, last_load=? WHERE id=?", [SITETIME, $id]);
                     }
 
-                    redirect("/uploads/files/".$folder.$downs['link']);
+                    App::redirect("/uploads/files/".$folder.$downs['link']);
                 } else {
                     show_error('Ошибка! Файла для скачивания не существует!');
                 }
@@ -522,8 +522,8 @@ case 'add':
                             DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
                             DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
-                            notice('Сообщение успешно добавлено!');
-                            redirect("/load/down?act=end&id=$id");
+                            App::setFlash('success', 'Сообщение успешно добавлено!');
+                            App::redirect("/load/down?act=end&id=$id");
                         } else {
                             show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
                         }
@@ -565,8 +565,8 @@ case 'spam':
                     if (is_flood(App::getUsername())) {
                         DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], App::getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, App::setting('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
-                        notice('Жалоба успешно отправлена!');
-                        redirect("/load/down?act=comments&id=$id&page=$page");
+                        App::setFlash('success', 'Жалоба успешно отправлена!');
+                        App::redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
                         show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
                     }
@@ -700,8 +700,8 @@ case 'editpost':
 
                         DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'down', $pid]);
 
-                        notice('Сообщение успешно отредактировано!');
-                        redirect("/load/down?act=comments&id=$id&page=$page");
+                        App::setFlash('success', 'Сообщение успешно отредактировано!');
+                        App::redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
                         show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                     }
@@ -741,8 +741,8 @@ case 'del':
                 $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='down' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
                 DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
-                notice('Выбранные комментарии успешно удалены!');
-                redirect("/load/down?act=comments&id=$id&page=$page");
+                App::setFlash('success', 'Выбранные комментарии успешно удалены!');
+                App::redirect("/load/down?act=comments&id=$id&page=$page");
             } else {
                 show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
             }
@@ -768,7 +768,7 @@ case 'end':
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
         $end = ceil($total_comments / App::setting('downcomm'));
 
-        redirect("/load/down?act=comments&id=$id&page=$end");
+        App::redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
         show_error('Ошибка! Данного файла не существует!');
     }

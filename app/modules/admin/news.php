@@ -160,14 +160,14 @@ case 'change':
                     DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
 
                 } else {
-                    notice($handle->error, 'danger');
+                    App::setFlash('danger', $handle->error);
                 }
             }
         }
         // ---------------------------------------------------------------------------------//
 
-        notice('Новость успешно отредактирована!');
-        redirect("/admin/news?page=$page");
+        App::setFlash('success', 'Новость успешно отредактирована!');
+        App::redirect("/admin/news?page=$page");
 
     } else {
         show_error($validation->getErrors());
@@ -240,13 +240,13 @@ case 'addnews':
                 DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
 
             } else {
-                notice($handle->error, 'danger');
-                redirect("/admin/news?act=edit&id=$lastid");
+                App::setFlash('danger', $handle->error);
+                App::redirect("/admin/news?act=edit&id=$lastid");
             }
         }
 
-        notice('Новость успешно добавлена!');
-        redirect("/admin/news");
+        App::setFlash('success', 'Новость успешно добавлена!');
+        App::redirect("/admin/news");
 
     } else {
         show_error($validation->getErrors());
@@ -267,8 +267,8 @@ case 'restatement':
         if ($token == $_SESSION['token']) {
             restatement('news');
 
-            notice('Комментарии успешно пересчитаны!');
-            redirect("/admin/news");
+            App::setFlash('success', 'Комментарии успешно пересчитаны!');
+            App::redirect("/admin/news");
 
         } else {
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -307,8 +307,8 @@ case 'del':
                 DB::run() -> query("DELETE FROM `news` WHERE `id` IN (".$del.");");
                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type = 'News' AND `relate_id` IN (".$del.");");
 
-                notice('Выбранные новости успешно удалены!');
-                redirect("/admin/news?page=$page");
+                App::setFlash('success', 'Выбранные новости успешно удалены!');
+                App::redirect("/admin/news?page=$page");
 
             } else {
                 show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с изображениями!');
@@ -328,7 +328,7 @@ endswitch;
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

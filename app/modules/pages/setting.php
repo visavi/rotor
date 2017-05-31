@@ -116,8 +116,8 @@ case 'edit':
                 'subscribe' => $subscribe,
             ]);
 
-            notice('Настройки успешно изменены!');
-            redirect("/setting");
+            App::setFlash('success', 'Настройки успешно изменены!');
+            App::redirect("/setting");
 
         } else {
             show_error('Ошибка! Данный скин не установлен на сайте!');

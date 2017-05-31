@@ -99,7 +99,7 @@ case 'viewcomm':
     if (!empty($querycomm)) {
         $end = ceil($querycomm / App::setting('downlist'));
 
-        redirect("/load/down?act=comments&id=$id&page=$end");
+        App::redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
         show_error('Ошибка! Комментарий к данному файлу не существует!');
     }

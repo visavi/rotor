@@ -121,8 +121,8 @@ if (is_admin()) {
                         $post->reply = $reply;
                         $post->save();
 
-                        notice('Ответ успешно добавлен!');
-                        redirect("/admin/book?page=$page");
+                        App::setFlash('success', 'Ответ успешно добавлен!');
+                        App::redirect("/admin/book?page=$page");
                     } else {
                         show_error('Ошибка! Сообщения для ответа не существует!');
                     }
@@ -181,8 +181,8 @@ if (is_admin()) {
                         $post->updated_at = SITETIME;
                         $post->save();
 
-                        notice('Сообщение успешно отредактировано!');
-                        redirect("/admin/book?page=$page");
+                        App::setFlash('success', 'Сообщение успешно отредактировано!');
+                        App::redirect("/admin/book?page=$page");
                     } else {
                         show_error('Ошибка! Сообщения для редактирования не существует!');
                     }
@@ -209,8 +209,8 @@ if (is_admin()) {
 
                     Guest::whereIn('id', $postIds)->delete();
 
-                    notice('Выбранные сообщения успешно удалены!');
-                    redirect("/admin/book?page=$page");
+                    App::setFlash('success', 'Выбранные сообщения успешно удалены!');
+                    App::redirect("/admin/book?page=$page");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные сообщения!');
                 }
@@ -232,8 +232,8 @@ if (is_admin()) {
                 if ($uid == $_SESSION['token']) {
                     Guest::truncate();
 
-                    notice('Гостевая книга успешно очищена!');
-                    redirect("/admin/book");
+                    App::setFlash('success', 'Гостевая книга успешно очищена!');
+                    App::redirect("/admin/book");
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
@@ -249,7 +249,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

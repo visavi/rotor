@@ -109,8 +109,8 @@ if (!empty($queryuser)) {
 
                                     DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".App::setting('wallmaxpost').") AS del);", [$uz, $uz]);
 
-                                    notice('Запись успешно добавлена!');
-                                    redirect("/wall?uz=$uz");
+                                    App::setFlash('success', 'Запись успешно добавлена!');
+                                    App::redirect("/wall?uz=$uz");
                                 } else {
                                     show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
                                 }
@@ -152,8 +152,8 @@ if (!empty($queryuser)) {
                             if (is_flood(App::getUsername())) {
                                 DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], App::getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, App::setting('home').'/wall?uz='.$uz.'&amp;page='.$page]);
 
-                                notice('Жалоба успешно отправлена!');
-                                redirect("/wall?uz=$uz&page=$page");
+                                App::setFlash('success', 'Жалоба успешно отправлена!');
+                                App::redirect("/wall?uz=$uz&page=$page");
                             } else {
                                 show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
                             }
@@ -192,8 +192,8 @@ if (!empty($queryuser)) {
 
                         $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [App::getUsername()]);
 
-                        notice('Выбранные записи успешно удалены!');
-                        redirect("/wall?uz=$uz&page=$page");
+                        App::setFlash('success', 'Выбранные записи успешно удалены!');
+                        App::redirect("/wall?uz=$uz&page=$page");
                     } else {
                         show_error('Ошибка! Отстутствуют выбранные сообщения для удаления!');
                     }
@@ -226,8 +226,8 @@ if (!empty($queryuser)) {
 
                         $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.");");
 
-                        notice('Выбранные записи успешно удалены!');
-                        redirect("/wall?uz=$uz&page=$page");
+                        App::setFlash('success', 'Выбранные записи успешно удалены!');
+                        App::redirect("/wall?uz=$uz&page=$page");
                     } else {
                         show_error('Ошибка! Отстутствуют выбранные сообщения для удаления!');
                     }

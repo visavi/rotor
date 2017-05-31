@@ -134,7 +134,7 @@ case 'note':
             DB::run() -> query("UPDATE contact SET text=? WHERE id=? AND user_id=?;", [$msg, $id, App::getUserId()]);
 
             App::setFlash('success', 'Заметка успешно отредактирована!');
-            redirect("/contact");
+            App::redirect("/contact");
         } else {
             App::setInput(Request::all());
             App::setFlash('danger', $validation->getErrors());
@@ -176,7 +176,7 @@ case 'delete':
         App::setFlash('danger', $validation->getErrors());
     }
 
-    redirect("/contact?page=$page");
+    App::redirect("/contact?page=$page");
 break;
 
 endswitch;

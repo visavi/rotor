@@ -273,13 +273,13 @@ case 'create':
             DB::run() -> query("UPDATE `news` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
             DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
-            notice('Комментарий успешно добавлен!');
+            App::setFlash('success', 'Комментарий успешно добавлен!');
 
             if (isset($_GET['read'])) {
-                redirect('/news/'.$id);
+                App::redirect('/news/'.$id);
             }
 
-            redirect('/news/'.$id.'/end');
+            App::redirect('/news/'.$id.'/end');
 
         } else {
             show_error($validation->getErrors());
@@ -311,8 +311,8 @@ case 'delete':
 
                 DB::run() -> query("UPDATE `news` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
-                notice('Выбранные комментарии успешно удалены!');
-                redirect('/news/'.$id.'/comments?page='.$page);
+                App::setFlash('success', 'Выбранные комментарии успешно удалены!');
+                App::redirect('/news/'.$id.'/comments?page='.$page);
 
             } else {
                 show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');

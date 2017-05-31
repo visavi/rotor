@@ -126,7 +126,7 @@ switch ($act):
         if ($total) {
             $end = ceil($total / App::setting('postgallery'));
 
-            redirect("/gallery?act=comments&gid=$gid&page=$end");
+            App::redirect("/gallery?act=comments&gid=$gid&page=$end");
         } else {
             show_error('Ошибка! Комментарий к данному изображению не существует!');
         }
@@ -157,8 +157,8 @@ switch ($act):
                             'comments' => Capsule::raw('comments - 1'),
                         ]);
 
-                    notice('Комментарий успешно удален!');
-                    redirect("/gallery/comments?act=comments&uz=$uz&page=$page");
+                    App::setFlash('success', 'Комментарий успешно удален!');
+                    App::redirect("/gallery/comments?act=comments&uz=$uz&page=$page");
                 } else {
                     show_error('Ошибка! Данного комментария не существует!');
                 }

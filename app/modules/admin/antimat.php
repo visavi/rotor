@@ -65,8 +65,8 @@ if (is_admin([101, 102, 103])) {
                     if (empty($querymat)) {
                         DB::run() -> query("INSERT INTO antimat (string) VALUES (?);", [$mat]);
 
-                        notice('Слово успешно добавлено в список антимата!');
-                        redirect("/admin/antimat");
+                        App::setFlash('success', 'Слово успешно добавлено в список антимата!');
+                        App::redirect("/admin/antimat");
 
                     } else {
                         show_error('Ошибка! Введенное слово уже имеетеся в списке!');
@@ -93,8 +93,8 @@ if (is_admin([101, 102, 103])) {
                 if (!empty($id)) {
                     DB::run() -> query("DELETE FROM antimat WHERE id=?;", [$id]);
 
-                    notice('Слово успешно удалено из списка антимата!');
-                    redirect("/admin/antimat");
+                    App::setFlash('success', 'Слово успешно удалено из списка антимата!');
+                    App::redirect("/admin/antimat");
 
                 } else {
                     show_error('Ошибка удаления! Отсутствуют выбранное слово!');
@@ -128,8 +128,8 @@ if (is_admin([101, 102, 103])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("DELETE FROM antimat;");
 
-                    notice('Список антимата успешно очищен!');
-                    redirect("/admin/antimat");
+                    App::setFlash('success', 'Список антимата успешно очищен!');
+                    App::redirect("/admin/antimat");
 
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -146,7 +146,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

@@ -34,7 +34,7 @@ if (Request::isMethod('post')) {
         DB::run()->query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `info`=? WHERE `login`=? LIMIT 1;", [$name, $country, $city, $icq, $skype, $site, $birthday, $info, App::getUsername()]);
 
         App::setFlash('success', 'Ваш профиль успешно изменен!');
-        redirect("/profile");
+        App::redirect("/profile");
 
     } else {
         App::setInput(Request::all());

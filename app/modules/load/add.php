@@ -159,8 +159,8 @@ case 'add':
 
                                             $lastid = DB::run() -> lastInsertId();
 
-                                            notice('Данные успешно добавлены!');
-                                            redirect("/load/add?act=view&id=$lastid");
+                                            App::setFlash('success', 'Данные успешно добавлены!');
+                                            App::redirect("/load/add?act=view&id=$lastid");
 
                                         } else {
                                             show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
@@ -353,8 +353,8 @@ case 'edit':
 
                                                     DB::run() -> query("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `time`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $new['time'], $id]);
 
-                                                    notice('Данные успешно изменены!');
-                                                    redirect("/load/add?act=view&id=$id");
+                                                    App::setFlash('success', 'Данные успешно изменены!');
+                                                    App::redirect("/load/add?act=view&id=$id");
 
                                                 } else {
                                                     show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
@@ -473,8 +473,8 @@ case 'loadfile':
                                                 }
                                             }
 
-                                            notice('Файл успешно загружен!');
-                                            redirect("/load/add?act=view&id=$id");
+                                            App::setFlash('success', 'Файл успешно загружен!');
+                                            App::redirect("/load/add?act=view&id=$id");
 
                                         } else {
                                             show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
@@ -538,8 +538,8 @@ case 'loadscreen':
                                 DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$handle -> file_dst_name, $id]);
                                 $handle -> clean();
 
-                                notice('Скриншот успешно загружен!');
-                                redirect("/load/add?act=view&id=$id");
+                                App::setFlash('success', 'Скриншот успешно загружен!');
+                                App::redirect("/load/add?act=view&id=$id");
 
                             } else {
                                 show_error($handle -> error);
@@ -587,8 +587,8 @@ case 'delfile':
 
                 DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
-                notice('Файл успешно удален!');
-                redirect("/load/add?act=view&id=$id");
+                App::setFlash('success', 'Файл успешно удален!');
+                App::redirect("/load/add?act=view&id=$id");
 
             } else {
                 show_error('Ошибка! Данный файл уже проверен модератором!');
@@ -619,8 +619,8 @@ case 'delscreen':
 
                 DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
-                notice('Скриншот успешно удален!');
-                redirect("/load/add?act=view&id=$id");
+                App::setFlash('success', 'Скриншот успешно удален!');
+                App::redirect("/load/add?act=view&id=$id");
 
             } else {
                 show_error('Ошибка! Данный файл уже проверен модератором!');

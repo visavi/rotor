@@ -142,8 +142,8 @@ case 'changemail':
 
         DB::run() -> query("INSERT INTO `changemail` (`user`, `mail`, hash, `time`) VALUES (?, ?, ?, ?);", [App::getUsername(), $meil, $genkey, SITETIME + 86400]);
 
-        notice('На новый адрес почты отправлено письмо для подтверждения!');
-        redirect("/account");
+        App::setFlash('success', 'На новый адрес почты отправлено письмо для подтверждения!');
+        App::redirect("/account");
 
     } else {
         show_error($validation->getErrors());
@@ -179,8 +179,8 @@ case 'editmail':
         DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], App::getUsername()]);
         DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, App::getUsername()]);
 
-        notice('Адрес электронной почты успешно изменен!');
-        redirect("/account");
+        App::setFlash('success', 'Адрес электронной почты успешно изменен!');
+        App::redirect("/account");
 
     } else {
         show_error($validation->getErrors());
@@ -217,8 +217,8 @@ case 'editstatus':
         DB::run() -> query("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", [$status, $cost, App::getUsername()]);
         save_title();
 
-        notice('Ваш статус успешно изменен!');
-        redirect("/account");
+        App::setFlash('success', 'Ваш статус успешно изменен!');
+        App::redirect("/account");
 
     } else {
         show_error($validation->getErrors());
@@ -259,8 +259,8 @@ break;
         DB::run() -> query("UPDATE `users` SET `nickname`=?, `timenickname`=? WHERE `login`=? LIMIT 1;", [$nickname, SITETIME + 86400, App::getUsername()]);
         save_nickname();
 
-        notice('Ваш ник успешно изменен!');
-        redirect("/account");
+        App::setFlash('success', 'Ваш ник успешно изменен!');
+        App::redirect("/account");
 
     } else {
         show_error($validation->getErrors());
@@ -297,8 +297,8 @@ case 'editsec':
 
         DB::run() -> query("UPDATE `users` SET `secquest`=?, `secanswer`=? WHERE `login`=? LIMIT 1;", [$secquest, $secanswer, App::getUsername()]);
 
-        notice('Секретный вопрос и ответ успешно изменены!');
-        redirect("/account");
+        App::setFlash('success', 'Секретный вопрос и ответ успешно изменены!');
+        App::redirect("/account");
 
     } else {
         show_error($validation->getErrors());
@@ -343,8 +343,8 @@ case 'editpass':
 
         unset($_SESSION['id'], $_SESSION['password']);
 
-        notice('Пароль успешно изменен!');
-        redirect("/login");
+        App::setFlash('success', 'Пароль успешно изменен!');
+        App::redirect("/login");
 
     } else {
         show_error($validation->getErrors());
@@ -365,8 +365,8 @@ case 'apikey':
 
         DB::run() -> query("UPDATE `users` SET `apikey`=? WHERE `login`=?;", [md5(App::getUsername().$key), App::getUsername()]);
 
-        notice('Новый ключ успешно сгенерирован!');
-        redirect("/account");
+        App::setFlash('success', 'Новый ключ успешно сгенерирован!');
+        App::redirect("/account");
     } else {
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }

@@ -147,8 +147,8 @@ if (is_admin([101, 102, 103])) {
 
                     DB::run() -> query("DELETE FROM `banhist` WHERE `id` IN (".$del.");");
 
-                    notice('Выбранные баны успешно удалены!');
-                    redirect("/admin/banhist?page=$page");
+                    App::setFlash('success', 'Выбранные баны успешно удалены!');
+                    App::redirect("/admin/banhist?page=$page");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные баны!');
                 }
@@ -164,7 +164,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

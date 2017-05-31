@@ -7,7 +7,7 @@ if (App::setting('closedsite') == 2) {
     echo 'Администрация сайта приносит вам свои извинения за возможные неудобства.<br />';
     echo 'Работа сайта возможно возобновится в ближайшее время.<br /><br />';
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

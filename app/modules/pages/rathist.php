@@ -126,8 +126,8 @@ if (is_user()) {
 
                             DB::run() -> query("DELETE FROM `rating` WHERE `id` IN (".$del.") AND `login`=?;", [$uz]);
 
-                            notice('Выбранные голосования успешно удалены!');
-                            redirect("/rathist?uz=$uz");
+                            App::setFlash('success', 'Выбранные голосования успешно удалены!');
+                            App::redirect("/rathist?uz=$uz");
                         } else {
                             show_error('Ошибка! Отсутствуют выбранные голосования!');
                         }

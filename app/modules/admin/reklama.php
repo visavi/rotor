@@ -125,8 +125,8 @@ if (is_admin()) {
                                     DB::run() -> query("UPDATE `rekuser` SET `site`=?, `name`=?, `color`=?, `bold`=? WHERE `id`=?", [$site, $name, $color, $bold, $id]);
                                     save_advertuser();
 
-                                    notice('Рекламная ссылка успешно изменена!');
-                                    redirect("/admin/reklama?page=$page");
+                                    App::setFlash('success', 'Рекламная ссылка успешно изменена!');
+                                    App::redirect("/admin/reklama?page=$page");
                                 } else {
                                     show_error('Ошибка! Редактируемой ссылки не существует!');
                                 }
@@ -168,8 +168,8 @@ if (is_admin()) {
                     DB::run() -> query("DELETE FROM `rekuser` WHERE `id` IN (".$del.");");
                     save_advertuser();
 
-                    notice('Выбранные ссылки успешно удалены!');
-                    redirect("/admin/reklama?page=$page");
+                    App::setFlash('success', 'Выбранные ссылки успешно удалены!');
+                    App::redirect("/admin/reklama?page=$page");
                 } else {
                     show_error('Ошибка! Не выбраны ссылки для удаления!');
                 }
@@ -185,7 +185,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

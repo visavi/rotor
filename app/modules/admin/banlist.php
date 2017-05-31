@@ -32,7 +32,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

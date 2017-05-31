@@ -201,8 +201,8 @@ if (is_admin([101, 102])) {
                                 DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
                             }
 
-                            notice('Данные успешно отправлены!');
-                            redirect("/admin/offers?act=view&id=$id");
+                            App::setFlash('success', 'Данные успешно отправлены!');
+                            App::redirect("/admin/offers?act=view&id=$id");
                         } else {
                             show_error('Ошибка! Недопустимый статус предложения или проблемы!');
                         }
@@ -275,8 +275,8 @@ if (is_admin([101, 102])) {
 
                             DB::run() -> query("UPDATE `offers` SET `type`=?, `closed`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $closed, $title, $text, $id]);
 
-                            notice('Данные успешно отредактированы!');
-                            redirect("/admin/offers?act=view&id=$id");
+                            App::setFlash('success', 'Данные успешно отредактированы!');
+                            App::redirect("/admin/offers?act=view&id=$id");
                         } else {
                             show_error('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
                         }
@@ -313,8 +313,8 @@ if (is_admin([101, 102])) {
                     DB::run() -> query("DELETE FROM `comments` WHERE relate_type='offer' AND `relate_id` IN (".$del.");");
                     DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id` IN (".$del.");");
 
-                    notice('Выбранные пункты успешно удалены!');
-                    redirect("/admin/offers?type=$type&page=$page");
+                    App::setFlash('success', 'Выбранные пункты успешно удалены!');
+                    App::redirect("/admin/offers?type=$type&page=$page");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные предложения или проблемы!');
                 }
@@ -336,8 +336,8 @@ if (is_admin([101, 102])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `comments` WHERE `offers`.`id`=`comments`.`relate_id` AND relate_type='offer');");
 
-                    notice('Комментарии успешно пересчитаны!');
-                    redirect("/admin/offers");
+                    App::setFlash('success', 'Комментарии успешно пересчитаны!');
+                    App::redirect("/admin/offers");
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
@@ -353,7 +353,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-	redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

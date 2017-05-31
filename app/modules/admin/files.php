@@ -92,7 +92,7 @@ if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
 
                                 file_put_contents(APP.'/views/'.$path.$file.'.blade.php', $msg);
 
-                                notice('Файл успешно сохранен!');
+                                App::setFlash('success', 'Файл успешно сохранен!');
                                 redirect ("/admin/files?act=edit&path=$path&file=$file");
 
                             } else {
@@ -149,8 +149,8 @@ if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
                                     file_put_contents(APP.'/views/'.$path.$name.'.blade.php', '');
                                     chmod(APP.'/views/'.$path.$name.'.blade.php', 0666);
 
-                                    notice('Новый файл успешно создан!');
-                                    redirect('/admin/files?act=edit&file='.$name.'&path='.$path);
+                                    App::setFlash('success', 'Новый файл успешно создан!');
+                                    App::redirect('/admin/files?act=edit&file='.$name.'&path='.$path);
 
                                 } else {
                                     show_error('Ошибка! Файл с данным названием уже существует!');
@@ -161,8 +161,8 @@ if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
                                     mkdir(APP .'/views/'.$path.$name, 0777, true);
                                     umask($old);
 
-                                    notice('Новая директория успешно создана!');
-                                    redirect('/admin/files?path='.$path.$name.'/');
+                                    App::setFlash('success', 'Новая директория успешно создана!');
+                                    App::redirect('/admin/files?path='.$path.$name.'/');
                                 } else {
                                     show_error('Ошибка! Категория с данным названием уже существует!');
                                 }
@@ -215,8 +215,8 @@ if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
                         if ($type == 'dir') {
                             if (file_exists(APP .'/views/'.$path.$name)) {
                                 removeDir(APP . '/views/' . $path . $name);
-                                notice('Директория успешно удалена!');
-                                redirect('/admin/files?path=' . $path);
+                                App::setFlash('success', 'Директория успешно удалена!');
+                                App::redirect('/admin/files?path=' . $path);
                             } else {
                                 show_error('Ошибка! Данного директории не существует!');
                             }
@@ -224,7 +224,7 @@ if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
                             if (file_exists(APP .'/views/'.$path.$name.'.blade.php')) {
 
                                 if (unlink(APP .'/views/'.$path.$name.'.blade.php')) {
-                                    notice('Файл успешно удален!');
+                                    App::setFlash('success', 'Файл успешно удален!');
                                     redirect ('/admin/files?path='.$path);
 
                                 } else {
@@ -252,7 +252,7 @@ if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-	redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

@@ -214,8 +214,8 @@ if ($act == 'add') {
                     }
                 }
 
-                notice('Сообщение успешно добавлено!');
-                redirect("/chat");
+                App::setFlash('success', 'Сообщение успешно добавлено!');
+                App::redirect("/chat");
 
             } else {
                 show_error('Антифлуд! Разрешается отправлять сообщения раз в ' . flood_period() . ' секунд!');

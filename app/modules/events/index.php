@@ -192,15 +192,15 @@ case 'addevent':
 						$handle -> clean();
 
 					} else {
-						notice($handle->error, 'danger');
-						redirect("/events?act=editevent&id=$lastid");
+                        App::setFlash('success', $handle->error, 'danger');
+                        App::redirect("/events?act=editevent&id=$lastid");
 					}
 				}
 			}
 			// ---------------------------------------------------------------------------------//
 
-			notice('Событие успешно добавленo!');
-			redirect("/events");
+            App::setFlash('success', 'Событие успешно добавленo!');
+            App::redirect("/events");
 
 		} else {
 			show_error($validation->getErrors());
@@ -311,14 +311,14 @@ case 'changeevent':
 						$handle -> clean();
 
 					} else {
-						notice($handle->error, 'danger');
+                        App::setFlash('success', $handle->error, 'danger');
 					}
 				}
 			}
 			// ---------------------------------------------------------------------------------//
 
-			notice('Событие успешно отредактировано!');
-			redirect("/events?act=editevent&id=$id");
+            App::setFlash('success', 'Событие успешно отредактировано!');
+            App::redirect("/events?act=editevent&id=$id");
 
 		} else {
 			show_error($validation->getErrors());
@@ -443,13 +443,13 @@ case 'addcomment':
 			DB::run() -> query("UPDATE `events` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 			DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
-			notice('Комментарий успешно добавлен!');
+            App::setFlash('success', 'Комментарий успешно добавлен!');
 
 			if (isset($_GET['read'])) {
-				redirect("/events?act=read&id=$id");
+                App::redirect("/events?act=read&id=$id");
 			}
 
-			redirect("/events?act=end&id=$id");
+            App::redirect("/events?act=end&id=$id");
 
 		} else {
 			show_error($validation->getErrors());
@@ -479,8 +479,8 @@ case 'del':
 				$delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='event' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
 				DB::run() -> query("UPDATE `events` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
-				notice('Выбранные комментарии успешно удалены!');
-				redirect("/events?act=comments&id=$id&page=$page");
+                App::setFlash('success', 'Выбранные комментарии успешно удалены!');
+                App::redirect("/events?act=comments&id=$id&page=$page");
 
 			} else {
 				show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
@@ -507,7 +507,7 @@ case 'end':
 		$total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
 		$end = ceil($total_comments / App::setting('postevents'));
 
-		redirect("/events?act=comments&id=$id&page=$end");
+        App::redirect("/events?act=comments&id=$id&page=$end");
 
 	} else {
 		show_error('Ошибка! Данного события не существует!');

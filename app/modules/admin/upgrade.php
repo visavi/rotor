@@ -29,7 +29,7 @@ echo '<i class="fa fa-check"></i> <b>Установлена актуальная
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

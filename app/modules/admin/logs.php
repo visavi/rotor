@@ -114,8 +114,8 @@ if (is_admin([101, 102])) {
                 if (is_admin([101])) {
                     DB::run() -> query("TRUNCATE `error`;");
 
-                    notice('Лог-файлы успешно очищены!');
-                    redirect("/admin/logs");
+                    App::setFlash('success', 'Лог-файлы успешно очищены!');
+                    App::redirect("/admin/logs");
 
                 } else {
                     show_error('Ошибка! Очищать логи могут только суперадмины!');
@@ -132,7 +132,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

@@ -197,8 +197,8 @@ if (is_admin([101, 102, 103])) {
 
                                             DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, App::getUsername(), 2, $reasonban, $bantotaltime * 60, SITETIME]);
 
-                                            notice('Данные успешно изменены!');
-                                            redirect("/admin/ban?act=edit&uz=$uz");
+                                            App::setFlash('success', 'Данные успешно изменены!');
+                                            App::redirect("/admin/ban?act=edit&uz=$uz");
                                         } else {
                                             show_error('Ошибка! Слишком большая заметка, не более 1000 символов!');
                                         }
@@ -280,8 +280,8 @@ if (is_admin([101, 102, 103])) {
 
                                             Note::saveNote($note, $record);
 
-                                            notice('Аккаунт успешно заблокирован!');
-                                            redirect("/admin/ban?act=edit&uz=$uz");
+                                            App::setFlash('success', 'Аккаунт успешно заблокирован!');
+                                            App::redirect("/admin/ban?act=edit&uz=$uz");
                                         } else {
                                             show_error('Ошибка! Слишком большая заметка, не более 1000 символов!');
                                         }
@@ -332,8 +332,8 @@ if (is_admin([101, 102, 103])) {
 
                         DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `time`) VALUES (?, ?, ?);", [$uz, App::getUsername(), SITETIME]);
 
-                        notice('Аккаунт успешно разблокирован!');
-                        redirect("/admin/ban?act=edit&uz=$uz");
+                        App::setFlash('success', 'Аккаунт успешно разблокирован!');
+                        App::redirect("/admin/ban?act=edit&uz=$uz");
                     } else {
                         show_error('Ошибка! Данный аккаунт уже разблокирован!');
                     }
@@ -397,7 +397,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

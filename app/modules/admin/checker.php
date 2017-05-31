@@ -80,8 +80,8 @@ if (is_admin([101])) {
 
                     file_put_contents(STORAGE."/temp/checker.dat", serialize($arr['files']), LOCK_EX);
 
-                    notice('Сайт успешно отсканирован!');
-                    redirect("/admin/checker");
+                    App::setFlash('success', 'Сайт успешно отсканирован!');
+                    App::redirect("/admin/checker");
                 } else {
                     show_error('Ошибка! Директория temp недоступна для записи!');
                 }
@@ -97,7 +97,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-	redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

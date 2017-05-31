@@ -42,7 +42,7 @@ case 'index':
             show_error('Ошибка! Данного раздела не существует!');
         }
     } else {
-        redirect("/blog");
+        App::redirect("/blog");
     }
 break;
 
@@ -164,8 +164,8 @@ case 'changeblog':
 
                                     DB::run() -> query("UPDATE `blogs` SET `category_id`=?, `title`=?, `text`=?, `tags`=? WHERE `id`=?;", [$cats, $title, $text, $tags, $id]);
 
-                                    notice('Статья успешно отредактирована!');
-                                    redirect("/blog/blog?act=view&id=$id");
+                                    App::setFlash('success', 'Статья успешно отредактирована!');
+                                    App::redirect("/blog/blog?act=view&id=$id");
 
                                 } else {
                                     show_error('Ошибка! Изменение невозможно, вы не автор данной статьи!');
@@ -281,8 +281,8 @@ case 'addblog':
 
                                     DB::run() -> query("UPDATE `users` SET `point`=`point`+5, `money`=`money`+100 WHERE `login`=? LIMIT 1;", [App::getUsername()]);
 
-                                    notice('Статья успешно опубликована!');
-                                    redirect("/blog/blog?act=view&id=$lastid");
+                                    App::setFlash('success', 'Статья успешно опубликована!');
+                                    App::redirect("/blog/blog?act=view&id=$lastid");
 
                                 } else {
                                     show_error('Антифлуд! Вы слишком часто добавляете статьи!');
@@ -340,8 +340,8 @@ case 'vote':
                                 DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['blog', $id, App::getUsername(), $expiresrated]);
                                 DB::run() -> query("UPDATE `blogs` SET `rating`=`rating`+? WHERE `id`=?;", [$score, $id]);
 
-                                notice('Ваша оценка принята! Рейтинг статьи: '.format_num($blogs['rating'] + $score));
-                                redirect("/blog/blog?act=view&id=$id");
+                                App::setFlash('success', 'Ваша оценка принята! Рейтинг статьи: '.format_num($blogs['rating'] + $score));
+                                App::redirect("/blog/blog?act=view&id=$id");
 
                             } else {
                                 show_error('Ошибка! Вы уже оценивали данную статью!');
@@ -432,8 +432,8 @@ case 'add':
                         DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
                         DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 
-                        notice('Сообщение успешно добавлено!');
-                        redirect("/blog/blog?act=end&id=$id");
+                        App::setFlash('success', 'Сообщение успешно добавлено!');
+                        App::redirect("/blog/blog?act=end&id=$id");
 
                     } else {
                         show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
@@ -473,8 +473,8 @@ case 'spam':
                     if (is_flood(App::getUsername())) {
                         DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], App::getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, App::setting('home').'/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
-                        notice('Жалоба успешно отправлена!');
-                        redirect("/blog/blog?act=comments&id=$id&page=$page");
+                        App::setFlash('success', 'Жалоба успешно отправлена!');
+                        App::redirect("/blog/blog?act=comments&id=$id&page=$page");
 
                     } else {
                         show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
@@ -590,8 +590,8 @@ case 'editpost':
 
                         DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'blog', $pid]);
 
-                        notice('Сообщение успешно отредактировано!');
-                       redirect("/blog/blog?act=comments&id=$id&page=$page");
+                        App::setFlash('success', 'Сообщение успешно отредактировано!');
+                        App::redirect("/blog/blog?act=comments&id=$id&page=$page");
 
                     } else {
                         show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
@@ -633,8 +633,8 @@ case 'del':
                 $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='blog' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
                 DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
-                notice('Выбранные комментарии успешно удалены!');
-                redirect("/blog/blog?act=comments&id=$id&page=$page");
+                App::setFlash('success', 'Выбранные комментарии успешно удалены!');
+                App::redirect("/blog/blog?act=comments&id=$id&page=$page");
 
             } else {
                 show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
@@ -661,7 +661,7 @@ case 'end':
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
         $end = ceil($total_comments / App::setting('blogpost'));
 
-        redirect("/blog/blog?act=comments&id=$id&page=$end");
+        App::redirect("/blog/blog?act=comments&id=$id&page=$end");
 
     } else {
         show_error('Ошибка! Комментарий к данной статье не существует!');

@@ -114,8 +114,8 @@ if (is_admin()) {
 
                             DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", [$title, $text, $closed, $gid]);
 
-                            notice('Фотография успешно отредактирована!');
-                            redirect("/admin/gallery?page=$page");
+                            App::setFlash('success', 'Фотография успешно отредактирована!');
+                            App::redirect("/admin/gallery?page=$page");
 
                         } else {
                             show_error('Ошибка! Слишком длинное описание (Необходимо до 1000 символов)!');
@@ -158,8 +158,8 @@ if (is_admin()) {
                                 unlink_image('uploads/pictures/', $delete['link']);
                             }
 
-                            notice('Выбранные фотографии успешно удалены!');
-                            redirect("/admin/gallery?page=$page");
+                            App::setFlash('success', 'Выбранные фотографии успешно удалены!');
+                            App::redirect("/admin/gallery?page=$page");
 
                         } else {
                             show_error('Ошибка! Данных фотографий не существует!');
@@ -188,8 +188,8 @@ if (is_admin()) {
                 if ($token == $_SESSION['token']) {
                     restatement('photo');
 
-                    notice('Комментарии успешно пересчитаны!');
-                    redirect("/admin/gallery");
+                    App::setFlash('success', 'Комментарии успешно пересчитаны!');
+                    App::redirect("/admin/gallery");
 
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -202,13 +202,13 @@ if (is_admin()) {
         break;
 
     default:
-        redirect("/admin/gallery");
+        App::redirect("/admin/gallery");
     endswitch;
 
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

@@ -105,8 +105,8 @@ if (is_admin()) {
             if ($uid == $_SESSION['token']) {
                 clear_files(STORAGE."/chat/chat.dat");
 
-                notice('Мини-чат успешно очищен!');
-                redirect("/admin/minichat");
+                App::setFlash('success', 'Мини-чат успешно очищен!');
+                App::redirect("/admin/minichat");
 
             } else {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -129,8 +129,8 @@ if (is_admin()) {
             if ($del !== "") {
                 delete_lines(STORAGE."/chat/chat.dat", $del);
 
-                notice('Выбранные сообщения успешно удалены!');
-                redirect("/admin/minichat?page=$page");
+                App::setFlash('success', 'Выбранные сообщения успешно удалены!');
+                App::redirect("/admin/minichat?page=$page");
 
             } else {
                 show_error('Ошибка удаления! Отсутствуют выбранные сообщения');
@@ -190,8 +190,8 @@ if (is_admin()) {
 
                         replace_lines(STORAGE."/chat/chat.dat", $id, $text);
 
-                        notice('Сообщение успешно отредактировано!');
-                        redirect("/admin/minichat?page=$page");
+                        App::setFlash('success', 'Сообщение успешно отредактировано!');
+                        App::redirect("/admin/minichat?page=$page");
 
                     } else {
                         show_error('Ошибка! Сообщения для редактирования не существует!');
@@ -212,7 +212,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

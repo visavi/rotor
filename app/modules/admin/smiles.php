@@ -5,7 +5,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $page = abs(intval(Request::input('page', 1)));
 
-if (! is_admin([101, 102])) redirect('/admin/');
+if (! is_admin([101, 102])) App::redirect('/admin/');
 
 //show_title('Управление смайлами');
 
@@ -115,8 +115,8 @@ case 'load':
                     $handle -> clean();
                     clearCache();
 
-                    notice('Смайл успешно загружен!');
-                    redirect("/admin/smiles");
+                    App::setFlash('success', 'Смайл успешно загружен!');
+                    App::redirect("/admin/smiles");
 
                 } else {
                     show_error($handle->error);
@@ -187,8 +187,8 @@ case 'change':
 
         clearCache();
 
-        notice('Смайл успешно отредактирован!');
-        redirect("/admin/smiles?page=$page");
+        App::setFlash('success', 'Смайл успешно отредактирован!');
+        App::redirect("/admin/smiles?page=$page");
 
 
     } else {
@@ -222,8 +222,8 @@ case 'del':
                 Smile::where_id_in($del)->delete_many();
                 clearCache();
 
-                notice('Выбранные смайлы успешно удалены!');
-                redirect("/admin/smiles?page=$page");
+                App::setFlash('success', 'Выбранные смайлы успешно удалены!');
+                App::redirect("/admin/smiles?page=$page");
 
             } else {
                 show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');

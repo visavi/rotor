@@ -110,8 +110,8 @@ if (is_admin([101, 102])) {
                                 if (empty($black)) {
                                     DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [$type, $value, App::getUsername(), SITETIME]);
 
-                                    notice('Запись успешно добавлена в черный список!');
-                                    redirect("/admin/blacklist?main=$main");
+                                    App::setFlash('success', 'Запись успешно добавлена в черный список!');
+                                    App::redirect("/admin/blacklist?main=$main");
 
                                 } else {
                                     show_error('Ошибка! Данная запись уже имеется в списках!');
@@ -154,8 +154,8 @@ if (is_admin([101, 102])) {
 
                     DB::run() -> query("DELETE FROM `blacklist` WHERE `type`=? AND `id` IN (".$del.");", [$type]);
 
-                    notice('Выбранные записи успешно удалены!');
-                    redirect("/admin/blacklist?main=$main&page=$page");
+                    App::setFlash('success', 'Выбранные записи успешно удалены!');
+                    App::redirect("/admin/blacklist?main=$main&page=$page");
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные записи для удаления!');
                 }
@@ -171,7 +171,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

@@ -237,8 +237,8 @@ if (is_admin()) {
 
                                                             DB::run() -> query("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `notice`=?, `time`=?, `app`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $notice, $new['time'], $app, $id]);
 
-                                                            notice('Данные успешно изменены!');
-                                                            redirect("/admin/newload?act=view&id=$id");
+                                                            App::setFlash('success', 'Данные успешно изменены!');
+                                                            App::redirect("/admin/newload?act=view&id=$id");
 
                                                         } else {
                                                             show_error('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
@@ -307,8 +307,8 @@ if (is_admin()) {
                                     DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                 }
 
-                                notice('Файл успешно опубликован!');
-                                redirect("/admin/newload");
+                                App::setFlash('success', 'Файл успешно опубликован!');
+                                App::redirect("/admin/newload");
 
                             } else {
                                 show_error('Ошибка! В данной загрузке отсутствует прикрепленный файл!');
@@ -349,8 +349,8 @@ if (is_admin()) {
 
                     DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
-                    notice('Файл успешно удален!');
-                    redirect("/admin/newload?act=view&id=$id");
+                    App::setFlash('success', 'Файл успешно удален!');
+                    App::redirect("/admin/newload?act=view&id=$id");
 
                 } else {
                     show_error('Ошибка! Данный файл уже проверен модератором!');
@@ -378,8 +378,8 @@ if (is_admin()) {
 
                     DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
-                    notice('Скриншот успешно удален!');
-                    redirect("/admin/newload?act=view&id=$id");
+                    App::setFlash('success', 'Скриншот успешно удален!');
+                    App::redirect("/admin/newload?act=view&id=$id");
 
                 } else {
                     show_error('Ошибка! Данный файл уже проверен модератором!');
@@ -425,8 +425,8 @@ if (is_admin()) {
                         unlink_image('uploads/screen/'.$folder, $delfile['screen']);
                     }
 
-                    notice('Выбранные файлы успешно удалены!');
-                    redirect("/admin/newload?page=$page");
+                    App::setFlash('success', 'Выбранные файлы успешно удалены!');
+                    App::redirect("/admin/newload?page=$page");
 
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные файлы!');
@@ -443,7 +443,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

@@ -15,16 +15,16 @@ if ($_SERVER['REQUEST_URI']) {
     if (isset($parse['path'])) {
         if (strpos($parse['path'], '/upload/') !== false) {
             $parse['path'] = str_replace('/upload/', '/uploads/', $parse['path']);
-            redirect($parse['path'], true);
+            App::redirect($parse['path'], true);
         }
     }
 
     if (isset($parse['path']) && $parse['path'] == '/news/rss.php'){
-        redirect('/news/rss', true);
+        App::redirect('/news/rss', true);
     }
 
     if (isset($parse['path']) && ($parse['path'] == '/services/' || $parse['path'] == '/services')){
-        redirect('/files', true);
+        App::redirect('/files', true);
     }
 
     if (isset($parse['path']) && isset($parse['query'])) {
@@ -32,23 +32,23 @@ if ($_SERVER['REQUEST_URI']) {
         parse_str($parse['query'], $output);
 
         if ($parse['path'] == '/forum/forum.php' && isset($output['fid']) && is_numeric($output['fid'])){
-            redirect('/forum/'.$output['fid'], true);
+            App::redirect('/forum/'.$output['fid'], true);
         }
 
         if ($parse['path'] == '/forum/topic.php' && isset($output['tid']) && is_numeric($output['tid'])){
-            redirect('/topic/'.$output['tid'], true);
+            App::redirect('/topic/'.$output['tid'], true);
         }
 
         if ($parse['path'] == '/forum/print.php' && isset($output['tid']) && is_numeric($output['tid'])){
-            redirect('/topic/'.$output['tid'].'/print', true);
+            App::redirect('/topic/'.$output['tid'].'/print', true);
         }
 
         if ($parse['path'] == '/forum/rss.php' && isset($output['tid']) && is_numeric($output['tid'])){
-            redirect('/topic/'.$output['tid'].'/rss', true);
+            App::redirect('/topic/'.$output['tid'].'/rss', true);
         }
 
         if ($parse['path'] == '/blog/print.php' && isset($output['id']) && is_numeric($output['id'])){
-            redirect('/blog/print?id='.$output['id'], true);
+            App::redirect('/blog/print?id='.$output['id'], true);
         }
 
         if (
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_URI']) {
             isset($output['act']) &&
             isset($output['uz'])
         ){
-            redirect('/forum/active/'.$output['act'].'?user='.$output['uz'], true);
+            App::redirect('/forum/active/'.$output['act'].'?user='.$output['uz'], true);
         }
 
         if (
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_URI']) {
             isset($output['act']) &&
             isset($output['uz'])
         ){
-            redirect('/load/active?act='.$output['act'].'&uz='.$output['uz'], true);
+            App::redirect('/load/active?act='.$output['act'].'&uz='.$output['uz'], true);
         }
 
         if (
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_URI']) {
             isset($output['act']) &&
             isset($output['uz'])
         ){
-            redirect('/blog/active?act='.$output['act'].'&uz='.$output['uz'], true);
+            App::redirect('/blog/active?act='.$output['act'].'&uz='.$output['uz'], true);
         }
 
         if (
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_URI']) {
             isset($output['id']) &&
             is_numeric($output['id'])
         ){
-            redirect('/blog/blog?act=view&id='.$output['id'], true);
+            App::redirect('/blog/blog?act=view&id='.$output['id'], true);
         }
 
         if (
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_URI']) {
             isset($output['view']) &&
             isset($output['img'])
         ){
-            redirect('/load/zip?act=preview&id='.$output['id'].'&view='.$output['view'].'&img=1', true);
+            App::redirect('/load/zip?act=preview&id='.$output['id'].'&view='.$output['view'].'&img=1', true);
         }
 
         if (
@@ -106,11 +106,11 @@ if ($_SERVER['REQUEST_URI']) {
             isset($output['view']) &&
             is_numeric($output['view'])
         ){
-            redirect('/load/zip?act=preview&id='.$output['id'].'&view='.$output['view'], true);
+            App::redirect('/load/zip?act=preview&id='.$output['id'].'&view='.$output['view'], true);
         }
 
         if ($parse['path'] == '/load/zip.php' && isset($output['id']) && is_numeric($output['id'])){
-            redirect('/load/zip?id='.$output['id'], true);
+            App::redirect('/load/zip?id='.$output['id'], true);
         }
 
 
@@ -120,30 +120,30 @@ if ($_SERVER['REQUEST_URI']) {
             isset($output['id']) &&
             is_numeric($output['id'])
         ){
-            redirect('/load/down?act='.$output['act'].'&id='.$output['id'], true);
+            App::redirect('/load/down?act='.$output['act'].'&id='.$output['id'], true);
         }
 
         if ($parse['path'] == '/gallery/index.php' && isset($output['act']) &&
             $output['act'] == 'view' && isset($output['gid']) && is_numeric($output['gid'])){
-            redirect('/gallery?act=view&gid='.$output['gid'], true);
+            App::redirect('/gallery?act=view&gid='.$output['gid'], true);
         }
 
         if ($parse['path'] == '/gallery/album.php' && isset($output['act']) &&
             $output['act'] == 'photo' && isset($output['uz'])){
-            redirect('/gallery/album?act=photo&uz='.$output['uz'], true);
+            App::redirect('/gallery/album?act=photo&uz='.$output['uz'], true);
         }
 
         if ($parse['path'] == '/gallery/comments.php' && isset($output['act']) &&
             $output['act'] == 'comments' && isset($output['uz'])){
-            redirect('/gallery/comments?act=comments&uz='.$output['uz'], true);
+            App::redirect('/gallery/comments?act=comments&uz='.$output['uz'], true);
         }
 
         if ($parse['path'] == '/pages/wall.php' && isset($output['uz'])){
-            redirect('/wall?uz='.$output['uz'], true);
+            App::redirect('/wall?uz='.$output['uz'], true);
         }
 
         if ($parse['path'] == '/pages/user.php' && isset($output['uz'])){
-            redirect('/user/'.$output['uz'], true);
+            App::redirect('/user/'.$output['uz'], true);
         }
     }
 

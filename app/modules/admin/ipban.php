@@ -81,8 +81,8 @@ if (is_admin([101, 102])) {
                         DB::run() -> query("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, App::getUsername(), SITETIME]);
                         App::ipBan(true);
 
-                        notice('IP успешно занесен в список!');
-                        redirect("/admin/ipban?page=$page");
+                        App::setFlash('success', 'IP успешно занесен в список!');
+                        App::redirect("/admin/ipban?page=$page");
                     } else {
                         show_error('Ошибка! Введенный IP уже имеетеся в списке!');
                     }
@@ -115,8 +115,8 @@ if (is_admin([101, 102])) {
                     DB::run() -> query("DELETE FROM `ban` WHERE `id` IN (".$del.");");
                     App::ipBan(true);
 
-                    notice('Выбранные IP успешно удалены из списка!');
-                    redirect("/admin/ipban?page=$page");
+                    App::setFlash('success', 'Выбранные IP успешно удалены из списка!');
+                    App::redirect("/admin/ipban?page=$page");
                 } else {
                     echo '<i class="fa fa-times"></i> <b>Ошибка удаления! Отсутствуют выбранные IP</b><br />';
                 }
@@ -139,8 +139,8 @@ if (is_admin([101, 102])) {
                     DB::run() -> query("TRUNCATE `ban`;");
                     App::ipBan(true);
 
-                    notice('Список IP успешно очищен!');
-                    redirect("/admin/ipban");
+                    App::setFlash('success', 'Список IP успешно очищен!');
+                    App::redirect("/admin/ipban");
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
@@ -156,7 +156,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

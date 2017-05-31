@@ -296,8 +296,8 @@ switch ($act):
 
                                 DB::run() -> query("UPDATE `offers` SET `type`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $title, $text, $id]);
 
-                                notice('Данные успешно отредактированы!');
-                                redirect("/offers?act=view&type=$types&id=$id");
+                                App::setFlash('success', 'Данные успешно отредактированы!');
+                                App::redirect("/offers?act=view&type=$types&id=$id");
                             } else {
                                 show_error('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
                             }
@@ -427,8 +427,8 @@ switch ($act):
 
                                 DB::run() -> query("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 
-                                notice('Комментарий успешно добавлен!');
-                                redirect("/offers?act=end&id=$id");
+                                App::setFlash('success', 'Комментарий успешно добавлен!');
+                                App::redirect("/offers?act=end&id=$id");
                             } else {
                                 show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
                             }
@@ -475,8 +475,8 @@ switch ($act):
                                 }
                             }
 
-                            notice('Спасибо! Ваш голос учтен!');
-                            redirect("/offers?act=view&id=$id");
+                            App::setFlash('success', 'Спасибо! Ваш голос учтен!');
+                            App::redirect("/offers?act=view&id=$id");
                         } else {
                             show_error('Ошибка! Запрещено голосовать за свое продложение или проблему!');
                         }
@@ -547,8 +547,8 @@ switch ($act):
 
                             DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, App::getUsername(), SITETIME]);
 
-                            notice('Сообщение успешно добавлено!');
-                            redirect("/offers?act=view&type=$types&id=$lastid");
+                            App::setFlash('success', 'Сообщение успешно добавлено!');
+                            App::redirect("/offers?act=view&type=$types&id=$lastid");
                         } else {
                             show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
                         }
@@ -588,8 +588,8 @@ switch ($act):
                     $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='offer' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
                     DB::run() -> query("UPDATE `offers` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
-                    notice('Выбранные комментарии успешно удалены!');
-                    redirect("/offers?act=comments&id=$id&page=$page");
+                    App::setFlash('success', 'Выбранные комментарии успешно удалены!');
+                    App::redirect("/offers?act=comments&id=$id&page=$page");
                 } else {
                     show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
                 }
@@ -614,7 +614,7 @@ switch ($act):
             $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
             $end = ceil($total_comments / App::setting('postcommoffers'));
 
-            redirect("/offers?act=comments&id=$id&page=$end");
+            App::redirect("/offers?act=comments&id=$id&page=$end");
         } else {
             show_error('Ошибка! Данного предложения или проблемы не существует!');
         }

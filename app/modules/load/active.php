@@ -107,7 +107,7 @@ case 'viewcomm':
     if (!empty($querycomm)) {
         $end = ceil($querycomm / App::setting('downlist'));
 
-        redirect("/load/down?act=comments&id=$id&page=$end");
+        App::redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
         show_error('Ошибка! Комментарий к данному файлу не существует!');
     }
@@ -132,8 +132,8 @@ case 'del':
                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `id`=? AND `relate_id`=?;", ['down', $id, $downs]);
                 DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $downs]);
 
-                notice('Комментарий успешно удален!');
-                redirect("/load/active?act=comments&uz=$uz&page=$page");
+                App::setFlash('success', 'Комментарий успешно удален!');
+                App::redirect("/load/active?act=comments&uz=$uz&page=$page");
             } else {
                 show_error('Ошибка! Данного комментария не существует!');
             }

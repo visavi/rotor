@@ -165,8 +165,8 @@ if (is_admin([101])) {
 
                         fn_close($fp, $method);
 
-                        notice('База данных успешно обработана и сохранена!');
-                        redirect("/admin/backup");
+                        App::setFlash('success', 'База данных успешно обработана и сохранена!');
+                        App::redirect("/admin/backup");
 
                     } else {
                         show_error('Ошибка! Некоторые таблицы отсутствуют в базе данных!');
@@ -195,8 +195,8 @@ if (is_admin([101])) {
                         if (file_exists(STORAGE.'/backup/'.$backup)) {
                             unlink (STORAGE.'/backup/'.$backup);
 
-                            notice('Бэкап успешно удален!');
-                            redirect("/admin/backup");
+                            App::setFlash('success', 'Бэкап успешно удален!');
+                            App::redirect("/admin/backup");
 
                         } else {
                             show_error('Ошибка! Данного бэкапа не существует!');
@@ -219,7 +219,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-	redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

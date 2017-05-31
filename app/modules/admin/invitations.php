@@ -145,8 +145,8 @@ case 'send':
             $text = 'Вы получили пригласительные ключи в количестве '.count($listkeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listkeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на этот сайт!';
             send_private($user, App::getUsername(), $text);
 
-            notice('Ключи успешно отправлены!');
-            redirect("/admin/invitations");
+            App::setFlash('success', 'Ключи успешно отправлены!');
+            App::redirect("/admin/invitations");
 
         } else {
             show_error('Ошибка! Не найден пользователь с заданным логином!');
@@ -190,8 +190,8 @@ case 'mailing':
                     $dbr -> execute($key, $user, SITETIME);
                 }
 
-                notice('Ключи успешно разосланы! (Отправлено: '.$total.')');
-                redirect("/admin/invitations");
+                App::setFlash('success', 'Ключи успешно разосланы! (Отправлено: '.$total.')');
+                App::redirect("/admin/invitations");
 
             } else {
                 show_error('Ошибка! Отсутствуют получатели ключей!');
@@ -223,8 +223,8 @@ case 'generate':
                 $dbr -> execute($key, App::getUsername(), SITETIME);
             }
 
-            notice('Ключи успешно сгенерированы!');
-            redirect("/admin/invitations");
+            App::setFlash('success', 'Ключи успешно сгенерированы!');
+            App::redirect("/admin/invitations");
 
         } else {
             show_error('Ошибка! Не указано число генерируемых ключей!');
@@ -251,8 +251,8 @@ case 'del':
 
             DB::run() -> query("DELETE FROM `invite` WHERE `id` IN (".$del.");");
 
-            notice('Выбранные ключи успешно удалены!');
-            redirect("/admin/invitations?used=$used&page=$page");
+            App::setFlash('success', 'Выбранные ключи успешно удалены!');
+            App::redirect("/admin/invitations?used=$used&page=$page");
 
         } else {
             show_error('Ошибка! Отсутствуют выбранные ключи!');
@@ -269,7 +269,7 @@ endswitch;
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

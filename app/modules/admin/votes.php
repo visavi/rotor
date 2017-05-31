@@ -103,8 +103,8 @@ if (is_admin([101, 102, 103])) {
                             $dbr -> execute($lastid, $data);
                         }
 
-                        notice('Голосование успешно создано!');
-                        redirect("/admin/votes");
+                        App::setFlash('success', 'Голосование успешно создано!');
+                        App::redirect("/admin/votes");
                     } else {
                         show_error('Ошибка! Необходимо минимум 2 варианта ответов!');
                     }
@@ -186,8 +186,8 @@ if (is_admin([101, 102, 103])) {
                                 }
                             }
 
-                            notice('Голосование успешно изменено!');
-                            redirect("/admin/votes");
+                            App::setFlash('success', 'Голосование успешно изменено!');
+                            App::redirect("/admin/votes");
                         } else {
                             show_error('Ошибка! Не заполнены все обязательные поля с ответами!');
                         }
@@ -220,14 +220,14 @@ if (is_admin([101, 102, 103])) {
                         if ($do == 'close') {
                             DB::run() -> query("UPDATE `vote` SET `closed`=? WHERE `id`=?;", [1, $id]);
                             DB::run() -> query("DELETE FROM `votepoll` WHERE `vote_id`=?;", [$id]);
-                            notice('Голосование успешно закрыто!');
-                            redirect("/admin/votes");
+                            App::setFlash('success', 'Голосование успешно закрыто!');
+                            App::redirect("/admin/votes");
                         }
 
                         if ($do == 'open') {
                             DB::run() -> query("UPDATE `vote` SET `closed`=? WHERE `id`=?;", [0, $id]);
-                            notice('Голосование успешно открыто!');
-                            redirect("/admin/votes?act=history");
+                            App::setFlash('success', 'Голосование успешно открыто!');
+                            App::redirect("/admin/votes?act=history");
                         }
                     } else {
                         show_error('Ошибка! Данного голосования не существует!');
@@ -257,8 +257,8 @@ if (is_admin([101, 102, 103])) {
                         DB::run() -> query("DELETE FROM `voteanswer` WHERE `vote_id`=?;", [$id]);
                         DB::run() -> query("DELETE FROM `votepoll` WHERE `vote_id`=?;", [$id]);
 
-                        notice('Голосование успешно удалено!');
-                        redirect("/admin/votes");
+                        App::setFlash('success', 'Голосование успешно удалено!');
+                        App::redirect("/admin/votes");
                     } else {
                         show_error('Ошибка! Данного голосования не существует!');
                     }
@@ -281,8 +281,8 @@ if (is_admin([101, 102, 103])) {
                 if (is_admin([101])) {
                     DB::run() -> query("UPDATE `vote` SET `count`=(SELECT SUM(`result`) FROM `voteanswer` WHERE `vote`.id=`voteanswer`.`vote_id`) WHERE `closed`=?;", [0]);
 
-                    notice('Все данные успешно пересчитаны!');
-                    redirect("/admin/votes");
+                    App::setFlash('success', 'Все данные успешно пересчитаны!');
+                    App::redirect("/admin/votes");
                 } else {
                     show_error('Ошибка! Пересчитывать голосования могут только суперадмины!');
                 }
@@ -333,7 +333,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

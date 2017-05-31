@@ -64,8 +64,8 @@ switch ($act):
                                 ['from' => [$umail => $name]]
                             )) {
 
-                            notice('Ваше письмо успешно отправлено!');
-                            redirect("/");
+                            App::setFlash('success', 'Ваше письмо успешно отправлено!');
+                            App::redirect("/");
 
                         } else {
                             show_error('Ошибка! Не удалось отправить письмо администратору!');

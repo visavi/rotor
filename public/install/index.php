@@ -343,7 +343,7 @@ header("Content-type:text/html; charset=utf-8");
                     'time' => SITETIME,
                 ]);
 
-                redirect('?act=finish');
+                App::redirect('?act=finish');
 
 
             } else {echo '<p style="color: #ff0000">Ошибка! Указанный вами адрес e-mail уже используется в системе!</p>';}

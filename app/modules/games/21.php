@@ -62,7 +62,7 @@ if (is_user()) {
                             DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [$mn, App::getUsername()]);
                             save_money(60);
 
-                            redirect("21?act=game&rand=$randgame");
+                            App::redirect("21?act=game&rand=$randgame");
 
                         } else {
                             show_error('Вы уже сделали ставку, вернитесь в игру!');

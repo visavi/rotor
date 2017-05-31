@@ -162,8 +162,8 @@ if ($act=="addrub") {
 
                     write_files(STORAGE."/board/database.dat", "$text\r\n", 0, 0666);
 
-                    notice('Новый раздел успешно создан!');
-                    redirect("/admin/board");
+                    App::setFlash('success', 'Новый раздел успешно создан!');
+                    App::redirect("/admin/board");
 
                 } else {show_error('Ошибка! Слишком длинное или короткое описание рубрики!');}
             } else {show_error('Ошибка! Слишком длинное или короткое название рубрики!');}
@@ -227,8 +227,8 @@ if (is_admin([101,102])){
 
                         replace_lines(STORAGE."/board/database.dat", $id, $text);
 
-                        notice('Раздел успешно изменен!');
-                        redirect("/admin/board");
+                        App::setFlash('success', 'Раздел успешно изменен!');
+                        App::redirect("/admin/board");
 
                     } else {show_error('Ошибка! Рубрики для редактирования не существует!');}
                 } else {show_error('Ошибка! Слишком длинное или короткое описание рубрики!');}
@@ -256,8 +256,8 @@ if ($act=="move"){
 
                     move_lines(STORAGE."/board/database.dat", $id, $where);
 
-                    notice('Раздел успешно перемещен!');
-                    redirect("/admin/board");
+                    App::setFlash('success', 'Раздел успешно перемещен!');
+                    App::redirect("/admin/board");
 
                 } else {show_error('Ошибка! Не выбрано действие для сдвига!');}
             } else {show_error('Ошибка! Не выбрана строка для сдвига!');}
@@ -291,8 +291,8 @@ if ($act=="delrub") {
 
                 delete_lines(STORAGE."/board/database.dat", $del);
 
-                notice('Раздел успешно удален!');
-                redirect("/admin/board");
+                App::setFlash('success', 'Раздел успешно удален!');
+                App::redirect("/admin/board");
 
             } else {show_error('Ошибка удаления! Отсутствуют выбранные рубрики!');}
         } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
@@ -316,8 +316,8 @@ if ($act=="deltop") {
 
             delete_lines(STORAGE."/board/$id.dat", $del);
 
-            notice('Объявление успешно удалено!');
-            redirect("/admin/board?act=board&id=$id&page=$page");
+            App::setFlash('success', 'Объявление успешно удалено!');
+            App::redirect("/admin/board?act=board&id=$id&page=$page");
 
             } else {show_error('Ошибка! Отсутствуют выбранные объявления!');}
         } else {show_error('Ошибка! Не выбрана рубрика для удаления!');}
@@ -330,7 +330,7 @@ if ($act=="deltop") {
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

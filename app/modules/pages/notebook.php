@@ -66,8 +66,8 @@ if (is_user()) {
                         DB::run() -> query("INSERT INTO `notebook` (`user`, `text`, `time`) VALUES (?, ?, ?);", [App::getUsername(), $msg, SITETIME]);
                     }
 
-                    notice('Запись успешно сохранена!');
-                    redirect("/notebook");
+                    App::setFlash('success', 'Запись успешно сохранена!');
+                    App::redirect("/notebook");
                 } else {
                     show_error('Ошибка! Слишком длинная запись, не более 10тыс. символов!');
                 }

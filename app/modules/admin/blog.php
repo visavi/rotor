@@ -67,8 +67,8 @@ if (is_admin()) {
                 if ($uid == $_SESSION['token']) {
                     restatement('blog');
 
-                    notice('Все данные успешно пересчитаны!');
-                    redirect("/admin/blog");
+                    App::setFlash('success', 'Все данные успешно пересчитаны!');
+                    App::redirect("/admin/blog");
 
                 } else {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -94,8 +94,8 @@ if (is_admin()) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `catsblog`;");
                         DB::run() -> query("INSERT INTO `catsblog` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
-                        notice('Новый раздел успешно добавлен!');
-                        redirect("/admin/blog");
+                        App::setFlash('success', 'Новый раздел успешно добавлен!');
+                        App::redirect("/admin/blog");
 
                     } else {
                         show_error('Ошибка! Слишком длинное или короткое название раздела!');
@@ -156,8 +156,8 @@ if (is_admin()) {
                         if (!empty($blogs)) {
                             DB::run() -> query("UPDATE `catsblog` SET sort=?, `name`=? WHERE `id`=?;", [$order, $name, $cid]);
 
-                            notice('Раздел успешно отредактирован!');
-                            redirect("/admin/blog");
+                            App::setFlash('success', 'Раздел успешно отредактирован!');
+                            App::redirect("/admin/blog");
 
                         } else {
                             show_error('Ошибка! Данного раздела не существует!');
@@ -213,8 +213,8 @@ if (is_admin()) {
                         DB::run() -> query("DELETE FROM `blogs` WHERE `category_id`=?;", [$cid]);
                         DB::run() -> query("DELETE FROM `catsblog` WHERE `id`=?;", [$cid]);
 
-                        notice('Раздел успешно удален!');
-                        redirect("/admin/blog");
+                        App::setFlash('success', 'Раздел успешно удален!');
+                        App::redirect("/admin/blog");
 
                     } else {
                         show_error('Ошибка! Данного раздела не существует!');
@@ -333,8 +333,8 @@ if (is_admin()) {
 
                                     DB::run() -> query("UPDATE `blogs` SET `title`=?, `text`=?, `user`=?, `tags`=? WHERE `id`=?;", [$title, $text, $user, $tags, $id]);
 
-                                    notice('Статья успешно отредактирована!');
-                                    redirect("/admin/blog?act=blog&cid=$cid&page=$page");
+                                    App::setFlash('success', 'Статья успешно отредактирована!');
+                                    App::redirect("/admin/blog?act=blog&cid=$cid&page=$page");
 
                                 } else {
                                     show_error('Ошибка! Данной статьи не существует!');
@@ -419,8 +419,8 @@ if (is_admin()) {
                         DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$section]);
                         DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$cid]);
 
-                        notice('Статья успешно перемещена!');
-                        redirect("/admin/blog?act=blog&cid=$section");
+                        App::setFlash('success', 'Статья успешно перемещена!');
+                        App::redirect("/admin/blog?act=blog&cid=$section");
 
                     } else {
                         show_error('Ошибка! Статьи для перемещения не существует!');
@@ -459,8 +459,8 @@ if (is_admin()) {
                     // Обновление счетчиков
                     DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-? WHERE `id`=?", [$delblogs, $cid]);
 
-                    notice('Выбранные статьи успешно удалены!');
-                    redirect("/admin/blog?act=blog&cid=$cid&page=$page");
+                    App::setFlash('success', 'Выбранные статьи успешно удалены!');
+                    App::redirect("/admin/blog?act=blog&cid=$cid&page=$page");
 
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные статьи для удаления!');
@@ -477,7 +477,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

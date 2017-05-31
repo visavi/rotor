@@ -206,8 +206,8 @@ if ($act == "add"){
 
                     write_files(STORAGE."/board/$id.dat", "$text\r\n", 0, 0666);
 
-                    notice('Объявление успешно размещено!');
-                    redirect("/board?act=board&id=$id");
+                    App::setFlash('success', 'Объявление успешно размещено!');
+                    App::redirect("/board?act=board&id=$id");
 
                 } else {show_error('Ошибка, не указано число дней показа объявления!');}
             } else {show_error('Слишком длинное или короткое объявление (Необходимо от 10 до 1000 символов)');}

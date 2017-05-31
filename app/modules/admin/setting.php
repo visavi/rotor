@@ -95,8 +95,8 @@ if (is_admin([101])) {
 
                                     save_setting();
 
-                                    notice('Настройки сайта успешно изменены!');
-                                    redirect("/admin/setting?act=setzero");
+                                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                                    App::redirect("/admin/setting?act=setzero");
 
                                 } else {
                                     show_error('Ошибка! Аккаунт пользователя '.$login.' не найден в базе');
@@ -259,8 +259,8 @@ if (is_admin([101])) {
 
                         save_setting();
 
-                        notice('Настройки сайта успешно изменены!');
-                        redirect("/admin/setting?act=setone");
+                        App::setFlash('success', 'Настройки сайта успешно изменены!');
+                        App::redirect("/admin/setting?act=setone");
 
                     } else {
                         show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -360,8 +360,8 @@ if (is_admin([101])) {
 
                             save_setting();
 
-                            notice('Настройки сайта успешно изменены!');
-                            redirect("/admin/setting?act=mail");
+                            App::setFlash('success', 'Настройки сайта успешно изменены!');
+                            App::redirect("/admin/setting?act=mail");
 
                         } else {
                             show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -430,8 +430,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=settwo");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=settwo");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -519,8 +519,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setthree");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setthree");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -591,8 +591,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setfour");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setfour");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -652,8 +652,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setfive");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setfive");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -719,8 +719,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setload");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setload");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -777,8 +777,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setblog");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setblog");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -826,8 +826,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setevent");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setevent");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -906,8 +906,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setseven");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setseven");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -980,8 +980,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=seteight");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=seteight");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -1042,8 +1042,8 @@ if (is_admin([101])) {
         *
         * save_setting();
         *
-        * notice('Настройки сайта успешно изменены!');
-        * redirect("/admin/setting");
+        * App::setFlash('success', 'Настройки сайта успешно изменены!');
+        * App::redirect("/admin/setting");
         *
         * } else {show_error('Ошибка! Все поля настроек обязательны для заполнения!');}
         * } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
@@ -1110,8 +1110,8 @@ if (is_admin([101])) {
                             $dbr -> execute($captcha_interpolation, 'captcha_interpolation');
                             save_setting();
 
-                            notice('Настройки сайта успешно изменены!');
-                            redirect("/admin/setting?act=setten");
+                            App::setFlash('success', 'Настройки сайта успешно изменены!');
+                            App::redirect("/admin/setting?act=setten");
 
                         } else {
                             show_error('Ошибка! Амплитуда колебаний может быть от 0 до 8!');
@@ -1184,8 +1184,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=seteleven");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=seteleven");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -1238,8 +1238,8 @@ if (is_admin([101])) {
 
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setadv");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setadv");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -1301,8 +1301,8 @@ if (is_admin([101])) {
                     $dbr -> execute($copyfoto, 'copyfoto');
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setimage");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setimage");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -1351,8 +1351,8 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['smileminweight']), 'smileminweight');
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setsmile");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setsmile");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -1401,8 +1401,8 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['addofferspoint']), 'addofferspoint');
                     save_setting();
 
-                    notice('Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setoffer");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=setoffer");
 
                 } else {
                     show_error('Ошибка! Все поля настроек обязательны для заполнения!');
@@ -1419,7 +1419,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

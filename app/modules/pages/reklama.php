@@ -120,8 +120,8 @@ case 'create':
 
                                 save_advertuser();
 
-                                notice('Рекламная ссылка успешно размещена (Cписано: '.moneys($price).')');
-                                redirect("/reklama");
+                                App::setFlash('success', 'Рекламная ссылка успешно размещена (Cписано: '.moneys($price).')');
+                                App::redirect("/reklama");
 
                             } else {
                                 show_error('Ошибка! Для покупки рекламы у вас недостаточно денег!');

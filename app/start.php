@@ -26,7 +26,7 @@ if ($ipBan = App::ipBan()) {
         }
 
         if ($matches == 4 && ! Request::is('banip', 'captcha')) {
-            redirect('/banip');
+            App::redirect('/banip');
         }
     }
 }
@@ -152,34 +152,32 @@ if ($user = is_user()) {
     // Забанен
     if (App::user('ban')) {
         if (! Request::is('ban', 'rules', 'logout')) {
-            redirect('/ban?log='.App::getUsername());
+            App::redirect('/ban?log='.App::getUsername());
         }
     }
 
     // Подтверждение регистрации
     if (App::setting('regkeys') > 0 && App::user('confirmreg') > 0 && empty(App::user('ban'))) {
         if (! Request::is('key', 'login', 'logout')) {
-            redirect('/key?log='.App::getUsername());
+            App::redirect('/key?log='.App::getUsername());
         }
     }
 
     // Просрочен кредит
     if (App::user('sumcredit') > 0 && SITETIME > App::user('timecredit') && empty(App::user('ban'))) {
         if (Request::path() != 'games/credit') {
-            redirect('/games/credit?log='.App::getUsername());
+            App::redirect('/games/credit?log='.App::getUsername());
         }
     }
     // ---------------------- Получение ежедневного бонуса -----------------------//
     if (App::user('timebonus') < SITETIME - 82800) {
-        var_dump(date('Y-m-d H:i:s', $user['timebonus']), App::getUserId());
-
         $user = User::where('id', App::getUserId());
         $user->update([
             'timebonus' => SITETIME,
             'money' => Capsule::raw('money + '.App::setting('bonusmoney')),
         ]);
 
-        notice('Получен ежедневный бонус '.moneys(App::setting('bonusmoney')).'!');
+        App::setFlash('success', 'Получен ежедневный бонус '.moneys(App::setting('bonusmoney')).'!');
     }
 
     // ------------------ Запись текущей страницы для админов --------------------//
@@ -206,13 +204,13 @@ if ($user = is_user()) {
 
 // Сайт закрыт для всех
 if (App::setting('closedsite') == 2 && !is_admin() && ! Request::is('closed', 'login')) {
-    redirect('/closed');
+    App::redirect('/closed');
 }
 
 // Сайт закрыт для гостей
 if (App::setting('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'lostpassword', 'captcha')) {
-    notice('Для входа на сайт необходимо авторизоваться!');
-    redirect('/login');
+    App::setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
+    App::redirect('/login');
 }
 
 /**

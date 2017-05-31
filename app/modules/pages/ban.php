@@ -65,8 +65,8 @@ if (is_user()) {
                                     DB::run() -> query("UPDATE `users` SET `explainban`=? WHERE `login`=?;", [0, App::getUsername()]);
                                     DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?;", [App::user('loginsendban')]);
 
-                                    notice('Объяснение успешно отправлено!');
-                                    redirect("/ban");
+                                    App::setFlash('success', 'Объяснение успешно отправлено!');
+                                    App::redirect("/ban");
 
                                 } else {
                                     show_error('Ошибка! Пользователь который вас забанил не найден!');

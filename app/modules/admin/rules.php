@@ -65,8 +65,8 @@ if (is_admin([101, 102])) {
 
                     DB::run() -> query("REPLACE INTO `rules` (`id`, `text`, `time`) VALUES (?,?,?);", [1, $msg, SITETIME]);
 
-                    notice('Правила успешно изменены!');
-                    redirect("/admin/rules");
+                    App::setFlash('success', 'Правила успешно изменены!');
+                    App::redirect("/admin/rules");
                 } else {
                     show_error('Ошибка! Вы не ввели текст с правилами сайта!');
                 }
@@ -83,7 +83,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

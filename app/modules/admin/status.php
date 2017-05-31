@@ -91,8 +91,8 @@ if (is_admin([101, 102])) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
                         DB::run() -> query("UPDATE `status` SET `topoint`=?, `point`=?, `name`=?, `color`=? WHERE `id`=?;", [$topoint, $point, $name, $color, $id]);
 
-                        notice('Статус успешно изменен!');
-                        redirect("/admin/status");
+                        App::setFlash('success', 'Статус успешно изменен!');
+                        App::redirect("/admin/status");
                     } else {
                         show_error('Ошибка! Недопустимый формат цвета статуса!');
                     }
@@ -145,8 +145,8 @@ if (is_admin([101, 102])) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
                         DB::run() -> query("INSERT INTO `status` (`topoint`, `point`, `name`, `color`) VALUES (?, ?, ?, ?);", [$topoint, $point, $name, $color]);
 
-                        notice('Статус успешно добавлен!');
-                        redirect("/admin/status");
+                        App::setFlash('success', 'Статус успешно добавлен!');
+                        App::redirect("/admin/status");
                     } else {
                         show_error('Ошибка! Недопустимый формат цвета статуса!');
                     }
@@ -172,8 +172,8 @@ if (is_admin([101, 102])) {
                 if (!empty($id)) {
                     DB::run() -> query("DELETE FROM `status` WHERE `id`=?;", [$id]);
 
-                    notice('Статус успешно удален!');
-                    redirect("/admin/status");
+                    App::setFlash('success', 'Статус успешно удален!');
+                    App::redirect("/admin/status");
                 } else {
                     show_error('Ошибка! Отсутствует выбранный статус для удаления!');
                 }
@@ -189,7 +189,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

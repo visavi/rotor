@@ -80,8 +80,8 @@ switch ($act):
                 if (!empty($rat)) {
                     $end = ceil($rat / App::setting('avtorlist'));
 
-                    notice('Позиция в рейтинге: '.$rat);
-                    redirect("/authoritylist?page=$end&uz=$queryuser");
+                    App::setFlash('success', 'Позиция в рейтинге: '.$rat);
+                    App::redirect("/authoritylist?page=$end&uz=$queryuser");
                 } else {
                     show_error('Пользователь с данным логином не найден!');
                 }

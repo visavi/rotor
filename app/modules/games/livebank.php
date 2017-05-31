@@ -70,8 +70,8 @@ switch ($act):
                 if (!empty($rat)) {
                     $end = ceil($rat / App::setting('vkladlist'));
 
-                    notice('Позиция в рейтинге: '.$rat);
-                    redirect("/games/livebank?page=$end&uz=$queryuser");
+                    App::setFlash('success', 'Позиция в рейтинге: '.$rat);
+                    App::redirect("/games/livebank?page=$end&uz=$queryuser");
                 } else {
                     show_error('Пользователь с данным логином не найден!');
                 }

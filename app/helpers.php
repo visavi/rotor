@@ -1569,14 +1569,14 @@ function resize_image($dir, $name, $size, $params = []) {
 }
 
 // ------------- Функция переадресации -------------//
-function redirect($url, $permanent = false){
+/*function redirect($url, $permanent = false){
 
     if ($permanent){
         header('HTTP/1.1 301 Moved Permanently');
     }
 
     exit(header('Location: '.$url));
-}
+}*/
 
 // ------------- Функция вывода ссылки на анкету -------------//
 function profile($user, $color = false)
@@ -1771,9 +1771,9 @@ function text_private($id, $replace = []){
 }
 
 // ------------ Функция записи flash уведомлений -----------//
-function notice($message, $status = 'success'){
+/*function notice($message, $status = 'success'){
     $_SESSION['note'][$status][] = $message;
-}
+}*/
 
 // ------------ Функция статистики производительности -----------//
 function perfomance(){

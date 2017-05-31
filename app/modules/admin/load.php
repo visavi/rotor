@@ -333,8 +333,8 @@ case 'addfile':
 
                                             $lastid = DB::run() -> lastInsertId();
 
-                                            notice('Данные успешно добавлены!');
-                                            redirect("/admin/load?act=editdown&id=$lastid");
+                                            App::setFlash('success', 'Данные успешно добавлены!');
+                                            App::redirect("/admin/load?act=editdown&id=$lastid");
                                         } else {
                                             show_error('Ошибка! Название '.$title.' уже имеется в файлах!');
                                         }
@@ -380,8 +380,8 @@ case 'restatement':
         if ($uid == $_SESSION['token']) {
             restatement('load');
 
-            notice('Все данные успешно пересчитаны!');
-            redirect("/admin/load");
+            App::setFlash('success', 'Все данные успешно пересчитаны!');
+            App::redirect("/admin/load");
         } else {
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
@@ -406,8 +406,8 @@ case 'addcats':
                 $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `cats`;");
                 DB::run() -> query("INSERT INTO `cats` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
-                notice('Новый раздел успешно добавлен!');
-                redirect("/admin/load");
+                App::setFlash('success', 'Новый раздел успешно добавлен!');
+                App::redirect("/admin/load");
             } else {
                 show_error('Ошибка! Слишком длинное или короткое название раздела!');
             }
@@ -555,11 +555,11 @@ case 'addeditcats':
 
                         if (!empty($renameDir)) {
                             DB::run() -> query("UPDATE `cats` SET `folder`=? WHERE `id`=?;", [$folder, $cid]);
-                            notice('Директория изменена!');
+                            App::setFlash('success', 'Директория изменена!');
                         }
 
-                        notice('Раздел успешно отредактирован!');
-                        redirect("/admin/load");
+                        App::setFlash('success', 'Раздел успешно отредактирован!');
+                        App::redirect("/admin/load");
                     } else {
                         show_error('Ошибка! Данный раздел имеет подкатегории!');
                     }
@@ -644,8 +644,8 @@ case 'delcats':
                             removeDir(HOME.'/uploads/screen/'.$folder);
                         }
 
-                        notice('Раздел успешно удален!');
-                        redirect("/admin/load");
+                        App::setFlash('success', 'Раздел успешно удален!');
+                        App::redirect("/admin/load");
                     } else {
                         show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
                     }
@@ -897,8 +897,8 @@ case 'changedown':
 
                                                 DB::run() -> query("UPDATE `downs` SET `title`=?, `text`=?, `author`=?, `site`=?, `time`=? WHERE `id`=?;", [$title, $text, $author, $site, $new['time'], $id]);
 
-                                                notice('Данные успешно изменены!');
-                                                redirect("/admin/load?act=editdown&id=$id");
+                                                App::setFlash('success', 'Данные успешно изменены!');
+                                                App::redirect("/admin/load?act=editdown&id=$id");
 
                                             } else {
                                                 show_error('Ошибка! Название '.$title.' уже имеется в общих файлах!');
@@ -969,8 +969,8 @@ case 'copyfile':
 
                                     DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
-                                    notice('Файл успешно импортирован!');
-                                    redirect("/admin/load?act=editdown&id=$id");
+                                    App::setFlash('success', 'Файл успешно импортирован!');
+                                    App::redirect("/admin/load?act=editdown&id=$id");
                                 } else {
                                     show_error('Ошибка! Не удалось импортировать файл!');
                                 }
@@ -1034,8 +1034,8 @@ case 'loadfile':
 
                                     DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
-                                    notice('Файл успешно загружен!');
-                                    redirect("/admin/load?act=editdown&id=$id");
+                                    App::setFlash('success', 'Файл успешно загружен!');
+                                    App::redirect("/admin/load?act=editdown&id=$id");
                                 } else {
                                     show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                                 }
@@ -1091,8 +1091,8 @@ case 'loadscreen':
 
                         $handle -> clean();
 
-                        notice('Скриншот успешно загружен!');
-                        redirect("/admin/load?act=editdown&id=$id");
+                        App::setFlash('success', 'Скриншот успешно загружен!');
+                        App::redirect("/admin/load?act=editdown&id=$id");
                     } else {
                         show_error($handle -> error);
                     }
@@ -1129,8 +1129,8 @@ case 'delfile':
 
         DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
-        notice('Файл успешно удален!');
-        redirect("/admin/load?act=editdown&id=$id");
+        App::setFlash('success', 'Файл успешно удален!');
+        App::redirect("/admin/load?act=editdown&id=$id");
     } else {
         show_error('Ошибка! Данного файла не существует!');
     }
@@ -1151,8 +1151,8 @@ case 'delscreen':
 
         DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
-        notice('Скриншот успешно удален!');
-        redirect("/admin/load?act=editdown&id=$id");
+        App::setFlash('success', 'Скриншот успешно удален!');
+        App::redirect("/admin/load?act=editdown&id=$id");
     } else {
         show_error('Ошибка! Данного файла не существует!');
     }
@@ -1249,8 +1249,8 @@ case 'addmovedown':
                 DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$section]);
                 DB::run() -> query("UPDATE `cats` SET `count`=`count`-1 WHERE `id`=?", [$cid]);
 
-                notice('Файл успешно перемещен!');
-                redirect("/admin/load?act=down&cid=$section");
+                App::setFlash('success', 'Файл успешно перемещен!');
+                App::redirect("/admin/load?act=down&cid=$section");
             } else {
                 show_error('Ошибка! Файла для перемещения не существует!');
             }
@@ -1297,8 +1297,8 @@ case 'deldown':
                         unlink_image('uploads/screen/'.$folder, $delfile['screen']);
                     }
 
-                    notice('Выбранные файлы успешно удалены!');
-                    redirect("/admin/load?act=down&cid=$cid&page=$page");
+                    App::setFlash('success', 'Выбранные файлы успешно удалены!');
+                    App::redirect("/admin/load?act=down&cid=$cid&page=$page");
                 } else {
                     show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
                 }
@@ -1320,7 +1320,7 @@ endswitch;
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

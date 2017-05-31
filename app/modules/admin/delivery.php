@@ -80,8 +80,8 @@ if (is_admin([101])) {
                                 $insertprivat -> execute($uzval, App::getUsername(), $msg, SITETIME);
                             }
 
-                            notice('Сообщение успешно разослано! (Отправлено: '.$total.')');
-                            redirect("/admin/delivery");
+                            App::setFlash('success', 'Сообщение успешно разослано! (Отправлено: '.$total.')');
+                            App::redirect("/admin/delivery");
 
                         } else {
                             show_error('Ошибка! Отсутствуют получатели рассылки!');
@@ -107,7 +107,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-	redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

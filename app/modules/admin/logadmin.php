@@ -50,8 +50,8 @@ if (is_admin([101])) {
             if ($uid == $_SESSION['token']) {
                 DB::run() -> query("DELETE FROM admlog;");
 
-                notice('Лог-файл успешно очищен!');
-                redirect("/admin/logadmin");
+                App::setFlash('success', 'Лог-файл успешно очищен!');
+                App::redirect("/admin/logadmin");
             } else {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
@@ -64,7 +64,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-	redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

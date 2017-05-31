@@ -6,8 +6,8 @@ App::view(App::setting('themes').'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 if (!App::getUsername()){
-    notice('Гостям сюда нельзя!');
-    redirect('/');
+    App::setFlash('danger', 'Гостям сюда нельзя!');
+    App::redirect('/');
 }
 
 switch ($act):
@@ -45,8 +45,8 @@ break;
 case 'vzlom':
 
     if (App::user('money') < App::setting('safeattempt')) {
-            notice('У тебя нет таких денег!');
-            redirect('/games/safe');
+        App::setFlash('danger', 'У тебя нет таких денег!');
+        App::redirect('/games/safe');
     }else{
 
         if (empty($_SESSION['go']) || !$_SESSION['try']){
@@ -58,8 +58,8 @@ case 'vzlom':
         echo '<br /><img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';
 
         if (!$_SESSION['code'] || !$_SESSION['go']){
-            notice('Нееее.... такое тут не канает!');
-            redirect('/games/safe');
+            App::setFlash('danger', 'Нееее.... такое тут не канает!');
+            App::redirect('/games/safe');
         } else {
 
             if ($_SESSION['try']==0) {
@@ -94,8 +94,8 @@ case 'vzlom1':
 
     if (empty($_SESSION['go'])){
         echo'<br /><font color="red">Нее... такой фокус тут не канает...</font><br />';
-        notice('нееее... такое тут не канает!');
-        redirect("/games/safe");exit;
+        App::setFlash('danger', 'нееее... такое тут не канает!');
+        App::redirect("/games/safe");exit;
     }else{
 
         if ($k1==$_SESSION['s1'] || $k1==$_SESSION['s2'] || $k1==$_SESSION['s3'] || $k1==$_SESSION['s4'] ){$g1="*";}

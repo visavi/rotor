@@ -65,7 +65,7 @@ switch ($act):
         if ($total) {
 
             $end = ceil($total / App::setting('postnews'));
-            redirect('/news/'.$nid.'/comments?page='.$end.'#comment_'.$id);
+            App::redirect('/news/'.$nid.'/comments?page='.$end.'#comment_'.$id);
 
         } else {
             show_error('Ошибка! Комментариев к данной новости не существует!');

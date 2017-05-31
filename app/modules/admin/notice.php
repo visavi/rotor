@@ -4,7 +4,7 @@ App::view(App::setting('themes').'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
-if (! is_admin([101])) redirect('/admin/');
+if (! is_admin([101])) App::redirect('/admin/');
 
 //show_title('Шаблоны писем');
 
@@ -134,8 +134,8 @@ case 'save':
             $note
         );
 
-        notice('Шаблон успешно сохранен!');
-        redirect('/admin/notice?act=edit&id='.$notice->id);
+        App::setFlash('success', 'Шаблон успешно сохранен!');
+        App::redirect('/admin/notice?act=edit&id='.$notice->id);
 
     } else {
         show_error($validation->getErrors());
@@ -163,8 +163,8 @@ case 'del':
 
         $notice->delete();
 
-        notice('Выбранный шаблон успешно удален!');
-        redirect('/admin/notice');
+        App::setFlash('success', 'Выбранный шаблон успешно удален!');
+        App::redirect('/admin/notice');
 
     } else {
         show_error($validation->getErrors());

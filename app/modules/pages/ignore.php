@@ -133,7 +133,7 @@ case 'note':
             DB::run() -> query("UPDATE ignoring SET text=? WHERE id=? AND user_id=?;", [$msg, $id, App::getUserId()]);
 
             App::setFlash('success', 'Заметка успешно отредактирована!');
-            redirect("/ignore");
+            App::redirect("/ignore");
         } else {
             App::setInput(Request::all());
             App::setFlash('danger', $validation->getErrors());
@@ -174,7 +174,7 @@ case 'delete':
         App::setFlash('danger', $validation->getErrors());
     }
 
-    redirect("/ignore?page=$page");
+    App::redirect("/ignore?page=$page");
     break;
 
 endswitch;

@@ -141,8 +141,8 @@ switch ($act):
                                     DB::run() -> query("UPDATE `voteanswer` SET `result`=`result`+1 WHERE `id`=?;", [$poll]);
                                     DB::run() -> query("INSERT INTO `votepoll` (`vote_id`, `user`, `time`) VALUES (?, ?, ?);", [$id, App::getUsername(), SITETIME]);
 
-                                    notice('Ваш голос успешно принят!');
-                                    redirect("/votes?act=poll&id=$id");
+                                    App::setFlash('success', 'Ваш голос успешно принят!');
+                                    App::redirect("/votes?act=poll&id=$id");
 
                                 } else {
                                     show_error('Ошибка! Вы уже проголосовали в этом опросе!');

@@ -78,7 +78,7 @@ if (Request::isMethod('post')) {
         send_private($login, App::getUsername(), $text);
 
         App::setFlash('success', 'Репутация успешно изменена!');
-        redirect('/user/'.$login);
+        App::redirect('/user/'.$login);
 
     } else {
         App::setInput(Request::all());

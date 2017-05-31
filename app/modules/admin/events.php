@@ -150,14 +150,14 @@ case 'change':
                     $handle -> clean();
 
                 } else {
-                    notice($handle->error, 'danger');
+                    App::setFlash('danger', $handle->error);
                 }
             }
         }
         // ---------------------------------------------------------------------------------//
 
-        notice('Событие успешно отредактировано!');
-        redirect("/admin/events?act=edit&id=$id");
+        App::setFlash('success', 'Событие успешно отредактировано!');
+        App::redirect("/admin/events?act=edit&id=$id");
 
     } else {
         show_error($validation->getErrors());
@@ -178,8 +178,8 @@ case 'restatement':
         if ($uid == $_SESSION['token']) {
             restatement('events');
 
-            notice('Комментарии успешно пересчитаны!');
-            redirect("/admin/events");
+            App::setFlash('success', 'Комментарии успешно пересчитаны!');
+            App::redirect("/admin/events");
 
         } else {
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -217,8 +217,8 @@ case 'del':
                 DB::run() -> query("DELETE FROM `events` WHERE `id` IN (".$del.");");
                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `event_id` IN (".$del.");", ['event']);
 
-                notice('Выбранные события успешно удалены!');
-                redirect("/admin/events?page=$page");
+                App::setFlash('success', 'Выбранные события успешно удалены!');
+                App::redirect("/admin/events?page=$page");
 
                 } else {
                 show_error('Ошибка! Не установлены атрибуты доступа на директорию с изображениями!');
@@ -238,7 +238,7 @@ endswitch;
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

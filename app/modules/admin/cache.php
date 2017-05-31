@@ -72,7 +72,7 @@ case 'clear':
         clearCache();
 
         App::setFlash('success', 'Кэш-файлы успешно удалены!');
-        redirect("/admin/cache");
+        App::redirect("/admin/cache");
 
     } else {
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -101,7 +101,7 @@ case 'clearimage':
         }
 
         App::setFlash('success', 'Изображения успешно удалены!');
-        redirect("/admin/cache/image");
+        App::redirect("/admin/cache/image");
 
     } else {
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
@@ -116,7 +116,7 @@ endswitch;
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect('/');
+    App::redirect('/');
 }
 
 App::view(App::setting('themes').'/foot');

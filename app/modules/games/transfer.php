@@ -84,8 +84,8 @@ if (is_user()) {
 
                                             DB::run() -> query("DELETE FROM `transfers` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `transfers` ORDER BY `time` DESC LIMIT 1000) AS del);");
 
-                                            notice('Перевод успешно завершен! Пользователь уведомлен о переводе');
-                                            redirect("/games/transfer");
+                                            App::setFlash('success', 'Перевод успешно завершен! Пользователь уведомлен о переводе');
+                                            App::redirect("/games/transfer");
 
                                         } else {
                                             show_error('Ошибка! Вы внесены в игнор-лист получателя!');

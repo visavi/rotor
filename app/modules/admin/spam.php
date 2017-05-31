@@ -87,8 +87,8 @@ if (is_admin([101, 102, 103])) {
 
                     DB::run() -> query("DELETE FROM `spam` WHERE `id` IN (".$del.");");
 
-                    notice('Выбранные жалобы успешно удалены!');
-                    redirect("/admin/spam?type=$type&page=$page");
+                    App::setFlash('success', 'Выбранные жалобы успешно удалены!');
+                    App::redirect("/admin/spam?type=$type&page=$page");
 
                 } else {
                     show_error('Ошибка! Отсутствуют выбранные жалобы!');
@@ -111,8 +111,8 @@ if (is_admin([101, 102, 103])) {
                 if (is_admin([101, 102])) {
                     DB::run() -> query("TRUNCATE `spam`;");
 
-                    notice('Жалобы успешно очищены!');
-                    redirect("/admin/spam");
+                    App::setFlash('success', 'Жалобы успешно очищены!');
+                    App::redirect("/admin/spam");
 
                 } else {
                     show_error('Ошибка! Очищать жалобы могут только админы!');
@@ -129,7 +129,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');

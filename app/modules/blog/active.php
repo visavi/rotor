@@ -69,8 +69,8 @@ case 'del':
                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `id`=? AND relate_id=?;", ['blog', $id, $blogs]);
                 DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $blogs]);
 
-                notice('Комментарий успешно удален!');
-                redirect("/blog/active?act=comments&uz=$uz&page=$page");
+                App::setFlash('success', 'Комментарий успешно удален!');
+                App::redirect("/blog/active?act=comments&uz=$uz&page=$page");
 
             } else {
                 show_error('Ошибка! Данного комментария не существует!');

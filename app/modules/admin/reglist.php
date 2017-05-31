@@ -111,8 +111,8 @@ if (is_admin([101, 102, 103])) {
                             $arrayusers = implode(',', $arrayusers);
                             DB::run() -> query("UPDATE `users` SET `confirmreg`=?, `confirmregkey`=? WHERE `login` IN ('".$arrayusers."');", [0, '']);
 
-                            notice('Выбранные аккаунты успешно одобрены!');
-                            redirect("/admin/reglist?page=$page");
+                            App::setFlash('success', 'Выбранные аккаунты успешно одобрены!');
+                            App::redirect("/admin/reglist?page=$page");
                         }
                         // ----------------------------------- Запрет регистрации -------------------------------------//
                         if ($choice == 2) {
@@ -121,8 +121,8 @@ if (is_admin([101, 102, 103])) {
                                 delete_users($value);
                             }
 
-                            notice('Выбранные пользователи успешно удалены!');
-                            redirect("/admin/reglist?page=$page");
+                            App::setFlash('success', 'Выбранные пользователи успешно удалены!');
+                            App::redirect("/admin/reglist?page=$page");
                         }
                     } else {
                         show_error('Ошибка! Отсутствуют выбранные пользователи!');
@@ -142,7 +142,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
 
 } else {
-    redirect("/");
+    App::redirect("/");
 }
 
 App::view(App::setting('themes').'/foot');
