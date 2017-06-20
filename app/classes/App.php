@@ -190,9 +190,9 @@ class App
      * @param  string  $subject Тема письма
      * @param  string  $body    Текст сообщения
      * @param  array   $headers Дополнительные параметры
-     * @return boolean  Результат отправки
+     * @return boolean Результат отправки
      */
-/*    public static function sendMail($to, $subject, $body, $headers = [])
+    public static function sendMail($to, $subject, $body, $headers = [])
     {
         if (empty($headers['from'])) $headers['from'] = [env('SITE_EMAIL') => env('SITE_ADMIN')];
 
@@ -204,7 +204,7 @@ class App
             ->setReturnPath(env('SITE_EMAIL'));
 
         if (env('MAIL_DRIVER') == 'smtp') {
-            $transport = Swift_SmtpTransport::newInstance(env('MAIL_HOST'), env('MAIL_PORT'), 'ssl')
+            $transport = Swift_SmtpTransport::newInstance(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION'))
                 ->setUsername(env('MAIL_USERNAME'))
                 ->setPassword(env('MAIL_PASSWORD'));
         } else {
@@ -213,7 +213,7 @@ class App
 
         $mailer = new Swift_Mailer($transport);
         return $mailer->send($message);
-    }*/
+    }
 
     /**
      * Возвращает форматированную дату

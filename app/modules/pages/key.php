@@ -1,81 +1,29 @@
 <?php
-App::view(App::setting('themes').'/index');
 
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
+if (! is_user()) {
+    App::abort(403, 'Для подтверждение регистрации  необходимо быть авторизованным!');
 }
 
-//show_title('Подтверждение регистрации');
+if (empty(App::setting('regkeys'))) {
+    App::abort('default', 'Подтверждение регистрации выключено на сайте!');
+}
 
-if (is_user()) {
-    if (!empty(App::setting('regkeys'))) {
-        if (!empty(App::user('confirmreg'))) {
-            if (App::user('confirmreg') == 1) {
-                switch ($act):
-                ############################################################################################
-                ##                                    Главная страница                                    ##
-                ############################################################################################
-                    case "index":
+if (empty(App::setting('regkeys'))) {
+    App::abort('default', 'Вашему профилю не требуется подтверждение регистрации!');
+}
 
-                        echo 'Добро пожаловать, <b>'.App::getUsername().'!</b><br />';
-                        echo 'Для подтверждения регистрации вам необходимо ввести мастер-ключ, который был отправлен вам на E-mail<br /><br />';
+if (Request::has('code')) {
+    $code = check(trim(Request::input('code')));
 
-                        echo '<div class="form">';
-                        echo 'Мастер-код:<br />';
-                        echo '<form method="post" action="/key?act=inkey">';
-                        echo '<input name="key" maxlength="30" />';
-                        echo '<input value="Подтвердить" type="submit" /></form></div><br />';
+    if ($code == App::user('confirmregkey')) {
+        DB::run() -> query("UPDATE users SET confirmreg=?, confirmregkey=? WHERE id=?;", [0, '', App::getUserId()]);
 
-                        echo 'Пока вы не подтвердите регистрацию вы не сможете войти на сайт<br />';
-                        echo 'Ваш профиль будет ждать активации в течение 24 часов, после чего автоматически удален<br /><br />';
+        App::setFlash('success', 'Мастер-код успешно подтвержден!');
+        App::redirect("/");
 
-                        echo '<i class="fa fa-times"></i> <a href="/logout">Выход</a><br />';
-                    break;
-
-                    ############################################################################################
-                    ##                                   Проверка мастер-ключа                                ##
-                    ############################################################################################
-                    case "inkey":
-
-                        if (isset($_GET['key'])) {
-                            $key = check(trim($_GET['key']));
-                        } else {
-                            $key = check(trim($_POST['key']));
-                        }
-
-                        if (!empty($key)) {
-                            if ($key == App::user('confirmregkey')) {
-                                DB::run() -> query("UPDATE users SET confirmreg=?, confirmregkey=? WHERE login=?;", [0, '', App::getUsername()]);
-
-                                echo 'Мастер-код подтвержден, теперь вы можете войти на сайт!<br /><br />';
-                                echo '<i class="fa fa-check"></i> <b><a href="/">Вход на сайт!</a></b><br /><br />';
-                            } else {
-                                show_error('Ошибка! Мастер-код не совпадает с данными, проверьте правильность ввода!');
-                            }
-                        } else {
-                            show_error('Ошибка! Вы не ввели мастер-код, пожалуйста повторите!');
-                        }
-
-                        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/key">Вернуться</a><br />';
-                    break;
-
-                endswitch;
-            } else {
-                echo 'Добро пожаловать, <b>'.check(App::getUsername()).'!</b><br />';
-                echo 'Ваш аккаунт еще не прошел проверку администрацией<br />';
-                echo 'Если после авторизации вы видите эту страницу, значит ваш профиль еще не активирован!<br /><br />';
-                echo '<i class="fa fa-times"></i> <a href="/logout">Выход</a><br />';
-            }
-        } else {
-            show_error('Ошибка! Вашему профилю не требуется подтверждение регистрации!');
-        }
     } else {
-        show_error('Ошибка! Подтверждение регистрации выключено на сайте!');
+        App::setFlash('danger', 'Мастер-код не совпадает с данными, проверьте правильность ввода');
     }
-} else {
-    show_error('Ошибка! Для подтверждение регистрации  необходимо быть авторизованным!');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view('pages/key');
