@@ -20,7 +20,7 @@ case 'index':
     echo '<div class="form">';
     echo '<form method="post" action="/lostpassword?act=remind">';
     echo 'Логин или email:<br />';
-    echo '<input name="uz" type="text" maxlength="50" value="'.$cooklog.'" /><br />';
+    echo '<input name="user" type="text" maxlength="50" value="'.$cooklog.'" /><br />';
     echo '<input value="Продолжить" type="submit" /></form></div><br />';
 
     echo 'Если у вас установлен секретный вопрос, вам будет предложено на него ответить<br /><br />';
@@ -32,33 +32,32 @@ break;
 ############################################################################################
 case 'remind':
 
-    $uz = check(utf_lower(Request::input('uz')));
+    $login = check(Request::input('user'));
 
-    if (!empty($uz)) {
+    if ($login) {
 
-        $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE LOWER(`login`)=? OR `email`=? LIMIT 1;", [$uz, $uz]);
+        $user = User::where('login', $login)->orWhere('email', $login)->first();
 
-        if (!empty($user)) {
+        if ($user) {
 
-            $email = ($uz == $user['email']) ? $user['email'] : '';
+            $email = ($login == $user['email']) ? $user['email'] : '';
 
-            echo '<div class="b">'.user_gender($user['login']).' <b>'.profile($user['login']).'</b> '.user_visit($user['login']).'</div>';
+            echo '<div class="b">'.user_gender($user).' <b>'.profile($user).'</b> '.user_visit($user).'</div>';
 
-            if (!empty($user['email'])) {
-                echo '<b><big>Восстановление на email:</big></b><br />';
-                echo '<div class="form">';
-                echo '<form method="post" action="/lostpassword?act=send">';
-                echo 'Введите email:<br />';
-                echo '<input name="email" type="text" value="'.$email.'" maxlength="50" /><br />';
-                echo 'Проверочный код:<br /> ';
-                echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
-                echo '<input name="provkod" size="6" maxlength="6" /><br />';
-                echo '<input name="uz" type="hidden" value="'.$user['login'].'" />';
-                echo '<br /><input value="Восстановить" type="submit" /></form></div><br />';
-            }
-            // --------------------------------------------------------------//
-            if (!empty($user['secquest'])) {
-                echo '<b><big>Ответ на секретный вопрос:</big></b><br />';
+            echo '<b>Восстановление на email:</b><br />';
+            echo '<div class="form">';
+            echo '<form method="post" action="/lostpassword?act=send">';
+            echo 'Введите email:<br />';
+            echo '<input name="email" type="text" value="'.$email.'" maxlength="50" /><br />';
+            echo 'Проверочный код:<br /> ';
+            echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
+            echo '<input name="protect" size="6" maxlength="6" /><br />';
+            echo '<input name="user" type="hidden" value="'.$user['login'].'" />';
+            echo '<br /><input value="Восстановить" type="submit" /></form></div><br />';
+
+            // -------------------------------------------------------------//
+            if ($user['secquest']) {
+                echo '<b>Ответ на секретный вопрос:</b><br />';
                 echo '<div class="form">';
                 echo '<form method="post" action="/lostpassword?act=answer">';
 
@@ -68,15 +67,10 @@ case 'remind':
                 echo 'Проверочный код:<br /> ';
                 echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
                 echo '<input name="provkod" size="6" maxlength="6" /><br />';
-                echo '<input name="uz" type="hidden" value="'.$user['login'].'" />';
+                echo '<input name="user" type="hidden" value="'.$user['login'].'" />';
                 echo '<br /><input value="Восстановить" type="submit" /></form></div><br />';
             }
 
-            if (empty($user['email']) && empty($user['secquest'])) {
-                echo '<i class="fa fa-times"></i> <b>Невозможно восстановить пароль!</b><br />';
-                echo 'Нет технической возможности восстановить пароль, так как у данного пользователя не указан адрес почтового ящика и не установлен секретный вопрос<br />';
-                echo 'Для того чтобы вернуть доступ к своему аккаунту необходимо связаться с администрацией сайта<br /><br />';
-            }
         } else {
             show_error('Ошибка! Пользователь с данным логином или email не найден!');
         }
@@ -92,16 +86,16 @@ break;
 ############################################################################################
 case 'send':
 
-    $uz = check(Request::input('uz'));
+    $login = check(Request::input('user'));
     $email = check(Request::input('email'));
-    $provkod = check(Request::input('provkod'));
+    $protect = check(Request::input('protect'));
 
-    $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
-    if (! empty($user)) {
+    $user = User::where('login', $login)->first();
+    if ($user) {
 
         $validation = new Validation();
 
-        $validation -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
+        $validation -> addRule('equal', [$protect, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
             -> addRule('not_empty', $email, 'Не введен адрес почтового ящика для восстановления!')
             -> addRule('not_empty', $user['email'], 'У данного пользователя не установлен email!')
             -> addRule('equal', [$email, $user['email']], 'Введенный адрес email не совпадает с адресом в профиле!')
@@ -109,14 +103,18 @@ case 'send':
 
         if ($validation->run()) {
 
-            $restkey = str_random();
+            $sitelink = starts_with(App::setting('home'), '//') ? 'http:'. App::setting('home') : App::setting('home');
+            $resetKey = str_random();
+            $resetLink = $sitelink.'/lostpassword?act=restore&user='.$user['login'].'&key='.$resetKey;
 
-            DB::run() -> query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$restkey, SITETIME + 43200, $uz]);
+            DB::run() -> query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `id`=?;", [$resetKey, SITETIME + 43200, $user->id]);
             // ---------------- Инструкция по восстановлению пароля на email --------------------------//
-            sendMail($user['email'],
-                'Подтверждение восстановления пароля на сайте '.App::setting('title'),
-                nl2br("Здравствуйте, ".$user['login']." \nВами была произведена операция по восстановлению пароля на сайте ".App::setting('home')." \n\nДанные отправителя: \nIp: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nОтправлено: ".date('j.m.Y / H:i', SITETIME)."\n\nДля того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n".App::setting('home')."/lostpassword?act=restore&uz=".$user['login']."&key=".$restkey." \n\nЕсли это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его")
-            );
+
+            $subject = 'Восстановление пароля на сайте '.App::setting('title');
+            $message = 'Здравствуйте, '.$user['login'].'<br />Вами была произведена операция по восстановлению пароля на сайте <a href="' . App::setting('home') . '">' . App::setting('title') . '</a><br /><br />Данные отправителя:<br />Ip: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Отправлено: '.date('j.m.Y / H:i', SITETIME).'<br /><br />Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br />Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
+
+            $body = App::view('mailer.recovery', compact('subject', 'message', 'resetLink'), true);
+            App::sendMail($user['email'], $subject, $body);
 
             echo '<i class="fa fa-check"></i> <b>Восстановление пароля инициализировано!</b><br /><br />';
             echo 'Письмо с инструкцией по восстановлению пароля успешно выслано на email указанный в профиле<br />';
@@ -130,7 +128,6 @@ case 'send':
         show_error('Ошибка! Пользователь с данным логином не найден!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/lostpassword?act=remind&amp;uz='.$uz.'">Вернуться</a><br />';
 break;
 
 ############################################################################################

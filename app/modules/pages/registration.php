@@ -18,7 +18,7 @@ if (Request::isMethod('post')) {
         $meil = strtolower(check(Request::input('meil')));
         $domain = utf_substr(strrchr($meil, '@'), 1);
         $gender = Request::input('gender') == 1 ? 1 : 2;
-        $registration_key = '';
+        $activateKey = '';
 
         $validation = new Validation();
         $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
@@ -68,24 +68,21 @@ if (Request::isMethod('post')) {
         // Регистрация аккаунта
         if ($validation->run()) {
 
-            $sitelink = starts_with(App::setting('home'), '//') ? 'http:'. App::setting('home') : App::setting('home');
 
             // --- Уведомление о регистрации на email ---//
-            $message = 'Добро пожаловать, ' . $logs . '<br />Теперь вы зарегистрированный пользователь сайта <a href="' . App::setting('home') . '">' . App::setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br />Ваши данные для входа на сайт <br /><b>Логин: ' . $logs . '</b><br /><b>Пароль: ' . $pars . '</b><br /><br />Надеемся вам понравится на нашем портале! <br />С уважением администрация сайта <br />Если это письмо попало к вам по ошибке, то просто проигнорируйте его <br /><br />';
+            $message = 'Добро пожаловать, ' . $logs . '<br />Теперь вы зарегистрированный пользователь сайта <a href="' . App::setting('home') . '">' . App::setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br />Ваши данные для входа на сайт <br /><b>Логин: ' . $logs . '</b><br /><b>Пароль: ' . $pars . '</b><br /><br />';
 
             if (App::setting('regkeys') == 1) {
-                $registration_key = str_random();
+                $siteLink = starts_with(App::setting('home'), '//') ? 'http:'. App::setting('home') : App::setting('home');
+                $activateKey = str_random();
+                $activateLink = $siteLink.'/key?code=' . $activateKey;
 
                 echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br />';
                 echo 'Мастер-ключ был выслан вам на почтовый ящик: ' . $meil . '</span></b><br /><br />';
-
-                $message .= 'Внимание!<br />Для подтверждения регистрации необходимо в течение 24 часов ввести мастер-ключ!<br />Ваш мастер-ключ: <b>' . $registration_key . '</b><br />Введите его после авторизации на сайте<br />Или перейдите по прямой ссылке: <br /><br /><a href="' . $sitelink . '/key?code=' . $registration_key . '">' . $sitelink. '/key?code=' . $registration_key . '</a><br /><br />Если в течение 24 часов вы не подтвердите регистрацию, ваш профиль будет автоматически удален';
             }
 
             if (App::setting('regkeys') == 2) {
                 echo '<b><span style="color:#ff0000">Внимание! Ваш аккаунт будет активирован только после проверки администрацией!</span></b><br /><br />';
-
-                $message .= 'Внимание!<br />Ваш аккаунт будет активирован только после проверки администрацией!<br />Проверить статус активации вы сможете после авторизации на сайте';
             }
 
             // Активация пригласительного ключа
@@ -105,7 +102,7 @@ if (Request::isMethod('post')) {
                 'money' => App::setting('registermoney'),
                 'timelastlogin' => SITETIME,
                 'confirmreg' => App::setting('regkeys'),
-                'confirmregkey' => $registration_key,
+                'confirmregkey' => $activateKey,
                 'subscribe' => str_random(32),
             ]);
 
@@ -114,7 +111,7 @@ if (Request::isMethod('post')) {
             send_private($user->id, 0, $textpriv);
 
             $subject = 'Регистрация на сайте ' . App::setting('title');
-            $body = App::view('mailer.register', compact('subject', 'message'), true);
+            $body = App::view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'), true);
             App::sendMail($meil, $subject, $body);
 
             App::login($logs, $pars);
