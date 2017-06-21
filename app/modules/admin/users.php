@@ -48,7 +48,7 @@ if (is_admin([101, 102])) {
                         $data['email'] = 'Не указан';
                     }
 
-                    echo '<hr /><div>'.user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (E-mail: '.$data['email'].')<br />';
+                    echo '<hr /><div>'.user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (email: '.$data['email'].')<br />';
 
                     echo 'Зарегистрирован: '.date_fixed($data['joined']).'</div>';
                 }
@@ -144,7 +144,7 @@ if (is_admin([101, 102])) {
                     echo '<input type="text" name="country" maxlength="30" value="'.$user['country'].'" /><br />';
                     echo 'Откуда:<br />';
                     echo '<input type="text" name="city" maxlength="50" value="'.$user['city'].'" /><br />';
-                    echo 'E-mail:<br />';
+                    echo 'Email:<br />';
                     echo '<input type="text" name="email" maxlength="50" value="'.$user['email'].'" /><br />';
                     echo 'Сайт:<br />';
                     echo '<input type="text" name="site" maxlength="50" value="'.$user['site'].'" /><br />';
@@ -302,7 +302,7 @@ if (is_admin([101, 102])) {
                                 show_error('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
                             }
                         } else {
-                            show_error('Ошибка! Вы ввели неверный адрес e-mail, необходим формат name@site.domen!');
+                            show_error('Ошибка! Вы ввели неверный адрес email, необходим формат name@site.domen!');
                         }
                     } else {
                         show_error('Ошибка! У вас недостаточно прав для редактирования этого профиля!');
@@ -330,7 +330,7 @@ if (is_admin([101, 102])) {
 
             echo '<b>Добавить в черный список:</b><br />';
             echo 'Логин пользователя: <input name="loginblack" type="checkbox" value="1"  checked="checked" /><br />';
-            echo 'E-mail пользователя: <input name="mailblack" type="checkbox" value="1"  checked="checked" /><br /><br />';
+            echo 'Email пользователя: <input name="mailblack" type="checkbox" value="1"  checked="checked" /><br /><br />';
 
             echo '<b>Удаление сообщений:</b><br />';
             echo 'Темы в форуме: <input name="deltopicforum" type="checkbox" value="1" /><br />';

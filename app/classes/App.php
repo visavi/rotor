@@ -162,7 +162,7 @@ class App
      * Возвращает блок с текстом ошибки
      *
      * @param  string $field имя поля
-     * @return string блоки ошибки
+     * @return string        блоки ошибки
      */
     public static function textError($field)
     {
@@ -189,18 +189,20 @@ class App
      * @param  mixed   $to      Получатель
      * @param  string  $subject Тема письма
      * @param  string  $body    Текст сообщения
-     * @param  array   $headers Дополнительные параметры
-     * @return boolean Результат отправки
+     * @param  array   $params  Дополнительные параметры
+     * @return boolean          Результат отправки
      */
-    public static function sendMail($to, $subject, $body, $headers = [])
+    public static function sendMail($to, $subject, $body, $params = [])
     {
-        if (empty($headers['from'])) $headers['from'] = [env('SITE_EMAIL') => env('SITE_ADMIN')];
+        if (empty($params['from'])) {
+            $params['from'] = [env('SITE_EMAIL') => env('SITE_ADMIN')];
+        }
 
         $message = Swift_Message::newInstance()
             ->setTo($to)
             ->setSubject($subject)
             ->setBody($body, 'text/html')
-            ->setFrom($headers['from'])
+            ->setFrom($params['from'])
             ->setReturnPath(env('SITE_EMAIL'));
 
         if (env('MAIL_DRIVER') == 'smtp') {

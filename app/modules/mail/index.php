@@ -1,91 +1,38 @@
 <?php
-App::view(App::setting('themes').'/index');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
+if (Request::isMethod('post')) {
 
-//show_title('Письмо Администратору');
+    $message = nl2br(check(Request::input('message')));
+    $name    = check(Request::input('name'));
+    $email   = check(Request::input('email'));
+    $protect = check(Request::input('protect'));
 
-switch ($act):
-############################################################################################
-##                                    Главная страница                                    ##
-############################################################################################
-    case 'index':
+    if (is_user()) {
+        $name = App::getUsername();
+        $email = App::user('email');
+    }
 
-        echo '<div class="form">';
-        echo '<form method="post" action="mail?act=send">';
+    $validation = new Validation();
 
-        if (! is_user()) {
-            echo 'Ваше имя:<br /><input name="name" maxlength="20" /><br />';
-            echo 'Ваш E-mail:<br /><input name="umail" maxlength="50" /><br />';
-        } else {
-            if (empty(App::user('email'))) {
-                echo 'Ваш E-mail:<br /><input name="umail" maxlength="50" /><br />';
-            }
-        }
+    $validation -> addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+        ->addRule('string', $name, ['name' => 'Слишком длинное или короткое имя'], true, 5, 100)
+        ->addRule('string', $message, ['message' => 'Слишком длинное или короткое сообшение'], true, 5, 50000)
+        ->addRule('email', $email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!'], true);
 
-        echo 'Сообщение:<br />';
-        echo '<textarea cols="25" rows="5" name="body"></textarea><br />';
+    if ($validation->run()) {
 
-        echo 'Проверочный код:<br />';
-        echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
+        $message .= '<br /><br />IP: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Отправлено: '.date_fixed(SITETIME, 'j.m.Y / H:i');
 
-        echo '<input name="provkod" size="6" maxlength="6" /><br />';
-        echo '<input value="Отправить" type="submit" /></form></div><br />';
+        $subject = 'Письмо с сайта '.App::setting('title');
+        $body = App::view('mailer.default', compact('subject', 'message'), true);
+        App::sendMail(App::setting('emails'), $subject, $body, ['from' => [$email => $name]]);
 
-        echo 'Обновите страницу если вы не видите проверочный код!<br /><br />';
-    break;
+        App::setFlash('success', 'Ваше письмо успешно отправлено!');
+        App::redirect("/");
 
-    ############################################################################################
-    ##                                    Отправка сообщения                                  ##
-    ############################################################################################
-    case 'send':
+    } else {
+        App::setFlash('danger', $validation->getErrors());
+    }
+}
 
-        $body = isset($_POST['body']) ? check($_POST['body']) : '';
-        $name = isset($_POST['name']) ? check($_POST['name']) : '';
-        $umail = isset($_POST['umail']) ? check($_POST['umail']) : '';
-        $provkod = isset($_POST['provkod']) ? check(strtolower($_POST['provkod'])) : '';
-
-        if (is_user()) {
-            $name = App::getUsername();
-
-            if (!empty(App::user('email'))) {
-                $umail = App::user('email');
-            }
-        }
-
-        if ($_SESSION['protect'] == $provkod) {
-            if (utf_strlen($name) >= 3 && utf_strlen($name) <= 50) {
-                if (utf_strlen($body) >= 5 && utf_strlen($body) <= 10000) {
-                    if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $umail)) {
-
-                        if (sendMail(App::setting('emails'),
-                                'Письмо с сайта '.App::setting('title'),
-                                nl2br(html_entity_decode($body, ENT_QUOTES)).'<br /><br />IP: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Отправлено: '.date_fixed(SITETIME, 'j.m.Y / H:i'),
-                                ['from' => [$umail => $name]]
-                            )) {
-
-                            App::setFlash('success', 'Ваше письмо успешно отправлено!');
-                            App::redirect("/");
-
-                        } else {
-                            show_error('Ошибка! Не удалось отправить письмо администратору!');
-                        }
-                    } else {
-                        show_error('Вы ввели неверный адрес e-mail, необходим формат name@site.domen!');
-                    }
-                } else {
-                    show_error('Слишком длинное или короткое сообшение, необходимо от 5 до 5000 символов!');
-                }
-            } else {
-                show_error('Слишком длинное или короткое имя, необходимо от 3 до 50 символов!');
-            }
-        } else {
-            show_error('Проверочное число не совпало с данными на картинке!');
-        }
-
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="mail">Вернуться</a><br />';
-    break;
-
-endswitch;
-
-App::view(App::setting('themes').'/foot');
+App::view('mail/index');

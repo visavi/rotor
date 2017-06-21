@@ -68,7 +68,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="arrayusers[]" value="'.$data['login'].'" /> ';
                     echo user_gender($data['login']).' <b>'.profile($data['login']).'</b>';
-                    echo '(E-mail: '.$data['email'].')</div>';
+                    echo '(email: '.$data['email'].')</div>';
 
                     echo '<div>Зарегистрирован: '.date_fixed($data['joined']).'</div>';
                 }

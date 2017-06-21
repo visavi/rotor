@@ -23,7 +23,7 @@ if (Request::isMethod('post')) {
         $validation = new Validation();
         $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
             ->addRule('regex', [$logs, '|^[a-z0-9\-]+$|i'], ['logs' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'], true)
-            ->addRule('email', $meil, ['meil' => 'Вы ввели неверный адрес e-mail, необходим формат name@site.domen!'], true)
+            ->addRule('email', $meil, ['meil' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'], true)
             ->addRule('string', $invite, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], App::setting('invite'), 12, 15)
             ->addRule('string', $logs, ['logs' => 'Слишком длинный или короткий логин!'], true, 3, 20)
             ->addRule('string', $pars, ['pars' => 'Слишком длинный или короткий пароль!'], true, 6, 20)
@@ -49,7 +49,7 @@ if (Request::isMethod('post')) {
 
         // Проверка email на существование
         $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$meil]);
-        $validation->addRule('empty', $regmail, ['meil' => 'Указанный вами адрес e-mail уже используется в системе!']);
+        $validation->addRule('empty', $regmail, ['meil' => 'Указанный вами адрес email уже используется в системе!']);
 
         // Проверка домена от email в черном списке
         $blackdomain = DB::run()->querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [3, $domain]);
@@ -70,7 +70,7 @@ if (Request::isMethod('post')) {
 
             $sitelink = starts_with(App::setting('home'), '//') ? 'http:'. App::setting('home') : App::setting('home');
 
-            // --- Уведомление о регистрации на E-mail ---//
+            // --- Уведомление о регистрации на email ---//
             $message = 'Добро пожаловать, ' . $logs . '<br />Теперь вы зарегистрированный пользователь сайта <a href="' . App::setting('home') . '">' . App::setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br />Ваши данные для входа на сайт <br /><b>Логин: ' . $logs . '</b><br /><b>Пароль: ' . $pars . '</b><br /><br />Надеемся вам понравится на нашем портале! <br />С уважением администрация сайта <br />Если это письмо попало к вам по ошибке, то просто проигнорируйте его <br /><br />';
 
             if (App::setting('regkeys') == 1) {

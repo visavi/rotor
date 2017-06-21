@@ -346,7 +346,7 @@ header("Content-type:text/html; charset=utf-8");
                 App::redirect('?act=finish');
 
 
-            } else {echo '<p style="color: #ff0000">Ошибка! Указанный вами адрес e-mail уже используется в системе!</p>';}
+            } else {echo '<p style="color: #ff0000">Ошибка! Указанный вами адрес email уже используется в системе!</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Пользователь с данным логином уже зарегистрирован!</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес сайта, необходим формата http://my_site.domen</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес email, необходим формат name@site.domen</p>';}
@@ -365,7 +365,7 @@ header("Content-type:text/html; charset=utf-8");
                 <input class="form-control" name="password" type="password" maxlength="50" /><br />
                 Повторите пароль:<br />
                 <input class="form-control" name="password2" type="password" maxlength="50" /><br />
-                Адрес e-mail:<br />
+                Адрес email:<br />
                 <input class="form-control" name="email" maxlength="100" value="<?= $email ?>" /><br />
                 Адрес сайта:<br />
                 <input name="site" value="<?= $site ?>" maxlength="100" /><br /><br />
@@ -375,7 +375,7 @@ header("Content-type:text/html; charset=utf-8");
 
         Внимание, в поле логин разрешены только знаки латинского алфавита, цифры и знак дефис<br />
         Все поля обязательны для заполнения<br />
-        E-mail будет нужен для восстановления пароля, пишите только свои данные<br />
+        Email будет нужен для восстановления пароля, пишите только свои данные<br />
         Не нажимайте кнопку дважды, подождите до тех пор, пока процесс не завершится<br />
         В поле ввода адреса сайта необходимо ввести адрес в который у вас распакован движок, если это поддомен или папка, то необходимо указать ее, к примеру http://wap.visavi.net<br /><br />
 

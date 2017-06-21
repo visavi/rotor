@@ -11,7 +11,7 @@ $validation = new Validation();
 $validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
 	-> addRule('regex', array($logs, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!', true)
 	-> addRule('regex', array($pars, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в пароле. Разрешены знаки латинского алфавита, цифры и дефис!', true)
-	-> addRule('email', $meil, 'Вы ввели неверный адрес e-mail, необходим формат name@site.domen!')
+	-> addRule('email', $meil, 'Вы ввели неверный адрес email, необходим формат name@site.domen!')
 	-> addRule('string', $invite, 'Слишком длинный или короткий пригласительный ключ!', App::setting('invite'), 15, 20)
 	-> addRule('string', $logs, 'Слишком длинный или короткий логин!', true, 3, 20)
 	-> addRule('string', $pars, 'Слишком длинный или короткий пароль!',  true, 6, 20)
@@ -136,7 +136,7 @@ addRule('url', 'http://visavi.net', 'Неверный формат адреса 
 
 <h3 id="validateEmail">validateEmail</h3>
 <pre class="prettyprint linenums">
-addRule('email', $meil, 'Неправильный адрес e-mail, необходим формат name@site.domen!', true)
+addRule('email', $meil, 'Неправильный адрес email, необходим формат name@site.domen!', true)
 </pre>
 Если передан required = false, то валидация сработает при пустой строке
 

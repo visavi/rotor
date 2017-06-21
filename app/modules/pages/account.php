@@ -8,7 +8,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 if (is_user()) {
 switch ($act):
 ############################################################################################
-##                                    Изменение e-mail                                    ##
+##                                    Изменение email                                    ##
 ############################################################################################
 case 'index':
 
@@ -18,7 +18,7 @@ case 'index':
     echo '<b>Мои данные</b> / ';
     echo '<a href="/setting">Настройки</a><hr />';
 
-    echo '<b><big>Изменение E-mail</big></b><br />';
+    echo '<b><big>Изменение email</big></b><br />';
     echo '<div class="form">';
     echo '<form method="post" action="/account?act=changemail&amp;uid='.$_SESSION['token'].'">';
     echo 'Е-mail:<br />';
@@ -105,7 +105,7 @@ case 'index':
 break;
 
 ############################################################################################
-##                                     Изменение e-mail                                   ##
+##                                     Изменение email                                   ##
 ############################################################################################
 case 'changemail':
 
@@ -117,11 +117,11 @@ case 'changemail':
 
     $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         -> addRule('not_equal', [$meil, App::user('email')], 'Новый адрес email должен отличаться от текущего!')
-        -> addRule('email', $meil, 'Неправильный адрес e-mail, необходим формат name@site.domen!', true)
+        -> addRule('email', $meil, 'Неправильный адрес email, необходим формат name@site.domen!', true)
         -> addRule('bool', password_verify($provpass, App::user('password')), 'Введенный пароль не совпадает с данными в профиле!');
 
     $regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$meil]);
-    $validation -> addRule('empty', $regmail, 'Указанный вами адрес e-mail уже используется в системе!');
+    $validation -> addRule('empty', $regmail, 'Указанный вами адрес email уже используется в системе!');
 
     // Проверка email в черном списке
     $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $meil]);
@@ -137,7 +137,7 @@ case 'changemail':
 
         sendMail($meil,
             'Изменение адреса электронной почты на сайте '.App::setting('title'),
-            nl2br("Здравствуйте, ".App::getUsername()." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить e-mail, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".App::setting('home')."/account?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течение суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять e-mail, то просто проигнорируйте данное письмо")
+            nl2br("Здравствуйте, ".App::getUsername()." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить email, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".App::setting('home')."/account?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течение суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо")
         );
 
         DB::run() -> query("INSERT INTO `changemail` (`user`, `mail`, hash, `time`) VALUES (?, ?, ?, ?);", [App::getUsername(), $meil, $genkey, SITETIME + 86400]);
@@ -153,7 +153,7 @@ case 'changemail':
 break;
 
 ############################################################################################
-##                                     Изменение e-mail                                   ##
+##                                     Изменение email                                   ##
 ############################################################################################
 case 'editmail':
 
@@ -169,10 +169,10 @@ case 'editmail':
         -> addRule('not_equal', [$armail['mail'], App::user('email')], 'Новый адрес email должен отличаться от текущего!');
 
     $regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$armail['mail']]);
-    $validation -> addRule('empty', $regmail, 'Указанный вами адрес e-mail уже используется в системе!');
+    $validation -> addRule('empty', $regmail, 'Указанный вами адрес email уже используется в системе!');
 
     $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $armail['mail']]);
-    $validation -> addRule('empty', $blackmail, 'Указанный вами адрес e-mail занесен в черный список!');
+    $validation -> addRule('empty', $blackmail, 'Указанный вами адрес email занесен в черный список!');
 
     if ($validation->run()) {
 

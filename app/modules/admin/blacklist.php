@@ -32,7 +32,7 @@ if (is_admin([101, 102])) {
     }
 
 /* 	$links = array (
-        array('page' => 'mail', 'name' => 'E-mail'),
+        array('page' => 'mail', 'name' => 'Email'),
         array('page' => 'login', 'name' => 'Логины'),
         array('page' => 'domain', 'name' => 'Домены')
     );
@@ -48,7 +48,7 @@ if (is_admin([101, 102])) {
 
     echo '<hr />'; */
 
-    echo 'Запрещенные: <a href="/admin/blacklist"'.(($type == 1) ? ' style="font-weight: bold;"' : '').'>E-mail</a> / <a href="/admin/blacklist?main=login"'.(($type == 2) ? ' style="font-weight: bold;"' : '').'>Логины</a> / <a href="/admin/blacklist?main=domain"'.(($type == 3) ? ' style="font-weight: bold;"' : '').'>Домены</a><hr />';
+    echo 'Запрещенные: <a href="/admin/blacklist"'.(($type == 1) ? ' style="font-weight: bold;"' : '').'>Email</a> / <a href="/admin/blacklist?main=login"'.(($type == 2) ? ' style="font-weight: bold;"' : '').'>Логины</a> / <a href="/admin/blacklist?main=domain"'.(($type == 3) ? ' style="font-weight: bold;"' : '').'>Домены</a><hr />';
 
     switch ($act):
     ############################################################################################
@@ -123,7 +123,7 @@ if (is_admin([101, 102])) {
                             show_error('Ошибка! Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!');
                         }
                     } else {
-                        show_error('Ошибка! Недопустимый адрес e-mail, необходим формат name@site.domen!');
+                        show_error('Ошибка! Недопустимый адрес email, необходим формат name@site.domen!');
                     }
                 } else {
                     show_error('Ошибка! Вы не ввели запись или она слишком длинная!');

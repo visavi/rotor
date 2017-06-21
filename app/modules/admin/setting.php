@@ -16,12 +16,11 @@ if (is_admin([101])) {
         case 'index':
 
             if (App::getUsername() == App::setting('nickname')) {
-                echo'<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setzero">Администраторская</a><br />';
-
-                echo'<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setone">Основные настройки</a><br />';
-                echo'<i class="fa fa-pencil"></i> <a href="/admin/setting?act=mail">Почта / Рассылка</a><br />';
+                echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setzero">Администраторская</a><br />';
+                echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setone">Основные настройки</a><br />';
             }
 
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=mail">Почта / Рассылка</a><br />';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=settwo">Вывод информации</a><br />';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setthree">Гостевая / Новости</a><br />';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setfour">Форум / Галерея / Объявления</a><br />';
@@ -51,7 +50,7 @@ if (is_admin([101])) {
                 echo '<form method="post" action="/admin/setting?act=editzero&amp;uid='.$_SESSION['token'].'">';
 
                 echo 'Логин администратора:<br /><input name="nickname" maxlength="20" value="'.$setting['nickname'].'" /><br />';
-                echo 'E-mail администратора:<br /><input name="emails" maxlength="50" value="'.$setting['emails'].'" /><br />';
+                echo 'Email администратора:<br /><input name="emails" maxlength="50" value="'.$setting['emails'].'" /><br />';
                 echo 'Подтвердите пароль:<br /><input name="pass" type="password" maxlength="20" /><br />';
                 echo '<input value="Изменить" type="submit" /></form></div><br />';
 
@@ -102,7 +101,7 @@ if (is_admin([101])) {
                                     show_error('Ошибка! Аккаунт пользователя '.$login.' не найден в базе');
                                 }
                             } else {
-                                show_error('Неправильный адрес e-mail, необходим формат name@site.domen!');
+                                show_error('Неправильный адрес email, необходим формат name@site.domen!');
                             }
                         } else {
                             show_error('Ошибка! Пароль не совпадает с данными в профиле!');
@@ -286,42 +285,7 @@ if (is_admin([101])) {
                 echo '<div class="form">';
                 echo '<form method="post" action="/admin/setting?act=editmail&amp;uid='.$_SESSION['token'].'">';
 
-
-                echo '<b>Почта</b><br />';
-                echo 'Способ отправки почты: <br />';
-
-                $maildrivers = ['sendmail' => 'Отправка средставами PHP', 'smtp' => 'Протокол SMTP'];
-                echo '<select name="maildriver">';
-
-                foreach ($maildrivers as $k => $v) {
-                    $selected = ($k == $setting['maildriver']) ? ' selected="selected"' : '';
-
-                    echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
-                }
-                echo '</select><br />';
-
-                echo 'SMTP-сервер:<br /><input name="mailhost" maxlength="100" value="'.$setting['mailhost'].'" title="Адрес сервера SMTP" /><br />';
-
-                echo 'SMTP-порт:<br /><input name="mailport" maxlength="6" value="'.$setting['mailport'].'" title="Номер порта SMTP" /><br />';
-
-                echo 'Протокол шифрования: <br />';
-
-                $maildrivers = ['' => 'Без протокола', 'ssl' => 'SSL шифрование', 'tls' => 'TLS шифрование'];
-                echo '<select name="mailsecurity">';
-
-                foreach ($maildrivers as $k => $v) {
-                    $selected = ($k == $setting['mailsecurity']) ? ' selected="selected"' : '';
-
-                    echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
-                }
-                echo '</select><br />';
-
-                echo 'Имя пользователя SMTP (user@domain.name):<br /><input name="mailusername" maxlength="100" value="'.$setting['mailusername'].'" title="Имя пользователя SMTP" /><br />';
-
-                $mailpassword = ! empty($setting['mailpassword']) ? 'Пароль скрыт' : 'Пароль не установлен';
-                echo 'Пароль пользователя SMTP:<br /><input name="mailpassword" type="password" maxlength="100" value="" title="Пароль пользователя SMTP" / placeholder="'.$mailpassword.'"><br />';
-
-                echo '<hr /><b>Рассылка</b><br />';
+                echo '<b>Рассылка</b><br />';
                 echo 'Кол. дней перед отправкой уведомления о привате на email:<br /><input name="sendprivatmailday" maxlength="2" value="'.$setting['sendprivatmailday'].'" /><br />';
                 echo 'Рассылка писем на email за одну операцию:<br /><input name="sendmailpacket" maxlength="3" value="'.$setting['sendmailpacket'].'" /><br />';
 
@@ -339,41 +303,25 @@ if (is_admin([101])) {
 
             $uid = check($_GET['uid']);
             $mailusername = ! empty($_POST['mailsecurity']) ? check($_POST['mailusername']) : '';
-            if (App::getUsername() == App::setting('nickname')) {
-                if ($uid == $_SESSION['token']) {
-                    if (empty($mailusername ) || preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mailusername)) {
-                        if ($_POST['maildriver'] != "" && $_POST['mailhost'] != "" && $_POST['mailport'] != "" && $_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
 
-                            $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                            $dbr -> execute(check($_POST['maildriver']), 'maildriver');
-                            $dbr -> execute(check($_POST['mailhost']), 'mailhost');
-                            $dbr -> execute(intval($_POST['mailport']), 'mailport');
-                            $dbr -> execute(check($_POST['mailsecurity']), 'mailsecurity');
-                            $dbr -> execute(check($_POST['mailusername']), 'mailusername');
+            if ($uid == $_SESSION['token']) {
+                if ($_POST['sendprivatmailday'] != "" && $_POST['sendmailpacket'] != "") {
 
-                            if (! empty($_POST['mailpassword'])) {
-                                $dbr -> execute(check($_POST['mailpassword']), 'mailpassword');
-                            }
+                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
 
-                            $dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
-                            $dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
+                    $dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
+                    $dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
 
-                            save_setting();
+                    save_setting();
 
-                            App::setFlash('success', 'Настройки сайта успешно изменены!');
-                            App::redirect("/admin/setting?act=mail");
+                    App::setFlash('success', 'Настройки сайта успешно изменены!');
+                    App::redirect("/admin/setting?act=mail");
 
-                        } else {
-                            show_error('Ошибка! Все поля настроек обязательны для заполнения!');
-                        }
-                    } else {
-                        show_error('Неправильный адрес e-mail, необходим формат name@site.domen!');
-                    }
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
+                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=mail">Вернуться</a><br />';
         break;

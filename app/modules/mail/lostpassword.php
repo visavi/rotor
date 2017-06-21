@@ -45,10 +45,10 @@ case 'remind':
             echo '<div class="b">'.user_gender($user['login']).' <b>'.profile($user['login']).'</b> '.user_visit($user['login']).'</div>';
 
             if (!empty($user['email'])) {
-                echo '<b><big>Восстановление на e-mail:</big></b><br />';
+                echo '<b><big>Восстановление на email:</big></b><br />';
                 echo '<div class="form">';
                 echo '<form method="post" action="/lostpassword?act=send">';
-                echo 'Введите e-mail:<br />';
+                echo 'Введите email:<br />';
                 echo '<input name="email" type="text" value="'.$email.'" maxlength="50" /><br />';
                 echo 'Проверочный код:<br /> ';
                 echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
@@ -112,14 +112,14 @@ case 'send':
             $restkey = str_random();
 
             DB::run() -> query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `login`=?;", [$restkey, SITETIME + 43200, $uz]);
-            // ---------------- Инструкция по восстановлению пароля на E-mail --------------------------//
+            // ---------------- Инструкция по восстановлению пароля на email --------------------------//
             sendMail($user['email'],
                 'Подтверждение восстановления пароля на сайте '.App::setting('title'),
                 nl2br("Здравствуйте, ".$user['login']." \nВами была произведена операция по восстановлению пароля на сайте ".App::setting('home')." \n\nДанные отправителя: \nIp: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nОтправлено: ".date('j.m.Y / H:i', SITETIME)."\n\nДля того чтобы восстановить пароль, вам необходимо перейти по ссылке: \n\n".App::setting('home')."/lostpassword?act=restore&uz=".$user['login']."&key=".$restkey." \n\nЕсли это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его")
             );
 
             echo '<i class="fa fa-check"></i> <b>Восстановление пароля инициализировано!</b><br /><br />';
-            echo 'Письмо с инструкцией по восстановлению пароля успешно выслано на E-mail указанный в профиле<br />';
+            echo 'Письмо с инструкцией по восстановлению пароля успешно выслано на email указанный в профиле<br />';
             echo 'Внимательно прочтите письмо и выполните все необходимые действия для восстановления пароля<br />';
             echo 'Восстанавливать пароль можно не чаще чем раз в 12 часов<br /><br />';
 
@@ -168,7 +168,7 @@ case 'restore':
 
             echo 'Пароль вы сможете поменять в своем профиле<br /><br />';
 
-            // --------------------------- Восстановлению пароля на E-mail --------------------------//
+            // --------------------------- Восстановлению пароля на email --------------------------//
             sendMail($user['email'],
                 'Восстановление пароля на сайте '.App::setting('title'),
                 nl2br("Здравствуйте, ".$user['login']." \nВаши новые данные для входа на на сайт ".App::setting('home')." \nЛогин: ".$user['login']." \nПароль: ".$newpass." \n\nЗапомните и постарайтесь больше не забывать данные \nПароль вы сможете поменять в своем профиле \nВсего наилучшего!")

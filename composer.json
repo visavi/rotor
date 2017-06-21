@@ -25,7 +25,7 @@
         "vlucas/phpdotenv": "^2.4",
         "robmorgan/phinx": "^0.8",
         "verot/class.upload.php": "^0.33",
-        "php-curl-class/php-curl-class": "^7.2",
+        "php-curl-class/php-curl-class": "^7.3",
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.1",
         "illuminate/database": "^5.4"

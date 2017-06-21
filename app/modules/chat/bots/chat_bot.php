@@ -2,7 +2,7 @@
 #-----------------------------------------------------#
 #          ********* ROTORCMS *********               #
 #              Made by  :  VANTUZ                     #
-#               E-mail  :  visavi.net@mail.ru         #
+#                Email  :  visavi.net@mail.ru         #
 #                 Site  :  http://pizdec.ru           #
 #             WAP-Site  :  http://visavi.net          #
 #                  ICQ  :  36-44-66                   #
