@@ -208,7 +208,7 @@ if (App::setting('closedsite') == 2 && !is_admin() && ! Request::is('closed', 'l
 }
 
 // Сайт закрыт для гостей
-if (App::setting('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'lostpassword', 'captcha')) {
+if (App::setting('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
     App::setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
     App::redirect('/login');
 }

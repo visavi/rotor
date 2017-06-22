@@ -1,28 +1,20 @@
 <?php
-App::view(App::setting('themes').'/index');
+$key = check(Request::input('key'));
 
-$key = isset($_GET['key']) ? check($_GET['key']) : '';
+/**
+ * Отписка от рассылки
+ */
+if (! $key) {
+    App::abort('default', 'Отсутствует ключ для отписки от рассылки');
+}
+$user = User::where('subscribe', $key)->first();
 
-//show_title('Отписка от рассылки');
-############################################################################################
-##                                    Главная страница                                    ##
-############################################################################################
-
-if (! empty($key)) {
-
-    $user = User::where('subscribe', $key)->find_one();
-    if ($user) {
-
-        $user->subscribe = null;
-        $user->save();
-
-        echo '<i class="fa fa-check"></i> <b>Вы успешно отписались от рассылки!</b><br />';
-
-    } else {
-        show_error('Ошибка! Ключ для отписки от рассылки устарел!');
-    }
-} else {
-    show_error('Ошибка! Отсутствует ключ для отписки от рассылки!');
+if (! $user) {
+    App::abort('default', 'Ключ для отписки от рассылки устарел!');
 }
 
-App::view(App::setting('themes').'/foot');
+$user->subscribe = null;
+$user->save();
+
+App::setFlash('success', 'Вы успешно отписались от рассылки!');
+App::redirect('/');

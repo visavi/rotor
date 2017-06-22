@@ -7,9 +7,10 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 if (is_user()) {
 switch ($act):
-############################################################################################
-##                                    Изменение email                                    ##
-############################################################################################
+
+/**
+ * Главная
+ */
 case 'index':
 
     echo '<i class="fa fa-book"></i> ';
@@ -27,23 +28,9 @@ case 'index':
     echo '<input name="provpass" type="password" maxlength="20" /><br />';
     echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-    ############################################################################################
-    ##                                Изменение ника                                          ##
-    ############################################################################################
-/*    echo '<b><big>Изменение ника</big></b><br />';
-
-    if (App::user('point') >= App::setting('editnickpoint')) {
-        echo '<div class="form">';
-        echo '<form method="post" action="/account?act=editnick&amp;uid='.$_SESSION['token'].'">';
-        echo 'Ваш ник:<br />';
-        echo '<input name="nickname" maxlength="20" value="'.App::user('nickname').'" />';
-        echo '<input value="Изменить" type="submit" /></form></div><br />';
-    } else {
-        show_error('Изменять ник могут пользователи у которых более '.points(App::setting('editnickpoint')).'!');
-    }*/
-    ############################################################################################
-    ##                        Изменение персонального статуса                                 ##
-    ############################################################################################
+    /**
+     * Изменение персонального статуса
+     */
     if (!empty(App::setting('editstatus'))) {
         echo '<b><big>Изменение статуса</big></b><br />';
 
@@ -63,21 +50,10 @@ case 'index':
             show_error('Изменять статус могут пользователи у которых более '.points(App::setting('editstatuspoint')).'!');
         }
     }
-    ############################################################################################
-    ##                                  Секретный вопрос                                      ##
-    ############################################################################################
-    echo '<b><big>Секретный вопрос</big></b><br />';
-    echo '<div class="form">';
-    echo '<form method="post" action="/account?act=editsec&amp;uid='.$_SESSION['token'].'">';
-    echo 'Секретный вопрос:<br />';
-    echo '<input name="secquest" maxlength="50" value="'.App::user('secquest').'" /><br />';
-    echo 'Ответ на вопрос:<br /><input name="secanswer" maxlength="30" /><br />';
-    echo 'Текущий пароль:<br /><input name="provpass" type="password" maxlength="20" /><br />';
-    echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-    ############################################################################################
-    ##                                    Изменение пароля                                    ##
-    ############################################################################################
+    /**
+     * Изменение пароля
+     */
     echo '<b><big>Изменение пароля</big></b><br />';
 
     echo '<div class="form">';
@@ -87,9 +63,9 @@ case 'index':
     echo 'Текущий пароль:<br /><input name="oldpass" type="password" maxlength="20" /><br />';
     echo '<input value="Изменить" type="submit" /></form></div><br />';
 
-    ############################################################################################
-    ##                                    API-ключ                                            ##
-    ############################################################################################
+    /**
+     * API-ключ
+     */
     echo '<b><big>Ваш API-ключ</big></b><br />';
 
     if(empty(App::user('apikey'))) {
@@ -104,9 +80,9 @@ case 'index':
     }
 break;
 
-############################################################################################
-##                                     Изменение email                                   ##
-############################################################################################
+/**
+ * Изменение email
+ */
 case 'changemail':
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
@@ -127,20 +103,23 @@ case 'changemail':
     $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $meil]);
     $validation -> addRule('empty', $blackmail, 'Указанный вами адрес email занесен в черный список!');
 
-    DB::run() -> query("DELETE FROM `changemail` WHERE `time`<?;", [SITETIME]);
-    $changemail = DB::run() -> querySingle("SELECT `id` FROM `changemail` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
+    DB::run() -> query("DELETE FROM `changemail` WHERE `created_at`<?;", [SITETIME]);
+    $changemail = DB::run() -> querySingle("SELECT `id` FROM `changemail` WHERE `user_id`=? LIMIT 1;", [App::getUserId()]);
     $validation -> addRule('empty', $changemail, 'Вы уже отправили код подтверждения на новый адрес почты!');
 
     if ($validation->run()) {
 
         $genkey = str_random(rand(15,20));
 
-        sendMail($meil,
-            'Изменение адреса электронной почты на сайте '.App::setting('title'),
-            nl2br("Здравствуйте, ".App::getUsername()." \nВами была произведена операция по изменению адреса электронной почты \n\nДля того, чтобы изменить email, необходимо подтвердить новый адрес почты \nПерейдите по данной ссылке: \n\n".App::setting('home')."/account?act=editmail&key=".$genkey." \n\nСсылка будет дейстительной в течение суток до ".date('j.m.y / H:i', SITETIME + 86400).", для изменения адреса необходимо быть авторизованным на сайте \nЕсли это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо")
-        );
+        $siteLink = starts_with(App::setting('home'), '//') ? 'http:'. App::setting('home') : App::setting('home');
 
-        DB::run() -> query("INSERT INTO `changemail` (`user`, `mail`, hash, `time`) VALUES (?, ?, ?, ?);", [App::getUsername(), $meil, $genkey, SITETIME + 86400]);
+        $subject = 'Изменение email на сайте '.App::setting('title');
+        $message = 'Здравствуйте, '.App::getUsername().'<br />Вами была произведена операция по изменению адреса электронной почты<br /><br />Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br />Перейдите по данной ссылке:<br /><br /><a href="'.$siteLink.'/account?act=editmail&key='.$genkey.'">'.$siteLink.'/account?act=editmail&key='.$genkey.'</a><br /><br />Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).', для изменения адреса необходимо быть авторизованным на сайте<br />Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+
+        $body = App::view('mailer.default', compact('subject', 'message'), true);
+        App::sendMail($meil, $subject, $body);
+
+        DB::run() -> query("INSERT INTO `changemail` (`user_id`, `mail`, hash, `created_at`) VALUES (?, ?, ?, ?);", [App::getUserId(), $meil, $genkey, SITETIME + 86400]);
 
         App::setFlash('success', 'На новый адрес почты отправлено письмо для подтверждения!');
         App::redirect("/account");
@@ -152,15 +131,15 @@ case 'changemail':
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
-############################################################################################
-##                                     Изменение email                                   ##
-############################################################################################
+/**
+ * Изменение email
+ */
 case 'editmail':
 
     $key = (isset($_GET['key'])) ? check(strval($_GET['key'])) : '';
 
-    DB::run() -> query("DELETE FROM `changemail` WHERE `time`<?;", [SITETIME]);
-    $armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, App::getUsername()]);
+    DB::run() -> query("DELETE FROM `changemail` WHERE `created_at`<?;", [SITETIME]);
+    $armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, App::getUserId()]);
 
     $validation = new Validation();
 
@@ -177,7 +156,7 @@ case 'editmail':
     if ($validation->run()) {
 
         DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], App::getUsername()]);
-        DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user`=? LIMIT 1;", [$key, App::getUsername()]);
+        DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, App::getUserId()]);
 
         App::setFlash('success', 'Адрес электронной почты успешно изменен!');
         App::redirect("/account");
@@ -189,9 +168,9 @@ case 'editmail':
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
-############################################################################################
-##                                   Изменение статуса                                    ##
-############################################################################################
+/**
+ * Изменение статуса
+ */
 case 'editstatus':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $status = (isset($_POST['status'])) ? check($_POST['status']) : '';
@@ -227,89 +206,9 @@ case 'editstatus':
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
-############################################################################################
-##                                     Изменение ника                                     ##
-############################################################################################
-/*case 'editnick':
-    $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
-    $nickname = (isset($_POST['nickname'])) ? check($_POST['nickname']) : '';
-
-    $validation = new Validation();
-
-    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('max', [App::user('point'), App::setting('editnickpoint')], 'У вас недостаточно актива для изменения ника!')
-        -> addRule('min', [App::user('timenickname'), SITETIME], 'Изменять ник можно не чаще чем 1 раз в сутки!')
-        -> addRule('regex', [$nickname, '|^[0-9a-zA-Zа-яА-ЯЁё_\.\-\s]+$|u'], 'Разрешены символы русского, латинского алфавита и цифры!')
-        -> addRule('string', $nickname, 'Слишком длинный или короткий ник!', false, 3, 20)
-        -> addRule('not_equal', [$nickname, App::user('nickname')], 'Новый ник должен отличаться от текущего!');
-
-    if (!empty($nickname)) {
-        $reglogin = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE lower(`login`)=? LIMIT 1;", [utf_lower($nickname)]);
-        $validation -> addRule('empty', $reglogin, 'Выбранный вами ник используется кем-то в качестве логина!');
-
-        $regnick = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE lower(`nickname`)=? LIMIT 1;", [utf_lower($nickname)]);
-        $validation -> addRule('empty', $regnick, 'Выбранный вами ник уже используется на сайте!');
-
-        $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, utf_lower($nickname)]);
-        $validation -> addRule('empty', $blacklogin, 'Выбранный вами ник занесен в черный список!');
-    }
-
-    if ($validation->run()) {
-
-        DB::run() -> query("UPDATE `users` SET `nickname`=?, `timenickname`=? WHERE `login`=? LIMIT 1;", [$nickname, SITETIME + 86400, App::getUsername()]);
-        save_nickname();
-
-        App::setFlash('success', 'Ваш ник успешно изменен!');
-        App::redirect("/account");
-
-    } else {
-        show_error($validation->getErrors());
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
-break;*/
-
-############################################################################################
-##                                    Изменение вопроса                                   ##
-############################################################################################
-case 'editsec':
-
-    $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
-    $secquest = (isset($_POST['secquest'])) ? check($_POST['secquest']) : '';
-    $secanswer = (isset($_POST['secanswer'])) ? check($_POST['secanswer']) : '';
-    $provpass = (isset($_POST['provpass'])) ? check($_POST['provpass']) : '';
-
-    $validation = new Validation();
-
-    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('bool', password_verify($provpass, App::user('password')), 'Введенный пароль не совпадает с данными в профиле!')
-        -> addRule('not_equal', [$secquest, App::user('secquest')], 'Новый секретный вопрос должен отличаться от текущего!')
-        -> addRule('string', $secquest, 'Слишком длинный или короткий секретный вопрос!', false, 3, 50);
-
-    if (!empty($secquest)) {
-        $validation -> addRule('string', $secanswer, 'Слишком длинный или короткий секретный ответ!', true, 3, 30);
-        $secanswer = md5(md5($secanswer));
-    } else {
-        $secanswer = '';
-    }
-
-    if ($validation->run()) {
-
-        DB::run() -> query("UPDATE `users` SET `secquest`=?, `secanswer`=? WHERE `login`=? LIMIT 1;", [$secquest, $secanswer, App::getUsername()]);
-
-        App::setFlash('success', 'Секретный вопрос и ответ успешно изменены!');
-        App::redirect("/account");
-
-    } else {
-        show_error($validation->getErrors());
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
-break;
-
-############################################################################################
-##                                     Изменение пароля                                   ##
-############################################################################################
+/**
+ * Изменение пароля
+ */
 case 'editpass':
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
@@ -334,12 +233,11 @@ case 'editpass':
 
         DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), App::getUsername()]);
 
-        if (! empty(App::user('email'))){
-            sendMail(App::user('email'),
-                'Изменение пароля на сайте '.App::setting('title'),
-                nl2br("Здравствуйте, ".App::getUsername()." \nВами была произведена операция по изменению пароля \n\nВаш новый пароль: ".$newpass." \nСохраните его в надежном месте \n\nДанные инициализации: \nIP: ".App::getClientIp()." \nБраузер: ".App::getUserAgent()." \nВремя: ".date('j.m.y / H:i', SITETIME))
-            );
-        }
+        $subject = 'Изменение пароля на сайте '.App::setting('title');
+        $message = 'Здравствуйте, '.App::getUsername().'<br />Вами была произведена операция по изменению пароля<br /><br /><b>Ваш новый пароль: '.$newpass.'</b><br />Сохраните его в надежном месте<br /><br />Данные инициализации:<br />IP: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Время: '.date('j.m.y / H:i', SITETIME);
+
+        $body = App::view('mailer.default', compact('subject', 'message'), true);
+        App::sendMail(App::user('email'), $subject, $body);
 
         unset($_SESSION['id'], $_SESSION['password']);
 
@@ -353,9 +251,9 @@ case 'editpass':
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
 break;
 
-############################################################################################
-##                                     Генерация ключа                                    ##
-############################################################################################
+/**
+ * Генерация ключа
+ */
 case 'apikey':
     $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
 

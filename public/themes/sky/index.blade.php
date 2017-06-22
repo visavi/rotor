@@ -139,7 +139,7 @@ header("Content-type:text/html; charset=utf-8");
 <input value="Войти" type="submit" /></form>
 
 <a href="/register">Регистрация</a><br />
-<a href="/lostpassword">Забыли пароль?</a>
+<a href="/recovery">Забыли пароль?</a>
 <?php endif; ?>
 
 

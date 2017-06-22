@@ -72,7 +72,8 @@ $router->map('GET|POST', '/register', 'pages/registration.php', 'register');
 $router->map('GET|POST', '/user/[user:login]/[note:action]', 'pages/user.php', 'note');
 
 $router->map('GET|POST', '/mail', 'mail/index.php', 'mail');
-$router->map('GET|POST', '/lostpassword', 'mail/lostpassword.php', 'lostpassword');
+$router->map('GET|POST', '/recovery', 'mail/recovery.php', 'recovery');
+$router->map('GET', '/recovery/restore', 'mail/recovery.php@restore');
 $router->map('GET|POST', '/unsubscribe', 'mail/unsubscribe.php', 'unsubscribe');
 
 $router->map('GET', '/menu', 'pages/index.php@menu');

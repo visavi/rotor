@@ -10,7 +10,7 @@ class App
      */
     public static function returnUrl($url = null)
     {
-       if (Request::is('/', 'login', 'register', 'lostpassword', 'ban', 'closed')) {
+       if (Request::is('/', 'login', 'register', 'recovery', 'ban', 'closed')) {
            return false;
        }
         $query = Request::has('return') ? Request::input('return') : Request::path();
@@ -204,6 +204,13 @@ class App
             ->setBody($body, 'text/html')
             ->setFrom($params['from'])
             ->setReturnPath(env('SITE_EMAIL'));
+
+        if (isset($params['subscribe'])) {
+            $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.env('SITE_EMAIL').'>, <'.App::setting('home').'/unsubscribe?key='.$params['subscribe'].'>');
+
+            $body = str_replace('<!-- unsubscribe -->', '<br /><br /><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.App::setting('home').'/unsubscribe?key='.$params['subscribe'].'">откажитесь от подписки</a></small>', $body);
+            $message->setBody($body, 'text/html');
+        }
 
         if (env('MAIL_DRIVER') == 'smtp') {
             $transport = Swift_SmtpTransport::newInstance(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION'))

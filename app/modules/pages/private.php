@@ -143,12 +143,14 @@ case 'send':
                 ->limit(App::setting('sendmailpacket'))
                 ->get();
 
+            $sitelink = starts_with(App::setting('home'), '//') ? 'http:'. App::setting('home') : App::setting('home');
+
             foreach ($deliveryUsers as $deliveryUser) {
-                sendMail($deliveryUser['email'],
-                    $deliveryUser['newprivat'] . ' непрочитанных сообщений (' . App::setting('title') . ')',
-                    nl2br("Здравствуйте " . $deliveryUser['login'] . "! \nУ вас имеются непрочитанные сообщения (" . $deliveryUser['newprivat'] . " шт.) на сайте " . App::setting('title') . " \nПрочитать свои сообщения вы можете по адресу " . App::setting('home') . "/private"),
-                    ['unsubkey' => $deliveryUser['subscribe']]
-                );
+
+                $subject = $deliveryUser['newprivat'] . ' непрочитанных сообщений (' . App::setting('title') . ')';
+                $message = 'Здравствуйте ' . $deliveryUser['login'] . '!<br />У вас имеются непрочитанные сообщения (' . $deliveryUser['newprivat'] . ' шт.) на сайте ' . App::setting('title') . '<br />Прочитать свои сообщения вы можете по адресу <a href="' . $sitelink . '/private">' . $sitelink . '/private</a>';
+                $body = App::view('mailer.default', compact('subject', 'message'), true);
+                App::sendMail($deliveryUser['email'], $subject, $body, ['subscribe' => $deliveryUser['subscribe']]);
 
                 $user = User::where('id', $deliveryUser->id);
                 $user->update(['sendprivatmail' => 1]);

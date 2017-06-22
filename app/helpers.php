@@ -812,49 +812,6 @@ function check_string($string) {
     return $string;
 }
 
-/**
- * Отправка уведомления на email
- * @param  mixed   $to      Получатель
- * @param  string  $subject Тема письма
- * @param  string  $body    Текст сообщения
- * @param  array   $params Дополнительные параметры
- * @return boolean  Результат отправки
- */
-/*function sendMail($to, $subject, $body, $params = [])
-{
-
-    if (empty($params['from'])) {
-
-        $mailusername = ! empty(App::setting('mailusername')) ? App::setting('mailusername') : App::setting('emails');
-
-        $params['from'] = [$mailusername => App::setting('nickname')];
-    }
-
-    $message = Swift_Message::newInstance()
-        ->setTo($to)
-        ->setSubject($subject)
-        ->setBody($body, 'text/html')
-        ->setFrom($params['from'])
-        ->setReturnPath($mailusername);
-
-    if (isset($params['unsubkey'])) {
-        $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.$mailusername.'>, <'.App::setting('home').'/unsubscribe?key='.$params['unsubkey'].'>');
-        $message->setBody($body.'<br /><br />Если вы не хотите получать эти эл. письма, пожалуйста, <a href="'.App::setting('home').'/unsubscribe?key='.$params['unsubkey'].'">откажитесь от подписки</a>', 'text/html');
-    }
-
-    if (App::setting('maildriver') == 'smtp') {
-        $mailsecurity = ! empty(App::setting('mailsecurity')) ? App::setting('mailsecurity') : null;
-        $transport = Swift_SmtpTransport::newInstance(App::setting('mailhost'), App::setting('mailport'), $mailsecurity)
-            ->setUsername($mailusername)
-            ->setPassword(App::setting('mailpassword'));
-    } else {
-        $transport = new Swift_MailTransport();
-    }
-
-    $mailer = new Swift_Mailer($transport);
-    return $mailer->send($message);
-}*/
-
 // --------------------- Функция вывода навигации в галерее ------------------------//
 function photo_navigation($id) {
 

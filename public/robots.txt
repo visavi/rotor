@@ -8,7 +8,7 @@ Disallow: /logout
 Disallow: /register
 Disallow: /menu
 Disallow: /mail
-Disallow: /lostpassword
+Disallow: /recovery
 Disallow: /unsubscribe
 Disallow: /captcha
 Disallow: /online
