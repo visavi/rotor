@@ -1,89 +1,66 @@
 <?php
-App::view(App::setting('themes').'/index');
 
-$act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
+$tag = urldecode(param('tag'));
 
-switch ($act):
-############################################################################################
-##                                    Главная страница                                    ##
-############################################################################################
-case 'index':
+if ($tag) {
+    if (! is_utf($tag)){
+        $tag = win_to_utf($tag);
+    }
 
-    //show_title('Облако тегов');
-    //App::setting('newtitle') = 'Блоги - Облако тегов';
+    if (utf_strlen($tag) < 2) {
+        App::setFlash('danger', 'Ошибка! Необходимо не менее 2-х символов в запросе!');
+        App::redirect('/blog/tags');
+    }
 
-    if (@filemtime(STORAGE."/temp/tagcloud.dat") < time()-3600) {
-        $querytag = DB::run() -> query("SELECT `tags` FROM `blogs`;");
-        $tags = $querytag -> fetchAll(PDO::FETCH_COLUMN);
+    if (empty($_SESSION['findresult']) || empty($_SESSION['blogfind']) || $tag!=$_SESSION['blogfind']) {
+
+        $result = Blog::select('id')
+            ->where('tags', 'like', '%'.$tag.'%')
+            ->limit(500)
+            ->pluck('id')
+            ->all();
+
+        $_SESSION['blogfind'] = $tag;
+        $_SESSION['findresult'] = $result;
+    }
+
+    $total = count($_SESSION['findresult']);
+    $page = App::paginate(App::setting('blogpost'), $total);
+
+    $blogs = Blog::select('blogs.*', 'catsblog.name')
+        ->whereIn('blogs.id', $_SESSION['findresult'])
+        ->join('catsblog', 'blogs.category_id', '=', 'catsblog.id')
+        ->orderBy('created_at', 'desc')
+        ->offset($page['offset'])
+        ->limit(App::setting('blogpost'))
+        ->with('user')
+        ->get();
+
+    App::view('blog/tags_search', compact('blogs', 'tag', 'page'));
+
+} else {
+    if (@filemtime(STORAGE."/temp/tagcloud.dat") < time() - 3600) {
+
+        $tags =  Blog::select('tags')
+            ->pluck('tags')
+            ->all();
 
         $alltag = implode(',', $tags);
+
         $dumptags = preg_split('/[\s]*[,][\s]*/s', $alltag);
-        $arraytags = array_count_values(array_map('utf_lower', $dumptags));
+        $tags = array_count_values(array_map('utf_lower', $dumptags));
 
-        arsort($arraytags);
-        array_splice($arraytags, 50);
-        shuffle_assoc($arraytags);
+        arsort($tags);
+        array_splice($tags, 100);
+        shuffle_assoc($tags);
 
-        file_put_contents(STORAGE."/temp/tagcloud.dat", serialize($arraytags), LOCK_EX);
+        file_put_contents(STORAGE."/temp/tagcloud.dat", serialize($tags), LOCK_EX);
     }
 
-    $arraytags = unserialize(file_get_contents(STORAGE."/temp/tagcloud.dat"));
+    $tags = unserialize(file_get_contents(STORAGE."/temp/tagcloud.dat"));
 
-    $max = max($arraytags);
-    $min = min($arraytags);
+    $max = max($tags);
+    $min = min($tags);
 
-    App::view('blog/tags', ['tags' => $arraytags, 'max' => $max, 'min' => $min]);
-break;
-
-############################################################################################
-##                                    Главная страница                                    ##
-############################################################################################
-case 'search':
-
-    //show_title('Поиск по тегам');
-    //App::setting('newtitle') = 'Блоги - Поиск по тегам';
-
-    $tags = (isset($_GET['tags'])) ? check($_GET['tags']) : '';
-
-    if (!is_utf($tags)){
-        $tags = win_to_utf($tags);
-    }
-
-    if (utf_strlen($tags) >= 2) {
-
-        if (empty($_SESSION['findresult']) || empty($_SESSION['blogfind']) || $tags!=$_SESSION['blogfind']) {
-            $querysearch = DB::run() -> query("SELECT `id` FROM `blogs` WHERE `tags` LIKE '%".$tags."%' LIMIT 500;");
-            $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
-
-            $_SESSION['blogfind'] = $tags;
-            $_SESSION['findresult'] = $result;
-        }
-
-        $total = count($_SESSION['findresult']);
-        $page = App::paginate(App::setting('blogpost'), $total);
-
-        if ($total > 0) {
-
-            $result = implode(',', $_SESSION['findresult']);
-
-            $queryblog = DB::run() -> query("SELECT b.*, name FROM blogs b LEFT JOIN catsblog c ON b.category_id=c.id WHERE b.id IN (".$result.") ORDER BY time DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
-            $blogs = $queryblog -> fetchAll();
-
-            App::view('blog/tags_search', compact('blogs', 'tags', 'page'));
-
-            App::pagination($page);
-        } else {
-            show_error('По вашему запросу ничего не найдено!');
-        }
-    } else {
-        show_error('Ошибка! Необходимо не менее 2-х символов в запросе!');
-    }
-
-    App::view('includes/back', ['link' => '/blog/tags', 'title' => 'Облако', 'icon' => 'balloon.gif']);
-break;
-
-endswitch;
-
-App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
-
-App::view(App::setting('themes').'/foot');
+    App::view('blog/tags', compact('tags', 'max', 'min'));
+}

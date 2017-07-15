@@ -572,14 +572,6 @@ function stats_counter() {
 // ------------------ Функция вывода счетчика посещений -----------------//
 function show_counter()
 {
-    /*
-     * @TODO Временно, убрать после вывода в шаблоны
-     */
-    if (isset($_SESSION['note'])) {
-        unset($_SESSION['note']);
-
-    }
-
     if (is_user()) {
 
         //$visitPage = !empty(App::setting('newtitle')) ? App::setting('newtitle') : null;
@@ -826,15 +818,17 @@ function photo_navigation($id) {
 }
 
 // --------------------- Функция вывода статистики блогов ------------------------//
-function stats_blog() {
-    if (@filemtime(STORAGE."/temp/statblog.dat") < time()-900) {
-        $totalblog = DB::run() -> querySingle("SELECT SUM(`count`) FROM `catsblog`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `time`>?;", [SITETIME-86400 * 3]);
+function stats_blog()
+{
+    if (@filemtime(STORAGE."/temp/statblogblog.dat") < time()-900) {
 
-        if (empty($totalnew)) {
-            $stat = (int)$totalblog;
-        } else {
+        $totalblog = Blog::count();
+        $totalnew  = Blog::where('created_at', '>', SITETIME - 86400 * 3)->count();
+
+        if ($totalnew) {
             $stat = $totalblog.'/+'.$totalnew;
+        } else {
+            $stat = $totalblog;
         }
 
         file_put_contents(STORAGE."/temp/statblog.dat", $stat, LOCK_EX);
@@ -1329,7 +1323,7 @@ function recentfiles($show = 5) {
 // ------------- Функция кэширования последних статей в блогах -----------------//
 function recentblogs() {
     if (@filemtime(STORAGE."/temp/recentblog.dat") < time()-600) {
-        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` ORDER BY `time` DESC LIMIT 5;");
+        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` ORDER BY `created_at` DESC LIMIT 5;");
         $recent = $queryblogs -> fetchAll();
 
         file_put_contents(STORAGE."/temp/recentblog.dat", serialize($recent), LOCK_EX);
@@ -1339,7 +1333,7 @@ function recentblogs() {
 
     if (is_array($blogs) && count($blogs) > 0) {
         foreach ($blogs as $blog) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/blog/blog?act=view&amp;id='.$blog['id'].'">'.$blog['title'].'</a> ('.$blog['comments'].')<br />';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/article/'.$blog['id'].'">'.$blog['title'].'</a> ('.$blog['comments'].')<br />';
         }
     }
 }
@@ -1403,7 +1397,7 @@ function restatement($mode) {
 
         case 'blog':
             DB::run() -> query("UPDATE `catsblog` SET `count`=(SELECT count(*) FROM `blogs` WHERE `catsblog`.`id`=`blogs`.`category_id`);");
-            DB::run() -> query("UPDATE `blogs` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='Blog' AND `blogs`.`id`=`comments`.`relate_id`);");
+            DB::run() -> query("UPDATE `blogs` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='".Blog::class."' AND `blogs`.`id`=`comments`.`relate_id`);");
             break;
 
         case 'load':
@@ -1416,7 +1410,7 @@ function restatement($mode) {
             break;
 
         case 'photo':
-            DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type=".Photo::class." AND `photo`.`id`=`comments`.`relate_id`);");
+            DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='".Photo::class."' AND `photo`.`id`=`comments`.`relate_id`);");
             break;
 
         case 'events':

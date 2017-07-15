@@ -1,14 +1,10 @@
 <?php
-App::view(App::setting('themes').'/index');
 
-$act = check(Request::input('act', 'index'));
-$cid = abs(intval(Request::input('cid')));
-$id = abs(intval(Request::input('id')));
+$id = param('id');
+$cid = param('cid');
+
 $uz = check(Request::input('uz'));
 $page = abs(intval(Request::input('page', 1)));
-
-//show_title('Блоги');
-//App::setting('newtitle') = 'Блоги - Список статей';
 
 switch ($act):
 ############################################################################################
@@ -16,34 +12,32 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    if (!empty($cid)) {
-        $cats = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
+    $category = CatsBlog::find($cid);
 
-        if (!empty($cats)) {
-
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `category_id`=?;", [$cid]);
-            $page = App::paginate(App::setting('blogpost'), $total);
-
-            if ($total > 0) {
-
-                //App::setting('newtitle') = $cats['name'].' (Стр. '.$page['current'].')';
-
-                $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";", [$cid]);
-                $blogs = $queryblog->fetchAll();
-
-                App::view('blog/blog', compact('blogs', 'cats', 'page'));
-
-                App::pagination($page);
-
-            } else {
-                show_error('Статей еще нет, будь первым!');
-            }
-        } else {
-            show_error('Ошибка! Данного раздела не существует!');
-        }
-    } else {
-        App::redirect("/blog");
+    if (! $category) {
+        App::abort('default', 'Данного раздела не существует!');
     }
+
+    $total = Blog::where('category_id', $cid)->count();
+
+    $page = App::paginate(App::setting('blogpost'), $total);
+
+    if ($total > 0) {
+
+        $blogs = Blog::where('category_id', $cid)
+            ->orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit(App::setting('blogpost'))
+            ->with('user')
+            ->get();
+
+        App::view('blog/blog', compact('blogs', 'category', 'page'));
+
+    } else {
+        show_error('Статей еще нет, будь первым!');
+    }
+
+
 break;
 
 ############################################################################################
@@ -51,46 +45,61 @@ break;
 ############################################################################################
 case 'view':
 
-    $blogs = DB::run() -> queryFetch("SELECT b.*, cb.name FROM `blogs` b LEFT JOIN `catsblog` cb ON b.`category_id`=cb.`id` WHERE b.`id`=? LIMIT 1;", [$id]);
+    $blog = Blog::select('blogs.*', 'catsblog.name')
+        ->where('blogs.id', $id)
+        ->leftJoin('catsblog', function($join){
+            $join->on('blogs.category_id', '=', 'catsblog.id');
+        })
+        ->first();
 
-    if (!empty($blogs)) {
-        $text = preg_split('|\[nextpage\](<br * /?>)*|', $blogs['text'], -1, PREG_SPLIT_NO_EMPTY);
+    if ($blog) {
+        $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog['text'], -1, PREG_SPLIT_NO_EMPTY);
 
         $total = count($text);
         $page = App::paginate(1, $total);
 
         if ($total > 0) {
-            //App::setting('newtitle') = $blogs['title'];
-            //App::setting('keywords') = $blogs['tags'];
-            //App::setting('description') =  strip_str($blogs['text']);
-
-            // --------------
             if ($page['current'] == 1) {
-                $queryreads = DB::run() -> querySingle("SELECT `ip` FROM `readblog` WHERE `blog`=? AND `ip`=? LIMIT 1;", [$id, App::getClientIp()]);
+                $reads = Read::where('relate_type', Blog::class)
+                    ->where('relate_id', $id)
+                    ->where('ip', App::getClientIp())
+                    ->first();
 
-                if (empty($queryreads)) {
-                    $expiresread = SITETIME + 3600 * App::setting('blogexpread');
-                    DB::run() -> query("DELETE FROM `readblog` WHERE `time`<?;", [SITETIME]);
-                    DB::run() -> query("INSERT INTO `readblog` (`blog`, `ip`, `time`) VALUES (?, ?, ?);", [$id, App::getClientIp(), $expiresread]);
-                    DB::run() -> query("UPDATE `blogs` SET `visits`=`visits`+1 WHERE `id`=? LIMIT 1;", [$id]);
+                if (! $reads) {
+                    $expiresRead = SITETIME + 3600 * App::setting('blogexpread');
+
+                    Read::where('relate_type', Blog::class)
+                        ->where('created_at', '<', SITETIME)
+                        ->delete();
+
+                    Read::create([
+                        'relate_type' => Blog::class,
+                        'relate_id'   => $id,
+                        'ip'          => App::getClientIp(),
+                        'created_at'  => $expiresRead,
+                    ]);
+
+                    $blog->update([
+                        'visits' => Capsule::raw('visits + 1'),
+                    ]);
                 }
             }
 
             $end = ($total < $page['offset'] + 1) ? $total : $page['offset'] + 1;
 
             for ($i = $page['offset']; $i < $end; $i++) {
-                $blogs['text'] = App::bbCode($text[$i]).'<br />';
+                $blog['text'] = App::bbCode($text[$i]).'<br />';
             }
 
-            $tagsList = preg_split('/[\s]*[,][\s]*/', $blogs['tags']);
+            $tagsList = preg_split('/[\s]*[,][\s]*/', $blog['tags']);
 
             $tags = '';
             foreach($tagsList as $key => $value) {
                 $comma = (empty($key)) ? '' : ', ';
-                $tags .= $comma.'<a href="/blog/tags?act=search&amp;tags='.urlencode($value).'">'.$value.'</a>';
+                $tags .= $comma.'<a href="/blog/tags/'.urlencode($value).'">'.$value.'</a>';
             }
 
-            App::view('blog/blog_view', compact('blogs', 'tags', 'page'));
+            App::view('blog/blog_view', compact('blog', 'tags', 'page'));
 
         } else {
             show_error('Текста статьи еще нет!');
@@ -373,37 +382,29 @@ break;
 ############################################################################################
 case 'comments':
 
-    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
+    $blog = Blog::where('id', $id)->first();
 
-    if (!empty($blogs)) {
+    if (! $blog) {
+        App::abort('default', 'Данной статьи не существует!');
+    }
         //App::setting('newtitle') = 'Комментарии - '.$blogs['title'];
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['blog', $id]);
-        $page = App::paginate(App::setting('blogcomm'), $total);
+    $total = Comment::where('relate_type', Blog::class)
+        ->where('relate_id', $id)
+        ->count();
 
-        if ($total > 0) {
+    $page = App::paginate(App::setting('blogcomm'), $total);
 
-            $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".App::setting('blogcomm').";", ['blog', $id]);
-            $comments = $querycomm -> fetchAll();
+    $comments = Comment::where('relate_type', Blog::class)
+        ->where('relate_id', $id)
+        ->orderBy('created_at')
+        ->offset($page['offset'])
+        ->limit(App::setting('blogcomm'))
+        ->get();
 
-            App::view('blog/blog_comments', ['blogs' => $blogs, 'comments' => $comments, 'is_admin' => is_admin(), 'page' => $page]);
+    $is_admin = is_admin();
 
-            App::pagination($page);
-        } else {
-            show_error('Комментариев еще нет!');
-        }
-
-        if (is_user()) {
-            App::view('blog/blog_comments_form', ['blogs' => $blogs]);
-        } else {
-            show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-        }
-    } else {
-        show_error('Ошибка! Данной статьи не существует!');
-    }
-
-    App::view('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'Вернуться']);
-    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
+    App::view('blog/blog_comments', compact('blog', 'comments', 'is_admin', 'page'));
 break;
 
 ############################################################################################
@@ -490,52 +491,6 @@ case 'spam':
         }
     } else {
         show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
-    }
-
-    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
-break;
-
-############################################################################################
-##                                   Ответ на сообщение                                   ##
-############################################################################################
-case 'reply':
-
-    $id = abs(intval(Request::input('id')));
-    $pid = abs(intval(Request::input('pid')));
-
-    if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
-
-        if (!empty($post)) {
-            App::view('blog/blog_reply', ['post' => $post, 'id' => $id]);
-        } else {
-            show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
-    }
-
-    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
-break;
-
-############################################################################################
-##                                   Цитирование сообщения                                ##
-############################################################################################
-case 'quote':
-
-    $pid = abs(intval(Request::input('pid')));
-
-
-    if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
-
-        if (!empty($post)) {
-            App::view('blog/blog_quote', ['post' => $post, 'id' => $id]);
-        } else {
-            show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
     }
 
     App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
@@ -654,22 +609,18 @@ break;
 ############################################################################################
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", ['blog', $id]);
+    $blog = Blog::find($id);
 
-    if (!empty($query['total_comments'])) {
-
-        $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = ceil($total_comments / App::setting('blogpost'));
-
-        App::redirect("/blog/blog?act=comments&id=$id&page=$end");
-
-    } else {
-        show_error('Ошибка! Комментарий к данной статье не существует!');
+    if (empty($blog)) {
+        App::abort(404, 'Выбранная вами статья не существует, возможно она была удалена!');
     }
 
-    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+    $total = Comment::where('relate_type', Blog::class)
+        ->where('relate_id', $id)
+        ->count();
+
+    $end = ceil($total / App::setting('blogpost'));
+    App::redirect('/article/'.$id.'/comments?page='.$end);
 break;
 
 endswitch;
-
-App::view(App::setting('themes').'/foot');
