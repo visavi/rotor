@@ -16,10 +16,7 @@ $type = isset($types[$type]) ? $type : 'post';
 if (is_admin([101, 102, 103])) {
     //show_title('Список жалоб');
 
-    $total = Spam::select(Capsule::raw("
-        SUM(relate_type='".Guest::class."') guest,
-        SUM(relate_type='".Post::class."') post
-    "))->first();
+ ``
 
     switch ($act):
     ############################################################################################

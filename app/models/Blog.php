@@ -17,9 +17,16 @@ class Blog extends BaseModel
      */
     protected $guarded = [];
 
-
+    /**
+     * Возвращает последнии комментарии к статье
+     *
+     * @param int $limit
+     * @return mixed
+     */
     public function lastComments($limit = 15)
     {
-        return $this->hasMany('Comment', 'relate_id')->where('relate_type', 'blog')->limit($limit);
+        return $this->hasMany('Comment', 'relate_id')
+            ->where('relate_type', self::class)
+            ->limit($limit);
     }
 }

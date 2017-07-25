@@ -19,16 +19,21 @@ $router->map('GET|POST', '/book/[edit:action]/[i:id]', 'book/index.php');
 $router->map('GET', '/sitemap.xml', 'pages/sitemap.php');
 $router->map('GET', '/sitemap/[a:action].xml', 'pages/sitemap.php');
 
-$router->map('GET',      '/blog',        'blog/index.php', 'blog');
+$router->map('GET', '/blog', 'blog/index.php', 'blog');
+$router->map('GET', '/blog/[i:cid]', 'blog/blog.php');
+$router->map('GET', '/article/[i:id]', 'blog/blog.php@view');
+$router->map('GET', '/article/[i:id]/print', 'blog/print.php');
+$router->map('GET', '/blog/rss', 'blog/rss.php');
+$router->map('GET', '/article/[i:id]/rss', 'blog/rss.php@comments');
+$router->map('GET', '/article/[i:id]/[comments|end:action]', 'blog/blog.php');
+$router->map('GET', '/blog/tags/[*:tag]?', 'blog/tags.php');
+
+
+
 $router->map('GET|POST', '/blog/active', 'blog/active.php');
 $router->map('GET|POST', '/blog/new',    'blog/new.php');
-$router->map('GET|POST', '/blog/blog',   'blog/blog.php');
-$router->map('GET|POST', '/blog/print',  'blog/print.php');
 $router->map('GET|POST', '/blog/search', 'blog/search.php');
-$router->map('GET|POST', '/blog/tags',   'blog/tags.php');
 $router->map('GET|POST', '/blog/top',    'blog/top.php');
-$router->map('GET',      '/blog/[i:id]/rss', 'blog/rss.php@comments');
-$router->map('GET',      '/blog/rss',    'blog/rss.php');
 
 $router->map('GET', '/news', 'news/index.php', 'news');
 $router->map('GET', '/news/[i:id]', 'news/index.php@view');
