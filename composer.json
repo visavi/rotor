@@ -21,7 +21,7 @@
         "mobiledetect/mobiledetectlib": "^2.8",
         "pclzip/pclzip": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.9",
-        "swiftmailer/swiftmailer": "~5.4",
+        "swiftmailer/swiftmailer": "~6.0",
         "vlucas/phpdotenv": "^2.4",
         "robmorgan/phinx": "^0.8",
         "verot/class.upload.php": "^0.33",

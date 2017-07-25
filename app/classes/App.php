@@ -198,7 +198,7 @@ class App
             $params['from'] = [env('SITE_EMAIL') => env('SITE_ADMIN')];
         }
 
-        $message = Swift_Message::newInstance()
+        $message = (new Swift_Message())
             ->setTo($to)
             ->setSubject($subject)
             ->setBody($body, 'text/html')
@@ -213,11 +213,11 @@ class App
         }
 
         if (env('MAIL_DRIVER') == 'smtp') {
-            $transport = Swift_SmtpTransport::newInstance(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION'))
+            $transport = (new Swift_SmtpTransport(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION')))
                 ->setUsername(env('MAIL_USERNAME'))
                 ->setPassword(env('MAIL_PASSWORD'));
         } else {
-            $transport = new Swift_MailTransport();
+            $transport = new Swift_SendmailTransport();
         }
 
         $mailer = new Swift_Mailer($transport);
