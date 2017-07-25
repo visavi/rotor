@@ -81,13 +81,13 @@ case 'restore':
         $subject = 'Восстановление пароля на сайте '.App::setting('title');
         $message = 'Здравствуйте, '.$user['login'].'<br />Ваши новые данные для входа на на сайт <a href="' . App::setting('home') . '">' . App::setting('title') . '</a><br /><b>Логин: '.$user['login'].'</b><br /><b>Пароль: '.$newpass.'</b><br /><br />Запомните и постарайтесь больше не забывать данные <br />Пароль вы сможете поменять в своем профиле<br />Всего наилучшего!';
 
-        App::view('mail/restore', ['login' => $user['login'], 'password' => $newpass]);
-
         $body = App::view('mailer.default', compact('subject', 'message'), true);
         App::sendMail($user['email'], $subject, $body);
 
+        App::view('mail/restore', ['login' => $user['login'], 'password' => $newpass]);
     } else {
-        show_error($validation->getErrors());
+        App::setFlash('danger', current($validation->getErrors()));
+        App::redirect('/');
     }
 break;
 
