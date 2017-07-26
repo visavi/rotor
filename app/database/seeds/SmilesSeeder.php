@@ -17,7 +17,7 @@ class SmilesSeeder extends AbstractSeed
             ['cats' => 1, 'name' => ').gif', 'code' => ':)'],
             ['cats' => 1, 'name' => '(.gif', 'code' => ':('],
             ['cats' => 1, 'name' => '4moks.gif', 'code' => ':4moks'],
-            ['cats' => 1, 'name' => 'D.gif', 'code' => ':d'],
+            ['cats' => 1, 'name' => 'D.gif', 'code' => ':D'],
             ['cats' => 1, 'name' => 'E.gif', 'code' => ':E'],
             ['cats' => 1, 'name' => 'aaa.gif', 'code' => ':aaa'],
             ['cats' => 1, 'name' => 'agree.gif', 'code' => ':agree'],
