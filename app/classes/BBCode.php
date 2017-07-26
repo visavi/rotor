@@ -1,9 +1,10 @@
 <?php
 /**
  * Класс обработки BB-кодов
+ *
  * @license Code and contributions have MIT License
  * @link    http://visavi.net
- * @author  Alexander Grigorev <visavi.net@mail.ru>
+ * @author  Alexander Grigorev <admin@visavi.net>
  */
 class BBCode
 {
@@ -105,6 +106,7 @@ class BBCode
 
     /**
      * Обрабатывает текст
+     *
      * @param  string $source текст содержаший BBCode
      * @return string         распарсенный текст
      */
@@ -129,6 +131,7 @@ class BBCode
 
     /**
      * Очищает текст от BB-кодов
+     *
      * @param  string $source неочищенный текст
      * @return string         очищенный текст
      */
@@ -138,7 +141,8 @@ class BBCode
     }
 
     /**
-     * Обработка ссылок
+     * Обрабатывает ссылки
+     *
      * @param  array  $match ссылка
      * @return string        обработанная ссылка
      */
@@ -159,14 +163,18 @@ class BBCode
     }
 
     /**
-     * Обработка списков
+     * Обрабатывет списки
+     *
      * @param  array  $match список
      * @return string обработанный список
      */
     public function listReplace($match)
     {
         $li = preg_split('/<br[^>]*>\R/', $match[1], -1, PREG_SPLIT_NO_EMPTY);
-        if (empty($li)) return $match[0];
+
+        if (empty($li)) {
+            return $match[0];
+        }
 
         $list = [];
         foreach($li as $l){
@@ -178,6 +186,12 @@ class BBCode
         return '<'.$tag.'>'.implode($list).'</'.$tag.'>';
     }
 
+    /**
+     * Обрабатывает размер текста
+     *
+     * @param  callable $match массив элементов
+     * @return string   обработанный текст
+     */
     public function fontSize($match)
     {
         $sizes = [1 => 'x-small', 2 => 'small', 3 => 'medium', 4 => 'large', 5 => 'x-large'];
@@ -186,7 +200,8 @@ class BBCode
     }
 
     /**
-     * Подсветка кода
+     * Подсвечивает код
+     *
      * @param  callable $match массив элементов
      * @return string          текст с подсветкой
      */
@@ -199,7 +214,8 @@ class BBCode
     }
 
     /**
-     * Скрытие текста под спойлер
+     * Скрывает текст под спойлер
+     *
      * @param  callable $match массив элементов
      * @return string          код спойлера
      */
@@ -215,7 +231,8 @@ class BBCode
     }
 
     /**
-     * Скрытие текста от неавторизованных пользователей
+     * Скрывате текст от неавторизованных пользователей
+     *
      * @param  callable $match массив элементов
      * @return string          скрытый код
      */
@@ -229,7 +246,8 @@ class BBCode
     }
 
     /**
-     * Обработка смайлов
+     * Обрабатывет смайлы
+     *
      * @param $source
      * @return string Обработанный текст
      * @internal param string $text Необработанный текст
@@ -265,6 +283,7 @@ class BBCode
 
     /**
      * Добавляет или переопределяет парсер.
+     *
      * @param  string $name    Parser name
      * @param  string $pattern Pattern
      * @param  string $replace Replace pattern
@@ -280,6 +299,7 @@ class BBCode
 
     /**
      * Устанавливает список доступных парсеров
+     *
      * @param  mixed  $only parsers
      * @return object BBCode object
      */
@@ -292,6 +312,7 @@ class BBCode
 
     /**
      * Исключает парсеры из набора
+     *
      * @param  mixed  $except parsers
      * @return object BBCode object
      */
@@ -304,6 +325,7 @@ class BBCode
 
     /**
      * Возвращает список всех парсеров
+     *
      * @return array array of parsers
      */
     public function getParsers()
@@ -313,6 +335,7 @@ class BBCode
 
     /**
      * Filters all parsers that you don´t want
+     *
      * @param  array $only chosen parsers
      * @return array parsers
      */
@@ -323,6 +346,7 @@ class BBCode
 
     /**
      * Removes the parsers that you don´t want
+     *
      * @param array $excepts
      * @return array parsers
      * @internal param array $except parsers to exclude

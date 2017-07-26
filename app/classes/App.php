@@ -308,7 +308,9 @@ class App
     {
         $bbCode = new BBCode();
 
-        if (! $parse) return $bbCode->clear($text);
+        if (! $parse) {
+            return $bbCode->clear($text);
+        }
 
         $text = $bbCode->parse($text);
         $text = $bbCode->parseSmiles($text);

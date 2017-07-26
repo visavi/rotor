@@ -91,4 +91,194 @@ class BBCodeTest extends TestCase
 
         $this->assertEquals($parseText, '<span style="color:#ff0000">П<span style="color:#00ff00">р<span style="color:#0000ff">и</span><span style="color:#00ff00">в</span></span>ет</span>');
     }
+
+    /**
+     * Тестирует центрирование текста
+     */
+    public function testCenter()
+    {
+        $text      = '[center]Привет[/center]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<div style="text-align:center;">Привет</div>');
+    }
+
+    /**
+     * Тестирует цитирование текста
+     */
+    public function testQuote()
+    {
+        $text      = '[quote]Привет[/quote]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<blockquote>Привет</blockquote>');
+    }
+
+    /**
+     * Тестирует цитирование текста с именем
+     */
+    public function testNamedQuote()
+    {
+        $text      = '[quote=Имя]Привет[/quote]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<blockquote>Привет<small>Имя</small></blockquote>');
+    }
+
+    /**
+     * Тестирует ссылку в тексте
+     */
+    public function testHttp()
+    {
+        $text      = 'http://сайт.рф';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<a href="http://сайт.рф" target="_blank" rel="nofollow">http://сайт.рф</a>');
+    }
+
+    /**
+     * Тестирует ссылку в тексте совпадающую с именем сайта
+     */
+    public function testHttpNotTarget()
+    {
+        $text      = 'http://rotor.ll';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<a href="//rotor.ll">http://rotor.ll</a>');
+    }
+
+    /**
+     * Тестирует ссылку в тексте совпадающую с именем сайта
+     */
+    public function testHttpsComplex()
+    {
+        $text      = 'https://rotor.ll/dir/index.php?name=name&name2=name2#anchor';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">https://rotor.ll/dir/index.php?name=name&name2=name2#anchor</a>');
+    }
+
+    /**
+     * Тестирует ссылку в тексте
+     */
+    public function testLink()
+    {
+        $text      = '[url]https://rotor.ll[/url]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<a href="//rotor.ll">https://rotor.ll</a>');
+    }
+
+    /**
+     * Тестирует именованную ссылку в тексте
+     */
+    public function testNamedLink()
+    {
+        $text      = '[url=http://rotor.ll/dir/index.php?name=name&name2=name2#anchor]Сайт[/url]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<a href="//rotor.ll/dir/index.php?name=name&name2=name2#anchor">Сайт</a>');
+    }
+
+    /**
+     * Тестирует картинку в тексте
+     */
+    public function testImage()
+    {
+        $text      = '[img]http://rotor.ll/assets/images/img/logo.png[/img]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<img src="http://rotor.ll/assets/images/img/logo.png" class="img-responsive" alt="image">');
+    }
+
+    /**
+     * Тестирует сортированный список в тексте
+     */
+    public function testOrderedList()
+    {
+        $text      = '[list=1]Список'.PHP_EOL.'список2[/list]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<ol><li>Список</li><li>список2</li></ol>');
+    }
+
+    /**
+     * Тестирует несортированный список в тексте
+     */
+    public function testUnorderedList()
+    {
+        $text      = '[list]Список[/list]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<ul><li>Список</li></ul>');
+    }
+
+    /**
+     * Тестирует спойлер в тексте
+     */
+    public function testSpoiler()
+    {
+        $text      = '[spoiler]Спойлер[/spoiler]';
+        $parseText = App::bbCode($text);
+        $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
+
+        $this->assertEquals($parseText, '<div class="spoiler"><b class="spoiler-title">Развернуть для просмотра</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>');
+    }
+
+    /**
+     * Тестирует именованный спойлер в тексте
+     */
+    public function testShortSpoiler()
+    {
+        $text      = '[spoiler=Открыть]Спойлер[/spoiler]';
+        $parseText = App::bbCode($text);
+        $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
+
+        $this->assertEquals($parseText, '<div class="spoiler"><b class="spoiler-title">Открыть</b><div class="spoiler-text" style="display: none;">Спойлер</div></div>');
+    }
+
+    /**
+     * Тестирует скрытый текст
+     */
+    public function testHide()
+    {
+        $text      = '[hide]Скрытый текст[/hide]';
+        $parseText = App::bbCode($text);
+        $parseText = trim(preg_replace('/\s\s+/', '', $parseText));
+
+        $this->assertEquals($parseText, '<div class="hiding"><span class="strong">Скрытый контент:</span> Для просмотра необходимо авторизоваться!</div>');
+    }
+
+    /**
+     * Тестирует видео в тексте
+     */
+    public function testYoutube()
+    {
+        $text      = '[youtube]85bkCmaOh4o[/youtube]';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="//www.youtube.com/embed/85bkCmaOh4o"></iframe></div>');
+    }
+
+    /**
+     * Тестирует смайлы в тексте
+     */
+    public function testSmile()
+    {
+        $text      = 'Привет :D :hello';
+        $parseText = App::bbCode($text);
+
+        $this->assertEquals($parseText, 'Привет <img src="/uploads/smiles/D.gif" alt="D.gif" /> <img src="/uploads/smiles/hello.gif" alt="hello.gif" />');
+    }
+
+    /**
+     * Тестирует очистку тегов в тексте
+     */
+    public function testClear()
+    {
+        $text      = '[center][b]Привет[/b] [i]Привет[/i][/center]';
+        $parseText = App::bbCode($text, false);
+
+        $this->assertEquals($parseText, 'Привет Привет');
+    }
 }

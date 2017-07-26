@@ -4,7 +4,6 @@ php:
   - 7.0
   - 7.1
   - 7.2
-  - hhvm
 
 before_script:
   - travis_retry composer install --no-interaction --prefer-source
@@ -13,10 +12,6 @@ before_script:
   - if [[ "$DB_DRIVER" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS test;" -uroot; fi
   - php rotor migrate
   - php rotor seed:run
-
-matrix:
-  allow_failures:
-    - php: hhvm
 
 script:
   - vendor/bin/phpunit
