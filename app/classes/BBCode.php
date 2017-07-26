@@ -38,11 +38,11 @@ class BBCode
         ],
         'fontSize' => [
             'pattern' => '/\[size\=([1-5])\](.*?)\[\/size\]/s',
-            'replace' => '<font size="$1">$2</font>',
+            'callback' => 'fontSize',
         ],
         'fontColor' => [
             'pattern' => '/\[color\=(#[A-f0-9]{6}|#[A-f0-9]{3})\](.*?)\[\/color\]/s',
-            'replace' => '<font color="$1">$2</font>',
+            'replace' => '<span style="color:$1">$2</span>',
             'iterate' => 5,
         ],
         'center' => [
@@ -176,6 +176,13 @@ class BBCode
         $tag  = strpos($match[0], '[list]') === false ? 'ol' : 'ul';
 
         return '<'.$tag.'>'.implode($list).'</'.$tag.'>';
+    }
+
+    public function fontSize($match)
+    {
+        $sizes = [1 => 'x-small', 2 => 'small', 3 => 'medium', 4 => 'large', 5 => 'x-large'];
+
+        return '<span style="font-size:'.$sizes[$match[1]].'">'.$match[2].'</span>';
     }
 
     /**

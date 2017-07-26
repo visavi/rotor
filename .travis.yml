@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+  - hhvm
+
+matrix:
+  allow_failures:
+    - php: 7.0
+
+before_script:
+  - travis_retry composer install --no-interaction --prefer-source
+  - mysql -e 'create database test;'
+
+script:
+  - vendor/bin/phpunit
+
+env: APP_ENV=testing DB_HOST=127.0.0.1 DB_DATABASE=test DB_USERNAME=root DB_PASSWORD=
