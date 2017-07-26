@@ -43,9 +43,13 @@ $router->map('GET', '/news/allcomments', 'news/comments.php');
 $router->map('GET', '/news/allcomments/[i:nid]/[i:id]', 'news/comments.php@viewcomm');
 $router->map('GET', '/news/rss', 'news/rss.php', 'news_rss');
 
-$router->map('GET|POST', '/gallery', 'gallery/index.php', 'gallery');
+$router->map('GET', '/gallery', 'gallery/index.php', 'gallery');
+$router->map('GET', '/gallery/[i:gid]', 'gallery/index.php@view');
+$router->map('GET', '/gallery/[i:gid]/comments', 'gallery/comments.php');
+$router->map('GET', '/gallery/[i:gid]/[end:action]', 'gallery/index.php');
+
+
 $router->map('GET|POST', '/gallery/album', 'gallery/album.php');
-$router->map('GET|POST', '/gallery/comments', 'gallery/comments.php');
 $router->map('GET|POST', '/gallery/top', 'gallery/top.php');
 
 $router->map('GET', '/forum', 'forum/index.php', 'forum');

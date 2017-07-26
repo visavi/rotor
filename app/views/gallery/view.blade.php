@@ -1,5 +1,14 @@
-<?php if (!empty($photo)): ?>
-    <?php //show_title($photo['title']); ?>
+@extends('layout')
+
+@section('title')
+    {{ $photo->title }} - @parent
+@stop
+
+@section('content')
+
+    <h1>{{ $photo['title'] }}</h1>
+
+    <?php if (!empty($photo)): ?>
 
     <?php
     $links = [
@@ -28,8 +37,8 @@
 
         Размер: <?= read_file(HOME.'/uploads/pictures/'.$photo['link']) ?><br />
         Добавлено: <?= profile($photo['user'])?> (<?= date_fixed($photo['time']) ?>)<br />
-        <a href="/gallery?act=comments&amp;gid=<?= $photo['id'] ?> ">Комментарии</a> (<?= $photo['comments'] ?>)
-        <a href="/gallery?act=end&amp;gid=<?= $photo['id'] ?>">&raquo;</a>
+        <a href="/gallery/<?= $photo['id'] ?>/comments">Комментарии</a> (<?= $photo['comments'] ?>)
+        <a href="/gallery/<?= $photo['id'] ?>/end">&raquo;</a>
     </div>
     <br />
 
@@ -47,10 +56,11 @@
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;uz=<?= $photo['user'] ?>">В альбом</a><br />
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;user=<?= $photo->getUser()->login ?>">В альбом</a><br />
 
-<?php else: ?>
-    <?= show_error('Ошибка! Данного изображения нет в базе'); ?>
-<?php endif; ?>
+    <?php else: ?>
+        <?= show_error('Ошибка! Данного изображения нет в базе'); ?>
+    <?php endif; ?>
 
-<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
+@stop

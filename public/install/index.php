@@ -112,16 +112,16 @@ header("Content-type:text/html; charset=utf-8");
         ?>
         <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
 
-        <p>Минимальная версия PHP необходимая для работы движка PHP 5.6.4 и MySQL 5.5.3</p>
+        <p>Минимальная версия PHP необходимая для работы движка PHP 7.0 и MySQL 5.5.3</p>
 
         <p style="font-size: 15px; font-weight: bold">Проверка требований</p>
         <?php
         $error_setting = 0;
 
-        if (version_compare(PHP_VERSION, '5.6.4') > 0) {
-            echo '<i class="fa fa-plus-circle"></i> Версия PHP 5.6.4 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br />';
+        if (version_compare(PHP_VERSION, '7.0') > 0) {
+            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br />';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Версия PHP 5.6.4 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br />';
+            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br />';
         $error_critical = 1;
         }
 
