@@ -11,10 +11,10 @@ return [
             'adapter' => 'mysql',
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
-            'host' => $_ENV['DB_HOST'],
-            'name' => $_ENV['DB_DATABASE'],
-            'user' => $_ENV['DB_USERNAME'],
-            'pass' => $_ENV['DB_PASSWORD'],
+            'host' => env('DB_HOST'),
+            'name' => env('DB_DATABASE'),
+            'user' => env('DB_USERNAME'),
+            'pass' => env('DB_PASSWORD'),
         ]
     ]
 ];
