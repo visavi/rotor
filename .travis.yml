@@ -3,17 +3,26 @@ language: php
 php:
   - 7.0
   - 7.1
+  - 7.2
   - hhvm
-
-matrix:
-  allow_failures:
-    - php: 7.0
 
 before_script:
   - travis_retry composer install --no-interaction --prefer-source
-  - mysql -e 'create database test;'
+  - if [[ "$DB_DRIVER" == "pgsql" ]]; then psql -c "DROP DATABASE IF EXISTS test;" -U postgres; fi
+  - if [[ "$DB_DRIVER" == "pgsql" ]]; then psql -c "create database test;" -U postgres; fi
+  - if [[ "$DB_DRIVER" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS test;" -uroot; fi
+
+matrix:
+  allow_failures:
+    - php: hhvm
 
 script:
   - vendor/bin/phpunit
 
-env: APP_ENV=testing DB_HOST=127.0.0.1 DB_DATABASE=test DB_USERNAME=root DB_PASSWORD=
+env:
+  - APP_ENV=testing
+  - DB_HOST=127.0.0.1
+  - DB_DRIVER=mysql
+  - DB_DATABASE=test
+  - DB_USERNAME=root
+  - DB_PASSWORD=
