@@ -20,9 +20,10 @@ script:
   - vendor/bin/phpunit
 
 env:
-  - APP_ENV=testing
-  - DB_HOST=127.0.0.1
-  - DB_DRIVER=mysql
-  - DB_DATABASE=test
-  - DB_USERNAME=root
-  - DB_PASSWORD=
+  global:
+    - APP_ENV=testing
+    - DB_HOST=127.0.0.1
+    - DB_DRIVER=mysql
+    - DB_DATABASE=test
+    - DB_USERNAME=root
+    - DB_PASSWORD=
