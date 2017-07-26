@@ -20,7 +20,7 @@ class NoticeSeeder extends AbstractSeed
 Перед посещением сайта рекомендуем вам ознакомиться с [url=%SITENAME%/rules]правилами сайта[/url], это поможет Вам избежать неприятных ситуаций.
 Желаем приятно провести время.
 С уважением, администрация сайта!',
-            'time' => SITETIME,
+            'created_at' => SITETIME,
             'protect' => 1,
         ];
 
