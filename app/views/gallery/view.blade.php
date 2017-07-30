@@ -48,11 +48,11 @@
         <div class="form" style="text-align:center">
 
             <?php if ($nav['next']): ?>
-                <a href="/gallery?act=view&amp;gid=<?= $nav['next'] ?>">&laquo; Назад</a> &nbsp;
+                <a href="/gallery/<?= $nav['next'] ?>">&laquo; Назад</a> &nbsp;
             <?php endif; ?>
 
             <?php if ($nav['prev']): ?>
-                &nbsp; <a href="/gallery?act=view&amp;gid=<?= $nav['prev'] ?>">Вперед &raquo;</a>
+                &nbsp; <a href="/gallery/<?= $nav['prev'] ?>">Вперед &raquo;</a>
             <?php endif; ?>
         </div>
     <?php endif; ?>

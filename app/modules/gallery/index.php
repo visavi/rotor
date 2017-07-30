@@ -1,6 +1,7 @@
 <?php
 
-$uz = check(Request::input('uz'));
+//$uz = check(Request::input('uz'));
+$gid = param('gid');
 $page = abs(intval(Request::input('page', 1)));
 
 switch ($act):
@@ -25,8 +26,6 @@ break;
  * Просмотр полной фотографии
  */
 case 'view':
-    $gid = param('gid');
-
     $photo = Photo::where('id', $gid)
         ->with('user')
         ->first();
@@ -273,93 +272,27 @@ break;
 case 'comments':
 
     $photo = Photo::find($gid);
-    if ($photo) {
-        //App::setting('newtitle') = 'Комментарии - '.$photo['title'];
 
-        echo '<i class="fa fa-picture-o"></i> <b><a href="/gallery?act=view&amp;gid='.$photo['id'].'">'.$photo['title'].'</a></b><hr />';
-
-        $total = Comment::where('relate_type', Photo::class)
-            ->where('relate_id', $gid)
-            ->count();
-        $page = App::paginate(App::setting('postgallery'), $total);
-
-        if ($total > 0) {
-            $is_admin = is_admin();
-            if ($is_admin) {
-                echo '<form action="/gallery?act=delcomm&amp;gid='.$gid.'&amp;page='.$page['current'].'" method="post">';
-                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-            }
-
-            $comments = Comment::where('relate_type', Photo::class)
-                ->where('relate_id', $gid)
-                ->offset($page['offset'])
-                ->limit($page['limit'])
-                ->orderBy('created_at')
-                ->with('user')
-                ->get();
-
-            foreach ($comments as $data) {
-
-                echo '<div class="b">';
-                echo '<div class="img">'.user_avatars($data->user).'</div>';
-
-                if ($is_admin) {
-                    echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
-                }
-
-                echo '<b>'.profile($data->user).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
-                echo user_title($data->user).' '.user_online($data->user).'</div>';
-
-                if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME) {
-                    echo '<div class="right"><a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
-                }
-
-                echo '<div>'.App::bbCode($data['text']).'<br />';
-
-                if (is_admin() || empty(App::setting('anonymity'))) {
-                    echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
-                }
-
-                echo '</div>';
-            }
-
-            if ($is_admin) {
-                echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
-            }
-
-            App::pagination($page);
-        }
-
-        if (empty($photo['closed'])) {
-
-            if (empty($total)) {
-                show_error('Комментариев еще нет!');
-            }
-
-            if (is_user()) {
-                echo '<div class="form">';
-                echo '<form action="/gallery?act=addcomm&amp;gid='.$gid.'" method="post">';
-                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-
-                echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
-                echo '<input type="submit" value="Написать" /></form></div><br />';
-
-                echo '<a href="/rules">Правила</a> / ';
-                echo '<a href="/smiles">Смайлы</a> / ';
-                echo '<a href="/tags">Теги</a><br /><br />';
-            } else {
-                show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
-            }
-        } else {
-            show_error('Комментирование данной фотографии закрыто!');
-        }
-
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;uz='.$photo['user'].'">Альбом</a><br />';
-    } else {
-        show_error('Ошибка! Данного изображение не существует!');
+    if (! $photo) {
+        App::abort('default', 'Фотография не найдена');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br />';
+    $total = Comment::where('relate_type', Photo::class)
+        ->where('relate_id', $gid)
+        ->count();
+    $page = App::paginate(App::setting('postgallery'), $total);
+
+    $comments = Comment::where('relate_type', Photo::class)
+        ->where('relate_id', $gid)
+        ->offset($page['offset'])
+        ->limit($page['limit'])
+        ->orderBy('created_at')
+        ->with('user')
+        ->get();
+
+    $isAdmin = is_admin();
+
+    App::view('gallery/comments', compact('photo', 'comments', 'page', 'isAdmin'));
 break;
 
 
@@ -592,19 +525,17 @@ break;
  */
 case 'end':
 
-    $query = DB::run() -> queryFetch("SELECT count(*) as `total_comments` FROM `comments` WHERE relate_type=? AND `relate_id`=? LIMIT 1;", [Photo::class, $gid]);
+    $photo = Photo::find($gid);
 
-    if (!empty($query)) {
-
-        $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = ceil($total_comments / App::setting('postgallery'));
-
-        App::redirect("/gallery?act=comments&gid=$gid&page=$end");
-
-    } else {
-        show_error('Ошибка! Комментарий к данному изображению не существует!');
+    if (empty($photo)) {
+        App::abort(404, 'Выбранное вами фото не найдено, возможно она была удалена!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
+    $total = Comment::where('relate_type', Photo::class)
+        ->where('relate_id', $gid)
+        ->count();
+
+    $end = ceil($total / App::setting('postgallery'));
+    App::redirect('/gallery/'.$gid.'/comments?page='.$end);
 break;
 endswitch;

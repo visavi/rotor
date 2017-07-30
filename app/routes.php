@@ -28,8 +28,6 @@ $router->map('GET', '/article/[i:id]/rss', 'blog/rss.php@comments');
 $router->map('GET', '/article/[i:id]/[comments|end:action]', 'blog/blog.php');
 $router->map('GET', '/blog/tags/[*:tag]?', 'blog/tags.php');
 
-
-
 $router->map('GET|POST', '/blog/active', 'blog/active.php');
 $router->map('GET|POST', '/blog/new',    'blog/new.php');
 $router->map('GET|POST', '/blog/search', 'blog/search.php');
@@ -45,9 +43,7 @@ $router->map('GET', '/news/rss', 'news/rss.php', 'news_rss');
 
 $router->map('GET', '/gallery', 'gallery/index.php', 'gallery');
 $router->map('GET', '/gallery/[i:gid]', 'gallery/index.php@view');
-$router->map('GET', '/gallery/[i:gid]/comments', 'gallery/comments.php');
-$router->map('GET', '/gallery/[i:gid]/[end:action]', 'gallery/index.php');
-
+$router->map('GET', '/gallery/[i:gid]/[comments|end:action]', 'gallery/index.php');
 
 $router->map('GET|POST', '/gallery/album', 'gallery/album.php');
 $router->map('GET|POST', '/gallery/top', 'gallery/top.php');
