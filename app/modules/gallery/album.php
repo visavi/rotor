@@ -1,49 +1,28 @@
 <?php
-App::view(App::setting('themes').'/index');
 
-
-$act = check(Request::input('act', 'index'));
-$uz = check(Request::input('uz'));
+$login = param('login');
 
 switch ($act):
 ############################################################################################
 ##                                  Вывод комментариев                                    ##
 ############################################################################################
     case 'index':
-        //show_title('Альбомы пользователей');
-
         $total = Photo::distinct('user_id')
             ->join('users', 'photo.user_id', '=', 'users.id')
             ->count('user_id');
 
         $page = App::paginate(App::setting('photogroup'), $total);
 
-        if ($total > 0) {
+        $albums = Photo::select('user_id', 'login')
+            ->selectRaw('count(*) as cnt, sum(comments) as comments')
+            ->join('users', 'photo.user_id', '=', 'users.id')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->groupBy('user_id')
+            ->orderBy('cnt', 'desc')
+            ->get();
 
-            //App::setting('newtitle') = 'Альбомы пользователей (Стр. '.$page['current'].')';
-
-            $albums = Photo::select('user_id', 'login')
-                ->selectRaw('count(*) as cnt, sum(comments) as comments')
-                ->join('users', 'photo.user_id', '=', 'users.id')
-                ->offset($page['offset'])
-                ->limit($page['limit'])
-                ->groupBy('user_id')
-                ->orderBy('cnt', 'desc')
-                ->get();
-
-            foreach($albums as $data) {
-
-                echo '<i class="fa fa-picture-o"></i> ';
-                echo '<b><a href="/gallery/album?act=photo&amp;uz='.$data->login.'">'.$data->login.'</a></b> ('.$data['cnt'].' фото / '.$data['comments'].' комм.)<br />';
-            }
-
-            App::pagination($page);
-
-            echo 'Всего альбомов: <b>'.$total.'</b><br /><br />';
-
-        } else {
-            show_error('Альбомов еще нет!');
-        }
+        App::view('gallery/album', compact('albums', 'page'));
     break;
 
     ############################################################################################
@@ -53,7 +32,7 @@ switch ($act):
 
         //show_title('Список всех фотографий '.$uz);
 
-        $user = User::where('login', $uz)->first();
+        $user = User::where('login', $login)->first();
 
         if (! $user) {
             App::abort('default', 'Пользователь не найден!');
@@ -107,7 +86,3 @@ switch ($act):
     break;
 
 endswitch;
-
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
-
-App::view(App::setting('themes').'/foot');

@@ -45,8 +45,9 @@ $router->map('GET',      '/gallery', 'gallery/index.php', 'gallery');
 $router->map('GET',      '/gallery/[i:gid]', 'gallery/index.php@view');
 $router->map('GET',      '/gallery/[i:gid]/[comments|end:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[create:action]', 'gallery/index.php');
+$router->map('GET',      '/gallery/album', 'gallery/album.php');
+$router->map('GET',      '/gallery/album/[user:login]', 'gallery/album.php@photo');
 
-$router->map('GET|POST', '/gallery/album', 'gallery/album.php');
 $router->map('GET|POST', '/gallery/top', 'gallery/top.php');
 
 $router->map('GET',      '/forum', 'forum/index.php', 'forum');
