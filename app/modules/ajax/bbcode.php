@@ -1,8 +1,5 @@
-<?php
-
-if (Request::ajax()){
-    $message = isset($_POST['data']) ? check($_POST['data']) : '';
-?>
+<?php if (Request::ajax()): ?>
+    <?php $message = check(Request::input('data')); ?>
     <!doctype html>
 
     <html lang="ru">
@@ -16,4 +13,4 @@ if (Request::ajax()){
         <?php exit(App::bbCode($message)); ?>
     </body>
     </html>
-<?php } ?>
+<?php endif; ?>

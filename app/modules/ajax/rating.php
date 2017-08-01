@@ -1,25 +1,32 @@
 <?php
+
+$id    = abs(intval(Request::input('id')));
+$type  = check(Request::input('type'));
+$vote  = check(Request::input('vote'));
+$token = check(Request::input('token'));
+
+// Время хранения голосов
+$expiresRating = SITETIME + 3600 * 24 * 30;
+
 if (! is_user()) {
-    exit(json_encode(['status' => 'error', 'message' => 'Вы не авторизованы']));
+    exit(json_encode(['status' => 'error', 'message' => 'not authorized']));
 }
 
-$expiresrating = SITETIME + 3600 * 24 * 30; // 30 дней
+if ($token != $_SESSION['token']) {
+    exit(json_encode(['status' => 'error', 'message' => 'invalid token']));
+}
 
-$id = abs(intval(Request::input('id')));
-$type = check(Request::input('type'));
-$vote = check(Request::input('vote'));
-
-if (! in_array($vote, [1, -1])) {
-    exit(json_encode(['status' => 'error']));
+if (! in_array($vote, [-1, 1])) {
+    exit(json_encode(['status' => 'error', 'message' => 'invalid rating']));
 }
 
 Polling::where('relate_type', $type)
     ->where('created_at', '<', SITETIME)
     ->delete();
 
-$post = Post::where('user_id', '<>', App::getUserId())->find($id);
+$post = $type::where('user_id', '<>', App::getUserId())->find($id);
 if (! $post) {
-    exit(json_encode(['status' => 'error']));
+    exit(json_encode(['status' => 'error', 'message' => 'message not found']));
 }
 
 $polling = Polling::where('relate_type', $type)
@@ -38,19 +45,22 @@ if ($polling) {
         $cancel = true;
     }
 } else {
-
     $poll = Polling::create([
         'relate_type' => $type,
-        'relate_id' => $id,
-        'user_id' => App::getUserId(),
-        'vote' => $vote,
-        'created_at' => $expiresrating,
+        'relate_id'   => $id,
+        'user_id'     => App::getUserId(),
+        'vote'        => $vote,
+        'created_at'  => $expiresRating,
     ]);
 }
 
 $operation = ($vote == '1') ? '+' : '-';
 
 $post->update(['rating' => Capsule::raw("rating $operation 1")]);
-$post = Post::find($id);
+$post = $type::find($id);
 
-echo json_encode(['status' => 'success', 'cancel' => $cancel, 'count' => $post['rating']]);
+echo json_encode([
+    'status' => 'success',
+    'cancel' => $cancel,
+    'rating' => format_num($post['rating'])
+]);

@@ -1519,16 +1519,6 @@ function resize_image($dir, $name, $size, $params = []) {
     return '<img src="/assets/img/images/photo.jpg" alt="nophoto" />';
 }
 
-// ------------- Функция переадресации -------------//
-/*function redirect($url, $permanent = false){
-
-    if ($permanent){
-        header('HTTP/1.1 301 Moved Permanently');
-    }
-
-    exit(header('Location: '.$url));
-}*/
-
 // ------------- Функция вывода ссылки на анкету -------------//
 function profile($user, $color = false)
 {
@@ -1542,15 +1532,20 @@ function profile($user, $color = false)
     return App::setting('guestsuser');
 }
 
-// ------------- Функция вывода рейтинга -------------//
-function format_num($num = 0){
-
+/**
+ * Форматирует вывод числа
+ *
+ * @param integer $num
+ * @return string
+ */
+function format_num($num)
+{
     if ($num > 0) {
         return '<span style="color:#00aa00">+'.$num.'</span>';
     } elseif ($num < 0) {
         return '<span style="color:#ff0000">'.$num.'</span>';
     } else {
-        return 0;
+        return '<span>0</span>';
    }
 }
 

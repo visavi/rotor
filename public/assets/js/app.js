@@ -109,7 +109,8 @@ function postQuote(el)
 }
 
 /* Выход с сайта */
-function logout(el) {
+function logout(el)
+{
     if (bootbox.confirm('Вы уверены, что хотите выйти?', function(result){
             if (result) {
                 window.location = $(el).attr("href");
@@ -120,7 +121,8 @@ function logout(el) {
 }
 
 /* Отправка жалобы на спам */
-function sendComplaint(el) {
+function sendComplaint(el)
+{
     bootbox.confirm('Вы действительно хотите отправить жалобу?', function(result){
         if (result) {
 
@@ -147,8 +149,8 @@ function sendComplaint(el) {
 }
 
 /* Добавление или удаление закладок */
-function bookmark(el) {
-
+function bookmark(el)
+{
     $.ajax({
         data: {tid: $(el).data('tid'), token: $(el).data('token')},
         dataType: 'JSON', type: 'POST', url: '/forum/bookmark/perform',
@@ -174,8 +176,8 @@ function bookmark(el) {
 }
 
 /* Удаление сообщения в форуме */
-function deletePost(el) {
-
+function deletePost(el)
+{
     $.ajax({
         data: {tid: $(el).data('tid'), token: $(el).data('token')},
         dataType: 'JSON', type: 'POST', url: '/forum/active/delete',
@@ -198,8 +200,8 @@ function deletePost(el) {
 }
 
 /* Изменение рейтинга */
-function changeRating(el) {
-
+function changeRating(el)
+{
     $.ajax({
         data: {
             id: $(el).data('id'),
@@ -207,14 +209,15 @@ function changeRating(el) {
             vote: $(el).data('vote'),
             token: $(el).data('token')
         },
-        dataType: 'JSON', type: 'POST', url: '/ajax/rating',
+        dataType: 'JSON',
+        type: 'POST',
+        url: '/ajax/rating',
         success: function(data) {
-
-            if (data.status == 'error'){
+            if (data.status === 'error') {
                 return false;
             }
 
-            if (data.status == 'success'){
+            if (data.status === 'success') {
                 rating = $(el).closest('.js-rating').find('span');
 
                 $(el).closest('.js-rating').find('a').removeClass('active');
@@ -222,8 +225,8 @@ function changeRating(el) {
                 if (! data.cancel) {
                     $(el).addClass('active');
                 }
-
-                rating.text(data.count);
+console.log($(data.rating));
+                rating.html($(data.rating));
             }
         }
     });
@@ -231,7 +234,8 @@ function changeRating(el) {
 }
 
 /* Показ формы создания голосования */
-function showVoteForm() {
+function showVoteForm()
+{
     $('.js-vote-form').toggle();
 
     return false;

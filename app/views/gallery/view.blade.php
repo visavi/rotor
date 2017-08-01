@@ -33,7 +33,15 @@
             <?= App::bbCode($photo['text']) ?><br />
         <?php endif; ?>
 
-        Рейтинг: <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=down&amp;token=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-down"></i></a> <big><b><?= format_num($photo['rating']) ?></b></big> <a href="/gallery?act=vote&amp;gid=<?= $photo['id'] ?>&amp;vote=up&amp;token=<?= $_SESSION['token'] ?>"><i class="fa fa-thumbs-up"></i></a><br />
+        <div class="js-rating">Рейтинг:
+            @unless (App::getUserId() == $photo['user_id'])
+                <a class="post-rating-down<?= $photo->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="Photo" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+            @endunless
+            <span>{!! format_num($photo['rating']) !!}</span>
+            @unless (App::getUserId() == $photo['user_id'])
+                <a class="post-rating-up<?= $photo->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="Photo" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+            @endunless
+        </div>
 
         Размер: <?= read_file(HOME.'/uploads/pictures/'.$photo['link']) ?><br />
         Добавлено: <?= profile($photo['user'])?> (<?= date_fixed($photo['time']) ?>)<br />

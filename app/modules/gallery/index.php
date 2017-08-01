@@ -26,7 +26,13 @@ break;
  * Просмотр полной фотографии
  */
 case 'view':
-    $photo = Photo::where('id', $gid)
+    $photo = Photo::select('photo.*', 'pollings.vote')
+        ->where('photo.id', $gid)
+        ->leftJoin ('pollings', function($join) {
+            $join->on('photo.id', '=', 'pollings.relate_id')
+                ->where('pollings.relate_type', Photo::class)
+                ->where('pollings.user_id', App::getUserId());
+        })
         ->with('user')
         ->first();
 
@@ -35,58 +41,6 @@ case 'view':
     }
 
     App::view('gallery/view', compact('photo', 'page'));
-break;
-
-/**
- * Оценка фотографии
- */
-case 'vote':
-
-    $token = check(Request::input('token'));
-    $vote = check(Request::input('vote'));
-
-    if (is_user()) {
-        if ($token == $_SESSION['token']) {
-            if ($vote == 'up' || $vote == 'down') {
-
-                $score = ($vote == 'up') ? 1 : -1;
-
-                $data = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
-
-                if (!empty($data)) {
-                    if (App::getUserId() != $data['user_id']) {
-                        $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user_id`=? LIMIT 1;", [Photo::class, $gid, App::getUserId()]);
-
-                        if (empty($queryrated)) {
-                            $expiresrated = SITETIME + 3600 * App::setting('photoexprated');
-
-                            DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND created_at<?;", [Photo::class, SITETIME]);
-                            DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user_id`, `created_at`) VALUES (?, ?, ?, ?);", [Photo::class, $gid, App::getUserId(), $expiresrated]);
-                            DB::run() -> query("UPDATE `photo` SET `rating`=`rating`+? WHERE `id`=?;", [$score, $gid]);
-
-                            App::setFlash('success', 'Ваша оценка принята! Рейтинг фотографии: '.format_num($data['rating'] + $score));
-                            App::redirect("/gallery?act=view&gid=$gid");
-
-                        } else {
-                            show_error('Ошибка! Вы уже оценивали данную фотографию!');
-                        }
-                    } else {
-                        show_error('Ошибка! Нельзя голосовать за свои фотографии!');
-                    }
-                } else {
-                    show_error('Ошибка! Данной фотографии не существует!');
-                }
-            } else {
-                show_error('Ошибка! Необходимо проголосовать за или против фотографии!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        show_login('Вы не авторизованы, для голосования за фотографии, необходимо');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=view&amp;gid='.$gid.'">Вернуться</a><br />';
 break;
 
 /**
