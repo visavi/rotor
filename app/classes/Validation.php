@@ -19,13 +19,6 @@ class Validation
     private $validation_rules = [];
 
     /**
-     * the constructor, duh!
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * run the validation rules
      * @return bool;
      */
@@ -123,7 +116,7 @@ class Validation
 
     /**
      * displays an error
-     * @param string $error The error text
+     * @param mixed $error The error text
      * @param null $description
      */
     public function addError($error, $description = null)

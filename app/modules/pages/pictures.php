@@ -24,11 +24,10 @@ case 'index':
         }
 
         if ($validation->run()) {
-
             //-------- Удаляем старую фотку и аватар ----------//
             $user = User::find(App::getUserId());
 
-            if (!empty($user['picture'])){
+            if ($user['picture']) {
                 unlink_image('uploads/photos/', $user['picture']);
                 unlink_image('uploads/avatars/', $user['avatar']);
 
@@ -39,36 +38,41 @@ case 'index':
 
             //-------- Генерируем аватар ----------//
             $handle->process(HOME.'/uploads/photos/');
-            $picture = $handle -> file_dst_name;
-
-            $handle->file_new_name_body = $newName;
-            $handle->image_resize = true;
-            $handle->image_ratio_crop = true;
-            $handle->image_y = 48;
-            $handle->image_x = 48;
-            $handle->image_watermark = false;
-            $handle->image_convert = 'png';
-            $handle->file_overwrite = true;
-
-            $handle->process(HOME.'/uploads/avatars/');
-            $avatar = $handle -> file_dst_name;
 
             if ($handle->processed) {
+                $picture = $handle->file_dst_name;
 
-                $user = User::find(App::getUserId());
-                $user->picture = $picture;
-                $user->avatar = $avatar;
-                $user->save();
+                $handle->file_new_name_body = $newName;
+                $handle->image_resize = true;
+                $handle->image_ratio_crop = true;
+                $handle->image_y = 48;
+                $handle->image_x = 48;
+                $handle->image_watermark = false;
+                $handle->image_convert = 'png';
+                $handle->file_overwrite = true;
 
-                save_avatar();
+                $handle->process(HOME . '/uploads/avatars/');
+                $avatar = $handle->file_dst_name;
+
+                if ($handle->processed) {
+
+                    $user = User::find(App::getUserId());
+                    $user->picture = $picture;
+                    $user->avatar = $avatar;
+                    $user->save();
+
+                    save_avatar();
+                }
+
+                App::setFlash('success', 'Фотография успешно загружена!');
+                App::redirect('/profile');
+            } else {
+                $validation -> addError(['photo' => $handle->error]);
             }
-
-            App::setFlash('success', 'Фотография успешно загружена!');
-            App::redirect('/profile');
-        } else {
-            App::setInput(Request::all());
-            App::setFlash('danger', $validation->getErrors());
         }
+
+        App::setInput(Request::all());
+        App::setFlash('danger', $validation->getErrors());
     }
 
     $user = User::where('login', App::getUsername())->first();

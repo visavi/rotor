@@ -46,102 +46,63 @@ break;
 /**
  * Форма загрузки фото
  */
-case 'addphoto':
+case 'create':
 
-    //App::setting('newtitle') = 'Добавление фотографии';
-
-    if (is_user()) {
-        echo '<div class="form">';
-        echo '<form action="/gallery?act=add" method="post" enctype="multipart/form-data">';
-        echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-        echo 'Прикрепить фото:<br /><input type="file" name="photo" /><br />';
-        echo 'Название: <br /><input type="text" name="title" /><br />';
-        echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text"></textarea><br />';
-
-        echo 'Закрыть комментарии: <input name="closed" type="checkbox" value="1" /><br />';
-
-        echo '<input type="submit" value="Добавить" /></form></div><br />';
-
-        echo 'Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br />';
-        echo 'Весом не более '.formatsize(App::setting('filesize')).' и размером от 100 до '.(int)App::setting('fileupfoto').' px<br /><br />';
-    } else {
-        show_login('Вы не авторизованы, чтобы добавить фотографию, необходимо');
+    if (! is_user()) {
+        App::abort(403, 'Для добавления фотографий небходимо авторизоваться!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Вернуться</a><br />';
-break;
+    if (Request::isMethod('post')) {
 
-/**
- * Загрузка фото
- */
-case 'add':
+        $token = check(Request::input('token'));
+        $title = check(Request::input('title'));
+        $text = check(Request::input('text'));
+        $closed = Request::has('closed') ? 1 : 0;
 
-    //App::setting('newtitle') = 'Результат добавления';
 
-    $token = check(Request::input('token'));
-    $title = check(Request::input('title'));
-    $text = check(Request::input('text'));
-    $closed = Request::has('closed') ? 1 : 0;
+        $validation = new Validation();
+        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            ->addRule('string', $title, ['title' => 'Слишком длинное или короткое название!'], true, 5, 50)
+            ->addRule('string', $text, ['text' => 'Слишком длинное описание!'], true, 0, 1000)
+            ->addRule('bool', is_flood(App::getUsername()), ['text' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!']);
 
-    if (is_user()) {
-        if ($token == $_SESSION['token']) {
-            if (is_uploaded_file($_FILES['photo']['tmp_name'])) {
-                if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($text) <= 1000) {
-                        if (is_flood(App::getUserId())) {
+        $handle = upload_image(
+            $_FILES['photo'],
+            App::setting('filesize'),
+            App::setting('fileupfoto'),
+            uniqid()
+        );
 
-                            $handle = upload_image(
-                                $_FILES['photo'],
-                                App::setting('filesize'),
-                                App::setting('fileupfoto'),
-                                uniqid()
-                            );
-
-                            if ($handle) {
-                                $handle -> process(HOME.'/uploads/pictures/');
-                                if ($handle -> processed) {
-
-                                    $photo = new Photo();
-                                    $photo->user_id = App::getUserId();
-                                    $photo->title = $title;
-                                    $photo->text = antimat($text);
-                                    $photo->link = $handle->file_dst_name;
-                                    $photo->created_at = SITETIME;
-                                    $photo->closed = $closed;
-                                    $photo->save();
-
-                                    $handle -> clean();
-
-                                    App::setFlash('success', 'Фотография успешно загружена!');
-                                    App::redirect("/gallery");
-
-                                } else {
-                                    show_error($handle->error);
-                                }
-                            } else {
-                                show_error('Ошибка! Не удалось загрузить изображение!');
-                            }
-                        } else {
-                            show_error('Антифлуд! Вы слишком часто добавляете фотографии!');
-                        }
-                    } else {
-                        show_error('Слишком длинное описание (Необходимо до 1000 символов)!');
-                    }
-                } else {
-                    show_error('Слишком длинное или короткое название (Необходимо от 5 до 50 символов)!');
-                }
-            } else {
-                show_error('Ошибка! Не удалось загрузить изображение!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        if (! $handle) {
+            $validation -> addError(['photo' => 'Не удалось загрузить фотографию!']);
         }
-    } else {
-        show_login('Вы не авторизованы, чтобы добавить фотографию, необходимо');
+
+        if ($validation->run()) {
+
+            $handle -> process(HOME.'/uploads/pictures/');
+            if ($handle->processed) {
+                $photo = new Photo();
+                $photo->user_id    = App::getUserId();
+                $photo->title      = $title;
+                $photo->text       = antimat($text);
+                $photo->link       = $handle->file_dst_name;
+                $photo->created_at = SITETIME;
+                $photo->closed     = $closed;
+                $photo->save();
+
+                App::setFlash('success', 'Фотография успешно загружена!');
+                App::redirect('/gallery/'.$photo->id);
+            } else {
+                $validation -> addError(['photo' => $handle->error]);
+            }
+        }
+
+        App::setInput(Request::all());
+        App::setFlash('danger', $validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=addphoto">Вернуться</a><br />';
-    break;
+    App::view('gallery/create');
+break;
 
 /**
  * Редактирование фото
@@ -482,7 +443,7 @@ case 'end':
     $photo = Photo::find($gid);
 
     if (empty($photo)) {
-        App::abort(404, 'Выбранное вами фото не найдено, возможно она была удалена!');
+        App::abort(404, 'Выбранное вами фото не найдено, возможно оно было удалено!');
     }
 
     $total = Comment::where('relate_type', Photo::class)

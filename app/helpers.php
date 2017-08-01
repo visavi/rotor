@@ -1604,7 +1604,7 @@ function copyright_archive($filename){
 }
 
 // ------------- Функция загрузки и обработки изображений -------------//
-function upload_image($file, $weight, $size, $new_name = false)
+function upload_image($file, $weight, $size, $newName = false)
 {
     $handle = new FileUpload($file);
 
@@ -1617,13 +1617,15 @@ function upload_image($file, $weight, $size, $new_name = false)
         $handle -> file_overwrite = true;
 
         if ($handle->file_src_name_ext == 'png' ||
-            $handle->file_src_name_ext == 'bmp'){
+            $handle->file_src_name_ext == 'bmp') {
             $handle->image_convert = 'jpg';
         }
-        if (!empty($new_name)) {
-            $handle -> file_new_name_body = $new_name;
+
+        if ($newName) {
+            $handle -> file_new_name_body = $newName;
         }
-        if (!empty(App::setting('copyfoto'))) {
+
+        if (App::setting('copyfoto')) {
             $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
             $handle -> image_watermark_position = 'BR';
         }
