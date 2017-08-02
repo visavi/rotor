@@ -30,7 +30,7 @@
 
             @if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME)
                 <div class="right">
-                    <a href="/gallery?act=editcomm&amp;gid='.$photo->id.'&amp;cid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a>
+                    <a href="/gallery/{{ $photo->id }}/{{ $data['id'] }}/edit">Редактировать</a>
                 </div>
             @endif
 
@@ -76,6 +76,6 @@
         {{ show_error('Комментирование данной фотографии закрыто!') }}
     @endif
 
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;uz={{ $photo->getUser()->login }}">Альбом</a><br />
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">Альбом</a><br />
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
 @stop

@@ -139,6 +139,9 @@ case 'edit':
 
             App::setFlash('success', 'Фотография успешно отредактирована!');
             App::redirect("/gallery/album/".App::getUsername());
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
         }
     }
 
@@ -208,6 +211,9 @@ case 'comments':
 
             App::setFlash('success', 'Комментарий успешно добавлен!');
             App::redirect('/gallery/'.$photo->id.'/end');
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
         }
     }
 
@@ -232,44 +238,34 @@ break;
 /**
  * Подготовка к редактированию
  */
- case 'editcomm':
+ case 'editcomment':
 
-    $cid = abs(intval(Request::input('cid')));
+     $id  = abs(intval(param('id')));
 
-    if (is_user()) {
-        $comm = Comment::select('comments.*', 'photo.closed')
-            ->where('relate_type', Photo::class)
-            ->where('comments.id', $cid)
-            ->where('comments.user_id', App::getUserId())
-            ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
-            ->first();
+     if (! is_user()) {
+         App::abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
+     }
 
-        if (!empty($comm)) {
-            if (empty($comm['closed'])) {
-                if ($comm['created_at'] + 600 > SITETIME) {
+    $comment = Comment::select('comments.*', 'photo.closed')
+        ->where('relate_type', Photo::class)
+        ->where('comments.id', $id)
+        ->where('comments.user_id', App::getUserId())
+        ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+        ->first();
 
-                    echo '<i class="fa fa-pencil"></i> <b>'.$comm->getUser()->login.'</b> <small>('.date_fixed($comm['created_at']).')</small><br /><br />';
+     if (! $comment) {
+         App::abort('default', 'Комментарий удален или вы не автор этого комментария!');
+     }
 
-                    echo '<div class="form">';
-                    echo '<form action="/gallery?act=changecomm&amp;gid='.$comm['relate_id'].'&amp;cid='.$cid.'&amp;page='.$page.'" method="post">';
-                    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-                    echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$comm['text'].'</textarea><br />';
-                    echo '<input type="submit" value="Редактировать" /></form></div><br />';
+     if ($comment['closed']) {
+         App::abort('default', 'Редактирование невозможно, комментирование запрещено!');
+     }
 
-                } else {
-                    show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
-                }
-            } else {
-                show_error('Ошибка! Редактирование невозможно, комментирование запрещено!');
-            }
-        } else {
-            show_error('Ошибка! Комментарий удален или вы не автор этого комментария!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы редактировать комментарии, необходимо');
-    }
+     if ($comment['created_at'] + 600 < SITETIME) {
+         App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=comments&amp;gid='.$gid.'&amp;page='.$page.'">Вернуться</a><br />';
+     App::view('gallery/editcomment', compact('comment'));
 break;
 
 /**
