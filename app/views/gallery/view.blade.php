@@ -14,8 +14,8 @@
     $links = [
         ['url' => '/admin/gallery?act=edit&amp;page='.$page.'&amp;gid='.$photo['id'], 'label' => 'Редактировать', 'show' => is_admin()],
         ['url' => '/admin/gallery?act=del&amp;del='.$photo['id'].'&amp;page='.$page.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => is_admin()],
-        ['url' => '/gallery?act=edit&amp;gid='.$photo['id'].'&amp;page='.$page, 'label' => 'Редактировать', 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
-        ['url' => '/gallery?act=delphoto&amp;gid='.$photo['id'].'&amp;page='.$page.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
+        ['url' => '/gallery/'.$photo['id'].'/edit', 'label' => 'Редактировать', 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
+        ['url' => '/gallery/'.$photo['id'].'/delete?token='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
     ];
     ?>
 
@@ -64,7 +64,7 @@
             <?php endif; ?>
         </div>
     <?php endif; ?>
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;user=<?= $photo->getUser()->login ?>">В альбом</a><br />
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/<?= $photo->getUser()->login ?>">В альбом</a><br />
 
     <?php else: ?>
         <?= show_error('Ошибка! Данного изображения нет в базе'); ?>

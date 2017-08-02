@@ -11,7 +11,7 @@
 <?php
 
 $links = [
-    ['url' => '/gallery/album?act=photo', 'label' => 'Мои фото', 'show' => is_user()],
+    ['url' => '/gallery/album/'.App::user('login'), 'label' => 'Мои фото', 'show' => is_user()],
     ['url' => '/gallery/comments?act=comments', 'label' => 'Мои комментарии', 'show' => is_user()],
     ['url' => '/gallery/album', 'label' => 'Все альбомы'],
     ['url' => '/gallery/comments', 'label' => 'Все комментарии'],

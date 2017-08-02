@@ -49,7 +49,7 @@ case 'add':
             $user = User::where('id', App::getUserId());
             $user->update([
                 'allguest' => Capsule::raw('allguest + 1'),
-                'point' => Capsule::raw('point + 1'),
+                'point' => Capsule::raw('point + '.$bookscores),
                 'money' => Capsule::raw('money + 5'),
             ]);
         }

@@ -59,7 +59,6 @@ case 'create':
         $text = check(Request::input('text'));
         $closed = Request::has('closed') ? 1 : 0;
 
-
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
             ->addRule('string', $title, ['title' => 'Слишком длинное или короткое название!'], true, 5, 50)
@@ -108,88 +107,108 @@ break;
  * Редактирование фото
  */
 case 'edit':
-
-    if (is_user()) {
-        $photo = Photo::where('user_id', App::getUserId())->find($gid);
-
-        if (!empty($photo)) {
-
-            echo '<div class="form">';
-            echo '<form action="/gallery?act=change&amp;gid='.$gid.'&amp;page='.$page.'" method="post">';
-            echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-            echo 'Название: <br /><input type="text" name="title" value="'.$photo['title'].'" /><br />';
-            echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br />';
-
-            echo 'Закрыть комментарии: ';
-            $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
-            echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
-
-            echo '<input type="submit" value="Изменить" /></form></div><br />';
-        } else {
-            show_error('Ошибка! Фотография удалена или вы не автор этой фотографии!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы редактировать фотографию, необходимо');
+    if (! is_user()) {
+        App::abort(403, 'Авторизуйтесь для редактирования фотографии!');
     }
 
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album?act=photo&amp;uz='.$uz.'&amp;page='.$page.'">Альбом</a><br />';
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br />';
-break;
+    $photo = Photo::where('user_id', App::getUserId())->find($gid);
 
-/**
- * Изменение описания
- */
-case 'change':
-
-    $token = check(Request::input('token'));
-    $title = check(Request::input('title'));
-    $text = check(Request::input('text'));
-    $closed = Request::has('closed') ? 1 : 0;
-
-    if ($token == $_SESSION['token']) {
-        if (is_user()) {
-            $photo = Photo::where('user_id', App::getUserId())->find($gid);
-
-            if (!empty($photo)) {
-                if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($text) <= 1000) {
-
-                        $text = antimat($text);
-
-                        DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", [$title, $text, $closed, $gid]);
-
-                        App::setFlash('success', 'Фотография успешно отредактирована!');
-                        App::redirect("/gallery/album?act=photo&uz=$uz&page=$page");
-
-                    } else {
-                        show_error('Ошибка! Слишком длинное описание (Необходимо до 1000 символов)!');
-                    }
-                } else {
-                    show_error('Ошибка! Слишком длинное или короткое название!');
-                }
-            } else {
-                show_error('Ошибка! Фотография удалена или вы не автор этой фотографии!');
-            }
-        } else {
-            show_login('Вы не авторизованы, чтобы редактировать фотографию, необходимо');
-        }
-    } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+    if (! $photo) {
+        App::abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
     }
 
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery?act=edit&amp;gid='.$gid.'&amp;page='.$page.'">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br />';
+    if (Request::isMethod('post')) {
+        $token = check(Request::input('token'));
+        $title = check(Request::input('title'));
+        $text = check(Request::input('text'));
+        $closed = Request::has('closed') ? 1 : 0;
+
+        $validation = new Validation();
+        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            ->addRule('string', $title, ['title' => 'Слишком длинное или короткое название!'], true, 5, 50)
+            ->addRule('string', $text, ['text' => 'Слишком длинное описание!'], true, 0, 1000);
+
+        if ($validation->run()) {
+            $text = antimat($text);
+
+            $photo->update([
+                'title'  => $title,
+                'text'   => $text,
+                'closed' => $closed,
+            ]);
+
+            App::setFlash('success', 'Фотография успешно отредактирована!');
+            App::redirect("/gallery/album/".App::getUsername());
+        }
+    }
+
+    $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
+
+    App::view('gallery/edit', compact('photo', 'checked'));
 break;
 
 /**
  * Список комментариев
  */
 case 'comments':
-
     $photo = Photo::find($gid);
 
     if (! $photo) {
         App::abort('default', 'Фотография не найдена');
+    }
+
+    if (Request::isMethod('post')) {
+        $token = check(Request::input('token'));
+        $msg  = check(Request::input('msg'));
+
+        $validation = new Validation();
+        $validation
+            ->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
+            ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
+            ->addRule('bool', is_flood(App::getUsername()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!'])
+            -> addRule('empty', $photo['closed'], 'Комментирование данной фотографии запрещено!');
+
+        if ($validation->run()) {
+            $msg = antimat($msg);
+
+            Comment::create([
+                'relate_type' => Photo::class,
+                'relate_id'   => $photo->id,
+                'text'        => $msg,
+                'user_id'     => App::getUserId(),
+                'created_at'  => SITETIME,
+                'ip'          => App::getClientIp(),
+                'brow'        => App::getUserAgent(),
+            ]);
+
+            Capsule::delete('
+                DELETE FROM comments WHERE relate_type = :relate_type AND relate_id = :relate_id AND created_at < (
+                    SELECT MIN(created_at) FROM (
+                        SELECT created_at FROM comments WHERE relate_type = :relate_type2 AND relate_id = :relate_id2 ORDER BY created_at DESC LIMIT '.App::setting('maxpostgallery').'
+                    ) AS del
+                );', [
+                    'relate_type'  => Photo::class,
+                    'relate_id'    => $photo->id,
+                    'relate_type2' => Photo::class,
+                    'relate_id2'   => $photo->id,
+                ]
+            );
+
+            $user = User::where('id', App::getUserId());
+            $user->update([
+                'allcomments' => Capsule::raw('allcomments + 1'),
+                'point' => Capsule::raw('point + 1'),
+                'money' => Capsule::raw('money + 5'),
+            ]);
+
+            $photo->update([
+                'comments'  => Capsule::raw('comments + 1'),
+            ]);
+
+            App::setFlash('success', 'Комментарий успешно добавлен!');
+            App::redirect('/gallery/'.$photo->id.'/end');
+        }
     }
 
     $total = Comment::where('relate_type', Photo::class)
@@ -208,60 +227,6 @@ case 'comments':
     $isAdmin = is_admin();
 
     App::view('gallery/comments', compact('photo', 'comments', 'page', 'isAdmin'));
-break;
-
-
-/**
- * Запись комментариев
- */
-case 'addcomm':
-
-    $token = check(Request::input('token'));
-    $msg = check(Request::input('msg'));
-
-    //App::setting('newtitle') = 'Добавление комментария';
-
-    if (is_user()) {
-        if ($token == $_SESSION['token']) {
-            if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
-                $data = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
-
-                if (!empty($data)) {
-                    if (empty($data['closed'])) {
-                        if (is_flood(App::getUsername())) {
-                            $msg = antimat($msg);
-
-                            DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", [Photo::class, $gid, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
-
-                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".App::setting('maxpostgallery').") AS del);", [Photo::class, $gid, Photo::class, $gid]);
-
-                            DB::run() -> query("UPDATE `photo` SET `comments`=`comments`+1 WHERE `id`=?;", [$gid]);
-                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=?", [App::getUserId()]);
-
-                            App::setFlash('success', 'Комментарий успешно добавлен!');
-                            App::redirect("/gallery?act=end&gid=$gid");
-
-                        } else {
-                            show_error('Антифлуд! Разрешается отправлять комментарии раз в '.flood_period().' секунд!');
-                        }
-                    } else {
-                        show_error('Ошибка! Комментирование данной фотографии запрещено!');
-                    }
-                } else {
-                    show_error('Ошибка! Данного изображения не существует!');
-                }
-            } else {
-                show_error('Ошибка! Слишком длинный или короткий комментарий!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=comments&amp;gid='.$gid.'">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/gallery">В галерею</a><br />';
 break;
 
 /**

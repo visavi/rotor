@@ -17,7 +17,7 @@
 
                 @if ($moder)
                     <a href="/gallery/{{ $data['id'] }}/edit">Редактировать</a> /
-                    <a href="/gallery/{{ $data['id'] }}/delete?token={{ $_SESSION['token'] }}">Удалить</a>
+                    <a href="/gallery/{{ $data['id'] }}/delete?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
                 @endif
             </div>
             <div>
