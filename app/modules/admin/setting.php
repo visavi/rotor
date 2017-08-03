@@ -211,9 +211,6 @@ if (is_admin([101])) {
                 $checked = ($setting['invite'] == 1) ? ' checked="checked"' : '';
                 echo '<input name="invite" id="invite" type="checkbox" value="1"'.$checked.' title="Для регистрация необходимо ввести специальный пригласительный ключ" /> <label for="invite">Регистрация по приглашениям</label><br />';
 
-                $checked = ($setting['anonymity'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="anonymity" id="anonymity" type="checkbox" value="1"'.$checked.' /> <label for="anonymity">Скрывать IP для пользователей</label><br />';
-
                 echo '<input value="Изменить" type="submit" /></form></div><br />';
             } else {
                 show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
@@ -230,7 +227,6 @@ if (is_admin([101])) {
             $uid = check($_GET['uid']);
             $invite = (empty($_POST['invite'])) ? 0 : 1;
             $openreg = (empty($_POST['openreg'])) ? 0 : 1;
-            $anonymity = (empty($_POST['anonymity'])) ? 0 : 1;
             $regkeys = (isset($_POST['regkeys'])) ? abs(intval($_POST['regkeys'])) : 0;
             $closedsite = (isset($_POST['closedsite'])) ? abs(intval($_POST['closedsite'])) : 0;
 
@@ -253,7 +249,6 @@ if (is_admin([101])) {
                         $dbr -> execute($regkeys, 'regkeys');
                         $dbr -> execute($invite, 'invite');
                         $dbr -> execute($openreg, 'openreg');
-                        $dbr -> execute($anonymity, 'anonymity');
                         $dbr -> execute($closedsite, 'closedsite');
 
                         save_setting();

@@ -20,31 +20,30 @@
             <div class="b">
                 <div class="img">{!! user_avatars($data->user) !!}</div>
 
-                @if ($isAdmin)
-                    <span class="imgright"><input type="checkbox" name="del[]" value="{{ $data['id'] }}" /></span>
-                @endif
+                <div class="pull-right">
+                    @if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME)
+                        <a title="Редактировать" href="/gallery/{{ $photo->id }}/{{ $data['id'] }}/edit"><i class="fa fa-pencil text-muted"></i></a>
+                    @endif
+
+                    @if ($isAdmin)
+                        <input type="checkbox" name="del[]" value="{{ $data['id'] }}" />
+                    @endif
+                </div>
 
                 <b>{!! profile($data->user) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br />
                 {!! user_title($data->user) !!} {!! user_online($data->user) !!}
             </div>
-
-            @if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME)
-                <div class="right">
-                    <a href="/gallery/{{ $photo->id }}/{{ $data['id'] }}/edit">Редактировать</a>
-                </div>
-            @endif
-
             <div>
                 {!! App::bbCode($data['text']) !!}<br />
 
-                @if ($isAdmin || empty(App::setting('anonymity')))
+                @if ($isAdmin)
                     <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
                 @endif
             </div>
         @endforeach
 
         @if ($isAdmin)
-            <span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>
+            <button class="pull-right btn btn-danger">Удалить выбранное</button></form>
         @endif
 
         {{ App::pagination($page) }}

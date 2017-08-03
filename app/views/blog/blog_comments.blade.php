@@ -43,7 +43,7 @@
             <div>
                 <?=App::bbCode($data['text'])?><br />
 
-            <?php if (is_admin() || empty(App::setting('anonymity'))): ?>
+            <?php if (is_admin()): ?>
                 <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
             <?php endif; ?>
 

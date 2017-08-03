@@ -19,7 +19,7 @@
 
             Написал: <?= $data->getUser()->login ?> <?=user_online($data->user)?> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
 
-            <?php if (is_admin() || empty(App::setting('anonymity'))): ?>
+            <?php if (is_admin()): ?>
                 <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
             <?php endif; ?>
 

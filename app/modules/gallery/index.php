@@ -238,87 +238,61 @@ break;
 /**
  * Подготовка к редактированию
  */
- case 'editcomment':
+case 'editcomment':
 
-     $id  = abs(intval(param('id')));
+    $id  = abs(intval(param('id')));
+    $gid  = abs(intval(param('gid')));
 
-     if (! is_user()) {
-         App::abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
-     }
-
-    $comment = Comment::select('comments.*', 'photo.closed')
-        ->where('relate_type', Photo::class)
-        ->where('comments.id', $id)
-        ->where('comments.user_id', App::getUserId())
-        ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
-        ->first();
-
-     if (! $comment) {
-         App::abort('default', 'Комментарий удален или вы не автор этого комментария!');
-     }
-
-     if ($comment['closed']) {
-         App::abort('default', 'Редактирование невозможно, комментирование запрещено!');
-     }
-
-     if ($comment['created_at'] + 600 < SITETIME) {
-         App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
-     }
-
-     App::view('gallery/editcomment', compact('comment'));
-break;
-
-/**
- * Редактирование комментария
- */
-case 'changecomm':
-
-    $cid = abs(intval(Request::input('cid')));
-    $msg = check(Request::input('msg'));
-    $token = check(Request::input('token'));
-
-    if (is_user()) {
-        if ($token == $_SESSION['token']) {
-            if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
-
-                $comm = Comment::select('comments.*', 'photo.closed')
-                    ->where('relate_type', Photo::class)
-                    ->where('comments.id', $cid)
-                    ->where('comments.user_id', App::getUserId())
-                    ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
-                    ->first();
-
-                if (!empty($comm)) {
-                    if (empty($comm['closed'])) {
-                        if ($comm['created_at'] + 600 > SITETIME) {
-
-                            $msg = antimat($msg);
-
-                            DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?;", [$msg, Photo::class, $cid]);
-
-                            App::setFlash('success', 'Комментарий успешно отредактирован!');
-                            App::redirect("/gallery?act=comments&gid=$gid&page=$page");
-
-                        } else {
-                            show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!');
-                        }
-                    } else {
-                        show_error('Ошибка! Редактирование невозможно, комментирование запрещено!');
-                    }
-                } else {
-                    show_error('Ошибка! Комментарий удален или вы не автор этого комментария!');
-                }
-            } else {
-                show_error('Ошибка! Слишком длинный или короткий комментарий!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы редактировать комментарии, необходимо');
+    if (! is_user()) {
+        App::abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=editcomm&amp;gid='.$gid.'&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
+    $comment = Comment::select('comments.*', 'photo.closed')
+    ->where('relate_type', Photo::class)
+    ->where('comments.id', $id)
+    ->where('comments.user_id', App::getUserId())
+    ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+    ->first();
+
+    if (! $comment) {
+        App::abort('default', 'Комментарий удален или вы не автор этого комментария!');
+    }
+
+    if ($comment['closed']) {
+        App::abort('default', 'Редактирование невозможно, комментирование запрещено!');
+    }
+
+    if ($comment['created_at'] + 600 < SITETIME) {
+        App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+    }
+
+    if (Request::isMethod('post')) {
+        $cid = abs(intval(Request::input('cid')));
+        $msg = check(Request::input('msg'));
+        $token = check(Request::input('token'));
+
+        $validation = new Validation();
+        $validation
+            ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
+            ->addRule('bool', is_flood(App::getUsername()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!'])
+            -> addRule('empty', $comment['closed'], 'Комментирование данной фотографии запрещено!');
+
+        if ($validation->run()) {
+            $msg = antimat($msg);
+
+            $comment->update([
+                'text' => $msg,
+            ]);
+
+            App::setFlash('success', 'Комментарий успешно отредактирован!');
+            App::redirect('/gallery/'.$gid.'/comments');
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
+        }
+    }
+    App::view('gallery/editcomment', compact('comment'));
 break;
 
 /**

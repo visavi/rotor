@@ -106,7 +106,7 @@ case 'view':
 
                 echo '<div>'.App::bbCode($comm['text']).'<br />';
 
-                if (is_admin() || empty(App::setting('anonymity'))) {
+                if (is_admin()) {
                     echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
                 }
 
@@ -198,7 +198,7 @@ case 'comments':
 
                 echo '<div>'.App::bbCode($data['text']).'<br />';
 
-                if (is_admin() || empty(App::setting('anonymity'))) {
+                if (is_admin()) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 

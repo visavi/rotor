@@ -157,7 +157,7 @@
                 <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br />
             <?php endif; ?>
 
-            <?php if (is_admin() || empty(App::setting('anonymity'))): ?>
+            <?php if (is_admin()): ?>
                 <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
             <?php endif; ?>
 

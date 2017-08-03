@@ -29,7 +29,7 @@ switch ($act):
                 echo '<div class="b">';
                 echo user_gender($data->user).' <b>'.profile($data->user).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
 
-                if (is_admin() || empty(App::setting('anonymity'))) {
+                if (is_admin()) {
                     echo '<div><span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
                 }
             }
@@ -67,7 +67,7 @@ switch ($act):
                     echo user_gender($data->user).' <b>'.profile($data->user).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
                 }
 
-                if (is_admin() || empty(App::setting('anonymity'))) {
+                if (is_admin()) {
                     echo '<div><span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
                 }
             }

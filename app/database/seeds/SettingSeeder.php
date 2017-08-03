@@ -15,7 +15,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'advertpoint', 'value' => 2000],
             ['name'  => 'allowextload', 'value' => 'zip,rar,txt,jpg,jpeg,gif,png,mp3,mp4,3gp,wav,mmf,mid,midi,sis,jar,jad'],
             ['name'  => 'allvotes', 'value' => 10],
-            ['name'  => 'anonymity', 'value' => 1],
             ['name'  => 'avtorlist', 'value' => 10],
             ['name'  => 'banlist', 'value' => 10],
             ['name'  => 'blacklist', 'value' => 10],

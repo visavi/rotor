@@ -133,7 +133,7 @@ if ($act == 'index') {
             echo '<b><a href="/chat?name=' . $data[1] . '#form">' . $data[1] . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
             echo user_title($data[1]) . ' ' . $useronline . '</div>';
             echo '<div>' . App::bbCode($data[0]) . '<br />';
-            if (is_admin() || empty(App::setting('anonymity'))){
+            if (is_admin()){
                 echo '<span class="data">(' . $data[4] . ', ' . $data[5] . ')</span></div>';
             }
         }

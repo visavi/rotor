@@ -457,7 +457,7 @@ case 'comments':
 
                     echo '<div class="message">'.App::bbCode($data['text']).'<br />';
 
-                    if (is_admin() || empty(App::setting('anonymity'))) {
+                    if (is_admin()) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                     }
                     echo '</div>';

@@ -73,7 +73,7 @@ case 'comments':
 
             echo 'Написал: '.$data['user'].' <small>('.date_fixed($data['time']).')</small><br />';
 
-            if ($is_admin || empty(App::setting('anonymity'))) {
+            if ($is_admin) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
             }
 

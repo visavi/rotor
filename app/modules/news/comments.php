@@ -35,7 +35,7 @@ switch ($act):
 
                 echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['created_at']).')</small><br />';
 
-                if (is_admin() || empty(App::setting('anonymity'))) {
+                if (is_admin()) {
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                 }
 
