@@ -12,7 +12,7 @@
 
     @if ($comments->isNotEmpty())
         @if ($isAdmin)
-            <form action="/gallery/{{ $photo['id'] }}/delete" method="post">
+            <form action="/gallery/{{ $photo['id'] }}/comments/delete" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
         @endif
 

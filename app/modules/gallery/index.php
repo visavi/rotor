@@ -1,7 +1,6 @@
 <?php
 
-//$uz = check(Request::input('uz'));
-$gid = param('gid');
+$gid  = abs(intval(param('gid')));
 $page = abs(intval(Request::input('page', 1)));
 
 switch ($act):
@@ -54,9 +53,9 @@ case 'create':
 
     if (Request::isMethod('post')) {
 
-        $token = check(Request::input('token'));
-        $title = check(Request::input('title'));
-        $text = check(Request::input('text'));
+        $token  = check(Request::input('token'));
+        $title  = check(Request::input('title'));
+        $text   = check(Request::input('text'));
         $closed = Request::has('closed') ? 1 : 0;
 
         $validation = new Validation();
@@ -241,7 +240,6 @@ break;
 case 'editcomment':
 
     $id  = abs(intval(param('id')));
-    $gid  = abs(intval(param('gid')));
 
     if (! is_user()) {
         App::abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
@@ -298,75 +296,82 @@ break;
 /**
  * Удаление комментариев
  */
-case 'delcomm':
+case 'delcomments':
 
     $token = check(Request::input('token'));
     $del   = intar(Request::input('del'));
 
-    if (is_admin()) {
-        if ($token == $_SESSION['token']) {
-            if (!empty($del)) {
-                $del = implode(',', $del);
-
-                $delcomments = DB::run() -> exec("DELETE FROM comments WHERE relate_type=Photo::class AND id IN (".$del.") AND relate_id=".$gid.";");
-                DB::run() -> query("UPDATE photo SET comments=comments-? WHERE id=?;", [$delcomments, $gid]);
-
-                App::setFlash('success', 'Выбранные комментарии успешно удалены!');
-                App::redirect("/gallery?act=comments&gid=$gid&page=$page");
-
-            } else {
-                show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        show_error('Ошибка! Удалять комментарии могут только модераторы!');
+    if (! is_admin()) {
+        redirect ('/');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery?act=comments&amp;gid='.$gid.'">Вернуться</a><br />';
+    $validation = new Validation();
+    $validation
+        ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+        ->addRule('bool', $del, 'Отстутствуют выбранные комментарии для удаления');
+
+
+    if ($validation->run()) {
+
+        $delComments = Comment::where('relate_type', Photo::class)
+            ->where('relate_id', $gid)
+            ->whereIn('id', $del)
+            ->delete();
+
+        Photo::where('id', $gid)
+            ->update([
+                'comments'  => Capsule::raw('comments - '.$delComments),
+            ]);
+
+        App::setFlash('success', 'Выбранные комментарии успешно удалены!');
+    } else {
+        App::setFlash('danger', $validation->getErrors());
+    }
+
+    App::redirect('/gallery/'.$gid.'/comments');
 break;
-
-
 
 /**
  * Удаление фотографий
  */
-case 'delphoto':
+case 'delete':
 
     $token = check(Request::input('token'));
 
-    if (is_user()) {
-        if ($token == $_SESSION['token']) {
-            if (is_writeable(HOME.'/uploads/pictures')) {
-                $querydel = DB::run() -> queryFetch("SELECT `id`, `link`, `comments` FROM `photo` WHERE `id`=? AND `user_id`=? LIMIT 1;", [$gid, App::getUserId()]);
-                if (!empty($querydel)) {
-                    if (empty($querydel['comments'])) {
-                        DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$querydel['id']]);
-                        DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", [Photo::class, $querydel['id']]);
-
-                        unlink_image('uploads/pictures/', $querydel['link']);
-
-                        App::setFlash('success', 'Фотография успешно удалена!');
-                        App::redirect("/gallery/album?act=photo&page=$page");
-
-                    } else {
-                        show_error('Ошибка! Запрещено удалять фотографии к которым имеются комментарии!');
-                    }
-                } else {
-                    show_error('Ошибка! Данная фотография не существует или вы не автор этой фотографии!');
-                }
-            } else {
-                show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с фотографиями!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы удалять фотографии, необходимо');
+    if (! is_user()) {
+        App::abort(403, 'Для удаления фотографий небходимо авторизоваться!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery/album?act=photo&amp;page='.$page.'">Вернуться</a><br />';
+    $photo = Photo::where('user_id', App::getUserId())->find($gid);
+
+    if (! $photo) {
+        App::abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
+    }
+
+
+    $validation = new Validation();
+    $validation
+        ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+        ->addRule('bool', is_writeable(HOME.'/uploads/pictures'), ['Не установлены атрибуты доступа на дирекоторию с фотографиями!'])
+        -> addRule('empty', $photo['comments'], 'Запрещено удалять фотографии к которым имеются комментарии!');
+
+
+    if ($validation->run()) {
+        unlink_image('uploads/pictures/', $photo['link']);
+
+        Comment::where('relate_type', Photo::class)
+            ->where('relate_id', $photo->id)
+            ->delete();
+
+        $photo->delete();
+
+        App::setFlash('success', 'Фотография успешно удалена!');
+
+    } else {
+        App::setFlash('danger', $validation->getErrors());
+    }
+
+    App::redirect('/gallery/album/'.App::getUsername());
 break;
 
 

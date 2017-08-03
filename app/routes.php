@@ -43,13 +43,14 @@ $router->map('GET',      '/news/rss', 'news/rss.php', 'news_rss');
 
 $router->map('GET',      '/gallery', 'gallery/index.php', 'gallery');
 $router->map('GET',      '/gallery/[i:gid]', 'gallery/index.php@view');
-$router->map('GET',      '/gallery/[i:gid]/[end:action]', 'gallery/index.php');
+$router->map('GET',      '/gallery/[i:gid]/[delete|end:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[i:gid]/[comments:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[create:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[i:gid]/[edit:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[i:gid]/[i:id]/edit', 'gallery/index.php@editcomment');
 $router->map('GET',      '/gallery/album', 'gallery/album.php');
 $router->map('GET',      '/gallery/album/[user:login]', 'gallery/album.php@photo');
+$router->map('POST',     '/gallery/[i:gid]/comments/delete', 'gallery/index.php@delcomments');
 
 $router->map('GET|POST', '/gallery/top', 'gallery/top.php');
 
