@@ -18,7 +18,7 @@ case 'index':
         ->with('user')
         ->get();
 
-    App::view('gallery/index', compact('photos', 'page', 'total'));
+    App::view('gallery/index', compact('photos', 'page'));
 break;
 
 /**

@@ -46,6 +46,7 @@ switch ($act):
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->orderBy('created_at', 'desc')
+            ->with('user')
             ->get();
 
         $moder = (App::getUserId() == $user->id) ? 1 : 0;
