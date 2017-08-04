@@ -11,7 +11,7 @@
     <i class="fa fa-pencil"></i> <b>{{ $comment->getUser()->login }}</b> <small>({{ date_fixed($comment['created_at']) }})</small><br /><br />
 
     <div class="form">
-        <form action="/gallery/{{ $comment['relate_id'] }}/{{$comment->id }}/edit" method="post">
+        <form method="post">
             <input type="hidden" name="token" value="{{  $_SESSION['token'] }}">
             <textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">{{  $comment['text'] }}</textarea><br />
             <button class="btn btn-success">Редактировать</button>

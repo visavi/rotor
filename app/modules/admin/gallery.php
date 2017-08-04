@@ -13,7 +13,7 @@ if (is_admin()) {
     ############################################################################################
         case 'index':
 
-            echo '<a href="/gallery?act=addphoto">Добавить фото</a> / ';
+            echo '<a href="/gallery/create">Добавить фото</a> / ';
             echo '<a href="/gallery?page='.$page.'">Обзор</a><hr />';
 
             $total = Photo::count();

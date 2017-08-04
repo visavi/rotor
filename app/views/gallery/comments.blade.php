@@ -12,7 +12,7 @@
 
     @if ($comments->isNotEmpty())
         @if ($isAdmin)
-            <form action="/gallery/{{ $photo['id'] }}/comments/delete" method="post">
+            <form action="/gallery/{{ $photo['id'] }}/comments/delete?page={{ $page['current'] }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
         @endif
 
@@ -22,7 +22,7 @@
 
                 <div class="pull-right">
                     @if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME)
-                        <a title="Редактировать" href="/gallery/{{ $photo->id }}/{{ $data['id'] }}/edit"><i class="fa fa-pencil text-muted"></i></a>
+                        <a title="Редактировать" href="/gallery/{{ $photo->id }}/{{ $data['id'] }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
                     @endif
 
                     @if ($isAdmin)

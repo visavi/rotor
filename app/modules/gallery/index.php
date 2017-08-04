@@ -137,7 +137,7 @@ case 'edit':
             ]);
 
             App::setFlash('success', 'Фотография успешно отредактирована!');
-            App::redirect("/gallery/album/".App::getUsername());
+            App::redirect('/gallery/album/'.App::getUsername().'?page='.$page);
         } else {
             App::setInput(Request::all());
             App::setFlash('danger', $validation->getErrors());
@@ -146,7 +146,7 @@ case 'edit':
 
     $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
 
-    App::view('gallery/edit', compact('photo', 'checked'));
+    App::view('gallery/edit', compact('photo', 'checked', 'page'));
 break;
 
 /**
@@ -284,7 +284,7 @@ case 'editcomment':
             ]);
 
             App::setFlash('success', 'Комментарий успешно отредактирован!');
-            App::redirect('/gallery/'.$gid.'/comments');
+            App::redirect('/gallery/'.$gid.'/comments?page='.$page);
         } else {
             App::setInput(Request::all());
             App::setFlash('danger', $validation->getErrors());
@@ -328,7 +328,7 @@ case 'delcomments':
         App::setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/gallery/'.$gid.'/comments');
+    App::redirect('/gallery/'.$gid.'/comments?page='.$page);
 break;
 
 /**
@@ -371,7 +371,7 @@ case 'delete':
         App::setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/gallery/album/'.App::getUsername());
+    App::redirect('/gallery/album/'.App::getUsername().'?page='.$page);
 break;
 
 

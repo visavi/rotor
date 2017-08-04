@@ -112,7 +112,7 @@
                 <b><a href="/forum/active/themes?user={{ $user['login'] }}">Форум</a></b> (<a href="/forum/active/posts?user={{ $user['login'] }}">Сообщ.</a>) /
                 <b><a href="/load/active?act=files&amp;uz={{ $user['login'] }}">Загрузки</a></b> (<a href="/load/active?act=comments&amp;uz={{ $user['login'] }}">комм.</a>) /
                 <b><a href="/blog/active?act=blogs&amp;uz={{ $user['login'] }}">Блоги</a></b> (<a href="/blog/active?act=comments&amp;uz={{ $user['login'] }}">комм.</a>) /
-                <b><a href="/gallery/album?act=photo&amp;uz={{ $user['login'] }}">Галерея</a></b> (<a href="/gallery/comments?act=comments&amp;uz={{ $user['login'] }}">комм.</a>)<br />
+                <b><a href="/gallery/album/{{ $user['login'] }}">Галерея</a></b> (<a href="/gallery/comments?act=comments&amp;uz={{ $user['login'] }}">комм.</a>)<br />
             </div>
         </div>
     </div>

@@ -16,8 +16,8 @@
                 <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }})<br />
 
                 @if ($moder)
-                    <a href="/gallery/{{ $data['id'] }}/edit">Редактировать</a> /
-                    <a href="/gallery/{{ $data['id'] }}/delete?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+                    <a href="/gallery/{{ $data['id'] }}/edit?page={{ $page['current'] }}">Редактировать</a> /
+                    <a href="/gallery/{{ $data['id'] }}/delete?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
                 @endif
             </div>
             <div>

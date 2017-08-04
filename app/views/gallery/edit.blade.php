@@ -9,7 +9,7 @@
     <h1>Редактирование фотографии</h1>
 
     <div class="form">
-        <form action="/gallery/{{ $photo->id }}/edit" method="post">
+        <form action="/gallery/{{ $photo->id }}/edit?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             Название: <br /><input name="title" value="{{ $photo['title'] }}" /><br />
             Подпись к фото: <br /><textarea cols="25" rows="5" name="text">{{ $photo['text'] }}</textarea><br />
