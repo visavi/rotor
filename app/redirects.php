@@ -125,12 +125,12 @@ if ($_SERVER['REQUEST_URI']) {
 
         if ($parse['path'] == '/gallery/index.php' && isset($output['act']) &&
             $output['act'] == 'view' && isset($output['gid']) && is_numeric($output['gid'])){
-            App::redirect('/gallery?act=view&gid='.$output['gid'], true);
+            App::redirect('/gallery/'.$output['gid'], true);
         }
 
         if ($parse['path'] == '/gallery/album.php' && isset($output['act']) &&
             $output['act'] == 'photo' && isset($output['uz'])){
-            App::redirect('/gallery/album?act=photo&uz='.$output['uz'], true);
+            App::redirect('/gallery/album/'.$output['uz'], true);
         }
 
         if ($parse['path'] == '/gallery/comments.php' && isset($output['act']) &&

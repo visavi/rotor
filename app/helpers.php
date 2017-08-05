@@ -1079,8 +1079,13 @@ function is_admin($access = []) {
     return false;
 }
 
-// ------------------------- Функция вывода ошибок ------------------------//
-function show_error($errors) {
+/**
+ * Выводит ошибки
+ *
+ * @param string $errors
+ */
+function show_error($errors)
+{
     App::view('includes/error', compact('errors'));
 }
 

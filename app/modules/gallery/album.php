@@ -22,15 +22,13 @@ switch ($act):
             ->orderBy('cnt', 'desc')
             ->get();
 
-        App::view('gallery/album', compact('albums', 'page'));
+        App::view('gallery/albums', compact('albums', 'page'));
     break;
 
     ############################################################################################
     ##                               Просмотр по пользователям                                ##
     ############################################################################################
     case 'photo':
-
-        //show_title('Список всех фотографий '.$uz);
 
         $user = User::where('login', $login)->first();
 
@@ -51,7 +49,7 @@ switch ($act):
 
         $moder = (App::getUserId() == $user->id) ? 1 : 0;
 
-        App::view('gallery/album_photo', compact('photos', 'moder', 'page', 'user'));
+        App::view('gallery/album', compact('photos', 'moder', 'page', 'user'));
     break;
 
 endswitch;

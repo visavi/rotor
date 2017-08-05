@@ -11,9 +11,9 @@
 <?php
 
 $links = [
-    ['url' => '/gallery/album/'.App::user('login'), 'label' => 'Мои фото', 'show' => is_user()],
+    ['url' => '/gallery/album/'.App::user('login'), 'label' => 'Мои альбом', 'show' => is_user()],
     ['url' => '/gallery/comments?act=comments', 'label' => 'Мои комментарии', 'show' => is_user()],
-    ['url' => '/gallery/album', 'label' => 'Все альбомы'],
+    ['url' => '/gallery/albums', 'label' => 'Все альбомы'],
     ['url' => '/gallery/comments', 'label' => 'Все комментарии'],
     ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => is_admin()],
 ];
@@ -47,7 +47,7 @@ $links = [
 
         <?php App::pagination($page) ?>
 
-        Всего фотографий: <b><?= $total ?></b><br /><br />
+        Всего фотографий: <b><?= $page['total'] ?></b><br /><br />
 
     <?php else: ?>
         <?= show_error('Фотографий нет, будь первым!'); ?>

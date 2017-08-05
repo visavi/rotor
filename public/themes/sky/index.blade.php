@@ -70,7 +70,7 @@ header("Content-type:text/html; charset=utf-8");
                         <li><a href="/gallery"><span class="l"></span><span class="r"></span><span class="t">Галерея</span></a>
                            <ul>
                                  <li><a href="/gallery/top">Топ фото</a></li>
-                                 <li><a href="/gallery/album">Все альбомы</a></li>
+                                 <li><a href="/gallery/albums">Все альбомы</a></li>
 											<li><a href="/gallery/comments">Все комментарии</a></li>
                 		   </ul></li>
 

@@ -1,58 +1,28 @@
 <?php
-App::view(App::setting('themes').'/index');
-
-$act = check(Request::input('act', 'index'));
-$uz = check(Request::input('uz'));
 
 switch ($act):
-    ############################################################################################
-    ##                                   Вывод всех комментариев                              ##
-    ############################################################################################
+    /**
+     * Выводит все комментарии
+     */
     case 'index':
-        //show_title('Список всех комментариев');
-
-
         $total = Comment::where('relate_type', Photo::class)->count();
         $page = App::paginate(App::setting('postgallery'), $total);
 
-        if ($total > 0) {
-            //App::setting('newtitle') = 'Список всех комментариев (Стр. '.$page['current'].')';
+        $comments = Comment::select('comments.*', 'title')
+            ->where('relate_type', Photo::class)
+            ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy('comments.created_at', 'desc')
+            ->with('user')
+            ->get();
 
-            $comments = Comment::select('comments.*', 'title')
-                ->where('relate_type', Photo::class)
-                ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
-                ->offset($page['offset'])
-                ->limit($page['limit'])
-                ->orderBy('comments.created_at')
-                ->with('user')
-                ->get();
-
-            foreach ($comments as $data) {
-
-                echo '<div class="b"><i class="fa fa-comment"></i> <b><a href="/gallery/comments?act=viewcomm&amp;gid='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b>';
-                echo '</div>';
-
-
-                echo '<div>'.App::bbCode($data['text']).'<br />';
-                echo 'Написал: '.profile($data['user']).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
-
-                if (is_admin()) {
-                    echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
-                }
-
-                echo '</div>';
-            }
-
-            App::pagination($page);
-
-        } else {
-            show_error('Комментариев еще нет!');
-        }
+        App::view('gallery/all_comments', compact('comments', 'page'));
     break;
 
-    ############################################################################################
-    ##                                  Вывод комментариев                                    ##
-    ############################################################################################
+    /**
+     * Выводит комментарии пользователя
+     */
     case 'comments':
         //show_title('Список всех комментариев '.$uz);
 
@@ -109,32 +79,33 @@ switch ($act):
         }
     break;
 
-    ############################################################################################
-    ##                                     Переход к сообщение                                ##
-    ############################################################################################
-    case 'viewcomm':
+    /**
+     * Переход к сообщению
+     */
+    case 'viewcomment':
 
-        $gid = abs(intval(Request::input('gid')));
-        $cid = abs(intval(Request::input('cid')));
+        $id  = abs(intval(param('id')));
+        $gid = abs(intval(param('gid')));
 
         $total = Comment::where('relate_type', Photo::class)
             ->where('relate_id', $gid)
-            ->where('id', '<=', $cid)
+            ->where('id', '<=', $id)
             ->orderBy('created_at')
             ->count();
 
         if ($total) {
             $end = ceil($total / App::setting('postgallery'));
 
-            App::redirect("/gallery?act=comments&gid=$gid&page=$end");
+            App::redirect('/gallery/'.$gid.'/comments?page='.$end);
         } else {
-            show_error('Ошибка! Комментарий к данному изображению не существует!');
+            App::setFlash('success', 'Комментариев к данному изображению не существует!');
+            App::redirect("/gallery/comments");
         }
     break;
 
-    ############################################################################################
-    ##                                 Удаление комментариев                                  ##
-    ############################################################################################
+    /**
+     * Удаление комментариев
+     */
     case 'del':
 
         $token = check(Request::input('token'));
@@ -173,7 +144,3 @@ switch ($act):
     break;
 
 endswitch;
-
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />';
-
-App::view(App::setting('themes').'/foot');
