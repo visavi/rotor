@@ -81,7 +81,7 @@
                 @foreach($vote['answers'] as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer['id'] }}" /> {{ $answer['answer'] }}</label><br />
                 @endforeach
-                <br /><button type="submit" class="btn btn-sm btn-primary">Голосовать</button>
+                <br /><button class="btn btn-sm btn-primary">Голосовать</button>
             </form><br />
         @endif
 

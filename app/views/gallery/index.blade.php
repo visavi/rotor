@@ -12,7 +12,7 @@
 
 $links = [
     ['url' => '/gallery/album/'.App::user('login'), 'label' => 'Мои альбом', 'show' => is_user()],
-    ['url' => '/gallery/comments?act=comments', 'label' => 'Мои комментарии', 'show' => is_user()],
+    ['url' => '/gallery/comment/'.App::user('login'), 'label' => 'Мои комментарии', 'show' => is_user()],
     ['url' => '/gallery/albums', 'label' => 'Все альбомы'],
     ['url' => '/gallery/comments', 'label' => 'Все комментарии'],
     ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => is_admin()],

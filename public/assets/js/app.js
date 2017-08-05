@@ -199,6 +199,38 @@ function deletePost(el)
     return false;
 }
 
+/* Удаление комментариев */
+function deleteComment(el)
+{
+    bootbox.confirm('Вы действительно хотите удалить комментарий?', function(result){
+        if (result) {
+            $.ajax({
+                data: {
+                    id: $(el).data('id'),
+                    rid: $(el).data('rid'),
+                    type: $(el).data('type'),
+                    token: $(el).data('token')
+                },
+                dataType: 'JSON', type: 'POST', url: '/ajax/delcomment',
+                success: function(data) {
+
+                    if (data.status == 'error'){
+                        notify('error', data.message);
+                        return false;
+                    }
+
+                    if (data.status == 'success'){
+                        notify('success', 'Комментарий успешно удален!');
+
+                        $(el).closest('.post').hide('slow');
+                    }
+                }
+            });
+        }
+    });
+    return false;
+}
+
 /* Изменение рейтинга */
 function changeRating(el)
 {
@@ -225,7 +257,7 @@ function changeRating(el)
                 if (! data.cancel) {
                     $(el).addClass('active');
                 }
-console.log($(data.rating));
+
                 rating.html($(data.rating));
             }
         }

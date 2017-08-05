@@ -229,9 +229,7 @@ case 'comments':
         ->with('user')
         ->get();
 
-    $isAdmin = is_admin();
-
-    App::view('gallery/comments', compact('photo', 'comments', 'page', 'isAdmin'));
+    App::view('gallery/comments', compact('photo', 'comments', 'page'));
 break;
 
 /**
@@ -291,44 +289,6 @@ case 'editcomment':
         }
     }
     App::view('gallery/editcomment', compact('comment'));
-break;
-
-/**
- * Удаление комментариев
- */
-case 'delcomments':
-
-    $token = check(Request::input('token'));
-    $del   = intar(Request::input('del'));
-
-    if (! is_admin()) {
-        redirect ('/');
-    }
-
-    $validation = new Validation();
-    $validation
-        ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        ->addRule('bool', $del, 'Отстутствуют выбранные комментарии для удаления');
-
-
-    if ($validation->run()) {
-
-        $delComments = Comment::where('relate_type', Photo::class)
-            ->where('relate_id', $gid)
-            ->whereIn('id', $del)
-            ->delete();
-
-        Photo::where('id', $gid)
-            ->update([
-                'comments'  => Capsule::raw('comments - '.$delComments),
-            ]);
-
-        App::setFlash('success', 'Выбранные комментарии успешно удалены!');
-    } else {
-        App::setFlash('danger', $validation->getErrors());
-    }
-
-    App::redirect('/gallery/'.$gid.'/comments?page='.$page);
 break;
 
 /**

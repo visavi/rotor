@@ -48,10 +48,10 @@ $router->map('GET|POST', '/gallery/[i:gid]/[comments:action]', 'gallery/index.ph
 $router->map('GET|POST', '/gallery/[create:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[i:gid]/[edit:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[i:gid]/[i:id]/edit', 'gallery/index.php@editcomment');
-$router->map('POST',     '/gallery/[i:gid]/comments/delete', 'gallery/index.php@delcomments');
 $router->map('GET',      '/gallery/albums', 'gallery/album.php');
 $router->map('GET',      '/gallery/album/[user:login]', 'gallery/album.php@photo');
 $router->map('GET',      '/gallery/comments', 'gallery/comments.php');
+$router->map('GET',      '/gallery/comment/[user:login]', 'gallery/comments.php@comment');
 $router->map('GET',      '/gallery/[i:gid]/[i:id]/comment', 'gallery/comments.php@viewcomment');
 
 $router->map('GET|POST', '/gallery/top', 'gallery/top.php');
@@ -98,6 +98,7 @@ $router->map('GET', '/captcha', 'gallery/protect.php', 'captcha');
 $router->map('GET', '/online/[all:action]?', 'pages/online.php', 'online');
 
 $router->map('POST', '/ajax/bbcode', 'ajax/bbcode.php');
+$router->map('POST', '/ajax/delcomment', 'ajax/delcomment.php');
 $router->map('POST', '/ajax/rating', 'ajax/rating.php');
 
 $router->map('GET|POST', '/wall', 'pages/wall.php', 'wall');

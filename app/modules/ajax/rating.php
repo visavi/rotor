@@ -8,7 +8,7 @@ $token = check(Request::input('token'));
 // Время хранения голосов
 $expiresRating = SITETIME + 3600 * 24 * 30;
 
-if (! is_user()) {
+if (! Request::ajax() || ! is_user()) {
     exit(json_encode(['status' => 'error', 'message' => 'not authorized']));
 }
 

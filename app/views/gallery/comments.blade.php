@@ -11,40 +11,33 @@
     <i class="fa fa-picture-o"></i> <b><a href="/gallery/{{ $photo['id'] }}">К фото</a></b><hr />
 
     @if ($comments->isNotEmpty())
-        @if ($isAdmin)
-            <form action="/gallery/{{ $photo['id'] }}/comments/delete?page={{ $page['current'] }}" method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-        @endif
-
         @foreach ($comments as $data)
-            <div class="b">
-                <div class="img">{!! user_avatars($data->user) !!}</div>
+            <div class="post">
+                <div class="b">
+                    <div class="img">{!! user_avatars($data->user) !!}</div>
 
-                <div class="pull-right">
-                    @if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME)
-                        <a title="Редактировать" href="/gallery/{{ $photo->id }}/{{ $data['id'] }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
-                    @endif
+                    <div class="pull-right">
+                        @if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME)
+                            <a title="Редактировать" href="/gallery/{{ $photo->id }}/{{ $data['id'] }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
+                        @endif
 
-                    @if ($isAdmin)
-                        <input type="checkbox" name="del[]" value="{{ $data['id'] }}" />
+                        @if (is_admin())
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data['relate_id'] }}" data-id="{{ $data['id'] }}" data-type="{{ Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
+                        @endif
+                    </div>
+
+                    <b>{!! profile($data->user) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br />
+                    {!! user_title($data->user) !!} {!! user_online($data->user) !!}
+                </div>
+                <div>
+                    {!! App::bbCode($data['text']) !!}<br />
+
+                    @if (is_admin())
+                        <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
                     @endif
                 </div>
-
-                <b>{!! profile($data->user) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br />
-                {!! user_title($data->user) !!} {!! user_online($data->user) !!}
-            </div>
-            <div>
-                {!! App::bbCode($data['text']) !!}<br />
-
-                @if ($isAdmin)
-                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
-                @endif
             </div>
         @endforeach
-
-        @if ($isAdmin)
-            <button class="pull-right btn btn-danger">Удалить выбранное</button></form>
-        @endif
 
         {{ App::pagination($page) }}
     @endif

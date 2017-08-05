@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Список всех комментариев (Стр. {{ $page['current']}}) - @parent
+    Список всех комментариев {{ $user->login }} (Стр. {{ $page['current']}}) - @parent
 @stop
 
 @section('content')
 
-    <h1>Список всех комментариев</h1>
+    <h1>Список всех комментариев {{ $user->login }}</h1>
 
     @if ($comments)
         @foreach ($comments as $data)
