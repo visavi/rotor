@@ -127,8 +127,13 @@ function sendComplaint(el)
         if (result) {
 
             $.ajax({
-                data: {id: $(el).data('id'), page: $(el).data('page'), token: $(el).data('token')},
-                dataType: 'JSON', type: 'POST', url: $(el).data('type') + '/complaint',
+                data: {
+                    id: $(el).data('id'),
+                    type: $(el).data('type'),
+                    page: $(el).data('page'),
+                    token: $(el).data('token')
+                },
+                dataType: 'JSON', type: 'POST', url: '/ajax/complaint',
                 success: function(data) {
 
                     $(el).replaceWith('<i class="fa fa-bell-slash-o text-muted"></i>');

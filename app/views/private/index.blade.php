@@ -57,7 +57,7 @@
             echo '<a href="/contact?act=add&amp;uz=' . $data->getAuthor()->login . '&amp;token=' . $_SESSION['token'] . '">В контакт</a> / ';
             echo '<a href="/ignore?act=add&amp;uz=' . $data->getAuthor()->login . '&amp;token=' . $_SESSION['token'] . '">Игнор</a> / ';
 
-            echo '<noindex><a href="#" onclick="return sendComplaint(this)" data-type="/private" data-id="' . $data['id'] . '" data-token="' . $_SESSION['token'] . '" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>';
+            echo '<noindex><a href="#" onclick="return sendComplaint(this)" data-type="'.Inbox::class.' " data-id="' . $data['id'] . '" data-token="' . $_SESSION['token'] . '" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>';
             }
 
             echo '</div>';

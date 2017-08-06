@@ -30,7 +30,7 @@
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <noindex><a href="#" onclick="return sendComplaint(this)" data-type="/book" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
+                            <noindex><a href="#" onclick="return sendComplaint(this)" data-type="{{ Guest::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
                         </div>
 
                     <?php endif; ?>

@@ -127,40 +127,4 @@ case 'edit':
 
     App::view('book/edit', compact('post', 'id'));
 break;
-
-/**
- * Жалоба
- */
-case 'complaint':
-    if (! Request::ajax()) App::redirect('/');
-
-    $token = check(Request::input('token'));
-    $page = abs(intval(Request::input('page')));
-    $id = abs(intval(Request::input('id')));
-
-    $validation = new Validation();
-    $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
-
-    $data = Guest::find($id);
-    $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
-
-    $spam = Spam::where(['relate_type' => Guest::class, 'relate_id' => $id])->first();
-    $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
-
-    if ($validation->run()) {
-
-        $spam = new Spam();
-        $spam->relate_type = Guest::class;
-        $spam->relate_id   = $data['id'];
-        $spam->user_id     = App::getUserId();
-        $spam->link        = '/book?page='.$page;
-        $spam->created_at  = SITETIME;
-        $spam->save();
-
-        exit(json_encode(['status' => 'success']));
-    } else {
-        exit(json_encode(['status' => 'error', 'message' => current($validation->getErrors())]));
-    }
-    break;
 endswitch;

@@ -13,7 +13,7 @@ $router->map( 'GET', '/search', function() {
 });
 
 $router->map('GET',      '/book', 'book/index.php', 'book');
-$router->map('POST',     '/book/[complaint|add:action]', 'book/index.php');
+$router->map('POST',     '/book/[add:action]', 'book/index.php');
 $router->map('GET|POST', '/book/[edit:action]/[i:id]', 'book/index.php');
 
 $router->map('GET', '/sitemap.xml', 'pages/sitemap.php');
@@ -73,8 +73,7 @@ $router->map('GET',      '/topic/[i:tid]/rss', 'forum/rss.php@posts');
 $router->map('GET',      '/topic/[i:tid]/print', 'forum/print.php');
 $router->map('POST',     '/topic/[i:tid]/vote', 'forum/topic.php@vote');
 $router->map('GET',      '/topic/[i:tid]/[end|close:action]', 'forum/topic.php');
-$router->map('POST',     '/topic/[i:tid]/[create|delete|complaint:action]', 'forum/topic.php');
-$router->map('POST',     '/topic/[complaint:action]', 'forum/topic.php');
+$router->map('POST',     '/topic/[i:tid]/[create|delete:action]', 'forum/topic.php');
 $router->map('GET|POST', '/topic/[i:tid]/[i:id]/edit', 'forum/topic.php@editpost');
 $router->map('GET|POST', '/topic/[i:tid]/[edit:action]', 'forum/topic.php');
 
@@ -100,12 +99,13 @@ $router->map('GET', '/online/[all:action]?', 'pages/online.php', 'online');
 $router->map('POST', '/ajax/bbcode', 'ajax/bbcode.php');
 $router->map('POST', '/ajax/delcomment', 'ajax/delcomment.php');
 $router->map('POST', '/ajax/rating', 'ajax/rating.php');
+$router->map('POST', '/ajax/complaint', 'ajax/complaint.php');
 
 $router->map('GET|POST', '/wall', 'pages/wall.php', 'wall');
 $router->map('GET|POST', '/setting', 'pages/setting.php');
 
 $router->map('GET',      '/private/[outbox|trash|history|clear:action]?', 'pages/private.php');
-$router->map('POST',     '/private/[complaint|delete:action]', 'pages/private.php');
+$router->map('POST',     '/private/[delete:action]', 'pages/private.php');
 $router->map('GET|POST', '/private/[send:action]', 'pages/private.php');
 
 $router->map('GET',      '/ignore', 'pages/ignore.php');

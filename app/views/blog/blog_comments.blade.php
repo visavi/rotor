@@ -9,57 +9,49 @@
 
     <a href="/article/<?=$blog['id']?>/rss">RSS-лента</a><hr />
 
-    <?php if (is_admin()): ?>
-        <form action="/blog/blog?act=del&amp;id=<?=$blog['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>" method="post">
-    <?php endif; ?>
+    @if ($comments)
+        @foreach ($comments as $data)
+            <div class="post">
+                <div class="b">
+                    <div class="img"><?=user_avatars($data['user'])?></div>
 
-    @forelse ($comments as $data)
+                    <div class="pull-right">
+                        @if (App::getUserId() != $data['user_id'])
+                            <a href="#" onclick="return postReply('<?= $data->getUser()->login ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
-        <div class="b">
-            <div class="img"><?=user_avatars($data['user'])?></div>
+                            <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-            <?php if (is_admin()): ?>
-                <span class="imgright"><input type="checkbox" name="del[]" value="<?=$data['id']?>" /></span>
-            <?php endif; ?>
+                            <noindex>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ Blog::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            </noindex>
+                        @endif
+                    </div>
 
-            <b><?=profile($data['user'])?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
-            <?=user_title($data['user'])?> <?=user_online($data['user'])?>
-        </div>
-
-            <?php if (is_user() && App::getUserId() != $data->getUser()->id): ?>
-                <div class="right">
-                    <a href="/blog/blog?act=reply&amp;id=<?=$blog['id']?>&amp;pid=<?=$data['id']?>&amp;page=<?=$page['current']?>">Отв</a> /
-                    <a href="/blog/blog?act=quote&amp;id=<?=$blog['id']?>&amp;pid=<?=$data['id']?>&amp;page=<?=$page['current']?>">Цит</a> /
-                    <noindex><a href="/blog/blog?act=spam&amp;id=<?=$blog['id']?>&amp;pid=<?=$data['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы подтверждаете факт спама?')" rel="nofollow">Спам</a></noindex>
+                    <b><?=profile($data['user'])?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
+                    <?=user_title($data['user'])?> <?=user_online($data['user'])?>
                 </div>
-            <?php endif; ?>
 
-            <?php if (App::getUserId() == $data->getUser()->id && $data['created_at'] + 600 > SITETIME): ?>
-                <div class="right">
-                    <a href="/blog/blog?act=edit&amp;id=<?=$blog['id']?>&amp;pid=<?=$data['id']?>&amp;page=<?=$page['current']?>">Редактировать</a>
+                    <?php if (App::getUserId() == $data->getUser()->id && $data['created_at'] + 600 > SITETIME): ?>
+                        <div class="right">
+                            <a href="/blog/blog?act=edit&amp;id=<?=$blog['id']?>&amp;pid=<?=$data['id']?>&amp;page=<?=$page['current']?>">Редактировать</a>
+                        </div>
+                    <?php endif; ?>
+
+                <div class="message">
+                    {!! App::bbCode($data['text']) !!}<br />
                 </div>
-            <?php endif; ?>
 
-            <div>
-                <?=App::bbCode($data['text'])?><br />
-
-            <?php if (is_admin()): ?>
-                <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
-            <?php endif; ?>
-
-        </div>
-    @empty
+                @if (is_admin())
+                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                @endif
+            </div>
+        @endforeach
+        {{ App::pagination($page) }}
+    @else
         {{ show_error('Нет сообщений') }}
-    @endforelse
-
-
-    <?php if (is_admin()): ?>
-        <span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>
-    <?php endif; ?>
-    <hr />
+    @endif
 
     @if (is_user())
-
         <div class="form">
             <form action="/article/<?=$blog['id']?>/comments" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
@@ -77,8 +69,6 @@
     @endif
 
 <?php
-    App::pagination($page);
-
     App::view('includes/back', ['link' => '/article/'.$blog['id'], 'title' => 'Вернуться']);
     App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 ?>

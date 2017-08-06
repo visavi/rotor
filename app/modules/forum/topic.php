@@ -229,43 +229,6 @@ case 'create':
 break;
 
 ############################################################################################
-##                                      Жалоба                                            ##
-############################################################################################
-case 'complaint':
-
-    if (! Request::ajax()) App::redirect('/');
-
-    $token = check(Request::input('token'));
-    $id    = abs(intval(Request::input('id')));
-    $page = abs(intval(Request::input('page')));
-
-    $validation = new Validation();
-    $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться');
-
-    $data = Post::find($id);
-    $validation->addRule('custom', $data, 'Выбранное вами сообщение для жалобы не существует!');
-
-    $spam = Spam::where('relate_type', Post::class)->where('relate_id', $id)->first();
-    $validation->addRule('custom', !$spam, 'Жалоба на данное сообщение уже отправлена!');
-
-    if ($validation->run()) {
-        $spam = Spam::create([
-            'relate_type' => Post::class,
-            'relate_id'   => $data['id'],
-            'user_id'     => App::getUserId(),
-            'link'        => '/topic/'.$data['topic_id'].'?page='.$page,
-            'created_at'  => SITETIME,
-        ]);
-
-        exit(json_encode(['status' => 'success']));
-    } else {
-        exit(json_encode(['status' => 'error', 'message' => current($validation->getErrors())]));
-    }
-
-break;
-
-############################################################################################
 ##                                    Удаление сообщений                                  ##
 ############################################################################################
 case 'delete':

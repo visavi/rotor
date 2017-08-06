@@ -397,47 +397,6 @@ case 'comments':
 break;
 
 ############################################################################################
-##                                    Жалоба на спам                                      ##
-############################################################################################
-case 'spam':
-
-    $uid = check(Request::input('uid'));
-    $pid = abs(intval(Request::input('pid')));
-
-    if (is_user()) {
-        if ($uid == $_SESSION['token']) {
-            $data = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['blog', $pid]);
-
-            if (!empty($data)) {
-                $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [6, $pid]);
-
-                if (empty($queryspam)) {
-                    if (is_flood(App::getUsername())) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [6, $data['id'], App::getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, App::setting('home').'/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page]);
-
-                        App::setFlash('success', 'Жалоба успешно отправлена!');
-                        App::redirect("/blog/blog?act=comments&id=$id&page=$page");
-
-                    } else {
-                        show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
-                    }
-                } else {
-                    show_error('Ошибка! Жалоба на данное сообщение уже отправлена!');
-                }
-            } else {
-                show_error('Ошибка! Выбранное вами сообщение для жалобы не существует!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
-    }
-
-    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
-break;
-
-############################################################################################
 ##                                Подготовка к редактированию                             ##
 ############################################################################################
 case 'edit':
