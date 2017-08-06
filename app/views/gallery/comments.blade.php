@@ -15,8 +15,17 @@
             <div class="post">
                 <div class="b">
                     <div class="img">{!! user_avatars($data->user) !!}</div>
-
                     <div class="pull-right">
+                        @if (App::getUserId() != $data['user_id'])
+                            <a href="#" onclick="return postReply('<?= $data->getUser()->login ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+
+                            <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+
+                            <noindex>
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ Photo::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            </noindex>
+                        @endif
+
                         @if ($data->user_id == App::getUserId() && $data['created_at'] + 600 > SITETIME)
                             <a title="Редактировать" href="/gallery/{{ $photo->id }}/{{ $data['id'] }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
                         @endif
@@ -29,13 +38,12 @@
                     <b>{!! profile($data->user) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br />
                     {!! user_title($data->user) !!} {!! user_online($data->user) !!}
                 </div>
-                <div>
-                    {!! App::bbCode($data['text']) !!}<br />
-
-                    @if (is_admin())
-                        <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
-                    @endif
+                <div class="message">
+                    {!! App::bbCode($data['text']) !!}
                 </div>
+                @if (is_admin())
+                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                @endif
             </div>
         @endforeach
 

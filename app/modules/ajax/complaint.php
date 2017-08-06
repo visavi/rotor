@@ -19,6 +19,13 @@ switch ($type):
         $path = '/blog?page='.$page;
         break;
 
+    case 'Photo':
+        $data = Comment::where('relate_type', $type)
+            ->where('id', $id)
+            ->first();
+        $path = '/gallery/'.$data['relate_id'].'/comments?page='.$page;
+        break;
+
     case 'Guest':
         $data = $type::find($id);
         $path = '/book?page='.$page;
