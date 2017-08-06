@@ -35,11 +35,11 @@
 
         <div class="js-rating">Рейтинг:
             @unless (App::getUserId() == $photo['user_id'])
-                <a class="post-rating-down<?= $photo->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="Photo" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+                <a class="post-rating-down<?= $photo->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="{{ Photo::class }}" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
             @endunless
             <span>{!! format_num($photo['rating']) !!}</span>
             @unless (App::getUserId() == $photo['user_id'])
-                <a class="post-rating-up<?= $photo->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="Photo" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+                <a class="post-rating-up<?= $photo->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="{{ Photo::class }}" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
             @endunless
         </div>
 

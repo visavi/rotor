@@ -22,22 +22,14 @@ case 'index':
 
     $page = App::paginate(App::setting('blogpost'), $total);
 
-    if ($total > 0) {
+    $blogs = Blog::where('category_id', $cid)
+        ->orderBy('created_at', 'desc')
+        ->offset($page['offset'])
+        ->limit(App::setting('blogpost'))
+        ->with('user')
+        ->get();
 
-        $blogs = Blog::where('category_id', $cid)
-            ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit(App::setting('blogpost'))
-            ->with('user')
-            ->get();
-
-        App::view('blog/blog', compact('blogs', 'category', 'page'));
-
-    } else {
-        show_error('Статей еще нет, будь первым!');
-    }
-
-
+    App::view('blog/blog', compact('blogs', 'category', 'page'));
 break;
 
 ############################################################################################
@@ -45,68 +37,68 @@ break;
 ############################################################################################
 case 'view':
 
-    $blog = Blog::select('blogs.*', 'catsblog.name')
+    $blog = Blog::select('blogs.*', 'catsblog.name', 'pollings.vote')
         ->where('blogs.id', $id)
         ->leftJoin('catsblog', function($join){
             $join->on('blogs.category_id', '=', 'catsblog.id');
         })
+        ->leftJoin ('pollings', function($join) {
+            $join->on('blogs.id', '=', 'pollings.relate_id')
+                ->where('pollings.relate_type', Blog::class)
+                ->where('pollings.user_id', App::getUserId());
+        })
         ->first();
 
-    if ($blog) {
-        $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog['text'], -1, PREG_SPLIT_NO_EMPTY);
-
-        $total = count($text);
-        $page = App::paginate(1, $total);
-
-        if ($total > 0) {
-            if ($page['current'] == 1) {
-                $reads = Read::where('relate_type', Blog::class)
-                    ->where('relate_id', $id)
-                    ->where('ip', App::getClientIp())
-                    ->first();
-
-                if (! $reads) {
-                    $expiresRead = SITETIME + 3600 * App::setting('blogexpread');
-
-                    Read::where('relate_type', Blog::class)
-                        ->where('created_at', '<', SITETIME)
-                        ->delete();
-
-                    Read::create([
-                        'relate_type' => Blog::class,
-                        'relate_id'   => $id,
-                        'ip'          => App::getClientIp(),
-                        'created_at'  => $expiresRead,
-                    ]);
-
-                    $blog->update([
-                        'visits' => Capsule::raw('visits + 1'),
-                    ]);
-                }
-            }
-
-            $end = ($total < $page['offset'] + 1) ? $total : $page['offset'] + 1;
-
-            for ($i = $page['offset']; $i < $end; $i++) {
-                $blog['text'] = App::bbCode($text[$i]).'<br />';
-            }
-
-            $tagsList = preg_split('/[\s]*[,][\s]*/', $blog['tags']);
-
-            $tags = '';
-            foreach($tagsList as $key => $value) {
-                $comma = (empty($key)) ? '' : ', ';
-                $tags .= $comma.'<a href="/blog/tags/'.urlencode($value).'">'.$value.'</a>';
-            }
-
-            App::view('blog/blog_view', compact('blog', 'tags', 'page'));
-
-        } else {
-            show_error('Текста статьи еще нет!');
-        }
-    } else {
-        show_error('Ошибка! Данной статьи не существует!');
+    if (! $blog) {
+        App::abort(404, 'Данной статьи не существует!');
     }
+
+    $text = preg_split('|\[nextpage\](<br * /?>)*|', $blog['text'], -1, PREG_SPLIT_NO_EMPTY);
+
+    $total = count($text);
+    $page = App::paginate(1, $total);
+
+    if ($page['current'] == 1) {
+        $reads = Read::where('relate_type', Blog::class)
+            ->where('relate_id', $id)
+            ->where('ip', App::getClientIp())
+            ->first();
+
+        if (! $reads) {
+            $expiresRead = SITETIME + 3600 * App::setting('blogexpread');
+
+            Read::where('relate_type', Blog::class)
+                ->where('created_at', '<', SITETIME)
+                ->delete();
+
+            Read::create([
+                'relate_type' => Blog::class,
+                'relate_id'   => $id,
+                'ip'          => App::getClientIp(),
+                'created_at'  => $expiresRead,
+            ]);
+
+            $blog->update([
+                'visits' => Capsule::raw('visits + 1'),
+            ]);
+        }
+    }
+
+    $end = ($total < $page['offset'] + 1) ? $total : $page['offset'] + 1;
+
+    for ($i = $page['offset']; $i < $end; $i++) {
+        $blog['text'] = App::bbCode($text[$i]).'<br />';
+    }
+
+    $tagsList = preg_split('/[\s]*[,][\s]*/', $blog['tags']);
+
+    $tags = '';
+    foreach($tagsList as $key => $value) {
+        $comma = (empty($key)) ? '' : ', ';
+        $tags .= $comma.'<a href="/blog/tags/'.urlencode($value).'">'.$value.'</a>';
+    }
+
+    App::view('blog/blog_view', compact('blog', 'tags', 'page'));
 
     App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 break;
@@ -322,62 +314,6 @@ case 'addblog':
 break;
 
 ############################################################################################
-##                                       Оценка статьи                                    ##
-############################################################################################
-case 'vote':
-
-    $uid = check(Request::input('uid'));
-    $vote = check(Request::input('vote'));
-
-    if (is_user()) {
-        if ($uid == $_SESSION['token']) {
-            if (App::user('point') >= App::setting('blogvotepoint')){
-                if ($vote == 'up' || $vote == 'down') {
-
-                    $score = ($vote == 'up') ? 1 : -1;
-
-                    $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
-
-                    if (!empty($blogs)) {
-                        if (App::getUsername() != $blogs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['blog', $id, App::getUsername()]);
-
-                            if (empty($queryrated)) {
-                                $expiresrated = SITETIME + 3600 * App::setting('blogexprated');
-
-                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['blog', SITETIME]);
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['blog', $id, App::getUsername(), $expiresrated]);
-                                DB::run() -> query("UPDATE `blogs` SET `rating`=`rating`+? WHERE `id`=?;", [$score, $id]);
-
-                                App::setFlash('success', 'Ваша оценка принята! Рейтинг статьи: '.format_num($blogs['rating'] + $score));
-                                App::redirect("/blog/blog?act=view&id=$id");
-
-                            } else {
-                                show_error('Ошибка! Вы уже оценивали данную статью!');
-                            }
-                        } else {
-                            show_error('Ошибка! Нельзя голосовать за свою статью!');
-                        }
-                    } else {
-                        show_error('Ошибка! Данной статьи не существует!');
-                    }
-                } else {
-                    show_error('Ошибка! Необходимо проголосовать за или против статьи!');
-                }
-            } else {
-                show_error('Ошибка! У вас недостаточно актива для голосования (Необходимо '.points(App::setting('blogvotepoint')).')!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        show_login('Вы не авторизованы, для голосования за статьи, необходимо');
-    }
-
-    App::view('includes/back', ['link' => '/blog/blog?act=view&amp;id='.$id, 'title' => 'Вернуться']);
-break;
-
-############################################################################################
 ##                                      Комментарии                                       ##
 ############################################################################################
 case 'comments':
@@ -387,7 +323,62 @@ case 'comments':
     if (! $blog) {
         App::abort('default', 'Данной статьи не существует!');
     }
-        //App::setting('newtitle') = 'Комментарии - '.$blogs['title'];
+
+    if (Request::isMethod('post')) {
+        $token = check(Request::input('token'));
+        $msg   = check(Request::input('msg'));
+
+        $validation = new Validation();
+        $validation
+            ->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
+            ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+            ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
+            ->addRule('bool', is_flood(App::getUsername()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!']);
+
+        if ($validation->run()) {
+            $msg = antimat($msg);
+
+            Comment::create([
+                'relate_type' => Blog::class,
+                'relate_id'   => $blog->id,
+                'text'        => $msg,
+                'user_id'     => App::getUserId(),
+                'created_at'  => SITETIME,
+                'ip'          => App::getClientIp(),
+                'brow'        => App::getUserAgent(),
+            ]);
+
+            Capsule::delete('
+                DELETE FROM comments WHERE relate_type = :relate_type AND relate_id = :relate_id AND created_at < (
+                    SELECT MIN(created_at) FROM (
+                        SELECT created_at FROM comments WHERE relate_type = :relate_type2 AND relate_id = :relate_id2 ORDER BY created_at DESC LIMIT '.App::setting('maxpostgallery').'
+                    ) AS del
+                );', [
+                    'relate_type'  => Blog::class,
+                    'relate_id'    => $blog->id,
+                    'relate_type2' => Blog::class,
+                    'relate_id2'   => $blog->id,
+                ]
+            );
+
+            $user = User::where('id', App::getUserId());
+            $user->update([
+                'allcomments' => Capsule::raw('allcomments + 1'),
+                'point' => Capsule::raw('point + 1'),
+                'money' => Capsule::raw('money + 5'),
+            ]);
+
+            $blog->update([
+                'comments'  => Capsule::raw('comments + 1'),
+            ]);
+
+            App::setFlash('success', 'Комментарий успешно добавлен!');
+            App::redirect('/article/'.$blog->id.'/end');
+        } else {
+            App::setInput(Request::all());
+            App::setFlash('danger', $validation->getErrors());
+        }
+    }
 
     $total = Comment::where('relate_type', Blog::class)
         ->where('relate_id', $id)
@@ -402,57 +393,7 @@ case 'comments':
         ->limit(App::setting('blogcomm'))
         ->get();
 
-    $is_admin = is_admin();
-
-    App::view('blog/blog_comments', compact('blog', 'comments', 'is_admin', 'page'));
-break;
-
-############################################################################################
-##                                Добавление комментариев                                 ##
-############################################################################################
-case 'add':
-
-    $uid = check(Request::input('uid'));
-    $id = abs(intval(Request::input('id')));
-    $msg = check(Request::input('msg'));
-
-    if (is_user()) {
-        if ($uid == $_SESSION['token']) {
-            if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $queryblog = DB::run() -> querySingle("SELECT `category_id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
-
-                if (!empty($queryblog)) {
-                    if (is_flood(App::getUsername())) {
-
-                        $msg = antimat($msg);
-
-                        DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['blog', $queryblog, $id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
-
-                        DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE `relate_type`=? AND `relate_id`=? ORDER BY `time` DESC LIMIT ".App::setting('maxblogcomm').") AS del);", ['blog', $id, 'blog', $id]);
-
-                        DB::run() -> query("UPDATE `blogs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
-                        DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
-
-                        App::setFlash('success', 'Сообщение успешно добавлено!');
-                        App::redirect("/blog/blog?act=end&id=$id");
-
-                    } else {
-                        show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
-                    }
-                } else {
-                    show_error('Ошибка! Данной статьи не существует!');
-                }
-            } else {
-                show_error('Ошибка! Слишком длинное или короткое сообщение!');
-            }
-        } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-    }
-
-    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id, 'title' => 'Вернуться']);
+    App::view('blog/blog_comments', compact('blog', 'comments', 'page'));
 break;
 
 ############################################################################################

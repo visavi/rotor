@@ -23,7 +23,7 @@ switch ($act):
     /**
      * Выводит комментарии пользователя
      */
-    case 'comment':
+    case 'comments':
         $login = param('login');
 
         $user = User::where('login', $login)->first();

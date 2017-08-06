@@ -14,10 +14,11 @@
         </div>
         <div class="col-md-8">
             <h3>Ошибка 403!</h3>
-            <div class="lead">Доступ запрещен!</div>
 
             @if ($message)
                 <div class="lead">{{ $message }}</div>
+            @else
+                <div class="lead">Доступ запрещен!</div>
             @endif
         </div>
     </div>

@@ -14,10 +14,11 @@
         </div>
         <div class="col-md-8">
             <h3>Ошибка 404!</h3>
-            <div class="lead">Данной страницы не существует!</div>
 
             @if ($message)
                 <div class="lead">{{ $message }}</div>
+            @else
+                <div class="lead">Данной страницы не существует!</div>
             @endif
         </div>
     </div>

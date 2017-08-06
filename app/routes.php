@@ -19,14 +19,15 @@ $router->map('GET|POST', '/book/[edit:action]/[i:id]', 'book/index.php');
 $router->map('GET', '/sitemap.xml', 'pages/sitemap.php');
 $router->map('GET', '/sitemap/[a:action].xml', 'pages/sitemap.php');
 
-$router->map('GET', '/blog', 'blog/index.php', 'blog');
-$router->map('GET', '/blog/[i:cid]', 'blog/blog.php');
-$router->map('GET', '/article/[i:id]', 'blog/blog.php@view');
-$router->map('GET', '/article/[i:id]/print', 'blog/print.php');
-$router->map('GET', '/blog/rss', 'blog/rss.php');
-$router->map('GET', '/article/[i:id]/rss', 'blog/rss.php@comments');
-$router->map('GET', '/article/[i:id]/[comments|end:action]', 'blog/blog.php');
-$router->map('GET', '/blog/tags/[*:tag]?', 'blog/tags.php');
+$router->map('GET',      '/blog', 'blog/index.php', 'blog');
+$router->map('GET',      '/blog/[i:cid]', 'blog/blog.php');
+$router->map('GET',      '/article/[i:id]', 'blog/blog.php@view');
+$router->map('GET',      '/article/[i:id]/print', 'blog/print.php');
+$router->map('GET',      '/blog/rss', 'blog/rss.php');
+$router->map('GET',      '/article/[i:id]/rss', 'blog/rss.php@comments');
+$router->map('GET|POST', '/article/[i:id]/[comments:action]', 'blog/blog.php');
+$router->map('GET',      '/article/[i:id]/[end:action]', 'blog/blog.php');
+$router->map('GET',      '/blog/tags/[*:tag]?', 'blog/tags.php');
 
 $router->map('GET|POST', '/blog/active', 'blog/active.php');
 $router->map('GET|POST', '/blog/new', 'blog/new.php');
@@ -49,11 +50,10 @@ $router->map('GET|POST', '/gallery/[create:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[i:gid]/[edit:action]', 'gallery/index.php');
 $router->map('GET|POST', '/gallery/[i:gid]/[i:id]/edit', 'gallery/index.php@editcomment');
 $router->map('GET',      '/gallery/albums', 'gallery/album.php');
-$router->map('GET',      '/gallery/album/[user:login]', 'gallery/album.php@photo');
+$router->map('GET',      '/gallery/albums/[user:login]', 'gallery/album.php@photo');
 $router->map('GET',      '/gallery/comments', 'gallery/comments.php');
-$router->map('GET',      '/gallery/comment/[user:login]', 'gallery/comments.php@comment');
+$router->map('GET',      '/gallery/comments/[user:login]', 'gallery/comments.php@comments');
 $router->map('GET',      '/gallery/[i:gid]/[i:id]/comment', 'gallery/comments.php@viewcomment');
-
 $router->map('GET|POST', '/gallery/top', 'gallery/top.php');
 
 $router->map('GET',      '/forum', 'forum/index.php', 'forum');

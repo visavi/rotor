@@ -36,7 +36,7 @@ case 'view':
         ->first();
 
     if (! $photo) {
-        App::abort('default', 'Фотография не найдена');
+        App::abort(404, 'Фотография не найдена');
     }
 
     App::view('gallery/view', compact('photo', 'page'));
@@ -137,7 +137,7 @@ case 'edit':
             ]);
 
             App::setFlash('success', 'Фотография успешно отредактирована!');
-            App::redirect('/gallery/album/'.App::getUsername().'?page='.$page);
+            App::redirect('/gallery/albums/'.App::getUsername().'?page='.$page);
         } else {
             App::setInput(Request::all());
             App::setFlash('danger', $validation->getErrors());
@@ -331,7 +331,7 @@ case 'delete':
         App::setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/gallery/album/'.App::getUsername().'?page='.$page);
+    App::redirect('/gallery/albums/'.App::getUsername().'?page='.$page);
 break;
 
 

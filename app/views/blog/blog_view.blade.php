@@ -41,7 +41,15 @@
 
     <hr />
 
-    Рейтинг: <a href="/blog/blog?act=vote&amp;id=<?=$blog['id']?>&amp;vote=down&amp;uid=<?=$_SESSION['token']?>"><i class="fa fa-thumbs-down"></i></a> <big><b><?=format_num($blog['rating'])?></b></big> <a href="/blog/blog?act=vote&amp;id=<?=$blog['id']?>&amp;vote=up&amp;uid=<?=$_SESSION['token']?>"><i class="fa fa-thumbs-up"></i></a><br /><br />
+    <div class="js-rating">Рейтинг:
+        @unless (App::getUserId() == $blog['user_id'])
+            <a class="post-rating-down<?= $blog->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $blog['id'] }}" data-type="{{ Blog::class }}" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+        @endunless
+        <span>{!! format_num($blog['rating']) !!}</span>
+        @unless (App::getUserId() == $blog['user_id'])
+            <a class="post-rating-up<?= $blog->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $blog['id'] }}" data-type="{{ Blog::class }}" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+        @endunless
+    </div>
 
     <i class="fa fa-eye"></i> Просмотров: <?=$blog['visits']?><br />
     <i class="fa fa-comment"></i> <a href="/article/<?=$blog['id']?>/comments">Комментарии</a> (<?=$blog['comments']?>)

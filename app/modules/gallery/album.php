@@ -49,7 +49,7 @@ switch ($act):
 
         $moder = (App::getUserId() == $user->id) ? 1 : 0;
 
-        App::view('gallery/album', compact('photos', 'moder', 'page', 'user'));
+        App::view('gallery/user_albums', compact('photos', 'moder', 'page', 'user'));
     break;
 
 endswitch;

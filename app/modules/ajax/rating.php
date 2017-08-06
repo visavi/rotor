@@ -26,7 +26,10 @@ Polling::where('relate_type', $type)
 
 $post = $type::where('user_id', '<>', App::getUserId())->find($id);
 if (! $post) {
-    exit(json_encode(['status' => 'error', 'message' => 'message not found']));
+    exit(json_encode([
+        'status' => 'error',
+        'message' => 'message not found',
+    ]));
 }
 
 $polling = Polling::where('relate_type', $type)

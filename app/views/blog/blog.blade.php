@@ -6,30 +6,32 @@
 
 @section('content')
 
-    <h1><?=$category['name']?> <small>(Статей: <?=$category['count']?>)</small></h1>
-    <a href="/blog">Блоги</a> / <a href="/blog/blog?act=new&amp;cid=<?=$category['id']?>">Написать</a>
+    <h1>{{ $category['name'] }} <small>(Статей: {{ $category['count'] }})</small></h1>
+    <a href="/blog">Блоги</a> / <a href="/blog/blog?act=new&amp;cid={{ $category['id'] }}">Написать</a>
 
-    <?php if (is_admin()): ?>
-        / <a href="/admin/blog?act=blog&amp;cid=<?=$category['id']?>&amp;page=<?=$page['current']?>">Управление</a>
-    <?php endif; ?>
+    @if (is_admin())
+        / <a href="/admin/blog?act=blog&amp;cid={{ $category['id'] }}&amp;page={{ $page['current'] }}">Управление</a>
+    @endif
     <hr />
 
-    <?php foreach ($blogs as $data): ?>
+    @if ($blogs)
+        @foreach ($blogs as $data)
+            <div class="b">
+                <i class="fa fa-pencil"></i>
+                <b><a href="/article/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({!! format_num($data['rating']) !!})
+            </div>
+            <div>
+                Автор: {!! profile($data['user']) !!} ({{ date_fixed($data['created_at']) }})<br />
+                Просмотров: {{ $data['visits'] }}<br />
+                <a href="/article/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
+                <a href="/article/{{ $data['id'] }}/end">&raquo;</a>
+            </div>
+        @endforeach
 
-        <div class="b">
-            <i class="fa fa-pencil"></i>
-            <b><a href="/article/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=format_num($data['rating'])?>)
-        </div>
-
-        <div>
-            Автор: <?=profile($data['user'])?> (<?=date_fixed($data['created_at'])?>)<br />
-            Просмотров: <?=$data['visits']?><br />
-            <a href="/article/<?=$data['id']?>/comments">Комментарии</a> (<?=$data['comments']?>)
-            <a href="/article/<?=$data['id']?>/end">&raquo;</a>
-        </div>
-    <?php endforeach; ?>
-
-    <?= App::pagination($page); ?>
+        {{ App::pagination($page) }}
+    @else
+        {{ show_error('Статей еще нет, будь первым!') }}
+    @endif
 
     <a href="/blog/top">Топ статей</a> /
     <a href="/blog/tags">Облако тегов</a> /

@@ -9,7 +9,7 @@
 
     <a href="/article/<?=$blog['id']?>/rss">RSS-лента</a><hr />
 
-    <?php if ($is_admin): ?>
+    <?php if (is_admin()): ?>
         <form action="/blog/blog?act=del&amp;id=<?=$blog['id']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>" method="post">
     <?php endif; ?>
 
@@ -18,7 +18,7 @@
         <div class="b">
             <div class="img"><?=user_avatars($data['user'])?></div>
 
-            <?php if ($is_admin): ?>
+            <?php if (is_admin()): ?>
                 <span class="imgright"><input type="checkbox" name="del[]" value="<?=$data['id']?>" /></span>
             <?php endif; ?>
 
@@ -53,23 +53,24 @@
     @endforelse
 
 
-    <?php if ($is_admin): ?>
+    <?php if (is_admin()): ?>
         <span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>
     <?php endif; ?>
     <hr />
 
     @if (is_user())
 
-    <div class="form">
-        <form action="/blog/blog?act=add&amp;id=<?=$blog['id']?>&amp;uid=<?=$_SESSION['token']?>" method="post">
-            <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />
-            <input type="submit" value="Написать" />
-        </form>
-    </div><br />
+        <div class="form">
+            <form action="/article/<?=$blog['id']?>/comments" method="post">
+                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+                <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />
+                <button class="btn btn-success">Написать</button>
+            </form>
+        </div><br />
 
-    <a href="/rules">Правила</a> /
-    <a href="/smiles">Смайлы</a> /
-    <a href="/tags">Теги</a><br /><br />
+        <a href="/rules">Правила</a> /
+        <a href="/smiles">Смайлы</a> /
+        <a href="/tags">Теги</a><br /><br />
 
     @else
         <?= show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо'); ?>
