@@ -67,11 +67,20 @@ class App
             $error->save();
 
             Log::where('code', $code)
-                ->where('created_at',  '<',  SITETIME - 3600 * 24 * Setting::get('maxlogdat'))
+                ->where('created_at', '<', SITETIME - 3600 * 24 * Setting::get('maxlogdat'))
                 ->delete();
         }
 
-        exit(self::view('errors.'.$code, compact('message')));
+        if (Request::ajax()) {
+            header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+
+            exit(json_encode([
+                'status' => 'error',
+                'message' => $message,
+            ]));
+        }
+
+        exit(self::view('errors/'.$code, compact('message')));
     }
 
 

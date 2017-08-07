@@ -7,10 +7,6 @@ $type  = check(Request::input('type'));
 $page  = check(Request::input('page'));
 $token = check(Request::input('token'));
 
-if (! Request::ajax()) {
-    redirect('/');
-}
-
 switch ($type):
     case 'Blog':
         $data = Comment::where('relate_type', $type)
@@ -44,7 +40,8 @@ endswitch;
 $spam = Spam::where(['relate_type' => $type, 'relate_id' => $id])->first();
 
 $validation = new Validation();
-$validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+$validation->addRule('bool', Request::ajax(), 'Это не ajax запрос!')
+    ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
     ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться')
     ->addRule('bool', $data, 'Выбранное вами сообщение для жалобы не существует!')
     ->addRule('bool', ! $spam, 'Жалоба на данное сообщение уже отправлена!');

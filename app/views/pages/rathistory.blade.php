@@ -10,7 +10,7 @@
 
     <i class="fa fa-thumbs-up"></i> <b>Полученные</b> / <a href="/rating/{{ $user->login }}/gave">Отданные</a><hr />
 
-    @if ($ratings)
+    @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
             <div class="post">
                 <div class="b">
@@ -40,7 +40,7 @@
             </div>
         @endforeach
     @else
-        {{  show_error('В истории еще ничего нет!') }}
+        {{ show_error('В истории еще ничего нет!') }}
     @endif
 
     <br />

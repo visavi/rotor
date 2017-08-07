@@ -10,7 +10,7 @@
 
     <i class="fa fa-thumbs-up"></i> <a href="/rating/{{ $user->login }}/received">Полученные</a> / <b>Отданные</b><hr />
 
-    @if ($ratings)
+    @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
             <div class="b">
                 @if (empty($data['vote']))

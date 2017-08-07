@@ -1,5 +1,4 @@
 <?php
-//show_title('История голосований '.$uz);
 
 $login = check(param('login'));
 
@@ -46,12 +45,9 @@ case 'delete':
     $id    = abs(intval(Request::input('id')));
     $token = check(Request::input('token'));
 
-    if (! Request::ajax()) {
-        redirect('/');
-    }
-
     $validation = new Validation();
     $validation
+        ->addRule('bool', Request::ajax(), 'Это не ajax запрос!')
         ->addRule('bool', is_admin([101]), 'Удалять рейтинг могут только администраторы')
         ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
         ->addRule('not_empty', $id, ['Не выбрана запись для удаление!']);
