@@ -273,6 +273,32 @@ function changeRating(el)
     return false;
 }
 
+/**
+ * Удаляет запись из истории рейтинга
+ */
+function deleteRating(el)
+{
+    $.ajax({
+        data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
+        dataType: 'JSON', type: 'POST', url: '/rating/' + $(el).data('login') + '/delete',
+        success: function(data) {
+
+            if (data.status === 'error'){
+                notify('error', data.message);
+                return false;
+            }
+
+            if (data.status === 'success'){
+                notify('success', 'Запись успешно удалена');
+
+                $(el).closest('.post').hide('slow');
+            }
+        }
+    });
+
+    return false;
+}
+
 /* Показ формы создания голосования */
 function showVoteForm()
 {

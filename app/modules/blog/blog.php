@@ -78,9 +78,7 @@ case 'view':
                 'created_at'  => $expiresRead,
             ]);
 
-            $blog->update([
-                'visits' => Capsule::raw('visits + 1'),
-            ]);
+            $blog->increment('visits');
         }
     }
 

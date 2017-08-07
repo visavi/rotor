@@ -94,7 +94,7 @@
 
                 <a href="/banhist?uz={{ $user['login'] }}">Строгих нарушений: {{ $user['totalban'] }}</a><br />
 
-                <a href="/rathist?uz={{ $user['login'] }}">Репутация: <b>{!! format_num($user['rating']) !!}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br />
+                <a href="/rating/{{ $user->login }}/received">Репутация: <b>{!! format_num($user['rating']) !!}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br />
 
                 @if (is_user() && App::getUsername() != $user['login'])
                     [ <a href="/user/{{ $user['login'] }}/rating?vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /

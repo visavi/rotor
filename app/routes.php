@@ -82,6 +82,10 @@ $router->map('GET', '/user/[user:login]', 'pages/user.php');
 $router->map('GET|POST', '/login', 'pages/login.php', 'login');
 $router->map('GET|POST', '/register', 'pages/registration.php', 'register');
 $router->map('GET|POST', '/user/[user:login]/[note:action]', 'pages/user.php', 'note');
+$router->map('GET|POST', '/user/[user:login]/[rating:action]', 'pages/rating.php');
+
+$router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'pages/rathistory.php');
+$router->map('POST', '/rating/[user:login]/[delete:action]', 'pages/rathistory.php');
 
 $router->map('GET|POST', '/mail', 'mail/index.php', 'mail');
 $router->map('GET|POST', '/recovery', 'mail/recovery.php', 'recovery');
@@ -122,7 +126,6 @@ $router->map('GET|POST', '/profile', 'pages/profile.php');
 $router->map('GET|POST', '/account', 'pages/account.php');
 $router->map('GET|POST', '/offers', 'pages/offers.php');
 $router->map('GET|POST', '/notebook', 'pages/notebook.php');
-$router->map('GET|POST', '/rathist', 'pages/rathist.php');
 $router->map('GET',      '/reklama', 'pages/reklama.php');
 $router->map('GET|POST', '/reklama/[create:action]', 'pages/reklama.php');
 $router->map('GET|POST', '/authlog', 'pages/authlog.php');
@@ -138,7 +141,6 @@ $router->map('GET|POST', '/banip', 'pages/banip.php');
 $router->map('GET|POST', '/razban', 'pages/razban.php');
 $router->map('GET|POST', '/banhist', 'pages/banhist.php');
 $router->map('GET|POST', '/statusfaq', 'pages/statusfaq.php');
-$router->map('GET|POST', '/user/[user:login]/[rating:action]', 'pages/rating.php');
 $router->map('GET|POST', '/ratinglist', 'pages/ratinglist.php');
 $router->map('GET|POST', '/faq', 'pages/faq.php');
 $router->map('GET|POST', '/closed', 'pages/closed.php');

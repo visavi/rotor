@@ -1,12 +1,14 @@
 @extends('layout')
 
 @section('title')
-    Изменения репутации пользователя {{ $login }} - @parent
+    Изменения репутации пользователя {{ $user->login }} - @parent
 @stop
 
 @section('content')
 
-    <div class="b">{!! user_avatars($login) !!} <b>{{ $login }} </b> {{ user_visit($login) }}</div>
+    <h1>Изменения репутации пользователя {{ $user->login }}</h1>
+
+    <div class="b">{!! user_avatars($user) !!} <b>{{ $user->login }} </b> {{ user_visit($user) }}</div>
 
     <div class="form">
         <form method="post">
@@ -29,6 +31,6 @@
         </form>
     </div><br />
 
-    <i class="fa fa-briefcase"></i> <a href="/rathist?uz={{ $login }}">История</a><br />
-    <i class="fa fa-arrow-circle-left"></i> <a href="/user/{{ $login }}">Вернуться</a><br />
+    <i class="fa fa-briefcase"></i> <a href="/rating/{{ $user->login }}/received">История</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/user/{{ $user->login }}">Вернуться</a><br />
 @stop

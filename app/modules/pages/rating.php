@@ -6,12 +6,13 @@ if (! is_user()) {
     App::abort(403, 'Для изменения рейтинга небходимо авторизоваться!');
 }
 
-$getUser = user($login);
-if (! $getUser) {
+$user = User::where('login', $login)->first();
+
+if (! $user) {
     App::abort('default', 'Данного пользователя не существует!');
 }
 
-if (App::getUsername() == $login) {
+if (App::getUserId() == $user->id) {
     App::abort('default', 'Запрещено изменять репутацию самому себе!');
 }
 
@@ -19,7 +20,12 @@ if (App::user('point') < Setting::get('editratingpoint')) {
     App::abort('default', 'Для изменения репутации необходимо набрать '.points(Setting::get('editratingpoint')).'!');
 }
 
-$getRating = Rating::where('user', App::getUsername())->where('login', $login)->find_one();
+// Голосовать за того же пользователя можно через 90 дней
+$getRating = Rating::where('user_id', App::getUserId())
+    ->where('recipient_id', $user->id)
+    ->where('created_at', '>', SITETIME - 3600 * 24 * 90)
+    ->first();
+
 if ($getRating) {
     App::abort('default', 'Вы уже изменяли репутацию этому пользователю!');
 }
@@ -44,46 +50,40 @@ if (Request::isMethod('post')) {
 
         $text = antimat($text);
 
-        $rating = Rating::create();
-        $rating->set([
-            'user' => App::getUsername(),
-            'login' => $login,
-            'text' => $text,
-            'vote' => $vote,
-            'time' => SITETIME,
+        $rating = Rating::create([
+            'user_id'      => App::getUserId(),
+            'recipient_id' => $user->id,
+            'text'         => $text,
+            'vote'         => $vote,
+            'created_at'   => SITETIME,
         ]);
-        $rating->save();
-
-        Rating::where_lt('time', SITETIME - 3600 * 24 * 365)->delete_many();
 
         if ($vote == 1) {
+            $text = 'Пользователь [b]' . App::getUsername() . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
-            $user = User::where('login', $login)->find_one();
-            $user->set_expr('rating', 'posrating - negrating + 1');
-            $user->set_expr('posrating', 'posrating + 1');
-            $user->save();
-
-            $text = 'Пользователь [b]' . App::getUsername() . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($getUser['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+            $user->update([
+                'rating' => Capsule::raw('posrating - negrating + 1'),
+                'posrating' => Capsule::raw('posrating + 1'),
+            ]);
 
         } else {
 
-            $user = User::where('login', $login)->find_one();
-            $user->set_expr('rating', 'posrating - negrating - 1');
-            $user->set_expr('negrating', 'negrating + 1');
-            $user->save();
+            $text = 'Пользователь [b]' . App::getUsername() . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($user['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
-            $text = 'Пользователь [b]' . App::getUsername() . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($getUser['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+            $user->update([
+                'rating' => Capsule::raw('posrating - negrating - 1'),
+                'negrating' => Capsule::raw('negrating + 1'),
+            ]);
         }
 
-        send_private($login, App::getUsername(), $text);
+        send_private($user->id, App::getUserId(), $text);
 
         App::setFlash('success', 'Репутация успешно изменена!');
-        App::redirect('/user/'.$login);
-
+        App::redirect('/user/'.$user->login);
     } else {
         App::setInput(Request::all());
         App::setFlash('danger', $validation->getErrors());
     }
 }
 
-App::view('pages/rating', compact('login', 'vote'));
+App::view('pages/rating', compact('user', 'vote'));

@@ -22,4 +22,12 @@ class Rating extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователей
+     */
+    public function recipient()
+    {
+        return $this->belongsTo('User', 'recipient_id');
+    }
 }
