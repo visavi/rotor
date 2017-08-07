@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -12,7 +12,7 @@ switch ($act):
 ############################################################################################
 case "index":
 
-    //App::setting('newtitle') = 'Поиск в файлах';
+    //Setting::get('newtitle') = 'Поиск в файлах';
 
     echo '<div class="form"><form action="/load/search?act=search" method="get">';
     echo '<input type="hidden" name="act" value="search" />';
@@ -65,7 +65,7 @@ case "search":
             $findme = "\"$find\"";
         }
 
-        //App::setting('newtitle') = $find.' - Результаты поиска';
+        //Setting::get('newtitle') = $find.' - Результаты поиска';
 
         $wheres = (empty($where)) ? 'title' : 'text';
 
@@ -85,7 +85,7 @@ case "search":
             }
 
             $total = count($_SESSION['loadfindres']);
-            $page = App::paginate(App::setting('downlist'), $total);
+            $page = App::paginate(Setting::get('downlist'), $total);
 
             if ($total > 0) {
 
@@ -93,7 +93,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -127,7 +127,7 @@ case "search":
             }
 
             $total = count($_SESSION['loadfindres']);
-            $page = App::paginate(App::setting('downlist'), $total);
+            $page = App::paginate(Setting::get('downlist'), $total);
 
             if ($total > 0) {
 
@@ -135,7 +135,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -177,4 +177,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

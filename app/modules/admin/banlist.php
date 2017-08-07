@@ -1,15 +1,15 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (is_admin([101, 102, 103])) {
     //show_title('Список забаненых');
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", [1, SITETIME]);
-    $page = App::paginate(App::setting('reglist'), $total);
+    $page = App::paginate(Setting::get('reglist'), $total);
 
     if ($total > 0) {
 
-        $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `ban`=? AND `timeban`>? ORDER BY `timelastban` DESC LIMIT ".$page['offset'].", ".App::setting('reglist').";", [1, SITETIME]);
+        $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `ban`=? AND `timeban`>? ORDER BY `timelastban` DESC LIMIT ".$page['offset'].", ".Setting::get('reglist').";", [1, SITETIME]);
 
         while ($data = $queryusers -> fetch()) {
             echo '<div class="b">';
@@ -35,4 +35,4 @@ if (is_admin([101, 102, 103])) {
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

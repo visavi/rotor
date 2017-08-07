@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (is_admin([101])) {
 //show_title('Очистка кэша');
@@ -119,4 +119,4 @@ echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />'
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

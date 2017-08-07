@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -14,11 +14,11 @@ if (is_user()) {
     ##                                   История авторизаций                                  ##
     ############################################################################################
     $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [App::getUsername()]);
-    $page = App::paginate(App::setting('loginauthlist'), $total);
+    $page = App::paginate(Setting::get('loginauthlist'), $total);
 
     if ($total > 0) {
 
-        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loginauthlist').";", [App::getUsername()]);
+        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loginauthlist').";", [App::getUsername()]);
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';
@@ -48,4 +48,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/menu">Вернуться</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -27,7 +27,7 @@
             <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;"><br />
             <input name="protect" id="inputProtect" maxlength="6" required><br />
 
-            <button type="submit" class="btn btn-primary">Подтвердить</button>
+            <button class="btn btn-primary">Подтвердить</button>
         </form>
     @endif
 @stop

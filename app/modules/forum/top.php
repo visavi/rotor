@@ -13,11 +13,11 @@ case 'themes':
             $total = 500;
         }
 
-        $page = App::paginate(App::setting('forumtem'), $total);
+        $page = App::paginate(Setting::get('forumtem'), $total);
 
         $topics = Topic::where('closed', 0)
             ->orderBy('posts', 'desc')
-            ->limit(App::setting('forumtem'))
+            ->limit(Setting::get('forumtem'))
             ->offset($page['offset'])
             ->with('forum', 'user', 'lastPost.user')
             ->get();
@@ -38,10 +38,10 @@ case 'posts':
             $total = 500;
         }
 
-        $page = App::paginate(App::setting('forumpost'), $total);
+        $page = App::paginate(Setting::get('forumpost'), $total);
 
         $posts = Post::orderBy('rating', 'desc')
-            ->limit(App::setting('forumpost'))
+            ->limit(Setting::get('forumpost'))
             ->offset($page['offset'])
             ->with('topic', 'user')
             ->get();

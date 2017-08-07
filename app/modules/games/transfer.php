@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -26,7 +26,7 @@ if (is_user()) {
 
             echo 'В наличии: '.moneys(App::user('money')).'<br /><br />';
 
-            if (App::user('point') >= App::setting('sendmoneypoint')) {
+            if (App::user('point') >= Setting::get('sendmoneypoint')) {
                 if (empty($uz)) {
                     echo '<div class="form">';
                     echo '<form action="/games/transfer?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -48,7 +48,7 @@ if (is_user()) {
                     echo '<input type="submit" value="Перевести" /></form></div><br />';
                 }
             } else {
-                show_error('Ошибка! Для перевода денег вам необходимо набрать '.points(App::setting('sendmoneypoint')).'!');
+                show_error('Ошибка! Для перевода денег вам необходимо набрать '.points(Setting::get('sendmoneypoint')).'!');
             }
         break;
 
@@ -63,7 +63,7 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($money > 0) {
-                    if (App::user('point') >= App::setting('sendmoneypoint')) {
+                    if (App::user('point') >= Setting::get('sendmoneypoint')) {
                         if ($money <= App::user('money')) {
                             if ($uz != App::getUsername()) {
                                 if ($msg <= 1000) {
@@ -103,7 +103,7 @@ if (is_user()) {
                             show_error('Ошибка! Недостаточно средств для перевода такого количества денег!');
                         }
                     } else {
-                        show_error('Ошибка! Для перевода денег вам необходимо набрать '.points(App::setting('sendmoneypoint')).'!');
+                        show_error('Ошибка! Для перевода денег вам необходимо набрать '.points(Setting::get('sendmoneypoint')).'!');
                     }
                 } else {
                     show_error('Ошибка! Перевод невозможен указана неверная сумма!');
@@ -123,4 +123,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

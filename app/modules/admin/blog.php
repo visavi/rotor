@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -204,7 +204,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
+            if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
@@ -237,18 +237,18 @@ if (is_admin()) {
             $cats = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
             if (!empty($cats)) {
-                //App::setting('newtitle') = $cats['name'];
+                //Setting::get('newtitle') = $cats['name'];
 
                 echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Статей: '.$cats['count'].')';
                 echo ' (<a href="/blog/blog?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
                 echo '<hr />';
 
                 $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `category_id`=?;", [$cid]);
-                $page = App::paginate(App::setting('blogpost'), $total);
+                $page = App::paginate(Setting::get('blogpost'), $total);
 
                 if ($total > 0) {
 
-                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";", [$cid]);
+                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('blogpost').";", [$cid]);
 
                     echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -325,7 +325,7 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($text) >= 100 && utf_strlen($text) <= App::setting('maxblogpost')) {
+                    if (utf_strlen($text) >= 100 && utf_strlen($text) <= Setting::get('maxblogpost')) {
                         if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
                             if (preg_match('|^[a-z0-9\-]+$|i', $user)) {
                                 $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
@@ -346,7 +346,7 @@ if (is_admin()) {
                             show_error('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.App::setting('maxblogpost').' символов)!');
+                        show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.Setting::get('maxblogpost').' символов)!');
                     }
                 } else {
                     show_error('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
@@ -480,4 +480,4 @@ if (is_admin()) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

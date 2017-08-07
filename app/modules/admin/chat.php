@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -22,7 +22,7 @@ if (is_admin()) {
             echo '<a href="/tags">Теги</a><hr />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
-            $page = App::paginate(App::setting('chatpost'), $total);
+            $page = App::paginate(Setting::get('chatpost'), $total);
 
             if (App::user('newchat') != stats_newchat()) {
                 DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), App::getUsername()]);
@@ -30,7 +30,7 @@ if (is_admin()) {
 
             if ($total > 0) {
 
-                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('chatpost').";");
+                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('chatpost').";");
 
                 while ($data = $querychat -> fetch()) {
                     echo '<div class="b">';
@@ -97,7 +97,7 @@ if (is_admin()) {
                         DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [App::getUsername(), $msg, App::getClientIp(), App::getUserAgent(), SITETIME]);
                     }
 
-                    DB::run() -> query("DELETE FROM `chat` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `chat` ORDER BY `time` DESC LIMIT ".App::setting('maxpostchat').") AS del);");
+                    DB::run() -> query("DELETE FROM `chat` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `chat` ORDER BY `time` DESC LIMIT ".Setting::get('maxpostchat').") AS del);");
 
                     DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), App::getUsername()]);
 
@@ -270,4 +270,4 @@ if (is_admin()) {
     redirect ('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

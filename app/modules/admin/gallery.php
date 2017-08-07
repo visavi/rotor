@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $page = abs(intval(Request::input('page', 1)));
@@ -17,7 +17,7 @@ if (is_admin()) {
             echo '<a href="/gallery?page='.$page.'">Обзор</a><hr />';
 
             $total = Photo::count();
-            $page = App::paginate(App::setting('fotolist'), $total);
+            $page = App::paginate(Setting::get('fotolist'), $total);
 
 
             if ($total > 0) {
@@ -26,7 +26,7 @@ if (is_admin()) {
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 $photos = Photo::orderBy('created_at', 'desc')
                     ->offset($page['offset'])
-                    ->limit(App::setting('fotolist'))
+                    ->limit(Setting::get('fotolist'))
                     ->with('user')
                     ->get();
 
@@ -37,7 +37,7 @@ if (is_admin()) {
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]).'</a><br />';
+                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]).'</a><br />';
 
                     if (!empty($data['text'])){
                         echo App::bbCode($data['text']).'<br />';
@@ -211,4 +211,4 @@ if (is_admin()) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

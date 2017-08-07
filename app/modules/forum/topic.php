@@ -9,7 +9,7 @@ switch ($act):
 case 'index':
 
     $total = Post::where('topic_id', $tid)->count();
-    $page = App::paginate(App::setting('forumpost'), $total);
+    $page = App::paginate(Setting::get('forumpost'), $total);
 
     $topic = Topic::select('topics.*', 'bookmarks.posts as bookmark_posts')
         ->where('topics.id', $tid)
@@ -29,7 +29,7 @@ case 'index':
         })
         ->with('files', 'user', 'editUser')
         ->offset($page['offset'])
-        ->limit(App::setting('forumpost'))
+        ->limit(Setting::get('forumpost'))
         ->orderBy('created_at', 'asc')
         ->get();
 
@@ -97,7 +97,7 @@ case 'create':
         -> addRule('not_empty', $topics, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
         -> addRule('empty', $topics['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
         -> addRule('equal', [is_flood(App::getUsername()), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!'])
-        -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, App::setting('forumtextlength'));
+        -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, Setting::get('forumtextlength'));
 
         // Проверка сообщения на схожесть
         $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `id` DESC LIMIT 1;", [$tid]);
@@ -107,7 +107,7 @@ case 'create':
 
         $msg = antimat($msg);
 
-        if (App::getUserId() == $post['user_id'] && $post['created_at'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= App::setting('forumtextlength'))) {
+        if (App::getUserId() == $post['user_id'] && $post['created_at'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= Setting::get('forumtextlength'))) {
 
             $newpost = $post['text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['created_at']).' сек.[/size][/i]'."\n".$msg;
 
@@ -150,7 +150,7 @@ case 'create':
                 if ($user['login']) {
 
                     if ($user['notify']) {
-                        send_private($user['login'], App::getUsername(), 'Пользователь ' . App::getUsername() . ' ответил вам в теме [url=' . App::setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / App::setting('forumpost')) . '#post_'.$lastid.']' . $newTopic['title'] . '[/url]'.PHP_EOL.'Текст сообщения: '.$msg);
+                        send_private($user['login'], App::getUsername(), 'Пользователь ' . App::getUsername() . ' ответил вам в теме [url=' . Setting::get('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / Setting::get('forumpost')) . '#post_'.$lastid.']' . $newTopic['title'] . '[/url]'.PHP_EOL.'Текст сообщения: '.$msg);
                     }
                 }
             }
@@ -158,15 +158,15 @@ case 'create':
 
         // Загрузка файла
         if (!empty($_FILES['file']['name']) && !empty($lastid)) {
-            if (App::user('point') >= App::setting('forumloadpoints')){
+            if (App::user('point') >= Setting::get('forumloadpoints')){
                 if (is_uploaded_file($_FILES['file']['tmp_name'])) {
 
                     $filename = check($_FILES['file']['name']);
                     $filename = (!is_utf($filename)) ? utf_lower(win_to_utf($filename)) : utf_lower($filename);
                     $filesize = $_FILES['file']['size'];
 
-                    if ($filesize > 0 && $filesize <= App::setting('forumloadsize')) {
-                        $arrext = explode(',', App::setting('forumextload'));
+                    if ($filesize > 0 && $filesize <= Setting::get('forumloadsize')) {
+                        $arrext = explode(',', Setting::get('forumextload'));
                         $ext = getExtension($filename);
 
                         if (in_array($ext, $arrext, true)) {
@@ -204,7 +204,7 @@ case 'create':
                             $fileError = 'Файл не загружен! Недопустимое расширение!';
                         }
                     } else {
-                        $fileError = 'Файл не загружен! Максимальный размер '.formatsize(App::setting('forumloadsize')).'!';
+                        $fileError = 'Файл не загружен! Максимальный размер '.formatsize(Setting::get('forumloadsize')).'!';
                     }
                 } else {
                     $fileError = 'Ошибка! Не удалось загрузить файл!';
@@ -287,7 +287,7 @@ case 'close':
     $validation = new Validation();
     $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
          -> addRule('bool', is_user(), 'Для закрытия тем необходимо авторизоваться')
-         -> addRule('max', [App::user('point'), App::setting('editforumpoint')], 'Для закрытия тем вам необходимо набрать '.points(App::setting('editforumpoint')).'!')
+         -> addRule('max', [App::user('point'), Setting::get('editforumpoint')], 'Для закрытия тем вам необходимо набрать '.points(Setting::get('editforumpoint')).'!')
         -> addRule('not_empty', $topic, 'Выбранная вами тема не существует, возможно она была удалена!')
         -> addRule('equal', [$topic['user_id'], App::getUserId()], 'Вы не автор данной темы!')
         -> addRule('empty', $topic['closed'], 'Данная тема уже закрыта!');
@@ -320,7 +320,7 @@ case 'edit':
 
     if (! is_user()) App::abort(403, 'Авторизуйтесь для изменения темы!');
 
-    if (App::user('point') < App::setting('editforumpoint')) {
+    if (App::user('point') < Setting::get('editforumpoint')) {
         App::abort('default', 'У вас недостаточно актива для изменения темы!');
     }
 
@@ -354,7 +354,7 @@ case 'edit':
             -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50);
 
         if ($post) {
-            $validation->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, App::setting('forumtextlength'));
+            $validation->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, Setting::get('forumtextlength'));
         }
         if ($validation->run()) {
 
@@ -420,7 +420,7 @@ case 'editpost':
 
         $validation = new Validation();
         $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, App::setting('forumtextlength'));
+            -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, Setting::get('forumtextlength'));
 
         if ($validation->run()) {
 
@@ -533,7 +533,7 @@ case 'viewpost':
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    $end = ceil($countTopics / App::setting('forumpost'));
+    $end = ceil($countTopics / Setting::get('forumpost'));
     App::redirect('/topic/'.$tid.'?page='.$end.'#post_'.$id);
 break;
 
@@ -548,7 +548,7 @@ case 'end':
         App::abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
     }
 
-    $end = ceil($topic['posts'] / App::setting('forumpost'));
+    $end = ceil($topic['posts'] / Setting::get('forumpost'));
     App::redirect('/topic/'.$tid.'?page='.$end);
 break;
 

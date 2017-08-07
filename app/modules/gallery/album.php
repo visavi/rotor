@@ -11,7 +11,7 @@ switch ($act):
             ->join('users', 'photo.user_id', '=', 'users.id')
             ->count('user_id');
 
-        $page = App::paginate(App::setting('photogroup'), $total);
+        $page = App::paginate(Setting::get('photogroup'), $total);
 
         $albums = Photo::select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(comments) as comments')
@@ -38,7 +38,7 @@ switch ($act):
 
         $total = Photo::where('user_id', $user->id)->count();
 
-        $page = App::paginate(App::setting('fotolist'), $total);
+        $page = App::paginate(Setting::get('fotolist'), $total);
 
         $photos = Photo::where('user_id', $user->id)
             ->offset($page['offset'])

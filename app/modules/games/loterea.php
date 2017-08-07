@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 //show_title('Лотерея');
@@ -21,7 +21,7 @@ if (is_user()) {
                 $arrwinners = $querywin -> fetchAll(PDO::FETCH_COLUMN);
 
                 $winusers = '';
-                $jackpot = (empty($datalot['sum'])) ? App::setting('jackpot') : $datalot['sum'];
+                $jackpot = (empty($datalot['sum'])) ? Setting::get('jackpot') : $datalot['sum'];
                 $oldnum = (empty($datalot['newnum'])) ? 0 : $datalot['newnum'];
                 $wincount = count($arrwinners);
 
@@ -31,14 +31,14 @@ if (is_user()) {
                     foreach ($arrwinners as $winuz) {
                         if (check_user($winuz)) {
                             $textpriv = 'Поздравляем! Вы сорвали Джек-пот в лотерее и выиграли '.moneys($winmoneys);
-                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$winuz, App::setting('nickname'), $textpriv, SITETIME]);
+                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$winuz, Setting::get('nickname'), $textpriv, SITETIME]);
 
                             DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1, `money`=`money`+? WHERE `login`=?", [$winmoneys, $winuz]);
                         }
                     }
 
                     $winusers = implode(',', $arrwinners);
-                    $jackpot = App::setting('jackpot');
+                    $jackpot = Setting::get('jackpot');
                 }
 
                 DB::run() -> query("REPLACE INTO `lotinfo` (`id`, `date`, `sum`, `newnum`, `oldnum`, `winners`) VALUES (?, ?, ?, ?, ?, ?);", [1, $newtime, $jackpot, $rand, $oldnum, $winusers]);
@@ -153,4 +153,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

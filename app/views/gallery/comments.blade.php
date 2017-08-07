@@ -17,7 +17,7 @@
                     <div class="img">{!! user_avatars($data->user) !!}</div>
                     <div class="pull-right">
                         @if (App::getUserId() != $data['user_id'])
-                            <a href="#" onclick="return postReply('<?= $data->getUser()->login ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 

@@ -80,13 +80,16 @@ function postJump() {
 }
 
 /* Ответ на сообщение */
-function postReply(name)
+function postReply(el)
 {
+    var post = $(el).closest('.post');
+    var author = post.find('b').text();
+
     postJump();
 
     var field = $("#markItUp");
     separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '[b]' + name + '[/b], ');
+    field.focus().val(field.val() + separ + '[b]' + author + '[/b], ');
 
     return false;
 }

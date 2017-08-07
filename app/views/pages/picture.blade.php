@@ -10,7 +10,7 @@
 
     <div class="form">
         @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
-            {!! resize_image('uploads/photos/', $user['picture'], App::setting('previewsize'), ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}
+            {!! resize_image('uploads/photos/', $user['picture'], Setting::get('previewsize'), ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}
         @else
             <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />
         @endif
@@ -25,12 +25,12 @@
                 </label>
                 <span class='label label-info' id="upload-file-info"></span>
             </div>
-            <button type="submit" class="btn btn-primary">Загрузить</button>
+            <button class="btn btn-primary">Загрузить</button>
         </form>
     </div><br />
 
     Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br />
-    Весом не более {{ formatsize(App::setting('filesize')) }} и размером от 100 до {{  App::setting('fileupfoto') }} px<br />
+    Весом не более {{ formatsize(Setting::get('filesize')) }} и размером от 100 до {{  Setting::get('fileupfoto') }} px<br />
     Аватар генерируется автоматически из вашей фотографии<br /><br />
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br />

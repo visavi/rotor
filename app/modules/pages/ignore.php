@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $page = abs(intval(Request::input('page', 1)));
 
@@ -14,7 +14,7 @@ switch ($act):
 case 'index':
 
     $total = Ignore::where('user_id', App::getUserId())->count();
-    $page = App::paginate(App::setting('ignorlist'), $total);
+    $page = App::paginate(Setting::get('ignorlist'), $total);
 
     $ignores = Ignore::where('user_id', App::getUserId())
         ->orderBy('created_at', 'desc')
@@ -79,7 +79,7 @@ case 'create':
         $validation->addRule('not_equal', [$user->login, App::getUsername()], 'Запрещено добавлять свой логин!');
 
         $totalIgnore = Ignore::where('user_id', App::getUserId())->count();
-        $validation->addRule('min', [$totalIgnore, App::setting('limitignore')], 'Ошибка! Игнор-лист переполнен (Максимум ' . App::setting('limitignore') . ' пользователей!)');
+        $validation->addRule('min', [$totalIgnore, Setting::get('limitignore')], 'Ошибка! Игнор-лист переполнен (Максимум ' . Setting::get('limitignore') . ' пользователей!)');
 
         $validation->addRule('custom', ! isIgnore(App::user(), $user), 'Данный пользователь уже есть в игнор-листе!');
 
@@ -182,4 +182,4 @@ endswitch;
 echo '<i class="fa fa-users"></i> <a href="/contact">Контакт-лист</a><br />';
 echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

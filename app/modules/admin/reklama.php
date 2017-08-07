@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -18,11 +18,11 @@ if (is_admin()) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `rekuser` WHERE `time`>?;", [SITETIME]);
-            $page = App::paginate(App::setting('rekuserpost'), $total);
+            $page = App::paginate(Setting::get('rekuserpost'), $total);
 
             if ($total > 0) {
 
-                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('rekuserpost').";", [SITETIME]);
+                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('rekuserpost').";", [SITETIME]);
 
                 echo '<form action="/admin/reklama?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -64,7 +64,7 @@ if (is_admin()) {
         ############################################################################################
         case 'edit':
 
-            //App::setting('newtitle') = 'Редактирование ссылки';
+            //Setting::get('newtitle') = 'Редактирование ссылки';
 
             $id = abs(intval($_GET['id']));
 
@@ -188,4 +188,4 @@ if (is_admin()) {
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

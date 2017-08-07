@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -19,7 +19,7 @@ if (is_user()) {
                 echo 'В банке: '.moneys($databank['sum']).'<br /><br />';
 
                 if ($databank['sum'] > 0) {
-                    if ($databank['sum'] <= App::setting('maxsumbank')) {
+                    if ($databank['sum'] <= Setting::get('maxsumbank')) {
                         if ($databank['time'] >= SITETIME) {
                             echo '<b>До получения процентов осталось '.formattime($databank['time'] - SITETIME).'</b><br />';
                             echo 'Будет получено с процентов: '.moneys(percent_bank($databank['sum'])).'<br /><br />';
@@ -40,10 +40,10 @@ if (is_user()) {
                         }
                     } else {
                         echo '<b><span style="color:#ff0000">Внимание у вас слишком большой вклад</span></b><br />';
-                        echo 'Превышена максимальная сумма вклада для получения процентов на '.moneys($databank['sum'] - App::setting('maxsumbank')).'<br /><br />';
+                        echo 'Превышена максимальная сумма вклада для получения процентов на '.moneys($databank['sum'] - Setting::get('maxsumbank')).'<br /><br />';
                     }
                 } else {
-                    echo 'Для получения процентов на счете должны быть средства, но не более '.moneys(App::setting('maxsumbank')).'<br /><br />';
+                    echo 'Для получения процентов на счете должны быть средства, но не более '.moneys(Setting::get('maxsumbank')).'<br /><br />';
                 }
             } else {
                 echo 'Вы новый клиент нашего банка. Мы рады, что вы доверяеете нам свои деньги<br />';
@@ -60,7 +60,7 @@ if (is_user()) {
             echo '</select><br />';
             echo '<input type="submit" value="Выполнить" /></form></div><br />';
 
-            echo 'Максимальная сумма вклада: '.moneys(App::setting('maxsumbank')).'<br /><br />';
+            echo 'Максимальная сумма вклада: '.moneys(Setting::get('maxsumbank')).'<br /><br />';
             echo 'Процентная ставка зависит от суммы вклада<br />';
             echo 'Вклад до 100 тыс. - ставка 10%<br />';
             echo 'Вклад более 100 тыс. - ставка 6%<br />';
@@ -87,7 +87,7 @@ if (is_user()) {
                 if ($provkod == $_SESSION['protect']) {
                     $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
                     if (!empty($databank)) {
-                        if ($databank['sum'] > 0 && $databank['sum'] <= App::setting('maxsumbank')) {
+                        if ($databank['sum'] > 0 && $databank['sum'] <= Setting::get('maxsumbank')) {
                             if ($databank['time'] < SITETIME) {
                                 $percent = percent_bank($databank['sum']);
 
@@ -184,4 +184,4 @@ echo '<i class="fa fa-bar-chart"></i> <a href="/games/livebank">Статисти
 echo '<i class="fa fa-money"></i> <a href="/games/credit">Выдача кредитов</a><br />';
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

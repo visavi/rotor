@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $used = (!empty($_GET['used'])) ? 1  : 0;
@@ -14,7 +14,7 @@ switch ($act):
 ############################################################################################
 case 'index':
 
-    if (empty(App::setting('invite'))) {
+    if (empty(Setting::get('invite'))) {
         echo '<i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br /><br />';
     }
 
@@ -25,11 +25,11 @@ case 'index':
     }
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `invite` WHERE `used`=?;", [$used]);
-    $page = App::paginate(App::setting('listinvite'), $total);
+    $page = App::paginate(Setting::get('listinvite'), $total);
 
     if ($total > 0) {
 
-        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('listinvite').";", [$used]);
+        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('listinvite').";", [$used]);
 
         echo '<form action="/admin/invitations?act=del&amp;used='.$used.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -272,4 +272,4 @@ endswitch;
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

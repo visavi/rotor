@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $id  = abs(intval(Request::input('id', 0)));
@@ -16,7 +16,7 @@ case 'index':
     echo '<div class="form"><a href="/news">Обзор новостей</a></div>';
 
     $total = News::count();
-    $page = App::paginate(App::setting('postnews'), $total);
+    $page = App::paginate(Setting::get('postnews'), $total);
 
     if ($total > 0) {
 
@@ -145,7 +145,7 @@ case 'change':
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-            $handle = upload_image($_FILES['image'], App::setting('filesize'), App::setting('fileupfoto'), $id);
+            $handle = upload_image($_FILES['image'], Setting::get('filesize'), Setting::get('fileupfoto'), $id);
             if ($handle) {
 
                 // Удаление старой картинки
@@ -225,13 +225,13 @@ case 'addnews':
         $lastid = DB::run() -> lastInsertId();
 
         // Выводим на главную если там нет новостей
-        if (!empty($top) && empty(App::setting('lastnews'))) {
+        if (!empty($top) && empty(Setting::get('lastnews'))) {
             DB::run() -> query("UPDATE `setting` SET `value`=? WHERE `name`=?;", [1, 'lastnews']);
             save_setting();
         }
 
         // ---------------------------- Загрузка изображения -------------------------------//
-        $handle = upload_image($_FILES['image'], App::setting('filesize'), App::setting('fileupfoto'), $lastid);
+        $handle = upload_image($_FILES['image'], Setting::get('filesize'), Setting::get('fileupfoto'), $lastid);
         if ($handle) {
 
             $handle -> process(HOME.'/uploads/news/');
@@ -331,4 +331,4 @@ echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />'
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

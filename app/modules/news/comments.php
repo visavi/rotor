@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 //show_title('Список последних комментариев');
 
@@ -15,7 +15,7 @@ switch ($act):
             if ($total > 100) {
                 $total = 100;
             }
-            $page = App::paginate(App::setting('postnews'), $total);
+            $page = App::paginate(Setting::get('postnews'), $total);
 
             $comments = Comment::select('comments.*', 'title', 'comments')
                 ->where('relate_type', News::class)
@@ -64,7 +64,7 @@ switch ($act):
 
         if ($total) {
 
-            $end = ceil($total / App::setting('postnews'));
+            $end = ceil($total / Setting::get('postnews'));
             App::redirect('/news/'.$nid.'/comments?page='.$end.'#comment_'.$id);
 
         } else {
@@ -76,4 +76,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

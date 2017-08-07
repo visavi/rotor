@@ -45,7 +45,7 @@ if (empty($find)) {
             $findme = "\"$find\"";
         }
 
-        //App::setting('newtitle') = $find . ' - Результаты поиска';
+        //Setting::get('newtitle') = $find . ' - Результаты поиска';
 
         $wheres = (empty($where)) ? 'topics' : 'posts';
 
@@ -72,13 +72,13 @@ if (empty($find)) {
             $total = count($_SESSION['forumfindres']);
 
             if ($total > 0) {
-                $page = App::paginate(App::setting('forumtem'), $total);
+                $page = App::paginate(Setting::get('forumtem'), $total);
 
                 $topics = Topic::whereIn('id', $_SESSION['forumfindres'])
                     ->with('lastPost.user')
                     ->orderBy('updated_at', 'desc')
                     ->offset($page['offset'])
-                    ->limit(App::setting('forumtem'))
+                    ->limit(Setting::get('forumtem'))
                     ->get();
 
                 App::view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
@@ -111,13 +111,13 @@ if (empty($find)) {
             $total = count($_SESSION['forumfindres']);
 
             if ($total > 0) {
-                $page = App::paginate(App::setting('forumpost'), $total);
+                $page = App::paginate(Setting::get('forumpost'), $total);
 
                 $posts = Post::whereIn('id', $_SESSION['forumfindres'])
                     ->with('user', 'topic')
                     ->orderBy('created_at', 'desc')
                     ->offset($page['offset'])
-                    ->limit(App::setting('forumpost'))
+                    ->limit(Setting::get('forumpost'))
                     ->get();
 
                 App::view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));

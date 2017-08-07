@@ -1,6 +1,6 @@
 <?php
 
-$domain = check_string(App::setting('home'));
+$domain = check_string(Setting::get('home'));
 
 switch ($act):
 ############################################################################################

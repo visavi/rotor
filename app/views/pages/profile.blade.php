@@ -25,7 +25,7 @@
                         <div class="pull-right">
                             @if (!empty(App::user('picture')) && file_exists(HOME.'/uploads/photos/'.App::user('picture')))
                                 <a class="gallery" href="/uploads/photos/{{ App::user('picture') }}">
-                                    {!! resize_image('uploads/photos/', App::user('picture'), App::setting('previewsize'), ['alt' => App::user('login'), 'class' => 'img-responsive img-rounded']) !!}
+                                    {!! resize_image('uploads/photos/', App::user('picture'), Setting::get('previewsize'), ['alt' => App::user('login'), 'class' => 'img-responsive img-rounded']) !!}
                                 </a>
                                 <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
                             @else
@@ -87,7 +87,7 @@
                             <textarea class="form-control" id="markItUp" cols="25" rows="5" name="info">{{ App::getInput('info', App::user('info')) }}</textarea>
                             {!! App::textError('info') !!}
                         </div>
-                        <button type="submit" class="btn btn-primary">Изменить</button>
+                        <button class="btn btn-primary">Изменить</button>
                     </div>
                 </div>
             </div>

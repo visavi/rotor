@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -46,7 +46,7 @@ switch ($act):
             if (empty($votes['closed'])) {
 
                 //show_title($votes['title']);
-                //App::setting('newtitle') = $votes['title'];
+                //Setting::get('newtitle') = $votes['title'];
 
                 $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `vote_id`=? ORDER BY `id`;", [$id]);
                 $answer = $queryanswer -> fetchAll();
@@ -179,7 +179,7 @@ switch ($act):
         $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($votes)) {
 
-            //App::setting('newtitle') = $votes['title'];
+            //Setting::get('newtitle') = $votes['title'];
 
             echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
@@ -204,4 +204,4 @@ endswitch;
 
 echo '<i class="fa fa-briefcase"></i> <a href="/votes/history">Архив голосований</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

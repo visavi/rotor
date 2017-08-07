@@ -6,7 +6,7 @@ header("Content-type:text/html; charset=utf-8");
 <head>
     <title>
         @section('title')
-            {{ App::setting('title') }}
+            {{ Setting::get('title') }}
         @show
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -25,8 +25,8 @@ header("Content-type:text/html; charset=utf-8");
 
 <div id="wrap">
     <div id="header">
-        <h1 id="logo-text"><a href="/"><?= App::setting('title') ?></a></h1>
-        <p id="slogan"><?= App::setting('logos') ?></p>
+        <h1 id="logo-text"><a href="/"><?= Setting::get('title') ?></a></h1>
+        <p id="slogan"><?= Setting::get('logos') ?></p>
 
         <div id="header-links">
             <p>

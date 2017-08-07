@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $uz = (isset($_REQUEST['uz'])) ? check($_REQUEST['uz']) : '';
@@ -13,11 +13,11 @@ switch ($act):
     case 'index':
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `bank`;");
-        $page = App::paginate(App::setting('vkladlist'), $total);
+        $page = App::paginate(Setting::get('vkladlist'), $total);
 
         if ($total > 0) {
 
-            $queryvklad = DB::run() -> query("SELECT * FROM `bank` ORDER BY `sum` DESC, `user` ASC LIMIT ".$page['offset'].", ".App::setting('vkladlist').";");
+            $queryvklad = DB::run() -> query("SELECT * FROM `bank` ORDER BY `sum` DESC, `user` ASC LIMIT ".$page['offset'].", ".Setting::get('vkladlist').";");
 
             $i = 0;
             while ($data = $queryvklad -> fetch()) {
@@ -68,7 +68,7 @@ switch ($act):
                 }
 
                 if (!empty($rat)) {
-                    $end = ceil($rat / App::setting('vkladlist'));
+                    $end = ceil($rat / Setting::get('vkladlist'));
 
                     App::setFlash('success', 'Позиция в рейтинге: '.$rat);
                     App::redirect("/games/livebank?page=$end&uz=$queryuser");
@@ -90,4 +90,4 @@ endswitch;
 echo '<i class="fa fa-money"></i> <a href="/games/bank">В банк</a><br />';
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -41,12 +41,12 @@ if (is_user()) {
 
             $guess = abs(intval($_POST['guess']));
 
-            if (App::user('money') >= App::setting('hisumma')) {
+            if (App::user('money') >= Setting::get('hisumma')) {
                 if ($guess >= 1 && $guess <= 100) {
                     $_SESSION['hi_count']++;
 
                     if ($guess != $_SESSION['hill']) {
-                        if ($_SESSION['hi_count'] < App::setting('hipopytka')) {
+                        if ($_SESSION['hi_count'] < Setting::get('hipopytka')) {
                             echo'<b>Введите число от 1 до 100</b><br /><br />';
 
                             echo '<b>Попыток: '.(int)$_SESSION['hi_count'].'</b><br />';
@@ -65,9 +65,9 @@ if (is_user()) {
                             echo '<input type="submit" value="Угадать" />';
                             echo '</form></div><br />';
 
-                            DB::run() -> query("UPDATE `users` SET `money`=`money`- ".App::setting('hisumma')." WHERE `login`=? LIMIT 1;", [App::getUsername()]);
+                            DB::run() -> query("UPDATE `users` SET `money`=`money`- ".Setting::get('hisumma')." WHERE `login`=? LIMIT 1;", [App::getUsername()]);
 
-                            $count_pop = App::setting('hipopytka') - $_SESSION['hi_count'];
+                            $count_pop = Setting::get('hipopytka') - $_SESSION['hi_count'];
 
                             echo 'Осталось попыток: <b>'.(int)$count_pop.'</b><br />';
 
@@ -75,17 +75,17 @@ if (is_user()) {
 
                             echo 'У вас в наличии: '.moneys($allmoney).'<br /><br />';
                         } else {
-                            echo '<i class="fa fa-times"></i> <b>Вы проигали потому что, не отгадали число за '.(int)App::setting('hipopytka').' попыток</b><br />';
+                            echo '<i class="fa fa-times"></i> <b>Вы проигали потому что, не отгадали число за '.(int)Setting::get('hipopytka').' попыток</b><br />';
                             echo 'Было загадано число: '.$_SESSION['hill'].'<br /><br />';
 
                             unset($_SESSION['hill']);
                             unset($_SESSION['hi_count']);
                         }
                     } else {
-                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [App::setting('hiprize'), App::getUsername()]);
+                        DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [Setting::get('hiprize'), App::getUsername()]);
 
                         echo '<b>Поздравляем!!! Вы угадали число '.(int)$guess.'</b><br />';
-                        echo 'Ваш выигрыш составил '.moneys(App::setting('hiprize')).'<br /><br />';
+                        echo 'Ваш выигрыш составил '.moneys(Setting::get('hiprize')).'<br /><br />';
 
                         unset($_SESSION['hill']);
                         unset($_SESSION['hi_count']);
@@ -105,10 +105,10 @@ if (is_user()) {
         ############################################################################################
         case 'faq':
 
-            echo 'Для участия в игре напишите число и нажмите "Угадать", за каждую попытку у вас будут списывать по '.moneys(App::setting('hisumma')).'<br />';
+            echo 'Для участия в игре напишите число и нажмите "Угадать", за каждую попытку у вас будут списывать по '.moneys(Setting::get('hisumma')).'<br />';
             echo 'После каждой попытки вам дают подсказку большое это число или маленькое<br />';
-            echo 'Если вы не уложились за '.App::setting('hipopytka').' попыток, то игра будет начата заново<br />';
-            echo 'При выигрыше вы получаете на счет '.moneys(App::setting('hiprize')).'<br />';
+            echo 'Если вы не уложились за '.Setting::get('hipopytka').' попыток, то игра будет начата заново<br />';
+            echo 'При выигрыше вы получаете на счет '.moneys(Setting::get('hiprize')).'<br />';
             echo 'Итак дерзайте!<br /><br />';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/hi">Вернуться</a><br />';
@@ -122,4 +122,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -25,14 +25,14 @@ if ($tag) {
     }
 
     $total = count($_SESSION['findresult']);
-    $page = App::paginate(App::setting('blogpost'), $total);
+    $page = App::paginate(Setting::get('blogpost'), $total);
 
     $blogs = Blog::select('blogs.*', 'catsblog.name')
         ->whereIn('blogs.id', $_SESSION['findresult'])
         ->join('catsblog', 'blogs.category_id', '=', 'catsblog.id')
         ->orderBy('created_at', 'desc')
         ->offset($page['offset'])
-        ->limit(App::setting('blogpost'))
+        ->limit(Setting::get('blogpost'))
         ->with('user')
         ->get();
 

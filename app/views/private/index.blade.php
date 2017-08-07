@@ -14,11 +14,11 @@
         echo '<div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: '.App::user('newprivat').'</span></b></div>';
     }
 
-    if ($page['total'] >= (App::setting('limitmail') - (App::setting('limitmail') / 10)) && $page['total'] < App::setting('limitmail')) {
+    if ($page['total'] >= (Setting::get('limitmail') - (Setting::get('limitmail') / 10)) && $page['total'] < Setting::get('limitmail')) {
         echo '<div style="text-align:center"><b><span style="color:#ff0000">Ваш ящик почти заполнен, необходимо очистить или удалить старые сообщения!</span></b></div>';
     }
 
-    if ($page['total'] >= App::setting('limitmail')) {
+    if ($page['total'] >= Setting::get('limitmail')) {
         echo '<div style="text-align:center"><b><span style="color:#ff0000">Ваш ящик переполнен, вы не сможете получать письма пока не очистите его!</span></b></div>';
     }
 
@@ -68,7 +68,7 @@
     App::pagination($page);
 
     echo 'Всего писем: <b>'.$page['total'].'</b><br />';
-    echo 'Объем ящика: <b>'.App::setting('limitmail').'</b><br /><br />';
+    echo 'Объем ящика: <b>'.Setting::get('limitmail').'</b><br /><br />';
 
     echo '<i class="fa fa-times"></i> <a href="/private/clear?token='.$_SESSION['token'].'">Очистить ящик</a><br />';
     } else {

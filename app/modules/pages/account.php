@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -31,23 +31,23 @@ case 'index':
     /**
      * Изменение персонального статуса
      */
-    if (!empty(App::setting('editstatus'))) {
+    if (!empty(Setting::get('editstatus'))) {
         echo '<b><big>Изменение статуса</big></b><br />';
 
-        if (App::user('point') >= App::setting('editstatuspoint')) {
+        if (App::user('point') >= Setting::get('editstatuspoint')) {
             echo '<div class="form">';
             echo '<form method="post" action="/account?act=editstatus&amp;uid='.$_SESSION['token'].'">';
             echo 'Персональный статус:<br />';
             echo '<input name="status" maxlength="20" value="'.App::user('status').'" />';
             echo '<input value="Изменить" type="submit" /></form>';
 
-            if (!empty(App::setting('editstatusmoney'))) {
-                echo '<br /><i>Стоимость: '.moneys(App::setting('editstatusmoney')).'</i>';
+            if (!empty(Setting::get('editstatusmoney'))) {
+                echo '<br /><i>Стоимость: '.moneys(Setting::get('editstatusmoney')).'</i>';
             }
 
             echo '</div><br />';
         } else {
-            show_error('Изменять статус могут пользователи у которых более '.points(App::setting('editstatuspoint')).'!');
+            show_error('Изменять статус могут пользователи у которых более '.points(Setting::get('editstatuspoint')).'!');
         }
     }
 
@@ -111,9 +111,9 @@ case 'changemail':
 
         $genkey = str_random(rand(15,20));
 
-        $siteLink = starts_with(App::setting('home'), '//') ? 'http:'. App::setting('home') : App::setting('home');
+        $siteLink = starts_with(Setting::get('home'), '//') ? 'http:'. Setting::get('home') : Setting::get('home');
 
-        $subject = 'Изменение email на сайте '.App::setting('title');
+        $subject = 'Изменение email на сайте '.Setting::get('title');
         $message = 'Здравствуйте, '.App::getUsername().'<br />Вами была произведена операция по изменению адреса электронной почты<br /><br />Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br />Перейдите по данной ссылке:<br /><br /><a href="'.$siteLink.'/account?act=editmail&key='.$genkey.'">'.$siteLink.'/account?act=editmail&key='.$genkey.'</a><br /><br />Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).', для изменения адреса необходимо быть авторизованным на сайте<br />Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
         $body = App::view('mailer.default', compact('subject', 'message'), true);
@@ -174,15 +174,15 @@ break;
 case 'editstatus':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $status = (isset($_POST['status'])) ? check($_POST['status']) : '';
-    $cost = (!empty($status)) ? App::setting('editstatusmoney') : 0;
+    $cost = (!empty($status)) ? Setting::get('editstatusmoney') : 0;
 
     $validation = new Validation();
 
     $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('not_empty', App::setting('editstatus'), 'Изменение статуса запрещено администрацией сайта!')
+        -> addRule('not_empty', Setting::get('editstatus'), 'Изменение статуса запрещено администрацией сайта!')
         -> addRule('empty', App::user('ban'), 'Для изменения статуса у вас не должно быть нарушений!')
         -> addRule('not_equal', [$status, App::user('status')], 'Новый статус должен отличаться от текущего!')
-        -> addRule('max', [App::user('point'), App::setting('editstatuspoint')], 'У вас недостаточно актива для изменения статуса!')
+        -> addRule('max', [App::user('point'), Setting::get('editstatuspoint')], 'У вас недостаточно актива для изменения статуса!')
         -> addRule('max', [App::user('money'), $cost], 'У вас недостаточно денег для изменения статуса!')
         -> addRule('string', $status, 'Слишком длинный или короткий статус!', false, 3, 20);
 
@@ -233,7 +233,7 @@ case 'editpass':
 
         DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), App::getUsername()]);
 
-        $subject = 'Изменение пароля на сайте '.App::setting('title');
+        $subject = 'Изменение пароля на сайте '.Setting::get('title');
         $message = 'Здравствуйте, '.App::getUsername().'<br />Вами была произведена операция по изменению пароля<br /><br /><b>Ваш новый пароль: '.$newpass.'</b><br />Сохраните его в надежном месте<br /><br />Данные инициализации:<br />IP: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Время: '.date('j.m.y / H:i', SITETIME);
 
         $body = App::view('mailer.default', compact('subject', 'message'), true);
@@ -278,4 +278,4 @@ endswitch;
     show_login('Вы не авторизованы, чтобы изменять свои данные, необходимо');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -19,11 +19,11 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=666">История автобанов</a><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `ban`;");
-            $page = App::paginate(App::setting('ipbanlist'), $total);
+            $page = App::paginate(Setting::get('ipbanlist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('ipbanlist').";");
+                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('ipbanlist').";");
 
                 echo '<form action="/admin/ipban?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -159,4 +159,4 @@ if (is_admin([101, 102])) {
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

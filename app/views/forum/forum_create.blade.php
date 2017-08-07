@@ -72,7 +72,7 @@
                     {!! App::textError('answer') !!}
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Создать тему</button>
+            <button class="btn btn-primary">Создать тему</button>
         </form>
     </div><br />
 

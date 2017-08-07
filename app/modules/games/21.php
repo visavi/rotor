@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $randgame = mt_rand(100, 999);
 
@@ -14,18 +14,18 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            $ochkostavka = App::setting('ochkostavka');
+            $ochkostavka = Setting::get('ochkostavka');
 
             echo 'В наличии: '.moneys(App::user('money')).'<br /><br />';
 
             if (empty($_SESSION['stavka'])) {
                 if (App::user('money') > 0) {
-                    if (App::user('money') < App::setting('ochkostavka')) {
+                    if (App::user('money') < Setting::get('ochkostavka')) {
                         $ochkostavka = App::user('money');
                     }
 
                     echo '<div class="form">';
-                    echo 'Ваша ставка (1 - '.App::setting('ochkostavka').'):<br />';
+                    echo 'Ваша ставка (1 - '.Setting::get('ochkostavka').'):<br />';
                     echo'<form action="21?act=ini&amp;rand='.$randgame.'" method="post">';
                     echo'<input name="mn" />';
                     echo'<input type="submit" value="Играть" /></form></div><br />';
@@ -54,7 +54,7 @@ if (is_user()) {
             }
 
             if ($mn > 0) {
-                if ($mn <= App::setting('ochkostavka')) {
+                if ($mn <= Setting::get('ochkostavka')) {
                     if (App::user('money') >= $mn) {
                         if (empty($_SESSION['stavka'])) {
                             $_SESSION['stavka'] = $mn;
@@ -71,10 +71,10 @@ if (is_user()) {
                         show_error('У вас недостаточно денег для подобной ставки!');
                     }
                 } else {
-                    show_error('Запрещено ставить больше чем максимальная ставка '.moneys(App::setting('ochkostavka')).'!');
+                    show_error('Запрещено ставить больше чем максимальная ставка '.moneys(Setting::get('ochkostavka')).'!');
                 }
             } else {
-                show_error('Вы не указали ставку, необходимо поставить от 1 до '.App::setting('ochkostavka').'!');
+                show_error('Вы не указали ставку, необходимо поставить от 1 до '.Setting::get('ochkostavka').'!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">Вернуться</a><br />';
@@ -264,4 +264,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

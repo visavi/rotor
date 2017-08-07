@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 //show_title('Справка по тегам');
 
@@ -24,7 +24,7 @@ echo 'Для того чтобы вставить ссылку, можно пр�
 echo '<i class="fa fa-link"></i> Для ссылки с названием: [url=http://адрес_cсылки] Название [/url]<br />';
 echo '<i class="fa fa-link"></i> Короткий способ: [url] http://адрес_cсылки [/url]<br /><br />';
 
-echo '<i class="fa fa-image"></i> [img]Ссылка на изображение[/img]<br />'.App::bbCode('[img]'.App::setting('home').'/assets/img/images/logo.png[/img]').'<br />';
+echo '<i class="fa fa-image"></i> [img]Ссылка на изображение[/img]<br />'.App::bbCode('[img]'.Setting::get('home').'/assets/img/images/logo.png[/img]').'<br />';
 echo '<i class="fa fa-youtube-play"></i> [youtube]Код видео с youtube[/youtube]<br />'.App::bbCode('[youtube]yf_YWiqqv34[/youtube]').'<br />';
 
 echo '<i class="fa fa-align-center"></i> [center]Текст по центру[/center]'.App::bbCode('[center]Текст по центру[/center]').'<br />';
@@ -46,4 +46,4 @@ echo '<i class="fa fa-eraser"></i> Очистка выделенного тек�
 echo '<i class="fa fa-smile-o"></i> Вставка смайла из готового набора<br />';
 echo '<i class="fa fa-check-square-o"></i> Предварительный просмотр обработанного текста<br /><br /><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

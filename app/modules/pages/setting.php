@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -78,7 +78,7 @@ case 'index':
         </label>
     </div>
 
-    <button type="submit" class="btn btn-primary">Изменить</button>
+    <button class="btn btn-primary">Изменить</button>
     </form></div><br />
 
     * Значение всех полей (max.50)<br /><br />
@@ -134,4 +134,4 @@ endswitch;
     show_login('Вы не авторизованы, чтобы изменять настройки, необходимо');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

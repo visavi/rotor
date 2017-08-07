@@ -19,11 +19,11 @@ case 'themes':
         App::abort('default', 'Созданных тем еще нет!');
     }
 
-    $page = App::paginate(App::setting('forumtem'), $total);
+    $page = App::paginate(Setting::get('forumtem'), $total);
 
     $topics = Topic::where('user_id', $user->id)
         ->orderBy('updated_at', 'desc')
-        ->limit(App::setting('forumtem'))
+        ->limit(Setting::get('forumtem'))
         ->offset($page['offset'])
         ->with('forum', 'user', 'lastPost.user')
         ->get();
@@ -41,11 +41,11 @@ case 'posts':
         App::abort('default', 'Созданных сообщений еще нет!');
     }
 
-    $page = App::paginate(App::setting('forumpost'), $total);
+    $page = App::paginate(Setting::get('forumpost'), $total);
 
     $posts = Post::where('user_id', $user->id)
         ->orderBy('created_at', 'desc')
-        ->limit(App::setting('forumpost'))
+        ->limit(Setting::get('forumpost'))
         ->offset($page['offset'])
         ->with('topic', 'user')
         ->get();

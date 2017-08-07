@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $type = check(Request::input('type'));
@@ -25,13 +25,13 @@ if (is_admin([101, 102, 103])) {
         case 'index':
             echo '<a href="/admin/spam?type=post">Форум</a> ('.$total['post'].') / <a href="/admin/spam?type=guest">Гостевая</a> ('.$total['guest'].') / <a href="/admin/spam?type=privat">Приват</a> ('.$total['inbox'].') / <a href="/admin/spam?type=wall">Стена</a> ('.$total['wall'].') / <a href="/admin/spam?type=load">Загрузки</a> ('.$total['load'].') / <a href="/admin/spam?type=blog">Блоги</a> ('.$total['blog'].')<br /><br />';
 
-            $page = App::paginate(App::setting('spamlist'), $total['post']);
+            $page = App::paginate(Setting::get('spamlist'), $total['post']);
             if ($page['total'] > 0) {
 
                 $records = Spam::where('relate_type', $types[$type])
                     ->orderBy('created_at', 'desc')
                     ->offset($page['offset'])
-                    ->limit(App::setting('spamlist'))
+                    ->limit(Setting::get('spamlist'))
                     ->with('relate.user', 'user')
                     ->get();
 
@@ -129,4 +129,4 @@ if (is_admin([101, 102, 103])) {
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

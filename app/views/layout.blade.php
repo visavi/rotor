@@ -1,4 +1,4 @@
-@include(App::setting('themes').'.index' )
+@include(Setting::get('themes').'.index' )
 
 <div style="text-align:center">
     @include('advert.top_all')
@@ -11,4 +11,4 @@
 @yield('content')
 
 @include('advert.bottom_all')
-@include(App::setting('themes').'.foot')
+@include(Setting::get('themes').'.foot')

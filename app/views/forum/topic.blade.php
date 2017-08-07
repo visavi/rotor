@@ -18,7 +18,7 @@
     <a href="/topic/<?=$topic['id']?>/print">Печать</a> / <a href="/topic/<?=$topic['id']?>/rss">RSS-лента</a>
 
     <?php if (is_user()): ?>
-        <?php if ($topic->getUser()->id == App::getUserId() && empty($topic['closed']) && App::user('point') >= App::setting('editforumpoint')): ?>
+        <?php if ($topic->getUser()->id == App::getUserId() && empty($topic['closed']) && App::user('point') >= Setting::get('editforumpoint')): ?>
            / <a href="/topic/<?= $topic['id'] ?>/close?token=<?=$_SESSION['token']?>">Закрыть</a>
            / <a href="/topic/<?= $topic['id'] ?>/edit">Изменить</a>
         <?php endif; ?>
@@ -102,7 +102,7 @@
                 <div class="pull-right">
                     <?php if (App::getUserId() != $data['user_id']): ?>
 
-                        <a href="#" onclick="return postReply('<?= $data->getUser()->login ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                        <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                         <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
@@ -147,7 +147,7 @@
                     <?= icons($ext) ?>
                     <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
                     <?php if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])): ?>
-                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], App::setting('previewsize'), ['alt' => $file['name']]) ?></a><br />
+                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], Setting::get('previewsize'), ['alt' => $file['name']]) ?></a><br />
                     <?php endif; ?>
                 <?php endforeach; ?>
                 </div>
@@ -170,7 +170,7 @@
 
     <?php if ($topic['isModer']): ?>
         <span class="pull-right">
-            <button type="submit" class="btn btn-danger">Удалить выбранное</button>
+            <button class="btn btn-danger">Удалить выбранное</button>
         </span>
         </form>
     <?php endif; ?>
@@ -189,7 +189,7 @@
                         {!! App::textError('msg') !!}
                     </div>
 
-                    <?php if (App::user('point') >= App::setting('forumloadpoints')): ?>
+                    <?php if (App::user('point') >= Setting::get('forumloadpoints')): ?>
                         <div class="js-attach-form" style="display: none;">
 
                             <label class="btn btn-sm btn-default" for="inputFile">
@@ -199,8 +199,8 @@
                             <span class='label label-info' id="upload-file-info"></span>
 
                             <div class="info">
-                                Максимальный вес файла: <b><?=round(App::setting('forumloadsize')/1024)?></b> Kb<br />
-                                Допустимые расширения: <?=str_replace(',', ', ', App::setting('forumextload'))?>
+                                Максимальный вес файла: <b><?=round(Setting::get('forumloadsize')/1024)?></b> Kb<br />
+                                Допустимые расширения: <?=str_replace(',', ', ', Setting::get('forumextload'))?>
                             </div><br />
                         </div>
 
@@ -209,7 +209,7 @@
                         </span>
                     <?php endif; ?>
 
-                    <button type="submit" class="btn btn-primary">Написать</button>
+                    <button class="btn btn-primary">Написать</button>
                 </form>
             </div><br />
 

@@ -6,7 +6,7 @@ switch ($act):
      */
     case 'index':
         $total = Comment::where('relate_type', Photo::class)->count();
-        $page = App::paginate(App::setting('postgallery'), $total);
+        $page = App::paginate(Setting::get('postgallery'), $total);
 
         $comments = Comment::select('comments.*', 'title')
             ->where('relate_type', Photo::class)
@@ -36,7 +36,7 @@ switch ($act):
             ->where('user_id', $user->id)
             ->count();
 
-        $page = App::paginate(App::setting('postgallery'), $total);
+        $page = App::paginate(Setting::get('postgallery'), $total);
 
         $comments = Comment::select('comments.*', 'title')
             ->where('relate_type', Photo::class)
@@ -66,7 +66,7 @@ switch ($act):
             ->count();
 
         if ($total) {
-            $end = ceil($total / App::setting('postgallery'));
+            $end = ceil($total / Setting::get('postgallery'));
 
             App::redirect('/gallery/'.$gid.'/comments?page='.$end);
         } else {

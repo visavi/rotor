@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $page = abs(intval(Request::input('page', 1)));
@@ -14,11 +14,11 @@ if (is_admin([101, 102, 103])) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist`;");
-            $page = App::paginate(App::setting('listbanhist'), $total);
+            $page = App::paginate(Setting::get('listbanhist'), $total);
 
             if ($total > 0) {
 
-                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('listbanhist').";");
+                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('listbanhist').";");
 
                 echo '<form action="/admin/banhist?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -77,11 +77,11 @@ if (is_admin([101, 102, 103])) {
 
             if (user($uz)) {
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
-                $page = App::paginate(App::setting('listbanhist'), $total);
+                $page = App::paginate(Setting::get('listbanhist'), $total);
 
                 if ($total > 0) {
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('listbanhist').";", [$uz]);
+                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('listbanhist').";", [$uz]);
 
                     echo '<form action="/admin/banhist?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -167,4 +167,4 @@ if (is_admin([101, 102, 103])) {
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

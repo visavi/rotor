@@ -31,7 +31,7 @@
 
                     @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
                         <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
-                            {!! resize_image('uploads/photos/', $user['picture'], App::setting('previewsize'), ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}</a>
+                            {!! resize_image('uploads/photos/', $user['picture'], Setting::get('previewsize'), ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}</a>
                     @else
                         <img src="/assets/img/images/photo.jpg" alt="Фото" class="pull-right img-responsive img-rounded" />
                     @endif
@@ -148,7 +148,7 @@
             @endif
 
             @if (is_admin([101, 102, 103]))
-                @if (!empty(App::setting('invite')))
+                @if (!empty(Setting::get('invite')))
                     <i class="fa fa-ban"></i> <a href="/admin/invitations?act=send&amp;user={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">Отправить инвайт</a><br />
                 @endif
             <i class="fa fa-ban"></i> <a href="/admin/ban?act=edit&amp;uz={{ $user['login'] }}">Бан / Разбан</a><br />

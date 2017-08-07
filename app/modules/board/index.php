@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
@@ -57,8 +57,8 @@ if ($act == "board"){
 
     $string = search_string(STORAGE."/board/database.dat", $id, 2);
     if ($string) {
-        //App::setting('header') = $string[0];
-        //App::setting('header') = $string[1];
+        //Setting::get('header') = $string[0];
+        //Setting::get('header') = $string[1];
 
         echo '<a href="/board">Объявления</a> / ';
         echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a>';
@@ -86,13 +86,13 @@ if ($act == "board"){
             $files = array_reverse($files);
             $total = count($files);
 
-            $page = App::paginate(App::setting('boardspost'), $total);
+            $page = App::paginate(Setting::get('boardspost'), $total);
             if ($total>0) {
 
-                if ($total < $page['offset'] + App::setting('boardspost')){
+                if ($total < $page['offset'] + Setting::get('boardspost')){
                     $end = $total;
                 } else {
-                    $end = $page['offset'] + App::setting('boardspost');
+                    $end = $page['offset'] + Setting::get('boardspost');
                 }
 
                 for ($i = $page['offset']; $i < $end; $i++){
@@ -132,7 +132,7 @@ if($act == "view"){
             $bstr = search_string(STORAGE."/board/$id.dat", $bid, 5);
             if ($bstr) {
 
-                //App::setting('header') = $bstr[0];
+                //Setting::get('header') = $bstr[0];
 
                 echo '<a href="/board">Объявления</a> / ';
                 echo '<a href="/board?act=board&amp;id='.$id.'">'.$string[0].'</a> / ';
@@ -153,7 +153,7 @@ if($act == "view"){
 ############################################################################################
 if ($act == "new"){
 
-    //App::setting('header') = 'Добавление объявления';
+    //Setting::get('header') = 'Добавление объявления';
 
     if (is_user()){
 
@@ -165,11 +165,11 @@ if ($act == "new"){
             echo '<b>Объявление:</b><br /><textarea cols="25" rows="3" name="msg"></textarea><br />';
             echo '<b>Срок показа:</b><br /><select name="days">';
 
-            for($i=5; $i<=App::setting('boarddays'); $i=$i+5){
+            for($i=5; $i<=Setting::get('boarddays'); $i=$i+5){
                 echo '<option  value="'.$i.'">'.$i.' дней</option>';
             }
 
-            echo '</select><br /> (Максимальный срок показа -  <b>'.(int)App::setting('boarddays').'</b> дней.)<br />';
+            echo '</select><br /> (Максимальный срок показа -  <b>'.(int)Setting::get('boarddays').'</b> дней.)<br />';
             echo '<input type="submit" value="Добавить" /></form></div><br />';
 
         } else {show_error('Ошибка! Данного раздела не существует!');}
@@ -183,7 +183,7 @@ if ($act == "new"){
 ############################################################################################
 if ($act == "add"){
 
-    //App::setting('header') = 'Добавление объявления';
+    //Setting::get('header') = 'Добавление объявления';
 
     if (is_user()){
         if (search_string(STORAGE."/board/database.dat", $id, 2)) {
@@ -194,7 +194,7 @@ if ($act == "add"){
 
         if (utf_strlen(trim($zag))>=5 && utf_strlen($zag)<=50){
             if (utf_strlen(trim($msg))>=10 && utf_strlen($msg)<=1000){
-                if ($days>0 && $days<=App::setting('boarddays')){
+                if ($days>0 && $days<=Setting::get('boarddays')){
 
                     $deltime = SITETIME + ($days * 86400);
 
@@ -220,4 +220,4 @@ echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=new&amp;id='.$
 
 echo '<i class="fa fa-home"></i> <a href="/">На главную</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

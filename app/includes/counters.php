@@ -3,7 +3,7 @@
 $days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 $hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
 
-DB::run() -> query("DELETE FROM `online` WHERE `updated_at`<?;", [SITETIME - App::setting('timeonline')]);
+DB::run() -> query("DELETE FROM `online` WHERE `updated_at`<?;", [SITETIME - Setting::get('timeonline')]);
 
 $newhost = 0;
 

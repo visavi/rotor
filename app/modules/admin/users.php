@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -37,11 +37,11 @@ if (is_admin([101, 102])) {
             echo '<b>Cписок последних зарегистрированных</b><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
-            $page = App::paginate(App::setting('userlist'), $total);
+            $page = App::paginate(Setting::get('userlist'), $total);
 
             if ($total > 0) {
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".App::setting('userlist').";");
+                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".Setting::get('userlist').";");
 
                 while ($data = $queryusers -> fetch()) {
                     if (empty($data['email'])) {
@@ -80,11 +80,11 @@ if (is_admin([101, 102])) {
                 }
 
                 $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE LOWER(`login`) ".$search.";");
-                $page = App::paginate(App::setting('usersearch'), $total);
+                $page = App::paginate(Setting::get('usersearch'), $total);
 
                 if ($total > 0) {
 
-                    $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".App::setting('usersearch').";");
+                    $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".Setting::get('usersearch').";");
 
                     while ($data = $queryuser -> fetch()) {
 
@@ -118,7 +118,7 @@ if (is_admin([101, 102])) {
 
                 echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br /><br />';
 
-                if (App::getUsername() == App::setting('nickname') || App::getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                if (App::getUsername() == Setting::get('nickname') || App::getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
                     if ($user['login'] == App::getUsername()) {
                         echo '<b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br /><br />';
                     }
@@ -126,7 +126,7 @@ if (is_admin([101, 102])) {
                     echo '<div class="form">';
                     echo '<form method="post" action="/admin/users?act=upgrade&amp;uz='.$user['login'].'&amp;uid='.$_SESSION['token'].'">';
 
-                    if (App::getUsername() == App::setting('nickname')) {
+                    if (App::getUsername() == Setting::get('nickname')) {
                         $arr_access = [101, 102, 103, 105, 107];
 
                         echo 'Уровень доступа:<br />';
@@ -250,7 +250,7 @@ if (is_admin([101, 102])) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
-                    if (App::getUsername() == App::setting('nickname') || App::getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                    if (App::getUsername() == Setting::get('nickname') || App::getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
 
                         if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
                             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
@@ -258,7 +258,7 @@ if (is_admin([101, 102])) {
                                     if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
                                         if ($gender == 1 || $gender == 2) {
                                             if (utf_strlen($info) <= 1000) {
-                                                if (App::getUsername() == App::setting('nickname')) {
+                                                if (App::getUsername() == Setting::get('nickname')) {
                                                     $access = $level;
                                                 } else {
                                                     $access = $user['level'];
@@ -477,4 +477,4 @@ if (is_admin([101, 102])) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

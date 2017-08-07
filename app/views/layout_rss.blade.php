@@ -5,18 +5,18 @@
     <channel>
         <title>
             @section('title')
-                {{ App::setting('title') }}
+                {{ Setting::get('title') }}
             @show
         </title>
-        <link>{{ App::setting('home') }}/</link>
-        <description>Сообщения RSS - {{ App::setting('title') }}</description>
+        <link>{{ Setting::get('home') }}/</link>
+        <description>Сообщения RSS - {{ Setting::get('title') }}</description>
         <image>
-            <url>{{ App::setting('home') }}{{ App::setting('logotip') }}</url>
-            <title>Сообщения RSS - {{ App::setting('title') }}</title>
-            <link>{{ App::setting('home') }}/</link>
+            <url>{{ Setting::get('home') }}{{ Setting::get('logotip') }}</url>
+            <title>Сообщения RSS - {{ Setting::get('title') }}</title>
+            <link>{{ Setting::get('home') }}/</link>
         </image>
-        <managingEditor>{{ App::setting('emails') }} ({{ App::setting('nickname') }})</managingEditor>
-        <webMaster>{{ App::setting('emails') }} ({{ App::setting('nickname') }})</webMaster>
+        <managingEditor>{{ Setting::get('emails') }} ({{ Setting::get('nickname') }})</managingEditor>
+        <webMaster>{{ Setting::get('emails') }} ({{ Setting::get('nickname') }})</webMaster>
         <lastBuildDate>{{ date("r", SITETIME) }}</lastBuildDate>
 
             @yield('content')

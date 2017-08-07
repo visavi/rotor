@@ -6,7 +6,7 @@ header("Content-type:text/html; charset=utf-8");
 <head>
     <title>
         @section('title')
-            {{ App::setting('title') }}
+            {{ Setting::get('title') }}
         @show
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -20,16 +20,16 @@ header("Content-type:text/html; charset=utf-8");
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />
 
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description" content="@yield('description', App::setting('description'))">
-    <meta name="keywords" content="@yield('keywords', App::setting('keywords'))">
+    <meta name="description" content="@yield('description', Setting::get('description'))">
+    <meta name="keywords" content="@yield('keywords', Setting::get('keywords'))">
     <meta name="generator" content="RotorCMS {{ env('VERSION') }}" />
 </head>
 <body>
 
 <div class="cs" id="up">
-    <!-- <a href="/"><span class="logotype">{{ App::setting('title') }}</span></a><br /> -->
-    <a href="/"><img src="{{ App::setting('logotip') }}" alt="{{ App::setting('title') }}" /></a><br />
-    {{ App::setting('logos') }}
+    <!-- <a href="/"><span class="logotype">{{ Setting::get('title') }}</span></a><br /> -->
+    <a href="/"><img src="{{ Setting::get('logotip') }}" alt="{{ Setting::get('title') }}" /></a><br />
+    {{ Setting::get('logos') }}
 </div>
 
 <?php App::view('includes/menu'); ?>

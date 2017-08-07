@@ -4,7 +4,7 @@
 <head>
     <title>
         @section('title')
-            {{ App::setting('title') }}
+            {{ Setting::get('title') }}
         @show
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

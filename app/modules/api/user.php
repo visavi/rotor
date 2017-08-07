@@ -28,8 +28,8 @@ if (!empty($key)){
             'allprivat' => user_mail($user['login']),
             'newprivat' => $user['newprivat'],
             'status'    => user_title($user['login']),
-            'avatar'    => App::setting('home').'/uploads/avatars/'.$user['avatar'],
-            'picture'   => App::setting('home').'/uploads/photos/'.$user['picture'],
+            'avatar'    => Setting::get('home').'/uploads/avatars/'.$user['avatar'],
+            'picture'   => Setting::get('home').'/uploads/photos/'.$user['picture'],
             'rating'    => $user['rating'],
             'lastlogin' => $user['timelastlogin'],
         ]);

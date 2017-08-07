@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'blogs';
 
@@ -16,9 +16,9 @@ case 'blogs':
         if ($total > 100) {
             $total = 100;
         }
-        $page = App::paginate(App::setting('blogpost'), $total);
+        $page = App::paginate(Setting::get('blogpost'), $total);
 
-        $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
+        $queryblog = DB::run() -> query("SELECT `blogs`.*, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('blogpost').";");
         $blogs = $queryblog->fetchAll();
 
         App::view('blog/new_blogs', compact('blogs'));
@@ -41,9 +41,9 @@ case 'comments':
         if ($total > 100) {
             $total = 100;
         }
-        $page = App::paginate(App::setting('blogpost'), $total);
+        $page = App::paginate(Setting::get('blogpost'), $total);
 
-        $querycomment = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
+        $querycomment = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".Setting::get('blogpost').";");
         $comments = $querycomment->fetchAll();
 
         App::view('blog/new_comments', compact('comments'));
@@ -58,4 +58,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'fa-arrow-circle-up']);
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -4,11 +4,11 @@ if (! is_user()) {
     App::abort(403, 'Для подтверждение регистрации  необходимо быть авторизованным!');
 }
 
-if (empty(App::setting('regkeys'))) {
+if (empty(Setting::get('regkeys'))) {
     App::abort('default', 'Подтверждение регистрации выключено на сайте!');
 }
 
-if (empty(App::setting('regkeys'))) {
+if (empty(Setting::get('regkeys'))) {
     App::abort('default', 'Вашему профилю не требуется подтверждение регистрации!');
 }
 

@@ -27,13 +27,13 @@
         <label for="markItUp">Сообщение:</label>
         <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
 <?php
-        if (App::user('point') < App::setting('privatprotect')) {
+        if (App::user('point') < Setting::get('privatprotect')) {
             echo 'Проверочный код:<br />';
             echo '<img src="/captcha" alt="" /><br />';
             echo '<input name="provkod" size="6" maxlength="6" /><br />';
         }
 
-        echo '<button type="submit" class="btn btn-primary">Отправить</button></form></div><br />';
+        echo '<button class="btn btn-primary">Отправить</button></form></div><br />';
 
     } else {
 
@@ -69,13 +69,13 @@
     <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg') }}</textarea>
 <?php
 
-        if (App::user('point') < App::setting('privatprotect')) {
+        if (App::user('point') < Setting::get('privatprotect')) {
             echo 'Проверочный код:<br />';
             echo '<img src="/captcha" alt="" /><br />';
             echo '<input name="provkod" size="6" maxlength="6" /><br />';
         }
 
-        echo '<button type="submit" class="btn btn-primary">Отправить</button></form></div><br />';
+        echo '<button class="btn btn-primary">Отправить</button></form></div><br />';
 
         echo 'Введите логин или выберите пользователя из своего контакт-листа<br />';
     }

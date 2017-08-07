@@ -54,7 +54,7 @@ class App
             header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
         }
 
-        if (App::setting('errorlog') && in_array($code, [403, 404])) {
+        if (Setting::get('errorlog') && in_array($code, [403, 404])) {
 
             $error = new Log();
             $error->code = $code;
@@ -67,7 +67,7 @@ class App
             $error->save();
 
             Log::where('code', $code)
-                ->where('created_at',  '<',  SITETIME - 3600 * 24 * App::setting('maxlogdat'))
+                ->where('created_at',  '<',  SITETIME - 3600 * 24 * Setting::get('maxlogdat'))
                 ->delete();
         }
 
@@ -206,9 +206,9 @@ class App
             ->setReturnPath(env('SITE_EMAIL'));
 
         if (isset($params['subscribe'])) {
-            $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.env('SITE_EMAIL').'>, <'.App::setting('home').'/unsubscribe?key='.$params['subscribe'].'>');
+            $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.env('SITE_EMAIL').'>, <'.Setting::get('home').'/unsubscribe?key='.$params['subscribe'].'>');
 
-            $body = str_replace('<!-- unsubscribe -->', '<br /><br /><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.App::setting('home').'/unsubscribe?key='.$params['subscribe'].'">откажитесь от подписки</a></small>', $body);
+            $body = str_replace('<!-- unsubscribe -->', '<br /><br /><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.Setting::get('home').'/unsubscribe?key='.$params['subscribe'].'">откажитесь от подписки</a></small>', $body);
             $message->setBody($body, 'text/html');
         }
 
@@ -370,7 +370,7 @@ class App
      */
     public static function getUsername()
     {
-        return self::user('login') ? self::user('login') : self::setting('guestsuser');
+        return self::user('login') ? self::user('login') : Setting::get('guestsuser');
     }
 
     /**
@@ -392,36 +392,14 @@ class App
     public static function user($key = null)
     {
         if (Registry::has('user')) {
-            if (empty($key)) return Registry::get('user');
-
-            return isset(Registry::get('user')[$key]) ? Registry::get('user')[$key] : '';
-        }
-    }
-
-    /**
-     * Возвращает настройки сайта по ключу
-     *
-     * @param  string $key ключ массива
-     * @return string      данные
-     */
-    public static function setting($key = null)
-    {
-        if (! Registry::has('setting')) {
-
-            if (! file_exists(STORAGE.'/temp/setting.dat')) {
-                $setting = Setting::pluck('value', 'name')->all();
-                file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
+            if (empty($key)) {
+                return Registry::get('user');
+            } else {
+                return Registry::get('user')[$key] ?? null;
             }
-            $setting = unserialize(file_get_contents(STORAGE.'/temp/setting.dat'));
-
-            Registry::set('setting', $setting);
         }
 
-        if (empty($key)) {
-            return Registry::get('setting');
-        }
-
-        return isset(Registry::get('setting')[$key]) ? Registry::get('setting')[$key] : null;
+        return null;
     }
 
     /**
@@ -434,7 +412,7 @@ class App
      */
     public static function login($login, $password, $remember = true)
     {
-        $domain = check_string(self::setting('home'));
+        $domain = check_string(Setting::get('home'));
 
         if (!empty($login) && !empty($password)) {
 
@@ -515,7 +493,7 @@ class App
      */
     public static function socialLogin($token)
     {
-        $domain = check_string(self::setting('home'));
+        $domain = check_string(Setting::get('home'));
 
         $curl = new Curl\Curl();
         $network = $curl->get('http://ulogin.ru/token.php', [

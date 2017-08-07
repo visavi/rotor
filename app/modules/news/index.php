@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $id = param('id');
 
@@ -15,9 +15,9 @@ case 'index':
     }
 
     $total = News::count();
-    $page = App::paginate(App::setting('postnews'), $total);
+    $page = App::paginate(Setting::get('postnews'), $total);
 
-    //App::setting('description') =  'Список новостей (Стр. '.$page['current'].')';
+    //Setting::get('description') =  'Список новостей (Стр. '.$page['current'].')';
 
     if ($total > 0) {
 
@@ -69,8 +69,8 @@ case 'view':
             echo '<a href="/admin/news?act=del&amp;del='.$id.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данную новость?\')">Удалить</a></div>';
         }
 
-        //App::setting('newtitle') = $data['title'];
-        //App::setting('description') =  strip_str($data['text']);
+        //Setting::get('newtitle') = $data['title'];
+        //Setting::get('description') =  strip_str($data['text']);
 
         echo '<div class="b"><i class="fa fa-file-o"></i> ';
         echo '<b>'.$data['title'].'</b><small> ('.date_fixed($data['created_at']).')</small></div>';
@@ -160,10 +160,10 @@ case 'comments':
             ->where('relate_id', $id)
             ->count();
 
-        $page = App::paginate(App::setting('postnews'), $total);
+        $page = App::paginate(Setting::get('postnews'), $total);
 
-        //App::setting('newtitle') = 'Комментарии - '.$datanews['title'];
-        //App::setting('description') =  'Комментарии - '.$datanews['title'].' (Стр. '.$page['current'].')';
+        //Setting::get('newtitle') = 'Комментарии - '.$datanews['title'];
+        //Setting::get('description') =  'Комментарии - '.$datanews['title'].' (Стр. '.$page['current'].')';
 
         echo '<h1><a href="/news/'.$datanews['id'].'">'.$datanews['title'].'</a></h1>';
 
@@ -268,7 +268,7 @@ case 'create':
 
             DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", ['news', $id, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".App::setting('maxkommnews').") AS del);", ['news', $id, 'news', $id]);
+            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT ".Setting::get('maxkommnews').") AS del);", ['news', $id, 'news', $id]);
 
             DB::run() -> query("UPDATE `news` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
             DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
@@ -339,11 +339,11 @@ case 'end':
         App::abort(404, 'Ошибка! Данной новости не существует!');
     }
 
-    $end = ceil($news['comments'] / App::setting('postnews'));
+    $end = ceil($news['comments'] / Setting::get('postnews'));
     App::redirect('/news/'.$id.'/comments?page='.$end);
 
 break;
 
 endswitch;
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

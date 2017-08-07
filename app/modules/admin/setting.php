@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -15,7 +15,7 @@ if (is_admin([101])) {
     ############################################################################################
         case 'index':
 
-            if (App::getUsername() == App::setting('nickname')) {
+            if (App::getUsername() == Setting::get('nickname')) {
                 echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setzero">Администраторская</a><br />';
                 echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setone">Основные настройки</a><br />';
             }
@@ -43,7 +43,7 @@ if (is_admin([101])) {
         ##                          Форма администраторских настроек                              ##
         ############################################################################################
         case 'setzero':
-            if (App::getUsername() == App::setting('nickname')) {
+            if (App::getUsername() == Setting::get('nickname')) {
                 echo '<b>Администраторская</b><br /><hr />';
 
                 echo '<div class="form">';
@@ -74,7 +74,7 @@ if (is_admin([101])) {
             $mail = check($_POST['emails']);
             $pass = check($_POST['pass']);
 
-            if (App::getUsername() == App::setting('nickname')) {
+            if (App::getUsername() == Setting::get('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     if (!empty($login) && !empty($mail) && !empty($pass)) {
 
@@ -124,7 +124,7 @@ if (is_admin([101])) {
         ############################################################################################
         case 'setone':
 
-            if (App::getUsername() == App::setting('nickname')) {
+            if (App::getUsername() == Setting::get('nickname')) {
                 echo '<b>Основные настройки</b><br /><hr />';
 
                 echo '<div class="form">';
@@ -230,7 +230,7 @@ if (is_admin([101])) {
             $regkeys = (isset($_POST['regkeys'])) ? abs(intval($_POST['regkeys'])) : 0;
             $closedsite = (isset($_POST['closedsite'])) ? abs(intval($_POST['closedsite'])) : 0;
 
-            if (App::getUsername() == App::setting('nickname')) {
+            if (App::getUsername() == Setting::get('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
 
@@ -276,7 +276,7 @@ if (is_admin([101])) {
 
             echo '<b>Настройки почты и рассылок</b><br /><hr />';
 
-            if (App::getUsername() == App::setting('nickname')) {
+            if (App::getUsername() == Setting::get('nickname')) {
                 echo '<div class="form">';
                 echo '<form method="post" action="/admin/setting?act=editmail&amp;uid='.$_SESSION['token'].'">';
 
@@ -1212,7 +1212,7 @@ if (is_admin([101])) {
 
             $checked = ($setting['copyfoto'] == 1) ? ' checked="checked"' : '';
             echo '<input name="copyfoto" type="checkbox" value="1"'.$checked.' /> Наложение копирайта<br />';
-            echo '<img src="/assets/img/images/watermark.png" alt="watermark" title="'.App::setting('home').'/assets/img/images/watermark.png" /><br />';
+            echo '<img src="/assets/img/images/watermark.png" alt="watermark" title="'.Setting::get('home').'/assets/img/images/watermark.png" /><br />';
 
             echo '<input value="Изменить" type="submit" /></form></div><br />';
 
@@ -1365,4 +1365,4 @@ if (is_admin([101])) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

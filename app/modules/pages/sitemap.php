@@ -16,7 +16,7 @@ case 'index':
     $locs = [];
     foreach ($pages as $page) {
         $locs[] = [
-            'loc' => App::setting('home').'/sitemap/'.$page,
+            'loc' => Setting::get('home').'/sitemap/'.$page,
             'lastmod' => date('c', SITETIME),
         ];
     }
@@ -39,7 +39,7 @@ case 'blogs':
         $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
         $locs[] = [
-            'loc' => App::setting('home').'/blog/blog?act=view&id='.$blog['id'],
+            'loc' => Setting::get('home').'/blog/blog?act=view&id='.$blog['id'],
             'lastmod' => date('c', $changeTime),
             'changefreq' => $new ? 'weekly' : 'monthly',
             'priority' => $new ? '1.0' : '0.5',
@@ -62,7 +62,7 @@ case 'news':
         $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
         $locs[] = [
-            'loc' => App::setting('home').'/news/'.$news['id'],
+            'loc' => Setting::get('home').'/news/'.$news['id'],
             'lastmod' => date('c', $changeTime),
             'changefreq' => $new ? 'weekly' : 'monthly',
             'priority' => $new ? '1.0' : '0.5',
@@ -86,7 +86,7 @@ case 'events':
         $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
         $locs[] = [
-            'loc' => App::setting('home').'/events?act=read&id='.$event['id'],
+            'loc' => Setting::get('home').'/events?act=read&id='.$event['id'],
             'lastmod' => date('c', $changeTime),
             'changefreq' => $new ? 'weekly' : 'monthly',
             'priority' => $new ? '1.0' : '0.5',
@@ -108,7 +108,7 @@ case 'topics':
         $new = (SITETIME < $topic['last_time'] + 3600 * 24 * 30) ? true : false;
 
         $locs[] = [
-            'loc' => App::setting('home').'/topic/'.$topic['id'],
+            'loc' => Setting::get('home').'/topic/'.$topic['id'],
             'lastmod' => date('c', $topic['last_time']),
             'changefreq' => $new ? 'weekly' : 'monthly',
             'priority' => $new ? '1.0' : '0.5',
@@ -132,7 +132,7 @@ break;
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc' => App::setting('home').'/load/down?act=view&id='.$down['id'],
+                'loc' => Setting::get('home').'/load/down?act=view&id='.$down['id'],
                 'lastmod' => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority' => $new ? '1.0' : '0.5',

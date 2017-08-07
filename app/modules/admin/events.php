@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
@@ -16,11 +16,11 @@ case 'index':
     echo '<div class="form"><a href="/events">Обзор событий</a></div>';
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `events`;");
-    $page = App::paginate(App::setting('postevents'), $total);
+    $page = App::paginate(Setting::get('postevents'), $total);
 
     if ($total > 0) {
 
-        $queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('postevents').";");
+        $queryevents = DB::run() -> query("SELECT * FROM `events` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('postevents').";");
 
         echo '<form action="/admin/events?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -92,7 +92,7 @@ case 'edit':
         }
 
         echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
-        echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(App::setting('filesize')).' и '.App::setting('fileupfoto').'px)</i><br /><br />';
+        echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(Setting::get('filesize')).' и '.Setting::get('fileupfoto').'px)</i><br /><br />';
 
         $checked = ($dataevent['closed'] == 1) ? ' checked="checked"' : '';
         echo '<input name="closed" type="checkbox" value="1"'.$checked.' /> Закрыть комментарии<br />';
@@ -134,7 +134,7 @@ case 'change':
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-            $handle = upload_image($_FILES['image'], App::setting('filesize'), App::setting('fileupfoto'), $id);
+            $handle = upload_image($_FILES['image'], Setting::get('filesize'), Setting::get('fileupfoto'), $id);
             if ($handle) {
 
                 // Удаление старой картинки
@@ -241,5 +241,5 @@ echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />'
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');
 

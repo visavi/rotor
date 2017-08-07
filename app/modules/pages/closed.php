@@ -1,7 +1,7 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
-if (App::setting('closedsite') == 2) {
+if (Setting::get('closedsite') == 2) {
     echo '<center><br /><br /><h2>Внимание! Сайт закрыт по техническим причинам</h2></center>';
 
     echo 'Администрация сайта приносит вам свои извинения за возможные неудобства.<br />';
@@ -10,4 +10,4 @@ if (App::setting('closedsite') == 2) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

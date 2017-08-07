@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -43,12 +43,12 @@ if (is_user()) {
             echo '</select><br />';
             echo '<input type="submit" value="Продолжить" /></form></div><br />';
 
-            echo'Минимальная сумма кредита '.moneys(App::setting('minkredit')).'<br />';
-            echo'Максимальная сумма кредита равна '.moneys(App::setting('maxkredit')).'<br /><br />';
+            echo'Минимальная сумма кредита '.moneys(Setting::get('minkredit')).'<br />';
+            echo'Максимальная сумма кредита равна '.moneys(Setting::get('maxkredit')).'<br /><br />';
 
-            echo '<b>Условия кредита</b><br />Независимо от суммы кредита банк берет '.(int)App::setting('percentkredit').'% за операцию, кредит выдается на 5 дней<br />';
+            echo '<b>Условия кредита</b><br />Независимо от суммы кредита банк берет '.(int)Setting::get('percentkredit').'% за операцию, кредит выдается на 5 дней<br />';
             echo 'Каждый просроченный день увеличивает сумму на 1% и у вас списывается '.points(10).'<br />';
-            echo 'Кредит выдается пользователям у которых не менее '.points(App::setting('creditpoint')).'<br /><br />';
+            echo 'Кредит выдается пользователям у которых не менее '.points(Setting::get('creditpoint')).'<br /><br />';
         break;
 
         ############################################################################################
@@ -60,15 +60,15 @@ if (is_user()) {
             $oper = (int)$_POST['oper'];
 
             if ($oper == 1 || $oper == 2) {
-                if ($gold >= App::setting('minkredit')) {
+                if ($gold >= Setting::get('minkredit')) {
                     // -------------------------- Выдача кредитов -----------------------------//
                     if ($oper == 1) {
                         echo '<b>Получение кредита</b><br />';
 
-                        if ($gold <= App::setting('maxkredit')) {
-                            if (App::user('point') >= App::setting('creditpoint')) {
+                        if ($gold <= Setting::get('maxkredit')) {
+                            if (App::user('point') >= Setting::get('creditpoint')) {
                                 if (empty(App::user('sumcredit'))) {
-                                    $sumcredit = $gold + (($gold * App::setting('percentkredit')) / 100);
+                                    $sumcredit = $gold + (($gold * Setting::get('percentkredit')) / 100);
 
                                     DB::run() -> query("UPDATE `users` SET `money`=`money`+?, `sumcredit`=?, `timecredit`=? WHERE `login`=? LIMIT 1;", [$gold, $sumcredit, SITETIME + 432000, App::getUsername()]);
 
@@ -83,7 +83,7 @@ if (is_user()) {
                                 show_error('Ошибка! Ваш статус не позволяет вам получать кредит!');
                             }
                         } else {
-                            show_error('Ошибка! Операции более чем с '.moneys(App::setting('maxkredit')).' не проводятся!');
+                            show_error('Ошибка! Операции более чем с '.moneys(Setting::get('maxkredit')).' не проводятся!');
                         }
                     }
                     // -------------------------- Погашение кредитов -----------------------------//
@@ -110,7 +110,7 @@ if (is_user()) {
                         }
                     }
                 } else {
-                    show_error('Операции менее чем с '.moneys(App::setting('minkredit')).' не проводятся!');
+                    show_error('Операции менее чем с '.moneys(Setting::get('minkredit')).' не проводятся!');
                 }
             } else {
                 show_error('Ошибка! Не выбрана операция!');
@@ -128,4 +128,4 @@ if (is_user()) {
 echo '<i class="fa fa-money"></i> <a href="/games/bank">Банк</a><br />';
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

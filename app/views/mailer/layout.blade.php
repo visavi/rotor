@@ -87,7 +87,7 @@
                             <td class="aligncenter content-block" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">
 
                                 @section('footer')
-                                    <a href="{{ App::setting('home') }}" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;">{{ App::setting('copy') }}</a>
+                                    <a href="{{ Setting::get('home') }}" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;">{{ Setting::get('copy') }}</a>
                                 @show
                             </td>
                         </tr>

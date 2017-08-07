@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
 } else {
@@ -30,7 +30,7 @@ if (is_admin([101, 102])) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type]);
             $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type2]);
-            $page = App::paginate(App::setting('postoffers'), $total);
+            $page = App::paginate(Setting::get('postoffers'), $total);
 
             echo '<i class="fa fa-book"></i> ';
 
@@ -44,7 +44,7 @@ if (is_admin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".App::setting('postoffers').";", [$type]);
+                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".Setting::get('postoffers').";", [$type]);
 
                 echo '<form action="/admin/offers?act=del&amp;type='.$type.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -101,7 +101,7 @@ if (is_admin([101, 102])) {
 
             $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
             if (!empty($queryoff)) {
-                //App::setting('newtitle') = $queryoff['title'];
+                //Setting::get('newtitle') = $queryoff['title'];
 
                 echo '<div class="b">';
                 echo '<i class="fa fa-file-o"></i> ';
@@ -356,4 +356,4 @@ if (is_admin([101, 102])) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -26,8 +26,7 @@
                     <?php if (is_user() && App::getUserId() != $data['user_id']): ?>
 
                         <div class="pull-right">
-                            <a href="#" onclick="return postReply('<?= $data->getUser()->login ?>')" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
-
+                            <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
                             <noindex><a href="#" onclick="return sendComplaint(this)" data-type="{{ Guest::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a></noindex>
@@ -44,7 +43,7 @@
                     <div class="img"><?=userAvatar($data->user)?></div>
 
                     <?php if (empty($data['user_id'])): ?>
-                        <b><?= App::setting('guestsuser') ?></b> <small>(<?=date_fixed($data['created_at'])?>)</small>
+                        <b><?= Setting::get('guestsuser') ?></b> <small>(<?=date_fixed($data['created_at'])?>)</small>
                     <?php else: ?>
                         <b><?=profile($data->user)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
                         <?=user_title($data->user)?> <?=user_online($data->user)?>
@@ -85,11 +84,11 @@
                     {!! App::textError('msg') !!}
                 </div>
 
-                <button type="submit" class="btn btn-primary">Написать</button>
+                <button class="btn btn-primary">Написать</button>
             </form>
         </div><br />
 
-    <?php elseif (App::setting('bookadds') == 1): ?>
+    <?php elseif (Setting::get('bookadds') == 1): ?>
 
         <div class="form">
             <form action="book/add" method="post">
@@ -108,7 +107,7 @@
                     {!! App::textError('protect') !!}
                 </div>
 
-                <button type="submit" class="btn btn-primary">Написать</button>
+                <button class="btn btn-primary">Написать</button>
             </form>
         </div><br />
 

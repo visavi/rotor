@@ -17,7 +17,7 @@
         echo 'Мастер-код:<br />';
         echo '<form method="get" action="/key">';
         echo '<input  class="form-control" name="code" maxlength="30" />';
-        echo '<button type="submit" class="btn btn-primary">Подтвердить</button></form></div><br />';
+        echo '<button class="btn btn-primary">Подтвердить</button></form></div><br />';
 
         echo 'Пока вы не подтвердите регистрацию вы не сможете войти на сайт<br />';
         echo 'Ваш профиль будет ждать активации в течение 24 часов, после чего автоматически удален<br /><br />';

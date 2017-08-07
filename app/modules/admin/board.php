@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
@@ -64,8 +64,8 @@ if ($act=="board")  {
         $string = search_string(STORAGE."/board/database.dat", $id, 2);
         if ($string) {
 
-            //App::setting('header') = $string[0];
-            //App::setting('header') = $string[1];
+            //Setting::get('header') = $string[0];
+            //Setting::get('header') = $string[1];
 
             echo '<a href="/admin/board">Объявления</a> / ';
             echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a> / ';
@@ -76,15 +76,15 @@ if ($act=="board")  {
                 $lines = array_reverse($lines);
                 $total = count($lines);
 
-                $page = App::paginate(App::setting('boardspost'), $total);
+                $page = App::paginate(Setting::get('boardspost'), $total);
 
                 if ($total>0) {
                     echo '<form action="/admin/board?act=deltop&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-                    if ($total < $page['offset'] + App::setting('boardspost')){
+                    if ($total < $page['offset'] + Setting::get('boardspost')){
                         $end = $total;
                     } else {
-                        $end = $page['offset'] + App::setting('boardspost');
+                        $end = $page['offset'] + Setting::get('boardspost');
                     }
 
                     for ($i = $page['offset']; $i < $end; $i++){
@@ -333,4 +333,4 @@ echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />'
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

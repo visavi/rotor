@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -17,11 +17,11 @@ if (is_admin([101])) {
         case "index":
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM admlog;");
-            $page = App::paginate(App::setting('loglist'), $total);
+            $page = App::paginate(Setting::get('loglist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loglist').";");
+                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loglist').";");
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -67,4 +67,4 @@ if (is_admin([101])) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 //show_title('Взлом сейфа');
 
@@ -30,12 +30,12 @@ case 'index':
     echo 'Всё готово для совершения взлома! Перейдите по ссылке Лoмaть ceйф!<br />';
 
     echo 'Попробуй вскрыть наш сейф.
-    <br />В сейфе тебя ждёт: '.moneys(App::setting('safesum')).' (плaтишь 1 paз зa 5 пoпытoк)<br />
-    За попытку взлома ты заплатишь '.moneys(App::setting('safeattempt')).'. Ну это чтобы купить себе необходимое для взлома оборудование.<br />
+    <br />В сейфе тебя ждёт: '.moneys(Setting::get('safesum')).' (плaтишь 1 paз зa 5 пoпытoк)<br />
+    За попытку взлома ты заплатишь '.moneys(Setting::get('safeattempt')).'. Ну это чтобы купить себе необходимое для взлома оборудование.<br />
     У тебя будет только 5 попыток чтобы подобрать код из 4-х цифр.<br />
     Если тебя это устраивает, то ВПЕРЁД!<br />';
 
-    if(App::user('money')<App::setting('safeattempt')){
+    if(App::user('money')<Setting::get('safeattempt')){
         echo 'У тебя не достаточно денег!';
     }else{
         echo '&#187; <a href="/games/safe?act=vzlom">Лoмaть ceйф</a><br /><br />';
@@ -44,13 +44,13 @@ break;
 
 case 'vzlom':
 
-    if (App::user('money') < App::setting('safeattempt')) {
+    if (App::user('money') < Setting::get('safeattempt')) {
         App::setFlash('danger', 'У тебя нет таких денег!');
         App::redirect('/games/safe');
     }else{
 
         if (empty($_SESSION['go']) || !$_SESSION['try']){
-            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [App::setting('safeattempt'), App::getUsername()]);
+            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=? LIMIT 1;", [Setting::get('safeattempt'), App::getUsername()]);
             $_SESSION['go'] = 'ok';
         }
 
@@ -152,7 +152,7 @@ case 'vzlom1':
             echo '<br />ПОЗДРАВЛЯЮ! СЕЙФ УСПЕШНО ВЗЛОМАН!<br />
             <font color="red">НА ВАШ СЧЁТ ПЕРЕВЕДЕНЫ 1000$</font><br />';
 
-            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [App::setting('safesum'), App::getUsername()]);
+            DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [Setting::get('safesum'), App::getUsername()]);
             unset($_SESSION['go'], $_SESSION['try']);
 
             echo'&raquo; <a href="/games/safe">Ещё взломать?</a><br /><br />';
@@ -196,4 +196,4 @@ endswitch;
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

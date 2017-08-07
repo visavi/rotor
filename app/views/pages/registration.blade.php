@@ -12,15 +12,15 @@
     Длина логина должна быть от 3 до 20 символов<br />
     Логин должен состоять только из знаков латинского алфавита и цифр, допустим знак дефиса!<br />
 
-    @if (App::setting('regkeys') == 1)
+    @if (Setting::get('regkeys') == 1)
         <i class="fa fa-pencil text-muted"></i> <span style="color:#ff0000"><b>Включено подтверждение регистрации!</b> Вам на почтовый ящик будет выслан мастер-ключ, который необходим для подтверждения регистрации!</span><br />
     @endif
 
-    @if (App::setting('regkeys') == 2)
+    @if (Setting::get('regkeys') == 2)
         <i class="fa fa-pencil text-muted"></i> <span style="color:#ff0000"><b>Включена модерация регистрации!</b> Ваш аккаунт будет активирован только после проверки администрацией!</span><br />
     @endif
 
-    @if (!empty(App::setting('invite')))
+    @if (!empty(Setting::get('invite')))
         <i class="fa fa-pencil text-muted"></i> <span style="color:#ff0000"><b>Включена регистрация по приглашениям!</b> Регистрация пользователей возможна только по специальным пригласительным ключам</span><br />
     @endif
 
@@ -38,7 +38,7 @@
     @endif
 
     <script src="//ulogin.ru/js/ulogin.js"></script>
-    <div style="padding: 5px;" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,twitter,google,yandex;redirect_uri={{ App::setting('home') }}%2Flogin">
+    <div style="padding: 5px;" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name,photo;optional=sex,email,nickname;providers=vkontakte,odnoklassniki,mailru,facebook,twitter,google,yandex;redirect_uri={{ Setting::get('home') }}%2Flogin">
     </div>
 
     <div class="form">
@@ -69,7 +69,7 @@
                 {!! App::textError('meil') !!}
             </div>
 
-            @if (!empty(App::setting('invite')))
+            @if (!empty(Setting::get('invite')))
                 <div class="form-group{{ App::hasError('invite') }}">
                     <label for="inputInvite">Пригласительный ключ:</label>
                     <input class="form-control" name="invite" id="inputInvite" maxlength="32" value="{{ App::getInput('invite') }}" required>
@@ -95,7 +95,7 @@
                 {!! App::textError('protect') !!}
             </div>
 
-            <button type="submit" class="btn btn-primary">Регистрация</button>
+            <button class="btn btn-primary">Регистрация</button>
         </form>
     </div>
     <br />

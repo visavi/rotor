@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : "";
@@ -24,15 +24,15 @@ if (is_admin()) {
         $file = array_reverse($file);
         $total = count($file);
 
-        $page = App::paginate(App::setting('chatpost'), $total);
+        $page = App::paginate(Setting::get('chatpost'), $total);
 
         if ($total > 0) {
             echo '<form action="/admin/minichat?act=del&amp;page=' . $page['current'] . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
 
-            if ($total < $page['offset'] + App::setting('chatpost')) {
+            if ($total < $page['offset'] + Setting::get('chatpost')) {
                 $end = $total;
             } else {
-                $end = $page['offset'] + App::setting('chatpost');
+                $end = $page['offset'] + Setting::get('chatpost');
             }
 
             for ($i = $page['offset']; $i < $end; $i++) {
@@ -153,7 +153,7 @@ if (is_admin()) {
 
                 $data[0] = yes_br($data[0]);
 
-                //App::setting('header') = 'Редактирование сообщения';
+                //Setting::get('header') = 'Редактирование сообщения';
 
                 echo '<div class="form"><form action="/admin/minichat?act=addedit&amp;id=' . $id . '&amp;page=' . $page . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
 
@@ -215,4 +215,4 @@ if (is_admin()) {
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

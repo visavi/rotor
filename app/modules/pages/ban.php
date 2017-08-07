@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -31,7 +31,7 @@ if (is_user()) {
                     echo 'Востановление профиля или данных после этого будет невозможным<br />';
                     echo 'Будьте внимательны, старайтесь не нарушать больше правил<br /><br />';
                     // --------------------------------------------------//
-                    if (App::setting('addbansend') == 1 && App::user('explainban') == 1) {
+                    if (Setting::get('addbansend') == 1 && App::user('explainban') == 1) {
                         echo '<div class="form">';
                         echo '<form method="post" action="/ban?act=send">';
                         echo 'Объяснение:<br />';
@@ -50,7 +50,7 @@ if (is_user()) {
 
                     $msg = check($_POST['msg']);
 
-                    if (App::setting('addbansend') == 1) {
+                    if (Setting::get('addbansend') == 1) {
                         if (App::user('explainban') == 1) {
                             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
                                 $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [App::user('loginsendban')]);
@@ -109,4 +109,4 @@ if (is_user()) {
     show_error('Ошибка! Вы не авторизованы!');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

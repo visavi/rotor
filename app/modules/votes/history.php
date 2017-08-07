@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -22,11 +22,11 @@ switch ($act):
         //show_title('История голосований');
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
-        $page = App::paginate(App::setting('allvotes'), $total);
+        $page = App::paginate(Setting::get('allvotes'), $total);
 
         if ($total > 0) {
 
-            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('allvotes').";", [1]);
+            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('allvotes').";", [1]);
 
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
@@ -51,7 +51,7 @@ switch ($act):
 
         if (!empty($votes)) {
             if (!empty($votes['closed'])) {
-                //App::setting('newtitle') = $votes['title'];
+                //Setting::get('newtitle') = $votes['title'];
 
                 echo '<i class="fa fa-briefcase"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
 
@@ -97,4 +97,4 @@ endswitch;
 
 echo '<i class="fa fa-bar-chart"></i> <a href="/votes">Список голосований</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

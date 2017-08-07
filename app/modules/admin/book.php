@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $page = abs(intval(Request::input('page')));
@@ -19,10 +19,10 @@ if (is_admin()) {
             $total = Guest::count();
             if ($total > 0) {
 
-                $page = App::paginate(App::setting('bookpost'), $total);
+                $page = App::paginate(Setting::get('bookpost'), $total);
 
                 $posts = Guest::orderBy('created_at', 'desc')
-                    ->limit(App::setting('bookpost'))
+                    ->limit(Setting::get('bookpost'))
                     ->offset($page['offset'])
                     ->with('user')
                     ->get();
@@ -112,7 +112,7 @@ if (is_admin()) {
             $reply = check($_POST['reply']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($reply) >= 5 && utf_strlen($reply) < App::setting('guesttextlength')) {
+                if (utf_strlen($reply) >= 5 && utf_strlen($reply) < Setting::get('guesttextlength')) {
 
                     $post = Guest::find($id);
 
@@ -171,7 +171,7 @@ if (is_admin()) {
             $msg = check($_POST['msg']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < App::setting('guesttextlength')) {
+                if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < Setting::get('guesttextlength')) {
 
                     $post = Guest::find($id);
                     if ($post) {
@@ -252,4 +252,4 @@ if (is_admin()) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

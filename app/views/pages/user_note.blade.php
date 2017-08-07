@@ -17,7 +17,7 @@
                 {!! App::textError('notice') !!}
             </div>
 
-            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <button class="btn btn-primary">Сохранить</button>
         </form>
     </div><br />
 

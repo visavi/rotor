@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -24,11 +24,11 @@ switch ($act):
     case 'index':
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
-        $page = App::paginate(App::setting('avtorlist'), $total);
+        $page = App::paginate(Setting::get('avtorlist'), $total);
 
         if ($total > 0) {
 
-            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `rating` DESC, `login` ASC LIMIT ".$page['offset'].", ".App::setting('avtorlist').";");
+            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `rating` DESC, `login` ASC LIMIT ".$page['offset'].", ".Setting::get('avtorlist').";");
 
             $i = 0;
             while ($data = $queryusers -> fetch()) {
@@ -78,7 +78,7 @@ switch ($act):
                     }
                 }
                 if (!empty($rat)) {
-                    $end = ceil($rat / App::setting('avtorlist'));
+                    $end = ceil($rat / Setting::get('avtorlist'));
 
                     App::setFlash('success', 'Позиция в рейтинге: '.$rat);
                     App::redirect("/authoritylist?page=$end&uz=$queryuser");
@@ -97,4 +97,4 @@ switch ($act):
 
 endswitch;
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

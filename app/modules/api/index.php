@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 //show_title('API интерфейс');
 ?>
@@ -22,4 +22,4 @@ App::view(App::setting('themes').'/index');
 </pre>
 
 <?php
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

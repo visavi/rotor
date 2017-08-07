@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 //show_title('Онлайн пользователей');
 
@@ -58,4 +58,4 @@ if ($total > 0) {
 
 echo '<i class="fa fa-users"></i> <a href="/who">Kто-где?</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

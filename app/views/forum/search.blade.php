@@ -89,7 +89,7 @@
                 </label>
             </div>
 
-            <button type="submit" class="btn btn-primary">Найти</button>
+            <button class="btn btn-primary">Найти</button>
         </form>
     </div>
 @stop

@@ -18,7 +18,7 @@ case 'index':
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-        $handle = upload_image($_FILES['photo'], App::setting('filesize'), App::setting('fileupfoto'), $newName);
+        $handle = upload_image($_FILES['photo'], Setting::get('filesize'), Setting::get('fileupfoto'), $newName);
         if (! $handle) {
             $validation -> addError(['photo' => 'Не удалось загрузить фотографию!']);
         }

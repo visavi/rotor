@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -10,7 +10,7 @@ if (isset($_GET['act'])) {
 if (is_admin([101, 102])) {
     //show_title('Просмотр лог-файлов');
 
-    if (empty(App::setting('errorlog'))){
+    if (empty(Setting::get('errorlog'))){
         echo '<b><span style="color:#ff0000">Внимание! Запись логов выключена в настройках!</span></b><br /><br />';
     }
 
@@ -23,11 +23,11 @@ if (is_admin([101, 102])) {
             echo '<b>Ошибки 404</b> | <a href="/admin/logs?act=403">Ошибки 403</a> | <a href="/admin/logs?act=666">Автобаны</a><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [404]);
-            $page = App::paginate(App::setting('loglist'), $total);
+            $page = App::paginate(Setting::get('loglist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loglist').";", [404]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loglist').";", [404]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -55,11 +55,11 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <b>Ошибки 403</b> | <a href="/admin/logs?act=666">Автобаны</a><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [403]);
-            $page = App::paginate(App::setting('loglist'), $total);
+            $page = App::paginate(Setting::get('loglist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loglist').";", [403]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loglist').";", [403]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -83,11 +83,11 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <a href="/admin/logs?act=403">Ошибки 403</a> | <b>Автобаны</b><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [666]);
-            $page = App::paginate(App::setting('loglist'), $total);
+            $page = App::paginate(Setting::get('loglist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('loglist').";", [666]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loglist').";", [666]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -135,4 +135,4 @@ if (is_admin([101, 102])) {
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

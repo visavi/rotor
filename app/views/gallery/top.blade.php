@@ -32,7 +32,7 @@
                 <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }}) ({!! format_num($data['rating']) !!})
             </div>
 
-            <div><a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title']]) !!}</a>
+            <div><a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]) !!}</a>
 
                 <br />{!! App::bbCode($data['text']) !!}<br />
 

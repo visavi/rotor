@@ -11,7 +11,7 @@ switch ($act):
 case 'index':
 
     $total = Inbox::where('user_id', App::getUserId())->count();
-    $page = App::paginate(App::setting('privatpost'), $total);
+    $page = App::paginate(Setting::get('privatpost'), $total);
 
     $page['totalOutbox'] = Outbox::where('user_id', App::getUserId())->count();
     $page['totalTrash'] = Trash::where('user_id', App::getUserId())->count();
@@ -39,7 +39,7 @@ break;
 case 'outbox':
 
     $total = Outbox::where('user_id', App::getUserId())->count();
-    $page = App::paginate(App::setting('privatpost'), $total);
+    $page = App::paginate(Setting::get('privatpost'), $total);
 
     $messages = Outbox::where('user_id', App::getUserId())
         ->orderBy('created_at', 'desc')
@@ -60,7 +60,7 @@ break;
 case 'trash':
 
     $total = Trash::where('user_id', App::getUserId())->count();
-    $page = App::paginate(App::setting('privatpost'), $total);
+    $page = App::paginate(Setting::get('privatpost'), $total);
 
     $page['totalInbox'] = Inbox::where('user_id', App::getUserId())->count();
     $page['totalOutbox'] = Outbox::where('user_id', App::getUserId())->count();
@@ -105,13 +105,13 @@ case 'send':
 
             $validation->addRule('not_equal', [$user->id, App::getUserId()], ['user' => 'Нельзя отправлять письмо самому себе!']);
 
-            if (App::user('point') < App::setting('privatprotect') && $provkod != $_SESSION['protect']) {
+            if (App::user('point') < Setting::get('privatprotect') && $provkod != $_SESSION['protect']) {
                 $validation -> addError(['provkod' => 'Проверочное число не совпало с данными на картинке!']);
             }
 
             // лимит ящика
             $totalInbox = Inbox::where('user_id', $user->id)->count();
-            $validation->addRule('min', [$totalInbox, App::setting('limitmail')], 'Ящик получателя переполнен!');
+            $validation->addRule('min', [$totalInbox, Setting::get('limitmail')], 'Ящик получателя переполнен!');
 
             // Проверка на игнор
             $ignoring = Ignore::where('user_id', $user->id)
@@ -130,25 +130,25 @@ case 'send':
 
             DB::run()->query("INSERT INTO `outbox` (`user_id`, `recipient_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [App::getUserId(), $user->id, $msg, SITETIME]);
 
-            DB::run()->query("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . App::setting('limitoutmail') . ") AS del);", [App::getUserId(), App::getUserId()]);
+            DB::run()->query("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . Setting::get('limitoutmail') . ") AS del);", [App::getUserId(), App::getUserId()]);
             save_usermail(60);
 
             $deliveryUsers = User::where('sendprivatmail', 0)
                 ->where('confirmreg', 0)
                 ->where('newprivat', '>', 0)
-                ->where('timelastlogin', '<', SITETIME - 86400 * App::setting('sendprivatmailday'))
+                ->where('timelastlogin', '<', SITETIME - 86400 * Setting::get('sendprivatmailday'))
                 ->where('subscribe', '<>', '')
                 ->where('email', '<>', '')
                 ->orderBy('timelastlogin')
-                ->limit(App::setting('sendmailpacket'))
+                ->limit(Setting::get('sendmailpacket'))
                 ->get();
 
-            $sitelink = starts_with(App::setting('home'), '//') ? 'http:'. App::setting('home') : App::setting('home');
+            $sitelink = starts_with(Setting::get('home'), '//') ? 'http:'. Setting::get('home') : Setting::get('home');
 
             foreach ($deliveryUsers as $deliveryUser) {
 
-                $subject = $deliveryUser['newprivat'] . ' непрочитанных сообщений (' . App::setting('title') . ')';
-                $message = 'Здравствуйте ' . $deliveryUser['login'] . '!<br />У вас имеются непрочитанные сообщения (' . $deliveryUser['newprivat'] . ' шт.) на сайте ' . App::setting('title') . '<br />Прочитать свои сообщения вы можете по адресу <a href="' . $sitelink . '/private">' . $sitelink . '/private</a>';
+                $subject = $deliveryUser['newprivat'] . ' непрочитанных сообщений (' . Setting::get('title') . ')';
+                $message = 'Здравствуйте ' . $deliveryUser['login'] . '!<br />У вас имеются непрочитанные сообщения (' . $deliveryUser['newprivat'] . ' шт.) на сайте ' . Setting::get('title') . '<br />Прочитать свои сообщения вы можете по адресу <a href="' . $sitelink . '/private">' . $sitelink . '/private</a>';
                 $body = App::view('mailer.default', compact('subject', 'message'), true);
                 App::sendMail($deliveryUser['email'], $subject, $body, ['subscribe' => $deliveryUser['subscribe']]);
 
@@ -185,7 +185,7 @@ case 'delete':
         if ($type == 'outbox') {
             DB::run() -> query("DELETE FROM `outbox` WHERE `id` IN (".$del.") AND `user_id`=?;", [App::getUserId()]);
         } else {
-            $deltrash = SITETIME + 86400 * App::setting('expiresmail');
+            $deltrash = SITETIME + 86400 * Setting::get('expiresmail');
 
             DB::run() -> query("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
 
@@ -220,7 +220,7 @@ case 'clear':
         } elseif ($type == 'trash') {
             DB::run()->query("DELETE FROM `trash` WHERE `user_id`=?;", [App::getUserId()]);
         } else {
-            $deltrash = SITETIME + 86400 * App::setting('expiresmail');
+            $deltrash = SITETIME + 86400 * Setting::get('expiresmail');
 
             DB::run() -> query("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
 
@@ -259,7 +259,7 @@ case 'history':
 
     $total = $totalInbox + $totalOutbox;
 
-    $page = App::paginate(App::setting('privatpost'), $total);
+    $page = App::paginate(Setting::get('privatpost'), $total);
 
     $outbox = Outbox::select('id', 'user_id', 'user_id as author_id', 'text', 'created_at')
         ->where('user_id', App::getUserId())

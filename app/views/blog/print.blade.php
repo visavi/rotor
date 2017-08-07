@@ -12,5 +12,5 @@
 
     <br /><br />
 
-    URL: <a href="<?= App::setting('home') ?>/article/<?=$blog['id']?>"><?= App::setting('home')?>/article/<?=$blog['id']?></a>
+    URL: <a href="<?= Setting::get('home') ?>/article/<?=$blog['id']?>"><?= Setting::get('home')?>/article/<?=$blog['id']?></a>
 @stop

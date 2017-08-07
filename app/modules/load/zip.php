@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 $act = isset($_GET['act']) ? check($_GET['act']) : 'index';
@@ -17,7 +17,7 @@ case 'index':
     if (!empty($downs)) {
         if (!empty($downs['active'])) {
             if (getExtension($downs['link']) == 'zip') {
-                //App::setting('newtitle') = 'Просмотр архива - '.$downs['title'];
+                //Setting::get('newtitle') = 'Просмотр архива - '.$downs['title'];
 
                 $zip = new PclZip('uploads/files/'.$downs['link']);
                 if (($list = $zip -> listContent()) != 0) {
@@ -26,17 +26,17 @@ case 'index':
 
                     sort($list);
 
-                    $page = App::paginate(App::setting('ziplist'), $total);
+                    $page = App::paginate(Setting::get('ziplist'), $total);
                     if ($total > 0) {
                         echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
                         echo 'Всего файлов: '.$total.'<hr />';
 
                         $arrext = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'env', 'gitignore', 'json', 'yml', 'md'];
 
-                        if ($total < $page['offset'] + App::setting('ziplist')) {
+                        if ($total < $page['offset'] + Setting::get('ziplist')) {
                             $end = $total;
                         } else {
-                            $end = $page['offset'] + App::setting('ziplist');
+                            $end = $page['offset'] + Setting::get('ziplist');
                         }
                         for ($i = $page['offset']; $i < $end; $i++) {
                             if ($list[$i]['folder'] == 1) {
@@ -94,7 +94,7 @@ case 'preview':
                 $filecontent = $content[0]['content'];
                 $filename = $content[0]['filename'];
 
-                //App::setting('newtitle') = 'Просмотр файла - '.$filename;
+                //Setting::get('newtitle') = 'Просмотр файла - '.$filename;
 
                 echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
 
@@ -143,4 +143,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

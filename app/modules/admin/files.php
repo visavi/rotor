@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $file = check(Request::input('file'));
@@ -15,7 +15,7 @@ if (
     $path = '';
 }
 
-if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
+if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
     //show_title('Редактирование страниц');
 
     switch ($act):
@@ -255,4 +255,4 @@ if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

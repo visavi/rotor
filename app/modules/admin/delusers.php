@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
+if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
     //show_title('Очистка базы юзеров');
 
     switch ($act):
@@ -125,4 +125,4 @@ if (is_admin([101]) && App::getUsername() == App::setting('nickname')) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

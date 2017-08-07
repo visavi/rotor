@@ -6,7 +6,7 @@ header('Content-type:text/html; charset=utf-8');
 <head>
     <title>
         @section('title')
-            {{ App::setting('title') }}
+            {{ Setting::get('title') }}
         @show
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -18,8 +18,8 @@ header('Content-type:text/html; charset=utf-8');
     @stack('styles')
     <link rel="stylesheet" href="/themes/motor/css/style.css" type="text/css" />
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />
-    <meta name="description" content="@yield('description', App::setting('description'))">
-    <meta name="keywords" content="@yield('keywords', App::setting('keywords'))">
+    <meta name="description" content="@yield('description', Setting::get('description'))">
+    <meta name="keywords" content="@yield('keywords', Setting::get('keywords'))">
     <meta name="generator" content="RotorCMS {{ env('VERSION') }}" />
 </head>
 <body>
@@ -34,8 +34,8 @@ header('Content-type:text/html; charset=utf-8');
         <div class="backgr_top">
             <div class="content">
                 <div class="logo">
-                    <!-- <a href="/"><span class="logotype">{{ App::setting('title') }}</span></a> -->
-                    <a href="/"><img src="/assets/img/images/logo.png" alt="{{ App::setting('title') }}" /></a>
+                    <!-- <a href="/"><span class="logotype">{{ Setting::get('title') }}</span></a> -->
+                    <a href="/"><img src="/assets/img/images/logo.png" alt="{{ Setting::get('title') }}" /></a>
                 </div>
 
                 <div class="menu">

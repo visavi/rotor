@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -40,7 +40,7 @@ case 'search':
         array_splice($arrfind, 3);
 
         if (count($arrfind) > 0) {
-            //App::setting('newtitle') = $find.' - Результаты поиска';
+            //Setting::get('newtitle') = $find.' - Результаты поиска';
 
             $types = (empty($type)) ? 'AND' : 'OR';
             $wheres = (empty($where)) ? 'title' : 'text';
@@ -66,13 +66,13 @@ case 'search':
                 }
 
                 $total = count($_SESSION['blogfindres']);
-                $page = App::paginate(App::setting('blogpost'), $total);
+                $page = App::paginate(Setting::get('blogpost'), $total);
 
                 if ($total > 0) {
 
                     $result = implode(',', $_SESSION['blogfindres']);
 
-                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
+                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('blogpost').";");
                     $blogs = $queryblog -> fetchAll();
 
                     App::view('blog/search_title', compact('blogs', 'find', 'total'));
@@ -101,13 +101,13 @@ case 'search':
                 }
 
                 $total = count($_SESSION['blogfindres']);
-                $page = App::paginate(App::setting('blogpost'), $total);
+                $page = App::paginate(Setting::get('blogpost'), $total);
 
                 if ($total > 0) {
 
                     $result = implode(',', $_SESSION['blogfindres']);
 
-                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
+                    $queryblog = DB::run() -> query("SELECT `blogs`.*, `category_id`, `name` FROM `blogs` LEFT JOIN `catsblog` ON `blogs`.`category_id`=`catsblog`.`id` WHERE blogs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('blogpost').";");
                     $blogs = $queryblog -> fetchAll();
 
                     App::view('blog/search_text', compact('blogs', 'find', 'total'));
@@ -135,4 +135,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

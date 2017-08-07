@@ -23,9 +23,9 @@ if (Request::isMethod('post')) {
 
         $message .= '<br /><br />IP: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Отправлено: '.date_fixed(SITETIME, 'j.m.Y / H:i');
 
-        $subject = 'Письмо с сайта '.App::setting('title');
+        $subject = 'Письмо с сайта '.Setting::get('title');
         $body = App::view('mailer.default', compact('subject', 'message'), true);
-        App::sendMail(App::setting('emails'), $subject, $body, ['from' => [$email => $name]]);
+        App::sendMail(Setting::get('emails'), $subject, $body, ['from' => [$email => $name]]);
 
         App::setFlash('success', 'Ваше письмо успешно отправлено!');
         App::redirect("/");

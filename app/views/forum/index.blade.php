@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>Форум {{ App::setting('title') }}</h1>
+    <h1>Форум {{ Setting::get('title') }}</h1>
     @if (is_user())
         Мои: <a href="/forum/active/themes">темы</a>, <a href="/forum/active/posts">сообщения</a>, <a href="/forum/bookmark">закладки</a> /
     @endif

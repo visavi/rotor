@@ -2,14 +2,14 @@
 
 header('Content-type: image/jpeg');
 $phrase = new Gregwar\Captcha\PhraseBuilder;
-$phrase = $phrase->build(App::setting('captcha_maxlength'), App::setting('captcha_symbols'));
+$phrase = $phrase->build(Setting::get('captcha_maxlength'), Setting::get('captcha_symbols'));
 
 $builder = new Gregwar\Captcha\CaptchaBuilder($phrase);
 $builder->setBackgroundColor(mt_rand(200,255), mt_rand(200,255), mt_rand(200,255));
-$builder->setMaxOffset(App::setting('captcha_offset'));
-$builder->setMaxAngle(App::setting('captcha_angle'));
-$builder->setDistortion(App::setting('captcha_distortion'));
-$builder->setInterpolation(App::setting('captcha_interpolation'));
+$builder->setMaxOffset(Setting::get('captcha_offset'));
+$builder->setMaxAngle(Setting::get('captcha_angle'));
+$builder->setDistortion(Setting::get('captcha_distortion'));
+$builder->setInterpolation(Setting::get('captcha_interpolation'));
 $builder->build()->output();
 
 $_SESSION['protect'] = $builder->getPhrase();

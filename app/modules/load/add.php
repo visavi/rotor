@@ -1,12 +1,12 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
 if (is_user()) {
-if (is_admin() || App::setting('downupload') == 1) {
+if (is_admin() || Setting::get('downupload') == 1) {
 
 switch ($act):
 /**
@@ -20,7 +20,7 @@ case 'index':
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<a href="/load/active">Проверенные</a><hr />';
 
-    if (App::setting('home') == 'http://visavi.net') {
+    if (Setting::get('home') == 'http://visavi.net') {
         echo '<div class="info">';
         echo '<i class="fa fa-question-circle"></i> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
         echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br />';
@@ -233,10 +233,10 @@ case 'view':
                         echo '<b><big>Загрузка файла</big></b><br /><br />';
                         echo '<div class="info">';
                         echo '<form action="/load/add?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-                        echo 'Прикрепить файл* ('.App::setting('allowextload').'):<br /><input type="file" name="loadfile" /><br />';
+                        echo 'Прикрепить файл* ('.Setting::get('allowextload').'):<br /><input type="file" name="loadfile" /><br />';
                         echo '<input value="Загрузить" type="submit" /></form><br />';
 
-                        echo 'Максимальный вес файла: '.formatsize(App::setting('fileupload')).'</div><br />';
+                        echo 'Максимальный вес файла: '.formatsize(Setting::get('fileupload')).'</div><br />';
 
                     } else {
 
@@ -251,12 +251,12 @@ case 'view':
                                 echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br /><input type="file" name="screen" /><br />';
                                 echo '<input value="Загрузить" type="submit" /></form><br />';
 
-                                echo 'Максимальный вес скриншота: '.formatsize(App::setting('screenupload')).'<br />';
-                                echo 'Требуемый размер скриншота: от 100 до '.App::setting('screenupsize').' px</div><br /><br />';
+                                echo 'Максимальный вес скриншота: '.formatsize(Setting::get('screenupload')).'<br />';
+                                echo 'Требуемый размер скриншота: от 100 до '.Setting::get('screenupsize').' px</div><br /><br />';
 
                             } else {
                                 echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                                echo resize_image('uploads/screen/'.$folder, $new['screen'], App::setting('previewsize')).'<br />';
+                                echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br />';
                             }
                         }
                     }
@@ -421,8 +421,8 @@ case 'loadfile':
 
                                 $ext = getExtension($filename);
 
-                                if (in_array($ext, explode(',', App::setting('allowextload')), true)) {
-                                    if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= App::setting('fileupload')) {
+                                if (in_array($ext, explode(',', Setting::get('allowextload')), true)) {
+                                    if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= Setting::get('fileupload')) {
                                         $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                                         if (empty($downlink)) {
 
@@ -480,7 +480,7 @@ case 'loadfile':
                                             show_error('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                                         }
                                     } else {
-                                        show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize(App::setting('fileupload')).'!');
+                                        show_error('Ошибка! Максимальный размер загружаемого файла '.formatsize(Setting::get('fileupload')).'!');
                                     }
                                 } else {
                                     show_error('Ошибка! Недопустимое расширение файла!');
@@ -528,7 +528,7 @@ case 'loadscreen':
                     if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
                         // ------------------------------------------------------//
-                        $handle = upload_image($_FILES['screen'], App::setting('screenupload'), App::setting('screenupsize'),  $down['link']);
+                        $handle = upload_image($_FILES['screen'], Setting::get('screenupload'), Setting::get('screenupsize'),  $down['link']);
                         if ($handle) {
                             $folder = $down['folder'] ? $down['folder'].'/' : '';
 
@@ -639,7 +639,7 @@ break;
  * Правила
  */
 case 'rules':
-    if (App::setting('home') == 'http://visavi.net') {
+    if (Setting::get('home') == 'http://visavi.net') {
 
         //show_title('Правила оформления скриптов');
 
@@ -681,9 +681,9 @@ case 'rules':
 
         echo '<b>Ограничения:</b><br />';
         echo 'К загрузке допускаются архивы в формате zip, скриншоты можно загружать в форматах jpg, jpeg, gif и png<br />';
-        echo 'Максимальный вес архива: '.formatsize(App::setting('fileupload')).'<br />';
-        echo 'Максимальный вес скриншота: '.formatsize(App::setting('screenupload')).'<br />';
-        echo 'Требуемый размер скриншота: от 100 до '.App::setting('screenupsize').' px<br /><br />';
+        echo 'Максимальный вес архива: '.formatsize(Setting::get('fileupload')).'<br />';
+        echo 'Максимальный вес скриншота: '.formatsize(Setting::get('screenupload')).'<br />';
+        echo 'Требуемый размер скриншота: от 100 до '.Setting::get('screenupsize').' px<br /><br />';
 
         echo '<b>Рекомендации:</b><br />';
         echo 'Чем лучше вы оформите скрипт при публикации, тем быстрее он будет проверен и размещен в архиве<br />';
@@ -709,4 +709,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/load/', 'title' => 'Категории']);
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

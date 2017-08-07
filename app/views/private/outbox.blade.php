@@ -41,7 +41,7 @@
         App::pagination($page);
 
         echo 'Всего писем: <b>'.$page['total'].'</b><br />';
-        echo 'Объем ящика: <b>'.App::setting('limitmail').'</b><br /><br />';
+        echo 'Объем ящика: <b>'.Setting::get('limitmail').'</b><br /><br />';
 
         echo '<i class="fa fa-times"></i> <a href="/private/clear?type=outbox&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
     } else {

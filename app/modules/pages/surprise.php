@@ -39,7 +39,7 @@ $user->update([
 
 $text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.points($surprisePoint).PHP_EOL.moneys($surpriseMoney).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
 
-send_private(App::getUsername(), App::setting('nickname'), $text);
+send_private(App::getUsername(), Setting::get('nickname'), $text);
 
 $surprise = Surprise::create([
     'user_id' => App::getUserId(),

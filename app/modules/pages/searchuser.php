@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -45,11 +45,11 @@ switch ($act):
             }
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE lower(`login`) ".$search.";");
-            $page = App::paginate(App::setting('usersearch'), $total);
+            $page = App::paginate(Setting::get('usersearch'), $total);
 
             if ($total > 0) {
 
-                $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".App::setting('usersearch').";");
+                $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".Setting::get('usersearch').";");
                 while ($data = $queryuser -> fetch()) {
 
                     echo user_gender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
@@ -77,7 +77,7 @@ switch ($act):
         $find = check(strtolower($_POST['find']));
 
         if (utf_strlen($find)>=3 && utf_strlen($find)<=20) {
-            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? ORDER BY `point` DESC LIMIT ".App::setting('usersearch').";", ['%'.$find.'%']);
+            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? ORDER BY `point` DESC LIMIT ".Setting::get('usersearch').";", ['%'.$find.'%']);
 
             $result = $querysearch -> fetchAll();
             $total = count($result);
@@ -110,4 +110,4 @@ endswitch;
     show_error('Ошибка! Для поиска пользователей необходимо авторизоваться!');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

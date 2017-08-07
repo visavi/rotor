@@ -369,7 +369,7 @@ header("Content-type:text/html; charset=utf-8");
                 <input class="form-control" name="email" maxlength="100" value="<?= $email ?>" /><br />
                 Адрес сайта:<br />
                 <input name="site" value="<?= $site ?>" maxlength="100" /><br /><br />
-               <button type="submit" class="btn btn-primary">Создать</button>
+               <button class="btn btn-primary">Создать</button>
             </form>
         </div><br />
 

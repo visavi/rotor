@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
@@ -177,4 +177,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/admin', 'title' => 'В админку', 'icon' => 'fa-wrench']);
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

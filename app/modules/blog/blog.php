@@ -20,12 +20,12 @@ case 'index':
 
     $total = Blog::where('category_id', $cid)->count();
 
-    $page = App::paginate(App::setting('blogpost'), $total);
+    $page = App::paginate(Setting::get('blogpost'), $total);
 
     $blogs = Blog::where('category_id', $cid)
         ->orderBy('created_at', 'desc')
         ->offset($page['offset'])
-        ->limit(App::setting('blogpost'))
+        ->limit(Setting::get('blogpost'))
         ->with('user')
         ->get();
 
@@ -65,7 +65,7 @@ case 'view':
             ->first();
 
         if (! $reads) {
-            $expiresRead = SITETIME + 3600 * App::setting('blogexpread');
+            $expiresRead = SITETIME + 3600 * Setting::get('blogexpread');
 
             Read::where('relate_type', Blog::class)
                 ->where('created_at', '<', SITETIME)
@@ -147,7 +147,7 @@ case 'changeblog':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                if (utf_strlen($text) >= 100 && utf_strlen($text) <= App::setting('maxblogpost')) {
+                if (utf_strlen($text) >= 100 && utf_strlen($text) <= Setting::get('maxblogpost')) {
                     if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
                         $querycats = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cats]);
                         if (!empty($cats)) {
@@ -181,7 +181,7 @@ case 'changeblog':
                         show_error('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
                     }
                 } else {
-                    show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.App::setting('maxblogpost').' символов)!');
+                    show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.Setting::get('maxblogpost').' символов)!');
                 }
             } else {
                 show_error('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
@@ -202,14 +202,14 @@ break;
 ############################################################################################
 case 'blogs':
 
-    //App::setting('newtitle') = 'Статьи пользователей';
+    //Setting::get('newtitle') = 'Статьи пользователей';
 
     $total = DB::run() -> querySingle("select COUNT(DISTINCT `user`) from `blogs`");
-    $page = App::paginate(App::setting('bloggroup'), $total);
+    $page = App::paginate(Setting::get('bloggroup'), $total);
 
     if ($total > 0) {
 
-        $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".App::setting('bloggroup').";");
+        $queryblogs = DB::run() -> query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT ".$page['offset'].", ".Setting::get('bloggroup').";");
         $blogs = $queryblogs -> fetchAll();
 
         App::view('blog/blog_blogs', compact('blogs', 'total'));
@@ -228,7 +228,7 @@ break;
 ############################################################################################
 case 'new':
 
-    //App::setting('newtitle') = 'Публикация новой статьи';
+    //Setting::get('newtitle') = 'Публикация новой статьи';
 
     if (is_user()) {
 
@@ -254,7 +254,7 @@ break;
 ############################################################################################
 case 'addblog':
 
-    //App::setting('newtitle') = 'Публикация новой статьи';
+    //Setting::get('newtitle') = 'Публикация новой статьи';
 
     $uid = check(Request::input('uid'));
     $cid = abs(intval(Request::input('cid')));
@@ -266,7 +266,7 @@ case 'addblog':
         if ($uid == $_SESSION['token']) {
             if (!empty($cid)) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($text) >= 100 && utf_strlen($text) <= App::setting('maxblogpost')) {
+                    if (utf_strlen($text) >= 100 && utf_strlen($text) <= Setting::get('maxblogpost')) {
                         if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
                             $blogs = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
                             if (!empty($blogs)) {
@@ -295,7 +295,7 @@ case 'addblog':
                             show_error('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.App::setting('maxblogpost').' символов)!');
+                        show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.Setting::get('maxblogpost').' символов)!');
                     }
                 } else {
                     show_error('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
@@ -351,7 +351,7 @@ case 'comments':
             Capsule::delete('
                 DELETE FROM comments WHERE relate_type = :relate_type AND relate_id = :relate_id AND created_at < (
                     SELECT MIN(created_at) FROM (
-                        SELECT created_at FROM comments WHERE relate_type = :relate_type2 AND relate_id = :relate_id2 ORDER BY created_at DESC LIMIT '.App::setting('maxpostgallery').'
+                        SELECT created_at FROM comments WHERE relate_type = :relate_type2 AND relate_id = :relate_id2 ORDER BY created_at DESC LIMIT '.Setting::get('maxpostgallery').'
                     ) AS del
                 );', [
                     'relate_type'  => Blog::class,
@@ -384,13 +384,13 @@ case 'comments':
         ->where('relate_id', $id)
         ->count();
 
-    $page = App::paginate(App::setting('blogcomm'), $total);
+    $page = App::paginate(Setting::get('blogcomm'), $total);
 
     $comments = Comment::where('relate_type', Blog::class)
         ->where('relate_id', $id)
         ->orderBy('created_at')
         ->offset($page['offset'])
-        ->limit(App::setting('blogcomm'))
+        ->limit(Setting::get('blogcomm'))
         ->get();
 
     App::view('blog/blog_comments', compact('blog', 'comments', 'page'));
@@ -401,7 +401,7 @@ break;
 ############################################################################################
 case 'edit':
 
-    //App::setting('newtitle') = 'Редактирование сообщения';
+    //Setting::get('newtitle') = 'Редактирование сообщения';
 
     $pid = abs(intval(Request::input('pid')));
 
@@ -519,7 +519,7 @@ case 'end':
         ->where('relate_id', $id)
         ->count();
 
-    $end = ceil($total / App::setting('blogpost'));
+    $end = ceil($total / Setting::get('blogpost'));
     App::redirect('/article/'.$id.'/comments?page='.$end);
 break;
 

@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -312,12 +312,12 @@ if (is_admin()) {
 
             if ($total > 0) {
 
-                $page = App::paginate(App::setting('forumtem'), $total);
+                $page = App::paginate(Setting::get('forumtem'), $total);
 
                 $topics = Topic::where('forum_id', $fid)
                     ->orderBy('locked', 'desc')
                     ->orderBy('updated_at', 'desc')
-                    ->limit(App::setting('forumtem'))
+                    ->limit(Setting::get('forumtem'))
                     ->offset($page['offset'])
                     ->with('lastPost.user')
                     ->get();
@@ -481,7 +481,7 @@ if (is_admin()) {
 
                     echo '</select>';
 
-                    echo '<button type="submit" class="btn btn-primary">Переместить</button></form></div><br />';
+                    echo '<button class="btn btn-primary">Переместить</button></form></div><br />';
                 } elseif(count($forums) == 1) {
                     show_error('Нет разделов для перемещения!');
                 }else {
@@ -733,7 +733,7 @@ if (is_admin()) {
                     $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
 
                     if ($total > 0) {
-                        $page = App::paginate(App::setting('forumpost'), $total);
+                        $page = App::paginate(Setting::get('forumpost'), $total);
 
 
 
@@ -745,7 +745,7 @@ if (is_admin()) {
                             })
                             ->with('files', 'user', 'editUser')
                             ->offset($page['offset'])
-                            ->limit(App::setting('forumpost'))
+                            ->limit(Setting::get('forumpost'))
                             ->orderBy('created_at', 'asc')
                             ->get();
 
@@ -809,8 +809,8 @@ if (is_admin()) {
                         echo '<div class="js-attach-form" style="display: none;">
                             Прикрепить файл:<br /><input type="file" name="file" /><br />
                             <div class="info">
-                                Максимальный вес файла: <b>'.round(App::setting('forumloadsize')/1024).'</b> Kb<br />
-                                Допустимые расширения: '.str_replace(',', ', ', App::setting('forumextload')).'
+                                Максимальный вес файла: <b>'.round(Setting::get('forumloadsize')/1024).'</b> Kb<br />
+                                Допустимые расширения: '.str_replace(',', ', ', Setting::get('forumextload')).'
                             </div><br />
                         </div>';
 
@@ -920,7 +920,7 @@ if (is_admin()) {
             $delfile = intar(Request::input('delfile'));
 
             if ($token == $_SESSION['token']) {
-                if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= App::setting('forumtextlength')) {
+                if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= Setting::get('forumtextlength')) {
                     $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
                     if (!empty($post)) {
 
@@ -966,4 +966,4 @@ if (is_admin()) {
     App::redirect('/');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

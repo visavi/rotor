@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $sort = (isset($_GET['sort'])) ? check($_GET['sort']) : 'visits';
 
@@ -16,11 +16,11 @@ switch ($sort) {
 //show_title('Топ популярных блогов');
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs`;");
-$page = App::paginate(App::setting('blogpost'), $total);
+$page = App::paginate(Setting::get('blogpost'), $total);
 
 if ($total > 0) {
 
-    $queryblog = DB::run() -> query("SELECT `b`.*, `name` FROM `blogs` b LEFT JOIN `catsblog` cb ON `b`.`category_id`=`cb`.`id` ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";");
+    $queryblog = DB::run() -> query("SELECT `b`.*, `name` FROM `blogs` b LEFT JOIN `catsblog` cb ON `b`.`category_id`=`cb`.`id` ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".Setting::get('blogpost').";");
     $blogs = $queryblog->fetchAll();
 
     App::view('blog/top', compact('blogs', 'order'));
@@ -32,4 +32,4 @@ if ($total > 0) {
 
 App::view('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'fa-arrow-circle-up']);
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

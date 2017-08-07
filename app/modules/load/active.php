@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $uz = empty($_GET['uz']) ? check(App::getUsername()) : check($_GET['uz']);
 $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
@@ -18,11 +18,11 @@ case 'files':
     echo '<b>Проверенные</b><hr />';
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [1, $uz]);
-    $page = App::paginate(App::setting('downlist'), $total);
+    $page = App::paginate(Setting::get('downlist'), $total);
 
     if ($total > 0) {
 
-        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";", [1, $uz]);
+        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", [1, $uz]);
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -51,13 +51,13 @@ case 'comments':
     //show_title('Список всех комментариев');
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['down', $uz]);
-    $page = App::paginate(App::setting('downlist'), $total);
+    $page = App::paginate(Setting::get('downlist'), $total);
 
     if ($total > 0) {
 
         $is_admin = is_admin();
 
-        $querypost = DB::run() -> query("SELECT `c`.*, `title`, `comments` FROM `comments` c LEFT JOIN `downs` d ON `c`.`relate_id`=`d`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";", ['down', $uz]);
+        $querypost = DB::run() -> query("SELECT `c`.*, `title`, `comments` FROM `comments` c LEFT JOIN `downs` d ON `c`.`relate_id`=`d`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", ['down', $uz]);
 
         while ($data = $querypost -> fetch()) {
             echo '<div class="b">';
@@ -105,7 +105,7 @@ case 'viewcomm':
     $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `id`<=? AND `relate_id`=? ORDER BY `time` ASC LIMIT 1;", ['down', $cid, $id]);
 
     if (!empty($querycomm)) {
-        $end = ceil($querycomm / App::setting('downlist'));
+        $end = ceil($querycomm / Setting::get('downlist'));
 
         App::redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
@@ -151,4 +151,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

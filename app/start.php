@@ -6,7 +6,7 @@ ob_start();
 session_name('SID');
 session_start();
 
-date_default_timezone_set(App::setting('timezone'));
+date_default_timezone_set(Setting::get('timezone'));
 
 /**
  * Проверка на ip-бан
@@ -34,7 +34,7 @@ if ($ipBan = App::ipBan()) {
 /**
  * Счетчик запросов
  */
-if (App::setting('doslimit')) {
+if (Setting::get('doslimit')) {
     if (is_writeable(STORAGE.'/antidos')) {
 
         $dosfiles = glob(STORAGE.'/antidos/*.dat');
@@ -56,9 +56,9 @@ if (App::setting('doslimit')) {
         $write = time().'|'.App::server('REQUEST_URI').'|'.App::server('HTTP_REFERER').'|'.App::getUserAgent().'|'.App::getUsername().'|';
         write_files(STORAGE.'/antidos/'.App::getClientIp().'.dat', $write."\r\n", 0, 0666);
         // ----------------------- Автоматическая блокировка ------------------------//
-        if (counter_string(STORAGE.'/antidos/'.App::getClientIp().'.dat') > App::setting('doslimit')) {
+        if (counter_string(STORAGE.'/antidos/'.App::getClientIp().'.dat') > Setting::get('doslimit')) {
 
-            if (!empty(App::setting('errorlog'))){
+            if (!empty(Setting::get('errorlog'))){
 
                 $banip = Ban::where('ip', App::getClientIp())->first();
 
@@ -157,7 +157,7 @@ if ($user = is_user()) {
     }
 
     // Подтверждение регистрации
-    if (App::setting('regkeys') > 0 && App::user('confirmreg') > 0 && empty(App::user('ban'))) {
+    if (Setting::get('regkeys') > 0 && App::user('confirmreg') > 0 && empty(App::user('ban'))) {
         if (! Request::is('key', 'login', 'logout')) {
             App::redirect('/key?log='.App::getUsername());
         }
@@ -174,10 +174,10 @@ if ($user = is_user()) {
         $user = User::where('id', App::getUserId());
         $user->update([
             'timebonus' => SITETIME,
-            'money' => Capsule::raw('money + '.App::setting('bonusmoney')),
+            'money' => Capsule::raw('money + '.Setting::get('bonusmoney')),
         ]);
 
-        App::setFlash('success', 'Получен ежедневный бонус '.moneys(App::setting('bonusmoney')).'!');
+        App::setFlash('success', 'Получен ежедневный бонус '.moneys(Setting::get('bonusmoney')).'!');
     }
 
     // ------------------ Запись текущей страницы для админов --------------------//
@@ -203,12 +203,12 @@ if ($user = is_user()) {
 }
 
 // Сайт закрыт для всех
-if (App::setting('closedsite') == 2 && !is_admin() && ! Request::is('closed', 'login')) {
+if (Setting::get('closedsite') == 2 && !is_admin() && ! Request::is('closed', 'login')) {
     App::redirect('/closed');
 }
 
 // Сайт закрыт для гостей
-if (App::setting('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
+if (Setting::get('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
     App::setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
     App::redirect('/login');
 }
@@ -219,14 +219,14 @@ if (App::setting('closedsite') == 1 && !is_user() && ! Request::is('register', '
 $browser_detect = new Mobile_Detect();
 
 if (! is_user() || empty($setting['themes'])) {
-    if (! empty(App::setting('touchthemes'))) {
+    if (! empty(Setting::get('touchthemes'))) {
         if ($browser_detect->isTablet()) {
-            $setting['themes'] = App::setting('touchthemes');
+            $setting['themes'] = Setting::get('touchthemes');
         }
     }
-    if (! empty(App::setting('webthemes'))) {
+    if (! empty(Setting::get('webthemes'))) {
         if (! $browser_detect->isMobile() && ! $browser_detect->isTablet()) {
-            $setting['themes'] = App::setting('webthemes');
+            $setting['themes'] = Setting::get('webthemes');
         }
     }
 }

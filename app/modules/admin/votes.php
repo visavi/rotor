@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -299,11 +299,11 @@ if (is_admin([101, 102, 103])) {
         case 'history':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
-            $page = App::paginate(App::setting('allvotes'), $total);
+            $page = App::paginate(Setting::get('allvotes'), $total);
 
             if ($total > 0) {
 
-                $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('allvotes').";", [1]);
+                $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('allvotes').";", [1]);
 
                 while ($data = $queryvote -> fetch()) {
                     echo '<div class="b">';
@@ -336,4 +336,4 @@ if (is_admin([101, 102, 103])) {
     App::redirect("/");
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

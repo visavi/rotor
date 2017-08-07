@@ -13,7 +13,7 @@ switch ($act):
 case 'index':
 
     $total = Bookmark::where('user_id', App::getUserId())->count();
-    $page = App::paginate(App::setting('forumtem'), $total);
+    $page = App::paginate(Setting::get('forumtem'), $total);
 
     $topics = Bookmark::select('bookmarks.posts as book_posts', 'bookmarks.topic_id', 'topics.*')
         ->where('bookmarks.user_id', App::getUserId())
@@ -21,7 +21,7 @@ case 'index':
         ->with('topic.user', 'topic.lastPost.user')
         ->orderBy('updated_at', 'desc')
         ->offset($page['offset'])
-        ->limit(App::setting('forumtem'))
+        ->limit(Setting::get('forumtem'))
         ->get();
 
     App::view('forum/bookmark', compact('topics', 'page'));

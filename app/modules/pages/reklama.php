@@ -1,9 +1,9 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 //show_title('Реклама на сайте');
 
-if (!empty(App::setting('rekusershow'))) {
+if (!empty(Setting::get('rekusershow'))) {
 switch ($act):
 ############################################################################################
 ##                                    Главная страница                                    ##
@@ -11,16 +11,16 @@ switch ($act):
 
 case 'index':
 
-    //App::setting('newtitle') = 'Список всех ссылок';
+    //Setting::get('newtitle') = 'Список всех ссылок';
 
     $total = RekUser::where_gt('time', SITETIME)->count();
 
-    $page = App::paginate(App::setting('rekuserpost'), $total);
+    $page = App::paginate(Setting::get('rekuserpost'), $total);
 
     if ($total > 0) {
 
         $reklama = RekUser::where_gt('time', SITETIME)
-            ->limit(App::setting('rekuserpost'))
+            ->limit(Setting::get('rekuserpost'))
             ->offset($page['offset'])
             ->order_by_desc('time')
             ->find_many();
@@ -87,19 +87,19 @@ case 'create':
 
                     $total = RekUser::where_gt('time', SITETIME)->count();
 
-                    if ($total < App::setting('rekusertotal')) {
+                    if ($total < Setting::get('rekusertotal')) {
 
                         $rekuser = RekUser::where('user', App::getUsername())->find_one();
 
                         if (empty($rekuser)) {
-                            $price = App::setting('rekuserprice');
+                            $price = Setting::get('rekuserprice');
 
                             if (!empty($color)) {
-                                $price = $price + App::setting('rekuseroptprice');
+                                $price = $price + Setting::get('rekuseroptprice');
                             }
 
                             if (!empty($bold)) {
-                                $price = $price + App::setting('rekuseroptprice');
+                                $price = $price + Setting::get('rekuseroptprice');
                             }
 
                             if (App::user('money') >= $price) {
@@ -111,7 +111,7 @@ case 'create':
                                     'color' => $color,
                                     'bold' => $bold,
                                     'user' => App::getUsername(),
-                                    'time' => SITETIME + (App::setting('rekusertime') * 3600),
+                                    'time' => SITETIME + (Setting::get('rekusertime') * 3600),
                                 ])->save();
 
                                 $user = User::find_one(App::getUserId());
@@ -139,7 +139,7 @@ case 'create':
 
             $total = RekUser::where_gt('time', SITETIME)->count();
 
-            if ($total < App::setting('rekusertotal')) {
+            if ($total < Setting::get('rekusertotal')) {
 
                 $rekuser = RekUser::where('user', App::getUsername())->where_gt('time', SITETIME)->find_one();
 
@@ -173,8 +173,8 @@ case 'create':
 
                     echo '<br /><input value="Купить" type="submit" /></form></div><br />';
 
-                    echo 'Стоимость размещения ссылки '.moneys(App::setting('rekuserprice')).' за '.App::setting('rekusertime').' часов<br />';
-                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys(App::setting('rekuseroptprice')).'<br />';
+                    echo 'Стоимость размещения ссылки '.moneys(Setting::get('rekuserprice')).' за '.Setting::get('rekusertime').' часов<br />';
+                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys(Setting::get('rekuseroptprice')).'<br />';
                     echo 'Ссылка прокручивается на всех страницах сайта с другими ссылками пользователей<br />';
                     echo 'В названии ссылки запрещено использовать любые ненормативные и матные слова<br />';
                     echo 'Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br />';
@@ -203,4 +203,4 @@ endswitch;
     show_error('Показ и размещение рекламы запрещено администрацией сайта!');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 //show_title('Кто в онлайне');
 
@@ -15,14 +15,14 @@ switch ($act):
 ############################################################################################
     case 'index':
 
-        $page = App::paginate(App::setting('onlinelist'), $total);
+        $page = App::paginate(Setting::get('onlinelist'), $total);
         if ($total > 0) {
 
             $online = Online::whereNotNull('user_id')
                 ->with('user')
                 ->orderBy('updated_at', 'desc')
                 ->offset($page['offset'])
-                ->limit(App::setting('onlinelist'))
+                ->limit(Setting::get('onlinelist'))
                 ->get();
 
             foreach ($online as $data) {
@@ -48,20 +48,20 @@ switch ($act):
     case 'all':
 
         $total = $total_all;
-        $page = App::paginate(App::setting('onlinelist'), $total);
+        $page = App::paginate(Setting::get('onlinelist'), $total);
 
         if ($total > 0) {
 
             $online = Online::with('user')
                 ->orderBy('updated_at', 'desc')
                 ->offset($page['offset'])
-                ->limit(App::setting('onlinelist'))
+                ->limit(Setting::get('onlinelist'))
                 ->get();
 
             foreach ($online as $data) {
                 if (empty($data['user'])) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-user-circle-o"></i> <b>'.App::setting('guestsuser').'</b>  (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
+                    echo '<i class="fa fa-user-circle-o"></i> <b>'.Setting::get('guestsuser').'</b>  (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
                 } else {
                     echo '<div class="b">';
                     echo user_gender($data->user).' <b>'.profile($data->user).'</b> (Время: '.date_fixed($data['updated_at'], 'H:i:s').')</div>';
@@ -82,4 +82,4 @@ switch ($act):
 
 endswitch;
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

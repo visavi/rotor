@@ -34,7 +34,7 @@
         App::pagination($page);
 
         echo 'Всего писем: <b>'.$page['total'].'</b><br />';
-        echo 'Срок хранения (дней): <b>'.App::setting('expiresmail').'</b><br /><br />';
+        echo 'Срок хранения (дней): <b>'.Setting::get('expiresmail').'</b><br /><br />';
 
         echo '<i class="fa fa-times"></i> <a href="/private/clear?type=trash&amp;token='.$_SESSION['token'].'">Очистить ящик</a><br />';
     } else {

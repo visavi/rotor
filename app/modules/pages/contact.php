@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $page = abs(intval(Request::input('page', 1)));
 
@@ -14,7 +14,7 @@ switch ($act):
 case 'index':
 
     $total = Contact::where('user_id', App::getUserId())->count();
-    $page = App::paginate(App::setting('contactlist'), $total);
+    $page = App::paginate(Setting::get('contactlist'), $total);
 
     $contacts = Contact::where('user_id', App::getUserId())
         ->orderBy('created_at', 'desc')
@@ -80,7 +80,7 @@ case 'create':
         $validation->addRule('not_equal', [$user->login, App::getUsername()], 'Запрещено добавлять свой логин!');
 
         $totalContact = Contact::where('user_id', App::getUserId())->count();
-        $validation->addRule('min', [$totalContact, App::setting('limitcontact')], 'Ошибка! Контакт-лист переполнен (Максимум ' . App::setting('limitcontact') . ' пользователей!)');
+        $validation->addRule('min', [$totalContact, Setting::get('limitcontact')], 'Ошибка! Контакт-лист переполнен (Максимум ' . Setting::get('limitcontact') . ' пользователей!)');
 
         $validation->addRule('custom', ! isContact(App::user(), $user), 'Данный пользователь уже есть в контакт-листе!');
     }
@@ -184,4 +184,4 @@ endswitch;
 echo '<i class="fa fa-ban"></i> <a href="/ignore">Игнор-лист</a><br />';
 echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

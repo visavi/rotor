@@ -12,11 +12,11 @@ switch ($sort) {
 }
 
 $total = Photo::count();
-$page = App::paginate(App::setting('fotolist'), $total);
+$page = App::paginate(Setting::get('fotolist'), $total);
 
 $photos = Photo::orderBy($order, 'desc')
     ->offset($page['offset'])
-    ->limit(App::setting('fotolist'))
+    ->limit(Setting::get('fotolist'))
     ->with('user')
     ->get();
 

@@ -54,7 +54,7 @@ class Forum extends BaseModel
             $pages = [];
             $link = '/topic/'.$topic->id;
 
-            $pg_cnt = ceil($topic->posts / App::setting('forumpost'));
+            $pg_cnt = ceil($topic->posts / Setting::get('forumpost'));
 
             for ($i = 1; $i <= 5; $i++) {
                 if ($i <= $pg_cnt) {

@@ -20,12 +20,12 @@ case 'index':
 
     $total = Topic::where('forum_id', $fid)->count();
 
-    $page = App::paginate(App::setting('forumtem'), $total);
+    $page = App::paginate(Setting::get('forumtem'), $total);
 
     $topics = Topic::where('forum_id', $fid)
         ->orderBy('locked', 'desc')
         ->orderBy('updated_at', 'desc')
-        ->limit(App::setting('forumtem'))
+        ->limit(Setting::get('forumtem'))
         ->offset($page['offset'])
         ->with('lastPost.user')
         ->get();
@@ -38,7 +38,7 @@ break;
 ############################################################################################
 case 'create':
 
-    //App::setting('newtitle') = 'Создание новой темы';
+    //Setting::get('newtitle') = 'Создание новой темы';
 
     $fid = abs(intval(Request::input('fid')));
 
@@ -70,7 +70,7 @@ case 'create':
             -> addRule('empty', $forum['closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
             -> addRule('equal', [is_flood(App::getUsername()), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!'])
             -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50)
-            -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, App::setting('forumtextlength'));
+            -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, Setting::get('forumtextlength'));
 
         if ($vote) {
             $validation->addRule('string', $question, ['question' => 'Слишком длинный или короткий текст вопроса!'], true, 5, 100);

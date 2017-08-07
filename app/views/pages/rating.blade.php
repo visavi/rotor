@@ -25,7 +25,7 @@
                 {!! App::textError('text') !!}
             </div>
 
-            <button type="submit" class="btn btn-primary">Продолжить</button>
+            <button class="btn btn-primary">Продолжить</button>
         </form>
     </div><br />
 

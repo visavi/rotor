@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 if (empty($_GET['uz'])) {
     $uz = check(App::getUsername());
@@ -11,11 +11,11 @@ if (is_user()) {
     //show_title('История банов '.$uz);
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
-    $page = App::paginate(App::setting('listbanhist'), $total);
+    $page = App::paginate(Setting::get('listbanhist'), $total);
 
     if ($total > 0) {
 
-        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE user=? ORDER BY time DESC LIMIT ".$page['offset'].", ".App::setting('listbanhist').";", [$uz]);
+        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE user=? ORDER BY time DESC LIMIT ".$page['offset'].", ".Setting::get('listbanhist').";", [$uz]);
 
         while ($data = $queryhist -> fetch()) {
             echo '<div class="b">';
@@ -53,4 +53,4 @@ if (is_user()) {
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/user/'.$uz.'">В анкету</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

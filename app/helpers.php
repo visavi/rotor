@@ -96,7 +96,7 @@ function delete_album($user)
 function moneys($sum)
 {
     $sum = (int)$sum;
-    $money = explode(',', App::setting('moneyname'));
+    $money = explode(',', Setting::get('moneyname'));
     if (count($money) == 3) {
         $str1 = abs($sum) % 100;
         $str2 = $sum % 10;
@@ -113,7 +113,7 @@ function moneys($sum)
 function points($sum)
 {
     $sum = (int)$sum;
-    $score = explode(',', App::setting('scorename'));
+    $score = explode(',', Setting::get('scorename'));
     if (count($score) == 3) {
         $str1 = abs($sum) % 100;
         $str2 = $sum % 10;
@@ -238,7 +238,7 @@ function antimat($str) {
 // ------------------ Функция должности юзера --------------------//
 function user_status($level)
 {
-    $name = explode(',', App::setting('statusname'));
+    $name = explode(',', Setting::get('statusname'));
 
     switch ($level) {
         case '101': $status = $name[0];
@@ -288,14 +288,14 @@ function user_title($user)
     static $status;
 
     if (! $user) {
-        return App::setting('statusdef');
+        return Setting::get('statusdef');
     }
 
     if (is_null($status)) {
         save_title(3600);
         $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
     }
-    return isset($status[$user->id]) ? $status[$user->id] : App::setting('statusdef');
+    return isset($status[$user->id]) ? $status[$user->id] : Setting::get('statusdef');
 }
 // ------------- Функция вывода статусов пользователей -----------//
 
@@ -303,50 +303,6 @@ function user_title($user)
 function save_setting() {
     $setting = Setting::pluck('value', 'name')->all();
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
-}
-
-// ------------------------- Функция времени антифлуда ------------------------------//
-function flood_period()
-{
-    $period = App::setting('floodstime');
-
-    if (App::user('point') < 50) {
-        $period = round(App::setting('floodstime') * 2);
-    }
-    if (App::user('point') >= 500) {
-        $period = round(App::setting('floodstime') / 2);
-    }
-    if (App::user('point') >= 1000) {
-        $period = round(App::setting('floodstime') / 3);
-    }
-    if (App::user('point') >= 5000) {
-        $period = round(App::setting('floodstime') / 6);
-    }
-    if (is_admin()) {
-        $period = 0;
-    }
-
-    return $period;
-}
-
-// ------------------------- Функция антифлуда ------------------------------//
-function is_flood($login, $period = 0) {
-
-    $period = empty($period) ? flood_period() : $period;
-
-    if (empty($period)) return true;
-
-    DB::run() -> query("DELETE FROM `flood` WHERE `time`<?;", [SITETIME]);
-
-    $queryflood = DB::run() -> querySingle("SELECT `id` FROM `flood` WHERE `user`=? AND `page`=? LIMIT 1;", [$login, App::server('PHP_SELF')]);
-
-    if (empty($queryflood)) {
-        DB::run() -> query("INSERT INTO `flood` (`user`, `page`, `time`) VALUES (?, ?, ?);", [$login, App::server('PHP_SELF'), SITETIME + $period]);
-
-        return true;
-    }
-
-    return false;
 }
 
 // ------------------ Функция вывода рейтинга --------------------//
@@ -387,7 +343,7 @@ function scan_check($dirname) {
         if (is_file($dirname.'/'.$file)) {
             $ext = getExtension($file);
 
-            if (!in_array($ext, explode(',',App::setting('nocheck')) )) {
+            if (!in_array($ext, explode(',',Setting::get('nocheck')) )) {
                 $arr['files'][] = $dirname.'/'.$file.' - '.date_fixed(filemtime($dirname.'/'.$file), 'j.m.Y / H:i').' - '.read_file($dirname.'/'.$file);
                 $arr['totalfiles']++;
             }
@@ -553,7 +509,7 @@ function stats_online($cache = 30) {
 // ------------------ Функция вывода пользователей онлайн -----------------//
 function show_online()
 {
-    if (App::setting('onlines') == 1) {
+    if (Setting::get('onlines') == 1) {
         $online = stats_online();
         App::view('includes/online', compact('online'));
     }
@@ -574,7 +530,7 @@ function show_counter()
 {
     if (is_user()) {
 
-        //$visitPage = !empty(App::setting('newtitle')) ? App::setting('newtitle') : null;
+        //$visitPage = !empty(Setting::get('newtitle')) ? Setting::get('newtitle') : null;
 
         Visit::updateOrCreate(
             ['user_id' => App::getUserId()],
@@ -590,7 +546,7 @@ function show_counter()
 
     include_once (APP."/includes/counters.php");
 
-    if (App::setting('incount') > 0) {
+    if (Setting::get('incount') > 0) {
         $count = stats_counter();
 
         App::view('includes/counter', compact('count'));
@@ -857,7 +813,7 @@ function stats_guest()
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `guest`;");
 
-        if ($total > (App::setting('maxpostbook') - 10)) {
+        if ($total > (Setting::get('maxpostbook') - 10)) {
             $stat = DB::run() -> querySingle("SELECT MAX(`id`) FROM `guest`;");
         } else {
             $stat = $total;
@@ -874,7 +830,7 @@ function stats_chat() {
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
 
-    if ($total > (App::setting('chatpost') - 10)) {
+    if ($total > (Setting::get('chatpost') - 10)) {
         $total = DB::run() -> querySingle("SELECT MAX(`id`) FROM `chat`;");
     }
 
@@ -999,11 +955,11 @@ function stats_news() {
 // --------------------------- Функция вывода новостей -------------------------//
 function last_news()
 {
-    if (App::setting('lastnews') > 0) {
+    if (Setting::get('lastnews') > 0) {
 
         $news = News::where('top', 1)
             ->orderBy('created_at', 'desc')
-            ->limit(App::setting('lastnews'))
+            ->limit(Setting::get('lastnews'))
             ->get();
 
         $total = count($news);
@@ -1176,7 +1132,7 @@ function strip_str($str, $words = 20) {
 // ------------------ Функция вывода пользовательской рекламы --------------------//
 function show_advertuser()
 {
-    if (!empty(App::setting('rekusershow'))) {
+    if (!empty(Setting::get('rekusershow'))) {
         if (@filemtime(STORAGE."/temp/rekuser.dat") < time()-1800) {
             save_advertuser();
         }
@@ -1186,7 +1142,7 @@ function show_advertuser()
 
         if ($total > 0) {
 
-            $rekusershow = (App::setting('rekusershow') > $total) ? $total : App::setting('rekusershow');
+            $rekusershow = (Setting::get('rekusershow') > $total) ? $total : Setting::get('rekusershow');
 
             $quot_rand = array_rand($datafile, $rekusershow);
 
@@ -1281,7 +1237,7 @@ function recentphotos($show = 5)
 
     if (is_array($photos) && count($photos) > 0) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], App::setting('previewsize'), ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br />';
@@ -1534,7 +1490,7 @@ function profile($user, $color = false)
             return '<a href="/user/'.$user->login.'">'.$user->login.'</a>';
         }
     }
-    return App::setting('guestsuser');
+    return Setting::get('guestsuser');
 }
 
 /**
@@ -1617,8 +1573,8 @@ function upload_image($file, $weight, $size, $newName = false)
         $handle -> image_resize = true;
         $handle -> image_ratio = true;
         $handle -> image_ratio_no_zoom_in = true;
-        $handle -> image_y = App::setting('screensize');
-        $handle -> image_x = App::setting('screensize');
+        $handle -> image_y = Setting::get('screensize');
+        $handle -> image_x = Setting::get('screensize');
         $handle -> file_overwrite = true;
 
         if ($handle->file_src_name_ext == 'png' ||
@@ -1630,7 +1586,7 @@ function upload_image($file, $weight, $size, $newName = false)
             $handle -> file_new_name_body = $newName;
         }
 
-        if (App::setting('copyfoto')) {
+        if (Setting::get('copyfoto')) {
             $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
             $handle -> image_watermark_position = 'BR';
         }
@@ -1731,7 +1687,7 @@ function text_private($id, $replace = []){
 // ------------ Функция статистики производительности -----------//
 function perfomance(){
 
-    if (is_admin() && App::setting('performance')){
+    if (is_admin() && Setting::get('performance')){
 
         $queries = env('APP_DEBUG') ? getQueryLog() : [];
 

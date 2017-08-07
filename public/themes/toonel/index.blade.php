@@ -6,7 +6,7 @@ header("Content-type:text/html; charset=utf-8");
 <head>
     <title>
         @section('title')
-            {{ App::setting('title') }}
+            {{ Setting::get('title') }}
         @show
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -25,7 +25,7 @@ header("Content-type:text/html; charset=utf-8");
     <tr>
         <td class="t1">
             <a href="/">
-                <img src="/themes/toonel/img/logo.gif" alt="<?= App::setting('title') ?>"/>
+                <img src="/themes/toonel/img/logo.gif" alt="<?= Setting::get('title') ?>"/>
             </a>
         </td>
         <td class="t2"></td>

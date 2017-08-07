@@ -10,11 +10,11 @@ switch ($act):
 case 'index':
 
     $total = Photo::count();
-    $page = App::paginate(App::setting('fotolist'), $total);
+    $page = App::paginate(Setting::get('fotolist'), $total);
 
     $photos = Photo::orderBy('created_at', 'desc')
         ->offset($page['offset'])
-        ->limit(App::setting('fotolist'))
+        ->limit(Setting::get('fotolist'))
         ->with('user')
         ->get();
 
@@ -66,8 +66,8 @@ case 'create':
 
         $handle = upload_image(
             $_FILES['photo'],
-            App::setting('filesize'),
-            App::setting('fileupfoto'),
+            Setting::get('filesize'),
+            Setting::get('fileupfoto'),
             uniqid()
         );
 
@@ -187,7 +187,7 @@ case 'comments':
             Capsule::delete('
                 DELETE FROM comments WHERE relate_type = :relate_type AND relate_id = :relate_id AND created_at < (
                     SELECT MIN(created_at) FROM (
-                        SELECT created_at FROM comments WHERE relate_type = :relate_type2 AND relate_id = :relate_id2 ORDER BY created_at DESC LIMIT '.App::setting('maxpostgallery').'
+                        SELECT created_at FROM comments WHERE relate_type = :relate_type2 AND relate_id = :relate_id2 ORDER BY created_at DESC LIMIT '.Setting::get('maxpostgallery').'
                     ) AS del
                 );', [
                     'relate_type'  => Photo::class,
@@ -219,7 +219,7 @@ case 'comments':
     $total = Comment::where('relate_type', Photo::class)
         ->where('relate_id', $gid)
         ->count();
-    $page = App::paginate(App::setting('postgallery'), $total);
+    $page = App::paginate(Setting::get('postgallery'), $total);
 
     $comments = Comment::where('relate_type', Photo::class)
         ->where('relate_id', $gid)
@@ -350,7 +350,7 @@ case 'end':
         ->where('relate_id', $gid)
         ->count();
 
-    $end = ceil($total / App::setting('postgallery'));
+    $end = ceil($total / Setting::get('postgallery'));
     App::redirect('/gallery/'.$gid.'/comments?page='.$end);
 break;
 endswitch;

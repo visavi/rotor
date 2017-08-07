@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $sort = isset($_GET['sort']) ? check($_GET['sort']) : 'loads';
 
@@ -38,11 +38,11 @@ if ($order == 'comments') {
 echo '<hr />';
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [1]);
-$page = App::paginate(App::setting('downlist'), $total);
+$page = App::paginate(Setting::get('downlist'), $total);
 
 if ($total > 0) {
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".App::setting('downlist').";", [1]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", [1]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -68,4 +68,4 @@ if ($total > 0) {
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $uz = (empty($_GET['uz'])) ? check(App::getUsername()) : check($_GET['uz']);
@@ -15,11 +15,11 @@ if (!empty($queryuser)) {
     ############################################################################################
         case 'index':
 
-            //App::setting('newtitle') = 'Стена пользователя '.$uz;
+            //Setting::get('newtitle') = 'Стена пользователя '.$uz;
             echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.$uz.'</b><br /><br />';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
-            $page = App::paginate(App::setting('wallpost'), $total);
+            $page = App::paginate(Setting::get('wallpost'), $total);
 
             if ($uz == App::getUsername() && App::user('newwall') > 0) {
                 echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.App::user('newwall').'</span></b></div>';
@@ -36,7 +36,7 @@ if (!empty($queryuser)) {
                     echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('wallpost').";", [$uz]);
+                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('wallpost').";", [$uz]);
 
                 while ($data = $querywall -> fetch()) {
                     echo '<div class="b">';
@@ -107,7 +107,7 @@ if (!empty($queryuser)) {
 
                                     DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, App::getUsername(), $msg, SITETIME]);
 
-                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".App::setting('wallmaxpost').") AS del);", [$uz, $uz]);
+                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".Setting::get('wallmaxpost').") AS del);", [$uz, $uz]);
 
                                     App::setFlash('success', 'Запись успешно добавлена!');
                                     App::redirect("/wall?uz=$uz");
@@ -150,7 +150,7 @@ if (!empty($queryuser)) {
 
                         if (empty($queryspam)) {
                             if (is_flood(App::getUsername())) {
-                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], App::getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, App::setting('home').'/wall?uz='.$uz.'&amp;page='.$page]);
+                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], App::getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, Setting::get('home').'/wall?uz='.$uz.'&amp;page='.$page]);
 
                                 App::setFlash('success', 'Жалоба успешно отправлена!');
                                 App::redirect("/wall?uz=$uz&page=$page");
@@ -247,4 +247,4 @@ if (!empty($queryuser)) {
     show_error('Ошибка! Пользователь с данным логином  не зарегистрирован!');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

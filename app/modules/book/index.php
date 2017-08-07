@@ -7,10 +7,10 @@ switch ($act):
 case 'index':
 
     $total = Guest::count();
-    $page = App::paginate(App::setting('bookpost'), $total);
+    $page = App::paginate(Setting::get('bookpost'), $total);
 
     $posts = Guest::orderBy('created_at', 'desc')
-        ->limit(App::setting('bookpost'))
+        ->limit(Setting::get('bookpost'))
         ->offset($page['offset'])
         ->with('user', 'editUser')
         ->get();
@@ -28,11 +28,11 @@ case 'add':
 
     $validation = new Validation();
     $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-        ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, App::setting('guesttextlength'))
-        ->addRule('bool', is_flood(App::getUsername()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!']);
+        ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, Setting::get('guesttextlength'))
+        ->addRule('bool', Flood::isFlood(App::getUserId()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!']);
 
     /* Проерка для гостей */
-    if (! is_user() && App::setting('bookadds')) {
+    if (! is_user() && Setting::get('bookadds')) {
         $protect = check(strtolower(Request::input('protect')));
         $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
     } else {
@@ -44,7 +44,7 @@ case 'add':
         $msg = antimat($msg);
 
         if (is_user()) {
-            $bookscores = (App::setting('bookscores')) ? 1 : 0;
+            $bookscores = (Setting::get('bookscores')) ? 1 : 0;
 
             $user = User::where('id', App::getUserId());
             $user->update([
@@ -67,7 +67,7 @@ case 'add':
         Capsule::delete('
             DELETE FROM guest WHERE created_at < (
                 SELECT MIN(created_at) FROM (
-                    SELECT created_at FROM guest ORDER BY created_at DESC LIMIT '.App::setting('maxpostbook').'
+                    SELECT created_at FROM guest ORDER BY created_at DESC LIMIT '.Setting::get('maxpostbook').'
                 ) AS del
             );'
         );
@@ -106,7 +106,7 @@ case 'edit':
 
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, App::setting('guesttextlength'));
+            ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, Setting::get('guesttextlength'));
 
         if ($validation->run()) {
 

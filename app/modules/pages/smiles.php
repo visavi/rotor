@@ -1,17 +1,17 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 //show_title('Список смайлов');
 
 $total = Smile::count();
-$page = App::paginate(App::setting('smilelist'), $total);
+$page = App::paginate(Setting::get('smilelist'), $total);
 
 if ($total > 0) {
     $smiles = Smile::orderBy(Capsule::raw('CHAR_LENGTH(`code`)'))
         ->orderBy('name')
-        ->limit(App::setting('smilelist'))
+        ->limit(Setting::get('smilelist'))
         ->offset($page['offset'])
         ->get();
 
@@ -26,4 +26,4 @@ if ($total > 0) {
     show_error('Смайлы не найдены!');
 }
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

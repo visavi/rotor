@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'blogs';
 $uz = (empty($_GET['uz'])) ? check(App::getUsername()) : check($_GET['uz']);
@@ -13,11 +13,11 @@ case 'blogs':
     //show_title('Список всех статей '.$uz);
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `blogs` WHERE `user`=?;", [$uz]);
-    $page = App::paginate(App::setting('blogpost'), $total);
+    $page = App::paginate(Setting::get('blogpost'), $total);
 
     if ($total > 0) {
 
-        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";", [$uz]);
+        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('blogpost').";", [$uz]);
         $blogs = $queryblogs -> fetchAll();
 
         App::view('blog/active_blogs', compact('blogs'));
@@ -37,13 +37,13 @@ case 'comments':
     //show_title('Список всех комментариев '.$uz);
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['blog', $uz]);
-    $page = App::paginate(App::setting('blogpost'), $total);
+    $page = App::paginate(Setting::get('blogpost'), $total);
 
     if ($total > 0) {
 
         $is_admin = is_admin();
 
-        $querycomments = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' AND comments.`user`=? ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".App::setting('blogpost').";", [$uz]);
+        $querycomments = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `blogs` ON `comments`.`relate_id`=`blogs`.`id` WHERE relate_type='blog' AND comments.`user`=? ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".Setting::get('blogpost').";", [$uz]);
         $comments = $querycomments -> fetchAll();
 
         App::view('blog/active_comments', compact('comments', 'page'));
@@ -89,4 +89,4 @@ endswitch;
 
 App::view('includes/back', ['link' => '/blog', 'title' => 'Категории', 'icon' => 'fa-arrow-circle-up']);
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');

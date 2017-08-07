@@ -7,7 +7,7 @@ header("Content-type:text/html; charset=utf-8");
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>
         @section('title')
-            {{ App::setting('title') }}
+            {{ Setting::get('title') }}
         @show
     </title>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
@@ -15,8 +15,8 @@ header("Content-type:text/html; charset=utf-8");
 <link rel="stylesheet" href="/themes/sky/css/style.css" type="text/css" media="screen" />
 <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />
 <?= include_javascript(); ?>
-<meta name="keywords" content="@yield('keywords', App::setting('keywords'))" />
-<meta name="description" content="@yield('description', App::setting('description'))" />
+<meta name="keywords" content="@yield('keywords', Setting::get('keywords'))" />
+<meta name="description" content="@yield('description', Setting::get('description'))" />
 <meta name="generator" content="RotorCMS <?= env('VERSION') ?>" />
 </head><body>
 <!--Themes by TurikUs-->
@@ -206,7 +206,7 @@ header("Content-type:text/html; charset=utf-8");
 
                                 <h2 class="art-PostHeaderIcon-wrapper">
                                     <img src="/themes/sky/img/PostHeaderIcon.png" width="29" height="29" alt="PostHeaderIcon" />
-                                    <span class="art-PostHeader"><?= App::setting('title') ?></span>
+                                    <span class="art-PostHeader"><?= Setting::get('title') ?></span>
                                 </h2>
 
                             <div class="art-PostContent">

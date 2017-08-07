@@ -1,5 +1,5 @@
 <?php
-App::view(App::setting('themes').'/index');
+App::view(Setting::get('themes').'/index');
 
 //show_title('Статусы пользователей');
 
@@ -32,4 +32,4 @@ if ($total>0){
 echo 'Некоторые статусы могут быть выделены определенными цветами<br />';
 echo 'Самым активным юзерам администрация сайта может назначать особые статусы<br /><br />';
 
-App::view(App::setting('themes').'/foot');
+App::view(Setting::get('themes').'/foot');
