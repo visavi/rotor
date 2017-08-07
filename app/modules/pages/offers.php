@@ -417,7 +417,7 @@ switch ($act):
                     $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryoff)) {
                         if (empty($queryoff['closed'])) {
-                            if (is_flood(App::getUsername())) {
+                            if (Flood::isFlood(App::getUserId())) {
 
                                 $msg = antimat($msg);
 
@@ -430,7 +430,7 @@ switch ($act):
                                 App::setFlash('success', 'Комментарий успешно добавлен!');
                                 App::redirect("/offers?act=end&id=$id");
                             } else {
-                                show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
+                                show_error('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                             }
                         } else {
                             show_error('Комментирование данного предложения или проблемы закрыто!');
@@ -537,7 +537,7 @@ switch ($act):
             if (App::user('point') >= Setting::get('addofferspoint')) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                     if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
-                        if (is_flood(App::getUsername())) {
+                        if (Flood::isFlood(App::getUserId())) {
 
                             $title = antimat($title);
                             $text = antimat($text);
@@ -550,7 +550,7 @@ switch ($act):
                             App::setFlash('success', 'Сообщение успешно добавлено!');
                             App::redirect("/offers?act=view&type=$types&id=$lastid");
                         } else {
-                            show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
+                            show_error('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                         }
                     } else {
                         show_error('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');

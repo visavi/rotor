@@ -96,7 +96,7 @@ case 'create':
     $validation -> addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
         -> addRule('not_empty', $topics, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
         -> addRule('empty', $topics['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
-        -> addRule('equal', [is_flood(App::getUsername()), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' сек!'])
+        -> addRule('equal', [Flood::isFlood(App::getUserId()), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' сек!'])
         -> addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, Setting::get('forumtextlength'));
 
         // Проверка сообщения на схожесть

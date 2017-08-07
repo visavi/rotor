@@ -271,7 +271,7 @@ case 'addblog':
                             $blogs = DB::run() -> querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
                             if (!empty($blogs)) {
 
-                                if (is_flood(App::getUsername())) {
+                                if (Flood::isFlood(App::getUserId())) {
 
                                     $text = antimat($text);
 
@@ -333,7 +333,7 @@ case 'comments':
             ->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
             ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
             ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
-            ->addRule('bool', is_flood(App::getUsername()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!']);
+            ->addRule('bool', Flood::isFlood(App::getUserId()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!']);
 
         if ($validation->run()) {
             $msg = antimat($msg);

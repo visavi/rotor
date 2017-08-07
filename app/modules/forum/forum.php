@@ -68,7 +68,7 @@ case 'create':
         $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
             -> addRule('not_empty', $forum, ['fid' => 'Раздела для новой темы не существует!'])
             -> addRule('empty', $forum['closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
-            -> addRule('equal', [is_flood(App::getUsername()), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.flood_period().' сек!'])
+            -> addRule('equal', [Flood::isFlood(App::getUserId()), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.Flood::getPeriod().' сек!'])
             -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50)
             -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, Setting::get('forumtextlength'));
 

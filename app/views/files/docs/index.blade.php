@@ -29,8 +29,6 @@
 - user_title<br />
 - save_setting<br />
 - save_navigation<br />
-- flood_period<br />
-- is_flood<br />
 - rating_vote<br />
 - safe_encode<br />
 - safe_decode<br />

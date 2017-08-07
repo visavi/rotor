@@ -97,7 +97,7 @@ if (!empty($queryuser)) {
                         if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
                             $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, App::getUsername()]);
                             if (empty($ignorstr)) {
-                                if (is_flood(App::getUsername())) {
+                                if (Flood::isFlood(App::getUserId())) {
 
                                     $msg = antimat($msg);
 
@@ -112,7 +112,7 @@ if (!empty($queryuser)) {
                                     App::setFlash('success', 'Запись успешно добавлена!');
                                     App::redirect("/wall?uz=$uz");
                                 } else {
-                                    show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
+                                    show_error('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                                 }
                             } else {
                                 show_error('Ошибка! Вы внесены в игнор-лист пользователя!');
@@ -149,13 +149,13 @@ if (!empty($queryuser)) {
                         $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [4, $id]);
 
                         if (empty($queryspam)) {
-                            if (is_flood(App::getUsername())) {
+                            if (Flood::isFlood(App::getUserId())) {
                                 DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], App::getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, Setting::get('home').'/wall?uz='.$uz.'&amp;page='.$page]);
 
                                 App::setFlash('success', 'Жалоба успешно отправлена!');
                                 App::redirect("/wall?uz=$uz&page=$page");
                             } else {
-                                show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
+                                show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.Flood::getPeriod().' секунд!');
                             }
                         } else {
                             show_error('Ошибка! Вы уже отправили жалобу на данное сообщение!');

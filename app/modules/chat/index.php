@@ -170,7 +170,7 @@ if ($act == 'add') {
     if (is_user()) {
         if (utf_strlen($msg) > 3 && utf_strlen($msg) < 1000) {
 
-            if (is_flood(App::getUsername())) {
+            if (Flood::isFlood(App::getUserId())) {
 
                 $msg = antimat($msg);
 
@@ -218,7 +218,7 @@ if ($act == 'add') {
                 App::redirect("/chat");
 
             } else {
-                show_error('Антифлуд! Разрешается отправлять сообщения раз в ' . flood_period() . ' секунд!');
+                show_error('Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!');
             }
         } else {
             show_error('Ошибка, слишком длинное или короткое сообщение!');

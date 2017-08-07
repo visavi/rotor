@@ -511,7 +511,7 @@ case 'add':
 
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
-                        if (is_flood(App::getUsername())) {
+                        if (Flood::isFlood(App::getUserId())) {
 
                             $msg = antimat($msg);
 
@@ -525,7 +525,7 @@ case 'add':
                             App::setFlash('success', 'Сообщение успешно добавлено!');
                             App::redirect("/load/down?act=end&id=$id");
                         } else {
-                            show_error('Антифлуд! Разрешается отправлять сообщения раз в '.flood_period().' секунд!');
+                            show_error('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                         }
                     } else {
                         show_error('Ошибка! Данный файл еще не проверен модератором!');
@@ -562,13 +562,13 @@ case 'spam':
                 $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [5, $pid]);
 
                 if (empty($queryspam)) {
-                    if (is_flood(App::getUsername())) {
+                    if (Flood::isFlood(App::getUserId())) {
                         DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], App::getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, Setting::get('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         App::setFlash('success', 'Жалоба успешно отправлена!');
                         App::redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
-                        show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.flood_period().' секунд!');
+                        show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.Flood::getPeriod().' секунд!');
                     }
                 } else {
                     show_error('Ошибка! Жалоба на данное сообщение уже отправлена!');

@@ -82,12 +82,12 @@ function postJump() {
 /* Ответ на сообщение */
 function postReply(el)
 {
-    var post = $(el).closest('.post');
-    var author = post.find('b').text();
-
     postJump();
 
+    var post = $(el).closest('.post');
+    var author = post.find('b').text();
     var field = $("#markItUp");
+
     separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '[b]' + author + '[/b], ');
 
@@ -141,12 +141,12 @@ function sendComplaint(el)
 
                     $(el).replaceWith('<i class="fa fa-bell-slash-o text-muted"></i>');
 
-                    if (data.status == 'error'){
+                    if (data.status === 'error'){
                         notify('error', data.message);
                         return false;
                     }
 
-                    if (data.status == 'success'){
+                    if (data.status === 'success'){
                         notify('success', 'Жалоба успешно отправлена!');
                     }
                 }
@@ -164,17 +164,17 @@ function bookmark(el)
         dataType: 'JSON', type: 'POST', url: '/forum/bookmark/perform',
         success: function(data) {
 
-            if (data.status == 'error'){
+            if (data.status === 'error'){
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status == 'added'){
+            if (data.status === 'added'){
                 notify('success', data.message);
                 $(el).text('Из закладок');
             }
 
-            if (data.status == 'deleted'){
+            if (data.status === 'deleted'){
                 notify('success', data.message);
                 $(el).text('В закладки');
             }
@@ -191,12 +191,12 @@ function deletePost(el)
         dataType: 'JSON', type: 'POST', url: '/forum/active/delete',
         success: function(data) {
 
-            if (data.status == 'error'){
+            if (data.status === 'error'){
                 notify('error', data.message);
                 return false;
             }
 
-            if (data.status == 'success'){
+            if (data.status === 'success'){
                 notify('success', 'Сообщение успешно удалено');
 
                 $(el).closest('.post').hide('slow');
@@ -222,12 +222,12 @@ function deleteComment(el)
                 dataType: 'JSON', type: 'POST', url: '/ajax/delcomment',
                 success: function(data) {
 
-                    if (data.status == 'error'){
+                    if (data.status === 'error'){
                         notify('error', data.message);
                         return false;
                     }
 
-                    if (data.status == 'success'){
+                    if (data.status === 'success'){
                         notify('success', 'Комментарий успешно удален!');
 
                         $(el).closest('.post').hide('slow');

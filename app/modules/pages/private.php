@@ -99,7 +99,7 @@ case 'send':
         $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
             ->addRule('bool', $user, ['user' => 'Ошибка! Пользователь не найден!'])
             ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, 1000)
-            ->addRule('equal', [is_flood(App::getUsername()), true], 'Антифлуд! Разрешается публиковать события раз в '.flood_period().' сек!');
+            ->addRule('equal', [Flood::isFlood(App::getUserId()), true], 'Антифлуд! Разрешается публиковать события раз в '.Flood::getPeriod().' сек!');
 
         if ($user) {
 

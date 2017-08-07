@@ -257,7 +257,7 @@ case 'create':
         $validation = new Validation();
 
         $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            -> addRule('equal', [is_flood(App::getUsername()), true], 'Антифлуд! Разрешается комментировать раз в '.flood_period().' сек!')
+            -> addRule('equal', [Flood::isFlood(App::getUserId()), true], 'Антифлуд! Разрешается комментировать раз в '.Flood::getPeriod().' сек!')
             -> addRule('not_empty', $data, 'Выбранной новости не существует, возможно она было удалена!')
             -> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
             -> addRule('empty', $data['closed'], 'Комментирование данной новости запрещено!');
