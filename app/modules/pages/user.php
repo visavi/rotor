@@ -2,7 +2,7 @@
 
 $login = check(param('login', App::getUsername()));
 
-switch ($act):
+switch ($action):
 /**
  * Главная страница
  */

@@ -9,7 +9,7 @@ if (! is_admin([101, 102])) App::redirect('/admin/');
 
 //show_title('Управление смайлами');
 
-switch ($act):
+switch ($action):
 /**
  * Список смайлов
  */

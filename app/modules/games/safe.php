@@ -10,7 +10,7 @@ if (!App::getUsername()){
     App::redirect('/');
 }
 
-switch ($act):
+switch ($action):
 
 case 'index':
     echo '<img src="/assets/img/safe/safe-closed.png" alt="сейф"/><br />';

@@ -8,7 +8,7 @@ if (! is_admin([101])) App::redirect('/admin/');
 
 //show_title('Шаблоны писем');
 
-switch ($act):
+switch ($action):
 
 /**
  * Главная страница

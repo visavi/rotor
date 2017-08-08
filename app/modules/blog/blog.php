@@ -1,12 +1,10 @@
 <?php
 
-$id = param('id');
-$cid = param('cid');
-
-$uz = check(Request::input('uz'));
+$id   = abs(intval(param('id')));
+$cid  = abs(intval(param('cid')));
 $page = abs(intval(Request::input('page', 1)));
 
-switch ($act):
+switch ($action):
 ############################################################################################
 ##                                    Главная страница                                    ##
 ############################################################################################
@@ -97,7 +95,6 @@ case 'view':
     }
 
     App::view('blog/blog_view', compact('blog', 'tags', 'page'));
-
     App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
 break;
 
@@ -398,29 +395,24 @@ break;
 ##                                Подготовка к редактированию                             ##
 ############################################################################################
 case 'edit':
-
-    //Setting::get('newtitle') = 'Редактирование сообщения';
-
-    $pid = abs(intval(Request::input('pid')));
-
-    if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['blog', $pid, App::getUsername()]);
-
-        if (!empty($post)) {
-            if ($post['time'] + 600 > SITETIME) {
-
-                App::view('blog/blog_edit', ['post' => $post, 'pid' => $pid, 'page' => $page]);
-            } else {
-                show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
-            }
-        } else {
-            show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
-        }
-    } else {
-        show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
+    if (! is_user()) {
+        App::abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
     }
 
-    App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id='.$id.'&amp;apage='.$page, 'title' => 'Вернуться']);
+    $comment = Comment::where('relate_type', Blog::class)
+        ->where('id', $cid)
+        ->where('user_id', App::getUserId())
+        ->first();
+
+    if (! $comment) {
+        App::abort('default', 'Комментарий удален или вы не автор этого комментария!');
+    }
+
+    if ($comment['created_at'] + 600 < SITETIME) {
+        App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+    }
+
+    App::view('blog/blog_edit', compact('comment', 'page'));
 break;
 
 ############################################################################################

@@ -50,7 +50,7 @@ if (is_admin([101, 102])) {
 
     echo 'Запрещенные: <a href="/admin/blacklist"'.(($type == 1) ? ' style="font-weight: bold;"' : '').'>Email</a> / <a href="/admin/blacklist?main=login"'.(($type == 2) ? ' style="font-weight: bold;"' : '').'>Логины</a> / <a href="/admin/blacklist?main=domain"'.(($type == 3) ? ' style="font-weight: bold;"' : '').'>Домены</a><hr />';
 
-    switch ($act):
+    switch ($action):
     ############################################################################################
     ##                                    Главная страница                                    ##
     ############################################################################################

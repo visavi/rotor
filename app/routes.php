@@ -12,9 +12,9 @@ $router->map( 'GET', '/search', function() {
     App::view('search/index');
 });
 
-$router->map('GET',      '/book', 'book/index.php', 'book');
-$router->map('POST',     '/book/[add:action]', 'book/index.php');
-$router->map('GET|POST', '/book/[edit:action]/[i:id]', 'book/index.php');
+$router->map('GET',      '/book', 'BookController@index', 'book');
+$router->map('POST',     '/book/add', 'BookController@add');
+$router->map('GET|POST', '/book/edit/[i:id]', 'BookController@edit');
 
 $router->map('GET', '/sitemap.xml', 'pages/sitemap.php');
 $router->map('GET', '/sitemap/[a:action].xml', 'pages/sitemap.php');
@@ -28,6 +28,7 @@ $router->map('GET',      '/article/[i:id]/rss', 'blog/rss.php@comments');
 $router->map('GET|POST', '/article/[i:id]/[comments:action]', 'blog/blog.php');
 $router->map('GET',      '/article/[i:id]/[end:action]', 'blog/blog.php');
 $router->map('GET',      '/blog/tags/[*:tag]?', 'blog/tags.php');
+$router->map('GET|POST', '/article/[i:id]/[i:cid]/[edit:action]', 'blog/blog.php');
 
 $router->map('GET|POST', '/blog/active', 'blog/active.php');
 $router->map('GET|POST', '/blog/new', 'blog/new.php');

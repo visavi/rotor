@@ -12,8 +12,8 @@
 
     <div class="form">
         <form method="post">
-            <input type="hidden" name="token" value="{{  $_SESSION['token'] }}">
-            <textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">{{  $comment['text'] }}</textarea><br />
+            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+            <textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">{{ $comment['text'] }}</textarea><br />
             <button class="btn btn-success">Редактировать</button>
         </form>
     </div><br />

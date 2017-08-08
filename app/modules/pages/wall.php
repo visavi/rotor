@@ -9,7 +9,7 @@ $page = abs(intval(Request::input('page', 1)));
 
 $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 if (!empty($queryuser)) {
-    switch ($act):
+    switch ($action):
     ############################################################################################
     ##                                    Главная страница                                    ##
     ############################################################################################

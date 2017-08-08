@@ -44,7 +44,8 @@
         "psr-4": {
             "": [
                 "app/classes/",
-                "app/models/"
+                "app/models/",
+                "app/controllers/"
             ]
         },
         "files": [

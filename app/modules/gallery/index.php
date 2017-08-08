@@ -3,7 +3,7 @@
 $gid  = abs(intval(param('gid')));
 $page = abs(intval(Request::input('page', 1)));
 
-switch ($act):
+switch ($action):
 /**
  * Главная страница
  */

@@ -1,6 +1,6 @@
 <?php
 
-switch ($act):
+switch ($action):
 /**
  * RSS всех блогов
  */

@@ -80,7 +80,9 @@ class App
             ]));
         }
 
-        exit(self::view('errors/'.$code, compact('message')));
+        $referer = Request::header('referer') ?? null;
+
+        exit(self::view('errors/'.$code, compact('message', 'referer')));
     }
 
 
@@ -93,7 +95,9 @@ class App
      */
     public static function redirect($url, $permanent = false)
     {
-        if (isset($_SESSION['captcha'])) $_SESSION['captcha'] = null;
+        if (isset($_SESSION['captcha'])) {
+            $_SESSION['captcha'] = null;
+        }
 
         if ($permanent){
             header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
@@ -153,7 +157,7 @@ class App
      */
     public static function getInput($name, $default = '')
     {
-        return isset($_SESSION['input'][$name]) ? $_SESSION['input'][$name] : $default;
+        return $_SESSION['input'][$name] ?? $default;
     }
 
     /**

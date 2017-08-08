@@ -12,7 +12,7 @@ if (! $user) {
     App::abort('default', 'Данного пользователя не существует!');
 }
 
-switch ($act):
+switch ($action):
 /**
  *  Полученные голоса
  */
