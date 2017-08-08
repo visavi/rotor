@@ -16,8 +16,8 @@ $router->map('GET',      '/book', 'BookController@index', 'book');
 $router->map('POST',     '/book/add', 'BookController@add');
 $router->map('GET|POST', '/book/edit/[i:id]', 'BookController@edit');
 
-$router->map('GET', '/sitemap.xml', 'pages/sitemap.php');
-$router->map('GET', '/sitemap/[a:action].xml', 'pages/sitemap.php');
+$router->map('GET', '/sitemap.xml', 'SitemapController@index');
+$router->map('GET', '/sitemap/[a:action].xml', 'SitemapController');
 
 $router->map('GET',      '/blog', 'blog/index.php', 'blog');
 $router->map('GET',      '/blog/[i:cid]', 'blog/blog.php');
