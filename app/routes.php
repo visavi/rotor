@@ -4,13 +4,7 @@ $router = new AltoRouter();
 
 $router->addMatchTypes(['user' => '[0-9A-Za-z-_]++']);
 
-$router->map( 'GET', '/', function() {
-    App::view('index');
-});
-
-$router->map( 'GET', '/search', function() {
-    App::view('search/index');
-});
+$router->map('GET', '/', 'HomeController@index', 'home');
 
 $router->map('GET',      '/book', 'BookController@index', 'book');
 $router->map('POST',     '/book/add', 'BookController@add');
@@ -35,13 +29,13 @@ $router->map('GET|POST', '/blog/new', 'blog/new.php');
 $router->map('GET|POST', '/blog/search', 'blog/search.php');
 $router->map('GET|POST', '/blog/top', 'blog/top.php');
 
-$router->map('GET',      '/news', 'news/index.php', 'news');
-$router->map('GET',      '/news/[i:id]', 'news/index.php@view');
-$router->map('GET|POST', '/news/[i:id]/[delete|comments|end:action]', 'news/index.php');
-$router->map('POST',     '/news/[i:id]/[create:action]', 'news/index.php');
-$router->map('GET',      '/news/allcomments', 'news/comments.php');
-$router->map('GET',      '/news/allcomments/[i:nid]/[i:id]', 'news/comments.php@viewcomm');
-$router->map('GET',      '/news/rss', 'news/rss.php', 'news_rss');
+$router->map('GET',      '/news', 'NewsController@index', 'news');
+$router->map('GET',      '/news/[i:id]', 'NewsController@view');
+$router->map('GET|POST', '/news/[i:id]/[delete|comments|end:action]', 'NewsController');
+$router->map('POST',     '/news/[i:id]/[create:action]', 'NewsController');
+$router->map('GET',      '/news/rss', 'NewsController@rss', 'news_rss');
+$router->map('GET',      '/news/allcomments', 'NewsCommentsController@index');
+$router->map('GET',      '/news/allcomments/[i:nid]/[i:id]', 'NewsCommentsController@viewcomm');
 
 $router->map('GET',      '/gallery', 'gallery/index.php', 'gallery');
 $router->map('GET',      '/gallery/[i:gid]', 'gallery/index.php@view');
@@ -232,5 +226,9 @@ $router->map('GET|POST', '/admin/notice', 'admin/notice.php');
 $router->map('GET|POST', '/admin/files', 'admin/files.php');
 $router->map('GET|POST', '/admin/delusers', 'admin/delusers.php');
 $router->map('GET',      '/admin/upgrade', 'admin/upgrade.php');
+
+$router->map( 'GET', '/search', function() {
+    App::view('search/index');
+});
 
 Registry::set('router', $router);

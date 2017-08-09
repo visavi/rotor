@@ -25,4 +25,3 @@ if ($router['target'] && is_callable($router['target'])) {
 } else {
     App::abort(404);
 }
-if (isset($_SESSION['input'])) unset($_SESSION['input']);

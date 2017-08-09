@@ -2,6 +2,9 @@
 
 class ForumSearchController extends BaseController
 {
+    /**
+     * Главная страница
+     */
     public function index()
     {
         $fid = check(Request::input('fid'));
