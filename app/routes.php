@@ -13,16 +13,16 @@ $router->map('GET|POST', '/book/edit/[i:id]', 'BookController@edit');
 $router->map('GET', '/sitemap.xml', 'SitemapController@index');
 $router->map('GET', '/sitemap/[a:action].xml', 'SitemapController');
 
-$router->map('GET',      '/blog', 'blog/index.php', 'blog');
-$router->map('GET',      '/blog/[i:cid]', 'blog/blog.php');
-$router->map('GET',      '/article/[i:id]', 'blog/blog.php@view');
-$router->map('GET',      '/article/[i:id]/print', 'blog/print.php');
-$router->map('GET',      '/blog/rss', 'blog/rss.php');
-$router->map('GET',      '/article/[i:id]/rss', 'blog/rss.php@comments');
-$router->map('GET|POST', '/article/[i:id]/[comments:action]', 'blog/blog.php');
-$router->map('GET',      '/article/[i:id]/[end:action]', 'blog/blog.php');
+$router->map('GET',      '/blog', 'BlogController@index', 'blog');
+$router->map('GET',      '/blog/[i:cid]', 'BlogController@blog');
+$router->map('GET',      '/article/[i:id]', 'BlogController@view');
+$router->map('GET',      '/article/[i:id]/print', 'BlogController@print');
+$router->map('GET',      '/blog/rss', 'BlogController@rss');
+$router->map('GET',      '/article/[i:id]/rss', 'BlogController@rssComments');
+$router->map('GET|POST', '/article/[i:id]/[comments:action]', 'BlogController');
+$router->map('GET|POST', '/article/[i:id]/[i:cid]/[edit:action]', 'BlogController');
+$router->map('GET',      '/article/[i:id]/[end:action]', 'BlogController');
 $router->map('GET',      '/blog/tags/[*:tag]?', 'blog/tags.php');
-$router->map('GET|POST', '/article/[i:id]/[i:cid]/[edit:action]', 'blog/blog.php');
 
 $router->map('GET|POST', '/blog/active', 'blog/active.php');
 $router->map('GET|POST', '/blog/new', 'blog/new.php');
