@@ -1,7 +1,7 @@
 <?php
 
-class SitemapController extends BaseController {
-
+class SitemapController extends BaseController
+{
     /**
      * Генерируем главную страницу
      */
