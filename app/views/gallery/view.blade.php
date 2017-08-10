@@ -12,8 +12,8 @@
 
     <?php
     $links = [
-        ['url' => '/admin/gallery?act=edit&amp;page='.$page.'&amp;gid='.$photo['id'], 'label' => 'Редактировать', 'show' => is_admin()],
-        ['url' => '/admin/gallery?act=del&amp;del='.$photo['id'].'&amp;page='.$page.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => is_admin()],
+        ['url' => '/admin/gallery?act=edit&amp;gid='.$photo['id'], 'label' => 'Редактировать', 'show' => is_admin()],
+        ['url' => '/admin/gallery?act=del&amp;del='.$photo['id'].'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => is_admin()],
         ['url' => '/gallery/'.$photo['id'].'/edit', 'label' => 'Редактировать', 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
         ['url' => '/gallery/'.$photo['id'].'/delete?token='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == App::getUsername()) && !is_admin())],
     ];
@@ -22,7 +22,7 @@
     <ol class="breadcrumb">
         <?php foreach ($links as $link): ?>
             <?php if (isset($link['show']) && $link['show'] == false) continue; ?>
-            <li><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></ li>
+            <li><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></li>
         <?php endforeach; ?>
     </ol>
 

@@ -5,6 +5,7 @@ $router = new AltoRouter();
 $router->addMatchTypes(['user' => '[0-9A-Za-z-_]++']);
 
 $router->map('GET', '/', 'HomeController@index', 'home');
+$router->map('GET', '/captcha', 'HomeController@captcha', 'captcha');
 
 $router->map('GET',      '/book', 'BookController@index', 'book');
 $router->map('POST',     '/book/add', 'BookController@add');
@@ -22,7 +23,7 @@ $router->map('GET',      '/article/[i:id]/rss', 'BlogController@rssComments');
 $router->map('GET|POST', '/article/[i:id]/[comments:action]', 'BlogController');
 $router->map('GET|POST', '/article/[i:id]/[i:cid]/[edit:action]', 'BlogController');
 $router->map('GET',      '/article/[i:id]/[end:action]', 'BlogController');
-$router->map('GET',      '/blog/tags/[*:tag]?', 'blog/tags.php');
+$router->map('GET',      '/blog/tags/[*:tag]?', 'BlogController@tags');
 
 $router->map('GET|POST', '/blog/active', 'blog/active.php');
 $router->map('GET|POST', '/blog/new', 'blog/new.php');
@@ -37,19 +38,19 @@ $router->map('GET',      '/news/rss', 'NewsController@rss', 'news_rss');
 $router->map('GET',      '/news/allcomments', 'NewsCommentsController@index');
 $router->map('GET',      '/news/allcomments/[i:nid]/[i:id]', 'NewsCommentsController@viewcomm');
 
-$router->map('GET',      '/gallery', 'gallery/index.php', 'gallery');
-$router->map('GET',      '/gallery/[i:gid]', 'gallery/index.php@view');
-$router->map('GET',      '/gallery/[i:gid]/[delete|end:action]', 'gallery/index.php');
-$router->map('GET|POST', '/gallery/[i:gid]/[comments:action]', 'gallery/index.php');
-$router->map('GET|POST', '/gallery/[create:action]', 'gallery/index.php');
-$router->map('GET|POST', '/gallery/[i:gid]/[edit:action]', 'gallery/index.php');
-$router->map('GET|POST', '/gallery/[i:gid]/[i:id]/edit', 'gallery/index.php@editcomment');
-$router->map('GET',      '/gallery/albums', 'gallery/album.php');
-$router->map('GET',      '/gallery/albums/[user:login]', 'gallery/album.php@photo');
-$router->map('GET',      '/gallery/comments', 'gallery/comments.php');
-$router->map('GET',      '/gallery/comments/[user:login]', 'gallery/comments.php@comments');
-$router->map('GET',      '/gallery/[i:gid]/[i:id]/comment', 'gallery/comments.php@viewcomment');
-$router->map('GET|POST', '/gallery/top', 'gallery/top.php');
+$router->map('GET',      '/gallery', 'PhotoController@index', 'gallery');
+$router->map('GET',      '/gallery/[i:gid]', 'PhotoController@view');
+$router->map('GET',      '/gallery/[i:gid]/[delete|end:action]', 'PhotoController');
+$router->map('GET|POST', '/gallery/[i:gid]/[comments:action]', 'PhotoController');
+$router->map('GET|POST', '/gallery/[create:action]', 'PhotoController');
+$router->map('GET|POST', '/gallery/[i:gid]/[edit:action]', 'PhotoController');
+$router->map('GET|POST', '/gallery/[i:gid]/[i:id]/edit', 'PhotoController@editcomment');
+$router->map('GET',      '/gallery/albums', 'PhotoController@albums');
+$router->map('GET',      '/gallery/album/[user:login]', 'PhotoController@album');
+$router->map('GET',      '/gallery/comments', 'PhotoController@allComments');
+$router->map('GET',      '/gallery/comments/[user:login]', 'PhotoController@userComments');
+$router->map('GET',      '/gallery/[i:gid]/[i:id]/comment', 'PhotoController@viewcomment');
+$router->map('GET|POST', '/gallery/top', 'PhotoController@top');
 
 $router->map('GET',      '/forum', 'ForumController@index', 'forum');
 $router->map('GET',      '/forum/[i:fid]', 'ForumController@forum');
@@ -63,17 +64,18 @@ $router->map('GET|POST', '/topic/[i:tid]/[i:id]/edit', 'TopicController@editpost
 $router->map('GET|POST', '/topic/[i:tid]/[edit:action]', 'TopicController');
 $router->map('GET',      '/forum/bookmark', 'BookmarkController@index');
 $router->map('POST',     '/forum/bookmark/[delete|perform:action]', 'BookmarkController');
-$router->map('GET',      '/forum/search', 'ForumSearchController@index');
+$router->map('GET',      '/forum/search', 'ForumController@search');
 $router->map('GET',      '/forum/active/[posts|themes:action]', 'ForumActiveController');
 $router->map('POST',     '/forum/active/delete', 'ForumActiveController@delete');
 $router->map('GET',      '/forum/new/[posts|themes:action]', 'ForumNewController');
-$router->map('GET',      '/forum/top/[posts|themes:action]', 'ForumTopController');
+$router->map('GET',      '/forum/top/posts', 'ForumController@topPosts');
+$router->map('GET',      '/forum/top/themes', 'ForumController@topThemes');
 $router->map('GET',      '/topic/[i:tid]/print', 'TopicController@print');
-$router->map('GET',      '/forum/rss', 'ForumRssController@index');
-$router->map('GET',      '/topic/[i:tid]/rss', 'ForumRssController@posts');
+$router->map('GET',      '/forum/rss', 'ForumController@rss');
+$router->map('GET',      '/topic/[i:tid]/rss', 'ForumController@rssPosts');
 
-$router->map('GET', '/logout', 'pages/login.php@logout', 'logout');
-$router->map('GET', '/user/[user:login]', 'pages/user.php');
+$router->map('GET',      '/logout', 'pages/login.php@logout', 'logout');
+$router->map('GET',      '/user/[user:login]', 'pages/user.php');
 $router->map('GET|POST', '/login', 'pages/login.php', 'login');
 $router->map('GET|POST', '/register', 'pages/registration.php', 'register');
 $router->map('GET|POST', '/user/[user:login]/[note:action]', 'pages/user.php', 'note');
@@ -84,7 +86,7 @@ $router->map('POST', '/rating/[user:login]/[delete:action]', 'pages/rathistory.p
 
 $router->map('GET|POST', '/mail', 'mail/index.php', 'mail');
 $router->map('GET|POST', '/recovery', 'mail/recovery.php', 'recovery');
-$router->map('GET', '/recovery/restore', 'mail/recovery.php@restore');
+$router->map('GET',      '/recovery/restore', 'mail/recovery.php@restore');
 $router->map('GET|POST', '/unsubscribe', 'mail/unsubscribe.php', 'unsubscribe');
 
 $router->map('GET', '/menu', 'pages/index.php@menu');
@@ -92,7 +94,6 @@ $router->map('GET', '/page/[a:action]?', 'pages/index.php');
 $router->map('GET', '/tags', 'pages/tags.php', 'tags');
 $router->map('GET', '/rules', 'pages/rules.php', 'smiles');
 $router->map('GET', '/smiles', 'pages/smiles.php', 'rules');
-$router->map('GET', '/captcha', 'gallery/protect.php', 'captcha');
 $router->map('GET', '/online/[all:action]?', 'pages/online.php', 'online');
 
 $router->map('POST', '/ajax/bbcode', 'ajax/bbcode.php');

@@ -10,7 +10,7 @@
     <i class="fa fa-pencil"></i> <b>{{ $comment->getUser()->login }}</b> <small>({{ date_fixed($comment['created_at']) }})</small><br /><br />
 
     <div class="form">
-        <form action="/article/{{ $comment['relate_id'] }}/{{ $comment->id }}/edi?page={{ $page }}" method="post">
+        <form action="/article/{{ $comment['relate_id'] }}/{{ $comment->id }}/edit?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             <textarea id="markItUp" cols="25" rows="5" name="msg">{{ $comment['text'] }}</textarea><br />
             <input type="submit" value="Редактировать" />
