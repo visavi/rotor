@@ -74,20 +74,20 @@ $router->map('GET',      '/topic/[i:tid]/print', 'TopicController@print');
 $router->map('GET',      '/forum/rss', 'ForumController@rss');
 $router->map('GET',      '/topic/[i:tid]/rss', 'ForumController@rssPosts');
 
-$router->map('GET',      '/logout', 'pages/login.php@logout', 'logout');
-$router->map('GET',      '/user/[user:login]', 'pages/user.php');
-$router->map('GET|POST', '/login', 'pages/login.php', 'login');
-$router->map('GET|POST', '/register', 'pages/registration.php', 'register');
-$router->map('GET|POST', '/user/[user:login]/[note:action]', 'pages/user.php', 'note');
-$router->map('GET|POST', '/user/[user:login]/[rating:action]', 'pages/rating.php');
+$router->map('GET',      '/user/[user:login]', 'UserController@index');
+$router->map('GET|POST', '/user/[user:login]/note', 'UserController@note', 'note');
+$router->map('GET|POST', '/login', 'UserController@login', 'login');
+$router->map('GET',      '/logout', 'UserController@logout', 'logout');
+$router->map('GET|POST', '/register', 'UserController@register', 'register');
+$router->map('GET|POST', '/user/[user:login]/[rating:action]', 'UserController@rating');
 
 $router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'pages/rathistory.php');
 $router->map('POST', '/rating/[user:login]/[delete:action]', 'pages/rathistory.php');
 
-$router->map('GET|POST', '/mail', 'mail/index.php', 'mail');
-$router->map('GET|POST', '/recovery', 'mail/recovery.php', 'recovery');
-$router->map('GET',      '/recovery/restore', 'mail/recovery.php@restore');
-$router->map('GET|POST', '/unsubscribe', 'mail/unsubscribe.php', 'unsubscribe');
+$router->map('GET|POST', '/mail', 'MailController@index', 'mail');
+$router->map('GET|POST', '/recovery', 'MailController@recovery', 'recovery');
+$router->map('GET',      '/recovery/restore', 'MailController@restore');
+$router->map('GET|POST', '/unsubscribe', 'MailController@unsubscribe', 'unsubscribe');
 
 $router->map('GET', '/menu', 'pages/index.php@menu');
 $router->map('GET', '/page/[a:action]?', 'pages/index.php');
