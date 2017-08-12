@@ -8,7 +8,7 @@
 
     <h1>Список всех комментариев</h1>
 
-    @if ($comments)
+    @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="post">
                 <div class="b">

@@ -24,34 +24,34 @@ $links = [
             <li><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></li>
         <?php endforeach; ?>
     </ol>
-    <?php if ($page['total'] > 0): ?>
-        <?php foreach($photos as $data): ?>
+    @if ($photos->isNotEmpty())
+        @foreach($photos as $data)
 
             <div class="b"><i class="fa fa-picture-o"></i>
-                <b><a href="/gallery/<?= $data['id'] ?>"><?= $data['title'] ?></a></b>
-                (<?= read_file(HOME.'/uploads/pictures/'.$data['link']) ?>) (Рейтинг: <?= format_num($data['rating']) ?>)
+                <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b>
+                ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }}) (Рейтинг: {!! format_num($data['rating']) !!})
             </div>
 
             <div>
-                <a href="/gallery/<?= $data['id'] ?>"><?= resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]) ?></a><br />
+                <a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]) !!}</a><br />
 
-                <?php if (!empty($data['text'])): ?>
-                    <?= App::bbCode($data['text']) ?><br />
-                <?php endif; ?>
+                @if ($data['text'])
+                    {!! App::bbCode($data['text']) !!}<br />
+                @endif
 
-                Добавлено: <?= profile($data->user) ?> (<?= date_fixed($data['created_at']) ?>)<br />
-                <a href="/gallery/<?= $data['id'] ?>/comments">Комментарии</a> (<?= $data['comments'] ?>)
-                <a href="/gallery/<?= $data['id'] ?>/end">&raquo;</a>
+                Добавлено: {!! profile($data->user) !!} ({{ date_fixed($data['created_at']) }})<br />
+                <a href="/gallery/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
+                <a href="/gallery/{{ $data['id'] }}/end">&raquo;</a>
             </div>
-        <?php endforeach; ?>
+        @endforeach
 
-        <?php App::pagination($page) ?>
+        {{ App::pagination($page) }}
 
-        Всего фотографий: <b><?= $page['total'] ?></b><br /><br />
+        Всего фотографий: <b>{{ $page['total'] }}</b><br /><br />
 
-    <?php else: ?>
-        <?= show_error('Фотографий нет, будь первым!'); ?>
-    <?php endif; ?>
+    @else
+        {{ show_error('Фотографий нет, будь первым!') }}
+    @endif
 
     <?php
     $links = [
@@ -65,5 +65,4 @@ $links = [
             <li><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></li>
         <?php endforeach; ?>
     </ol>
-
 @stop
