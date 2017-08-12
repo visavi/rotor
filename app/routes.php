@@ -96,10 +96,10 @@ $router->map('GET', '/rules', 'pages/rules.php', 'smiles');
 $router->map('GET', '/smiles', 'pages/smiles.php', 'rules');
 $router->map('GET', '/online/[all:action]?', 'pages/online.php', 'online');
 
-$router->map('POST', '/ajax/bbcode', 'ajax/bbcode.php');
-$router->map('POST', '/ajax/delcomment', 'ajax/delcomment.php');
-$router->map('POST', '/ajax/rating', 'ajax/rating.php');
-$router->map('POST', '/ajax/complaint', 'ajax/complaint.php');
+$router->map('POST', '/ajax/bbcode', 'AjaxController@bbCode');
+$router->map('POST', '/ajax/delcomment', 'AjaxController@delComment');
+$router->map('POST', '/ajax/rating', 'AjaxController@rating');
+$router->map('POST', '/ajax/complaint', 'AjaxController@complaint');
 
 $router->map('GET|POST', '/wall', 'pages/wall.php', 'wall');
 $router->map('GET|POST', '/setting', 'pages/setting.php');
