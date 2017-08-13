@@ -95,7 +95,7 @@ $router->map('GET', '/page/[a:action]?', 'PageController@index');
 $router->map('GET', '/tags', 'PageController@tags', 'tags');
 $router->map('GET', '/rules', 'PageController@rules', 'rules');
 $router->map('GET', '/smiles', 'PageController@smiles', 'smiles');
-$router->map('GET', '/online/[all:action]?', 'pages/online.php', 'online');
+$router->map('GET', '/online/[all:action]?', 'OnlineController@index', 'online');
 
 $router->map('POST', '/ajax/bbcode', 'AjaxController@bbCode');
 $router->map('POST', '/ajax/delcomment', 'AjaxController@delComment');
