@@ -81,16 +81,16 @@ $router->map('GET',      '/logout', 'UserController@logout', 'logout');
 $router->map('GET|POST', '/register', 'UserController@register', 'register');
 $router->map('GET|POST', '/user/[user:login]/[rating:action]', 'UserController@rating');
 
-$router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'pages/rathistory.php');
-$router->map('POST', '/rating/[user:login]/[delete:action]', 'pages/rathistory.php');
+$router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'RatingController');
+$router->map('POST', '/rating/delete', 'RatingController@delete');
 
 $router->map('GET|POST', '/mail', 'MailController@index', 'mail');
 $router->map('GET|POST', '/recovery', 'MailController@recovery', 'recovery');
 $router->map('GET',      '/recovery/restore', 'MailController@restore');
 $router->map('GET|POST', '/unsubscribe', 'MailController@unsubscribe', 'unsubscribe');
 
-$router->map('GET', '/menu', 'pages/index.php@menu');
-$router->map('GET', '/page/[a:action]?', 'pages/index.php');
+$router->map('GET', '/menu', 'PageController@menu');
+$router->map('GET', '/page/[a:action]?', 'PageController@index');
 $router->map('GET', '/tags', 'pages/tags.php', 'tags');
 $router->map('GET', '/rules', 'pages/rules.php', 'smiles');
 $router->map('GET', '/smiles', 'pages/smiles.php', 'rules');

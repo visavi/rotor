@@ -1,19 +1,24 @@
-<?php
-if (isset($act) && $act == 'recent') {
-	//show_title('Последняя активность');
-}
+@extends('layout')
 
-echo '<div class="b"><i class="fa fa-forumbee fa-lg text-muted"></i> <b>Последние темы</b></div>';
-recenttopics();
+@section('title')
+    Последняя активность - @parent
+@stop
 
-echo '<div class="b"><i class="fa fa-download fa-lg text-muted"></i> <b>Последние файлы</b></div>';
-recentfiles();
+@section('content')
+    <h1>Последняя активность</h1>
 
-echo '<div class="b"><i class="fa fa-globe fa-lg text-muted"></i> <b>Последние статьи</b></div>';
-recentblogs();
+    <div class="b"><i class="fa fa-forumbee fa-lg text-muted"></i> <b>Последние темы</b></div>
+    {{ recenttopics() }}
 
-echo '<div class="b"><i class="fa fa-hashtag fa-lg text-muted"></i>  <b>Последние cобытия</b></div>';
-recentevents();
+    <div class="b"><i class="fa fa-download fa-lg text-muted"></i> <b>Последние файлы</b></div>
+    {{ recentfiles() }}
 
-echo '<div class="b"><i class="fa fa-image fa-lg text-muted"></i> <b>Последние фотографии</b></div>';
-recentphotos();
+    <div class="b"><i class="fa fa-globe fa-lg text-muted"></i> <b>Последние статьи</b></div>
+    {{ recentblogs() }}
+
+    <div class="b"><i class="fa fa-hashtag fa-lg text-muted"></i>  <b>Последние cобытия</b></div>
+    {{ recentevents() }}
+
+    <div class="b"><i class="fa fa-image fa-lg text-muted"></i> <b>Последние фотографии</b></div>
+    {{  recentphotos() }}
+@stop
