@@ -74,39 +74,40 @@ $router->map('GET',      '/topic/[i:tid]/print', 'TopicController@print');
 $router->map('GET',      '/forum/rss', 'ForumController@rss');
 $router->map('GET',      '/topic/[i:tid]/rss', 'ForumController@rssPosts');
 
-$router->map('GET',      '/logout', 'pages/login.php@logout', 'logout');
-$router->map('GET',      '/user/[user:login]', 'pages/user.php');
-$router->map('GET|POST', '/login', 'pages/login.php', 'login');
-$router->map('GET|POST', '/register', 'pages/registration.php', 'register');
-$router->map('GET|POST', '/user/[user:login]/[note:action]', 'pages/user.php', 'note');
-$router->map('GET|POST', '/user/[user:login]/[rating:action]', 'pages/rating.php');
+$router->map('GET',      '/user/[user:login]', 'UserController@index');
+$router->map('GET|POST', '/user/[user:login]/note', 'UserController@note', 'note');
+$router->map('GET|POST', '/login', 'UserController@login', 'login');
+$router->map('GET',      '/logout', 'UserController@logout', 'logout');
+$router->map('GET|POST', '/register', 'UserController@register', 'register');
+$router->map('GET|POST', '/user/[user:login]/[rating:action]', 'UserController@rating');
+$router->map('GET|POST', '/profile', 'UserController@profile');
 
-$router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'pages/rathistory.php');
-$router->map('POST', '/rating/[user:login]/[delete:action]', 'pages/rathistory.php');
+$router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'RatingController');
+$router->map('POST', '/rating/delete', 'RatingController@delete');
 
-$router->map('GET|POST', '/mail', 'mail/index.php', 'mail');
-$router->map('GET|POST', '/recovery', 'mail/recovery.php', 'recovery');
-$router->map('GET',      '/recovery/restore', 'mail/recovery.php@restore');
-$router->map('GET|POST', '/unsubscribe', 'mail/unsubscribe.php', 'unsubscribe');
+$router->map('GET|POST', '/mail', 'MailController@index', 'mail');
+$router->map('GET|POST', '/recovery', 'MailController@recovery', 'recovery');
+$router->map('GET',      '/recovery/restore', 'MailController@restore');
+$router->map('GET|POST', '/unsubscribe', 'MailController@unsubscribe', 'unsubscribe');
 
-$router->map('GET', '/menu', 'pages/index.php@menu');
-$router->map('GET', '/page/[a:action]?', 'pages/index.php');
-$router->map('GET', '/tags', 'pages/tags.php', 'tags');
-$router->map('GET', '/rules', 'pages/rules.php', 'smiles');
-$router->map('GET', '/smiles', 'pages/smiles.php', 'rules');
-$router->map('GET', '/online/[all:action]?', 'pages/online.php', 'online');
+$router->map('GET', '/menu', 'PageController@menu');
+$router->map('GET', '/page/[a:action]?', 'PageController@index');
+$router->map('GET', '/tags', 'PageController@tags', 'tags');
+$router->map('GET', '/rules', 'PageController@rules', 'rules');
+$router->map('GET', '/smiles', 'PageController@smiles', 'smiles');
+$router->map('GET', '/online/[all:action]?', 'OnlineController@index', 'online');
 
-$router->map('POST', '/ajax/bbcode', 'ajax/bbcode.php');
-$router->map('POST', '/ajax/delcomment', 'ajax/delcomment.php');
-$router->map('POST', '/ajax/rating', 'ajax/rating.php');
-$router->map('POST', '/ajax/complaint', 'ajax/complaint.php');
+$router->map('POST', '/ajax/bbcode', 'AjaxController@bbCode');
+$router->map('POST', '/ajax/delcomment', 'AjaxController@delComment');
+$router->map('POST', '/ajax/rating', 'AjaxController@rating');
+$router->map('POST', '/ajax/complaint', 'AjaxController@complaint');
 
 $router->map('GET|POST', '/wall', 'pages/wall.php', 'wall');
 $router->map('GET|POST', '/setting', 'pages/setting.php');
 
-$router->map('GET',      '/private/[outbox|trash|history|clear:action]?', 'pages/private.php');
-$router->map('POST',     '/private/[delete:action]', 'pages/private.php');
-$router->map('GET|POST', '/private/[send:action]', 'pages/private.php');
+$router->map('GET',      '/private/[outbox|trash|history|clear:action]?', 'PrivateController');
+$router->map('POST',     '/private/[delete:action]', 'PrivateController');
+$router->map('GET|POST', '/private/[send:action]', 'PrivateController');
 
 $router->map('GET',      '/ignore', 'pages/ignore.php');
 $router->map('GET|POST', '/ignore/[note:action]/[i:id]', 'pages/ignore.php');
@@ -118,7 +119,6 @@ $router->map('POST',     '/contact/[create|delete:action]', 'pages/contact.php')
 
 $router->map('GET', '/key', 'pages/key.php');
 
-$router->map('GET|POST', '/profile', 'pages/profile.php');
 $router->map('GET|POST', '/account', 'pages/account.php');
 $router->map('GET|POST', '/offers', 'pages/offers.php');
 $router->map('GET|POST', '/notebook', 'pages/notebook.php');

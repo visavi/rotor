@@ -8,7 +8,7 @@
 
     <h1>{{ $photo['title'] }}</h1>
 
-    <?php if (!empty($photo)): ?>
+    @if ($photo)
 
     <?php
     $links = [
@@ -27,11 +27,11 @@
     </ol>
 
     <div>
-        <a href="/uploads/pictures/<?= $photo['link'] ?>" class="gallery"><img  class="img-responsive" src="/uploads/pictures/<?= $photo['link'] ?>" alt="image" /></a><br />
+        <a href="/uploads/pictures/{{ $photo['link'] }}" class="gallery"><img  class="img-responsive" src="/uploads/pictures/{{ $photo['link'] }}" alt="image" /></a><br />
 
-        <?php if (!empty($photo['text'])): ?>
-            <?= App::bbCode($photo['text']) ?><br />
-        <?php endif; ?>
+        @if ($photo['text'])
+            {!! App::bbCode($photo['text']) !!}<br />
+        @endif
 
         <div class="js-rating">Рейтинг:
             @unless (App::getUserId() == $photo['user_id'])
@@ -43,32 +43,31 @@
             @endunless
         </div>
 
-        Размер: <?= read_file(HOME.'/uploads/pictures/'.$photo['link']) ?><br />
-        Добавлено: <?= profile($photo['user'])?> (<?= date_fixed($photo['time']) ?>)<br />
-        <a href="/gallery/<?= $photo['id'] ?>/comments">Комментарии</a> (<?= $photo['comments'] ?>)
-        <a href="/gallery/<?= $photo['id'] ?>/end">&raquo;</a>
+        Размер: {{ read_file(HOME.'/uploads/pictures/'.$photo['link']) }}<br />
+        Добавлено: {!! profile($photo['user']) !!} ({{ date_fixed($photo['time']) }})<br />
+        <a href="/gallery/{{ $photo['id'] }}/comments">Комментарии</a> ({{ $photo['comments'] }})
+        <a href="/gallery/{{ $photo['id'] }}/end">&raquo;</a>
     </div>
     <br />
 
     <?php $nav = photo_navigation($photo['id']); ?>
 
-    <?php if ($nav['next'] || $nav['prev']): ?>
+    @if ($nav['next'] || $nav['prev'])
         <div class="form" style="text-align:center">
+            @if ($nav['next'])
+                <a href="/gallery/{{ $nav['next'] }}">&laquo; Назад</a> &nbsp;
+            @endif
 
-            <?php if ($nav['next']): ?>
-                <a href="/gallery/<?= $nav['next'] ?>">&laquo; Назад</a> &nbsp;
-            <?php endif; ?>
-
-            <?php if ($nav['prev']): ?>
-                &nbsp; <a href="/gallery/<?= $nav['prev'] ?>">Вперед &raquo;</a>
-            <?php endif; ?>
+            @if ($nav['prev'])
+                &nbsp; <a href="/gallery/{{ $nav['prev'] }}">Вперед &raquo;</a>
+            @endif
         </div>
-    <?php endif; ?>
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/<?= $photo->getUser()->login ?>">В альбом</a><br />
+    @endif
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">В альбом</a><br />
 
-    <?php else: ?>
-        <?= show_error('Ошибка! Данного изображения нет в базе'); ?>
-    <?php endif; ?>
+    @else
+        {{ show_error('Ошибка! Данного изображения нет в базе') }}
+    @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
 @stop

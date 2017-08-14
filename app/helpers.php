@@ -1228,16 +1228,16 @@ function recentphotos($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
 
-        $recent = Photo::orderBy('time', 'desc')->limit($show)->get();
+        $recent = Photo::orderBy('created_at', 'desc')->limit($show)->get();
 
         file_put_contents(STORAGE."/temp/recentphotos.dat", serialize($recent), LOCK_EX);
     }
 
     $photos = unserialize(file_get_contents(STORAGE."/temp/recentphotos.dat"));
 
-    if (is_array($photos) && count($photos) > 0) {
+    if ($photos->isNotEmpty()) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery?act=view&amp;gid='.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery/'.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br />';
@@ -1253,7 +1253,7 @@ function recenttopics($show = 5) {
 
     $topics = unserialize(file_get_contents(STORAGE."/temp/recenttopics.dat"));
 
-    if ($topics) {
+    if ($topics->isNotEmpty()) {
         foreach ($topics as $topic) {
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic->posts.')';
             echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br />';

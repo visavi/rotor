@@ -1,5 +1,5 @@
 <?php
-//$page = abs(intval(Request::input('page', 1)));
+
 class BlogController extends BaseController
 {
     /**

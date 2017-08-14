@@ -280,7 +280,7 @@ function deleteRating(el)
 {
     $.ajax({
         data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
-        dataType: 'JSON', type: 'POST', url: '/rating/' + $(el).data('login') + '/delete',
+        dataType: 'JSON', type: 'POST', url: '/rating/delete',
         success: function(data) {
 
             if (data.status === 'error'){

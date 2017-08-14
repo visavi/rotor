@@ -24,7 +24,7 @@
 
                     <div class="pull-right">
                         @if (is_admin())
-                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data['id'] }}" data-login="{{ $data->getUser()->login }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
+                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
                         @endif
                     </div>
                 </div>

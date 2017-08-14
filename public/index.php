@@ -19,9 +19,13 @@ if ($router['target'] && is_callable($router['target'])) {
 } elseif ($router['target']) {
 
     $target = explode('@', $router['target']);
-    $action = $target[1] ?? $router['params']['action'];
+    $action = $router['params']['action'] ?? $target[1] ?? 'index';
 
-    call_user_func_array([new $target[0], $action], $router['params']);
+    if (class_exists($target[0])) {
+        call_user_func_array([new $target[0], $action], $router['params']);
+    } else {
+        include_once (APP.'/modules/'.$target[0]);
+    }
 } else {
     App::abort(404);
 }
