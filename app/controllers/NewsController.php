@@ -7,51 +7,16 @@ class NewsController extends BaseController
      */
     public function index()
     {
-        //show_title('Новости сайта');
-
-        if (is_admin([101, 102])) {
-            echo '<div class="form"><a href="/admin/news">Управление новостями</a></div>';
-        }
-
         $total = News::count();
         $page = App::paginate(Setting::get('postnews'), $total);
 
-        //Setting::get('description') =  'Список новостей (Стр. '.$page['current'].')';
+        $news = News::orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->with('user')
+            ->get();
 
-        if ($total > 0) {
-
-            $news = News::orderBy('created_at', 'desc')
-                ->offset($page['offset'])
-                ->limit($page['limit'])
-                ->with('user')
-                ->get();
-
-            foreach ($news as $data) {
-                echo '<div class="b">';
-                echo $data['closed'] == 0 ? '<i class="fa fa-plus-square-o"></i> ' : '<i class="fa fa-minus-square-o"></i> ';
-                echo '<b><a href="/news/' . $data['id'] . '">' . $data['title'] . '</a></b><small> (' . date_fixed($data['created_at']) . ')</small></div>';
-
-                if (!empty($data['image'])) {
-                    echo '<div class="img"><a href="/uploads/news/' . $data['image'] . '">' . resize_image('uploads/news/', $data['image'], 75, ['alt' => $data['title']]) . '</a></div>';
-                }
-
-                if (stristr($data['text'], '[cut]')) {
-                    $data['text'] = current(explode('[cut]', $data['text'])) . ' <a href="/news/' . $data['id'] . '">Читать далее &raquo;</a>';
-                }
-
-                echo '<div>' . App::bbCode($data['text']) . '</div>';
-                echo '<div style="clear:both;">Добавлено: ' . profile($data->user) . '<br />';
-                echo '<a href="/news/' . $data['id'] . '/comments">Комментарии</a> (' . $data['comments'] . ') ';
-                echo '<a href="/news/' . $data['id'] . '/end">&raquo;</a></div>';
-            }
-
-            App::pagination($page);
-        } else {
-            show_error('Новостей еще нет!');
-        }
-
-        echo '<i class="fa fa-rss"></i> <a href="/news/rss">RSS подписка</a><br />';
-        echo '<i class="fa fa-comment"></i> <a href="/news/allcomments">Комментарии</a><br />';
+        App::view('news/index', compact('news', 'page'));
     }
 
     /**
