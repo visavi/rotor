@@ -34,7 +34,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->first();
 
-        if (!$photo) {
+        if (! $photo) {
             App::abort(404, 'Фотография не найдена');
         }
 

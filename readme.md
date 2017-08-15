@@ -1,7 +1,7 @@
 RotorCMS 7.0
 =========
 
-[![Latest Stable Version](https://img.shields.io/badge/php-%3E%3D%207.0-brightgreen.svg)](https://php.net)
+[![Php Version](https://img.shields.io/badge/php-%3E%3D%207.0-brightgreen.svg)](https://php.net)
 [![Latest Stable Version](https://poser.pugx.org/visavi/rotor/v/stable)](https://packagist.org/packages/visavi/rotor)
 [![Total Downloads](https://poser.pugx.org/visavi/rotor/downloads)](https://packagist.org/packages/visavi/rotor)
 [![Latest Unstable Version](https://poser.pugx.org/visavi/rotor/v/unstable)](https://packagist.org/packages/visavi/rotor)

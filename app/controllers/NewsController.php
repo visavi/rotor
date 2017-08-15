@@ -24,92 +24,24 @@ class NewsController extends BaseController
      */
     public function view($id)
     {
-        $data = News::find($id);
+        $news = News::find($id);
 
-        if (!empty($data)) {
-
-            if (is_admin()) {
-                echo '<div class="form"><a href="/admin/news?act=edit&amp;id=' . $id . '">Редактировать</a> / ';
-                echo '<a href="/admin/news?act=del&amp;del=' . $id . '&amp;token=' . $_SESSION['token'] . '" onclick="return confirm(\'Вы действительно хотите удалить данную новость?\')">Удалить</a></div>';
-            }
-
-            //Setting::get('newtitle') = $data['title'];
-            //Setting::get('description') =  strip_str($data['text']);
-
-            echo '<div class="b"><i class="fa fa-file-o"></i> ';
-            echo '<b>' . $data['title'] . '</b><small> (' . date_fixed($data['created_at']) . ')</small></div>';
-
-            if (!empty($data['image'])) {
-
-                echo '<div class="img"><a href="/uploads/news/' . $data['image'] . '">' . resize_image('uploads/news/', $data['image'], 75, ['alt' => $data['title']]) . '</a></div>';
-            }
-
-            $data['text'] = str_replace('[cut]', '', $data['text']);
-            echo '<div>' . App::bbCode($data['text']) . '</div>';
-            echo '<div style="clear:both;">Добавлено: ' . profile($data['author']) . '</div><br />';
-
-            if ($data['comments'] > 0) {
-                echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
-
-                $comments = Comment::where('relate_type', News::class)
-                    ->where('relate_id', $id)
-                    ->limit(5)
-                    ->orderBy('created_at', 'desc')
-                    ->with('user')
-                    ->get();
-
-                $comments = $comments->reverse();
-
-                foreach ($comments as $comm) {
-                    echo '<div class="b">';
-                    echo '<div class="img">' . user_avatars($comm['user']) . '</div>';
-
-                    echo '<b>' . profile($comm['user']) . '</b>';
-                    echo '<small> (' . date_fixed($comm['created_at']) . ')</small><br />';
-                    echo user_title($comm['user']) . ' ' . user_online($comm['user']) . '</div>';
-
-                    echo '<div>' . App::bbCode($comm['text']) . '<br />';
-
-                    if (is_admin()) {
-                        echo '<span class="data">(' . $comm['brow'] . ', ' . $comm['ip'] . ')</span>';
-                    }
-
-                    echo '</div>';
-                }
-
-                if ($data['comments'] > 5) {
-                    echo '<div class="act"><b><a href="/news/' . $data['id'] . '/comments">Все комментарии</a></b> (' . $data['comments'] . ') ';
-                    echo '<a href="/news/' . $data['id'] . '/end">&raquo;</a></div><br />';
-                }
-            }
-
-            if (empty($data['closed'])) {
-
-                if (empty($data['comments'])) {
-                    show_error('Комментариев еще нет!');
-                }
-
-                if (is_user()) {
-                    echo '<div class="form"><form action="/news/' . $id . '/create?read=1" method="post">';
-                    echo '<input type="hidden" name="token" value="' . $_SESSION['token'] . '">';
-                    echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
-                    echo '<input type="submit" value="Написать" /></form></div>';
-
-                    echo '<br />';
-                    echo '<a href="/rules">Правила</a> / ';
-                    echo '<a href="/smiles">Смайлы</a> / ';
-                    echo '<a href="/tags">Теги</a><br /><br />';
-                } else {
-                    show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-                }
-            } else {
-                show_error('Комментирование данной новости закрыто!');
-            }
-        } else {
-            show_error('Ошибка! Выбранная вами новость не существует, возможно она была удалена!');
+        if (! $news) {
+            App::abort(404, 'Новость не существует, возможно она была удалена!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
+        $news['text'] = str_replace('[cut]', '', $news['text']);
+
+        $comments = Comment::where('relate_type', News::class)
+            ->where('relate_id', $id)
+            ->limit(5)
+            ->orderBy('created_at', 'desc')
+            ->with('user')
+            ->get();
+
+        $comments = $comments->reverse();
+
+        App::view('news/view', compact('news', 'comments'));
     }
 
     /**
