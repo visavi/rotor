@@ -32,7 +32,7 @@ $router->map('GET|POST', '/blog/top', 'blog/top.php');
 
 $router->map('GET',      '/news', 'NewsController@index', 'news');
 $router->map('GET',      '/news/[i:id]', 'NewsController@view');
-$router->map('GET|POST', '/news/[i:id]/[delete|comments|end:action]', 'NewsController');
+$router->map('GET|POST', '/news/[i:id]/[comments|end:action]', 'NewsController');
 $router->map('POST',     '/news/[i:id]/[create:action]', 'NewsController');
 $router->map('GET',      '/news/rss', 'NewsController@rss', 'news_rss');
 $router->map('GET',      '/news/allcomments', 'NewsCommentsController@index');

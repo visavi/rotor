@@ -49,93 +49,27 @@ class NewsController extends BaseController
      */
     public function comments($id)
     {
-        $datanews = News::find($id);
+        $news = News::find($id);
 
-        if (!empty($datanews)) {
-
-            $total = Comment::where('relate_type', News::class)
-                ->where('relate_id', $id)
-                ->count();
-
-            $page = App::paginate(Setting::get('postnews'), $total);
-
-            //Setting::get('newtitle') = 'Комментарии - '.$datanews['title'];
-            //Setting::get('description') =  'Комментарии - '.$datanews['title'].' (Стр. '.$page['current'].')';
-
-            echo '<h1><a href="/news/' . $datanews['id'] . '">' . $datanews['title'] . '</a></h1>';
-
-            if ($total > 0) {
-
-                $is_admin = is_admin();
-                if ($is_admin) {
-                    echo '<form action="/news/' . $id . '/delete?page=' . $page['current'] . '" method="post">';
-                    echo '<input type="hidden" name="token" value="' . $_SESSION['token'] . '">';
-                }
-
-                $comments = Comment::where('relate_type', News::class)
-                    ->where('relate_id', $id)
-                    ->offset($page['offset'])
-                    ->limit($page['limit'])
-                    ->orderBy('created_at')
-                    ->with('user')
-                    ->get();
-
-                foreach ($comments as $data) {
-
-                    echo '<div class="b" id="comment_' . $data['id'] . '"">';
-                    echo '<div class="img">' . user_avatars($data['user']) . '</div>';
-
-                    if ($is_admin) {
-                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="' . $data['id'] . '" /></span>';
-                    }
-
-                    echo '<b>' . profile($data['user']) . '</b>';
-                    echo '<small> (' . date_fixed($data['created_at']) . ')</small><br />';
-                    echo user_title($data['user']) . ' ' . user_online($data['user']) . '</div>';
-
-                    echo '<div>' . App::bbCode($data['text']) . '<br />';
-
-                    if (is_admin()) {
-                        echo '<span class="data">(' . $data['brow'] . ', ' . $data['ip'] . ')</span>';
-                    }
-
-                    echo '</div>';
-                }
-
-                if ($is_admin) {
-                    echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
-                }
-
-                App::pagination($page);
-            }
-
-            if (empty($datanews['closed'])) {
-
-                if (!$total) {
-                    show_error('Комментариев еще нет!');
-                }
-
-                if (is_user()) {
-                    echo '<div class="form"><form action="/news/' . $id . '/create" method="post">';
-                    echo '<input type="hidden" name="token" value="' . $_SESSION['token'] . '">';
-                    echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
-                    echo '<input type="submit" value="Написать" /></form></div>';
-
-                    echo '<br />';
-                    echo '<a href="/rules">Правила</a> / ';
-                    echo '<a href="/smiles">Смайлы</a> / ';
-                    echo '<a href="/tags">Теги</a><br /><br />';
-                } else {
-                    show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-                }
-            } else {
-                show_error('Комментирование данной новости закрыто!');
-            }
-        } else {
-            show_error('Ошибка! Выбранная новость не существует, возможно она была удалена!');
+        if (! $news) {
+            App::abort(404, 'Новость не существует, возможно она была удалена!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
+        $total = Comment::where('relate_type', News::class)
+            ->where('relate_id', $id)
+            ->count();
+
+        $page = App::paginate(Setting::get('postnews'), $total);
+
+        $comments = Comment::where('relate_type', News::class)
+            ->where('relate_id', $id)
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy('created_at')
+            ->with('user')
+            ->get();
+
+        App::view('news/comments', compact('news', 'comments', 'page'));
     }
 
     /**
@@ -191,47 +125,10 @@ class NewsController extends BaseController
     }
 
     /**
-     * Удаление комментариев
-     */
-    public function delete()
-    {
-        $token = check(Request::input('token'));
-        $del = intar(Request::input('del'));
-        $page = abs(intval(Request::input('page', 1)));
-
-        if (is_admin()) {
-            if ($token == $_SESSION['token']) {
-                if (!empty($del)) {
-
-                    $del = implode(',', $del);
-
-                    $delcomments = DB::run()->exec("DELETE FROM `comments` WHERE relate_type='news' AND `relate_id`=" . $id . " AND `id` IN (" . $del . ");");
-
-                    DB::run()->query("UPDATE `news` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
-
-                    App::setFlash('success', 'Выбранные комментарии успешно удалены!');
-                    App::redirect('/news/' . $id . '/comments?page=' . $page);
-
-                } else {
-                    show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-        } else {
-            show_error('Ошибка! Удалять комментарии могут только модераторы!');
-        }
-
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/' . $id . '/comments?page=' . $page . '">Вернуться</a><br />';
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
-    }
-
-    /**
      * Переадресация на последнюю страницу
      */
     public function end($id)
     {
-
         $news = News::find($id);
 
         if (empty($news)) {

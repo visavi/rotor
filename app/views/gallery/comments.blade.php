@@ -40,10 +40,11 @@
                 </div>
                 <div class="message">
                     {!! App::bbCode($data['text']) !!}
+
+                    @if (is_admin())
+                        <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                    @endif
                 </div>
-                @if (is_admin())
-                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
-                @endif
             </div>
         @endforeach
 
