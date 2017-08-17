@@ -43,7 +43,7 @@
         <div class="info"><?=App::bbCode($topic['note'])?></div>
     <?php endif; ?>
 
-    <hr />
+    <hr>
 
     <?php if (is_admin()): ?>
         <?php if (empty($topic['closed'])): ?>
@@ -61,7 +61,7 @@
         <a href="/admin/forum?act=edittopic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Изменить</a> /
         <a href="/admin/forum?act=movetopic&amp;tid=<?=$topic['id']?>">Переместить</a> /
         <a href="/admin/forum?act=deltopics&amp;fid=<?=$topic['forum_id']?>&amp;del=<?=$topic['id']?>&amp;token=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную тему?')">Удалить</a> /
-        <a href="/admin/forum?act=topic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Управление</a><br />
+        <a href="/admin/forum?act=topic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Управление</a><br>
     <?php endif; ?>
 
     @if($vote['answers'])
@@ -72,17 +72,17 @@
                 <?php $proc = round(($data * 100) / $vote['sum'], 1); ?>
                 <?php $maxproc = round(($data * 100) / $vote['max']); ?>
 
-                <b>{{ $key }}</b> (Голосов: {{ $data }})<br />
+                <b>{{ $key }}</b> (Голосов: {{ $data }})<br>
                 {!! App::progressBar($maxproc, $proc.'%') !!}
             @endforeach
         @else
             <form action="/topic/{{ $topic['id'] }}/vote?page={{ $page['current'] }}" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}" />
+                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 @foreach($vote['answers'] as $answer)
-                    <label><input name="poll" type="radio" value="{{ $answer['id'] }}" /> {{ $answer['answer'] }}</label><br />
+                    <label><input name="poll" type="radio" value="{{ $answer['id'] }}"> {{ $answer['answer'] }}</label><br>
                 @endforeach
-                <br /><button class="btn btn-sm btn-primary">Голосовать</button>
-            </form><br />
+                <br><button class="btn btn-sm btn-primary">Голосовать</button>
+            </form><br>
         @endif
 
         Всего проголосовало: {{ $vote['count'] }}
@@ -114,7 +114,7 @@
                     <?php if ((App::getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME) || $topic['isModer']): ?>
                         <a href="/topic/<?=$topic['id']?>/<?=$data['id']?>/edit?page=<?=$page['current']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         <?php if ($topic['isModer']): ?>
-                        <input type="checkbox" name="del[]" value="<?=$data['id']?>" />
+                        <input type="checkbox" name="del[]" value="<?=$data['id']?>">
                         <?php endif; ?>
                     <?php endif; ?>
 
@@ -131,7 +131,7 @@
 
                 <div class="img"><?=user_avatars($data->user)?></div>
 
-                <?=$num?>. <b><?=profile($data->user)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
+                <?=$num?>. <b><?=profile($data->user)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br>
                 <?=user_title($data->user)?> <?=user_online($data->user)?>
             </div>
 
@@ -140,21 +140,21 @@
             </div>
 
             <?php if (! $data->files->isEmpty()): ?>
-                <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />
+                <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br>
                 <?php foreach ($data->files as $file): ?>
                     <?php $ext = getExtension($file['hash']); ?>
 
                     <?= icons($ext) ?>
-                    <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br />
+                    <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>"><?=$file['name']?></a> (<?=formatsize($file['size'])?>)<br>
                     <?php if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])): ?>
-                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], Setting::get('previewsize'), ['alt' => $file['name']]) ?></a><br />
+                        <a href="/uploads/forum/<?=$topic['id']?>/<?=$file['hash']?>" class="gallery" data-group="{{ $data['id'] }}"><?= resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], Setting::get('previewsize'), ['alt' => $file['name']]) ?></a><br>
                     <?php endif; ?>
                 <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
             <?php if ($data['edit_user_id']): ?>
-                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br />
+                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br>
             <?php endif; ?>
 
             <?php if (is_admin()): ?>
@@ -181,7 +181,7 @@
         <?php if (empty($topic['closed'])): ?>
             <div class="form">
                 <form action="/topic/<?=$topic['id']?>/create" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
+                    <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
 
                     <div class="form-group{{ App::hasError('msg') }}">
                         <label for="markItUp">Сообщение:</label>
@@ -199,9 +199,9 @@
                             <span class='label label-info' id="upload-file-info"></span>
 
                             <div class="info">
-                                Максимальный вес файла: <b><?=round(Setting::get('forumloadsize')/1024)?></b> Kb<br />
+                                Максимальный вес файла: <b><?=round(Setting::get('forumloadsize')/1024)?></b> Kb<br>
                                 Допустимые расширения: <?=str_replace(',', ', ', Setting::get('forumextload'))?>
-                            </div><br />
+                            </div><br>
                         </div>
 
                         <span class="imgright js-attach-button">
@@ -211,7 +211,7 @@
 
                     <button class="btn btn-primary">Написать</button>
                 </form>
-            </div><br />
+            </div><br>
 
         <?php else: ?>
             <?php show_error('Данная тема закрыта для обсуждения!'); ?>
@@ -225,5 +225,5 @@
     <a href="/rules">Правила</a> /
     <a href="/forum/top/themes">Топ тем</a> /
     <a href="/forum/top/posts">Топ постов</a> /
-    <a href="/forum/search?fid=<?=$topic['forum_id']?>">Поиск</a><br />
+    <a href="/forum/search?fid=<?=$topic['forum_id']?>">Поиск</a><br>
 @stop

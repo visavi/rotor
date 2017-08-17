@@ -16,13 +16,13 @@ case 'index':
     echo '<a href="/user/'.App::getUsername().'">Моя анкета</a> / ';
     echo '<a href="/profile">Мой профиль</a> / ';
     echo '<a href="/account">Мои данные</a> / ';
-    echo '<b>Настройки</b><hr />';
+    echo '<b>Настройки</b><hr>';
 
     echo '<div class="form">';
     echo '<form method="post" action="setting?act=edit">';
-    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
+    echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
-    echo 'Wap-тема по умолчанию:<br />';
+    echo 'Wap-тема по умолчанию:<br>';
     echo '<select name="themes">';
     echo '<option value="0">Автоматически</option>';
     $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
@@ -30,31 +30,31 @@ case 'index':
         $selected = (App::user('themes') == basename($themes)) ? ' selected="selected"' : '';
         echo '<option value="'.basename($themes).'"'.$selected.'>'.basename($themes).'</option>';
     }
-    echo '</select><br />';
+    echo '</select><br>';
 
     $langShort = [
         'ru' => 'русский',
         'en' => 'English',
     ];
 
-    echo 'Язык:<br />';
+    echo 'Язык:<br>';
     echo '<select name="lang">';
     $languages = glob(APP."/lang/*", GLOB_ONLYDIR);
     foreach ($languages as $lang) {
         $selected = (App::user('lang') == basename($lang)) ? ' selected="selected"' : '';
         echo '<option value="'.basename($lang).'"'.$selected.'>'.$langShort[basename($lang)].'</option>';
     }
-    echo '</select><br />';
+    echo '</select><br>';
 
     $arrtimezone = range(-12, 12);
 
-    echo 'Временной сдвиг:<br />';
+    echo 'Временной сдвиг:<br>';
     echo '<select name="timezone">';
     foreach($arrtimezone as $zone) {
         $selected = (App::user('timezone') == $zone) ? ' selected="selected"' : '';
         echo '<option value="'.$zone.'"'.$selected.'>'.$zone.'</option>';
     }
-    echo '</select> - '.date_fixed(SITETIME, 'H:i').'<br />';
+    echo '</select> - '.date_fixed(SITETIME, 'H:i').'<br>';
 
 ?>
     <?php $checked = (App::user('privacy') == 1) ? ' checked="checked"' : ''; ?>
@@ -79,9 +79,9 @@ case 'index':
     </div>
 
     <button class="btn btn-primary">Изменить</button>
-    </form></div><br />
+    </form></div><br>
 
-    * Значение всех полей (max.50)<br /><br />
+    * Значение всех полей (max.50)<br><br>
 
     <?php
 break;
@@ -126,7 +126,7 @@ case 'edit':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/setting">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/setting">Вернуться</a><br>';
 break;
 
 endswitch;

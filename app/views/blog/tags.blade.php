@@ -13,7 +13,7 @@
 
             <a href="/blog/tags/<?=urlencode($key)?>"><span style="font-size:<?=$fontsize?>%"><?=$key?></span></a>
         <?php endforeach; ?>
-    </div><br />
+    </div><br>
 
     <?php App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']); ?>
 @stop

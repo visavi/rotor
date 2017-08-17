@@ -17,7 +17,7 @@ if ($total > 0) {
         echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
     }
 
-    echo '<br />Всего пользователей: '.$total.' чел.<br /><br />';
+    echo '<br>Всего пользователей: '.$total.' чел.<br><br>';
 } else {
     show_error('Зарегистированных пользователей нет!');
 }
@@ -34,7 +34,7 @@ if ($total > 0) {
         echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
     }
 
-    echo '<br />Всего именниников: '.$total.' чел.<br /><br />';
+    echo '<br>Всего именниников: '.$total.' чел.<br><br>';
 } else {
     show_error('Сегодня именинников нет!');
 }
@@ -51,11 +51,11 @@ if ($total > 0) {
         echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
     }
 
-    echo '<br />Всего новичков: '.$total.' чел.<br /><br />';
+    echo '<br>Всего новичков: '.$total.' чел.<br><br>';
 } else {
     show_error('Новичков пока нет!');
 }
 
-echo '<i class="fa fa-users"></i> <a href="/who">Kто-где?</a><br />';
+echo '<i class="fa fa-users"></i> <a href="/who">Kто-где?</a><br>';
 
 App::view(Setting::get('themes').'/foot');

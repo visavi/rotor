@@ -12,7 +12,7 @@
     @if (is_admin())
         / <a href="/admin/blog?act=blog&amp;cid={{ $category['id'] }}&amp;page={{ $page['current'] }}">Управление</a>
     @endif
-    <hr />
+    <hr>
 
     @if ($blogs)
         @foreach ($blogs as $data)
@@ -21,8 +21,8 @@
                 <b><a href="/article/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({!! format_num($data['rating']) !!})
             </div>
             <div>
-                Автор: {!! profile($data['user']) !!} ({{ date_fixed($data['created_at']) }})<br />
-                Просмотров: {{ $data['visits'] }}<br />
+                Автор: {!! profile($data['user']) !!} ({{ date_fixed($data['created_at']) }})<br>
+                Просмотров: {{ $data['visits'] }}<br>
                 <a href="/article/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
                 <a href="/article/{{ $data['id'] }}/end">&raquo;</a>
             </div>

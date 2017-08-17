@@ -24,27 +24,27 @@ if (is_admin([101, 102, 103])) {
                     echo '<div class="img">'.user_avatars($data['user']).'</div>';
                     echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                    echo '<small>('.date_fixed($data['time']).')</small><br />';
+                    echo '<small>('.date_fixed($data['time']).')</small><br>';
 
                     echo '<a href="/admin/transfers?act=view&amp;uz='.$data['user'].'">Все переводы</a></div>';
 
                     echo '<div>';
-                    echo 'Кому: '.profile($data['login']).'<br />';
-                    echo 'Сумма: '.moneys($data['summ']).'<br />';
-                    echo 'Комментарий: '.$data['text'].'<br />';
+                    echo 'Кому: '.profile($data['login']).'<br>';
+                    echo 'Сумма: '.moneys($data['summ']).'<br>';
+                    echo 'Комментарий: '.$data['text'].'<br>';
                     echo '</div>';
                 }
 
                 App::pagination($page);
 
                 echo '<div class="form">';
-                echo '<b>Поиск по пользователю:</b><br />';
+                echo '<b>Поиск по пользователю:</b><br>';
                 echo '<form action="/admin/transfers?act=view" method="get">';
-                echo '<input type="hidden" name="act" value="view" />';
-                echo '<input type="text" name="uz" />';
-                echo '<input type="submit" value="Искать" /></form></div><br />';
+                echo '<input type="hidden" name="act" value="view">';
+                echo '<input type="text" name="uz">';
+                echo '<input type="submit" value="Искать"></form></div><br>';
 
-                echo 'Всего операций: <b>'.$total.'</b><br /><br />';
+                echo 'Всего операций: <b>'.$total.'</b><br><br>';
 
             } else {
                 show_error('Истории операций еще нет!');
@@ -76,15 +76,15 @@ if (is_admin([101, 102, 103])) {
                         echo '</div>';
 
                         echo '<div>';
-                        echo 'Кому: '.profile($data['login']).'<br />';
-                        echo 'Сумма: '.moneys($data['summ']).'<br />';
-                        echo 'Комментарий: '.$data['text'].'<br />';
+                        echo 'Кому: '.profile($data['login']).'<br>';
+                        echo 'Сумма: '.moneys($data['summ']).'<br>';
+                        echo 'Комментарий: '.$data['text'].'<br>';
                         echo '</div>';
                     }
 
                     App::pagination($page);
 
-                    echo 'Всего операций: <b>'.$total.'</b><br /><br />';
+                    echo 'Всего операций: <b>'.$total.'</b><br><br>';
 
                 } else {
                     show_error('Истории операций еще нет!');
@@ -93,12 +93,12 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Данный пользователь не найден!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/transfers">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/transfers">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

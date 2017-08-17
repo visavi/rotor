@@ -12,14 +12,14 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            echo 'В наличии: '.moneys(App::user('money')).'<br />';
-            echo 'В банке: '.moneys(user_bankmoney(App::getUsername())).'<br /><br />';
+            echo 'В наличии: '.moneys(App::user('money')).'<br>';
+            echo 'В банке: '.moneys(user_bankmoney(App::getUsername())).'<br><br>';
             // --------------------- Вычисление если долг ---------------------------//
             if (App::user('sumcredit') > 0) {
-                echo '<b><span style="color:#ff0000">Сумма долга составляет: '.moneys(App::user('sumcredit')).'</span></b><br />';
+                echo '<b><span style="color:#ff0000">Сумма долга составляет: '.moneys(App::user('sumcredit')).'</span></b><br>';
 
                 if (SITETIME < App::user('timecredit')) {
-                    echo 'До истечения срока кредита осталось <b>'.formattime(App::user('timecredit') - SITETIME).'</b><br /><br />';
+                    echo 'До истечения срока кредита осталось <b>'.formattime(App::user('timecredit') - SITETIME).'</b><br><br>';
                 } else {
                     if (App::user('point') >= 10) {
                         $delpoint = 10;
@@ -27,28 +27,28 @@ if (is_user()) {
                         $delpoint = App::user('point');
                     }
 
-                    echo '<b><span style="color:#ff0000">Внимание! Время погашения кредита просрочено!</span></b><br />';
-                    echo 'Начислен штраф в сумме 1%, у вас списано '.points($delpoint).'<br /><br />';
+                    echo '<b><span style="color:#ff0000">Внимание! Время погашения кредита просрочено!</span></b><br>';
+                    echo 'Начислен штраф в сумме 1%, у вас списано '.points($delpoint).'<br><br>';
 
                     DB::run() -> query("UPDATE `users` SET `point`=`point`-?, `timecredit`=?, `sumcredit`=round(`sumcredit`*1.01) WHERE `login`=? LIMIT 1;", [$delpoint, SITETIME + 86400, App::getUsername()]);
                 }
             }
 
             echo '<div class="form">';
-            echo '<b>Операция:</b><br />';
+            echo '<b>Операция:</b><br>';
             echo '<form action="credit?act=operacia" method="post">';
-            echo '<input type="text" name="gold" /><br />';
+            echo '<input type="text" name="gold"><br>';
             echo '<select name="oper">';
             echo '<option value="1">Взять кредит</option><option value="2">Погасить кредит</option>';
-            echo '</select><br />';
-            echo '<input type="submit" value="Продолжить" /></form></div><br />';
+            echo '</select><br>';
+            echo '<input type="submit" value="Продолжить"></form></div><br>';
 
-            echo'Минимальная сумма кредита '.moneys(Setting::get('minkredit')).'<br />';
-            echo'Максимальная сумма кредита равна '.moneys(Setting::get('maxkredit')).'<br /><br />';
+            echo'Минимальная сумма кредита '.moneys(Setting::get('minkredit')).'<br>';
+            echo'Максимальная сумма кредита равна '.moneys(Setting::get('maxkredit')).'<br><br>';
 
-            echo '<b>Условия кредита</b><br />Независимо от суммы кредита банк берет '.(int)Setting::get('percentkredit').'% за операцию, кредит выдается на 5 дней<br />';
-            echo 'Каждый просроченный день увеличивает сумму на 1% и у вас списывается '.points(10).'<br />';
-            echo 'Кредит выдается пользователям у которых не менее '.points(Setting::get('creditpoint')).'<br /><br />';
+            echo '<b>Условия кредита</b><br>Независимо от суммы кредита банк берет '.(int)Setting::get('percentkredit').'% за операцию, кредит выдается на 5 дней<br>';
+            echo 'Каждый просроченный день увеличивает сумму на 1% и у вас списывается '.points(10).'<br>';
+            echo 'Кредит выдается пользователям у которых не менее '.points(Setting::get('creditpoint')).'<br><br>';
         break;
 
         ############################################################################################
@@ -63,7 +63,7 @@ if (is_user()) {
                 if ($gold >= Setting::get('minkredit')) {
                     // -------------------------- Выдача кредитов -----------------------------//
                     if ($oper == 1) {
-                        echo '<b>Получение кредита</b><br />';
+                        echo '<b>Получение кредита</b><br>';
 
                         if ($gold <= Setting::get('maxkredit')) {
                             if (App::user('point') >= Setting::get('creditpoint')) {
@@ -74,8 +74,8 @@ if (is_user()) {
 
                                     $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [App::getUsername()]);
 
-                                    echo 'Cредства успешно перечислены вам в карман!<br />';
-                                    echo 'Количество денег на руках: <b>'.moneys($allmoney).'</b><br /><br />';
+                                    echo 'Cредства успешно перечислены вам в карман!<br>';
+                                    echo 'Количество денег на руках: <b>'.moneys($allmoney).'</b><br><br>';
                                 } else {
                                     show_error('Ошибка! Вы не сможете получить кредит, возможно за вами еще числится долг!');
                                 }
@@ -88,7 +88,7 @@ if (is_user()) {
                     }
                     // -------------------------- Погашение кредитов -----------------------------//
                     if ($oper == 2) {
-                        echo '<b>Погашение кредита</b><br />';
+                        echo '<b>Погашение кредита</b><br>';
 
                         if (App::user('sumcredit') > 0) {
                             if (App::user('sumcredit') == $gold) {
@@ -97,8 +97,8 @@ if (is_user()) {
 
                                     $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [App::getUsername()]);
 
-                                    echo 'Поздравляем! Кредит успешно погашен, благодорим за сотрудничество!<br />';
-                                    echo 'Остаток денег на руках: <b>'.moneys($allmoney).'</b><br /><br />';
+                                    echo 'Поздравляем! Кредит успешно погашен, благодорим за сотрудничество!<br>';
+                                    echo 'Остаток денег на руках: <b>'.moneys($allmoney).'</b><br><br>';
                                 } else {
                                     show_error('Ошибка! у вас нехватает денег для погашения кредита!');
                                 }
@@ -116,7 +116,7 @@ if (is_user()) {
                 show_error('Ошибка! Не выбрана операция!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/credit">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/credit">Вернуться</a><br>';
         break;
 
     endswitch;
@@ -125,7 +125,7 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы совершать операции, необходимо');
 }
 
-echo '<i class="fa fa-money"></i> <a href="/games/bank">Банк</a><br />';
-echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-money"></i> <a href="/games/bank">Банк</a><br>';
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

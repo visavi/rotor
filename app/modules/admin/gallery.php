@@ -14,7 +14,7 @@ if (is_admin()) {
         case 'index':
 
             echo '<a href="/gallery/create">Добавить фото</a> / ';
-            echo '<a href="/gallery?page='.$page.'">Обзор</a><hr />';
+            echo '<a href="/gallery?page='.$page.'">Обзор</a><hr>';
 
             $total = Photo::count();
             $page = App::paginate(Setting::get('fotolist'), $total);
@@ -33,33 +33,33 @@ if (is_admin()) {
                 foreach ($photos as $data) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-picture-o"></i> ';
-                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/uploads/pictures/'.$data['link']).')<br />';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
+                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/uploads/pictures/'.$data['link']).')<br>';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]).'</a><br />';
+                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]).'</a><br>';
 
                     if (!empty($data['text'])){
-                        echo App::bbCode($data['text']).'<br />';
+                        echo App::bbCode($data['text']).'<br>';
                     }
 
-                    echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
+                    echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br>';
                     echo '<a href="/gallery?act=comments&amp;gid='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                     echo '<a href="/gallery?act=end&amp;gid='.$data['id'].'">&raquo;</a>';
                     echo '</div>';
                 }
 
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+                echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
                 App::pagination($page);
 
-                echo 'Всего фотографий: <b>'.$total.'</b><br /><br />';
+                echo 'Всего фотографий: <b>'.$total.'</b><br><br>';
             } else {
                 show_error('Фотографий еще нет!');
             }
 
             if (is_admin([101])) {
-                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
         break;
 
@@ -77,19 +77,19 @@ if (is_admin()) {
                 echo '<div class="form">';
                 echo '<form action="/admin/gallery?act=change&amp;gid='.$gid.'&amp;page='.$page.'" method="post">';
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-                echo 'Название: <br /><input type="text" name="title" value="'.$photo['title'].'" /><br />';
-                echo 'Подпись к фото: <br /><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br />';
+                echo 'Название: <br><input type="text" name="title" value="'.$photo['title'].'"><br>';
+                echo 'Подпись к фото: <br><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br>';
 
                 echo 'Закрыть комментарии: ';
                 $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
+                echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
-                echo '<input type="submit" value="Изменить" /></form></div><br />';
+                echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
                 show_error('Ошибка! Данной фотографии не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -130,8 +130,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=edit&amp;gid='.$gid.'&amp;page='.$page.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery">Галерея</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=edit&amp;gid='.$gid.'&amp;page='.$page.'">Вернуться</a><br>';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery">Галерея</a><br>';
         break;
 
         ############################################################################################
@@ -174,7 +174,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -198,14 +198,14 @@ if (is_admin()) {
                 show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery">Вернуться</a><br>';
         break;
 
     default:
         App::redirect("/admin/gallery");
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

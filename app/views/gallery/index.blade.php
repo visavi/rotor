@@ -33,13 +33,13 @@ $links = [
             </div>
 
             <div>
-                <a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]) !!}</a><br />
+                <a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]) !!}</a><br>
 
                 @if ($data['text'])
-                    {!! App::bbCode($data['text']) !!}<br />
+                    {!! App::bbCode($data['text']) !!}<br>
                 @endif
 
-                Добавлено: {!! profile($data->user) !!} ({{ date_fixed($data['created_at']) }})<br />
+                Добавлено: {!! profile($data->user) !!} ({{ date_fixed($data['created_at']) }})<br>
                 <a href="/gallery/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
                 <a href="/gallery/{{ $data['id'] }}/end">&raquo;</a>
             </div>
@@ -47,7 +47,7 @@ $links = [
 
         {{ App::pagination($page) }}
 
-        Всего фотографий: <b>{{ $page['total'] }}</b><br /><br />
+        Всего фотографий: <b>{{ $page['total'] }}</b><br><br>
 
     @else
         {{ show_error('Фотографий нет, будь первым!') }}

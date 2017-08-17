@@ -46,12 +46,12 @@ switch ($action):
             App::pagination($page);
 
             echo '<div class="form">';
-            echo '<b>Поиск пользователя:</b><br />';
+            echo '<b>Поиск пользователя:</b><br>';
             echo '<form action="/ratinglist?act=search&amp;page='.$page['current'].'" method="post">';
-            echo '<input type="text" name="uz" value="'.App::getUsername().'" />';
-            echo '<input type="submit" value="Искать" /></form></div><br />';
+            echo '<input type="text" name="uz" value="'.App::getUsername().'">';
+            echo '<input type="submit" value="Искать"></form></div><br>';
 
-            echo 'Всего юзеров: <b>'.$total.'</b><br /><br />';
+            echo 'Всего юзеров: <b>'.$total.'</b><br><br>';
         } else {
             show_error('Пользователей еще нет!');
         }
@@ -90,7 +90,7 @@ switch ($action):
             show_error('Ошибка! Вы не ввели логин пользователя');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ratinglist?page='.$page.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ratinglist?page='.$page.'">Вернуться</a><br>';
     break;
 
 endswitch;

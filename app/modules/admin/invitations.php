@@ -15,13 +15,13 @@ switch ($action):
 case 'index':
 
     if (empty(Setting::get('invite'))) {
-        echo '<i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br /><br />';
+        echo '<i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br><br>';
     }
 
     if (empty($used)){
-        echo '<b>Неиспользованные</b> / <a href="/admin/invitations?used=1">Использованные</a><hr />';
+        echo '<b>Неиспользованные</b> / <a href="/admin/invitations?used=1">Использованные</a><hr>';
     } else {
-        echo '<a href="/admin/invitations">Неиспользованные</a> / <b>Использованные</b><hr />';
+        echo '<a href="/admin/invitations">Неиспользованные</a> / <b>Использованные</b><hr>';
     }
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `invite` WHERE `used`=?;", [$used]);
@@ -35,28 +35,28 @@ case 'index':
 
         while ($data = $invitations -> fetch()) {
 
-            echo '<div class="b"><input type="checkbox" name="del[]" value="'.$data['id'].'" /> <b>'.$data['hash'].'</b></div>';
-            echo '<div>Владелец: '.profile($data['user']).'<br />';
+            echo '<div class="b"><input type="checkbox" name="del[]" value="'.$data['id'].'"> <b>'.$data['hash'].'</b></div>';
+            echo '<div>Владелец: '.profile($data['user']).'<br>';
 
             if (!empty($data['invited'])) {
-                echo 'Приглашенный: '.profile($data['invited']).'<br />';
+                echo 'Приглашенный: '.profile($data['invited']).'<br>';
             }
-            echo 'Создан: '.date_fixed($data['time']).'<br />';
+            echo 'Создан: '.date_fixed($data['time']).'<br>';
             echo '</div>';
         }
 
-        echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+        echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
         App::pagination($page);
 
-        echo 'Всего ключей: <b>'.$total.'</b><br /><br />';
+        echo 'Всего ключей: <b>'.$total.'</b><br><br>';
 
     } else {
         show_error('Приглашений еще нет!');
     }
 
-    echo '<i class="fa fa-check"></i> <a href="/admin/invitations?act=new">Создать ключи</a><br />';
-    echo '<i class="fa fa-key"></i> <a href="/admin/invitations?act=list">Список ключей</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/admin/invitations?act=new">Создать ключи</a><br>';
+    echo '<i class="fa fa-key"></i> <a href="/admin/invitations?act=list">Список ключей</a><br>';
 break;
 
 ############################################################################################
@@ -64,7 +64,7 @@ break;
 ############################################################################################
 case 'new':
 
-    echo '<b><big>Генерация новых ключей:</big></b><br />';
+    echo '<b><big>Генерация новых ключей:</big></b><br>';
     echo '<div class="form">';
     echo '<form action="/admin/invitations?act=generate&amp;uid='.$_SESSION['token'].'" method="post">';
     echo '<select name="keys">';
@@ -76,31 +76,31 @@ case 'new':
     echo '<option value="20">20 ключей</option>';
     echo '<option value="50">50 ключей</option>';
     echo '</select>	';
-    echo '<input type="submit" value="Генерировать" /></form></div><br />';
+    echo '<input type="submit" value="Генерировать"></form></div><br>';
 
-    echo '<b><big>Отправить ключ пользователю:</big></b><br />';
+    echo '<b><big>Отправить ключ пользователю:</big></b><br>';
     echo '<div class="form">';
     echo '<form action="/admin/invitations?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
-    echo 'Логин пользователя:<br />';
-    echo '<input type="text" name="user" /><br />';
+    echo 'Логин пользователя:<br>';
+    echo '<input type="text" name="user"><br>';
     echo '<select name="keys">';
     echo '<option value="1">1 ключ</option>';
     echo '<option value="2">2 ключа</option>';
     echo '<option value="3">3 ключа</option>';
     echo '<option value="4">4 ключа</option>';
     echo '<option value="5">5 ключей</option>';
-    echo '</select><br />';
-    echo '<input type="submit" value="Отправить" /></form></div><br />';
+    echo '</select><br>';
+    echo '<input type="submit" value="Отправить"></form></div><br>';
 
     if (is_admin([101])){
-        echo '<b><big>Рассылка ключей:</big></b><br />';
+        echo '<b><big>Рассылка ключей:</big></b><br>';
         echo '<div class="form">';
-        echo 'Разослать ключи активным пользователям:<br />';
+        echo 'Разослать ключи активным пользователям:<br>';
         echo '<form action="/admin/invitations?act=mailing&amp;uid='.$_SESSION['token'].'" method="post">';
-        echo '<input type="submit" value="Разослать" /></form></div><br />';
+        echo '<input type="submit" value="Разослать"></form></div><br>';
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -112,12 +112,12 @@ case 'list':
     $total = count($invite);
 
     if ($total > 0){
-        echo 'Всего ваших ключей: '.$total.'<br />';
-        echo '<textarea cols="25" rows="10">'.implode(', ', $invite).'</textarea><br /><br />';
+        echo 'Всего ваших ключей: '.$total.'<br>';
+        echo '<textarea cols="25" rows="10">'.implode(', ', $invite).'</textarea><br><br>';
     } else {
         show_error('Ошибка! Нет ваших пригласительных ключей!');
     }
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -155,7 +155,7 @@ case 'send':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -203,7 +203,7 @@ case 'mailing':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
 break;
 ############################################################################################
 ##                                    Генерация ключей                                    ##
@@ -233,7 +233,7 @@ case 'generate':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -261,12 +261,12 @@ case 'del':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br>';
 break;
 
 endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

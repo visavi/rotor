@@ -98,7 +98,7 @@ class BlogController extends BaseController
         $end = ($total < $page['offset'] + 1) ? $total : $page['offset'] + 1;
 
         for ($i = $page['offset']; $i < $end; $i++) {
-            $blog['text'] = App::bbCode($text[$i]) . '<br />';
+            $blog['text'] = App::bbCode($text[$i]) . '<br>';
         }
 
         $tagsList = preg_split('/[\s]*[,][\s]*/', $blog['tags']);

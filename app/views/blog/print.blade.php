@@ -10,7 +10,7 @@
 
     <?=App::bbCode($blog['text'])?>
 
-    <br /><br />
+    <br><br>
 
     URL: <a href="<?= Setting::get('home') ?>/article/<?=$blog['id']?>"><?= Setting::get('home')?>/article/<?=$blog['id']?></a>
 @stop

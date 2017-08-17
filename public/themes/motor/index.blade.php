@@ -9,18 +9,19 @@ header('Content-type:text/html; charset=utf-8');
             {{ Setting::get('title') }}
         @show
     </title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="image_src" href="/assets/img/images/icon.png" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="image_src" href="/assets/img/images/icon.png">
     @section('styles')
         <?= include_style() ?>
     @show
     @stack('styles')
-    <link rel="stylesheet" href="/themes/motor/css/style.css" type="text/css" />
-    <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />
+    <link rel="stylesheet" href="/themes/motor/css/style.css">
+    <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
     <meta name="description" content="@yield('description', Setting::get('description'))">
     <meta name="keywords" content="@yield('keywords', Setting::get('keywords'))">
-    <meta name="generator" content="RotorCMS {{ env('VERSION') }}" />
+    <meta name="generator" content="RotorCMS {{ env('VERSION') }}">
 </head>
 <body>
 <!--Design by Vantuz (http://visavi.net)-->
@@ -29,13 +30,13 @@ header('Content-type:text/html; charset=utf-8');
     <div class="main" id="up">
 
         <div class="panelTop">
-            <img src="/themes/motor/img/panel_top.gif" alt="" />
+            <img src="/themes/motor/img/panel_top.gif" alt="">
         </div>
         <div class="backgr_top">
             <div class="content">
                 <div class="logo">
                     <!-- <a href="/"><span class="logotype">{{ Setting::get('title') }}</span></a> -->
-                    <a href="/"><img src="/assets/img/images/logo.png" alt="{{ Setting::get('title') }}" /></a>
+                    <a href="/"><img src="/assets/img/images/logo.png" alt="{{ Setting::get('title') }}"></a>
                 </div>
 
                 <div class="menu">

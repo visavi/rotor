@@ -1,5 +1,5 @@
 <h3>Поиск запроса &quot;<?=$find?>&quot; в тексте</h3>
-Найдено совпадений: <b><?=$total?></b><br /><br />
+Найдено совпадений: <b><?=$total?></b><br><br>
 
 <?php foreach ($blogs as $data): ?>
 
@@ -14,9 +14,9 @@
 	} ?>
 
 	<div>
-		<?=$data['text']?><br />
+		<?=$data['text']?><br>
 
-		Категория: <a href="/blog/blog?cid=<?=$data['id']?>"><?=$data['name']?></a><br />
+		Категория: <a href="/blog/blog?cid=<?=$data['id']?>"><?=$data['name']?></a><br>
 		Автор: <?=profile($data['user'])?> (<?=date_fixed($data['time'])?>)
 	</div>
 <?php endforeach; ?>

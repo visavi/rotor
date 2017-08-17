@@ -9,16 +9,16 @@ header("Content-type:text/html; charset=utf-8");
             {{ Setting::get('title') }}
         @show
     </title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="image_src" href="/assets/img/images/icon.png" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="image_src" href="/assets/img/images/icon.png">
     <?= include_style() ?>
-    <link rel="stylesheet" href="/themes/bluewater/css/style.css" type="text/css" />
-    <link rel="alternate" href="/news/rsss" title="RSS News" type="application/rss+xml" />
+    <link rel="stylesheet" href="/themes/bluewater/css/style.css">
+    <link rel="alternate" href="/news/rsss" title="RSS News" type="application/rss+xml">
     <?= include_javascript() ?>
-    <meta name="keywords" content="%KEYWORDS%" />
-    <meta name="description" content="%DESCRIPTION%" />
-    <meta name="generator" content="RotorCMS <?= env('VERSION') ?>" />
+    <meta name="keywords" content="%KEYWORDS%">
+    <meta name="description" content="%DESCRIPTION%">
+    <meta name="generator" content="RotorCMS <?= env('VERSION') ?>">
 </head>
 <body>
 <!--Design by WmLiM (http://komwap.ru)-->

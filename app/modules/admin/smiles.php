@@ -27,20 +27,20 @@ case 'index':
     echo '<form action="/admin/smiles?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
     foreach($smiles as $smile) {
-        echo '<img src="/uploads/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
+        echo '<img src="/uploads/smiles/'.$smile['name'].'" alt=""> — <b>'.$smile['code'].'</b><br>';
 
-        echo '<input type="checkbox" name="del[]" value="'.$smile['id'].'" /> <a href="/admin/smiles?act=edit&amp;id='.$smile['id'].'&amp;page='.$page['current'].'">Редактировать</a><br />';
+        echo '<input type="checkbox" name="del[]" value="'.$smile['id'].'"> <a href="/admin/smiles?act=edit&amp;id='.$smile['id'].'&amp;page='.$page['current'].'">Редактировать</a><br>';
     }
 
-    echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+    echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
     App::pagination($page);
 
-    echo 'Всего cмайлов: <b>'.$total.'</b><br /><br />';
+    echo 'Всего cмайлов: <b>'.$total.'</b><br><br>';
 
     //show_error('Смайлы еще не загружены!');
 
-    echo '<i class="fa fa-upload"></i> <a href="/admin/smiles?act=add&amp;page='.$page['current'].'">Загрузить</a><br />';
+    echo '<i class="fa fa-upload"></i> <a href="/admin/smiles?act=add&amp;page='.$page['current'].'">Загрузить</a><br>';
 break;
 
 /**
@@ -53,15 +53,15 @@ case 'add':
     echo '<div class="form">';
     echo '<form action="/admin/smiles?act=load&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
 
-    echo 'Прикрепить смайл:<br /><input type="file" name="smile" /><br />';
-    echo 'Код смайла: <br /><input type="text" name="code" /> <i>Код смайла должен начинаться со знака двоеточия</i><br />';
+    echo 'Прикрепить смайл:<br><input type="file" name="smile"><br>';
+    echo 'Код смайла: <br><input type="text" name="code"> <i>Код смайла должен начинаться со знака двоеточия</i><br>';
 
-    echo '<input type="submit" value="Загрузить" /></form></div><br />';
+    echo '<input type="submit" value="Загрузить"></form></div><br>';
 
-    echo 'Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png, bmp<br />';
-    echo 'Весом не более '.formatsize(Setting::get('smilemaxsize')).' и размером до '.Setting::get('smilemaxweight').' px<br /><br />';
+    echo 'Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png, bmp<br>';
+    echo 'Весом не более '.formatsize(Setting::get('smilemaxsize')).' и размером до '.Setting::get('smilemaxweight').' px<br><br>';
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br>';
 break;
 
 /**
@@ -142,14 +142,14 @@ case 'edit':
     $smile = Smile::find_one($id);
 
     if (! empty($smile)) {
-        echo '<b><big>Редактирование смайла</big></b><br /><br />';
-        echo '<img src="/uploads/smiles/'.$smile['name'].'" alt="" /> — <b>'.$smile['code'].'</b><br />';
+        echo '<b><big>Редактирование смайла</big></b><br><br>';
+        echo '<img src="/uploads/smiles/'.$smile['name'].'" alt=""> — <b>'.$smile['code'].'</b><br>';
 
         echo '<div class="form">';
         echo '<form action="/admin/smiles?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
-        echo 'Код смайла:<br />';
-        echo '<input type="text" name="code" value="'.$smile['code'].'" /> <i>Код смайла должен начинаться со знака двоеточия</i><br />';
-        echo '<input type="submit" value="Изменить" /></form></div><br />';
+        echo 'Код смайла:<br>';
+        echo '<input type="text" name="code" value="'.$smile['code'].'"> <i>Код смайла должен начинаться со знака двоеточия</i><br>';
+        echo '<input type="submit" value="Изменить"></form></div><br>';
     } else {
         show_error('Ошибка! Смайла для редактирования не существует!');
     }
@@ -240,6 +240,6 @@ break;
 
 endswitch;
 
-echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 App::view(Setting::get('themes').'/foot');

@@ -21,11 +21,11 @@ if (count($downs) > 0) {
         echo 'Мои: <a href="/load/active?act=files">файлы</a>, <a href="/load/active?act=comments">комментарии</a> / ';
     }
 
-    echo 'Новые: <a href="/load/new?act=files">файлы</a>, <a href="/load/new?act=comments">комментарии</a><hr />';
+    echo 'Новые: <a href="/load/new?act=files">файлы</a>, <a href="/load/new?act=comments">комментарии</a><hr>';
 
     $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-3600 * 120]);
 
-    echo '<i class="fa fa-folder-open"></i> <b><a href="/load/fresh">Свежие загрузки</a></b> ('.$totalnew.')<br />';
+    echo '<i class="fa fa-folder-open"></i> <b><a href="/load/fresh">Свежие загрузки</a></b> ('.$totalnew.')<br>';
 
     foreach($output[0] as $key => $data) {
         echo '<i class="fa fa-folder-open"></i> ';
@@ -34,7 +34,7 @@ if (count($downs) > 0) {
         $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
         $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
 
-        echo '('.$data['count'] . $subcnt . $new.')<br />';
+        echo '('.$data['count'] . $subcnt . $new.')<br>';
         // ---------------------- Старый вывод ------------------------------//
         /**
         * if (isset($output[$key])) {
@@ -45,7 +45,7 @@ if (count($downs) > 0) {
         * if ($i==0) {$comma = '';} else {$comma = ', ';}
         * echo $comma.'<a href="/load/down?cid='.$datasub['id'].'">'.$datasub['name'].'</a>';
         * ++$i;}
-        * echo '</small><br />';
+        * echo '</small><br>';
         * }
         */
         // ------------------------- Новый вывод ---------------------------//
@@ -55,16 +55,16 @@ if (count($downs) > 0) {
                 $new = (empty($odata['new'])) ? '' : '/<span style="color:#ff0000">+'.$odata['new'].'</span>';
 
                 echo '<i class="fa fa-angle-right"></i> <b><a href="/load/down?cid='.$odata['id'].'">'.$odata['name'].'</a></b> ';
-                echo '('.$odata['count'] . $subcnt . $new.')<br />';
+                echo '('.$odata['count'] . $subcnt . $new.')<br>';
             }
         }
         // ----------------------------------------------------//
     }
 
-    echo '<br />';
+    echo '<br>';
     echo '<a href="/load/top">Топ файлов</a> / ';
     echo '<a href="/load/search">Поиск</a> / ';
-    echo '<a href="/load/add">Добавить файл</a><br />';
+    echo '<a href="/load/add">Добавить файл</a><br>';
 
 } else {
     show_error('Разделы загрузок еще не созданы!');

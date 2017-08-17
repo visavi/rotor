@@ -4,20 +4,20 @@ header("Content-type:text/html; charset=utf-8");
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>
         @section('title')
             {{ Setting::get('title') }}
         @show
     </title>
-<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <?= include_style(); ?>
-<link rel="stylesheet" href="/themes/sky/css/style.css" type="text/css" media="screen" />
-<link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml" />
+<link rel="stylesheet" href="/themes/sky/css/style.css" media="screen">
+<link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
 <?= include_javascript(); ?>
-<meta name="keywords" content="@yield('keywords', Setting::get('keywords'))" />
-<meta name="description" content="@yield('description', Setting::get('description'))" />
-<meta name="generator" content="RotorCMS <?= env('VERSION') ?>" />
+<meta name="keywords" content="@yield('keywords', Setting::get('keywords'))">
+<meta name="description" content="@yield('description', Setting::get('description'))">
+<meta name="generator" content="RotorCMS <?= env('VERSION') ?>">
 </head><body>
 <!--Themes by TurikUs-->
 
@@ -131,14 +131,14 @@ header("Content-type:text/html; charset=utf-8");
 <div class="divb">Авторизация</div>
 
 <form method="post" action="/login<?= App::returnUrl() ?>">
-Логин:<br /><input name="login" value="'.$cooklog.'" /><br />
-Пароль:<br /><input name="pass" type="password" /><br />
+Логин:<br><input name="login" value="'.$cooklog.'"><br>
+Пароль:<br><input name="pass" type="password"><br>
 Запомнить меня:
-<input name="cookietrue" type="checkbox" value="1" checked="checked" /><br />
+<input name="cookietrue" type="checkbox" value="1" checked="checked"><br>
 
-<input value="Войти" type="submit" /></form>
+<input value="Войти" type="submit"></form>
 
-<a href="/register">Регистрация</a><br />
+<a href="/register">Регистрация</a><br>
 <a href="/recovery">Забыли пароль?</a>
 <?php endif; ?>
 
@@ -205,7 +205,7 @@ header("Content-type:text/html; charset=utf-8");
 
 
                                 <h2 class="art-PostHeaderIcon-wrapper">
-                                    <img src="/themes/sky/img/PostHeaderIcon.png" width="29" height="29" alt="PostHeaderIcon" />
+                                    <img src="/themes/sky/img/PostHeaderIcon.png" width="29" height="29" alt="PostHeaderIcon">
                                     <span class="art-PostHeader"><?= Setting::get('title') ?></span>
                                 </h2>
 

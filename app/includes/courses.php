@@ -27,10 +27,10 @@ $courses = @unserialize(file_get_contents(STORAGE."/temp/courses.dat"));
 
 if (!empty($courses['USD'])){
 
-	echo '<b>Курсы валют</b> ('.$courses['Date'].')<br />';
-	echo '<b>'.$courses['USD']['nominal'].' '.$courses['USD']['name'].'</b> - '.$courses['USD']['value'].'<br />';
-	echo '<b>'.$courses['EUR']['nominal'].' '.$courses['EUR']['name'].'</b> - '.$courses['EUR']['value'].'<br />';
-	echo '<b>'.$courses['UAH']['nominal'].' '.$courses['UAH']['name'].'</b> - '.$courses['UAH']['value'].'<br />';
+	echo '<b>Курсы валют</b> ('.$courses['Date'].')<br>';
+	echo '<b>'.$courses['USD']['nominal'].' '.$courses['USD']['name'].'</b> - '.$courses['USD']['value'].'<br>';
+	echo '<b>'.$courses['EUR']['nominal'].' '.$courses['EUR']['name'].'</b> - '.$courses['EUR']['value'].'<br>';
+	echo '<b>'.$courses['UAH']['nominal'].' '.$courses['UAH']['name'].'</b> - '.$courses['UAH']['value'].'<br>';
 
 } else {
 	show_error('Ошибка! Не удалось загрузить последние курсы валют!');

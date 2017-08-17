@@ -32,33 +32,33 @@ case 'index':
             echo '<div class="b">';
             echo '<div class="img">'.user_avatars($data->ignoring).'</div>';
 
-            echo '<b>'.profile($data->ignoring).'</b> <small>('.date_fixed($data['created_at']).')</small><br />';
+            echo '<b>'.profile($data->ignoring).'</b> <small>('.date_fixed($data['created_at']).')</small><br>';
             echo user_title($data->ignoring).' '.user_online($data->ignoring).'</div>';
 
             echo '<div>';
             if ($data['text']) {
-                echo 'Заметка: '.$data['text'].'<br />';
+                echo 'Заметка: '.$data['text'].'<br>';
             }
 
-            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
             echo '<a href="/private/send?user='.$data->getIgnore()->login.'">Написать</a> | ';
             echo '<a href="/ignore/note/'.$data['id'].'">Заметка</a>';
             echo '</div>';
         }
 
-        echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+        echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
         App::pagination($page);
 
-        echo 'Всего в игноре: <b>'.$page['total'].'</b><br />';
+        echo 'Всего в игноре: <b>'.$page['total'].'</b><br>';
     } else {
         show_error('Игнор-лист пуст!');
     }
 
-    echo '<br /><div class="form"><form method="post" action="/ignore/create">';
+    echo '<br><div class="form"><form method="post" action="/ignore/create">';
     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-    echo '<b>Логин:</b><br /><input name="user" />';
-    echo '<input value="Добавить" type="submit" /></form></div><br />';
+    echo '<b>Логин:</b><br><input name="user">';
+    echo '<input value="Добавить" type="submit"></form></div><br>';
     break;
 
 ############################################################################################
@@ -140,16 +140,16 @@ case 'note':
         }
     }
 
-    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$ignore->getIgnore()->login.'</b> '.user_online($ignore->ignoring).':<br /><br />';
+    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$ignore->getIgnore()->login.'</b> '.user_online($ignore->ignoring).':<br><br>';
 
     echo '<div class="form">';
     echo '<form method="post" action="/ignore/note/'.$id.'">';
     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-    echo 'Заметка:<br />';
-    echo '<textarea cols="25" rows="5" name="msg" id="markItUp">'.$ignore['text'].'</textarea><br />';
-    echo '<input value="Редактировать" type="submit" /></form></div><br />';
+    echo 'Заметка:<br>';
+    echo '<textarea cols="25" rows="5" name="msg" id="markItUp">'.$ignore['text'].'</textarea><br>';
+    echo '<input value="Редактировать" type="submit"></form></div><br>';
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ignore?page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -179,7 +179,7 @@ case 'delete':
 
 endswitch;
 
-echo '<i class="fa fa-users"></i> <a href="/contact">Контакт-лист</a><br />';
-echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br />';
+echo '<i class="fa fa-users"></i> <a href="/contact">Контакт-лист</a><br>';
+echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

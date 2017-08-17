@@ -50,14 +50,14 @@
             <?php $display = $checkVote ? '' : ' style="display: none"'; ?>
 
             <label>
-                <input name="vote" onchange="return showVoteForm();" type="checkbox"{!! $checked !!} /> Создать голосование
-            </label><br />
+                <input name="vote" onchange="return showVoteForm();" type="checkbox"{!! $checked !!}> Создать голосование
+            </label><br>
 
             <div class="js-vote-form"{!! $display !!}>
                 <div class="form-group{{ App::hasError('question') }}">
 
                     <label for="inputQuestion">Вопрос:</label>
-                    <input type="text" name="question" class="form-control" id="inputQuestion" value="{{ App::getInput('question') }}" maxlength="100" />
+                    <input type="text" name="question" class="form-control" id="inputQuestion" value="{{ App::getInput('question') }}" maxlength="100">
                     {!! App::textError('question') !!}
                 </div>
 
@@ -67,19 +67,19 @@
 
                     @for ($i=0; $i<10; $i++)
                         <label for="inputAnswer{{ $i }}">Ответ {{ $i + 1 }}</label>
-                        <input type="text" name="answer[]" class="form-control" id="inputAnswer{{ $i }}" value="{{ isset($answers[$i]) ? $answers[$i] : '' }}" maxlength="50" />
+                        <input type="text" name="answer[]" class="form-control" id="inputAnswer{{ $i }}" value="{{ isset($answers[$i]) ? $answers[$i] : '' }}" maxlength="50">
                     @endfor
                     {!! App::textError('answer') !!}
                 </div>
             </div>
             <button class="btn btn-primary">Создать тему</button>
         </form>
-    </div><br />
+    </div><br>
 
-    Прежде чем создать новую тему необходимо ознакомиться с правилами<br />
-    <a href="/rules">Правила сайта</a><br />
-    Также убедись что такой темы нет, чтобы не создавать одинаковые, для этого введи ключевое слово в поиске<br />
-    <a href="/forum/search">Поиск по форуму</a><br />
-    И если после этого вы уверены, что ваша тема будет интересна другим пользователям, то можете ее создать<br /><br />
+    Прежде чем создать новую тему необходимо ознакомиться с правилами<br>
+    <a href="/rules">Правила сайта</a><br>
+    Также убедись что такой темы нет, чтобы не создавать одинаковые, для этого введи ключевое слово в поиске<br>
+    <a href="/forum/search">Поиск по форуму</a><br>
+    И если после этого вы уверены, что ваша тема будет интересна другим пользователям, то можете ее создать<br><br>
 
 @stop

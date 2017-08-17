@@ -32,7 +32,7 @@ if ($act == 'index') {
                 echo '<b><a href="/admin/board?act=board&amp;id='.$data[2].'">'.$data[0].'</a></b> ('.(int)$totalboard.')';
 
                 if ($is_admin){
-                    echo '<br /><input type="checkbox" name="del[]" value="'.$key.'" /> ';
+                    echo '<br><input type="checkbox" name="del[]" value="'.$key.'"> ';
 
                     if ($key != 0){echo '<a href="/admin/board?act=move&amp;id='.$key.'&amp;where=0&amp;uid='.$_SESSION['token'].'">Вверх</a> / ';} else {echo 'Вверх / ';}
                     if ($total > ($key+1)){echo '<a href="/admin/board?act=move&amp;id='.$key.'&amp;where=1&amp;uid='.$_SESSION['token'].'">Вниз</a>';} else {echo 'Вниз';}
@@ -44,14 +44,14 @@ if ($act == 'index') {
                 echo '<div>'.$data[1].'</div>';
             }
 
-            if ($is_admin) {echo '<br /><input type="submit" value="Удалить выбранное" /></form>';}
+            if ($is_admin) {echo '<br><input type="submit" value="Удалить выбранное"></form>';}
 
             echo '<p>Всего рубрик: <b>'.(int)$total.'</b></p>';
 
         } else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
     } else {show_error('Доска объявлений пуста, рубрики еще не созданы!');}
 
-    if ($is_admin) {echo '<i class="fa fa-pencil"></i> <a href="/admin/board?act=add">Добавить</a><br />';}
+    if ($is_admin) {echo '<i class="fa fa-pencil"></i> <a href="/admin/board?act=add">Добавить</a><br>';}
 }
 
 ############################################################################################
@@ -69,7 +69,7 @@ if ($act=="board")  {
 
             echo '<a href="/admin/board">Объявления</a> / ';
             echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a> / ';
-            echo '<a href="/board?act=board&amp;id='.$id.'">Обзор</a><br /><hr />';
+            echo '<a href="/board?act=board&amp;id='.$id.'">Обзор</a><br><hr>';
 
             if (file_exists(STORAGE."/board/$id.dat")){
                 $lines = file(STORAGE."/board/$id.dat");
@@ -99,16 +99,16 @@ if ($act=="board")  {
 
                     echo '<div class="b">';
 
-                    echo '<input type="checkbox" name="del[]" value="'.$num.'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$num.'"> ';
 
                     echo '<i class="fa fa-folder-open"></i> '.($i+1).'. ';
                     echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;page='.$page['current'].'">'.$data[0].'</a></b> ';
                     echo '(<small>'.date_fixed($data[3]).'</small>)</div>';
-                    echo '<div>Текст объявления: '.$data[2].'<br />';
+                    echo '<div>Текст объявления: '.$data[2].'<br>';
                     echo 'Автор объявления: '.profile($data[1]).'</div>';
 
                     }
-                    echo '<br /><input type="submit" value="Удалить выбранное" /></form><br />';
+                    echo '<br><input type="submit" value="Удалить выбранное"></form><br>';
 
                     App::pagination($page);
 
@@ -119,7 +119,7 @@ if ($act=="board")  {
         } else {show_error('Ошибка! Данной рубрики не существует!');}
     } else {show_error('Ошибка! Не выбрана рубрика для просмотра!');}
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br>';
 }
 
 ############################################################################################
@@ -129,17 +129,17 @@ if ($act=="add") {
 
     if (is_admin([101,102])){
 
-        echo '<b><big>Добавление рубрики</big></b><br /><br />';
+        echo '<b><big>Добавление рубрики</big></b><br><br>';
 
         echo '<div class="form">';
         echo '<form action="/admin/board?act=addrub&amp;uid='.$_SESSION['token'].'" method="post">';
-        echo 'Название: <br /><input type="text" name="zag" /><br />';
-        echo 'Описание: <br /><input type="text" name="msg" /><br />';
-        echo '<input type="submit" value="Добавить" /></form></div><br />';
+        echo 'Название: <br><input type="text" name="zag"><br>';
+        echo 'Описание: <br><input type="text" name="msg"><br>';
+        echo '<input type="submit" value="Добавить"></form></div><br>';
 
     } else {show_error('Ошибка! Добавлять рубрики могут только администраторы!');}
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br>';
 }
 
 ############################################################################################
@@ -170,8 +170,8 @@ if ($act=="addrub") {
         } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
     } else {show_error('Ошибка! Добавлять рубрики могут только администраторы!');}
 
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/board?act=add">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">К объявлениям</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/board?act=add">Вернуться</a><br>';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">К объявлениям</a><br>';
 }
 
 
@@ -187,20 +187,20 @@ if ($act=="edit") {
             if (isset($file[$id])){
             $data = explode("|", $file[$id]);
 
-            echo '<b><big>Редактирование рубрики</big></b><br /><br />';
+            echo '<b><big>Редактирование рубрики</big></b><br><br>';
 
             echo '<div class="form"><form action="/admin/board?id='.$id.'&amp;act=addedit&amp;uid='.$_SESSION['token'].'" method="post">';
 
-            echo 'Название: <br /><input type="text" name="zag" value="'.$data[0].'" /><br />';
-            echo 'Описание: <br /><input type="text" name="msg" value="'.$data[1].'" /><br />';
+            echo 'Название: <br><input type="text" name="zag" value="'.$data[0].'"><br>';
+            echo 'Описание: <br><input type="text" name="msg" value="'.$data[1].'"><br>';
 
-            echo '<input type="submit" value="Изменить" /></form></div><br />';
+            echo '<input type="submit" value="Изменить"></form></div><br>';
 
             } else {show_error('Ошибка! Данной рубрики не существует!');}
         } else {show_error('Ошибка! Не выбрана рубрика для редактирования!');}
     } else {show_error('Ошибка! Редактировать рубрики могут только администраторы!');}
 
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board?">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board?">Вернуться</a><br>';
 }
 
 
@@ -237,8 +237,8 @@ if (is_admin([101,102])){
     } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 } else {show_error('Ошибка! Редактировать рубрики могут только администраторы!');}
 
-echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/board?act=add">Вернуться</a><br />';
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">К объявлениям</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/board?act=add">Вернуться</a><br>';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">К объявлениям</a><br>';
 }
 
 ############################################################################################
@@ -264,7 +264,7 @@ if ($act=="move"){
         } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
     } else {show_error('Ошибка! Двигать рубрики могут только администраторы!');}
 
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br>';
 }
 
 
@@ -298,7 +298,7 @@ if ($act=="delrub") {
         } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
     } else {show_error('Ошибка! Удалять рубрики могут только администраторы!');}
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board">Вернуться</a><br>';
 }
 
 
@@ -323,11 +323,11 @@ if ($act=="deltop") {
         } else {show_error('Ошибка! Не выбрана рубрика для удаления!');}
     } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board?act=board&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/board?act=board&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
 }
 
 //----------------------- Концовка -------------------------//
-echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

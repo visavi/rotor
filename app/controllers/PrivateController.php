@@ -154,7 +154,7 @@ class PrivateController extends BaseController
                 foreach ($deliveryUsers as $deliveryUser) {
 
                     $subject = $deliveryUser['newprivat'] . ' непрочитанных сообщений (' . Setting::get('title') . ')';
-                    $message = 'Здравствуйте ' . $deliveryUser['login'] . '!<br />У вас имеются непрочитанные сообщения (' . $deliveryUser['newprivat'] . ' шт.) на сайте ' . Setting::get('title') . '<br />Прочитать свои сообщения вы можете по адресу <a href="' . $sitelink . '/private">' . $sitelink . '/private</a>';
+                    $message = 'Здравствуйте ' . $deliveryUser['login'] . '!<br>У вас имеются непрочитанные сообщения (' . $deliveryUser['newprivat'] . ' шт.) на сайте ' . Setting::get('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . $sitelink . '/private">' . $sitelink . '/private</a>';
                     $body = App::view('mailer.default', compact('subject', 'message'), true);
                     App::sendMail($deliveryUser['email'], $subject, $body, ['subscribe' => $deliveryUser['subscribe']]);
 

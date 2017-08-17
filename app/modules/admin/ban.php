@@ -24,12 +24,12 @@ if (is_admin([101, 102, 103])) {
         case 'index':
 
             echo '<div class="form">';
-            echo 'Логин пользователя:<br />';
+            echo 'Логин пользователя:<br>';
             echo '<form method="post" action="/admin/ban?act=edit">';
-            echo '<input type="text" name="uz" maxlength="20" />';
-            echo '<input value="Редактировать" type="submit" /></form></div><br />';
+            echo '<input type="text" name="uz" maxlength="20">';
+            echo '<input value="Редактировать" type="submit"></form></div><br>';
 
-            echo 'Введите логин пользователя который необходимо отредактировать<br /><br />';
+            echo 'Введите логин пользователя который необходимо отредактировать<br><br>';
         break;
 
         ############################################################################################
@@ -42,56 +42,56 @@ if (is_admin([101, 102, 103])) {
             if (!empty($user)) {
                 $uz = $user['login'];
 
-                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br /><br />';
+                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br><br>';
 
                 if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                     echo '<div class="form">';
-                    echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br />';
-                    echo 'Последняя причина: '.App::bbCode($user['reasonban']).'<br />';
-                    echo 'Забанил: '.profile($user['loginsendban']).'</div><br />';
+                    echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br>';
+                    echo 'Последняя причина: '.App::bbCode($user['reasonban']).'<br>';
+                    echo 'Забанил: '.profile($user['loginsendban']).'</div><br>';
                 }
 
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
 
-                echo 'Строгих нарушений: <b>'.$user['totalban'].'</b><br />';
-                echo '<i class="fa fa-history"></i> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br /><br />';
+                echo 'Строгих нарушений: <b>'.$user['totalban'].'</b><br>';
+                echo '<i class="fa fa-history"></i> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br><br>';
 
                 if ($user['level'] < 101 || $user['level'] > 105) {
                     if (empty($user['ban']) || $user['timeban'] < SITETIME) {
                         if ($user['totalban'] < 5) {
                             echo '<div class="form">';
                             echo '<form method="post" action="/admin/ban?act=zaban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">';
-                            echo '<b>Время бана:</b><br /><input name="bantime" /><br />';
+                            echo '<b>Время бана:</b><br><input name="bantime"><br>';
 
-                            echo '<input name="bantype" type="radio" value="min" checked="checked" /> Минут<br />';
-                            echo '<input name="bantype" type="radio" value="chas" /> Часов<br />';
-                            echo '<input name="bantype" type="radio" value="sut" /> Суток<br />';
+                            echo '<input name="bantype" type="radio" value="min" checked="checked"> Минут<br>';
+                            echo '<input name="bantype" type="radio" value="chas"> Часов<br>';
+                            echo '<input name="bantype" type="radio" value="sut"> Суток<br>';
 
-                            echo '<b>Причина бана:</b><br />';
-                            echo '<textarea name="reasonban" cols="25" rows="5"></textarea><br />';
+                            echo '<b>Причина бана:</b><br>';
+                            echo '<textarea name="reasonban" cols="25" rows="5"></textarea><br>';
 
                             $usernote = DB::run() -> queryFetch("SELECT * FROM `note` WHERE `user`=? LIMIT 1;", [$uz]);
 
-                            echo '<b>Заметка:</b><br />';
-                            echo '<textarea cols="25" rows="5" name="note">'.$usernote['text'].'</textarea><br />';
+                            echo '<b>Заметка:</b><br>';
+                            echo '<textarea cols="25" rows="5" name="note">'.$usernote['text'].'</textarea><br>';
 
-                            echo '<input value="Забанить" type="submit" /></form></div><br />';
+                            echo '<input value="Забанить" type="submit"></form></div><br>';
 
-                            echo 'Подсчет нарушений производится при бане более чем на 12 часов<br />';
-                            echo 'При общем числе нарушений более пяти, профиль пользователя удаляется<br />';
-                            echo 'Максимальное время бана '.round(Setting::get('maxbantime') / 1440).' суток<br />';
-                            echo 'Внимание! Постарайтесь как можно подробнее описать причину бана<br /><br />';
+                            echo 'Подсчет нарушений производится при бане более чем на 12 часов<br>';
+                            echo 'При общем числе нарушений более пяти, профиль пользователя удаляется<br>';
+                            echo 'Максимальное время бана '.round(Setting::get('maxbantime') / 1440).' суток<br>';
+                            echo 'Внимание! Постарайтесь как можно подробнее описать причину бана<br><br>';
                         } else {
-                            echo '<b><span style="color:#ff0000">Внимание! Пользователь превысил лимит банов</span></b><br />';
-                            echo 'Вы можете удалить этот профиль!<br /><br />';
-                            echo '<i class="fa fa-times"></i> <b><a href="/admin/ban?act=deluser&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Удалить профиль</a></b><br /><br />';
+                            echo '<b><span style="color:#ff0000">Внимание! Пользователь превысил лимит банов</span></b><br>';
+                            echo 'Вы можете удалить этот профиль!<br><br>';
+                            echo '<i class="fa fa-times"></i> <b><a href="/admin/ban?act=deluser&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Удалить профиль</a></b><br><br>';
                         }
                     } else {
-                        echo '<b><span style="color:#ff0000">Внимание, данный аккаунт заблокирован!</span></b><br />';
-                        echo 'До окончания бана: '.formattime($user['timeban'] - SITETIME).'<br /><br />';
+                        echo '<b><span style="color:#ff0000">Внимание, данный аккаунт заблокирован!</span></b><br>';
+                        echo 'До окончания бана: '.formattime($user['timeban'] - SITETIME).'<br><br>';
 
-                        echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Изменить</a><br />';
-                        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/ban?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr />';
+                        echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Изменить</a><br>';
+                        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/ban?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr>';
                     }
                 } else {
                     show_error('Ошибка! Запрещено банить админов и модеров сайта!');
@@ -100,7 +100,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Пользователя с данным логином не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -110,16 +110,16 @@ if (is_admin([101, 102, 103])) {
 
             $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
             if (!empty($user)) {
-                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br /><br />';
+                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br><br>';
 
                 if ($user['level'] < 101 || $user['level'] > 105) {
                     if (!empty($user['ban']) && $user['timeban'] > SITETIME) {
                         if (!empty($user['timelastban'])) {
-                            echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br />';
-                            echo 'Забанил: '.profile($user['loginsendban']).'<br />';
+                            echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br>';
+                            echo 'Забанил: '.profile($user['loginsendban']).'<br>';
                         }
-                        echo 'Строгих нарушений: <b>'.$user['totalban'].'</b><br />';
-                        echo 'До окончания бана: '.formattime($user['timeban'] - SITETIME).'<br /><br />';
+                        echo 'Строгих нарушений: <b>'.$user['totalban'].'</b><br>';
+                        echo 'До окончания бана: '.formattime($user['timeban'] - SITETIME).'<br><br>';
 
                         if ($user['timeban'] - SITETIME >= 86400) {
                             $type = 'sut';
@@ -135,19 +135,19 @@ if (is_admin([101, 102, 103])) {
 
                         echo '<div class="form">';
                         echo '<form method="post" action="/admin/ban?act=changeban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">';
-                        echo 'Время бана:<br /><input name="bantime" value="'.$file_time.'" /><br />';
+                        echo 'Время бана:<br><input name="bantime" value="'.$file_time.'"><br>';
 
                         $checked = ($type == 'min') ? ' checked="checked"' : '';
-                        echo '<input name="bantype" type="radio" value="min"'.$checked.' /> Минут<br />';
+                        echo '<input name="bantype" type="radio" value="min"'.$checked.'> Минут<br>';
                         $checked = ($type == 'chas') ? ' checked="checked"' : '';
-                        echo '<input name="bantype" type="radio" value="chas"'.$checked.' /> Часов<br />';
+                        echo '<input name="bantype" type="radio" value="chas"'.$checked.'> Часов<br>';
                         $checked = ($type == 'sut') ? ' checked="checked"' : '';
-                        echo '<input name="bantype" type="radio" value="sut"'.$checked.' /> Суток<br />';
+                        echo '<input name="bantype" type="radio" value="sut"'.$checked.'> Суток<br>';
 
-                        echo 'Причина бана:<br />';
-                        echo '<textarea name="reasonban" cols="25" rows="5">'.$user['reasonban'].'</textarea><br />';
+                        echo 'Причина бана:<br>';
+                        echo '<textarea name="reasonban" cols="25" rows="5">'.$user['reasonban'].'</textarea><br>';
 
-                        echo '<input value="Изменить" type="submit" /></form></div><br />';
+                        echo '<input value="Изменить" type="submit"></form></div><br>';
                     } else {
                         show_error('Ошибка! Данный пользователь не забанен!');
                     }
@@ -158,7 +158,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Пользователя с данным логином не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -224,7 +224,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -307,7 +307,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -344,7 +344,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -374,8 +374,8 @@ if (is_admin([101, 102, 103])) {
                             delete_album($uz);
                             delete_users($uz);
 
-                            echo 'Данные занесены в черный список!<br />';
-                            echo '<i class="fa fa-check"></i> <b>Профиль пользователя успешно удален!</b><br /><br />';
+                            echo 'Данные занесены в черный список!<br>';
+                            echo '<i class="fa fa-check"></i> <b>Профиль пользователя успешно удален!</b><br><br>';
                         } else {
                             show_error('Ошибка! Запрещено банить админов и модеров сайта!');
                         }
@@ -389,12 +389,12 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo'<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban">Вернуться</a><br />';
+            echo'<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

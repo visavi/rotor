@@ -17,18 +17,18 @@ if (is_user()) {
         case "index":
             $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
 
-            echo 'Здесь вы можете хранить отрывки сообщений или любую другую важную информацию<br /><br />';
+            echo 'Здесь вы можете хранить отрывки сообщений или любую другую важную информацию<br><br>';
 
             if (!empty($note['text'])) {
-                echo '<div>Личная запись:<br />';
-                echo App::bbCode($note['text']).'</div><br />';
+                echo '<div>Личная запись:<br>';
+                echo App::bbCode($note['text']).'</div><br>';
 
-                echo 'Последнее изменение: '.date_fixed($note['time']).'<br /><br />';
+                echo 'Последнее изменение: '.date_fixed($note['time']).'<br><br>';
             } else {
                 show_error('Запись пустая или отсутствует!');
             }
 
-            echo '<i class="fa fa-pencil"></i> <a href="/notebook?act=edit">Редактировать</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/notebook?act=edit">Редактировать</a><br>';
             break;
 
         ############################################################################################
@@ -40,12 +40,12 @@ if (is_user()) {
 
             echo '<div class="form">';
             echo '<form action="/notebook?act=change&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$note['text'].'</textarea><br />';
-            echo '<input type="submit" value="Сохранить" /></form></div><br />';
+            echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$note['text'].'</textarea><br>';
+            echo '<input type="submit" value="Сохранить"></form></div><br>';
 
-            echo '* Доступ к личной записи не имеет никто кроме вас<br /><br />';
+            echo '* Доступ к личной записи не имеет никто кроме вас<br><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/notebook">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/notebook">Вернуться</a><br>';
             break;
 
         ############################################################################################
@@ -75,7 +75,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/notebook?act=edit">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/notebook?act=edit">Вернуться</a><br>';
             break;
 
     endswitch;

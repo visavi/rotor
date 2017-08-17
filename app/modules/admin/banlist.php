@@ -15,21 +15,21 @@ if (is_admin([101, 102, 103])) {
             echo '<div class="b">';
             echo user_gender($data['login']).' <b>'.profile($data['login']).'</b> (Забанен: '.date_fixed($data['timelastban']).')</div>';
 
-            echo '<div>До окончания бана осталось '.formattime($data['timeban'] - SITETIME).'<br />';
-            echo 'Забанил: <b>'.profile($data['loginsendban']).'</b><br />';
-            echo 'Причина: '.App::bbCode($data['reasonban']).'<br />';
+            echo '<div>До окончания бана осталось '.formattime($data['timeban'] - SITETIME).'<br>';
+            echo 'Забанил: <b>'.profile($data['loginsendban']).'</b><br>';
+            echo 'Причина: '.App::bbCode($data['reasonban']).'<br>';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=edit&amp;uz='.$data['login'].'">Редактировать</a></div>';
         }
 
         App::pagination($page);
 
-        echo 'Всего забанено: <b>'.$total.'</b><br /><br />';
+        echo 'Всего забанено: <b>'.$total.'</b><br><br>';
 
     } else {
         show_error('Пользователей еще нет!');
     }
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

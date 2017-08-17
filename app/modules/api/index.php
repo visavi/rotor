@@ -4,12 +4,12 @@ App::view(Setting::get('themes').'/index');
 //show_title('API интерфейс');
 ?>
 
-<i class="fa fa-cog"></i> <b><a href="/api">api</a></b> - Главная страница с описанием интерфейса<br />
-<i class="fa fa-cog"></i> <b><a href="/api/user">api/user</a></b> - Параметры: key, Возвращаемые значения: массив данных из профиля пользователя<br />
-<i class="fa fa-cog"></i> <b><a href="/api/private">api/private</a></b> - Параметры: key, count = 10, Возвращаемые значения: total - кол. сообщений, messages - массив приватных сообщений<br />
-<i class="fa fa-cog"></i> <b><a href="/api/forum">api/forum</a></b> - Параметры: key, id, Возвращаемые значения: id - id темы, author - автор темы, title - заголовок темы, messages - массив постов<br />
+<i class="fa fa-cog"></i> <b><a href="/api">api</a></b> - Главная страница с описанием интерфейса<br>
+<i class="fa fa-cog"></i> <b><a href="/api/user">api/user</a></b> - Параметры: key, Возвращаемые значения: массив данных из профиля пользователя<br>
+<i class="fa fa-cog"></i> <b><a href="/api/private">api/private</a></b> - Параметры: key, count = 10, Возвращаемые значения: total - кол. сообщений, messages - массив приватных сообщений<br>
+<i class="fa fa-cog"></i> <b><a href="/api/forum">api/forum</a></b> - Параметры: key, id, Возвращаемые значения: id - id темы, author - автор темы, title - заголовок темы, messages - массив постов<br>
 
-<br />Для доступа к данным нужен API-ключ, которые можно получить на странице мои данные<br /><br />
+<br>Для доступа к данным нужен API-ключ, которые можно получить на странице мои данные<br><br>
 
 Пример использования
 <pre class="prettyprint linenums">

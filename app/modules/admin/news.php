@@ -36,8 +36,8 @@ case 'index':
             $icon = (empty($data['closed'])) ? 'unlock' : 'lock';
             echo '<i class="fa fa-'.$icon.'"></i> ';
 
-            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['created_at']).')</small><br />';
-            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['created_at']).')</small><br>';
+            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
             echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
@@ -54,24 +54,24 @@ case 'index':
 
             echo '<div>'.App::bbCode($data['text']).'</div>';
 
-            echo '<div style="clear:both;">Добавлено: '.profile($data['user']).'<br />';
+            echo '<div style="clear:both;">Добавлено: '.profile($data['user']).'<br>';
             echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ('.$data['comments'].') ';
             echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
         }
 
-        echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+        echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
         App::pagination($page);
 
-        echo 'Всего новостей: <b>'.(int)$total.'</b><br /><br />';
+        echo 'Всего новостей: <b>'.(int)$total.'</b><br><br>';
     } else {
         show_error('Новостей еще нет!');
     }
 
-    echo '<i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br>';
 
     if (is_admin([101])) {
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br>';
     }
 break;
 
@@ -85,37 +85,37 @@ case 'edit':
 
     if (!empty($datanews)) {
 
-        echo '<b><big>Редактирование</big></b><br /><br />';
+        echo '<b><big>Редактирование</big></b><br><br>';
 
         echo '<div class="form cut">';
         echo '<form action="/admin/news?act=change&amp;id='.$id.'&amp;page='.$page.'" method="post" enctype="multipart/form-data">';
         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-        echo 'Заголовок:<br />';
-        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$datanews['title'].'" /><br />';
-        echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$datanews['text'].'</textarea><br />';
+        echo 'Заголовок:<br>';
+        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$datanews['title'].'"><br>';
+        echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$datanews['text'].'</textarea><br>';
 
         if (!empty($datanews['image']) && file_exists(HOME.'/uploads/news/'.$datanews['image'])){
 
-            echo '<a href="/uploads/news/'.$datanews['image'].'">'.resize_image('uploads/news/', $datanews['image'], 75, ['alt' => $datanews['title']]).'</a><br />';
-            echo '<b>'.$datanews['image'].'</b> ('.read_file(HOME.'/uploads/news/'.$datanews['image']).')<br /><br />';
+            echo '<a href="/uploads/news/'.$datanews['image'].'">'.resize_image('uploads/news/', $datanews['image'], 75, ['alt' => $datanews['title']]).'</a><br>';
+            echo '<b>'.$datanews['image'].'</b> ('.read_file(HOME.'/uploads/news/'.$datanews['image']).')<br><br>';
         }
 
-        echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br /><br />';
+        echo 'Прикрепить картинку:<br><input type="file" name="image"><br><br>';
 
         echo 'Закрыть комментарии: ';
         $checked = ($datanews['closed'] == 1) ? ' checked="checked"' : '';
-        echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
+        echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
         echo 'Показывать на главной: ';
         $checked = ($datanews['top'] == 1) ? ' checked="checked"' : '';
-        echo '<input name="top" type="checkbox" value="1"'.$checked.' /><br />';
+        echo '<input name="top" type="checkbox" value="1"'.$checked.'><br>';
 
-        echo '<br /><input type="submit" value="Изменить" /></form></div><br />';
+        echo '<br><input type="submit" value="Изменить"></form></div><br>';
     } else {
         show_error('Ошибка! Выбранная новость не существует, возможно она была удалена!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -173,8 +173,8 @@ case 'change':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?page='.$page.'">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?page='.$page.'">К новостям</a><br>';
 break;
 
 ############################################################################################
@@ -187,17 +187,17 @@ case 'add':
     echo '<div class="form cut">';
     echo '<form action="/admin/news?act=addnews" method="post" enctype="multipart/form-data">';
     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-    echo 'Заголовок:<br />';
-    echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
-    echo '<textarea id="markItUp" cols="50" rows="10" name="msg"></textarea><br />';
-    echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br /><br />';
+    echo 'Заголовок:<br>';
+    echo '<input type="text" name="title" size="50" maxlength="50"><br>';
+    echo '<textarea id="markItUp" cols="50" rows="10" name="msg"></textarea><br>';
+    echo 'Прикрепить картинку:<br><input type="file" name="image"><br><br>';
 
-    echo 'Вывести на главную: <input name="top" type="checkbox" value="1" /><br />';
-    echo 'Закрыть комментарии: <input name="closed" type="checkbox" value="1" /><br />';
+    echo 'Вывести на главную: <input name="top" type="checkbox" value="1"><br>';
+    echo 'Закрыть комментарии: <input name="closed" type="checkbox" value="1"><br>';
 
-    echo '<br /><input type="submit" value="Добавить" /></form></div><br />';
+    echo '<br><input type="submit" value="Добавить"></form></div><br>';
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -252,8 +252,8 @@ case 'addnews':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=add">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news">К новостям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=add">Вернуться</a><br>';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news">К новостям</a><br>';
 break;
 
 ############################################################################################
@@ -277,7 +277,7 @@ case 'restatement':
         show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -320,12 +320,12 @@ case 'del':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br>';
 break;
 
 endswitch;
 
-echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

@@ -8,8 +8,8 @@
 
     <h1>Кто в онлайне</h1>
 
-    Всего на сайте: <b>{{ $page['total'] }}</b><br />
-    Зарегистрированных:  <b>{{ $registered }}</b><br /><br />
+    Всего на сайте: <b>{{ $page['total'] }}</b><br>
+    Зарегистрированных:  <b>{{ $registered }}</b><br><br>
 
 
     @if ($online->isNotEmpty())
@@ -35,5 +35,5 @@
         {{ show_error('На сайте никого нет!') }}
     @endif
 
-    <i class="fa fa-users"></i> <a href="/online">Скрыть гостей</a><br />
+    <i class="fa fa-users"></i> <a href="/online">Скрыть гостей</a><br>
 @stop

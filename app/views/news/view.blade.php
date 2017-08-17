@@ -26,7 +26,7 @@
 
     <div style="clear:both;">
         Добавлено: {!! profile($news['user']) !!}
-    </div><br />
+    </div><br>
 
     @if ($comments->isNotEmpty())
         <div class="act">
@@ -38,12 +38,12 @@
                 <div class="img">{!! user_avatars($comm['user']) !!}</div>
 
                 <b>{!! profile($comm['user']) !!}</b>
-                <small> ({{ date_fixed($comm['created_at']) }})</small><br />
+                <small> ({{ date_fixed($comm['created_at']) }})</small><br>
                 {!! user_title($comm['user']) !!} {!! user_online($comm['user']) !!}
             </div>
 
             <div>
-                {!! App::bbCode($comm['text']) !!}<br />
+                {!! App::bbCode($comm['text']) !!}<br>
 
                 @if (is_admin())
                  <span class="data">({{ $comm['brow'] }}, {{ $comm['ip'] }})</span>
@@ -55,7 +55,7 @@
             <div class="act">
                 <b><a href="/news/{{ $news['id'] }}/comments">Все комментарии</a></b> ({{ $news['comments'] }})
                 <a href="/news/{{ $news['id'] }}/end">&raquo;</a>
-            </div><br />
+            </div><br>
         @endif
     @endif
 
@@ -68,15 +68,15 @@
             <div class="form">
                 <form action="/news/{{ $news->id }}/create?read=1" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                    <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />
+                    <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
                     <button class="btn btn-success">Написать</button>
                 </form>
             </div>
 
-            <br />
+            <br>
             <a href="/rules">Правила</a> /
             <a href="/smiles">Смайлы</a> /
-            <a href="/tags">Теги</a><br /><br />
+            <a href="/tags">Теги</a><br><br>
         @else
             {{ show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо') }}
         @endif
@@ -85,6 +85,6 @@
     @endif
 
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br>
 
 @stop

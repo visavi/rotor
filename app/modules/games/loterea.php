@@ -48,13 +48,13 @@ if (is_user()) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `lotusers`;");
             $datalot = DB::run() -> queryFetch("SELECT * FROM `lotinfo` WHERE `id`=?;", [1]);
 
-            echo 'Участвуй в лотерее! С каждым разом джек-пот растет<br />';
-            echo 'Стань счастливым обладателем заветной суммы!<br /><br />';
+            echo 'Участвуй в лотерее! С каждым разом джек-пот растет<br>';
+            echo 'Стань счастливым обладателем заветной суммы!<br><br>';
 
-            echo 'Джек-пот составляет <b><span style="color:#ff0000">'.moneys($datalot['sum']).'</span></b><br /><br />';
+            echo 'Джек-пот составляет <b><span style="color:#ff0000">'.moneys($datalot['sum']).'</span></b><br><br>';
 
             if (!empty($datalot['oldnum'])) {
-                echo 'Выигрышное число прошлого тура: <b>'.$datalot['oldnum'].'</b><br />';
+                echo 'Выигрышное число прошлого тура: <b>'.$datalot['oldnum'].'</b><br>';
 
                 if (!empty($datalot['winners'])) {
                     $winners = explode (',', $datalot['winners']);
@@ -71,21 +71,21 @@ if (is_user()) {
                     echo 'Джек-пот не выиграл никто!';
                 }
 
-                echo '<br /><br />';
+                echo '<br><br>';
             }
 
             echo 'Введите число от 1 до 100 включительно';
 
             echo '<div class="form">';
             echo '<form action="/games/loterea?act=bilet" method="post">';
-            echo '<input type="text" name="bilet" />';
-            echo '<input type="submit" value="Купить билет" /></form></div><br />';
+            echo '<input type="text" name="bilet">';
+            echo '<input type="submit" value="Купить билет"></form></div><br>';
 
-            echo 'В этом туре участвуют: '.$total.'<br />';
-            echo 'Cтоимость билета '.moneys(50).'<br />';
-            echo 'В наличии: '.moneys(App::user('money')).'<br /><br />';
+            echo 'В этом туре участвуют: '.$total.'<br>';
+            echo 'Cтоимость билета '.moneys(50).'<br>';
+            echo 'В наличии: '.moneys(App::user('money')).'<br><br>';
 
-            echo '<i class="fa fa-users"></i> <a href="/games/loterea?act=show">Участники</a><br />';
+            echo '<i class="fa fa-users"></i> <a href="/games/loterea?act=show">Участники</a><br>';
         break;
 
         ############################################################################################
@@ -103,8 +103,8 @@ if (is_user()) {
                         DB::run() -> query("INSERT INTO `lotusers` (`user`, `num`, `time`) VALUES (?, ?, ?);", [App::getUsername(), $bilet, SITETIME]);
                         DB::run() -> query("UPDATE users SET `money`=`money`-50 WHERE `login`=?", [App::getUsername()]);
 
-                        echo '<b>Билет успешно приобретен!</b><br />';
-                        echo 'Результат розыгрыша станет известным после полуночи!<br /><br />';
+                        echo '<b>Билет успешно приобретен!</b><br>';
+                        echo 'Результат розыгрыша станет известным после полуночи!<br><br>';
                     } else {
                         show_error('Вы уже купили билет! Нельзя покупать дважды!');
                     }
@@ -115,8 +115,8 @@ if (is_user()) {
                 show_error('Неверный ввод данных! Введите число от 1 до 100 включительно!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/loterea">Вернуться</a><br />';
-            echo '<i class="fa fa-users"></i> <a href="/games/loterea?act=show">Участники</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/loterea">Вернуться</a><br>';
+            echo '<i class="fa fa-users"></i> <a href="/games/loterea?act=show">Участники</a><br>';
         break;
 
         ############################################################################################
@@ -134,15 +134,15 @@ if (is_user()) {
                 foreach ($lotusers as $key => $data) {
                     echo ($key + 1).'. ';
                     echo '<b>'.user_gender($data['user']).' '.profile($data['user']).'</b> ';
-                    echo '(Ставка: <b>'.$data['num'].'</b>) ('.date_fixed($data['time']).')<br />';
+                    echo '(Ставка: <b>'.$data['num'].'</b>) ('.date_fixed($data['time']).')<br>';
                 }
 
-                echo '<br />Всего участников: <b>'.$total.'</b><br /><br />';
+                echo '<br>Всего участников: <b>'.$total.'</b><br><br>';
             } else {
                 show_error('Еще нет ни одного участника!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/loterea">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/loterea">Вернуться</a><br>';
         break;
 
     endswitch;
@@ -151,6 +151,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы учавствовать в лотерее, необходимо');
 }
 
-echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

@@ -23,7 +23,7 @@
 
     <div><?=App::bbCode($data['text'])?></div>
 
-    <div style="clear:both;">Добавлено: <?=profile($data['author'])?><br />
+    <div style="clear:both;">Добавлено: <?=profile($data['author'])?><br>
         <a href="/events?act=comments&amp;id=<?=$data['id']?>">Комментарии</a> (<?=$data['comments']?>)
         <a href="/events?act=end&amp;id=<?=$data['id']?>">&raquo;</a>
     </div>

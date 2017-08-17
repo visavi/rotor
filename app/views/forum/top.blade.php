@@ -17,7 +17,7 @@
         </div>
         <div>
             <?= Forum::pagination($data)?>
-            Автор: <?=$data->getUser()->login ?><br />
+            Автор: <?=$data->getUser()->login ?><br>
             Сообщение: <?= $data->getLastPost()->getUser()->login ?> (<?=date_fixed($data->getLastPost()->created_at)?>)
         </div>
     <?php endforeach; ?>

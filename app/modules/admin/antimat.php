@@ -16,8 +16,8 @@ if (is_admin([101, 102, 103])) {
     ############################################################################################
         case "index":
 
-            echo 'Все слова в списке будут заменяться на ***<br />';
-            echo 'Чтобы удалить слово нажмите на него, добавить слово можно в форме ниже<br /><br />';
+            echo 'Все слова в списке будут заменяться на ***<br>';
+            echo 'Чтобы удалить слово нажмите на него, добавить слово можно в форме ниже<br><br>';
 
             $querymat = DB::run() -> query("SELECT * FROM antimat;");
             $arrmat = $querymat -> fetchAll();
@@ -33,21 +33,21 @@ if (is_admin([101, 102, 103])) {
                     echo $comma.'<a href="/admin/antimat?act=del&amp;id='.$value['id'].'&amp;uid='.$_SESSION['token'].'">'.$value['string'].'</a>';
                 }
 
-                echo '<br /><br />';
+                echo '<br><br>';
             } else {
                 show_error('Список пуст, добавьте слово!');
             }
 
             echo '<div class="b">';
-            echo 'Добавить слово:<br />';
+            echo 'Добавить слово:<br>';
             echo '<form action="/admin/antimat?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo '<input type="text" name="mat" />';
-            echo '<input type="submit" value="Добавить" /></form></div><br />';
+            echo '<input type="text" name="mat">';
+            echo '<input type="submit" value="Добавить"></form></div><br>';
 
-            echo 'Всего слов в базе: <b>'.$total.'</b><br /><br />';
+            echo 'Всего слов в базе: <b>'.$total.'</b><br><br>';
 
             if (is_admin([101]) && $total > 0) {
-                echo '<i class="fa fa-times"></i> <a href="/admin/antimat?act=prodel">Очистить</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/admin/antimat?act=prodel">Очистить</a><br>';
             }
         break;
 
@@ -78,7 +78,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -103,7 +103,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -111,10 +111,10 @@ if (is_admin([101, 102, 103])) {
         ############################################################################################
         case "prodel":
 
-            echo 'Вы уверены что хотите удалить все слова в антимате?<br />';
-            echo '<i class="fa fa-times"></i> <b><a href="/admin/antimat?act=clear&amp;uid='.$_SESSION['token'].'">Да уверен!</a></b><br /><br />';
+            echo 'Вы уверены что хотите удалить все слова в антимате?<br>';
+            echo '<i class="fa fa-times"></i> <b><a href="/admin/antimat?act=clear&amp;uid='.$_SESSION['token'].'">Да уверен!</a></b><br><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -138,12 +138,12 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Очищать гостевую могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/antimat">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

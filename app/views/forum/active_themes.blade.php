@@ -18,7 +18,7 @@
 
         <div>
             <?= Forum::pagination($data)?>
-            Форум: <a href="/forum/<?= $data->getForum()->id ?>"><?= $data->getForum()->title ?></a><br />
+            Форум: <a href="/forum/<?= $data->getForum()->id ?>"><?= $data->getForum()->title ?></a><br>
             Автор: <?= $data->getUser()->login ?> / Посл.: <?= $data->getLastPost()->getUser()->login ?> (<?=date_fixed($data->getLastPost()->created_at)?>)
         </div>
 

@@ -15,21 +15,21 @@ case "index":
     //Setting::get('newtitle') = 'Поиск в файлах';
 
     echo '<div class="form"><form action="/load/search?act=search" method="get">';
-    echo '<input type="hidden" name="act" value="search" />';
+    echo '<input type="hidden" name="act" value="search">';
 
-    echo 'Запрос:<br />';
-    echo '<input type="text" name="find" /><br />';
+    echo 'Запрос:<br>';
+    echo '<input type="text" name="find"><br>';
 
-    echo 'Искать:<br />';
-    echo '<input name="where" type="radio" value="0" checked="checked" /> В названии<br />';
-    echo '<input name="where" type="radio" value="1" /> В описании<br /><br />';
+    echo 'Искать:<br>';
+    echo '<input name="where" type="radio" value="0" checked="checked"> В названии<br>';
+    echo '<input name="where" type="radio" value="1"> В описании<br><br>';
 
-    echo 'Тип запроса:<br />';
-    echo '<input name="type" type="radio" value="0" checked="checked" /> И<br />';
-    echo '<input name="type" type="radio" value="1" /> Или<br />';
-    echo '<input name="type" type="radio" value="2" /> Полный<br /><br />';
+    echo 'Тип запроса:<br>';
+    echo '<input name="type" type="radio" value="0" checked="checked"> И<br>';
+    echo '<input name="type" type="radio" value="1"> Или<br>';
+    echo '<input name="type" type="radio" value="2"> Полный<br><br>';
 
-    echo '<input type="submit" value="Поиск" /></form></div><br />';
+    echo '<input type="submit" value="Поиск"></form></div><br>';
 
 break;
 
@@ -73,7 +73,7 @@ case "search":
 
         // ----------------------------- Поиск в названии -------------------------------//
         if ($wheres == 'title') {
-            echo 'Поиск запроса <b>&quot;'.$find.'&quot;</b> в названии<br />';
+            echo 'Поиск запроса <b>&quot;'.$find.'&quot;</b> в названии<br>';
 
             if (empty($_SESSION['loadfindres']) || $loadfind!=$_SESSION['loadfind']) {
 
@@ -89,7 +89,7 @@ case "search":
 
             if ($total > 0) {
 
-                echo 'Найдено совпадений: <b>'.$total.'</b><br /><br />';
+                echo 'Найдено совпадений: <b>'.$total.'</b><br><br>';
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
@@ -103,8 +103,8 @@ case "search":
                     echo '<div class="b"><i class="fa fa-file-o"></i> ';
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-                    echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
-                    echo 'Скачиваний: '.$data['loads'].'<br />';
+                    echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br>';
+                    echo 'Скачиваний: '.$data['loads'].'<br>';
                     echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 
@@ -115,7 +115,7 @@ case "search":
         }
         // --------------------------- Поиск в описании -------------------------------//
         if ($wheres == 'text') {
-            echo 'Поиск запроса <b>&quot;'.$find.'&quot;</b> в описании<br />';
+            echo 'Поиск запроса <b>&quot;'.$find.'&quot;</b> в описании<br>';
 
             if (empty($_SESSION['loadfindres']) || $loadfind!=$_SESSION['loadfind']) {
 
@@ -131,7 +131,7 @@ case "search":
 
             if ($total > 0) {
 
-                echo 'Найдено совпадений: <b>'.$total.'</b><br /><br />';
+                echo 'Найдено совпадений: <b>'.$total.'</b><br><br>';
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
@@ -150,9 +150,9 @@ case "search":
                         $data['text'] = utf_substr($data['text'], 0, 300).'...';
                     }
 
-                    echo '<div>'.$data['text'].'<br />';
+                    echo '<div>'.$data['text'].'<br>';
 
-                    echo 'Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
+                    echo 'Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br>';
                     echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 
@@ -166,7 +166,7 @@ case "search":
         show_error('Ошибка! Запрос должен содержать от 3 до 50 символов!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/search">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/search">Вернуться</a><br>';
 break;
 
 endswitch;
@@ -175,6 +175,6 @@ endswitch;
     show_login('Вы не авторизованы, чтобы использовать поиск, необходимо');
 }
 
-echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
 App::view(Setting::get('themes').'/foot');

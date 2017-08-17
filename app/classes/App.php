@@ -221,7 +221,7 @@ class App
         if (isset($params['subscribe'])) {
             $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.env('SITE_EMAIL').'>, <'.Setting::get('home').'/unsubscribe?key='.$params['subscribe'].'>');
 
-            $body = str_replace('<!-- unsubscribe -->', '<br /><br /><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.Setting::get('home').'/unsubscribe?key='.$params['subscribe'].'">откажитесь от подписки</a></small>', $body);
+            $body = str_replace('<!-- unsubscribe -->', '<br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.Setting::get('home').'/unsubscribe?key='.$params['subscribe'].'">откажитесь от подписки</a></small>', $body);
             $message->setBody($body, 'text/html');
         }
 

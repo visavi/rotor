@@ -25,16 +25,16 @@ if (is_admin([101, 102])) {
         case 'index':
 
             echo '<div class="form">';
-            echo 'Логин пользователя:<br />';
+            echo 'Логин пользователя:<br>';
             echo '<form action="/admin/users?act=edit" method="post">';
-            echo '<input type="text" name="uz" maxlength="20" />';
-            echo '<input value="Редактировать" type="submit" /></form></div><br />';
+            echo '<input type="text" name="uz" maxlength="20">';
+            echo '<input value="Редактировать" type="submit"></form></div><br>';
 
-            echo '<a href="/admin/users?act=sort&amp;q=1">0-9</a> / <a href="/admin/users?act=sort&amp;q=a">A</a> / <a href="/admin/users?act=sort&amp;q=b">B</a> / <a href="/admin/users?act=sort&amp;q=c">C</a> / <a href="/admin/users?act=sort&amp;q=d">D</a> / <a href="/admin/users?act=sort&amp;q=e">E</a> / <a href="/admin/users?act=sort&amp;q=f">F</a> / <a href="/admin/users?act=sort&amp;q=g">G</a> / <a href="/admin/users?act=sort&amp;q=h">H</a> / <a href="/admin/users?act=sort&amp;q=i">I</a> / <a href="/admin/users?act=sort&amp;q=j">J</a> / <a href="/admin/users?act=sort&amp;q=k">K</a> / <a href="/admin/users?act=sort&amp;q=l">L</a> / <a href="/admin/users?act=sort&amp;q=m">M</a> / <a href="/admin/users?act=sort&amp;q=n">N</a> / <a href="/admin/users?act=sort&amp;q=o">O</a> / <a href="/admin/users?act=sort&amp;q=p">P</a> / <a href="/admin/users?act=sort&amp;q=q">Q</a> / <a href="/admin/users?act=sort&amp;q=r">R</a> / <a href="/admin/users?act=sort&amp;q=s">S</a> / <a href="/admin/users?act=sort&amp;q=t">T</a> / <a href="/admin/users?act=sort&amp;q=u">U</a> / <a href="/admin/users?act=sort&amp;q=v">V</a> / <a href="/admin/users?act=sort&amp;q=w">W</a> / <a href="/admin/users?act=sort&amp;q=x">X</a> / <a href="/admin/users?act=sort&amp;q=y">Y</a> / <a href="/admin/users?act=sort&amp;q=z">Z</a><br />';
+            echo '<a href="/admin/users?act=sort&amp;q=1">0-9</a> / <a href="/admin/users?act=sort&amp;q=a">A</a> / <a href="/admin/users?act=sort&amp;q=b">B</a> / <a href="/admin/users?act=sort&amp;q=c">C</a> / <a href="/admin/users?act=sort&amp;q=d">D</a> / <a href="/admin/users?act=sort&amp;q=e">E</a> / <a href="/admin/users?act=sort&amp;q=f">F</a> / <a href="/admin/users?act=sort&amp;q=g">G</a> / <a href="/admin/users?act=sort&amp;q=h">H</a> / <a href="/admin/users?act=sort&amp;q=i">I</a> / <a href="/admin/users?act=sort&amp;q=j">J</a> / <a href="/admin/users?act=sort&amp;q=k">K</a> / <a href="/admin/users?act=sort&amp;q=l">L</a> / <a href="/admin/users?act=sort&amp;q=m">M</a> / <a href="/admin/users?act=sort&amp;q=n">N</a> / <a href="/admin/users?act=sort&amp;q=o">O</a> / <a href="/admin/users?act=sort&amp;q=p">P</a> / <a href="/admin/users?act=sort&amp;q=q">Q</a> / <a href="/admin/users?act=sort&amp;q=r">R</a> / <a href="/admin/users?act=sort&amp;q=s">S</a> / <a href="/admin/users?act=sort&amp;q=t">T</a> / <a href="/admin/users?act=sort&amp;q=u">U</a> / <a href="/admin/users?act=sort&amp;q=v">V</a> / <a href="/admin/users?act=sort&amp;q=w">W</a> / <a href="/admin/users?act=sort&amp;q=x">X</a> / <a href="/admin/users?act=sort&amp;q=y">Y</a> / <a href="/admin/users?act=sort&amp;q=z">Z</a><br>';
 
-            echo 'Введите логин пользователя который необходимо отредактировать<br /><br />';
+            echo 'Введите логин пользователя который необходимо отредактировать<br><br>';
 
-            echo '<b>Cписок последних зарегистрированных</b><br />';
+            echo '<b>Cписок последних зарегистрированных</b><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
             $page = App::paginate(Setting::get('userlist'), $total);
@@ -48,7 +48,7 @@ if (is_admin([101, 102])) {
                         $data['email'] = 'Не указан';
                     }
 
-                    echo '<hr /><div>'.user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (email: '.$data['email'].')<br />';
+                    echo '<hr><div>'.user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (email: '.$data['email'].')<br>';
 
                     echo 'Зарегистрирован: '.date_fixed($data['joined']).'</div>';
                 }
@@ -59,7 +59,7 @@ if (is_admin([101, 102])) {
             } else {
                 show_error('Пользователей еще нет!');
             }
-            echo '<br /><br />';
+            echo '<br><br>';
         break;
 
         ############################################################################################
@@ -90,12 +90,12 @@ if (is_admin([101, 102])) {
 
                         echo user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> ';
 
-                        echo user_online($data['login']).' ('.points($data['point']).')<br />';
+                        echo user_online($data['login']).' ('.points($data['point']).')<br>';
                     }
 
                     App::pagination($page);
 
-                    echo 'Найдено совпадений: '.$total.'<br /><br />';
+                    echo 'Найдено совпадений: '.$total.'<br><br>';
                 } else {
                     show_error('Совпадений не найдено!');
                 }
@@ -103,7 +103,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Не выбраны критерии поиска пользователей!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -116,11 +116,11 @@ if (is_admin([101, 102])) {
             if (!empty($user)) {
                 $uz = $user['login'];
 
-                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br /><br />';
+                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br><br>';
 
                 if (App::getUsername() == Setting::get('nickname') || App::getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
                     if ($user['login'] == App::getUsername()) {
-                        echo '<b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br /><br />';
+                        echo '<b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br><br>';
                     }
 
                     echo '<div class="form">';
@@ -129,83 +129,83 @@ if (is_admin([101, 102])) {
                     if (App::getUsername() == Setting::get('nickname')) {
                         $arr_access = [101, 102, 103, 105, 107];
 
-                        echo 'Уровень доступа:<br />';
+                        echo 'Уровень доступа:<br>';
                         echo '<select name="level">';
                         foreach ($arr_access as $value) {
                             $selected = ($user['level'] == $value) ? ' selected="selected"' : '';
                             echo '<option value="'.$value.'"'.$selected.'>'.user_status($value).'</option>';
                         }
-                        echo '</select><br />';
+                        echo '</select><br>';
                     }
 
-                    echo 'Новый пароль: (Oставьте пустым если не надо менять)<br />';
-                    echo '<input type="text" name="password" maxlength="30" /><br />';
-                    echo 'Страна:<br />';
-                    echo '<input type="text" name="country" maxlength="30" value="'.$user['country'].'" /><br />';
-                    echo 'Откуда:<br />';
-                    echo '<input type="text" name="city" maxlength="50" value="'.$user['city'].'" /><br />';
-                    echo 'Email:<br />';
-                    echo '<input type="text" name="email" maxlength="50" value="'.$user['email'].'" /><br />';
-                    echo 'Сайт:<br />';
-                    echo '<input type="text" name="site" maxlength="50" value="'.$user['site'].'" /><br />';
-                    echo 'Зарегистрирован:<br />';
-                    echo '<input type="text" name="joined" maxlength="10" value="'.date_fixed($user['joined'], "d.m.Y").'" /><br />';
-                    echo 'Дата рождения:<br />';
-                    echo '<input type="text" name="birthday" maxlength="10" value="'.$user['birthday'].'" /><br />';
-                    echo 'ICQ:<br />';
-                    echo '<input type="text" name="icq" maxlength="10" value="'.$user['icq'].'" /><br />';
-                    echo 'Имя пользователя:<br />';
-                    echo '<input type="text" name="name" maxlength="20" value="'.$user['name'].'" /><br />';
-                    echo 'Актив:<br />';
-                    echo '<input type="text" name="point" value="'.$user['point'].'" /><br />';
-                    echo 'Деньги:<br />';
-                    echo '<input type="text" name="money" value="'.$user['money'].'" /><br />';
-                    echo 'Особый статус:<br />';
-                    echo '<input type="text" name="status" maxlength="25" value="'.$user['status'].'" /><br />';
-                    echo 'Репутация (плюсы):<br />';
-                    echo '<input type="text" name="posrating" value="'.$user['posrating'].'" /><br />';
-                    echo 'Репутация (минусы):<br />';
-                    echo '<input type="text" name="negrating" value="'.$user['negrating'].'" /><br />';
-                    echo 'Скин:<br />';
-                    echo '<input type="text" name="themes" value="'.$user['themes'].'" /><br />';
+                    echo 'Новый пароль: (Oставьте пустым если не надо менять)<br>';
+                    echo '<input type="text" name="password" maxlength="30"><br>';
+                    echo 'Страна:<br>';
+                    echo '<input type="text" name="country" maxlength="30" value="'.$user['country'].'"><br>';
+                    echo 'Откуда:<br>';
+                    echo '<input type="text" name="city" maxlength="50" value="'.$user['city'].'"><br>';
+                    echo 'Email:<br>';
+                    echo '<input type="text" name="email" maxlength="50" value="'.$user['email'].'"><br>';
+                    echo 'Сайт:<br>';
+                    echo '<input type="text" name="site" maxlength="50" value="'.$user['site'].'"><br>';
+                    echo 'Зарегистрирован:<br>';
+                    echo '<input type="text" name="joined" maxlength="10" value="'.date_fixed($user['joined'], "d.m.Y").'"><br>';
+                    echo 'Дата рождения:<br>';
+                    echo '<input type="text" name="birthday" maxlength="10" value="'.$user['birthday'].'"><br>';
+                    echo 'ICQ:<br>';
+                    echo '<input type="text" name="icq" maxlength="10" value="'.$user['icq'].'"><br>';
+                    echo 'Имя пользователя:<br>';
+                    echo '<input type="text" name="name" maxlength="20" value="'.$user['name'].'"><br>';
+                    echo 'Актив:<br>';
+                    echo '<input type="text" name="point" value="'.$user['point'].'"><br>';
+                    echo 'Деньги:<br>';
+                    echo '<input type="text" name="money" value="'.$user['money'].'"><br>';
+                    echo 'Особый статус:<br>';
+                    echo '<input type="text" name="status" maxlength="25" value="'.$user['status'].'"><br>';
+                    echo 'Репутация (плюсы):<br>';
+                    echo '<input type="text" name="posrating" value="'.$user['posrating'].'"><br>';
+                    echo 'Репутация (минусы):<br>';
+                    echo '<input type="text" name="negrating" value="'.$user['negrating'].'"><br>';
+                    echo 'Скин:<br>';
+                    echo '<input type="text" name="themes" value="'.$user['themes'].'"><br>';
 
-                    echo 'Пол:<br />';
+                    echo 'Пол:<br>';
                     echo '<select name="gender">';
                     $selected = ($user['gender'] == 1) ? ' selected="selected"' : '';
                     echo '<option value="1"'.$selected.'>Мужской</option>';
                     $selected = ($user['gender'] == 2) ? ' selected="selected"' : '';
                     echo '<option value="2"'.$selected.'>Женский</option>';
-                    echo '</select><br />';
+                    echo '</select><br>';
 
-                    echo 'О себе:<br />';
-                    echo '<textarea cols="25" rows="5" name="info">'.$user['info'].'</textarea><br />';
+                    echo 'О себе:<br>';
+                    echo '<textarea cols="25" rows="5" name="info">'.$user['info'].'</textarea><br>';
 
-                    echo '<input value="Изменить" type="submit" /></form></div><br />';
+                    echo '<input value="Изменить" type="submit"></form></div><br>';
 
                     echo '<div class="b"><b>Дополнительная информация</b></div>';
                     if ($user['confirmreg'] == 1) {
-                        echo '<span style="color:#ff0000"><b>Аккаунт не активирован</b></span><br />';
+                        echo '<span style="color:#ff0000"><b>Аккаунт не активирован</b></span><br>';
                     }
 
                     $visit = DB::run() -> queryFetch("SELECT `ip`, `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", [$uz]);
                     if (!empty($visit)) {
-                        echo '<b>Последний визит:</b> '.date_fixed($visit['nowtime'], 'j F Y / H:i').'<br />';
-                        echo '<b>Последний IP:</b> '.$visit['ip'].'<br />';
+                        echo '<b>Последний визит:</b> '.date_fixed($visit['nowtime'], 'j F Y / H:i').'<br>';
+                        echo '<b>Последний IP:</b> '.$visit['ip'].'<br>';
                     }
 
                     if ($user['ban'] == 1 && $user['timeban'] > SITETIME) {
-                        echo '<span style="color:#ff0000"><b>Пользователь забанен</b></span><br />';
+                        echo '<span style="color:#ff0000"><b>Пользователь забанен</b></span><br>';
                     }
                     if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                         echo '<div class="form">';
-                        echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br />';
-                        echo 'Последняя причина: '.App::bbCode($user['reasonban']).'<br />';
+                        echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br>';
+                        echo 'Последняя причина: '.App::bbCode($user['reasonban']).'<br>';
                         echo 'Забанил: '.profile($user['loginsendban']).'</div>';
                     }
-                    echo 'Строгих банов: <b>'.$user['totalban'].'</b><br /><br />';
+                    echo 'Строгих банов: <b>'.$user['totalban'].'</b><br><br>';
 
                     if ($user['level'] < 101 || $user['level'] > 105) {
-                        echo '<i class="fa fa-times"></i> <b><a href="/admin/users?act=poddel&amp;uz='.$uz.'">Удалить профиль</a></b><br />';
+                        echo '<i class="fa fa-times"></i> <b><a href="/admin/users?act=poddel&amp;uz='.$uz.'">Удалить профиль</a></b><br>';
                     }
                 } else {
                     show_error('Ошибка! У вас недостаточно прав для редактирования этого профиля!');
@@ -214,7 +214,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Пользователя с данным логином не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -265,8 +265,8 @@ if (is_admin([101, 102])) {
                                                 }
 
                                                 if (!empty($pass)) {
-                                                    echo '<b><span style="color:#ff0000">Внимание! Вы изменили пароль пользователя!</span></b><br />';
-                                                    echo 'Не забудьте ему напомнить его новый пароль: <b>'.$pass.'</b><br /><br />';
+                                                    echo '<b><span style="color:#ff0000">Внимание! Вы изменили пароль пользователя!</span></b><br>';
+                                                    echo 'Не забудьте ему напомнить его новый пароль: <b>'.$pass.'</b><br><br>';
                                                     $mdpass = password_hash($pass, PASSWORD_BCRYPT);
                                                 } else {
                                                     $mdpass = $user['password'];
@@ -285,7 +285,7 @@ if (is_admin([101, 102])) {
                                                 save_title();
                                                 save_money();
 
-                                                echo '<i class="fa fa-check"></i> <b>Данные пользователя успешно изменены!</b><br /><br />';
+                                                echo '<i class="fa fa-check"></i> <b>Данные пользователя успешно изменены!</b><br><br>';
                                             } else {
                                                 show_error('Ошибка! Слишком большая информация в графе о себе, не более 1000 символов!');
                                             }
@@ -314,8 +314,8 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/users">Выбор юзера</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/users">Выбор юзера</a><br>';
         break;
 
         ############################################################################################
@@ -323,28 +323,28 @@ if (is_admin([101, 102])) {
         ############################################################################################
         case 'poddel':
 
-            echo '<i class="fa fa-times"></i> Вы подтверждаете, что хотите полностью удалить аккаунт пользователя <b>'.$uz.'</b>?<br /><br />';
+            echo '<i class="fa fa-times"></i> Вы подтверждаете, что хотите полностью удалить аккаунт пользователя <b>'.$uz.'</b>?<br><br>';
 
             echo '<div class="form">';
             echo '<form action="/admin/users?act=deluser&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-            echo '<b>Добавить в черный список:</b><br />';
-            echo 'Логин пользователя: <input name="loginblack" type="checkbox" value="1"  checked="checked" /><br />';
-            echo 'Email пользователя: <input name="mailblack" type="checkbox" value="1"  checked="checked" /><br /><br />';
+            echo '<b>Добавить в черный список:</b><br>';
+            echo 'Логин пользователя: <input name="loginblack" type="checkbox" value="1"  checked="checked"><br>';
+            echo 'Email пользователя: <input name="mailblack" type="checkbox" value="1"  checked="checked"><br><br>';
 
-            echo '<b>Удаление сообщений:</b><br />';
-            echo 'Темы в форуме: <input name="deltopicforum" type="checkbox" value="1" /><br />';
-            echo 'Темы и сообщения: <input name="delpostforum" type="checkbox" value="1" /><br />';
-            echo 'Комментарии в галерее: <input name="delcommphoto" type="checkbox" value="1" /><br />';
-            echo 'Комментарии в новостях: <input name="delcommnews" type="checkbox" value="1" /><br />';
-            echo 'Комментарии в блогах: <input name="delcommblog" type="checkbox" value="1" /><br />';
-            echo 'Комментарии в загрузках: <input name="delcommload" type="checkbox" value="1" /><br />';
-            echo 'Фотографии в галерее: <input name="delimages" type="checkbox" value="1" /><br /><br />';
+            echo '<b>Удаление сообщений:</b><br>';
+            echo 'Темы в форуме: <input name="deltopicforum" type="checkbox" value="1"><br>';
+            echo 'Темы и сообщения: <input name="delpostforum" type="checkbox" value="1"><br>';
+            echo 'Комментарии в галерее: <input name="delcommphoto" type="checkbox" value="1"><br>';
+            echo 'Комментарии в новостях: <input name="delcommnews" type="checkbox" value="1"><br>';
+            echo 'Комментарии в блогах: <input name="delcommblog" type="checkbox" value="1"><br>';
+            echo 'Комментарии в загрузках: <input name="delcommload" type="checkbox" value="1"><br>';
+            echo 'Фотографии в галерее: <input name="delimages" type="checkbox" value="1"><br><br>';
 
-            echo '<input type="submit" value="Удалить профиль" /></form></div><br />';
+            echo '<input type="submit" value="Удалить профиль"></form></div><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users?act=edit&amp;uz='.$uz.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/users">Выбор юзера</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/users">Выбор юзера</a><br>';
             break;
         ############################################################################################
         ##                                   Удаление профиля                                     ##
@@ -455,7 +455,7 @@ if (is_admin([101, 102])) {
                         // Удаление профиля
                         delete_users($uz);
 
-                        echo '<i class="fa fa-check"></i> <b>Профиль пользователя успешно удален!</b><br /><br />';
+                        echo '<i class="fa fa-check"></i> <b>Профиль пользователя успешно удален!</b><br><br>';
                     } else {
                         show_error('Ошибка! У вас недостаточно прав для удаления этого профиля!');
                     }
@@ -466,12 +466,12 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

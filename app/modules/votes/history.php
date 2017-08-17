@@ -31,7 +31,7 @@ switch ($action):
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
                 echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b></div>';
-                echo '<div>Создано: '.date_fixed($data['time']).'<br />';
+                echo '<div>Создано: '.date_fixed($data['time']).'<br>';
                 echo 'Всего голосов: '.$data['count'].'</div>';
             }
 
@@ -53,7 +53,7 @@ switch ($action):
             if (!empty($votes['closed'])) {
                 //Setting::get('newtitle') = $votes['title'];
 
-                echo '<i class="fa fa-briefcase"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
+                echo '<i class="fa fa-briefcase"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br><br>';
 
                 $queryanswer = DB::run() -> query("SELECT `answer`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", [$id]);
                 $answer = $queryanswer -> fetchAssoc();
@@ -75,11 +75,11 @@ switch ($action):
                         $proc = round(($data * 100) / $sum, 1);
                         $maxproc = round(($data * 100) / $max);
 
-                        echo '<b>'.$key.'</b> (Голосов: '.$data.')<br />';
-                        progress_bar($maxproc, $proc.'%').'<br /><br />';
+                        echo '<b>'.$key.'</b> (Голосов: '.$data.')<br>';
+                        progress_bar($maxproc, $proc.'%').'<br><br>';
                     }
 
-                    echo 'Вариантов: <b>'.$total.'</b><br /><br />';
+                    echo 'Вариантов: <b>'.$total.'</b><br><br>';
                 } else {
                     show_error('Ошибка! Для данного голосования не созданы варианты ответов!');
                 }
@@ -90,11 +90,11 @@ switch ($action):
             show_error('Ошибка! Данного голосования не существует!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes/history?page='.$page.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes/history?page='.$page.'">Вернуться</a><br>';
     break;
 
 endswitch;
 
-echo '<i class="fa fa-bar-chart"></i> <a href="/votes">Список голосований</a><br />';
+echo '<i class="fa fa-bar-chart"></i> <a href="/votes">Список голосований</a><br>';
 
 App::view(Setting::get('themes').'/foot');

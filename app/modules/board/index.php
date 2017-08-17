@@ -27,7 +27,7 @@ if ($act == 'index') {
                 echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                 echo '<b><a href="/board?act=board&amp;id='.$data[2].'">'.$data[0].'</a></b> ('.(int)$totalboard.')</div>';
 
-                echo '<div>'.$data[1].'<br />';
+                echo '<div>'.$data[1].'<br>';
 
                 if($totalboard>0){
                     $fileboard = file(STORAGE."/board/$data[2].dat");
@@ -35,7 +35,7 @@ if ($act == 'index') {
 
                     if (utf_strlen($lostlist[0])>35) {$lostlist[0]=utf_substr($lostlist[0],0,30); $lostlist[0].="...";}
 
-                    echo 'Тема: <a href="/board?act=view&amp;id='.$lostlist[6].'&amp;bid='.$lostlist[5].'">'.$lostlist[0].'</a><br />';
+                    echo 'Тема: <a href="/board?act=view&amp;id='.$lostlist[6].'&amp;bid='.$lostlist[5].'">'.$lostlist[0].'</a><br>';
 
                     echo 'Объявление: '.profile($lostlist[1]).' <small>('.date_fixed($lostlist[3]).')</small>';
 
@@ -66,7 +66,7 @@ if ($act == "board"){
         if (is_admin()){
             echo ' / <a href="/admin/board?act=board&amp;id='.$id.'">Управление</a>';
         }
-        echo '<hr />';
+        echo '<hr>';
 
         if (file_exists(STORAGE."/board/$id.dat")){
             $files = file(STORAGE."/board/$id.dat");
@@ -107,8 +107,8 @@ if ($act == "board"){
                     echo '<i class="fa fa-folder-open"></i> '.($i+1).'. ';
                     echo '<b><a href="/board?act=view&amp;id='.$id.'&amp;bid='.$data[5].'&amp;page='.$page['current'].'">'.$data[0].'</a></b> ';
                     echo '<small>('.date_fixed($data[3]).')</small></div>';
-                    echo 'Текст объявления: '.$data[2].'<br />';
-                    echo 'Автор объявления: '.profile($data[1]).'<br />';
+                    echo 'Текст объявления: '.$data[2].'<br>';
+                    echo 'Автор объявления: '.profile($data[1]).'<br>';
                 }
 
                 App::pagination($page);
@@ -136,12 +136,12 @@ if($act == "view"){
 
                 echo '<a href="/board">Объявления</a> / ';
                 echo '<a href="/board?act=board&amp;id='.$id.'">'.$string[0].'</a> / ';
-                echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a><hr />';
+                echo '<a href="/board?act=new&amp;id='.$id.'">Добавить</a><hr>';
 
-                echo $bstr[2].'<br />';
-                echo 'Автор: '.profile($bstr[1]).'<br />';
-                echo 'Размещено:  '.date_fixed($bstr[3]).'<br />';
-                echo '<small>Дата удаления: <b>'.date_fixed($bstr[4]).'</b></small><br /><br />';
+                echo $bstr[2].'<br>';
+                echo 'Автор: '.profile($bstr[1]).'<br>';
+                echo 'Размещено:  '.date_fixed($bstr[3]).'<br>';
+                echo '<small>Дата удаления: <b>'.date_fixed($bstr[4]).'</b></small><br><br>';
 
             } else {show_error('Ошибка! Данного объявления не существует!');}
         } else {show_error('Ошибка! Данной рубрики не существует!');}
@@ -161,21 +161,21 @@ if ($act == "new"){
 
             echo '<div class="form">';
             echo '<form action="/board?act=add&amp;id='.$id.'" method="post">';
-            echo '<b>Заголовок:</b><br /><input type="text" name="zag" maxlength="50" /><br />';
-            echo '<b>Объявление:</b><br /><textarea cols="25" rows="3" name="msg"></textarea><br />';
-            echo '<b>Срок показа:</b><br /><select name="days">';
+            echo '<b>Заголовок:</b><br><input type="text" name="zag" maxlength="50"><br>';
+            echo '<b>Объявление:</b><br><textarea cols="25" rows="3" name="msg"></textarea><br>';
+            echo '<b>Срок показа:</b><br><select name="days">';
 
             for($i=5; $i<=Setting::get('boarddays'); $i=$i+5){
                 echo '<option  value="'.$i.'">'.$i.' дней</option>';
             }
 
-            echo '</select><br /> (Максимальный срок показа -  <b>'.(int)Setting::get('boarddays').'</b> дней.)<br />';
-            echo '<input type="submit" value="Добавить" /></form></div><br />';
+            echo '</select><br> (Максимальный срок показа -  <b>'.(int)Setting::get('boarddays').'</b> дней.)<br>';
+            echo '<input type="submit" value="Добавить"></form></div><br>';
 
         } else {show_error('Ошибка! Данного раздела не существует!');}
     } else {show_login('Вы не авторизованы, чтобы добавить объявление, необходимо');}
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=board&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=board&amp;id='.$id.'">Вернуться</a><br>';
 }
 
 ############################################################################################
@@ -215,9 +215,9 @@ if ($act == "add"){
     } else {show_error('Ошибка! Данной рубрики не существует!');}
 } else {show_login('Вы не авторизованы, чтобы добавить объявление, необходимо');}
 
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=new&amp;id='.$id.'">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/board?act=new&amp;id='.$id.'">Вернуться</a><br>';
 }
 
-echo '<i class="fa fa-home"></i> <a href="/">На главную</a><br />';
+echo '<i class="fa fa-home"></i> <a href="/">На главную</a><br>';
 
 App::view(Setting::get('themes').'/foot');

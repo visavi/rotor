@@ -28,8 +28,8 @@ case 'index':
 
                     $page = App::paginate(Setting::get('ziplist'), $total);
                     if ($total > 0) {
-                        echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
-                        echo 'Всего файлов: '.$total.'<hr />';
+                        echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br><br>';
+                        echo 'Всего файлов: '.$total.'<hr>';
 
                         $arrext = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'env', 'gitignore', 'json', 'yml', 'md'];
 
@@ -41,7 +41,7 @@ case 'index':
                         for ($i = $page['offset']; $i < $end; $i++) {
                             if ($list[$i]['folder'] == 1) {
                                 $filename = substr($list[$i]['filename'], 0, -1);
-                                echo '<i class="fa fa-folder-open-o"></i> <b>Директория '.$filename.'</b><br />';
+                                echo '<i class="fa fa-folder-open-o"></i> <b>Директория '.$filename.'</b><br>';
                             } else {
                                 $ext = getExtension($list[$i]['filename']);
 
@@ -52,13 +52,13 @@ case 'index':
                                 } else {
                                     echo $list[$i]['filename'];
                                 }
-                                echo ' ('.formatsize($list[$i]['size']).')<br />';
+                                echo ' ('.formatsize($list[$i]['size']).')<br>';
                             }
                         }
 
                         App::pagination($page);
 
-                        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['name'].'</a><br />';
+                        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['name'].'</a><br>';
                     } else {
                         show_error('Ошибка! В данном архиве нет файлов!');
                     }
@@ -96,16 +96,16 @@ case 'preview':
 
                 //Setting::get('newtitle') = 'Просмотр файла - '.$filename;
 
-                echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br /><br />';
+                echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br><br>';
 
-                echo '<b>'.$filename.'</b> ('.formatsize($content[0]['size']).')<hr />';
+                echo '<b>'.$filename.'</b> ('.formatsize($content[0]['size']).')<hr>';
 
                 if (!preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $filename)) {
                     if ($content[0]['size'] > 0) {
                         if (is_utf($filecontent)) {
-                            echo '<pre class="prettyprint linenums">'.htmlspecialchars($filecontent).'</pre><br />';
+                            echo '<pre class="prettyprint linenums">'.htmlspecialchars($filecontent).'</pre><br>';
                         } else {
-                            echo '<pre class="prettyprint linenums">'.win_to_utf(htmlspecialchars($filecontent)).'</pre><br />';
+                            echo '<pre class="prettyprint linenums">'.win_to_utf(htmlspecialchars($filecontent)).'</pre><br>';
                         }
                     } else {
                         show_error('Данный файл пустой!');
@@ -124,7 +124,7 @@ case 'preview':
                         die($filecontent);
                     }
 
-                    echo '<img src="/load/zip?act=preview&amp;id='.$id.'&amp;view='.$view.'&amp;img=1" alt="image" /><br /><br />';
+                    echo '<img src="/load/zip?act=preview&amp;id='.$id.'&amp;view='.$view.'&amp;img=1" alt="image"><br><br>';
                 }
             } else {
                 show_error('Ошибка! Не удалось извлечь файл!');
@@ -136,11 +136,11 @@ case 'preview':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/zip?id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/zip?id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 endswitch;
 
-echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
 App::view(Setting::get('themes').'/foot');

@@ -42,19 +42,19 @@ switch ($action):
                     echo ' <b>'.profile($data['login']).'</b> (Репутация: '.($data['rating']).')</div>';
                 }
 
-                echo '<div>Плюсов: '.$data['posrating'].' / Минусов: '.$data['negrating'].'<br />';
+                echo '<div>Плюсов: '.$data['posrating'].' / Минусов: '.$data['negrating'].'<br>';
                 echo 'Дата регистрации: '.date_fixed($data['joined'], 'j F Y').'</div>';
             }
 
             App::pagination($page);
 
             echo '<div class="form">';
-            echo '<b>Поиск пользователя:</b><br />';
+            echo '<b>Поиск пользователя:</b><br>';
             echo '<form action="/authoritylist?act=search&amp;page='.$page['current'].'" method="post">';
-            echo '<input type="text" name="uz" value="'.App::getUsername().'" />';
-            echo '<input type="submit" value="Искать" /></form></div><br />';
+            echo '<input type="text" name="uz" value="'.App::getUsername().'">';
+            echo '<input type="submit" value="Искать"></form></div><br>';
 
-            echo 'Всего пользователей: <b>'.$total.'</b><br /><br />';
+            echo 'Всего пользователей: <b>'.$total.'</b><br><br>';
         } else {
             show_error('Пользователей еще нет!');
         }
@@ -92,7 +92,7 @@ switch ($action):
             show_error('Ошибка! Вы не ввели логин пользователя');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/authoritylist?page='.$page.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/authoritylist?page='.$page.'">Вернуться</a><br>';
     break;
 
 endswitch;

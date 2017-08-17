@@ -8,11 +8,11 @@
 
     <h1>Редактирование сообщения</h1>
 
-    <i class="fa fa-pencil text-muted"></i> <b><?=profile($post->user)?></b> (<?=date_fixed($post['time'])?>)<br /><br />
+    <i class="fa fa-pencil text-muted"></i> <b><?=profile($post->user)?></b> (<?=date_fixed($post['time'])?>)<br><br>
 
     <div class="form">
         <form action="/book/edit/<?= $id ?>" method="post">
-            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
+            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
 
             <div class="form-group{{ App::hasError('msg') }}">
                 <label for="markItUp">Сообщение:</label>
@@ -22,7 +22,7 @@
 
             <button class="btn btn-primary">Редактировать</button>
         </form>
-    </div><br />
+    </div><br>
 
     <?php App::view('includes/back', ['link' => '/book', 'title' => 'Вернуться']); ?>
 @stop

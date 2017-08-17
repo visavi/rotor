@@ -61,7 +61,7 @@ case 'read':
 		$data['text'] = str_replace('[cut]', '', $data['text']);
 
 		echo '<div>'.App::bbCode($data['text']).'</div>';
-		echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'</div><br />';
+		echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'</div><br>';
 
 		if ($data['comments'] > 0) {
 		echo '<div class="act"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>';
@@ -75,10 +75,10 @@ case 'read':
 				echo '<div class="img">'.user_avatars($comm['user']).'</div>';
 
 				echo '<b>'.profile($comm['user']).'</b>';
-				echo '<small> ('.date_fixed($comm['time']).')</small><br />';
+				echo '<small> ('.date_fixed($comm['time']).')</small><br>';
 				echo user_title($comm['user']).' '.user_online($comm['user']).'</div>';
 
-				echo '<div>'.App::bbCode($comm['text']).'<br />';
+				echo '<div>'.App::bbCode($comm['text']).'<br>';
 
 				if (is_admin()) {
 					echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
@@ -89,7 +89,7 @@ case 'read':
 
 			if ($data['comments'] > 5) {
 				echo '<div class="act"><b><a href="/events?act=comments&amp;id='.$data['id'].'">Все комментарии</a></b> ('.$data['comments'].') ';
-				echo '<a href="/events?act=end&amp;id='.$data['id'].'">&raquo;</a></div><br />';
+				echo '<a href="/events?act=end&amp;id='.$data['id'].'">&raquo;</a></div><br>';
 			}
 
 		} else {
@@ -99,13 +99,13 @@ case 'read':
 		if (is_user()) {
 			if (empty($data['closed'])) {
 				echo '<div class="form"><form action="/events?act=addcomment&amp;id='.$id.'&amp;read=1&amp;uid='.$_SESSION['token'].'" method="post">';
-				echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
-				echo '<input type="submit" value="Написать" /></form></div>';
+				echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>';
+				echo '<input type="submit" value="Написать"></form></div>';
 
-				echo '<br />';
+				echo '<br>';
 				echo '<a href="/rules">Правила</a> / ';
 				echo '<a href="/smiles">Смайлы</a> / ';
-				echo '<a href="/tags">Теги</a><br /><br />';
+				echo '<a href="/tags">Теги</a><br><br>';
 			} else {
 				show_error('Комментирование данного события закрыто!');
 			}
@@ -116,7 +116,7 @@ case 'read':
 		show_error('Ошибка! Выбранного вами события не существует, возможно оно было удалено!');
 	}
 
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br>';
 break;
 
 ############################################################################################
@@ -125,30 +125,30 @@ break;
 case 'new':
 	if (is_user()) {
 		if (App::user('point') >= Setting::get('eventpoint')){
-			echo '<b><big>Добавление события</big></b><br /><br />';
+			echo '<b><big>Добавление события</big></b><br><br>';
 
 			echo '<div class="form cut">';
 			echo '<form action="/events?act=addevent&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-			echo 'Заголовок:<br />';
-			echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
-			echo '<textarea id="markItUp" cols="50" rows="10" name="msg"></textarea><br />';
-			echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
-			echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(Setting::get('filesize')).' и '.Setting::get('fileupfoto').'px)</i><br /><br />';
+			echo 'Заголовок:<br>';
+			echo '<input type="text" name="title" size="50" maxlength="50"><br>';
+			echo '<textarea id="markItUp" cols="50" rows="10" name="msg"></textarea><br>';
+			echo 'Прикрепить картинку:<br><input type="file" name="image"><br>';
+			echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(Setting::get('filesize')).' и '.Setting::get('fileupfoto').'px)</i><br><br>';
 
 			if (is_admin()){
-				echo '<input name="top" type="checkbox" value="1" /> Вывести на главную<br />';
-				echo '<input name="closed" type="checkbox" value="1" /> Закрыть комментарии<br />';
+				echo '<input name="top" type="checkbox" value="1"> Вывести на главную<br>';
+				echo '<input name="closed" type="checkbox" value="1"> Закрыть комментарии<br>';
 			}
-			echo '<input type="submit" value="Добавить" /></form></div><br />';
+			echo '<input type="submit" value="Добавить"></form></div><br>';
 
-			echo 'Рекомендация! Для обрезки события используйте тег [cut]<br />';
+			echo 'Рекомендация! Для обрезки события используйте тег [cut]<br>';
 		} else {
 			show_error('Ошибка! У вас недостаточно актива для создания события (Необходимо '.points(Setting::get('eventpoint')).')!');
 		}
 	} else {
 		show_login('Вы не авторизованы, для создания события, необходимо');
 	}
-			echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">Вернуться</a><br />';
+			echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -209,8 +209,8 @@ case 'addevent':
 		show_login('Вы не авторизованы, для создания события, необходимо');
 	}
 
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events?act=new">Вернуться</a><br />';
-	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events?act=new">Вернуться</a><br>';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events">К событиям</a><br>';
 break;
 
 ############################################################################################
@@ -228,31 +228,31 @@ case 'editevent':
 
 		if ($validation->run()) {
 
-			echo '<b><big>Редактирование</big></b><br /><br />';
+			echo '<b><big>Редактирование</big></b><br><br>';
 
 			echo '<div class="form cut">';
 			echo '<form action="/events?act=changeevent&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-			echo 'Заголовок:<br />';
-			echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['title'].'" /><br />';
-			echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br />';
+			echo 'Заголовок:<br>';
+			echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['title'].'"><br>';
+			echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br>';
 
 			if (!empty($dataevent['image']) && file_exists(HOME.'/uploads/events/'.$dataevent['image'])){
-				echo '<a href="/uploads/events/'.$dataevent['image'].'">'.resize_image('uploads/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br />';
-				echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/uploads/events/'.$dataevent['image']).')<br /><br />';
+				echo '<a href="/uploads/events/'.$dataevent['image'].'">'.resize_image('uploads/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br>';
+				echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/uploads/events/'.$dataevent['image']).')<br><br>';
 			}
 
-			echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
-			echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(Setting::get('filesize')).' и '.Setting::get('fileupfoto').'px)</i><br /><br />';
+			echo 'Прикрепить картинку:<br><input type="file" name="image"><br>';
+			echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(Setting::get('filesize')).' и '.Setting::get('fileupfoto').'px)</i><br><br>';
 
 			if (is_admin()){
 				$checked = ($dataevent['closed'] == 1) ? ' checked="checked"' : '';
-				echo '<input name="closed" type="checkbox" value="1"'.$checked.' /> Закрыть комментарии<br />';
+				echo '<input name="closed" type="checkbox" value="1"'.$checked.'> Закрыть комментарии<br>';
 
 				$checked = ($dataevent['top'] == 1) ? ' checked="checked"' : '';
-				echo '<input name="top" type="checkbox" value="1"'.$checked.' /> Показывать на главной<br />';
+				echo '<input name="top" type="checkbox" value="1"'.$checked.'> Показывать на главной<br>';
 			}
 
-			echo '<input type="submit" value="Изменить" /></form></div><br />';
+			echo '<input type="submit" value="Изменить"></form></div><br>';
 
 		} else {
 			show_error($validation->getErrors());
@@ -261,7 +261,7 @@ case 'editevent':
 		show_login('Вы не авторизованы, для редактирования события, необходимо');
 	}
 
-	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events">К событиям</a><br>';
 break;
 
 ############################################################################################
@@ -326,8 +326,8 @@ case 'changeevent':
 	} else {
 		show_login('Вы не авторизованы, для редактирования события, необходимо');
 	}
-	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=editevent&amp;id='.$id.'">Вернуться</a><br />';
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=editevent&amp;id='.$id.'">Вернуться</a><br>';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br>';
 break;
 
 ############################################################################################
@@ -340,9 +340,9 @@ case 'comments':
 	if (!empty($dataevent)) {
 		//Setting::get('newtitle') = 'Комментарии - '.$dataevent['title'];
 
-		echo '<i class="fa fa-file-o"></i> <b><a href="/events?act=read&amp;id='.$dataevent['id'].'">'.$dataevent['title'].'</a></b><br /><br />';
+		echo '<i class="fa fa-file-o"></i> <b><a href="/events?act=read&amp;id='.$dataevent['id'].'">'.$dataevent['title'].'</a></b><br><br>';
 
-		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr />';
+		echo '<a href="/events?act=end&amp;id='.$id.'">Обновить</a><hr>';
 
 		$total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['event', $id]);
 
@@ -364,14 +364,14 @@ case 'comments':
 				echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
 				if ($is_admin) {
-					echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
+					echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
 				}
 
 				echo '<b>'.profile($data['user']).'</b>';
-				echo '<small> ('.date_fixed($data['time']).')</small><br />';
+				echo '<small> ('.date_fixed($data['time']).')</small><br>';
 				echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-				echo '<div>'.App::bbCode($data['text']).'<br />';
+				echo '<div>'.App::bbCode($data['text']).'<br>';
 
 				if (is_admin()) {
 					echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -381,7 +381,7 @@ case 'comments':
 			}
 
 			if ($is_admin) {
-				echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
+				echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
 			}
 
             App::pagination($page);
@@ -393,13 +393,13 @@ case 'comments':
 		if (is_user()) {
 			if (empty($dataevent['closed'])) {
 				echo '<div class="form"><form action="/events?act=addcomment&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-				echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
-				echo '<input type="submit" value="Написать" /></form></div>';
+				echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>';
+				echo '<input type="submit" value="Написать"></form></div>';
 
-				echo '<br />';
+				echo '<br>';
 				echo '<a href="/rules">Правила</a> / ';
 				echo '<a href="/smiles">Смайлы</a> / ';
-				echo '<a href="/tags">Теги</a><br /><br />';
+				echo '<a href="/tags">Теги</a><br><br>';
 			} else {
 				show_error('Комментирование данного события закрыто!');
 			}
@@ -410,7 +410,7 @@ case 'comments':
 		show_error('Ошибка! Выбранного события не существует, возможно оно было удалено!');
 	}
 
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br>';
 break;
 
 ############################################################################################
@@ -458,8 +458,8 @@ case 'addcomment':
 		show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
 	}
 
-	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br>';
 break;
 
 ############################################################################################
@@ -492,8 +492,8 @@ case 'del':
 		show_error('Ошибка! Удалять комментарии могут только модераторы!');
 	}
 
-	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-up"></i> <a href="/events?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br>';
 break;
 
 ############################################################################################
@@ -513,7 +513,7 @@ case 'end':
 		show_error('Ошибка! Данного события не существует!');
 	}
 
-	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br />';
+	echo '<i class="fa fa-arrow-circle-left"></i> <a href="/events">К событиям</a><br>';
 break;
 
 endswitch;

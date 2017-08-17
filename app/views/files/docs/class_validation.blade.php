@@ -45,7 +45,7 @@ if ($validation->run()){
 </ul>
 
 <h3>run()</h3>
-Запускает проверку и возвращает true если все условия выполнены или массив со списком ошибок<br />
+Запускает проверку и возвращает true если все условия выполнены или массив со списком ошибок<br>
 
 <pre class="prettyprint linenums">
 if ($validation->run()){
@@ -56,8 +56,8 @@ if ($validation->run()){
 </pre>
 
 <h3>addError($error)</h3>
-Добавляет ошибку в список<br />
-Используется для пользовательской проверки некоторых данных<br />
+Добавляет ошибку в список<br>
+Используется для пользовательской проверки некоторых данных<br>
 Аналогично фильтру <a href="#validateCustom">custom (validateCustom)</a>
 
 <pre class="prettyprint linenums">
@@ -153,5 +153,5 @@ addRule('custom', strcmp($var1, $var2) !== 0, 'Данные не равны пр
 </pre>
 Возвращает true если условие будет выполнено
 
-<br /><br />
-<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br />
+<br><br>
+<i class="fa fa-arrow-circle-left"></i> <a href="/files/docs">Вернуться</a><br>

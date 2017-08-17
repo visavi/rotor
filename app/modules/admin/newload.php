@@ -25,7 +25,7 @@ if (is_admin()) {
 
                 while ($data = $querynew -> fetch()) {
                     echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
 
                     if (empty($data['app'])) {
                         echo '<i class="fa fa-download"></i> ';
@@ -35,26 +35,26 @@ if (is_admin()) {
 
                     echo '<b><a href="/admin/newload?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.date_fixed($data['time']).')</div>';
                     echo '<div>';
-                    echo 'Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br />';
-                    echo 'Добавлено: '.profile($data['user']).'<br />';
+                    echo 'Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br>';
+                    echo 'Добавлено: '.profile($data['user']).'<br>';
                     if (!empty($data['link'])) {
-                        echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/uploads/files/'.$data['link']).')<br />';
+                        echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/uploads/files/'.$data['link']).')<br>';
                     } else {
-                        echo 'Файл: Не загружен<br />';
+                        echo 'Файл: Не загружен<br>';
                     }
                     if (!empty($data['screen'])) {
-                        echo 'Скрин: '.$data['screen'].' ('.read_file(HOME.'/uploads/screen/'.$data['screen']).')<br />';
+                        echo 'Скрин: '.$data['screen'].' ('.read_file(HOME.'/uploads/screen/'.$data['screen']).')<br>';
                     } else {
-                        echo 'Скрин: Не загружен<br />';
+                        echo 'Скрин: Не загружен<br>';
                     }
                     echo '</div>';
                 }
 
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+                echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
                 App::pagination($page);
 
-                echo 'Всего файлов: <b>'.$total.'</b><br /><br />';
+                echo 'Всего файлов: <b>'.$total.'</b><br><br>';
             } else {
                 show_error('Новых файлов еще нет!');
             }
@@ -79,31 +79,31 @@ if (is_admin()) {
                             echo '<a href="/admin/newload?act=allow&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете публикацию файла?\')">Опубликовать</a> / ';
                         }
 
-                        echo '<a href="/admin/newload?act=deldown&amp;del='.$new['id'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете удаление файла?\')">Удалить файл</a><hr />';
+                        echo '<a href="/admin/newload?act=deldown&amp;del='.$new['id'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете удаление файла?\')">Удалить файл</a><hr>';
 
                         $folder = $new['folder'] ? $new['folder'].'/' : '';
 
                         if (!empty($new['link'])) {
-                            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+                            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
                         } else {
-                            echo '<i class="fa fa-download"></i> <b>Не загружен</b><br />';
+                            echo '<i class="fa fa-download"></i> <b>Не загружен</b><br>';
                         }
 
                         if (!empty($new['screen'])) {
-                            echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                            echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br />';
+                            echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                            echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br>';
                         } else {
-                            echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br />';
+                            echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br>';
                         }
 
-                        echo '<br /><b><big>Редактирование</big></b><br /><br />';
+                        echo '<br><b><big>Редактирование</big></b><br><br>';
 
-                        echo 'Добавлено: <b>'.profile($new['user']).'</b> '.user_visit($new['user']).'<br />';
-                        echo 'Время последнего изменения:  ('.date_fixed($new['time']).')<br /><br />';
+                        echo 'Добавлено: <b>'.profile($new['user']).'</b> '.user_visit($new['user']).'<br>';
+                        echo 'Время последнего изменения:  ('.date_fixed($new['time']).')<br><br>';
 
                         echo '<div class="form">';
                         echo '<form action="/admin/newload?act=edit&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                        echo 'Категория*:<br />';
+                        echo 'Категория*:<br>';
 
                         $output = [];
 
@@ -129,30 +129,30 @@ if (is_admin()) {
                             }
                         }
 
-                        echo '</select><br />';
+                        echo '</select><br>';
 
                         if (empty($new['site'])) {
                             $new['site'] = 'http://';
                         }
 
-                        echo 'Название*:<br />';
-                        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['title'].'" /><br />';
-                        echo 'Описание*:<br />';
-                        echo '<textarea cols="25" rows="10" name="text">'.$new['text'].'</textarea><br />';
-                        echo 'Автор файла:<br />';
-                        echo '<input type="text" name="author" maxlength="50" value="'.$new['author'].'" /><br />';
-                        echo 'Сайт автора:<br />';
-                        echo '<input type="text" name="site" maxlength="50" value="'.$new['site'].'" /><br />';
-                        echo 'Имя файла*:<br />';
-                        echo '<input type="text" name="link" maxlength="50" value="'.$new['link'].'" /><br />';
-                        echo 'Уведомление:<br />';
-                        echo '<textarea cols="25" rows="5" name="notice">'.$new['notice'].'</textarea><br />';
+                        echo 'Название*:<br>';
+                        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['title'].'"><br>';
+                        echo 'Описание*:<br>';
+                        echo '<textarea cols="25" rows="10" name="text">'.$new['text'].'</textarea><br>';
+                        echo 'Автор файла:<br>';
+                        echo '<input type="text" name="author" maxlength="50" value="'.$new['author'].'"><br>';
+                        echo 'Сайт автора:<br>';
+                        echo '<input type="text" name="site" maxlength="50" value="'.$new['site'].'"><br>';
+                        echo 'Имя файла*:<br>';
+                        echo '<input type="text" name="link" maxlength="50" value="'.$new['link'].'"><br>';
+                        echo 'Уведомление:<br>';
+                        echo '<textarea cols="25" rows="5" name="notice">'.$new['notice'].'</textarea><br>';
 
                         echo 'Файл проверен: ';
                         $checked = ($new['app'] == 1) ? ' checked="checked"' : '';
-                        echo '<input name="app" type="checkbox" value="1"'.$checked.' /><br /><br />';
+                        echo '<input name="app" type="checkbox" value="1"'.$checked.'><br><br>';
 
-                        echo '<input value="Изменить" type="submit" /></form></div><br />';
+                        echo '<input value="Изменить" type="submit"></form></div><br>';
 
                     } else {
                         show_error('Категории файлов еще не созданы!');
@@ -164,7 +164,7 @@ if (is_admin()) {
                 show_error('Данного файла не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -278,7 +278,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -326,7 +326,7 @@ if (is_admin()) {
                 show_error('Ошибка! Опубликовывать файлы могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -359,7 +359,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данного файла не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -388,7 +388,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данного файла не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -435,12 +435,12 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?page='.$page.'">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

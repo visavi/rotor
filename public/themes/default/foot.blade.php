@@ -1,6 +1,6 @@
 </div>
 <div class="lol" id="down">
-    <a href="/">{{ Setting::get('copy') }}</a><br />
+    <a href="/">{{ Setting::get('copy') }}</a><br>
     <?= show_online() ?>
     <?= show_counter() ?>
 </div>

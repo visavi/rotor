@@ -21,26 +21,26 @@ if (is_admin([101, 102])) {
             $total = count($status);
 
             if ($total > 0) {
-                echo '<b>Статус</b>  — <b>Актив</b><br />';
+                echo '<b>Статус</b>  — <b>Актив</b><br>';
                 foreach ($status as $statval) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-user-circle-o"></i> ';
 
                     if (empty($statval['color'])) {
-                        echo '<b>'.$statval['name'].'</b> <small>('.$statval['topoint'].'-'.$statval['point'].')</small><br />';
+                        echo '<b>'.$statval['name'].'</b> <small>('.$statval['topoint'].'-'.$statval['point'].')</small><br>';
                     } else {
-                        echo '<b><span style="color:'.$statval['color'].'">'.$statval['name'].'</span></b> <small>('.$statval['topoint'].'-'.$statval['point'].')</small><br />';
+                        echo '<b><span style="color:'.$statval['color'].'">'.$statval['name'].'</span></b> <small>('.$statval['topoint'].'-'.$statval['point'].')</small><br>';
                     }
                     echo '</div>';
                     echo '<a href="/admin/status?act=edit&amp;id='.$statval['id'].'">Изменить</a> / ';
-                    echo '<a href="/admin/status?act=del&amp;id='.$statval['id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a><br />';
+                    echo '<a href="/admin/status?act=del&amp;id='.$statval['id'].'&amp;uid='.$_SESSION['token'].'">Удалить</a><br>';
                 }
-                echo '<br />Всего статусов: <b>'.$total.'</b><br /><br />';
+                echo '<br>Всего статусов: <b>'.$total.'</b><br><br>';
             } else {
                 show_error('Статусы еще не назначены!');
             }
 
-            echo '<i class="fa fa-check"></i> <a href="/admin/status?act=add">Создать</a><br />';
+            echo '<i class="fa fa-check"></i> <a href="/admin/status?act=add">Создать</a><br>';
         break;
 
         ############################################################################################
@@ -53,25 +53,25 @@ if (is_admin([101, 102])) {
             $status = DB::run() -> queryFetch("SELECT * FROM `status` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($status)) {
-                echo '<b><big>Изменение статуса</big></b><br /><br />';
+                echo '<b><big>Изменение статуса</big></b><br><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/status?act=change&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo 'От:<br />';
-                echo '<input type="text" name="topoint" maxlength="10" value="'.$status['topoint'].'" /><br />';
-                echo 'До:<br />';
-                echo '<input type="text" name="point" maxlength="10" value="'.$status['point'].'" /><br />';
-                echo 'Статус:<br />';
-                echo '<input type="text" name="name" maxlength="30" value="'.$status['name'].'" /><br />';
-                echo 'Цвет:<br />';
-                echo '<input type="text" name="color" maxlength="7" value="'.$status['color'].'" /><br />';
+                echo 'От:<br>';
+                echo '<input type="text" name="topoint" maxlength="10" value="'.$status['topoint'].'"><br>';
+                echo 'До:<br>';
+                echo '<input type="text" name="point" maxlength="10" value="'.$status['point'].'"><br>';
+                echo 'Статус:<br>';
+                echo '<input type="text" name="name" maxlength="30" value="'.$status['name'].'"><br>';
+                echo 'Цвет:<br>';
+                echo '<input type="text" name="color" maxlength="7" value="'.$status['color'].'"><br>';
 
-                echo '<input type="submit" value="Изменить" /></form></div><br />';
+                echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
                 show_error('Ошибка! Данного статуса не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -103,7 +103,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status?act=edit&amp;id='.$id.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status?act=edit&amp;id='.$id.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -111,22 +111,22 @@ if (is_admin([101, 102])) {
         ############################################################################################
         case 'add':
 
-            echo '<b><big>Создание статуса</big></b><br /><br />';
+            echo '<b><big>Создание статуса</big></b><br><br>';
 
             echo '<div class="form">';
             echo '<form action="/admin/status?act=create&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo 'От:<br />';
-            echo '<input type="text" name="topoint" maxlength="10" /><br />';
-            echo 'До:<br />';
-            echo '<input type="text" name="point" maxlength="10" /><br />';
-            echo 'Статус:<br />';
-            echo '<input type="text" name="name" maxlength="30" /><br />';
-            echo 'Цвет:<br />';
-            echo '<input type="text" name="color" maxlength="7" /><br />';
+            echo 'От:<br>';
+            echo '<input type="text" name="topoint" maxlength="10"><br>';
+            echo 'До:<br>';
+            echo '<input type="text" name="point" maxlength="10"><br>';
+            echo 'Статус:<br>';
+            echo '<input type="text" name="name" maxlength="30"><br>';
+            echo 'Цвет:<br>';
+            echo '<input type="text" name="color" maxlength="7"><br>';
 
-            echo '<input type="submit" value="Создать" /></form></div><br />';
+            echo '<input type="submit" value="Создать"></form></div><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -157,7 +157,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status?act=add">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status?act=add">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -181,12 +181,12 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

@@ -24,28 +24,28 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            echo 'В наличии: '.moneys(App::user('money')).'<br /><br />';
+            echo 'В наличии: '.moneys(App::user('money')).'<br><br>';
 
             if (App::user('point') >= Setting::get('sendmoneypoint')) {
                 if (empty($uz)) {
                     echo '<div class="form">';
                     echo '<form action="/games/transfer?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo 'Логин юзера:<br />';
-                    echo '<input type="text" name="uz" maxlength="20" /><br />';
-                    echo 'Кол-во денег:<br />';
-                    echo '<input type="text" name="money" /><br />';
-                    echo 'Примечание:<br />';
-                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
-                    echo '<input type="submit" value="Перевести" /></form></div><br />';
+                    echo 'Логин юзера:<br>';
+                    echo '<input type="text" name="uz" maxlength="20"><br>';
+                    echo 'Кол-во денег:<br>';
+                    echo '<input type="text" name="money"><br>';
+                    echo 'Примечание:<br>';
+                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
+                    echo '<input type="submit" value="Перевести"></form></div><br>';
                 } else {
                     echo '<div class="form">';
-                    echo 'Перевод для <b>'.$uz.'</b>:<br /><br />';
+                    echo 'Перевод для <b>'.$uz.'</b>:<br><br>';
                     echo '<form action="/games/transfer?act=send&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo 'Кол-во денег:<br />';
-                    echo '<input type="text" name="money" /><br />';
-                    echo 'Примечание:<br />';
-                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
-                    echo '<input type="submit" value="Перевести" /></form></div><br />';
+                    echo 'Кол-во денег:<br>';
+                    echo '<input type="text" name="money"><br>';
+                    echo 'Примечание:<br>';
+                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
+                    echo '<input type="submit" value="Перевести"></form></div><br>';
                 }
             } else {
                 show_error('Ошибка! Для перевода денег вам необходимо набрать '.points(Setting::get('sendmoneypoint')).'!');
@@ -112,7 +112,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/transfer">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/transfer">Вернуться</a><br>';
         break;
 
     endswitch;
@@ -121,6 +121,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы совершать операции, необходимо');
 }
 
-echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

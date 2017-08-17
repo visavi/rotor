@@ -15,7 +15,7 @@
     <?php if (is_admin()):?>
         / <a href="/admin/book?page=<?=$page['current']?>">Управление</a>
     <?php endif;?>
-    <hr />
+    <hr>
 
     <?php if ($page['total'] > 0): ?>
         <?php foreach ($posts as $data): ?>
@@ -45,7 +45,7 @@
                     <?php if (empty($data['user_id'])): ?>
                         <b><?= Setting::get('guestsuser') ?></b> <small>(<?=date_fixed($data['created_at'])?>)</small>
                     <?php else: ?>
-                        <b><?=profile($data->user)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
+                        <b><?=profile($data->user)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br>
                         <?=user_title($data->user)?> <?=user_online($data->user)?>
                     <?php endif; ?>
                 </div>
@@ -53,7 +53,7 @@
                 <div class="message"><?=App::bbCode($data['text'])?></div>
 
                 <?php if (!empty($data['edit_user_id'])): ?>
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br />
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br>
                 <?php endif; ?>
 
                 <?php if (is_admin()): ?>
@@ -61,7 +61,7 @@
                 <?php endif; ?>
 
                 <?php if (!empty($data['reply'])): ?>
-                    <br /><span style="color:#ff0000">Ответ: <?=App::bbCode($data['reply'])?></span>
+                    <br><span style="color:#ff0000">Ответ: <?=App::bbCode($data['reply'])?></span>
                 <?php endif; ?>
 
             </div>
@@ -77,7 +77,7 @@
     <?php if (is_user()): ?>
         <div class="form">
             <form action="book/add" method="post">
-                <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
+                <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
                 <div class="form-group{{ App::hasError('msg') }}">
                     <label for="markItUp">Сообщение:</label>
                     <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ App::getInput('msg') }}</textarea>
@@ -86,13 +86,13 @@
 
                 <button class="btn btn-primary">Написать</button>
             </form>
-        </div><br />
+        </div><br>
 
     <?php elseif (Setting::get('bookadds') == 1): ?>
 
         <div class="form">
             <form action="book/add" method="post">
-                <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
+                <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
 
                 <div class="form-group{{ App::hasError('msg') }}">
                     <label for="inputText">Сообщение:</label>
@@ -109,7 +109,7 @@
 
                 <button class="btn btn-primary">Написать</button>
             </form>
-        </div><br />
+        </div><br>
 
     <?php else: ?>
         <?php show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо'); ?>

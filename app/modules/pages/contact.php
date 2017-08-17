@@ -32,34 +32,34 @@ case 'index':
             echo '<div class="b">';
             echo '<div class="img">'.user_avatars($contact->contactor).'</div>';
 
-            echo '<b>'.profile($contact->contactor).'</b> <small>('.date_fixed($contact['created_at']).')</small><br />';
+            echo '<b>'.profile($contact->contactor).'</b> <small>('.date_fixed($contact['created_at']).')</small><br>';
             echo user_title($contact->contactor).' '.user_online($contact->contactor).'</div>';
 
             echo '<div>';
             if ($contact['text']) {
-                echo 'Заметка: '.$contact['text'].'<br />';
+                echo 'Заметка: '.$contact['text'].'<br>';
             }
 
-            echo '<input type="checkbox" name="del[]" value="'.$contact['id'].'" /> ';
+            echo '<input type="checkbox" name="del[]" value="'.$contact['id'].'"> ';
             echo '<a href="/private/send?user='.$contact->getContact()->login.'">Написать</a> | ';
             echo '<a href="/games/transfer?uz='.$contact->getContact()->login.'">Перевод</a> | ';
             echo '<a href="/contact/note/'.$contact['id'].'">Заметка</a>';
             echo '</div>';
         }
 
-        echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+        echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
         App::pagination($page);
 
-        echo 'Всего в контактах: <b>'.$page['total'].'</b><br />';
+        echo 'Всего в контактах: <b>'.$page['total'].'</b><br>';
     } else {
         show_error('Контакт-лист пуст!');
     }
 
-    echo '<br /><div class="form"><form method="post" action="/contact/create">';
+    echo '<br><div class="form"><form method="post" action="/contact/create">';
     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-    echo '<b>Логин:</b><br /><input name="user" />';
-    echo '<input value="Добавить" type="submit" /></form></div><br />';
+    echo '<b>Логин:</b><br><input name="user">';
+    echo '<input value="Добавить" type="submit"></form></div><br>';
 break;
 
 ############################################################################################
@@ -141,16 +141,16 @@ case 'note':
         }
     }
 
-    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$contact->getContact()->login.'</b> '.user_online($contact->contactor).':<br /><br />';
+    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$contact->getContact()->login.'</b> '.user_online($contact->contactor).':<br><br>';
 
     echo '<div class="form">';
     echo '<form method="post" action="/contact/note/'.$id.'">';
     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-    echo 'Заметка:<br />';
-    echo '<textarea cols="25" rows="5" name="msg" id="markItUp">'.$contact['text'].'</textarea><br />';
-    echo '<input value="Редактировать" type="submit" /></form></div><br />';
+    echo 'Заметка:<br>';
+    echo '<textarea cols="25" rows="5" name="msg" id="markItUp">'.$contact['text'].'</textarea><br>';
+    echo '<input value="Редактировать" type="submit"></form></div><br>';
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/contact">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/contact">Вернуться</a><br>';
 break;
 
 
@@ -181,7 +181,7 @@ break;
 
 endswitch;
 
-echo '<i class="fa fa-ban"></i> <a href="/ignore">Игнор-лист</a><br />';
-echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br />';
+echo '<i class="fa fa-ban"></i> <a href="/ignore">Игнор-лист</a><br>';
+echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

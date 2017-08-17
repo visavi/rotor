@@ -35,18 +35,18 @@ if (is_admin()) {
 
             if (count($forums) > 0) {
 
-                echo '<a href="/forum">Обзор форума</a><hr />';
+                echo '<a href="/forum">Обзор форума</a><hr>';
 
                 foreach($forums as $data) {
                     echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                     echo '<b>'.$data['sort'].'. <a href="/admin/forum?act=forum&amp;fid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['topics'].'/'.$data['posts'].')';
 
                     if (!empty($data['desc'])) {
-                        echo '<br /><small>'.$data['desc'].'</small>';
+                        echo '<br><small>'.$data['desc'].'</small>';
                     }
 
                     if (is_admin([101])) {
-                        echo '<br /><a href="/admin/forum?act=editforum&amp;fid='.$data['id'].'">Редактировать</a> / ';
+                        echo '<br><a href="/admin/forum?act=editforum&amp;fid='.$data['id'].'">Редактировать</a> / ';
                         echo '<a href="/admin/forum?act=delforum&amp;fid='.$data['id'].'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы уверены что хотите удалить данный раздел? \')">Удалить</a>';
                     }
 
@@ -60,7 +60,7 @@ if (is_admin()) {
                                 echo '(<a href="/admin/forum?act=editforum&amp;fid='.$datasub['id'].'">Редактировать</a> / ';
                                 echo '<a href="/admin/forum?act=delforum&amp;fid='.$datasub['id'].'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы уверены что хотите удалить данный раздел? \')">Удалить</a>)';
                             }
-                            echo '<br />';
+                            echo '<br>';
                         }
                     } ?>
 
@@ -80,13 +80,13 @@ if (is_admin()) {
             }
 
             if (is_admin([101])) {
-                echo '<hr /><form action="/admin/forum?act=addforum" method="post">';
-                echo '<input type="hidden" name="token" value="'. $_SESSION['token'] .'" />';
-                echo 'Заголовок:<br />';
-                echo '<input type="text" name="title" maxlength="50" />';
-                echo '<input type="submit" value="Создать раздел" /></form><hr />';
+                echo '<hr><form action="/admin/forum?act=addforum" method="post">';
+                echo '<input type="hidden" name="token" value="'. $_SESSION['token'] .'">';
+                echo 'Заголовок:<br>';
+                echo '<input type="text" name="title" maxlength="50">';
+                echo '<input type="submit" value="Создать раздел"></form><hr>';
 
-                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
 
         break;
@@ -112,7 +112,7 @@ if (is_admin()) {
                 show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -142,7 +142,7 @@ if (is_admin()) {
                 show_error('Ошибка! Добавлять разделы могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -153,17 +153,17 @@ if (is_admin()) {
             if (is_admin([101])) {
                 $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", [$fid]);
                 if (!empty($forums)) {
-                    echo '<b><big>Редактирование</big></b><br /><br />';
+                    echo '<b><big>Редактирование</big></b><br><br>';
 
                     echo '<div class="form">';
                     echo '<form action="/admin/forum?act=addeditforum&amp;fid='.$fid.'&amp;token='.$_SESSION['token'].'" method="post">';
-                    echo 'Раздел: <br />';
-                    echo '<input type="text" name="title" maxlength="50" value="'.$forums['title'].'" /><br />';
+                    echo 'Раздел: <br>';
+                    echo '<input type="text" name="title" maxlength="50" value="'.$forums['title'].'"><br>';
 
                     $query = DB::run() -> query("SELECT `id`, `title`, `parent_id` FROM `forums` WHERE `parent_id`=? ORDER BY sort ASC;", [0]);
                     $section = $query -> fetchAll();
 
-                    echo 'Родительский форум:<br />';
+                    echo 'Родительский форум:<br>';
                     echo '<select name="parent">';
                     echo '<option value="0">Основной форум</option>';
 
@@ -173,19 +173,19 @@ if (is_admin()) {
                             echo '<option value="'.$data['id'].'"'.$selected.'>'.$data['title'].'</option>';
                         }
                     }
-                    echo '</select><br />';
+                    echo '</select><br>';
 
-                    echo 'Описание: <br />';
-                    echo '<input type="text" name="desc" maxlength="100" value="'.$forums['desc'].'" /><br />';
+                    echo 'Описание: <br>';
+                    echo '<input type="text" name="desc" maxlength="100" value="'.$forums['desc'].'"><br>';
 
-                    echo 'Положение: <br />';
-                    echo '<input type="text" name="order" maxlength="2" value="'.$forums['sort'].'" /><br />';
+                    echo 'Положение: <br>';
+                    echo '<input type="text" name="order" maxlength="2" value="'.$forums['sort'].'"><br>';
 
                     echo 'Закрыть форум: ';
                     $checked = ($forums['closed'] == 1) ? ' checked="checked"' : '';
-                    echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
+                    echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
-                    echo '<input type="submit" value="Изменить" /></form></div><br />';
+                    echo '<input type="submit" value="Изменить"></form></div><br>';
                 } else {
                     show_error('Ошибка! Данного раздела не существует!');
                 }
@@ -193,7 +193,7 @@ if (is_admin()) {
                 show_error('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -240,8 +240,8 @@ if (is_admin()) {
                 show_error('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=editforum&amp;fid='.$fid.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">В Форум</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=editforum&amp;fid='.$fid.'">Вернуться</a><br>';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">В Форум</a><br>';
         break;
 
         ############################################################################################
@@ -285,7 +285,7 @@ if (is_admin()) {
                 show_error('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -304,9 +304,9 @@ if (is_admin()) {
                 ->get();
 
             echo '<a href="/admin/forum">Форум</a> / ';
-            echo '<a href="/forum/'.$fid.'?page='.$page.'">Обзор раздела</a><br /><br />';
+            echo '<a href="/forum/'.$fid.'?page='.$page.'">Обзор раздела</a><br><br>';
 
-            echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$forum['title'].'</b><hr />';
+            echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$forum['title'].'</b><hr>';
 
             $total = Topic::where('forum_id', $fid)->count();
 
@@ -325,7 +325,7 @@ if (is_admin()) {
                 echo '<form action="/admin/forum?act=deltopics&amp;fid='.$fid.'&amp;page='.$page['current'].'&amp;token='.$_SESSION['token'].'" method="post">';
 
                 echo '<div class="form">';
-                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
+                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all">Отметить все</label></b>';
                 echo '</div>';
 
                 foreach ($topics as $topic) {
@@ -333,9 +333,9 @@ if (is_admin()) {
 
                     echo '<i class="fa '.$topic->getIcon().'"></i> ';
 
-                    echo '<b><a href="/admin/forum?act=topic&amp;tid='.$topic['id'].'">'.$topic['title'].'</a></b> ('.$topic['posts'].')<br />';
+                    echo '<b><a href="/admin/forum?act=topic&amp;tid='.$topic['id'].'">'.$topic['title'].'</a></b> ('.$topic['posts'].')<br>';
 
-                    echo '<input type="checkbox" name="del[]" value="'.$topic['id'].'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$topic['id'].'"> ';
 
                     echo '<a href="/admin/forum?act=edittopic&amp;tid='.$topic['id'].'&amp;page='.$topic['current'].'">Редактировать</a> / ';
                     echo '<a href="/admin/forum?act=movetopic&amp;tid='.$topic['id'].'&amp;page='.$topic['current'].'">Переместить</a></div>';
@@ -346,7 +346,7 @@ if (is_admin()) {
                     echo 'Сообщение: '.$topic->getLastPost()->getUser()->login.' ('.date_fixed($topic->getLastPost()->created_at).')</div>';
                 }
 
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+                echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
                 App::pagination($page);
             } else {
@@ -359,7 +359,7 @@ if (is_admin()) {
                 show_error('В данном разделе запрещено создавать темы!');
             }
 
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br>';
         break;
 
         ############################################################################################
@@ -371,32 +371,32 @@ if (is_admin()) {
 
             if (!empty($topics)) {
 
-                echo '<b><big>Редактирование</big></b><br /><br />';
+                echo '<b><big>Редактирование</big></b><br><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/forum?act=addedittopic&amp;fid='.$topics['forum_id'].'&amp;tid='.$tid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'" method="post">';
-                echo 'Тема: <br />';
-                echo '<input type="text" name="title" size="50" maxlength="50" value="'.$topics['title'].'" /><br />';
-                echo 'Кураторы темы: <br />';
-                echo '<input type="text" name="moderators" size="50" maxlength="100" value="'.$topics['moderators'].'" /><br />';
+                echo 'Тема: <br>';
+                echo '<input type="text" name="title" size="50" maxlength="50" value="'.$topics['title'].'"><br>';
+                echo 'Кураторы темы: <br>';
+                echo '<input type="text" name="moderators" size="50" maxlength="100" value="'.$topics['moderators'].'"><br>';
 
-                echo 'Объявление:<br />';
-                echo '<textarea id="markItUp" cols="25" rows="5" name="note">'.$topics['note'].'</textarea><br />';
+                echo 'Объявление:<br>';
+                echo '<textarea id="markItUp" cols="25" rows="5" name="note">'.$topics['note'].'</textarea><br>';
 
                 echo 'Закрепить тему: ';
                 $checked = ($topics['locked'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="locked" type="checkbox" value="1"'.$checked.' /><br />';
+                echo '<input name="locked" type="checkbox" value="1"'.$checked.'><br>';
 
                 echo 'Закрыть тему: ';
                 $checked = ($topics['closed'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
+                echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
-                echo '<br /><input type="submit" value="Изменить" /></form></div><br />';
+                echo '<br><input type="submit" value="Изменить"></form></div><br>';
             } else {
                 show_error('Ошибка! Данной темы не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topics['forum_id'].'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topics['forum_id'].'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -435,8 +435,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=edittopic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;page='.$page.'">К темам</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=edittopic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br>';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;page='.$page.'">К темам</a><br>';
         break;
 
         ############################################################################################
@@ -447,7 +447,7 @@ if (is_admin()) {
             $topic = Topic::find($tid);
 
             if (!empty($topic)) {
-                echo '<i class="fa fa-folder-open"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic->getUser()->login.')<br /><br />';
+                echo '<i class="fa fa-folder-open"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic->getUser()->login.')<br><br>';
 
                 $forums = Forum::where('parent_id', 0)
                     ->with('children')
@@ -481,7 +481,7 @@ if (is_admin()) {
 
                     echo '</select>';
 
-                    echo '<button class="btn btn-primary">Переместить</button></form></div><br />';
+                    echo '<button class="btn btn-primary">Переместить</button></form></div><br>';
                 } elseif(count($forums) == 1) {
                     show_error('Нет разделов для перемещения!');
                 }else {
@@ -491,7 +491,7 @@ if (is_admin()) {
                 show_error('Ошибка! Данной темы не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topic['forum_id'].'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topic['forum_id'].'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -532,8 +532,8 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=movetopic&amp;tid='.$tid.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'">К темам</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=movetopic&amp;tid='.$tid.'">Вернуться</a><br>';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'">К темам</a><br>';
         break;
 
         ############################################################################################
@@ -609,7 +609,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -675,7 +675,7 @@ if (is_admin()) {
                     show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
 
-                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br>';
             break;
 
         ############################################################################################
@@ -694,14 +694,14 @@ if (is_admin()) {
                     }
 
                     echo '<a href="/admin/forum?act=forum&amp;fid='.$topic['forum_id'].'">'.$topic['forum_title'].'</a> / ';
-                    echo '<a href="/topic/'.$tid.'?page='.$page.'">Обзор темы</a><br /><br />';
+                    echo '<a href="/topic/'.$tid.'?page='.$page.'">Обзор темы</a><br><br>';
 
                     echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$topic['title'].'</b>';
 
                     if (!empty($topic['moderators'])) {
                         $moderators = User::whereIn('id', explode(',', $topic['moderators']))->get();
 
-                        echo '<br />Кураторы темы: ';
+                        echo '<br>Кураторы темы: ';
                         foreach ($moderators as $mkey => $mval) {
                             $comma = (empty($mkey)) ? '' : ', ';
                             echo $comma . profile($mval);
@@ -712,7 +712,7 @@ if (is_admin()) {
                         echo '<div class="info">'.App::bbCode($topic['note']).'</div>';
                     }
 
-                    echo '<hr />';
+                    echo '<hr>';
 
                     if (empty($topic['closed'])) {
                         echo '<a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid='.$tid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'">Закрыть</a> / ';
@@ -728,7 +728,7 @@ if (is_admin()) {
 
                     echo '<a href="/admin/forum?act=edittopic&amp;tid='.$tid.'&amp;page='.$page.'">Изменить</a> / ';
                     echo '<a href="/admin/forum?act=movetopic&amp;tid='.$tid.'">Переместить</a> / ';
-                    echo '<a href="/admin/forum?act=deltopics&amp;fid='.$topic['id'].'&amp;del='.$tid.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данную тему?\')">Удалить</a><br />';
+                    echo '<a href="/admin/forum?act=deltopics&amp;fid='.$topic['id'].'&amp;del='.$tid.'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить данную тему?\')">Удалить</a><br>';
 
                     $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
 
@@ -752,7 +752,7 @@ if (is_admin()) {
                         echo '<form action="/admin/forum?act=delposts&amp;tid='.$tid.'&amp;page='.$page['current'].'&amp;token='.$_SESSION['token'].'" method="post">';
 
                         echo '<div align="right" class="form">';
-                        echo '<b><label for="all">Отметить все</label></b> <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" />&nbsp;';
+                        echo '<b><label for="all">Отметить все</label></b> <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">&nbsp;';
                         echo '</div>';
 
                         foreach ($posts as $key=>$data){
@@ -761,22 +761,22 @@ if (is_admin()) {
                             echo '<div class="b">';
 
                             echo '<div class="img">'.user_avatars($data->user).'</div>';
-                            echo '<span class="imgright"><a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Ред.</a> <input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
+                            echo '<span class="imgright"><a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Ред.</a> <input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
 
 
-                            echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.date_fixed($data['created_at']).')</small><br />';
+                            echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.date_fixed($data['created_at']).')</small><br>';
                             echo user_title($data->user).' '.user_online($data->user).'</div>';
 
-                            echo '<div>'.App::bbCode($data['text']).'<br />';
+                            echo '<div>'.App::bbCode($data['text']).'<br>';
 
                             // -- Прикрепленные файлы -- //
                             if ($data->files->isNotEmpty()) {
-                                echo '<div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br />';
+                                echo '<div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br>';
                                 foreach ($data->files as $file){
                                     $ext = getExtension($file['hash']);
                                     echo icons($ext).' ';
 
-                                    echo '<a href="/uploads/forum/'.$data['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
+                                    echo '<a href="/uploads/forum/'.$data['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br>';
                                 }
                                 echo '</div>';
 
@@ -784,13 +784,13 @@ if (is_admin()) {
                             // --------------------------//
 
                             if (!empty($data['updated_at'])) {
-                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.date_fixed($data['updated_at']).')</small><br />';
+                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.date_fixed($data['updated_at']).')</small><br>';
                             }
 
                             echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
                         }
 
-                        echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
+                        echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
 
                         App::pagination($page);
 
@@ -803,21 +803,21 @@ if (is_admin()) {
                         echo '<form action="/topic/'.$tid.'/create" method="post" enctype="multipart/form-data">';
                         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
-                        echo 'Сообщение:<br />';
-                        echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
+                        echo 'Сообщение:<br>';
+                        echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>';
 
                         echo '<div class="js-attach-form" style="display: none;">
-                            Прикрепить файл:<br /><input type="file" name="file" /><br />
+                            Прикрепить файл:<br><input type="file" name="file"><br>
                             <div class="info">
-                                Максимальный вес файла: <b>'.round(Setting::get('forumloadsize')/1024).'</b> Kb<br />
+                                Максимальный вес файла: <b>'.round(Setting::get('forumloadsize')/1024).'</b> Kb<br>
                                 Допустимые расширения: '.str_replace(',', ', ', Setting::get('forumextload')).'
-                            </div><br />
+                            </div><br>
                         </div>';
 
                         echo '<span class="imgright js-attach-button"><a href="#" onclick="return showAttachForm();">Загрузить файл</a></span>';
 
-                        echo '<input type="submit" value="Написать" />';
-                        echo '</form></div><br />';
+                        echo '<input type="submit" value="Написать">';
+                        echo '</form></div><br>';
 
                     } else {
                         show_error('Данная тема закрыта для обсуждения!');
@@ -828,7 +828,7 @@ if (is_admin()) {
             } else {
                 show_error('Ошибка! Не выбрана тема!');
             }
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br>';
         break;
 
         ############################################################################################
@@ -871,7 +871,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -885,28 +885,28 @@ if (is_admin()) {
 
             if (!empty($post)) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> <small>('.date_fixed($post['created_at']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> <small>('.date_fixed($post['created_at']).')</small><br><br>';
 
                 echo '<div class="form" id="form">';
                 echo '<form action="/admin/forum?act=addeditpost&amp;tid='.$post['topic_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'" method="post">';
-                echo 'Редактирование сообщения:<br />';
-                echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$post['text'].'</textarea><br />';
+                echo 'Редактирование сообщения:<br>';
+                echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$post['text'].'</textarea><br>';
 
                 if ($post->files->isNotEmpty()){
-                    echo '<i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br />';
+                    echo '<i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br>';
                     foreach ($post->files as $file){
-                        echo '<input type="checkbox" name="delfile[]" value="'.$file['id'].'" /> ';
-                        echo '<a href="/uploads/forum/'.$post['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br />';
+                        echo '<input type="checkbox" name="delfile[]" value="'.$file['id'].'"> ';
+                        echo '<a href="/uploads/forum/'.$post['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br>';
                     }
-                    echo '<br />';
+                    echo '<br>';
                 }
 
-                echo '<input value="Редактировать" name="do" type="submit" /></form></div><br />';
+                echo '<input value="Редактировать" name="do" type="submit"></form></div><br>';
             } else {
                 show_error('Ошибка! Данного сообщения не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -955,12 +955,12 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$pid.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$pid.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

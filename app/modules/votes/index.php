@@ -26,10 +26,10 @@ switch ($action):
             foreach($votes as $valvote) {
                 echo '<div class="b">';
                 echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['id'].'">'.$valvote['title'].'</a></b></div>';
-                echo '<div>Создано: '.date_fixed($valvote['time']).'<br />';
+                echo '<div>Создано: '.date_fixed($valvote['time']).'<br>';
                 echo 'Всего голосов: '.$valvote['count'].'</div>';
             }
-            echo '<br />';
+            echo '<br>';
         } else {
             show_error('Открытых голосований еще нет!');
         }
@@ -59,13 +59,13 @@ switch ($action):
                         echo '<form action="/votes?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
                         foreach($answer as $data) {
-                            echo '<input name="poll" type="radio" value="'.$data['id'].'" /> '.$data['answer'].'<br />';
+                            echo '<input name="poll" type="radio" value="'.$data['id'].'"> '.$data['answer'].'<br>';
                         }
 
-                        echo '<br /><input type="submit" value="Голосовать" /></form><br />';
+                        echo '<br><input type="submit" value="Голосовать"></form><br>';
 
-                        echo 'Проголосовало: <b>'.$votes['count'].'</b><br /><br />';
-                        echo '<i class="fa fa-history"></i> <a href="/votes?act=poll&amp;id='.$id.'&amp;result=show">Результаты</a><br />';
+                        echo 'Проголосовало: <b>'.$votes['count'].'</b><br><br>';
+                        echo '<i class="fa fa-history"></i> <a href="/votes?act=poll&amp;id='.$id.'&amp;result=show">Результаты</a><br>';
 
                     } else {
 
@@ -86,16 +86,16 @@ switch ($action):
                             $proc = round(($data * 100) / $sum, 1);
                             $maxproc = round(($data * 100) / $max);
 
-                            echo '<b>'.$key.'</b> (Голосов: '.$data.')<br />';
+                            echo '<b>'.$key.'</b> (Голосов: '.$data.')<br>';
                             App::progressBar($maxproc, $proc.'%');
                         }
 
-                        echo 'Проголосовало: <b>'.$votes['count'].'</b><br /><br />';
+                        echo 'Проголосовало: <b>'.$votes['count'].'</b><br><br>';
 
                         if (!empty($_GET['result'])) {
-                            echo '<i class="fa fa-bar-chart"></i> <a href="/votes?act=poll&amp;id='.$id.'">К вариантам</a><br />';
+                            echo '<i class="fa fa-bar-chart"></i> <a href="/votes?act=poll&amp;id='.$id.'">К вариантам</a><br>';
                         }
-                        echo '<i class="fa fa-users"></i> <a href="/votes?act=voters&amp;id='.$id.'">Проголосовавшие</a><br />';
+                        echo '<i class="fa fa-users"></i> <a href="/votes?act=voters&amp;id='.$id.'">Проголосовавшие</a><br>';
                     }
 
                 } else {
@@ -108,7 +108,7 @@ switch ($action):
             show_error('Ошибка! Данного голосования не существует!');
         }
 
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>';
     break;
 
     ############################################################################################
@@ -166,8 +166,8 @@ switch ($action):
             show_login('Вы не авторизованы, чтобы участвовать в голосованиях, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes?act=poll&amp;id='.$id.'">Вернуться</a><br />';
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes?act=poll&amp;id='.$id.'">Вернуться</a><br>';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>';
     break;
 
     ############################################################################################
@@ -181,27 +181,27 @@ switch ($action):
 
             //Setting::get('newtitle') = $votes['title'];
 
-            echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br /><br />';
+            echo '<i class="fa fa-bar-chart"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br><br>';
 
             $querypoll = DB::run() -> query("SELECT `user`, `time` FROM `votepoll` WHERE `vote_id`=? ORDER BY `time` DESC LIMIT 20;", [$id]);
             $polls = $querypoll -> fetchAll();
 
             foreach($polls as $poll){
-                echo user_gender($poll['user']).profile($poll['user']).' ('.date_fixed($poll['time']).')<br />';
+                echo user_gender($poll['user']).profile($poll['user']).' ('.date_fixed($poll['time']).')<br>';
             }
 
-            echo '<br />';
+            echo '<br>';
 
         } else {
             show_error('Ошибка! Данного голосования не существует!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes?act=poll&amp;id='.$id.'">Вернуться</a><br />';
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes?act=poll&amp;id='.$id.'">Вернуться</a><br>';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>';
     break;
 
 endswitch;
 
-echo '<i class="fa fa-briefcase"></i> <a href="/votes/history">Архив голосований</a><br />';
+echo '<i class="fa fa-briefcase"></i> <a href="/votes/history">Архив голосований</a><br>';
 
 App::view(Setting::get('themes').'/foot');

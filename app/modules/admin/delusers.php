@@ -16,11 +16,11 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
     ############################################################################################
         case 'index':
 
-            echo 'Удалить пользователей которые не посещали сайт:<br />';
+            echo 'Удалить пользователей которые не посещали сайт:<br>';
 
             echo '<div class="form">';
             echo '<form action="/admin/delusers?act=poddel" method="post">';
-            echo 'Период:<br />';
+            echo 'Период:<br>';
             echo '<select name="deldate">';
             echo '<option value="1080">3 года</option>';
             echo '<option value="900">2.5 года</option>';
@@ -28,12 +28,12 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
             echo '<option value="560">1.5 года</option>';
             echo '<option value="360">1 год</option>';
             echo '<option value="180">0.5 года</option>';
-            echo '</select><br />';
-            echo 'Минимум актива:<br />';
-            echo '<input type="text" name="point" value="0" /><br />';
-            echo '<input value="Анализ" type="submit" /></form></div><br />';
+            echo '</select><br>';
+            echo 'Минимум актива:<br>';
+            echo '<input type="text" name="point" value="0"><br>';
+            echo '<input value="Анализ" type="submit"></form></div><br>';
 
-            echo 'Всего пользователей: <b>'.stats_users().'</b><br /><br />';
+            echo 'Всего пользователей: <b>'.stats_users().'</b><br><br>';
         break;
 
         ############################################################################################
@@ -52,8 +52,8 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 $total = count($users);
 
                 if ($total > 0) {
-                    echo 'Будут удалены пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней <br />';
-                    echo 'И имеющие в своем активе не более '.points($point).'<br /><br />';
+                    echo 'Будут удалены пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней <br>';
+                    echo 'И имеющие в своем активе не более '.points($point).'<br><br>';
 
                     echo '<b>Список:</b> ';
 
@@ -66,9 +66,9 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         echo $comma.' '.profile($value);
                     }
 
-                    echo '<br /><br />Будет удалено пользователей: <b>'.$total.'</b><br /><br />';
+                    echo '<br><br>Будет удалено пользователей: <b>'.$total.'</b><br><br>';
 
-                    echo '<i class="fa fa-times"></i> <b><a href="/admin/delusers?act=del&amp;deldate='.$deldate.'&amp;point='.$point.'&amp;uid='.$_SESSION['token'].'">Удалить пользователей</a></b><br /><br />';
+                    echo '<i class="fa fa-times"></i> <b><a href="/admin/delusers?act=del&amp;deldate='.$deldate.'&amp;point='.$point.'&amp;uid='.$_SESSION['token'].'">Удалить пользователей</a></b><br><br>';
                 } else {
                     show_error('Пользователи для удаления отсутствуют!');
                 }
@@ -76,7 +76,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 show_error('Ошибка! Указанно недопустимое время для удаления!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -102,8 +102,8 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                             delete_users($value);
                         }
 
-                        echo 'Пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней, успешно удалены!<br />';
-                        echo 'Было удалено пользователей: <b>'.$total.'</b><br /><br />';
+                        echo 'Пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней, успешно удалены!<br>';
+                        echo 'Было удалено пользователей: <b>'.$total.'</b><br><br>';
                     } else {
                         show_error('Пользователи для удаления отсутствуют!');
                     }
@@ -114,12 +114,12 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

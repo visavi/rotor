@@ -30,7 +30,7 @@ case 'index':
             echo '<i class="fa fa-check-circle"></i> ';
             echo '<b><a href="'.$data['site'].'">'.$data['name'].'</a></b> ('.profile($data['user']).')</div>';
 
-            echo 'Истекает: '.date_fixed($data['time']).'<br />';
+            echo 'Истекает: '.date_fixed($data['time']).'<br>';
 
             if (! empty($data['color'])) {
                 echo 'Цвет: <span style="color:'.$data['color'].'">'.$data['color'].'</span>, ';
@@ -39,20 +39,20 @@ case 'index':
             }
 
             if (! empty($data['bold'])) {
-                echo 'Жирность: есть<br />';
+                echo 'Жирность: есть<br>';
             } else {
-                echo 'Жирность: нет<br />';
+                echo 'Жирность: нет<br>';
             }
         }
 
         App::pagination($page);
 
-        echo 'Всего ссылок: <b>'.$total.'</b><br /><br />';
+        echo 'Всего ссылок: <b>'.$total.'</b><br><br>';
     } else {
         show_error('В данный момент рекламных ссылок еще нет!');
     }
 
-    echo '<i class="fa fa-money"></i> <a href="/reklama/create">Купить рекламу</a><br />';
+    echo '<i class="fa fa-money"></i> <a href="/reklama/create">Купить рекламу</a><br>';
     break;
 
 ############################################################################################
@@ -144,42 +144,42 @@ case 'create':
                 $rekuser = RekUser::where('user', App::getUsername())->where_gt('time', SITETIME)->find_one();
 
                 if (empty($rekuser)) {
-                    echo 'У вас в наличии: <b>'.moneys(App::user('money')).'</b><br /><br />';
+                    echo 'У вас в наличии: <b>'.moneys(App::user('money')).'</b><br><br>';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/reklama/create">';
                     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
-                    echo 'Адрес сайта:<br />';
-                    echo '<input name="site" type="text" value="http://" maxlength="50" /><br />';
+                    echo 'Адрес сайта:<br>';
+                    echo '<input name="site" type="text" value="http://" maxlength="50"><br>';
 
-                    echo 'Название ссылки:<br />';
-                    echo '<input name="name" type="text" maxlength="35" /><br />';
+                    echo 'Название ссылки:<br>';
+                    echo '<input name="name" type="text" maxlength="35"><br>';
 
                     echo 'Код цвета:';
 
                     if (file_exists(BASEDIR.'/modules/services/colors.php')) {
                         echo ' <a href="/services/colors">(?)</a>';
                     }
-                    echo '<br />';
-                    echo '<input name="color" type="text" maxlength="7" /><br />';
+                    echo '<br>';
+                    echo '<input name="color" type="text" maxlength="7"><br>';
 
                     echo 'Жирность: ';
-                    echo '<input name="bold" type="checkbox" value="1" /><br />';
+                    echo '<input name="bold" type="checkbox" value="1"><br>';
 
-                    echo 'Проверочный код:<br />';
-                    echo '<img src="/captcha" alt="" /><br />';
-                    echo '<input name="provkod" size="6" maxlength="6" /><br />';
+                    echo 'Проверочный код:<br>';
+                    echo '<img src="/captcha" alt=""><br>';
+                    echo '<input name="provkod" size="6" maxlength="6"><br>';
 
-                    echo '<br /><input value="Купить" type="submit" /></form></div><br />';
+                    echo '<br><input value="Купить" type="submit"></form></div><br>';
 
-                    echo 'Стоимость размещения ссылки '.moneys(Setting::get('rekuserprice')).' за '.Setting::get('rekusertime').' часов<br />';
-                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys(Setting::get('rekuseroptprice')).'<br />';
-                    echo 'Ссылка прокручивается на всех страницах сайта с другими ссылками пользователей<br />';
-                    echo 'В названии ссылки запрещено использовать любые ненормативные и матные слова<br />';
-                    echo 'Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br />';
-                    echo 'Запрещены ссылки на сайты с алярмами и порно<br />';
-                    echo 'За нарушение правил предусмотрено наказание в виде строгого бана<br /><br />';
+                    echo 'Стоимость размещения ссылки '.moneys(Setting::get('rekuserprice')).' за '.Setting::get('rekusertime').' часов<br>';
+                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys(Setting::get('rekuseroptprice')).'<br>';
+                    echo 'Ссылка прокручивается на всех страницах сайта с другими ссылками пользователей<br>';
+                    echo 'В названии ссылки запрещено использовать любые ненормативные и матные слова<br>';
+                    echo 'Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br>';
+                    echo 'Запрещены ссылки на сайты с алярмами и порно<br>';
+                    echo 'За нарушение правил предусмотрено наказание в виде строгого бана<br><br>';
 
                 } else {
                     show_error('Ошибка! Вы уже разместили рекламу, запрещено добавлять несколько сайтов подряд!');
@@ -194,7 +194,7 @@ case 'create':
         show_login('Вы не авторизованы, для покупки рекламы, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/reklama">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/reklama">Вернуться</a><br>';
 break;
 
 endswitch;

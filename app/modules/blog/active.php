@@ -24,7 +24,7 @@ case 'blogs':
 
         App::pagination($page);
 
-        echo 'Всего статей: <b>'.$total.'</b><br /><br />';
+        echo 'Всего статей: <b>'.$total.'</b><br><br>';
     } else {
         show_error('Статей еще нет!');
     }

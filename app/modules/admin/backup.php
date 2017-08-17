@@ -27,15 +27,15 @@ if (is_admin([101])) {
                 arsort($globfiles);
 
                 foreach($globfiles as $value) {
-                    echo '<i class="fa fa-archive"></i> <b>'.basename($value).'</b> ('.read_file($value).') (<a href="/admin/backup?act=del&amp;backup='.basename($value).'&amp;uid='.$_SESSION['token'].'">Удалить</a>)<br />';
+                    echo '<i class="fa fa-archive"></i> <b>'.basename($value).'</b> ('.read_file($value).') (<a href="/admin/backup?act=del&amp;backup='.basename($value).'&amp;uid='.$_SESSION['token'].'">Удалить</a>)<br>';
                 }
 
-                echo '<br />Всего бэкапов: <b>'.$total.'</b><br /><br />';
+                echo '<br>Всего бэкапов: <b>'.$total.'</b><br><br>';
             } else {
                 show_error('Бэкапов еще нет!');
             }
 
-            echo '<i class="fa fa-check"></i> <a href="/admin/backup?act=choice">Новый бэкап</a><br />';
+            echo '<i class="fa fa-check"></i> <a href="/admin/backup?act=choice">Новый бэкап</a><br>';
         break;
 
         ############################################################################################
@@ -48,19 +48,19 @@ if (is_admin([101])) {
             $total = count($tables);
 
             if ($total > 0) {
-                echo 'Всего таблиц: <b>'.$total.'</b><br /><br />';
+                echo 'Всего таблиц: <b>'.$total.'</b><br><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/backup?act=backup&amp;uid='.$_SESSION['token'].'" method="post">';
 
-                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b><hr />';
+                echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all">Отметить все</label></b><hr>';
 
                 foreach ($tables as $data) {
-                    echo '<input type="checkbox" name="tables[]" value="'.$data['Name'].'" /> ';
-                    echo '<i class="fa fa-database"></i> <b>'.$data['Name'].'</b> (Записей: '.$data['Rows'].' / Размер: '.formatsize($data['Data_length']).')<br />';
+                    echo '<input type="checkbox" name="tables[]" value="'.$data['Name'].'"> ';
+                    echo '<i class="fa fa-database"></i> <b>'.$data['Name'].'</b> (Записей: '.$data['Rows'].' / Размер: '.formatsize($data['Data_length']).')<br>';
                 }
 
-                echo '<br />Метод сжатия:<br />';
+                echo '<br>Метод сжатия:<br>';
                 echo '<select name="method">';
 
                 echo '<option value="0">Не сжимать</option>';
@@ -73,24 +73,24 @@ if (is_admin([101])) {
                     echo '<option value="2">BZip2</option>';
                 }
 
-                echo '</select><br />';
+                echo '</select><br>';
 
                 $level = [0 => 'Без сжатия', 1 => '1 (минимальная)', 2 => '2', 3 => '3', 4 => '4', 5 => '5 (средняя)', 6 => '6', 7 => '7 (рекомендуемая)', 8 => '8', 9 => '9 (максимальная)'];
 
-                echo 'Степень сжатия:<br />';
+                echo 'Степень сжатия:<br>';
                 echo '<select name="level">';
                 foreach($level as $key => $val) {
                     $selected = ($key == 7) ? ' selected="selected"' : '';
                     echo '<option value="'.$key.'"'.$selected.'>'.$val.'</option>';
                 }
-                echo '</select><br />';
+                echo '</select><br>';
 
-                echo '<br /><input type="submit" value="Выполнить" /></form></div><br />';
+                echo '<br><input type="submit" value="Выполнить"></form></div><br>';
             } else {
                 show_error('Нет таблиц для бэкапа!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -178,7 +178,7 @@ if (is_admin([101])) {
                 show_error('Ошибка! Директория backup недоступна для записи!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup?act=choice">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup?act=choice">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -211,12 +211,12 @@ if (is_admin([101])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

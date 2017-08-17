@@ -24,14 +24,14 @@
 
     echo '<i class="fa fa-envelope"></i> <b>Входящие ('.$page['total'].')</b> / ';
     echo '<a href="/private/outbox">Отправленные ('.$page['totalOutbox'].')</a> / ';
-    echo '<a href="/private/trash">Корзина ('.$page['totalTrash'].')</a><hr />';
+    echo '<a href="/private/trash">Корзина ('.$page['totalTrash'].')</a><hr>';
 
     if ($messages->isNotEmpty()) {
 
         echo '<form action="/private/delete?page='.$page['current'].'" method="post">';
         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
         echo '<div class="form">';
-            echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked" /> <b><label for="all">Отметить все</label></b>';
+            echo '<input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked"> <b><label for="all">Отметить все</label></b>';
             echo '</div>';
 
         foreach($messages as $data) {
@@ -39,16 +39,16 @@
         echo '<div class="b">';
             echo '<div class="img">'.user_avatars($data->author).'</div>';
             if ($data->author) {
-            echo '<b>' . profile($data->author) . '</b>  (' . date_fixed($data['created_at']) . ')<br />';
+            echo '<b>' . profile($data->author) . '</b>  (' . date_fixed($data['created_at']) . ')<br>';
             echo user_title($data->author) . ' ' . user_online($data->author);
             } else {
             echo '<b>Система</b>';
             }
 
             echo '</div>';
-        echo '<div>'.App::bbCode($data['text']).'<br />';
+        echo '<div>'.App::bbCode($data['text']).'<br>';
 
-            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
 
             if ($data->author) {
 
@@ -63,21 +63,21 @@
             echo '</div>';
         }
 
-        echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+        echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
     App::pagination($page);
 
-    echo 'Всего писем: <b>'.$page['total'].'</b><br />';
-    echo 'Объем ящика: <b>'.Setting::get('limitmail').'</b><br /><br />';
+    echo 'Всего писем: <b>'.$page['total'].'</b><br>';
+    echo 'Объем ящика: <b>'.Setting::get('limitmail').'</b><br><br>';
 
-    echo '<i class="fa fa-times"></i> <a href="/private/clear?token='.$_SESSION['token'].'">Очистить ящик</a><br />';
+    echo '<i class="fa fa-times"></i> <a href="/private/clear?token='.$_SESSION['token'].'">Очистить ящик</a><br>';
     } else {
     show_error('Входящих писем еще нет!');
     }
 ?>
 
-    <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br />
-    <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br />
-    <i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br />
+    <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br>
+    <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br>
 
 @stop

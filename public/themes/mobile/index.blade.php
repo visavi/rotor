@@ -11,7 +11,7 @@ header('Content-type:text/html; charset=utf-8');
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="image_src" href="/assets/img/images/icon.png"/>
     <?= include_style() ?>
-    <link rel="stylesheet" href="/themes/mobile/css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="/themes/mobile/css/style.css"/>
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml"/>
     <?= include_javascript() ?>
     <meta name="keywords" content="%KEYWORDS%"/>
@@ -32,7 +32,7 @@ header('Content-type:text/html; charset=utf-8');
         <td width="580">
 
             <div class="a" id="up">
-                <!-- <a href="/"><span class="logotype"><?= Setting::get('title') ?></span></a><br /> -->
+                <!-- <a href="/"><span class="logotype"><?= Setting::get('title') ?></span></a><br> -->
                 <a href="/"><img src="<?= Setting::get('logotip') ?>" alt="<?= Setting::get('title') ?>"/></a><br/>
                 <?= Setting::get('logos') ?>
             </div>

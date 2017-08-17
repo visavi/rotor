@@ -53,7 +53,7 @@
                 {!! App::textError('period') !!}
             </div>
 
-            Искать:<br />
+            Искать:<br>
             <div class="radio">
                 <label>
                     <input type="radio" name="where" value="0"{{ (App::getInput('where') == 0 ? ' checked' : '') }}>
@@ -69,7 +69,7 @@
             </div>
 
 
-            Тип запроса:<br />
+            Тип запроса:<br>
             <div class="radio">
                 <label>
                     <input type="radio" name="type" value="0"{{ (App::getInput('type') == 0 ? ' checked' : '') }}>

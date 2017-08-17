@@ -24,9 +24,9 @@ $wrap->setOption('environment', 'default');
 
 
 <?php
-echo '<i class="fa fa-check"></i> <b>Установлена актуальная версия RotorCMS</b><br />';
+echo '<i class="fa fa-check"></i> <b>Установлена актуальная версия RotorCMS</b><br>';
 
-echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

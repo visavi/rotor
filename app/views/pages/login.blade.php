@@ -34,14 +34,14 @@
                 <label for="inputPassword">Пароль:</label>
                 <input class="form-control" name="pass" type="password" id="inputPassword" maxlength="20" required>
                 <label>
-                    <input name="remember" type="checkbox" value="1" checked="checked" /> Запомнить меня
+                    <input name="remember" type="checkbox" value="1" checked="checked"> Запомнить меня
                 </label>
             </div>
 
             <button class="btn btn-primary">Войти</button>
         </form>
     </div>
-    <br />
-    <a href="/register">Регистрация</a><br />
-    <a href="/recovery">Забыли пароль?</a><br /><br />
+    <br>
+    <a href="/register">Регистрация</a><br>
+    <a href="/recovery">Забыли пароль?</a><br><br>
 @stop

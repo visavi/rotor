@@ -30,9 +30,9 @@ class NewsCommentsController extends BaseController
 
                 echo '<i class="fa fa-comment"></i> <b><a href="/news/allcomments/' . $data['relate_id'] . '/' . $data['id'] . '">' . $data['title'] . '</a></b> (' . $data['comments'] . ')</div>';
 
-                echo '<div>' . App::bbCode($data['text']) . '<br />';
+                echo '<div>' . App::bbCode($data['text']) . '<br>';
 
-                echo 'Написал: ' . profile($data['user']) . ' <small>(' . date_fixed($data['created_at']) . ')</small><br />';
+                echo 'Написал: ' . profile($data['user']) . ' <small>(' . date_fixed($data['created_at']) . ')</small><br>';
 
                 if (is_admin()) {
                     echo '<span class="data">(' . $data['brow'] . ', ' . $data['ip'] . ')</span>';
@@ -45,7 +45,7 @@ class NewsCommentsController extends BaseController
         } else {
             show_error('Комментарии не найдены!');
         }
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br>';
     }
 
     /**
@@ -67,7 +67,7 @@ class NewsCommentsController extends BaseController
         } else {
             show_error('Ошибка! Комментариев к данной новости не существует!');
         }
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br>';
     }
 }
 

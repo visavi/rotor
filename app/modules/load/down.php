@@ -45,7 +45,7 @@ case 'index':
             <?php if (is_user() && ! $cats['closed']): ?>
                 <div class="pull-right">
                     <a class="btn btn-success" href="/load/add?cid=<?= $cid ?>">Добавить файл</a>
-                </div><br />
+                </div><br>
             <?php endif; ?>
 
             <?php
@@ -59,7 +59,7 @@ case 'index':
                 default: $order = 'time';
             }
 
-            echo '<br />Сортировать: ';
+            echo '<br>Сортировать: ';
 
             if ($order == 'time') {
                 echo '<b>По дате</b> / ';
@@ -93,7 +93,7 @@ case 'index':
                     echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                     echo '<b><a href="/load/down?cid='.$subdata['id'].'">'.$subdata['name'].'</a></b> ('.$subdata['count'].')</div>';
                 }
-                echo '<hr />';
+                echo '<hr>';
             }
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
@@ -115,11 +115,11 @@ case 'index':
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
                     echo '<div>';
 
-                    echo 'Скачиваний: '.$data['loads'].'<br />';
+                    echo 'Скачиваний: '.$data['loads'].'<br>';
 
                     $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
-                    echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br />';
+                    echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br>';
                     echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                     echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
                 }
@@ -145,7 +145,7 @@ case 'index':
         if (empty($cats['closed'])) {
             echo ' / <a href="/load/add?cid='.$cid.'">Добавить файл</a>';
         }
-        echo '<br />';
+        echo '<br>';
     } else {
         App::redirect("/load");
     }
@@ -189,25 +189,25 @@ case 'view':
             </ol>
   <?php
             if (empty($downs['active']) && $downs['user'] == App::getUsername()){
-                echo '<div class="info"><b>Внимание!</b> Данная загрузка добавлена, но еще требует модераторской проверки<br />';
-                echo '<i class="fa fa-pencil"></i> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br />';
+                echo '<div class="info"><b>Внимание!</b> Данная загрузка добавлена, но еще требует модераторской проверки<br>';
+                echo '<i class="fa fa-pencil"></i> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br>';
             }
 
             $ext = getExtension($downs['link']);
 
             if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('uploads/files/'.$folder, $downs['link'], Setting::get('previewsize'), ['alt' => $downs['title']]).'</a><br />';
+                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('uploads/files/'.$folder, $downs['link'], Setting::get('previewsize'), ['alt' => $downs['title']]).'</a><br>';
             }
 
-            echo '<div class="message">'.App::bbCode($downs['text']).'</div><br />';
+            echo '<div class="message">'.App::bbCode($downs['text']).'</div><br>';
 
             $poster = '';
             if (!empty($downs['screen']) && file_exists(HOME.'/uploads/screen/'.$folder.$downs['screen'])) {
                 $poster = ' poster="/uploads/screen/'.$folder.$downs['screen'].'"';
 
                 if ($ext != 'mp4') {
-                    echo 'Скриншот:<br />';
-                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('uploads/screen/'.$folder, $downs['screen'], Setting::get('previewsize'), ['alt' => $downs['title']]).'</a><br /><br />';
+                    echo 'Скриншот:<br>';
+                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('uploads/screen/'.$folder, $downs['screen'], Setting::get('previewsize'), ['alt' => $downs['title']]).'</a><br><br>';
                 }
             }
 
@@ -217,14 +217,14 @@ case 'view':
                 if (!empty($downs['site'])) {
                     echo ' (<a href="'.$downs['site'].'">'.$downs['site'].'</a>)';
                 }
-                echo '<br />';
+                echo '<br>';
             }
 
             if (!empty($downs['site']) && empty($downs['author'])) {
-                echo 'Сайт автора: <a href="'.$downs['site'].'">'.$downs['site'].'</a><br />';
+                echo 'Сайт автора: <a href="'.$downs['site'].'">'.$downs['site'].'</a><br>';
             }
 
-            echo 'Добавлено: '.profile($downs['user']).' ('.date_fixed($downs['time']).')<hr />';
+            echo 'Добавлено: '.profile($downs['user']).' ('.date_fixed($downs['time']).')<hr>';
 
             // -----------------------------------------------------------//
             if (!empty($downs['link']) && file_exists(HOME.'/uploads/files/'.$folder.$downs['link'])) {
@@ -243,30 +243,30 @@ case 'view':
                 }
 
                 if ($ext == 'zip') {
-                    echo '<i class="fa fa-archive"></i> <b><a href="/load/zip?id='.$id.'">Просмотреть архив</a></b><br />';
+                    echo '<i class="fa fa-archive"></i> <b><a href="/load/zip?id='.$id.'">Просмотреть архив</a></b><br>';
                 }
 
                 $filesize = (!empty($downs['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$downs['link']) : 0;
 
                 if (is_user()) {
-                    echo '<i class="fa fa-download"></i> <b><a href="/load/down?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br />';
+                    echo '<i class="fa fa-download"></i> <b><a href="/load/down?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br>';
                 } else {
                     echo '<div class="form">';
                     echo '<form action="/load/down?act=load&amp;id='.$id.'" method="post">';
 
-                    echo 'Проверочный код:<br /> ';
-                    echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt="" /><br />';
-                    echo '<input name="protect" size="6" maxlength="6" />';
-                    echo '<input type="submit" value="Скачать ('.$filesize.')" /></form>';
-                    echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br />';
+                    echo 'Проверочный код:<br> ';
+                    echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt=""><br>';
+                    echo '<input name="protect" size="6" maxlength="6">';
+                    echo '<input type="submit" value="Скачать ('.$filesize.')"></form>';
+                    echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br>';
                 }
 
                 echo '<i class="fa fa-comment"></i> <b><a href="/load/down?act=comments&amp;id='.$id.'">Комментарии</a></b> ('.$downs['comments'].') ';
-                echo '<a href="/load/down?act=end&amp;id='.$id.'">&raquo;</a><br />';
+                echo '<a href="/load/down?act=end&amp;id='.$id.'">&raquo;</a><br>';
 
                 $rating = (!empty($downs['rated'])) ? round($downs['rating'] / $downs['rated'], 1) : 0;
-                echo '<br />Рейтинг: '.rating_vote($rating).'<br />';
-                echo 'Всего голосов: <b>'.$downs['rated'].'</b><br /><br />';
+                echo '<br>Рейтинг: '.rating_vote($rating).'<br>';
+                echo 'Всего голосов: <b>'.$downs['rated'].'</b><br><br>';
 
                 if (is_user()) {
                     echo '<form action="/load/down?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -277,25 +277,25 @@ case 'view':
                     echo '<option value="2">Плохо</option>';
                     echo '<option value="1">Отстой</option>';
                     echo '</select>';
-                    echo '<input type="submit" value="Oценить" /></form>';
+                    echo '<input type="submit" value="Oценить"></form>';
                 }
 
-                echo 'Всего скачиваний: <b>'.$downs['loads'].'</b><br />';
+                echo 'Всего скачиваний: <b>'.$downs['loads'].'</b><br>';
                 if (!empty($downs['last_load'])) {
-                    echo 'Последнее скачивание: '.date_fixed($downs['last_load']).'<br />';
+                    echo 'Последнее скачивание: '.date_fixed($downs['last_load']).'<br>';
                 }
 
                 if (is_user()) {
-                    echo '<br />Скопировать адрес:<br />';
-                    echo '<input name="text" size="40" value="'.Setting::get('home').'/uploads/files/'.$folder.$downs['link'].'" /><br />';
+                    echo '<br>Скопировать адрес:<br>';
+                    echo '<input name="text" size="40" value="'.Setting::get('home').'/uploads/files/'.$folder.$downs['link'].'"><br>';
                 }
 
-                echo '<br />';
+                echo '<br>';
             } else {
                 show_error('Файл еще не загружен!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['cats_name'].'</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['cats_name'].'</a><br>';
 
         } else {
             show_error('Ошибка! Данный файл еще не проверен модератором!');
@@ -345,7 +345,7 @@ case 'load':
         show_error('Ошибка! Проверочное число не совпало с данными на картинке!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -377,9 +377,9 @@ case 'vote':
                                 DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, App::getUsername(), $expiresrated]);
                                 DB::run() -> query("UPDATE `downs` SET `rating`=`rating`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
 
-                                echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br />';
-                                echo 'Всего оценивало: '.($downs['rated'] + 1).'<br />';
-                                echo 'Средняя оценка: '.round(($downs['rating'] + $score) / ($downs['rated'] + 1), 1).'<br /><br />';
+                                echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br>';
+                                echo 'Всего оценивало: '.($downs['rated'] + 1).'<br>';
+                                echo 'Средняя оценка: '.round(($downs['rating'] + $score) / ($downs['rated'] + 1), 1).'<br><br>';
                             } else {
                                 show_error('Ошибка! Вы уже оценивали данный файл!');
                             }
@@ -402,7 +402,7 @@ case 'vote':
         show_login('Вы не авторизованы, для голосования за файлы, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -416,9 +416,9 @@ case 'comments':
         if (!empty($downs['active'])) {
             //Setting::get('newtitle') = 'Комментарии - '.$downs['title'];
 
-            echo '<i class="fa fa-file-o"></i> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['title'].'</a></b><br /><br />';
+            echo '<i class="fa fa-file-o"></i> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['title'].'</a></b><br><br>';
 
-            echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr />';
+            echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['down', $id]);
             $page = App::paginate(Setting::get('downcomm'), $total);
@@ -438,10 +438,10 @@ case 'comments':
                     echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
                     if ($is_admin) {
-                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
+                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
                     }
 
-                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
                     if (!empty(App::getUsername()) && App::getUsername() != $data['user']) {
@@ -455,7 +455,7 @@ case 'comments':
                         echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
-                    echo '<div class="message">'.App::bbCode($data['text']).'<br />';
+                    echo '<div class="message">'.App::bbCode($data['text']).'<br>';
 
                     if (is_admin()) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -464,7 +464,7 @@ case 'comments':
                 }
 
                 if ($is_admin) {
-                    echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
+                    echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
                 }
 
                 App::pagination($page);
@@ -475,13 +475,13 @@ case 'comments':
             if (is_user()) {
                 echo '<div class="form">';
                 echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<b>Сообщение:</b><br />';
-                echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
-                echo '<input type="submit" value="Написать" /></form></div><br />';
+                echo '<b>Сообщение:</b><br>';
+                echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
+                echo '<input type="submit" value="Написать"></form></div><br>';
 
                 echo '<a href="/rules">Правила</a> / ';
                 echo '<a href="/smiles">Смайлы</a> / ';
-                echo '<a href="/tags">Теги</a><br /><br />';
+                echo '<a href="/tags">Теги</a><br><br>';
             } else {
                 show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
             }
@@ -492,7 +492,7 @@ case 'comments':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -543,7 +543,7 @@ case 'add':
         show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -583,7 +583,7 @@ case 'spam':
         show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -593,20 +593,20 @@ case 'reply':
 
     $pid = abs(intval($_GET['pid']));
 
-    echo '<b><big>Ответ на сообщение</big></b><br /><br />';
+    echo '<b><big>Ответ на сообщение</big></b><br><br>';
 
     if (is_user()) {
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
         if (!empty($post)) {
             echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_title($post['user']).' '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
-            echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr />';
+            echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr>';
 
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo 'Сообщение:<br />';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br />';
-            echo '<input type="submit" value="Ответить" /></form></div><br />';
+            echo 'Сообщение:<br>';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br>';
+            echo '<input type="submit" value="Ответить"></form></div><br>';
         } else {
             show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
         }
@@ -614,7 +614,7 @@ case 'reply':
         show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -624,16 +624,16 @@ case 'quote':
 
     $pid = abs(intval($_GET['pid']));
 
-    echo '<b><big>Цитирование</big></b><br /><br />';
+    echo '<b><big>Цитирование</big></b><br><br>';
     if (is_user()) {
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
         if (!empty($post)) {
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo 'Сообщение:<br />';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
-            echo '<input type="submit" value="Цитировать" /></form></div><br />';
+            echo 'Сообщение:<br>';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br>';
+            echo '<input type="submit" value="Цитировать"></form></div><br>';
         } else {
             show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
         }
@@ -641,7 +641,7 @@ case 'quote':
         show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -659,13 +659,13 @@ case 'edit':
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
+                echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/load/down?act=editpost&amp;id='.$post['relate_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo 'Редактирование сообщения:<br />';
-                echo '<textarea cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br />';
-                echo '<input type="submit" value="Редактировать" /></form></div><br />';
+                echo 'Редактирование сообщения:<br>';
+                echo '<textarea cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br>';
+                echo '<input type="submit" value="Редактировать"></form></div><br>';
             } else {
                 show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
             }
@@ -676,7 +676,7 @@ case 'edit':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -718,7 +718,7 @@ case 'editpost':
         show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -753,7 +753,7 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -777,6 +777,6 @@ break;
 
 endswitch;
 
-echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
 App::view(Setting::get('themes').'/foot');

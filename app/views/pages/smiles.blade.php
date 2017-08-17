@@ -10,12 +10,12 @@
 
     @if ($smiles)
         @foreach($smiles as $smile)
-            <img src="/uploads/smiles/{{ $smile['name'] }}" alt="" /> — <b>{{ $smile['code'] }}</b><br />
+            <img src="/uploads/smiles/{{ $smile['name'] }}" alt=""> — <b>{{ $smile['code'] }}</b><br>
         @endforeach
 
         {{  App::pagination($page) }}
 
-        Всего cмайлов: <b>{{ $page['total'] }}</b><br /><br />
+        Всего cмайлов: <b>{{ $page['total'] }}</b><br><br>
     @else
         {{  show_error('Смайлы не найдены!') }}
     @endif

@@ -18,12 +18,12 @@ case 'index':
 
     echo '<i class="fa fa-book"></i> <b>Публикация</b> / ';
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
-    echo '<a href="/load/active">Проверенные</a><hr />';
+    echo '<a href="/load/active">Проверенные</a><hr>';
 
     if (Setting::get('home') == 'http://visavi.net') {
         echo '<div class="info">';
-        echo '<i class="fa fa-question-circle"></i> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br />';
-        echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br />';
+        echo '<i class="fa fa-question-circle"></i> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br>';
+        echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br>';
     }
 
     $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `sort` ASC;");
@@ -32,7 +32,7 @@ case 'index':
     if (count($downs) > 0) {
         echo '<div class="form">';
         echo '<form action="/load/add?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
-        echo 'Категория*:<br />';
+        echo 'Категория*:<br>';
 
         $output = [];
 
@@ -59,22 +59,22 @@ case 'index':
             }
         }
 
-        echo '</select><br />';
+        echo '</select><br>';
 
-        echo 'Название*:<br />';
-        echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
-        echo 'Описание*:<br />';
-        echo '<textarea cols="25" rows="10" name="text"></textarea><br />';
-        echo 'Автор файла:<br />';
-        echo '<input type="text" name="author" maxlength="50" /><br />';
-        echo 'Сайт автора:<br />';
-        echo '<input type="text" name="site" maxlength="50" value="http://" /><br />';
+        echo 'Название*:<br>';
+        echo '<input type="text" name="title" size="50" maxlength="50"><br>';
+        echo 'Описание*:<br>';
+        echo '<textarea cols="25" rows="10" name="text"></textarea><br>';
+        echo 'Автор файла:<br>';
+        echo '<input type="text" name="author" maxlength="50"><br>';
+        echo 'Сайт автора:<br>';
+        echo '<input type="text" name="site" maxlength="50" value="http://"><br>';
 
-        echo '<input value="Продолжить" type="submit" /></form></div><br />';
+        echo '<input value="Продолжить" type="submit"></form></div><br>';
 
-        echo 'Все поля отмеченные знаком *, обязательны для заполнения<br />';
-        echo 'Файл и скриншот вы сможете загрузить после добавления описания<br />';
-        echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br /><br />';
+        echo 'Все поля отмеченные знаком *, обязательны для заполнения<br>';
+        echo 'Файл и скриншот вы сможете загрузить после добавления описания<br>';
+        echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br><br>';
     } else {
         show_error('Категории файлов еще не созданы!');
     }
@@ -89,7 +89,7 @@ case 'waiting':
 
     echo '<i class="fa fa-book"></i> <a href="/load/add">Публикация</a> / ';
     echo '<b>Ожидающие</b> / ';
-    echo '<a href="/load/active">Проверенные</a><hr />';
+    echo '<a href="/load/active">Проверенные</a><hr>';
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [0, App::getUsername()]);
 
@@ -103,26 +103,26 @@ case 'waiting':
 
             echo '<b><a href="/load/add?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.date_fixed($data['time']).')</div>';
             echo '<div>';
-            echo 'Категория: '.$data['name'].'<br />';
+            echo 'Категория: '.$data['name'].'<br>';
             if (!empty($data['link'])) {
-                echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/uploads/files/'.$data['link']).')<br />';
+                echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/uploads/files/'.$data['link']).')<br>';
             } else {
-                echo 'Файл: <span style="color:#ff0000">Не загружен</span><br />';
+                echo 'Файл: <span style="color:#ff0000">Не загружен</span><br>';
             }
             if (!empty($data['screen'])) {
-                echo 'Скрин: '.$data['screen'].' ('.read_file(HOME.'/uploads/files/'.$data['screen']).')<br />';
+                echo 'Скрин: '.$data['screen'].' ('.read_file(HOME.'/uploads/files/'.$data['screen']).')<br>';
             } else {
-                echo 'Скрин: <span style="color:#ff0000">Не загружен</span><br />';
+                echo 'Скрин: <span style="color:#ff0000">Не загружен</span><br>';
             }
             echo '</div>';
         }
 
-        echo '<br />';
+        echo '<br>';
     } else {
         show_error('Ожидающих модерации файлов еще нет!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add">Вернуться</a><br>';
 break;
 
 /**
@@ -193,7 +193,7 @@ case 'add':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=newfile&amp;cid='.$cid.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=newfile&amp;cid='.$cid.'">Вернуться</a><br>';
 break;
 
 /**
@@ -205,7 +205,7 @@ case 'view':
 
     echo '<i class="fa fa-book"></i> <a href="/load/add">Публикация</a> / ';
     echo '<b><a href="/load/add?act=waiting">Ожидающие</a></b> / ';
-    echo '<a href="/load/active?act=files">Проверенные</a><hr />';
+    echo '<a href="/load/active?act=files">Проверенные</a><hr>';
 
     $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
@@ -224,49 +224,49 @@ case 'view':
                         echo '<a href="/load/down?cid='.$podcats['id'].'">'.$podcats['name'].'</a> / ';
                     }
 
-                    echo '<a href="/load/down?act=view&amp;id='.$id.'">Обзор файла</a><br /><br />';
+                    echo '<a href="/load/down?act=view&amp;id='.$id.'">Обзор файла</a><br><br>';
 
-                    echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br />После проверки вы не сможете отредактировать описание и загрузить файл или скриншот</div><br />';
+                    echo '<div class="info"><b>Внимание!</b> Данная загрузка опубликована, но еще требует модераторской проверки<br>После проверки вы не сможете отредактировать описание и загрузить файл или скриншот</div><br>';
 
                     if (empty($new['link'])) {
 
-                        echo '<b><big>Загрузка файла</big></b><br /><br />';
+                        echo '<b><big>Загрузка файла</big></b><br><br>';
                         echo '<div class="info">';
                         echo '<form action="/load/add?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-                        echo 'Прикрепить файл* ('.Setting::get('allowextload').'):<br /><input type="file" name="loadfile" /><br />';
-                        echo '<input value="Загрузить" type="submit" /></form><br />';
+                        echo 'Прикрепить файл* ('.Setting::get('allowextload').'):<br><input type="file" name="loadfile"><br>';
+                        echo '<input value="Загрузить" type="submit"></form><br>';
 
-                        echo 'Максимальный вес файла: '.formatsize(Setting::get('fileupload')).'</div><br />';
+                        echo 'Максимальный вес файла: '.formatsize(Setting::get('fileupload')).'</div><br>';
 
                     } else {
 
-                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
 
                         $ext = getExtension($new['link']);
                         if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
                             if (empty($new['screen'])) {
-                                echo '<br /><b><big>Загрузка скриншота</big></b><br /><br />';
+                                echo '<br><b><big>Загрузка скриншота</big></b><br><br>';
                                 echo '<div class="info">';
                                 echo '<form action="/load/add?act=loadscreen&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-                                echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br /><input type="file" name="screen" /><br />';
-                                echo '<input value="Загрузить" type="submit" /></form><br />';
+                                echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br><input type="file" name="screen"><br>';
+                                echo '<input value="Загрузить" type="submit"></form><br>';
 
-                                echo 'Максимальный вес скриншота: '.formatsize(Setting::get('screenupload')).'<br />';
-                                echo 'Требуемый размер скриншота: от 100 до '.Setting::get('screenupsize').' px</div><br /><br />';
+                                echo 'Максимальный вес скриншота: '.formatsize(Setting::get('screenupload')).'<br>';
+                                echo 'Требуемый размер скриншота: от 100 до '.Setting::get('screenupsize').' px</div><br><br>';
 
                             } else {
-                                echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                                echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br />';
+                                echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                                echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br>';
                             }
                         }
                     }
 
-                    echo '<br />';
-                    echo '<b><big>Редактирование</big></b><br /><br />';
+                    echo '<br>';
+                    echo '<b><big>Редактирование</big></b><br><br>';
                     echo '<div class="form">';
                     echo '<form action="/load/add?act=edit&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-                    echo 'Категория*:<br />';
+                    echo 'Категория*:<br>';
 
                     $output = [];
 
@@ -290,19 +290,19 @@ case 'view':
                         }
                     }
 
-                    echo '</select><br />';
+                    echo '</select><br>';
 
-                    echo 'Название*:<br />';
-                    echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['title'].'" /><br />';
-                    echo 'Описание*:<br />';
-                    echo '<textarea cols="25" rows="5" name="text">'.$new['text'].'</textarea><br />';
-                    echo 'Автор файла:<br />';
-                    echo '<input type="text" name="author" maxlength="50" value="'.$new['author'].'" /><br />';
-                    echo 'Сайт автора:<br />';
-                    echo '<input type="text" name="site" maxlength="50" value="'.$new['site'].'" /><br />';
+                    echo 'Название*:<br>';
+                    echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['title'].'"><br>';
+                    echo 'Описание*:<br>';
+                    echo '<textarea cols="25" rows="5" name="text">'.$new['text'].'</textarea><br>';
+                    echo 'Автор файла:<br>';
+                    echo '<input type="text" name="author" maxlength="50" value="'.$new['author'].'"><br>';
+                    echo 'Сайт автора:<br>';
+                    echo '<input type="text" name="site" maxlength="50" value="'.$new['site'].'"><br>';
 
-                    echo '<input value="Изменить" type="submit" /></form></div><br />';
-                    echo 'Все поля отмеченные знаком *, обязательны для заполнения<br /><br />';
+                    echo '<input value="Изменить" type="submit"></form></div><br>';
+                    echo 'Все поля отмеченные знаком *, обязательны для заполнения<br><br>';
 
                 } else {
                     show_error('Ошибка! Данный файл уже проверен модератором!');
@@ -393,7 +393,7 @@ case 'edit':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 /**
@@ -510,7 +510,7 @@ case 'loadfile':
         show_error('Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 /**
@@ -563,7 +563,7 @@ case 'loadscreen':
         show_error('Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 /**
@@ -600,7 +600,7 @@ case 'delfile':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 /**
@@ -632,7 +632,7 @@ case 'delscreen':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 /**
@@ -643,57 +643,57 @@ case 'rules':
 
         //show_title('Правила оформления скриптов');
 
-        echo '<b><span style="color:#ff0000">Внимание! Запрещено выкладывать платные скрипты или скрипты не предназначенные для свободного распространения.<br />
-Запрещено размещать скрипты накрутчиков, скрипты для спама, взлома или любые вредоносные скрипты</span></b><br /><br />';
+        echo '<b><span style="color:#ff0000">Внимание! Запрещено выкладывать платные скрипты или скрипты не предназначенные для свободного распространения.<br>
+Запрещено размещать скрипты накрутчиков, скрипты для спама, взлома или любые вредоносные скрипты</span></b><br><br>';
 
-        echo 'Чтобы не превращать архив скриптов в свалку мусора, все скрипты на нашем сайте проходят ручную обработку<br />';
-        echo 'Если вы хотите добавить скрипт, НЕ обязательно быть его автором, но вы обязательно должны указать данные и контакты автора скрипта<br />';
-        echo 'Также если вы автор модификации или небольшой переделки, то можете указать и свои данные в описании к скрипту<br /><br />';
+        echo 'Чтобы не превращать архив скриптов в свалку мусора, все скрипты на нашем сайте проходят ручную обработку<br>';
+        echo 'Если вы хотите добавить скрипт, НЕ обязательно быть его автором, но вы обязательно должны указать данные и контакты автора скрипта<br>';
+        echo 'Также если вы автор модификации или небольшой переделки, то можете указать и свои данные в описании к скрипту<br><br>';
 
-        echo '<b>Авторские права</b><br />';
-        echo 'Для размещения скрипта в нашем архиве вы должны быть автором этого скрипта, у вас должны быть эсклюзивные права для размещения этого скрипта или лицензия на распространения скрипта<br />';
-        echo 'Не рекомендуется публиковать скрипт если вы не уверены, что он распространяется свободно или автор не против этого<br />';
-        echo 'Все скрипты размещенные у нас не могут быть удалены с нашего сайта, исключением является публикация скрипта без согласия автора или выложенных с нарушением текущих правил и только по требованию автора<br />';
-        echo 'Размещая скрипт у нас вы автоматически соглашаетесь со всеми правилами<br /><br />';
+        echo '<b>Авторские права</b><br>';
+        echo 'Для размещения скрипта в нашем архиве вы должны быть автором этого скрипта, у вас должны быть эсклюзивные права для размещения этого скрипта или лицензия на распространения скрипта<br>';
+        echo 'Не рекомендуется публиковать скрипт если вы не уверены, что он распространяется свободно или автор не против этого<br>';
+        echo 'Все скрипты размещенные у нас не могут быть удалены с нашего сайта, исключением является публикация скрипта без согласия автора или выложенных с нарушением текущих правил и только по требованию автора<br>';
+        echo 'Размещая скрипт у нас вы автоматически соглашаетесь со всеми правилами<br><br>';
 
-        echo '<b>В архиве со скриптом должны быть следующие, обязательные файлы:</b><br />';
+        echo '<b>В архиве со скриптом должны быть следующие, обязательные файлы:</b><br>';
 
-        echo '<b>1.</b> Сам скрипт. Все файлы необходимые для нормальной работы<br />';
-        echo '<b>2.</b> Инструкция по установке. Как правильно установить скрипт<br />';
-        echo '<b>3.</b> Полное описание скрипта. Какие функции имеются в этом скрипте, возможности и т.д.<br />';
-        echo '<b>4.</b> Требования для работы. (К примеру PHP4, HTML, библиотека ICONV)<br />';
-        echo '<b>5.</b> Автор скрипта и(или) автор модификации<br />';
-        echo '<b>6.</b> Контакты авторов (адрес сайта)<br />';
-        echo '<b>7.</b> Красивое и уникальное название архива и скрипта<br /><br />';
+        echo '<b>1.</b> Сам скрипт. Все файлы необходимые для нормальной работы<br>';
+        echo '<b>2.</b> Инструкция по установке. Как правильно установить скрипт<br>';
+        echo '<b>3.</b> Полное описание скрипта. Какие функции имеются в этом скрипте, возможности и т.д.<br>';
+        echo '<b>4.</b> Требования для работы. (К примеру PHP4, HTML, библиотека ICONV)<br>';
+        echo '<b>5.</b> Автор скрипта и(или) автор модификации<br>';
+        echo '<b>6.</b> Контакты авторов (адрес сайта)<br>';
+        echo '<b>7.</b> Красивое и уникальное название архива и скрипта<br><br>';
 
-        echo '<b>Примеры описания скриптов</b><br />';
-        echo 'Название: <b>cat_skor</b><br />';
-        echo 'Каталог мобильных сайтов в трех версиях: wml xhtml и html.<br />
-Возможности<br />
-- Полная статистика каталога: переходы по дням, по месяцам и за все время.<br />
-- Полная статистика по каждому сайту: переходы по дням, месяцам, переходы за все время, описание.<br />
-- Автоудаление неактивных сайтов.<br />
+        echo '<b>Примеры описания скриптов</b><br>';
+        echo 'Название: <b>cat_skor</b><br>';
+        echo 'Каталог мобильных сайтов в трех версиях: wml xhtml и html.<br>
+Возможности<br>
+- Полная статистика каталога: переходы по дням, по месяцам и за все время.<br>
+- Полная статистика по каждому сайту: переходы по дням, месяцам, переходы за все время, описание.<br>
+- Автоудаление неактивных сайтов.<br>
 - Отчет на email за каждый день ....... (и т.д.)
-<br />
-Требования: PHP4, MySQL, WML, (X)HTML, CRON<br />
-Автор cкрипта: skor<br />
-Сайт автора http://xwap.org<br /><br />';
+<br>
+Требования: PHP4, MySQL, WML, (X)HTML, CRON<br>
+Автор cкрипта: skor<br>
+Сайт автора http://xwap.org<br><br>';
 
-        echo '<b>Ограничения:</b><br />';
-        echo 'К загрузке допускаются архивы в формате zip, скриншоты можно загружать в форматах jpg, jpeg, gif и png<br />';
-        echo 'Максимальный вес архива: '.formatsize(Setting::get('fileupload')).'<br />';
-        echo 'Максимальный вес скриншота: '.formatsize(Setting::get('screenupload')).'<br />';
-        echo 'Требуемый размер скриншота: от 100 до '.Setting::get('screenupsize').' px<br /><br />';
+        echo '<b>Ограничения:</b><br>';
+        echo 'К загрузке допускаются архивы в формате zip, скриншоты можно загружать в форматах jpg, jpeg, gif и png<br>';
+        echo 'Максимальный вес архива: '.formatsize(Setting::get('fileupload')).'<br>';
+        echo 'Максимальный вес скриншота: '.formatsize(Setting::get('screenupload')).'<br>';
+        echo 'Требуемый размер скриншота: от 100 до '.Setting::get('screenupsize').' px<br><br>';
 
-        echo '<b>Рекомендации:</b><br />';
-        echo 'Чем лучше вы оформите скрипт при публикации, тем быстрее он будет проверен и размещен в архиве<br />';
-        echo 'Рекомендуем самостоятельно подготовить хорошее и граммотное описание скрипта, а не просто скопировать и вставить текст<br />';
-        echo 'Важным моментом является выбор названия и имени архива со скриптом, они должны быть уникальными, нельзя добавлять к примеру gb.zip, forum.zip и т.д. так как эти названия не уникальные и подходят под большинство скриптов выбранной категории<br />';
-        echo 'Название и имя архива не должны быть слишком короткими или длинными, не должны быть чересчур информативными<br /><br />';
+        echo '<b>Рекомендации:</b><br>';
+        echo 'Чем лучше вы оформите скрипт при публикации, тем быстрее он будет проверен и размещен в архиве<br>';
+        echo 'Рекомендуем самостоятельно подготовить хорошее и граммотное описание скрипта, а не просто скопировать и вставить текст<br>';
+        echo 'Важным моментом является выбор названия и имени архива со скриптом, они должны быть уникальными, нельзя добавлять к примеру gb.zip, forum.zip и т.д. так как эти названия не уникальные и подходят под большинство скриптов выбранной категории<br>';
+        echo 'Название и имя архива не должны быть слишком короткими или длинными, не должны быть чересчур информативными<br><br>';
 
-        echo 'После проверки ваш скрипт будет размещен в нашем архиве и станет доступным для скачивания, добавления оценок и комментариев<br /><br />';
+        echo 'После проверки ваш скрипт будет размещен в нашем архиве и станет доступным для скачивания, добавления оценок и комментариев<br><br>';
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?cid='.$cid.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?cid='.$cid.'">Вернуться</a><br>';
     }
 break;
 

@@ -18,13 +18,13 @@ if (is_admin([101, 102, 103])) {
         case "index":
 
             if (Setting::get('regkeys') == 0) {
-                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Подтверждение регистрации отключено!</span></b><br /><br />';
+                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Подтверждение регистрации отключено!</span></b><br><br>';
             }
             if (Setting::get('regkeys') == 1) {
-                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включено автоматическое подтверждение регистраций!</span></b><br /><br />';
+                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включено автоматическое подтверждение регистраций!</span></b><br><br>';
             }
             if (Setting::get('regkeys') == 2) {
-                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включена модерация регистраций!</span></b><br /><br />';
+                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включена модерация регистраций!</span></b><br><br>';
             }
             // --------------- Удаление не подтвердивших регистрацию -----------//
             if (Setting::get('regkeys') == 1) {
@@ -34,7 +34,7 @@ if (is_admin([101, 102, 103])) {
                 $deltotal = count($arrdelusers);
 
                 if ($deltotal > 0) {
-                    echo 'Автоматически удалено аккаунтов: <b>'.$deltotal.'</b><br />';
+                    echo 'Автоматически удалено аккаунтов: <b>'.$deltotal.'</b><br>';
 
                     foreach($arrdelusers as $key => $value) {
                         if ($key == 0) {
@@ -47,7 +47,7 @@ if (is_admin([101, 102, 103])) {
                         delete_album($value);
                         delete_users($value);
                     }
-                    echo '<br /><br />';
+                    echo '<br><br>';
                 }
             }
             // --------------------------------------------------------//
@@ -66,23 +66,23 @@ if (is_admin([101, 102, 103])) {
                     }
 
                     echo '<div class="b">';
-                    echo '<input type="checkbox" name="arrayusers[]" value="'.$data['login'].'" /> ';
+                    echo '<input type="checkbox" name="arrayusers[]" value="'.$data['login'].'"> ';
                     echo user_gender($data['login']).' <b>'.profile($data['login']).'</b>';
                     echo '(email: '.$data['email'].')</div>';
 
                     echo '<div>Зарегистрирован: '.date_fixed($data['joined']).'</div>';
                 }
 
-                echo '<br /><select name="choice">';
+                echo '<br><select name="choice">';
                 echo '<option value="1">Разрешить</option>';
                 echo '<option value="2">Запретить</option>';
                 echo '</select>';
 
-                echo '<input type="submit" value="Выполнить" /></form>';
+                echo '<input type="submit" value="Выполнить"></form>';
 
                 App::pagination($page);
 
-                echo 'Всего ожидающих: <b>'.(int)$total.'</b><br /><br />';
+                echo 'Всего ожидающих: <b>'.(int)$total.'</b><br><br>';
             } else {
                 show_error('Нет пользователей требующих подтверждения регистрации!');
             }
@@ -134,12 +134,12 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reglist?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reglist?page='.$page.'">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

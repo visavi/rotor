@@ -8,7 +8,7 @@
 
     <h1>{{ $photo['title'] }}</h1>
 
-    <i class="fa fa-picture-o"></i> <b><a href="/gallery/{{ $photo['id'] }}">К фото</a></b><hr />
+    <i class="fa fa-picture-o"></i> <b><a href="/gallery/{{ $photo['id'] }}">К фото</a></b><hr>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
@@ -35,7 +35,7 @@
                         @endif
                     </div>
 
-                    <b>{!! profile($data->user) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br />
+                    <b>{!! profile($data->user) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br>
                     {!! user_title($data->user) !!} {!! user_online($data->user) !!}
                 </div>
                 <div class="message">
@@ -62,14 +62,14 @@
                 <form action="/gallery/{{ $photo->id }}/comments" method="post">
                     <input type="hidden" name="token" value="{{  $_SESSION['token'] }}">
 
-                    <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />
+                    <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
                     <button class="btn btn-success">Написать</button>
                 </form>
-            </div><br />
+            </div><br>
 
             <a href="/rules">Правила</a> /
             <a href="/smiles">Смайлы</a> /
-            <a href="/tags">Теги</a><br /><br />
+            <a href="/tags">Теги</a><br><br>
         @else
             {{ show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо') }}
         @endif
@@ -77,6 +77,6 @@
         {{ show_error('Комментирование данной фотографии закрыто!') }}
     @endif
 
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">Альбом</a><br />
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">Альбом</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

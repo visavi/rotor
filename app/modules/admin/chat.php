@@ -19,7 +19,7 @@ if (is_admin()) {
 
             echo '<a href="/admin/chat?rand='.mt_rand(100, 999).'">Обновить</a> / ';
             echo '<a href="/smiles">Смайлы</a> / ';
-            echo '<a href="/tags">Теги</a><hr />';
+            echo '<a href="/tags">Теги</a><hr>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
             $page = App::paginate(Setting::get('chatpost'), $total);
@@ -36,7 +36,7 @@ if (is_admin()) {
                     echo '<div class="b">';
                     echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
-                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
                     if (App::getUsername() != $data['user']) {
@@ -49,10 +49,10 @@ if (is_admin()) {
                         echo '<div class="right"><a href="/admin/chat?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.App::bbCode($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br>';
 
                     if (!empty($data['edit'])) {
-                        echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.$data['edit'].' ('.date_fixed($data['edit_time']).')</small><br />';
+                        echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.$data['edit'].' ('.date_fixed($data['edit_time']).')</small><br>';
                     }
 
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -67,11 +67,11 @@ if (is_admin()) {
 
             echo '<div class="form">';
             echo '<form action="/admin/chat?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
-            echo '<input type="submit" value="Написать" /></form></div><br />';
+            echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>';
+            echo '<input type="submit" value="Написать"></form></div><br>';
 
             if (is_admin([101]) && $total > 0) {
-                echo '<i class="fa fa-times"></i> <a href="/admin/chat?act=prodel">Очистить чат</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/admin/chat?act=prodel">Очистить чат</a><br>';
             }
         break;
 
@@ -111,7 +111,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -121,23 +121,23 @@ if (is_admin()) {
 
             $id = abs(intval($_GET['id']));
 
-            echo '<b><big>Ответ на сообщение</big></b><br /><br />';
+            echo '<b><big>Ответ на сообщение</big></b><br><br>';
 
             $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($post)) {
                 echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
-                echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr />';
+                echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/chat?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br />';
-                echo '<input type="submit" value="Ответить" /></form></div><br />';
+                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br>';
+                echo '<input type="submit" value="Ответить"></form></div><br>';
             } else {
                 show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -147,20 +147,20 @@ if (is_admin()) {
 
             $id = abs(intval($_GET['id']));
 
-            echo '<b><big>Цитирование</big></b><br /><br />';
+            echo '<b><big>Цитирование</big></b><br><br>';
 
             $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($post)) {
                 echo '<div class="form">';
                 echo '<form action="/admin/chat?act=add&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br />';
-                echo '<input type="submit" value="Ответить" /></form></div><br />';
+                echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br>';
+                echo '<input type="submit" value="Ответить"></form></div><br>';
             } else {
                 show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -175,12 +175,12 @@ if (is_admin()) {
             if (!empty($post)) {
                 if ($post['time'] + 600 > SITETIME) {
 
-                    echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br /><br />';
+                    echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br><br>';
 
                     echo '<div class="form">';
                     echo '<form action="/admin/chat?act=editpost&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br />';
-                    echo '<input type="submit" value="Редактировать" /></form></div><br />';
+                    echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br>';
+                    echo '<input type="submit" value="Редактировать"></form></div><br>';
                 } else {
                     show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                 }
@@ -188,7 +188,7 @@ if (is_admin()) {
                 show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -225,18 +225,18 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/chat?page='.$page.'">В админ-чат</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/chat?page='.$page.'">В админ-чат</a><br>';
         break;
 
         ############################################################################################
         ##                                 Подтверждение очистки                                  ##
         ############################################################################################
         case 'prodel':
-            echo 'Вы уверены что хотите удалить все сообщения в админ-чате?<br />';
-            echo '<i class="fa fa-times"></i> <b><a href="/admin/chat?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+            echo 'Вы уверены что хотите удалить все сообщения в админ-чате?<br>';
+            echo '<i class="fa fa-times"></i> <b><a href="/admin/chat?act=alldel&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -259,12 +259,12 @@ if (is_admin()) {
                 show_error('Ошибка! Очищать админ-чат могут только суперадмины!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     redirect ('/');

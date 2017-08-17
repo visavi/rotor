@@ -42,26 +42,26 @@ switch ($action):
                 } else {
                     echo ($page['offset'] + $i).'. <b>'.profile($data['login']).'</b> ';
                 }
-                echo '('.points($data['point']).')<br />';
+                echo '('.points($data['point']).')<br>';
                 echo user_title($data['login']).' '.user_online($data['login']);
                 echo '</div>';
 
                 echo '<div>';
-                echo 'Форум: '.$data['allforum'].' | Гостевая: '.$data['allguest'].' | Коммент: '.$data['allcomments'].'<br />';
-                echo 'Посещений: '.$data['visits'].'<br />';
-                echo 'Деньги: '.user_money($data['login']).'<br />';
+                echo 'Форум: '.$data['allforum'].' | Гостевая: '.$data['allguest'].' | Коммент: '.$data['allcomments'].'<br>';
+                echo 'Посещений: '.$data['visits'].'<br>';
+                echo 'Деньги: '.user_money($data['login']).'<br>';
                 echo 'Дата регистрации: '.date_fixed($data['joined'], 'j F Y').'</div>';
             }
 
             App::pagination($page);
 
             echo '<div class="form">';
-            echo '<b>Поиск пользователя:</b><br />';
+            echo '<b>Поиск пользователя:</b><br>';
             echo '<form action="/userlist?act=search&amp;page='.$page['current'].'" method="post">';
-            echo '<input type="text" name="uz" value="'.App::getUsername().'" />';
-            echo '<input type="submit" value="Искать" /></form></div><br />';
+            echo '<input type="text" name="uz" value="'.App::getUsername().'">';
+            echo '<input type="submit" value="Искать"></form></div><br>';
 
-            echo 'Всего пользователей: <b>'.$total.'</b><br /><br />';
+            echo 'Всего пользователей: <b>'.$total.'</b><br><br>';
         } else {
             show_error('Пользователей еще нет!');
         }
@@ -100,11 +100,11 @@ switch ($action):
             show_error('Ошибка! Вы не ввели логин пользователя');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/userlist?page='.$page.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/userlist?page='.$page.'">Вернуться</a><br>';
     break;
 
 endswitch;
 
-echo '<i class="fa fa-users"></i> <a href="/onlinewho">Новички</a><br />';
+echo '<i class="fa fa-users"></i> <a href="/onlinewho">Новички</a><br>';
 
 App::view(Setting::get('themes').'/foot');

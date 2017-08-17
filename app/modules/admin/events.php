@@ -30,8 +30,8 @@ case 'index':
             $icon = (empty($data['closed'])) ? 'unlock' : 'lock';
             echo '<i class="fa fa-'.$icon.'"></i> ';
 
-            echo '<b><a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small><br />';
-            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+            echo '<b><a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['time']).')</small><br>';
+            echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
             echo '<a href="/admin/events?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
@@ -48,24 +48,24 @@ case 'index':
 
             echo '<div>'.App::bbCode($data['text']).'</div>';
 
-            echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'<br />';
+            echo '<div style="clear:both;">Добавлено: '.profile($data['author']).'<br>';
             echo '<a href="/events?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
             echo '<a href="/events?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
         }
 
-        echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+        echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
         App::pagination($page);
 
-        echo 'Всего событий: <b>'.(int)$total.'</b><br /><br />';
+        echo 'Всего событий: <b>'.(int)$total.'</b><br><br>';
     } else {
         show_error('Событий еще нет!');
     }
 
-    echo '<i class="fa fa-check"></i> <a href="/events?act=new">Добавить событие</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/events?act=new">Добавить событие</a><br>';
 
     if (is_admin([101])) {
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
     }
 break;
 
@@ -77,35 +77,35 @@ case 'edit':
 
     if (!empty($dataevent)) {
 
-        echo '<b><big>Редактирование</big></b><br /><br />';
+        echo '<b><big>Редактирование</big></b><br><br>';
 
         echo '<div class="form cut">';
         echo '<form action="/admin/events?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-        echo 'Заголовок:<br />';
-        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['title'].'" /><br />';
-        echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br />';
+        echo 'Заголовок:<br>';
+        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$dataevent['title'].'"><br>';
+        echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$dataevent['text'].'</textarea><br>';
 
         if (!empty($dataevent['image']) && file_exists(HOME.'/uploads/events/'.$dataevent['image'])){
 
-            echo '<a href="/uploads/events/'.$dataevent['image'].'">'.resize_image('uploads/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br />';
-            echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/uploads/events/'.$dataevent['image']).')<br /><br />';
+            echo '<a href="/uploads/events/'.$dataevent['image'].'">'.resize_image('uploads/events/', $dataevent['image'], 75, ['alt' => $dataevent['title']]).'</a><br>';
+            echo '<b>'.$dataevent['image'].'</b> ('.read_file(HOME.'/uploads/events/'.$dataevent['image']).')<br><br>';
         }
 
-        echo 'Прикрепить картинку:<br /><input type="file" name="image" /><br />';
-        echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(Setting::get('filesize')).' и '.Setting::get('fileupfoto').'px)</i><br /><br />';
+        echo 'Прикрепить картинку:<br><input type="file" name="image"><br>';
+        echo '<i>gif, jpg, jpeg, png и bmp (Не более '.formatsize(Setting::get('filesize')).' и '.Setting::get('fileupfoto').'px)</i><br><br>';
 
         $checked = ($dataevent['closed'] == 1) ? ' checked="checked"' : '';
-        echo '<input name="closed" type="checkbox" value="1"'.$checked.' /> Закрыть комментарии<br />';
+        echo '<input name="closed" type="checkbox" value="1"'.$checked.'> Закрыть комментарии<br>';
 
         $checked = ($dataevent['top'] == 1) ? ' checked="checked"' : '';
-        echo '<input name="top" type="checkbox" value="1"'.$checked.' /> Показывать на главной<br />';
+        echo '<input name="top" type="checkbox" value="1"'.$checked.'> Показывать на главной<br>';
 
-        echo '<br /><input type="submit" value="Изменить" /></form></div><br />';
+        echo '<br><input type="submit" value="Изменить"></form></div><br>';
     } else {
         show_error('Ошибка! Выбранного события не существует, возможно оно было удалено!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -163,8 +163,8 @@ case 'change':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?page='.$page.'">К событиям</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/events?page='.$page.'">К событиям</a><br>';
 break;
 
 ############################################################################################
@@ -188,7 +188,7 @@ case 'restatement':
         show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -230,12 +230,12 @@ case 'del':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/events?page='.$page.'">Вернуться</a><br>';
 break;
 
 endswitch;
 
-echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

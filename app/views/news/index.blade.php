@@ -33,7 +33,7 @@
 
             <div>{!! App::bbCode($data['text']) !!}</div>
             <div style="clear:both;">
-                Добавлено: {!! profile($data->user) !!}<br />
+                Добавлено: {!! profile($data->user) !!}<br>
                 <a href="/news/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
                 <a href="/news/{{ $data['id'] }}/end">&raquo;</a>
             </div>
@@ -44,6 +44,6 @@
         show_error('Новостей еще нет!');
     @endif
 
-    <i class="fa fa-rss"></i> <a href="/news/rss">RSS подписка</a><br />
-    <i class="fa fa-comment"></i> <a href="/news/allcomments">Комментарии</a><br />
+    <i class="fa fa-rss"></i> <a href="/news/rss">RSS подписка</a><br>
+    <i class="fa fa-comment"></i> <a href="/news/allcomments">Комментарии</a><br>
 @stop

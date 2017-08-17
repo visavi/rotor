@@ -1,1 +1,1 @@
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> (<?=stats_checker()?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> (<?=stats_checker()?>)<br>

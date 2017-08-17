@@ -19,19 +19,19 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            echo '<b>Введите число от 1 до 100</b><br /><br />';
-            echo '<b>Попыток: 0</b><br />';
+            echo '<b>Введите число от 1 до 100</b><br><br>';
+            echo '<b>Попыток: 0</b><br>';
 
             echo '<div class="form">';
             echo '<form action="/games/hi?act=hi" method="post">';
-            echo 'Введите число:<br />';
-            echo '<input type="text" name="guess" />';
-            echo '<input type="submit" value="Угадать" />';
-            echo '</form></div><br />';
+            echo 'Введите число:<br>';
+            echo '<input type="text" name="guess">';
+            echo '<input type="submit" value="Угадать">';
+            echo '</form></div><br>';
 
-            echo 'У вас в наличии: '.moneys(App::user('money')).'<br /><br />';
+            echo 'У вас в наличии: '.moneys(App::user('money')).'<br><br>';
 
-            echo '<i class="fa fa-question-circle"></i> <a href="/games/hi?act=faq">Правила</a><br />';
+            echo '<i class="fa fa-question-circle"></i> <a href="/games/hi?act=faq">Правила</a><br>';
         break;
 
         ############################################################################################
@@ -47,36 +47,36 @@ if (is_user()) {
 
                     if ($guess != $_SESSION['hill']) {
                         if ($_SESSION['hi_count'] < Setting::get('hipopytka')) {
-                            echo'<b>Введите число от 1 до 100</b><br /><br />';
+                            echo'<b>Введите число от 1 до 100</b><br><br>';
 
-                            echo '<b>Попыток: '.(int)$_SESSION['hi_count'].'</b><br />';
+                            echo '<b>Попыток: '.(int)$_SESSION['hi_count'].'</b><br>';
 
                             if ($guess > $_SESSION['hill']) {
-                                echo $guess.' — это большое число<br /><i class="fa fa-minus-circle"></i> Введите меньше<br /><br />';
+                                echo $guess.' — это большое число<br><i class="fa fa-minus-circle"></i> Введите меньше<br><br>';
                             }
                             if ($guess < $_SESSION['hill']) {
-                                echo $guess.' — это маленькое число<br /><i class="fa fa-plus-circle"></i> Введите больше<br /><br />';
+                                echo $guess.' — это маленькое число<br><i class="fa fa-plus-circle"></i> Введите больше<br><br>';
                             }
 
                             echo '<div class="form">';
                             echo '<form action="/games/hi?act=hi" method="post">';
-                            echo 'Введите число:<br />';
-                            echo '<input type="text" name="guess" />';
-                            echo '<input type="submit" value="Угадать" />';
-                            echo '</form></div><br />';
+                            echo 'Введите число:<br>';
+                            echo '<input type="text" name="guess">';
+                            echo '<input type="submit" value="Угадать">';
+                            echo '</form></div><br>';
 
                             DB::run() -> query("UPDATE `users` SET `money`=`money`- ".Setting::get('hisumma')." WHERE `login`=? LIMIT 1;", [App::getUsername()]);
 
                             $count_pop = Setting::get('hipopytka') - $_SESSION['hi_count'];
 
-                            echo 'Осталось попыток: <b>'.(int)$count_pop.'</b><br />';
+                            echo 'Осталось попыток: <b>'.(int)$count_pop.'</b><br>';
 
                             $allmoney = DB::run() -> querySingle("SELECT `money` FROM `users` WHERE `login`=? LIMIT 1;", [App::getUsername()]);
 
-                            echo 'У вас в наличии: '.moneys($allmoney).'<br /><br />';
+                            echo 'У вас в наличии: '.moneys($allmoney).'<br><br>';
                         } else {
-                            echo '<i class="fa fa-times"></i> <b>Вы проигали потому что, не отгадали число за '.(int)Setting::get('hipopytka').' попыток</b><br />';
-                            echo 'Было загадано число: '.$_SESSION['hill'].'<br /><br />';
+                            echo '<i class="fa fa-times"></i> <b>Вы проигали потому что, не отгадали число за '.(int)Setting::get('hipopytka').' попыток</b><br>';
+                            echo 'Было загадано число: '.$_SESSION['hill'].'<br><br>';
 
                             unset($_SESSION['hill']);
                             unset($_SESSION['hi_count']);
@@ -84,8 +84,8 @@ if (is_user()) {
                     } else {
                         DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [Setting::get('hiprize'), App::getUsername()]);
 
-                        echo '<b>Поздравляем!!! Вы угадали число '.(int)$guess.'</b><br />';
-                        echo 'Ваш выигрыш составил '.moneys(Setting::get('hiprize')).'<br /><br />';
+                        echo '<b>Поздравляем!!! Вы угадали число '.(int)$guess.'</b><br>';
+                        echo 'Ваш выигрыш составил '.moneys(Setting::get('hiprize')).'<br><br>';
 
                         unset($_SESSION['hill']);
                         unset($_SESSION['hi_count']);
@@ -97,7 +97,7 @@ if (is_user()) {
                 show_error('Вы не можете играть, т.к. на вашем счету недостаточно средств!');
             }
 
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/games/hi?newgame">Начать заново</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/games/hi?newgame">Начать заново</a><br>';
         break;
 
         ############################################################################################
@@ -105,13 +105,13 @@ if (is_user()) {
         ############################################################################################
         case 'faq':
 
-            echo 'Для участия в игре напишите число и нажмите "Угадать", за каждую попытку у вас будут списывать по '.moneys(Setting::get('hisumma')).'<br />';
-            echo 'После каждой попытки вам дают подсказку большое это число или маленькое<br />';
-            echo 'Если вы не уложились за '.Setting::get('hipopytka').' попыток, то игра будет начата заново<br />';
-            echo 'При выигрыше вы получаете на счет '.moneys(Setting::get('hiprize')).'<br />';
-            echo 'Итак дерзайте!<br /><br />';
+            echo 'Для участия в игре напишите число и нажмите "Угадать", за каждую попытку у вас будут списывать по '.moneys(Setting::get('hisumma')).'<br>';
+            echo 'После каждой попытки вам дают подсказку большое это число или маленькое<br>';
+            echo 'Если вы не уложились за '.Setting::get('hipopytka').' попыток, то игра будет начата заново<br>';
+            echo 'При выигрыше вы получаете на счет '.moneys(Setting::get('hiprize')).'<br>';
+            echo 'Итак дерзайте!<br><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/hi">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/hi">Вернуться</a><br>';
         break;
 
     endswitch;
@@ -120,6 +120,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы начать игру, необходимо');
 }
 
-echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

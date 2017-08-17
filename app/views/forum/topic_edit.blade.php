@@ -8,7 +8,7 @@
 
     <h1>Изменение темы</h1>
 
-    <i class="fa fa-pencil"></i> <b><?=$post->getUser()->login?></b> <small>(<?=date_fixed($post['time'])?>)</small><br /><br />
+    <i class="fa fa-pencil"></i> <b><?=$post->getUser()->login?></b> <small>(<?=date_fixed($post['time'])?>)</small><br><br>
 
     <div class="form">
         <form action="/topic/<?=$topic['id']?>/edit" method="post">
@@ -31,5 +31,5 @@
 
             <button class="btn btn-primary">Редактировать</button>
         </form>
-    </div><br />
+    </div><br>
 @stop

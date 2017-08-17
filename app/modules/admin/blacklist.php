@@ -46,9 +46,9 @@ if (is_admin([101, 102])) {
         echo $separator.'<a href="/admin/blacklist?page='.$link['page'].'"'.$active.'>'.$link['name'].'</a>';
     }
 
-    echo '<hr />'; */
+    echo '<hr>'; */
 
-    echo 'Запрещенные: <a href="/admin/blacklist"'.(($type == 1) ? ' style="font-weight: bold;"' : '').'>Email</a> / <a href="/admin/blacklist?main=login"'.(($type == 2) ? ' style="font-weight: bold;"' : '').'>Логины</a> / <a href="/admin/blacklist?main=domain"'.(($type == 3) ? ' style="font-weight: bold;"' : '').'>Домены</a><hr />';
+    echo 'Запрещенные: <a href="/admin/blacklist"'.(($type == 1) ? ' style="font-weight: bold;"' : '').'>Email</a> / <a href="/admin/blacklist?main=login"'.(($type == 2) ? ' style="font-weight: bold;"' : '').'>Логины</a> / <a href="/admin/blacklist?main=domain"'.(($type == 3) ? ' style="font-weight: bold;"' : '').'>Домены</a><hr>';
 
     switch ($action):
     ############################################################################################
@@ -67,13 +67,13 @@ if (is_admin([101, 102])) {
 
                 while ($data = $queryblack -> fetch()) {
                     echo '<div class="b">';
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
 
                     echo '<i class="fa fa-pencil"></i> <b>'.$data['value'].'</b></div>';
-                    echo '<div>Добавлено: '.profile($data['user']).'<br />';
+                    echo '<div>Добавлено: '.profile($data['user']).'<br>';
                     echo 'Время: '.date_fixed($data['time']).'</div>';
                 }
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+                echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
                 App::pagination($page);
 
@@ -83,11 +83,11 @@ if (is_admin([101, 102])) {
 
             echo '<div class="form">';
             echo '<form action="/admin/blacklist?act=add&amp;main='.$main.'&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo '<b>Запись:</b><br />';
-            echo '<input name="value" type="text" maxlength="100" value="'.$placeholder.'" />';
-            echo '<input type="submit" value="Добавить" /></form></div><br />';
+            echo '<b>Запись:</b><br>';
+            echo '<input name="value" type="text" maxlength="100" value="'.$placeholder.'">';
+            echo '<input type="submit" value="Добавить"></form></div><br>';
 
-            echo 'Всего в списке: <b>'.$total.'</b><br /><br />';
+            echo 'Всего в списке: <b>'.$total.'</b><br><br>';
         break;
 
         ############################################################################################
@@ -132,7 +132,7 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.page.'">Вернуться</a><br>';
         break;
 
 
@@ -163,12 +163,12 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

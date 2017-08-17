@@ -1,1 +1,1 @@
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/invitations">Приглашения</a> (<?=stats_invite()?>)<br />
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/invitations">Приглашения</a> (<?=stats_invite()?>)<br>

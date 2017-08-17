@@ -15,9 +15,9 @@
             (<?= $data->getTopic()->posts ?>)
         </div>
         <div>
-            <?=App::bbCode($data['text'])?><br />
+            <?=App::bbCode($data['text'])?><br>
 
-            Написал: <?= $data->getUser()->login ?> <?=user_online($data->user)?> <small>(<?=date_fixed($data['created_at'])?>)</small><br />
+            Написал: <?= $data->getUser()->login ?> <?=user_online($data->user)?> <small>(<?=date_fixed($data['created_at'])?>)</small><br>
 
             <?php if (is_admin()): ?>
                 <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>

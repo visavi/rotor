@@ -14,7 +14,7 @@ if ($act == 'index') {
     if (is_admin()) {
         echo ' / <a href="/admin/minichat?page=' . $page . '">Управление</a>';
     }
-    echo '<hr />';
+    echo '<hr>';
 
     // ---------------------------------------------------------------//
     if (! file_exists(STORAGE."/chat/chat.dat")){
@@ -115,24 +115,24 @@ if ($act == 'index') {
             $useravatars = user_avatars($data[1]);
 
             if ($data[1] == 'Вундер-киндер') {
-                $useravatars = '<img src="/assets/img/chat/mag.gif" alt="image" /> ';
+                $useravatars = '<img src="/assets/img/chat/mag.gif" alt="image"> ';
                 $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
             }
             if ($data[1] == 'Настюха') {
-                $useravatars = '<img src="/assets/img/chat/bot.gif" alt="image" /> ';
+                $useravatars = '<img src="/assets/img/chat/bot.gif" alt="image"> ';
                 $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
             }
             if ($data[1] == 'Весельчак') {
-                $useravatars = '<img src="/assets/img/chat/shut.gif" alt="image" /> ';
+                $useravatars = '<img src="/assets/img/chat/shut.gif" alt="image"> ';
                 $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
             }
 
             echo '<div class="b">';
             echo '<div class="img">' . $useravatars . '</div>';
 
-            echo '<b><a href="/chat?name=' . $data[1] . '#form">' . $data[1] . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br />';
+            echo '<b><a href="/chat?name=' . $data[1] . '#form">' . $data[1] . '</a></b>  <small>(' . date_fixed($data[3]) . ')</small><br>';
             echo user_title($data[1]) . ' ' . $useronline . '</div>';
-            echo '<div>' . App::bbCode($data[0]) . '<br />';
+            echo '<div>' . App::bbCode($data[0]) . '<br>';
             if (is_admin()){
                 echo '<span class="data">(' . $data[4] . ', ' . $data[5] . ')</span></div>';
             }
@@ -147,9 +147,9 @@ if ($act == 'index') {
     if (is_user()) {
         echo '<div class="form" id="form">';
         echo '<form action="/chat?act=add" method="post">';
-        echo '<b>Сообщение:</b><br />';
-        echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $name . '</textarea><br />';
-        echo '<input type="submit" value="Добавить" /></form></div>';
+        echo '<b>Сообщение:</b><br>';
+        echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $name . '</textarea><br>';
+        echo '<input type="submit" value="Добавить"></form></div>';
     } else {
         echo '<div id="form">';
         show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
@@ -227,13 +227,13 @@ if ($act == 'add') {
         show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
     }
 
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/chat">Вернуться</a><br /><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/chat">Вернуться</a><br><br>';
 
 }
 
 echo '<a href="/rules">Правила</a> / ';
 echo '<a href="/smiles">Смайлы</a> / ';
-echo '<a href="/tags">Теги</a><br /><br />';
+echo '<a href="/tags">Теги</a><br><br>';
 
 echo '<i class="fa fa-home"></i> <a href="/">На главную</a>';
 

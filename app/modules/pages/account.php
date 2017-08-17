@@ -17,35 +17,35 @@ case 'index':
     echo '<a href="user/'.App::getUsername().'">Моя анкета</a> / ';
     echo '<a href="/profile">Мой профиль</a> / ';
     echo '<b>Мои данные</b> / ';
-    echo '<a href="/setting">Настройки</a><hr />';
+    echo '<a href="/setting">Настройки</a><hr>';
 
-    echo '<b><big>Изменение email</big></b><br />';
+    echo '<b><big>Изменение email</big></b><br>';
     echo '<div class="form">';
     echo '<form method="post" action="/account?act=changemail&amp;uid='.$_SESSION['token'].'">';
-    echo 'Е-mail:<br />';
-    echo '<input name="meil" maxlength="50" value="'.App::user('email').'" /><br />';
-    echo 'Текущий пароль:<br />';
-    echo '<input name="provpass" type="password" maxlength="20" /><br />';
-    echo '<input value="Изменить" type="submit" /></form></div><br />';
+    echo 'Е-mail:<br>';
+    echo '<input name="meil" maxlength="50" value="'.App::user('email').'"><br>';
+    echo 'Текущий пароль:<br>';
+    echo '<input name="provpass" type="password" maxlength="20"><br>';
+    echo '<input value="Изменить" type="submit"></form></div><br>';
 
     /**
      * Изменение персонального статуса
      */
     if (!empty(Setting::get('editstatus'))) {
-        echo '<b><big>Изменение статуса</big></b><br />';
+        echo '<b><big>Изменение статуса</big></b><br>';
 
         if (App::user('point') >= Setting::get('editstatuspoint')) {
             echo '<div class="form">';
             echo '<form method="post" action="/account?act=editstatus&amp;uid='.$_SESSION['token'].'">';
-            echo 'Персональный статус:<br />';
-            echo '<input name="status" maxlength="20" value="'.App::user('status').'" />';
-            echo '<input value="Изменить" type="submit" /></form>';
+            echo 'Персональный статус:<br>';
+            echo '<input name="status" maxlength="20" value="'.App::user('status').'">';
+            echo '<input value="Изменить" type="submit"></form>';
 
             if (!empty(Setting::get('editstatusmoney'))) {
-                echo '<br /><i>Стоимость: '.moneys(Setting::get('editstatusmoney')).'</i>';
+                echo '<br><i>Стоимость: '.moneys(Setting::get('editstatusmoney')).'</i>';
             }
 
-            echo '</div><br />';
+            echo '</div><br>';
         } else {
             show_error('Изменять статус могут пользователи у которых более '.points(Setting::get('editstatuspoint')).'!');
         }
@@ -54,29 +54,29 @@ case 'index':
     /**
      * Изменение пароля
      */
-    echo '<b><big>Изменение пароля</big></b><br />';
+    echo '<b><big>Изменение пароля</big></b><br>';
 
     echo '<div class="form">';
     echo '<form method="post" action="/account?act=editpass&amp;uid='.$_SESSION['token'].'">';
-    echo 'Новый пароль:<br /><input name="newpass" maxlength="20" /><br />';
-    echo 'Повторите пароль:<br /><input name="newpass2" maxlength="20" /><br />';
-    echo 'Текущий пароль:<br /><input name="oldpass" type="password" maxlength="20" /><br />';
-    echo '<input value="Изменить" type="submit" /></form></div><br />';
+    echo 'Новый пароль:<br><input name="newpass" maxlength="20"><br>';
+    echo 'Повторите пароль:<br><input name="newpass2" maxlength="20"><br>';
+    echo 'Текущий пароль:<br><input name="oldpass" type="password" maxlength="20"><br>';
+    echo '<input value="Изменить" type="submit"></form></div><br>';
 
     /**
      * API-ключ
      */
-    echo '<b><big>Ваш API-ключ</big></b><br />';
+    echo '<b><big>Ваш API-ключ</big></b><br>';
 
     if(empty(App::user('apikey'))) {
         echo '<div class="form">';
         echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
-        echo '<input value="Получить ключ" type="submit" /></form></div><br />';
+        echo '<input value="Получить ключ" type="submit"></form></div><br>';
     } else {
         echo '<div class="form">';
         echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
-        echo 'Ключ: <strong>'.App::user('apikey').'</strong><br />';
-        echo '<input value="Изменить ключ" type="submit" /></form></div><br />';
+        echo 'Ключ: <strong>'.App::user('apikey').'</strong><br>';
+        echo '<input value="Изменить ключ" type="submit"></form></div><br>';
     }
 break;
 
@@ -114,7 +114,7 @@ case 'changemail':
         $siteLink = starts_with(Setting::get('home'), '//') ? 'http:'. Setting::get('home') : Setting::get('home');
 
         $subject = 'Изменение email на сайте '.Setting::get('title');
-        $message = 'Здравствуйте, '.App::getUsername().'<br />Вами была произведена операция по изменению адреса электронной почты<br /><br />Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br />Перейдите по данной ссылке:<br /><br /><a href="'.$siteLink.'/account?act=editmail&key='.$genkey.'">'.$siteLink.'/account?act=editmail&key='.$genkey.'</a><br /><br />Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).', для изменения адреса необходимо быть авторизованным на сайте<br />Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+        $message = 'Здравствуйте, '.App::getUsername().'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.$siteLink.'/account?act=editmail&key='.$genkey.'">'.$siteLink.'/account?act=editmail&key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).', для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
         $body = App::view('mailer.default', compact('subject', 'message'), true);
         App::sendMail($meil, $subject, $body);
@@ -128,7 +128,7 @@ case 'changemail':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
 break;
 
 /**
@@ -165,7 +165,7 @@ case 'editmail':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
 break;
 
 /**
@@ -203,7 +203,7 @@ case 'editstatus':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
 break;
 
 /**
@@ -234,7 +234,7 @@ case 'editpass':
         DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), App::getUsername()]);
 
         $subject = 'Изменение пароля на сайте '.Setting::get('title');
-        $message = 'Здравствуйте, '.App::getUsername().'<br />Вами была произведена операция по изменению пароля<br /><br /><b>Ваш новый пароль: '.$newpass.'</b><br />Сохраните его в надежном месте<br /><br />Данные инициализации:<br />IP: '.App::getClientIp().'<br />Браузер: '.App::getUserAgent().'<br />Время: '.date('j.m.y / H:i', SITETIME);
+        $message = 'Здравствуйте, '.App::getUsername().'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.App::getClientIp().'<br>Браузер: '.App::getUserAgent().'<br>Время: '.date('j.m.y / H:i', SITETIME);
 
         $body = App::view('mailer.default', compact('subject', 'message'), true);
         App::sendMail(App::user('email'), $subject, $body);
@@ -248,7 +248,7 @@ case 'editpass':
         show_error($validation->getErrors());
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
 break;
 
 /**
@@ -269,7 +269,7 @@ case 'apikey':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
 break;
 
 endswitch;

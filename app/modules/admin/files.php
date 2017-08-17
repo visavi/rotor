@@ -48,7 +48,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
 
                         echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.$file.'&amp;type=dir&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить эту директорию\')"><i class="fa fa-remove"></i></a></div>';
 
-                        echo '<i class="fa fa-folder-o"></i> <b><a href="/admin/files?path='.$path.$file.'/">'.$file.'</a></b><br />';
+                        echo '<i class="fa fa-folder-o"></i> <b><a href="/admin/files?path='.$path.$file.'/">'.$file.'</a></b><br>';
                         echo 'Объектов: '.count(array_diff(scandir(APP.'/views/'.$path.$file), ['.', '..'])).'</li>';
                     } else {
 
@@ -59,7 +59,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.basename($file, '.blade.php').'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
 
                         echo '<i class="fa fa-file-o"></i> ';
-                        echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.basename($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br />';
+                        echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.basename($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br>';
                         echo 'Строк: ' . $strok . ' / ';
                         echo 'Изменен: ' . date_fixed(filemtime(APP.'/views/'.$path.$file)) . '</li>';
                     }
@@ -70,9 +70,9 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
             }
 
             if ($path) {
-                echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.ltrim(dirname($path), '.').'/">Вернуться</a><br />';
+                echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.ltrim(dirname($path), '.').'/">Вернуться</a><br>';
             }
-            echo'<i class="fa fa-file-o"></i> <a href="/admin/files?act=new&amp;path='.$path.'">Создать</a><br />';
+            echo'<i class="fa fa-file-o"></i> <a href="/admin/files?act=new&amp;path='.$path.'">Создать</a><br>';
         break;
 
         ############################################################################################
@@ -103,13 +103,13 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         $mainfile = file_get_contents(APP.'/views/'.$path.$file.'.blade.php');
 
                         echo '<div class="form" id="form">';
-                        echo '<b>Редактирование файла '.$file.'</b><br />';
+                        echo '<b>Редактирование файла '.$file.'</b><br>';
 
                         echo '<form method="post">';
                         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 
-                        echo '<textarea id="markItUpHtml" cols="90" rows="30" name="msg">'.check($mainfile).'</textarea><br />';
-                        echo '<input type="submit" value="Редактировать" /></form></div><br />';
+                        echo '<textarea id="markItUpHtml" cols="90" rows="30" name="msg">'.check($mainfile).'</textarea><br>';
+                        echo '<input type="submit" value="Редактировать"></form></div><br>';
 
                         echo '<p class="help-block">Нажмите Ctrl+Enter для перевода строки, Shift+Enter для вставки линии</p>';
 
@@ -123,7 +123,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 show_error('Ошибка! Недопустимое название страницы!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -131,7 +131,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
         ############################################################################################
         case 'new':
 
-            echo '<b>Создание нового файла</b><br /><br />';
+            echo '<b>Создание нового файла</b><br><br>';
 
             if (is_writeable(APP.'/views/'.$path)) {
 
@@ -178,25 +178,25 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
 
                 echo '<div class="form">';
                 echo '<form action="/admin/files?act=new&amp;path='.$path.'" method="post">';
-                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
-                echo '<input type="hidden" name="type" value="dir" />';
-                echo 'Название директории:<br />';
-                echo '<input type="text" name="name" maxlength="30" /><br />';
-                echo '<input value="Создать директорию" type="submit" /></form></div><br />';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
+                echo '<input type="hidden" name="type" value="dir">';
+                echo 'Название директории:<br>';
+                echo '<input type="text" name="name" maxlength="30"><br>';
+                echo '<input value="Создать директорию" type="submit"></form></div><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/files?act=new&amp;path='.$path.'" method="post">';
-                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'" />';
-                echo '<input type="hidden" name="type" value="file" />';
-                echo 'Название файла (без расширения):<br />';
-                echo '<input type="text" name="name" maxlength="30" /><br />';
-                echo '<input value="Создать файл" type="submit" /></form></div>';
-                echo '<br />Разрешены латинские символы и цифры, а также знаки дефис и нижнее подчеркивание<br /><br />';
+                echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
+                echo '<input type="hidden" name="type" value="file">';
+                echo 'Название файла (без расширения):<br>';
+                echo '<input type="text" name="name" maxlength="30"><br>';
+                echo '<input value="Создать файл" type="submit"></form></div>';
+                echo '<br>Разрешены латинские символы и цифры, а также знаки дефис и нижнее подчеркивание<br><br>';
             } else {
                 show_error('Директория '.$path.' недоступна для записи!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -244,12 +244,12 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

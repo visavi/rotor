@@ -20,8 +20,8 @@
                 </div>
 
                 <div>
-                    {!! App::bbCode($data['text']) !!}<br />
-                    Написал: <b>{!! profile($data['user']) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br />
+                    {!! App::bbCode($data['text']) !!}<br>
+                    Написал: <b>{!! profile($data['user']) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br>
 
                     @if (is_admin())
                         <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
@@ -36,5 +36,5 @@
         {{ show_error('Комментариев еще нет!') }}
     @endif
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

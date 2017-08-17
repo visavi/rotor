@@ -29,13 +29,13 @@ if (is_admin()) {
                 while ($data = $queryrek -> fetch()) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-check-circle"></i> ';
-                    echo '<b><a href="'.$data['site'].'">'.$data['name'].'</a></b> ('.profile($data['user']).')<br />';
+                    echo '<b><a href="'.$data['site'].'">'.$data['name'].'</a></b> ('.profile($data['user']).')<br>';
 
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
                     echo '<a href="/admin/reklama?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo 'Истекает: '.date_fixed($data['time']).'<br />';
+                    echo 'Истекает: '.date_fixed($data['time']).'<br>';
 
                     if (!empty($data['color'])) {
                         echo 'Цвет: <span style="color:'.$data['color'].'">'.$data['color'].'</span>, ';
@@ -44,16 +44,16 @@ if (is_admin()) {
                     }
 
                     if (!empty($data['bold'])) {
-                        echo 'Жирность: есть<br />';
+                        echo 'Жирность: есть<br>';
                     } else {
-                        echo 'Жирность: нет<br />';
+                        echo 'Жирность: нет<br>';
                     }
                 }
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+                echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
                 App::pagination($page);
 
-                echo 'Всего ссылок: <b>'.$total.'</b><br /><br />';
+                echo 'Всего ссылок: <b>'.$total.'</b><br><br>';
             } else {
                 show_error('В данный момент рекламных ссылок еще нет!');
             }
@@ -71,15 +71,15 @@ if (is_admin()) {
             $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($data)) {
-                echo '<b><big>Редактирование заголовка</big></b><br /><br />';
+                echo '<b><big>Редактирование заголовка</big></b><br><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/reklama?act=change&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo 'Адрес сайта:<br />';
-                echo '<input name="site" type="text" value="'.$data['site'].'" maxlength="50" /><br />';
+                echo 'Адрес сайта:<br>';
+                echo '<input name="site" type="text" value="'.$data['site'].'" maxlength="50"><br>';
 
-                echo 'Название ссылки:<br />';
-                echo '<input name="name" type="text" maxlength="35" value="'.$data['name'].'" /><br />';
+                echo 'Название ссылки:<br>';
+                echo '<input name="name" type="text" maxlength="35" value="'.$data['name'].'"><br>';
 
                 echo 'Код цвета:';
 
@@ -87,19 +87,19 @@ if (is_admin()) {
                     echo ' <a href="/services/colors">(?)</a>';
                 }
 
-                echo '<br />';
-                echo '<input name="color" type="text" maxlength="7" value="'.$data['color'].'" /><br />';
+                echo '<br>';
+                echo '<input name="color" type="text" maxlength="7" value="'.$data['color'].'"><br>';
 
                 echo 'Жирность: ';
                 $checked = ($data['bold'] == 1) ? ' checked="checked"' : '';
-                echo '<input name="bold" type="checkbox" value="1"'.$checked.' /><br />';
+                echo '<input name="bold" type="checkbox" value="1"'.$checked.'><br>';
 
-                echo '<br /><input type="submit" value="Изменить" /></form></div><br />';
+                echo '<br><input type="submit" value="Изменить"></form></div><br>';
             } else {
                 show_error('Ошибка! Данной ссылки не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -146,7 +146,7 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -177,12 +177,12 @@ if (is_admin()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

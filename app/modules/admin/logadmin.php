@@ -27,14 +27,14 @@ if (is_admin([101])) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-file-o"></i> <b>'.profile($data['user']).'</b>';
                     echo ' ('.date_fixed($data['time']).')</div>';
-                    echo '<div>Страница: '.$data['request'].'<br />';
-                    echo 'Откуда: '.$data['referer'].'<br />';
+                    echo '<div>Страница: '.$data['request'].'<br>';
+                    echo 'Откуда: '.$data['referer'].'<br>';
                     echo '<small><span style="color:#cc00cc">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
                 App::pagination($page);
 
-                echo '<i class="fa fa-times"></i> <a href="/admin/logadmin?act=del&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/admin/logadmin?act=del&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br>';
             } else {
                 show_error('Записей еще нет!');
             }
@@ -56,12 +56,12 @@ if (is_admin([101])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/logadmin">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/logadmin">Вернуться</a><br>';
             break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

@@ -59,7 +59,7 @@ switch ($action):
             default: $order = 'votes';
         }
 
-        echo '<br />Сортировать: ';
+        echo '<br>Сортировать: ';
 
         if ($order == 'votes') {
             echo '<b>Голоса</b> / ';
@@ -85,7 +85,7 @@ switch ($action):
             echo '<a href="/offers?type='.$type.'&amp;sort=comm">Комментарии</a>';
         }
 
-        echo '<hr />';
+        echo '<hr>';
 
         if ($total > 0) {
 
@@ -94,7 +94,7 @@ switch ($action):
             while ($data = $queryoffers -> fetch()) {
                 echo '<div class="b">';
                 echo '<i class="fa fa-file-o"></i> ';
-                echo '<b><a href="/offers?act=view&amp;type='.$type.'&amp;id='.$data['id'].'">'.$data['title'].'</a></b> (Голосов: '.$data['votes'].')<br />';
+                echo '<b><a href="/offers?act=view&amp;type='.$type.'&amp;id='.$data['id'].'">'.$data['title'].'</a></b> (Голосов: '.$data['votes'].')<br>';
 
                 switch ($data['status']) {
                     case '1': echo '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b>';
@@ -107,20 +107,20 @@ switch ($action):
                 }
 
                 echo '</div>';
-                echo '<div>'.App::bbCode($data['text']).'<br />';
-                echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br />';
+                echo '<div>'.App::bbCode($data['text']).'<br>';
+                echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br>';
                 echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                 echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
             }
 
             App::pagination($page);
 
-            echo 'Всего записей: <b>'.$total.'</b><br /><br />';
+            echo 'Всего записей: <b>'.$total.'</b><br><br>';
         } else {
             show_error('Записей еще нет!');
         }
 
-        echo '<i class="fa fa-check"></i> <a href="/offers?act=new">Добавить</a><br />';
+        echo '<i class="fa fa-check"></i> <a href="/offers?act=new">Добавить</a><br>';
     break;
 
     ############################################################################################
@@ -137,7 +137,7 @@ switch ($action):
         if (is_admin([101, 102])) {
             echo ' / <a href="/admin/offers?act=view&amp;id='.$id.'">Управление</a>';
         }
-        echo '<hr />';
+        echo '<hr>';
 
         $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($queryoff)) {
@@ -145,7 +145,7 @@ switch ($action):
 
             echo '<div class="b">';
             echo '<i class="fa fa-file-o"></i> ';
-            echo '<b>'.$queryoff['title'].'</b> (Голосов: '.$queryoff['votes'].')<br />';
+            echo '<b>'.$queryoff['title'].'</b> (Голосов: '.$queryoff['votes'].')<br>';
 
             switch ($queryoff['status']) {
                 case '1': echo '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b>';
@@ -163,29 +163,29 @@ switch ($action):
                 echo '<div class="right"><a href="/offers?act=edit&amp;id='.$id.'">Редактировать</a></div>';
             }
 
-            echo '<div>'.App::bbCode($queryoff['text']).'<br />';
-            echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br />';
+            echo '<div>'.App::bbCode($queryoff['text']).'<br>';
+            echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br>';
 
             if ($queryoff['status'] <= 1 && App::getUsername() != $queryoff['user']) {
                 $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, App::getUsername()]);
 
                 if (empty($queryrated)) {
-                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br />';
+                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br>';
                 } else {
-                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-down"></i> Передумал</a></b><br />';
+                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-down"></i> Передумал</a></b><br>';
                 }
             }
 
             echo '<a href="/offers?act=comments&amp;id='.$id.'">Комментарии</a> ('.$queryoff['comments'].') ';
-            echo '<a href="/offers?act=end&amp;id='.$id.'">&raquo;</a></div><br />';
+            echo '<a href="/offers?act=end&amp;id='.$id.'">&raquo;</a></div><br>';
 
             if (!empty($queryoff['text_reply'])) {
                 echo '<div class="b"><b>Официальный ответ</b></div>';
-                echo '<div class="q">'.App::bbCode($queryoff['text_reply']).'<br />';
-                echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br />';
+                echo '<div class="q">'.App::bbCode($queryoff['text_reply']).'<br>';
+                echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br>';
             }
             // ------------------------------------------------//
-            echo '<div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br />';
+            echo '<div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br>';
 
             if ($queryoff['comments'] > 0) {
                 $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 5;", ['offer', $id]);
@@ -195,10 +195,10 @@ switch ($action):
                     echo '<div class="img">'.user_avatars($comm['user']).'</div>';
 
                     echo '<b>'.profile($comm['user']).'</b>';
-                    echo '<small> ('.date_fixed($comm['time']).')</small><br />';
+                    echo '<small> ('.date_fixed($comm['time']).')</small><br>';
                     echo user_title($comm['user']).' '.user_online($comm['user']).'</div>';
 
-                    echo '<div>'.App::bbCode($comm['text']).'<br />';
+                    echo '<div>'.App::bbCode($comm['text']).'<br>';
 
                     if (is_admin()) {
                         echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
@@ -206,7 +206,7 @@ switch ($action):
 
                     echo '</div>';
                 }
-                echo '<br />';
+                echo '<br>';
             } else {
                 show_error('Комментариев еще нет!');
             }
@@ -214,14 +214,14 @@ switch ($action):
             if (is_user()) {
                 if (empty($queryoff['closed'])) {
                     echo '<div class="form"><form action="/offers?act=addcomm&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo '<b>Комментарий:</b><br />';
-                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
-                    echo '<input type="submit" value="Написать" /></form></div>';
+                    echo '<b>Комментарий:</b><br>';
+                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
+                    echo '<input type="submit" value="Написать"></form></div>';
 
-                    echo '<br />';
+                    echo '<br>';
                     echo '<a href="/rules">Правила</a> / ';
                     echo '<a href="/smiles">Смайлы</a> / ';
-                    echo '<a href="/tags">Теги</a><br /><br />';
+                    echo '<a href="/tags">Теги</a><br><br>';
                 } else {
                     show_error('Комментирование данного предложения или проблемы закрыто!');
                 }
@@ -232,7 +232,7 @@ switch ($action):
             show_error('Ошибка! Данного предложения или проблемы не существует!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?type='.$type.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?type='.$type.'">Вернуться</a><br>';
     break;
 
     ############################################################################################
@@ -248,18 +248,18 @@ switch ($action):
                     echo '<div class="form">';
                     echo '<form action="/offers?act=change&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-                    echo 'Тип:<br />';
+                    echo 'Тип:<br>';
                     echo '<select name="types">';
                     $selected = ($queryoff['type'] == 0) ? ' selected="selected"' : '';
                     echo '<option value="0"'.$selected.'>Предложение</option>';
                     $selected = ($queryoff['type'] == 1) ? ' selected="selected"' : '';
                     echo '<option value="1"'.$selected.'>Проблема</option>';
-                    echo '</select><br />';
+                    echo '</select><br>';
 
-                    echo 'Заголовок: <br /><input type="text" name="title" value="'.$queryoff['title'].'" /><br />';
-                    echo 'Описание: <br /><textarea cols="25" rows="5" name="text">'.$queryoff['text'].'</textarea><br />';
+                    echo 'Заголовок: <br><input type="text" name="title" value="'.$queryoff['title'].'"><br>';
+                    echo 'Описание: <br><textarea cols="25" rows="5" name="text">'.$queryoff['text'].'</textarea><br>';
 
-                    echo '<input type="submit" value="Изменить" /></form></div><br />';
+                    echo '<input type="submit" value="Изменить"></form></div><br>';
                 } else {
                     show_error('Ошибка! Данное предложение или проблема уже решена или закрыта!');
                 }
@@ -270,7 +270,7 @@ switch ($action):
             show_login('Вы не авторизованы, чтобы редактировать предложение, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br>';
     break;
 
     ############################################################################################
@@ -317,7 +317,7 @@ switch ($action):
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=edit&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=edit&amp;id='.$id.'">Вернуться</a><br>';
     break;
 
     ############################################################################################
@@ -329,11 +329,11 @@ switch ($action):
         if (!empty($queryoff)) {
             //Setting::get('newtitle') = 'Комментарии - '.$queryoff['title'];
 
-            echo '<i class="fa fa-comment"></i> <b><a href="/offers?act=view&amp;id='.$queryoff['id'].'">'.$queryoff['title'].'</a></b><br /><br />';
+            echo '<i class="fa fa-comment"></i> <b><a href="/offers?act=view&amp;id='.$queryoff['id'].'">'.$queryoff['title'].'</a></b><br><br>';
 
             echo '<a href="/offers?type=0">Предложения</a> / ';
             echo '<a href="/offers?type=1">Проблемы</a> / ';
-            echo '<a href="/offers?act=end&amp;id='.$id.'">Обновить</a><hr />';
+            echo '<a href="/offers?act=end&amp;id='.$id.'">Обновить</a><hr>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
             $page = App::paginate(Setting::get('postcommoffers'), $total);
@@ -353,13 +353,13 @@ switch ($action):
                     echo '<div class="img">'.user_avatars($data['user']).'</div>';
 
                     if ($is_admin) {
-                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
+                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
                     }
 
-                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    echo '<div>'.App::bbCode($data['text']).'<br />';
+                    echo '<div>'.App::bbCode($data['text']).'<br>';
 
                     if ($is_admin) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -369,7 +369,7 @@ switch ($action):
                 }
 
                 if ($is_admin) {
-                    echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
+                    echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
                 }
 
                 App::pagination($page);
@@ -381,13 +381,13 @@ switch ($action):
                 if (empty($queryoff['closed'])) {
                     echo '<div class="form">';
                     echo '<form action="/offers?act=addcomm&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo '<b>Комментарий:</b><br />';
-                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
-                    echo '<input type="submit" value="Написать" /></form></div><br />';
+                    echo '<b>Комментарий:</b><br>';
+                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
+                    echo '<input type="submit" value="Написать"></form></div><br>';
 
                     echo '<a href="/rules">Правила</a> / ';
                     echo '<a href="/smiles">Смайлы</a> / ';
-                    echo '<a href="/tags">Теги</a><br /><br />';
+                    echo '<a href="/tags">Теги</a><br><br>';
                 } else {
                     show_error('Комментирование данного предложения или проблемы закрыто!');
                 }
@@ -395,7 +395,7 @@ switch ($action):
                 show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$queryoff['id'].'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$queryoff['id'].'">Вернуться</a><br>';
         } else {
             show_error('Ошибка! Данного предложения или проблемы не существует!');
         }
@@ -448,7 +448,7 @@ switch ($action):
             show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br>';
     break;
 
     ############################################################################################
@@ -493,34 +493,34 @@ switch ($action):
             show_login('Вы не авторизованы, для голосования за предложения и проблемы, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br>';
     break;
 
     ############################################################################################
     ##                                 Подготовка к добавлению                                ##
     ############################################################################################
     case 'new':
-        echo '<b><big>Добавление</big></b><br /><br />';
+        echo '<b><big>Добавление</big></b><br><br>';
 
         if (App::user('point') >= Setting::get('addofferspoint')) {
             echo '<div class="form">';
             echo '<form action="/offers?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
 
-            echo 'Я хотел бы...<br />';
+            echo 'Я хотел бы...<br>';
             echo '<select name="types">';
             echo '<option value="0">Предложить идею</option><option value="1">Сообщить о проблеме</option>';
-            echo '</select><br />';
+            echo '</select><br>';
 
-            echo 'Заголовок: <br />';
-            echo '<input type="text" name="title" maxlength="50" /><br />';
-            echo 'Описание:<br />';
-            echo '<textarea cols="25" rows="5" name="text"></textarea><br />';
-            echo '<input type="submit" value="Добавить" /></form></div><br />';
+            echo 'Заголовок: <br>';
+            echo '<input type="text" name="title" maxlength="50"><br>';
+            echo 'Описание:<br>';
+            echo '<textarea cols="25" rows="5" name="text"></textarea><br>';
+            echo '<input type="submit" value="Добавить"></form></div><br>';
         } else {
             show_error('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.points(Setting::get('addofferspoint')).'!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br>';
     break;
 
     ############################################################################################
@@ -565,7 +565,7 @@ switch ($action):
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=new">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=new">Вернуться</a><br>';
     break;
 
     ############################################################################################
@@ -600,7 +600,7 @@ switch ($action):
             show_error('Ошибка! Удалять комментарии могут только модераторы!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br>';
     break;
 
     ############################################################################################
@@ -619,7 +619,7 @@ switch ($action):
             show_error('Ошибка! Данного предложения или проблемы не существует!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br>';
     break;
 
 endswitch;

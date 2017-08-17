@@ -16,7 +16,7 @@ if (is_user()) {
 
             $ochkostavka = Setting::get('ochkostavka');
 
-            echo 'В наличии: '.moneys(App::user('money')).'<br /><br />';
+            echo 'В наличии: '.moneys(App::user('money')).'<br><br>';
 
             if (empty($_SESSION['stavka'])) {
                 if (App::user('money') > 0) {
@@ -25,21 +25,21 @@ if (is_user()) {
                     }
 
                     echo '<div class="form">';
-                    echo 'Ваша ставка (1 - '.Setting::get('ochkostavka').'):<br />';
+                    echo 'Ваша ставка (1 - '.Setting::get('ochkostavka').'):<br>';
                     echo'<form action="21?act=ini&amp;rand='.$randgame.'" method="post">';
-                    echo'<input name="mn" />';
-                    echo'<input type="submit" value="Играть" /></form></div><br />';
+                    echo'<input name="mn">';
+                    echo'<input type="submit" value="Играть"></form></div><br>';
                 } else {
                     show_error('У вас нет денег для игры!');
                 }
 
-                echo 'Mаксимальная ставка - '.moneys($ochkostavka).'<br /><br />';
+                echo 'Mаксимальная ставка - '.moneys($ochkostavka).'<br><br>';
             } else {
-                echo 'Cтавки сделаны, на кону: '.moneys($_SESSION['stavka'] * 2).'<br /><br />';
-                echo '<b><a href="/games/21?act=game&amp;case=go&amp;rand='.$randgame.'">Вернитесь в игру</a></b><br /><br />';
+                echo 'Cтавки сделаны, на кону: '.moneys($_SESSION['stavka'] * 2).'<br><br>';
+                echo '<b><a href="/games/21?act=game&amp;case=go&amp;rand='.$randgame.'">Вернитесь в игру</a></b><br><br>';
             }
 
-            echo '<i class="fa fa-question-circle"></i> <a href="/games/21?act=rules">Правила игры</a><br />';
+            echo '<i class="fa fa-question-circle"></i> <a href="/games/21?act=rules">Правила игры</a><br>';
         break;
 
         ############################################################################################
@@ -77,7 +77,7 @@ if (is_user()) {
                 show_error('Вы не указали ставку, необходимо поставить от 1 до '.Setting::get('ochkostavka').'!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -120,15 +120,15 @@ if (is_user()) {
                     }
                 }
 
-                echo 'В наличии: '.moneys(App::user('money')).'<br />';
+                echo 'В наличии: '.moneys(App::user('money')).'<br>';
 
-                echo '<br /><b>Ваши карты:</b><br />';
+                echo '<br><b>Ваши карты:</b><br>';
 
                 foreach($_SESSION['cards'] as $value) {
-                    echo '<img src="/assets/img/cards/'.$value.'.gif" alt="" /> ';
+                    echo '<img src="/assets/img/cards/'.$value.'.gif" alt=""> ';
                 }
 
-                echo '<br />'.cards_points($_SESSION['uscore']).'<br /><br />';
+                echo '<br>'.cards_points($_SESSION['uscore']).'<br><br>';
 
                 if ($case == 'end') {
                     while ($_SESSION['bscore'] < 17) {
@@ -184,30 +184,30 @@ if (is_user()) {
                     if (empty($win)) {
                         DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$_SESSION['stavka'], App::getUsername()]);
                         save_money(60);
-                        echo '<b><span style="color:#ffa500">Ничья</span></b><br />';
-                        echo 'Ставка в размере '.moneys($_SESSION['stavka']).' возвращена вам на счет<br /><br />';
+                        echo '<b><span style="color:#ffa500">Ничья</span></b><br>';
+                        echo 'Ставка в размере '.moneys($_SESSION['stavka']).' возвращена вам на счет<br><br>';
                     } elseif ($win == 1) {
                         DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=? LIMIT 1;", [$_SESSION['stavka'] * 2, App::getUsername()]);
                         save_money(60);
 
-                        echo '<b><span style="color:#00cc00">Вы выиграли</span></b><br />';
-                        echo 'Ставка в размере '.moneys($_SESSION['stavka'] * 2).' отправлена вам на счет<br /><br />';
+                        echo '<b><span style="color:#00cc00">Вы выиграли</span></b><br>';
+                        echo 'Ставка в размере '.moneys($_SESSION['stavka'] * 2).' отправлена вам на счет<br><br>';
                     } else {
-                        echo '<b><span style="color:#ff0000">Вы проиграли</span></b><br />';
-                        echo 'Ставка в размере '.moneys($_SESSION['stavka'] * 2).' отправлена в банк<br /><br />';
+                        echo '<b><span style="color:#ff0000">Вы проиграли</span></b><br>';
+                        echo 'Ставка в размере '.moneys($_SESSION['stavka'] * 2).' отправлена в банк<br><br>';
                     }
 
                     if (empty($bust)) {
-                        echo '<b>Карты банкира:</b><br />';
+                        echo '<b>Карты банкира:</b><br>';
 
                         foreach($_SESSION['bankircards'] as $bvalue) {
-                            echo '<img src="/assets/img/cards/'.$bvalue.'.gif" alt="" /> ';
+                            echo '<img src="/assets/img/cards/'.$bvalue.'.gif" alt=""> ';
                         }
 
-                        echo '<br />'.cards_points($_SESSION['bscore']).'<br /><br />';
+                        echo '<br>'.cards_points($_SESSION['bscore']).'<br><br>';
                     }
 
-                    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/games/21?act=ini&amp;rand='.$randgame.'&amp;mn='.$_SESSION['stavka'].'">Повторить ставку</a><br />';
+                    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/games/21?act=ini&amp;rand='.$randgame.'&amp;mn='.$_SESSION['stavka'].'">Повторить ставку</a><br>';
 
                     unset($_SESSION['arrcard']);
                     unset($_SESSION['cards']);
@@ -216,44 +216,44 @@ if (is_user()) {
                     unset($_SESSION['uscore']);
                     unset($_SESSION['bscore']);
                 } else {
-                    echo 'На кону: '.moneys($_SESSION['stavka'] * 2).'<br /><br />';
+                    echo 'На кону: '.moneys($_SESSION['stavka'] * 2).'<br><br>';
                     echo '<b><a href="/games/21?act=game&amp;rand='.$randgame.'">Взять карту</a></b> или ';
-                    echo '<b><a href="/games/21?act=game&amp;case=end&amp;rand='.$randgame.'">Открыться</a></b><br /><br />';
+                    echo '<b><a href="/games/21?act=game&amp;case=end&amp;rand='.$randgame.'">Открыться</a></b><br><br>';
                 }
             } else {
                 show_error('Вы не установили размер ставки, необходимо сделать ставку!');
             }
 
             if (empty($_SESSION['stavka'])) {
-                echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">Новая ставка</a><br />';
+                echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">Новая ставка</a><br>';
             }
             break;
         // -------------------------- Правила игры -------------------------------------//
         case 'rules':
 
-            echo 'Для участия в игре сделайте ставку и нажмите <b>Играть</b><br />';
-            echo 'Ваша ставка будет получена Банкиром и он начнет сдавать Вам карты.<br />';
-            echo 'В игре участвуют двое - Вы и Банкир, на кону - двойная ставка (Ваша ставка и ставка Банкира). Взяв карты, Вы подсчитываете суммарное количество их очков.<br /><br />';
+            echo 'Для участия в игре сделайте ставку и нажмите <b>Играть</b><br>';
+            echo 'Ваша ставка будет получена Банкиром и он начнет сдавать Вам карты.<br>';
+            echo 'В игре участвуют двое - Вы и Банкир, на кону - двойная ставка (Ваша ставка и ставка Банкира). Взяв карты, Вы подсчитываете суммарное количество их очков.<br><br>';
 
-            echo '<b>Очки считаются следующим образом:</b><br />';
-            echo '<img src="/assets/img/cards/2.gif" alt="" /> шестерка - 6 очков<br />';
-            echo '<img src="/assets/img/cards/6.gif" alt="" /> семерка - 7 очков<br />';
-            echo '<img src="/assets/img/cards/10.gif" alt="" /> восьмерка - 8 очков<br />';
-            echo '<img src="/assets/img/cards/14.gif" alt="" /> девятка - 9 очков<br />';
-            echo '<img src="/assets/img/cards/18.gif" alt="" /> десятка - 10 очков<br />';
-            echo '<img src="/assets/img/cards/22.gif" alt="" /> валет - 2 очков<br />';
-            echo '<img src="/assets/img/cards/26.gif" alt="" /> дама - 3 очков<br />';
-            echo '<img src="/assets/img/cards/30.gif" alt="" /> король - 4 очков<br />';
-            echo '<img src="/assets/img/cards/34.gif" alt="" /> туз - 11 очков.<br /><br />';
+            echo '<b>Очки считаются следующим образом:</b><br>';
+            echo '<img src="/assets/img/cards/2.gif" alt=""> шестерка - 6 очков<br>';
+            echo '<img src="/assets/img/cards/6.gif" alt=""> семерка - 7 очков<br>';
+            echo '<img src="/assets/img/cards/10.gif" alt=""> восьмерка - 8 очков<br>';
+            echo '<img src="/assets/img/cards/14.gif" alt=""> девятка - 9 очков<br>';
+            echo '<img src="/assets/img/cards/18.gif" alt=""> десятка - 10 очков<br>';
+            echo '<img src="/assets/img/cards/22.gif" alt=""> валет - 2 очков<br>';
+            echo '<img src="/assets/img/cards/26.gif" alt=""> дама - 3 очков<br>';
+            echo '<img src="/assets/img/cards/30.gif" alt=""> король - 4 очков<br>';
+            echo '<img src="/assets/img/cards/34.gif" alt=""> туз - 11 очков.<br><br>';
 
-            echo 'Сумма очков не зависит от масти карт.<br />';
-            echo 'Для взятия очередной карты нужно нажать кнопку <b>Взять карту</b>.<br />';
-            echo 'Если сумма Ваших очков больше 21, то Вы проиграли - перебор, исключение - 2 туза(22 очка).<br />';
-            echo 'Очко(21) главнее чем 2 туза(22)!<br /><br />';
+            echo 'Сумма очков не зависит от масти карт.<br>';
+            echo 'Для взятия очередной карты нужно нажать кнопку <b>Взять карту</b>.<br>';
+            echo 'Если сумма Ваших очков больше 21, то Вы проиграли - перебор, исключение - 2 туза(22 очка).<br>';
+            echo 'Очко(21) главнее чем 2 туза(22)!<br><br>';
 
-            echo 'Взяв необходимое количество карт, Вы нажимаете кнопку <b>Открыться</b>, и Банкир открывает свои карты (если Вы набираете 20, 21 или 22 (2 туза) очка то Банкир открывается автоматически). Выигрывает тот, у кого больше очков. Победитель забирает кон размером в 2 ставки. При равном количестве очков выигрывает банкир!<br /><br />';
+            echo 'Взяв необходимое количество карт, Вы нажимаете кнопку <b>Открыться</b>, и Банкир открывает свои карты (если Вы набираете 20, 21 или 22 (2 туза) очка то Банкир открывается автоматически). Выигрывает тот, у кого больше очков. Победитель забирает кон размером в 2 ставки. При равном количестве очков выигрывает банкир!<br><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">В игру</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/21">В игру</a><br>';
         break;
 
     endswitch;
@@ -262,6 +262,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы начать игру, необходимо');
 }
 
-echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

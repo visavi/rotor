@@ -14,7 +14,7 @@ if (is_admin()) {
     ############################################################################################
     if ($act == 'index') {
         echo '<a href="/admin/minichat?rand=' . mt_rand(100, 990) . '">Обновить</a> / ';
-        echo '<a href="/chat?page=' . $page . '">Обзор</a><br /><hr />';
+        echo '<a href="/chat?page=' . $page . '">Обзор</a><br><hr>';
 
         if (! file_exists(STORAGE."/chat/chat.dat")){
             touch(STORAGE."/chat/chat.dat");
@@ -45,17 +45,17 @@ if (is_admin()) {
                 $anketa = profile($data[1]);
 
                 if ($data[1] == 'Вундер-киндер') {
-                    $useravatars = '<img src="/assets/img/chat/mag.gif" alt="image" /> ';
+                    $useravatars = '<img src="/assets/img/chat/mag.gif" alt="image"> ';
                     $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Вундер-киндер';
                 }
                 if ($data[1] == 'Настюха') {
-                    $useravatars = '<img src="/assets/img/chat/bot.gif" alt="image" /> ';
+                    $useravatars = '<img src="/assets/img/chat/bot.gif" alt="image"> ';
                     $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Настюха';
                 }
                 if ($data[1] == 'Весельчак') {
-                    $useravatars = '<img src="/assets/img/chat/shut.gif" alt="image" /> ';
+                    $useravatars = '<img src="/assets/img/chat/shut.gif" alt="image"> ';
                     $useronline = '<i class="fa fa-asterisk fa-spin text-success"></i>';
                     $anketa = 'Весельчак';
                 }
@@ -64,22 +64,22 @@ if (is_admin()) {
 
                 echo $useravatars;
 
-                echo '<b>' . $anketa . '</b> ' . user_title($data[1]) . ' ' . $useronline . ' <small> (' . date_fixed($data[3]) . ')</small><br />';
-                echo '<input type="checkbox" name="del[]" value="' . $num . '" /> ';
+                echo '<b>' . $anketa . '</b> ' . user_title($data[1]) . ' ' . $useronline . ' <small> (' . date_fixed($data[3]) . ')</small><br>';
+                echo '<input type="checkbox" name="del[]" value="' . $num . '"> ';
                 echo '<a href="/admin/minichat?act=edit&amp;id=' . $num . '&amp;page=' . $page['current'] . '">Редактировать</a>';
 
-                echo '</div><div>' . App::bbCode($data[0]) . '<br />';
+                echo '</div><div>' . App::bbCode($data[0]) . '<br>';
                 echo '<span style="color:#cc00cc"><small>(' . $data[4] . ', ' . $data[5] . ')</small></span></div>';
             }
 
-            echo '<br /><input type="submit" value="Удалить выбранное" /></form><br />';
+            echo '<br><input type="submit" value="Удалить выбранное"></form><br>';
 
             App::pagination($page);
 
             echo '<p>Всего сообщений: <b>' . (int)$total . '</b></p>';
 
             if (is_admin([101])) {
-                echo '<i class="fa fa-times"></i> <a href="/admin/minichat?act=prodel">Очистить</a><br />';
+                echo '<i class="fa fa-times"></i> <a href="/admin/minichat?act=prodel">Очистить</a><br>';
             }
         } else {
             show_error('Сообщений еще нет!');
@@ -89,11 +89,11 @@ if (is_admin()) {
     # #                                 Подтверждение очистки                                  ##
     # ###########################################################################################
     if ($act == "prodel") {
-        echo '<br />Вы уверены что хотите удалить все сообщения в мини-чате?<br />';
+        echo '<br>Вы уверены что хотите удалить все сообщения в мини-чате?<br>';
 
-        echo '<i class="fa fa-times"></i> <b><a href="/admin/minichat?act=alldel&amp;uid=' . $_SESSION['token'] . '">Да уверен!</a></b><br /><br />';
+        echo '<i class="fa fa-times"></i> <b><a href="/admin/minichat?act=alldel&amp;uid=' . $_SESSION['token'] . '">Да уверен!</a></b><br><br>';
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat">Вернуться</a><br>';
     }
     # ###########################################################################################
     # #                                   Очистка мини-чата                                    ##
@@ -115,7 +115,7 @@ if (is_admin()) {
             show_error('Ошибка! Очищать мини-чат могут только суперадмины!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat">Вернуться</a><br>';
     }
 
     ############################################################################################
@@ -139,7 +139,7 @@ if (is_admin()) {
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?page=' . $page . '">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?page=' . $page . '">Вернуться</a><br>';
     }
 
     ############################################################################################
@@ -157,10 +157,10 @@ if (is_admin()) {
 
                 echo '<div class="form"><form action="/admin/minichat?act=addedit&amp;id=' . $id . '&amp;page=' . $page . '&amp;uid=' . $_SESSION['token'] . '" method="post">';
 
-                echo '<i class="fa fa-pencil"></i> <b>' . $data[1] . '</b> <small>(' . date_fixed($data[3]) . ')</small><br />';
+                echo '<i class="fa fa-pencil"></i> <b>' . $data[1] . '</b> <small>(' . date_fixed($data[3]) . ')</small><br>';
 
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg">' . $data[0] . '</textarea><br/>';
-                echo '<input type="submit" value="Изменить" /></form></div><br />';
+                echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
                 show_error('Ошибка! Сообщения для редактирования не существует!');
             }
@@ -168,7 +168,7 @@ if (is_admin()) {
             show_error('Ошибка! Не выбрано сообщение для редактирования!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?page=' . $page . '">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?page=' . $page . '">Вернуться</a><br>';
     }
     # ###########################################################################################
     # #                                 Изменение сообщения                                    ##
@@ -206,10 +206,10 @@ if (is_admin()) {
             show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?act=edit&amp;id=' . $id . '&amp;page=' . $page . '">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/minichat?act=edit&amp;id=' . $id . '&amp;page=' . $page . '">Вернуться</a><br>';
     }
     // -------------------------------- КОНЦОВКА ----------------------------------//
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

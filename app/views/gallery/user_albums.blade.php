@@ -13,7 +13,7 @@
         @foreach ($photos as $data)
             <div class="b">
                 <i class="fa fa-picture-o"></i>
-                <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }})<br />
+                <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }})<br>
 
                 @if ($moder)
                     <a href="/gallery/{{ $data['id'] }}/edit?page={{ $page['current'] }}">Редактировать</a> /
@@ -21,24 +21,24 @@
                 @endif
             </div>
             <div>
-                <a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]) !!}</a><br />
+                <a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]) !!}</a><br>
 
                 @if ($data['text'])
-                   {{ App::bbCode($data['text']) }}<br />
+                   {{ App::bbCode($data['text']) }}<br>
                 @endif
 
-                Добавлено: {!! profile($data->user) !!} ({{ date_fixed($data['created_at']) }})<br />
+                Добавлено: {!! profile($data->user) !!} ({{ date_fixed($data['created_at']) }})<br>
                 <a href="/gallery/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
             </div>
         @endforeach
 
         {{ App::pagination($page) }}
 
-        Всего фотографий: <b>{{ $page['total'] }}</b><br /><br />
+        Всего фотографий: <b>{{ $page['total'] }}</b><br><br>
     @else
         {{ show_error('Фотографий в альбоме еще нет!') }}
     @endif
 
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/albums">Альбомы</a><br />
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/albums">Альбомы</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

@@ -17,7 +17,7 @@ if (is_admin([101])) {
         case 'index':
 
             if (file_exists(STORAGE."/temp/checker.dat")) {
-                echo 'Последнее сканирование: <b>'.date_fixed(filemtime(STORAGE."/temp/checker.dat")).'</b><br /><br />';
+                echo 'Последнее сканирование: <b>'.date_fixed(filemtime(STORAGE."/temp/checker.dat")).'</b><br><br>';
 
                 $arr = scan_check('../');
                 $arr['files'] = str_replace('..//', '', $arr['files']);
@@ -31,28 +31,28 @@ if (is_admin([101])) {
                 $count_arr2 = count($arr2);
 
                 if (($count_arr1 + $count_arr2) > 0) {
-                    echo '<b><span style="color:#ff0000">Новые файлы и новые параметры файлов:</span></b><br /><br />';
+                    echo '<b><span style="color:#ff0000">Новые файлы и новые параметры файлов:</span></b><br><br>';
                     if ($count_arr1 > 0) {
                         foreach($arr1 as $val) {
-                            echo '<i class="fa fa-plus-circle text-success"></i> '.check($val).'<br />';
+                            echo '<i class="fa fa-plus-circle text-success"></i> '.check($val).'<br>';
                         }
-                        echo '<br />';
+                        echo '<br>';
                     } else {
                         show_error('Нет новых изменений!');
                     }
 
-                    echo '<b><span style="color:#ff0000">Удаленные файлы и старые параметры файлов:</span></b><br /><br />';
+                    echo '<b><span style="color:#ff0000">Удаленные файлы и старые параметры файлов:</span></b><br><br>';
                     if ($count_arr2 > 0) {
                         foreach($arr2 as $val) {
-                            echo '<i class="fa fa-minus-circle text-danger"></i> '.check($val).'<br />';
+                            echo '<i class="fa fa-minus-circle text-danger"></i> '.check($val).'<br>';
                         }
-                        echo '<br />';
+                        echo '<br>';
                     } else {
                         show_error('Нет старых изменений!');
                     }
 
-                    echo 'Всего папок: <b>'.$arr['totaldirs'].'</b><br />';
-                    echo 'Всего файлов: <b>'.$arr['totalfiles'].'</b><br /><br />';
+                    echo 'Всего папок: <b>'.$arr['totaldirs'].'</b><br>';
+                    echo 'Всего файлов: <b>'.$arr['totalfiles'].'</b><br><br>';
                 } else {
                     show_error('Изменений файлов со времени последнего сканирования не обнаружено!');
                 }
@@ -60,10 +60,10 @@ if (is_admin([101])) {
                 show_error('Необходимо провести начальное сканирование!');
             }
 
-            echo 'Сканирование системы позволяет узнать какие файлы или папки менялись в течение определенного времени<br />';
-            echo 'Внимание сервис не учитывает некоторые расширения файлов: '.Setting::get('nocheck').'<br /><br />';
+            echo 'Сканирование системы позволяет узнать какие файлы или папки менялись в течение определенного времени<br>';
+            echo 'Внимание сервис не учитывает некоторые расширения файлов: '.Setting::get('nocheck').'<br><br>';
 
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/checker?act=skan&amp;uid='.$_SESSION['token'].'">Сканировать</a><br />';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/checker?act=skan&amp;uid='.$_SESSION['token'].'">Сканировать</a><br>';
         break;
 
         ############################################################################################
@@ -89,12 +89,12 @@ if (is_admin([101])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/checker">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/checker">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

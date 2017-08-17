@@ -120,8 +120,8 @@ class NewsController extends BaseController
             show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
         }
 
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/' . $id . '/comments?page=' . $page . '">Вернуться</a><br />';
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/' . $id . '/comments?page=' . $page . '">Вернуться</a><br>';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br>';
     }
 
     /**

@@ -31,19 +31,19 @@ switch ($action):
                     echo '<b>'.profile($data['user']).'</b> ('.moneys($data['sum']).')</div>';
                 }
 
-                echo '<div>Начислений: '.$data['oper'].'<br />';
+                echo '<div>Начислений: '.$data['oper'].'<br>';
                 echo 'Посл. операция: '.date_fixed($data['time']).'</div>';
             }
 
             App::pagination($page);
 
             echo '<div class="form">';
-            echo '<b>Поиск пользователя:</b><br />';
+            echo '<b>Поиск пользователя:</b><br>';
             echo '<form action="/games/livebank?act=search&amp;page='.$page['current'].'" method="post">';
-            echo '<input type="text" name="uz" value="'.App::getUsername().'" />';
-            echo '<input type="submit" value="Искать" /></form></div><br />';
+            echo '<input type="text" name="uz" value="'.App::getUsername().'">';
+            echo '<input type="submit" value="Искать"></form></div><br>';
 
-            echo 'Всего вкладчиков: <b>'.$total.'</b><br /><br />';
+            echo 'Всего вкладчиков: <b>'.$total.'</b><br><br>';
         } else {
             show_error('Вкладов еще нет!');
         }
@@ -82,12 +82,12 @@ switch ($action):
             show_error('Ошибка! Вы не ввели логин пользователя');
         }
 
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/livebank?page='.$page.'">Вернуться</a><br />';
+        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/livebank?page='.$page.'">Вернуться</a><br>';
     break;
 
 endswitch;
 
-echo '<i class="fa fa-money"></i> <a href="/games/bank">В банк</a><br />';
-echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-money"></i> <a href="/games/bank">В банк</a><br>';
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

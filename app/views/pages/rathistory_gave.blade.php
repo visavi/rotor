@@ -8,7 +8,7 @@
 
     <h1>Отданные голоса {{ $user->login }}</h1>
 
-    <i class="fa fa-thumbs-up"></i> <a href="/rating/{{ $user->login }}/received">Полученные</a> / <b>Отданные</b><hr />
+    <i class="fa fa-thumbs-up"></i> <a href="/rating/{{ $user->login }}/received">Полученные</a> / <b>Отданные</b><hr>
 
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
@@ -35,6 +35,6 @@
         {{  show_error('В истории еще ничего нет!') }}
     @endif
 
-    <br />
-    <i class="fa fa-arrow-circle-up"></i> <a href="/user/{{  $user->login }}">В анкету</a><br />
+    <br>
+    <i class="fa fa-arrow-circle-up"></i> <a href="/user/{{  $user->login }}">В анкету</a><br>
 @stop

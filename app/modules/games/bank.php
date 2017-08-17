@@ -14,64 +14,64 @@ if (is_user()) {
 
             $databank = DB::run() -> queryFetch("SELECT * FROM `bank` WHERE `user`=? LIMIT 1;", [App::getUsername()]);
             if (!empty($databank)) {
-                echo '<b>Выписка по счету</b><br />';
-                echo 'На руках: '.moneys(App::user('money')).'<br />';
-                echo 'В банке: '.moneys($databank['sum']).'<br /><br />';
+                echo '<b>Выписка по счету</b><br>';
+                echo 'На руках: '.moneys(App::user('money')).'<br>';
+                echo 'В банке: '.moneys($databank['sum']).'<br><br>';
 
                 if ($databank['sum'] > 0) {
                     if ($databank['sum'] <= Setting::get('maxsumbank')) {
                         if ($databank['time'] >= SITETIME) {
-                            echo '<b>До получения процентов осталось '.formattime($databank['time'] - SITETIME).'</b><br />';
-                            echo 'Будет получено с процентов: '.moneys(percent_bank($databank['sum'])).'<br /><br />';
+                            echo '<b>До получения процентов осталось '.formattime($databank['time'] - SITETIME).'</b><br>';
+                            echo 'Будет получено с процентов: '.moneys(percent_bank($databank['sum'])).'<br><br>';
                         } else {
-                            echo '<b>Получение процентов</b> ('.moneys(percent_bank($databank['sum'])).')<br />';
+                            echo '<b>Получение процентов</b> ('.moneys(percent_bank($databank['sum'])).')<br>';
                             echo '<div class="form">';
                             echo '<form action="/games/bank?act=prolong&amp;uid='.$_SESSION['token'].'" method="post">';
 
                             echo '<select name="oper">';
                             echo '<option value="0">Получить на руки</option><option value="1">Положить в банк</option>';
-                            echo '</select><br />';
+                            echo '</select><br>';
 
-                            echo 'Проверочный код:<br /> ';
-                            echo '<img src="/captcha" alt="" /><br />';
-                            echo '<input name="provkod" size="6" maxlength="6" /><br />';
+                            echo 'Проверочный код:<br> ';
+                            echo '<img src="/captcha" alt=""><br>';
+                            echo '<input name="provkod" size="6" maxlength="6"><br>';
 
-                            echo '<input value="Получить" type="submit" /></form></div><br />';
+                            echo '<input value="Получить" type="submit"></form></div><br>';
                         }
                     } else {
-                        echo '<b><span style="color:#ff0000">Внимание у вас слишком большой вклад</span></b><br />';
-                        echo 'Превышена максимальная сумма вклада для получения процентов на '.moneys($databank['sum'] - Setting::get('maxsumbank')).'<br /><br />';
+                        echo '<b><span style="color:#ff0000">Внимание у вас слишком большой вклад</span></b><br>';
+                        echo 'Превышена максимальная сумма вклада для получения процентов на '.moneys($databank['sum'] - Setting::get('maxsumbank')).'<br><br>';
                     }
                 } else {
-                    echo 'Для получения процентов на счете должны быть средства, но не более '.moneys(Setting::get('maxsumbank')).'<br /><br />';
+                    echo 'Для получения процентов на счете должны быть средства, но не более '.moneys(Setting::get('maxsumbank')).'<br><br>';
                 }
             } else {
-                echo 'Вы новый клиент нашего банка. Мы рады, что вы доверяеете нам свои деньги<br />';
-                echo 'Сейчас ваш счет не открыт, вложите свои средства, чтобы получать проценты с вклада<br /><br />';
+                echo 'Вы новый клиент нашего банка. Мы рады, что вы доверяеете нам свои деньги<br>';
+                echo 'Сейчас ваш счет не открыт, вложите свои средства, чтобы получать проценты с вклада<br><br>';
             }
 
-            echo '<b>Операция</b><br />';
+            echo '<b>Операция</b><br>';
 
             echo '<div class="form">';
             echo '<form action="/games/bank?act=operacia" method="post">';
-            echo '<input type="text" name="gold" /><br />';
+            echo '<input type="text" name="gold"><br>';
             echo '<select name="oper">';
             echo '<option value="2">Положить деньги</option><option value="1">Снять деньги</option>';
-            echo '</select><br />';
-            echo '<input type="submit" value="Выполнить" /></form></div><br />';
+            echo '</select><br>';
+            echo '<input type="submit" value="Выполнить"></form></div><br>';
 
-            echo 'Максимальная сумма вклада: '.moneys(Setting::get('maxsumbank')).'<br /><br />';
-            echo 'Процентная ставка зависит от суммы вклада<br />';
-            echo 'Вклад до 100 тыс. - ставка 10%<br />';
-            echo 'Вклад более 100 тыс. - ставка 6%<br />';
-            echo 'Вклад более 250 тыс. - ставка 3%<br />';
-            echo 'Вклад более 500 тыс. - ставка 2%<br />';
-            echo 'Вклад более 1 млн. - ставка 1%<br />';
-            echo 'Вклад более 5 млн. - ставка 0.5%<br /><br />';
+            echo 'Максимальная сумма вклада: '.moneys(Setting::get('maxsumbank')).'<br><br>';
+            echo 'Процентная ставка зависит от суммы вклада<br>';
+            echo 'Вклад до 100 тыс. - ставка 10%<br>';
+            echo 'Вклад более 100 тыс. - ставка 6%<br>';
+            echo 'Вклад более 250 тыс. - ставка 3%<br>';
+            echo 'Вклад более 500 тыс. - ставка 2%<br>';
+            echo 'Вклад более 1 млн. - ставка 1%<br>';
+            echo 'Вклад более 5 млн. - ставка 0.5%<br><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `bank`;");
 
-            echo 'Всего вкладчиков: <b>'.$total.'</b><br /><br />';
+            echo 'Всего вкладчиков: <b>'.$total.'</b><br><br>';
         break;
 
         ############################################################################################
@@ -97,7 +97,7 @@ if (is_user()) {
                                 } else {
                                     DB::run() -> query("UPDATE `bank` SET `sum`=`sum`+?, `oper`=`oper`+1, `time`=? WHERE `user`=?", [$percent, SITETIME + 43200, App::getUsername()]);
                                 }
-                                echo '<b>Продление счета успешно завершено, получено c процентов: '.moneys($percent).'</b><br /><br />';
+                                echo '<b>Продление счета успешно завершено, получено c процентов: '.moneys($percent).'</b><br><br>';
                             } else {
                                 show_error('Ошибка! Время получения процентов еще не наступило!');
                             }
@@ -114,7 +114,7 @@ if (is_user()) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/bank">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/bank">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -135,7 +135,7 @@ if (is_user()) {
                             DB::run() -> query("UPDATE `users` SET `money`=`money`+? WHERE `login`=?", [$gold, App::getUsername()]);
                             DB::run() -> query("UPDATE `bank` SET `sum`=`sum`-?, `time`=? WHERE `user`=?", [$gold, SITETIME + 43200, App::getUsername()]);
 
-                            echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно списана с вашего счета<br /><br />';
+                            echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно списана с вашего счета<br><br>';
                         } else {
                             show_error('Ошибка! Вы не можете снять денег больше чем у вас на счете!');
                         }
@@ -161,8 +161,8 @@ if (is_user()) {
                             DB::run() -> query("INSERT INTO `bank` (`user`, `sum`, `time`) VALUES (?, ?, ?);", [App::getUsername(), $gold, SITETIME + 43200]);
                         }
 
-                        echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно зачислена на ваш счет<br />';
-                        echo 'Получить проценты с вклада вы сможете не ранее чем через 12 часов<br /><br />';
+                        echo 'Сумма в размере <b>'.moneys($gold).'</b> успешно зачислена на ваш счет<br>';
+                        echo 'Получить проценты с вклада вы сможете не ранее чем через 12 часов<br><br>';
                     } else {
                         show_error('Недостаточное количество денег, у вас нет данной суммы на руках');
                     }
@@ -171,7 +171,7 @@ if (is_user()) {
                 }
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/bank">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/bank">Вернуться</a><br>';
         break;
 
     endswitch;
@@ -180,8 +180,8 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы совершать операции, необходимо');
 }
 
-echo '<i class="fa fa-bar-chart"></i> <a href="/games/livebank">Статистика вкладов</a><br />';
-echo '<i class="fa fa-money"></i> <a href="/games/credit">Выдача кредитов</a><br />';
-echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br />';
+echo '<i class="fa fa-bar-chart"></i> <a href="/games/livebank">Статистика вкладов</a><br>';
+echo '<i class="fa fa-money"></i> <a href="/games/credit">Выдача кредитов</a><br>';
+echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';
 
 App::view(Setting::get('themes').'/foot');

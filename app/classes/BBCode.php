@@ -269,7 +269,7 @@ class BBCode
 
                 $smilesName = array_map(
                     function($smile) {
-                        return str_replace($smile, '<img src="/uploads/smiles/'.$smile.'" alt="'.$smile.'" />', $smile);
+                        return str_replace($smile, '<img src="/uploads/smiles/'.$smile.'" alt="'.$smile.'">', $smile);
                     }, $smilesName);
 
                 file_put_contents(STORAGE.'/temp/smiles.dat', serialize(['codes' => $smilesCode, 'names' => $smilesName]));

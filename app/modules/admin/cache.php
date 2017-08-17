@@ -10,7 +10,7 @@ switch ($action):
 ############################################################################################
 case 'index':
 
-    echo '<i class="fa fa-eraser fa-2x"></i> <b>Файлы</b> / <a href="/admin/cache/image">Изображения</a><br /><br />';
+    echo '<i class="fa fa-eraser fa-2x"></i> <b>Файлы</b> / <a href="/admin/cache/image">Изображения</a><br><br>';
 
     $cachefiles = glob(STORAGE.'/temp/*.dat');
     $total = count($cachefiles);
@@ -18,12 +18,12 @@ case 'index':
     if (is_array($cachefiles) && $total>0){
         foreach ($cachefiles as $file) {
 
-        echo '<i class="fa fa-file-text-o"></i> <b>'.basename($file).'</b>  ('.read_file($file).' / '.date_fixed(filemtime($file)).')<br />';
+        echo '<i class="fa fa-file-text-o"></i> <b>'.basename($file).'</b>  ('.read_file($file).' / '.date_fixed(filemtime($file)).')<br>';
         }
 
-        echo '<br />Всего файлов: '. $total .'<br /><br />';
+        echo '<br>Всего файлов: '. $total .'<br><br>';
 
-        echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clear?token='.$_SESSION['token'].'">Очистить кэш</a><br />';
+        echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clear?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
     } else {
         show_error('Файлов еще нет!');
     }
@@ -35,7 +35,7 @@ break;
 case 'image':
     $view = (isset($_GET['view'])) ? 1 : 0;
 
-    echo '<i class="fa fa-eraser fa-2x"></i> <a href="/admin/cache">Файлы</a> / <b>Изображения</b><br /><br />';
+    echo '<i class="fa fa-eraser fa-2x"></i> <a href="/admin/cache">Файлы</a> / <b>Изображения</b><br><br>';
 
     $cachefiles = glob(HOME.'/uploads/thumbnail/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
     $total = count($cachefiles);
@@ -45,16 +45,16 @@ case 'image':
     if (is_array($cachefiles) && $totals>0){
         for ($i=0; $i<$totals; $i++) {
 
-        echo '<i class="fa fa-picture-o"></i> <b>'.basename($cachefiles[$i]).'</b>  ('.read_file($cachefiles[$i]).' / '.date_fixed(filemtime($cachefiles[$i])).')<br />';
+        echo '<i class="fa fa-picture-o"></i> <b>'.basename($cachefiles[$i]).'</b>  ('.read_file($cachefiles[$i]).' / '.date_fixed(filemtime($cachefiles[$i])).')<br>';
         }
 
         if ($total>$totals){
-            echo '<br /><b><a href="/admin/cache/image?view=1">Показать все</a></b>';
+            echo '<br><b><a href="/admin/cache/image?view=1">Показать все</a></b>';
         }
 
-        echo '<br />Всего изображений: '. $total .'<br /><br />';
+        echo '<br>Всего изображений: '. $total .'<br><br>';
 
-        echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clearimage?token='.$_SESSION['token'].'">Очистить кэш</a><br />';
+        echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clearimage?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
     } else {
         show_error('Изображений еще нет!');
     }
@@ -113,7 +113,7 @@ break;
 
 endswitch;
 
-echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

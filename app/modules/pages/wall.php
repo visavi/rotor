@@ -16,7 +16,7 @@ if (!empty($queryuser)) {
         case 'index':
 
             //Setting::get('newtitle') = 'Стена пользователя '.$uz;
-            echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.$uz.'</b><br /><br />';
+            echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.$uz.'</b><br><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
             $page = App::paginate(Setting::get('wallpost'), $total);
@@ -43,10 +43,10 @@ if (!empty($queryuser)) {
                     echo '<div class="img">'.user_avatars($data['login']).'</div>';
 
                     if ($is_admin || $uz == App::getUsername()) {
-                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'" /></span>';
+                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
                     }
 
-                    echo '<b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time']).')</small><br />';
+                    echo '<b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
                     echo user_title($data['login']).' '.user_online($data['login']).'</div>';
 
                     if ($uz == App::getUsername() && App::getUsername() != $data['login']) {
@@ -60,7 +60,7 @@ if (!empty($queryuser)) {
                 }
 
                 if ($is_admin || $uz == App::getUsername()) {
-                    echo '<span class="imgright"><input type="submit" value="Удалить выбранное" /></span></form>';
+                    echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
                 }
 
                 App::pagination($page);
@@ -72,15 +72,15 @@ if (!empty($queryuser)) {
 
                 echo '<div class="form">';
                 echo '<form action="/wall?act=add&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo 'Сообщение:<br />';
-                echo '<textarea cols="25" rows="5" name="msg"></textarea><br />';
-                echo '<input type="submit" value="Написать" /></form></div><br />';
+                echo 'Сообщение:<br>';
+                echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
+                echo '<input type="submit" value="Написать"></form></div><br>';
 
             } else {
                 show_login('Вы не авторизованы, чтобы написать на стене, необходимо');
             }
 
-            echo 'Всего записей: <b>'.$total.'</b><br /><br />';
+            echo 'Всего записей: <b>'.$total.'</b><br><br>';
         break;
 
         ############################################################################################
@@ -130,7 +130,7 @@ if (!empty($queryuser)) {
                 show_login('Вы не авторизованы, чтобы написать на стене, необходимо');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -170,7 +170,7 @@ if (!empty($queryuser)) {
                 show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -204,7 +204,7 @@ if (!empty($queryuser)) {
                 show_error('Ошибка! Нельзя удалять записи на чужой стене!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -238,7 +238,7 @@ if (!empty($queryuser)) {
                 show_error('Ошибка! Удалять записи могут только модераторы!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';
         break;
 
     endswitch;

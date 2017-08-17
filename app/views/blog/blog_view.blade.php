@@ -22,24 +22,24 @@
          / <a href="/blog/blog?act=editblog&amp;id=<?=$blog['id']?>">Изменить</a>
     <?php endif; ?>
 
-    <br /><br />
+    <br><br>
 
     <?php if (is_admin()): ?>
-        <br /> <a href="/admin/blog?act=editblog&amp;cid=<?=$blog['category_id']?>&amp;id=<?=$blog['id']?>">Редактировать</a> /
+        <br> <a href="/admin/blog?act=editblog&amp;cid=<?=$blog['category_id']?>&amp;id=<?=$blog['id']?>">Редактировать</a> /
         <a href="/admin/blog?act=moveblog&amp;cid=<?=$blog['category_id']?>&amp;id=<?=$blog['id']?>">Переместить</a> /
         <a href="/admin/blog?act=delblog&amp;cid=<?=$blog['category_id']?>&amp;del=<?=$blog['id']?>&amp;uid=<?=$_SESSION['token']?>" onclick="return confirm('Вы действительно хотите удалить данную статью?')">Удалить</a>
     <?php endif; ?>
-    <hr />
+    <hr>
 
     <?=$blog['text']?>
 
     <?php App::pagination($page); ?>
 
-    Автор статьи: <?=profile($blog['user'])?> (<?=date_fixed($blog['created_at'])?>)<br />
+    Автор статьи: <?=profile($blog['user'])?> (<?=date_fixed($blog['created_at'])?>)<br>
 
     <i class="fa fa-tag"></i> <?=$tags?>
 
-    <hr />
+    <hr>
 
     <div class="js-rating">Рейтинг:
         @unless (App::getUserId() == $blog['user_id'])
@@ -51,7 +51,7 @@
         @endunless
     </div>
 
-    <i class="fa fa-eye"></i> Просмотров: <?=$blog['visits']?><br />
+    <i class="fa fa-eye"></i> Просмотров: <?=$blog['visits']?><br>
     <i class="fa fa-comment"></i> <a href="/article/<?=$blog['id']?>/comments">Комментарии</a> (<?=$blog['comments']?>)
-    <a href="/article/<?=$blog['id']?>/end">&raquo;</a><br /><br />
+    <a href="/article/<?=$blog['id']?>/end">&raquo;</a><br><br>
 @stop

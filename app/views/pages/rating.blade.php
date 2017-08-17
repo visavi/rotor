@@ -12,7 +12,7 @@
 
     <div class="form">
         <form method="post">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}" />
+            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             <label for="inputRating">Рейтинг</label>
             <select class="form-control" id="inputRating" name="vote">
                 <?php $selected = ($vote == 1) ? ' selected="selected"' : ''; ?>
@@ -29,8 +29,8 @@
 
             <button class="btn btn-primary">Продолжить</button>
         </form>
-    </div><br />
+    </div><br>
 
-    <i class="fa fa-briefcase"></i> <a href="/rating/{{ $user->login }}/received">История</a><br />
-    <i class="fa fa-arrow-circle-left"></i> <a href="/user/{{ $user->login }}">Вернуться</a><br />
+    <i class="fa fa-briefcase"></i> <a href="/rating/{{ $user->login }}/received">История</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/user/{{ $user->login }}">Вернуться</a><br>
 @stop

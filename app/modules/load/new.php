@@ -28,8 +28,8 @@ case 'files':
             echo '<div class="b"><i class="fa fa-file-o"></i> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-            echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br />';
-            echo 'Скачиваний: '.$data['loads'].'<br />';
+            echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br>';
+            echo 'Скачиваний: '.$data['loads'].'<br>';
             echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
         }
 
@@ -61,9 +61,9 @@ case 'comments':
 
             echo '<i class="fa fa-comment"></i> <b><a href="/load/new?act=viewcomm&amp;id='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')</div>';
 
-            echo '<div>'.App::bbCode($data['text']).'<br />';
+            echo '<div>'.App::bbCode($data['text']).'<br>';
 
-            echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['time']).')</small><br />';
+            echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['time']).')</small><br>';
 
             if (is_admin()) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -107,6 +107,6 @@ break;
 
 endswitch;
 
-echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
 App::view(Setting::get('themes').'/foot');

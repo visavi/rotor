@@ -35,7 +35,7 @@ if ($order == 'comments') {
     echo '<a href="/load/top?sort=comm">Комментарии</a>';
 }
 
-echo '<hr />';
+echo '<hr>';
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [1]);
 $page = App::paginate(Setting::get('downlist'), $total);
@@ -52,11 +52,11 @@ if ($total > 0) {
         echo '<div class="b"><i class="fa fa-file-o"></i> ';
         echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-        echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br />';
-        echo 'Скачиваний: '.$data['loads'].'<br />';
+        echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br>';
+        echo 'Скачиваний: '.$data['loads'].'<br>';
         $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
-        echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br />';
+        echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br>';
         echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
         echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
     }
@@ -66,6 +66,6 @@ if ($total > 0) {
     show_error('Опубликованных файлов еще нет!');
 }
 
-echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
 App::view(Setting::get('themes').'/foot');

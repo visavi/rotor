@@ -21,14 +21,14 @@ if (is_admin([101, 102])) {
             if (!empty($rules)) {
                 $rules['text'] = str_replace(['%SITENAME%', '%MAXBAN%'], [Setting::get('title'), round(Setting::get('maxbantime') / 1440)], $rules['text']);
 
-                echo App::bbCode($rules['text']).'<hr />';
+                echo App::bbCode($rules['text']).'<hr>';
 
-                echo 'Последнее изменение: '.date_fixed($rules['time']).'<br /><br />';
+                echo 'Последнее изменение: '.date_fixed($rules['time']).'<br><br>';
             } else {
                 show_error('Правила сайта еще не установлены!');
             }
 
-            echo '<i class="fa fa-pencil"></i> <a href="/admin/rules?act=edit">Редактировать</a><br />';
+            echo '<i class="fa fa-pencil"></i> <a href="/admin/rules?act=edit">Редактировать</a><br>';
         break;
 
         ############################################################################################
@@ -41,14 +41,14 @@ if (is_admin([101, 102])) {
             echo '<div class="form">';
             echo '<form action="/admin/rules?act=change&amp;uid='.$_SESSION['token'].'" method="post">';
 
-            echo '<textarea id="markItUp" cols="35" rows="20" name="msg">'.$rules['text'].'</textarea><br />';
-            echo '<input type="submit" value="Изменить" /></form></div><br />';
+            echo '<textarea id="markItUp" cols="35" rows="20" name="msg">'.$rules['text'].'</textarea><br>';
+            echo '<input type="submit" value="Изменить"></form></div><br>';
 
-            echo '<b>Внутренние переменные:</b><br />';
-            echo '%SITENAME% - Название сайта<br />';
-            echo '%MAXBAN% - Максимальное время бана<br /><br />';
+            echo '<b>Внутренние переменные:</b><br>';
+            echo '%SITENAME% - Название сайта<br>';
+            echo '%MAXBAN% - Максимальное время бана<br><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/rules">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/rules">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -74,13 +74,13 @@ if (is_admin([101, 102])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/rules?act=edit">Вернуться</a><br />';
-            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/rules">К правилам</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/rules?act=edit">Вернуться</a><br>';
+            echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/rules">К правилам</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

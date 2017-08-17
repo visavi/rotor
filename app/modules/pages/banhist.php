@@ -24,8 +24,8 @@ if (is_user()) {
 
             echo '<div>';
             if (!empty($data['type'])) {
-                echo 'Причина: '.App::bbCode($data['reason']).'<br />';
-                echo 'Срок: '.formattime($data['term']).'<br />';
+                echo 'Причина: '.App::bbCode($data['reason']).'<br>';
+                echo 'Срок: '.formattime($data['term']).'<br>';
             }
 
             switch ($data['type']) {
@@ -36,14 +36,14 @@ if (is_user()) {
                 default: $stat = '<span style="color:#00cc00">Разбанил</span>:';
             }
 
-            echo $stat.' '.profile($data['send']).'<br />';
+            echo $stat.' '.profile($data['send']).'<br>';
 
             echo '</div>';
         }
 
         App::pagination($page);
 
-        echo 'Всего действий: <b>'.$total.'</b><br /><br />';
+        echo 'Всего действий: <b>'.$total.'</b><br><br>';
     } else {
         show_error('В истории еще ничего нет!');
     }
@@ -51,6 +51,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, чтобы просматривать историю, необходимо');
 }
 
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/user/'.$uz.'">В анкету</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/user/'.$uz.'">В анкету</a><br>';
 
 App::view(Setting::get('themes').'/foot');

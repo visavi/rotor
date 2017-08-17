@@ -11,10 +11,10 @@
                     &copy; Copyright 2005-<?=date('Y')?> {{ Setting::get('title') }}
                 </div>
                 <div id="image">
-                    <a href="/"><img src="/themes/motor/img/smalllogo2.gif" alt="smalllogo" /></a>
+                    <a href="/"><img src="/themes/motor/img/smalllogo2.gif" alt="smalllogo"></a>
                 </div>
             </div>
-            <img src="/themes/motor/img/panel_bot.gif" alt="" />
+            <img src="/themes/motor/img/panel_bot.gif" alt="">
         </div>
     </div>
 </div>

@@ -12,16 +12,16 @@
         @foreach($albums as $data)
 
             <i class="fa fa-picture-o"></i>
-            <b><a href="/gallery/album/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data['cnt'] }} фото / {{ $data['comments'] }} комм.)<br />
+            <b><a href="/gallery/album/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data['cnt'] }} фото / {{ $data['comments'] }} комм.)<br>
 
         @endforeach
 
         {{ App::pagination($page) }}
 
-        Всего альбомов: <b>{{ $page['total'] }}</b><br /><br />
+        Всего альбомов: <b>{{ $page['total'] }}</b><br><br>
     @else
         {{ show_error('Альбомов еще нет!') }}
     @endif
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

@@ -443,7 +443,7 @@ function user_avatars($user) {
     static $avatars;
 
     if (! $user) {
-        return '<img src="/assets/img/images/avatar_guest.png" alt="" /> ';
+        return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
     }
 
     if (is_null($avatars)) {
@@ -452,10 +452,10 @@ function user_avatars($user) {
     }
 
     if (isset($avatars[$user->id]) && file_exists(HOME.'/uploads/avatars/'.$avatars[$user->id])) {
-        return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$avatars[$user->id].'" alt="" /></a> ';
+        return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$avatars[$user->id].'" alt=""></a> ';
     }
 
-    return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt="" /></a> ';
+    return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
 }
 
 
@@ -463,14 +463,14 @@ function user_avatars($user) {
 function userAvatar($user)
 {
     if (! $user) {
-        return '<img src="/assets/img/images/avatar_guest.png" alt="" /> ';
+        return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
     }
 
     if ($user->avatar && file_exists(HOME.'/uploads/avatars/'.$user->avatar)) {
-        return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$user->avatar.'" alt="" /></a> ';
+        return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$user->avatar.'" alt=""></a> ';
     }
 
-    return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt="" /></a> ';
+    return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
 }
 
 
@@ -967,9 +967,9 @@ function last_news()
         if ($total > 0) {
             foreach ($news as $data) {
                 $data['text'] = str_replace('[cut]', '', $data['text']);
-                echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].') <i class="fa fa-caret-down news-title"></i><br />';
+                echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].') <i class="fa fa-caret-down news-title"></i><br>';
 
-                echo '<div class="news-text" style="display: none;">'.App::bbCode($data['text']).'<br />';
+                echo '<div class="news-text" style="display: none;">'.App::bbCode($data['text']).'<br>';
                 echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ';
                 echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
             }
@@ -1151,7 +1151,7 @@ function show_advertuser()
                 for($i = 0; $i < $rekusershow; $i++) {
                     $result[] = $datafile[$quot_rand[$i]];
                 }
-                $result = implode('<br />', $result);
+                $result = implode('<br>', $result);
             } else {
                 $result = $datafile[$quot_rand];
             }
@@ -1218,7 +1218,7 @@ function recentevents($show = 5) {
     if (is_array($events) && count($events) > 0) {
         foreach ($events as $data) {
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i> ';
-            echo '<a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].')<br />';
+            echo '<a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].')<br>';
         }
     }
 }
@@ -1240,7 +1240,7 @@ function recentphotos($show = 5)
             echo '<a href="/gallery/'.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
-        echo '<br />';
+        echo '<br>';
     }
 }
 
@@ -1256,7 +1256,7 @@ function recenttopics($show = 5) {
     if ($topics->isNotEmpty()) {
         foreach ($topics as $topic) {
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic->posts.')';
-            echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br />';
+            echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br>';
         }
     }
 }
@@ -1276,7 +1276,7 @@ function recentfiles($show = 5) {
         foreach ($files as $file){
 
             $filesize = (!empty($file['link'])) ? read_file(HOME.'/uploads/files/'.$file['link']) : 0;
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['id'].'">'.$file['title'].'</a> ('.$filesize.')<br />';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['id'].'">'.$file['title'].'</a> ('.$filesize.')<br>';
         }
     }
 }
@@ -1294,7 +1294,7 @@ function recentblogs() {
 
     if (is_array($blogs) && count($blogs) > 0) {
         foreach ($blogs as $blog) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/article/'.$blog['id'].'">'.$blog['title'].'</a> ('.$blog['comments'].')<br />';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/article/'.$blog['id'].'">'.$blog['title'].'</a> ('.$blog['comments'].')<br>';
         }
     }
 }
@@ -1457,7 +1457,7 @@ function resize_image($dir, $name, $size, $params = []) {
         $strParams = implode(' ', $strParams);
 
         if ($imgsize[0] <= $size && $imgsize[1] <= $size) {
-            return '<img src="/'.$dir.$name.'"'.$strParams.' />';
+            return '<img src="/'.$dir.$name.'"'.$strParams.'>';
         }
 
         if (!file_exists(HOME.'/uploads/thumbnail/'.$prename) || filesize(HOME.'/uploads/thumbnail/'.$prename) < 18) {
@@ -1474,10 +1474,10 @@ function resize_image($dir, $name, $size, $params = []) {
                 $handle -> process(HOME.'/uploads/thumbnail/');
             }
         }
-        return '<img src="/uploads/thumbnail/'.$prename.'"'.$strParams.' />';
+        return '<img src="/uploads/thumbnail/'.$prename.'"'.$strParams.'>';
     }
 
-    return '<img src="/assets/img/images/photo.jpg" alt="nophoto" />';
+    return '<img src="/assets/img/images/photo.jpg" alt="nophoto">';
 }
 
 // ------------- Функция вывода ссылки на анкету -------------//
@@ -1512,29 +1512,29 @@ function format_num($num)
 
 // ------------- Подключение стилей -------------//
 function include_style(){
-    echo '<link rel="stylesheet" href="/assets/css/bootstrap.min.css" type="text/css" />'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css" type="text/css" />'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/css/prettify.css" type="text/css" />'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/js/markitup/style.css" type="text/css" />'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/css/toastr.min.css" type="text/css" />'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/js/mediaelement/mediaelementplayer.min.css" />'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/js/mediaelement/mejs-skins.css" />'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/js/colorbox/colorbox.css" />'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/css/app.css" type="text/css" />'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/css/bootstrap.min.css">'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css">'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/css/prettify.css">'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/js/markitup/style.css">'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/css/toastr.min.css">'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/js/mediaelement/mediaelementplayer.min.css">'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/js/mediaelement/mejs-skins.css">'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/js/colorbox/colorbox.css">'."\r\n";
+    echo '<link rel="stylesheet" href="/assets/css/app.css">'."\r\n";
 }
 
 // ------------- Подключение javascript -------------//
 function include_javascript(){
-    echo '<script type="text/javascript" src="/assets/js/jquery-3.2.1.min.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/prettify.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/markitup/jquery.markitup.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/markitup/markitup.set.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/bootbox.min.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/toastr.min.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/mediaelement/mediaelement-and-player.min.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/colorbox/jquery.colorbox-min.js"></script>'."\r\n";
-    echo '<script type="text/javascript" src="/assets/js/app.js"></script>'."\r\n";
+    echo '<script src="/assets/js/jquery-3.2.1.min.js"></script>'."\r\n";
+    echo '<script src="/assets/js/bootstrap.min.js"></script>'."\r\n";
+    echo '<script src="/assets/js/prettify.js"></script>'."\r\n";
+    echo '<script src="/assets/js/markitup/jquery.markitup.js"></script>'."\r\n";
+    echo '<script src="/assets/js/markitup/markitup.set.js"></script>'."\r\n";
+    echo '<script src="/assets/js/bootbox.min.js"></script>'."\r\n";
+    echo '<script src="/assets/js/toastr.min.js"></script>'."\r\n";
+    echo '<script src="/assets/js/mediaelement/mediaelement-and-player.min.js"></script>'."\r\n";
+    echo '<script src="/assets/js/colorbox/jquery.colorbox-min.js"></script>'."\r\n";
+    echo '<script src="/assets/js/app.js"></script>'."\r\n";
 }
 
 // ------------- Прогресс бар -------------//

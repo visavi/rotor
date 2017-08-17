@@ -227,19 +227,19 @@ class UserController extends BaseController
                 if ($validation->run()) {
 
                     // --- Уведомление о регистрации на email ---//
-                    $message = 'Добро пожаловать, ' . $logs . '<br />Теперь вы зарегистрированный пользователь сайта <a href="' . Setting::get('home') . '">' . Setting::get('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br />Ваши данные для входа на сайт <br /><b>Логин: ' . $logs . '</b><br /><b>Пароль: ' . $pars . '</b><br /><br />';
+                    $message = 'Добро пожаловать, ' . $logs . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . Setting::get('home') . '">' . Setting::get('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $logs . '</b><br><b>Пароль: ' . $pars . '</b><br><br>';
 
                     if (Setting::get('regkeys') == 1) {
                         $siteLink = starts_with(Setting::get('home'), '//') ? 'http:'. Setting::get('home') : Setting::get('home');
                         $activateKey = str_random();
                         $activateLink = $siteLink.'/key?code=' . $activateKey;
 
-                        echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br />';
-                        echo 'Мастер-ключ был выслан вам на почтовый ящик: ' . $meil . '</span></b><br /><br />';
+                        echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br>';
+                        echo 'Мастер-ключ был выслан вам на почтовый ящик: ' . $meil . '</span></b><br><br>';
                     }
 
                     if (Setting::get('regkeys') == 2) {
-                        echo '<b><span style="color:#ff0000">Внимание! Ваш аккаунт будет активирован только после проверки администрацией!</span></b><br /><br />';
+                        echo '<b><span style="color:#ff0000">Внимание! Ваш аккаунт будет активирован только после проверки администрацией!</span></b><br><br>';
                     }
 
                     // Активация пригласительного ключа

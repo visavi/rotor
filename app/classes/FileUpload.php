@@ -85,7 +85,7 @@ class FileUpload extends upload
                 $this->processed = false;
                 $this->error = $this->translate('incorrect_ext', [implode(', ', $this->ext_check)]);
             } else {
-                $this->log .= '- file ext OK<br />';
+                $this->log .= '- file ext OK<br>';
             }
         }
 
@@ -95,7 +95,7 @@ class FileUpload extends upload
                 $this->processed = false;
                 $this->error = $this->translate('file_too_big', [formatsize($this->file_max_size)]);
             } else {
-                $this->log .= '- file size OK<br />';
+                $this->log .= '- file size OK<br>';
             }
         }
 
@@ -120,7 +120,7 @@ class FileUpload extends upload
                         $this->error = $this->translate('image_too_short', [$this->image_min_height]);
                     }
                 } else {
-                    $this->log .= '- no image properties available, can\'t enforce dimension checks : ' . $this->file_src_mime . '<br />';
+                    $this->log .= '- no image properties available, can\'t enforce dimension checks : ' . $this->file_src_mime . '<br>';
                 }
             }
         }

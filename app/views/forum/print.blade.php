@@ -10,9 +10,9 @@
 
     <?php foreach ($posts as $key => $data): ?>
 
-        <?=($key + 1)?>. <b><?= $data->getUser()->login ?></b> (<?=date_fixed($data['created_at'])?>)<br />
+        <?=($key + 1)?>. <b><?= $data->getUser()->login ?></b> (<?=date_fixed($data['created_at'])?>)<br>
         <?=App::bbCode($data['text'])?>
-        <br /><br />
+        <br><br>
 
     <?php endforeach; ?>
 

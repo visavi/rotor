@@ -12,11 +12,11 @@
         @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
             {!! resize_image('uploads/photos/', $user['picture'], Setting::get('previewsize'), ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}
         @else
-            <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />
+            <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото">
         @endif
 
         <form action="/pictures" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}" />
+            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ App::hasError('photo') }}">
                 <label class="btn btn-sm btn-default" for="inputPhoto">
@@ -27,11 +27,11 @@
             </div>
             <button class="btn btn-primary">Загрузить</button>
         </form>
-    </div><br />
+    </div><br>
 
-    Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br />
-    Весом не более {{ formatsize(Setting::get('filesize')) }} и размером от 100 до {{  Setting::get('fileupfoto') }} px<br />
-    Аватар генерируется автоматически из вашей фотографии<br /><br />
+    Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br>
+    Весом не более {{ formatsize(Setting::get('filesize')) }} и размером от 100 до {{  Setting::get('fileupfoto') }} px<br>
+    Аватар генерируется автоматически из вашей фотографии<br><br>
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/profile">Вернуться</a><br>
 @stop

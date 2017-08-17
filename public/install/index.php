@@ -77,15 +77,15 @@ header("Content-type:text/html; charset=utf-8");
     <title>
         Обновление RotorCMS
     </title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="image_src" href="/assets/img/images/icon.png" />
-    <link rel="stylesheet" href="/themes/default/css/style.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="image_src" href="/assets/img/images/icon.png">
+    <link rel="stylesheet" href="/themes/default/css/style.css">
 </head>
 <body>
 
 <div class="cs" id="up">
-    <a href="/"><img src="/assets/img/images/logo.png" /></a>
+    <a href="/"><img src="/assets/img/images/logo.png"></a>
 </div>
 <div class="site">
 
@@ -107,7 +107,7 @@ header("Content-type:text/html; charset=utf-8");
         ];
 
         foreach ($keys as $key) {
-            echo $key.' - '.env($key).'<br />';
+            echo $key.' - '.env($key).'<br>';
         }
         ?>
         <p>Не забудьте изменить значение APP_KEY, эти данные необходимы для шифрования cookies и паролей в сессиях</p>
@@ -119,71 +119,71 @@ header("Content-type:text/html; charset=utf-8");
         $error_setting = 0;
 
         if (version_compare(PHP_VERSION, '7.0') > 0) {
-            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br />';
+            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br />';
+            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br>';
         $error_critical = 1;
         }
 
         if (extension_loaded('pdo_mysql')) {
 
             $version = strtok(getModuleSetting('pdo_mysql', ['Client API version', 'PDO Driver for MySQL, client library version']), '-');
-            echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
+            echo '<i class="fa fa-plus-circle"></i> Расширение PDO-MySQL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
+            echo '<i class="fa fa-minus-circle"></i> Расширение PDO-MySQL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
             $error_critical = 1;
         }
 
         if (extension_loaded('openssl')) {
             $version = getModuleSetting('openssl', ['OpenSSL Library Version', 'OpenSSL Header Version']);
-            echo '<i class="fa fa-plus-circle"></i> Расширение OpenSSL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
+            echo '<i class="fa fa-plus-circle"></i> Расширение OpenSSL ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение OpenSSL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
+            echo '<i class="fa fa-minus-circle"></i> Расширение OpenSSL: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
             $error_critical = 1;
         }
 
         if (extension_loaded('tokenizer')) {
-            echo '<i class="fa fa-plus-circle"></i> Расширение Tokenizer: <b><span style="color:#00cc00">ОК</span></b><br />';
+            echo '<i class="fa fa-plus-circle"></i> Расширение Tokenizer: <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение Tokenizer: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
+            echo '<i class="fa fa-minus-circle"></i> Расширение Tokenizer: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
             $error_critical = 1;
         }
 
         if (extension_loaded('mbstring')) {
             $version = getModuleSetting('mbstring', ['oniguruma version', 'Multibyte regex (oniguruma) version']);
-            echo '<i class="fa fa-plus-circle"></i> Расширение Mbstring ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
+            echo '<i class="fa fa-plus-circle"></i> Расширение Mbstring ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение Mbstring: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
+            echo '<i class="fa fa-minus-circle"></i> Расширение Mbstring: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
             $error_critical = 1;
         }
 
         if (extension_loaded('xml')) {
             $version = getModuleSetting('xml', 'libxml2 Version');
-            echo '<i class="fa fa-plus-circle"></i> Расширение XML ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
+            echo '<i class="fa fa-plus-circle"></i> Расширение XML ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Расширение XML: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br />';
+            echo '<i class="fa fa-minus-circle"></i> Расширение XML: <b><span style="color:#ff0000">Ошибка</span></b> (Расширение не загружено)<br>';
             $error_critical = 1;
         }
 
         if (extension_loaded('gd')) {
             $version = getModuleSetting('gd', ['GD headers Version', 'GD library Version']);
-            echo '<i class="fa fa-plus-circle"></i> Библиотека GD ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
+            echo '<i class="fa fa-plus-circle"></i> Библиотека GD ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
+            echo '<i class="fa fa-minus-circle"></i> Библиотека GD: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
             $error_setting++;
         }
 
         if (extension_loaded('curl')) {
             $version = getModuleSetting('curl', 'cURL Information');
-            echo '<i class="fa fa-plus-circle"></i> Библиотека Curl ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br />';
+            echo '<i class="fa fa-plus-circle"></i> Библиотека Curl ('.$version.'): <b><span style="color:#00cc00">ОК</span></b><br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Библиотека Curl: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br />';
+            echo '<i class="fa fa-minus-circle"></i> Библиотека Curl: <b><span style="color:#ffa500">Предупреждение</span></b> (Библиотека не загружена)<br>';
             $error_setting++;
         }
 
-        echo 'Для обработка видео желательно установить библиотеку FFmpeg<br />';
+        echo 'Для обработка видео желательно установить библиотеку FFmpeg<br>';
 
-        echo '<br /><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
+        echo '<br><p style="font-size: 15px; font-weight: bold">Права доступа</p>';
 
         $storage = glob(DIR.'/app/storage/*', GLOB_ONLYDIR);
         $uploads = glob(DIR.'/uploads/*', GLOB_ONLYDIR);
@@ -208,31 +208,31 @@ header("Content-type:text/html; charset=utf-8");
             }
             $chmod_value = @decoct(@fileperms($dir)) % 1000;
 
-            echo '<i class="fa fa-check-circle"></i> '.str_replace('../', '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br />';
+            echo '<i class="fa fa-check-circle"></i> '.str_replace('../', '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br>';
         }
 
-        echo '<br />Дополнительно можете выставить права на директории и файы с шаблонами внутри app/views<br /><br />';
+        echo '<br>Дополнительно можете выставить права на директории и файы с шаблонами внутри app/views<br><br>';
 
-        echo 'Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br />';
-        echo 'Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br /><br />';
+        echo 'Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br>';
+        echo 'Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br><br>';
 
         if (empty($error_critical)  && empty($chmod_errors)) {
-            echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br /><br />';
+            echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br><br>';
 
             if (empty($error_setting)) {
-                echo 'Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br /><br />';
+                echo 'Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br><br>';
             } else {
-                echo '<b><span style="color:#ffa500">У вас имеются предупреждения!</span></b> (Всего: ' . $error_setting . ')<br />';
-                echo 'Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br />';
-                echo 'Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br /><br />';
+                echo '<b><span style="color:#ffa500">У вас имеются предупреждения!</span></b> (Всего: ' . $error_setting . ')<br>';
+                echo 'Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br>';
+                echo 'Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br><br>';
             }
 
-            echo '<span style="color:#ff0000">Внимание, база данных должна быть создана в кодировке utf8mb4_unicode_ci</span><br /><br />';
+            echo '<span style="color:#ff0000">Внимание, база данных должна быть создана в кодировке utf8mb4_unicode_ci</span><br><br>';
 
-            echo '<p><a style="font-size: 18px" href="?act=status">Проверить статус</a></p><br />';
+            echo '<p><a style="font-size: 18px" href="?act=status">Проверить статус</a></p><br>';
         } else {
-            echo '<b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br />';
-            echo 'Вы не сможете приступить к установке, пока не устраните все ошибки<br /><br />';
+            echo '<b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br>';
+            echo 'Вы не сможете приступить к установке, пока не устраните все ошибки<br><br>';
         }
 
         ?>
@@ -272,9 +272,9 @@ header("Content-type:text/html; charset=utf-8");
 
         <h1>Шаг 5 - создание администратора</h1>
 
-        Прежде чем перейти к администрированию вашего сайта, необходимо создать аккаунт администратора.<br />
-        Перед тем как нажимать кнопку Создать, убедитесь, что на предыдущей странице нет уведомлений об ошибках, иначе процесс не сможет быть завершен удачно.<br />
-        После окончания инсталляции необходимо удалить директории <b>install</b> и <b>upgrade</b> со всем содержимым навсегда, пароль и остальные данные вы сможете поменять в своем профиле<br /><br />
+        Прежде чем перейти к администрированию вашего сайта, необходимо создать аккаунт администратора.<br>
+        Перед тем как нажимать кнопку Создать, убедитесь, что на предыдущей странице нет уведомлений об ошибках, иначе процесс не сможет быть завершен удачно.<br>
+        После окончания инсталляции необходимо удалить директории <b>install</b> и <b>upgrade</b> со всем содержимым навсегда, пароль и остальные данные вы сможете поменять в своем профиле<br><br>
 
         <?php
             $servername = isset($_SERVER['HTTP_HOST']) ? htmlspecialchars($_SERVER['HTTP_HOST']) : htmlspecialchars($_SERVER['SERVER_NAME']);
@@ -359,25 +359,25 @@ header("Content-type:text/html; charset=utf-8");
 
         <div class="form">
            <form method="post">
-                Логин (max20):<br />
-                <input class="form-control" name="login" maxlength="20" value="<?= $login ?>" /><br />
-                Пароль(max20):<br />
-                <input class="form-control" name="password" type="password" maxlength="50" /><br />
-                Повторите пароль:<br />
-                <input class="form-control" name="password2" type="password" maxlength="50" /><br />
-                Адрес email:<br />
-                <input class="form-control" name="email" maxlength="100" value="<?= $email ?>" /><br />
-                Адрес сайта:<br />
-                <input name="site" value="<?= $site ?>" maxlength="100" /><br /><br />
+                Логин (max20):<br>
+                <input class="form-control" name="login" maxlength="20" value="<?= $login ?>"><br>
+                Пароль(max20):<br>
+                <input class="form-control" name="password" type="password" maxlength="50"><br>
+                Повторите пароль:<br>
+                <input class="form-control" name="password2" type="password" maxlength="50"><br>
+                Адрес email:<br>
+                <input class="form-control" name="email" maxlength="100" value="<?= $email ?>"><br>
+                Адрес сайта:<br>
+                <input name="site" value="<?= $site ?>" maxlength="100"><br><br>
                <button class="btn btn-primary">Создать</button>
             </form>
-        </div><br />
+        </div><br>
 
-        Внимание, в поле логин разрешены только знаки латинского алфавита, цифры и знак дефис<br />
-        Все поля обязательны для заполнения<br />
-        Email будет нужен для восстановления пароля, пишите только свои данные<br />
-        Не нажимайте кнопку дважды, подождите до тех пор, пока процесс не завершится<br />
-        В поле ввода адреса сайта необходимо ввести адрес в который у вас распакован движок, если это поддомен или папка, то необходимо указать ее, к примеру http://wap.visavi.net<br /><br />
+        Внимание, в поле логин разрешены только знаки латинского алфавита, цифры и знак дефис<br>
+        Все поля обязательны для заполнения<br>
+        Email будет нужен для восстановления пароля, пишите только свои данные<br>
+        Не нажимайте кнопку дважды, подождите до тех пор, пока процесс не завершится<br>
+        В поле ввода адреса сайта необходимо ввести адрес в который у вас распакован движок, если это поддомен или папка, то необходимо указать ее, к примеру http://wap.visavi.net<br><br>
 
 
     <?php else: ?>
@@ -385,9 +385,9 @@ header("Content-type:text/html; charset=utf-8");
         <h1>Установка завершена</h1>
 
         <p>
-            Поздравляем Вас, RotorCMS был успешно установлен на Ваш сервер. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br /><br />
-            Аккаунт администратора создан<br /><br />
-            <a href="/">Перейти на главную страницу сайта</a><br />
+            Поздравляем Вас, RotorCMS был успешно установлен на Ваш сервер. Вы можете перейти на главную страницу вашего сайта и посмотреть возможности скрипта<br><br>
+            Аккаунт администратора создан<br><br>
+            <a href="/">Перейти на главную страницу сайта</a><br>
         </p>
         <p style="font-size: 20px">Удалите директории install и upgrade</p>
 

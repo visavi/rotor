@@ -15,7 +15,7 @@ case 'files':
     echo '<i class="fa fa-book"></i> ';
     echo '<a href="/load/add">Публикация</a> / ';
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
-    echo '<b>Проверенные</b><hr />';
+    echo '<b>Проверенные</b><hr>';
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [1, $uz]);
     $page = App::paginate(Setting::get('downlist'), $total);
@@ -32,8 +32,8 @@ case 'files':
             echo '<div class="b"><i class="fa fa-file-o"></i> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-            echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br />';
-            echo 'Скачиваний: '.$data['loads'].'<br />';
+            echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br>';
+            echo 'Скачиваний: '.$data['loads'].'<br>';
             echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
             echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
         }
@@ -69,9 +69,9 @@ case 'comments':
             }
 
             echo '</div>';
-            echo '<div>'.App::bbCode($data['text']).'<br />';
+            echo '<div>'.App::bbCode($data['text']).'<br>';
 
-            echo 'Написал: '.$data['user'].' <small>('.date_fixed($data['time']).')</small><br />';
+            echo 'Написал: '.$data['user'].' <small>('.date_fixed($data['time']).')</small><br>';
 
             if ($is_admin) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -144,11 +144,11 @@ case 'del':
         show_error('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/active?act=comments&amp;uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/active?act=comments&amp;uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 endswitch;
 
-echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br />';
+echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
 App::view(Setting::get('themes').'/foot');

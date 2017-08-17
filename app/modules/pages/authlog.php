@@ -46,6 +46,6 @@ if (is_user()) {
     show_login('Вы не авторизованы, для просмотра истории, необходимо');
 }
 
-echo '<i class="fa fa-arrow-circle-left"></i> <a href="/menu">Вернуться</a><br />';
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/menu">Вернуться</a><br>';
 
 App::view(Setting::get('themes').'/foot');

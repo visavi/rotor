@@ -28,7 +28,7 @@ if (is_admin([101, 102, 103])) {
             if (count($votes) > 0) {
                 foreach($votes as $valvote) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['id'].'">'.$valvote['title'].'</a></b><br />';
+                    echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['id'].'">'.$valvote['title'].'</a></b><br>';
                     echo '<a href="/admin/votes?act=edit&amp;id='.$valvote['id'].'">Изменить</a>';
                     echo ' / <a href="/admin/votes?act=action&amp;do=close&amp;id='.$valvote['id'].'&amp;uid='.$_SESSION['token'].'">Закрыть</a>';
 
@@ -38,19 +38,19 @@ if (is_admin([101, 102, 103])) {
 
                     echo '</div>';
 
-                    echo '<div>Создано: '.date_fixed($valvote['time']).'<br />';
+                    echo '<div>Создано: '.date_fixed($valvote['time']).'<br>';
                     echo 'Всего голосов: '.$valvote['count'].'</div>';
                 }
-                echo '<br />';
+                echo '<br>';
             } else {
                 show_error('Открытых голосований еще нет!');
             }
 
-            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes?act=new">Создать голосование</a><br />';
-            echo '<i class="fa fa-briefcase"></i> <a href="/admin/votes?act=history">История голосований</a><br />';
+            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes?act=new">Создать голосование</a><br>';
+            echo '<i class="fa fa-briefcase"></i> <a href="/admin/votes?act=history">История голосований</a><br>';
 
             if (is_admin([101])) {
-                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/votes?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+                echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/votes?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
 
         break;
@@ -63,21 +63,21 @@ if (is_admin([101, 102, 103])) {
             echo '<div class="form">';
             echo '<form action="/admin/votes?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
 
-            echo 'Вопрос:<br />';
-            echo '<input type="text" name="title" size="50" maxlength="100" /><br />';
-            echo 'Ответ 1:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 2:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 3:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 4:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 5:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 6:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 7:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 8:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 9:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo 'Ответ 10:<br /><input type="text" name="answer[]" maxlength="50" /><br />';
-            echo '<input type="submit" value="Создать" /></form></div><br />';
+            echo 'Вопрос:<br>';
+            echo '<input type="text" name="title" size="50" maxlength="100"><br>';
+            echo 'Ответ 1:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 2:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 3:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 4:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 5:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 6:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 7:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 8:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 9:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo 'Ответ 10:<br><input type="text" name="answer[]" maxlength="50"><br>';
+            echo '<input type="submit" value="Создать"></form></div><br>';
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -115,8 +115,8 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=new">Вернуться</a><br />';
-            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">К голосованиям</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=new">Вернуться</a><br>';
+            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">К голосованиям</a><br>';
         break;
 
         ############################################################################################
@@ -130,28 +130,28 @@ if (is_admin([101, 102, 103])) {
                 echo '<div class="form">';
                 echo '<form action="/admin/votes?act=change&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-                echo 'Вопрос:<br />';
-                echo '<input type="text" name="title" size="50" maxlength="100" value="'.$votes['title'].'" /><br />';
+                echo 'Вопрос:<br>';
+                echo '<input type="text" name="title" size="50" maxlength="100" value="'.$votes['title'].'"><br>';
 
                 $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `vote_id`=? ORDER BY `id`;", [$id]);
                 $answer = $queryanswer -> fetchAll();
 
                 for ($i = 0; $i < 10; $i++) {
                     if (!empty($answer[$i])) {
-                        echo '<span style="color:#ff0000">Ответ '.($i + 1).':</span><br /><input type="text" name="answer['.$answer[$i]['id'].']" maxlength="50" value="'.$answer[$i]['answer'].'" /><br />';
+                        echo '<span style="color:#ff0000">Ответ '.($i + 1).':</span><br><input type="text" name="answer['.$answer[$i]['id'].']" maxlength="50" value="'.$answer[$i]['answer'].'"><br>';
                     } else {
-                        echo 'Ответ '.($i + 1).':<br /><input type="text" name="newanswer[]" maxlength="50" /><br />';
+                        echo 'Ответ '.($i + 1).':<br><input type="text" name="newanswer[]" maxlength="50"><br>';
                     }
                 }
 
-                echo '<input type="submit" value="Изменить" /></form></div><br />';
+                echo '<input type="submit" value="Изменить"></form></div><br>';
 
-                echo 'Поля отмеченные красным цветом обязательны для заполнения!<br /><br />';
+                echo 'Поля отмеченные красным цветом обязательны для заполнения!<br><br>';
             } else {
                 show_error('Ошибка! Данного голосования не существует!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -201,8 +201,8 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=edit&amp;id='.$id.'">Вернуться</a><br />';
-            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">К голосованиям</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=edit&amp;id='.$id.'">Вернуться</a><br>';
+            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">К голосованиям</a><br>';
         break;
 
         ############################################################################################
@@ -239,7 +239,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -269,7 +269,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -290,7 +290,7 @@ if (is_admin([101, 102, 103])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
         break;
 
         ############################################################################################
@@ -307,7 +307,7 @@ if (is_admin([101, 102, 103])) {
 
                 while ($data = $queryvote -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b><br />';
+                    echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b><br>';
 
                     echo '<a href="/admin/votes?act=action&amp;do=open&amp;id='.$data['id'].'&amp;uid='.$_SESSION['token'].'">Открыть</a>';
 
@@ -316,7 +316,7 @@ if (is_admin([101, 102, 103])) {
                     }
 
                     echo '</div>';
-                    echo '<div>Создано: '.date_fixed($data['time']).'<br />';
+                    echo '<div>Создано: '.date_fixed($data['time']).'<br>';
                     echo 'Всего голосов: '.$data['count'].'</div>';
                 }
 
@@ -325,12 +325,12 @@ if (is_admin([101, 102, 103])) {
                 show_error('Голосований в архиве еще нет!');
             }
 
-            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">Список голосований</a><br />';
+            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">Список голосований</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect("/");

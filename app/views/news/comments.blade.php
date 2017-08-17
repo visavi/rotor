@@ -35,12 +35,12 @@
                     </div>
 
                     <b>{!! profile($data['user']) !!}</b>
-                    <small> ({{ date_fixed($data['created_at']) }})</small><br />
+                    <small> ({{ date_fixed($data['created_at']) }})</small><br>
                     {!! user_title($data['user']) !!} {!! user_online($data['user']) !!}
                 </div>
 
                 <div class="message">
-                    {!! App::bbCode($data['text']) !!}<br />
+                    {!! App::bbCode($data['text']) !!}<br>
 
                     @if (is_admin())
                         <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
@@ -62,14 +62,14 @@
             <div class="form">
                 <form action="/news/{{ $news->id }}/create" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                    <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />
+                    <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
                     <button class="btn btn-success">Написать</button>
                 </form>
             </div>
-        <br />
+        <br>
         <a href="/rules">Правила</a> /
         <a href="/smiles">Смайлы</a> /
-        <a href="/tags">Теги</a><br /><br />
+        <a href="/tags">Теги</a><br><br>
         @else
             {{show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо') }}
         @endif
@@ -77,5 +77,5 @@
         {{show_error('Комментирование данной новости закрыто!') }}
     @endif
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br>
 @stop

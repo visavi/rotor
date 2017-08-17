@@ -29,15 +29,15 @@ header("Content-type:text/html; charset=utf-8");
     <title>
         Обновление RotorCMS
     </title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="image_src" href="/assets/img/images/icon.png" />
-    <link rel="stylesheet" href="/themes/default/css/style.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="image_src" href="/assets/img/images/icon.png">
+    <link rel="stylesheet" href="/themes/default/css/style.css">
 </head>
 <body>
 
 <div class="cs" id="up">
-    <a href="/"><img src="/assets/img/images/logo.png" /></a>
+    <a href="/"><img src="/assets/img/images/logo.png"></a>
 </div>
 <div class="site">
     <pre>

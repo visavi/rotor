@@ -26,7 +26,7 @@
         </div>
     @endif
 
-    <hr />
+    <hr>
 
     <?php if (! $forum->children->isEmpty() && $page['current'] == 1): ?>
         <div class="act">
@@ -38,7 +38,7 @@
 
             <?php if ($child->lastTopic): ?>
                 <div>
-                    Тема: <a href="/topic/<?= $child->lastTopic->id ?>/end"><?= $child->lastTopic->title ?></a><br />
+                    Тема: <a href="/topic/<?= $child->lastTopic->id ?>/end"><?= $child->lastTopic->title ?></a><br>
                     @if ($child->lastTopic->lastPost)
                         Сообщение: <?=$child->lastTopic->lastPost->getUser()->login ?> (<?=date_fixed($child->lastTopic->lastPost->created_at)?>)
                     @endif
@@ -49,7 +49,7 @@
         <?php endforeach; ?>
 
         </div>
-        <hr />
+        <hr>
     <?php endif; ?>
 
     @if ($topics)
@@ -78,5 +78,5 @@
     <a href="/rules">Правила</a> /
     <a href="/forum/top/themes">Топ тем</a> /
     <a href="/forum/top/posts">Топ постов</a> /
-    <a href="/forum/search?fid=<?= $forum->id ?>">Поиск</a><br />
+    <a href="/forum/search?fid=<?= $forum->id ?>">Поиск</a><br>
 @stop

@@ -24,7 +24,7 @@ if ($total > 0) {
         echo '<div class="b">'.user_gender($data['user']).' <b>'.profile($data['user']).'</b> ('.$lastvisit.')</div>';
 
         $position = (!empty($data['page'])) ? $data['page'] : 'Не определено';
-        echo '<div>Находится: '.$position.'<br />';
+        echo '<div>Находится: '.$position.'<br>';
         echo 'Переходов: '.$data['count'].'</div>';
     }
 

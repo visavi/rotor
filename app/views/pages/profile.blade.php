@@ -12,11 +12,11 @@
     <a href="/user/{{ App::getUsername() }}">Моя анкета</a> /
     <b>Мой профиль</b> /
     <a href="/account">Мои данные</a> /
-    <a href="/setting">Настройки</a><hr />
+    <a href="/setting">Настройки</a><hr>
 
     <div class="form">
         <form method="post" action="/profile">
-            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
+            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
 
             <div class="container-fluid">
                 <div class="row">
@@ -29,7 +29,7 @@
                                 </a>
                                 <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
                             @else
-                                <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото" />
+                                <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото">
                                 <a href="/pictures">Загрузить фото</a>
                             @endif
                             </div>

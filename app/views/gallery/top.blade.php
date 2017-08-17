@@ -24,7 +24,7 @@
             <a href="/gallery/top?sort=comments">Комментарии</a>
         @endif
 
-        <hr />
+        <hr>
 
         @foreach($photos as $data)
             <div class="b">
@@ -34,9 +34,9 @@
 
             <div><a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]) !!}</a>
 
-                <br />{!! App::bbCode($data['text']) !!}<br />
+                <br>{!! App::bbCode($data['text']) !!}<br>
 
-                Добавлено: {!! profile($data['user']) !!} ({{ date_fixed($data['time']) }})<br />
+                Добавлено: {!! profile($data['user']) !!} ({{ date_fixed($data['time']) }})<br>
                 <a href="/gallery/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
                 <a href="/gallery/{{ $data['id'] }}/end">&raquo;</a>
             </div>
@@ -47,5 +47,5 @@
         {{ show_error('Загруженных фотографий еще нет!') }}
     @endif
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

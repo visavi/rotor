@@ -34,11 +34,11 @@ case 'index':
             $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
             $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
 
-            echo '('.$data['count'] . $subcnt . $new.')<br />';
+            echo '('.$data['count'] . $subcnt . $new.')<br>';
 
             if (is_admin([101])) {
                 echo '<a href="/admin/load?act=editcats&amp;cid='.$data['id'].'">Редактировать</a> / ';
-                echo '<a href="/admin/load?act=prodelcats&amp;cid='.$data['id'].'">Удалить</a><br />';
+                echo '<a href="/admin/load?act=prodelcats&amp;cid='.$data['id'].'">Удалить</a><br>';
             }
             // ----------------------------------------------------//
             if (isset($output[$key])) {
@@ -55,7 +55,7 @@ case 'index':
                         echo ' (<a href="/admin/load?act=editcats&amp;cid='.$odata['id'].'">Редактировать</a> / ';
                         echo '<a href="/admin/load?act=prodelcats&amp;cid='.$odata['id'].'">Удалить</a>)';
                     }
-                    echo '<br />';
+                    echo '<br>';
                 }
             }
         }
@@ -64,17 +64,17 @@ case 'index':
     }
 
     if (is_admin([101])) {
-        echo '<br /><div class="form">';
+        echo '<br><div class="form">';
         echo '<form action="/admin/load?act=addcats&amp;uid='.$_SESSION['token'].'" method="post">';
-        echo '<b>Раздел:</b><br />';
-        echo '<input type="text" name="name" maxlength="50" />';
-        echo '<input type="submit" value="Создать раздел" /></form></div><br />';
+        echo '<b>Раздел:</b><br>';
+        echo '<input type="text" name="name" maxlength="50">';
+        echo '<input type="submit" value="Создать раздел"></form></div><br>';
 
-        echo '<i class="fa fa-cloud-upload"></i> <a href="/admin/load?act=newimport">FTP-импорт</a><br />';
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br />';
+        echo '<i class="fa fa-cloud-upload"></i> <a href="/admin/load?act=newimport">FTP-импорт</a><br>';
+        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
     }
 
-    echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile">Добавить</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile">Добавить</a><br>';
 break;
 
 ############################################################################################
@@ -89,7 +89,7 @@ case 'newimport':
             $downs = $querydown -> fetchAll();
 
             if (count($downs) > 0) {
-                echo 'Для импорта необходимо загрузить файлы через FTP в папку load/loader, после этого здесь вам нужно выбрать категорию в которую переместить файлы, отметить нужные файлы и нажать импортировать<br /><br />';
+                echo 'Для импорта необходимо загрузить файлы через FTP в папку load/loader, после этого здесь вам нужно выбрать категорию в которую переместить файлы, отметить нужные файлы и нажать импортировать<br><br>';
 
                 $files = array_diff(scandir(HOME.'/uploads/loader'), ['.', '..', '.htaccess']);
 
@@ -97,7 +97,7 @@ case 'newimport':
                 if ($total > 0) {
                     echo '<div class="form">';
                     echo '<form action="/admin/load?act=addimport&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo 'Категория:<br />';
+                    echo 'Категория:<br>';
 
                     $output = [];
 
@@ -122,18 +122,18 @@ case 'newimport':
                         }
                     }
 
-                    echo '</select><br /><br />';
+                    echo '</select><br><br>';
 
-                    echo '<input type="checkbox" name="all" onchange="for (i in this.form.elements) this.form.elements[i].checked = this.checked" /> <b>Отметить все</b><br />';
+                    echo '<input type="checkbox" name="all" onchange="for (i in this.form.elements) this.form.elements[i].checked = this.checked"> <b>Отметить все</b><br>';
 
                     foreach ($files as $file) {
                         $ext = getExtension($file);
-                        echo '<input type="checkbox" name="files[]" value="'.$file.'" /> '.icons($ext).' '.$file.'<br />';
+                        echo '<input type="checkbox" name="files[]" value="'.$file.'"> '.icons($ext).' '.$file.'<br>';
                     }
 
-                    echo '<input value="Импортировать" type="submit" /></form></div><br />';
+                    echo '<input value="Импортировать" type="submit"></form></div><br>';
 
-                    echo 'Всего файлов: '.$total.'<br /><br />';
+                    echo 'Всего файлов: '.$total.'<br><br>';
                 } else {
                     show_error('В директории нет файлов для импорта!');
                 }
@@ -147,7 +147,7 @@ case 'newimport':
         show_error('Импортировать файлы могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -213,12 +213,12 @@ case 'addimport':
                         }
 
                         if ($count > 0) {
-                            echo '<i class="fa fa-check"></i> <b>Выбранные файлы успешно импортированы</b><br /><br />';
+                            echo '<i class="fa fa-check"></i> <b>Выбранные файлы успешно импортированы</b><br><br>';
                         }
 
                         if ($total != $count) {
-                            echo 'Не удалось импортировать некоторые файлы!<br />';
-                            echo 'Возможные причины: недопустимое расширение файлов, большой вес, недопустимое имя файлов или в имени файла присутствуют недопустимые расширения<br /><br />';
+                            echo 'Не удалось импортировать некоторые файлы!<br>';
+                            echo 'Возможные причины: недопустимое расширение файлов, большой вес, недопустимое имя файлов или в имени файла присутствуют недопустимые расширения<br><br>';
                         }
                     } else {
                         show_error('Ошибка! Выбранный вами раздел не существует!');
@@ -236,7 +236,7 @@ case 'addimport':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=newimport">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=newimport">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -251,7 +251,7 @@ case 'newfile':
     if (count($downs) > 0) {
         echo '<div class="form">';
         echo '<form action="/admin/load?act=addfile&amp;uid='.$_SESSION['token'].'" method="post">';
-        echo 'Категория*:<br />';
+        echo 'Категория*:<br>';
 
         $output = [];
 
@@ -278,27 +278,27 @@ case 'newfile':
             }
         }
 
-        echo '</select><br />';
+        echo '</select><br>';
 
-        echo 'Название*:<br />';
-        echo '<input type="text" name="title" size="50" maxlength="50" /><br />';
-        echo 'Описание*:<br />';
-        echo '<textarea cols="25" rows="10" name="text"></textarea><br />';
-        echo 'Автор файла:<br />';
-        echo '<input type="text" name="author" maxlength="50" /><br />';
-        echo 'Сайт автора:<br />';
-        echo '<input type="text" name="site" maxlength="50" value="http://" /><br />';
+        echo 'Название*:<br>';
+        echo '<input type="text" name="title" size="50" maxlength="50"><br>';
+        echo 'Описание*:<br>';
+        echo '<textarea cols="25" rows="10" name="text"></textarea><br>';
+        echo 'Автор файла:<br>';
+        echo '<input type="text" name="author" maxlength="50"><br>';
+        echo 'Сайт автора:<br>';
+        echo '<input type="text" name="site" maxlength="50" value="http://"><br>';
 
-        echo '<input value="Продолжить" type="submit" /></form></div><br />';
+        echo '<input value="Продолжить" type="submit"></form></div><br>';
 
-        echo 'Все поля отмеченные знаком *, обязательны для заполнения<br />';
-        echo 'Файл и скриншот вы сможете загрузить после добавления описания<br />';
-        echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br /><br />';
+        echo 'Все поля отмеченные знаком *, обязательны для заполнения<br>';
+        echo 'Файл и скриншот вы сможете загрузить после добавления описания<br>';
+        echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br><br>';
     } else {
         show_error('Категории файлов еще не созданы!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -366,7 +366,7 @@ case 'addfile':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -389,7 +389,7 @@ case 'restatement':
         show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -418,7 +418,7 @@ case 'addcats':
         show_error('Ошибка! Добавлять разделы могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -430,17 +430,17 @@ case 'editcats':
         $downs = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
 
         if (!empty($downs)) {
-            echo '<b><big>Редактирование</big></b><br /><br />';
+            echo '<b><big>Редактирование</big></b><br><br>';
 
             echo '<div class="form">';
             echo '<form action="/admin/load?act=addeditcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo 'Раздел: <br />';
-            echo '<input type="text" name="name" maxlength="50" value="'.$downs['name'].'" /><br />';
+            echo 'Раздел: <br>';
+            echo '<input type="text" name="name" maxlength="50" value="'.$downs['name'].'"><br>';
 
             $query = DB::run() -> query("SELECT `id`, `name`, `parent` FROM `cats` WHERE `parent`=0 ORDER BY sort ASC;");
             $section = $query -> fetchAll();
 
-            echo 'Родительский раздел:<br />';
+            echo 'Родительский раздел:<br>';
             echo '<select name="parent">';
             echo '<option value="0">Основной раздел</option>';
 
@@ -450,21 +450,21 @@ case 'editcats':
                     echo '<option value="'.$data['id'].'"'.$selected.'>'.$data['name'].'</option>';
                 }
             }
-            echo '</select><br />';
+            echo '</select><br>';
 
-            echo 'Положение: <br />';
-            echo '<input type="text" name="order" maxlength="2" value="'.$downs['sort'].'" /><br />';
+            echo 'Положение: <br>';
+            echo '<input type="text" name="order" maxlength="2" value="'.$downs['sort'].'"><br>';
 
-            echo 'Директория: <br />';
-            echo '<input type="text" name="folder" maxlength="50" value="'.$downs['folder'].'" /><br />';
+            echo 'Директория: <br>';
+            echo '<input type="text" name="folder" maxlength="50" value="'.$downs['folder'].'"><br>';
 
-            echo 'При создании директории, загруженные ранее файлы будут автоматически перемещены<br /><br />';
+            echo 'При создании директории, загруженные ранее файлы будут автоматически перемещены<br><br>';
 
             echo 'Закрыть раздел: ';
             $checked = ($downs['closed'] == 1) ? ' checked="checked"' : '';
-            echo '<input name="closed" type="checkbox" value="1"'.$checked.' /><br />';
+            echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
-            echo '<input type="submit" value="Изменить" /></form></div><br />';
+            echo '<input type="submit" value="Изменить"></form></div><br>';
         } else {
             show_error('Ошибка! Данного раздела не существует!');
         }
@@ -472,7 +472,7 @@ case 'editcats':
         show_error('Ошибка! Изменять разделы могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -579,8 +579,8 @@ case 'addeditcats':
         show_error('Ошибка! Изменять разделы могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=editcats&amp;cid='.$cid.'">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Категории</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=editcats&amp;cid='.$cid.'">Вернуться</a><br>';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Категории</a><br>';
 break;
 
 ############################################################################################
@@ -593,8 +593,8 @@ case 'prodelcats':
 
         if (!empty($downs['id'])) {
             if (empty($downs['subcnt'])) {
-                echo 'Вы уверены что хотите удалить раздел <b>'.$downs['name'].'</b> в загрузках?<br />';
-                echo '<i class="fa fa-times"></i> <b><a href="/admin/load?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br /><br />';
+                echo 'Вы уверены что хотите удалить раздел <b>'.$downs['name'].'</b> в загрузках?<br>';
+                echo '<i class="fa fa-times"></i> <b><a href="/admin/load?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br><br>';
             } else {
                 show_error('Ошибка! Данный раздел имеет подкатегории!');
             }
@@ -605,7 +605,7 @@ case 'prodelcats':
         show_error('Ошибка! Удалять разделы могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -662,7 +662,7 @@ case 'delcats':
         show_error('Ошибка! Удалять разделы могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -683,13 +683,13 @@ case 'down':
         echo ' / <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Загрузить файл</a>';
     }
 
-    echo '<br /><br />';
+    echo '<br><br>';
     if ($cats > 0) {
         //Setting::get('newtitle') = $cats['name'];
 
         echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
         echo ' (<a href="/load/down?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
-        echo '<hr />';
+        echo '<hr>';
 
         $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `parent`=?;", [$cid]);
         $sub = $querysub -> fetchAll();
@@ -699,7 +699,7 @@ case 'down':
                 echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                 echo '<b><a href="/admin/load?act=down&amp;cid='.$subdata['id'].'">'.$subdata['name'].'</a></b> ('.$subdata['count'].')</div>';
             }
-            echo '<hr />';
+            echo '<hr>';
         }
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
@@ -722,10 +722,10 @@ case 'down':
 
                 echo '<div class="b">';
                 echo '<i class="fa fa-file-o"></i> ';
-                echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')<br />';
+                echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')<br>';
 
                 if ($is_admin) {
-                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'" /> ';
+                    echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
                 }
 
                 echo '<a href="/admin/load?act=editdown&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a> / ';
@@ -733,16 +733,16 @@ case 'down':
 
                 echo '<div>';
 
-                echo 'Скачиваний: '.$data['loads'].'<br />';
+                echo 'Скачиваний: '.$data['loads'].'<br>';
 
                 $rating = (!empty($data['rated'])) ? round($data['rating'] / $data['rated'], 1) : 0;
 
-                echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br />';
+                echo 'Рейтинг: <b>'.$rating.'</b> (Голосов: '.$data['rated'].')<br>';
                 echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].')</div>';
             }
 
             if ($is_admin) {
-                echo '<br /><input type="submit" value="Удалить выбранное" /></form>';
+                echo '<br><input type="submit" value="Удалить выбранное"></form>';
             }
 
             App::pagination($page);
@@ -759,9 +759,9 @@ case 'down':
         show_error('Ошибка! Данного раздела не существует!');
     }
     if (empty($cats['closed'])) {
-        echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Добавить</a><br />';
+        echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Добавить</a><br>';
     }
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load">Категории</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load">Категории</a><br>';
 break;
 
 ############################################################################################
@@ -781,65 +781,65 @@ case 'editdown':
             echo '<a href="/admin/load?act=down&amp;cid='.$podcats['id'].'">'.$podcats['name'].'</a> / ';
         }
 
-        echo '<a href="/load/down?act=view&amp;id='.$id.'">Обзор файла</a><br /><br />';
+        echo '<a href="/load/down?act=view&amp;id='.$id.'">Обзор файла</a><br><br>';
 
         if (empty($new['link'])) {
-            echo '<b><big>Загрузка файла</big></b><br /><br />';
+            echo '<b><big>Загрузка файла</big></b><br><br>';
 
             echo '<div class="form">';
             echo '<form action="/admin/load?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-            echo 'Прикрепить файл* ('.Setting::get('allowextload').'):<br /><input type="file" name="loadfile" /><br />';
-            echo '<input value="Загрузить" type="submit" /></form></div><br />';
+            echo 'Прикрепить файл* ('.Setting::get('allowextload').'):<br><input type="file" name="loadfile"><br>';
+            echo '<input value="Загрузить" type="submit"></form></div><br>';
 
             echo '<div class="form">';
             echo '<form action="/admin/load?act=copyfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo 'Импорт файла*:<br /><input type="text" name="loadfile" value="http://" /><br />';
-            echo '<input value="Импортировать" type="submit" /></form></div><br />';
+            echo 'Импорт файла*:<br><input type="text" name="loadfile" value="http://"><br>';
+            echo '<input value="Импортировать" type="submit"></form></div><br>';
 
         } else {
             $folder = $new['folder'] ? $new['folder'].'/' : '';
 
-            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/admin/load?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br />';
+            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/admin/load?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
 
             $ext = getExtension($new['link']);
             if (! in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
 
                 if (empty($new['screen'])) {
-                    echo '<br /><b><big>Загрузка скриншота</big></b><br /><br />';
+                    echo '<br><b><big>Загрузка скриншота</big></b><br><br>';
                     echo '<div class="form">';
                     echo '<form action="/admin/load?act=loadscreen&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-                    echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br /><input type="file" name="screen" /><br />';
-                    echo '<input value="Загрузить" type="submit" /></form></div><br />';
+                    echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br><input type="file" name="screen"><br>';
+                    echo '<input value="Загрузить" type="submit"></form></div><br>';
                 } else {
-                    echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br /><br />';
-                    echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br />';
+                    echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                    echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br>';
                 }
             }
         }
 
-        echo '<br />';
+        echo '<br>';
 
-        echo '<b><big>Редактирование</big></b><br /><br />';
+        echo '<b><big>Редактирование</big></b><br><br>';
         echo '<div class="form">';
         echo '<form action="/admin/load?act=changedown&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-        echo 'Название*:<br />';
-        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['title'].'" /><br />';
-        echo 'Описание*:<br />';
-        echo '<textarea cols="25" rows="5" name="text">'.$new['text'].'</textarea><br />';
-        echo 'Автор файла:<br />';
-        echo '<input type="text" name="author" maxlength="50" value="'.$new['author'].'" /><br />';
-        echo 'Сайт автора:<br />';
-        echo '<input type="text" name="site" maxlength="50" value="'.$new['site'].'" /><br />';
-        echo 'Имя файла*:<br />';
-        echo '<input type="text" name="loadfile" maxlength="50" value="'.$new['link'].'" /><br />';
+        echo 'Название*:<br>';
+        echo '<input type="text" name="title" size="50" maxlength="50" value="'.$new['title'].'"><br>';
+        echo 'Описание*:<br>';
+        echo '<textarea cols="25" rows="5" name="text">'.$new['text'].'</textarea><br>';
+        echo 'Автор файла:<br>';
+        echo '<input type="text" name="author" maxlength="50" value="'.$new['author'].'"><br>';
+        echo 'Сайт автора:<br>';
+        echo '<input type="text" name="site" maxlength="50" value="'.$new['site'].'"><br>';
+        echo 'Имя файла*:<br>';
+        echo '<input type="text" name="loadfile" maxlength="50" value="'.$new['link'].'"><br>';
 
-        echo '<input value="Изменить" type="submit" /></form></div><br />';
+        echo '<input value="Изменить" type="submit"></form></div><br>';
     } else {
         show_error('Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load">Категории</a><br />';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load">Категории</a><br>';
 break;
 
 ############################################################################################
@@ -934,7 +934,7 @@ case 'changedown':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -996,7 +996,7 @@ case 'copyfile':
         show_error('Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -1064,7 +1064,7 @@ case 'loadfile':
         show_error('Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -1109,7 +1109,7 @@ case 'loadscreen':
         show_error('Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -1135,7 +1135,7 @@ case 'delfile':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -1157,7 +1157,7 @@ case 'delscreen':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -1170,7 +1170,7 @@ case 'movedown':
     if (!empty($downs)) {
         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
-        echo '<i class="fa fa-download"></i> <b>'.$downs['title'].'</b> ('.read_file(HOME.'/uploads/files/'.$folder.$downs['link']).')<br /><br />';
+        echo '<i class="fa fa-download"></i> <b>'.$downs['title'].'</b> ('.read_file(HOME.'/uploads/files/'.$folder.$downs['link']).')<br><br>';
 
         $querycats = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
         $cats = $querycats -> fetchAll();
@@ -1185,7 +1185,7 @@ case 'movedown':
 
             echo '<div class="form"><form action="/admin/load?act=addmovedown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
 
-            echo 'Выберите раздел для перемещения:<br />';
+            echo 'Выберите раздел для перемещения:<br>';
             echo '<select name="section">';
             echo '<option value="0">Список разделов</option>';
 
@@ -1207,7 +1207,7 @@ case 'movedown':
 
             echo '</select>';
 
-            echo '<input type="submit" value="Переместить" /></form></div><br />';
+            echo '<input type="submit" value="Переместить"></form></div><br>';
 
         } elseif(count($cats) == 1) {
             show_error('Нет доступных разделов для перемещения!');
@@ -1218,7 +1218,7 @@ case 'movedown':
         show_error('Ошибка! Данного файла не существует!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -1261,8 +1261,8 @@ case 'addmovedown':
         show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=movedown&amp;id='.$id.'">Вернуться</a><br />';
-    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'">К разделам</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=movedown&amp;id='.$id.'">Вернуться</a><br>';
+    echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'">К разделам</a><br>';
 break;
 
 ############################################################################################
@@ -1312,12 +1312,12 @@ case 'deldown':
         show_error('Ошибка! Удалять файлы могут только суперадмины!');
     }
 
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br />';
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 endswitch;
 
-echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

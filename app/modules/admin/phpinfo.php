@@ -4,24 +4,24 @@ App::view(Setting::get('themes').'/index');
 if (is_admin([101, 102])) {
     //show_title('PHP-info');
 
-    echo 'PHP version: <b>'.phpversion().'</b><br />';
+    echo 'PHP version: <b>'.phpversion().'</b><br>';
 
     if (zend_version()) {
-        echo 'Zend version: <b>'.zend_version().'</b><br />';
+        echo 'Zend version: <b>'.zend_version().'</b><br>';
     }
 
     if (gd_info()) {
         $gd_info = preg_replace('/[^0-9\.]/', '', gd_info());
-        echo 'GD Version: <b>'.$gd_info['GD Version'].'</b><br />';
+        echo 'GD Version: <b>'.$gd_info['GD Version'].'</b><br>';
     }
 
     $res = DB::run() -> querySingle("SELECT VERSION()");
-    echo 'PDO MySQL: <b>'.preg_replace('/[^0-9\.]/', '', $res).'</b><br />';
+    echo 'PDO MySQL: <b>'.preg_replace('/[^0-9\.]/', '', $res).'</b><br>';
 
     if (function_exists('ini_get_all')) {
         $ini = ini_get_all();
 
-        echo '<br /><table width="99%" border="0" cellspacing="0" cellpadding="2">';
+        echo '<br><table width="99%" border="0" cellspacing="0" cellpadding="2">';
         echo '<tr bgcolor="ffff00"><td width="40%">Directive</td><td width="60%">Local Value</td></tr>';
 
         $q = 0;
@@ -44,13 +44,13 @@ if (is_admin([101, 102])) {
 
             echo '<tr bgcolor="'.$bgcolor.'"><td width="40%">'.$inikey.'</td><td width="60%">'.check($inivalue['local_value']).'</td></tr>';
         }
-        echo '</table><br />';
+        echo '</table><br>';
 
     } else {
         show_error('Ошибка! Функция ini_get_all запрещена в php.ini!');
     }
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

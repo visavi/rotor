@@ -12,11 +12,11 @@
 
     if ($user) {
 
-        echo '<i class="fa fa-envelope"></i> Сообщение для <b>' . profile($user) . '</b> ' . user_visit($user) . ':<br />';
-        echo '<i class="fa fa-history"></i> <a href="/private/history?user=' . $user->login . '">История переписки</a><br />';
+        echo '<i class="fa fa-envelope"></i> Сообщение для <b>' . profile($user) . '</b> ' . user_visit($user) . ':<br>';
+        echo '<i class="fa fa-history"></i> <a href="/private/history?user=' . $user->login . '">История переписки</a><br>';
 
         if (isIgnore(App::user(), $user)) {
-            echo '<b><span style="color:#ff0000">Внимание, данный пользователь находится в игнор-листе!</span></b><br />';
+            echo '<b><span style="color:#ff0000">Внимание, данный пользователь находится в игнор-листе!</span></b><br>';
         }
 
         echo '<div class="form">';
@@ -28,12 +28,12 @@
         <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
 <?php
         if (App::user('point') < Setting::get('privatprotect')) {
-            echo 'Проверочный код:<br />';
-            echo '<img src="/captcha" alt="" /><br />';
-            echo '<input name="provkod" size="6" maxlength="6" /><br />';
+            echo 'Проверочный код:<br>';
+            echo '<img src="/captcha" alt=""><br>';
+            echo '<input name="provkod" size="6" maxlength="6"><br>';
         }
 
-        echo '<button class="btn btn-primary">Отправить</button></form></div><br />';
+        echo '<button class="btn btn-primary">Отправить</button></form></div><br>';
 
     } else {
 
@@ -60,7 +60,7 @@
             foreach($contacts as $data) {
                 echo '<option value="'.$data->getContact()->login.'">'.$data->getContact()->login.'</option>';
             }
-            echo '</select><br />';
+            echo '</select><br>';
         }
 ?>
 
@@ -70,20 +70,20 @@
 <?php
 
         if (App::user('point') < Setting::get('privatprotect')) {
-            echo 'Проверочный код:<br />';
-            echo '<img src="/captcha" alt="" /><br />';
-            echo '<input name="provkod" size="6" maxlength="6" /><br />';
+            echo 'Проверочный код:<br>';
+            echo '<img src="/captcha" alt=""><br>';
+            echo '<input name="provkod" size="6" maxlength="6"><br>';
         }
 
-        echo '<button class="btn btn-primary">Отправить</button></form></div><br />';
+        echo '<button class="btn btn-primary">Отправить</button></form></div><br>';
 
-        echo 'Введите логин или выберите пользователя из своего контакт-листа<br />';
+        echo 'Введите логин или выберите пользователя из своего контакт-листа<br>';
     }
 ?>
 
-    <i class="fa fa-arrow-circle-up"></i> <a href="/private">К письмам</a><br />
-    <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br />
-    <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br />
-    <i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br />
+    <i class="fa fa-arrow-circle-up"></i> <a href="/private">К письмам</a><br>
+    <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br>
+    <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br>
 
 @stop

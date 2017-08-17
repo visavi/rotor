@@ -268,7 +268,7 @@ class BBCodeTest extends TestCase
         $text      = 'Привет :D :hello';
         $parseText = App::bbCode($text);
 
-        $this->assertEquals($parseText, 'Привет <img src="/uploads/smiles/D.gif" alt="D.gif" /> <img src="/uploads/smiles/hello.gif" alt="hello.gif" />');
+        $this->assertEquals($parseText, 'Привет <img src="/uploads/smiles/D.gif" alt="D.gif"> <img src="/uploads/smiles/hello.gif" alt="hello.gif">');
     }
 
     /**

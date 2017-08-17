@@ -18,14 +18,14 @@ if (is_admin([101])) {
 
             echo '<div class="form">';
             echo '<form action="/admin/delivery?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
-            echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br />';
-            echo 'Отправить:<br />';
-            echo '<label><input name="rec" type="radio" value="1" checked="checked" /> В онлайне</label><br />';
-            echo '<label><input name="rec" type="radio" value="2" /> Активным</label><br />';
-            echo '<label><input name="rec" type="radio" value="3" /> Администрации</label><br />';
-            echo '<label><input name="rec" type="radio" value="4" /> Всем пользователям</label><br /><br />';
+            echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>';
+            echo 'Отправить:<br>';
+            echo '<label><input name="rec" type="radio" value="1" checked="checked"> В онлайне</label><br>';
+            echo '<label><input name="rec" type="radio" value="2"> Активным</label><br>';
+            echo '<label><input name="rec" type="radio" value="3"> Администрации</label><br>';
+            echo '<label><input name="rec" type="radio" value="4"> Всем пользователям</label><br><br>';
 
-            echo '<input type="submit" value="Разослать" /></form></div><br />';
+            echo '<input type="submit" value="Разослать"></form></div><br>';
         break;
 
 
@@ -99,12 +99,12 @@ if (is_admin([101])) {
                 show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delivery">Вернуться</a><br />';
+            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delivery">Вернуться</a><br>';
         break;
 
     endswitch;
 
-    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br />';
+    echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
     App::redirect('/');

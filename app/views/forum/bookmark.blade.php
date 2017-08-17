@@ -11,10 +11,10 @@
 
     @if ($page['total'] > 0)
         <form action="/forum/bookmark/delete?page=<?=$page['current']?>" method="post">
-            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" />
+            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
             <?php foreach ($topics as $topic): ?>
                 <div class="b">
-                    <input type="checkbox" name="del[]" value="<?=$topic['id']?>" />
+                    <input type="checkbox" name="del[]" value="<?=$topic['id']?>">
 
                     <i class="fa <?=$topic->getTopic()->getIcon()?> text-muted"></i>
 
@@ -29,8 +29,8 @@
                 </div>
             <?php endforeach; ?>
 
-            <br />
-            <input type="submit" value="Удалить выбранное" />
+            <br>
+            <input type="submit" value="Удалить выбранное">
         </form>
 
         <?php App::pagination($page) ?>

@@ -27,10 +27,10 @@
     </ol>
 
     <div>
-        <a href="/uploads/pictures/{{ $photo['link'] }}" class="gallery"><img  class="img-responsive" src="/uploads/pictures/{{ $photo['link'] }}" alt="image" /></a><br />
+        <a href="/uploads/pictures/{{ $photo['link'] }}" class="gallery"><img  class="img-responsive" src="/uploads/pictures/{{ $photo['link'] }}" alt="image"></a><br>
 
         @if ($photo['text'])
-            {!! App::bbCode($photo['text']) !!}<br />
+            {!! App::bbCode($photo['text']) !!}<br>
         @endif
 
         <div class="js-rating">Рейтинг:
@@ -43,12 +43,12 @@
             @endunless
         </div>
 
-        Размер: {{ read_file(HOME.'/uploads/pictures/'.$photo['link']) }}<br />
-        Добавлено: {!! profile($photo['user']) !!} ({{ date_fixed($photo['time']) }})<br />
+        Размер: {{ read_file(HOME.'/uploads/pictures/'.$photo['link']) }}<br>
+        Добавлено: {!! profile($photo['user']) !!} ({{ date_fixed($photo['time']) }})<br>
         <a href="/gallery/{{ $photo['id'] }}/comments">Комментарии</a> ({{ $photo['comments'] }})
         <a href="/gallery/{{ $photo['id'] }}/end">&raquo;</a>
     </div>
-    <br />
+    <br>
 
     <?php $nav = photo_navigation($photo['id']); ?>
 
@@ -63,11 +63,11 @@
             @endif
         </div>
     @endif
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">В альбом</a><br />
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">В альбом</a><br>
 
     @else
         {{ show_error('Ошибка! Данного изображения нет в базе') }}
     @endif
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br />
+    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

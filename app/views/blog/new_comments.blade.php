@@ -5,8 +5,8 @@
 	</div>
 
 	<div>
-		<?=App::bbCode($data['text'])?><br />
-		Написал: <?=profile($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br />
+		<?=App::bbCode($data['text'])?><br>
+		Написал: <?=profile($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br>
 
 		<?php if (is_admin()): ?>
 			<span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>

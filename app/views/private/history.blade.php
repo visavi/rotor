@@ -12,7 +12,7 @@
 
     echo '<i class="fa fa-envelope"></i> <a href="/private">Входящие</a> / ';
     echo '<a href="/private/outbox">Отправленные</a> / ';
-    echo '<a href="/private/trash">Корзина</a><hr />';
+    echo '<a href="/private/trash">Корзина</a><hr>';
 
     if ($messages->isNotEmpty()) {
 
@@ -29,7 +29,7 @@
         show_error('История переписки отсутствует!');
     }
 
-    echo '<br /><div class="form">';
+    echo '<br><div class="form">';
     echo '<form action="/private/send?user='.$user->login.'" method="post">';
     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
 ?>
@@ -39,18 +39,18 @@
 
   <?php
     if (App::user('point') < Setting::get('privatprotect')) {
-        echo 'Проверочный код:<br /> ';
-        echo '<img src="/captcha" alt="" /><br />';
-        echo '<input name="provkod" size="6" maxlength="6" /><br />';
+        echo 'Проверочный код:<br> ';
+        echo '<img src="/captcha" alt=""><br>';
+        echo '<input name="provkod" size="6" maxlength="6"><br>';
     }
 
-    echo '<button class="btn btn-primary">Быстрый ответ</button></form></div><br />';
+    echo '<button class="btn btn-primary">Быстрый ответ</button></form></div><br>';
 
-    echo 'Всего писем: <b>'.$page['total'].'</b><br /><br />';
+    echo 'Всего писем: <b>'.$page['total'].'</b><br><br>';
 
 ?>
-    <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br />
-    <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br />
-    <i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br />
+    <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br>
+    <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br>
+    <i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br>
 
 @stop

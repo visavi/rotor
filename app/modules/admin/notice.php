@@ -44,12 +44,12 @@ case 'index':
             echo '</div>';
         }
 
-        echo '<br />Всего шаблонов: '.$total.'<br /><br />';
+        echo '<br>Всего шаблонов: '.$total.'<br><br>';
 
     } else {
         show_error('Шаблонов еще нет!');
     }
-    echo '<i class="fa fa-check"></i> <a href="/admin/notice?act=new">Добавить</a><br />';
+    echo '<i class="fa fa-check"></i> <a href="/admin/notice?act=new">Добавить</a><br>';
 break;
 
 /**
@@ -61,12 +61,12 @@ case 'new':
     echo '<div class="form">';
     echo '<form action="/admin/notice?act=save" method="post">';
     echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-    echo 'Название: <br />';
-    echo '<input type="text" name="name" maxlength="100" size="50" /><br />';
-    echo '<textarea id="markItUp" cols="35" rows="20" name="text"></textarea><br />';
-    echo '<input name="protect" id="protect" type="checkbox" value="1" /> <label for="protect">Системный шаблон</label><br />';
+    echo 'Название: <br>';
+    echo '<input type="text" name="name" maxlength="100" size="50"><br>';
+    echo '<textarea id="markItUp" cols="35" rows="20" name="text"></textarea><br>';
+    echo '<input name="protect" id="protect" type="checkbox" value="1"> <label for="protect">Системный шаблон</label><br>';
 
-    echo '<input type="submit" value="Сохранить" /></form></div><br />';
+    echo '<input type="submit" value="Сохранить"></form></div><br>';
 
     App::view('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
 break;
@@ -79,21 +79,21 @@ case 'edit':
     if ($notice) {
 
         if ($notice['protect']) {
-            echo '<div class="info"><i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b></div><br />';
+            echo '<div class="info"><i class="fa fa-exclamation-circle"></i> <b>Вы редактируете системный шаблон</b></div><br>';
         }
 
         echo '<div class="form">';
         echo '<form action="/admin/notice?act=save&amp;id='.$id.'" method="post">';
         echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
-        echo 'Название: <br />';
-        echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['name'].'" /><br />';
-        echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['text'].'</textarea><br />';
+        echo 'Название: <br>';
+        echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['name'].'"><br>';
+        echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['text'].'</textarea><br>';
 
         $checked = $notice['protect'] ? ' checked="checked"' : '';
 
-        echo '<input name="protect" id="protect" type="checkbox" value="1" '.$checked.' /> <label for="protect">Системный шаблон</label><br />';
+        echo '<input name="protect" id="protect" type="checkbox" value="1" '.$checked.'> <label for="protect">Системный шаблон</label><br>';
 
-        echo '<input type="submit" value="Изменить" /></form></div><br />';
+        echo '<input type="submit" value="Изменить"></form></div><br>';
 
     } else {
         show_error('Ошибка! Шаблона для редактирования не существует!');

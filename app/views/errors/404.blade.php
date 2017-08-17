@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-md-4 text-center">
-            <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error 404" />
+            <img src="/assets/img/errors/{{ basename($images[array_rand($images)]) }}" alt="error 404">
         </div>
         <div class="col-md-8">
             <h3>Ошибка 404!</h3>
