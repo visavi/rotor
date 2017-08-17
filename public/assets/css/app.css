@@ -56,6 +56,17 @@ blockquote small:before {
     content:'\2014 \00A0';
 }
 
+.has-error .form-control {
+    border-color: #dc3545;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+.has-error .form-control:focus {
+    border-color: #dc3545;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+}
+
 .prettyprint {
   font-size: 100%;
   border-radius: 4px;
