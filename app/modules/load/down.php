@@ -43,7 +43,7 @@ case 'index':
             </ol>
 
             <?php if (is_user() && ! $cats['closed']): ?>
-                <div class="pull-right">
+                <div class="float-right">
                     <a class="btn btn-success" href="/load/add?cid=<?= $cid ?>">Добавить файл</a>
                 </div><br>
             <?php endif; ?>
@@ -255,7 +255,7 @@ case 'view':
                     echo '<form action="/load/down?act=load&amp;id='.$id.'" method="post">';
 
                     echo 'Проверочный код:<br> ';
-                    echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt=""><br>';
+                    echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="rounded" alt="" style="cursor: pointer;" alt=""><br>';
                     echo '<input name="protect" size="6" maxlength="6">';
                     echo '<input type="submit" value="Скачать ('.$filesize.')"></form>';
                     echo '<em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br>';

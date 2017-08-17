@@ -44,7 +44,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
 
                     if (is_dir(APP.'/views/'.$path.$file)) {
                         echo '<li class="list-group-item">';
-                        echo '<div class="pull-right">';
+                        echo '<div class="float-right">';
 
                         echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.$file.'&amp;type=dir&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить эту директорию\')"><i class="fa fa-remove"></i></a></div>';
 
@@ -55,7 +55,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         $size = formatsize(filesize(APP.'/views/'.$path.$file));
                         $strok = count(file(APP.'/views/'.$path.$file));
 
-                        echo '<li class="list-group-item"><div class="pull-right">';
+                        echo '<li class="list-group-item"><div class="float-right">';
                         echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.basename($file, '.blade.php').'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
 
                         echo '<i class="fa fa-file-o"></i> ';

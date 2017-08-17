@@ -99,7 +99,7 @@
             <div class="post">
             <div class="b" id="post_<?=$data['id']?>">
 
-                <div class="pull-right">
+                <div class="float-right">
                     <?php if (App::getUserId() != $data['user_id']): ?>
 
                         <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
@@ -167,7 +167,7 @@
     <?php endif; ?>
 
     <?php if ($topic['isModer']): ?>
-        <span class="pull-right">
+        <span class="float-right">
             <button class="btn btn-danger">Удалить выбранное</button>
         </span>
         </form>
@@ -190,7 +190,7 @@
                     <?php if (App::user('point') >= Setting::get('forumloadpoints')): ?>
                         <div class="js-attach-form" style="display: none;">
 
-                            <label class="btn btn-sm btn-default" for="inputFile">
+                            <label class="btn btn-sm btn-secondary" for="inputFile">
                                 <input id="inputFile" type="file" name="file"  style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
                                 Выбрать файл
                             </label>

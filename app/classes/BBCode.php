@@ -74,7 +74,7 @@ class BBCode
         ],
         'image' => [
             'pattern' => '%\[img\]((\w+:)?//[^\s()<>\[\]]+\.(jpg|png|gif|jpeg))\[/img\]%s',
-            'replace' => '<img src="$1" class="img-responsive" alt="image">',
+            'replace' => '<img src="$1" class="img-fluid" alt="image">',
         ],
         'orderedList' => [
             'pattern' => '/\[list=1\](.*?)\[\/list\]/s',

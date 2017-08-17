@@ -90,7 +90,7 @@
 
             <div class="form-group{{ App::hasError('protect') }}">
                 <label for="inputProtect">Проверочный код:</label>
-                <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;">
+                <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;">
                 <input class="form-control" name="protect" id="inputProtect" maxlength="6" required>
                 {!! App::textError('protect') !!}
             </div>

@@ -21,7 +21,7 @@
     @endif
 
     @if (is_user() && empty($forum['closed']))
-        <div class="pull-right">
+        <div class="float-right">
             <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
         </div>
     @endif

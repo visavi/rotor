@@ -15,7 +15,7 @@
             <div class="post">
                 <div class="b">
                     <div class="img">{!! user_avatars($data->user) !!}</div>
-                    <div class="pull-right">
+                    <div class="float-right">
                         @if (App::getUserId() != $data['user_id'])
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 

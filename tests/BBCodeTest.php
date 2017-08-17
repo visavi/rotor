@@ -188,7 +188,7 @@ class BBCodeTest extends TestCase
         $text      = '[img]http://rotor.ll/assets/images/img/logo.png[/img]';
         $parseText = App::bbCode($text);
 
-        $this->assertEquals($parseText, '<img src="http://rotor.ll/assets/images/img/logo.png" class="img-responsive" alt="image">');
+        $this->assertEquals($parseText, '<img src="http://rotor.ll/assets/images/img/logo.png" class="img-fluid" alt="image">');
     }
 
     /**

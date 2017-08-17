@@ -10,16 +10,16 @@
 
     <div class="form">
         @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
-            {!! resize_image('uploads/photos/', $user['picture'], Setting::get('previewsize'), ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}
+            {!! resize_image('uploads/photos/', $user['picture'], Setting::get('previewsize'), ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}
         @else
-            <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото">
+            <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото">
         @endif
 
         <form action="/pictures" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ App::hasError('photo') }}">
-                <label class="btn btn-sm btn-default" for="inputPhoto">
+                <label class="btn btn-sm btn-secondary" for="inputPhoto">
                     <input id="inputPhoto" type="file" name="photo"  style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
                     Прикрепить фото
                 </label>

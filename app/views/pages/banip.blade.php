@@ -24,7 +24,7 @@
         <form method="post">
 
             <label for="inputProtect">Докажите что вы не робот:</label><br>
-            <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;"><br>
+            <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;"><br>
             <input name="protect" id="inputProtect" maxlength="6" required><br>
 
             <button class="btn btn-primary">Подтвердить</button>

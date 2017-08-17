@@ -27,7 +27,7 @@
     </ol>
 
     <div>
-        <a href="/uploads/pictures/{{ $photo['link'] }}" class="gallery"><img  class="img-responsive" src="/uploads/pictures/{{ $photo['link'] }}" alt="image"></a><br>
+        <a href="/uploads/pictures/{{ $photo['link'] }}" class="gallery"><img  class="img-fluid" src="/uploads/pictures/{{ $photo['link'] }}" alt="image"></a><br>
 
         @if ($photo['text'])
             {!! App::bbCode($photo['text']) !!}<br>

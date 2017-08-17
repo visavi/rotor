@@ -14,7 +14,7 @@
     echo 'Логин или email:<br>';
     echo '<input name="user" type="text" value="'.$cookieLogin.'" maxlength="100"><br>';
     echo 'Проверочный код:<br> ';
-    echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;" alt=""><br>';
+    echo '<img src="/captcha" onclick="this.src=\'/captcha?\'+Math.random()" class="rounded" alt="" style="cursor: pointer;" alt=""><br>';
     echo '<input name="protect" size="6" maxlength="6"><br>';
     echo '<br><input value="Восстановить" type="submit"></form></div><br>';
 

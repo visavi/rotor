@@ -26,21 +26,19 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 col-md-push-6">
-                <div class="pull-right">
+            <div class="col-md-6 push-md-6">
+                <div class="float-right">
 
                     @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
                         <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
-                            {!! resize_image('uploads/photos/', $user['picture'], Setting::get('previewsize'), ['alt' => $user['login'], 'class' => 'img-responsive img-rounded']) !!}</a>
+                            {!! resize_image('uploads/photos/', $user['picture'], Setting::get('previewsize'), ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}</a>
                     @else
-                        <img src="/assets/img/images/photo.jpg" alt="Фото" class="pull-right img-responsive img-rounded">
+                        <img src="/assets/img/images/photo.jpg" alt="Фото" class="float-right img-fluid rounded">
                     @endif
                 </div>
             </div>
 
-            <div class="col-md-6 col-md-pull-6">
-
-
+            <div class="col-md-6 pull-md-6">
                 Cтатус: <b><a href="/statusfaq">{!! user_title($user) !!}</a></b><br>
 
                 {!! user_gender($user) !!}

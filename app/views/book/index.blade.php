@@ -25,7 +25,7 @@
 
                     <?php if (is_user() && App::getUserId() != $data['user_id']): ?>
 
-                        <div class="pull-right">
+                        <div class="float-right">
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
@@ -35,7 +35,7 @@
                     <?php endif; ?>
 
                     <?php if (App::getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME): ?>
-                        <div class="pull-right">
+                        <div class="float-right">
                             <a href="/book/edit/<?=$data['id']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         </div>
                     <?php endif; ?>
@@ -102,7 +102,7 @@
 
                 <div class="form-group{{ App::hasError('protect') }}">
                     <label for="inputProtect">Проверочный код:</label>
-                    <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="img-rounded" alt="" style="cursor: pointer;">
+                    <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;">
                     <input class="form-control" name="protect" id="inputProtect" maxlength="6" required>
                     {!! App::textError('protect') !!}
                 </div>

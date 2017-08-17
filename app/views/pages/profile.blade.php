@@ -21,15 +21,15 @@
             <div class="container-fluid">
                 <div class="row">
 
-                    <div class="col-md-6 col-md-push-6">
-                        <div class="pull-right">
+                    <div class="col-6 col-md-push-6">
+                        <div class="float-right">
                             @if (!empty(App::user('picture')) && file_exists(HOME.'/uploads/photos/'.App::user('picture')))
                                 <a class="gallery" href="/uploads/photos/{{ App::user('picture') }}">
-                                    {!! resize_image('uploads/photos/', App::user('picture'), Setting::get('previewsize'), ['alt' => App::user('login'), 'class' => 'img-responsive img-rounded']) !!}
+                                    {!! resize_image('uploads/photos/', App::user('picture'), Setting::get('previewsize'), ['alt' => App::user('login'), 'class' => 'img-fluid rounded']) !!}
                                 </a>
                                 <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
                             @else
-                                <img class="img-responsive img-rounded" src="/assets/img/images/photo.jpg" alt="Фото">
+                                <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото">
                                 <a href="/pictures">Загрузить фото</a>
                             @endif
                             </div>

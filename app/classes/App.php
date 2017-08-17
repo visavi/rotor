@@ -671,7 +671,7 @@ class App
         $data = file_get_contents($path);
 
         if (! isset($params['class'])) {
-            $params['class'] = 'img-responsive';
+            $params['class'] = 'img-fluid';
         }
 
         $strParams = [];

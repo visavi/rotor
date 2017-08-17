@@ -1237,7 +1237,7 @@ function recentphotos($show = 5)
 
     if ($photos->isNotEmpty()) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/'.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title'], 'class' => 'img-rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery/'.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title'], 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br>';
@@ -1446,7 +1446,7 @@ function resize_image($dir, $name, $size, $params = []) {
         if (empty($params['alt'])) $params['alt'] = $name;
 
         if (! isset($params['class'])) {
-            $params['class'] = 'img-responsive';
+            $params['class'] = 'img-fluid';
         }
 
         $strParams = [];
@@ -1526,6 +1526,7 @@ function include_style(){
 // ------------- Подключение javascript -------------//
 function include_javascript(){
     echo '<script src="/assets/js/jquery-3.2.1.min.js"></script>'."\r\n";
+    echo '<script src="/assets/js/popper.min.js"></script>'."\r\n";
     echo '<script src="/assets/js/bootstrap.min.js"></script>'."\r\n";
     echo '<script src="/assets/js/prettify.js"></script>'."\r\n";
     echo '<script src="/assets/js/markitup/jquery.markitup.js"></script>'."\r\n";

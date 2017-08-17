@@ -35,20 +35,30 @@ blockquote:before {
 }
 
 blockquote {
+  padding: 8px 15px;
   font-size: 95%;
   background:#f2f1f6;
   border: 1px solid #ddd;
   border-left: 5px solid #ddd;
-  margin: 0 0 10px;
+  margin: 0;
   font-style:italic;
   color:#543;
-  -moz-box-shadow: 2px 2px 15px #ccc;
-  -webkit-box-shadow: 2px 2px 15px #ccc;
   box-shadow: 2px 2px 15px #ccc;
+}
+
+blockquote small {
+  display: block;
+  font-size: 80%;
+  color: #868e96;
+}
+
+blockquote small:before {
+    content:'\2014 \00A0';
 }
 
 .prettyprint {
   font-size: 100%;
+  border-radius: 4px;
 }
 
 .spoiler {
