@@ -24,7 +24,7 @@ $wrap->setOption('environment', 'default');
 header("Content-type:text/html; charset=utf-8");
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <title>
         Обновление RotorCMS

@@ -21,9 +21,8 @@
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <noindex>
-                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ Blog::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
-                            </noindex>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ Blog::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+
                         @endif
 
                         @if (App::getUserId() == $data->getUser()->id && $data['created_at'] + 600 > SITETIME)

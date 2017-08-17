@@ -448,7 +448,7 @@ case 'comments':
                         echo '<div class="right">';
                         echo '<a href="/load/down?act=reply&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Отв</a> / ';
                         echo '<a href="/load/down?act=quote&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Цит</a> / ';
-                        echo '<noindex><a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></noindex></div>';
+                        echo '<a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></div>';
                     }
 
                     if (App::getUsername() == $data['user'] && $data['time'] + 600 > SITETIME) {
