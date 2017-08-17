@@ -315,8 +315,6 @@ class ForumController extends BaseController
         }
 
         App::view('forum/rss', compact('topics'));
-        var_dump(getQueryLog());
-        exit;
     }
 
     /**
