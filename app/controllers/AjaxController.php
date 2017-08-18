@@ -39,6 +39,13 @@ class AjaxController extends BaseController
         $token = check(Request::input('token'));
 
         switch ($type):
+            case 'News':
+                $data = Comment::where('relate_type', $type)
+                    ->where('id', $id)
+                    ->first();
+                $path = '/news/'.$data['relate_id'].'/comments?page='.$page;
+                break;
+
             case 'Blog':
                 $data = Comment::where('relate_type', $type)
                     ->where('id', $id)
