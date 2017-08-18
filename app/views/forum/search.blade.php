@@ -8,10 +8,10 @@
     <h1>Поиск по форуму</h1>
 
     <div class="form">
-        <form action="/forum/search" method="get">
+        <form action="/forum/search">
             <div class="form-group{{ App::hasError('find') }}">
                 <label for="inputFind">Запрос</label>
-                <input name="find" type="text" class="form-control" id="inputFind" maxlength="50" placeholder="Введите запрос" value="{{ App::getInput('find') }}" required>
+                <input name="find" class="form-control" id="inputFind" maxlength="50" placeholder="Введите запрос" value="{{ App::getInput('find') }}" required>
                 {!! App::textError('find') !!}
             </div>
 

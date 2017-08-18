@@ -74,15 +74,16 @@ class App
         if (Request::ajax()) {
             header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
 
-            exit(json_encode([
+            json_encode([
                 'status' => 'error',
                 'message' => $message,
-            ]));
+            ]);
+        } else {
+            $referer = Request::header('referer') ?? null;
+            self::view('errors/'.$code, compact('message', 'referer'));
         }
 
-        $referer = Request::header('referer') ?? null;
-
-        exit(self::view('errors/'.$code, compact('message', 'referer')));
+        exit();
     }
 
 
@@ -92,6 +93,7 @@ class App
      *
      * @param  string  $url адрес переадресации
      * @param  boolean $permanent постоянное перенаправление
+     * @return void
      */
     public static function redirect($url, $permanent = false)
     {
@@ -103,7 +105,8 @@ class App
             header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
         }
 
-        exit(header('Location: '.$url));
+        header('Location: '.$url);
+        exit();
     }
 
     /**
@@ -120,8 +123,7 @@ class App
     /**
      * Возвращает flash уведомления
      *
-     * @return string сформированный блок с уведомлениями
-     * @internal param array $errors массив уведомлений
+     * @return void сформированный блок с уведомлениями
      */
     public static function getFlash()
     {
@@ -155,9 +157,14 @@ class App
      * @param string $default
      * @return string сохраненный текст
      */
-    public static function getInput($name, $default = '')
+    public static function getInput($name, $default = null)
     {
-        return $_SESSION['input'][$name] ?? $default;
+        if (isset($_SESSION['input'])) {
+            $inputs = $_SESSION['input'];
+            unset($_SESSION['input']);
+        }
+
+        return $inputs[$name] ?? $default;
     }
 
     /**
@@ -179,10 +186,14 @@ class App
      */
     public static function textError($field)
     {
+        $text = null;
+
         if (isset($_SESSION['flash']['danger'][$field])) {
             $error = $_SESSION['flash']['danger'][$field];
-            return '<div class="text-danger">'.$error.'</div>';
+            $text = '<div class="text-danger">'.$error.'</div>';
         }
+
+        return $text;
     }
 
     /**

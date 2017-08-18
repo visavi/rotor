@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h3>Поиск запроса <?=$find?></h3>
+    <h1>Поиск запроса <?=$find?></h1>
 
     <p>Найдено совпадений в сообщениях: <?=$page['total']?></p>
 
@@ -22,5 +22,7 @@
 
     <?php endforeach; ?>
 
-	<?php App::pagination($page) ?>
+    <?php App::pagination($page) ?>
+
+    <i class="fa fa-arrow-circle-left"></i> <a href="/forum/search">Вернуться</a>
 @stop
