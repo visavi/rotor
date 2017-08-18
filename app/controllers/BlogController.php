@@ -358,19 +358,6 @@ class BlogController extends BaseController
                     'brow'        => App::getUserAgent(),
                 ]);
 
-                Capsule::delete('
-                DELETE FROM comments WHERE relate_type = :relate_type AND relate_id = :relate_id AND created_at < (
-                    SELECT MIN(created_at) FROM (
-                        SELECT created_at FROM comments WHERE relate_type = :relate_type2 AND relate_id = :relate_id2 ORDER BY created_at DESC LIMIT ' . Setting::get('maxpostgallery') . '
-                    ) AS del
-                );', [
-                        'relate_type'  => Blog::class,
-                        'relate_id'    => $blog->id,
-                        'relate_type2' => Blog::class,
-                        'relate_id2'   => $blog->id,
-                    ]
-                );
-
                 $user = User::where('id', App::getUserId());
                 $user->update([
                     'allcomments' => Capsule::raw('allcomments + 1'),

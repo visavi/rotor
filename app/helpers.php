@@ -811,15 +811,9 @@ function stats_guest()
 {
     if (@filemtime(STORAGE."/temp/statguest.dat") < time()-600) {
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `guest`;");
+        $total = Guest::count();
 
-        if ($total > (Setting::get('maxpostbook') - 10)) {
-            $stat = DB::run() -> querySingle("SELECT MAX(`id`) FROM `guest`;");
-        } else {
-            $stat = $total;
-        }
-
-        file_put_contents(STORAGE."/temp/statguest.dat", (int)$stat, LOCK_EX);
+        file_put_contents(STORAGE."/temp/statguest.dat", $total, LOCK_EX);
     }
 
     return file_get_contents(STORAGE."/temp/statguest.dat");
@@ -827,14 +821,7 @@ function stats_guest()
 
 // -------------------- Функция вывода статистики админ-чата -----------------------//
 function stats_chat() {
-
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
-
-    if ($total > (Setting::get('chatpost') - 10)) {
-        $total = DB::run() -> querySingle("SELECT MAX(`id`) FROM `chat`;");
-    }
-
-    return $total;
+    return Chat::count();
 }
 
 // ------------------ Функция вывода времени последнего сообщения --------------------//

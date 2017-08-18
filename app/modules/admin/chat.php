@@ -97,8 +97,6 @@ if (is_admin()) {
                         DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [App::getUsername(), $msg, App::getClientIp(), App::getUserAgent(), SITETIME]);
                     }
 
-                    DB::run() -> query("DELETE FROM `chat` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `chat` ORDER BY `time` DESC LIMIT ".Setting::get('maxpostchat').") AS del);");
-
                     DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), App::getUsername()]);
 
                     App::setFlash('success', 'Сообщение успешно добавлено!');

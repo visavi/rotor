@@ -65,14 +65,6 @@ class BookController extends BaseController
             $guest->created_at = SITETIME;
             $guest->save();
 
-            Capsule::delete('
-                    DELETE FROM guest WHERE created_at < (
-                        SELECT MIN(created_at) FROM (
-                            SELECT created_at FROM guest ORDER BY created_at DESC LIMIT ' . Setting::get('maxpostbook') . '
-                        ) AS del
-                    );'
-            );
-
             App::setFlash('success', 'Сообщение успешно добавлено!');
         } else {
             App::setInput(Request::all());

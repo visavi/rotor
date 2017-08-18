@@ -163,8 +163,8 @@ class PhotoController extends BaseController
         }
 
         if (Request::isMethod('post')) {
+            $msg   = check(Request::input('msg'));
             $token = check(Request::input('token'));
-            $msg = check(Request::input('msg'));
 
             $validation = new Validation();
             $validation
@@ -186,19 +186,6 @@ class PhotoController extends BaseController
                     'ip'          => App::getClientIp(),
                     'brow'        => App::getUserAgent(),
                 ]);
-
-                Capsule::delete('
-                DELETE FROM comments WHERE relate_type = :relate_type AND relate_id = :relate_id AND created_at < (
-                    SELECT MIN(created_at) FROM (
-                        SELECT created_at FROM comments WHERE relate_type = :relate_type2 AND relate_id = :relate_id2 ORDER BY created_at DESC LIMIT ' . Setting::get('maxpostgallery') . '
-                    ) AS del
-                );', [
-                        'relate_type'  => Photo::class,
-                        'relate_id'    => $photo->id,
-                        'relate_type2' => Photo::class,
-                        'relate_id2'   => $photo->id,
-                    ]
-                );
 
                 $user = User::where('id', App::getUserId());
                 $user->update([

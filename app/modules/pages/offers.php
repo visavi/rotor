@@ -423,8 +423,6 @@ switch ($action):
 
                                 DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
 
-                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `comments` WHERE relate_type=? AND `id`=? ORDER BY `time` DESC LIMIT ".Setting::get('maxpostoffers').") AS del);", [$id, 'offer', $id, 'offer']);
-
                                 DB::run() -> query("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 
                                 App::setFlash('success', 'Комментарий успешно добавлен!');

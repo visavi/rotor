@@ -96,11 +96,6 @@ if ($act == 'index') {
                 $_SESSION['botochat'] = 1;
             }
             }
-
-            $countstr = counter_string(STORAGE."/chat/chat.dat");
-            if ($countstr >= Setting::get('maxpostchat')) {
-            delete_lines(STORAGE."/chat/chat.dat", [0, 1, 2, 3, 4]);
-            }
         }
 
         if ($total < $page['offset'] + Setting::get('chatpost')) {
@@ -185,11 +180,6 @@ if ($act == 'add') {
                 $text = no_br($msg . '|' . App::getUsername() . '||' . SITETIME . '|' . App::getUserAgent() . '|' . App::getClientIp() . '|0|' . $data[7] . '|' . $data[8] . '|' . $unifile . '|');
 
                 write_files(STORAGE."/chat/chat.dat", "$text\r\n");
-
-                $countstr = counter_string(STORAGE."/chat/chat.dat");
-                if ($countstr >= Setting::get('maxpostchat')) {
-                    delete_lines(STORAGE."/chat/chat.dat", [0, 1, 2, 3, 4]);
-                }
 
                 DB::run() -> query("UPDATE `users` SET `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
 

@@ -412,8 +412,6 @@ if (is_admin([101])) {
 
             echo 'Новостей на страницу:<br><input name="postnews" maxlength="2" value="'.$setting['postnews'].'" title="Сколько новостей выводить на 1 страницу (По умолчанию: 10)"><br>';
 
-            echo 'Кол-во комментариев в новостях сохраняется:<br><input name="maxkommnews" maxlength="4" value="'.$setting['maxkommnews'].'" title="Сколько сохранять комментарий к новостям (По умолчанию: 500)"><br>';
-
             echo '<hr><b>Гостевая</b><br>';
             $checked = ($setting['bookadds'] == 1) ? ' checked="checked"' : '';
             echo '<input name="bookadds" id="bookadds" type="checkbox" value="1"'.$checked.' title="Разрешить гостям писать в гостевой"> <label for="bookadds">Допуск гостей</label><br>';
@@ -423,13 +421,10 @@ if (is_admin([101])) {
 
             echo 'Сообщений в гостевой на стр.:<br><input name="bookpost" maxlength="2" value="'.$setting['bookpost'].'" title="Сколько сообщений выводить на 1 страницу (По умолчанию: 10)"><br>';
             echo 'Неавторизованный пользователь:<br><input name="guestsuser" maxlength="20" value="'.$setting['guestsuser'].'" title="Как подписывать пользователя если он не авторизован (По умолчанию: Гость)"><br>';
-
-            echo 'Кол-во постов в гостевой сохраняется:<br><input name="maxpostbook" maxlength="4" value="'.$setting['maxpostbook'].'" title="Сколько сохранять сообщений в гостевой (По умолчанию: 500)"><br>';
             echo 'Символов в сообщении гостевой:<br><input name="guesttextlength" maxlength="5" value="'.$setting['guesttextlength'].'" title="Максимальное количество символов в сообщении (По умолчанию: 1000)"><br>';
 
             echo '<hr><b>Админ-чат</b><br>';
             echo 'Сообщений в админ-чате на стр.:<br><input name="chatpost" maxlength="2" value="'.$setting['chatpost'].'" title="Сколько сообщений выводить на 1 страницу (По умолчанию: 10)"><br>';
-            echo 'Общее кол-во сообщений в админ-чате:<br><input name="maxpostchat" maxlength="4" value="'.$setting['maxpostchat'].'" title="Сколько всего сообщений сохраняется в админ-чате (По умолчанию: 500)"><br>';
 
             echo '<input value="Изменить" type="submit"></form></div><br>';
 
@@ -446,17 +441,14 @@ if (is_admin([101])) {
             $bookscores = (empty($_POST['bookscores'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['lastnews'] != "" && $_POST['postnews'] != "" && $_POST['bookpost'] != "" && $_POST['guestsuser'] != "" && $_POST['maxkommnews'] != "" && $_POST['maxpostbook'] != "" && $_POST['guesttextlength'] != "" && $_POST['chatpost'] != "" && $_POST['maxpostchat'] != "") {
+                if ($_POST['lastnews'] != "" && $_POST['postnews'] != "" && $_POST['bookpost'] != "" && $_POST['guestsuser'] != ""  && $_POST['guesttextlength'] != "" && $_POST['chatpost'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['lastnews']), 'lastnews');
                     $dbr -> execute(intval($_POST['postnews']), 'postnews');
                     $dbr -> execute(intval($_POST['bookpost']), 'bookpost');
                     $dbr -> execute(check($_POST['guestsuser']), 'guestsuser');
-                    $dbr -> execute(intval($_POST['maxkommnews']), 'maxkommnews');
-                    $dbr -> execute(intval($_POST['maxpostbook']), 'maxpostbook');
                     $dbr -> execute(intval($_POST['guesttextlength']), 'guesttextlength');
                     $dbr -> execute(intval($_POST['chatpost']), 'chatpost');
-                    $dbr -> execute(intval($_POST['maxpostchat']), 'maxpostchat');
                     $dbr -> execute($bookadds, 'bookadds');
                     $dbr -> execute($bookscores, 'bookscores');
 
@@ -500,7 +492,6 @@ if (is_admin([101])) {
             echo '<b>Галерея</b><br>';
             echo 'Kол-во фото на стр.:<br><input name="fotolist" maxlength="2" value="'.$setting['fotolist'].'"><br>';
             echo 'Комментариев на страницу в галерее:<br><input name="postgallery" maxlength="3" value="'.$setting['postgallery'].'"><br>';
-            echo 'Комментариев сохраняется в галерее:<br><input name="maxpostgallery" maxlength="3" value="'.$setting['maxpostgallery'].'"><br>';
             echo 'Хранение голосований (часов):<br><input name="photoexprated" maxlength="3" value="'.$setting['photoexprated'].'"><br>';
             echo 'Группы в галереях:<br><input name="photogroup" maxlength="2" value="'.$setting['photogroup'].'"><br>';
 
@@ -516,7 +507,7 @@ if (is_admin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['forumpost'] != "" && $_POST['forumtem'] != "" && $_POST['forumtextlength'] != "" && $_POST['forumloadsize'] != "" && $_POST['forumextload'] != "" && $_POST['forumloadpoints'] != "" && $_POST['boardspost'] != "" && $_POST['boarddays'] != "" && $_POST['fotolist'] != "" && $_POST['postgallery'] != "" && $_POST['maxpostgallery'] != "" && $_POST['photoexprated'] != "" && $_POST['photogroup'] != "") {
+                if ($_POST['forumpost'] != "" && $_POST['forumtem'] != "" && $_POST['forumtextlength'] != "" && $_POST['forumloadsize'] != "" && $_POST['forumextload'] != "" && $_POST['forumloadpoints'] != "" && $_POST['boardspost'] != "" && $_POST['boarddays'] != "" && $_POST['fotolist'] != "" && $_POST['postgallery'] != "" && $_POST['photoexprated'] != "" && $_POST['photogroup'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['forumpost']), 'forumpost');
                     $dbr -> execute(intval($_POST['forumtem']), 'forumtem');
@@ -528,7 +519,6 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['boarddays']), 'boarddays');
                     $dbr -> execute(intval($_POST['fotolist']), 'fotolist');
                     $dbr -> execute(intval($_POST['postgallery']), 'postgallery');
-                    $dbr -> execute(intval($_POST['maxpostgallery']), 'maxpostgallery');
                     $dbr -> execute(intval($_POST['photoexprated']), 'photoexprated');
                     $dbr -> execute(intval($_POST['photogroup']), 'photogroup');
 
@@ -620,7 +610,6 @@ if (is_admin([101])) {
 
             echo 'Файлов в загрузках:<br><input name="downlist" maxlength="2" value="'.$setting['downlist'].'"><br>';
             echo 'Комментариев в загрузках:<br><input name="downcomm" maxlength="2" value="'.$setting['downcomm'].'"><br>';
-            echo 'Сохраняется комментариев:<br><input name="maxdowncomm" maxlength="4" value="'.$setting['maxdowncomm'].'"><br>';
             echo 'Хранение скачиваний (часов):<br><input name="expiresloads" maxlength="3" value="'.$setting['expiresloads'].'"><br>';
             echo 'Хранение голосований (часов):<br><input name="expiresrated" maxlength="3" value="'.$setting['expiresrated'].'"><br>';
             echo 'Просмотр архивов на стр.:<br><input name="ziplist" maxlength="2" value="'.$setting['ziplist'].'"><br>';
@@ -646,11 +635,10 @@ if (is_admin([101])) {
             $downupload = (empty($_POST['downupload'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['downlist'] != "" && $_POST['downcomm'] != "" && $_POST['maxdowncomm'] != "" && $_POST['expiresloads'] != "" && $_POST['expiresrated'] != "" && $_POST['ziplist'] != "" && $_POST['fileupload'] != "" && $_POST['screenupload'] != "" && $_POST['screenupsize'] != "" && $_POST['allowextload'] != "") {
+                if ($_POST['downlist'] != "" && $_POST['downcomm'] != "" && $_POST['expiresloads'] != "" && $_POST['expiresrated'] != "" && $_POST['ziplist'] != "" && $_POST['fileupload'] != "" && $_POST['screenupload'] != "" && $_POST['screenupsize'] != "" && $_POST['allowextload'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['downlist']), 'downlist');
                     $dbr -> execute(intval($_POST['downcomm']), 'downcomm');
-                    $dbr -> execute(intval($_POST['maxdowncomm']), 'maxdowncomm');
                     $dbr -> execute(intval($_POST['expiresloads']), 'expiresloads');
                     $dbr -> execute(intval($_POST['expiresrated']), 'expiresrated');
                     $dbr -> execute(intval($_POST['ziplist']), 'ziplist');
@@ -687,7 +675,6 @@ if (is_admin([101])) {
 
             echo 'Статей на страницу:<br><input name="blogpost" maxlength="2" value="'.$setting['blogpost'].'"><br>';
             echo 'Комментариев в блогах:<br><input name="blogcomm" maxlength="2" value="'.$setting['blogcomm'].'"><br>';
-            echo 'Сохраняется комментариев:<br><input name="maxblogcomm" maxlength="4" value="'.$setting['maxblogcomm'].'"><br>';
             echo 'Хранение прочтений (часов):<br><input name="blogexpread" maxlength="3" value="'.$setting['blogexpread'].'"><br>';
             echo 'Хранение голосований (часов):<br><input name="blogexprated" maxlength="3" value="'.$setting['blogexprated'].'"><br>';
             echo 'Группы блогов:<br><input name="bloggroup" maxlength="2" value="'.$setting['bloggroup'].'"><br>';
@@ -707,11 +694,10 @@ if (is_admin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['blogpost'] != "" && $_POST['blogcomm'] != "" && $_POST['maxblogcomm'] != "" && $_POST['blogexpread'] != "" && $_POST['blogexprated'] != "" && $_POST['bloggroup'] != "" && $_POST['maxblogpost'] != "" && $_POST['blogvotepoint'] != "") {
+                if ($_POST['blogpost'] != "" && $_POST['blogcomm'] != "" && $_POST['blogexpread'] != "" && $_POST['blogexprated'] != "" && $_POST['bloggroup'] != "" && $_POST['maxblogpost'] != "" && $_POST['blogvotepoint'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['blogpost']), 'blogpost');
                     $dbr -> execute(intval($_POST['blogcomm']), 'blogcomm');
-                    $dbr -> execute(intval($_POST['maxblogcomm']), 'maxblogcomm');
                     $dbr -> execute(intval($_POST['blogexpread']), 'blogexpread');
                     $dbr -> execute(intval($_POST['blogexprated']), 'blogexprated');
                     $dbr -> execute(intval($_POST['bloggroup']), 'bloggroup');
@@ -744,7 +730,6 @@ if (is_admin([101])) {
             echo '<form method="post" action="/admin/setting?act=editevent&amp;uid='.$_SESSION['token'].'">';
 
             echo 'Событий на страницу:<br><input name="postevents" maxlength="2" value="'.$setting['postevents'].'"><br>';
-            echo 'Кол. комментарий сохраняется:<br><input name="maxkommevents" maxlength="5" value="'.$setting['maxkommevents'].'"><br>';
             echo 'Кол. баллов для публикации событий:<br><input name="eventpoint" maxlength="3" value="'.$setting['eventpoint'].'"><br>';
 
             echo '<input value="Изменить" type="submit"></form></div><br>';
@@ -759,12 +744,11 @@ if (is_admin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['postevents'] != "" && $_POST['maxkommevents'] != "" && $_POST['eventpoint'] != "" ) {
+                if ($_POST['postevents'] != "" && $_POST['eventpoint'] != "" ) {
 
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
 
                     $dbr -> execute(intval($_POST['postevents']), 'postevents');
-                    $dbr -> execute(intval($_POST['maxkommevents']), 'maxkommevents');
                     $dbr -> execute(intval($_POST['eventpoint']), 'eventpoint');
 
                     save_setting();
@@ -1318,7 +1302,6 @@ if (is_admin([101])) {
             echo '<b>Предложения и проблемы </b><br>';
             echo 'Предложений на страницу:<br><input name="postoffers" maxlength="2" value="'.$setting['postoffers'].'"><br>';
             echo 'Комментариев на страницу:<br><input name="postcommoffers" maxlength="2" value="'.$setting['postcommoffers'].'"><br>';
-            echo 'Кол. комментариев сохраняется:<br><input name="maxpostoffers" maxlength="3" value="'.$setting['maxpostoffers'].'"><br>';
             echo 'Актива для создания предложения или проблемы: <br><input name="addofferspoint" maxlength="4" value="'.$setting['addofferspoint'].'"><br>';
             echo '<input value="Изменить" type="submit"></form></div><br>';
 
@@ -1334,13 +1317,12 @@ if (is_admin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['postoffers'] != "" && $_POST['postcommoffers'] != "" && $_POST['maxpostoffers'] != "" && $_POST['addofferspoint'] != "") {
+                if ($_POST['postoffers'] != "" && $_POST['postcommoffers'] != "" && $_POST['addofferspoint'] != "") {
 
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
 
                     $dbr -> execute(intval($_POST['postoffers']), 'postoffers');
                     $dbr -> execute(intval($_POST['postcommoffers']), 'postcommoffers');
-                    $dbr -> execute(intval($_POST['maxpostoffers']), 'maxpostoffers');
                     $dbr -> execute(intval($_POST['addofferspoint']), 'addofferspoint');
                     save_setting();
 

@@ -55,6 +55,56 @@ class NewsController extends BaseController
             App::abort(404, 'Новость не существует, возможно она была удалена!');
         }
 
+        if (Request::isMethod('post')) {
+            $msg   = check(Request::input('msg'));
+            $token = check(Request::input('token'));
+
+            $validation = new Validation();
+
+            $validation->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                ->addRule('equal', [Flood::isFlood(App::getUserId()), true], 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
+                ->addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
+                ->addRule('empty', $news['closed'], 'Комментирование данной новости запрещено!');
+
+            if ($validation->run()) {
+                $msg = antimat($msg);
+
+                Comment::create([
+                    'relate_type' => News::class,
+                    'relate_id'   => $news->id,
+                    'text'        => $msg,
+                    'user_id'     => App::getUserId(),
+                    'created_at'  => SITETIME,
+                    'ip'          => App::getClientIp(),
+                    'brow'        => App::getUserAgent(),
+                ]);
+
+                $user = User::where('id', App::getUserId());
+                $user->update([
+                    'allcomments' => Capsule::raw('allcomments + 1'),
+                    'point'       => Capsule::raw('point + 1'),
+                    'money'       => Capsule::raw('money + 5'),
+                ]);
+
+                $news->update([
+                    'comments' => Capsule::raw('comments + 1'),
+                ]);
+
+                App::setFlash('success', 'Комментарий успешно добавлен!');
+
+                if (isset($_GET['read'])) {
+                    App::redirect('/news/' . $news->id);
+                }
+
+                App::redirect('/news/' . $news->id . '/end');
+
+            } else {
+                App::setInput(Request::all());
+                App::setFlash('danger', $validation->getErrors());
+            }
+        }
+
         $total = Comment::where('relate_type', News::class)
             ->where('relate_id', $id)
             ->count();
@@ -70,57 +120,6 @@ class NewsController extends BaseController
             ->get();
 
         App::view('news/comments', compact('news', 'comments', 'page'));
-    }
-
-    /**
-     * Добавление комментариев
-     */
-    public function create($id)
-    {
-        $msg = check(Request::input('msg'));
-        $token = check(Request::input('token'));
-        $page = abs(intval(Request::input('page', 1)));
-
-        if (is_user()) {
-
-            $data = DB::run()->queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
-
-            $validation = new Validation();
-
-            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('equal', [Flood::isFlood(App::getUserId()), true], 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
-                ->addRule('not_empty', $data, 'Выбранной новости не существует, возможно она было удалена!')
-                ->addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
-                ->addRule('empty', $data['closed'], 'Комментирование данной новости запрещено!');
-
-            if ($validation->run()) {
-
-                $msg = antimat($msg);
-
-                DB::run()->query("INSERT INTO `comments` (relate_type, `relate_id`, `text`, `user_id`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?);", ['news', $id, $msg, App::getUserId(), SITETIME, App::getClientIp(), App::getUserAgent()]);
-
-                DB::run()->query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `created_at` DESC LIMIT " . Setting::get('maxkommnews') . ") AS del);", ['news', $id, 'news', $id]);
-
-                DB::run()->query("UPDATE `news` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
-                DB::run()->query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
-
-                App::setFlash('success', 'Комментарий успешно добавлен!');
-
-                if (isset($_GET['read'])) {
-                    App::redirect('/news/' . $id);
-                }
-
-                App::redirect('/news/' . $id . '/end');
-
-            } else {
-                show_error($validation->getErrors());
-            }
-        } else {
-            show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
-        }
-
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/news/' . $id . '/comments?page=' . $page . '">Вернуться</a><br>';
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br>';
     }
 
     /**
