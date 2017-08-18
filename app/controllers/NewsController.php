@@ -125,6 +125,56 @@ class NewsController extends BaseController
     }
 
     /**
+     * Редактирование комментария
+     */
+    public function editcomment($nid, $id)
+    {
+        $page = abs(intval(Request::input('page', 1)));
+
+        if (!is_user()) {
+            App::abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
+        }
+
+        $comment = Comment::where('relate_type', News::class)
+            ->where('comments.id', $id)
+            ->where('comments.user_id', App::getUserId())
+            ->first();
+
+        if (! $comment) {
+            App::abort('default', 'Комментарий удален или вы не автор этого комментария!');
+        }
+
+        if ($comment['created_at'] + 600 < SITETIME) {
+            App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+        }
+
+        if (Request::isMethod('post')) {
+            $msg   = check(Request::input('msg'));
+            $token = check(Request::input('token'));
+
+            $validation = new Validation();
+            $validation
+                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                ->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий комментарий!'], true, 5, 1000);
+
+            if ($validation->run()) {
+                $msg = antimat($msg);
+
+                $comment->update([
+                    'text' => $msg,
+                ]);
+
+                App::setFlash('success', 'Комментарий успешно отредактирован!');
+                App::redirect('/news/' . $nid . '/comments?page=' . $page);
+            } else {
+                App::setInput(Request::all());
+                App::setFlash('danger', $validation->getErrors());
+            }
+        }
+        App::view('news/editcomment', compact('comment', 'page'));
+    }
+
+    /**
      * Переадресация на последнюю страницу
      */
     public function end($id)

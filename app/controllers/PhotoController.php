@@ -236,7 +236,7 @@ class PhotoController extends BaseController
     }
 
     /**
-     * Подготовка к редактированию
+     * Редактирование комментария
      */
     public function editcomment($gid, $id)
     {
@@ -253,7 +253,7 @@ class PhotoController extends BaseController
             ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
             ->first();
 
-        if (!$comment) {
+        if (! $comment) {
             App::abort('default', 'Комментарий удален или вы не автор этого комментария!');
         }
 
@@ -266,15 +266,13 @@ class PhotoController extends BaseController
         }
 
         if (Request::isMethod('post')) {
-            $cid = abs(intval(Request::input('cid')));
-            $msg = check(Request::input('msg'));
+            $msg   = check(Request::input('msg'));
             $token = check(Request::input('token'));
 
             $validation = new Validation();
             $validation
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
-                ->addRule('bool', Flood::isFlood(App::getUserId()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий комментарий!'], true, 5, 1000)
                 ->addRule('empty', $comment['closed'], 'Комментирование данной фотографии запрещено!');
 
             if ($validation->run()) {
@@ -291,7 +289,7 @@ class PhotoController extends BaseController
                 App::setFlash('danger', $validation->getErrors());
             }
         }
-        App::view('gallery/editcomment', compact('comment'));
+        App::view('gallery/editcomment', compact('comment', 'page'));
     }
 
     /**

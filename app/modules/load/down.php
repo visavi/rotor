@@ -33,10 +33,10 @@ case 'index':
             ?>
 
             <ol class="breadcrumb">
-                <li><a href="/load">Категории</a></li>
+                <li class="breadcrumb-item"><a href="/load">Категории</a></li>
 
             <?php if ($cats['subcats_id']): ?>
-                <li><a href="/load/down?cid=<?= $cats['subcats_id'] ?>"><?= $cats['subcats_name'] ?></a></ li>
+                <li class="breadcrumb-item"><a href="/load/down?cid=<?= $cats['subcats_id'] ?>"><?= $cats['subcats_name'] ?></a></ li>
             <?php endif; ?>
 
                 <li class="active"><?= $cats['name'] ?></li>
@@ -177,15 +177,15 @@ case 'view':
             $folder = $downs['cats_folder'] ? $downs['cats_folder'].'/' : '';
 ?>
             <ol class="breadcrumb">
-                <li><a href="/load">Категории</a></li>
+                <li class="breadcrumb-item"><a href="/load">Категории</a></li>
 
                 <?php if ($downs['subcats_id']): ?>
-                    <li><a href="/load/down?cid=<?= $downs['subcats_id'] ?>"><?= $downs['subcats_name'] ?></a></li>
+                    <li class="breadcrumb-item"><a href="/load/down?cid=<?= $downs['subcats_id'] ?>"><?= $downs['subcats_name'] ?></a></li>
                 <?php endif; ?>
 
-                <li><a href="/load/down?cid=<?= $downs['category_id'] ?>"><?= $downs['cats_name'] ?></a></li>
-                <li class="active"><?= $downs['title'] ?></li>
-                <li class="active"><a href="/load/rss?id=<?= $id ?>">RSS-лента</a></li>
+                <li class="breadcrumb-item"><a href="/load/down?cid=<?= $downs['category_id'] ?>"><?= $downs['cats_name'] ?></a></li>
+                <li class="breadcrumb-item active"><?= $downs['title'] ?></li>
+                <li><a href="/load/rss?id=<?= $id ?>">RSS-лента</a></li>
             </ol>
   <?php
             if (empty($downs['active']) && $downs['user'] == App::getUsername()){

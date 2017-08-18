@@ -29,7 +29,7 @@
                         @endif
 
                         @if (is_admin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data['relate_id'] }}" data-id="{{ $data['id'] }}" data-type="{{ Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data['relate_id'] }}" data-id="{{ $data['id'] }}" data-type="{{ Photo::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove text-muted"></i></a>
                         @endif
                     </div>
 
@@ -38,11 +38,11 @@
                 </div>
                 <div class="message">
                     {!! App::bbCode($data['text']) !!}
-
-                    @if (is_admin())
-                        <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
-                    @endif
                 </div>
+
+                @if (is_admin())
+                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                @endif
             </div>
         @endforeach
 

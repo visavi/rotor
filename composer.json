@@ -18,6 +18,7 @@
         "gregwar/captcha": "^1.1",
         "illuminate/http": "~5.4",
         "illuminate/translation": "~5.4",
+        "illuminate/database": "~5.4",
         "mobiledetect/mobiledetectlib": "^2.8",
         "pclzip/pclzip": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.9",
@@ -27,8 +28,7 @@
         "verot/class.upload.php": "^0.33",
         "php-curl-class/php-curl-class": "^7.3",
         "jenssegers/blade": "^1.1",
-        "visavi/cleanup": "^1.1",
-        "illuminate/database": "^5.4"
+        "visavi/cleanup": "^1.1"
     },
     "require-dev": {
         "filp/whoops": "^2.1",

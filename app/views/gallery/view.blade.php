@@ -22,7 +22,7 @@
     <ol class="breadcrumb">
         <?php foreach ($links as $link): ?>
             <?php if (isset($link['show']) && $link['show'] == false) continue; ?>
-            <li><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></li>
+            <li class="breadcrumb-item"><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></li>
         <?php endforeach; ?>
     </ol>
 

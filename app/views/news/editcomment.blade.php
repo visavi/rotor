@@ -18,5 +18,5 @@
         </form>
     </div><br>
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/gallery/{{ $comment['relate_id'] }}/comments?page={{ $page }}">Вернуться</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/news/{{ $comment['relate_id'] }}/comments?page={{ $page }}">Вернуться</a><br>
 @stop
