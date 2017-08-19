@@ -125,7 +125,7 @@ class NewsController extends BaseController
     /**
      * Редактирование комментария
      */
-    public function editcomment($nid, $id)
+    public function editComment($nid, $id)
     {
         $page = abs(intval(Request::input('page', 1)));
 
@@ -199,5 +199,51 @@ class NewsController extends BaseController
         }
 
         App::view('news/rss', compact('newses'));
+    }
+
+    /**
+     * Все комментарии
+     */
+    public function allComments()
+    {
+        $total = Comment::where('relate_type', News::class)->count();
+
+        if ($total > 500) {
+            $total = 500;
+        }
+
+        $page = App::paginate(Setting::get('postnews'), $total);
+
+        $comments = Comment::select('comments.*', 'title', 'comments')
+            ->where('relate_type', News::class)
+            ->leftJoin('news', 'comments.relate_id', '=', 'news.id')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy('created_at', 'desc')
+            ->with('user')
+            ->get();
+
+        App::view('news/allcomments', compact('comments', 'page'));
+    }
+
+    /**
+     * Переход к сообщению
+     */
+    public function viewComment($id, $cid)
+    {
+        $news = News::find($id);
+
+        if (empty($news)) {
+            App::abort(404, 'Ошибка! Данной новости не существует!');
+        }
+
+        $total = Comment::where('relate_type', News::class)
+            ->where('relate_id', $id)
+            ->where('id', '<=', $cid)
+            ->orderBy('created_at')
+            ->count();
+
+        $end = ceil($total / Setting::get('postnews'));
+        App::redirect('/news/' . $id . '/comments?page=' . $end . '#comment_' . $cid);
     }
 }

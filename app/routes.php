@@ -35,9 +35,9 @@ $router->map('GET',      '/news/[i:id]', 'NewsController@view');
 $router->map('GET|POST', '/news/[i:id]/comments', 'NewsController@comments');
 $router->map('GET',      '/news/[i:id]/end', 'NewsController@end');
 $router->map('GET',      '/news/rss', 'NewsController@rss', 'news_rss');
-$router->map('GET',      '/news/allcomments', 'NewsCommentsController@index');
-$router->map('GET',      '/news/allcomments/[i:nid]/[i:id]', 'NewsCommentsController@viewcomm');
-$router->map('GET|POST', '/news/[i:nid]/[i:id]/edit', 'NewsController@editcomment');
+$router->map('GET|POST', '/news/[i:nid]/[i:id]/edit', 'NewsController@editComment');
+$router->map('GET',      '/news/allcomments', 'NewsController@allComments');
+$router->map('GET',      '/news/[i:nid]/[i:id]', 'NewsController@viewComment');
 
 $router->map('GET',      '/gallery', 'PhotoController@index', 'gallery');
 $router->map('GET',      '/gallery/[i:gid]', 'PhotoController@view');
