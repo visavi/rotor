@@ -235,93 +235,71 @@ class BlogController extends BaseController
     /**
      * Создание статьи
      */
-    public function new($cid)
+    public function create()
     {
-        //Setting::get('newtitle') = 'Публикация новой статьи';
-
-        if (is_user()) {
-
-            $querycat = DB::run()->query("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
-            $cats = $querycat->fetchAll();
-
-            if (count($cats) > 0) {
-
-                App::view('blog/blog_new', ['cats' => $cats, 'cid' => $cid]);
-
-            } else {
-                show_error('Категории блогов еще не созданы!');
-            }
-        } else {
-            show_login('Вы не авторизованы, для создания новой статьи, необходимо');
-        }
-
-        App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
-    }
-
-    /**
-     * Публикация статьи
-     */
-    public function addblog()
-    {
-        //Setting::get('newtitle') = 'Публикация новой статьи';
-
-        $uid = check(Request::input('uid'));
         $cid = abs(intval(Request::input('cid')));
-        $title = check(Request::input('title'));
-        $text = check(Request::input('text'));
-        $tags = check(Request::input('tags'));
 
-        if (is_user()) {
-            if ($uid == $_SESSION['token']) {
-                if (!empty($cid)) {
-                    if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                        if (utf_strlen($text) >= 100 && utf_strlen($text) <= Setting::get('maxblogpost')) {
-                            if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
-                                $blogs = DB::run()->querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
-                                if (!empty($blogs)) {
-
-                                    if (Flood::isFlood(App::getUserId())) {
-
-                                        $text = antimat($text);
-
-                                        DB::run()->query("INSERT INTO `blogs` (`category_id`, `user`, `title`, `text`, `tags`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$cid, App::getUsername(), $title, $text, $tags, SITETIME]);
-                                        $lastid = DB::run()->lastInsertId();
-
-                                        DB::run()->query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?;", [$cid]);
-
-                                        DB::run()->query("UPDATE `users` SET `point`=`point`+5, `money`=`money`+100 WHERE `login`=? LIMIT 1;", [App::getUsername()]);
-
-                                        App::setFlash('success', 'Статья успешно опубликована!');
-                                        App::redirect("/blog/blog?act=view&id=$lastid");
-
-                                    } else {
-                                        show_error('Антифлуд! Вы слишком часто добавляете статьи!');
-                                    }
-                                } else {
-                                    show_error('Ошибка! Выбранный вами раздел не существует!');
-                                }
-                            } else {
-                                show_error('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
-                            }
-                        } else {
-                            show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до ' . Setting::get('maxblogpost') . ' символов)!');
-                        }
-                    } else {
-                        show_error('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
-                    }
-                } else {
-                    show_error('Ошибка! Вы не выбрали категорию для добавления статьи!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-        } else {
-            show_login('Вы не авторизованы, для создания новой статьи, необходимо');
+        if (! is_user()) {
+            App::abort(403, 'Для публикации новой статьи необходимо авторизоваться');
         }
 
-        App::view('includes/back', ['link' => '/blog/blog?act=new&amp;cid=' . $cid, 'title' => 'Вернуться']);
-    }
+        $cats = CatsBlog::select('id', 'name')
+            ->pluck('name', 'id')
+            ->all();
 
+        if (! $cats) {
+            App::abort('default', 'Разделы блогов еще не созданы!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token = check(Request::input('token'));
+            $title = check(Request::input('title'));
+            $text = check(Request::input('text'));
+            $tags = check(Request::input('tags'));
+
+            $category = CatsBlog::find($cid);
+
+            $validation = new Validation();
+            $validation
+                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                ->addRule('string', $title, ['title' => 'Слишком длинный или короткий заголовок!'], true, 5, 50)
+                ->addRule('string', $text, ['text' => 'Слишком длинный или короткий текст статьи!'], true, 100, Setting::get('maxblogpost'))
+                ->addRule('string', $tags, ['tags' => 'Слишком длинные или короткие метки статьи!'], true, 2, 50)
+                ->addRule('bool', Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->addRule('not_empty', $category, ['cid' => 'Раздела для новой статьи не существует!']);
+
+            if ($validation->run()) {
+
+                $text = antimat($text);
+
+                $article = Blog::create([
+                    'category_id' => $cid,
+                    'user_id'     => App::getUserId(),
+                    'title'       => $title,
+                    'text'        => $text,
+                    'tags'        => $tags,
+                    'created_at'  => SITETIME,
+                ]);
+
+                $category->increment('count');
+
+                $user = User::where('id', App::getUserId());
+                $user->update([
+                    'point' => Capsule::raw('point + 5'),
+                    'money' => Capsule::raw('money + 100'),
+                ]);
+
+                App::setFlash('success', 'Статья успешно опубликована!');
+                App::redirect('/article/'.$article->id);
+            } else {
+                App::setInput(Request::all());
+                App::setFlash('danger', $validation->getErrors());
+            }
+        }
+
+        App::view('blog/create', ['cats' => $cats, 'cid' => $cid]);
+    }
 
     /**
      * Комментарии
@@ -343,7 +321,7 @@ class BlogController extends BaseController
                 ->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                 ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
-                ->addRule('bool', Flood::isFlood(App::getUserId()), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
+                ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
             if ($validation->run()) {
                 $msg = antimat($msg);

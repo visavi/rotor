@@ -165,7 +165,7 @@ if ($act == 'add') {
     if (is_user()) {
         if (utf_strlen($msg) > 3 && utf_strlen($msg) < 1000) {
 
-            if (Flood::isFlood(App::getUserId())) {
+            if (Flood::isFlood()) {
 
                 $msg = antimat($msg);
 

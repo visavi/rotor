@@ -24,9 +24,9 @@ $router->map('GET|POST', '/article/[i:id]/[comments:action]', 'BlogController');
 $router->map('GET|POST', '/article/[i:id]/[i:cid]/[edit:action]', 'BlogController');
 $router->map('GET',      '/article/[i:id]/[end:action]', 'BlogController');
 $router->map('GET',      '/blog/tags/[*:tag]?', 'BlogController@tags');
+$router->map('GET|POST', '/blog/create', 'BlogController@create');
 
 $router->map('GET|POST', '/blog/active', 'blog/active.php');
-$router->map('GET|POST', '/blog/new', 'blog/new.php');
 $router->map('GET|POST', '/blog/search', 'blog/search.php');
 $router->map('GET|POST', '/blog/top', 'blog/top.php');
 

@@ -86,8 +86,6 @@ class App
         exit();
     }
 
-
-
     /**
      * Переадресовывает пользователя
      *
@@ -284,12 +282,14 @@ class App
      */
     public static function filesize($filename, $decimals = 1)
     {
-        if (!file_exists($filename)) return 0;
+        if (! file_exists($filename)) {
+            return 0;
+        }
 
-        $bytes = filesize($filename);
-        $size = ['B','kB','MB','GB','TB'];
+        $bytes  = filesize($filename);
+        $size   = ['B','kB','MB','GB','TB'];
         $factor = floor((strlen($bytes) - 1) / 3);
-        $unit = isset($size[$factor]) ? $size[$factor] : '';
+        $unit   = $size[$factor] ?? '';
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).$unit;
     }
 

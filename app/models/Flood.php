@@ -55,12 +55,12 @@ class Flood extends BaseModel
     /**
      * Проверяет сообщение на флуд
      *
-     * @param int $userId
      * @param int $period
      * @return bool
      */
-    public static function isFlood($userId, $period = 0)
+    public static function isFlood($period = 0)
     {
+        $userId = App::getUserId();
         $period = $period ?: self::getPeriod();
 
         if (empty($period)) {

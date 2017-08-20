@@ -167,7 +167,7 @@ case 'addevent':
 		$validation = new Validation();
 
 		$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('equal', [Flood::isFlood(App::getUserId()), true], 'Антифлуд! Разрешается публиковать события раз в '.Flood::getPeriod().' сек!')
+			-> addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается публиковать события раз в '.Flood::getPeriod().' сек!')
 			-> addRule('max', [App::user('point'), Setting::get('eventpoint')], 'У вас недостаточно актива для создания события!')
 			-> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
 			-> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
@@ -427,7 +427,7 @@ case 'addcomment':
 		$validation = new Validation();
 
 		$validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-			-> addRule('equal', [Flood::isFlood(App::getUserId()), true], 'Антифлуд! Разрешается публиковать события раз в '.Flood::getPeriod().' сек!')
+			-> addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается публиковать события раз в '.Flood::getPeriod().' сек!')
 			-> addRule('not_empty', $data, 'Выбранного события не существует, возможно оно было удалено!')
 			-> addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
 			-> addRule('empty', $data['closed'], 'Комментирование данного события запрещено!');

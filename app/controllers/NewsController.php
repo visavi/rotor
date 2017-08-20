@@ -63,7 +63,7 @@ class NewsController extends BaseController
 
             $validation->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('equal', [Flood::isFlood(App::getUserId()), true], 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
+                ->addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
                 ->addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
                 ->addRule('empty', $news['closed'], 'Комментирование данной новости запрещено!');
 

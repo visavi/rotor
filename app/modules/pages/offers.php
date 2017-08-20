@@ -417,7 +417,7 @@ switch ($action):
                     $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryoff)) {
                         if (empty($queryoff['closed'])) {
-                            if (Flood::isFlood(App::getUserId())) {
+                            if (Flood::isFlood()) {
 
                                 $msg = antimat($msg);
 
@@ -535,7 +535,7 @@ switch ($action):
             if (App::user('point') >= Setting::get('addofferspoint')) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                     if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
-                        if (Flood::isFlood(App::getUserId())) {
+                        if (Flood::isFlood()) {
 
                             $title = antimat($title);
                             $text = antimat($text);

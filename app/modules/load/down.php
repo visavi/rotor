@@ -511,7 +511,7 @@ case 'add':
 
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
-                        if (Flood::isFlood(App::getUserId())) {
+                        if (Flood::isFlood()) {
 
                             $msg = antimat($msg);
 
@@ -560,7 +560,7 @@ case 'spam':
                 $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [5, $pid]);
 
                 if (empty($queryspam)) {
-                    if (Flood::isFlood(App::getUserId())) {
+                    if (Flood::isFlood()) {
                         DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], App::getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, Setting::get('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         App::setFlash('success', 'Жалоба успешно отправлена!');

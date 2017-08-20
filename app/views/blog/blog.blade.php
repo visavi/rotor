@@ -6,8 +6,14 @@
 
 @section('content')
 
+    @if (is_user())
+        <div class="float-right">
+            <a class="btn btn-success" href="/blog/create?cid={{ $category['id'] }}">Добавить статью</a>
+        </div>
+    @endif
+
     <h1>{{ $category['name'] }} <small>(Статей: {{ $category['count'] }})</small></h1>
-    <a href="/blog">Блоги</a> / <a href="/blog/blog?act=new&amp;cid={{ $category['id'] }}">Написать</a>
+    <a href="/blog">Блоги</a>
 
     @if (is_admin())
         / <a href="/admin/blog?act=blog&amp;cid={{ $category['id'] }}&amp;page={{ $page['current'] }}">Управление</a>

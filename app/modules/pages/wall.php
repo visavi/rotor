@@ -97,7 +97,7 @@ if (!empty($queryuser)) {
                         if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
                             $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, App::getUsername()]);
                             if (empty($ignorstr)) {
-                                if (Flood::isFlood(App::getUserId())) {
+                                if (Flood::isFlood()) {
 
                                     $msg = antimat($msg);
 
@@ -149,7 +149,7 @@ if (!empty($queryuser)) {
                         $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [4, $id]);
 
                         if (empty($queryspam)) {
-                            if (Flood::isFlood(App::getUserId())) {
+                            if (Flood::isFlood()) {
                                 DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], App::getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, Setting::get('home').'/wall?uz='.$uz.'&amp;page='.$page]);
 
                                 App::setFlash('success', 'Жалоба успешно отправлена!');
