@@ -26,7 +26,7 @@ class BlogController extends BaseController
     {
         $category = CatsBlog::find($cid);
 
-        if (!$category) {
+        if (! $category) {
             App::abort('default', 'Данного раздела не существует!');
         }
 
