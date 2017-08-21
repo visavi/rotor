@@ -62,7 +62,7 @@ class BlogController extends BaseController
             })
             ->first();
 
-        if (!$blog) {
+        if (! $blog) {
             App::abort(404, 'Данной статьи не существует!');
         }
 
@@ -77,7 +77,7 @@ class BlogController extends BaseController
                 ->where('ip', App::getClientIp())
                 ->first();
 
-            if (!$reads) {
+            if (! $reads) {
                 $expiresRead = SITETIME + 3600 * Setting::get('blogexpread');
 
                 Read::where('relate_type', Blog::class)
@@ -109,37 +109,33 @@ class BlogController extends BaseController
             $tags .= $comma . '<a href="/blog/tags/' . urlencode($value) . '">' . $value . '</a>';
         }
 
-        App::view('blog/blog_view', compact('blog', 'tags', 'page'));
-        App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+        App::view('blog/view', compact('blog', 'tags', 'page'));
     }
 
     /**
-     * Подготовка к редактированию статьи
+     * Редактированиe статьи
      */
-    public function editblog($id)
+    public function edit($id)
     {
-        if (is_user()) {
-            $blogs = DB::run()->queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
-
-            if (!empty($blogs)) {
-                if ($blogs['user'] == App::getUsername()) {
-                    $querycats = DB::run()->query("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
-                    $cats = $querycats->fetchAll();
-
-                    App::view('blog/blog_editblog', ['blogs' => $blogs, 'cats' => $cats]);
-
-                } else {
-                    show_error('Ошибка! Изменение невозможно, вы не автор данной статьи!');
-                }
-            } else {
-                show_error('Ошибка! Данной статьи не существует!');
-            }
-        } else {
-            show_login('Вы не авторизованы, чтобы редактировать статьи, необходимо');
+        if (! is_user()) {
+            App::abort(403, 'Для редактирования статьи необходимо авторизоваться');
         }
 
-        App::view('includes/back', ['link' => '/blog/blog/?act=view&amp;id=' . $id, 'title' => 'Вернуться']);
-        App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
+        $blog = Blog::find($id);
+
+        if (! $blog) {
+            App::abort(404, 'Данной статьи не существует!');
+        }
+
+        if ($blog->user_id != App::getUserId()) {
+            App::abort('default', 'Изменение невозможно, вы не автор данной статьи!');
+        }
+
+        $cats = CatsBlog::select('id', 'name')
+            ->pluck('name', 'id')
+            ->all();
+
+        App::view('blog/edit', compact('blog', 'cats'));
     }
 
     /**
@@ -375,7 +371,7 @@ class BlogController extends BaseController
     /**
      * Подготовка к редактированию комментария
      */
-    public function edit($id, $cid)
+    public function editComment($id, $cid)
     {
         $page = abs(intval(Request::input('page', 1)));
 
