@@ -112,7 +112,7 @@ class BBCode
      */
     public function parse($source)
     {
-        $source = nl2br($source);
+        $source = nl2br($source, false);
 
         foreach ($this->parsers as $parser) {
 

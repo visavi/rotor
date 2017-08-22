@@ -5,7 +5,6 @@
 @stop
 
 @section('content')
-
     <h1>Редактирование сообщения</h1>
 
     <i class="fa fa-pencil text-muted"></i> <b><?=profile($post->user)?></b> (<?=date_fixed($post['time'])?>)<br><br>

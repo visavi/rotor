@@ -181,10 +181,10 @@ $router->map('GET|POST', '/load/zip', 'load/zip.php');
 $router->map('GET|POST', '/votes', 'votes/index.php');
 $router->map('GET|POST', '/votes/history', 'votes/history.php');
 
-$router->map('GET', '/api', 'api/index.php');
-$router->map('GET', '/api/forum', 'api/forum.php');
-$router->map('GET', '/api/private', 'api/private.php');
-$router->map('GET', '/api/user', 'api/user.php');
+$router->map('GET', '/api', 'ApiController@index');
+$router->map('GET', '/api/user', 'ApiController@user');
+$router->map('GET', '/api/forum', 'ApiController@forum');
+$router->map('GET', '/api/private', 'ApiController@private');
 
 $router->map('GET',      '/admin', 'admin/index.php', 'admin');
 $router->map('GET|POST', '/admin/board', 'admin/board.php');

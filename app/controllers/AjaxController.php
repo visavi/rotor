@@ -13,7 +13,6 @@ class AjaxController extends BaseController
                 'message' => 'This is not ajax request'
             ]));
         }
-
     }
 
     /**
