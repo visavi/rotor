@@ -9,10 +9,10 @@
     <h1>Блоги</h1>
 
     @if (is_user())
-        Мои: <a href="/blog/active/blogs">статьи</a>, <a href="/blog/active/comments">комментарии</a> /
+        Мои: <a href="/blog/active/articles">статьи</a>, <a href="/blog/active/comments">комментарии</a> /
     @endif
 
-    Новые: <a href="/blog/new/blogs">статьи</a>, <a href="/blog/new/comments">комментарии</a><hr>
+    Новые: <a href="/blog/new/articles">статьи</a>, <a href="/blog/new/comments">комментарии</a><hr>
 
     @foreach($blogs as $key => $data)
         <i class="fa fa-folder-open"></i> <b><a href="/blog/{{ $data['id'] }}">{{ $data['name'] }}</a></b>

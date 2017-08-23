@@ -29,4 +29,23 @@ class Blog extends BaseModel
             ->where('relate_type', self::class)
             ->limit($limit);
     }
+
+    /**
+     * Возвращает связь категории блога
+     *
+     * @param int $limit
+     * @return mixed
+     */
+    public function category()
+    {
+        return $this->belongsTo('CatsBlog', 'category_id');
+    }
+
+    /**
+     * Возвращает модель категории блога
+     */
+    public function getСategory()
+    {
+        return $this->category ?? new CatsBlog();
+    }
 }

@@ -339,7 +339,7 @@ class BlogController extends BaseController
             ->limit(Setting::get('blogcomm'))
             ->get();
 
-        App::view('blog/blog_comments', compact('blog', 'comments', 'page'));
+        App::view('blog/comments', compact('blog', 'comments', 'page'));
     }
 
 
@@ -367,7 +367,7 @@ class BlogController extends BaseController
             App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 
-        App::view('blog/blog_edit', compact('comment', 'page'));
+        App::view('blog/editcomment', compact('comment', 'page'));
     }
 
     /**
@@ -586,5 +586,50 @@ class BlogController extends BaseController
 
             App::view('blog/tags', compact('tags', 'max', 'min'));
         }
+    }
+
+    /**
+     * Новые статьи
+     */
+    public function newArticles()
+    {
+        $total = Blog::count();
+
+        if ($total > 500) {
+            $total = 500;
+        }
+        $page = App::paginate(Setting::get('blogpost'), $total);
+
+        $blogs = Blog::orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit(Setting::get('blogpost'))
+            ->with('user')
+            ->get();
+
+        App::view('blog/new_articles', compact('blogs', 'page'));
+    }
+
+    /**
+     * Новые комментарии
+     */
+    public function newComments()
+    {
+        $total = Comment::where('relate_type', Blog::class)->count();
+
+        if ($total > 500) {
+            $total = 500;
+        }
+        $page = App::paginate(Setting::get('blogpost'), $total);
+
+        $comments = Comment::select('comments.*', 'title', 'comments')
+            ->where('relate_type', Blog::class)
+            ->leftJoin('blogs', 'comments.relate_id', '=', 'blogs.id')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy('comments.created_at', 'desc')
+            ->with('user')
+            ->get();
+
+        App::view('blog/new_comments', compact('comments', 'page'));
     }
 }

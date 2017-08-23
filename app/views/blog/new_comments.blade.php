@@ -1,16 +1,31 @@
-<?php foreach ($comments as $data): ?>
+@extends('layout')
 
-	<div class="b">
-		<i class="fa fa-comment"></i> <b><a href="/blog/blog?act=comments&amp;id=<?=$data['relate_id']?>"><?=$data['title']?></a></b> (<?=$data['comments']?>)
-	</div>
+@section('title')
+    Блоги - Новые комментарии (Стр. {{ $page['current'] }}) - @parent
+@stop
 
-	<div>
-		<?=App::bbCode($data['text'])?><br>
-		Написал: <?=profile($data['user'])?> <small>(<?=date_fixed($data['time'])?>)</small><br>
+@section('content')
 
-		<?php if (is_admin()): ?>
-			<span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
-		<?php endif; ?>
-	</div>
+    <h1>Новые комментарии</h1>
 
-<?php endforeach; ?>
+    @if ($comments->isNotEmpty())
+        @foreach ($comments as $data)
+            <div class="b">
+                <i class="fa fa-comment"></i> <b><a href="/article/{{ $data['relate_id'] }}/comments">{{ $data['title'] }}</a></b> ({{ $data['comments'] }})
+            </div>
+
+            <div>
+                {!! App::bbCode($data['text']) !!}<br>
+                Написал: {!! profile($data['user']) !!} <small>({{ date_fixed($data['time']) }})</small><br>
+
+                @if (is_admin())
+                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                @endif
+            </div>
+        @endforeach
+
+        {{ App::pagination($page) }}
+    @else
+        {{ show_error('Комментарии не найдены!') }}
+    @endif
+@stop
