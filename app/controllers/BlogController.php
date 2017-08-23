@@ -131,75 +131,53 @@ class BlogController extends BaseController
             App::abort('default', 'Изменение невозможно, вы не автор данной статьи!');
         }
 
+        if (Request::isMethod('post')) {
+
+            $token = check(Request::input('token'));
+            $cid   = abs(intval(Request::input('cid')));
+            $title = check(Request::input('title'));
+            $text  = check(Request::input('text'));
+            $tags  = check(Request::input('tags'));
+
+            $category = CatsBlog::find($cid);
+
+            $validation = new Validation();
+            $validation
+                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                ->addRule('string', $title, ['title' => 'Слишком длинный или короткий заголовок!'], true, 5, 50)
+                ->addRule('string', $text, ['text' => 'Слишком длинный или короткий текст статьи!'], true, 100, Setting::get('maxblogpost'))
+                ->addRule('string', $tags, ['tags' => 'Слишком длинные или короткие метки статьи!'], true, 2, 50)
+                ->addRule('bool', Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->addRule('not_empty', $category, ['cid' => 'Раздела для статьи не существует!']);
+
+            if ($validation->run()) {
+
+                // Обновление счетчиков
+                if ($blog->category_id != $category->id) {
+                    $category->increment('count');
+                    CatsBlog::where('id', $blog->category_id)->decrement('count');
+                }
+
+                $blog->update([
+                    'category_id' => $category->id,
+                    'title'       => $title,
+                    'text'        => $text,
+                    'tags'        => $tags,
+                ]);
+
+                App::setFlash('success', 'Статья успешно отредактирована!');
+                App::redirect('/article/'.$blog->id);
+            } else {
+                App::setInput(Request::all());
+                App::setFlash('danger', $validation->getErrors());
+            }
+        }
+
         $cats = CatsBlog::select('id', 'name')
             ->pluck('name', 'id')
             ->all();
 
         App::view('blog/edit', compact('blog', 'cats'));
-    }
-
-    /**
-     * Редактирование статьи
-     */
-    public function changeblog($id)
-    {
-        $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
-        $cats = (isset($_POST['cats'])) ? abs(intval($_POST['cats'])) : '';
-        $title = (isset($_POST['title'])) ? check($_POST['title']) : '';
-        $text = (isset($_POST['text'])) ? check($_POST['text']) : '';
-        $tags = (isset($_POST['tags'])) ? check($_POST['tags']) : '';
-
-        if (is_user()) {
-            if ($uid == $_SESSION['token']) {
-                if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($text) >= 100 && utf_strlen($text) <= Setting::get('maxblogpost')) {
-                        if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
-                            $querycats = DB::run()->querySingle("SELECT `id` FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cats]);
-                            if (!empty($cats)) {
-                                $blogs = DB::run()->queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
-
-                                if (!empty($blogs)) {
-                                    if ($blogs['user'] == App::getUsername()) {
-
-                                        // Обновление счетчиков
-                                        if ($blogs['category_id'] != $cats) {
-                                            DB::run()->query("UPDATE `comments` SET `relate_category_id`=? WHERE `relate_id`=?;", [$cats, $id]);
-                                            DB::run()->query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$cats]);
-                                            DB::run()->query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$blogs['category_id']]);
-                                        }
-
-                                        DB::run()->query("UPDATE `blogs` SET `category_id`=?, `title`=?, `text`=?, `tags`=? WHERE `id`=?;", [$cats, $title, $text, $tags, $id]);
-
-                                        App::setFlash('success', 'Статья успешно отредактирована!');
-                                        App::redirect("/blog/blog?act=view&id=$id");
-
-                                    } else {
-                                        show_error('Ошибка! Изменение невозможно, вы не автор данной статьи!');
-                                    }
-                                } else {
-                                    show_error('Ошибка! Данной статьи не существует!');
-                                }
-                            } else {
-                                show_error('Ошибка! Выбранного раздела не существует!');
-                            }
-                        } else {
-                            show_error('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
-                        }
-                    } else {
-                        show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до ' . Setting::get('maxblogpost') . ' символов)!');
-                    }
-                } else {
-                    show_error('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-        } else {
-            show_login('Вы не авторизованы, чтобы редактировать статьи, необходимо');
-        }
-
-        App::view('includes/back', ['link' => '/blog/blog?act=editblog&amp;id=' . $id, 'title' => 'Вернуться']);
-        App::view('includes/back', ['link' => '/blog/blog?act=view&amp;id=' . $id, 'title' => 'К статье', 'icon' => 'fa-arrow-circle-up']);
     }
 
     /**
@@ -251,8 +229,8 @@ class BlogController extends BaseController
 
             $token = check(Request::input('token'));
             $title = check(Request::input('title'));
-            $text = check(Request::input('text'));
-            $tags = check(Request::input('tags'));
+            $text  = check(Request::input('text'));
+            $tags  = check(Request::input('tags'));
 
             $category = CatsBlog::find($cid);
 
@@ -542,9 +520,11 @@ class BlogController extends BaseController
         App::view('blog/rss_comments', compact('blog'));
     }
 
+    /**
+     * Поиск по тегам
+     */
     public function tags($tag = null)
     {
-
         if ($tag) {
             $tag = urldecode($tag);
 

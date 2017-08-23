@@ -17,7 +17,7 @@ $router->map('GET', '/sitemap/[a:action].xml', 'SitemapController');
 $router->map('GET',      '/blog', 'BlogController@index', 'blog');
 $router->map('GET',      '/blog/[i:cid]', 'BlogController@blog');
 $router->map('GET',      '/article/[i:id]', 'BlogController@view');
-$router->map('GET',      '/article/[i:id]/edit', 'BlogController@edit');
+$router->map('GET|POST', '/article/[i:id]/edit', 'BlogController@edit');
 $router->map('GET',      '/article/[i:id]/print', 'BlogController@print');
 $router->map('GET',      '/blog/rss', 'BlogController@rss');
 $router->map('GET',      '/article/[i:id]/rss', 'BlogController@rssComments');

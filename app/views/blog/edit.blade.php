@@ -13,13 +13,13 @@
     <a href="/blog/blog?act=blogs">Все статьи</a><hr>
 
     <div class="form next">
-        <form action="/article/{{ $blog['id'] }}?token={{ $_SESSION['token'] }}" method="post">
-
+        <form action="/article/{{ $blog['id'] }}/edit" method="post">
+            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             Раздел:<br>
-            <select name="cats">
+            <select name="cid">
                 @foreach ($cats as $key => $value)
                     <?php $selected = ($blog['category_id'] == $key) ? ' selected="selected"' : ''; ?>
-                    <option value="{{ $key }}"{{  $selected }}>{{ $value }}</option>
+                    <option value="{{ $key }}"{{ $selected }}>{{ $value }}</option>
                 @endforeach
             </select><br>
 
