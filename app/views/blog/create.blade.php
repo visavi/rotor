@@ -10,7 +10,7 @@
 
     <a href="/blog">Блоги</a> /
     <a href="/blog/search">Поиск</a> /
-    <a href="/blog/blog?act=blogs">Все статьи</a><hr>
+    <a href="/blog/blogs">Все статьи</a><hr>
 
     <div class="form next">
         <form action="/blog/create" method="post">

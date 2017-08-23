@@ -185,25 +185,22 @@ class BlogController extends BaseController
      */
     public function blogs()
     {
-        //Setting::get('newtitle') = 'Статьи пользователей';
+        $total = Blog::distinct('user_id')
+            ->join('users', 'blogs.user_id', '=', 'users.id')
+            ->count('user_id');
 
-        $total = DB::run()->querySingle("select COUNT(DISTINCT `user`) from `blogs`");
         $page = App::paginate(Setting::get('bloggroup'), $total);
 
-        if ($total > 0) {
+        $blogs = Blog::select('user_id', 'login')
+            ->selectRaw('count(*) as cnt, sum(comments) as comments')
+            ->join('users', 'blogs.user_id', '=', 'users.id')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->groupBy('user_id')
+            ->orderBy('cnt', 'desc')
+            ->get();
 
-            $queryblogs = DB::run()->query("SELECT COUNT(*) AS cnt, `user` FROM `blogs` GROUP BY `user` ORDER BY cnt DESC LIMIT " . $page['offset'] . ", " . Setting::get('bloggroup') . ";");
-            $blogs = $queryblogs->fetchAll();
-
-            App::view('blog/blog_blogs', compact('blogs', 'total'));
-
-            App::pagination($page);
-
-        } else {
-            show_error('Статей еще нет!');
-        }
-
-        App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']);
+        App::view('blog/user_blogs', compact('blogs', 'page'));
     }
 
     /**
