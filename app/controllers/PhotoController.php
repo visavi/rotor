@@ -225,7 +225,7 @@ class PhotoController extends BaseController
     /**
      * Редактирование комментария
      */
-    public function editcomment($gid, $id)
+    public function editComment($gid, $id)
     {
         $page = abs(intval(Request::input('page', 1)));
 

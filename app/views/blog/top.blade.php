@@ -1,27 +1,43 @@
-Сортировать:
+@extends('layout')
 
-<?php $active = ($order == 'visits') ? ' style="font-weight: bold;"' : ''; ?>
-<a href="/blog/top?sort=visits"<?=$active?>>Просмотры</a>,
+@section('title')
+    Топ статей (Стр. {{ $page['current'] }})- @parent
+@stop
 
-<?php $active = ($order == 'rating') ? ' style="font-weight: bold;"' : ''; ?>
-<a href="/blog/top?sort=rated"<?=$active?>>Оценки</a>,
+@section('content')
 
-<?php $active = ($order == 'comments') ? ' style="font-weight: bold;"' : ''; ?>
-<a href="/blog/top?sort=comm"<?=$active?>>Комментарии</a>
-<hr>
+    <h1>Топ статей</h1>
 
-<?php foreach ($blogs as $data): ?>
+    Сортировать:
 
-	<div class="b">
-		<i class="fa fa-pencil"></i>
-		<b><a href="/blog/blog?act=view&amp;id=<?=$data['id']?>"><?=$data['title']?></a></b> (<?=format_num($data['rating'])?>)
-	</div>
+    <?php $active = ($order == 'visits') ? 'success' : 'light'; ?>
+    <a href="/blog/top?sort=visits" class="badge badge-{{ $active }}">Просмотры</a>
 
-	<div>
-		Категория: <a href="/blog/blog?cid=<?=$data['category_id']?>"><?=$data['name']?></a><br>
-		Просмотров: <?=$data['visits']?><br>
-		Рейтинг: <b><?=format_num($data['rating'])?></b><br>
-		<a href="/blog/blog?act=comments&amp;id=<?=$data['id']?>">Комментарии</a> (<?=$data['comments']?>)
-		<a href="/blog/blog?act=end&amp;id=<?=$data['id']?>">&raquo;</a>
-	</div>
-<?php endforeach; ?>
+    <?php $active = ($order == 'rating') ? 'success' : 'light'; ?>
+    <a href="/blog/top?sort=rated" class="badge badge-{{ $active }}">Оценки</a>
+
+    <?php $active = ($order == 'comments') ? 'success' : 'light'; ?>
+    <a href="/blog/top?sort=comm" class="badge badge-{{ $active }}">Комментарии</a>
+    <hr>
+
+    @if ($blogs->isNotEmpty())
+        @foreach ($blogs as $data)
+
+            <div class="b">
+                <i class="fa fa-pencil"></i>
+                <b><a href="/article/{{  $data['id'] }}">{{ $data['title'] }}</a></b> ({!! format_num($data['rating']) !!})
+            </div>
+
+            <div>
+                Категория: <a href="/blog/{{ $data['category_id'] }}">{{ $data['name'] }}</a><br>
+                Просмотров: {{ $data['visits'] }}<br>
+                <a href="/article/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
+                <a href="/article/{{  $data['id'] }}/end">&raquo;</a>
+            </div>
+        @endforeach
+
+        {{  App::pagination($page) }}
+    @else
+        {{ show_error('Опубликованных статей еще нет!') }}
+    @endif
+@stop

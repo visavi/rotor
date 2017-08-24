@@ -29,10 +29,10 @@ $router->map('GET|POST', '/blog/create', 'BlogController@create');
 $router->map('GET',      '/blog/blogs', 'BlogController@blogs');
 $router->map('GET',      '/blog/new/articles', 'BlogController@newArticles');
 $router->map('GET',      '/blog/new/comments', 'BlogController@newComments');
+$router->map('GET|POST', '/blog/top', 'BlogController@top');
 
 $router->map('GET|POST', '/blog/active', 'blog/active.php');
 $router->map('GET|POST', '/blog/search', 'blog/search.php');
-$router->map('GET|POST', '/blog/top', 'blog/top.php');
 
 $router->map('GET',      '/news', 'NewsController@index', 'news');
 $router->map('GET',      '/news/[i:id]', 'NewsController@view');
@@ -49,7 +49,7 @@ $router->map('GET',      '/gallery/[i:gid]/[delete|end:action]', 'PhotoControlle
 $router->map('GET|POST', '/gallery/[i:gid]/[comments:action]', 'PhotoController');
 $router->map('GET|POST', '/gallery/[create:action]', 'PhotoController');
 $router->map('GET|POST', '/gallery/[i:gid]/[edit:action]', 'PhotoController');
-$router->map('GET|POST', '/gallery/[i:gid]/[i:id]/edit', 'PhotoController@editcomment');
+$router->map('GET|POST', '/gallery/[i:gid]/[i:id]/edit', 'PhotoController@editComment');
 $router->map('GET',      '/gallery/albums', 'PhotoController@albums');
 $router->map('GET',      '/gallery/album/[user:login]', 'PhotoController@album');
 $router->map('GET',      '/gallery/comments', 'PhotoController@allComments');

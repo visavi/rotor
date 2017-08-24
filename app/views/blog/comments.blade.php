@@ -28,6 +28,10 @@
                         @if (App::getUserId() == $data->getUser()->id && $data['created_at'] + 600 > SITETIME)
                             <a href="/article/<?=$blog['id']?>/<?=$data['id']?>/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
                         @endif
+
+                        @if (is_admin())
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data['relate_id'] }}" data-id="{{ $data['id'] }}" data-type="{{ Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove text-muted"></i></a>
+                        @endif
                     </div>
 
                     <b><?=profile($data['user'])?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br>

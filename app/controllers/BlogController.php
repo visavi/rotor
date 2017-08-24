@@ -49,7 +49,6 @@ class BlogController extends BaseController
      */
     public function view($id)
     {
-
         $blog = Blog::select('blogs.*', 'catsblog.name', 'pollings.vote')
             ->where('blogs.id', $id)
             ->leftJoin('catsblog', function ($join) {
@@ -113,7 +112,7 @@ class BlogController extends BaseController
     }
 
     /**
-     * Редактированиe статьи
+     * Редактирование статьи
      */
     public function edit($id)
     {
@@ -342,7 +341,6 @@ class BlogController extends BaseController
         App::view('blog/comments', compact('blog', 'comments', 'page'));
     }
 
-
     /**
      * Подготовка к редактированию комментария
      */
@@ -367,50 +365,32 @@ class BlogController extends BaseController
             App::abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 
-        App::view('blog/editcomment', compact('comment', 'page'));
-    }
+        if (Request::isMethod('post')) {
+            $token = check(Request::input('token'));
+            $msg   = check(Request::input('msg'));
+            $page  = abs(intval(Request::input('page', 1)));
 
-    /**
-     * Редактирование комментария
-     */
-    public function editpost($id)
-    {
-        $uid = check(Request::input('uid'));
-        $pid = abs(intval(Request::input('pid')));
-        $msg = check(Request::input('msg'));
-        $page = abs(intval(Request::input('page', 1)));
+            $validation = new Validation();
+            $validation
+                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                ->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий комментарий!'], true, 5, 1000);
 
-        if (is_user()) {
-            if ($uid == $_SESSION['token']) {
-                if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                    $post = DB::run()->queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['blog', $pid, App::getUsername()]);
+            if ($validation->run()) {
+                $msg = antimat($msg);
 
-                    if (!empty($post)) {
-                        if ($post['time'] + 600 > SITETIME) {
-                            $msg = antimat($msg);
+                $comment->update([
+                    'text' => $msg,
+                ]);
 
-                            DB::run()->query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'blog', $pid]);
-
-                            App::setFlash('success', 'Сообщение успешно отредактировано!');
-                            App::redirect("/blog/blog?act=comments&id=$id&page=$page");
-
-                        } else {
-                            show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
-                        }
-                    } else {
-                        show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
-                    }
-                } else {
-                    show_error('Ошибка! Слишком длинное или короткое сообщение!');
-                }
+                App::setFlash('success', 'Комментарий успешно отредактирован!');
+                App::redirect('/article/' . $id . '/comments?page=' . $page);
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::setInput(Request::all());
+                App::setFlash('danger', $validation->getErrors());
             }
-        } else {
-            show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
         }
 
-        App::view('includes/back', ['link' => '/blog/blog?act=edit&amp;id=' . $id . '&amp;pid=' . $pid . '&amp;page=' . $page, 'title' => 'Вернуться']);
+        App::view('blog/editcomment', compact('comment', 'page'));
     }
 
     /**
@@ -534,8 +514,11 @@ class BlogController extends BaseController
                 App::redirect('/blog/tags');
             }
 
-            if (empty($_SESSION['findresult']) || empty($_SESSION['blogfind']) || $tag!=$_SESSION['blogfind']) {
-
+            if (
+                empty($_SESSION['findresult']) ||
+                empty($_SESSION['blogfind'])   ||
+                $tag != $_SESSION['blogfind']
+            ) {
                 $result = Blog::select('id')
                     ->where('tags', 'like', '%'.$tag.'%')
                     ->limit(500)
@@ -631,5 +614,34 @@ class BlogController extends BaseController
             ->get();
 
         App::view('blog/new_comments', compact('comments', 'page'));
+    }
+
+    /**
+     * Топ статей
+     */
+    public function top()
+    {
+        $sort = (isset($_GET['sort'])) ? check($_GET['sort']) : 'visits';
+
+        switch ($sort) {
+            case 'rated': $order = 'rating';
+                break;
+            case 'comm': $order = 'comments';
+                break;
+            default: $order = 'visits';
+        }
+
+        $total = Blog::count();
+        $page = App::paginate(Setting::get('blogpost'), $total);
+
+        $blogs = Blog::select('blogs.*', 'catsblog.name')
+            ->leftJoin('catsblog', 'blogs.category_id', '=', 'catsblog.id')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy($order, 'desc')
+            //->with('user')
+            ->get();
+
+            App::view('blog/top', compact('blogs', 'order', 'page'));
     }
 }
