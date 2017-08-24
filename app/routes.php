@@ -154,10 +154,6 @@ $router->map('GET|POST', '/events', 'events/index.php', 'events');
 
 $router->map('GET|POST', '/files/[*:page]?', 'files/index.php', 'files');
 
-$router->map('GET|POST', '/chat', 'chat/index.php', 'chat');
-
-$router->map('GET|POST', '/board', 'board/index.php', 'board');
-
 $router->map('GET|POST', '/games', 'games/index.php');
 $router->map('GET|POST', '/games/bank', 'games/bank.php');
 $router->map('GET|POST', '/games/credit', 'games/credit.php');
@@ -191,7 +187,6 @@ $router->map('GET', '/api/forum', 'ApiController@forum');
 $router->map('GET', '/api/private', 'ApiController@private');
 
 $router->map('GET',      '/admin', 'admin/index.php', 'admin');
-$router->map('GET|POST', '/admin/board', 'admin/board.php');
 $router->map('GET|POST', '/admin/book', 'admin/book.php');
 $router->map('GET|POST', '/admin/blog', 'admin/blog.php');
 $router->map('GET|POST', '/admin/chat', 'admin/chat.php');

@@ -17,7 +17,6 @@
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> (<?=stats_gallery()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes">Голосования</a> (<?=stats_votes()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> (<?=stats_offers()?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/chat">Мини-чат</a> (<?= stats_minichat() ?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games">Игры и развлечения</a><br>
 
     <div class="b">
@@ -50,7 +49,6 @@
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/files/docs">Документация RotorCMS</a><br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/search">Поиск по сайту</a><br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/mail">Обратная связь</a><br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/board">Доска объявлений</a> (<?= stats_board() ?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> (<?=stats_users()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> (<?=stats_admins()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/page/stat">Информация</a><br>
