@@ -29,26 +29,6 @@ class FillCommentsTable extends AbstractMigration
             $this->insert('comments', $rows);
         }
 
-        $comments = $this->fetchAll('SELECT * from commevents');
-        $rows = [];
-        foreach($comments as $comment) {
-            $comment['ip'] = substr($comment['ip'] , 0, 15);
-
-            $rows[] = [
-                'user' => $comment['author'],
-                'relate_type' => 'event',
-                'relate_category_id' => 0,
-                'relate_id' => $comment['event_id'],
-                'text' => $comment['text'],
-                'ip' => $comment['ip'],
-                'brow' => $comment['brow'],
-                'time' => $comment['time'],
-            ];
-        }
-        if ($rows) {
-            $this->insert('comments', $rows);
-        }
-
         $comments = $this->fetchAll('SELECT * from commload');
         $rows = [];
         foreach($comments as $comment) {

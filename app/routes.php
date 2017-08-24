@@ -150,8 +150,6 @@ $router->map('GET|POST', '/pictures', 'pages/pictures.php');
 $router->map('GET',      '/pictures/[delete:action]', 'pages/pictures.php');
 $router->map('GET',      '/surprise', 'pages/surprise.php');
 
-$router->map('GET|POST', '/events', 'events/index.php', 'events');
-
 $router->map('GET|POST', '/files/[*:page]?', 'files/index.php', 'files');
 
 $router->map('GET|POST', '/games', 'games/index.php');
@@ -191,7 +189,6 @@ $router->map('GET|POST', '/admin/book', 'admin/book.php');
 $router->map('GET|POST', '/admin/blog', 'admin/blog.php');
 $router->map('GET|POST', '/admin/chat', 'admin/chat.php');
 $router->map('GET',      '/admin/cache/[image|clear|clearimage:action]?', 'admin/cache.php');
-$router->map('GET|POST', '/admin/events', 'admin/events.php');
 $router->map('GET|POST', '/admin/forum', 'admin/forum.php');
 $router->map('GET|POST', '/admin/minichat', 'admin/minichat.php');
 $router->map('GET|POST', '/admin/news', 'admin/news.php');

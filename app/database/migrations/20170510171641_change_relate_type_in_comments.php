@@ -22,7 +22,7 @@ class ChangeRelateTypeInComments extends AbstractMigration
     public function down()
     {
         $table = $this->table('comments');
-        $table->changeColumn('relate_type', 'enum', ['values' => ['blog', 'event', 'down', 'news', 'offer', 'gallery']])
+        $table->changeColumn('relate_type', 'enum', ['values' => ['blog', 'down', 'news', 'offer', 'gallery']])
             ->save();
 
         $this->execute('UPDATE comments SET relate_type="gallery" WHERE relate_type="Photo";');
