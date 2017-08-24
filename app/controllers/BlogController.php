@@ -394,44 +394,6 @@ class BlogController extends BaseController
     }
 
     /**
-     * Удаление комментариев
-     */
-    public function del($id)
-    {
-        $uid = check(Request::input('uid'));
-        $page = abs(intval(Request::input('page', 1)));
-
-        if (isset($_POST['del'])) {
-            $del = intar($_POST['del']);
-        } else {
-            $del = 0;
-        }
-
-        if (is_admin()) {
-            if ($uid == $_SESSION['token']) {
-                if (!empty($del)) {
-                    $del = implode(',', $del);
-
-                    $delcomments = DB::run()->exec("DELETE FROM `comments` WHERE relate_type='blog' AND `id` IN (" . $del . ") AND `relate_id`=" . $id . ";");
-                    DB::run()->query("UPDATE `blogs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
-
-                    App::setFlash('success', 'Выбранные комментарии успешно удалены!');
-                    App::redirect("/blog/blog?act=comments&id=$id&page=$page");
-
-                } else {
-                    show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-        } else {
-            show_error('Ошибка! Удалять комментарии могут только модераторы!');
-        }
-
-        App::view('includes/back', ['link' => '/blog/blog?act=comments&amp;id=' . $id . '&amp;page=' . $page, 'title' => 'Вернуться']);
-    }
-
-    /**
      * Переадресация на последнюю страницу
      */
     public function end($id)
@@ -617,11 +579,87 @@ class BlogController extends BaseController
     }
 
     /**
+     * Статьи пользователя
+     */
+    public function userArticles()
+    {
+        $login = check(Request::input('user', App::getUsername()));
+
+        $user = User::where('login', $login)->first();
+
+        if (! $user) {
+            App::abort('default', 'Пользователь не найден!');
+        }
+
+        $total = Blog::where('user_id', $user->id)->count();
+        $page  = App::paginate(Setting::get('blogpost'), $total);
+
+        $blogs = Blog::where('user_id', $user->id)
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        App::view('blog/active_articles', compact('blogs', 'user', 'page'));
+    }
+
+    /**
+     * Комментарии пользователя
+     */
+    public function userComments()
+    {
+        $login = check(Request::input('user', App::getUsername()));
+
+        $user = User::where('login', $login)->first();
+
+        if (! $user) {
+            App::abort('default', 'Пользователь не найден!');
+        }
+
+        $total = Comment::where('relate_type', Blog::class)
+            ->where('user_id', $user->id)
+            ->count();
+        $page = App::paginate(Setting::get('blogpost'), $total);
+
+        $comments = Comment::select('comments.*', 'title', 'comments')
+            ->where('relate_type', Blog::class)
+            ->where('comments.user_id', $user->id)
+            ->leftJoin('blogs', 'comments.relate_id', '=', 'blogs.id')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->orderBy('comments.created_at', 'desc')
+            ->with('user')
+            ->get();
+
+            App::view('blog/active_comments', compact('comments', 'user', 'page'));
+    }
+
+    /**
+     * Переход к сообщению
+     */
+    public function viewComment($id, $сid)
+    {
+        $total = Comment::where('relate_type', Blog::class)
+            ->where('relate_id', $id)
+            ->where('id', '<=', $сid)
+            ->orderBy('created_at')
+            ->count();
+
+        if ($total) {
+            $end = ceil($total / Setting::get('blogpost'));
+            App::redirect('/article/' . $id . '/comments?page=' . $end);
+        } else {
+            App::setFlash('success', 'Комментариев к данной статье не существует!');
+            App::redirect('/article/' . $id . '/comments');
+        }
+    }
+
+    /**
      * Топ статей
      */
     public function top()
     {
-        $sort = (isset($_GET['sort'])) ? check($_GET['sort']) : 'visits';
+        $sort =check(Request::get('sort', 'visits'));
 
         switch ($sort) {
             case 'rated': $order = 'rating';
@@ -639,9 +677,9 @@ class BlogController extends BaseController
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->orderBy($order, 'desc')
-            //->with('user')
+            ->with('user')
             ->get();
 
-            App::view('blog/top', compact('blogs', 'order', 'page'));
+        App::view('blog/top', compact('blogs', 'order', 'page'));
     }
 }

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Топ статей (Стр. {{ $page['current'] }})- @parent
+    Топ статей (Стр. {{ $page['current'] }}) - @parent
 @stop
 
 @section('content')
@@ -29,6 +29,7 @@
             </div>
 
             <div>
+                Автор: {!! profile($data->user) !!}<br>
                 Категория: <a href="/blog/{{ $data['category_id'] }}">{{ $data['name'] }}</a><br>
                 Просмотров: {{ $data['visits'] }}<br>
                 <a href="/article/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})

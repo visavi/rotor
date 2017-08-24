@@ -1,12 +1,30 @@
-<?php foreach ($blogs as $data): ?>
+@extends('layout')
 
-    <div class="b">
-        <i class="fa fa-pencil"></i>
-        <b><a href="/blog/blog?act=view&amp;id=<?=$data['id']?>"><?=$data['title']?></a></b> (<?=format_num($data['rating'])?>)
-    </div>
+@section('title')
+    Список всех статей {{ $user->login }} (Стр. {{ $page['current'] }}) - @parent
+@stop
 
-    <div>Автор: <?=profile($data['user'])?> (<?=date_fixed($data['time'])?>)<br>
-        <i class="fa fa-comment"></i> <a href="/blog/blog?act=comments&amp;id=<?=$data['id']?>">Комментарии</a> (<?=$data['comments']?>)
-        <a href="/blog/blog?act=end&amp;id=<?=$data['id']?>">&raquo;</a>
-    </div>
-<?php endforeach; ?>
+@section('content')
+
+    <h1>Список всех статей {{ $user->login }}</h1>
+
+    @if ($blogs->isNotEmpty())
+        @foreach ($blogs as $data)
+            <div class="b">
+                <i class="fa fa-pencil"></i>
+                <b><a href="/article/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({!! format_num($data['rating']) !!})
+            </div>
+
+            <div>Автор: {!! profile($data['user']) !!} ({{ date_fixed($data['time']) }})<br>
+                <i class="fa fa-comment"></i> <a href="/article/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
+                <a href="/article/{{ $data['id'] }}/end">&raquo;</a>
+            </div>
+        @endforeach
+
+        {{ App::pagination($page) }}
+
+        Всего статей: <b>{{ $page['total'] }}</b><br>
+    @else
+        {{ show_error('Статей еще нет!') }}
+    @endif
+@stop

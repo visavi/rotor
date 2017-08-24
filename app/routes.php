@@ -29,10 +29,11 @@ $router->map('GET|POST', '/blog/create', 'BlogController@create');
 $router->map('GET',      '/blog/blogs', 'BlogController@blogs');
 $router->map('GET',      '/blog/new/articles', 'BlogController@newArticles');
 $router->map('GET',      '/blog/new/comments', 'BlogController@newComments');
-$router->map('GET|POST', '/blog/top', 'BlogController@top');
-
-$router->map('GET|POST', '/blog/active', 'blog/active.php');
-$router->map('GET|POST', '/blog/search', 'blog/search.php');
+$router->map('GET',      '/blog/active/articles', 'BlogController@userArticles');
+$router->map('GET',      '/blog/active/comments', 'BlogController@userComments');
+$router->map('GET',      '/blog/top', 'BlogController@top');
+$router->map('GET|POST', '/blog/search', 'BlogController@search');
+$router->map('GET',      '/article/[i:id]/[i:cid]', 'BlogController@viewcomment');
 
 $router->map('GET',      '/news', 'NewsController@index', 'news');
 $router->map('GET',      '/news/[i:id]', 'NewsController@view');

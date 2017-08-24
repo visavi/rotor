@@ -1,22 +1,42 @@
-<?php foreach ($comments as $data): ?>
-    <div class="b">
+@extends('layout')
 
-        <i class="fa fa-comment"></i> <b><a href="/blog/blog?act=comments&amp;id=<?=$data['relate_id']?>"><?=$data['title']?></a></b> (<?=$data['comments']?>)
+@section('title')
+    Список всех комментариев {{ $user->login }} (Стр. {{ $page['current'] }}) - @parent
+@stop
 
-        <?php if (is_admin()): ?>
-            — <a href="/blog/active?act=del&amp;id=<?=$data['id']?>&amp;uz=<?=$data['user']?>&amp;page=<?=$page['current']?>&amp;uid=<?=$_SESSION['token']?>">Удалить</a>
-        <?php endif; ?>
+@section('content')
 
-    </div>
-    <div>
-        <?=App::bbCode($data['text'])?>
-        <br>
+    <h1>Список всех комментариев {{ $user->login }}</h1>
 
-        Написал: <?=$data['user']?> <small>(<?=date_fixed($data['time'])?>)</small><br>
+    @if ($comments->isNotEmpty())
+        @foreach ($comments as $data)
+            <div class="post">
+                <div class="b">
 
-        <?php if (is_admin()): ?>
-            <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
-        <?php endif; ?>
+                    <i class="fa fa-comment"></i>
+                    <b><a href="/article/{{ $data['relate_id']}}/{{ $data['id']}}">{{ $data['title'] }}</a></b> ({{ $data['comments'] }})
 
-    </div>
-<?php endforeach; ?>
+                    <div class="float-right">
+                        @if (is_admin())
+                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data['relate_id'] }}" data-id="{{ $data['id'] }}" data-type="{{ Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove text-muted"></i></a>
+                        @endif
+                    </div>
+
+                </div>
+                <div>
+                    {!! App::bbCode($data['text']) !!}
+                    <br>
+
+                    Написал: {!! profile($data['user']) !!} <small>({{ date_fixed($data['time']) }})</small><br>
+                    @if (is_admin())
+                        <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                    @endif
+                </div>
+            </div>
+        @endforeach
+
+        {{ App::pagination($page) }}
+    @else
+        {{ show_error('Комментарии не найдены!') }}
+    @endif
+@stop
