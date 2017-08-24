@@ -1,19 +1,32 @@
-<div class="form">
-	<form action="/blog/search?act=search" method="get">
-		<input type="hidden" name="act" value="search">
+@extends('layout')
 
-		Запрос:<br>
-		<input type="text" name="find" size="50"><br>
+@section('title')
+    Поиск в блогах - @parent
+@stop
 
-		Искать:<br>
-		<input name="where" type="radio" value="0" checked="checked"> В заголовке<br>
-		<input name="where" type="radio" value="1"> В тексте<br><br>
+@section('content')
 
-		Тип запроса:<br>
-		<input name="type" type="radio" value="0" checked="checked"> И<br>
-		<input name="type" type="radio" value="1"> Или<br>
-		<input name="type" type="radio" value="2"> Полный<br><br>
+    <h1>Поиск в блогах</h1>
 
-		<input type="submit" value="Поиск">
-	</form>
-</div><br>
+        <div class="form">
+        <form action="/blog/search">
+            <input type="hidden" name="act" value="search">
+
+            Запрос:<br>
+            <input name="find" size="50"><br>
+
+            Искать:<br>
+            <input name="where" type="radio" value="0" checked="checked"> В заголовке<br>
+            <input name="where" type="radio" value="1"> В тексте<br><br>
+
+            Тип запроса:<br>
+            <input name="type" type="radio" value="0" checked="checked"> И<br>
+            <input name="type" type="radio" value="1"> Или<br>
+            <input name="type" type="radio" value="2"> Полный<br><br>
+
+            <button class="btn btn-primary">Поиск</button>
+        </form>
+    </div><br>
+
+    {{ App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']) }}
+@stop
