@@ -11,14 +11,14 @@
     @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <i class="fa fa-pencil"></i>
-            <b><a href="/blog/blogs/{{ $data->login }}">{{ $data->login }}</a></b> ({{$data['cnt'] }} cтатей / {{ $data->comments }} комм.)<br>
+            <b><a href="/blog/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{$data['cnt'] }} cтатей / {{ $data->comments }} комм.)<br>
         @endforeach
 
         {{ App::pagination($page) }}
 
-        <br><br>Всего пользователей: <b>{{  $page['total'] }}</b>
+        Всего пользователей: <b>{{  $page['total'] }}</b><br><br>
     @else
-        Статей еще нет!
+        {{ show_error('Статей еще нет!') }}
     @endif
 
     <?php App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']); ?>

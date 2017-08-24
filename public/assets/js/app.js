@@ -105,8 +105,10 @@ function postQuote(el)
     var date = post.find('small').text();
     var message = post.find('.message').text();
 
+    console.log(message);
+
     separ = field.val().length ? '\n' : '';
-    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + message + '[/quote]\n');
+    field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
 
     return false;
 }
