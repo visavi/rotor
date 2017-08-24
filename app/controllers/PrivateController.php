@@ -171,7 +171,12 @@ class PrivateController extends BaseController
             }
         }
 
-        App::view('private/send', compact('user'));
+        $contacts = Contact::where('user_id', App::getUserId())
+            ->rightJoin('users', 'contact.contact_id', '=', 'users.id')
+            ->orderBy('users.login')
+            ->get();
+
+        App::view('private/send', compact('user', 'contacts'));
     }
 
     /**
