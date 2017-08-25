@@ -81,11 +81,6 @@ addRule('numeric', $count, 'Слишком больше или маленько�
 </pre>
 Если передан required = false, то валидация сработает при пустой строке
 
-<h3 id="validateMax">validateMax</h3>
-<pre class="prettyprint linenums">
-addRule('max', array(App::user('point'), Setting::get('eventpoint')), 'У вас недостаточно актива для создания события!')
-</pre>
-
 <h3 id="validateMin">validateMin</h3>
 <pre class="prettyprint linenums">
 addRule('min', array(App::user('timenickname'), SITETIME), 'Изменять ник можно не чаще чем 1 раз в сутки!')

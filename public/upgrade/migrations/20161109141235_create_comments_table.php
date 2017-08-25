@@ -11,7 +11,7 @@ class CreateCommentsTable extends AbstractMigration
     {
         $table = $this->table('comments', ['collation' => 'utf8mb4_unicode_ci']);
         $table->addColumn('user', 'string', ['limit' => 20])
-            ->addColumn('relate_type', 'enum', ['values' => ['blog', 'event', 'down', 'news', 'offer', 'gallery']])
+            ->addColumn('relate_type', 'enum', ['values' => ['blog', 'down', 'news', 'offer', 'gallery']])
             ->addColumn('relate_category_id', 'integer', ['signed' => false])
             ->addColumn('relate_id', 'integer', ['signed' => false])
             ->addColumn('text', 'text', ['null' => true])

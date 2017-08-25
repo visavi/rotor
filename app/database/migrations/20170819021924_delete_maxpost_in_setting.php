@@ -11,7 +11,6 @@ class DeleteMaxpostInSetting extends AbstractMigration
     {
         $this->execute("DELETE FROM setting WHERE name='maxblogcomm' LIMIT 1;");
         $this->execute("DELETE FROM setting WHERE name='maxdowncomm' LIMIT 1;");
-        $this->execute("DELETE FROM setting WHERE name='maxkommevents' LIMIT 1;");
         $this->execute("DELETE FROM setting WHERE name='maxkommnews' LIMIT 1;");
         $this->execute("DELETE FROM setting WHERE name='maxpostbook' LIMIT 1;");
         $this->execute("DELETE FROM setting WHERE name='maxpostchat' LIMIT 1;");
@@ -26,7 +25,6 @@ class DeleteMaxpostInSetting extends AbstractMigration
     {
         $this->execute("INSERT INTO setting (name, value) VALUES ('maxblogcomm', 300);");
         $this->execute("INSERT INTO setting (name, value) VALUES ('maxdowncomm', 300);");
-        $this->execute("INSERT INTO setting (name, value) VALUES ('maxkommevents', 500);");
         $this->execute("INSERT INTO setting (name, value) VALUES ('maxkommnews', 500);");
         $this->execute("INSERT INTO setting (name, value) VALUES ('maxpostbook', 500);");
         $this->execute("INSERT INTO setting (name, value) VALUES ('maxpostchat', 500);");

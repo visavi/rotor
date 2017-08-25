@@ -16,9 +16,6 @@
     <div class="b"><i class="fa fa-globe fa-lg text-muted"></i> <b>Последние статьи</b></div>
     {{ recentblogs() }}
 
-    <div class="b"><i class="fa fa-hashtag fa-lg text-muted"></i>  <b>Последние cобытия</b></div>
-    {{ recentevents() }}
-
     <div class="b"><i class="fa fa-image fa-lg text-muted"></i> <b>Последние фотографии</b></div>
     {{  recentphotos() }}
 @stop
