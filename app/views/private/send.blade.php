@@ -46,12 +46,7 @@
 <input class="form-control" name="user" id="inputLogin" maxlength="20" value="{{ App::getInput('user') }}">
 
     <?php
-        $contacts = Contact::where('user_id', App::getUserId())
-            ->rightJoin('users', 'contact.contact_id', '=', 'users.id')
-            ->orderBy('users.login')
-            ->get();
-
-        if (count($contacts) > 0) {
+        if ($contacts->isNotEmpty()) {
             echo '<label for="inputContact">Или выберите из списка</label>';
             echo '<select class="form-control" id="inputContact" name="contact">';
 
