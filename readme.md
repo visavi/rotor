@@ -8,6 +8,7 @@ RotorCMS 7.0
 [![Build Status](https://travis-ci.org/visavi/rotor.svg)](https://travis-ci.org/visavi/rotor)
 [![License](https://poser.pugx.org/visavi/rotor/license)](https://packagist.org/packages/visavi/rotor)
 [![Dependency Status](https://www.versioneye.com/user/projects/588f6be5760ce60041d80429/badge.svg)](https://www.versioneye.com/user/projects/588f6be5760ce60041d80429)
+[![Code Climate](https://codeclimate.com/github/visavi/rotor/badges/gpa.svg)](https://codeclimate.com/github/visavi/rotor)
 
 Добро пожаловать!
 Мы благодарим Вас за то, что Вы решили использовать наш скрипт для своего сайта. RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта.
@@ -86,32 +87,18 @@ try_files $uri $uri/ =404
 
 на
 
-try_files $uri /index.php?$query_string;
+try_files $uri $uri/ /index.php?$query_string;
 ```
 
 Секция location ~ \.php$ должна быть примерно такого вида
 
 ```
-fastcgi_pass unix:/run/php/php7.0-fpm.sock;
 try_files $uri /index.php =404;
 fastcgi_split_path_info ^(.+\.php)(/.+)$;
+fastcgi_pass unix:/run/php/php7.0-fpm.sock;
 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 fastcgi_index index.php;
 include fastcgi.conf;
-```
-
-### Настройки apache
-
-Создайте файл .htaccess и пропишите в него следующий код
-
-```
-<IfModule mod_rewrite.c>
-	RewriteEngine On
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule ^(.*)/$ /$1 [L,R=301]
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^ index.php [L]
-</IfModule>
 ```
 
 ### Author
