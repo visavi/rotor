@@ -964,24 +964,6 @@ function last_news()
     }
 }
 
-// --------------------- Функция вывода статистики событий ------------------------//
-function stats_events() {
-    if (@filemtime(STORAGE."/temp/statevents.dat") < time()-900) {
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `events`;");
-        $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `events` WHERE `time`>?;", [SITETIME-86400 * 3]);
-
-        if (empty($totalnew)) {
-            $stat = (int)$total;
-        } else {
-            $stat = $total.'/+'.$totalnew;
-        }
-
-        file_put_contents(STORAGE."/temp/statevents.dat", (int)$stat, LOCK_EX);
-    }
-
-    return file_get_contents(STORAGE."/temp/statevents.dat");
-}
-
 // --------------------- Функция получения данных аккаунта  --------------------//
 function user($login) {
     if (! empty($login)) {
@@ -1190,26 +1172,6 @@ function curl_connect($url, $user_agent = 'Mozilla/5.0', $proxy = null) {
     }
 }
 
-// --------------------------- Функция показа событий---------------------------//
-function recentevents($show = 5) {
-
-    if (@filemtime(STORAGE."/temp/recentevents.dat") < time()-600) {
-        $query = DB::run()->query("SELECT * FROM `events` WHERE `top`=? ORDER BY `time` DESC LIMIT ".$show.";", [1]);
-        $events = $query->fetchAll();
-
-        file_put_contents(STORAGE."/temp/recentevents.dat", serialize($events), LOCK_EX);
-    }
-
-    $events = unserialize(file_get_contents(STORAGE."/temp/recentevents.dat"));
-
-    if (is_array($events) && count($events) > 0) {
-        foreach ($events as $data) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> ';
-            echo '<a href="/events?act=read&amp;id='.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].')<br>';
-        }
-    }
-}
-
 // --------------------------- Функция показа фотографий ---------------------------//
 function recentphotos($show = 5)
 {
@@ -1359,10 +1321,6 @@ function restatement($mode) {
 
         case 'photo':
             DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='".Photo::class."' AND `photo`.`id`=`comments`.`relate_id`);");
-            break;
-
-        case 'events':
-            DB::run() -> query("UPDATE `events` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='Event' AND `events`.`id`=`comments`.`relate_id`);");
             break;
     }
     return true;

@@ -45,7 +45,7 @@
 
     <i class="fa fa-code"></i> [code]Форматированный код[/code]{!! App::bbCode('[code]&lt;? echo"Для вставки php-кода"; ?&gt;[/code]') !!}<br>
     <i class="fa fa-exchange"></i> [nextpage] - Служит для переноса текста на новую страницу (Работает только в блогах)<br>
-    <i class="fa fa-scissors"></i> [cut] - Служит для обрезки текста (Работает только в новостях и событиях)<br><br>
+    <i class="fa fa-scissors"></i> [cut] - Служит для обрезки текста (Работает только в новостях)<br><br>
 
     <i class="fa fa-eraser"></i> Очистка выделенного текста от bb-кода<br>
     <i class="fa fa-smile-o"></i> Вставка смайла из готового набора<br>

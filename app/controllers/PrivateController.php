@@ -105,7 +105,7 @@ class PrivateController extends BaseController
             $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
                 ->addRule('bool', $user, ['user' => 'Ошибка! Пользователь не найден!'])
                 ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, 1000)
-                ->addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается публиковать события раз в ' . Flood::getPeriod() . ' сек!');
+                ->addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!');
 
             if ($user) {
 

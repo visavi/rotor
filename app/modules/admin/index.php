@@ -15,7 +15,6 @@ if (! is_admin()) {
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/forum">Форум</a> (<?=stats_forum()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/gallery">Галерея</a> (<?=stats_gallery()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/blog">Блоги</a> (<?=stats_blog()?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/events">События</a> (<?=stats_events()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/newload">Новые публикации</a> (<?=stats_newload()?>)<br>
 
     <?=show_admin_links(105);?>

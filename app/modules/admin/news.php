@@ -215,8 +215,8 @@ case 'addnews':
     $validation = new Validation();
 
     $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('string', $title, 'Слишком длинный или короткий заголовок события!', true, 5, 50)
-        -> addRule('string', $msg, 'Слишком длинный или короткий текст события!', true, 5, 10000);
+        -> addRule('string', $title, 'Слишком длинный или короткий заголовок новости!', true, 5, 50)
+        -> addRule('string', $msg, 'Слишком длинный или короткий текст новости!', true, 5, 10000);
 
     if ($validation->run()) {
 

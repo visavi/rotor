@@ -83,7 +83,7 @@ addRule('numeric', $count, 'Слишком больше или маленько�
 
 <h3 id="validateMax">validateMax</h3>
 <pre class="prettyprint linenums">
-addRule('max', array(App::user('point'), Setting::get('eventpoint')), 'У вас недостаточно актива для создания события!')
+addRule('max', array(App::user('point'), 50), 'У вас недостаточно актива!')
 </pre>
 
 <h3 id="validateMin">validateMin</h3>

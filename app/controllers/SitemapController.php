@@ -9,7 +9,6 @@ class SitemapController extends BaseController
     {
         $pages = ['news.xml',
             'blogs.xml',
-            'events.xml',
             'topics.xml',
             'downs.xml',];
 
@@ -80,38 +79,6 @@ class SitemapController extends BaseController
 
             $locs[] = [
                 'loc'        => Setting::get('home') . '/news/' . $news['id'],
-                'lastmod'    => date('c', $changeTime),
-                'changefreq' => $new ? 'weekly' : 'monthly',
-                'priority'   => $new ? '1.0' : '0.5',
-            ];
-        }
-        App::view('sitemap/url', compact('locs'));
-    }
-
-    /**
-     * Генерируем события
-     */
-    public function events()
-    {
-        $events = Event::select('events.*', Capsule::raw('MAX(c.created_at) as last_time'))
-            ->leftJoin('comments as c', function($join){
-                $join->on('events.id', '=', 'c.relate_id')
-                    ->where('relate_type', '=', Event::class);
-            })
-            ->groupBy('events.id')
-            ->orderBy('last_time', 'desc')
-            ->get();
-
-        $locs = [];
-        foreach ($events as $event) {
-
-            $changeTime = ($event['last_time'] > $event['time']) ? $event['last_time'] : $event['time'];
-
-            // Обновлено менее 1 месяца
-            $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
-
-            $locs[] = [
-                'loc'        => Setting::get('home') . '/events?act=read&id=' . $event['id'],
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',

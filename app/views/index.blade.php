@@ -38,12 +38,6 @@
     <?=recentblogs()?>
 
     <div class="b">
-        <i class="fa fa-hashtag fa-lg text-muted"></i>
-        <b><a href="/events">События</a></b> (<?=stats_events()?>)
-    </div>
-    <?=recentevents()?>
-
-    <div class="b">
         <i class="fa fa-cog fa-lg text-muted"></i>
         <b><a href="/page">Сервисы сайта</a></b>
     </div>

@@ -27,7 +27,6 @@ if (is_admin([101])) {
             echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setfive">Закладки / Голосования / Приват</a><br>';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setload">Загруз-центр</a> <br>';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setblog">Блоги</a><br>';
-            echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setevent">События</a><br>';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setseven">Постраничная навигация</a><br>';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=seteight">Прочее / Другое</a><br>';
             // echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setnine">Кэширование</a><br>';
@@ -717,53 +716,6 @@ if (is_admin([101])) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setblog">Вернуться</a><br>';
-        break;
-
-        ############################################################################################
-        ##                                   Форма изменения событий                              ##
-        ############################################################################################
-        case 'setevent':
-
-            echo '<b>Настройки событий</b><br><hr>';
-
-            echo '<div class="form">';
-            echo '<form method="post" action="/admin/setting?act=editevent&amp;uid='.$_SESSION['token'].'">';
-
-            echo 'Событий на страницу:<br><input name="postevents" maxlength="2" value="'.$setting['postevents'].'"><br>';
-            echo 'Кол. баллов для публикации событий:<br><input name="eventpoint" maxlength="3" value="'.$setting['eventpoint'].'"><br>';
-
-            echo '<input value="Изменить" type="submit"></form></div><br>';
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';
-        break;
-
-        ############################################################################################
-        ##                                   Изменение в событиях                                 ##
-        ############################################################################################
-        case 'editevent':
-
-            $uid = check($_GET['uid']);
-
-            if ($uid == $_SESSION['token']) {
-                if ($_POST['postevents'] != "" && $_POST['eventpoint'] != "" ) {
-
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-
-                    $dbr -> execute(intval($_POST['postevents']), 'postevents');
-                    $dbr -> execute(intval($_POST['eventpoint']), 'eventpoint');
-
-                    save_setting();
-
-                    App::setFlash('success', 'Настройки сайта успешно изменены!');
-                    App::redirect("/admin/setting?act=setevent");
-
-                } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
-                }
-            } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setevent">Вернуться</a><br>';
         break;
 
         ############################################################################################
