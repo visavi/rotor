@@ -255,7 +255,7 @@ class PrivateController extends BaseController
         }
 
         $type = $type ? '/' . $type : '';
-        App::redirect('/private/' . $type . '?page=' . $page);
+        App::redirect('/private' . $type . '?page=' . $page);
     }
 
     /**

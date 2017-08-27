@@ -20,7 +20,7 @@
             <div class="b">
                 <div class="img">{!! user_avatars($data['author']) !!}</div>
                 <b>{!! profile($data['author']) !!}</b>  ({{ date_fixed($data['time']) }})<br>
-                {{ user_title($data['author']) }} {!! user_online($data['author']) !!}</div>
+                {!! user_title($data['author']) !!} {!! user_online($data['author']) !!}</div>
 
             <div>{!! App::bbCode($data['text']) !!}<br>
 
