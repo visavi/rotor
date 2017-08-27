@@ -163,12 +163,6 @@ if ($user = is_user()) {
         }
     }
 
-    // Просрочен кредит
-    if (App::user('sumcredit') > 0 && SITETIME > App::user('timecredit') && empty(App::user('ban'))) {
-        if (Request::path() != 'games/credit') {
-            App::redirect('/games/credit?log='.App::getUsername());
-        }
-    }
     // ---------------------- Получение ежедневного бонуса -----------------------//
     if (App::user('timebonus') < SITETIME - 82800) {
         $user = User::where('id', App::getUserId());

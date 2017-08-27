@@ -17,7 +17,6 @@
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> (<?=stats_gallery()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes">Голосования</a> (<?=stats_votes()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> (<?=stats_offers()?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/games">Игры и развлечения</a><br>
 
     <div class="b">
         <i class="fa fa-forumbee fa-lg text-muted"></i>

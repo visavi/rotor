@@ -152,19 +152,6 @@ $router->map('GET',      '/surprise', 'pages/surprise.php');
 
 $router->map('GET|POST', '/files/[*:page]?', 'files/index.php', 'files');
 
-$router->map('GET|POST', '/games', 'games/index.php');
-$router->map('GET|POST', '/games/bank', 'games/bank.php');
-$router->map('GET|POST', '/games/credit', 'games/credit.php');
-$router->map('GET|POST', '/games/transfer', 'games/transfer.php');
-$router->map('GET|POST', '/games/livebank', 'games/livebank.php');
-$router->map('GET|POST', '/games/safe', 'games/safe.php');
-$router->map('GET|POST', '/games/loterea', 'games/loterea.php');
-$router->map('GET|POST', '/games/21', 'games/21.php');
-$router->map('GET|POST', '/games/hi', 'games/hi.php');
-$router->map('GET|POST', '/games/bandit', 'games/bandit.php');
-$router->map('GET|POST', '/games/kosti', 'games/kosti.php');
-$router->map('GET|POST', '/games/naperstki', 'games/naperstki.php');
-
 $router->map('GET|POST', '/load', 'load/index.php');
 $router->map('GET|POST', '/load/active', 'load/active.php');
 $router->map('GET|POST', '/load/add', 'load/add.php');

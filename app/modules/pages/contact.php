@@ -42,7 +42,7 @@ case 'index':
 
             echo '<input type="checkbox" name="del[]" value="'.$contact['id'].'"> ';
             echo '<a href="/private/send?user='.$contact->getContact()->login.'">Написать</a> | ';
-            echo '<a href="/games/transfer?uz='.$contact->getContact()->login.'">Перевод</a> | ';
+            echo '<a href="/transfer?uz='.$contact->getContact()->login.'">Перевод</a> | ';
             echo '<a href="/contact/note/'.$contact['id'].'">Заметка</a>';
             echo '</div>';
         }

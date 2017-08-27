@@ -25,6 +25,7 @@
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/rathist">Голосования</a><br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/reklama">Реклама</a><br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/authlog">История авторизаций</a><br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/transfer">Перевод денег</a><br>
 
     <div class="b"><i class="fa fa-sign-out fa-lg text-muted"></i> <b>Выход</b></div>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/logout">Выход [Exit]</a><br>

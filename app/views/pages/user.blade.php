@@ -109,7 +109,7 @@
 
                 <b><a href="/forum/active/themes?user={{ $user['login'] }}">Форум</a></b> (<a href="/forum/active/posts?user={{ $user['login'] }}">Сообщ.</a>) /
                 <b><a href="/load/active?act=files&amp;uz={{ $user['login'] }}">Загрузки</a></b> (<a href="/load/active?act=comments&amp;uz={{ $user['login'] }}">комм.</a>) /
-                <b><a href="/blog/active?act=blogs&amp;uz={{ $user['login'] }}">Блоги</a></b> (<a href="/blog/active?act=comments&amp;uz={{ $user['login'] }}">комм.</a>) /
+                <b><a href="/blog/active/articles?user={{ $user['login'] }}">Блоги</a></b> (<a href="/blog/active/comments?user={{ $user['login'] }}">комм.</a>) /
                 <b><a href="/gallery/album/{{ $user['login'] }}">Галерея</a></b> (<a href="/gallery/comments/{{ $user['login'] }}">комм.</a>)<br>
             </div>
         </div>
@@ -139,7 +139,7 @@
             <a href="/ignore?act=add&amp;uz={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">игнор</a><br>
             <i class="fa fa-envelope"></i> <a href="/private/send?user={{ $user['login'] }}">Отправить сообщение</a><br>
 
-            <i class="fa fa-money"></i> <a href="/games/transfer?uz={{ $user['login'] }}">Перечислить денег</a><br>
+            <i class="fa fa-money"></i> <a href="/transfer?uz={{ $user['login'] }}">Перечислить денег</a><br>
 
             @if (!empty($user['site']))
                 <i class="fa fa-home"></i> <a href="{{ $user['site'] }}">Перейти на сайт {{ $user['login'] }}</a><br>
