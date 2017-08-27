@@ -23,8 +23,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'blogexpread', 'value' => 72],
             ['name'  => 'blogpost', 'value' => 10],
             ['name'  => 'blogvotepoint', 'value' => 50],
-            ['name'  => 'boarddays', 'value' => 30],
-            ['name'  => 'boardspost', 'value' => 5],
             ['name'  => 'bonusmoney', 'value' => 500],
             ['name'  => 'bookadds', 'value' => 1],
             ['name'  => 'bookpost', 'value' => 10],

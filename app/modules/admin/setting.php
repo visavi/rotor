@@ -484,10 +484,6 @@ if (is_admin([101])) {
             echo 'Допустимые расширения файлов:<br><textarea cols="25" rows="5" name="forumextload">'.$setting['forumextload'].'</textarea><br>';
             echo 'Актива для загрузки файлов: <br><input name="forumloadpoints" maxlength="4" value="'.$setting['forumloadpoints'].'"><br><hr>';
 
-            echo '<b>Объявления</b><br>';
-            echo 'Объявлений на стр.:<br><input name="boardspost" maxlength="2" value="'.$setting['boardspost'].'"><br>';
-            echo 'Кол-во дней показа объявлений:<br><input name="boarddays" maxlength="3" value="'.$setting['boarddays'].'"><br><hr>';
-
             echo '<b>Галерея</b><br>';
             echo 'Kол-во фото на стр.:<br><input name="fotolist" maxlength="2" value="'.$setting['fotolist'].'"><br>';
             echo 'Комментариев на страницу в галерее:<br><input name="postgallery" maxlength="3" value="'.$setting['postgallery'].'"><br>';
@@ -506,7 +502,7 @@ if (is_admin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['forumpost'] != "" && $_POST['forumtem'] != "" && $_POST['forumtextlength'] != "" && $_POST['forumloadsize'] != "" && $_POST['forumextload'] != "" && $_POST['forumloadpoints'] != "" && $_POST['boardspost'] != "" && $_POST['boarddays'] != "" && $_POST['fotolist'] != "" && $_POST['postgallery'] != "" && $_POST['photoexprated'] != "" && $_POST['photogroup'] != "") {
+                if ($_POST['forumpost'] != "" && $_POST['forumtem'] != "" && $_POST['forumtextlength'] != "" && $_POST['forumloadsize'] != "" && $_POST['forumextload'] != "" && $_POST['forumloadpoints'] != "" && $_POST['fotolist'] != "" && $_POST['postgallery'] != "" && $_POST['photoexprated'] != "" && $_POST['photogroup'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['forumpost']), 'forumpost');
                     $dbr -> execute(intval($_POST['forumtem']), 'forumtem');
@@ -514,8 +510,6 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['forumloadsize'] * 1024 * 1024), 'forumloadsize');
                     $dbr -> execute(check($_POST['forumextload']), 'forumextload');
                     $dbr -> execute(intval($_POST['forumloadpoints']), 'forumloadpoints');
-                    $dbr -> execute(intval($_POST['boardspost']), 'boardspost');
-                    $dbr -> execute(intval($_POST['boarddays']), 'boarddays');
                     $dbr -> execute(intval($_POST['fotolist']), 'fotolist');
                     $dbr -> execute(intval($_POST['postgallery']), 'postgallery');
                     $dbr -> execute(intval($_POST['photoexprated']), 'photoexprated');

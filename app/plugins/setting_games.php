@@ -14,12 +14,6 @@ $setting['creditpoint']	  = 150;    // Количество баллов для 
 $setting['safesum']       = 1000;   // Всего денег в сейфе
 $setting['safeattempt']   = 100;    // Цена попытки взлома сейфа
 
-
-$setting['chatpost']      = 10; // Количество постов на страницу
-$setting['shutnik']       = 1;  // Шутник включен
-$setting['magnik']        = 1;  // Умник включен
-$setting['botnik']        = 1;  // Бот включен
-
 // --------------- Функция подсчета карт в игре ---------------//
 function cards_score($str) {
     if ($str > 32) return 11;
