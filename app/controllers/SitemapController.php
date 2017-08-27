@@ -7,10 +7,12 @@ class SitemapController extends BaseController
      */
     public function index()
     {
-        $pages = ['news.xml',
+        $pages = [
+            'news.xml',
             'blogs.xml',
             'topics.xml',
-            'downs.xml',];
+            'downs.xml',
+        ];
 
         $locs = [];
 

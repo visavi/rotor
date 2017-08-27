@@ -15,8 +15,6 @@
 - utf_lower<br>
 - <a href="/files/docs/check">check</a><br>
 - subtok<br>
-- no_br<br>
-- yes_br<br>
 - smiles<br>
 - nosmiles<br>
 - formatsize<br>
