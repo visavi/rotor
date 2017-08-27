@@ -8,7 +8,7 @@
 
     <h1>Топ популярных фотографий</h1>
 
-    @if($photos->isNotEmpty())
+    @if ($photos->isNotEmpty())
 
         Сортировать:
 
@@ -26,7 +26,7 @@
 
         <hr>
 
-        @foreach($photos as $data)
+        @foreach ($photos as $data)
             <div class="b">
                 <i class="fa fa-picture-o"></i>
                 <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }}) ({!! format_num($data['rating']) !!})

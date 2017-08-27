@@ -3,7 +3,7 @@
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-@foreach($locs as $loc)
+@foreach ($locs as $loc)
 
     <url>
         <loc>{{ $loc['loc'] }}</loc>

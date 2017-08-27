@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @foreach($newses as $news):
+    @foreach ($newses as $news):
         <?php $news['text'] = App::bbCode($news['text']); ?>
         <?php $news['text'] = str_replace(['/uploads/smiles', '[cut]'], [Setting::get('home').'/uploads/smiles', ''], $news['text']); ?>
 

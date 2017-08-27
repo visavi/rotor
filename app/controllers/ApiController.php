@@ -18,17 +18,17 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="user.json";');
 
-        $key = check(Request::get('key'));
+        $token = check(Request::get('token'));
 
-        if (! $key) {
-            echo json_encode(['error'=>'nokey']);
+        if (! $token) {
+            echo json_encode(['error'=>'no token']);
             exit();
         }
 
-        $user = User::where('apikey', $key)->first();
+        $user = User::where('apikey', $token)->first();
 
         if (! $user) {
-            echo json_encode(['error'=>'nouser']);
+            echo json_encode(['error'=>'no user']);
             exit();
         }
 
@@ -65,27 +65,27 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="private.json";');
 
-        $key   = check(Request::get('key'));
+        $token = check(Request::get('token'));
         $count = abs(intval(Request::get('count', 10)));
 
-        if (! $key) {
-            echo json_encode(['error'=>'nokey']);
+        if (! $token) {
+            echo json_encode(['error'=>'no token']);
             exit();
         }
 
-        $user = User::where('apikey', $key)->first();
+        $user = User::where('apikey', $token)->first();
         if (! $user) {
-            echo json_encode(['error'=>'nouser']);
+            echo json_encode(['error'=>'no user']);
             exit();
         }
 
         $inbox = Inbox::where('user_id', $user->id)
             ->orderBy('created_at')
+            ->limit($count)
             ->get();
 
-
         if ($inbox->isEmpty()) {
-            echo json_encode(['error'=>'nomessages']);
+            echo json_encode(['error'=>'no messages']);
             exit();
         }
 
@@ -118,23 +118,23 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="forum.json";');
 
-        $key = check(Request::get('key'));
-        $id  = abs(intval(Request::get('id')));
+        $token = check(Request::get('token'));
+        $id    = abs(intval(Request::get('id')));
 
-        if (! $key) {
-            echo json_encode(['error'=>'nokey']);
+        if (! $token) {
+            echo json_encode(['error'=>'no token']);
             exit();
         }
 
-        $user = User::where('apikey', $key)->first();
+        $user = User::where('apikey', $token)->first();
         if (! $user) {
-            echo json_encode(['error'=>'nouser']);
+            echo json_encode(['error'=>'no user']);
             exit();
         }
 
         $topic = Topic::find($id);
         if (! $topic) {
-            echo json_encode(['error'=>'notopic']);
+            echo json_encode(['error'=>'no topic']);
             exit();
         }
 

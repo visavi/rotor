@@ -9,7 +9,7 @@
     <h1>Список смайлов</h1>
 
     @if ($smiles)
-        @foreach($smiles as $smile)
+        @foreach ($smiles as $smile)
             <img src="/uploads/smiles/{{ $smile['name'] }}" alt=""> — <b>{{ $smile['code'] }}</b><br>
         @endforeach
 

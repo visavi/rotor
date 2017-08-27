@@ -64,11 +64,11 @@
         <a href="/admin/forum?act=topic&amp;tid=<?=$topic['id']?>&amp;page=<?=$page['current']?>">Управление</a><br>
     <?php endif; ?>
 
-    @if($vote['answers'])
+    @if ($vote['answers'])
         <h3>{{ $vote['title'] }}</h3>
 
-        @if(! is_user() || $vote['poll'] || $vote['closed'])
-            @foreach($vote['voted'] as $key => $data)
+        @if (! is_user() || $vote['poll'] || $vote['closed'])
+            @foreach ($vote['voted'] as $key => $data)
                 <?php $proc = round(($data * 100) / $vote['sum'], 1); ?>
                 <?php $maxproc = round(($data * 100) / $vote['max']); ?>
 
@@ -78,7 +78,7 @@
         @else
             <form action="/topic/{{ $topic['id'] }}/vote?page={{ $page['current'] }}" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                @foreach($vote['answers'] as $answer)
+                @foreach ($vote['answers'] as $answer)
                     <label><input name="poll" type="radio" value="{{ $answer['id'] }}"> {{ $answer['answer'] }}</label><br>
                 @endforeach
                 <br><button class="btn btn-sm btn-primary">Голосовать</button>

@@ -8,8 +8,8 @@
 
     <h1>Альбомы пользователей</h1>
 
-    @if($albums->isNotEmpty())
-        @foreach($albums as $data)
+    @if ($albums->isNotEmpty())
+        @foreach ($albums as $data)
 
             <i class="fa fa-picture-o"></i>
             <b><a href="/gallery/album/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data['cnt'] }} фото / {{ $data['comments'] }} комм.)<br>

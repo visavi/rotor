@@ -3,7 +3,7 @@
 
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-@foreach($locs as $loc)
+@foreach ($locs as $loc)
 
     <sitemap>
         <loc>{{ $loc['loc'] }}</loc>

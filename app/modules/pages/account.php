@@ -66,17 +66,17 @@ case 'index':
     /**
      * API-ключ
      */
-    echo '<b><big>Ваш API-ключ</big></b><br>';
+    echo '<b><big>Ваш API-токен</big></b><br>';
 
     if(empty(App::user('apikey'))) {
         echo '<div class="form">';
         echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
-        echo '<input value="Получить ключ" type="submit"></form></div><br>';
+        echo '<input value="Получить токен" type="submit"></form></div><br>';
     } else {
         echo '<div class="form">';
         echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
-        echo 'Ключ: <strong>'.App::user('apikey').'</strong><br>';
-        echo '<input value="Изменить ключ" type="submit"></form></div><br>';
+        echo 'Токен: <strong>'.App::user('apikey').'</strong><br>';
+        echo '<input value="Изменить токен" type="submit"></form></div><br>';
     }
 break;
 
