@@ -16,99 +16,14 @@ switch ($action):
 ############################################################################################
 ##                                    Главная страница                                    ##
 ############################################################################################
-    case 'index':
-        //show_title('Голосования');
 
-        $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC;", [0]);
-        $votes = $queryvote -> fetchAll();
-
-        if (count($votes) > 0) {
-            foreach($votes as $valvote) {
-                echo '<div class="b">';
-                echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['id'].'">'.$valvote['title'].'</a></b></div>';
-                echo '<div>Создано: '.date_fixed($valvote['time']).'<br>';
-                echo 'Всего голосов: '.$valvote['count'].'</div>';
-            }
-            echo '<br>';
-        } else {
-            show_error('Открытых голосований еще нет!');
-        }
-    break;
 
     ############################################################################################
     ##                                      Голосование                                       ##
     ############################################################################################
     case 'poll':
 
-        $votes = DB::run() -> queryFetch("SELECT * FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
 
-        if (!empty($votes)) {
-            if (empty($votes['closed'])) {
-
-                //show_title($votes['title']);
-                //Setting::get('newtitle') = $votes['title'];
-
-                $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `vote_id`=? ORDER BY `id`;", [$id]);
-                $answer = $queryanswer -> fetchAll();
-
-                if ($answer) {
-                    $polls = DB::run() -> querySingle("SELECT `id` FROM `votepoll` WHERE `vote_id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
-
-                    if ((is_user() && empty($polls)) && empty($_GET['result'])) {
-
-                        echo '<form action="/votes?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-
-                        foreach($answer as $data) {
-                            echo '<input name="poll" type="radio" value="'.$data['id'].'"> '.$data['answer'].'<br>';
-                        }
-
-                        echo '<br><input type="submit" value="Голосовать"></form><br>';
-
-                        echo 'Проголосовало: <b>'.$votes['count'].'</b><br><br>';
-                        echo '<i class="fa fa-history"></i> <a href="/votes?act=poll&amp;id='.$id.'&amp;result=show">Результаты</a><br>';
-
-                    } else {
-
-                        $queryanswer = DB::run() -> query("SELECT `answer`, `result` FROM `voteanswer` WHERE `vote_id`=? ORDER BY `result` DESC;", [$id]);
-                        $answer = $queryanswer -> fetchAssoc();
-
-                        $sum = $votes['count'];
-                        $max = max($answer);
-
-                        if (empty($sum)) {
-                            $sum = 1;
-                        }
-                        if (empty($max)) {
-                            $max = 1;
-                        }
-
-                        foreach($answer as $key => $data) {
-                            $proc = round(($data * 100) / $sum, 1);
-                            $maxproc = round(($data * 100) / $max);
-
-                            echo '<b>'.$key.'</b> (Голосов: '.$data.')<br>';
-                            App::progressBar($maxproc, $proc.'%');
-                        }
-
-                        echo 'Проголосовало: <b>'.$votes['count'].'</b><br><br>';
-
-                        if (!empty($_GET['result'])) {
-                            echo '<i class="fa fa-bar-chart"></i> <a href="/votes?act=poll&amp;id='.$id.'">К вариантам</a><br>';
-                        }
-                        echo '<i class="fa fa-users"></i> <a href="/votes?act=voters&amp;id='.$id.'">Проголосовавшие</a><br>';
-                    }
-
-                } else {
-                    show_error('Ошибка! Для данного голосования не созданы варианты ответов!');
-                }
-            } else {
-                show_error('Ошибка! Данный опрос закрыт для голосования!');
-            }
-        } else {
-            show_error('Ошибка! Данного голосования не существует!');
-        }
-
-        echo '<i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>';
     break;
 
     ############################################################################################

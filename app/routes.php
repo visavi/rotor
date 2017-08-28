@@ -115,6 +115,11 @@ $router->map('GET',      '/private/[outbox|trash|history|clear:action]?', 'Priva
 $router->map('POST',     '/private/[delete:action]', 'PrivateController');
 $router->map('GET|POST', '/private/[send:action]', 'PrivateController');
 
+$router->map('GET',      '/votes', 'VoteController@index');
+$router->map('GET',      '/votes/[i:id]', 'VoteController@view');
+$router->map('GET|POST', '/votes/[i:id]/vote', 'VoteController@vote');
+$router->map('GET|POST', '/votes/history', 'VoteController@history');
+
 $router->map('GET',      '/ignore', 'pages/ignore.php');
 $router->map('GET|POST', '/ignore/[note:action]/[i:id]', 'pages/ignore.php');
 $router->map('POST',     '/ignore/[create|delete:action]', 'pages/ignore.php');
@@ -162,9 +167,6 @@ $router->map('GET|POST', '/load/rss', 'load/rss.php');
 $router->map('GET|POST', '/load/search', 'load/search.php');
 $router->map('GET|POST', '/load/top', 'load/top.php');
 $router->map('GET|POST', '/load/zip', 'load/zip.php');
-
-$router->map('GET|POST', '/votes', 'votes/index.php');
-$router->map('GET|POST', '/votes/history', 'votes/history.php');
 
 $router->map('GET', '/api', 'ApiController@index');
 $router->map('GET', '/api/user', 'ApiController@user');

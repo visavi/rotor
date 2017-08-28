@@ -22,4 +22,20 @@ class Vote extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает топик
+     */
+    public function topic()
+    {
+        return $this->belongsTo('Topic', 'topic_id');
+    }
+
+    /**
+     * Возвращает модель топика
+     */
+    public function getTopic()
+    {
+        return $this->topic ? $this->topic : new Topic();
+    }
 }
