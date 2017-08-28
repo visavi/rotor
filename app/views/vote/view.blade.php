@@ -9,7 +9,7 @@
     <h1>{{ $vote->title }}</h1>
 
     @if ((is_user() && empty($vote['poll'])) && empty($show))
-        <form action="/votes/{{ $vote->id }}/vote" method="post">
+        <form action="/votes/{{ $vote->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             @foreach($vote['answers'] as $answer)

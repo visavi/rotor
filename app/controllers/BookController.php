@@ -57,13 +57,13 @@ class BookController extends BaseController
 
             $username = is_user() ? App::getUserId() : 0;
 
-            $guest = new Guest();
-            $guest->user_id = $username;
-            $guest->text = $msg;
-            $guest->ip = App::getClientIp();
-            $guest->brow = App::getUserAgent();
-            $guest->created_at = SITETIME;
-            $guest->save();
+            Guest::create([
+                'user_id'    => $username,
+                'text'       => $msg,
+                'ip'         => App::getClientIp(),
+                'brow'       => App::getUserAgent(),
+                'created_at' => SITETIME,
+            ]);
 
             App::setFlash('success', 'Сообщение успешно добавлено!');
         } else {

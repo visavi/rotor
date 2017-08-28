@@ -43,6 +43,39 @@ class VoteController extends BaseController
             ->where('user_id', App::getUserId())
             ->first();
 
+        if (Request::isMethod('post')) {
+            $token = check(Request::input('token'));
+            $poll  = abs(intval(Request::input('poll')));
+
+            $validation = new Validation();
+            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                ->addRule('empty', $vote['poll'], 'Вы уже проголосовали в этом опросе!')
+                ->addRule('not_empty', $poll, 'Вы не выбрали вариант ответа!');
+
+            $answer = VoteAnswer::where('id', $poll)->where('vote_id', $vote->id)->first();
+
+            if ($poll) {
+                $validation->addRule('not_empty', $answer, 'Ответ для данного голосования не найден!');
+            }
+
+            if ($validation->run()) {
+                $vote->increment('count');
+                $answer->increment('result');
+
+                VotePoll::create([
+                    'vote_id'    => $vote->id,
+                    'user_id'    => App::getUserId(),
+                    'created_at' => SITETIME,
+                ]);
+
+                App::setFlash('success', 'Ваш голос успешно принят!');
+                App::redirect('/votes/'.$vote->id);
+            } else {
+                App::setInput(Request::all());
+                App::setFlash('danger', $validation->getErrors());
+            }
+        }
+
         $results = array_pluck($vote['answers'], 'result', 'answer');
         $max = max($results);
 
@@ -54,5 +87,24 @@ class VoteController extends BaseController
         $vote['max'] = ($max > 0) ? $max : 1;
 
         App::view('vote/view', compact('vote', 'show'));
+    }
+
+    /**
+     * Проголосовавшие
+     */
+    public function voters($id)
+    {
+        $vote = Vote::find($id);
+
+        if (! $vote) {
+            App::abort(404, 'Данного голосования не существует!');
+        }
+
+        $voters = VotePoll::where('vote_id', $vote['id'])
+            ->orderBy('created_at', 'desc')
+            ->limit(50)
+            ->get();
+
+        App::view('vote/voters', compact('vote', 'voters'));
     }
 }

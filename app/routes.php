@@ -116,8 +116,8 @@ $router->map('POST',     '/private/[delete:action]', 'PrivateController');
 $router->map('GET|POST', '/private/[send:action]', 'PrivateController');
 
 $router->map('GET',      '/votes', 'VoteController@index');
-$router->map('GET',      '/votes/[i:id]', 'VoteController@view');
-$router->map('GET|POST', '/votes/[i:id]/vote', 'VoteController@vote');
+$router->map('GET|POST', '/votes/[i:id]', 'VoteController@view');
+$router->map('GET|',     '/votes/[i:id]/voters', 'VoteController@voters');
 $router->map('GET|POST', '/votes/history', 'VoteController@history');
 
 $router->map('GET',      '/ignore', 'pages/ignore.php');
