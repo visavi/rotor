@@ -78,7 +78,7 @@ case 'clear':
         App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    App::view('includes/back', ['link' => '/admin/cache', 'title' => 'Вернуться']);
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/cache">Вернуться</a><br>';
 break;
 
 ############################################################################################
@@ -107,8 +107,7 @@ case 'clearimage':
         App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-
-    App::view('includes/back', ['link' => '/admin/cache/image', 'title' => 'Вернуться']);
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/cache/image">Вернуться</a><br>';
 break;
 
 endswitch;

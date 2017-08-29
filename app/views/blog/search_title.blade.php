@@ -27,6 +27,6 @@
 
     {{ App::pagination($page) }}
 
-    {{ App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']) }}
-    {{ App::view('includes/back', ['link' => '/blog/search', 'title' => 'Вернуться']) }}
+    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/blog/search">Вернуться</a><br>
 @stop

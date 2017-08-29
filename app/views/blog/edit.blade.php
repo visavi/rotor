@@ -37,8 +37,7 @@
     <a href="/rules">Правила</a> /
     <a href="/smiles">Смайлы</a> /
     <a href="/tags">Теги</a><br><br>
-    <?php
-    App::view('includes/back', ['link' => '/article/' . $blog->id, 'title' => 'Вернуться']);
-    App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
-    ?>
+
+    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/article/{{ $blog->id }}">Вернуться</a><br>
 @stop

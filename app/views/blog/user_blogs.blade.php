@@ -21,5 +21,5 @@
         {{ App::showError('Статей еще нет!') }}
     @endif
 
-    <?php App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']); ?>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/blog">К блогам</a><br>
 @stop

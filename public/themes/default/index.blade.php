@@ -32,7 +32,7 @@ header("Content-type:text/html; charset=utf-8");
     {{ Setting::get('logos') }}
 </div>
 
-<?php App::view('includes/menu'); ?>
+<?php App::view('app/_menu'); ?>
 
 <div class="site">
 <?= App::view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

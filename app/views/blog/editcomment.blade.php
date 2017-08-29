@@ -17,6 +17,5 @@
         </form>
     </div><br>
 
-    <?php
-    App::view('includes/back', ['link' => '/article/'.$comment['relate_id'].'/comments?page='.$page, 'title' => 'Вернуться']); ?>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/article/{{ $comment['relate_id'] }}/comments?page={{ $page }}">Вернуться</a><br>
 @stop

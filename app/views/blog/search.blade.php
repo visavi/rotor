@@ -28,5 +28,5 @@
         </form>
     </div><br>
 
-    {{ App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']) }}
+    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
 @stop

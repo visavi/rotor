@@ -511,7 +511,7 @@ function show_online()
 {
     if (Setting::get('onlines') == 1) {
         $online = stats_online();
-        App::view('includes/online', compact('online'));
+        App::view('app/_online', compact('online'));
     }
 }
 

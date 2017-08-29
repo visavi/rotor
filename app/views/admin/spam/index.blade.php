@@ -29,7 +29,6 @@
             <div class="post">
                 @if ($data->relate)
                     <div class="b">
-                        <input type="checkbox" name="del[]" value="'.$data['id'].'">
                         <i class="fa fa-file-o"></i>
                         <b>{!! profile($data->relate->user) !!}</b>
                         <small>({{ date_fixed($data->relate->created_at, "d.m.y / H:i:s") }})</small>

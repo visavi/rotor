@@ -23,5 +23,5 @@
         </form>
     </div><br>
 
-    <?php App::view('includes/back', ['link' => '/book', 'title' => 'Вернуться']); ?>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/book">Вернуться</a><br>
 @stop

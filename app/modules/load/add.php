@@ -707,6 +707,6 @@ endswitch;
     App::showError('Вы не авторизованы, для добавления файла, необходимо');
 }
 
-App::view('includes/back', ['link' => '/load/', 'title' => 'Категории']);
+echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/">Категории</a><br>';
 
 App::view(Setting::get('themes').'/foot');

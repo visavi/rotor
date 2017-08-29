@@ -6,14 +6,15 @@
 
 @section('content')
     <h1>Облако тегов</h1>
+
     <div style="text-align:center">
-        <?php foreach ($tags as $key => $val): ?>
+        @foreach ($tags as $key => $val)
 
             <?php $fontsize = ($min != $max) ? round((($val - $min) / ($max - $min)) * 110 + 100) : 100; ?>
 
-            <a href="/blog/tags/<?=urlencode($key)?>"><span style="font-size:<?=$fontsize?>%"><?=$key?></span></a>
-        <?php endforeach; ?>
+            <a href="/blog/tags/{{ urlencode($key) }}"><span style="font-size:{{ $fontsize }}%">{{ $key }}</span></a>
+        @endforeach
     </div><br>
 
-    <?php App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']); ?>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/blog">К блогам</a><br>
 @stop

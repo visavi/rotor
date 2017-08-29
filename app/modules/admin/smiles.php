@@ -131,7 +131,7 @@ case 'load':
         App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
     }
 
-    App::view('includes/back', ['link' => '/admin/smiles?act=add&amp;page='.$page, 'title' => 'Вернуться']);
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?act=add&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 /**
@@ -154,7 +154,7 @@ case 'edit':
         App::showError('Ошибка! Смайла для редактирования не существует!');
     }
 
-    App::view('includes/back', ['link' => '/admin/smiles?page='.$page, 'title' => 'Вернуться']);
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br>';
 break;
 
 /**
@@ -195,7 +195,7 @@ case 'change':
         App::showError($validation->getErrors());
     }
 
-    App::view('includes/back', ['link' => '/admin/smiles?act=edit&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
 break;
 
 /**
@@ -235,7 +235,7 @@ case 'del':
         App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
-    App::view('includes/back', ['link' => '/admin/smiles?page='.$page, 'title' => 'Вернуться']);
+    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br>';
 break;
 
 endswitch;

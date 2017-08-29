@@ -53,7 +53,7 @@
 
     @if (is_user())
         <div class="form">
-            <form action="/article/{{ $blog['id'] }}/comments" method="post">
+            <form action="/article/{{ $blog->id }}/comments" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
                 <button class="btn btn-success">Написать</button>
@@ -68,8 +68,6 @@
         {{ App::showError('Для добавления сообщения необходимо авторизоваться') }}
     @endif
 
-<?php
-App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам', 'icon' => 'fa-arrow-circle-up']);
-App::view('includes/back', ['link' => '/article/'.$blog['id'], 'title' => 'Вернуться']);
-?>
+    <i class="fa fa-arrow-circle-up"></i> <a href="/blog">К блогам</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/article/{{ $blog->id }}">Вернуться</a><br>
 @stop
