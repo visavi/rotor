@@ -9,22 +9,22 @@
 
     <a href="/forum">Форум</a>
 
-    <?php foreach ($posts as $data): ?>
+    @foreach ($posts as $data)
         <div class="b">
-            <i class="fa fa-file-text-o"></i> <b><a href="/topic/<?=$data['topic_id']?>/<?=$data['id']?>"><?= $data->getTopic()->title ?></a></b>
-            (<?= $data->getTopic()->posts ?>)
+            <i class="fa fa-file-text-o"></i> <b><a href="/topic/{{ $data['topic_id'] }}/{{ $data['id'] }}">{{ $data->getTopic()->title }}</a></b>
+            ({{ $data->getTopic()->posts }})
         </div>
         <div>
-            <?=App::bbCode($data['text'])?><br>
+            {!! App::bbCode($data['text']) !!}<br>
 
-            Написал: <?= $data->getUser()->login ?> <?=user_online($data->user)?> <small>(<?=date_fixed($data['created_at'])?>)</small><br>
+            Написал: {{ $data->getUser()->login }} {!! user_online($data->user) !!} <small>({{ date_fixed($data['created_at']) }})</small><br>
 
-            <?php if (is_admin()): ?>
-                <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
-            <?php endif; ?>
+            @if (is_admin())
+                <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+            @endif
 
         </div>
-    <?php endforeach; ?>
+    @endforeach
 
-    <?php App::pagination($page) ?>
+    {{ App::pagination($page) }}
 @stop

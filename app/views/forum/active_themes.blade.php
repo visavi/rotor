@@ -10,19 +10,18 @@
 
     <a href="/forum">Форум</a>
 
-    <?php foreach ($topics as $data): ?>
+    @foreach ($topics as $data)
         <div class="b">
             <i class="fa {{ $data->getIcon() }} text-muted"></i>
-            <b><a href="/topic/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=$data['posts']?>)
+            <b><a href="/topic/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ $data['posts'] }})
         </div>
 
         <div>
-            <?= Forum::pagination($data)?>
-            Форум: <a href="/forum/<?= $data->getForum()->id ?>"><?= $data->getForum()->title ?></a><br>
-            Автор: <?= $data->getUser()->login ?> / Посл.: <?= $data->getLastPost()->getUser()->login ?> (<?=date_fixed($data->getLastPost()->created_at)?>)
+            {{ Forum::pagination($data) }}
+            Форум: <a href="/forum/{{ $data->getForum()->id }}">{{ $data->getForum()->title }}</a><br>
+            Автор: {{ $data->getUser()->login }} / Посл.: {{ $data->getLastPost()->getUser()->login }} ({{ date_fixed($data->getLastPost()->created_at) }})
         </div>
+    @endforeach
 
-    <?php endforeach; ?>
-
-    <?php App::pagination($page) ?>
+    {{ App::pagination($page) }}
 @stop

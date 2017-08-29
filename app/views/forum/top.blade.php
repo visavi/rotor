@@ -10,17 +10,17 @@
 
     <a href="/forum">Форум</a>
 
-    <?php foreach ($topics as $data): ?>
+    @foreach ($topics as $data)
         <div class="b">
-            <i class="fa <?= $data->getIcon() ?> text-muted"></i>
-            <b><a href="/topic/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=$data['posts']?>)
+            <i class="fa {{ $data->getIcon() }} text-muted"></i>
+            <b><a href="/topic/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ $data['posts'] }})
         </div>
         <div>
-            <?= Forum::pagination($data)?>
-            Автор: <?=$data->getUser()->login ?><br>
-            Сообщение: <?= $data->getLastPost()->getUser()->login ?> (<?=date_fixed($data->getLastPost()->created_at)?>)
+            {{ Forum::pagination($data) }}
+            Автор: {{ $data->getUser()->login }}<br>
+            Сообщение: {{ $data->getLastPost()->getUser()->login }} ({{ date_fixed($data->getLastPost()->created_at) }})
         </div>
-    <?php endforeach; ?>
+    @endforeach
 
-    <?php App::pagination($page) ?>
+    {{ App::pagination($page) }}
 @stop

@@ -8,10 +8,10 @@
 
     <h1>Изменение темы</h1>
 
-    <i class="fa fa-pencil"></i> <b><?=$post->getUser()->login?></b> <small>(<?=date_fixed($post['time'])?>)</small><br><br>
+    <i class="fa fa-pencil"></i> <b>{{ $post->getUser()->login }}</b> <small>({{ date_fixed($post['time']) }})</small><br><br>
 
     <div class="form">
-        <form action="/topic/<?=$topic['id']?>/edit" method="post">
+        <form action="/topic/{{ $topic['id'] }}/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
 

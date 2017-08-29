@@ -5,16 +5,13 @@
 @stop
 
 @section('content')
+    <h1>{{ $topic['title'] }}</h1>
 
-    <h1><?=$topic['title']?></h1>
-
-    <?php foreach ($posts as $key => $data): ?>
-
-        <?=($key + 1)?>. <b><?= $data->getUser()->login ?></b> (<?=date_fixed($data['created_at'])?>)<br>
-        <?=App::bbCode($data['text'])?>
+    @foreach ($posts as $key => $data)
+        {{ ($key + 1) }}. <b>{{ $data->getUser()->login }}</b> ({{ date_fixed($data['created_at']) }})<br>
+        {!! App::bbCode($data['text']) !!}
         <br><br>
+    @endforeach
 
-    <?php endforeach; ?>
-
-    URL: <a href="<?=Setting::get('home')?>/topic/<?=$topic['id']?>"><?=Setting::get('home')?>/topic/<?=$topic['id']?></a>
+    URL: <a href="{{ Setting::get('home') }}/topic/{{ $topic['id'] }}">{{ Setting::get('home') }}/topic/{{ $topic['id'] }}</a>
 @stop
