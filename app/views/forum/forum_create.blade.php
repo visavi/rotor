@@ -15,19 +15,15 @@
                 <label for="inputForum">Форум</label>
                 <select class="form-control" id="inputForum" name="fid">
 
-                    <?php foreach ($forums as $data): ?>
-                        <?php $selected = ($fid == $data['id']) ? ' selected="selected"' : ''; ?>
-                        <?php $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : ''; ?>
-                        <option value="<?=$data['id']?>"<?=$selected?><?=$disabled?>><?=$data['title']?></option>
+                    @foreach ($forums as $data)
+                        <option value="{{ $data['id'] }}"{!! ($fid == $data['id']) ? ' selected="selected"' : '' !!}{!! !empty($data['closed']) ? ' disabled="disabled"' : '' !!}>{{ $data['title'] }}</option>
 
-                        <?php if (! $data->children->isEmpty()): ?>
-                        <?php foreach($data->children as $datasub): ?>
-                        <?php $selected = $fid == $datasub['id'] ? ' selected="selected"' : ''; ?>
-                        <?php $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : ''; ?>
-                        <option value="<?=$datasub['id']?>"<?=$selected?><?=$disabled?>>– <?=$datasub['title']?></option>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                        @if (!$data->children->isEmpty())
+                            @foreach($data->children as $datasub)
+                                <option value="{{ $datasub['id'] }}"{!! $fid == $datasub['id'] ? ' selected="selected"' : '' !!}{!! !empty($datasub['closed']) ? ' disabled="disabled"' : '' !!}>– {{ $datasub['title'] }}</option>
+                            @endforeach
+                        @endif
+                    @endforeach
 
                 </select>
                 {!! App::textError('fid') !!}
@@ -35,7 +31,7 @@
 
             <div class="form-group{{ App::hasError('title') }}">
                 <label for="inputTitle">Название темы</label>
-                <input name="title" type="text" class="form-control" id="inputTitle"  maxlength="50" placeholder="Название темы" value="{{ App::getInput('title') }}" required>
+                <input name="title" type="text" class="form-control" id="inputTitle" maxlength="50" placeholder="Название темы" value="{{ App::getInput('title') }}" required>
                 {!! App::textError('title') !!}
             </div>
 
@@ -50,7 +46,8 @@
             <?php $display = $checkVote ? '' : ' style="display: none"'; ?>
 
             <label>
-                <input name="vote" onchange="return showVoteForm();" type="checkbox"{!! $checked !!}> Создать голосование
+                <input name="vote" onchange="return showVoteForm();" type="checkbox"{!! $checked !!}> Создать
+                голосование
             </label><br>
 
             <div class="js-vote-form"{!! $display !!}>
@@ -63,7 +60,7 @@
 
                 <div class="form-group{{ App::hasError('answer') }}">
 
-                    <?php $answers = array_diff((array)App::getInput('answer'), ['']) ?>
+                    <?php $answers = array_diff((array) App::getInput('answer'), ['']) ?>
 
                     @for ($i=0; $i<10; $i++)
                         <label for="inputAnswer{{ $i }}">Ответ {{ $i + 1 }}</label>

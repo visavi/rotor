@@ -6,23 +6,22 @@
 
 @section('content')
 
-    <h1>Поиск запроса <?=$find?></h1>
+    <h1>Поиск запроса {{ $find }}</h1>
 
-    <p>Найдено совпадений в темах: <?=$page['total']?></p>
+    <p>Найдено совпадений в темах: {{ $page['total'] }}</p>
 
-    <?php foreach ($topics as $topic): ?>
+    @foreach ($topics as $topic)
         <div class="b">
-
             <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-            <b><a href="/topic/<?=$topic['id']?>"><?=$topic['title']?></a></b> (<?=$topic['posts']?>)
+            <b><a href="/topic/{{ $topic['id'] }}">{{ $topic['title'] }}</a></b> ({{ $topic['posts'] }})
         </div>
         <div>
-            <?= Forum::pagination($topic)?>
-            Сообщение: <?=$topic->getLastPost()->getUser()->login?> (<?=date_fixed($topic->getLastPost()->created_at)?>)
+            {{ Forum::pagination($topic) }}
+            Сообщение: {{ $topic->getLastPost()->getUser()->login }} ({{ date_fixed($topic->getLastPost()->created_at) }})
         </div>
-    <?php endforeach; ?>
+    @endforeach
 
-    <?php App::pagination($page) ?>
+    {{ App::pagination($page) }}
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/forum/search">Вернуться</a>
 @stop
