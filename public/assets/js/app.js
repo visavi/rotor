@@ -301,6 +301,32 @@ function deleteRating(el)
     return false;
 }
 
+/**
+ * Удаляет запись из списка жалоб
+ */
+function deleteSpam(el)
+{
+    $.ajax({
+        data: {id: $(el).data('id'), token: $(el).data('token')},
+        dataType: 'JSON', type: 'POST', url: '/admin/spam/delete',
+        success: function(data) {
+
+            if (data.status === 'error'){
+                notify('error', data.message);
+                return false;
+            }
+
+            if (data.status === 'success'){
+                notify('success', 'Запись успешно удалена');
+
+                $(el).closest('.post').hide('slow');
+            }
+        }
+    });
+
+    return false;
+}
+
 /* Показ формы создания голосования */
 function showVoteForm()
 {

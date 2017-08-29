@@ -133,7 +133,7 @@ class App
      * Возвращает ошибку
      *
      * @param  mixed $errors ошибки
-     * @return void сформированный блок с ошибкой
+     * @return string сформированный блок с ошибкой
      */
     public static function showError($errors)
     {
