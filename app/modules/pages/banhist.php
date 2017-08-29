@@ -48,7 +48,7 @@ if (is_user()) {
         App::showError('В истории еще ничего нет!');
     }
 } else {
-    App::showError('Вы не авторизованы, чтобы просматривать историю, необходимо');
+    App::showError('Для просмотра истории необходимо авторизоваться');
 }
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/user/'.$uz.'">В анкету</a><br>';

@@ -131,7 +131,7 @@ break;
 
 endswitch;
 } else {
-    App::showError('Вы не авторизованы, чтобы изменять настройки, необходимо');
+    App::showError('Для изменения настроек необходимо авторизоваться');
 }
 
 App::view(Setting::get('themes').'/foot');

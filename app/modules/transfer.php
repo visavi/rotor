@@ -118,7 +118,7 @@ if (is_user()) {
     endswitch;
 
 } else {
-    App::showError('Вы не авторизованы, чтобы совершать операции, необходимо');
+    App::showError('Для совершения операций необходимо авторизоваться');
 }
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';

@@ -191,7 +191,7 @@ case 'create':
             App::showError('Ошибка! Для покупки рекламы вам необходимо набрать '.points(50).'!');
         }
     } else {
-        App::showError('Вы не авторизованы, для покупки рекламы, необходимо');
+        App::showError('Для покупки рекламы необходимо авторизоваться');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/reklama">Вернуться</a><br>';

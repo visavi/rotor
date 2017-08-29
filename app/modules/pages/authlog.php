@@ -43,7 +43,7 @@ if (is_user()) {
         App::showError('История авторизаций отсутствует');
     }
 } else {
-    App::showError('Вы не авторизованы, для просмотра истории, необходимо');
+    App::showError('Для просмотра истории необходимо авторизоваться');
 }
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/menu">Вернуться</a><br>';

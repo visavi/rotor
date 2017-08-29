@@ -81,7 +81,7 @@ if (is_user()) {
     endswitch;
 
 } else {
-    App::showError('Вы не авторизованы, чтобы сохранять заметки, необходимо');
+    App::showError('Для сохранения заметок необходимо авторизоваться');
 }
 
 App::view(Setting::get('themes').'/foot');

@@ -275,7 +275,7 @@ break;
 endswitch;
 
 } else {
-    App::showError('Вы не авторизованы, чтобы изменять свои данные, необходимо');
+    App::showError('Для изменения данных необходимо авторизоваться');
 }
 
 App::view(Setting::get('themes').'/foot');

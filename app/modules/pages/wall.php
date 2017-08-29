@@ -77,7 +77,7 @@ if (!empty($queryuser)) {
                 echo '<input type="submit" value="Написать"></form></div><br>';
 
             } else {
-                App::showError('Вы не авторизованы, чтобы написать на стене, необходимо');
+                App::showError('Для добавления сообщения необходимо авторизоваться');
             }
 
             echo 'Всего записей: <b>'.$total.'</b><br><br>';
@@ -127,7 +127,7 @@ if (!empty($queryuser)) {
                     App::showError('Стена закрыта, писать могут только пользователи из контактов!');
                 }
             } else {
-                App::showError('Вы не авторизованы, чтобы написать на стене, необходимо');
+                App::showError('Для добавления сообщения необходимо авторизоваться');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'">Вернуться</a><br>';
@@ -167,7 +167,7 @@ if (!empty($queryuser)) {
                     App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Вы не авторизованы, чтобы подать жалобу, необходимо');
+                App::showError('Для отправки жалобы необходимо авторизоваться');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';

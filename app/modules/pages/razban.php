@@ -64,7 +64,7 @@ if (is_user()) {
     endswitch;
 
 } else {
-    App::showError('Вы не авторизованы, чтобы снять нарушение, необходимо');
+    App::showError('Для снятия нарушения необходимо авторизоваться');
 }
 
 App::view(Setting::get('themes').'/foot');
