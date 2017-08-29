@@ -62,7 +62,7 @@ if (is_admin()) {
 
                 App::pagination($page);
             } else {
-                show_error('Сообщений нет, будь первым!');
+                App::showError('Сообщений нет, будь первым!');
             }
 
             echo '<div class="form">';
@@ -103,10 +103,10 @@ if (is_admin()) {
                     redirect ("/admin/chat");
 
                 } else {
-                    show_error('Ошибка! Слишком длинное или короткое сообщение!');
+                    App::showError('Ошибка! Слишком длинное или короткое сообщение!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br>';
@@ -132,7 +132,7 @@ if (is_admin()) {
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br>';
                 echo '<input type="submit" value="Ответить"></form></div><br>';
             } else {
-                show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
+                App::showError('Ошибка! Выбранное вами сообщение для ответа не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
@@ -155,7 +155,7 @@ if (is_admin()) {
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br>';
                 echo '<input type="submit" value="Ответить"></form></div><br>';
             } else {
-                show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
+                App::showError('Ошибка! Выбранное вами сообщение для цитирования не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
@@ -180,10 +180,10 @@ if (is_admin()) {
                     echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br>';
                     echo '<input type="submit" value="Редактировать"></form></div><br>';
                 } else {
-                    show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
+                    App::showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                 }
             } else {
-                show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+                App::showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
@@ -211,16 +211,16 @@ if (is_admin()) {
                             redirect ("/admin/chat?page=$page");
 
                         } else {
-                            show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
+                            App::showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                         }
                     } else {
-                        show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+                        App::showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
                     }
                 } else {
-                    show_error('Ошибка! Слишком длинное или короткое сообщение!');
+                    App::showError('Ошибка! Слишком длинное или короткое сообщение!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -251,10 +251,10 @@ if (is_admin()) {
                     App::setFlash('success', 'Админ-чат успешно очищен!');
                     redirect ("/admin/chat");
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Очищать админ-чат могут только суперадмины!');
+                App::showError('Ошибка! Очищать админ-чат могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br>';

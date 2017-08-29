@@ -1004,21 +1004,6 @@ function is_admin($access = []) {
     return false;
 }
 
-/**
- * Выводит ошибки
- *
- * @param string $errors
- */
-function show_error($errors)
-{
-    App::view('includes/error', compact('errors'));
-}
-
-// ------------------------- Функция вывода предупреждения ------------------------//
-function show_login($notice) {
-    App::view('includes/login', compact('notice'));
-}
-
 // ------------------ Функция вывода иконки расширения --------------------//
 function icons($ext) {
     switch ($ext) {

@@ -42,7 +42,7 @@ if (is_admin()) {
                     echo '<br>';
                 }
             } else {
-                show_error('Разделы блогов еще не созданы!');
+                App::showError('Разделы блогов еще не созданы!');
             }
 
             if (is_admin([101])) {
@@ -71,10 +71,10 @@ if (is_admin()) {
                     App::redirect("/admin/blog");
 
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Пересчитывать сообщения могут только суперадмины!');
+                App::showError('Ошибка! Пересчитывать сообщения могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br>';
@@ -98,13 +98,13 @@ if (is_admin()) {
                         App::redirect("/admin/blog");
 
                     } else {
-                        show_error('Ошибка! Слишком длинное или короткое название раздела!');
+                        App::showError('Ошибка! Слишком длинное или короткое название раздела!');
                     }
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Добавлять разделы могут только суперадмины!');
+                App::showError('Ошибка! Добавлять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br>';
@@ -130,10 +130,10 @@ if (is_admin()) {
 
                     echo '<input type="submit" value="Изменить"></form></div><br>';
                 } else {
-                    show_error('Ошибка! Данного раздела не существует!');
+                    App::showError('Ошибка! Данного раздела не существует!');
                 }
             } else {
-                show_error('Ошибка! Изменять разделы могут только суперадмины!');
+                App::showError('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br>';
@@ -160,16 +160,16 @@ if (is_admin()) {
                             App::redirect("/admin/blog");
 
                         } else {
-                            show_error('Ошибка! Данного раздела не существует!');
+                            App::showError('Ошибка! Данного раздела не существует!');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинное или короткое название раздела!');
+                        App::showError('Ошибка! Слишком длинное или короткое название раздела!');
                     }
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Изменять разделы могут только суперадмины!');
+                App::showError('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog?act=editcats&amp;cid='.$cid.'">Вернуться</a><br>';
@@ -188,10 +188,10 @@ if (is_admin()) {
                     echo 'Вы уверены что хотите удалить раздел <b>'.$blogs['name'].'</b> в блогах?<br>';
                     echo '<i class="fa fa-times"></i> <b><a href="/admin/blog?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br><br>';
                 } else {
-                    show_error('Ошибка! Данного раздела не существует!');
+                    App::showError('Ошибка! Данного раздела не существует!');
                 }
             } else {
-                show_error('Ошибка! Удалять разделы могут только суперадмины!');
+                App::showError('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br>';
@@ -217,13 +217,13 @@ if (is_admin()) {
                         App::redirect("/admin/blog");
 
                     } else {
-                        show_error('Ошибка! Данного раздела не существует!');
+                        App::showError('Ошибка! Данного раздела не существует!');
                     }
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Удалять разделы могут только суперадмины!');
+                App::showError('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog">Вернуться</a><br>';
@@ -272,10 +272,10 @@ if (is_admin()) {
 
                     App::pagination($page);
                 } else {
-                    show_error('В данном разделе еще нет статей!');
+                    App::showError('В данном разделе еще нет статей!');
                 }
             } else {
-                show_error('Ошибка! Данного раздела не существует!');
+                App::showError('Ошибка! Данного раздела не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/blog">Категории</a><br>';
@@ -305,7 +305,7 @@ if (is_admin()) {
 
                 echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
-                show_error('Ошибка! Данной статьи не существует!');
+                App::showError('Ошибка! Данной статьи не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -337,22 +337,22 @@ if (is_admin()) {
                                     App::redirect("/admin/blog?act=blog&cid=$cid&page=$page");
 
                                 } else {
-                                    show_error('Ошибка! Данной статьи не существует!');
+                                    App::showError('Ошибка! Данной статьи не существует!');
                                 }
                             } else {
-                                show_error('Ошибка! Недопустимые символы в логине! Разрешены только знаки латинского алфавита и цифры!');
+                                App::showError('Ошибка! Недопустимые символы в логине! Разрешены только знаки латинского алфавита и цифры!');
                             }
                         } else {
-                            show_error('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
+                            App::showError('Ошибка! Слишком длинные или короткие метки статьи (от 2 до 50 символов)!');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.Setting::get('maxblogpost').' символов)!');
+                        App::showError('Ошибка! Слишком длинный или короткий текст статьи (от 100 до '.Setting::get('maxblogpost').' символов)!');
                     }
                 } else {
-                    show_error('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
+                    App::showError('Ошибка! Слишком длинный или короткий заголовок (от 5 до 50 символов)!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=editblog&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -389,12 +389,12 @@ if (is_admin()) {
                     echo '</select>';
                     echo '<input type="submit" value="Переместить"></form></div><br>';
                 } elseif(count($cats) == 1) {
-                    show_error('Нет разделов для перемещения!');
+                    App::showError('Нет разделов для перемещения!');
                 } else {
-                    show_error('Ошибка! Разделы блогов еще не созданы!');
+                    App::showError('Ошибка! Разделы блогов еще не созданы!');
                 }
             } else {
-                show_error('Ошибка! Данной статьи не существует!');
+                App::showError('Ошибка! Данной статьи не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -423,13 +423,13 @@ if (is_admin()) {
                         App::redirect("/admin/blog?act=blog&cid=$section");
 
                     } else {
-                        show_error('Ошибка! Статьи для перемещения не существует!');
+                        App::showError('Ошибка! Статьи для перемещения не существует!');
                     }
                 } else {
-                    show_error('Ошибка! Выбранного раздела не существует!');
+                    App::showError('Ошибка! Выбранного раздела не существует!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$id.'">Вернуться</a><br>';
@@ -463,10 +463,10 @@ if (is_admin()) {
                     App::redirect("/admin/blog?act=blog&cid=$cid&page=$page");
 
                 } else {
-                    show_error('Ошибка! Отсутствуют выбранные статьи для удаления!');
+                    App::showError('Ошибка! Отсутствуют выбранные статьи для удаления!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blog?act=blog&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br>';

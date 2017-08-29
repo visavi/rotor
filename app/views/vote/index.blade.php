@@ -26,7 +26,7 @@
 
         <br>
     @else
-        {{ show_error('Открытых голосований еще нет!') }}
+        {{ App::showError('Открытых голосований еще нет!') }}
     @endif
 
     <i class="fa fa-briefcase"></i> <a href="/votes/history">Архив голосований</a><br>

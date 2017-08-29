@@ -74,7 +74,7 @@ if (is_admin()) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/book?act=alldel&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы уверены что хотите удалить все сообщения?\')">Очистить</a><br>';
                 }
             } else {
-                show_error('Сообщений еще нет!');
+                App::showError('Сообщений еще нет!');
             }
         break;
 
@@ -97,7 +97,7 @@ if (is_admin()) {
                 echo '<textarea cols="25" rows="5" name="reply">'.$post['reply'].'</textarea>';
                 echo '<br><input type="submit" value="Ответить"></form></div><br>';
             } else {
-                show_error('Ошибка! Сообщения для ответа не существует!');
+                App::showError('Ошибка! Сообщения для ответа не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br>';
@@ -124,13 +124,13 @@ if (is_admin()) {
                         App::setFlash('success', 'Ответ успешно добавлен!');
                         App::redirect("/admin/book?page=$page");
                     } else {
-                        show_error('Ошибка! Сообщения для ответа не существует!');
+                        App::showError('Ошибка! Сообщения для ответа не существует!');
                     }
                 } else {
-                    show_error('Ошибка! Слишком длинный или короткий текст ответа!');
+                    App::showError('Ошибка! Слишком длинный или короткий текст ответа!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?act=reply&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -156,7 +156,7 @@ if (is_admin()) {
                 echo '<textarea cols="50" rows="5" name="msg">'.$post['text'].'</textarea><br><br>';
                 echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
-                show_error('Ошибка! Сообщения для редактирования не существует!');
+                App::showError('Ошибка! Сообщения для редактирования не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br>';
@@ -184,13 +184,13 @@ if (is_admin()) {
                         App::setFlash('success', 'Сообщение успешно отредактировано!');
                         App::redirect("/admin/book?page=$page");
                     } else {
-                        show_error('Ошибка! Сообщения для редактирования не существует!');
+                        App::showError('Ошибка! Сообщения для редактирования не существует!');
                     }
                 } else {
-                    show_error('Ошибка! Слишком длинный или короткий текст сообщения!');
+                    App::showError('Ошибка! Слишком длинный или короткий текст сообщения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -212,10 +212,10 @@ if (is_admin()) {
                     App::setFlash('success', 'Выбранные сообщения успешно удалены!');
                     App::redirect("/admin/book?page=$page");
                 } else {
-                    show_error('Ошибка! Отсутствуют выбранные сообщения!');
+                    App::showError('Ошибка! Отсутствуют выбранные сообщения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br>';
@@ -235,10 +235,10 @@ if (is_admin()) {
                     App::setFlash('success', 'Гостевая книга успешно очищена!');
                     App::redirect("/admin/book");
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Очищать гостевую могут только суперадмины!');
+                App::showError('Ошибка! Очищать гостевую могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book">Вернуться</a><br>';

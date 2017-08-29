@@ -60,10 +60,10 @@ switch ($action):
 
                 echo 'Найдено совпадений: '.$total.'<br><br>';
             } else {
-                show_error('Совпадений не найдено!');
+                App::showError('Совпадений не найдено!');
             }
         } else {
-            show_error('Ошибка! Не выбраны критерии поиска пользователей!');
+            App::showError('Ошибка! Не выбраны критерии поиска пользователей!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br>';
@@ -95,10 +95,10 @@ switch ($action):
 
                 echo '<br>Найдено совпадений: <b>'.$total.'</b><br><br>';
             } else {
-                show_error('По вашему запросу ничего не найдено');
+                App::showError('По вашему запросу ничего не найдено');
             }
         } else {
-            show_error('Ошибка! Слишком короткий или длинный запрос, от 3 до 20 символов!');
+            App::showError('Ошибка! Слишком короткий или длинный запрос, от 3 до 20 символов!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br>';
@@ -107,7 +107,7 @@ switch ($action):
 endswitch;
 
 } else {
-    show_error('Ошибка! Для поиска пользователей необходимо авторизоваться!');
+    App::showError('Ошибка! Для поиска пользователей необходимо авторизоваться!');
 }
 
 App::view(Setting::get('themes').'/foot');

@@ -25,7 +25,7 @@ if (is_admin([101, 102])) {
 
                 echo 'Последнее изменение: '.date_fixed($rules['time']).'<br><br>';
             } else {
-                show_error('Правила сайта еще не установлены!');
+                App::showError('Правила сайта еще не установлены!');
             }
 
             echo '<i class="fa fa-pencil"></i> <a href="/admin/rules?act=edit">Редактировать</a><br>';
@@ -68,10 +68,10 @@ if (is_admin([101, 102])) {
                     App::setFlash('success', 'Правила успешно изменены!');
                     App::redirect("/admin/rules");
                 } else {
-                    show_error('Ошибка! Вы не ввели текст с правилами сайта!');
+                    App::showError('Ошибка! Вы не ввели текст с правилами сайта!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/rules?act=edit">Вернуться</a><br>';

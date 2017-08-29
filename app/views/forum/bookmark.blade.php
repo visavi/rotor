@@ -35,6 +35,6 @@
 
         {{ App::pagination($page) }}
     @else
-        {{ show_error('Закладок еще нет!') }}
+        {{ App::showError('Закладок еще нет!') }}
     @endif
 @stop

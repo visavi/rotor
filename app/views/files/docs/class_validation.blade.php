@@ -21,7 +21,7 @@ $validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Пров
 if ($validation->run()){
 	echo 'Все отлично, ошибок нет!';
 } else {
-	show_error($validation->getErrors());
+	App::showError($validation->getErrors());
 }
 </pre>
 
@@ -51,7 +51,7 @@ if ($validation->run()){
 if ($validation->run()){
 	echo 'Все отлично, ошибок нет!';
 } else {
-	show_error($validation->getErrors());
+	App::showError($validation->getErrors());
 }
 </pre>
 

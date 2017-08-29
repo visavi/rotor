@@ -70,7 +70,7 @@
         <?php App::pagination($page) ?>
 
     <?php else: ?>
-        <?php show_error('Сообщений нет, будь первым!'); ?>
+        <?php App::showError('Сообщений нет, будь первым!'); ?>
     <?php endif; ?>
 
 
@@ -112,6 +112,6 @@
         </div><br>
 
     <?php else: ?>
-        <?php show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо'); ?>
+        <?php App::showError('Вы не авторизованы, чтобы добавить сообщение, необходимо'); ?>
     <?php endif; ?>
 @stop

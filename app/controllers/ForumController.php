@@ -362,7 +362,7 @@ class ForumController extends BaseController
             App::view('forum/top', compact('topics', 'page'));
 
         } else {
-            show_error('Созданных тем еще нет!');
+            App::showError('Созданных тем еще нет!');
         }
     }
 
@@ -390,7 +390,7 @@ class ForumController extends BaseController
             App::view('forum/top_posts', compact('posts', 'page'));
 
         } else {
-            show_error('Созданных тем еще нет!');
+            App::showError('Созданных тем еще нет!');
         }
     }
 }

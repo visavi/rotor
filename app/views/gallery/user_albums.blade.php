@@ -36,7 +36,7 @@
 
         Всего фотографий: <b>{{ $page['total'] }}</b><br><br>
     @else
-        {{ show_error('Фотографий в альбоме еще нет!') }}
+        {{ App::showError('Фотографий в альбоме еще нет!') }}
     @endif
 
     <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/albums">Альбомы</a><br>

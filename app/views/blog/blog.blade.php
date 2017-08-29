@@ -36,7 +36,7 @@
 
         {{ App::pagination($page) }}
     @else
-        {{ show_error('Статей еще нет, будь первым!') }}
+        {{ App::showError('Статей еще нет, будь первым!') }}
     @endif
 
     <a href="/blog/top">Топ статей</a> /

@@ -73,7 +73,7 @@
 
         <i class="fa fa-times"></i> <a href="/private/clear?token={{ $_SESSION['token'] }}">Очистить ящик</a><br>
     @else
-        {{ show_error('Входящих писем еще нет!') }}
+        {{ App::showError('Входящих писем еще нет!') }}
     @endif
 
     <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br>

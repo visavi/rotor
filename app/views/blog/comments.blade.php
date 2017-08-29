@@ -48,7 +48,7 @@
         @endforeach
         {{ App::pagination($page) }}
     @else
-        {{ show_error('Нет сообщений') }}
+        {{ App::showError('Нет сообщений') }}
     @endif
 
     @if (is_user())
@@ -65,7 +65,7 @@
         <a href="/tags">Теги</a><br><br>
 
     @else
-        {{ show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо') }}
+        {{ App::showError('Вы не авторизованы, чтобы добавить сообщение, необходимо') }}
     @endif
 
 <?php

@@ -47,7 +47,7 @@ if (is_admin([101, 102])) {
         echo '</table><br>';
 
     } else {
-        show_error('Ошибка! Функция ini_get_all запрещена в php.ini!');
+        App::showError('Ошибка! Функция ini_get_all запрещена в php.ini!');
     }
 
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';

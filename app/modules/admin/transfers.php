@@ -47,7 +47,7 @@ if (is_admin([101, 102, 103])) {
                 echo 'Всего операций: <b>'.$total.'</b><br><br>';
 
             } else {
-                show_error('Истории операций еще нет!');
+                App::showError('Истории операций еще нет!');
             }
         break;
 
@@ -87,10 +87,10 @@ if (is_admin([101, 102, 103])) {
                     echo 'Всего операций: <b>'.$total.'</b><br><br>';
 
                 } else {
-                    show_error('Истории операций еще нет!');
+                    App::showError('Истории операций еще нет!');
                 }
             } else {
-                show_error('Ошибка! Данный пользователь не найден!');
+                App::showError('Ошибка! Данный пользователь не найден!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/transfers">Вернуться</a><br>';

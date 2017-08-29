@@ -55,7 +55,7 @@ if (is_admin()) {
 
                 echo 'Всего фотографий: <b>'.$total.'</b><br><br>';
             } else {
-                show_error('Фотографий еще нет!');
+                App::showError('Фотографий еще нет!');
             }
 
             if (is_admin([101])) {
@@ -86,7 +86,7 @@ if (is_admin()) {
 
                 echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
-                show_error('Ошибка! Данной фотографии не существует!');
+                App::showError('Ошибка! Данной фотографии не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page='.$page.'">Вернуться</a><br>';
@@ -118,16 +118,16 @@ if (is_admin()) {
                             App::redirect("/admin/gallery?page=$page");
 
                         } else {
-                            show_error('Ошибка! Слишком длинное описание (Необходимо до 1000 символов)!');
+                            App::showError('Ошибка! Слишком длинное описание (Необходимо до 1000 символов)!');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинное или короткое название!');
+                        App::showError('Ошибка! Слишком длинное или короткое название!');
                     }
                 } else {
-                    show_error('Ошибка! Данной фотографии не существует!');
+                    App::showError('Ошибка! Данной фотографии не существует!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=edit&amp;gid='.$gid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -162,16 +162,16 @@ if (is_admin()) {
                             App::redirect("/admin/gallery?page=$page");
 
                         } else {
-                            show_error('Ошибка! Данных фотографий не существует!');
+                            App::showError('Ошибка! Данных фотографий не существует!');
                         }
                     } else {
-                        show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с фотографиями!');
+                        App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с фотографиями!');
                     }
                 } else {
-                    show_error('Ошибка! Отсутствуют выбранные фотографии!');
+                    App::showError('Ошибка! Отсутствуют выбранные фотографии!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page='.$page.'">Вернуться</a><br>';
@@ -192,10 +192,10 @@ if (is_admin()) {
                     App::redirect("/admin/gallery");
 
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
+                App::showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery">Вернуться</a><br>';

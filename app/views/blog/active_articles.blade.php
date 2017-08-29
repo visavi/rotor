@@ -25,6 +25,6 @@
 
         Всего статей: <b>{{ $page['total'] }}</b><br>
     @else
-        {{ show_error('Статей еще нет!') }}
+        {{ App::showError('Статей еще нет!') }}
     @endif
 @stop

@@ -42,7 +42,7 @@ if ($total > 0) {
         echo '<input value="Отправить" type="submit"></form></div><br>';
     }
 } else {
-    show_error('Администрации еще нет!');
+    App::showError('Администрации еще нет!');
 }
 
 App::view(Setting::get('themes').'/foot');

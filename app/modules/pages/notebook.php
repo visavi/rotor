@@ -25,7 +25,7 @@ if (is_user()) {
 
                 echo 'Последнее изменение: '.date_fixed($note['time']).'<br><br>';
             } else {
-                show_error('Запись пустая или отсутствует!');
+                App::showError('Запись пустая или отсутствует!');
             }
 
             echo '<i class="fa fa-pencil"></i> <a href="/notebook?act=edit">Редактировать</a><br>';
@@ -69,10 +69,10 @@ if (is_user()) {
                     App::setFlash('success', 'Запись успешно сохранена!');
                     App::redirect("/notebook");
                 } else {
-                    show_error('Ошибка! Слишком длинная запись, не более 10тыс. символов!');
+                    App::showError('Ошибка! Слишком длинная запись, не более 10тыс. символов!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/notebook?act=edit">Вернуться</a><br>';
@@ -81,7 +81,7 @@ if (is_user()) {
     endswitch;
 
 } else {
-    show_login('Вы не авторизованы, чтобы сохранять заметки, необходимо');
+    App::showError('Вы не авторизованы, чтобы сохранять заметки, необходимо');
 }
 
 App::view(Setting::get('themes').'/foot');

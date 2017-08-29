@@ -78,7 +78,7 @@ if (is_admin([101, 102])) {
                 App::pagination($page);
 
             } else {
-                show_error('Cписок еще пуст!');
+                App::showError('Cписок еще пуст!');
             }
 
             echo '<div class="form">';
@@ -114,22 +114,22 @@ if (is_admin([101, 102])) {
                                     App::redirect("/admin/blacklist?main=$main");
 
                                 } else {
-                                    show_error('Ошибка! Данная запись уже имеется в списках!');
+                                    App::showError('Ошибка! Данная запись уже имеется в списках!');
                                 }
                             } else {
-                                show_error('Ошибка! Недопустимый адрес сайта! (http://sitename.domen)!');
+                                App::showError('Ошибка! Недопустимый адрес сайта! (http://sitename.domen)!');
                             }
                         } else {
-                            show_error('Ошибка! Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!');
+                            App::showError('Ошибка! Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!');
                         }
                     } else {
-                        show_error('Ошибка! Недопустимый адрес email, необходим формат name@site.domen!');
+                        App::showError('Ошибка! Недопустимый адрес email, необходим формат name@site.domen!');
                     }
                 } else {
-                    show_error('Ошибка! Вы не ввели запись или она слишком длинная!');
+                    App::showError('Ошибка! Вы не ввели запись или она слишком длинная!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.page.'">Вернуться</a><br>';
@@ -157,10 +157,10 @@ if (is_admin([101, 102])) {
                     App::setFlash('success', 'Выбранные записи успешно удалены!');
                     App::redirect("/admin/blacklist?main=$main&page=$page");
                 } else {
-                    show_error('Ошибка! Отсутствуют выбранные записи для удаления!');
+                    App::showError('Ошибка! Отсутствуют выбранные записи для удаления!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.$page.'">Вернуться</a><br>';

@@ -42,7 +42,7 @@ if ($total > 0) {
 
     echo 'Всего файлов: <b>'.$total.'</b><br><br>';
 } else {
-    show_error('За последние 5 дней загрузок еще нет!');
+    App::showError('За последние 5 дней загрузок еще нет!');
 }
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';

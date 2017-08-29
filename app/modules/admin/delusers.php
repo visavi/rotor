@@ -70,10 +70,10 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
 
                     echo '<i class="fa fa-times"></i> <b><a href="/admin/delusers?act=del&amp;deldate='.$deldate.'&amp;point='.$point.'&amp;uid='.$_SESSION['token'].'">Удалить пользователей</a></b><br><br>';
                 } else {
-                    show_error('Пользователи для удаления отсутствуют!');
+                    App::showError('Пользователи для удаления отсутствуют!');
                 }
             } else {
-                show_error('Ошибка! Указанно недопустимое время для удаления!');
+                App::showError('Ошибка! Указанно недопустимое время для удаления!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br>';
@@ -105,13 +105,13 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         echo 'Пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней, успешно удалены!<br>';
                         echo 'Было удалено пользователей: <b>'.$total.'</b><br><br>';
                     } else {
-                        show_error('Пользователи для удаления отсутствуют!');
+                        App::showError('Пользователи для удаления отсутствуют!');
                     }
                 } else {
-                    show_error('Ошибка! Указанно недопустимое время для удаления!');
+                    App::showError('Ошибка! Указанно недопустимое время для удаления!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br>';

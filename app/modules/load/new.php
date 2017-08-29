@@ -35,7 +35,7 @@ case 'files':
 
         App::pagination($page);
     } else {
-        show_error('Опубликованных файлов еще нет!');
+        App::showError('Опубликованных файлов еще нет!');
     }
 break;
 
@@ -74,7 +74,7 @@ case 'comments':
 
         App::pagination($page);
     } else {
-        show_error('Комментарии не найдены!');
+        App::showError('Комментарии не найдены!');
     }
 break;
 
@@ -101,7 +101,7 @@ case 'viewcomm':
 
         App::redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
-        show_error('Ошибка! Комментарий к данному файлу не существует!');
+        App::showError('Ошибка! Комментарий к данному файлу не существует!');
     }
 break;
 

@@ -55,7 +55,7 @@ if (is_admin()) {
 
                 echo 'Всего ссылок: <b>'.$total.'</b><br><br>';
             } else {
-                show_error('В данный момент рекламных ссылок еще нет!');
+                App::showError('В данный момент рекламных ссылок еще нет!');
             }
         break;
 
@@ -96,7 +96,7 @@ if (is_admin()) {
 
                 echo '<br><input type="submit" value="Изменить"></form></div><br>';
             } else {
-                show_error('Ошибка! Данной ссылки не существует!');
+                App::showError('Ошибка! Данной ссылки не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br>';
@@ -128,22 +128,22 @@ if (is_admin()) {
                                     App::setFlash('success', 'Рекламная ссылка успешно изменена!');
                                     App::redirect("/admin/reklama?page=$page");
                                 } else {
-                                    show_error('Ошибка! Редактируемой ссылки не существует!');
+                                    App::showError('Ошибка! Редактируемой ссылки не существует!');
                                 }
                             } else {
-                                show_error('Ошибка! Недопустимый формат цвета ссылки! (пример #ff0000)');
+                                App::showError('Ошибка! Недопустимый формат цвета ссылки! (пример #ff0000)');
                             }
                         } else {
-                            show_error('Ошибка! Слишком длинное или короткое название ссылки! (от 5 до 35 символов)');
+                            App::showError('Ошибка! Слишком длинное или короткое название ссылки! (от 5 до 35 символов)');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинный или короткий адрес ссылки! (от 5 до 50 символов)');
+                        App::showError('Ошибка! Слишком длинный или короткий адрес ссылки! (от 5 до 50 символов)');
                     }
                 } else {
-                    show_error('Ошибка! Недопустимый адрес сайта!');
+                    App::showError('Ошибка! Недопустимый адрес сайта!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -171,10 +171,10 @@ if (is_admin()) {
                     App::setFlash('success', 'Выбранные ссылки успешно удалены!');
                     App::redirect("/admin/reklama?page=$page");
                 } else {
-                    show_error('Ошибка! Не выбраны ссылки для удаления!');
+                    App::showError('Ошибка! Не выбраны ссылки для удаления!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br>';

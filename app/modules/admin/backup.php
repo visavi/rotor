@@ -32,7 +32,7 @@ if (is_admin([101])) {
 
                 echo '<br>Всего бэкапов: <b>'.$total.'</b><br><br>';
             } else {
-                show_error('Бэкапов еще нет!');
+                App::showError('Бэкапов еще нет!');
             }
 
             echo '<i class="fa fa-check"></i> <a href="/admin/backup?act=choice">Новый бэкап</a><br>';
@@ -87,7 +87,7 @@ if (is_admin([101])) {
 
                 echo '<br><input type="submit" value="Выполнить"></form></div><br>';
             } else {
-                show_error('Нет таблиц для бэкапа!');
+                App::showError('Нет таблиц для бэкапа!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br>';
@@ -169,13 +169,13 @@ if (is_admin([101])) {
                         App::redirect("/admin/backup");
 
                     } else {
-                        show_error('Ошибка! Некоторые таблицы отсутствуют в базе данных!');
+                        App::showError('Ошибка! Некоторые таблицы отсутствуют в базе данных!');
                     }
                 } else {
-                    show_error('Ошибка! Не выбраны таблицы для бэкапа!');
+                    App::showError('Ошибка! Не выбраны таблицы для бэкапа!');
                 }
             } else {
-                show_error('Ошибка! Директория backup недоступна для записи!');
+                App::showError('Ошибка! Директория backup недоступна для записи!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup?act=choice">Вернуться</a><br>';
@@ -199,16 +199,16 @@ if (is_admin([101])) {
                             App::redirect("/admin/backup");
 
                         } else {
-                            show_error('Ошибка! Данного бэкапа не существует!');
+                            App::showError('Ошибка! Данного бэкапа не существует!');
                         }
                     } else {
-                        show_error('Ошибка! Недопустимое название бэкапа!');
+                        App::showError('Ошибка! Недопустимое название бэкапа!');
                     }
                 } else {
-                    show_error('Ошибка! Вы не выбрали бэкапа для удаления!');
+                    App::showError('Ошибка! Вы не выбрали бэкапа для удаления!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br>';

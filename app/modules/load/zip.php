@@ -60,19 +60,19 @@ case 'index':
 
                         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['name'].'</a><br>';
                     } else {
-                        show_error('Ошибка! В данном архиве нет файлов!');
+                        App::showError('Ошибка! В данном архиве нет файлов!');
                     }
                 } else {
-                    show_error('Ошибка! Невозможно открыть архив!');
+                    App::showError('Ошибка! Невозможно открыть архив!');
                 }
             } else {
-                show_error('Ошибка! Невозможно просмотреть данный файл, т.к. он не является архивом!');
+                App::showError('Ошибка! Невозможно просмотреть данный файл, т.к. он не является архивом!');
             }
         } else {
-            show_error('Ошибка! Данный файл еще не проверен модератором!');
+            App::showError('Ошибка! Данный файл еще не проверен модератором!');
         }
     } else {
-        show_error('Ошибка! Данного файла не существует!');
+        App::showError('Ошибка! Данного файла не существует!');
     }
 break;
 
@@ -108,7 +108,7 @@ case 'preview':
                             echo '<pre class="prettyprint linenums">'.win_to_utf(htmlspecialchars($filecontent)).'</pre><br>';
                         }
                     } else {
-                        show_error('Данный файл пустой!');
+                        App::showError('Данный файл пустой!');
                     }
                 } else {
                     if (!empty($_GET['img'])) {
@@ -127,13 +127,13 @@ case 'preview':
                     echo '<img src="/load/zip?act=preview&amp;id='.$id.'&amp;view='.$view.'&amp;img=1" alt="image"><br><br>';
                 }
             } else {
-                show_error('Ошибка! Не удалось извлечь файл!');
+                App::showError('Ошибка! Не удалось извлечь файл!');
             }
         } else {
-            show_error('Ошибка! Данный файл еще не проверен модератором!');
+            App::showError('Ошибка! Данный файл еще не проверен модератором!');
         }
     } else {
-        show_error('Ошибка! Данного файла не существует!');
+        App::showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/zip?id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';

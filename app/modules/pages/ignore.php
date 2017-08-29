@@ -52,7 +52,7 @@ case 'index':
 
         echo 'Всего в игноре: <b>'.$page['total'].'</b><br>';
     } else {
-        show_error('Игнор-лист пуст!');
+        App::showError('Игнор-лист пуст!');
     }
 
     echo '<br><div class="form"><form method="post" action="/ignore/create">';

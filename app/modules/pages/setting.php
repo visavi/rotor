@@ -120,10 +120,10 @@ case 'edit':
             App::redirect("/setting");
 
         } else {
-            show_error('Ошибка! Данный скин не установлен на сайте!');
+            App::showError('Ошибка! Данный скин не установлен на сайте!');
         }
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/setting">Вернуться</a><br>';
@@ -131,7 +131,7 @@ break;
 
 endswitch;
 } else {
-    show_login('Вы не авторизованы, чтобы изменять настройки, необходимо');
+    App::showError('Вы не авторизованы, чтобы изменять настройки, необходимо');
 }
 
 App::view(Setting::get('themes').'/foot');

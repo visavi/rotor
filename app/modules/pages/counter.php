@@ -100,7 +100,7 @@ switch ($action):
 
 			echo '<br>';
 		} else {
-			show_error('Статистика за текущие сутки еще не обновилась!');
+			App::showError('Статистика за текущие сутки еще не обновилась!');
 		}
 
 		echo '<i class="fa fa-arrow-circle-left"></i> <a href="/counter">Вернуться</a><br>';
@@ -156,7 +156,7 @@ switch ($action):
 
 			echo '<br>';
 		} else {
-			show_error('Статистика за текущий месяц еще не обновилась!');
+			App::showError('Статистика за текущий месяц еще не обновилась!');
 		}
 
 		echo '<i class="fa fa-arrow-circle-left"></i> <a href="/counter">Вернуться</a><br>';

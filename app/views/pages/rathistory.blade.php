@@ -40,7 +40,7 @@
             </div>
         @endforeach
     @else
-        {{ show_error('В истории еще ничего нет!') }}
+        {{ App::showError('В истории еще ничего нет!') }}
     @endif
 
     <br>

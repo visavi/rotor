@@ -47,7 +47,7 @@ case 'index':
         echo '<br>Всего шаблонов: '.$total.'<br><br>';
 
     } else {
-        show_error('Шаблонов еще нет!');
+        App::showError('Шаблонов еще нет!');
     }
     echo '<i class="fa fa-check"></i> <a href="/admin/notice?act=new">Добавить</a><br>';
 break;
@@ -96,7 +96,7 @@ case 'edit':
         echo '<input type="submit" value="Изменить"></form></div><br>';
 
     } else {
-        show_error('Ошибка! Шаблона для редактирования не существует!');
+        App::showError('Ошибка! Шаблона для редактирования не существует!');
     }
 
     App::view('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);
@@ -138,7 +138,7 @@ case 'save':
         App::redirect('/admin/notice?act=edit&id='.$notice->id);
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     App::view('includes/back', ['link' => '/admin/notice?act=edit&amp;id='.$id, 'title' => 'Вернуться']);
@@ -167,7 +167,7 @@ case 'del':
         App::redirect('/admin/notice');
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     App::view('includes/back', ['link' => '/admin/notice', 'title' => 'Вернуться']);

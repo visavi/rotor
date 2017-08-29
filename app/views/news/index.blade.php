@@ -41,7 +41,7 @@
 
         {{ App::pagination($page) }}
     @else
-        show_error('Новостей еще нет!');
+        App::showError('Новостей еще нет!');
     @endif
 
     <i class="fa fa-rss"></i> <a href="/news/rss">RSS подписка</a><br>

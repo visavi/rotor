@@ -26,7 +26,7 @@ if (is_admin([101, 102, 103])) {
         echo 'Всего забанено: <b>'.$total.'</b><br><br>';
 
     } else {
-        show_error('Пользователей еще нет!');
+        App::showError('Пользователей еще нет!');
     }
 
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';

@@ -40,10 +40,10 @@ if (is_user()) {
 
         App::pagination($page);
     } else {
-        show_error('История авторизаций отсутствует');
+        App::showError('История авторизаций отсутствует');
     }
 } else {
-    show_login('Вы не авторизованы, для просмотра истории, необходимо');
+    App::showError('Вы не авторизованы, для просмотра истории, необходимо');
 }
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/menu">Вернуться</a><br>';

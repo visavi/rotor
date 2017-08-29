@@ -66,7 +66,7 @@
     <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">В альбом</a><br>
 
     @else
-        {{ show_error('Ошибка! Данного изображения нет в базе') }}
+        {{ App::showError('Ошибка! Данного изображения нет в базе') }}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>

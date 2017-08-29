@@ -25,7 +25,7 @@ case 'index':
 
         echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clear?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
     } else {
-        show_error('Файлов еще нет!');
+        App::showError('Файлов еще нет!');
     }
 break;
 
@@ -56,7 +56,7 @@ case 'image':
 
         echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clearimage?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
     } else {
-        show_error('Изображений еще нет!');
+        App::showError('Изображений еще нет!');
     }
 break;
 
@@ -75,7 +75,7 @@ case 'clear':
         App::redirect("/admin/cache");
 
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     App::view('includes/back', ['link' => '/admin/cache', 'title' => 'Вернуться']);
@@ -104,7 +104,7 @@ case 'clearimage':
         App::redirect("/admin/cache/image");
 
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
 

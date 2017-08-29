@@ -41,7 +41,7 @@
 
         <i class="fa fa-times"></i> <a href="/private/clear?type=outbox&amp;token={{ $_SESSION['token'] }}">Очистить ящик</a><br>
     @else
-        {{ show_error('Отправленных писем еще нет!') }}
+        {{ App::showError('Отправленных писем еще нет!') }}
     @endif
 
     <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br>

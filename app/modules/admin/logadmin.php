@@ -36,7 +36,7 @@ if (is_admin([101])) {
 
                 echo '<i class="fa fa-times"></i> <a href="/admin/logadmin?act=del&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br>';
             } else {
-                show_error('Записей еще нет!');
+                App::showError('Записей еще нет!');
             }
         break;
 
@@ -53,7 +53,7 @@ if (is_admin([101])) {
                 App::setFlash('success', 'Лог-файл успешно очищен!');
                 App::redirect("/admin/logadmin");
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/logadmin">Вернуться</a><br>';

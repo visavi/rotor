@@ -26,6 +26,6 @@
 
         {{ App::pagination($page) }}
     @else
-        {{ show_error('Комментарии не найдены!') }}
+        {{ App::showError('Комментарии не найдены!') }}
     @endif
 @stop

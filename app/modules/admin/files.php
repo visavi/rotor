@@ -66,7 +66,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 }
                 echo '</ul>';
             } else {
-                show_error('Файлов нет!');
+                App::showError('Файлов нет!');
             }
 
             if ($path) {
@@ -96,7 +96,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                                 redirect ("/admin/files?act=edit&path=$path&file=$file");
 
                             } else {
-                                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                             }
                         }
 
@@ -114,13 +114,13 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         echo '<p class="help-block">Нажмите Ctrl+Enter для перевода строки, Shift+Enter для вставки линии</p>';
 
                     } else {
-                        show_error('Ошибка! Файл недоступен для записи!');
+                        App::showError('Ошибка! Файл недоступен для записи!');
                     }
                 } else {
-                    show_error('Ошибка! Данного файла не существует!');
+                    App::showError('Ошибка! Данного файла не существует!');
                 }
             } else {
-                show_error('Ошибка! Недопустимое название страницы!');
+                App::showError('Ошибка! Недопустимое название страницы!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';
@@ -153,7 +153,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                                     App::redirect('/admin/files?act=edit&file='.$name.'&path='.$path);
 
                                 } else {
-                                    show_error('Ошибка! Файл с данным названием уже существует!');
+                                    App::showError('Ошибка! Файл с данным названием уже существует!');
                                 }
                             } else {
                                 if (!file_exists(APP .'/views/'.$path.$name)) {
@@ -164,15 +164,15 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                                     App::setFlash('success', 'Новая директория успешно создана!');
                                     App::redirect('/admin/files?path='.$path.$name.'/');
                                 } else {
-                                    show_error('Ошибка! Категория с данным названием уже существует!');
+                                    App::showError('Ошибка! Категория с данным названием уже существует!');
                                 }
                             }
 
                         } else {
-                            show_error('Ошибка! Недопустимое название файла или директории!');
+                            App::showError('Ошибка! Недопустимое название файла или директории!');
                         }
                     } else {
-                        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                     }
                 }
 
@@ -193,7 +193,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 echo '<input value="Создать файл" type="submit"></form></div>';
                 echo '<br>Разрешены латинские символы и цифры, а также знаки дефис и нижнее подчеркивание<br><br>';
             } else {
-                show_error('Директория '.$path.' недоступна для записи!');
+                App::showError('Директория '.$path.' недоступна для записи!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';
@@ -218,7 +218,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                                 App::setFlash('success', 'Директория успешно удалена!');
                                 App::redirect('/admin/files?path=' . $path);
                             } else {
-                                show_error('Ошибка! Данного директории не существует!');
+                                App::showError('Ошибка! Данного директории не существует!');
                             }
                         } else {
                             if (file_exists(APP .'/views/'.$path.$name.'.blade.php')) {
@@ -228,20 +228,20 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                                     redirect ('/admin/files?path='.$path);
 
                                 } else {
-                                    show_error('Ошибка! Не удалось удалить файл!');
+                                    App::showError('Ошибка! Не удалось удалить файл!');
                                 }
                             } else {
-                                show_error('Ошибка! Данного файла не существует!');
+                                App::showError('Ошибка! Данного файла не существует!');
                             }
                         }
                     } else {
-                        show_error('Ошибка! Недопустимое название страницы!');
+                        App::showError('Ошибка! Недопустимое название страницы!');
                     }
                 } else {
-                    show_error('Директория '.$path.' недоступна для записи!');
+                    App::showError('Директория '.$path.' недоступна для записи!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';

@@ -43,7 +43,7 @@ if (is_admin([101, 102])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/logs?act=clear&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br>';
                 }
             } else {
-                show_error('Записей еще нет!');
+                App::showError('Записей еще нет!');
             }
         break;
 
@@ -71,7 +71,7 @@ if (is_admin([101, 102])) {
 
                 App::pagination($page);
             } else {
-                show_error('Записей еще нет!');
+                App::showError('Записей еще нет!');
             }
         break;
 
@@ -99,7 +99,7 @@ if (is_admin([101, 102])) {
 
                 App::pagination($page);
             } else {
-                show_error('Записей еще нет!');
+                App::showError('Записей еще нет!');
             }
         break;
 
@@ -118,10 +118,10 @@ if (is_admin([101, 102])) {
                     App::redirect("/admin/logs");
 
                 } else {
-                    show_error('Ошибка! Очищать логи могут только суперадмины!');
+                    App::showError('Ошибка! Очищать логи могут только суперадмины!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/logs">Вернуться</a><br>';

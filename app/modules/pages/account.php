@@ -47,7 +47,7 @@ case 'index':
 
             echo '</div><br>';
         } else {
-            show_error('Изменять статус могут пользователи у которых более '.points(Setting::get('editstatuspoint')).'!');
+            App::showError('Изменять статус могут пользователи у которых более '.points(Setting::get('editstatuspoint')).'!');
         }
     }
 
@@ -125,7 +125,7 @@ case 'changemail':
         App::redirect("/account");
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -162,7 +162,7 @@ case 'editmail':
         App::redirect("/account");
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -200,7 +200,7 @@ case 'editstatus':
         App::redirect("/account");
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -245,7 +245,7 @@ case 'editpass':
         App::redirect("/login");
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -266,7 +266,7 @@ case 'apikey':
         App::setFlash('success', 'Новый ключ успешно сгенерирован!');
         App::redirect("/account");
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -275,7 +275,7 @@ break;
 endswitch;
 
 } else {
-    show_login('Вы не авторизованы, чтобы изменять свои данные, необходимо');
+    App::showError('Вы не авторизованы, чтобы изменять свои данные, необходимо');
 }
 
 App::view(Setting::get('themes').'/foot');

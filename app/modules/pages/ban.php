@@ -69,16 +69,16 @@ if (is_user()) {
                                     App::redirect("/ban");
 
                                 } else {
-                                    show_error('Ошибка! Пользователь который вас забанил не найден!');
+                                    App::showError('Ошибка! Пользователь который вас забанил не найден!');
                                 }
                             } else {
-                                show_error('Ошибка! Слишком длинное или короткое объяснение!');
+                                App::showError('Ошибка! Слишком длинное или короткое объяснение!');
                             }
                         } else {
-                            show_error('Ошибка! Вы уже писали объяснение!');
+                            App::showError('Ошибка! Вы уже писали объяснение!');
                         }
                     } else {
-                        show_error('Ошибка! Писать объяснительные запрещено админом!');
+                        App::showError('Ошибка! Писать объяснительные запрещено админом!');
                     }
 
                     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/ban">Вернуться</a><br>';
@@ -103,10 +103,10 @@ if (is_user()) {
             DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `explainban`=? WHERE `login`=?;", [0, 0, 0, App::getUsername()]);
         }
     } else {
-        show_error('Ошибка! Вы не забанены или срок бана истек!');
+        App::showError('Ошибка! Вы не забанены или срок бана истек!');
     }
 } else {
-    show_error('Ошибка! Вы не авторизованы!');
+    App::showError('Ошибка! Вы не авторизованы!');
 }
 
 App::view(Setting::get('themes').'/foot');

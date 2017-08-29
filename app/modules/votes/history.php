@@ -37,7 +37,7 @@ switch ($action):
 
             App::pagination($page);
         } else {
-            show_error('Голосований в архиве еще нет!');
+            App::showError('Голосований в архиве еще нет!');
         }
     break;
 
@@ -81,13 +81,13 @@ switch ($action):
 
                     echo 'Вариантов: <b>'.$total.'</b><br><br>';
                 } else {
-                    show_error('Ошибка! Для данного голосования не созданы варианты ответов!');
+                    App::showError('Ошибка! Для данного голосования не созданы варианты ответов!');
                 }
             } else {
-                show_error('Ошибка! Данного опроса не существует в истории!');
+                App::showError('Ошибка! Данного опроса не существует в истории!');
             }
         } else {
-            show_error('Ошибка! Данного голосования не существует!');
+            App::showError('Ошибка! Данного голосования не существует!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes/history?page='.$page.'">Вернуться</a><br>';

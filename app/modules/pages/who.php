@@ -30,7 +30,7 @@ if ($total > 0) {
 
     App::pagination($page);
 } else {
-    show_error('Пользователей еще нет!');
+    App::showError('Пользователей еще нет!');
 }
 
 App::view(Setting::get('themes').'/foot');

@@ -33,5 +33,5 @@ if (!empty($courses['USD'])){
 	echo '<b>'.$courses['UAH']['nominal'].' '.$courses['UAH']['name'].'</b> - '.$courses['UAH']['value'].'<br>';
 
 } else {
-	show_error('Ошибка! Не удалось загрузить последние курсы валют!');
+	App::showError('Ошибка! Не удалось загрузить последние курсы валют!');
 }

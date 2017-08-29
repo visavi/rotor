@@ -58,7 +58,7 @@ if (is_admin([101])) {
                 echo 'Будет произведена проверка нового пользователя и назначены ему все администраторские права<br><br>';
 
             } else {
-                show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
+                App::showError('Ошибка! Данные настройки доступны только владельцу сайта!');
             }
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';
         break;
@@ -97,22 +97,22 @@ if (is_admin([101])) {
                                     App::redirect("/admin/setting?act=setzero");
 
                                 } else {
-                                    show_error('Ошибка! Аккаунт пользователя '.$login.' не найден в базе');
+                                    App::showError('Ошибка! Аккаунт пользователя '.$login.' не найден в базе');
                                 }
                             } else {
-                                show_error('Неправильный адрес email, необходим формат name@site.domen!');
+                                App::showError('Неправильный адрес email, необходим формат name@site.domen!');
                             }
                         } else {
-                            show_error('Ошибка! Пароль не совпадает с данными в профиле!');
+                            App::showError('Ошибка! Пароль не совпадает с данными в профиле!');
                         }
                     } else {
-                        show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                        App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                     }
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
+                App::showError('Ошибка! Данные настройки доступны только владельцу сайта!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setzero">Вернуться</a><br>';
@@ -212,7 +212,7 @@ if (is_admin([101])) {
 
                 echo '<input value="Изменить" type="submit"></form></div><br>';
             } else {
-                show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
+                App::showError('Ошибка! Основные настройки доступны только владельцу сайта!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';
@@ -256,13 +256,13 @@ if (is_admin([101])) {
                         App::redirect("/admin/setting?act=setone");
 
                     } else {
-                        show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                        App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                     }
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Основные настройки доступны только владельцу сайта!');
+                App::showError('Ошибка! Основные настройки доступны только владельцу сайта!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setone">Вернуться</a><br>';
@@ -285,7 +285,7 @@ if (is_admin([101])) {
 
                 echo '<input value="Изменить" type="submit"></form></div><br>';
             } else {
-                show_error('Ошибка! Данные настройки доступны только владельцу сайта!');
+                App::showError('Ошибка! Данные настройки доступны только владельцу сайта!');
             }
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';
         break;
@@ -312,10 +312,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=mail");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=mail">Вернуться</a><br>';
         break;
@@ -376,10 +376,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=settwo");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=settwo">Вернуться</a><br>';
@@ -457,10 +457,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setthree");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setthree">Вернуться</a><br>';
@@ -521,10 +521,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setfour");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setfour">Вернуться</a><br>';
@@ -582,10 +582,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setfive");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setfive">Вернуться</a><br>';
@@ -647,10 +647,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setload");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setload">Вернуться</a><br>';
@@ -703,10 +703,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setblog");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setblog">Вернуться</a><br>';
@@ -783,10 +783,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setseven");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setseven">Вернуться</a><br>';
@@ -857,10 +857,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=seteight");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=seteight">Вернуться</a><br>';
@@ -918,8 +918,8 @@ if (is_admin([101])) {
         * App::setFlash('success', 'Настройки сайта успешно изменены!');
         * App::redirect("/admin/setting");
         *
-        * } else {show_error('Ошибка! Все поля настроек обязательны для заполнения!');}
-        * } else {show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');}
+        * } else {App::showError('Ошибка! Все поля настроек обязательны для заполнения!');}
+        * } else {App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');}
         *
         * echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setnine">Вернуться</a><br>';
         * break;
@@ -987,16 +987,16 @@ if (is_admin([101])) {
                             App::redirect("/admin/setting?act=setten");
 
                         } else {
-                            show_error('Ошибка! Амплитуда колебаний может быть от 0 до 8!');
+                            App::showError('Ошибка! Амплитуда колебаний может быть от 0 до 8!');
                         }
                     } else {
-                        show_error('Ошибка! Максимальное количество символов может быть от 4 до 6!');
+                        App::showError('Ошибка! Максимальное количество символов может быть от 4 до 6!');
                     }
                 } else {
-                    show_error('Ошибка! Недопустимые символы в captcha!');
+                    App::showError('Ошибка! Недопустимые символы в captcha!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setten">Вернуться</a><br>';
@@ -1061,10 +1061,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=seteleven");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=seteleven">Вернуться</a><br>';
@@ -1115,10 +1115,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setadv");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setadv">Вернуться</a><br>';
@@ -1178,10 +1178,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setimage");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setimage">Вернуться</a><br>';
@@ -1228,10 +1228,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setsmile");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setsmile">Вернуться</a><br>';
@@ -1276,10 +1276,10 @@ if (is_admin([101])) {
                     App::redirect("/admin/setting?act=setoffer");
 
                 } else {
-                    show_error('Ошибка! Все поля настроек обязательны для заполнения!');
+                    App::showError('Ошибка! Все поля настроек обязательны для заполнения!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setoffer">Вернуться</a><br>';

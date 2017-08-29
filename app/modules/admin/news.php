@@ -65,7 +65,7 @@ case 'index':
 
         echo 'Всего новостей: <b>'.(int)$total.'</b><br><br>';
     } else {
-        show_error('Новостей еще нет!');
+        App::showError('Новостей еще нет!');
     }
 
     echo '<i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br>';
@@ -112,7 +112,7 @@ case 'edit':
 
         echo '<br><input type="submit" value="Изменить"></form></div><br>';
     } else {
-        show_error('Ошибка! Выбранная новость не существует, возможно она была удалена!');
+        App::showError('Ошибка! Выбранная новость не существует, возможно она была удалена!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br>';
@@ -170,7 +170,7 @@ case 'change':
         App::redirect("/admin/news?page=$page");
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -249,7 +249,7 @@ case 'addnews':
         App::redirect("/admin/news");
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=add">Вернуться</a><br>';
@@ -271,10 +271,10 @@ case 'restatement':
             App::redirect("/admin/news");
 
         } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
+        App::showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br>';
@@ -311,13 +311,13 @@ case 'del':
                 App::redirect("/admin/news?page=$page");
 
             } else {
-                show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию с изображениями!');
+                App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с изображениями!');
             }
         } else {
-            show_error('Ошибка! Отсутствуют выбранные новости!');
+            App::showError('Ошибка! Отсутствуют выбранные новости!');
         }
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br>';

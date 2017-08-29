@@ -67,7 +67,7 @@ if (count($downs) > 0) {
     echo '<a href="/load/add">Добавить файл</a><br>';
 
 } else {
-    show_error('Разделы загрузок еще не созданы!');
+    App::showError('Разделы загрузок еще не созданы!');
 }
 
 App::view(Setting::get('themes').'/foot');

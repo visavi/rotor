@@ -26,7 +26,7 @@
 
         {{ App::pagination($page) }}
     @else
-        {{ show_error('Комментарии не найдены!') }}
+        {{ App::showError('Комментарии не найдены!') }}
     @endif
     <i class="fa fa-arrow-circle-up"></i> <a href="/news">К новостям</a><br>
 @stop

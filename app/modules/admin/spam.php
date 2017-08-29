@@ -66,7 +66,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/spam?act=clear&amp;token='.$_SESSION['token'].'">Очистить</a><br>';
                 }
             } else {
-                show_error('Жалоб еще нет!');
+                App::showError('Жалоб еще нет!');
             }
         break;
 
@@ -88,10 +88,10 @@ if (is_admin([101, 102, 103])) {
                     App::redirect("/admin/spam?type=$type&page=$page");
 
                 } else {
-                    show_error('Ошибка! Отсутствуют выбранные жалобы!');
+                    App::showError('Ошибка! Отсутствуют выбранные жалобы!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/spam?page='.$page.'">Вернуться</a><br>';
@@ -112,10 +112,10 @@ if (is_admin([101, 102, 103])) {
                     App::redirect("/admin/spam");
 
                 } else {
-                    show_error('Ошибка! Очищать жалобы могут только админы!');
+                    App::showError('Ошибка! Очищать жалобы могут только админы!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/spam">Вернуться</a><br>';

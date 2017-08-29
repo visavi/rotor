@@ -127,16 +127,16 @@ case 'index':
                 App::pagination($page);
             } else {
                 if (empty($cats['closed'])) {
-                    show_error('В данном разделе еще нет файлов!');
+                    App::showError('В данном разделе еще нет файлов!');
                 }
             }
 
             if (!empty($cats['closed'])) {
-                show_error('В данном разделе запрещена загрузка файлов!');
+                App::showError('В данном разделе запрещена загрузка файлов!');
             }
 
         } else {
-            show_error('Ошибка! Данного раздела не существует!');
+            App::showError('Ошибка! Данного раздела не существует!');
         }
 
         echo '<a href="/load/top">Топ файлов</a> / ';
@@ -292,16 +292,16 @@ case 'view':
 
                 echo '<br>';
             } else {
-                show_error('Файл еще не загружен!');
+                App::showError('Файл еще не загружен!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['cats_name'].'</a><br>';
 
         } else {
-            show_error('Ошибка! Данный файл еще не проверен модератором!');
+            App::showError('Ошибка! Данный файл еще не проверен модератором!');
         }
     } else {
-        show_error('Ошибка! Данного файла не существует!');
+        App::showError('Ошибка! Данного файла не существует!');
     }
 break;
 
@@ -333,16 +333,16 @@ case 'load':
 
                     App::redirect("/uploads/files/".$folder.$downs['link']);
                 } else {
-                    show_error('Ошибка! Файла для скачивания не существует!');
+                    App::showError('Ошибка! Файла для скачивания не существует!');
                 }
             } else {
-                show_error('Ошибка! Данный файл еще не проверен модератором!');
+                App::showError('Ошибка! Данный файл еще не проверен модератором!');
             }
         } else {
-            show_error('Ошибка! Данного файла не существует!');
+            App::showError('Ошибка! Данного файла не существует!');
         }
     } else {
-        show_error('Ошибка! Проверочное число не совпало с данными на картинке!');
+        App::showError('Ошибка! Проверочное число не совпало с данными на картинке!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -381,25 +381,25 @@ case 'vote':
                                 echo 'Всего оценивало: '.($downs['rated'] + 1).'<br>';
                                 echo 'Средняя оценка: '.round(($downs['rating'] + $score) / ($downs['rated'] + 1), 1).'<br><br>';
                             } else {
-                                show_error('Ошибка! Вы уже оценивали данный файл!');
+                                App::showError('Ошибка! Вы уже оценивали данный файл!');
                             }
                         } else {
-                            show_error('Ошибка! Нельзя голосовать за свой файл!');
+                            App::showError('Ошибка! Нельзя голосовать за свой файл!');
                         }
                     } else {
-                        show_error('Ошибка! Данный файл еще не проверен модератором!');
+                        App::showError('Ошибка! Данный файл еще не проверен модератором!');
                     }
                 } else {
-                    show_error('Ошибка! Данного файла не существует!');
+                    App::showError('Ошибка! Данного файла не существует!');
                 }
             } else {
-                show_error('Ошибка! Необходимо поставить оценку от 1 до 5 включительно!');
+                App::showError('Ошибка! Необходимо поставить оценку от 1 до 5 включительно!');
             }
         } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        show_login('Вы не авторизованы, для голосования за файлы, необходимо');
+        App::showError('Вы не авторизованы, для голосования за файлы, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -469,7 +469,7 @@ case 'comments':
 
                 App::pagination($page);
             } else {
-                show_error('Комментариев еще нет!');
+                App::showError('Комментариев еще нет!');
             }
 
             if (is_user()) {
@@ -483,13 +483,13 @@ case 'comments':
                 echo '<a href="/smiles">Смайлы</a> / ';
                 echo '<a href="/tags">Теги</a><br><br>';
             } else {
-                show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+                App::showError('Вы не авторизованы, чтобы добавить сообщение, необходимо');
             }
         } else {
-            show_error('Ошибка! Данный файл еще не проверен модератором!');
+            App::showError('Ошибка! Данный файл еще не проверен модератором!');
         }
     } else {
-        show_error('Ошибка! Данного файла не существует!');
+        App::showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -523,22 +523,22 @@ case 'add':
                             App::setFlash('success', 'Сообщение успешно добавлено!');
                             App::redirect("/load/down?act=end&id=$id");
                         } else {
-                            show_error('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
+                            App::showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                         }
                     } else {
-                        show_error('Ошибка! Данный файл еще не проверен модератором!');
+                        App::showError('Ошибка! Данный файл еще не проверен модератором!');
                     }
                 } else {
-                    show_error('Ошибка! Данного файла не существует!');
+                    App::showError('Ошибка! Данного файла не существует!');
                 }
             } else {
-                show_error('Ошибка! Слишком длинное или короткое сообщение!');
+                App::showError('Ошибка! Слишком длинное или короткое сообщение!');
             }
         } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+        App::showError('Вы не авторизованы, чтобы добавить сообщение, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'">Вернуться</a><br>';
@@ -566,19 +566,19 @@ case 'spam':
                         App::setFlash('success', 'Жалоба успешно отправлена!');
                         App::redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
-                        show_error('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.Flood::getPeriod().' секунд!');
+                        App::showError('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.Flood::getPeriod().' секунд!');
                     }
                 } else {
-                    show_error('Ошибка! Жалоба на данное сообщение уже отправлена!');
+                    App::showError('Ошибка! Жалоба на данное сообщение уже отправлена!');
                 }
             } else {
-                show_error('Ошибка! Выбранное вами сообщение для жалобы не существует!');
+                App::showError('Ошибка! Выбранное вами сообщение для жалобы не существует!');
             }
         } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        show_login('Вы не авторизованы, чтобы подать жалобу, необходимо');
+        App::showError('Вы не авторизованы, чтобы подать жалобу, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -606,10 +606,10 @@ case 'reply':
             echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br>';
             echo '<input type="submit" value="Ответить"></form></div><br>';
         } else {
-            show_error('Ошибка! Выбранное вами сообщение для ответа не существует!');
+            App::showError('Ошибка! Выбранное вами сообщение для ответа не существует!');
         }
     } else {
-        show_login('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
+        App::showError('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -633,10 +633,10 @@ case 'quote':
             echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br>';
             echo '<input type="submit" value="Цитировать"></form></div><br>';
         } else {
-            show_error('Ошибка! Выбранное вами сообщение для цитирования не существует!');
+            App::showError('Ошибка! Выбранное вами сообщение для цитирования не существует!');
         }
     } else {
-        show_login('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
+        App::showError('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -665,13 +665,13 @@ case 'edit':
                 echo '<textarea cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br>';
                 echo '<input type="submit" value="Редактировать"></form></div><br>';
             } else {
-                show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
+                App::showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
             }
         } else {
-            show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+            App::showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
         }
     } else {
-        show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
+        App::showError('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -701,19 +701,19 @@ case 'editpost':
                         App::setFlash('success', 'Сообщение успешно отредактировано!');
                         App::redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
-                        show_error('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
+                        App::showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                     }
                 } else {
-                    show_error('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+                    App::showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
                 }
             } else {
-                show_error('Ошибка! Слишком длинное или короткое сообщение!');
+                App::showError('Ошибка! Слишком длинное или короткое сообщение!');
             }
         } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        show_login('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
+        App::showError('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -742,13 +742,13 @@ case 'del':
                 App::setFlash('success', 'Выбранные комментарии успешно удалены!');
                 App::redirect("/load/down?act=comments&id=$id&page=$page");
             } else {
-                show_error('Ошибка! Отстутствуют выбранные комментарии для удаления!');
+                App::showError('Ошибка! Отстутствуют выбранные комментарии для удаления!');
             }
         } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        show_error('Ошибка! Удалять комментарии могут только модераторы!');
+        App::showError('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -768,7 +768,7 @@ case 'end':
 
         App::redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
-        show_error('Ошибка! Данного файла не существует!');
+        App::showError('Ошибка! Данного файла не существует!');
     }
 
 break;

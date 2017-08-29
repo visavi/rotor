@@ -52,7 +52,7 @@ case 'index':
         echo 'Всего ключей: <b>'.$total.'</b><br><br>';
 
     } else {
-        show_error('Приглашений еще нет!');
+        App::showError('Приглашений еще нет!');
     }
 
     echo '<i class="fa fa-check"></i> <a href="/admin/invitations?act=new">Создать ключи</a><br>';
@@ -115,7 +115,7 @@ case 'list':
         echo 'Всего ваших ключей: '.$total.'<br>';
         echo '<textarea cols="25" rows="10">'.implode(', ', $invite).'</textarea><br><br>';
     } else {
-        show_error('Ошибка! Нет ваших пригласительных ключей!');
+        App::showError('Ошибка! Нет ваших пригласительных ключей!');
     }
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br>';
 break;
@@ -149,10 +149,10 @@ case 'send':
             App::redirect("/admin/invitations");
 
         } else {
-            show_error('Ошибка! Не найден пользователь с заданным логином!');
+            App::showError('Ошибка! Не найден пользователь с заданным логином!');
         }
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
@@ -194,13 +194,13 @@ case 'mailing':
                 App::redirect("/admin/invitations");
 
             } else {
-                show_error('Ошибка! Отсутствуют получатели ключей!');
+                App::showError('Ошибка! Отсутствуют получатели ключей!');
             }
         } else {
-            show_error('Ошибка! Рассылать ключи может только администрация!');
+            App::showError('Ошибка! Рассылать ключи может только администрация!');
         }
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
@@ -227,10 +227,10 @@ case 'generate':
             App::redirect("/admin/invitations");
 
         } else {
-            show_error('Ошибка! Не указано число генерируемых ключей!');
+            App::showError('Ошибка! Не указано число генерируемых ключей!');
         }
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
@@ -255,10 +255,10 @@ case 'del':
             App::redirect("/admin/invitations?used=$used&page=$page");
 
         } else {
-            show_error('Ошибка! Отсутствуют выбранные ключи!');
+            App::showError('Ошибка! Отсутствуют выбранные ключи!');
         }
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br>';

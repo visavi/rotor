@@ -56,7 +56,7 @@ switch ($action):
 
             echo 'Всего пользователей: <b>'.$total.'</b><br><br>';
         } else {
-            show_error('Пользователей еще нет!');
+            App::showError('Пользователей еще нет!');
         }
     break;
 
@@ -83,13 +83,13 @@ switch ($action):
                     App::setFlash('success', 'Позиция в рейтинге: '.$rat);
                     App::redirect("/authoritylist?page=$end&uz=$queryuser");
                 } else {
-                    show_error('Пользователь с данным логином не найден!');
+                    App::showError('Пользователь с данным логином не найден!');
                 }
             } else {
-                show_error('Пользователь с данным логином не зарегистрирован!');
+                App::showError('Пользователь с данным логином не зарегистрирован!');
             }
         } else {
-            show_error('Ошибка! Вы не ввели логин пользователя');
+            App::showError('Ошибка! Вы не ввели логин пользователя');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/authoritylist?page='.$page.'">Вернуться</a><br>';

@@ -63,7 +63,7 @@ if ($total > 0) {
 
     App::pagination($page);
 } else {
-    show_error('Опубликованных файлов еще нет!');
+    App::showError('Опубликованных файлов еще нет!');
 }
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';

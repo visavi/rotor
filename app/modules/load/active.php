@@ -40,7 +40,7 @@ case 'files':
 
         App::pagination($page);
     } else {
-        show_error('Опубликованных файлов не найдено!');
+        App::showError('Опубликованных файлов не найдено!');
     }
 break;
 
@@ -82,7 +82,7 @@ case 'comments':
 
         App::pagination($page);
     } else {
-        show_error('Комментарии не найдены!');
+        App::showError('Комментарии не найдены!');
     }
 break;
 
@@ -109,7 +109,7 @@ case 'viewcomm':
 
         App::redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
-        show_error('Ошибка! Комментарий к данному файлу не существует!');
+        App::showError('Ошибка! Комментарий к данному файлу не существует!');
     }
 break;
 
@@ -135,13 +135,13 @@ case 'del':
                 App::setFlash('success', 'Комментарий успешно удален!');
                 App::redirect("/load/active?act=comments&uz=$uz&page=$page");
             } else {
-                show_error('Ошибка! Данного комментария не существует!');
+                App::showError('Ошибка! Данного комментария не существует!');
             }
         } else {
-            show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        show_error('Ошибка! Удалять комментарии могут только модераторы!');
+        App::showError('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/active?act=comments&amp;uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';

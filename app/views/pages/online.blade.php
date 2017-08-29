@@ -27,7 +27,7 @@
         @endforeach
         {{ App::pagination($page) }}
     @else
-        {{ show_error('Авторизованных пользователей нет!') }}
+        {{ App::showError('Авторизованных пользователей нет!') }}
     @endif
 
     <i class="fa fa-users"></i> <a href="/online/all">Показать гостей</a><br>

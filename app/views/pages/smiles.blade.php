@@ -17,6 +17,6 @@
 
         Всего cмайлов: <b>{{ $page['total'] }}</b><br><br>
     @else
-        {{  show_error('Смайлы не найдены!') }}
+        {{  App::showError('Смайлы не найдены!') }}
     @endif
 @stop

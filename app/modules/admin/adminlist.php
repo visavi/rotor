@@ -21,7 +21,7 @@ if (is_admin([101, 102, 103])) {
         echo '<br>Всего в администрации: <b>'.$total.'</b><br><br>';
 
     } else {
-        show_error('Администрации еще нет!');
+        App::showError('Администрации еще нет!');
     }
 
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';

@@ -38,7 +38,7 @@ case 'index':
 
     echo 'Всего cмайлов: <b>'.$total.'</b><br><br>';
 
-    //show_error('Смайлы еще не загружены!');
+    //App::showError('Смайлы еще не загружены!');
 
     echo '<i class="fa fa-upload"></i> <a href="/admin/smiles?act=add&amp;page='.$page['current'].'">Загрузить</a><br>';
 break;
@@ -119,16 +119,16 @@ case 'load':
                     App::redirect("/admin/smiles");
 
                 } else {
-                    show_error($handle->error);
+                    App::showError($handle->error);
                 }
             } else {
-                show_error($handle->error);
+                App::showError($handle->error);
             }
         } else {
-            show_error($validation->getErrors());
+            App::showError($validation->getErrors());
         }
     } else {
-        show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
+        App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
     }
 
     App::view('includes/back', ['link' => '/admin/smiles?act=add&amp;page='.$page, 'title' => 'Вернуться']);
@@ -151,7 +151,7 @@ case 'edit':
         echo '<input type="text" name="code" value="'.$smile['code'].'"> <i>Код смайла должен начинаться со знака двоеточия</i><br>';
         echo '<input type="submit" value="Изменить"></form></div><br>';
     } else {
-        show_error('Ошибка! Смайла для редактирования не существует!');
+        App::showError('Ошибка! Смайла для редактирования не существует!');
     }
 
     App::view('includes/back', ['link' => '/admin/smiles?page='.$page, 'title' => 'Вернуться']);
@@ -192,7 +192,7 @@ case 'change':
 
 
     } else {
-        show_error($validation->getErrors());
+        App::showError($validation->getErrors());
     }
 
     App::view('includes/back', ['link' => '/admin/smiles?act=edit&amp;id='.$id.'&amp;page='.$page, 'title' => 'Вернуться']);
@@ -226,13 +226,13 @@ case 'del':
                 App::redirect("/admin/smiles?page=$page");
 
             } else {
-                show_error('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
+                App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
             }
         } else {
-            show_error('Ошибка! Отсутствуют выбранные смайлы!');
+            App::showError('Ошибка! Отсутствуют выбранные смайлы!');
         }
     } else {
-        show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     App::view('includes/back', ['link' => '/admin/smiles?page='.$page, 'title' => 'Вернуться']);

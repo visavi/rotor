@@ -24,6 +24,6 @@
 
         {{ App::pagination($page) }}
     @else
-        {{ show_error('Опубликованных статей еще нет!') }}
+        {{ App::showError('Опубликованных статей еще нет!') }}
     @endif
 @stop

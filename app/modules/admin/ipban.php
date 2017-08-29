@@ -49,7 +49,7 @@ if (is_admin([101, 102])) {
 
                 echo 'Всего заблокировано: <b>'.$total.'</b><br><br>';
             } else {
-                show_error('В бан-листе пока пусто!');
+                App::showError('В бан-листе пока пусто!');
             }
 
             echo '<div class="form">';
@@ -84,13 +84,13 @@ if (is_admin([101, 102])) {
                         App::setFlash('success', 'IP успешно занесен в список!');
                         App::redirect("/admin/ipban?page=$page");
                     } else {
-                        show_error('Ошибка! Введенный IP уже имеетеся в списке!');
+                        App::showError('Ошибка! Введенный IP уже имеетеся в списке!');
                     }
                 } else {
-                    show_error('Ошибка! Вы ввели недопустимый IP-адрес для бана!');
+                    App::showError('Ошибка! Вы ввели недопустимый IP-адрес для бана!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban">Вернуться</a><br>';
@@ -142,10 +142,10 @@ if (is_admin([101, 102])) {
                     App::setFlash('success', 'Список IP успешно очищен!');
                     App::redirect("/admin/ipban");
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Очищать бан-лист могут только суперадмины!');
+                App::showError('Ошибка! Очищать бан-лист могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban?page='.$page.'">Вернуться</a><br>';

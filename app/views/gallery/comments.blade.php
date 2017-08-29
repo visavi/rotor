@@ -52,7 +52,7 @@
     @if (empty($photo['closed']))
 
         @if (empty($page['total']))
-            {{ show_error('Комментариев еще нет!') }}
+            {{ App::showError('Комментариев еще нет!') }}
         @endif
 
         @if (is_user())
@@ -69,10 +69,10 @@
             <a href="/smiles">Смайлы</a> /
             <a href="/tags">Теги</a><br><br>
         @else
-            {{ show_login('Вы не авторизованы, чтобы добавить комментарий, необходимо') }}
+            {{ App::showError('Вы не авторизованы, чтобы добавить комментарий, необходимо') }}
         @endif
     @else
-        {{ show_error('Комментирование данной фотографии закрыто!') }}
+        {{ App::showError('Комментирование данной фотографии закрыто!') }}
     @endif
 
     <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">Альбом</a><br>

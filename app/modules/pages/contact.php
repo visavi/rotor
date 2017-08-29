@@ -53,7 +53,7 @@ case 'index':
 
         echo 'Всего в контактах: <b>'.$page['total'].'</b><br>';
     } else {
-        show_error('Контакт-лист пуст!');
+        App::showError('Контакт-лист пуст!');
     }
 
     echo '<br><div class="form"><form method="post" action="/contact/create">';

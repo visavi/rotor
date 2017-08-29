@@ -54,7 +54,7 @@
     @if (! $news['closed'])
 
         @if ($comments->isEmpty())
-            {{ show_error('Комментариев еще нет!') }}
+            {{ App::showError('Комментариев еще нет!') }}
         @endif
 
         @if (is_user())
@@ -70,10 +70,10 @@
         <a href="/smiles">Смайлы</a> /
         <a href="/tags">Теги</a><br><br>
         @else
-            {{show_login('Вы не авторизованы, чтобы добавить сообщение, необходимо') }}
+            {{App::showError('Вы не авторизованы, чтобы добавить сообщение, необходимо') }}
         @endif
     @else
-        {{show_error('Комментирование данной новости закрыто!') }}
+        {{App::showError('Комментирование данной новости закрыто!') }}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/news">К новостям</a><br>

@@ -112,6 +112,7 @@ class App
      *
      * @param string $status статус уведомления
      * @param mixed $message массив или текст с уведомлениями
+     * @return void
      */
     public static function setFlash($status, $message)
     {
@@ -126,6 +127,21 @@ class App
     public static function getFlash()
     {
         self::view('app/_flash');
+    }
+
+    /**
+     * Возвращает ошибку
+     *
+     * @param  mixed $errors ошибки
+     * @return void сформированный блок с ошибкой
+     */
+    public static function showError($errors)
+    {
+        if (is_array($errors)) {
+            $errors = implode('<br><i class="fa fa-exclamation-circle fa-lg text-danger"></i> ', $errors);
+        }
+
+        self::view('app/_error', compact('errors'));
     }
 
     /**

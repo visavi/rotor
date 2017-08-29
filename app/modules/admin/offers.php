@@ -79,7 +79,7 @@ if (is_admin([101, 102])) {
 
                 echo 'Всего записей: <b>'.$total.'</b><br><br>';
             } else {
-                show_error('Записей еще нет!');
+                App::showError('Записей еще нет!');
             }
 
             if (is_admin([101])) {
@@ -134,7 +134,7 @@ if (is_admin([101, 102])) {
                     echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br>';
                 }
             } else {
-                show_error('Ошибка! Данного предложения или проблемы не существует!');
+                App::showError('Ошибка! Данного предложения или проблемы не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?type='.$type.'">Вернуться</a><br>';
@@ -171,7 +171,7 @@ if (is_admin([101, 102])) {
 
                 echo '<input type="submit" value="Отправить"></form></div><br>';
             } else {
-                show_error('Ошибка! Данного предложения или проблемы не существует!');
+                App::showError('Ошибка! Данного предложения или проблемы не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -204,16 +204,16 @@ if (is_admin([101, 102])) {
                             App::setFlash('success', 'Данные успешно отправлены!');
                             App::redirect("/admin/offers?act=view&id=$id");
                         } else {
-                            show_error('Ошибка! Недопустимый статус предложения или проблемы!');
+                            App::showError('Ошибка! Недопустимый статус предложения или проблемы!');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинный или короткий текст ответа (От 5 до 1000 символов)!');
+                        App::showError('Ошибка! Слишком длинный или короткий текст ответа (От 5 до 1000 символов)!');
                     }
                 } else {
-                    show_error('Ошибка! Данного предложения или проблемы не существует!');
+                    App::showError('Ошибка! Данного предложения или проблемы не существует!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?act=reply&amp;id='.$id.'">Вернуться</a><br>';
@@ -247,7 +247,7 @@ if (is_admin([101, 102])) {
 
                 echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
-                show_error('Ошибка! Данного предложения или проблемы не существует!');
+                App::showError('Ошибка! Данного предложения или проблемы не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -278,16 +278,16 @@ if (is_admin([101, 102])) {
                             App::setFlash('success', 'Данные успешно отредактированы!');
                             App::redirect("/admin/offers?act=view&id=$id");
                         } else {
-                            show_error('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
+                            App::showError('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
                         }
                     } else {
-                        show_error('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
+                        App::showError('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
                     }
                 } else {
-                    show_error('Ошибка! Данного предложения или проблемы не существует!');
+                    App::showError('Ошибка! Данного предложения или проблемы не существует!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?act=edit&amp;id='.$id.'">Вернуться</a><br>';
@@ -316,10 +316,10 @@ if (is_admin([101, 102])) {
                     App::setFlash('success', 'Выбранные пункты успешно удалены!');
                     App::redirect("/admin/offers?type=$type&page=$page");
                 } else {
-                    show_error('Ошибка! Отсутствуют выбранные предложения или проблемы!');
+                    App::showError('Ошибка! Отсутствуют выбранные предложения или проблемы!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?page='.$page.'">Вернуться</a><br>';
@@ -339,10 +339,10 @@ if (is_admin([101, 102])) {
                     App::setFlash('success', 'Комментарии успешно пересчитаны!');
                     App::redirect("/admin/offers");
                 } else {
-                    show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                show_error('Ошибка! Пересчитывать комментарии могут только суперадмины!');
+                App::showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers">Вернуться</a><br>';

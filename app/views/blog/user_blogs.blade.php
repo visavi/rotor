@@ -18,7 +18,7 @@
 
         Всего пользователей: <b>{{  $page['total'] }}</b><br><br>
     @else
-        {{ show_error('Статей еще нет!') }}
+        {{ App::showError('Статей еще нет!') }}
     @endif
 
     <?php App::view('includes/back', ['link' => '/blog', 'title' => 'К блогам']); ?>

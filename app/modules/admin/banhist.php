@@ -65,7 +65,7 @@ if (is_admin([101, 102, 103])) {
 
                 echo 'Всего действий: <b>'.$total.'</b><br><br>';
             } else {
-                show_error('Истории банов еще нет!');
+                App::showError('Истории банов еще нет!');
             }
         break;
 
@@ -121,10 +121,10 @@ if (is_admin([101, 102, 103])) {
                     echo 'Всего действий: <b>'.$total.'</b><br><br>';
 
                 } else {
-                    show_error('Истории банов еще нет!');
+                    App::showError('Истории банов еще нет!');
                 }
             } else {
-                show_error('Ошибка! Данный пользователь не найден!');
+                App::showError('Ошибка! Данный пользователь не найден!');
             }
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/banhist">Вернуться</a><br>';
         break;
@@ -150,10 +150,10 @@ if (is_admin([101, 102, 103])) {
                     App::setFlash('success', 'Выбранные баны успешно удалены!');
                     App::redirect("/admin/banhist?page=$page");
                 } else {
-                    show_error('Ошибка! Отсутствуют выбранные баны!');
+                    App::showError('Ошибка! Отсутствуют выбранные баны!');
                 }
             } else {
-                show_error('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/banhist?page='.$page.'">Вернуться</a><br>';

@@ -44,7 +44,7 @@
 
         {{ App::pagination($page) }}
     @else
-        {{ show_error('Загруженных фотографий еще нет!') }}
+        {{ App::showError('Загруженных фотографий еще нет!') }}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>

@@ -27,7 +27,7 @@
         {{ App::pagination($page) }}
 
     @else
-        {{ show_error('История переписки отсутствует!') }}
+        {{ App::showError('История переписки отсутствует!') }}
     @endif
 
     <br>
