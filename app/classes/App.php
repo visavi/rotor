@@ -173,12 +173,12 @@ class App
      */
     public static function getInput($name, $default = null)
     {
-        if (isset($_SESSION['input'])) {
-            $inputs = $_SESSION['input'];
-            unset($_SESSION['input']);
+        if (isset($_SESSION['input'][$name])) {
+            $input = $_SESSION['input'][$name];
+            unset($_SESSION['input'][$name]);
         }
 
-        return $inputs[$name] ?? $default;
+        return $input ?? $default;
     }
 
     /**

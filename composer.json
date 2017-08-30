@@ -16,9 +16,9 @@
         "altorouter/altorouter": "~1.2",
         "cbschuld/browser.php": "dev-master",
         "gregwar/captcha": "^1.1",
-        "illuminate/http": "~5.4",
-        "illuminate/translation": "~5.4",
-        "illuminate/database": "~5.4",
+        "illuminate/http": "~5.5",
+        "illuminate/translation": "~5.5",
+        "illuminate/database": "~5.5",
         "mobiledetect/mobiledetectlib": "^2.8",
         "pclzip/pclzip": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.9",
@@ -32,7 +32,7 @@
     },
     "require-dev": {
         "filp/whoops": "^2.1",
-        "phpunit/phpunit": "^6.2"
+        "phpunit/phpunit": "^6.3"
     },
     "scripts": {
         "post-create-project-cmd": [

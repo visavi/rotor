@@ -31,7 +31,7 @@
 
             <div class="form-group{{ App::hasError('title') }}">
                 <label for="inputTitle">Название темы</label>
-                <input name="title" type="text" class="form-control" id="inputTitle" maxlength="50" placeholder="Название темы" value="{{ App::getInput('title') }}" required>
+                <input name="title" class="form-control" id="inputTitle" maxlength="50" placeholder="Название темы" value="{{ App::getInput('title') }}" required>
                 {!! App::textError('title') !!}
             </div>
 
