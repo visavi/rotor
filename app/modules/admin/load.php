@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 $cid = isset($_GET['cid']) ? abs(intval($_GET['cid'])) : 0;
@@ -60,7 +60,7 @@ case 'index':
             }
         }
     } else {
-        App::showError('Разделы загрузок еще не созданы!');
+        showError('Разделы загрузок еще не созданы!');
     }
 
     if (is_admin([101])) {
@@ -81,7 +81,7 @@ break;
 ##                                      FTP-импорт                                        ##
 ############################################################################################
 case 'newimport':
-    //Setting::get('newtitle') = 'FTP-импорт';
+    //setting('newtitle') = 'FTP-импорт';
 
     if (is_admin([101])) {
         if (file_exists(HOME.'/uploads/loader')) {
@@ -135,16 +135,16 @@ case 'newimport':
 
                     echo 'Всего файлов: '.$total.'<br><br>';
                 } else {
-                    App::showError('В директории нет файлов для импорта!');
+                    showError('В директории нет файлов для импорта!');
                 }
             } else {
-                App::showError('Категории файлов еще не созданы!');
+                showError('Категории файлов еще не созданы!');
             }
         } else {
-            App::showError('Директория для импорта файлов не создана!');
+            showError('Директория для импорта файлов не создана!');
         }
     } else {
-        App::showError('Импортировать файлы могут только суперадмины!');
+        showError('Импортировать файлы могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
@@ -173,9 +173,9 @@ case 'addimport':
                             if (strlen($filename) <= 50) {
                                 if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
                                     $ext = getExtension($filename);
-                                    if (in_array($ext, explode(',', Setting::get('allowextload')), true)) {
+                                    if (in_array($ext, explode(',', setting('allowextload')), true)) {
                                         if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $filename)) {
-                                            if (filesize(HOME.'/uploads/loader/'.$file) > 0 && filesize(HOME.'/uploads/loader/'.$file) <= Setting::get('fileupload')) {
+                                            if (filesize(HOME.'/uploads/loader/'.$file) > 0 && filesize(HOME.'/uploads/loader/'.$file) <= setting('fileupload')) {
 
                                                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
@@ -201,7 +201,7 @@ case 'addimport':
                                                     rename(HOME.'/uploads/loader/'.$file, HOME.'/uploads/files/'.$folder.$filename);
 
                                                     DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$cid]);
-                                                    DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $file, $text, $filename, App::getUsername(), $screen, SITETIME, 1]);
+                                                    DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $file, $text, $filename, getUsername(), $screen, SITETIME, 1]);
 
                                                     $count++;
                                                 }
@@ -221,19 +221,19 @@ case 'addimport':
                             echo 'Возможные причины: недопустимое расширение файлов, большой вес, недопустимое имя файлов или в имени файла присутствуют недопустимые расширения<br><br>';
                         }
                     } else {
-                        App::showError('Ошибка! Выбранный вами раздел не существует!');
+                        showError('Ошибка! Выбранный вами раздел не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Вы не выбрали файлы для импорта!');
+                    showError('Ошибка! Вы не выбрали файлы для импорта!');
                 }
             } else {
-                App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
+                showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
             }
         } else {
-            App::showError('Ошибка! Вы не выбрали категорию для импорта файлов!');
+            showError('Ошибка! Вы не выбрали категорию для импорта файлов!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=newimport">Вернуться</a><br>';
@@ -243,7 +243,7 @@ break;
 ##                                    Добавление файла                                    ##
 ############################################################################################
 case 'newfile':
-    //Setting::get('newtitle') = 'Публикация нового файла';
+    //setting('newtitle') = 'Публикация нового файла';
 
     $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
     $downs = $querydown -> fetchAll();
@@ -295,7 +295,7 @@ case 'newfile':
         echo 'Файл и скриншот вы сможете загрузить после добавления описания<br>';
         echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br><br>';
     } else {
-        App::showError('Категории файлов еще не созданы!');
+        showError('Категории файлов еще не созданы!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
@@ -306,7 +306,7 @@ break;
 ############################################################################################
 case 'addfile':
 
-    //Setting::get('newtitle') = 'Публикация нового файла';
+    //setting('newtitle') = 'Публикация нового файла';
 
     $uid = check($_GET['uid']);
     $cid = abs(intval($_POST['cid']));
@@ -329,41 +329,41 @@ case 'addfile':
                                         if (empty($downtitle)) {
 
                                             DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$cid]);
-                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', App::getUsername(), $author, $site, '', SITETIME, 1]);
+                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', getUsername(), $author, $site, '', SITETIME, 1]);
 
                                             $lastid = DB::run() -> lastInsertId();
 
-                                            App::setFlash('success', 'Данные успешно добавлены!');
-                                            App::redirect("/admin/load?act=editdown&id=$lastid");
+                                            setFlash('success', 'Данные успешно добавлены!');
+                                            redirect("/admin/load?act=editdown&id=$lastid");
                                         } else {
-                                            App::showError('Ошибка! Название '.$title.' уже имеется в файлах!');
+                                            showError('Ошибка! Название '.$title.' уже имеется в файлах!');
                                         }
                                     } else {
-                                        App::showError('Ошибка! В данный раздел запрещена загрузка файлов!');
+                                        showError('Ошибка! В данный раздел запрещена загрузка файлов!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! Выбранный вами раздел не существует!');
+                                    showError('Ошибка! Выбранный вами раздел не существует!');
                                 }
                             } else {
-                                App::showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                                showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
                             }
                         } else {
-                            App::showError('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
+                            showError('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинный ник (логин) автора (не более 50 символов)!');
+                        showError('Ошибка! Слишком длинный ник (логин) автора (не более 50 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный или короткий текст описания (от 10 до 5000 символов)!');
+                    showError('Ошибка! Слишком длинный или короткий текст описания (от 10 до 5000 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
+                showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
             }
         } else {
-            App::showError('Ошибка! Вы не выбрали категорию для добавления файла!');
+            showError('Ошибка! Вы не выбрали категорию для добавления файла!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Вернуться</a><br>';
@@ -380,13 +380,13 @@ case 'restatement':
         if ($uid == $_SESSION['token']) {
             restatement('load');
 
-            App::setFlash('success', 'Все данные успешно пересчитаны!');
-            App::redirect("/admin/load");
+            setFlash('success', 'Все данные успешно пересчитаны!');
+            redirect("/admin/load");
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Ошибка! Пересчитывать сообщения могут только суперадмины!');
+        showError('Ошибка! Пересчитывать сообщения могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
@@ -406,16 +406,16 @@ case 'addcats':
                 $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `cats`;");
                 DB::run() -> query("INSERT INTO `cats` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
-                App::setFlash('success', 'Новый раздел успешно добавлен!');
-                App::redirect("/admin/load");
+                setFlash('success', 'Новый раздел успешно добавлен!');
+                redirect("/admin/load");
             } else {
-                App::showError('Ошибка! Слишком длинное или короткое название раздела!');
+                showError('Ошибка! Слишком длинное или короткое название раздела!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Ошибка! Добавлять разделы могут только суперадмины!');
+        showError('Ошибка! Добавлять разделы могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
@@ -466,10 +466,10 @@ case 'editcats':
 
             echo '<input type="submit" value="Изменить"></form></div><br>';
         } else {
-            App::showError('Ошибка! Данного раздела не существует!');
+            showError('Ошибка! Данного раздела не существует!');
         }
     } else {
-        App::showError('Ошибка! Изменять разделы могут только суперадмины!');
+        showError('Ошибка! Изменять разделы могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
@@ -555,28 +555,28 @@ case 'addeditcats':
 
                         if (!empty($renameDir)) {
                             DB::run() -> query("UPDATE `cats` SET `folder`=? WHERE `id`=?;", [$folder, $cid]);
-                            App::setFlash('success', 'Директория изменена!');
+                            setFlash('success', 'Директория изменена!');
                         }
 
-                        App::setFlash('success', 'Раздел успешно отредактирован!');
-                        App::redirect("/admin/load");
+                        setFlash('success', 'Раздел успешно отредактирован!');
+                        redirect("/admin/load");
                     } else {
-                        App::showError('Ошибка! Данный раздел имеет подкатегории!');
+                        showError('Ошибка! Данный раздел имеет подкатегории!');
                     }
                 } else {
-                    App::showError('Ошибка! Недопустимый выбор родительского раздела!');
+                    showError('Ошибка! Недопустимый выбор родительского раздела!');
                 }
             } else {
-                App::showError('Ошибка! Название дирекории должно состоять из лат. (до 50) символов!');
+                showError('Ошибка! Название дирекории должно состоять из лат. (до 50) символов!');
             }
             } else {
-                App::showError('Ошибка! Слишком длинное или короткое название раздела!');
+                showError('Ошибка! Слишком длинное или короткое название раздела!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Ошибка! Изменять разделы могут только суперадмины!');
+        showError('Ошибка! Изменять разделы могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=editcats&amp;cid='.$cid.'">Вернуться</a><br>';
@@ -596,13 +596,13 @@ case 'prodelcats':
                 echo 'Вы уверены что хотите удалить раздел <b>'.$downs['name'].'</b> в загрузках?<br>';
                 echo '<i class="fa fa-times"></i> <b><a href="/admin/load?act=delcats&amp;cid='.$cid.'&amp;uid='.$_SESSION['token'].'">Да, уверен!</a></b><br><br>';
             } else {
-                App::showError('Ошибка! Данный раздел имеет подкатегории!');
+                showError('Ошибка! Данный раздел имеет подкатегории!');
             }
         } else {
-            App::showError('Ошибка! Данного раздела не существует!');
+            showError('Ошибка! Данного раздела не существует!');
         }
     } else {
-        App::showError('Ошибка! Удалять разделы могут только суперадмины!');
+        showError('Ошибка! Удалять разделы могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
@@ -615,7 +615,7 @@ case 'delcats':
 
     $uid = check($_GET['uid']);
 
-    if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
+    if (is_admin([101]) && getUsername() == setting('nickname')) {
         if ($uid == $_SESSION['token']) {
             $downs = DB::run() -> queryFetch("SELECT `c1`.*, count(`c2`.`id`) AS `subcnt` FROM `cats` `c1` LEFT JOIN `cats` `c2` ON `c2`.`parent` = `c1`.`id` WHERE `c1`.`id`=? GROUP BY `id` LIMIT 1;", [$cid]);
 
@@ -644,22 +644,22 @@ case 'delcats':
                             removeDir(HOME.'/uploads/screen/'.$folder);
                         }
 
-                        App::setFlash('success', 'Раздел успешно удален!');
-                        App::redirect("/admin/load");
+                        setFlash('success', 'Раздел успешно удален!');
+                        redirect("/admin/load");
                     } else {
-                        App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
+                        showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
                     }
                 } else {
-                    App::showError('Ошибка! Данный раздел имеет подкатегории!');
+                    showError('Ошибка! Данный раздел имеет подкатегории!');
                 }
             } else {
-                App::showError('Ошибка! Данного раздела не существует!');
+                showError('Ошибка! Данного раздела не существует!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Ошибка! Удалять разделы могут только суперадмины!');
+        showError('Ошибка! Удалять разделы могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load">Вернуться</a><br>';
@@ -685,7 +685,7 @@ case 'down':
 
     echo '<br><br>';
     if ($cats > 0) {
-        //Setting::get('newtitle') = $cats['name'];
+        //setting('newtitle') = $cats['name'];
 
         echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
         echo ' (<a href="/load/down?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
@@ -703,15 +703,15 @@ case 'down':
         }
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
-        $page = App::paginate(Setting::get('downlist'), $total);
+        $page = paginate(setting('downlist'), $total);
 
         if ($total > 0) {
 
-            $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", [$cid, 1]);
+            $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";", [$cid, 1]);
 
             $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
-            $is_admin = (is_admin([101]) && App::getUsername() == Setting::get('nickname'));
+            $is_admin = (is_admin([101]) && getUsername() == setting('nickname'));
 
             if ($is_admin) {
                 echo '<form action="/admin/load?act=deldown&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -745,18 +745,18 @@ case 'down':
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
             }
 
-            App::pagination($page);
+            pagination($page);
         } else {
             if (empty($cats['closed'])) {
-                App::showError('В данном разделе еще нет файлов!');
+                showError('В данном разделе еще нет файлов!');
             }
         }
         if (!empty($cats['closed'])) {
-            App::showError('В данном разделе запрещена загрузка файлов!');
+            showError('В данном разделе запрещена загрузка файлов!');
         }
 
     } else {
-        App::showError('Ошибка! Данного раздела не существует!');
+        showError('Ошибка! Данного раздела не существует!');
     }
     if (empty($cats['closed'])) {
         echo '<i class="fa fa-check"></i> <a href="/admin/load?act=newfile&amp;cid='.$cid.'">Добавить</a><br>';
@@ -769,7 +769,7 @@ break;
 ############################################################################################
 case 'editdown':
 
-    //Setting::get('newtitle') = 'Редактирование файла';
+    //setting('newtitle') = 'Редактирование файла';
 
     $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
@@ -788,7 +788,7 @@ case 'editdown':
 
             echo '<div class="form">';
             echo '<form action="/admin/load?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-            echo 'Прикрепить файл* ('.Setting::get('allowextload').'):<br><input type="file" name="loadfile"><br>';
+            echo 'Прикрепить файл* ('.setting('allowextload').'):<br><input type="file" name="loadfile"><br>';
             echo '<input value="Загрузить" type="submit"></form></div><br>';
 
             echo '<div class="form">';
@@ -812,7 +812,7 @@ case 'editdown':
                     echo '<input value="Загрузить" type="submit"></form></div><br>';
                 } else {
                     echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                    echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br>';
+                    echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                 }
             }
         }
@@ -836,7 +836,7 @@ case 'editdown':
 
         echo '<input value="Изменить" type="submit"></form></div><br>';
     } else {
-        App::showError('Данного файла не существует!');
+        showError('Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load">Категории</a><br>';
@@ -897,41 +897,41 @@ case 'changedown':
 
                                                 DB::run() -> query("UPDATE `downs` SET `title`=?, `text`=?, `author`=?, `site`=?, `time`=? WHERE `id`=?;", [$title, $text, $author, $site, $new['time'], $id]);
 
-                                                App::setFlash('success', 'Данные успешно изменены!');
-                                                App::redirect("/admin/load?act=editdown&id=$id");
+                                                setFlash('success', 'Данные успешно изменены!');
+                                                redirect("/admin/load?act=editdown&id=$id");
 
                                             } else {
-                                                App::showError('Ошибка! Название '.$title.' уже имеется в общих файлах!');
+                                                showError('Ошибка! Название '.$title.' уже имеется в общих файлах!');
                                             }
                                         } else {
-                                            App::showError('Ошибка! Файл '.$loadfile.' уже присутствует в общих файлах!');
+                                            showError('Ошибка! Файл '.$loadfile.' уже присутствует в общих файлах!');
                                         }
                                     } else {
-                                        App::showError('Данного файла не существует!');
+                                        showError('Данного файла не существует!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! В названии файла присутствуют недопустимые расширения!');
+                                    showError('Ошибка! В названии файла присутствуют недопустимые расширения!');
                                 }
                             } else {
-                                App::showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
+                                showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
                             }
                         } else {
-                            App::showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                            showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
+                        showError('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
+                    showError('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Слишком длинный или короткий текст описания (от 10 до 5000 символов)!');
+                showError('Ошибка! Слишком длинный или короткий текст описания (от 10 до 5000 символов)!');
             }
         } else {
-            App::showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
+            showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
@@ -958,7 +958,7 @@ case 'copyfile':
 
                         $ext = getExtension($filename);
 
-                        if (in_array($ext, explode(',', Setting::get('allowextload')), true)) {
+                        if (in_array($ext, explode(',', setting('allowextload')), true)) {
 
                             $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                             if (empty($downlink)) {
@@ -969,31 +969,31 @@ case 'copyfile':
 
                                     DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
-                                    App::setFlash('success', 'Файл успешно импортирован!');
-                                    App::redirect("/admin/load?act=editdown&id=$id");
+                                    setFlash('success', 'Файл успешно импортирован!');
+                                    redirect("/admin/load?act=editdown&id=$id");
                                 } else {
-                                    App::showError('Ошибка! Не удалось импортировать файл!');
+                                    showError('Ошибка! Не удалось импортировать файл!');
                                 }
                             } else {
-                                App::showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
+                                showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                             }
                         } else {
-                            App::showError('Ошибка! Недопустимое расширение файла!');
+                            showError('Ошибка! Недопустимое расширение файла!');
                         }
                     } else {
-                        App::showError('Ошибка! В названии файла присутствуют недопустимые символы!');
+                        showError('Ошибка! В названии файла присутствуют недопустимые символы!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
+                    showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Не указан путь для импорта файла');
+                showError('Ошибка! Не указан путь для импорта файла');
             }
         } else {
-            App::showError('Ошибка! Файл уже загружен!');
+            showError('Ошибка! Файл уже загружен!');
         }
     } else {
-        App::showError('Данного файла не существует!');
+        showError('Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
@@ -1022,8 +1022,8 @@ case 'loadfile':
 
                         $ext = getExtension($filename);
 
-                        if (in_array($ext, explode(',', Setting::get('allowextload')), true)) {
-                            if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= Setting::get('fileupload')) {
+                        if (in_array($ext, explode(',', setting('allowextload')), true)) {
+                            if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= setting('fileupload')) {
                                 $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                                 if (empty($downlink)) {
 
@@ -1034,34 +1034,34 @@ case 'loadfile':
 
                                     DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
-                                    App::setFlash('success', 'Файл успешно загружен!');
-                                    App::redirect("/admin/load?act=editdown&id=$id");
+                                    setFlash('success', 'Файл успешно загружен!');
+                                    redirect("/admin/load?act=editdown&id=$id");
                                 } else {
-                                    App::showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
+                                    showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                                 }
                             } else {
-                                App::showError('Ошибка! Максимальный размер загружаемого файла '.formatsize(Setting::get('fileupload')).'!');
+                                showError('Ошибка! Максимальный размер загружаемого файла '.formatsize(setting('fileupload')).'!');
                             }
                         } else {
-                            App::showError('Ошибка! Недопустимое расширение файла!');
+                            showError('Ошибка! Недопустимое расширение файла!');
                         }
                     } else {
-                        App::showError('Ошибка! В названии файла присутствуют недопустимые символы!');
+                        showError('Ошибка! В названии файла присутствуют недопустимые символы!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
+                    showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Не удалось загрузить файл!');
+                showError('Ошибка! Не удалось загрузить файл!');
             }
             } else {
-                App::showError('Директория uploads/files/'.$folder.' недоступна для записи!');
+                showError('Директория uploads/files/'.$folder.' недоступна для записи!');
             }
         } else {
-            App::showError('Ошибка! Файл уже загружен!');
+            showError('Ошибка! Файл уже загружен!');
         }
     } else {
-        App::showError('Данного файла не существует!');
+        showError('Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
@@ -1080,7 +1080,7 @@ case 'loadscreen':
             if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
                 // ------------------------------------------------------//
-                $handle = upload_image($_FILES['screen'], Setting::get('screenupload'), Setting::get('screenupsize'), $down['link']);
+                $handle = upload_image($_FILES['screen'], setting('screenupload'), setting('screenupsize'), $down['link']);
                 if ($handle) {
                     $folder = $down['folder'] ? $down['folder'].'/' : '';
 
@@ -1091,22 +1091,22 @@ case 'loadscreen':
 
                         $handle -> clean();
 
-                        App::setFlash('success', 'Скриншот успешно загружен!');
-                        App::redirect("/admin/load?act=editdown&id=$id");
+                        setFlash('success', 'Скриншот успешно загружен!');
+                        redirect("/admin/load?act=editdown&id=$id");
                     } else {
-                        App::showError($handle -> error);
+                        showError($handle -> error);
                     }
                 } else {
-                    App::showError('Ошибка! Не удалось загрузить скриншот!');
+                    showError('Ошибка! Не удалось загрузить скриншот!');
                 }
             } else {
-                App::showError('Ошибка! Вы не загрузили скриншот!');
+                showError('Ошибка! Вы не загрузили скриншот!');
             }
         } else {
-            App::showError('Ошибка! Скриншот уже загружен!');
+            showError('Ошибка! Скриншот уже загружен!');
         }
     } else {
-        App::showError('Данного файла не существует!');
+        showError('Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
@@ -1129,10 +1129,10 @@ case 'delfile':
 
         DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
-        App::setFlash('success', 'Файл успешно удален!');
-        App::redirect("/admin/load?act=editdown&id=$id");
+        setFlash('success', 'Файл успешно удален!');
+        redirect("/admin/load?act=editdown&id=$id");
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
@@ -1151,10 +1151,10 @@ case 'delscreen':
 
         DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
-        App::setFlash('success', 'Скриншот успешно удален!');
-        App::redirect("/admin/load?act=editdown&id=$id");
+        setFlash('success', 'Скриншот успешно удален!');
+        redirect("/admin/load?act=editdown&id=$id");
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=editdown&amp;id='.$id.'">Вернуться</a><br>';
@@ -1210,12 +1210,12 @@ case 'movedown':
             echo '<input type="submit" value="Переместить"></form></div><br>';
 
         } elseif(count($cats) == 1) {
-            App::showError('Нет доступных разделов для перемещения!');
+            showError('Нет доступных разделов для перемещения!');
         } else {
-            App::showError('Разделы загрузок еще не созданы!');
+            showError('Разделы загрузок еще не созданы!');
         }
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -1249,16 +1249,16 @@ case 'addmovedown':
                 DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$section]);
                 DB::run() -> query("UPDATE `cats` SET `count`=`count`-1 WHERE `id`=?", [$cid]);
 
-                App::setFlash('success', 'Файл успешно перемещен!');
-                App::redirect("/admin/load?act=down&cid=$section");
+                setFlash('success', 'Файл успешно перемещен!');
+                redirect("/admin/load?act=down&cid=$section");
             } else {
-                App::showError('Ошибка! Файла для перемещения не существует!');
+                showError('Ошибка! Файла для перемещения не существует!');
             }
         } else {
-            App::showError('Ошибка! Выбранного раздела не существует!');
+            showError('Ошибка! Выбранного раздела не существует!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=movedown&amp;id='.$id.'">Вернуться</a><br>';
@@ -1273,7 +1273,7 @@ case 'deldown':
     $uid = check($_GET['uid']);
     $del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
 
-    if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
+    if (is_admin([101]) && getUsername() == setting('nickname')) {
         if ($uid == $_SESSION['token']) {
             if ($del > 0) {
                 $del = implode(',', $del);
@@ -1297,19 +1297,19 @@ case 'deldown':
                         unlink_image('uploads/screen/'.$folder, $delfile['screen']);
                     }
 
-                    App::setFlash('success', 'Выбранные файлы успешно удалены!');
-                    App::redirect("/admin/load?act=down&cid=$cid&page=$page");
+                    setFlash('success', 'Выбранные файлы успешно удалены!');
+                    redirect("/admin/load?act=down&cid=$cid&page=$page");
                 } else {
-                    App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
+                    showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с файлами!');
                 }
             } else {
-                App::showError('Ошибка! Отсутствуют выбранные файлы!');
+                showError('Ошибка! Отсутствуют выбранные файлы!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Ошибка! Удалять файлы могут только суперадмины!');
+        showError('Ошибка! Удалять файлы могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -1320,7 +1320,7 @@ endswitch;
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

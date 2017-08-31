@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $id = abs(intval(Request::input('id')));
@@ -15,11 +15,11 @@ if (is_admin()) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [0]);
-            $page = App::paginate(Setting::get('downlist'), $total);
+            $page = paginate(setting('downlist'), $total);
 
             if ($total > 0) {
 
-                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".Setting::get('downlist').";", [0]);
+                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".setting('downlist').";", [0]);
 
                 echo '<form action="/admin/newload?act=deldown&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -52,11 +52,11 @@ if (is_admin()) {
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                App::pagination($page);
+                pagination($page);
 
                 echo 'Всего файлов: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('Новых файлов еще нет!');
+                showError('Новых файлов еще нет!');
             }
         break;
 
@@ -75,7 +75,7 @@ if (is_admin()) {
 
                     if (count($downs) > 0) {
 
-                        if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
+                        if (is_admin([101]) && getUsername() == setting('nickname')) {
                             echo '<a href="/admin/newload?act=allow&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете публикацию файла?\')">Опубликовать</a> / ';
                         }
 
@@ -91,7 +91,7 @@ if (is_admin()) {
 
                         if (!empty($new['screen'])) {
                             echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                            echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br>';
+                            echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                         } else {
                             echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br>';
                         }
@@ -155,13 +155,13 @@ if (is_admin()) {
                         echo '<input value="Изменить" type="submit"></form></div><br>';
 
                     } else {
-                        App::showError('Категории файлов еще не созданы!');
+                        showError('Категории файлов еще не созданы!');
                     }
                 } else {
-                    App::showError('Ошибка! Данный файл уже проверен модератором!');
+                    showError('Ошибка! Данный файл уже проверен модератором!');
                 }
             } else {
-                App::showError('Данного файла не существует!');
+                showError('Данного файла не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload">Вернуться</a><br>';
@@ -227,9 +227,9 @@ if (is_admin()) {
                                                             if (!empty($notice) && $notice != $new['notice']) {
                                                                 // ------------------------Уведомление по привату------------------------//
                                                                 if (user($new['user'])) {
-                                                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.Setting::get('home').'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
+                                                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.setting('home').'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], App::getUsername(), $textpriv, SITETIME]);
+                                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUsername(), $textpriv, SITETIME]);
 
                                                                     DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                                                 }
@@ -237,45 +237,45 @@ if (is_admin()) {
 
                                                             DB::run() -> query("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `notice`=?, `time`=?, `app`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $notice, $new['time'], $app, $id]);
 
-                                                            App::setFlash('success', 'Данные успешно изменены!');
-                                                            App::redirect("/admin/newload?act=view&id=$id");
+                                                            setFlash('success', 'Данные успешно изменены!');
+                                                            redirect("/admin/newload?act=view&id=$id");
 
                                                         } else {
-                                                            App::showError('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+                                                            showError('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
                                                         }
                                                     } else {
-                                                        App::showError('Ошибка! Имя файла '.$link.' уже имеется в загрузках!');
+                                                        showError('Ошибка! Имя файла '.$link.' уже имеется в загрузках!');
                                                     }
                                                 } else {
-                                                    App::showError('Ошибка! Выбранный вами раздел не существует!');
+                                                    showError('Ошибка! Выбранный вами раздел не существует!');
                                                 }
                                             } else {
-                                                App::showError('Ошибка! Данный файл уже проверен модератором!');
+                                                showError('Ошибка! Данный файл уже проверен модератором!');
                                             }
                                         } else {
-                                            App::showError('Ошибка! Данного файла не существует!');
+                                            showError('Ошибка! Данного файла не существует!');
                                         }
 
                                     } else {
-                                        App::showError('Ошибка! В названии файла присутствуют недопустимые расширения!');
+                                        showError('Ошибка! В названии файла присутствуют недопустимые расширения!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
+                                    showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
                                 }
                             } else {
-                                App::showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                                showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
                             }
                         } else {
-                            App::showError('Ошибка! Слишком длинный ник (логин) автора (не более 50 символов)!');
+                            showError('Ошибка! Слишком длинный ник (логин) автора (не более 50 символов)!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинный или короткий текст описания (от 10 до 5000 символов)!');
+                        showError('Ошибка! Слишком длинный или короткий текст описания (от 10 до 5000 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
+                    showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -288,7 +288,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
+            if (is_admin([101]) && getUsername() == setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
@@ -301,29 +301,29 @@ if (is_admin()) {
                                 DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$new['category_id']]);
 
                                 if (user($new['user'])) {
-                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.Setting::get('home').'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
+                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.setting('home').'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], App::getUsername(), $textpriv, SITETIME]);
+                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUsername(), $textpriv, SITETIME]);
                                     DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                 }
 
-                                App::setFlash('success', 'Файл успешно опубликован!');
-                                App::redirect("/admin/newload");
+                                setFlash('success', 'Файл успешно опубликован!');
+                                redirect("/admin/newload");
 
                             } else {
-                                App::showError('Ошибка! В данной загрузке отсутствует прикрепленный файл!');
+                                showError('Ошибка! В данной загрузке отсутствует прикрепленный файл!');
                             }
                         } else {
-                            App::showError('Ошибка! Данный файл уже проверен модератором!');
+                            showError('Ошибка! Данный файл уже проверен модератором!');
                         }
                     } else {
-                        App::showError('Ошибка! Данного файла не существует!');
+                        showError('Ошибка! Данного файла не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Опубликовывать файлы могут только суперадмины!');
+                showError('Ошибка! Опубликовывать файлы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -349,14 +349,14 @@ if (is_admin()) {
 
                     DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
-                    App::setFlash('success', 'Файл успешно удален!');
-                    App::redirect("/admin/newload?act=view&id=$id");
+                    setFlash('success', 'Файл успешно удален!');
+                    redirect("/admin/newload?act=view&id=$id");
 
                 } else {
-                    App::showError('Ошибка! Данный файл уже проверен модератором!');
+                    showError('Ошибка! Данный файл уже проверен модератором!');
                 }
             } else {
-                App::showError('Ошибка! Данного файла не существует!');
+                showError('Ошибка! Данного файла не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -378,14 +378,14 @@ if (is_admin()) {
 
                     DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
-                    App::setFlash('success', 'Скриншот успешно удален!');
-                    App::redirect("/admin/newload?act=view&id=$id");
+                    setFlash('success', 'Скриншот успешно удален!');
+                    redirect("/admin/newload?act=view&id=$id");
 
                 } else {
-                    App::showError('Ошибка! Данный файл уже проверен модератором!');
+                    showError('Ошибка! Данный файл уже проверен модератором!');
                 }
             } else {
-                App::showError('Ошибка! Данного файла не существует!');
+                showError('Ошибка! Данного файла не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -425,14 +425,14 @@ if (is_admin()) {
                         unlink_image('uploads/screen/'.$folder, $delfile['screen']);
                     }
 
-                    App::setFlash('success', 'Выбранные файлы успешно удалены!');
-                    App::redirect("/admin/newload?page=$page");
+                    setFlash('success', 'Выбранные файлы успешно удалены!');
+                    redirect("/admin/newload?page=$page");
 
                 } else {
-                    App::showError('Ошибка! Отсутствуют выбранные файлы!');
+                    showError('Ошибка! Отсутствуют выбранные файлы!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/newload?page='.$page.'">Вернуться</a><br>';
@@ -443,7 +443,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

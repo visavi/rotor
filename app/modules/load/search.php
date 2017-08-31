@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -12,7 +12,7 @@ switch ($action):
 ############################################################################################
 case "index":
 
-    //Setting::get('newtitle') = 'Поиск в файлах';
+    //setting('newtitle') = 'Поиск в файлах';
 
     echo '<div class="form"><form action="/load/search?act=search" method="get">';
     echo '<input type="hidden" name="act" value="search">';
@@ -65,7 +65,7 @@ case "search":
             $findme = "\"$find\"";
         }
 
-        //Setting::get('newtitle') = $find.' - Результаты поиска';
+        //setting('newtitle') = $find.' - Результаты поиска';
 
         $wheres = (empty($where)) ? 'title' : 'text';
 
@@ -85,7 +85,7 @@ case "search":
             }
 
             $total = count($_SESSION['loadfindres']);
-            $page = App::paginate(Setting::get('downlist'), $total);
+            $page = paginate(setting('downlist'), $total);
 
             if ($total > 0) {
 
@@ -93,7 +93,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -108,9 +108,9 @@ case "search":
                     echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('По вашему запросу ничего не найдено!');
+                showError('По вашему запросу ничего не найдено!');
             }
         }
         // --------------------------- Поиск в описании -------------------------------//
@@ -127,7 +127,7 @@ case "search":
             }
 
             $total = count($_SESSION['loadfindres']);
-            $page = App::paginate(Setting::get('downlist'), $total);
+            $page = paginate(setting('downlist'), $total);
 
             if ($total > 0) {
 
@@ -135,7 +135,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";");
+                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -146,7 +146,7 @@ case "search":
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
                     if (utf_strlen($data['text']) > 300) {
-                        $data['text'] = strip_tags(App::bbCode($data['text']), '<br>');
+                        $data['text'] = strip_tags(bbCode($data['text']), '<br>');
                         $data['text'] = utf_substr($data['text'], 0, 300).'...';
                     }
 
@@ -156,14 +156,14 @@ case "search":
                     echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('По вашему запросу ничего не найдено!');
+                showError('По вашему запросу ничего не найдено!');
             }
         }
 
     } else {
-        App::showError('Ошибка! Запрос должен содержать от 3 до 50 символов!');
+        showError('Ошибка! Запрос должен содержать от 3 до 50 символов!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/search">Вернуться</a><br>';
@@ -172,9 +172,9 @@ break;
 endswitch;
 
 } else {
-    App::showError('Вы не авторизованы, чтобы использовать поиск, необходимо');
+    showError('Вы не авторизованы, чтобы использовать поиск, необходимо');
 }
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

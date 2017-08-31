@@ -1,5 +1,25 @@
 <?php
 
+use App\Models\Chat;
+use App\Models\Counter;
+use App\Models\User;
+use App\Models\News;
+use App\Models\Guest;
+use App\Models\Photo;
+use App\Models\Setting;
+use App\Models\Visit;
+use App\Models\Spam;
+use App\Models\Online;
+use App\Models\Vote;
+use App\Models\Topic;
+use App\Models\Post;
+use App\Models\Blog;
+use App\Classes\Request;
+use App\Classes\Registry;
+use App\Classes\BBCode;
+use Illuminate\Database\Capsule\Manager as DB;
+use Jenssegers\Blade\Blade;
+
 // --------------------------- Функция перевода секунд во время -----------------------------//
 function maketime($time) {
     if ($time < 3600) {
@@ -16,7 +36,7 @@ function date_fixed($timestamp, $format = "d.m.y / H:i")
     if (!is_numeric($timestamp)) {
         $timestamp = SITETIME;
     }
-    $shift = App::user('timezone') * 3600;
+    $shift = user('timezone') * 3600;
     $datestamp = date($format, $timestamp + $shift);
 
     $today = date("d.m.y", SITETIME + $shift);
@@ -96,7 +116,7 @@ function delete_album($user)
 function moneys($sum)
 {
     $sum = (int)$sum;
-    $money = explode(',', Setting::get('moneyname'));
+    $money = explode(',', setting('moneyname'));
     if (count($money) == 3) {
         $str1 = abs($sum) % 100;
         $str2 = $sum % 10;
@@ -113,7 +133,7 @@ function moneys($sum)
 function points($sum)
 {
     $sum = (int)$sum;
-    $score = explode(',', Setting::get('scorename'));
+    $score = explode(',', setting('scorename'));
     if (count($score) == 3) {
         $str1 = abs($sum) % 100;
         $str2 = $sum % 10;
@@ -238,7 +258,7 @@ function antimat($str) {
 // ------------------ Функция должности юзера --------------------//
 function user_status($level)
 {
-    $name = explode(',', Setting::get('statusname'));
+    $name = explode(',', setting('statusname'));
 
     switch ($level) {
         case '101': $status = $name[0];
@@ -260,7 +280,7 @@ function save_title($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
 
     $users = User::select('users.id', 'users.status', 'status.name', 'status.color')
-        ->leftJoin('status', 'users.point', 'between', Capsule::raw('status.topoint and status.point'))
+        ->leftJoin('status', 'users.point', 'between', DB::raw('status.topoint and status.point'))
         ->where('users.point', '>', 0)
         ->get();
 
@@ -288,14 +308,14 @@ function user_title($user)
     static $status;
 
     if (! $user) {
-        return Setting::get('statusdef');
+        return setting('statusdef');
     }
 
     if (is_null($status)) {
         save_title(3600);
         $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
     }
-    return isset($status[$user->id]) ? $status[$user->id] : Setting::get('statusdef');
+    return isset($status[$user->id]) ? $status[$user->id] : setting('statusdef');
 }
 // ------------- Функция вывода статусов пользователей -----------//
 
@@ -343,7 +363,7 @@ function scan_check($dirname) {
         if (is_file($dirname.'/'.$file)) {
             $ext = getExtension($file);
 
-            if (!in_array($ext, explode(',',Setting::get('nocheck')) )) {
+            if (!in_array($ext, explode(',',setting('nocheck')) )) {
                 $arr['files'][] = $dirname.'/'.$file.' - '.date_fixed(filemtime($dirname.'/'.$file), 'j.m.Y / H:i').' - '.read_file($dirname.'/'.$file);
                 $arr['totalfiles']++;
             }
@@ -409,7 +429,7 @@ function user_money($login) {
 function save_usermail($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/usermail.dat") < time() - $time) {
 
-        $messages = Inbox::select('user_id', Capsule::raw('count(*) as total'))
+        $messages = Inbox::select('user_id', DB::raw('count(*) as total'))
             ->groupBy('user_id')
             ->pluck('total', 'user_id')
             ->all();
@@ -498,7 +518,7 @@ function stats_online($cache = 30) {
         $online[0] = Online::whereNotNull('user_id')->count();
         $online[1] = Online::count();
 
-        include_once(APP.'/includes/count.php');
+        include_once(APP.'/Includes/count.php');
 
         file_put_contents(STORAGE."/temp/online.dat", serialize($online), LOCK_EX);
     }
@@ -509,9 +529,9 @@ function stats_online($cache = 30) {
 // ------------------ Функция вывода пользователей онлайн -----------------//
 function show_online()
 {
-    if (Setting::get('onlines') == 1) {
+    if (setting('onlines') == 1) {
         $online = stats_online();
-        App::view('app/_online', compact('online'));
+        view('app/_online', compact('online'));
     }
 }
 
@@ -530,26 +550,26 @@ function show_counter()
 {
     if (is_user()) {
 
-        //$visitPage = !empty(Setting::get('newtitle')) ? Setting::get('newtitle') : null;
+        //$visitPage = !empty(setting('newtitle')) ? setting('newtitle') : null;
 
         Visit::updateOrCreate(
-            ['user_id' => App::getUserId()],
+            ['user_id' => getUserId()],
             [
-                'self'       => App::server('PHP_SELF'),
+                'self'       => server('PHP_SELF'),
                 'page'       => null, //$visitPage,
-                'ip'         => App::getClientIp(),
-                'count'      => Capsule::raw('count + 1'),
+                'ip'         => getClientIp(),
+                'count'      => DB::raw('count + 1'),
                 'updated_at' => SITETIME,
             ]
         );
     }
 
-    include_once (APP."/includes/counters.php");
+    include_once (APP."/Includes/counters.php");
 
-    if (Setting::get('incount') > 0) {
+    if (setting('incount') > 0) {
         $count = stats_counter();
 
-        App::view('includes/counter', compact('count'));
+        view('includes/counter', compact('count'));
     }
 }
 
@@ -584,7 +604,7 @@ function stats_admins() {
 
 // --------------- Функция вывода количества жалоб --------------------//
 function stats_spam() {
-    return DB::run() -> querySingle("SELECT count(*) FROM `spam`;");
+    return Spam::count();
 }
 // --------------- Функция вывода количества забаненных --------------------//
 function stats_banned() {
@@ -826,7 +846,8 @@ function stats_chat() {
 
 // ------------------ Функция вывода времени последнего сообщения --------------------//
 function stats_newchat() {
-    return intval(DB::run() -> querySingle("SELECT MAX(`created_at`) FROM `chat`;"));
+    return Chat::max('created_at');
+    //return intval(DB::run() -> querySingle("SELECT MAX(`created_at`) FROM `chat`;"));
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//
@@ -905,15 +926,15 @@ function intar($string) {
 }
 
 // ------------------- Функция подсчета голосований --------------------//
-function stats_votes() {
+function statVotes()
+{
     if (@filemtime(STORAGE."/temp/statvote.dat") < time()-900) {
-        $data = DB::run() -> queryFetch("SELECT count(*) AS `count`, SUM(`count`) AS `sum` FROM `vote` WHERE `closed`=?;", [0]);
 
-        if (empty($data['sum'])) {
-            $data['sum'] = 0;
-        }
+        $votes = Vote::select(DB::raw('count(*) AS count', 'sum(count) AS sum'))
+            ->where('closed', 0)
+            ->count();
 
-        file_put_contents(STORAGE."/temp/statvote.dat", $data['count'].'/'.$data['sum'], LOCK_EX);
+        file_put_contents(STORAGE."/temp/statvote.dat", $votes['count'].'/'.$votes['sum'], LOCK_EX);
     }
 
     return file_get_contents(STORAGE."/temp/statvote.dat");
@@ -942,11 +963,11 @@ function stats_news() {
 // --------------------------- Функция вывода новостей -------------------------//
 function last_news()
 {
-    if (Setting::get('lastnews') > 0) {
+    if (setting('lastnews') > 0) {
 
         $news = News::where('top', 1)
             ->orderBy('created_at', 'desc')
-            ->limit(Setting::get('lastnews'))
+            ->limit(setting('lastnews'))
             ->get();
 
         $total = count($news);
@@ -956,7 +977,7 @@ function last_news()
                 $data['text'] = str_replace('[cut]', '', $data['text']);
                 echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].') <i class="fa fa-caret-down news-title"></i><br>';
 
-                echo '<div class="news-text" style="display: none;">'.App::bbCode($data['text']).'<br>';
+                echo '<div class="news-text" style="display: none;">'.bbCode($data['text']).'<br>';
                 echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ';
                 echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
             }
@@ -965,12 +986,12 @@ function last_news()
 }
 
 // --------------------- Функция получения данных аккаунта  --------------------//
-function user($login) {
+/*function user($login) {
     if (! empty($login)) {
         return User::where('login', $login)->first();
     }
     return false;
-}
+}*/
 
 // ------------------------- Функция проверки авторизации  ------------------------//
 function is_user() {
@@ -996,7 +1017,7 @@ function is_admin($access = []) {
     }
 
     if (is_user()) {
-        if (in_array(App::user('level'), $access)) {
+        if (in_array(user('level'), $access)) {
             return true;
         }
     }
@@ -1086,7 +1107,7 @@ function strip_str($str, $words = 20) {
 // ------------------ Функция вывода пользовательской рекламы --------------------//
 function show_advertuser()
 {
-    if (!empty(Setting::get('rekusershow'))) {
+    if (!empty(setting('rekusershow'))) {
         if (@filemtime(STORAGE."/temp/rekuser.dat") < time()-1800) {
             save_advertuser();
         }
@@ -1096,7 +1117,7 @@ function show_advertuser()
 
         if ($total > 0) {
 
-            $rekusershow = (Setting::get('rekusershow') > $total) ? $total : Setting::get('rekusershow');
+            $rekusershow = (setting('rekusershow') > $total) ? $total : setting('rekusershow');
 
             $quot_rand = array_rand($datafile, $rekusershow);
 
@@ -1117,7 +1138,7 @@ function show_advertuser()
 
 // --------------- Функция кэширования пользовательской рекламы -------------------//
 function save_advertuser() {
-    $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `created_at`>?;", [SITETIME]);
+    /*$queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `created_at`>?;", [SITETIME]);
     $data = $queryrek -> fetchAll();
 
     $arraylink = [];
@@ -1137,7 +1158,7 @@ function save_advertuser() {
         }
     }
 
-    file_put_contents(STORAGE."/temp/rekuser.dat", serialize($arraylink), LOCK_EX);
+    file_put_contents(STORAGE."/temp/rekuser.dat", serialize($arraylink), LOCK_EX);*/
 }
 
 // ----------- Функция закачки файла через curl ------------//
@@ -1171,7 +1192,7 @@ function recentphotos($show = 5)
 
     if ($photos->isNotEmpty()) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/'.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title'], 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery/'.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title'], 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br>';
@@ -1420,7 +1441,7 @@ function profile($user, $color = false)
             return '<a href="/user/'.$user->login.'">'.$user->login.'</a>';
         }
     }
-    return Setting::get('guestsuser');
+    return setting('guestsuser');
 }
 
 /**
@@ -1504,8 +1525,8 @@ function upload_image($file, $weight, $size, $newName = false)
         $handle -> image_resize = true;
         $handle -> image_ratio = true;
         $handle -> image_ratio_no_zoom_in = true;
-        $handle -> image_y = Setting::get('screensize');
-        $handle -> image_x = Setting::get('screensize');
+        $handle -> image_y = setting('screensize');
+        $handle -> image_x = setting('screensize');
         $handle -> file_overwrite = true;
 
         if ($handle->file_src_name_ext == 'png' ||
@@ -1517,7 +1538,7 @@ function upload_image($file, $weight, $size, $newName = false)
             $handle -> file_new_name_body = $newName;
         }
 
-        if (Setting::get('copyfoto')) {
+        if (setting('copyfoto')) {
             $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
             $handle -> image_watermark_position = 'BR';
         }
@@ -1533,11 +1554,6 @@ function upload_image($file, $weight, $size, $newName = false)
     }
 
     return false;
-}
-
-// ------------- Функция определения расширения файла -------------//
-function getExtension($filename){
-    return strtolower(substr(strrchr($filename, '.'), 1));
 }
 
 // ----- Функция определения входит ли пользователь в контакты -----//
@@ -1618,11 +1634,11 @@ function text_private($id, $replace = []){
 // ------------ Функция статистики производительности -----------//
 function perfomance(){
 
-    if (is_admin() && Setting::get('performance')){
+    if (is_admin() && setting('performance')){
 
         $queries = env('APP_DEBUG') ? getQueryLog() : [];
 
-        App::view('app/_perfomance', compact('queries'));
+        view('app/_perfomance', compact('queries'));
     }
 }
 
@@ -1645,21 +1661,756 @@ function clearCache()
     }
 
     // Авто-кэширование данных
-    App::ipBan(true);
+    ipBan(true);
 
     return true;
 }
 
 /**
- * Возвращает параметры роутов
- * @param  string $key     ключ параметра
- * @param  mixed  $default значение по умолчанию
- * @return mixed           найденный параметр
+ * Возвращает текущую страницу
+ *
+ * @param null $url
+ * @return string текущая страница
  */
-function param($key, $default = null)
+function returnUrl($url = null)
 {
-    $router = Registry::get('router')->match();
-    return isset($router['params'][$key]) ? $router['params'][$key] : $default;
+    if (Request::is('/', 'login', 'register', 'recovery', 'ban', 'closed')) {
+        return false;
+    }
+    $query = Request::has('return') ? Request::input('return') : Request::path();
+    return '?return='.urlencode(is_null($url) ? $query : $url);
+}
+
+/**
+ * Возвращает подключенный шаблон
+ *
+ * @param $template
+ * @param  array $params массив параметров
+ * @param  boolean $return выводить или возвращать код
+ * @return string сформированный код
+ * @internal param string $view имя шаблона
+ */
+function view($template, $params = [], $return = false)
+{
+    $blade = new Blade([RESOURCES.'/views', HOME.'/themes'], STORAGE.'/cache');
+
+    if ($return) {
+        return $blade->render($template, $params);
+    } else {
+        echo $blade->render($template, $params);
+    }
+}
+
+/**
+ * Сохраняет страницы с ошибками
+ *
+ * @param  integer $code    код ошибки
+ * @param  string  $message текст ошибки
+ * @return string  сформированная страница с ошибкой
+ */
+function abort($code, $message = null)
+{
+    if ($code == 403) {
+        header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
+    }
+
+    if ($code == 404) {
+        header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+    }
+
+    if (setting('errorlog') && in_array($code, [403, 404])) {
+
+        $error = new Log();
+        $error->code = $code;
+        $error->request = utf_substr(server('REQUEST_URI'), 0, 200);
+        $error->referer = utf_substr(server('HTTP_REFERER'), 0, 200);
+        $error->user_id = getUserId();
+        $error->ip = getClientIp();
+        $error->brow = getUserAgent();
+        $error->created_at = SITETIME;
+        $error->save();
+
+        Log::where('code', $code)
+            ->where('created_at', '<', SITETIME - 3600 * 24 * setting('maxlogdat'))
+            ->delete();
+    }
+
+    if (Request::ajax()) {
+        header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
+
+        json_encode([
+            'status' => 'error',
+            'message' => $message,
+        ]);
+    } else {
+        $referer = Request::header('referer') ?? null;
+        view('errors/'.$code, compact('message', 'referer'));
+    }
+
+    exit();
+}
+
+/**
+ * Переадресовывает пользователя
+ *
+ * @param  string  $url адрес переадресации
+ * @param  boolean $permanent постоянное перенаправление
+ * @return void
+ */
+function redirect($url, $permanent = false)
+{
+    if (isset($_SESSION['captcha'])) {
+        $_SESSION['captcha'] = null;
+    }
+
+    if ($permanent){
+        header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
+    }
+
+    header('Location: '.$url);
+    exit();
+}
+
+/**
+ * Сохраняет flash уведомления
+ *
+ * @param string $status статус уведомления
+ * @param mixed $message массив или текст с уведомлениями
+ * @return void
+ */
+function setFlash($status, $message)
+{
+    $_SESSION['flash'][$status] = $message;
+}
+
+/**
+ * Возвращает flash уведомления
+ *
+ * @return void сформированный блок с уведомлениями
+ */
+function getFlash()
+{
+    view('app/_flash');
+}
+
+/**
+ * Возвращает ошибку
+ *
+ * @param  mixed $errors ошибки
+ * @return string сформированный блок с ошибкой
+ */
+function showError($errors)
+{
+    if (is_array($errors)) {
+        $errors = implode('<br><i class="fa fa-exclamation-circle fa-lg text-danger"></i> ', $errors);
+    }
+
+    view('app/_error', compact('errors'));
+}
+
+/**
+ * Сохраняет POST данные введенных пользователем
+ *
+ * @param array $data массив полей
+ */
+function setInput(array $data)
+{
+    $prepareData = [];
+    foreach($data as $key => $value) {
+
+        if (is_object($value)) {
+            continue;
+        }
+
+        $prepareData[$key] = $value;
+    }
+
+    $_SESSION['input'] = $prepareData;
+}
+
+/**
+ * Возвращает значение из POST данных
+ *
+ * @param string $name имя поля
+ * @param string $default
+ * @return string сохраненный текст
+ */
+function getInput($name, $default = null)
+{
+    if (isset($_SESSION['input'][$name])) {
+        $input = $_SESSION['input'][$name];
+        unset($_SESSION['input'][$name]);
+    }
+
+    return $input ?? $default;
+}
+
+/**
+ * Подсвечивает блок с полем для ввода сообщения
+ *
+ * @param string $field имя поля
+ * @return string CSS класс ошибки
+ */
+function hasError($field)
+{
+    return isset($_SESSION['flash']['danger'][$field]) ? ' has-error' : '';
+}
+
+/**
+ * Возвращает блок с текстом ошибки
+ *
+ * @param  string $field имя поля
+ * @return string        блоки ошибки
+ */
+function textError($field)
+{
+    $text = null;
+
+    if (isset($_SESSION['flash']['danger'][$field])) {
+        $error = $_SESSION['flash']['danger'][$field];
+        $text = '<div class="text-danger">'.$error.'</div>';
+    }
+
+    return $text;
+}
+
+/**
+ * Проверяет является ли email валидным
+ *
+ * @param  string  $email адрес email
+ * @return boolean результат проверки
+ */
+function isMail($email)
+{
+    return preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email);
+}
+
+/**
+ * Отправка уведомления на email
+ *
+ * @param  mixed   $to      Получатель
+ * @param  string  $subject Тема письма
+ * @param  string  $body    Текст сообщения
+ * @param  array   $params  Дополнительные параметры
+ * @return boolean          Результат отправки
+ */
+function sendMail($to, $subject, $body, $params = [])
+{
+    if (empty($params['from'])) {
+        $params['from'] = [env('SITE_EMAIL') => env('SITE_ADMIN')];
+    }
+
+    $message = (new Swift_Message())
+        ->setTo($to)
+        ->setSubject($subject)
+        ->setBody($body, 'text/html')
+        ->setFrom($params['from'])
+        ->setReturnPath(env('SITE_EMAIL'));
+
+    if (isset($params['subscribe'])) {
+        $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.env('SITE_EMAIL').'>, <'.setting('home').'/unsubscribe?key='.$params['subscribe'].'>');
+
+        $body = str_replace('<!-- unsubscribe -->', '<br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.setting('home').'/unsubscribe?key='.$params['subscribe'].'">откажитесь от подписки</a></small>', $body);
+        $message->setBody($body, 'text/html');
+    }
+
+    if (env('MAIL_DRIVER') == 'smtp') {
+        $transport = (new Swift_SmtpTransport(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION')))
+            ->setUsername(env('MAIL_USERNAME'))
+            ->setPassword(env('MAIL_PASSWORD'));
+    } else {
+        $transport = new Swift_SendmailTransport(env('MAIL_PATH'));
+    }
+
+    $mailer = new Swift_Mailer($transport);
+    return $mailer->send($message);
+}
+
+/**
+ * Возвращает форматированную дату
+ *
+ * @param string $format отформатированная дата
+ * @param mixed  $date временная метки или дата
+ * @return string отформатированная дата
+ */
+function dateFormat($format, $date = null)
+{
+    $date = (is_null($date)) ? SITETIME : strtotime($date);
+
+    $eng = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    $rus = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+    return str_replace($eng, $rus, date($format, $date));
+}
+
+/**
+ * Возвращает расширение файла
+ *
+ * @param  string $filename имя файла
+ * @return string расширение
+ */
+function getExtension($filename)
+{
+    return pathinfo($filename, PATHINFO_EXTENSION);
+}
+
+/**
+ * Возвращает размер файла
+ *
+ * @param  string  $filename путь к файлу
+ * @param  integer $decimals кол. чисел после запятой
+ * @return string            форматированный вывод размера
+ */
+function sizeFormat($filename, $decimals = 1)
+{
+    if (! file_exists($filename)) {
+        return 0;
+    }
+
+    $bytes  = filesize($filename);
+    $size   = ['B','kB','MB','GB','TB'];
+    $factor = floor((strlen($bytes) - 1) / 3);
+    $unit   = $size[$factor] ?? '';
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).$unit;
+}
+
+/**
+ * Склоняет числа
+ *
+ * @param  integer $num  число
+ * @param  array   $forms массив склоняемых слов (один, два, много)
+ * @return string  форматированная строка
+ */
+function plural($num, array $forms)
+{
+    if ($num % 100 > 10 &&  $num % 100 < 15) return $num.' '.$forms[2];
+    if ($num % 10 == 1) return $num.' '.$forms[0];
+    if ($num % 10 > 1 && $num %10 < 5) return $num.' '.$forms[1];
+    return $num.' '.$forms[2];
+}
+
+/**
+ * Валидирует даты
+ *
+ * @param  string $date   дата
+ * @param  string $format формат даты
+ * @return boolean        результат валидации
+ */
+function validateDate($date, $format = 'Y-m-d H:i:s')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
+
+/**
+ * Обрабатывает BB-код
+ *
+ * @param  string  $text  Необработанный текст
+ * @param  boolean $parse Обрабатывать или вырезать код
+ * @return string         Обработанный текст
+ */
+function bbCode($text, $parse = true)
+{
+    $bbCode = new BBCode();
+
+    if (! $parse) {
+        return $bbCode->clear($text);
+    }
+
+    $text = $bbCode->parse($text);
+    $text = $bbCode->parseSmiles($text);
+
+    return $text;
+}
+
+/**
+ * Определяет браузер
+ *
+ * @param string|null $userAgent
+ * @return string браузер и версия браузера
+ */
+function getUserAgent($userAgent = null)
+{
+    $browser = new Browser();
+    if ($userAgent) {
+        $browser->setUserAgent($userAgent);
+    }
+
+    $brow = $browser->getBrowser();
+    $version = implode('.', array_slice(explode('.', $browser->getVersion()), 0, 2));
+    return mb_substr($version == 'unknown' ? $brow : $brow.' '.$version, 0, 25, 'utf-8');
+}
+
+/**
+ * Определяет IP пользователя
+ *
+ * @return string IP пользователя
+ */
+function getClientIp()
+{
+    $ip = Request::ip();
+    return $ip == '::1' ? '127.0.0.1' : $ip;
+}
+
+/**
+ * Возвращает серверные переменные
+ *
+ * @param string|null $key     ключ массива
+ * @param string|null $default значение по умолчанию
+ * @return mixed               данные
+ */
+function server($key = null, $default = null)
+{
+    $server = Request::server($key, $default);
+    if ($key == 'REQUEST_URI') $server = urldecode($server);
+    if ($key == 'PHP_SELF') $server = current(explode('?', server('REQUEST_URI')));
+
+    return check($server);
+}
+
+/**
+ * Возвращает логин пользователя
+ *
+ * @return string
+ */
+function getUsername()
+{
+    return user('login') ? user('login') : setting('guestsuser');
+}
+
+/**
+ * Возвращает ID пользователя
+ *
+ * @return int
+ */
+function getUserId()
+{
+    return isset($_SESSION['id']) ? intval($_SESSION['id']) : 0;
+}
+
+/**
+ * Возвращает данные пользователя по ключу
+ *
+ * @param  string $key ключ массива
+ * @return string      данные
+ */
+function user($key = null)
+{
+    if (Registry::has('user')) {
+        if (empty($key)) {
+            return Registry::get('user');
+        } else {
+            return Registry::get('user')[$key] ?? null;
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Авторизует пользователя
+ *
+ * @param  string  $login    Логин
+ * @param  string  $password Пароль пользователя
+ * @param  boolean $remember Запомнить пароль
+ * @return boolean           Результат авторизации
+ */
+function login($login, $password, $remember = true)
+{
+    $domain = check_string(setting('home'));
+
+    if (!empty($login) && !empty($password)) {
+
+        $user = User::whereRaw('LOWER(login) = ?', [$login])
+            ->first();
+
+        /* Миграция старых паролей */
+        if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
+        {
+            if (md5(md5($password)) == $user['password']) {
+                $user['password'] = password_hash($password, PASSWORD_BCRYPT);
+
+                $user = User::where('login', $user['login'])->first();
+                $user->password = $user['password'];
+                $user->save();
+            }
+        }
+
+        if ($user && password_verify($password, $user['password'])) {
+
+            if ($remember) {
+                setcookie('login', $user['login'], SITETIME + 3600 * 24 * 365, '/', $domain);
+                setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
+            }
+
+            $_SESSION['id'] = $user->id;
+            $_SESSION['password'] = md5(env('APP_KEY').$user->password);
+
+            // Сохранение привязки к соц. сетям
+            if (!empty($_SESSION['social'])) {
+
+                $social = new Social();
+                $social->user = $user->login;
+                $social->network = $_SESSION['social']->network;
+                $social->uid = $_SESSION['social']->uid;
+                $social->save();
+            }
+
+            $authorization = Login::where('user_id', $user->id)
+                ->where('created_at', '>', SITETIME - 30)
+                ->first();
+
+            if (! $authorization) {
+
+                Login::create([
+                    'user_id' => $user->id,
+                    'ip' => getClientIp(),
+                    'brow' => getUserAgent(),
+                    'created_at' => SITETIME,
+                    'type' => 1,
+                ]);
+
+                DB::delete('
+                    DELETE FROM login WHERE created_at < (
+                        SELECT MIN(created_at) FROM (
+                            SELECT created_at FROM guest ORDER BY created_at DESC LIMIT 50
+                        ) AS del
+                    );'
+                );
+            }
+
+            $user->update([
+                'visits' => DB::raw('visits + 1'),
+                'timelastlogin' => SITETIME
+            ]);
+
+            return $user;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Авторизует через социальные сети
+ *
+ * @param string $token идентификатор Ulogin
+ */
+function socialLogin($token)
+{
+    $domain = check_string(setting('home'));
+
+    $curl = new Curl\Curl();
+    $network = $curl->get('http://ulogin.ru/token.php', [
+        'token' => $token,
+        'host' => $_SERVER['HTTP_HOST']
+    ]);
+
+    if ($network && empty($network->error)) {
+        $_SESSION['social'] = $network;
+
+        $social = ORM::for_table('socials')->
+        where(['network' => $network->network, 'uid' => $network->uid])->
+        find_one();
+
+        if ($social && $user = user($social['user'])) {
+
+            setcookie('login', $user['login'], SITETIME + 3600 * 24 * 365, '/', $domain);
+            setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
+
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
+
+            setFlash('success', 'Добро пожаловать, '.$user['login'].'!');
+            redirect('/');
+        }
+    }
+}
+
+/**
+ * Генерирует постраничную навигация
+ *
+ * @param  array  $page массив данных
+ * @return string       сформированный блок
+ */
+function pagination($page)
+{
+    if ($page['total'] > 0) {
+
+        if (empty($page['crumbs'])) $page['crumbs'] = 3;
+
+        $url = array_except($_GET, 'page');
+        $request = $url ? '&'.http_build_query($url) : null;
+
+        $pages = [];
+        $pg_cnt = ceil($page['total'] / $page['limit']);
+        $idx_fst = max($page['current'] - $page['crumbs'], 1);
+        $idx_lst = min($page['current'] + $page['crumbs'], $pg_cnt);
+
+        if ($page['current'] != 1) {
+            $pages[] = [
+                'page' => $page['current'] - 1,
+                'title' => 'Предыдущая',
+                'name' => '«',
+            ];
+        }
+
+        if ($page['current'] > $page['crumbs'] + 1) {
+            $pages[] = [
+                'page' => 1,
+                'title' => '1 страница',
+                'name' => 1,
+            ];
+            if ($page['current'] != $page['crumbs'] + 2) {
+                $pages[] = [
+                    'separator' => true,
+                    'name' => ' ... ',
+                ];
+            }
+        }
+
+        for ($i = $idx_fst; $i <= $idx_lst; $i++) {
+            if ($i == $page['current']) {
+                $pages[] = [
+                    'current' => true,
+                    'name' => $i,
+                ];
+            } else {
+                $pages[] = [
+                    'page' => $i,
+                    'title' => $i.' страница',
+                    'name' => $i,
+                ];
+            }
+        }
+
+        if ($page['current'] < $pg_cnt - $page['crumbs']) {
+            if ($page['current'] != $pg_cnt - $page['crumbs'] - 1) {
+                $pages[] = [
+                    'separator' => true,
+                    'name' => ' ... ',
+                ];
+            }
+            $pages[] = [
+                'page' => $pg_cnt,
+                'title' => $pg_cnt . ' страница',
+                'name' => $pg_cnt,
+            ];
+        }
+
+        if ($page['current'] != $pg_cnt) {
+            $pages[] = [
+                'page' => $page['current'] + 1,
+                'title' => 'Следующая',
+                'name' => '»',
+            ];
+        }
+
+        view('app._pagination', compact('pages', 'request'));
+    }
+}
+
+/**
+ * Обрабатывает постраничную навигацию
+ *
+ * @param  integer $limit элементов на страницу
+ * @param  integer $total всего элементов
+ * @return array          массив подготовленных данных
+ */
+function paginate($limit, $total)
+{
+    $current = Request::input('page');
+    if ($current < 1) $current = 1;
+
+    if ($total && $current * $limit >= $total) {
+        $current = ceil($total / $limit);
+    }
+
+    $offset = intval(($current * $limit) - $limit);
+
+    return compact('current', 'offset', 'limit', 'total');
+}
+
+/**
+ * Устанавливает права доступа на папки
+ *
+ * @return void
+ */
+function install()
+{
+    $storage = glob(dirname(__DIR__).'/storage/*', GLOB_ONLYDIR);
+    $uploads = glob(dirname(dirname(__DIR__)).'/public/uploads/*', GLOB_ONLYDIR);
+
+    $dirs = array_merge($storage, $uploads);
+
+    foreach ($dirs as $dir) {
+        $old = umask(0);
+        chmod ($dir, 0777);
+        umask($old);
+    }
+}
+
+/**
+ * Возвращает сформированный код base64 картинки
+ *
+ * @param string  $path   путь к картинке
+ * @param array   $params параметры
+ * @return string         сформированный код
+ */
+function imageBase64($path, array $params = [])
+{
+    $type = pathinfo($path, PATHINFO_EXTENSION);
+    $data = file_get_contents($path);
+
+    if (! isset($params['class'])) {
+        $params['class'] = 'img-fluid';
+    }
+
+    $strParams = [];
+    foreach ($params as $key => $param) {
+        $strParams[] = $key.'="'.$param.'"';
+    }
+
+    $strParams = implode(' ', $strParams);
+
+    return '<img src="data:image/'.$type.';base64,'.base64_encode($data).'"'.$strParams.'>';
+}
+
+/**
+ * Выводит прогресс-бар
+ *
+ * @param int  $percent
+ * @param bool $title
+ */
+function progressBar($percent, $title = false)
+{
+    if (! $title){
+        $title = $percent.'%';
+    }
+    echo '<div class="progress">
+        <div class="progress-bar progress-bar-warning" style="width:'.$percent.'%;"></div>
+        <span class="progress-completed">'.$title.'</span>
+    </div>';
+}
+
+/**
+ * Инициализирует языковую локализацию
+ *
+ * @param  string $locale
+ * @param  string $fallback
+ * @return \Illuminate\Translation\Translator
+ */
+function translator($locale = 'ru', $fallback = 'en')
+{
+    $translator = new \Illuminate\Translation\Translator(
+        new \Illuminate\Translation\FileLoader(
+            new \Illuminate\Filesystem\Filesystem(),
+            RESOURCES.'/lang'
+        ),
+        $locale
+    );
+    $translator->setFallback($fallback);
+
+    return $translator;
 }
 
 /**
@@ -1672,9 +2423,8 @@ function param($key, $default = null)
  */
 function trans($id, $replace = [], $locale = null)
 {
-    return App::translator()->trans($id, $replace, $locale);
+    return translator()->trans($id, $replace, $locale);
 }
-
 
 /**
  * Translates the given message based on a count.
@@ -1687,7 +2437,7 @@ function trans($id, $replace = [], $locale = null)
  */
 function trans_choice($id, $number, array $replace = [], $locale = null)
 {
-    return App::translator()->transChoice($id, $number, $replace, $locale);
+    return translator()->transChoice($id, $number, $replace, $locale);
 }
 
 /**
@@ -1696,7 +2446,7 @@ function trans_choice($id, $number, array $replace = [], $locale = null)
  */
 function getQueryLog()
 {
-    $queries = Capsule::getQueryLog();
+    $queries = DB::getQueryLog();
     $formattedQueries = [];
     foreach ($queries as $query) {
         $prep = $query['query'];
@@ -1707,4 +2457,48 @@ function getQueryLog()
         $formattedQueries[] = ['query' => $prep, 'time' => $query['time']];
     }
     return $formattedQueries;
+}
+
+/**
+ * Выводит список забаненных ip
+ *
+ * @param  boolean $save нужно ли сбросить кеш
+ * @return array         массив IP
+ */
+function ipBan($save = false)
+{
+    if (! $save && file_exists(STORAGE.'/temp/ipban.dat')) {
+        $ipBan = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
+    } else {
+        $ipBan = Ban::pluck('ip')->all();
+        file_put_contents(STORAGE."/temp/ipban.dat", serialize($ipBan), LOCK_EX);
+    }
+
+    return $ipBan;
+}
+
+/**
+ * Возвращает настройки сайта по ключу
+ *
+ * @param  string $key ключ массива
+ * @return string      данные
+ */
+function setting($key = null)
+{
+    if (! Registry::has('setting')) {
+
+        if (! file_exists(STORAGE.'/temp/setting.dat')) {
+            $setting = Setting::pluck('value', 'name')->all();
+            file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
+        }
+        $setting = unserialize(file_get_contents(STORAGE.'/temp/setting.dat'));
+
+        Registry::set('setting', $setting);
+    }
+
+    if (empty($key)) {
+        return Registry::get('setting');
+    }
+
+    return isset(Registry::get('setting')[$key]) ? Registry::get('setting')[$key] : null;
 }

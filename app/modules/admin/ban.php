@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -47,7 +47,7 @@ if (is_admin([101, 102, 103])) {
                 if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                     echo '<div class="form">';
                     echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br>';
-                    echo 'Последняя причина: '.App::bbCode($user['reasonban']).'<br>';
+                    echo 'Последняя причина: '.bbCode($user['reasonban']).'<br>';
                     echo 'Забанил: '.profile($user['loginsendban']).'</div><br>';
                 }
 
@@ -79,7 +79,7 @@ if (is_admin([101, 102, 103])) {
 
                             echo 'Подсчет нарушений производится при бане более чем на 12 часов<br>';
                             echo 'При общем числе нарушений более пяти, профиль пользователя удаляется<br>';
-                            echo 'Максимальное время бана '.round(Setting::get('maxbantime') / 1440).' суток<br>';
+                            echo 'Максимальное время бана '.round(setting('maxbantime') / 1440).' суток<br>';
                             echo 'Внимание! Постарайтесь как можно подробнее описать причину бана<br><br>';
                         } else {
                             echo '<b><span style="color:#ff0000">Внимание! Пользователь превысил лимит банов</span></b><br>';
@@ -94,10 +94,10 @@ if (is_admin([101, 102, 103])) {
                         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/ban?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr>';
                     }
                 } else {
-                    App::showError('Ошибка! Запрещено банить админов и модеров сайта!');
+                    showError('Ошибка! Запрещено банить админов и модеров сайта!');
                 }
             } else {
-                App::showError('Ошибка! Пользователя с данным логином не существует!');
+                showError('Ошибка! Пользователя с данным логином не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban">Вернуться</a><br>';
@@ -149,13 +149,13 @@ if (is_admin([101, 102, 103])) {
 
                         echo '<input value="Изменить" type="submit"></form></div><br>';
                     } else {
-                        App::showError('Ошибка! Данный пользователь не забанен!');
+                        showError('Ошибка! Данный пользователь не забанен!');
                     }
                 } else {
-                    App::showError('Ошибка! Запрещено банить админов и модеров сайта!');
+                    showError('Ошибка! Запрещено банить админов и модеров сайта!');
                 }
             } else {
-                App::showError('Ошибка! Пользователя с данным логином не существует!');
+                showError('Ошибка! Пользователя с данным логином не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
@@ -189,39 +189,39 @@ if (is_admin([101, 102, 103])) {
                             }
 
                             if ($bantotaltime > 0) {
-                                if ($bantotaltime <= Setting::get('maxbantime')) {
+                                if ($bantotaltime <= setting('maxbantime')) {
                                     if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
                                         if (utf_strlen($note) <= 1000) {
 
-                                            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `reasonban`=?, `loginsendban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), $reasonban, App::getUsername(), $uz]);
+                                            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `reasonban`=?, `loginsendban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), $reasonban, getUsername(), $uz]);
 
-                                            DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, App::getUsername(), 2, $reasonban, $bantotaltime * 60, SITETIME]);
+                                            DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUsername(), 2, $reasonban, $bantotaltime * 60, SITETIME]);
 
-                                            App::setFlash('success', 'Данные успешно изменены!');
-                                            App::redirect("/admin/ban?act=edit&uz=$uz");
+                                            setFlash('success', 'Данные успешно изменены!');
+                                            redirect("/admin/ban?act=edit&uz=$uz");
                                         } else {
-                                            App::showError('Ошибка! Слишком большая заметка, не более 1000 символов!');
+                                            showError('Ошибка! Слишком большая заметка, не более 1000 символов!');
                                         }
                                     } else {
-                                        App::showError('Ошибка! Слишком длинная или короткая причина бана!');
+                                        showError('Ошибка! Слишком длинная или короткая причина бана!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! Максимальное время бана '.round(Setting::get('maxbantime') / 1440).' суток!');
+                                    showError('Ошибка! Максимальное время бана '.round(setting('maxbantime') / 1440).' суток!');
                                 }
                             } else {
-                                App::showError('Ошибка! Вы не указали время бана!');
+                                showError('Ошибка! Вы не указали время бана!');
                             }
                         } else {
-                            App::showError('Ошибка! Запрещено банить админов и модеров сайта!');
+                            showError('Ошибка! Запрещено банить админов и модеров сайта!');
                         }
                     } else {
-                        App::showError('Ошибка! Данный пользователь не забанен!');
+                        showError('Ошибка! Данный пользователь не забанен!');
                     }
                 } else {
-                    App::showError('Ошибка! Пользователя с данным логином не существует!');
+                    showError('Ошибка! Пользователя с данным логином не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Вернуться</a><br>';
@@ -255,7 +255,7 @@ if (is_admin([101, 102, 103])) {
                             }
 
                             if ($bantotaltime > 0) {
-                                if ($bantotaltime <= Setting::get('maxbantime')) {
+                                if ($bantotaltime <= setting('maxbantime')) {
                                     if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
                                         if (utf_strlen($notice) <= 1000) {
 
@@ -265,46 +265,46 @@ if (is_admin([101, 102, 103])) {
                                                 $bancount = 0;
                                             }
 
-                                            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `timelastban`=?, `reasonban`=?, `loginsendban`=?, `totalban`=`totalban`+?, `explainban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, App::getUsername(), $bancount, 1, $uz]);
+                                            DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `timelastban`=?, `reasonban`=?, `loginsendban`=?, `totalban`=`totalban`+?, `explainban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, getUsername(), $bancount, 1, $uz]);
 
-                                            DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, App::getUsername(), 1, $reasonban, $bantotaltime * 60, SITETIME]);
+                                            DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUsername(), 1, $reasonban, $bantotaltime * 60, SITETIME]);
 
                                             $note = Note::where('user', $uz)->find_one();
 
                                             $record = [
                                                 'user' => $uz,
                                                 'text' => $notice,
-                                                'edit' => App::getUsername(),
+                                                'edit' => getUsername(),
                                                 'time' => SITETIME,
                                             ];
 
                                             Note::saveNote($note, $record);
 
-                                            App::setFlash('success', 'Аккаунт успешно заблокирован!');
-                                            App::redirect("/admin/ban?act=edit&uz=$uz");
+                                            setFlash('success', 'Аккаунт успешно заблокирован!');
+                                            redirect("/admin/ban?act=edit&uz=$uz");
                                         } else {
-                                            App::showError('Ошибка! Слишком большая заметка, не более 1000 символов!');
+                                            showError('Ошибка! Слишком большая заметка, не более 1000 символов!');
                                         }
                                     } else {
-                                        App::showError('Ошибка! Слишком длинная или короткая причина бана!');
+                                        showError('Ошибка! Слишком длинная или короткая причина бана!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! Максимальное время бана '.round(Setting::get('maxbantime') / 1440).' суток!');
+                                    showError('Ошибка! Максимальное время бана '.round(setting('maxbantime') / 1440).' суток!');
                                 }
                             } else {
-                                App::showError('Ошибка! Вы не указали время бана!');
+                                showError('Ошибка! Вы не указали время бана!');
                             }
                         } else {
-                            App::showError('Ошибка! Запрещено банить админов и модеров сайта!');
+                            showError('Ошибка! Запрещено банить админов и модеров сайта!');
                         }
                     } else {
-                        App::showError('Ошибка! Данный аккаунт уже заблокирован!');
+                        showError('Ошибка! Данный аккаунт уже заблокирован!');
                     }
                 } else {
-                    App::showError('Ошибка! Пользователя с данным логином не существует!');
+                    showError('Ошибка! Пользователя с данным логином не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
@@ -330,18 +330,18 @@ if (is_admin([101, 102, 103])) {
 
                         DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `totalban`=`totalban`-?, `explainban`=? WHERE `login`=? LIMIT 1;", [0, 0, $bancount, 0, $uz]);
 
-                        DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `time`) VALUES (?, ?, ?);", [$uz, App::getUsername(), SITETIME]);
+                        DB::run() -> query("INSERT INTO `banhist` (`user`, `send`, `time`) VALUES (?, ?, ?);", [$uz, getUsername(), SITETIME]);
 
-                        App::setFlash('success', 'Аккаунт успешно разблокирован!');
-                        App::redirect("/admin/ban?act=edit&uz=$uz");
+                        setFlash('success', 'Аккаунт успешно разблокирован!');
+                        redirect("/admin/ban?act=edit&uz=$uz");
                     } else {
-                        App::showError('Ошибка! Данный аккаунт уже разблокирован!');
+                        showError('Ошибка! Данный аккаунт уже разблокирован!');
                     }
                 } else {
-                    App::showError('Ошибка! Пользователя с данным логином не существует!');
+                    showError('Ошибка! Пользователя с данным логином не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
@@ -363,12 +363,12 @@ if (is_admin([101, 102, 103])) {
 
                             $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $user['email']]);
                             if (empty($blackmail) && !empty($user['email'])) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], App::getUsername(), SITETIME]);
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], getUsername(), SITETIME]);
                             }
 
                             $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($user['login'])]);
                             if (empty($blacklogin)) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], App::getUsername(), SITETIME]);
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], getUsername(), SITETIME]);
                             }
 
                             delete_album($uz);
@@ -377,16 +377,16 @@ if (is_admin([101, 102, 103])) {
                             echo 'Данные занесены в черный список!<br>';
                             echo '<i class="fa fa-check"></i> <b>Профиль пользователя успешно удален!</b><br><br>';
                         } else {
-                            App::showError('Ошибка! Запрещено банить админов и модеров сайта!');
+                            showError('Ошибка! Запрещено банить админов и модеров сайта!');
                         }
                     } else {
-                        App::showError('Ошибка! У пользователя менее 5 нарушений, удаление невозможно!');
+                        showError('Ошибка! У пользователя менее 5 нарушений, удаление невозможно!');
                     }
                 } else {
-                    App::showError('Ошибка! Пользователя с данным логином не существует!');
+                    showError('Ошибка! Пользователя с данным логином не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo'<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ban">Вернуться</a><br>';
@@ -397,7 +397,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

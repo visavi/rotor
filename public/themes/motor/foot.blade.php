@@ -8,7 +8,7 @@
 
             <div id="footer">
                 <div id="text">
-                    &copy; Copyright 2005-<?=date('Y')?> {{ Setting::get('title') }}
+                    &copy; Copyright 2005-<?=date('Y')?> {{ setting('title') }}
                 </div>
                 <div id="image">
                     <a href="/"><img src="/themes/motor/img/smalllogo2.gif" alt="smalllogo"></a>

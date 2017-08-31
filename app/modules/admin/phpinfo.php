@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (is_admin([101, 102])) {
     //show_title('PHP-info');
@@ -47,13 +47,13 @@ if (is_admin([101, 102])) {
         echo '</table><br>';
 
     } else {
-        App::showError('Ошибка! Функция ini_get_all запрещена в php.ini!');
+        showError('Ошибка! Функция ini_get_all запрещена в php.ini!');
     }
 
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

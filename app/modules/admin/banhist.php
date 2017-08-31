@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $page = abs(intval(Request::input('page', 1)));
@@ -14,11 +14,11 @@ if (is_admin([101, 102, 103])) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist`;");
-            $page = App::paginate(Setting::get('listbanhist'), $total);
+            $page = paginate(setting('listbanhist'), $total);
 
             if ($total > 0) {
 
-                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('listbanhist').";");
+                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";");
 
                 echo '<form action="/admin/banhist?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -35,7 +35,7 @@ if (is_admin([101, 102, 103])) {
 
                     echo '<div>';
                     if (!empty($data['type'])) {
-                        echo 'Причина: '.App::bbCode($data['reason']).'<br>';
+                        echo 'Причина: '.bbCode($data['reason']).'<br>';
                         echo 'Срок: '.formattime($data['term']).'<br>';
                     }
 
@@ -54,7 +54,7 @@ if (is_admin([101, 102, 103])) {
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                App::pagination($page);
+                pagination($page);
 
                 echo '<div class="form">';
                 echo '<b>Поиск по пользователю:</b><br>';
@@ -65,7 +65,7 @@ if (is_admin([101, 102, 103])) {
 
                 echo 'Всего действий: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('Истории банов еще нет!');
+                showError('Истории банов еще нет!');
             }
         break;
 
@@ -77,11 +77,11 @@ if (is_admin([101, 102, 103])) {
 
             if (user($uz)) {
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
-                $page = App::paginate(Setting::get('listbanhist'), $total);
+                $page = paginate(setting('listbanhist'), $total);
 
                 if ($total > 0) {
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('listbanhist').";", [$uz]);
+                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";", [$uz]);
 
                     echo '<form action="/admin/banhist?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -97,7 +97,7 @@ if (is_admin([101, 102, 103])) {
 
                         echo '<div>';
                         if (!empty($data['type'])) {
-                            echo 'Причина: '.App::bbCode($data['reason']).'<br>';
+                            echo 'Причина: '.bbCode($data['reason']).'<br>';
                             echo 'Срок: '.formattime($data['term']).'<br>';
                         }
 
@@ -116,15 +116,15 @@ if (is_admin([101, 102, 103])) {
 
                     echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                    App::pagination($page);
+                    pagination($page);
 
                     echo 'Всего действий: <b>'.$total.'</b><br><br>';
 
                 } else {
-                    App::showError('Истории банов еще нет!');
+                    showError('Истории банов еще нет!');
                 }
             } else {
-                App::showError('Ошибка! Данный пользователь не найден!');
+                showError('Ошибка! Данный пользователь не найден!');
             }
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/banhist">Вернуться</a><br>';
         break;
@@ -147,13 +147,13 @@ if (is_admin([101, 102, 103])) {
 
                     DB::run() -> query("DELETE FROM `banhist` WHERE `id` IN (".$del.");");
 
-                    App::setFlash('success', 'Выбранные баны успешно удалены!');
-                    App::redirect("/admin/banhist?page=$page");
+                    setFlash('success', 'Выбранные баны успешно удалены!');
+                    redirect("/admin/banhist?page=$page");
                 } else {
-                    App::showError('Ошибка! Отсутствуют выбранные баны!');
+                    showError('Ошибка! Отсутствуют выбранные баны!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/banhist?page='.$page.'">Вернуться</a><br>';
@@ -164,7 +164,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

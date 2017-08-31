@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -22,15 +22,15 @@ if (is_admin()) {
             echo '<a href="/tags">Теги</a><hr>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
-            $page = App::paginate(Setting::get('chatpost'), $total);
+            $page = paginate(setting('chatpost'), $total);
 
-            if (App::user('newchat') != stats_newchat()) {
-                DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), App::getUsername()]);
+            if (user('newchat') != stats_newchat()) {
+                DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), getUsername()]);
             }
 
             if ($total > 0) {
 
-                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('chatpost').";");
+                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('chatpost').";");
 
                 while ($data = $querychat -> fetch()) {
                     echo '<div class="b">';
@@ -39,17 +39,17 @@ if (is_admin()) {
                     echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    if (App::getUsername() != $data['user']) {
+                    if (getUsername() != $data['user']) {
                         echo '<div class="right">';
                         echo '<a href="/admin/chat?act=reply&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Отв</a> / ';
                         echo '<a href="/admin/chat?act=quote&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Цит</a></div>';
                     }
 
-                    if (App::getUsername() == $data['user'] && $data['time'] + 600 > SITETIME) {
+                    if (getUsername() == $data['user'] && $data['time'] + 600 > SITETIME) {
                         echo '<div class="right"><a href="/admin/chat?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
-                    echo '<div>'.App::bbCode($data['text']).'<br>';
+                    echo '<div>'.bbCode($data['text']).'<br>';
 
                     if (!empty($data['edit'])) {
                         echo '<i class="fa fa-exclamation-circle"></i> <small>Отредактировано: '.$data['edit'].' ('.date_fixed($data['edit_time']).')</small><br>';
@@ -60,9 +60,9 @@ if (is_admin()) {
                     echo '</div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('Сообщений нет, будь первым!');
+                showError('Сообщений нет, будь первым!');
             }
 
             echo '<div class="form">';
@@ -87,26 +87,26 @@ if (is_admin()) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1500) {
                     $post = DB::run() -> queryFetch("SELECT * FROM `chat` ORDER BY `id` DESC LIMIT 1;");
 
-                    if (App::getUsername() == $post['user'] && $post['time'] + 1800 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= 1500)) {
+                    if (getUsername() == $post['user'] && $post['time'] + 1800 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= 1500)) {
 
                         $newpost = $post['text']."\n\n".'[i][size=1]Добавлено через '.maketime(SITETIME - $post['time']).' сек.[/size][/i]'."\n".$msg;
                         DB::run() -> query("UPDATE `chat` SET `text`=? WHERE `id`=? LIMIT 1;", [$newpost, $post['id']]);
 
                     } else {
 
-                        DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [App::getUsername(), $msg, App::getClientIp(), App::getUserAgent(), SITETIME]);
+                        DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [getUsername(), $msg, getClientIp(), getUserAgent(), SITETIME]);
                     }
 
-                    DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), App::getUsername()]);
+                    DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), getUsername()]);
 
-                    App::setFlash('success', 'Сообщение успешно добавлено!');
+                    setFlash('success', 'Сообщение успешно добавлено!');
                     redirect ("/admin/chat");
 
                 } else {
-                    App::showError('Ошибка! Слишком длинное или короткое сообщение!');
+                    showError('Ошибка! Слишком длинное или короткое сообщение!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br>';
@@ -125,14 +125,14 @@ if (is_admin()) {
 
             if (!empty($post)) {
                 echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
-                echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr>';
+                echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/chat?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br>';
                 echo '<input type="submit" value="Ответить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Выбранное вами сообщение для ответа не существует!');
+                showError('Ошибка! Выбранное вами сообщение для ответа не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
@@ -155,7 +155,7 @@ if (is_admin()) {
                 echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br>';
                 echo '<input type="submit" value="Ответить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Выбранное вами сообщение для цитирования не существует!');
+                showError('Ошибка! Выбранное вами сообщение для цитирования не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
@@ -168,7 +168,7 @@ if (is_admin()) {
 
             $id = abs(intval($_GET['id']));
 
-            $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
+            $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
 
             if (!empty($post)) {
                 if ($post['time'] + 600 > SITETIME) {
@@ -180,10 +180,10 @@ if (is_admin()) {
                     echo '<textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br>';
                     echo '<input type="submit" value="Редактировать"></form></div><br>';
                 } else {
-                    App::showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
+                    showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                 }
             } else {
-                App::showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+                showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?page='.$page.'">Вернуться</a><br>';
@@ -200,27 +200,27 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1500) {
-                    $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
+                    $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
 
                     if (!empty($post)) {
                         if ($post['time'] + 600 > SITETIME) {
 
-                            DB::run() -> query("UPDATE `chat` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=? LIMIT 1;", [$msg, App::getUsername(), SITETIME, $id]);
+                            DB::run() -> query("UPDATE `chat` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=? LIMIT 1;", [$msg, getUsername(), SITETIME, $id]);
 
-                            App::setFlash('success', 'Сообщение успешно отредактировано!');
+                            setFlash('success', 'Сообщение успешно отредактировано!');
                             redirect ("/admin/chat?page=$page");
 
                         } else {
-                            App::showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
+                            showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                         }
                     } else {
-                        App::showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+                        showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинное или короткое сообщение!');
+                    showError('Ошибка! Слишком длинное или короткое сообщение!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -248,13 +248,13 @@ if (is_admin()) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("TRUNCATE `chat`;");
 
-                    App::setFlash('success', 'Админ-чат успешно очищен!');
+                    setFlash('success', 'Админ-чат успешно очищен!');
                     redirect ("/admin/chat");
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Очищать админ-чат могут только суперадмины!');
+                showError('Ошибка! Очищать админ-чат могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/chat">Вернуться</a><br>';
@@ -268,4 +268,4 @@ if (is_admin()) {
     redirect ('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

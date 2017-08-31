@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -10,7 +10,7 @@ if (isset($_GET['act'])) {
 if (is_admin([101, 102])) {
     //show_title('Просмотр лог-файлов');
 
-    if (empty(Setting::get('errorlog'))){
+    if (empty(setting('errorlog'))){
         echo '<b><span style="color:#ff0000">Внимание! Запись логов выключена в настройках!</span></b><br><br>';
     }
 
@@ -23,11 +23,11 @@ if (is_admin([101, 102])) {
             echo '<b>Ошибки 404</b> | <a href="/admin/logs?act=403">Ошибки 403</a> | <a href="/admin/logs?act=666">Автобаны</a><br><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [404]);
-            $page = App::paginate(Setting::get('loglist'), $total);
+            $page = paginate(setting('loglist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loglist').";", [404]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [404]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -37,13 +37,13 @@ if (is_admin([101, 102])) {
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
 
                 if (is_admin([101])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/logs?act=clear&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br>';
                 }
             } else {
-                App::showError('Записей еще нет!');
+                showError('Записей еще нет!');
             }
         break;
 
@@ -55,11 +55,11 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <b>Ошибки 403</b> | <a href="/admin/logs?act=666">Автобаны</a><br><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [403]);
-            $page = App::paginate(Setting::get('loglist'), $total);
+            $page = paginate(setting('loglist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loglist').";", [403]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [403]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -69,9 +69,9 @@ if (is_admin([101, 102])) {
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('Записей еще нет!');
+                showError('Записей еще нет!');
             }
         break;
 
@@ -83,11 +83,11 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=404">Ошибки 404</a> | <a href="/admin/logs?act=403">Ошибки 403</a> | <b>Автобаны</b><br><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `error` WHERE `num`=?;", [666]);
-            $page = App::paginate(Setting::get('loglist'), $total);
+            $page = paginate(setting('loglist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loglist').";", [666]);
+                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [666]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -97,9 +97,9 @@ if (is_admin([101, 102])) {
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('Записей еще нет!');
+                showError('Записей еще нет!');
             }
         break;
 
@@ -114,14 +114,14 @@ if (is_admin([101, 102])) {
                 if (is_admin([101])) {
                     DB::run() -> query("TRUNCATE `error`;");
 
-                    App::setFlash('success', 'Лог-файлы успешно очищены!');
-                    App::redirect("/admin/logs");
+                    setFlash('success', 'Лог-файлы успешно очищены!');
+                    redirect("/admin/logs");
 
                 } else {
-                    App::showError('Ошибка! Очищать логи могут только суперадмины!');
+                    showError('Ошибка! Очищать логи могут только суперадмины!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/logs">Вернуться</a><br>';
@@ -132,7 +132,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

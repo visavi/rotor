@@ -1,12 +1,15 @@
 <?php
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 define('STARTTIME', microtime(1));
 define('BASEDIR', dirname(__DIR__));
 define('APP', BASEDIR.'/app');
 define('HOME', BASEDIR.'/public');
-define('STORAGE', APP.'/storage');
-define('SITETIME', time());
+define('RESOURCES', BASEDIR.'/resources');
+define('STORAGE', RESOURCES.'/storage');
 define('PCLZIP_TEMPORARY_DIR', STORAGE.'/temp/');
+define('SITETIME', time());
 define('VERSION', '7.0');
 
 require_once BASEDIR.'/vendor/autoload.php';
@@ -14,10 +17,10 @@ require_once BASEDIR.'/vendor/autoload.php';
 /**
  * Регистрация классов
  */
-$aliases = [
+/*$aliases = [
     'Capsule' => 'Illuminate\Database\Capsule\Manager',
 ];
-AliasLoader::getInstance($aliases)->register();
+AliasLoader::getInstance($aliases)->register();*/
 
 if (! env('APP_ENV')) {
     $dotenv = new Dotenv\Dotenv(BASEDIR);
@@ -34,9 +37,9 @@ if (env('APP_DEBUG')) {
     $whoops->register();
 }
 
-$capsule = new Capsule();
+$db = new DB();
 
-$capsule->addConnection([
+$db->addConnection([
     'driver'    => env('DB_DRIVER'),
     'host'      => env('DB_HOST'),
     'database'  => env('DB_DATABASE'),
@@ -48,7 +51,7 @@ $capsule->addConnection([
 
 /*use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
-$capsule->setEventDispatcher(new Dispatcher(new Container));*/
-$capsule->setAsGlobal();
-$capsule->bootEloquent();
-$capsule::connection()->enableQueryLog();
+$db->setEventDispatcher(new Dispatcher(new Container));*/
+$db->setAsGlobal();
+$db->bootEloquent();
+$db::connection()->enableQueryLog();

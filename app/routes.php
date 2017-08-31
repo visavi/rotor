@@ -173,8 +173,8 @@ $router->map('GET', '/api/user', 'ApiController@user');
 $router->map('GET', '/api/forum', 'ApiController@forum');
 $router->map('GET', '/api/private', 'ApiController@private');
 
-$router->map('GET',  '/admin/spam', 'AdminSpamController@index');
-$router->map('POST', '/admin/spam/delete', 'AdminSpamController@delete');
+$router->map('GET',  '/admin/spam', 'Admin\SpamController@index');
+$router->map('POST', '/admin/spam/delete', 'Admin\SpamController@delete');
 
 $router->map('GET',      '/admin', 'admin/index.php', 'admin');
 $router->map('GET|POST', '/admin/book', 'admin/book.php');
@@ -217,7 +217,7 @@ $router->map('GET|POST', '/admin/delusers', 'admin/delusers.php');
 $router->map('GET',      '/admin/upgrade', 'admin/upgrade.php');
 
 $router->map( 'GET', '/search', function() {
-    App::view('search/index');
+    view('search/index');
 });
 
-Registry::set('router', $router);
+App\Classes\Registry::set('router', $router);

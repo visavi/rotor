@@ -36,17 +36,13 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "App::install",
+            "install",
             "php -r \"copy('.env.example', '.env');\""
         ]
     },
     "autoload": {
         "psr-4": {
-            "": [
-                "app/classes/",
-                "app/models/",
-                "app/controllers/"
-            ]
+            "App\\": "app/"
         },
         "files": [
             "app/routes.php",

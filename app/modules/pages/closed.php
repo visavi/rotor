@@ -1,13 +1,13 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
-if (Setting::get('closedsite') == 2) {
+if (setting('closedsite') == 2) {
     echo '<center><br><br><h2>Внимание! Сайт закрыт по техническим причинам</h2></center>';
 
     echo 'Администрация сайта приносит вам свои извинения за возможные неудобства.<br>';
     echo 'Работа сайта возможно возобновится в ближайшее время.<br><br>';
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

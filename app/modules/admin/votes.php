@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -43,7 +43,7 @@ if (is_admin([101, 102, 103])) {
                 }
                 echo '<br>';
             } else {
-                App::showError('Открытых голосований еще нет!');
+                showError('Открытых голосований еще нет!');
             }
 
             echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes?act=new">Создать голосование</a><br>';
@@ -103,16 +103,16 @@ if (is_admin([101, 102, 103])) {
                             $dbr -> execute($lastid, $data);
                         }
 
-                        App::setFlash('success', 'Голосование успешно создано!');
-                        App::redirect("/admin/votes");
+                        setFlash('success', 'Голосование успешно создано!');
+                        redirect("/admin/votes");
                     } else {
-                        App::showError('Ошибка! Необходимо минимум 2 варианта ответов!');
+                        showError('Ошибка! Необходимо минимум 2 варианта ответов!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный или короткий вопрос (от 3 до 100 символов)!');
+                    showError('Ошибка! Слишком длинный или короткий вопрос (от 3 до 100 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=new">Вернуться</a><br>';
@@ -148,7 +148,7 @@ if (is_admin([101, 102, 103])) {
 
                 echo 'Поля отмеченные красным цветом обязательны для заполнения!<br><br>';
             } else {
-                App::showError('Ошибка! Данного голосования не существует!');
+                showError('Ошибка! Данного голосования не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
@@ -186,19 +186,19 @@ if (is_admin([101, 102, 103])) {
                                 }
                             }
 
-                            App::setFlash('success', 'Голосование успешно изменено!');
-                            App::redirect("/admin/votes");
+                            setFlash('success', 'Голосование успешно изменено!');
+                            redirect("/admin/votes");
                         } else {
-                            App::showError('Ошибка! Не заполнены все обязательные поля с ответами!');
+                            showError('Ошибка! Не заполнены все обязательные поля с ответами!');
                         }
                     } else {
-                        App::showError('Ошибка! Данного голосования не существует!');
+                        showError('Ошибка! Данного голосования не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный или короткий вопрос (от 3 до 100 символов)!');
+                    showError('Ошибка! Слишком длинный или короткий вопрос (от 3 до 100 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=edit&amp;id='.$id.'">Вернуться</a><br>';
@@ -220,23 +220,23 @@ if (is_admin([101, 102, 103])) {
                         if ($do == 'close') {
                             DB::run() -> query("UPDATE `vote` SET `closed`=? WHERE `id`=?;", [1, $id]);
                             DB::run() -> query("DELETE FROM `votepoll` WHERE `vote_id`=?;", [$id]);
-                            App::setFlash('success', 'Голосование успешно закрыто!');
-                            App::redirect("/admin/votes");
+                            setFlash('success', 'Голосование успешно закрыто!');
+                            redirect("/admin/votes");
                         }
 
                         if ($do == 'open') {
                             DB::run() -> query("UPDATE `vote` SET `closed`=? WHERE `id`=?;", [0, $id]);
-                            App::setFlash('success', 'Голосование успешно открыто!');
-                            App::redirect("/admin/votes?act=history");
+                            setFlash('success', 'Голосование успешно открыто!');
+                            redirect("/admin/votes?act=history");
                         }
                     } else {
-                        App::showError('Ошибка! Данного голосования не существует!');
+                        showError('Ошибка! Данного голосования не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Не выбрано действие для голосования!');
+                    showError('Ошибка! Не выбрано действие для голосования!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
@@ -257,16 +257,16 @@ if (is_admin([101, 102, 103])) {
                         DB::run() -> query("DELETE FROM `voteanswer` WHERE `vote_id`=?;", [$id]);
                         DB::run() -> query("DELETE FROM `votepoll` WHERE `vote_id`=?;", [$id]);
 
-                        App::setFlash('success', 'Голосование успешно удалено!');
-                        App::redirect("/admin/votes");
+                        setFlash('success', 'Голосование успешно удалено!');
+                        redirect("/admin/votes");
                     } else {
-                        App::showError('Ошибка! Данного голосования не существует!');
+                        showError('Ошибка! Данного голосования не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Удалять голосования могут только суперадмины!');
+                    showError('Ошибка! Удалять голосования могут только суперадмины!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
@@ -281,13 +281,13 @@ if (is_admin([101, 102, 103])) {
                 if (is_admin([101])) {
                     DB::run() -> query("UPDATE `vote` SET `count`=(SELECT SUM(`result`) FROM `voteanswer` WHERE `vote`.id=`voteanswer`.`vote_id`) WHERE `closed`=?;", [0]);
 
-                    App::setFlash('success', 'Все данные успешно пересчитаны!');
-                    App::redirect("/admin/votes");
+                    setFlash('success', 'Все данные успешно пересчитаны!');
+                    redirect("/admin/votes");
                 } else {
-                    App::showError('Ошибка! Пересчитывать голосования могут только суперадмины!');
+                    showError('Ошибка! Пересчитывать голосования могут только суперадмины!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes">Вернуться</a><br>';
@@ -299,11 +299,11 @@ if (is_admin([101, 102, 103])) {
         case 'history':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
-            $page = App::paginate(Setting::get('allvotes'), $total);
+            $page = paginate(setting('allvotes'), $total);
 
             if ($total > 0) {
 
-                $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('allvotes').";", [1]);
+                $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('allvotes').";", [1]);
 
                 while ($data = $queryvote -> fetch()) {
                     echo '<div class="b">';
@@ -320,9 +320,9 @@ if (is_admin([101, 102, 103])) {
                     echo 'Всего голосов: '.$data['count'].'</div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('Голосований в архиве еще нет!');
+                showError('Голосований в архиве еще нет!');
             }
 
             echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">Список голосований</a><br>';
@@ -333,7 +333,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

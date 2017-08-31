@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
+if (is_admin([101]) && getUsername() == setting('nickname')) {
     //show_title('Очистка базы юзеров');
 
     switch ($action):
@@ -70,10 +70,10 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
 
                     echo '<i class="fa fa-times"></i> <b><a href="/admin/delusers?act=del&amp;deldate='.$deldate.'&amp;point='.$point.'&amp;uid='.$_SESSION['token'].'">Удалить пользователей</a></b><br><br>';
                 } else {
-                    App::showError('Пользователи для удаления отсутствуют!');
+                    showError('Пользователи для удаления отсутствуют!');
                 }
             } else {
-                App::showError('Ошибка! Указанно недопустимое время для удаления!');
+                showError('Ошибка! Указанно недопустимое время для удаления!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br>';
@@ -105,13 +105,13 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         echo 'Пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней, успешно удалены!<br>';
                         echo 'Было удалено пользователей: <b>'.$total.'</b><br><br>';
                     } else {
-                        App::showError('Пользователи для удаления отсутствуют!');
+                        showError('Пользователи для удаления отсутствуют!');
                     }
                 } else {
-                    App::showError('Ошибка! Указанно недопустимое время для удаления!');
+                    showError('Ошибка! Указанно недопустимое время для удаления!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delusers">Вернуться</a><br>';
@@ -122,7 +122,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

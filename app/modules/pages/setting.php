@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -13,7 +13,7 @@ switch ($action):
 case 'index':
 
     echo '<i class="fa fa-book"></i> ';
-    echo '<a href="/user/'.App::getUsername().'">Моя анкета</a> / ';
+    echo '<a href="/user/'.getUsername().'">Моя анкета</a> / ';
     echo '<a href="/profile">Мой профиль</a> / ';
     echo '<a href="/account">Мои данные</a> / ';
     echo '<b>Настройки</b><hr>';
@@ -27,7 +27,7 @@ case 'index':
     echo '<option value="0">Автоматически</option>';
     $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
     foreach ($globthemes as $themes) {
-        $selected = (App::user('themes') == basename($themes)) ? ' selected="selected"' : '';
+        $selected = (user('themes') == basename($themes)) ? ' selected="selected"' : '';
         echo '<option value="'.basename($themes).'"'.$selected.'>'.basename($themes).'</option>';
     }
     echo '</select><br>';
@@ -41,7 +41,7 @@ case 'index':
     echo '<select name="lang">';
     $languages = glob(APP."/lang/*", GLOB_ONLYDIR);
     foreach ($languages as $lang) {
-        $selected = (App::user('lang') == basename($lang)) ? ' selected="selected"' : '';
+        $selected = (user('lang') == basename($lang)) ? ' selected="selected"' : '';
         echo '<option value="'.basename($lang).'"'.$selected.'>'.$langShort[basename($lang)].'</option>';
     }
     echo '</select><br>';
@@ -51,27 +51,27 @@ case 'index':
     echo 'Временной сдвиг:<br>';
     echo '<select name="timezone">';
     foreach($arrtimezone as $zone) {
-        $selected = (App::user('timezone') == $zone) ? ' selected="selected"' : '';
+        $selected = (user('timezone') == $zone) ? ' selected="selected"' : '';
         echo '<option value="'.$zone.'"'.$selected.'>'.$zone.'</option>';
     }
     echo '</select> - '.date_fixed(SITETIME, 'H:i').'<br>';
 
 ?>
-    <?php $checked = (App::user('privacy') == 1) ? ' checked="checked"' : ''; ?>
+    <?php $checked = (user('privacy') == 1) ? ' checked="checked"' : ''; ?>
     <div class="checkbox">
         <label data-toggle="tooltip" title="Писать в приват и на стену смогут только пользователи из контактов">
             <input name="privacy" type="checkbox" value="1"<?= $checked?>> Режим приватности
         </label>
     </div>
 
-    <?php $checked = (App::user('notify') == 1) ? ' checked="checked"' : ''; ?>
+    <?php $checked = (user('notify') == 1) ? ' checked="checked"' : ''; ?>
     <div class="checkbox">
         <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения">
             <input name="notify" type="checkbox" value="1"<?= $checked?>> Получать уведомления об ответах
         </label>
     </div>
 
-    <?php $checked = (! empty(App::user('subscribe'))) ? ' checked="checked"' : ''; ?>
+    <?php $checked = (! empty(user('subscribe'))) ? ' checked="checked"' : ''; ?>
     <div class="checkbox">
         <label data-toggle="tooltip" title="Получение информационных писем с сайта на email">
             <input name="subscribe" type="checkbox" value="1"<?= $checked?>> Получать информационные письма
@@ -107,7 +107,7 @@ case 'edit':
     if ($validation->run()) {
         if (file_exists(HOME."/themes/$themes/index.php") || $themes==0) {
 
-            $user = User::find(App::getUserId());
+            $user = User::find(getUserId());
             $user->update([
                 'themes'    => $themes,
                 'timezone'  => $timezone,
@@ -116,14 +116,14 @@ case 'edit':
                 'subscribe' => $subscribe,
             ]);
 
-            App::setFlash('success', 'Настройки успешно изменены!');
-            App::redirect("/setting");
+            setFlash('success', 'Настройки успешно изменены!');
+            redirect("/setting");
 
         } else {
-            App::showError('Ошибка! Данный скин не установлен на сайте!');
+            showError('Ошибка! Данный скин не установлен на сайте!');
         }
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/setting">Вернуться</a><br>';
@@ -131,7 +131,7 @@ break;
 
 endswitch;
 } else {
-    App::showError('Для изменения настроек необходимо авторизоваться');
+    showError('Для изменения настроек необходимо авторизоваться');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

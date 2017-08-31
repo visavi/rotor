@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
 } else {
@@ -30,7 +30,7 @@ if (is_admin([101, 102])) {
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type]);
             $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type2]);
-            $page = App::paginate(Setting::get('postoffers'), $total);
+            $page = paginate(setting('postoffers'), $total);
 
             echo '<i class="fa fa-book"></i> ';
 
@@ -44,7 +44,7 @@ if (is_admin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".Setting::get('postoffers').";", [$type]);
+                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".setting('postoffers').";", [$type]);
 
                 echo '<form action="/admin/offers?act=del&amp;type='.$type.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -67,7 +67,7 @@ if (is_admin([101, 102])) {
                     echo '<a href="/admin/offers?act=edit&amp;id='.$data['id'].'">Редактировать</a> / ';
                     echo '<a href="/admin/offers?act=reply&amp;id='.$data['id'].'">Ответить</a></div>';
 
-                    echo '<div>'.App::bbCode($data['text']).'<br>';
+                    echo '<div>'.bbCode($data['text']).'<br>';
                     echo 'Добавлено: '.profile($data['user']).'  ('.date_fixed($data['time']).')<br>';
                     echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                     echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
@@ -75,11 +75,11 @@ if (is_admin([101, 102])) {
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                App::pagination($page);
+                pagination($page);
 
                 echo 'Всего записей: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('Записей еще нет!');
+                showError('Записей еще нет!');
             }
 
             if (is_admin([101])) {
@@ -101,7 +101,7 @@ if (is_admin([101, 102])) {
 
             $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
             if (!empty($queryoff)) {
-                //Setting::get('newtitle') = $queryoff['title'];
+                //setting('newtitle') = $queryoff['title'];
 
                 echo '<div class="b">';
                 echo '<i class="fa fa-file-o"></i> ';
@@ -122,7 +122,7 @@ if (is_admin([101, 102])) {
                 echo '<div class="right"><a href="/admin/offers?act=edit&amp;id='.$id.'">Редактировать</a> / ';
                 echo '<a href="/admin/offers?act=reply&amp;id='.$id.'">Ответить</a></div>';
 
-                echo '<div>'.App::bbCode($queryoff['text']).'<br>';
+                echo '<div>'.bbCode($queryoff['text']).'<br>';
                 echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br>';
 
                 echo '<a href="/offers?act=comments&amp;id='.$id.'">Комментарии</a> ('.$queryoff['comments'].') ';
@@ -130,11 +130,11 @@ if (is_admin([101, 102])) {
 
                 if (!empty($queryoff['text_reply'])) {
                     echo '<div class="b"><b>Официальный ответ</b></div>';
-                    echo '<div class="q">'.App::bbCode($queryoff['text_reply']).'<br>';
+                    echo '<div class="q">'.bbCode($queryoff['text_reply']).'<br>';
                     echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br>';
                 }
             } else {
-                App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                showError('Ошибка! Данного предложения или проблемы не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?type='.$type.'">Вернуться</a><br>';
@@ -171,7 +171,7 @@ if (is_admin([101, 102])) {
 
                 echo '<input type="submit" value="Отправить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                showError('Ошибка! Данного предложения или проблемы не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -195,25 +195,25 @@ if (is_admin([101, 102])) {
 
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, App::getUsername(), SITETIME, $id]);
+                            DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, getUsername(), SITETIME, $id]);
 
                             if ($queryoff['status'] >= 2) {
                                 DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
                             }
 
-                            App::setFlash('success', 'Данные успешно отправлены!');
-                            App::redirect("/admin/offers?act=view&id=$id");
+                            setFlash('success', 'Данные успешно отправлены!');
+                            redirect("/admin/offers?act=view&id=$id");
                         } else {
-                            App::showError('Ошибка! Недопустимый статус предложения или проблемы!');
+                            showError('Ошибка! Недопустимый статус предложения или проблемы!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинный или короткий текст ответа (От 5 до 1000 символов)!');
+                        showError('Ошибка! Слишком длинный или короткий текст ответа (От 5 до 1000 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                    showError('Ошибка! Данного предложения или проблемы не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?act=reply&amp;id='.$id.'">Вернуться</a><br>';
@@ -247,7 +247,7 @@ if (is_admin([101, 102])) {
 
                 echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                showError('Ошибка! Данного предложения или проблемы не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -275,19 +275,19 @@ if (is_admin([101, 102])) {
 
                             DB::run() -> query("UPDATE `offers` SET `type`=?, `closed`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $closed, $title, $text, $id]);
 
-                            App::setFlash('success', 'Данные успешно отредактированы!');
-                            App::redirect("/admin/offers?act=view&id=$id");
+                            setFlash('success', 'Данные успешно отредактированы!');
+                            redirect("/admin/offers?act=view&id=$id");
                         } else {
-                            App::showError('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
+                            showError('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
+                        showError('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                    showError('Ошибка! Данного предложения или проблемы не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?act=edit&amp;id='.$id.'">Вернуться</a><br>';
@@ -313,13 +313,13 @@ if (is_admin([101, 102])) {
                     DB::run() -> query("DELETE FROM `comments` WHERE relate_type='offer' AND `relate_id` IN (".$del.");");
                     DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id` IN (".$del.");");
 
-                    App::setFlash('success', 'Выбранные пункты успешно удалены!');
-                    App::redirect("/admin/offers?type=$type&page=$page");
+                    setFlash('success', 'Выбранные пункты успешно удалены!');
+                    redirect("/admin/offers?type=$type&page=$page");
                 } else {
-                    App::showError('Ошибка! Отсутствуют выбранные предложения или проблемы!');
+                    showError('Ошибка! Отсутствуют выбранные предложения или проблемы!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers?page='.$page.'">Вернуться</a><br>';
@@ -336,13 +336,13 @@ if (is_admin([101, 102])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `comments` WHERE `offers`.`id`=`comments`.`relate_id` AND relate_type='offer');");
 
-                    App::setFlash('success', 'Комментарии успешно пересчитаны!');
-                    App::redirect("/admin/offers");
+                    setFlash('success', 'Комментарии успешно пересчитаны!');
+                    redirect("/admin/offers");
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
+                showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/offers">Вернуться</a><br>';
@@ -353,7 +353,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

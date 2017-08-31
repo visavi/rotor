@@ -1,12 +1,12 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
 if (is_user()) {
-if (is_admin() || Setting::get('downupload') == 1) {
+if (is_admin() || setting('downupload') == 1) {
 
 switch ($action):
 /**
@@ -20,7 +20,7 @@ case 'index':
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<a href="/load/active">Проверенные</a><hr>';
 
-    if (Setting::get('home') == 'http://visavi.net') {
+    if (setting('home') == 'http://visavi.net') {
         echo '<div class="info">';
         echo '<i class="fa fa-question-circle"></i> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br>';
         echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br>';
@@ -76,7 +76,7 @@ case 'index':
         echo 'Файл и скриншот вы сможете загрузить после добавления описания<br>';
         echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br><br>';
     } else {
-        App::showError('Категории файлов еще не созданы!');
+        showError('Категории файлов еще не созданы!');
     }
 break;
 
@@ -91,10 +91,10 @@ case 'waiting':
     echo '<b>Ожидающие</b> / ';
     echo '<a href="/load/active">Проверенные</a><hr>';
 
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [0, App::getUsername()]);
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [0, getUsername()]);
 
     if ($total > 0) {
-        $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC;", [0, App::getUsername()]);
+        $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC;", [0, getUsername()]);
 
         while ($data = $querynew -> fetch()) {
             echo '<div class="b">';
@@ -119,7 +119,7 @@ case 'waiting':
 
         echo '<br>';
     } else {
-        App::showError('Ожидающих модерации файлов еще нет!');
+        showError('Ожидающих модерации файлов еще нет!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add">Вернуться</a><br>';
@@ -155,42 +155,42 @@ case 'add':
                                         if (empty($downtitle)) {
 
                                             //DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `category_id`=?", array($cid));
-                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', App::getUsername(), $author, $site, '', SITETIME]);
+                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', getUsername(), $author, $site, '', SITETIME]);
 
                                             $lastid = DB::run() -> lastInsertId();
 
-                                            App::setFlash('success', 'Данные успешно добавлены!');
-                                            App::redirect("/load/add?act=view&id=$lastid");
+                                            setFlash('success', 'Данные успешно добавлены!');
+                                            redirect("/load/add?act=view&id=$lastid");
 
                                         } else {
-                                            App::showError('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+                                            showError('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
                                         }
                                     } else {
-                                        App::showError('Ошибка! В данный раздел запрещена загрузка файлов!');
+                                        showError('Ошибка! В данный раздел запрещена загрузка файлов!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! Выбранный вами раздел не существует!');
+                                    showError('Ошибка! Выбранный вами раздел не существует!');
                                 }
                             } else {
-                                App::showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                                showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
                             }
                         } else {
-                            App::showError('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
+                            showError('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
+                        showError('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный или короткий текст описания (от 50 до 5000 символов)!');
+                    showError('Ошибка! Слишком длинный или короткий текст описания (от 50 до 5000 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
+                showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
             }
         } else {
-            App::showError('Ошибка! Вы не выбрали категорию для добавления файла!');
+            showError('Ошибка! Вы не выбрали категорию для добавления файла!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=newfile&amp;cid='.$cid.'">Вернуться</a><br>';
@@ -212,7 +212,7 @@ case 'view':
     if (!empty($new)) {
         $downs = DB::run() -> query("SELECT `id`, `parent`, `name` FROM `cats` WHERE `closed`=0 ORDER BY `sort` ASC;") -> fetchAll();
         if (count($downs) > 0) {
-            if ($new['user'] == App::getUsername()) {
+            if ($new['user'] == getUsername()) {
                 if (empty($new['active'])) {
 
                     $folder = $new['folder'] ? $new['folder'].'/' : '';
@@ -233,10 +233,10 @@ case 'view':
                         echo '<b><big>Загрузка файла</big></b><br><br>';
                         echo '<div class="info">';
                         echo '<form action="/load/add?act=loadfile&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
-                        echo 'Прикрепить файл* ('.Setting::get('allowextload').'):<br><input type="file" name="loadfile"><br>';
+                        echo 'Прикрепить файл* ('.setting('allowextload').'):<br><input type="file" name="loadfile"><br>';
                         echo '<input value="Загрузить" type="submit"></form><br>';
 
-                        echo 'Максимальный вес файла: '.formatsize(Setting::get('fileupload')).'</div><br>';
+                        echo 'Максимальный вес файла: '.formatsize(setting('fileupload')).'</div><br>';
 
                     } else {
 
@@ -251,12 +251,12 @@ case 'view':
                                 echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br><input type="file" name="screen"><br>';
                                 echo '<input value="Загрузить" type="submit"></form><br>';
 
-                                echo 'Максимальный вес скриншота: '.formatsize(Setting::get('screenupload')).'<br>';
-                                echo 'Требуемый размер скриншота: от 100 до '.Setting::get('screenupsize').' px</div><br><br>';
+                                echo 'Максимальный вес скриншота: '.formatsize(setting('screenupload')).'<br>';
+                                echo 'Требуемый размер скриншота: от 100 до '.setting('screenupsize').' px</div><br><br>';
 
                             } else {
                                 echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                                echo resize_image('uploads/screen/'.$folder, $new['screen'], Setting::get('previewsize')).'<br>';
+                                echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                             }
                         }
                     }
@@ -305,16 +305,16 @@ case 'view':
                     echo 'Все поля отмеченные знаком *, обязательны для заполнения<br><br>';
 
                 } else {
-                    App::showError('Ошибка! Данный файл уже проверен модератором!');
+                    showError('Ошибка! Данный файл уже проверен модератором!');
                 }
             } else {
-                App::showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
+                showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
             }
         } else {
-            App::showError('Категории файлов еще не созданы!');
+            showError('Категории файлов еще не созданы!');
         }
     } else {
-        App::showError('Данного файла не существует!');
+        showError('Данного файла не существует!');
     }
 
 break;
@@ -342,7 +342,7 @@ case 'edit':
                             $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
                             if (!empty($new)) {
                                 if (empty($downs['closed'])) {
-                                    if ($new['user'] == App::getUsername()) {
+                                    if ($new['user'] == getUsername()) {
                                         if (empty($new['active'])) {
 
                                             $categories = DB::run() -> querySingle("SELECT `id` FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
@@ -353,44 +353,44 @@ case 'edit':
 
                                                     DB::run() -> query("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `time`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $new['time'], $id]);
 
-                                                    App::setFlash('success', 'Данные успешно изменены!');
-                                                    App::redirect("/load/add?act=view&id=$id");
+                                                    setFlash('success', 'Данные успешно изменены!');
+                                                    redirect("/load/add?act=view&id=$id");
 
                                                 } else {
-                                                    App::showError('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
+                                                    showError('Ошибка! Название файла '.$title.' уже имеется в загрузках!');
                                                 }
                                             } else {
-                                                App::showError('Ошибка! Выбранный вами раздел не существует!');
+                                                showError('Ошибка! Выбранный вами раздел не существует!');
                                             }
                                         } else {
-                                            App::showError('Ошибка! Данный файл уже проверен модератором!');
+                                            showError('Ошибка! Данный файл уже проверен модератором!');
                                         }
                                     } else {
-                                        App::showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
+                                        showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! В данный раздел запрещена загрузка файлов!');
+                                    showError('Ошибка! В данный раздел запрещена загрузка файлов!');
                                 }
                             } else {
-                                App::showError('Данного файла не существует!');
+                                showError('Данного файла не существует!');
                             }
                         } else {
-                            App::showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                            showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
+                        showError('Ошибка! Слишком длинный адрес сайта (не более 50 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
+                    showError('Ошибка! Слишком длинный ник (логин) автора (до 50 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Слишком длинный или короткий текст описания (от 50 до 5000 символов)!');
+                showError('Ошибка! Слишком длинный или короткий текст описания (от 50 до 5000 символов)!');
             }
         } else {
-            App::showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
+            showError('Ошибка! Слишком длинное или короткое название (от 5 до 50 символов)!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -407,7 +407,7 @@ case 'loadfile':
     $folder = $down['folder'] ? $down['folder'].'/' : '';
 
     if (!empty($down)) {
-        if ($down['user'] == App::getUsername()) {
+        if ($down['user'] == getUsername()) {
             if (empty($down['active'])) {
                 if (empty($down['link'])) {
                     if (is_writeable(HOME.'/uploads/files/'.$folder)) {
@@ -421,8 +421,8 @@ case 'loadfile':
 
                                 $ext = getExtension($filename);
 
-                                if (in_array($ext, explode(',', Setting::get('allowextload')), true)) {
-                                    if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= Setting::get('fileupload')) {
+                                if (in_array($ext, explode(',', setting('allowextload')), true)) {
+                                    if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= setting('fileupload')) {
                                         $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                                         if (empty($downlink)) {
 
@@ -473,41 +473,41 @@ case 'loadfile':
                                                 }
                                             }
 
-                                            App::setFlash('success', 'Файл успешно загружен!');
-                                            App::redirect("/load/add?act=view&id=$id");
+                                            setFlash('success', 'Файл успешно загружен!');
+                                            redirect("/load/add?act=view&id=$id");
 
                                         } else {
-                                            App::showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
+                                            showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                                         }
                                     } else {
-                                        App::showError('Ошибка! Максимальный размер загружаемого файла '.formatsize(Setting::get('fileupload')).'!');
+                                        showError('Ошибка! Максимальный размер загружаемого файла '.formatsize(setting('fileupload')).'!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! Недопустимое расширение файла!');
+                                    showError('Ошибка! Недопустимое расширение файла!');
                                 }
                             } else {
-                                App::showError('Ошибка! В названии файла присутствуют недопустимые символы!');
+                                showError('Ошибка! В названии файла присутствуют недопустимые символы!');
                             }
                         } else {
-                            App::showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
+                            showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
                         }
                     } else {
-                        App::showError('Ошибка! Не удалось загрузить файл!');
+                        showError('Ошибка! Не удалось загрузить файл!');
                     }
                     } else {
-                        App::showError('Ошибка! Директория для файлов недоступна для записи!');
+                        showError('Ошибка! Директория для файлов недоступна для записи!');
                     }
                 } else {
-                    App::showError('Ошибка! Файл уже загружен!');
+                    showError('Ошибка! Файл уже загружен!');
                 }
             } else {
-                App::showError('Ошибка! Данный файл уже проверен модератором!');
+                showError('Ошибка! Данный файл уже проверен модератором!');
             }
         } else {
-            App::showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
+            showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
         }
     } else {
-        App::showError('Данного файла не существует!');
+        showError('Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -522,13 +522,13 @@ case 'loadscreen':
     $down = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($down)) {
-        if ($down['user'] == App::getUsername()) {
+        if ($down['user'] == getUsername()) {
             if (empty($down['active'])) {
                 if (empty($down['screen'])) {
                     if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
                         // ------------------------------------------------------//
-                        $handle = upload_image($_FILES['screen'], Setting::get('screenupload'), Setting::get('screenupsize'),  $down['link']);
+                        $handle = upload_image($_FILES['screen'], setting('screenupload'), setting('screenupsize'),  $down['link']);
                         if ($handle) {
                             $folder = $down['folder'] ? $down['folder'].'/' : '';
 
@@ -538,29 +538,29 @@ case 'loadscreen':
                                 DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$handle -> file_dst_name, $id]);
                                 $handle -> clean();
 
-                                App::setFlash('success', 'Скриншот успешно загружен!');
-                                App::redirect("/load/add?act=view&id=$id");
+                                setFlash('success', 'Скриншот успешно загружен!');
+                                redirect("/load/add?act=view&id=$id");
 
                             } else {
-                                App::showError($handle -> error);
+                                showError($handle -> error);
                             }
                         } else {
-                            App::showError('Ошибка! Не удалось загрузить изображение!');
+                            showError('Ошибка! Не удалось загрузить изображение!');
                         }
                     } else {
-                        App::showError('Ошибка! Вы не загрузили скриншот!');
+                        showError('Ошибка! Вы не загрузили скриншот!');
                     }
                 } else {
-                    App::showError('Ошибка! Скриншот уже загружен!');
+                    showError('Ошибка! Скриншот уже загружен!');
                 }
             } else {
-                App::showError('Ошибка! Данный файл уже проверен модератором!');
+                showError('Ошибка! Данный файл уже проверен модератором!');
             }
         } else {
-            App::showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
+            showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
         }
     } else {
-        App::showError('Данного файла не существует!');
+        showError('Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -574,7 +574,7 @@ case 'delfile':
     $link = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($link)) {
-        if ($link['user'] == App::getUsername()) {
+        if ($link['user'] == getUsername()) {
             if (empty($link['active'])) {
                 $folder = $link['folder'] ? $link['folder'].'/' : '';
 
@@ -587,17 +587,17 @@ case 'delfile':
 
                 DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
-                App::setFlash('success', 'Файл успешно удален!');
-                App::redirect("/load/add?act=view&id=$id");
+                setFlash('success', 'Файл успешно удален!');
+                redirect("/load/add?act=view&id=$id");
 
             } else {
-                App::showError('Ошибка! Данный файл уже проверен модератором!');
+                showError('Ошибка! Данный файл уже проверен модератором!');
             }
         } else {
-            App::showError('Ошибка! Удаление невозможно, вы не автор данного файла!');
+            showError('Ошибка! Удаление невозможно, вы не автор данного файла!');
         }
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -611,7 +611,7 @@ case 'delscreen':
     $screen = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($screen)) {
-        if ($screen['user'] == App::getUsername()) {
+        if ($screen['user'] == getUsername()) {
             if (empty($screen['active'])) {
                 $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
@@ -619,17 +619,17 @@ case 'delscreen':
 
                 DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
-                App::setFlash('success', 'Скриншот успешно удален!');
-                App::redirect("/load/add?act=view&id=$id");
+                setFlash('success', 'Скриншот успешно удален!');
+                redirect("/load/add?act=view&id=$id");
 
             } else {
-                App::showError('Ошибка! Данный файл уже проверен модератором!');
+                showError('Ошибка! Данный файл уже проверен модератором!');
             }
         } else {
-            App::showError('Ошибка! Удаление невозможно, вы не автор данного файла!');
+            showError('Ошибка! Удаление невозможно, вы не автор данного файла!');
         }
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -639,7 +639,7 @@ break;
  * Правила
  */
 case 'rules':
-    if (Setting::get('home') == 'http://visavi.net') {
+    if (setting('home') == 'http://visavi.net') {
 
         //show_title('Правила оформления скриптов');
 
@@ -681,9 +681,9 @@ case 'rules':
 
         echo '<b>Ограничения:</b><br>';
         echo 'К загрузке допускаются архивы в формате zip, скриншоты можно загружать в форматах jpg, jpeg, gif и png<br>';
-        echo 'Максимальный вес архива: '.formatsize(Setting::get('fileupload')).'<br>';
-        echo 'Максимальный вес скриншота: '.formatsize(Setting::get('screenupload')).'<br>';
-        echo 'Требуемый размер скриншота: от 100 до '.Setting::get('screenupsize').' px<br><br>';
+        echo 'Максимальный вес архива: '.formatsize(setting('fileupload')).'<br>';
+        echo 'Максимальный вес скриншота: '.formatsize(setting('screenupload')).'<br>';
+        echo 'Требуемый размер скриншота: от 100 до '.setting('screenupsize').' px<br><br>';
 
         echo '<b>Рекомендации:</b><br>';
         echo 'Чем лучше вы оформите скрипт при публикации, тем быстрее он будет проверен и размещен в архиве<br>';
@@ -700,13 +700,13 @@ break;
 endswitch;
 
 } else {
-    App::showError('Возможность добавление файлов запрещена администрацией сайта');
+    showError('Возможность добавление файлов запрещена администрацией сайта');
 }
 
 } else {
-    App::showError('Вы не авторизованы, для добавления файла, необходимо');
+    showError('Вы не авторизованы, для добавления файла, необходимо');
 }
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/">Категории</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

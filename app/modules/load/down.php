@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
@@ -97,12 +97,12 @@ case 'index':
             }
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `category_id`=? AND `active`=?;", [$cid, 1]);
-            $page = App::paginate(Setting::get('downlist'), $total);
+            $page = paginate(setting('downlist'), $total);
 
             if ($total > 0) {
 
 
-                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", [$cid, 1]);
+                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".setting('downlist').";", [$cid, 1]);
 
                 $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
@@ -124,19 +124,19 @@ case 'index':
                     echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
                 if (empty($cats['closed'])) {
-                    App::showError('В данном разделе еще нет файлов!');
+                    showError('В данном разделе еще нет файлов!');
                 }
             }
 
             if (!empty($cats['closed'])) {
-                App::showError('В данном разделе запрещена загрузка файлов!');
+                showError('В данном разделе запрещена загрузка файлов!');
             }
 
         } else {
-            App::showError('Ошибка! Данного раздела не существует!');
+            showError('Ошибка! Данного раздела не существует!');
         }
 
         echo '<a href="/load/top">Топ файлов</a> / ';
@@ -147,7 +147,7 @@ case 'index':
         }
         echo '<br>';
     } else {
-        App::redirect("/load");
+        redirect("/load");
     }
 break;
 
@@ -164,7 +164,7 @@ case 'view':
     )->find_one();
 
     if (!empty($downs)) {
-        if (!empty($downs['active']) || $downs['user'] == App::getUsername()) {
+        if (!empty($downs['active']) || $downs['user'] == getUsername()) {
 
             if (is_admin([101, 102])) {
                 echo ' <a href="/admin/load?act=editdown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Редактировать</a> / ';
@@ -172,7 +172,7 @@ case 'view':
             }
 
             //show_title($downs['title']);
-            //Setting::get('description') =  strip_str($downs['text']);
+            //setting('description') =  strip_str($downs['text']);
 
             $folder = $downs['cats_folder'] ? $downs['cats_folder'].'/' : '';
 ?>
@@ -188,7 +188,7 @@ case 'view':
                 <li><a href="/load/rss?id=<?= $id ?>">RSS-лента</a></li>
             </ol>
   <?php
-            if (empty($downs['active']) && $downs['user'] == App::getUsername()){
+            if (empty($downs['active']) && $downs['user'] == getUsername()){
                 echo '<div class="info"><b>Внимание!</b> Данная загрузка добавлена, но еще требует модераторской проверки<br>';
                 echo '<i class="fa fa-pencil"></i> <a href="/load/add?act=view&amp;id='.$id.'">Перейти к редактированию</a></div><br>';
             }
@@ -196,10 +196,10 @@ case 'view':
             $ext = getExtension($downs['link']);
 
             if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('uploads/files/'.$folder, $downs['link'], Setting::get('previewsize'), ['alt' => $downs['title']]).'</a><br>';
+                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('uploads/files/'.$folder, $downs['link'], setting('previewsize'), ['alt' => $downs['title']]).'</a><br>';
             }
 
-            echo '<div class="message">'.App::bbCode($downs['text']).'</div><br>';
+            echo '<div class="message">'.bbCode($downs['text']).'</div><br>';
 
             $poster = '';
             if (!empty($downs['screen']) && file_exists(HOME.'/uploads/screen/'.$folder.$downs['screen'])) {
@@ -207,7 +207,7 @@ case 'view':
 
                 if ($ext != 'mp4') {
                     echo 'Скриншот:<br>';
-                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('uploads/screen/'.$folder, $downs['screen'], Setting::get('previewsize'), ['alt' => $downs['title']]).'</a><br><br>';
+                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('uploads/screen/'.$folder, $downs['screen'], setting('previewsize'), ['alt' => $downs['title']]).'</a><br><br>';
                 }
             }
 
@@ -287,21 +287,21 @@ case 'view':
 
                 if (is_user()) {
                     echo '<br>Скопировать адрес:<br>';
-                    echo '<input name="text" size="40" value="'.Setting::get('home').'/uploads/files/'.$folder.$downs['link'].'"><br>';
+                    echo '<input name="text" size="40" value="'.setting('home').'/uploads/files/'.$folder.$downs['link'].'"><br>';
                 }
 
                 echo '<br>';
             } else {
-                App::showError('Файл еще не загружен!');
+                showError('Файл еще не загружен!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['cats_name'].'</a><br>';
 
         } else {
-            App::showError('Ошибка! Данный файл еще не проверен модератором!');
+            showError('Ошибка! Данный файл еще не проверен модератором!');
         }
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 break;
 
@@ -322,27 +322,27 @@ case 'load':
                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
                 if (file_exists('uploads/files/'.$folder.$downs['link'])) {
-                    $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", [$id, App::getClientIp()]);
+                    $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", [$id, getClientIp()]);
                     if (empty($queryloads)) {
-                        $expiresloads = SITETIME + 3600 * Setting::get('expiresloads');
+                        $expiresloads = SITETIME + 3600 * setting('expiresloads');
 
                         DB::run() -> query("DELETE FROM loads WHERE time<?;", [SITETIME]);
-                        DB::run() -> query("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, App::getClientIp(), $expiresloads]);
+                        DB::run() -> query("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, getClientIp(), $expiresloads]);
                         DB::run() -> query("UPDATE downs SET loads=loads+1, last_load=? WHERE id=?", [SITETIME, $id]);
                     }
 
-                    App::redirect("/uploads/files/".$folder.$downs['link']);
+                    redirect("/uploads/files/".$folder.$downs['link']);
                 } else {
-                    App::showError('Ошибка! Файла для скачивания не существует!');
+                    showError('Ошибка! Файла для скачивания не существует!');
                 }
             } else {
-                App::showError('Ошибка! Данный файл еще не проверен модератором!');
+                showError('Ошибка! Данный файл еще не проверен модератором!');
             }
         } else {
-            App::showError('Ошибка! Данного файла не существует!');
+            showError('Ошибка! Данного файла не существует!');
         }
     } else {
-        App::showError('Ошибка! Проверочное число не совпало с данными на картинке!');
+        showError('Ошибка! Проверочное число не совпало с данными на картинке!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -367,39 +367,39 @@ case 'vote':
 
                 if (!empty($downs)) {
                     if (!empty($downs['active'])) {
-                        if (App::getUsername() != $downs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['down', $id, App::getUsername()]);
+                        if (getUsername() != $downs['user']) {
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['down', $id, getUsername()]);
 
                             if (empty($queryrated)) {
-                                $expiresrated = SITETIME + 3600 * Setting::get('expiresrated');
+                                $expiresrated = SITETIME + 3600 * setting('expiresrated');
 
                                 DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['down', SITETIME]);
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, App::getUsername(), $expiresrated]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, getUsername(), $expiresrated]);
                                 DB::run() -> query("UPDATE `downs` SET `rating`=`rating`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
 
                                 echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br>';
                                 echo 'Всего оценивало: '.($downs['rated'] + 1).'<br>';
                                 echo 'Средняя оценка: '.round(($downs['rating'] + $score) / ($downs['rated'] + 1), 1).'<br><br>';
                             } else {
-                                App::showError('Ошибка! Вы уже оценивали данный файл!');
+                                showError('Ошибка! Вы уже оценивали данный файл!');
                             }
                         } else {
-                            App::showError('Ошибка! Нельзя голосовать за свой файл!');
+                            showError('Ошибка! Нельзя голосовать за свой файл!');
                         }
                     } else {
-                        App::showError('Ошибка! Данный файл еще не проверен модератором!');
+                        showError('Ошибка! Данный файл еще не проверен модератором!');
                     }
                 } else {
-                    App::showError('Ошибка! Данного файла не существует!');
+                    showError('Ошибка! Данного файла не существует!');
                 }
             } else {
-                App::showError('Ошибка! Необходимо поставить оценку от 1 до 5 включительно!');
+                showError('Ошибка! Необходимо поставить оценку от 1 до 5 включительно!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Вы не авторизованы, для голосования за файлы, необходимо');
+        showError('Вы не авторизованы, для голосования за файлы, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -414,14 +414,14 @@ case 'comments':
 
     if (!empty($downs)) {
         if (!empty($downs['active'])) {
-            //Setting::get('newtitle') = 'Комментарии - '.$downs['title'];
+            //setting('newtitle') = 'Комментарии - '.$downs['title'];
 
             echo '<i class="fa fa-file-o"></i> <b><a href="/load/down?act=view&amp;id='.$id.'">'.$downs['title'].'</a></b><br><br>';
 
             echo '<a href="/load/down?act=comments&amp;id='.$id.'&amp;rand='.mt_rand(100, 999).'">Обновить</a> / <a href="/load/rss?id='.$id.'">RSS-лента</a><hr>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['down', $id]);
-            $page = App::paginate(Setting::get('downcomm'), $total);
+            $page = paginate(setting('downcomm'), $total);
 
             if ($total > 0) {
 
@@ -431,7 +431,7 @@ case 'comments':
                     echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".Setting::get('downcomm').";", ['down', $id]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".setting('downcomm').";", ['down', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -444,18 +444,18 @@ case 'comments':
                     echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    if (!empty(App::getUsername()) && App::getUsername() != $data['user']) {
+                    if (!empty(getUsername()) && getUsername() != $data['user']) {
                         echo '<div class="right">';
                         echo '<a href="/load/down?act=reply&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Отв</a> / ';
                         echo '<a href="/load/down?act=quote&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Цит</a> / ';
                         echo '<a href="/load/down?act=spam&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></div>';
                     }
 
-                    if (App::getUsername() == $data['user'] && $data['time'] + 600 > SITETIME) {
+                    if (getUsername() == $data['user'] && $data['time'] + 600 > SITETIME) {
                         echo '<div class="right"><a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
                     }
 
-                    echo '<div class="message">'.App::bbCode($data['text']).'<br>';
+                    echo '<div class="message">'.bbCode($data['text']).'<br>';
 
                     if (is_admin()) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -467,9 +467,9 @@ case 'comments':
                     echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('Комментариев еще нет!');
+                showError('Комментариев еще нет!');
             }
 
             if (is_user()) {
@@ -483,13 +483,13 @@ case 'comments':
                 echo '<a href="/smiles">Смайлы</a> / ';
                 echo '<a href="/tags">Теги</a><br><br>';
             } else {
-                App::showError('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+                showError('Вы не авторизованы, чтобы добавить сообщение, необходимо');
             }
         } else {
-            App::showError('Ошибка! Данный файл еще не проверен модератором!');
+            showError('Ошибка! Данный файл еще не проверен модератором!');
         }
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -515,30 +515,30 @@ case 'add':
 
                             $msg = antimat($msg);
 
-                            DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
+                            DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, getUsername(), SITETIME, getClientIp(), getUserAgent()]);
 
                             DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
-                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [App::getUsername()]);
+                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [getUsername()]);
 
-                            App::setFlash('success', 'Сообщение успешно добавлено!');
-                            App::redirect("/load/down?act=end&id=$id");
+                            setFlash('success', 'Сообщение успешно добавлено!');
+                            redirect("/load/down?act=end&id=$id");
                         } else {
-                            App::showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
+                            showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                         }
                     } else {
-                        App::showError('Ошибка! Данный файл еще не проверен модератором!');
+                        showError('Ошибка! Данный файл еще не проверен модератором!');
                     }
                 } else {
-                    App::showError('Ошибка! Данного файла не существует!');
+                    showError('Ошибка! Данного файла не существует!');
                 }
             } else {
-                App::showError('Ошибка! Слишком длинное или короткое сообщение!');
+                showError('Ошибка! Слишком длинное или короткое сообщение!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Вы не авторизованы, чтобы добавить сообщение, необходимо');
+        showError('Вы не авторизованы, чтобы добавить сообщение, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'">Вернуться</a><br>';
@@ -561,24 +561,24 @@ case 'spam':
 
                 if (empty($queryspam)) {
                     if (Flood::isFlood()) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], App::getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, Setting::get('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
+                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, setting('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
-                        App::setFlash('success', 'Жалоба успешно отправлена!');
-                        App::redirect("/load/down?act=comments&id=$id&page=$page");
+                        setFlash('success', 'Жалоба успешно отправлена!');
+                        redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
-                        App::showError('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.Flood::getPeriod().' секунд!');
+                        showError('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.Flood::getPeriod().' секунд!');
                     }
                 } else {
-                    App::showError('Ошибка! Жалоба на данное сообщение уже отправлена!');
+                    showError('Ошибка! Жалоба на данное сообщение уже отправлена!');
                 }
             } else {
-                App::showError('Ошибка! Выбранное вами сообщение для жалобы не существует!');
+                showError('Ошибка! Выбранное вами сообщение для жалобы не существует!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Вы не авторизованы, чтобы подать жалобу, необходимо');
+        showError('Вы не авторизованы, чтобы подать жалобу, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -598,7 +598,7 @@ case 'reply':
 
         if (!empty($post)) {
             echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_title($post['user']).' '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
-            echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr>';
+            echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -606,10 +606,10 @@ case 'reply':
             echo '<textarea cols="25" rows="5" name="msg" id="msg">[b]'.$post['user'].'[/b], </textarea><br>';
             echo '<input type="submit" value="Ответить"></form></div><br>';
         } else {
-            App::showError('Ошибка! Выбранное вами сообщение для ответа не существует!');
+            showError('Ошибка! Выбранное вами сообщение для ответа не существует!');
         }
     } else {
-        App::showError('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
+        showError('Вы не авторизованы, чтобы отвечать на сообщения, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -633,10 +633,10 @@ case 'quote':
             echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br>';
             echo '<input type="submit" value="Цитировать"></form></div><br>';
         } else {
-            App::showError('Ошибка! Выбранное вами сообщение для цитирования не существует!');
+            showError('Ошибка! Выбранное вами сообщение для цитирования не существует!');
         }
     } else {
-        App::showError('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
+        showError('Вы не авторизованы, чтобы цитировать сообщения, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -647,12 +647,12 @@ break;
 ############################################################################################
 case 'edit':
 
-    //Setting::get('newtitle') = 'Редактирование сообщения';
+    //setting('newtitle') = 'Редактирование сообщения';
 
     $pid = abs(intval($_GET['pid']));
 
     if (is_user()) {
-        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, App::getUsername()]);
+        $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, getUsername()]);
 
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
@@ -665,13 +665,13 @@ case 'edit':
                 echo '<textarea cols="25" rows="5" name="msg" id="msg">'.$post['text'].'</textarea><br>';
                 echo '<input type="submit" value="Редактировать"></form></div><br>';
             } else {
-                App::showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
+                showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
             }
         } else {
-            App::showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+            showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
         }
     } else {
-        App::showError('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
+        showError('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -689,7 +689,7 @@ case 'editpost':
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
             if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, App::getUsername()]);
+                $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, getUsername()]);
 
                 if (!empty($post)) {
                     if ($post['time'] + 600 > SITETIME) {
@@ -698,22 +698,22 @@ case 'editpost':
 
                         DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'down', $pid]);
 
-                        App::setFlash('success', 'Сообщение успешно отредактировано!');
-                        App::redirect("/load/down?act=comments&id=$id&page=$page");
+                        setFlash('success', 'Сообщение успешно отредактировано!');
+                        redirect("/load/down?act=comments&id=$id&page=$page");
                     } else {
-                        App::showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
+                        showError('Ошибка! Редактирование невозможно, прошло более 10 минут!!');
                     }
                 } else {
-                    App::showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
+                    showError('Ошибка! Сообщение удалено или вы не автор этого сообщения!');
                 }
             } else {
-                App::showError('Ошибка! Слишком длинное или короткое сообщение!');
+                showError('Ошибка! Слишком длинное или короткое сообщение!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
+        showError('Вы не авторизованы, чтобы редактировать сообщения, необходимо');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=edit&amp;id='.$id.'&amp;pid='.$pid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -739,16 +739,16 @@ case 'del':
                 $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='down' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
                 DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
-                App::setFlash('success', 'Выбранные комментарии успешно удалены!');
-                App::redirect("/load/down?act=comments&id=$id&page=$page");
+                setFlash('success', 'Выбранные комментарии успешно удалены!');
+                redirect("/load/down?act=comments&id=$id&page=$page");
             } else {
-                App::showError('Ошибка! Отстутствуют выбранные комментарии для удаления!');
+                showError('Ошибка! Отстутствуют выбранные комментарии для удаления!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Ошибка! Удалять комментарии могут только модераторы!');
+        showError('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=comments&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -764,11 +764,11 @@ case 'end':
     if (!empty($query)) {
 
         $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-        $end = ceil($total_comments / Setting::get('downcomm'));
+        $end = ceil($total_comments / setting('downcomm'));
 
-        App::redirect("/load/down?act=comments&id=$id&page=$end");
+        redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 
 break;
@@ -777,4 +777,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

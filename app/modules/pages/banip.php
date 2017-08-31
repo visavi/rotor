@@ -1,7 +1,7 @@
 <?php
 header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
 
-$ban = Ban::where('ip', App::getClientIp())
+$ban = Ban::where('ip', getClientIp())
     ->whereNull('user_id')
     ->first();
 
@@ -13,11 +13,11 @@ if (Request::isMethod('post')) {
 
         $ban->delete();
 
-        App::ipBan(true);
+        ipBan(true);
 
-        App::setFlash('success', 'IP успешно разбанен!');
-        App::redirect('/');
+        setFlash('success', 'IP успешно разбанен!');
+        redirect('/');
     }
 }
 
-App::view('pages/banip', compact('ban'));
+view('pages/banip', compact('ban'));

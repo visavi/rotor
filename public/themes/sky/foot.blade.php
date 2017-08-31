@@ -70,7 +70,7 @@ echo '</div>
                     <div class="art-Footer-inner">
                         <a href="/news/rss" class="art-rss-tag-icon" title="RSS"></a>
                         <div class="art-Footer-text">';
-echo '<a href="'.Setting::get('home').'">'.Setting::get('copy').'</a><br>';
+echo '<a href="'.setting('home').'">'.setting('copy').'</a><br>';
     show_online();
     show_counter();
 echo '</div>';

@@ -1,8 +1,8 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
-$uz = (empty($_GET['uz'])) ? check(App::getUsername()) : check($_GET['uz']);
+$uz = (empty($_GET['uz'])) ? check(getUsername()) : check($_GET['uz']);
 $page = abs(intval(Request::input('page', 1)));
 
 //show_title('Стена сообщений');
@@ -15,15 +15,15 @@ if (!empty($queryuser)) {
     ############################################################################################
         case 'index':
 
-            //Setting::get('newtitle') = 'Стена пользователя '.$uz;
+            //setting('newtitle') = 'Стена пользователя '.$uz;
             echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.$uz.'</b><br><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
-            $page = App::paginate(Setting::get('wallpost'), $total);
+            $page = paginate(setting('wallpost'), $total);
 
-            if ($uz == App::getUsername() && App::user('newwall') > 0) {
-                echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.App::user('newwall').'</span></b></div>';
-                DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, App::getUsername()]);
+            if ($uz == getUsername() && user('newwall') > 0) {
+                echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.user('newwall').'</span></b></div>';
+                DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, getUsername()]);
             }
 
             if ($total > 0) {
@@ -32,40 +32,40 @@ if (!empty($queryuser)) {
 
                 if ($is_admin) {
                     echo '<form action="/wall?act=del&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                } elseif ($uz == App::getUsername()) {
+                } elseif ($uz == getUsername()) {
                     echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('wallpost').";", [$uz]);
+                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('wallpost').";", [$uz]);
 
                 while ($data = $querywall -> fetch()) {
                     echo '<div class="b">';
                     echo '<div class="img">'.user_avatars($data['login']).'</div>';
 
-                    if ($is_admin || $uz == App::getUsername()) {
+                    if ($is_admin || $uz == getUsername()) {
                         echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
                     }
 
                     echo '<b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
                     echo user_title($data['login']).' '.user_online($data['login']).'</div>';
 
-                    if ($uz == App::getUsername() && App::getUsername() != $data['login']) {
+                    if ($uz == getUsername() && getUsername() != $data['login']) {
                         echo '<div class="right">';
                         echo '<a href="/private?act=submit&amp;uz='.$data['login'].'">Приват</a> / ';
                         echo '<a href="/wall?uz='.$data['login'].'">Стена</a> / ';
                         echo '<a href="/wall?act=spam&amp;id='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></div>';
                     }
 
-                    echo '<div>'.App::bbCode($data['text']).'</div>';
+                    echo '<div>'.bbCode($data['text']).'</div>';
                 }
 
-                if ($is_admin || $uz == App::getUsername()) {
+                if ($is_admin || $uz == getUsername()) {
                     echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('Записок еще нет!');
+                showError('Записок еще нет!');
             }
 
             if (is_user()) {
@@ -77,7 +77,7 @@ if (!empty($queryuser)) {
                 echo '<input type="submit" value="Написать"></form></div><br>';
 
             } else {
-                App::showError('Для добавления сообщения необходимо авторизоваться');
+                showError('Для добавления сообщения необходимо авторизоваться');
             }
 
             echo 'Всего записей: <b>'.$total.'</b><br><br>';
@@ -92,42 +92,42 @@ if (!empty($queryuser)) {
             $msg = check($_POST['msg']);
 
             if (is_user()) {
-                if ($uz == App::getUsername() || is_admin() || is_contact($uz, App::getUsername())){
+                if ($uz == getUsername() || is_admin() || is_contact($uz, getUsername())){
                     if ($uid == $_SESSION['token']) {
                         if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
-                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, App::getUsername()]);
+                            $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, getUsername()]);
                             if (empty($ignorstr)) {
                                 if (Flood::isFlood()) {
 
                                     $msg = antimat($msg);
 
-                                    if ($uz != App::getUsername()) {
+                                    if ($uz != getUsername()) {
                                         DB::run() -> query("UPDATE `users` SET `newwall`=`newwall`+1 WHERE `login`=?", [$uz]);
                                     }
 
-                                    DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, App::getUsername(), $msg, SITETIME]);
+                                    DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, getUsername(), $msg, SITETIME]);
 
-                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".Setting::get('wallmaxpost').") AS del);", [$uz, $uz]);
+                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".setting('wallmaxpost').") AS del);", [$uz, $uz]);
 
-                                    App::setFlash('success', 'Запись успешно добавлена!');
-                                    App::redirect("/wall?uz=$uz");
+                                    setFlash('success', 'Запись успешно добавлена!');
+                                    redirect("/wall?uz=$uz");
                                 } else {
-                                    App::showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
+                                    showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                                 }
                             } else {
-                                App::showError('Ошибка! Вы внесены в игнор-лист пользователя!');
+                                showError('Ошибка! Вы внесены в игнор-лист пользователя!');
                             }
                         } else {
-                            App::showError('Ошибка! Слишком длинное или короткое сообщение!');
+                            showError('Ошибка! Слишком длинное или короткое сообщение!');
                         }
                     } else {
-                        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                     }
                 } else {
-                    App::showError('Стена закрыта, писать могут только пользователи из контактов!');
+                    showError('Стена закрыта, писать могут только пользователи из контактов!');
                 }
             } else {
-                App::showError('Для добавления сообщения необходимо авторизоваться');
+                showError('Для добавления сообщения необходимо авторизоваться');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'">Вернуться</a><br>';
@@ -143,31 +143,31 @@ if (!empty($queryuser)) {
 
             if (is_user()) {
                 if ($uid == $_SESSION['token']) {
-                    $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", [App::getUsername(), $id]);
+                    $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", [getUsername(), $id]);
 
                     if (!empty($data)) {
                         $queryspam = DB::run() -> querySingle("SELECT `id` FROM `spam` WHERE relate=? AND `idnum`=? LIMIT 1;", [4, $id]);
 
                         if (empty($queryspam)) {
                             if (Flood::isFlood()) {
-                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], App::getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, Setting::get('home').'/wall?uz='.$uz.'&amp;page='.$page]);
+                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, setting('home').'/wall?uz='.$uz.'&amp;page='.$page]);
 
-                                App::setFlash('success', 'Жалоба успешно отправлена!');
-                                App::redirect("/wall?uz=$uz&page=$page");
+                                setFlash('success', 'Жалоба успешно отправлена!');
+                                redirect("/wall?uz=$uz&page=$page");
                             } else {
-                                App::showError('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.Flood::getPeriod().' секунд!');
+                                showError('Антифлуд! Разрешается жаловаться на спам не чаще чем раз в '.Flood::getPeriod().' секунд!');
                             }
                         } else {
-                            App::showError('Ошибка! Вы уже отправили жалобу на данное сообщение!');
+                            showError('Ошибка! Вы уже отправили жалобу на данное сообщение!');
                         }
                     } else {
-                        App::showError('Ошибка! Данное сообщение написано не на вашей стене!');
+                        showError('Ошибка! Данное сообщение написано не на вашей стене!');
                     }
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Для отправки жалобы необходимо авторизоваться');
+                showError('Для отправки жалобы необходимо авторизоваться');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -185,23 +185,23 @@ if (!empty($queryuser)) {
                 $del = 0;
             }
 
-            if ($uz == App::getUsername()) {
+            if ($uz == getUsername()) {
                 if ($uid == $_SESSION['token']) {
                     if (!empty($del)) {
                         $del = implode(',', $del);
 
-                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [App::getUsername()]);
+                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [getUsername()]);
 
-                        App::setFlash('success', 'Выбранные записи успешно удалены!');
-                        App::redirect("/wall?uz=$uz&page=$page");
+                        setFlash('success', 'Выбранные записи успешно удалены!');
+                        redirect("/wall?uz=$uz&page=$page");
                     } else {
-                        App::showError('Ошибка! Отстутствуют выбранные сообщения для удаления!');
+                        showError('Ошибка! Отстутствуют выбранные сообщения для удаления!');
                     }
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Нельзя удалять записи на чужой стене!');
+                showError('Ошибка! Нельзя удалять записи на чужой стене!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -226,16 +226,16 @@ if (!empty($queryuser)) {
 
                         $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.");");
 
-                        App::setFlash('success', 'Выбранные записи успешно удалены!');
-                        App::redirect("/wall?uz=$uz&page=$page");
+                        setFlash('success', 'Выбранные записи успешно удалены!');
+                        redirect("/wall?uz=$uz&page=$page");
                     } else {
-                        App::showError('Ошибка! Отстутствуют выбранные сообщения для удаления!');
+                        showError('Ошибка! Отстутствуют выбранные сообщения для удаления!');
                     }
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Удалять записи могут только модераторы!');
+                showError('Ошибка! Удалять записи могут только модераторы!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/wall?uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -244,7 +244,7 @@ if (!empty($queryuser)) {
     endswitch;
 
 } else {
-    App::showError('Ошибка! Пользователь с данным логином  не зарегистрирован!');
+    showError('Ошибка! Пользователь с данным логином  не зарегистрирован!');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

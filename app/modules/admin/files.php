@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $file = check(Request::input('file'));
@@ -15,7 +15,7 @@ if (
     $path = '';
 }
 
-if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
+if (is_admin([101]) && getUsername() == setting('nickname')) {
     //show_title('Редактирование страниц');
 
     switch ($action):
@@ -66,7 +66,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 }
                 echo '</ul>';
             } else {
-                App::showError('Файлов нет!');
+                showError('Файлов нет!');
             }
 
             if ($path) {
@@ -92,11 +92,11 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
 
                                 file_put_contents(APP.'/views/'.$path.$file.'.blade.php', $msg);
 
-                                App::setFlash('success', 'Файл успешно сохранен!');
+                                setFlash('success', 'Файл успешно сохранен!');
                                 redirect ("/admin/files?act=edit&path=$path&file=$file");
 
                             } else {
-                                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                             }
                         }
 
@@ -114,13 +114,13 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         echo '<p class="help-block">Нажмите Ctrl+Enter для перевода строки, Shift+Enter для вставки линии</p>';
 
                     } else {
-                        App::showError('Ошибка! Файл недоступен для записи!');
+                        showError('Ошибка! Файл недоступен для записи!');
                     }
                 } else {
-                    App::showError('Ошибка! Данного файла не существует!');
+                    showError('Ошибка! Данного файла не существует!');
                 }
             } else {
-                App::showError('Ошибка! Недопустимое название страницы!');
+                showError('Ошибка! Недопустимое название страницы!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';
@@ -149,11 +149,11 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                                     file_put_contents(APP.'/views/'.$path.$name.'.blade.php', '');
                                     chmod(APP.'/views/'.$path.$name.'.blade.php', 0666);
 
-                                    App::setFlash('success', 'Новый файл успешно создан!');
-                                    App::redirect('/admin/files?act=edit&file='.$name.'&path='.$path);
+                                    setFlash('success', 'Новый файл успешно создан!');
+                                    redirect('/admin/files?act=edit&file='.$name.'&path='.$path);
 
                                 } else {
-                                    App::showError('Ошибка! Файл с данным названием уже существует!');
+                                    showError('Ошибка! Файл с данным названием уже существует!');
                                 }
                             } else {
                                 if (!file_exists(APP .'/views/'.$path.$name)) {
@@ -161,18 +161,18 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                                     mkdir(APP .'/views/'.$path.$name, 0777, true);
                                     umask($old);
 
-                                    App::setFlash('success', 'Новая директория успешно создана!');
-                                    App::redirect('/admin/files?path='.$path.$name.'/');
+                                    setFlash('success', 'Новая директория успешно создана!');
+                                    redirect('/admin/files?path='.$path.$name.'/');
                                 } else {
-                                    App::showError('Ошибка! Категория с данным названием уже существует!');
+                                    showError('Ошибка! Категория с данным названием уже существует!');
                                 }
                             }
 
                         } else {
-                            App::showError('Ошибка! Недопустимое название файла или директории!');
+                            showError('Ошибка! Недопустимое название файла или директории!');
                         }
                     } else {
-                        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                     }
                 }
 
@@ -193,7 +193,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                 echo '<input value="Создать файл" type="submit"></form></div>';
                 echo '<br>Разрешены латинские символы и цифры, а также знаки дефис и нижнее подчеркивание<br><br>';
             } else {
-                App::showError('Директория '.$path.' недоступна для записи!');
+                showError('Директория '.$path.' недоступна для записи!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';
@@ -215,33 +215,33 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
                         if ($type == 'dir') {
                             if (file_exists(APP .'/views/'.$path.$name)) {
                                 removeDir(APP . '/views/' . $path . $name);
-                                App::setFlash('success', 'Директория успешно удалена!');
-                                App::redirect('/admin/files?path=' . $path);
+                                setFlash('success', 'Директория успешно удалена!');
+                                redirect('/admin/files?path=' . $path);
                             } else {
-                                App::showError('Ошибка! Данного директории не существует!');
+                                showError('Ошибка! Данного директории не существует!');
                             }
                         } else {
                             if (file_exists(APP .'/views/'.$path.$name.'.blade.php')) {
 
                                 if (unlink(APP .'/views/'.$path.$name.'.blade.php')) {
-                                    App::setFlash('success', 'Файл успешно удален!');
+                                    setFlash('success', 'Файл успешно удален!');
                                     redirect ('/admin/files?path='.$path);
 
                                 } else {
-                                    App::showError('Ошибка! Не удалось удалить файл!');
+                                    showError('Ошибка! Не удалось удалить файл!');
                                 }
                             } else {
-                                App::showError('Ошибка! Данного файла не существует!');
+                                showError('Ошибка! Данного файла не существует!');
                             }
                         }
                     } else {
-                        App::showError('Ошибка! Недопустимое название страницы!');
+                        showError('Ошибка! Недопустимое название страницы!');
                     }
                 } else {
-                    App::showError('Директория '.$path.' недоступна для записи!');
+                    showError('Директория '.$path.' недоступна для записи!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.$path.'">Вернуться</a><br>';
@@ -252,7 +252,7 @@ if (is_admin([101]) && App::getUsername() == Setting::get('nickname')) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

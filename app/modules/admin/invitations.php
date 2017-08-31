@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $used = (!empty($_GET['used'])) ? 1  : 0;
@@ -14,7 +14,7 @@ switch ($action):
 ############################################################################################
 case 'index':
 
-    if (empty(Setting::get('invite'))) {
+    if (empty(setting('invite'))) {
         echo '<i class="fa fa-exclamation-circle"></i> <span style="color:#ff0000"><b>Внимание! Регистрация по приглашения выключена!</b></span><br><br>';
     }
 
@@ -25,11 +25,11 @@ case 'index':
     }
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `invite` WHERE `used`=?;", [$used]);
-    $page = App::paginate(Setting::get('listinvite'), $total);
+    $page = paginate(setting('listinvite'), $total);
 
     if ($total > 0) {
 
-        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('listinvite').";", [$used]);
+        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listinvite').";", [$used]);
 
         echo '<form action="/admin/invitations?act=del&amp;used='.$used.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -47,12 +47,12 @@ case 'index':
 
         echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-        App::pagination($page);
+        pagination($page);
 
         echo 'Всего ключей: <b>'.$total.'</b><br><br>';
 
     } else {
-        App::showError('Приглашений еще нет!');
+        showError('Приглашений еще нет!');
     }
 
     echo '<i class="fa fa-check"></i> <a href="/admin/invitations?act=new">Создать ключи</a><br>';
@@ -107,7 +107,7 @@ break;
 ##                                       Список ключей                                    ##
 ############################################################################################
 case 'list':
-    $invitations = DB::run() -> query("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [App::getUsername(), 0]);
+    $invitations = DB::run() -> query("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [getUsername(), 0]);
     $invite = $invitations -> fetchAll(PDO::FETCH_COLUMN);
     $total = count($invite);
 
@@ -115,7 +115,7 @@ case 'list':
         echo 'Всего ваших ключей: '.$total.'<br>';
         echo '<textarea cols="25" rows="10">'.implode(', ', $invite).'</textarea><br><br>';
     } else {
-        App::showError('Ошибка! Нет ваших пригласительных ключей!');
+        showError('Ошибка! Нет ваших пригласительных ключей!');
     }
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br>';
 break;
@@ -143,16 +143,16 @@ case 'send':
             }
 
             $text = 'Вы получили пригласительные ключи в количестве '.count($listkeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listkeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на этот сайт!';
-            send_private($user, App::getUsername(), $text);
+            send_private($user, getUsername(), $text);
 
-            App::setFlash('success', 'Ключи успешно отправлены!');
-            App::redirect("/admin/invitations");
+            setFlash('success', 'Ключи успешно отправлены!');
+            redirect("/admin/invitations");
 
         } else {
-            App::showError('Ошибка! Не найден пользователь с заданным логином!');
+            showError('Ошибка! Не найден пользователь с заданным логином!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
@@ -171,7 +171,7 @@ case 'mailing':
             $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
             $users = $query->fetchAll(PDO::FETCH_COLUMN);
 
-            $users = array_diff($users, [App::getUsername()]);
+            $users = array_diff($users, [getUsername()]);
             $total = count($users);
 
             // Рассылка сообщений с подготовкой запросов
@@ -186,21 +186,21 @@ case 'mailing':
                 foreach ($users as $user){
                     $key = str_random(rand(12, 15));
                     $updateusers -> execute($user);
-                    $insertprivat -> execute($user, App::getUsername(), sprintf($text, $key), SITETIME);
+                    $insertprivat -> execute($user, getUsername(), sprintf($text, $key), SITETIME);
                     $dbr -> execute($key, $user, SITETIME);
                 }
 
-                App::setFlash('success', 'Ключи успешно разосланы! (Отправлено: '.$total.')');
-                App::redirect("/admin/invitations");
+                setFlash('success', 'Ключи успешно разосланы! (Отправлено: '.$total.')');
+                redirect("/admin/invitations");
 
             } else {
-                App::showError('Ошибка! Отсутствуют получатели ключей!');
+                showError('Ошибка! Отсутствуют получатели ключей!');
             }
         } else {
-            App::showError('Ошибка! Рассылать ключи может только администрация!');
+            showError('Ошибка! Рассылать ключи может только администрация!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
@@ -220,17 +220,17 @@ case 'generate':
 
             for($i = 0; $i < $keys; $i++) {
                 $key = str_random(rand(12, 15));
-                $dbr -> execute($key, App::getUsername(), SITETIME);
+                $dbr -> execute($key, getUsername(), SITETIME);
             }
 
-            App::setFlash('success', 'Ключи успешно сгенерированы!');
-            App::redirect("/admin/invitations");
+            setFlash('success', 'Ключи успешно сгенерированы!');
+            redirect("/admin/invitations");
 
         } else {
-            App::showError('Ошибка! Не указано число генерируемых ключей!');
+            showError('Ошибка! Не указано число генерируемых ключей!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations?act=new">Вернуться</a><br>';
@@ -251,14 +251,14 @@ case 'del':
 
             DB::run() -> query("DELETE FROM `invite` WHERE `id` IN (".$del.");");
 
-            App::setFlash('success', 'Выбранные ключи успешно удалены!');
-            App::redirect("/admin/invitations?used=$used&page=$page");
+            setFlash('success', 'Выбранные ключи успешно удалены!');
+            redirect("/admin/invitations?used=$used&page=$page");
 
         } else {
-            App::showError('Ошибка! Отсутствуют выбранные ключи!');
+            showError('Ошибка! Отсутствуют выбранные ключи!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/invitations">Вернуться</a><br>';
@@ -269,7 +269,7 @@ endswitch;
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

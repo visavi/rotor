@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $page = abs(intval(Request::input('page', 1)));
@@ -17,7 +17,7 @@ if (is_admin()) {
             echo '<a href="/gallery?page='.$page.'">Обзор</a><hr>';
 
             $total = Photo::count();
-            $page = App::paginate(Setting::get('fotolist'), $total);
+            $page = paginate(setting('fotolist'), $total);
 
 
             if ($total > 0) {
@@ -26,7 +26,7 @@ if (is_admin()) {
                 echo '<input type="hidden" name="token" value="'.$_SESSION['token'].'">';
                 $photos = Photo::orderBy('created_at', 'desc')
                     ->offset($page['offset'])
-                    ->limit(Setting::get('fotolist'))
+                    ->limit(setting('fotolist'))
                     ->with('user')
                     ->get();
 
@@ -37,10 +37,10 @@ if (is_admin()) {
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], Setting::get('previewsize'), ['alt' => $data['title']]).'</a><br>';
+                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]).'</a><br>';
 
                     if (!empty($data['text'])){
-                        echo App::bbCode($data['text']).'<br>';
+                        echo bbCode($data['text']).'<br>';
                     }
 
                     echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br>';
@@ -51,11 +51,11 @@ if (is_admin()) {
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                App::pagination($page);
+                pagination($page);
 
                 echo 'Всего фотографий: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('Фотографий еще нет!');
+                showError('Фотографий еще нет!');
             }
 
             if (is_admin([101])) {
@@ -86,7 +86,7 @@ if (is_admin()) {
 
                 echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Данной фотографии не существует!');
+                showError('Ошибка! Данной фотографии не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page='.$page.'">Вернуться</a><br>';
@@ -114,20 +114,20 @@ if (is_admin()) {
 
                             DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", [$title, $text, $closed, $gid]);
 
-                            App::setFlash('success', 'Фотография успешно отредактирована!');
-                            App::redirect("/admin/gallery?page=$page");
+                            setFlash('success', 'Фотография успешно отредактирована!');
+                            redirect("/admin/gallery?page=$page");
 
                         } else {
-                            App::showError('Ошибка! Слишком длинное описание (Необходимо до 1000 символов)!');
+                            showError('Ошибка! Слишком длинное описание (Необходимо до 1000 символов)!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинное или короткое название!');
+                        showError('Ошибка! Слишком длинное или короткое название!');
                     }
                 } else {
-                    App::showError('Ошибка! Данной фотографии не существует!');
+                    showError('Ошибка! Данной фотографии не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=edit&amp;gid='.$gid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -158,20 +158,20 @@ if (is_admin()) {
                                 unlink_image('uploads/pictures/', $delete['link']);
                             }
 
-                            App::setFlash('success', 'Выбранные фотографии успешно удалены!');
-                            App::redirect("/admin/gallery?page=$page");
+                            setFlash('success', 'Выбранные фотографии успешно удалены!');
+                            redirect("/admin/gallery?page=$page");
 
                         } else {
-                            App::showError('Ошибка! Данных фотографий не существует!');
+                            showError('Ошибка! Данных фотографий не существует!');
                         }
                     } else {
-                        App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с фотографиями!');
+                        showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с фотографиями!');
                     }
                 } else {
-                    App::showError('Ошибка! Отсутствуют выбранные фотографии!');
+                    showError('Ошибка! Отсутствуют выбранные фотографии!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery?page='.$page.'">Вернуться</a><br>';
@@ -188,27 +188,27 @@ if (is_admin()) {
                 if ($token == $_SESSION['token']) {
                     restatement('photo');
 
-                    App::setFlash('success', 'Комментарии успешно пересчитаны!');
-                    App::redirect("/admin/gallery");
+                    setFlash('success', 'Комментарии успешно пересчитаны!');
+                    redirect("/admin/gallery");
 
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
+                showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/gallery">Вернуться</a><br>';
         break;
 
     default:
-        App::redirect("/admin/gallery");
+        redirect("/admin/gallery");
     endswitch;
 
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

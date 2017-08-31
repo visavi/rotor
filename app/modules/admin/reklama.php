@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -18,11 +18,11 @@ if (is_admin()) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `rekuser` WHERE `time`>?;", [SITETIME]);
-            $page = App::paginate(Setting::get('rekuserpost'), $total);
+            $page = paginate(setting('rekuserpost'), $total);
 
             if ($total > 0) {
 
-                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('rekuserpost').";", [SITETIME]);
+                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('rekuserpost').";", [SITETIME]);
 
                 echo '<form action="/admin/reklama?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -51,11 +51,11 @@ if (is_admin()) {
                 }
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                App::pagination($page);
+                pagination($page);
 
                 echo 'Всего ссылок: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('В данный момент рекламных ссылок еще нет!');
+                showError('В данный момент рекламных ссылок еще нет!');
             }
         break;
 
@@ -64,7 +64,7 @@ if (is_admin()) {
         ############################################################################################
         case 'edit':
 
-            //Setting::get('newtitle') = 'Редактирование ссылки';
+            //setting('newtitle') = 'Редактирование ссылки';
 
             $id = abs(intval($_GET['id']));
 
@@ -96,7 +96,7 @@ if (is_admin()) {
 
                 echo '<br><input type="submit" value="Изменить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Данной ссылки не существует!');
+                showError('Ошибка! Данной ссылки не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br>';
@@ -125,25 +125,25 @@ if (is_admin()) {
                                     DB::run() -> query("UPDATE `rekuser` SET `site`=?, `name`=?, `color`=?, `bold`=? WHERE `id`=?", [$site, $name, $color, $bold, $id]);
                                     save_advertuser();
 
-                                    App::setFlash('success', 'Рекламная ссылка успешно изменена!');
-                                    App::redirect("/admin/reklama?page=$page");
+                                    setFlash('success', 'Рекламная ссылка успешно изменена!');
+                                    redirect("/admin/reklama?page=$page");
                                 } else {
-                                    App::showError('Ошибка! Редактируемой ссылки не существует!');
+                                    showError('Ошибка! Редактируемой ссылки не существует!');
                                 }
                             } else {
-                                App::showError('Ошибка! Недопустимый формат цвета ссылки! (пример #ff0000)');
+                                showError('Ошибка! Недопустимый формат цвета ссылки! (пример #ff0000)');
                             }
                         } else {
-                            App::showError('Ошибка! Слишком длинное или короткое название ссылки! (от 5 до 35 символов)');
+                            showError('Ошибка! Слишком длинное или короткое название ссылки! (от 5 до 35 символов)');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинный или короткий адрес ссылки! (от 5 до 50 символов)');
+                        showError('Ошибка! Слишком длинный или короткий адрес ссылки! (от 5 до 50 символов)');
                     }
                 } else {
-                    App::showError('Ошибка! Недопустимый адрес сайта!');
+                    showError('Ошибка! Недопустимый адрес сайта!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -168,13 +168,13 @@ if (is_admin()) {
                     DB::run() -> query("DELETE FROM `rekuser` WHERE `id` IN (".$del.");");
                     save_advertuser();
 
-                    App::setFlash('success', 'Выбранные ссылки успешно удалены!');
-                    App::redirect("/admin/reklama?page=$page");
+                    setFlash('success', 'Выбранные ссылки успешно удалены!');
+                    redirect("/admin/reklama?page=$page");
                 } else {
-                    App::showError('Ошибка! Не выбраны ссылки для удаления!');
+                    showError('Ошибка! Не выбраны ссылки для удаления!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reklama?page='.$page.'">Вернуться</a><br>';
@@ -185,7 +185,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

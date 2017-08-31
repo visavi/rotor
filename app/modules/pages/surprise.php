@@ -9,44 +9,44 @@ $surpriseRating = mt_rand(3, 7);
 $currentYear = date('Y');
 
 if (! is_user()) {
-    App::abort('default', 'Для того чтобы получить сюрприз, необходимо авторизоваться!');
+    abort('default', 'Для того чтобы получить сюрприз, необходимо авторизоваться!');
 }
 
 if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {
-    App::abort('default', 'Срок получения сюрприза уже закончился!');
+    abort('default', 'Срок получения сюрприза уже закончился!');
 }
 
-if (App::user('point') < $surprise['requiredPoint']) {
-    App::abort('default', 'Для того получения сюрприза необходимо '.points($surprise['requiredPoint']).'!');
+if (user('point') < $surprise['requiredPoint']) {
+    abort('default', 'Для того получения сюрприза необходимо '.points($surprise['requiredPoint']).'!');
 }
 
-$existSurprise = Surprise::where('user_id', App::getUserId())
+$existSurprise = Surprise::where('user_id', getUserId())
     ->where('year', $currentYear)
     ->first();
 
 if ($existSurprise) {
-    App::abort('default', 'Сюрприз уже получен');
+    abort('default', 'Сюрприз уже получен');
 }
 
 
-$user = User::find(App::getUserId());
+$user = User::find(getUserId());
 $user->update([
-    'point' => Capsule::raw('point + '.$surprisePoint),
-    'money' => Capsule::raw('money + '.$surpriseMoney),
-    'rating' => Capsule::raw('posrating - negrating + '.$surpriseRating),
-    'posrating' => Capsule::raw('posrating + '.$surpriseRating),
+    'point' => DB::raw('point + '.$surprisePoint),
+    'money' => DB::raw('money + '.$surpriseMoney),
+    'rating' => DB::raw('posrating - negrating + '.$surpriseRating),
+    'posrating' => DB::raw('posrating + '.$surpriseRating),
 ]);
 
 $text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.points($surprisePoint).PHP_EOL.moneys($surpriseMoney).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
 
-send_private(App::getUsername(), Setting::get('nickname'), $text);
+send_private(getUsername(), setting('nickname'), $text);
 
 $surprise = Surprise::create([
-    'user_id' => App::getUserId(),
+    'user_id' => getUserId(),
     'year' => $currentYear,
     'created_at' => SITETIME,
 ]);
 
-App::setFlash('success', 'Сюрприз успешно получен!');
-App::redirect('/');
+setFlash('success', 'Сюрприз успешно получен!');
+redirect('/');
 

@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
 $page = abs(intval(Request::input('page', 1)));
@@ -15,10 +15,10 @@ case 'files':
     if ($total > 100) {
         $total = 100;
     }
-    $page = App::paginate(Setting::get('downlist'), $total);
+    $page = paginate(setting('downlist'), $total);
 
     if ($total > 0) {
-        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", [1]);
+        $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";", [1]);
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -33,9 +33,9 @@ case 'files':
             echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
         }
 
-        App::pagination($page);
+        pagination($page);
     } else {
-        App::showError('Опубликованных файлов еще нет!');
+        showError('Опубликованных файлов еще нет!');
     }
 break;
 
@@ -51,17 +51,17 @@ case 'comments':
         $total = 100;
     }
 
-    $page = App::paginate(Setting::get('downlist'), $total);
+    $page = paginate(setting('downlist'), $total);
 
     if ($total > 0) {
-        $querydown = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `downs` ON `comments`.`relate_id`=`downs`.`id` WHERE relate_type='down' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";");
+        $querydown = DB::run() -> query("SELECT `comments`.*, `title`, `comments` FROM `comments` LEFT JOIN `downs` ON `comments`.`relate_id`=`downs`.`id` WHERE relate_type='down' ORDER BY comments.`time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";");
 
         while ($data = $querydown -> fetch()) {
             echo '<div class="b">';
 
             echo '<i class="fa fa-comment"></i> <b><a href="/load/new?act=viewcomm&amp;id='.$data['relate_id'].'&amp;cid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['comments'].')</div>';
 
-            echo '<div>'.App::bbCode($data['text']).'<br>';
+            echo '<div>'.bbCode($data['text']).'<br>';
 
             echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['time']).')</small><br>';
 
@@ -72,9 +72,9 @@ case 'comments':
             echo '</div>';
         }
 
-        App::pagination($page);
+        pagination($page);
     } else {
-        App::showError('Комментарии не найдены!');
+        showError('Комментарии не найдены!');
     }
 break;
 
@@ -97,11 +97,11 @@ case 'viewcomm':
     $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `id`<=? AND `relate_id`=? ORDER BY `time` ASC LIMIT 1;", ['down', $cid, $id]);
 
     if (!empty($querycomm)) {
-        $end = ceil($querycomm / Setting::get('downlist'));
+        $end = ceil($querycomm / setting('downlist'));
 
-        App::redirect("/load/down?act=comments&id=$id&page=$end");
+        redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
-        App::showError('Ошибка! Комментарий к данному файлу не существует!');
+        showError('Ошибка! Комментарий к данному файлу не существует!');
     }
 break;
 
@@ -109,4 +109,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

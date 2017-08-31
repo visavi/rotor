@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (is_admin([101, 102, 103])) {
     //show_title('Администрация сайта');
@@ -21,14 +21,14 @@ if (is_admin([101, 102, 103])) {
         echo '<br>Всего в администрации: <b>'.$total.'</b><br><br>';
 
     } else {
-        App::showError('Администрации еще нет!');
+        showError('Администрации еще нет!');
     }
 
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');
 

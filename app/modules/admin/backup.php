@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (function_exists('set_time_limit')) {
     set_time_limit(600);
@@ -32,7 +32,7 @@ if (is_admin([101])) {
 
                 echo '<br>Всего бэкапов: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('Бэкапов еще нет!');
+                showError('Бэкапов еще нет!');
             }
 
             echo '<i class="fa fa-check"></i> <a href="/admin/backup?act=choice">Новый бэкап</a><br>';
@@ -87,7 +87,7 @@ if (is_admin([101])) {
 
                 echo '<br><input type="submit" value="Выполнить"></form></div><br>';
             } else {
-                App::showError('Нет таблиц для бэкапа!');
+                showError('Нет таблиц для бэкапа!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br>';
@@ -165,17 +165,17 @@ if (is_admin([101])) {
 
                         fn_close($fp, $method);
 
-                        App::setFlash('success', 'База данных успешно обработана и сохранена!');
-                        App::redirect("/admin/backup");
+                        setFlash('success', 'База данных успешно обработана и сохранена!');
+                        redirect("/admin/backup");
 
                     } else {
-                        App::showError('Ошибка! Некоторые таблицы отсутствуют в базе данных!');
+                        showError('Ошибка! Некоторые таблицы отсутствуют в базе данных!');
                     }
                 } else {
-                    App::showError('Ошибка! Не выбраны таблицы для бэкапа!');
+                    showError('Ошибка! Не выбраны таблицы для бэкапа!');
                 }
             } else {
-                App::showError('Ошибка! Директория backup недоступна для записи!');
+                showError('Ошибка! Директория backup недоступна для записи!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup?act=choice">Вернуться</a><br>';
@@ -195,20 +195,20 @@ if (is_admin([101])) {
                         if (file_exists(STORAGE.'/backup/'.$backup)) {
                             unlink (STORAGE.'/backup/'.$backup);
 
-                            App::setFlash('success', 'Бэкап успешно удален!');
-                            App::redirect("/admin/backup");
+                            setFlash('success', 'Бэкап успешно удален!');
+                            redirect("/admin/backup");
 
                         } else {
-                            App::showError('Ошибка! Данного бэкапа не существует!');
+                            showError('Ошибка! Данного бэкапа не существует!');
                         }
                     } else {
-                        App::showError('Ошибка! Недопустимое название бэкапа!');
+                        showError('Ошибка! Недопустимое название бэкапа!');
                     }
                 } else {
-                    App::showError('Ошибка! Вы не выбрали бэкапа для удаления!');
+                    showError('Ошибка! Вы не выбрали бэкапа для удаления!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/backup">Вернуться</a><br>';
@@ -219,7 +219,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -24,9 +24,9 @@ if (is_user()) {
     ############################################################################################
         case 'index':
 
-            echo 'В наличии: '.moneys(App::user('money')).'<br><br>';
+            echo 'В наличии: '.moneys(user('money')).'<br><br>';
 
-            if (App::user('point') >= Setting::get('sendmoneypoint')) {
+            if (user('point') >= setting('sendmoneypoint')) {
                 if (empty($uz)) {
                     echo '<div class="form">';
                     echo '<form action="/games/transfer?act=send&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -48,7 +48,7 @@ if (is_user()) {
                     echo '<input type="submit" value="Перевести"></form></div><br>';
                 }
             } else {
-                App::showError('Ошибка! Для перевода денег вам необходимо набрать '.points(Setting::get('sendmoneypoint')).'!');
+                showError('Ошибка! Для перевода денег вам необходимо набрать '.points(setting('sendmoneypoint')).'!');
             }
         break;
 
@@ -63,53 +63,53 @@ if (is_user()) {
 
             if ($uid == $_SESSION['token']) {
                 if ($money > 0) {
-                    if (App::user('point') >= Setting::get('sendmoneypoint')) {
-                        if ($money <= App::user('money')) {
-                            if ($uz != App::getUsername()) {
+                    if (user('point') >= setting('sendmoneypoint')) {
+                        if ($money <= user('money')) {
+                            if ($uz != getUsername()) {
                                 if ($msg <= 1000) {
                                     $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
                                     if (!empty($queryuser)) {
-                                        $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, App::getUsername()]);
+                                        $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, getUsername()]);
                                         if (empty($ignorstr)) {
-                                            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?;", [$money, App::getUsername()]);
+                                            DB::run() -> query("UPDATE `users` SET `money`=`money`-? WHERE `login`=?;", [$money, getUsername()]);
                                             DB::run() -> query("UPDATE `users` SET `money`=`money`+?, `newprivat`=`newprivat`+1 WHERE `login`=?;", [$money, $uz]);
 
                                             $comment = (!empty($msg)) ? $msg : 'Не указано';
                                             // ------------------------Уведомление по привату------------------------//
-                                            $textpriv = 'Пользователь [b]'.App::getUsername().'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
+                                            $textpriv = 'Пользователь [b]'.getUsername().'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
 
-                                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, App::getUsername(), $textpriv, SITETIME]);
+                                            DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, getUsername(), $textpriv, SITETIME]);
                                             // ------------------------ Запись логов ------------------------//
-                                            DB::run() -> query("INSERT INTO `transfers` (`user`, `login`, `text`, `summ`, `time`) VALUES (?, ?, ?, ?, ?);", [App::getUsername(), $uz, $comment, $money, SITETIME]);
+                                            DB::run() -> query("INSERT INTO `transfers` (`user`, `login`, `text`, `summ`, `time`) VALUES (?, ?, ?, ?, ?);", [getUsername(), $uz, $comment, $money, SITETIME]);
 
                                             DB::run() -> query("DELETE FROM `transfers` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `transfers` ORDER BY `time` DESC LIMIT 1000) AS del);");
 
-                                            App::setFlash('success', 'Перевод успешно завершен! Пользователь уведомлен о переводе');
-                                            App::redirect("/games/transfer");
+                                            setFlash('success', 'Перевод успешно завершен! Пользователь уведомлен о переводе');
+                                            redirect("/games/transfer");
 
                                         } else {
-                                            App::showError('Ошибка! Вы внесены в игнор-лист получателя!');
+                                            showError('Ошибка! Вы внесены в игнор-лист получателя!');
                                         }
                                     } else {
-                                        App::showError('Ошибка! Данного адресата не существует!');
+                                        showError('Ошибка! Данного адресата не существует!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! Текст комментария не должен быть длиннее 1000 символов!');
+                                    showError('Ошибка! Текст комментария не должен быть длиннее 1000 символов!');
                                 }
                             } else {
-                                App::showError('Ошибка! Запещено переводить деньги самому себе!');
+                                showError('Ошибка! Запещено переводить деньги самому себе!');
                             }
                         } else {
-                            App::showError('Ошибка! Недостаточно средств для перевода такого количества денег!');
+                            showError('Ошибка! Недостаточно средств для перевода такого количества денег!');
                         }
                     } else {
-                        App::showError('Ошибка! Для перевода денег вам необходимо набрать '.points(Setting::get('sendmoneypoint')).'!');
+                        showError('Ошибка! Для перевода денег вам необходимо набрать '.points(setting('sendmoneypoint')).'!');
                     }
                 } else {
-                    App::showError('Ошибка! Перевод невозможен указана неверная сумма!');
+                    showError('Ошибка! Перевод невозможен указана неверная сумма!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/games/transfer">Вернуться</a><br>';
@@ -118,9 +118,9 @@ if (is_user()) {
     endswitch;
 
 } else {
-    App::showError('Для совершения операций необходимо авторизоваться');
+    showError('Для совершения операций необходимо авторизоваться');
 }
 
 echo '<i class="fa fa-cube"></i> <a href="/games">Развлечения</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

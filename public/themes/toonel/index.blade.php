@@ -6,7 +6,7 @@ header("Content-type:text/html; charset=utf-8");
 <head>
     <title>
         @section('title')
-            {{ Setting::get('title') }}
+            {{ setting('title') }}
         @show
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -25,7 +25,7 @@ header("Content-type:text/html; charset=utf-8");
     <tr>
         <td class="t1">
             <a href="/">
-                <img src="/themes/toonel/img/logo.gif" alt="<?= Setting::get('title') ?>"/>
+                <img src="/themes/toonel/img/logo.gif" alt="<?= setting('title') ?>"/>
             </a>
         </td>
         <td class="t2"></td>
@@ -66,10 +66,10 @@ header("Content-type:text/html; charset=utf-8");
                         &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
                     <?php endif; ?>
 
-                    <?php if (App::user('newchat') < stats_newchat()): ?>
+                    <?php if (user('newchat') < stats_newchat()): ?>
                         &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
             <div>
-<?= App::view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

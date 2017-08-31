@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -66,7 +66,7 @@ if (is_admin([101])) {
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
-                        $arrusers = array_diff($arrusers, [App::getUsername()]);
+                        $arrusers = array_diff($arrusers, [getUsername()]);
                         $total = count($arrusers);
 
                         // Рассылка сообщений с подготовкой запросов
@@ -77,26 +77,26 @@ if (is_admin([101])) {
 
                             foreach ($arrusers as $uzval){
                                 $updateusers -> execute($uzval);
-                                $insertprivat -> execute($uzval, App::getUsername(), $msg, SITETIME);
+                                $insertprivat -> execute($uzval, getUsername(), $msg, SITETIME);
                             }
 
-                            App::setFlash('success', 'Сообщение успешно разослано! (Отправлено: '.$total.')');
-                            App::redirect("/admin/delivery");
+                            setFlash('success', 'Сообщение успешно разослано! (Отправлено: '.$total.')');
+                            redirect("/admin/delivery");
 
                         } else {
-                            App::showError('Ошибка! Отсутствуют получатели рассылки!');
+                            showError('Ошибка! Отсутствуют получатели рассылки!');
                         }
 
                     } else {
-                        App::showError('Ошибка! Слишком длинный или короткий текст сообщения!');
+                        showError('Ошибка! Слишком длинный или короткий текст сообщения!');
                     }
 
                 } else {
-                    App::showError('Ошибка! Вы не выбрали получаетелей рассылки!');
+                    showError('Ошибка! Вы не выбрали получаетелей рассылки!');
                 }
 
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/delivery">Вернуться</a><br>';
@@ -107,7 +107,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

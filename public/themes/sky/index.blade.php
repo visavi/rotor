@@ -7,7 +7,7 @@ header("Content-type:text/html; charset=utf-8");
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>
         @section('title')
-            {{ Setting::get('title') }}
+            {{ setting('title') }}
         @show
     </title>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -15,8 +15,8 @@ header("Content-type:text/html; charset=utf-8");
 <link rel="stylesheet" href="/themes/sky/css/style.css" media="screen">
 <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
 <?= include_javascript(); ?>
-<meta name="keywords" content="@yield('keywords', Setting::get('keywords'))">
-<meta name="description" content="@yield('description', Setting::get('description'))">
+<meta name="keywords" content="@yield('keywords', setting('keywords'))">
+<meta name="description" content="@yield('description', setting('description'))">
 <meta name="generator" content="RotorCMS <?= env('VERSION') ?>">
 </head><body>
 <!--Themes by TurikUs-->
@@ -115,7 +115,7 @@ header("Content-type:text/html; charset=utf-8");
         &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
     <?php endif; ?>
 
-    <?php if (App::user('newchat')<stats_newchat()): ?>
+    <?php if (user('newchat')<stats_newchat()): ?>
         &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
     <?php endif; ?>
 
@@ -130,7 +130,7 @@ header("Content-type:text/html; charset=utf-8");
 
 <div class="divb">Авторизация</div>
 
-<form method="post" action="/login<?= App::returnUrl() ?>">
+<form method="post" action="/login<?= returnUrl() ?>">
 Логин:<br><input name="login" value="'.$cooklog.'"><br>
 Пароль:<br><input name="pass" type="password"><br>
 Запомнить меня:
@@ -166,7 +166,7 @@ header("Content-type:text/html; charset=utf-8");
                                     <div class="art-BlockContent-body">
                                         <div>
 <div class="divb">Календарь</div>
-<?php include (APP.'/includes/calendar.php'); ?>
+<?php include (APP.'/Includes/calendar.php'); ?>
 </div>
                                     </div>
                                 </div>
@@ -200,13 +200,13 @@ header("Content-type:text/html; charset=utf-8");
                         <div class="art-Post-inner">
 
 <div class="art-PostMetadataHeader">
-<?= App::view('includes/note'); ?>
+<?= view('includes/note'); ?>
 </div>
 
 
                                 <h2 class="art-PostHeaderIcon-wrapper">
                                     <img src="/themes/sky/img/PostHeaderIcon.png" width="29" height="29" alt="PostHeaderIcon">
-                                    <span class="art-PostHeader"><?= Setting::get('title') ?></span>
+                                    <span class="art-PostHeader"><?= setting('title') ?></span>
                                 </h2>
 
                             <div class="art-PostContent">

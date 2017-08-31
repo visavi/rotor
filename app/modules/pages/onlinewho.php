@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 //show_title('Онлайн пользователей');
 
@@ -19,7 +19,7 @@ if ($total > 0) {
 
     echo '<br>Всего пользователей: '.$total.' чел.<br><br>';
 } else {
-    App::showError('Зарегистированных пользователей нет!');
+    showError('Зарегистированных пользователей нет!');
 }
 
 echo '<div class="b"><b>Поздравляем именинников:</b></div>';
@@ -36,7 +36,7 @@ if ($total > 0) {
 
     echo '<br>Всего именниников: '.$total.' чел.<br><br>';
 } else {
-    App::showError('Сегодня именинников нет!');
+    showError('Сегодня именинников нет!');
 }
 // ---------------------------------------------------------------------------------//
 echo '<div class="b"><b>Приветствуем новичков:</b></div>';
@@ -53,9 +53,9 @@ if ($total > 0) {
 
     echo '<br>Всего новичков: '.$total.' чел.<br><br>';
 } else {
-    App::showError('Новичков пока нет!');
+    showError('Новичков пока нет!');
 }
 
 echo '<i class="fa fa-users"></i> <a href="/who">Kто-где?</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

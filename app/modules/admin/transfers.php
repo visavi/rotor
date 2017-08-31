@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -13,11 +13,11 @@ if (is_admin([101, 102, 103])) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers`;");
-            $page = App::paginate(Setting::get('listtransfers'), $total);
+            $page = paginate(setting('listtransfers'), $total);
 
             if ($total > 0) {
 
-                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('listtransfers').";");
+                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listtransfers').";");
 
                 while ($data = $querytrans -> fetch()) {
                     echo '<div class="b">';
@@ -35,7 +35,7 @@ if (is_admin([101, 102, 103])) {
                     echo '</div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
 
                 echo '<div class="form">';
                 echo '<b>Поиск по пользователю:</b><br>';
@@ -47,7 +47,7 @@ if (is_admin([101, 102, 103])) {
                 echo 'Всего операций: <b>'.$total.'</b><br><br>';
 
             } else {
-                App::showError('Истории операций еще нет!');
+                showError('Истории операций еще нет!');
             }
         break;
 
@@ -61,11 +61,11 @@ if (is_admin([101, 102, 103])) {
             if (user($uz)) {
 
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `user`=?;", [$uz]);
-                $page = App::paginate(Setting::get('listtransfers'), $total);
+                $page = paginate(setting('listtransfers'), $total);
 
                 if ($total > 0) {
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('listtransfers').";", [$uz]);
+                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listtransfers').";", [$uz]);
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
@@ -82,15 +82,15 @@ if (is_admin([101, 102, 103])) {
                         echo '</div>';
                     }
 
-                    App::pagination($page);
+                    pagination($page);
 
                     echo 'Всего операций: <b>'.$total.'</b><br><br>';
 
                 } else {
-                    App::showError('Истории операций еще нет!');
+                    showError('Истории операций еще нет!');
                 }
             } else {
-                App::showError('Ошибка! Данный пользователь не найден!');
+                showError('Ошибка! Данный пользователь не найден!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/transfers">Вернуться</a><br>';
@@ -101,7 +101,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

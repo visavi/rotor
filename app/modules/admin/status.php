@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -37,7 +37,7 @@ if (is_admin([101, 102])) {
                 }
                 echo '<br>Всего статусов: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('Статусы еще не назначены!');
+                showError('Статусы еще не назначены!');
             }
 
             echo '<i class="fa fa-check"></i> <a href="/admin/status?act=add">Создать</a><br>';
@@ -68,7 +68,7 @@ if (is_admin([101, 102])) {
 
                 echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Данного статуса не существует!');
+                showError('Ошибка! Данного статуса не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br>';
@@ -91,16 +91,16 @@ if (is_admin([101, 102])) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
                         DB::run() -> query("UPDATE `status` SET `topoint`=?, `point`=?, `name`=?, `color`=? WHERE `id`=?;", [$topoint, $point, $name, $color, $id]);
 
-                        App::setFlash('success', 'Статус успешно изменен!');
-                        App::redirect("/admin/status");
+                        setFlash('success', 'Статус успешно изменен!');
+                        redirect("/admin/status");
                     } else {
-                        App::showError('Ошибка! Недопустимый формат цвета статуса!');
+                        showError('Ошибка! Недопустимый формат цвета статуса!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинное или короткое название статуса!');
+                    showError('Ошибка! Слишком длинное или короткое название статуса!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status?act=edit&amp;id='.$id.'">Вернуться</a><br>';
@@ -145,16 +145,16 @@ if (is_admin([101, 102])) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
                         DB::run() -> query("INSERT INTO `status` (`topoint`, `point`, `name`, `color`) VALUES (?, ?, ?, ?);", [$topoint, $point, $name, $color]);
 
-                        App::setFlash('success', 'Статус успешно добавлен!');
-                        App::redirect("/admin/status");
+                        setFlash('success', 'Статус успешно добавлен!');
+                        redirect("/admin/status");
                     } else {
-                        App::showError('Ошибка! Недопустимый формат цвета статуса!');
+                        showError('Ошибка! Недопустимый формат цвета статуса!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинное или короткое название статуса!');
+                    showError('Ошибка! Слишком длинное или короткое название статуса!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status?act=add">Вернуться</a><br>';
@@ -172,13 +172,13 @@ if (is_admin([101, 102])) {
                 if (!empty($id)) {
                     DB::run() -> query("DELETE FROM `status` WHERE `id`=?;", [$id]);
 
-                    App::setFlash('success', 'Статус успешно удален!');
-                    App::redirect("/admin/status");
+                    setFlash('success', 'Статус успешно удален!');
+                    redirect("/admin/status");
                 } else {
-                    App::showError('Ошибка! Отсутствует выбранный статус для удаления!');
+                    showError('Ошибка! Отсутствует выбранный статус для удаления!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/status">Вернуться</a><br>';
@@ -189,7 +189,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

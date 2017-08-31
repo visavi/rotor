@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $id = isset($_GET['id']) ? abs(intval($_GET['id'])) : 0;
 $act = isset($_GET['act']) ? check($_GET['act']) : 'index';
@@ -17,7 +17,7 @@ case 'index':
     if (!empty($downs)) {
         if (!empty($downs['active'])) {
             if (getExtension($downs['link']) == 'zip') {
-                //Setting::get('newtitle') = 'Просмотр архива - '.$downs['title'];
+                //setting('newtitle') = 'Просмотр архива - '.$downs['title'];
 
                 $zip = new PclZip('uploads/files/'.$downs['link']);
                 if (($list = $zip -> listContent()) != 0) {
@@ -26,17 +26,17 @@ case 'index':
 
                     sort($list);
 
-                    $page = App::paginate(Setting::get('ziplist'), $total);
+                    $page = paginate(setting('ziplist'), $total);
                     if ($total > 0) {
                         echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br><br>';
                         echo 'Всего файлов: '.$total.'<hr>';
 
                         $arrext = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'env', 'gitignore', 'json', 'yml', 'md'];
 
-                        if ($total < $page['offset'] + Setting::get('ziplist')) {
+                        if ($total < $page['offset'] + setting('ziplist')) {
                             $end = $total;
                         } else {
-                            $end = $page['offset'] + Setting::get('ziplist');
+                            $end = $page['offset'] + setting('ziplist');
                         }
                         for ($i = $page['offset']; $i < $end; $i++) {
                             if ($list[$i]['folder'] == 1) {
@@ -56,23 +56,23 @@ case 'index':
                             }
                         }
 
-                        App::pagination($page);
+                        pagination($page);
 
                         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?cid='.$downs['category_id'].'">'.$downs['name'].'</a><br>';
                     } else {
-                        App::showError('Ошибка! В данном архиве нет файлов!');
+                        showError('Ошибка! В данном архиве нет файлов!');
                     }
                 } else {
-                    App::showError('Ошибка! Невозможно открыть архив!');
+                    showError('Ошибка! Невозможно открыть архив!');
                 }
             } else {
-                App::showError('Ошибка! Невозможно просмотреть данный файл, т.к. он не является архивом!');
+                showError('Ошибка! Невозможно просмотреть данный файл, т.к. он не является архивом!');
             }
         } else {
-            App::showError('Ошибка! Данный файл еще не проверен модератором!');
+            showError('Ошибка! Данный файл еще не проверен модератором!');
         }
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 break;
 
@@ -94,7 +94,7 @@ case 'preview':
                 $filecontent = $content[0]['content'];
                 $filename = $content[0]['filename'];
 
-                //Setting::get('newtitle') = 'Просмотр файла - '.$filename;
+                //setting('newtitle') = 'Просмотр файла - '.$filename;
 
                 echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br><br>';
 
@@ -108,7 +108,7 @@ case 'preview':
                             echo '<pre class="prettyprint linenums">'.win_to_utf(htmlspecialchars($filecontent)).'</pre><br>';
                         }
                     } else {
-                        App::showError('Данный файл пустой!');
+                        showError('Данный файл пустой!');
                     }
                 } else {
                     if (!empty($_GET['img'])) {
@@ -127,13 +127,13 @@ case 'preview':
                     echo '<img src="/load/zip?act=preview&amp;id='.$id.'&amp;view='.$view.'&amp;img=1" alt="image"><br><br>';
                 }
             } else {
-                App::showError('Ошибка! Не удалось извлечь файл!');
+                showError('Ошибка! Не удалось извлечь файл!');
             }
         } else {
-            App::showError('Ошибка! Данный файл еще не проверен модератором!');
+            showError('Ошибка! Данный файл еще не проверен модератором!');
         }
     } else {
-        App::showError('Ошибка! Данного файла не существует!');
+        showError('Ошибка! Данного файла не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/zip?id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -143,4 +143,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

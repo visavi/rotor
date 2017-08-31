@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -45,25 +45,25 @@ switch ($action):
             }
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE lower(`login`) ".$search.";");
-            $page = App::paginate(Setting::get('usersearch'), $total);
+            $page = paginate(setting('usersearch'), $total);
 
             if ($total > 0) {
 
-                $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".Setting::get('usersearch').";");
+                $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".setting('usersearch').";");
                 while ($data = $queryuser -> fetch()) {
 
                     echo user_gender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
                     echo user_online($data['login']).' ('.points($data['point']).')<br>';
                 }
 
-                App::pagination($page);
+                pagination($page);
 
                 echo 'Найдено совпадений: '.$total.'<br><br>';
             } else {
-                App::showError('Совпадений не найдено!');
+                showError('Совпадений не найдено!');
             }
         } else {
-            App::showError('Ошибка! Не выбраны критерии поиска пользователей!');
+            showError('Ошибка! Не выбраны критерии поиска пользователей!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br>';
@@ -77,7 +77,7 @@ switch ($action):
         $find = check(strtolower($_POST['find']));
 
         if (utf_strlen($find)>=3 && utf_strlen($find)<=20) {
-            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? ORDER BY `point` DESC LIMIT ".Setting::get('usersearch').";", ['%'.$find.'%']);
+            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? ORDER BY `point` DESC LIMIT ".setting('usersearch').";", ['%'.$find.'%']);
 
             $result = $querysearch -> fetchAll();
             $total = count($result);
@@ -95,10 +95,10 @@ switch ($action):
 
                 echo '<br>Найдено совпадений: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('По вашему запросу ничего не найдено');
+                showError('По вашему запросу ничего не найдено');
             }
         } else {
-            App::showError('Ошибка! Слишком короткий или длинный запрос, от 3 до 20 символов!');
+            showError('Ошибка! Слишком короткий или длинный запрос, от 3 до 20 символов!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br>';
@@ -107,7 +107,7 @@ switch ($action):
 endswitch;
 
 } else {
-    App::showError('Ошибка! Для поиска пользователей необходимо авторизоваться!');
+    showError('Ошибка! Для поиска пользователей необходимо авторизоваться!');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

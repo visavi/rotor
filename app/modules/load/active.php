@@ -1,7 +1,7 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
-$uz = empty($_GET['uz']) ? check(App::getUsername()) : check($_GET['uz']);
+$uz = empty($_GET['uz']) ? check(getUsername()) : check($_GET['uz']);
 $act = isset($_GET['act']) ? check($_GET['act']) : 'files';
 $page = abs(intval(Request::input('page', 1)));
 
@@ -18,11 +18,11 @@ case 'files':
     echo '<b>Проверенные</b><hr>';
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [1, $uz]);
-    $page = App::paginate(Setting::get('downlist'), $total);
+    $page = paginate(setting('downlist'), $total);
 
     if ($total > 0) {
 
-        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", [1, $uz]);
+        $querydown = DB::run() -> query("SELECT `d`.*, `name`, folder FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";", [1, $uz]);
 
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -38,9 +38,9 @@ case 'files':
             echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
         }
 
-        App::pagination($page);
+        pagination($page);
     } else {
-        App::showError('Опубликованных файлов не найдено!');
+        showError('Опубликованных файлов не найдено!');
     }
 break;
 
@@ -51,13 +51,13 @@ case 'comments':
     //show_title('Список всех комментариев');
 
     $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `user`=?;", ['down', $uz]);
-    $page = App::paginate(Setting::get('downlist'), $total);
+    $page = paginate(setting('downlist'), $total);
 
     if ($total > 0) {
 
         $is_admin = is_admin();
 
-        $querypost = DB::run() -> query("SELECT `c`.*, `title`, `comments` FROM `comments` c LEFT JOIN `downs` d ON `c`.`relate_id`=`d`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", ['down', $uz]);
+        $querypost = DB::run() -> query("SELECT `c`.*, `title`, `comments` FROM `comments` c LEFT JOIN `downs` d ON `c`.`relate_id`=`d`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";", ['down', $uz]);
 
         while ($data = $querypost -> fetch()) {
             echo '<div class="b">';
@@ -69,7 +69,7 @@ case 'comments':
             }
 
             echo '</div>';
-            echo '<div>'.App::bbCode($data['text']).'<br>';
+            echo '<div>'.bbCode($data['text']).'<br>';
 
             echo 'Написал: '.$data['user'].' <small>('.date_fixed($data['time']).')</small><br>';
 
@@ -80,9 +80,9 @@ case 'comments':
             echo '</div>';
         }
 
-        App::pagination($page);
+        pagination($page);
     } else {
-        App::showError('Комментарии не найдены!');
+        showError('Комментарии не найдены!');
     }
 break;
 
@@ -105,11 +105,11 @@ case 'viewcomm':
     $querycomm = DB::run() -> querySingle("SELECT COUNT(*) FROM `comments` WHERE relate_type=? AND `id`<=? AND `relate_id`=? ORDER BY `time` ASC LIMIT 1;", ['down', $cid, $id]);
 
     if (!empty($querycomm)) {
-        $end = ceil($querycomm / Setting::get('downlist'));
+        $end = ceil($querycomm / setting('downlist'));
 
-        App::redirect("/load/down?act=comments&id=$id&page=$end");
+        redirect("/load/down?act=comments&id=$id&page=$end");
     } else {
-        App::showError('Ошибка! Комментарий к данному файлу не существует!');
+        showError('Ошибка! Комментарий к данному файлу не существует!');
     }
 break;
 
@@ -132,16 +132,16 @@ case 'del':
                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `id`=? AND `relate_id`=?;", ['down', $id, $downs]);
                 DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [1, $downs]);
 
-                App::setFlash('success', 'Комментарий успешно удален!');
-                App::redirect("/load/active?act=comments&uz=$uz&page=$page");
+                setFlash('success', 'Комментарий успешно удален!');
+                redirect("/load/active?act=comments&uz=$uz&page=$page");
             } else {
-                App::showError('Ошибка! Данного комментария не существует!');
+                showError('Ошибка! Данного комментария не существует!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Ошибка! Удалять комментарии могут только модераторы!');
+        showError('Ошибка! Удалять комментарии могут только модераторы!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/active?act=comments&amp;uz='.$uz.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -151,4 +151,4 @@ endswitch;
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

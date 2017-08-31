@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (is_admin([101])) {
 //show_title('Очистка кэша');
@@ -25,7 +25,7 @@ case 'index':
 
         echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clear?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
     } else {
-        App::showError('Файлов еще нет!');
+        showError('Файлов еще нет!');
     }
 break;
 
@@ -56,7 +56,7 @@ case 'image':
 
         echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clearimage?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
     } else {
-        App::showError('Изображений еще нет!');
+        showError('Изображений еще нет!');
     }
 break;
 
@@ -71,11 +71,11 @@ case 'clear':
 
         clearCache();
 
-        App::setFlash('success', 'Кэш-файлы успешно удалены!');
-        App::redirect("/admin/cache");
+        setFlash('success', 'Кэш-файлы успешно удалены!');
+        redirect("/admin/cache");
 
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/cache">Вернуться</a><br>';
@@ -100,11 +100,11 @@ case 'clearimage':
             }
         }
 
-        App::setFlash('success', 'Изображения успешно удалены!');
-        App::redirect("/admin/cache/image");
+        setFlash('success', 'Изображения успешно удалены!');
+        redirect("/admin/cache/image");
 
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/cache/image">Вернуться</a><br>';
@@ -115,7 +115,7 @@ endswitch;
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

@@ -1,9 +1,9 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $page = abs(intval(Request::input('page', 1)));
 
-if (! is_user()) App::abort(403);
+if (! is_user()) abort(403);
 
 //show_title('Контакт-лист');
 
@@ -13,10 +13,10 @@ switch ($action):
 ############################################################################################
 case 'index':
 
-    $total = Contact::where('user_id', App::getUserId())->count();
-    $page = App::paginate(Setting::get('contactlist'), $total);
+    $total = Contact::where('user_id', getUserId())->count();
+    $page = paginate(setting('contactlist'), $total);
 
-    $contacts = Contact::where('user_id', App::getUserId())
+    $contacts = Contact::where('user_id', getUserId())
         ->orderBy('created_at', 'desc')
         ->offset($page['offset'])
         ->limit($page['limit'])
@@ -49,11 +49,11 @@ case 'index':
 
         echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-        App::pagination($page);
+        pagination($page);
 
         echo 'Всего в контактах: <b>'.$page['total'].'</b><br>';
     } else {
-        App::showError('Контакт-лист пуст!');
+        showError('Контакт-лист пуст!');
     }
 
     echo '<br><div class="form"><form method="post" action="/contact/create">';
@@ -77,32 +77,32 @@ case 'create':
     $validation->addRule('not_empty', $user, 'Данного пользователя не существует!');
 
     if ($user) {
-        $validation->addRule('not_equal', [$user->login, App::getUsername()], 'Запрещено добавлять свой логин!');
+        $validation->addRule('not_equal', [$user->login, getUsername()], 'Запрещено добавлять свой логин!');
 
-        $totalContact = Contact::where('user_id', App::getUserId())->count();
-        $validation->addRule('min', [$totalContact, Setting::get('limitcontact')], 'Ошибка! Контакт-лист переполнен (Максимум ' . Setting::get('limitcontact') . ' пользователей!)');
+        $totalContact = Contact::where('user_id', getUserId())->count();
+        $validation->addRule('min', [$totalContact, setting('limitcontact')], 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
 
-        $validation->addRule('custom', ! isContact(App::user(), $user), 'Данный пользователь уже есть в контакт-листе!');
+        $validation->addRule('custom', ! isContact(user(), $user), 'Данный пользователь уже есть в контакт-листе!');
     }
 
     if ($validation->run()) {
 
-            DB::run() -> query("INSERT INTO `contact` (`user_id`, `contact_id`, `created_at`) VALUES (?, ?, ?);", [App::getUserId(), $user->id, SITETIME]);
+            DB::run() -> query("INSERT INTO `contact` (`user_id`, `contact_id`, `created_at`) VALUES (?, ?, ?);", [getUserId(), $user->id, SITETIME]);
 
-            if (! isIgnore($user, App::user())) {
+            if (! isIgnore($user, user())) {
 
-                $message = 'Пользователь [b]'.App::getUsername().'[/b] добавил вас в свой контакт-лист!';
-                send_private($user->id, App::getUserId(), $message);
+                $message = 'Пользователь [b]'.getUsername().'[/b] добавил вас в свой контакт-лист!';
+                send_private($user->id, getUserId(), $message);
             }
 
-        App::setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');
+        setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');
 
     } else {
-        App::setInput(Request::all());
-        App::setFlash('danger', $validation->getErrors());
+        setInput(Request::all());
+        setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/contact?page='.$page);
+    redirect('/contact?page='.$page);
 break;
 
 ############################################################################################
@@ -112,12 +112,12 @@ case 'note':
 
     $id = param('id');
 
-    $contact = Contact::where('user_id', App::getUserId())
+    $contact = Contact::where('user_id', getUserId())
         ->where('id', $id)
         ->first();
 
     if (! $contact) {
-        App::abort('default', 'Запись не найдена');
+        abort('default', 'Запись не найдена');
     }
 
     if (Request::isMethod('post')) {
@@ -131,13 +131,13 @@ case 'note':
 
         if ($validation->run()) {
 
-            DB::run() -> query("UPDATE contact SET text=? WHERE id=? AND user_id=?;", [$msg, $id, App::getUserId()]);
+            DB::run() -> query("UPDATE contact SET text=? WHERE id=? AND user_id=?;", [$msg, $id, getUserId()]);
 
-            App::setFlash('success', 'Заметка успешно отредактирована!');
-            App::redirect("/contact");
+            setFlash('success', 'Заметка успешно отредактирована!');
+            redirect("/contact");
         } else {
-            App::setInput(Request::all());
-            App::setFlash('danger', $validation->getErrors());
+            setInput(Request::all());
+            setFlash('danger', $validation->getErrors());
         }
     }
 
@@ -169,14 +169,14 @@ case 'delete':
     if ($validation->run()) {
 
         $del = implode(',', $del);
-        DB::run() -> query("DELETE FROM contact WHERE id IN (".$del.") AND user_id=?;", [App::getUserId()]);
+        DB::run() -> query("DELETE FROM contact WHERE id IN (".$del.") AND user_id=?;", [getUserId()]);
 
-        App::setFlash('success', 'Выбранные пользователи успешно удалены!');
+        setFlash('success', 'Выбранные пользователи успешно удалены!');
     } else {
-        App::setFlash('danger', $validation->getErrors());
+        setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect("/contact?page=$page");
+    redirect("/contact?page=$page");
 break;
 
 endswitch;
@@ -184,4 +184,4 @@ endswitch;
 echo '<i class="fa fa-ban"></i> <a href="/ignore">Игнор-лист</a><br>';
 echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

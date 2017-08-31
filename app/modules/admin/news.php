@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $id  = abs(intval(Request::input('id', 0)));
@@ -16,7 +16,7 @@ case 'index':
     echo '<div class="form"><a href="/news">Обзор новостей</a></div>';
 
     $total = News::count();
-    $page = App::paginate(Setting::get('postnews'), $total);
+    $page = paginate(setting('postnews'), $total);
 
     if ($total > 0) {
 
@@ -52,7 +52,7 @@ case 'index':
                 $data['text'] = current(explode('[cut]', $data['text'])).' <a href="/news/'.$data['id'].'">Читать далее &raquo;</a>';
             }
 
-            echo '<div>'.App::bbCode($data['text']).'</div>';
+            echo '<div>'.bbCode($data['text']).'</div>';
 
             echo '<div style="clear:both;">Добавлено: '.profile($data['user']).'<br>';
             echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ('.$data['comments'].') ';
@@ -61,11 +61,11 @@ case 'index':
 
         echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-        App::pagination($page);
+        pagination($page);
 
         echo 'Всего новостей: <b>'.(int)$total.'</b><br><br>';
     } else {
-        App::showError('Новостей еще нет!');
+        showError('Новостей еще нет!');
     }
 
     echo '<i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br>';
@@ -112,7 +112,7 @@ case 'edit':
 
         echo '<br><input type="submit" value="Изменить"></form></div><br>';
     } else {
-        App::showError('Ошибка! Выбранная новость не существует, возможно она была удалена!');
+        showError('Ошибка! Выбранная новость не существует, возможно она была удалена!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br>';
@@ -145,7 +145,7 @@ case 'change':
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-            $handle = upload_image($_FILES['image'], Setting::get('filesize'), Setting::get('fileupfoto'), $id);
+            $handle = upload_image($_FILES['image'], setting('filesize'), setting('fileupfoto'), $id);
             if ($handle) {
 
                 // Удаление старой картинки
@@ -160,17 +160,17 @@ case 'change':
                     DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
 
                 } else {
-                    App::setFlash('danger', $handle->error);
+                    setFlash('danger', $handle->error);
                 }
             }
         }
         // ---------------------------------------------------------------------------------//
 
-        App::setFlash('success', 'Новость успешно отредактирована!');
-        App::redirect("/admin/news?page=$page");
+        setFlash('success', 'Новость успешно отредактирована!');
+        redirect("/admin/news?page=$page");
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -220,18 +220,18 @@ case 'addnews':
 
     if ($validation->run()) {
 
-        DB::run() -> query("INSERT INTO `news` (`title`, `text`, `user_id`, `created_at`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, App::getUserId(), SITETIME, 0, $closed, $top]);
+        DB::run() -> query("INSERT INTO `news` (`title`, `text`, `user_id`, `created_at`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, getUserId(), SITETIME, 0, $closed, $top]);
 
         $lastid = DB::run() -> lastInsertId();
 
         // Выводим на главную если там нет новостей
-        if (!empty($top) && empty(Setting::get('lastnews'))) {
+        if (!empty($top) && empty(setting('lastnews'))) {
             DB::run() -> query("UPDATE `setting` SET `value`=? WHERE `name`=?;", [1, 'lastnews']);
             save_setting();
         }
 
         // ---------------------------- Загрузка изображения -------------------------------//
-        $handle = upload_image($_FILES['image'], Setting::get('filesize'), Setting::get('fileupfoto'), $lastid);
+        $handle = upload_image($_FILES['image'], setting('filesize'), setting('fileupfoto'), $lastid);
         if ($handle) {
 
             $handle -> process(HOME.'/uploads/news/');
@@ -240,16 +240,16 @@ case 'addnews':
                 DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
 
             } else {
-                App::setFlash('danger', $handle->error);
-                App::redirect("/admin/news?act=edit&id=$lastid");
+                setFlash('danger', $handle->error);
+                redirect("/admin/news?act=edit&id=$lastid");
             }
         }
 
-        App::setFlash('success', 'Новость успешно добавлена!');
-        App::redirect("/admin/news");
+        setFlash('success', 'Новость успешно добавлена!');
+        redirect("/admin/news");
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=add">Вернуться</a><br>';
@@ -267,14 +267,14 @@ case 'restatement':
         if ($token == $_SESSION['token']) {
             restatement('news');
 
-            App::setFlash('success', 'Комментарии успешно пересчитаны!');
-            App::redirect("/admin/news");
+            setFlash('success', 'Комментарии успешно пересчитаны!');
+            redirect("/admin/news");
 
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
     } else {
-        App::showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
+        showError('Ошибка! Пересчитывать комментарии могут только суперадмины!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news">Вернуться</a><br>';
@@ -307,17 +307,17 @@ case 'del':
                 DB::run() -> query("DELETE FROM `news` WHERE `id` IN (".$del.");");
                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type = 'News' AND `relate_id` IN (".$del.");");
 
-                App::setFlash('success', 'Выбранные новости успешно удалены!');
-                App::redirect("/admin/news?page=$page");
+                setFlash('success', 'Выбранные новости успешно удалены!');
+                redirect("/admin/news?page=$page");
 
             } else {
-                App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с изображениями!');
+                showError('Ошибка! Не установлены атрибуты доступа на дирекоторию с изображениями!');
             }
         } else {
-            App::showError('Ошибка! Отсутствуют выбранные новости!');
+            showError('Ошибка! Отсутствуют выбранные новости!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?page='.$page.'">Вернуться</a><br>';
@@ -328,7 +328,7 @@ endswitch;
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

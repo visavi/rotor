@@ -1,14 +1,14 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 //show_title('Свежие загрузки');
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-3600 * 120]);
-$page = App::paginate(Setting::get('downlist'), $total);
+$page = paginate(setting('downlist'), $total);
 
 if ($total > 0) {
 
-    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('downlist').";", [1, SITETIME-3600 * 120]);
+    $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";", [1, SITETIME-3600 * 120]);
 
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -34,7 +34,7 @@ if ($total > 0) {
         echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
     }
 
-    App::pagination($page);
+    pagination($page);
 
     echo '<i class="fa fa-file text-success"></i> - Самая свежая загрузка<br>';
     echo '<i class="fa fa-file text-warning"></i> - Более дня назад<br>';
@@ -42,9 +42,9 @@ if ($total > 0) {
 
     echo 'Всего файлов: <b>'.$total.'</b><br><br>';
 } else {
-    App::showError('За последние 5 дней загрузок еще нет!');
+    showError('За последние 5 дней загрузок еще нет!');
 }
 
 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

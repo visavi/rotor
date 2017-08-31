@@ -1,17 +1,17 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 //show_title('Кто-где');
 
 $total = DB::run() -> querySingle("SELECT count(*) FROM `visit`;");
 
 if ($total > 0) {
-    if ($total > Setting::get('lastusers')) {
-        $total = Setting::get('lastusers');
+    if ($total > setting('lastusers')) {
+        $total = setting('lastusers');
     }
-    $page = App::paginate(Setting::get('showuser'), $total);
+    $page = paginate(setting('showuser'), $total);
 
-    $queryvisit = DB::run() -> query("SELECT * FROM `visit` ORDER BY `nowtime` DESC LIMIT ".$page['offset'].", ".Setting::get('showuser').";");
+    $queryvisit = DB::run() -> query("SELECT * FROM `visit` ORDER BY `nowtime` DESC LIMIT ".$page['offset'].", ".setting('showuser').";");
 
     while ($data = $queryvisit -> fetch()) {
 
@@ -28,9 +28,9 @@ if ($total > 0) {
         echo 'Переходов: '.$data['count'].'</div>';
     }
 
-    App::pagination($page);
+    pagination($page);
 } else {
-    App::showError('Пользователей еще нет!');
+    showError('Пользователей еще нет!');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

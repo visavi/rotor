@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (! is_admin()) {
     redirect ('/');
@@ -7,7 +7,7 @@ if (! is_admin()) {
 
 //show_title('Панель управления');
 ?>
-<i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">Версия <?= VERSION ?>.<?= Setting::get('buildversion') ?></a></b><br><br>
+<i class="fa fa-key fa-lg"></i> <b><a href="/admin/upgrade">Версия <?= VERSION ?>.<?= setting('buildversion') ?></a></b><br><br>
 
 <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Модератор</b></div>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/chat">Админ-чат</a> (<?=stats_chat()?>)<br>
@@ -26,7 +26,7 @@ if (! is_admin()) {
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/spam">Список жалоб</a> (<?=stats_spam()?>)<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> (<?=stats_admins()?>)<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/reglist">Список ожидающих</a> (<?=stats_reglist()?>)<br>
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> (<?=stats_votes()?>)<br>
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> (<?=statVotes()?>)<br>
         <?=show_admin_links(103);?>
     <?php }?>
 
@@ -47,13 +47,13 @@ if (! is_admin()) {
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br>
         <?=show_admin_links(101);?>
 
-        <?php if (App::getUsername() == Setting::get('nickname')) {?>
+        <?php if (getUsername() == setting('nickname')) {?>
             <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/files">Редактирование файлов</a><br>
             <?php show_admin_links();?>
         <?php }?>
     <?php }?>
 
-    <?php if ($admin = user(Setting::get('nickname'))) {?>
+    <?php if ($admin = user(setting('nickname'))) {?>
         <?php if ($admin['level'] != 101) {?>
 
             <br><div class="b"><b><span style="color:#ff0000">Внимание!!! Cуперадминистратор не имеет достаточных прав!</span></b><br>
@@ -64,15 +64,15 @@ if (! is_admin()) {
     <?php } else {?>
 
         <br><div class="b"><b><span style="color:#ff0000">Внимание!!! Отсутствует профиль суперадмина</span></b><br>
-        Профиль администратора <b><?=Setting::get('nickname')?></b> не задействован на сайте</div>
+        Профиль администратора <b><?=setting('nickname')?></b> не задействован на сайте</div>
 
     <?php }?>
 
-    <?php if (file_exists(BASEDIR.'/install') && !empty(Setting::get('nickname'))) {?>
+    <?php if (file_exists(BASEDIR.'/install') && !empty(setting('nickname'))) {?>
 
         <br><div class="b"><b><span style="color:#ff0000">Внимание!!! Необходимо удалить директорию install</span></b><br>
         Наличие этой директории может нарушить безопасность сайта. Удалите ее прямо сейчас!</div>
 
     <?php }?>
 
-<?php App::view(Setting::get('themes').'/foot'); ?>
+<?php view(setting('themes').'/foot'); ?>

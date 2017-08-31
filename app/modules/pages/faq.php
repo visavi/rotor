@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 echo '<b>FAQ по сайту</b><br><br>';
 
@@ -8,8 +8,8 @@ echo 'Регистрация предназначена для тех, кто н
 echo 'После регистрации у вас появятся новые возможности:<br>';
 
 echo '<b>1</b>. Повышать свой статус (после 6 месяцев пребывания на сайте, вы сможете изменить статус на персональный)<br>';
-echo '<b>2</b>. Добавлять свои фотографии в галерею и анкету (Вес картинки не должен превышать '.formatsize(Setting::get('filesize')).')<br>';
-echo '<b>3</b>. Изменять репутацию другим  пользователям сайта положительными или отрицательным голосом (При активе '.points(Setting::get('editratingpoint')).')<br>';
+echo '<b>2</b>. Добавлять свои фотографии в галерею и анкету (Вес картинки не должен превышать '.formatsize(setting('filesize')).')<br>';
+echo '<b>3</b>. Изменять репутацию другим  пользователям сайта положительными или отрицательным голосом (При активе '.points(setting('editratingpoint')).')<br>';
 echo '<b>4</b>. Иметь свой собственный контакт и игнор-листы<br>';
 echo '<b>5</b>. Изменять темы/скины по своему желанию, которая будет включаться автоматически при авторизации (Большой выбор скинов)<br>';
 echo '<b>6</b>. Общаться по внутренней почте сайта с пользователями сайта, писать под своим аккаунтом в гостевой, комментариях, форуме<br>';
@@ -19,23 +19,23 @@ echo '<b>9</b>. Изменять под себя настройки сайта, 
 
 echo '<br>При наборе определенного количества актива, пользователю открываются новые возможности:<br>';
 
-if (!empty(Setting::get('addofferspoint'))) {
-    echo '<b>'.points(Setting::get('addofferspoint')).'</b> - создание тем в "Предложенияx и проблемах"<br>';
+if (!empty(setting('addofferspoint'))) {
+    echo '<b>'.points(setting('addofferspoint')).'</b> - создание тем в "Предложенияx и проблемах"<br>';
 }
-if (!empty(Setting::get('forumloadpoints'))) {
-    echo '<b>'.points(Setting::get('forumloadpoints')).'</b> - Прикрепление файлов в форуме<br>';
+if (!empty(setting('forumloadpoints'))) {
+    echo '<b>'.points(setting('forumloadpoints')).'</b> - Прикрепление файлов в форуме<br>';
 }
-if (!empty(Setting::get('sendmoneypoint'))) {
-    echo '<b>'.points(Setting::get('sendmoneypoint')).'</b> - перечисление игровых денег<br>';
+if (!empty(setting('sendmoneypoint'))) {
+    echo '<b>'.points(setting('sendmoneypoint')).'</b> - перечисление игровых денег<br>';
 }
-if (!empty(Setting::get('editratingpoint'))) {
-    echo '<b>'.points(Setting::get('editratingpoint')).'</b> - изменение репутации пользователям<br>';
+if (!empty(setting('editratingpoint'))) {
+    echo '<b>'.points(setting('editratingpoint')).'</b> - изменение репутации пользователям<br>';
 }
-if (!empty(Setting::get('editforumpoint'))) {
-    echo '<b>'.points(Setting::get('editforumpoint')).'</b> - изменение и закрытие своих тем на форуме<br>';
+if (!empty(setting('editforumpoint'))) {
+    echo '<b>'.points(setting('editforumpoint')).'</b> - изменение и закрытие своих тем на форуме<br>';
 }
-if (!empty(Setting::get('advertpoint'))) {
-    echo '<b>'.points(Setting::get('advertpoint')).'</b> - исчезает вся реклама на главной странице сайта<br>';
+if (!empty(setting('advertpoint'))) {
+    echo '<b>'.points(setting('advertpoint')).'</b> - исчезает вся реклама на главной странице сайта<br>';
 }
 echo '<br>';
 
@@ -60,4 +60,4 @@ echo 'Активно участвуйте во всем, чаще заходит
 echo '<br><b>Не нашли ответа на интересующий себя вопрос?</b><br>';
 echo 'Напишите об этом <a href="/mail">администратору</a>, <a href="/adminlist">старшим сайта</a> через внутреннюю почту или создавайте тему на форуме где будем вместе обсуждать вопрос, делиться опытом и знаниями<br><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

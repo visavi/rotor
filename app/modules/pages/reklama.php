@@ -1,9 +1,9 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 //show_title('Реклама на сайте');
 
-if (!empty(Setting::get('rekusershow'))) {
+if (!empty(setting('rekusershow'))) {
 switch ($action):
 ############################################################################################
 ##                                    Главная страница                                    ##
@@ -11,16 +11,16 @@ switch ($action):
 
 case 'index':
 
-    //Setting::get('newtitle') = 'Список всех ссылок';
+    //setting('newtitle') = 'Список всех ссылок';
 
     $total = RekUser::where_gt('time', SITETIME)->count();
 
-    $page = App::paginate(Setting::get('rekuserpost'), $total);
+    $page = paginate(setting('rekuserpost'), $total);
 
     if ($total > 0) {
 
         $reklama = RekUser::where_gt('time', SITETIME)
-            ->limit(Setting::get('rekuserpost'))
+            ->limit(setting('rekuserpost'))
             ->offset($page['offset'])
             ->order_by_desc('time')
             ->find_many();
@@ -45,11 +45,11 @@ case 'index':
             }
         }
 
-        App::pagination($page);
+        pagination($page);
 
         echo 'Всего ссылок: <b>'.$total.'</b><br><br>';
     } else {
-        App::showError('В данный момент рекламных ссылок еще нет!');
+        showError('В данный момент рекламных ссылок еще нет!');
     }
 
     echo '<i class="fa fa-money"></i> <a href="/reklama/create">Купить рекламу</a><br>';
@@ -61,7 +61,7 @@ case 'index':
 case 'create':
 
     if (is_user()) {
-        if (App::user('point') >= 50) {
+        if (user('point') >= 50) {
 
             if (Request::isMethod('post')) {
                 $token = !empty($_POST['token']) ? check($_POST['token']) : 0;
@@ -74,7 +74,7 @@ case 'create':
                 $validation = new Validation();
 
                 $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                    -> addRule('max', [App::user('point'), 50], 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
+                    -> addRule('max', [user('point'), 50], 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
                     -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
                     -> addRule('regex', [$site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'], 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)
                     -> addRule('string', $site, 'Слишком длинный или короткий адрес ссылки!', true, 5, 50)
@@ -87,22 +87,22 @@ case 'create':
 
                     $total = RekUser::where_gt('time', SITETIME)->count();
 
-                    if ($total < Setting::get('rekusertotal')) {
+                    if ($total < setting('rekusertotal')) {
 
-                        $rekuser = RekUser::where('user', App::getUsername())->find_one();
+                        $rekuser = RekUser::where('user', getUsername())->find_one();
 
                         if (empty($rekuser)) {
-                            $price = Setting::get('rekuserprice');
+                            $price = setting('rekuserprice');
 
                             if (!empty($color)) {
-                                $price = $price + Setting::get('rekuseroptprice');
+                                $price = $price + setting('rekuseroptprice');
                             }
 
                             if (!empty($bold)) {
-                                $price = $price + Setting::get('rekuseroptprice');
+                                $price = $price + setting('rekuseroptprice');
                             }
 
-                            if (App::user('money') >= $price) {
+                            if (user('money') >= $price) {
 
                                 $reklama = RekUser::create();
                                 $reklama->set([
@@ -110,41 +110,41 @@ case 'create':
                                     'name'  => $name,
                                     'color' => $color,
                                     'bold' => $bold,
-                                    'user' => App::getUsername(),
-                                    'time' => SITETIME + (Setting::get('rekusertime') * 3600),
+                                    'user' => getUsername(),
+                                    'time' => SITETIME + (setting('rekusertime') * 3600),
                                 ])->save();
 
-                                $user = User::find_one(App::getUserId());
+                                $user = User::find_one(getUserId());
                                 $user->money -= $price;
                                 $user->save();
 
                                 save_advertuser();
 
-                                App::setFlash('success', 'Рекламная ссылка успешно размещена (Cписано: '.moneys($price).')');
-                                App::redirect("/reklama");
+                                setFlash('success', 'Рекламная ссылка успешно размещена (Cписано: '.moneys($price).')');
+                                redirect("/reklama");
 
                             } else {
-                                App::showError('Ошибка! Для покупки рекламы у вас недостаточно денег!');
+                                showError('Ошибка! Для покупки рекламы у вас недостаточно денег!');
                             }
                         } else {
-                            App::showError('Ошибка! Вы уже разместили рекламу, запрещено добавлять несколько сайтов подряд!');
+                            showError('Ошибка! Вы уже разместили рекламу, запрещено добавлять несколько сайтов подряд!');
                         }
                     } else {
-                        App::showError('Ошибка! В данный момент нет свободных мест для размещения рекламы!');
+                        showError('Ошибка! В данный момент нет свободных мест для размещения рекламы!');
                     }
                 } else {
-                    App::showError($validation->getErrors());
+                    showError($validation->getErrors());
                 }
             }
 
             $total = RekUser::where_gt('time', SITETIME)->count();
 
-            if ($total < Setting::get('rekusertotal')) {
+            if ($total < setting('rekusertotal')) {
 
-                $rekuser = RekUser::where('user', App::getUsername())->where_gt('time', SITETIME)->find_one();
+                $rekuser = RekUser::where('user', getUsername())->where_gt('time', SITETIME)->find_one();
 
                 if (empty($rekuser)) {
-                    echo 'У вас в наличии: <b>'.moneys(App::user('money')).'</b><br><br>';
+                    echo 'У вас в наличии: <b>'.moneys(user('money')).'</b><br><br>';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/reklama/create">';
@@ -173,8 +173,8 @@ case 'create':
 
                     echo '<br><input value="Купить" type="submit"></form></div><br>';
 
-                    echo 'Стоимость размещения ссылки '.moneys(Setting::get('rekuserprice')).' за '.Setting::get('rekusertime').' часов<br>';
-                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys(Setting::get('rekuseroptprice')).'<br>';
+                    echo 'Стоимость размещения ссылки '.moneys(setting('rekuserprice')).' за '.setting('rekusertime').' часов<br>';
+                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys(setting('rekuseroptprice')).'<br>';
                     echo 'Ссылка прокручивается на всех страницах сайта с другими ссылками пользователей<br>';
                     echo 'В названии ссылки запрещено использовать любые ненормативные и матные слова<br>';
                     echo 'Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br>';
@@ -182,16 +182,16 @@ case 'create':
                     echo 'За нарушение правил предусмотрено наказание в виде строгого бана<br><br>';
 
                 } else {
-                    App::showError('Ошибка! Вы уже разместили рекламу, запрещено добавлять несколько сайтов подряд!');
+                    showError('Ошибка! Вы уже разместили рекламу, запрещено добавлять несколько сайтов подряд!');
                 }
             } else {
-                App::showError('В данный момент нет свободных мест для размещения рекламы!');
+                showError('В данный момент нет свободных мест для размещения рекламы!');
             }
         } else {
-            App::showError('Ошибка! Для покупки рекламы вам необходимо набрать '.points(50).'!');
+            showError('Ошибка! Для покупки рекламы вам необходимо набрать '.points(50).'!');
         }
     } else {
-        App::showError('Для покупки рекламы необходимо авторизоваться');
+        showError('Для покупки рекламы необходимо авторизоваться');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/reklama">Вернуться</a><br>';
@@ -200,7 +200,7 @@ break;
 endswitch;
 
 } else {
-    App::showError('Показ и размещение рекламы запрещено администрацией сайта!');
+    showError('Показ и размещение рекламы запрещено администрацией сайта!');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

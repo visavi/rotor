@@ -1,7 +1,7 @@
 <?php
 
 if (! is_user()) {
-    App::abort(403, 'Чтобы загружать фотографии необходимо авторизоваться');
+    abort(403, 'Чтобы загружать фотографии необходимо авторизоваться');
 }
 
 switch ($action):
@@ -18,14 +18,14 @@ case 'index':
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-        $handle = upload_image($_FILES['photo'], Setting::get('filesize'), Setting::get('fileupfoto'), $newName);
+        $handle = upload_image($_FILES['photo'], setting('filesize'), setting('fileupfoto'), $newName);
         if (! $handle) {
             $validation -> addError(['photo' => 'Не удалось загрузить фотографию!']);
         }
 
         if ($validation->run()) {
             //-------- Удаляем старую фотку и аватар ----------//
-            $user = User::find(App::getUserId());
+            $user = User::find(getUserId());
 
             if ($user['picture']) {
                 unlink_image('uploads/photos/', $user['picture']);
@@ -56,7 +56,7 @@ case 'index':
 
                 if ($handle->processed) {
 
-                    $user = User::find(App::getUserId());
+                    $user = User::find(getUserId());
                     $user->picture = $picture;
                     $user->avatar = $avatar;
                     $user->save();
@@ -64,19 +64,19 @@ case 'index':
                     save_avatar();
                 }
 
-                App::setFlash('success', 'Фотография успешно загружена!');
-                App::redirect('/profile');
+                setFlash('success', 'Фотография успешно загружена!');
+                redirect('/profile');
             } else {
                 $validation -> addError(['photo' => $handle->error]);
             }
         }
 
-        App::setInput(Request::all());
-        App::setFlash('danger', $validation->getErrors());
+        setInput(Request::all());
+        setFlash('danger', $validation->getErrors());
     }
 
-    $user = User::where('login', App::getUsername())->first();
-    App::view('pages/picture', compact('user'));
+    $user = User::where('login', getUsername())->first();
+    view('pages/picture', compact('user'));
 break;
 
 
@@ -90,7 +90,7 @@ case 'delete':
     $validation = new Validation();
     $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-    $user = User::find(App::getUserId());
+    $user = User::find(getUserId());
     if (! $user || ! $user['picture']) {
         $validation -> addError('Фотографии для удаления не существует!');
     }
@@ -104,12 +104,12 @@ case 'delete':
         $user->avatar = null;
         $user->save();
 
-        App::setFlash('success', 'Фотография успешно удалена!');
+        setFlash('success', 'Фотография успешно удалена!');
     } else {
-        App::setFlash('danger', $validation->getErrors());
+        setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/profile');
+    redirect('/profile');
 
 break;
 endswitch;

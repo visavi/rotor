@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -35,7 +35,7 @@ switch ($action):
         $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type]);
         $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type2]);
 
-        $page = App::paginate(Setting::get('postoffers'), $total);
+        $page = paginate(setting('postoffers'), $total);
 
         echo '<i class="fa fa-book"></i> ';
 
@@ -89,7 +89,7 @@ switch ($action):
 
         if ($total > 0) {
 
-            $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".Setting::get('postoffers').";", [$type]);
+            $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".setting('postoffers').";", [$type]);
 
             while ($data = $queryoffers -> fetch()) {
                 echo '<div class="b">';
@@ -107,17 +107,17 @@ switch ($action):
                 }
 
                 echo '</div>';
-                echo '<div>'.App::bbCode($data['text']).'<br>';
+                echo '<div>'.bbCode($data['text']).'<br>';
                 echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br>';
                 echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                 echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
             }
 
-            App::pagination($page);
+            pagination($page);
 
             echo 'Всего записей: <b>'.$total.'</b><br><br>';
         } else {
-            App::showError('Записей еще нет!');
+            showError('Записей еще нет!');
         }
 
         echo '<i class="fa fa-check"></i> <a href="/offers?act=new">Добавить</a><br>';
@@ -141,7 +141,7 @@ switch ($action):
 
         $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($queryoff)) {
-            //Setting::get('newtitle') = $queryoff['title'];
+            //setting('newtitle') = $queryoff['title'];
 
             echo '<div class="b">';
             echo '<i class="fa fa-file-o"></i> ';
@@ -159,15 +159,15 @@ switch ($action):
 
             echo '</div>';
 
-            if ($queryoff['status'] <= 1 && App::getUsername() == $queryoff['user']) {
+            if ($queryoff['status'] <= 1 && getUsername() == $queryoff['user']) {
                 echo '<div class="right"><a href="/offers?act=edit&amp;id='.$id.'">Редактировать</a></div>';
             }
 
-            echo '<div>'.App::bbCode($queryoff['text']).'<br>';
+            echo '<div>'.bbCode($queryoff['text']).'<br>';
             echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br>';
 
-            if ($queryoff['status'] <= 1 && App::getUsername() != $queryoff['user']) {
-                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, App::getUsername()]);
+            if ($queryoff['status'] <= 1 && getUsername() != $queryoff['user']) {
+                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
 
                 if (empty($queryrated)) {
                     echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br>';
@@ -181,7 +181,7 @@ switch ($action):
 
             if (!empty($queryoff['text_reply'])) {
                 echo '<div class="b"><b>Официальный ответ</b></div>';
-                echo '<div class="q">'.App::bbCode($queryoff['text_reply']).'<br>';
+                echo '<div class="q">'.bbCode($queryoff['text_reply']).'<br>';
                 echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br>';
             }
             // ------------------------------------------------//
@@ -198,7 +198,7 @@ switch ($action):
                     echo '<small> ('.date_fixed($comm['time']).')</small><br>';
                     echo user_title($comm['user']).' '.user_online($comm['user']).'</div>';
 
-                    echo '<div>'.App::bbCode($comm['text']).'<br>';
+                    echo '<div>'.bbCode($comm['text']).'<br>';
 
                     if (is_admin()) {
                         echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
@@ -208,7 +208,7 @@ switch ($action):
                 }
                 echo '<br>';
             } else {
-                App::showError('Комментариев еще нет!');
+                showError('Комментариев еще нет!');
             }
 
             if (is_user()) {
@@ -223,13 +223,13 @@ switch ($action):
                     echo '<a href="/smiles">Смайлы</a> / ';
                     echo '<a href="/tags">Теги</a><br><br>';
                 } else {
-                    App::showError('Комментирование данного предложения или проблемы закрыто!');
+                    showError('Комментирование данного предложения или проблемы закрыто!');
                 }
             } else {
-                App::showError('Для добавления сообщения необходимо авторизоваться');
+                showError('Для добавления сообщения необходимо авторизоваться');
             }
         } else {
-            App::showError('Ошибка! Данного предложения или проблемы не существует!');
+            showError('Ошибка! Данного предложения или проблемы не существует!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?type='.$type.'">Вернуться</a><br>';
@@ -241,7 +241,7 @@ switch ($action):
     case 'edit':
 
         if (is_user()) {
-            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
+            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
             if (!empty($queryoff)) {
                 if ($queryoff['status'] <= 1) {
 
@@ -261,13 +261,13 @@ switch ($action):
 
                     echo '<input type="submit" value="Изменить"></form></div><br>';
                 } else {
-                    App::showError('Ошибка! Данное предложение или проблема уже решена или закрыта!');
+                    showError('Ошибка! Данное предложение или проблема уже решена или закрыта!');
                 }
             } else {
-                App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                showError('Ошибка! Данного предложения или проблемы не существует!');
             }
         } else {
-            App::showError('Для редактирования предложения необходимо авторизоваться');
+            showError('Для редактирования предложения необходимо авторизоваться');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -285,7 +285,7 @@ switch ($action):
 
         if ($uid == $_SESSION['token']) {
             if (is_user()) {
-                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, App::getUsername()]);
+                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
                         if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
@@ -296,25 +296,25 @@ switch ($action):
 
                                 DB::run() -> query("UPDATE `offers` SET `type`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $title, $text, $id]);
 
-                                App::setFlash('success', 'Данные успешно отредактированы!');
-                                App::redirect("/offers?act=view&type=$types&id=$id");
+                                setFlash('success', 'Данные успешно отредактированы!');
+                                redirect("/offers?act=view&type=$types&id=$id");
                             } else {
-                                App::showError('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
+                                showError('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
                             }
                         } else {
-                            App::showError('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
+                            showError('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
                         }
                     } else {
-                        App::showError('Ошибка! Данное предложение или проблема уже решена или закрыта!');
+                        showError('Ошибка! Данное предложение или проблема уже решена или закрыта!');
                     }
                 } else {
-                    App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                    showError('Ошибка! Данного предложения или проблемы не существует!');
                 }
             } else {
-                App::showError('Для редактирования предложения необходимо авторизоваться');
+                showError('Для редактирования предложения необходимо авторизоваться');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=edit&amp;id='.$id.'">Вернуться</a><br>';
@@ -327,7 +327,7 @@ switch ($action):
 
         $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
         if (!empty($queryoff)) {
-            //Setting::get('newtitle') = 'Комментарии - '.$queryoff['title'];
+            //setting('newtitle') = 'Комментарии - '.$queryoff['title'];
 
             echo '<i class="fa fa-comment"></i> <b><a href="/offers?act=view&amp;id='.$queryoff['id'].'">'.$queryoff['title'].'</a></b><br><br>';
 
@@ -336,7 +336,7 @@ switch ($action):
             echo '<a href="/offers?act=end&amp;id='.$id.'">Обновить</a><hr>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `comments` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
-            $page = App::paginate(Setting::get('postcommoffers'), $total);
+            $page = paginate(setting('postcommoffers'), $total);
 
             if ($total > 0) {
 
@@ -346,7 +346,7 @@ switch ($action):
                     echo '<form action="/offers?act=delcomm&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".Setting::get('postcommoffers').";", ['offer', $id]);
+                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".setting('postcommoffers').";", ['offer', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -359,7 +359,7 @@ switch ($action):
                     echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
                     echo user_title($data['user']).' '.user_online($data['user']).'</div>';
 
-                    echo '<div>'.App::bbCode($data['text']).'<br>';
+                    echo '<div>'.bbCode($data['text']).'<br>';
 
                     if ($is_admin) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -372,9 +372,9 @@ switch ($action):
                     echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
                 }
 
-                App::pagination($page);
+                pagination($page);
             } else {
-                App::showError('Комментариев еще нет!');
+                showError('Комментариев еще нет!');
             }
 
             if (is_user()) {
@@ -389,15 +389,15 @@ switch ($action):
                     echo '<a href="/smiles">Смайлы</a> / ';
                     echo '<a href="/tags">Теги</a><br><br>';
                 } else {
-                    App::showError('Комментирование данного предложения или проблемы закрыто!');
+                    showError('Комментирование данного предложения или проблемы закрыто!');
                 }
             } else {
-                App::showError('Для добавления сообщения необходимо авторизоваться');
+                showError('Для добавления сообщения необходимо авторизоваться');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$queryoff['id'].'">Вернуться</a><br>';
         } else {
-            App::showError('Ошибка! Данного предложения или проблемы не существует!');
+            showError('Ошибка! Данного предложения или проблемы не существует!');
         }
     break;
 
@@ -409,7 +409,7 @@ switch ($action):
         $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
         $msg = (isset($_POST['msg'])) ? check($_POST['msg']) : '';
 
-        //Setting::get('newtitle') = 'Добавление комментария';
+        //setting('newtitle') = 'Добавление комментария';
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
@@ -421,29 +421,29 @@ switch ($action):
 
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, App::getUsername(), SITETIME, App::getClientIp(), App::getUserAgent()]);
+                                DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, getUsername(), SITETIME, getClientIp(), getUserAgent()]);
 
                                 DB::run() -> query("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 
-                                App::setFlash('success', 'Комментарий успешно добавлен!');
-                                App::redirect("/offers?act=end&id=$id");
+                                setFlash('success', 'Комментарий успешно добавлен!');
+                                redirect("/offers?act=end&id=$id");
                             } else {
-                                App::showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
+                                showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                             }
                         } else {
-                            App::showError('Комментирование данного предложения или проблемы закрыто!');
+                            showError('Комментирование данного предложения или проблемы закрыто!');
                         }
                     } else {
-                        App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                        showError('Ошибка! Данного предложения или проблемы не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный или короткий комментарий!');
+                    showError('Ошибка! Слишком длинный или короткий комментарий!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
         } else {
-            App::showError('Для добавления сообщения необходимо авторизоваться');
+            showError('Для добавления сообщения необходимо авторизоваться');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br>';
@@ -461,34 +461,34 @@ switch ($action):
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
-                        if (App::getUsername() != $queryoff['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, App::getUsername()]);
+                        if (getUsername() != $queryoff['user']) {
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
                             if (empty($queryrated)) {
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, App::getUsername(), SITETIME]);
+                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, getUsername(), SITETIME]);
                                 DB::run() -> query("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", [$id]);
                             } else {
-                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, App::getUsername()]);
+                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
                                 if ($queryoff['votes'] > 0) {
                                     DB::run() -> query("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", [$id]);
                                 }
                             }
 
-                            App::setFlash('success', 'Спасибо! Ваш голос учтен!');
-                            App::redirect("/offers?act=view&id=$id");
+                            setFlash('success', 'Спасибо! Ваш голос учтен!');
+                            redirect("/offers?act=view&id=$id");
                         } else {
-                            App::showError('Ошибка! Запрещено голосовать за свое продложение или проблему!');
+                            showError('Ошибка! Запрещено голосовать за свое продложение или проблему!');
                         }
                     } else {
-                        App::showError('Ошибка! Данное предложение или проблема уже решена или закрыта!');
+                        showError('Ошибка! Данное предложение или проблема уже решена или закрыта!');
                     }
                 } else {
-                    App::showError('Ошибка! Данного предложения или проблемы не существует!');
+                    showError('Ошибка! Данного предложения или проблемы не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
         } else {
-            App::showError('Для голосования необходимо авторизоваться');
+            showError('Для голосования необходимо авторизоваться');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=view&amp;id='.$id.'">Вернуться</a><br>';
@@ -500,7 +500,7 @@ switch ($action):
     case 'new':
         echo '<b><big>Добавление</big></b><br><br>';
 
-        if (App::user('point') >= Setting::get('addofferspoint')) {
+        if (user('point') >= setting('addofferspoint')) {
             echo '<div class="form">';
             echo '<form action="/offers?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -515,7 +515,7 @@ switch ($action):
             echo '<textarea cols="25" rows="5" name="text"></textarea><br>';
             echo '<input type="submit" value="Добавить"></form></div><br>';
         } else {
-            App::showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.points(Setting::get('addofferspoint')).'!');
+            showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.points(setting('addofferspoint')).'!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br>';
@@ -532,7 +532,7 @@ switch ($action):
         $types = (empty($_POST['types'])) ? 0 : 1;
 
         if ($uid == $_SESSION['token']) {
-            if (App::user('point') >= Setting::get('addofferspoint')) {
+            if (user('point') >= setting('addofferspoint')) {
                 if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
                     if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
                         if (Flood::isFlood()) {
@@ -540,27 +540,27 @@ switch ($action):
                             $title = antimat($title);
                             $text = antimat($text);
 
-                            DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, App::getUsername(), 1, SITETIME]);
+                            DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, getUsername(), 1, SITETIME]);
                             $lastid = DB::run() -> lastInsertId();
 
-                            DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, App::getUsername(), SITETIME]);
+                            DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, getUsername(), SITETIME]);
 
-                            App::setFlash('success', 'Сообщение успешно добавлено!');
-                            App::redirect("/offers?act=view&type=$types&id=$lastid");
+                            setFlash('success', 'Сообщение успешно добавлено!');
+                            redirect("/offers?act=view&type=$types&id=$lastid");
                         } else {
-                            App::showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
+                            showError('Антифлуд! Разрешается отправлять сообщения раз в '.Flood::getPeriod().' секунд!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
+                        showError('Ошибка! Слишком длинное или короткое описание (От 5 до 1000 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
+                    showError('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
                 }
             } else {
-                App::showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.points(Setting::get('addofferspoint')).'!');
+                showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.points(setting('addofferspoint')).'!');
             }
         } else {
-            App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=new">Вернуться</a><br>';
@@ -586,16 +586,16 @@ switch ($action):
                     $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='offer' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
                     DB::run() -> query("UPDATE `offers` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
-                    App::setFlash('success', 'Выбранные комментарии успешно удалены!');
-                    App::redirect("/offers?act=comments&id=$id&page=$page");
+                    setFlash('success', 'Выбранные комментарии успешно удалены!');
+                    redirect("/offers?act=comments&id=$id&page=$page");
                 } else {
-                    App::showError('Ошибка! Отстутствуют выбранные комментарии для удаления!');
+                    showError('Ошибка! Отстутствуют выбранные комментарии для удаления!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
         } else {
-            App::showError('Ошибка! Удалять комментарии могут только модераторы!');
+            showError('Ошибка! Удалять комментарии могут только модераторы!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?act=comments&amp;id='.$id.'">Вернуться</a><br>';
@@ -610,11 +610,11 @@ switch ($action):
 
         if (!empty($query)) {
             $total_comments = (empty($query['total_comments'])) ? 1 : $query['total_comments'];
-            $end = ceil($total_comments / Setting::get('postcommoffers'));
+            $end = ceil($total_comments / setting('postcommoffers'));
 
-            App::redirect("/offers?act=comments&id=$id&page=$end");
+            redirect("/offers?act=comments&id=$id&page=$end");
         } else {
-            App::showError('Ошибка! Данного предложения или проблемы не существует!');
+            showError('Ошибка! Данного предложения или проблемы не существует!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br>';
@@ -622,4 +622,4 @@ switch ($action):
 
 endswitch;
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

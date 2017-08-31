@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -19,11 +19,11 @@ if (is_admin([101, 102])) {
             echo '<a href="/admin/logs?act=666">История автобанов</a><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `ban`;");
-            $page = App::paginate(Setting::get('ipbanlist'), $total);
+            $page = paginate(setting('ipbanlist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('ipbanlist').";");
+                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('ipbanlist').";");
 
                 echo '<form action="/admin/ipban?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -45,11 +45,11 @@ if (is_admin([101, 102])) {
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                App::pagination($page);
+                pagination($page);
 
                 echo 'Всего заблокировано: <b>'.$total.'</b><br><br>';
             } else {
-                App::showError('В бан-листе пока пусто!');
+                showError('В бан-листе пока пусто!');
             }
 
             echo '<div class="form">';
@@ -78,19 +78,19 @@ if (is_admin([101, 102])) {
                 if (preg_match('|^[0-9]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}$|', $ips)) {
                     $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", [$ips]);
                     if (empty($banip)) {
-                        DB::run() -> query("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, App::getUsername(), SITETIME]);
-                        App::ipBan(true);
+                        DB::run() -> query("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, getUsername(), SITETIME]);
+                        ipBan(true);
 
-                        App::setFlash('success', 'IP успешно занесен в список!');
-                        App::redirect("/admin/ipban?page=$page");
+                        setFlash('success', 'IP успешно занесен в список!');
+                        redirect("/admin/ipban?page=$page");
                     } else {
-                        App::showError('Ошибка! Введенный IP уже имеетеся в списке!');
+                        showError('Ошибка! Введенный IP уже имеетеся в списке!');
                     }
                 } else {
-                    App::showError('Ошибка! Вы ввели недопустимый IP-адрес для бана!');
+                    showError('Ошибка! Вы ввели недопустимый IP-адрес для бана!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban">Вернуться</a><br>';
@@ -113,10 +113,10 @@ if (is_admin([101, 102])) {
                     $del = implode(',', $del);
 
                     DB::run() -> query("DELETE FROM `ban` WHERE `id` IN (".$del.");");
-                    App::ipBan(true);
+                    ipBan(true);
 
-                    App::setFlash('success', 'Выбранные IP успешно удалены из списка!');
-                    App::redirect("/admin/ipban?page=$page");
+                    setFlash('success', 'Выбранные IP успешно удалены из списка!');
+                    redirect("/admin/ipban?page=$page");
                 } else {
                     echo '<i class="fa fa-times"></i> <b>Ошибка удаления! Отсутствуют выбранные IP</b><br>';
                 }
@@ -137,15 +137,15 @@ if (is_admin([101, 102])) {
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("TRUNCATE `ban`;");
-                    App::ipBan(true);
+                    ipBan(true);
 
-                    App::setFlash('success', 'Список IP успешно очищен!');
-                    App::redirect("/admin/ipban");
+                    setFlash('success', 'Список IP успешно очищен!');
+                    redirect("/admin/ipban");
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Очищать бан-лист могут только суперадмины!');
+                showError('Ошибка! Очищать бан-лист могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/ipban?page='.$page.'">Вернуться</a><br>';
@@ -156,7 +156,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

@@ -1,8 +1,8 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 //show_title('Загрузки');
-//Setting::get('newtitle') = 'Загрузки - Список разделов';
+//setting('newtitle') = 'Загрузки - Список разделов';
 
 $querydown = DB::run() -> query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `category_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400 * 5]);
 
@@ -67,7 +67,7 @@ if (count($downs) > 0) {
     echo '<a href="/load/add">Добавить файл</a><br>';
 
 } else {
-    App::showError('Разделы загрузок еще не созданы!');
+    showError('Разделы загрузок еще не созданы!');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

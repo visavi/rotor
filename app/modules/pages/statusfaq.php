@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 //show_title('Статусы пользователей');
 
@@ -26,10 +26,10 @@ if ($total>0){
 
     echo '<br>';
 } else {
-    App::showError('Статусы еще не назначены!');
+    showError('Статусы еще не назначены!');
 }
 
 echo 'Некоторые статусы могут быть выделены определенными цветами<br>';
 echo 'Самым активным юзерам администрация сайта может назначать особые статусы<br><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

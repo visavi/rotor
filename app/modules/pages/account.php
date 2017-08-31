@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
@@ -14,7 +14,7 @@ switch ($action):
 case 'index':
 
     echo '<i class="fa fa-book"></i> ';
-    echo '<a href="user/'.App::getUsername().'">Моя анкета</a> / ';
+    echo '<a href="user/'.getUsername().'">Моя анкета</a> / ';
     echo '<a href="/profile">Мой профиль</a> / ';
     echo '<b>Мои данные</b> / ';
     echo '<a href="/setting">Настройки</a><hr>';
@@ -23,7 +23,7 @@ case 'index':
     echo '<div class="form">';
     echo '<form method="post" action="/account?act=changemail&amp;uid='.$_SESSION['token'].'">';
     echo 'Е-mail:<br>';
-    echo '<input name="meil" maxlength="50" value="'.App::user('email').'"><br>';
+    echo '<input name="meil" maxlength="50" value="'.user('email').'"><br>';
     echo 'Текущий пароль:<br>';
     echo '<input name="provpass" type="password" maxlength="20"><br>';
     echo '<input value="Изменить" type="submit"></form></div><br>';
@@ -31,23 +31,23 @@ case 'index':
     /**
      * Изменение персонального статуса
      */
-    if (!empty(Setting::get('editstatus'))) {
+    if (!empty(setting('editstatus'))) {
         echo '<b><big>Изменение статуса</big></b><br>';
 
-        if (App::user('point') >= Setting::get('editstatuspoint')) {
+        if (user('point') >= setting('editstatuspoint')) {
             echo '<div class="form">';
             echo '<form method="post" action="/account?act=editstatus&amp;uid='.$_SESSION['token'].'">';
             echo 'Персональный статус:<br>';
-            echo '<input name="status" maxlength="20" value="'.App::user('status').'">';
+            echo '<input name="status" maxlength="20" value="'.user('status').'">';
             echo '<input value="Изменить" type="submit"></form>';
 
-            if (!empty(Setting::get('editstatusmoney'))) {
-                echo '<br><i>Стоимость: '.moneys(Setting::get('editstatusmoney')).'</i>';
+            if (!empty(setting('editstatusmoney'))) {
+                echo '<br><i>Стоимость: '.moneys(setting('editstatusmoney')).'</i>';
             }
 
             echo '</div><br>';
         } else {
-            App::showError('Изменять статус могут пользователи у которых более '.points(Setting::get('editstatuspoint')).'!');
+            showError('Изменять статус могут пользователи у которых более '.points(setting('editstatuspoint')).'!');
         }
     }
 
@@ -68,14 +68,14 @@ case 'index':
      */
     echo '<b><big>Ваш API-токен</big></b><br>';
 
-    if(empty(App::user('apikey'))) {
+    if(empty(user('apikey'))) {
         echo '<div class="form">';
         echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
         echo '<input value="Получить токен" type="submit"></form></div><br>';
     } else {
         echo '<div class="form">';
         echo '<form method="post" action="/account?act=apikey&amp;uid='.$_SESSION['token'].'">';
-        echo 'Токен: <strong>'.App::user('apikey').'</strong><br>';
+        echo 'Токен: <strong>'.user('apikey').'</strong><br>';
         echo '<input value="Изменить токен" type="submit"></form></div><br>';
     }
 break;
@@ -92,9 +92,9 @@ case 'changemail':
     $validation = new Validation();
 
     $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('not_equal', [$meil, App::user('email')], 'Новый адрес email должен отличаться от текущего!')
+        -> addRule('not_equal', [$meil, user('email')], 'Новый адрес email должен отличаться от текущего!')
         -> addRule('email', $meil, 'Неправильный адрес email, необходим формат name@site.domen!', true)
-        -> addRule('bool', password_verify($provpass, App::user('password')), 'Введенный пароль не совпадает с данными в профиле!');
+        -> addRule('bool', password_verify($provpass, user('password')), 'Введенный пароль не совпадает с данными в профиле!');
 
     $regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$meil]);
     $validation -> addRule('empty', $regmail, 'Указанный вами адрес email уже используется в системе!');
@@ -104,28 +104,28 @@ case 'changemail':
     $validation -> addRule('empty', $blackmail, 'Указанный вами адрес email занесен в черный список!');
 
     DB::run() -> query("DELETE FROM `changemail` WHERE `created_at`<?;", [SITETIME]);
-    $changemail = DB::run() -> querySingle("SELECT `id` FROM `changemail` WHERE `user_id`=? LIMIT 1;", [App::getUserId()]);
+    $changemail = DB::run() -> querySingle("SELECT `id` FROM `changemail` WHERE `user_id`=? LIMIT 1;", [getUserId()]);
     $validation -> addRule('empty', $changemail, 'Вы уже отправили код подтверждения на новый адрес почты!');
 
     if ($validation->run()) {
 
         $genkey = str_random(rand(15,20));
 
-        $siteLink = starts_with(Setting::get('home'), '//') ? 'http:'. Setting::get('home') : Setting::get('home');
+        $siteLink = starts_with(setting('home'), '//') ? 'http:'. setting('home') : setting('home');
 
-        $subject = 'Изменение email на сайте '.Setting::get('title');
-        $message = 'Здравствуйте, '.App::getUsername().'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.$siteLink.'/account?act=editmail&key='.$genkey.'">'.$siteLink.'/account?act=editmail&key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).', для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+        $subject = 'Изменение email на сайте '.setting('title');
+        $message = 'Здравствуйте, '.getUsername().'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.$siteLink.'/account?act=editmail&key='.$genkey.'">'.$siteLink.'/account?act=editmail&key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).', для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
-        $body = App::view('mailer.default', compact('subject', 'message'), true);
-        App::sendMail($meil, $subject, $body);
+        $body = view('mailer.default', compact('subject', 'message'), true);
+        sendMail($meil, $subject, $body);
 
-        DB::run() -> query("INSERT INTO `changemail` (`user_id`, `mail`, hash, `created_at`) VALUES (?, ?, ?, ?);", [App::getUserId(), $meil, $genkey, SITETIME + 86400]);
+        DB::run() -> query("INSERT INTO `changemail` (`user_id`, `mail`, hash, `created_at`) VALUES (?, ?, ?, ?);", [getUserId(), $meil, $genkey, SITETIME + 86400]);
 
-        App::setFlash('success', 'На новый адрес почты отправлено письмо для подтверждения!');
-        App::redirect("/account");
+        setFlash('success', 'На новый адрес почты отправлено письмо для подтверждения!');
+        redirect("/account");
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -139,13 +139,13 @@ case 'editmail':
     $key = (isset($_GET['key'])) ? check(strval($_GET['key'])) : '';
 
     DB::run() -> query("DELETE FROM `changemail` WHERE `created_at`<?;", [SITETIME]);
-    $armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, App::getUserId()]);
+    $armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, getUserId()]);
 
     $validation = new Validation();
 
     $validation -> addRule('not_empty', $key, 'Вы не ввели код изменения электронной почты!')
         -> addRule('not_empty', $armail, 'Данный код изменения электронной почты не найден в списке!')
-        -> addRule('not_equal', [$armail['mail'], App::user('email')], 'Новый адрес email должен отличаться от текущего!');
+        -> addRule('not_equal', [$armail['mail'], user('email')], 'Новый адрес email должен отличаться от текущего!');
 
     $regmail = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$armail['mail']]);
     $validation -> addRule('empty', $regmail, 'Указанный вами адрес email уже используется в системе!');
@@ -155,14 +155,14 @@ case 'editmail':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], App::getUsername()]);
-        DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, App::getUserId()]);
+        DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], getUsername()]);
+        DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, getUserId()]);
 
-        App::setFlash('success', 'Адрес электронной почты успешно изменен!');
-        App::redirect("/account");
+        setFlash('success', 'Адрес электронной почты успешно изменен!');
+        redirect("/account");
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -174,16 +174,16 @@ break;
 case 'editstatus':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $status = (isset($_POST['status'])) ? check($_POST['status']) : '';
-    $cost = (!empty($status)) ? Setting::get('editstatusmoney') : 0;
+    $cost = (!empty($status)) ? setting('editstatusmoney') : 0;
 
     $validation = new Validation();
 
     $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('not_empty', Setting::get('editstatus'), 'Изменение статуса запрещено администрацией сайта!')
-        -> addRule('empty', App::user('ban'), 'Для изменения статуса у вас не должно быть нарушений!')
-        -> addRule('not_equal', [$status, App::user('status')], 'Новый статус должен отличаться от текущего!')
-        -> addRule('max', [App::user('point'), Setting::get('editstatuspoint')], 'У вас недостаточно актива для изменения статуса!')
-        -> addRule('max', [App::user('money'), $cost], 'У вас недостаточно денег для изменения статуса!')
+        -> addRule('not_empty', setting('editstatus'), 'Изменение статуса запрещено администрацией сайта!')
+        -> addRule('empty', user('ban'), 'Для изменения статуса у вас не должно быть нарушений!')
+        -> addRule('not_equal', [$status, user('status')], 'Новый статус должен отличаться от текущего!')
+        -> addRule('max', [user('point'), setting('editstatuspoint')], 'У вас недостаточно актива для изменения статуса!')
+        -> addRule('max', [user('money'), $cost], 'У вас недостаточно денег для изменения статуса!')
         -> addRule('string', $status, 'Слишком длинный или короткий статус!', false, 3, 20);
 
     if (!empty($status)) {
@@ -193,14 +193,14 @@ case 'editstatus':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", [$status, $cost, App::getUsername()]);
+        DB::run() -> query("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", [$status, $cost, getUsername()]);
         save_title();
 
-        App::setFlash('success', 'Ваш статус успешно изменен!');
-        App::redirect("/account");
+        setFlash('success', 'Ваш статус успешно изменен!');
+        redirect("/account");
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -219,11 +219,11 @@ case 'editpass':
     $validation = new Validation();
 
     $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('bool', password_verify($oldpass, App::user('password')), 'Введенный пароль не совпадает с данными в профиле!')
+        -> addRule('bool', password_verify($oldpass, user('password')), 'Введенный пароль не совпадает с данными в профиле!')
         -> addRule('equal', [$newpass, $newpass2], 'Новые пароли не одинаковые!')
         -> addRule('string', $newpass, 'Слишком длинный или короткий новый пароль!', true, 6, 20)
         -> addRule('regex', [$newpass, '|^[a-z0-9\-]+$|i'], 'Недопустимые символы в пароле, разрешены знаки латинского алфавита, цифры и дефис!', true)
-        -> addRule('not_equal', [App::getUsername(), $newpass], 'Пароль и логин должны отличаться друг от друга!');
+        -> addRule('not_equal', [getUsername(), $newpass], 'Пароль и логин должны отличаться друг от друга!');
 
     if (ctype_digit($newpass)) {
         $validation -> addError('Запрещен пароль состоящий только из цифр, используйте буквы!');
@@ -231,21 +231,21 @@ case 'editpass':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), App::getUsername()]);
+        DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), getUsername()]);
 
-        $subject = 'Изменение пароля на сайте '.Setting::get('title');
-        $message = 'Здравствуйте, '.App::getUsername().'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.App::getClientIp().'<br>Браузер: '.App::getUserAgent().'<br>Время: '.date('j.m.y / H:i', SITETIME);
+        $subject = 'Изменение пароля на сайте '.setting('title');
+        $message = 'Здравствуйте, '.getUsername().'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.getClientIp().'<br>Браузер: '.getUserAgent().'<br>Время: '.date('j.m.y / H:i', SITETIME);
 
-        $body = App::view('mailer.default', compact('subject', 'message'), true);
-        App::sendMail(App::user('email'), $subject, $body);
+        $body = view('mailer.default', compact('subject', 'message'), true);
+        sendMail(user('email'), $subject, $body);
 
         unset($_SESSION['id'], $_SESSION['password']);
 
-        App::setFlash('success', 'Пароль успешно изменен!');
-        App::redirect("/login");
+        setFlash('success', 'Пароль успешно изменен!');
+        redirect("/login");
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -261,12 +261,12 @@ case 'apikey':
 
         $key = str_random();
 
-        DB::run() -> query("UPDATE `users` SET `apikey`=? WHERE `login`=?;", [md5(App::getUsername().$key), App::getUsername()]);
+        DB::run() -> query("UPDATE `users` SET `apikey`=? WHERE `login`=?;", [md5(getUsername().$key), getUsername()]);
 
-        App::setFlash('success', 'Новый ключ успешно сгенерирован!');
-        App::redirect("/account");
+        setFlash('success', 'Новый ключ успешно сгенерирован!');
+        redirect("/account");
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/account">Вернуться</a><br>';
@@ -275,7 +275,7 @@ break;
 endswitch;
 
 } else {
-    App::showError('Для изменения данных необходимо авторизоваться');
+    showError('Для изменения данных необходимо авторизоваться');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

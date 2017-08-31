@@ -1,9 +1,9 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $page = abs(intval(Request::input('page', 1)));
 
-if (! is_user()) App::abort(403);
+if (! is_user()) abort(403);
 
 //show_title('Игнор-лист');
 
@@ -13,10 +13,10 @@ switch ($action):
 ############################################################################################
 case 'index':
 
-    $total = Ignore::where('user_id', App::getUserId())->count();
-    $page = App::paginate(Setting::get('ignorlist'), $total);
+    $total = Ignore::where('user_id', getUserId())->count();
+    $page = paginate(setting('ignorlist'), $total);
 
-    $ignores = Ignore::where('user_id', App::getUserId())
+    $ignores = Ignore::where('user_id', getUserId())
         ->orderBy('created_at', 'desc')
         ->offset($page['offset'])
         ->limit($page['limit'])
@@ -48,11 +48,11 @@ case 'index':
 
         echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-        App::pagination($page);
+        pagination($page);
 
         echo 'Всего в игноре: <b>'.$page['total'].'</b><br>';
     } else {
-        App::showError('Игнор-лист пуст!');
+        showError('Игнор-лист пуст!');
     }
 
     echo '<br><div class="form"><form method="post" action="/ignore/create">';
@@ -76,32 +76,32 @@ case 'create':
     $validation->addRule('not_empty', $user, 'Данного пользователя не существует!');
 
     if ($user) {
-        $validation->addRule('not_equal', [$user->login, App::getUsername()], 'Запрещено добавлять свой логин!');
+        $validation->addRule('not_equal', [$user->login, getUsername()], 'Запрещено добавлять свой логин!');
 
-        $totalIgnore = Ignore::where('user_id', App::getUserId())->count();
-        $validation->addRule('min', [$totalIgnore, Setting::get('limitignore')], 'Ошибка! Игнор-лист переполнен (Максимум ' . Setting::get('limitignore') . ' пользователей!)');
+        $totalIgnore = Ignore::where('user_id', getUserId())->count();
+        $validation->addRule('min', [$totalIgnore, setting('limitignore')], 'Ошибка! Игнор-лист переполнен (Максимум ' . setting('limitignore') . ' пользователей!)');
 
-        $validation->addRule('custom', ! isIgnore(App::user(), $user), 'Данный пользователь уже есть в игнор-листе!');
+        $validation->addRule('custom', ! isIgnore(user(), $user), 'Данный пользователь уже есть в игнор-листе!');
 
         $validation->addRule('custom', ! in_array($user->level, [101, 102, 103, 105]), 'Запрещено добавлять в игнор администрацию сайта');
     }
 
     if ($validation->run()) {
 
-        DB::run() -> query("INSERT INTO `ignoring` (`user_id`, `ignore_id`, `created_at`) VALUES (?, ?, ?);", [App::getUserId(), $user->id, SITETIME]);
+        DB::run() -> query("INSERT INTO `ignoring` (`user_id`, `ignore_id`, `created_at`) VALUES (?, ?, ?);", [getUserId(), $user->id, SITETIME]);
 
-        if (! isIgnore($user, App::user())) {
-            $message = 'Пользователь [b]' . App::getUsername() . '[/b] добавил вас в свой игнор-лист!';
-            send_private($user->id, App::getUserId(), $message);
+        if (! isIgnore($user, user())) {
+            $message = 'Пользователь [b]' . getUsername() . '[/b] добавил вас в свой игнор-лист!';
+            send_private($user->id, getUserId(), $message);
         }
 
-        App::setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
+        setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
     } else {
-        App::setInput(Request::all());
-        App::setFlash('danger', $validation->getErrors());
+        setInput(Request::all());
+        setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect('/ignore?page='.$page);
+    redirect('/ignore?page='.$page);
 break;
 
 ############################################################################################
@@ -111,12 +111,12 @@ case 'note':
 
     $id = param('id');
 
-    $ignore = Ignore::where('user_id', App::getUserId())
+    $ignore = Ignore::where('user_id', getUserId())
         ->where('id', $id)
         ->first();
 
     if (! $ignore) {
-        App::abort('default', 'Запись не найдена');
+        abort('default', 'Запись не найдена');
     }
 
     if (Request::isMethod('post')) {
@@ -130,13 +130,13 @@ case 'note':
 
         if ($validation->run()) {
 
-            DB::run() -> query("UPDATE ignoring SET text=? WHERE id=? AND user_id=?;", [$msg, $id, App::getUserId()]);
+            DB::run() -> query("UPDATE ignoring SET text=? WHERE id=? AND user_id=?;", [$msg, $id, getUserId()]);
 
-            App::setFlash('success', 'Заметка успешно отредактирована!');
-            App::redirect("/ignore");
+            setFlash('success', 'Заметка успешно отредактирована!');
+            redirect("/ignore");
         } else {
-            App::setInput(Request::all());
-            App::setFlash('danger', $validation->getErrors());
+            setInput(Request::all());
+            setFlash('danger', $validation->getErrors());
         }
     }
 
@@ -167,14 +167,14 @@ case 'delete':
     if ($validation->run()) {
 
         $del = implode(',', $del);
-        DB::run() -> query("DELETE FROM ignoring WHERE `id` IN (".$del.") AND `user_id`=?;", [App::getUserId()]);
+        DB::run() -> query("DELETE FROM ignoring WHERE `id` IN (".$del.") AND `user_id`=?;", [getUserId()]);
 
-        App::setFlash('success', 'Выбранные пользователи успешно удалены!');
+        setFlash('success', 'Выбранные пользователи успешно удалены!');
     } else {
-        App::setFlash('danger', $validation->getErrors());
+        setFlash('danger', $validation->getErrors());
     }
 
-    App::redirect("/ignore?page=$page");
+    redirect("/ignore?page=$page");
     break;
 
 endswitch;
@@ -182,4 +182,4 @@ endswitch;
 echo '<i class="fa fa-users"></i> <a href="/contact">Контакт-лист</a><br>';
 echo '<i class="fa fa-envelope"></i> <a href="/private">Сообщения</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

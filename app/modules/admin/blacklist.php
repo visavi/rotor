@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -57,11 +57,11 @@ if (is_admin([101, 102])) {
         case 'index':
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `blacklist` WHERE `type`=?;", [$type]);
-            $page = App::paginate(Setting::get('blacklist'), $total);
+            $page = paginate(setting('blacklist'), $total);
 
             if ($total > 0) {
 
-                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('blacklist').";", [$type]);
+                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('blacklist').";", [$type]);
 
                 echo '<form action="/admin/blacklist?act=del&amp;main='.$main.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -75,10 +75,10 @@ if (is_admin([101, 102])) {
                 }
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                App::pagination($page);
+                pagination($page);
 
             } else {
-                App::showError('Cписок еще пуст!');
+                showError('Cписок еще пуст!');
             }
 
             echo '<div class="form">';
@@ -108,28 +108,28 @@ if (is_admin([101, 102])) {
 
                                 $black = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [$type, $value]);
                                 if (empty($black)) {
-                                    DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [$type, $value, App::getUsername(), SITETIME]);
+                                    DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [$type, $value, getUsername(), SITETIME]);
 
-                                    App::setFlash('success', 'Запись успешно добавлена в черный список!');
-                                    App::redirect("/admin/blacklist?main=$main");
+                                    setFlash('success', 'Запись успешно добавлена в черный список!');
+                                    redirect("/admin/blacklist?main=$main");
 
                                 } else {
-                                    App::showError('Ошибка! Данная запись уже имеется в списках!');
+                                    showError('Ошибка! Данная запись уже имеется в списках!');
                                 }
                             } else {
-                                App::showError('Ошибка! Недопустимый адрес сайта! (http://sitename.domen)!');
+                                showError('Ошибка! Недопустимый адрес сайта! (http://sitename.domen)!');
                             }
                         } else {
-                            App::showError('Ошибка! Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!');
+                            showError('Ошибка! Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!');
                         }
                     } else {
-                        App::showError('Ошибка! Недопустимый адрес email, необходим формат name@site.domen!');
+                        showError('Ошибка! Недопустимый адрес email, необходим формат name@site.domen!');
                     }
                 } else {
-                    App::showError('Ошибка! Вы не ввели запись или она слишком длинная!');
+                    showError('Ошибка! Вы не ввели запись или она слишком длинная!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.page.'">Вернуться</a><br>';
@@ -154,13 +154,13 @@ if (is_admin([101, 102])) {
 
                     DB::run() -> query("DELETE FROM `blacklist` WHERE `type`=? AND `id` IN (".$del.");", [$type]);
 
-                    App::setFlash('success', 'Выбранные записи успешно удалены!');
-                    App::redirect("/admin/blacklist?main=$main&page=$page");
+                    setFlash('success', 'Выбранные записи успешно удалены!');
+                    redirect("/admin/blacklist?main=$main&page=$page");
                 } else {
-                    App::showError('Ошибка! Отсутствуют выбранные записи для удаления!');
+                    showError('Ошибка! Отсутствуют выбранные записи для удаления!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/blacklist?main='.$main.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -171,7 +171,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

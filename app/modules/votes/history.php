@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -22,11 +22,11 @@ switch ($action):
         //show_title('История голосований');
 
         $total = DB::run() -> querySingle("SELECT count(*) FROM `vote` WHERE `closed`=? ORDER BY `time`;", [1]);
-        $page = App::paginate(Setting::get('allvotes'), $total);
+        $page = paginate(setting('allvotes'), $total);
 
         if ($total > 0) {
 
-            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('allvotes').";", [1]);
+            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('allvotes').";", [1]);
 
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
@@ -35,9 +35,9 @@ switch ($action):
                 echo 'Всего голосов: '.$data['count'].'</div>';
             }
 
-            App::pagination($page);
+            pagination($page);
         } else {
-            App::showError('Голосований в архиве еще нет!');
+            showError('Голосований в архиве еще нет!');
         }
     break;
 
@@ -51,7 +51,7 @@ switch ($action):
 
         if (!empty($votes)) {
             if (!empty($votes['closed'])) {
-                //Setting::get('newtitle') = $votes['title'];
+                //setting('newtitle') = $votes['title'];
 
                 echo '<i class="fa fa-briefcase"></i> <b>'.$votes['title'].'</b> (Голосов: '.$votes['count'].')<br><br>';
 
@@ -81,13 +81,13 @@ switch ($action):
 
                     echo 'Вариантов: <b>'.$total.'</b><br><br>';
                 } else {
-                    App::showError('Ошибка! Для данного голосования не созданы варианты ответов!');
+                    showError('Ошибка! Для данного голосования не созданы варианты ответов!');
                 }
             } else {
-                App::showError('Ошибка! Данного опроса не существует в истории!');
+                showError('Ошибка! Данного опроса не существует в истории!');
             }
         } else {
-            App::showError('Ошибка! Данного голосования не существует!');
+            showError('Ошибка! Данного голосования не существует!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/votes/history?page='.$page.'">Вернуться</a><br>';
@@ -97,4 +97,4 @@ endswitch;
 
 echo '<i class="fa fa-bar-chart"></i> <a href="/votes">Список голосований</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

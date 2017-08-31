@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $currhour = date("G", SITETIME);
 $currday = date("j", SITETIME);
@@ -38,13 +38,13 @@ switch ($action):
 		echo 'Хитов за месяц: <b>'.($counts31['hits'] + $count['dayhits']).'</b><br><br>';
 
 		echo 'Динамика за неделю<br>';
-		include_once(APP.'/includes/counter7.php');
+		include_once(APP.'/Includes/counter7.php');
 
 		echo 'Динамика за сутки<br>';
-		include_once(APP.'/includes/counter24.php');
+		include_once(APP.'/Includes/counter24.php');
 
 		echo 'Динамика за месяц<br>';
-		include_once(APP.'/includes/counter31.php');
+		include_once(APP.'/Includes/counter31.php');
 
 		echo '<a href="/counter/24">Статистика по часам</a><br>';
 		echo '<a href="/counter/31">Статистика по дням </a><br><br>';
@@ -58,7 +58,7 @@ switch ($action):
 		echo '<h1>Статистика по часам</h1>';
 
 		echo 'Динамика за сутки<br>';
-		include_once(APP.'/includes/counter24.php');
+		include_once(APP.'/Includes/counter24.php');
 
 		if ($currhour > 0) {
 			$hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
@@ -100,7 +100,7 @@ switch ($action):
 
 			echo '<br>';
 		} else {
-			App::showError('Статистика за текущие сутки еще не обновилась!');
+			showError('Статистика за текущие сутки еще не обновилась!');
 		}
 
 		echo '<i class="fa fa-arrow-circle-left"></i> <a href="/counter">Вернуться</a><br>';
@@ -114,7 +114,7 @@ switch ($action):
 		echo '<h1>Статистика по дням</h1>';
 
 		echo 'Динамика за месяц<br>';
-		include_once(APP.'/includes/counter31.php');
+		include_once(APP.'/Includes/counter31.php');
 
 		if ($currday > 1) {
 			$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
@@ -156,7 +156,7 @@ switch ($action):
 
 			echo '<br>';
 		} else {
-			App::showError('Статистика за текущий месяц еще не обновилась!');
+			showError('Статистика за текущий месяц еще не обновилась!');
 		}
 
 		echo '<i class="fa fa-arrow-circle-left"></i> <a href="/counter">Вернуться</a><br>';
@@ -164,4 +164,4 @@ switch ($action):
 
 endswitch;
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

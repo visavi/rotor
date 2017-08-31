@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -38,7 +38,7 @@ if (is_admin([101])) {
                         }
                         echo '<br>';
                     } else {
-                        App::showError('Нет новых изменений!');
+                        showError('Нет новых изменений!');
                     }
 
                     echo '<b><span style="color:#ff0000">Удаленные файлы и старые параметры файлов:</span></b><br><br>';
@@ -48,20 +48,20 @@ if (is_admin([101])) {
                         }
                         echo '<br>';
                     } else {
-                        App::showError('Нет старых изменений!');
+                        showError('Нет старых изменений!');
                     }
 
                     echo 'Всего папок: <b>'.$arr['totaldirs'].'</b><br>';
                     echo 'Всего файлов: <b>'.$arr['totalfiles'].'</b><br><br>';
                 } else {
-                    App::showError('Изменений файлов со времени последнего сканирования не обнаружено!');
+                    showError('Изменений файлов со времени последнего сканирования не обнаружено!');
                 }
             } else {
-                App::showError('Необходимо провести начальное сканирование!');
+                showError('Необходимо провести начальное сканирование!');
             }
 
             echo 'Сканирование системы позволяет узнать какие файлы или папки менялись в течение определенного времени<br>';
-            echo 'Внимание сервис не учитывает некоторые расширения файлов: '.Setting::get('nocheck').'<br><br>';
+            echo 'Внимание сервис не учитывает некоторые расширения файлов: '.setting('nocheck').'<br><br>';
 
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/checker?act=skan&amp;uid='.$_SESSION['token'].'">Сканировать</a><br>';
         break;
@@ -80,13 +80,13 @@ if (is_admin([101])) {
 
                     file_put_contents(STORAGE."/temp/checker.dat", serialize($arr['files']), LOCK_EX);
 
-                    App::setFlash('success', 'Сайт успешно отсканирован!');
-                    App::redirect("/admin/checker");
+                    setFlash('success', 'Сайт успешно отсканирован!');
+                    redirect("/admin/checker");
                 } else {
-                    App::showError('Ошибка! Директория temp недоступна для записи!');
+                    showError('Ошибка! Директория temp недоступна для записи!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/checker">Вернуться</a><br>';
@@ -97,7 +97,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

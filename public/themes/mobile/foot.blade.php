@@ -1,6 +1,6 @@
 </div>
 <div class="c" id="down">
-    <a href="<?= Setting::get('home') ?>"><?= Setting::get('copy') ?></a><br/>
+    <a href="<?= setting('home') ?>"><?= setting('copy') ?></a><br/>
     <?= show_counter() ?>
     <?= show_online() ?>
 </div>

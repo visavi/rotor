@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -13,12 +13,12 @@ if (is_user()) {
     ############################################################################################
     ##                                   История авторизаций                                  ##
     ############################################################################################
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [App::getUsername()]);
-    $page = App::paginate(Setting::get('loginauthlist'), $total);
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [getUsername()]);
+    $page = paginate(setting('loginauthlist'), $total);
 
     if ($total > 0) {
 
-        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loginauthlist').";", [App::getUsername()]);
+        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loginauthlist').";", [getUsername()]);
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';
@@ -38,14 +38,14 @@ if (is_user()) {
             echo '</span></div>';
         }
 
-        App::pagination($page);
+        pagination($page);
     } else {
-        App::showError('История авторизаций отсутствует');
+        showError('История авторизаций отсутствует');
     }
 } else {
-    App::showError('Для просмотра истории необходимо авторизоваться');
+    showError('Для просмотра истории необходимо авторизоваться');
 }
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/menu">Вернуться</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

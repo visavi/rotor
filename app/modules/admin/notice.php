@@ -1,10 +1,10 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
-if (! is_admin([101])) App::redirect('/admin/');
+if (! is_admin([101])) redirect('/admin/');
 
 //show_title('Шаблоны писем');
 
@@ -47,7 +47,7 @@ case 'index':
         echo '<br>Всего шаблонов: '.$total.'<br><br>';
 
     } else {
-        App::showError('Шаблонов еще нет!');
+        showError('Шаблонов еще нет!');
     }
     echo '<i class="fa fa-check"></i> <a href="/admin/notice?act=new">Добавить</a><br>';
 break;
@@ -96,7 +96,7 @@ case 'edit':
         echo '<input type="submit" value="Изменить"></form></div><br>';
 
     } else {
-        App::showError('Ошибка! Шаблона для редактирования не существует!');
+        showError('Ошибка! Шаблона для редактирования не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/notice">Вернуться</a><br>';
@@ -123,7 +123,7 @@ case 'save':
         $note = [
             'name'       => $name,
             'text'       => $text,
-            'user_id'    => App::getUserId(),
+            'user_id'    => getUserId(),
             'protect'    => $protect,
             'created_at' => SITETIME,
             'updated_at' => SITETIME,
@@ -134,11 +134,11 @@ case 'save':
             $note
         );
 
-        App::setFlash('success', 'Шаблон успешно сохранен!');
-        App::redirect('/admin/notice?act=edit&id='.$notice->id);
+        setFlash('success', 'Шаблон успешно сохранен!');
+        redirect('/admin/notice?act=edit&id='.$notice->id);
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/notice?act=edit&amp;id='.$id.'">Вернуться</a><br>';
@@ -163,11 +163,11 @@ case 'del':
 
         $notice->delete();
 
-        App::setFlash('success', 'Выбранный шаблон успешно удален!');
-        App::redirect('/admin/notice');
+        setFlash('success', 'Выбранный шаблон успешно удален!');
+        redirect('/admin/notice');
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa-arrow-circle-left"></i> <a href="/admin/notice">Вернуться</a><br>';
@@ -177,4 +177,4 @@ endswitch;
 
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

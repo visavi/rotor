@@ -21,7 +21,7 @@
 
             <?= show_counter() ?>
             <?= show_online() ?>
-            <a href="<?= Setting::get('home') ?>"><?= Setting::get('copy') ?></a><br/>
+            <a href="<?= setting('home') ?>"><?= setting('copy') ?></a><br/>
 
         </td>
     </tr>

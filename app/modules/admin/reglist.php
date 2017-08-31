@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -17,17 +17,17 @@ if (is_admin([101, 102, 103])) {
     ############################################################################################
         case "index":
 
-            if (Setting::get('regkeys') == 0) {
+            if (setting('regkeys') == 0) {
                 echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Подтверждение регистрации отключено!</span></b><br><br>';
             }
-            if (Setting::get('regkeys') == 1) {
+            if (setting('regkeys') == 1) {
                 echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включено автоматическое подтверждение регистраций!</span></b><br><br>';
             }
-            if (Setting::get('regkeys') == 2) {
+            if (setting('regkeys') == 2) {
                 echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включена модерация регистраций!</span></b><br><br>';
             }
             // --------------- Удаление не подтвердивших регистрацию -----------//
-            if (Setting::get('regkeys') == 1) {
+            if (setting('regkeys') == 1) {
                 $querydeluser = DB::run() -> query("SELECT `login` FROM `users` WHERE `confirmreg`>? AND `joined`<?;", [0, SITETIME-86400]);
                 $arrdelusers = $querydeluser -> fetchAll(PDO::FETCH_COLUMN);
 
@@ -52,11 +52,11 @@ if (is_admin([101, 102, 103])) {
             }
             // --------------------------------------------------------//
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", [0]);
-            $page = App::paginate(Setting::get('reglist'), $total);
+            $page = paginate(setting('reglist'), $total);
 
             if ($total > 0) {
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".Setting::get('reglist').";", [0]);
+                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".setting('reglist').";", [0]);
 
                 echo '<form action="/admin/reglist?act=choice&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -80,11 +80,11 @@ if (is_admin([101, 102, 103])) {
 
                 echo '<input type="submit" value="Выполнить"></form>';
 
-                App::pagination($page);
+                pagination($page);
 
                 echo 'Всего ожидающих: <b>'.(int)$total.'</b><br><br>';
             } else {
-                App::showError('Нет пользователей требующих подтверждения регистрации!');
+                showError('Нет пользователей требующих подтверждения регистрации!');
             }
 
         break;
@@ -111,8 +111,8 @@ if (is_admin([101, 102, 103])) {
                             $arrayusers = implode(',', $arrayusers);
                             DB::run() -> query("UPDATE `users` SET `confirmreg`=?, `confirmregkey`=? WHERE `login` IN ('".$arrayusers."');", [0, '']);
 
-                            App::setFlash('success', 'Выбранные аккаунты успешно одобрены!');
-                            App::redirect("/admin/reglist?page=$page");
+                            setFlash('success', 'Выбранные аккаунты успешно одобрены!');
+                            redirect("/admin/reglist?page=$page");
                         }
                         // ----------------------------------- Запрет регистрации -------------------------------------//
                         if ($choice == 2) {
@@ -121,17 +121,17 @@ if (is_admin([101, 102, 103])) {
                                 delete_users($value);
                             }
 
-                            App::setFlash('success', 'Выбранные пользователи успешно удалены!');
-                            App::redirect("/admin/reglist?page=$page");
+                            setFlash('success', 'Выбранные пользователи успешно удалены!');
+                            redirect("/admin/reglist?page=$page");
                         }
                     } else {
-                        App::showError('Ошибка! Отсутствуют выбранные пользователи!');
+                        showError('Ошибка! Отсутствуют выбранные пользователи!');
                     }
                 } else {
-                    App::showError('Ошибка! Не выбрано действие для пользователей!');
+                    showError('Ошибка! Не выбрано действие для пользователей!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/reglist?page='.$page.'">Вернуться</a><br>';
@@ -142,7 +142,7 @@ if (is_admin([101, 102, 103])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect("/");
+    redirect("/");
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

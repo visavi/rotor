@@ -1,0 +1,35 @@
+a:5:{i:0;a:18:{s:2:"id";s:4:"1890";s:11:"category_id";s:2:"32";s:5:"title";s:9:"Hack_pass";s:4:"text";s:935:"Автор: Jesk
+Совместимость: JohnCMS 6.2.0
+Версия хака: 1.0.0
+Сайт: [url=http://wmab.ru]wmab.ru[/url]
+
+Описание:
+Данный хак записывает пароли в открытом виде, если юзер сменить или восстановить пароль всеравно перезаписывается и показывает только супервайзерам!
+
+Установка:
+1) Распаковать архив в корень сайта с заменой файлов;
+2) Перейти по адресу http://you.site/pass.php и нажать кнопку установить;
+3) Пользоваться!
+
+ВНИМАНИЕ!
+Перед установкой хака убедитесь что у вас на сайте установлен JohnCMS версии 6.2.0!
+За данный хак Я ОТВЕТСТВЕННОСТИ НЕ НЕСУ!";s:4:"link";s:21:"johncms_hack_pass.zip";s:4:"user";s:4:"Jesk";s:6:"author";s:4:"Jesk";s:4:"site";s:14:"http://wmab.ru";s:6:"screen";s:25:"johncms_hack_pass.zip.jpg";s:4:"time";s:10:"1481497276";s:8:"comments";s:1:"3";s:6:"rating";s:1:"4";s:5:"rated";s:1:"1";s:5:"loads";s:1:"2";s:9:"last_load";s:10:"1481987623";s:3:"app";s:1:"0";s:6:"notice";s:0:"";s:6:"active";s:1:"1";}i:1;a:18:{s:2:"id";s:4:"1887";s:11:"category_id";s:2:"30";s:5:"title";s:65:"Адаптивный html шаблон для видео туба";s:4:"text";s:495:"Адаптивный шаблон для видео сайта на bootstrap, есть примеры страниц, блоки, айлф и графика в архиве. 
+Страницы: HomePage, Single Page, Archive Page, Contact Page
+Проверено на браузерах Edge, IE9+, Firefox, Safari, Opera, Chrome
+Цвет - красный
+Подойдет для видео сайтов, которых сейчас масса. Потребуется верстальщик.";s:4:"link";s:29:"kooltube_365bootstrap.com.zip";s:4:"user";s:4:"SEMM";s:6:"author";s:12:"365BOOTSTRAP";s:4:"site";s:28:"http://www.365bootstrap.com/";s:6:"screen";s:33:"kooltube_365bootstrap.com.zip.jpg";s:4:"time";s:10:"1477993755";s:8:"comments";s:1:"1";s:6:"rating";s:2:"20";s:5:"rated";s:1:"4";s:5:"loads";s:2:"32";s:9:"last_load";s:10:"1482862211";s:3:"app";s:1:"0";s:6:"notice";s:0:"";s:6:"active";s:1:"1";}i:2;a:18:{s:2:"id";s:4:"1886";s:11:"category_id";s:2:"18";s:5:"title";s:52:"Справочник автомобилей на PHP";s:4:"text";s:938:"Скрипт работающий с БД MySQL.
+Функции: 
+- добавление записей в таблицу;
+- удаление;
+- редактирование данных;
+- фильтрация по каждому из полей;
+- поиск в таблице.
+С помощью AJAX технологии скрипт становится гибким и не требует обновления страницы при каждом действии, что существенно упрощает пользование данным скриптом.
+Для использования скрипта нужно настроить соединение с БД MySQL в файле connect.php.
+Дамп таблицы auto_list.sql лежит в архиве, в PhpMyAdmin его нужно импортировать для корректной работы.
+Требования: PHP5, MySQL &gt;= 5.0, AJAX";s:4:"link";s:12:"autolist.zip";s:4:"user";s:6:"redmal";s:6:"author";s:6:"Redmal";s:4:"site";s:26:"http://java-virys.narod.ru";s:6:"screen";s:16:"autolist.zip.jpg";s:4:"time";s:10:"1476162960";s:8:"comments";s:1:"2";s:6:"rating";s:1:"5";s:5:"rated";s:1:"1";s:5:"loads";s:2:"11";s:9:"last_load";s:10:"1481305164";s:3:"app";s:1:"0";s:6:"notice";s:0:"";s:6:"active";s:1:"1";}i:3;a:18:{s:2:"id";s:4:"1885";s:11:"category_id";s:1:"8";s:5:"title";s:29:"Крестики-нолики";s:4:"text";s:278:"Простой скрипт игры крестики-нолики на php.
+Требования: php4, html
+Преимущества:
+В файле можно модифицировать алгоритм поиска выигрыша без вмешивания в код.";s:4:"link";s:13:"xo-online.zip";s:4:"user";s:6:"redmal";s:6:"author";s:6:"Redmal";s:4:"site";s:26:"http://java-virys.narod.ru";s:6:"screen";s:17:"xo-online.zip.jpg";s:4:"time";s:10:"1473888202";s:8:"comments";s:1:"4";s:6:"rating";s:2:"16";s:5:"rated";s:1:"4";s:5:"loads";s:2:"25";s:9:"last_load";s:10:"1481305219";s:3:"app";s:1:"0";s:6:"notice";s:0:"";s:6:"active";s:1:"1";}i:4;a:18:{s:2:"id";s:4:"1884";s:11:"category_id";s:2:"22";s:5:"title";s:7:"yftp_ru";s:4:"text";s:88:"Бекап сайта yftp.ru
+Мод. Jesk, Jcms@list.ru
+Дизайн под bootstrap";s:4:"link";s:11:"yftp.ru.zip";s:4:"user";s:4:"Jesk";s:6:"author";s:0:"";s:4:"site";s:14:"http://yftp.ru";s:6:"screen";s:15:"yftp.ru.zip.jpg";s:4:"time";s:10:"1473579175";s:8:"comments";s:1:"4";s:6:"rating";s:2:"25";s:5:"rated";s:1:"5";s:5:"loads";s:2:"35";s:9:"last_load";s:10:"1481304848";s:3:"app";s:1:"0";s:6:"notice";s:0:"";s:6:"active";s:1:"1";}}

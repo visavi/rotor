@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -19,13 +19,13 @@ if (is_admin([101, 102])) {
             $rules = DB::run() -> queryFetch("SELECT * FROM `rules`;");
 
             if (!empty($rules)) {
-                $rules['text'] = str_replace(['%SITENAME%', '%MAXBAN%'], [Setting::get('title'), round(Setting::get('maxbantime') / 1440)], $rules['text']);
+                $rules['text'] = str_replace(['%SITENAME%', '%MAXBAN%'], [setting('title'), round(setting('maxbantime') / 1440)], $rules['text']);
 
-                echo App::bbCode($rules['text']).'<hr>';
+                echo bbCode($rules['text']).'<hr>';
 
                 echo 'Последнее изменение: '.date_fixed($rules['time']).'<br><br>';
             } else {
-                App::showError('Правила сайта еще не установлены!');
+                showError('Правила сайта еще не установлены!');
             }
 
             echo '<i class="fa fa-pencil"></i> <a href="/admin/rules?act=edit">Редактировать</a><br>';
@@ -65,13 +65,13 @@ if (is_admin([101, 102])) {
 
                     DB::run() -> query("REPLACE INTO `rules` (`id`, `text`, `time`) VALUES (?,?,?);", [1, $msg, SITETIME]);
 
-                    App::setFlash('success', 'Правила успешно изменены!');
-                    App::redirect("/admin/rules");
+                    setFlash('success', 'Правила успешно изменены!');
+                    redirect("/admin/rules");
                 } else {
-                    App::showError('Ошибка! Вы не ввели текст с правилами сайта!');
+                    showError('Ошибка! Вы не ввели текст с правилами сайта!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/rules?act=edit">Вернуться</a><br>';
@@ -83,7 +83,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

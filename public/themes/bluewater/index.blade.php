@@ -6,7 +6,7 @@ header("Content-type:text/html; charset=utf-8");
 <head>
     <title>
         @section('title')
-            {{ Setting::get('title') }}
+            {{ setting('title') }}
         @show
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,8 +25,8 @@ header("Content-type:text/html; charset=utf-8");
 
 <div id="wrap">
     <div id="header">
-        <h1 id="logo-text"><a href="/"><?= Setting::get('title') ?></a></h1>
-        <p id="slogan"><?= Setting::get('logos') ?></p>
+        <h1 id="logo-text"><a href="/"><?= setting('title') ?></a></h1>
+        <p id="slogan"><?= setting('logos') ?></p>
 
         <div id="header-links">
             <p>
@@ -34,7 +34,7 @@ header("Content-type:text/html; charset=utf-8");
 <?php
 if (is_user()){
 
-    echo user_gender(App::user()).profile(App::user());
+    echo user_gender(user()).profile(user());
     if (is_admin()){
 
         echo ' | <a href="/admin">Админ-панель</a>';
@@ -42,14 +42,14 @@ if (is_user()){
         echo ' | <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>';
         }
 
-        if (App::user('newchat')<stats_newchat()){
+        if (user('newchat')<stats_newchat()){
         echo ' | <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>';
         }
 
     }
 
 } else {
-    echo '<a href="/login'.App::returnUrl().'">Авторизация</a> | ';
+    echo '<a href="/login'.returnUrl().'">Авторизация</a> | ';
     echo '<a href="/register">Регистрация</a>';
 }
 ?>
@@ -82,4 +82,4 @@ if (is_user()){
         </div>
         <div id="main">
             <div class="body_center">
-<?= App::view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

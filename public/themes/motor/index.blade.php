@@ -6,7 +6,7 @@ header('Content-type:text/html; charset=utf-8');
 <head>
     <title>
         @section('title')
-            {{ Setting::get('title') }}
+            {{ setting('title') }}
         @show
     </title>
     <meta charset="utf-8">
@@ -19,8 +19,8 @@ header('Content-type:text/html; charset=utf-8');
     @stack('styles')
     <link rel="stylesheet" href="/themes/motor/css/style.css">
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
-    <meta name="description" content="@yield('description', Setting::get('description'))">
-    <meta name="keywords" content="@yield('keywords', Setting::get('keywords'))">
+    <meta name="description" content="@yield('description', setting('description'))">
+    <meta name="keywords" content="@yield('keywords', setting('keywords'))">
     <meta name="generator" content="RotorCMS {{ env('VERSION') }}">
 </head>
 <body>
@@ -35,8 +35,8 @@ header('Content-type:text/html; charset=utf-8');
         <div class="backgr_top">
             <div class="content">
                 <div class="logo">
-                    <!-- <a href="/"><span class="logotype">{{ Setting::get('title') }}</span></a> -->
-                    <a href="/"><img src="/assets/img/images/logo.png" alt="{{ Setting::get('title') }}"></a>
+                    <!-- <a href="/"><span class="logotype">{{ setting('title') }}</span></a> -->
+                    <a href="/"><img src="/assets/img/images/logo.png" alt="{{ setting('title') }}"></a>
                 </div>
 
                 <div class="menu">
@@ -55,7 +55,7 @@ header('Content-type:text/html; charset=utf-8');
             <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
         <?php endif; ?>
 
-        <?php if (App::user('newchat') < stats_newchat()): ?>
+        <?php if ( user('newchat') < stats_newchat()): ?>
             <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
         <?php endif; ?>
 
@@ -66,7 +66,7 @@ header('Content-type:text/html; charset=utf-8');
     <a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
 
 <?php else: ?>
-    <a href="/login{{ App::returnUrl() }}">Авторизация</a>/
+    <a href="/login{{ returnUrl() }}">Авторизация</a>/
     <a href="/register">Регистрация</a>
 <?php endif; ?>
 
@@ -79,4 +79,4 @@ header('Content-type:text/html; charset=utf-8');
         <div class="backgr">
             <div class="bcontent">
                 <div class="mcontentwide">
-<?= App::view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

@@ -1,11 +1,11 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $page = abs(intval(Request::input('page', 1)));
 
-if (! is_admin([101, 102])) App::redirect('/admin/');
+if (! is_admin([101, 102])) redirect('/admin/');
 
 //show_title('Управление смайлами');
 
@@ -16,11 +16,11 @@ switch ($action):
 case 'index':
 
     $total = Smile::count();
-    $page = App::paginate(Setting::get('smilelist'), $total);
+    $page = paginate(setting('smilelist'), $total);
 
     $smiles = Smile::order_by_expr('CHAR_LENGTH(`code`) ASC')
         ->order_by_asc('name')
-        ->limit(Setting::get('smilelist'))
+        ->limit(setting('smilelist'))
         ->offset($page['offset'])
         ->find_many();
 
@@ -34,11 +34,11 @@ case 'index':
 
     echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-    App::pagination($page);
+    pagination($page);
 
     echo 'Всего cмайлов: <b>'.$total.'</b><br><br>';
 
-    //App::showError('Смайлы еще не загружены!');
+    //showError('Смайлы еще не загружены!');
 
     echo '<i class="fa fa-upload"></i> <a href="/admin/smiles?act=add&amp;page='.$page['current'].'">Загрузить</a><br>';
 break;
@@ -48,7 +48,7 @@ break;
  */
 case 'add':
 
-    //Setting::get('newtitle') = 'Добавление смайла';
+    //setting('newtitle') = 'Добавление смайла';
 
     echo '<div class="form">';
     echo '<form action="/admin/smiles?act=load&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post" enctype="multipart/form-data">';
@@ -59,7 +59,7 @@ case 'add':
     echo '<input type="submit" value="Загрузить"></form></div><br>';
 
     echo 'Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png, bmp<br>';
-    echo 'Весом не более '.formatsize(Setting::get('smilemaxsize')).' и размером до '.Setting::get('smilemaxweight').' px<br><br>';
+    echo 'Весом не более '.formatsize(setting('smilemaxsize')).' и размером до '.setting('smilemaxweight').' px<br><br>';
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br>';
 break;
@@ -69,7 +69,7 @@ break;
  */
 case 'load':
 
-    //Setting::get('newtitle') = 'Результат добавления';
+    //setting('newtitle') = 'Результат добавления';
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
@@ -97,11 +97,11 @@ case 'load':
                 //$handle -> file_overwrite = true;
 
                 $handle -> ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
-                $handle -> file_max_size = Setting::get('smilemaxsize');  // byte
-                $handle -> image_max_width = Setting::get('smilemaxweight');  // px
-                $handle -> image_max_height = Setting::get('smilemaxweight'); // px
-                $handle -> image_min_width = Setting::get('smileminweight');   // px
-                $handle -> image_min_height = Setting::get('smileminweight');  // px
+                $handle -> file_max_size = setting('smilemaxsize');  // byte
+                $handle -> image_max_width = setting('smilemaxweight');  // px
+                $handle -> image_max_height = setting('smilemaxweight'); // px
+                $handle -> image_min_width = setting('smileminweight');   // px
+                $handle -> image_min_height = setting('smileminweight');  // px
                 $handle -> process(HOME.'/uploads/smiles/');
 
                 if ($handle -> processed) {
@@ -115,20 +115,20 @@ case 'load':
                     $handle -> clean();
                     clearCache();
 
-                    App::setFlash('success', 'Смайл успешно загружен!');
-                    App::redirect("/admin/smiles");
+                    setFlash('success', 'Смайл успешно загружен!');
+                    redirect("/admin/smiles");
 
                 } else {
-                    App::showError($handle->error);
+                    showError($handle->error);
                 }
             } else {
-                App::showError($handle->error);
+                showError($handle->error);
             }
         } else {
-            App::showError($validation->getErrors());
+            showError($validation->getErrors());
         }
     } else {
-        App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
+        showError('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?act=add&amp;page='.$page.'">Вернуться</a><br>';
@@ -151,7 +151,7 @@ case 'edit':
         echo '<input type="text" name="code" value="'.$smile['code'].'"> <i>Код смайла должен начинаться со знака двоеточия</i><br>';
         echo '<input type="submit" value="Изменить"></form></div><br>';
     } else {
-        App::showError('Ошибка! Смайла для редактирования не существует!');
+        showError('Ошибка! Смайла для редактирования не существует!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br>';
@@ -187,12 +187,12 @@ case 'change':
 
         clearCache();
 
-        App::setFlash('success', 'Смайл успешно отредактирован!');
-        App::redirect("/admin/smiles?page=$page");
+        setFlash('success', 'Смайл успешно отредактирован!');
+        redirect("/admin/smiles?page=$page");
 
 
     } else {
-        App::showError($validation->getErrors());
+        showError($validation->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -222,17 +222,17 @@ case 'del':
                 Smile::where_id_in($del)->delete_many();
                 clearCache();
 
-                App::setFlash('success', 'Выбранные смайлы успешно удалены!');
-                App::redirect("/admin/smiles?page=$page");
+                setFlash('success', 'Выбранные смайлы успешно удалены!');
+                redirect("/admin/smiles?page=$page");
 
             } else {
-                App::showError('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
+                showError('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
             }
         } else {
-            App::showError('Ошибка! Отсутствуют выбранные смайлы!');
+            showError('Ошибка! Отсутствуют выбранные смайлы!');
         }
     } else {
-        App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+        showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br>';
@@ -242,4 +242,4 @@ endswitch;
 
 echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

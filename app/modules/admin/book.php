@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 $act = check(Request::input('act', 'index'));
 $page = abs(intval(Request::input('page')));
@@ -19,10 +19,10 @@ if (is_admin()) {
             $total = Guest::count();
             if ($total > 0) {
 
-                $page = App::paginate(Setting::get('bookpost'), $total);
+                $page = paginate(setting('bookpost'), $total);
 
                 $posts = Guest::orderBy('created_at', 'desc')
-                    ->limit(Setting::get('bookpost'))
+                    ->limit(setting('bookpost'))
                     ->offset($page['offset'])
                     ->with('user')
                     ->get();
@@ -50,7 +50,7 @@ if (is_admin()) {
                     echo '<a href="/admin/book?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a> / ';
                     echo '<a href="/admin/book?act=reply&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Ответить</a></div>';
 
-                    echo '<div>'.App::bbCode($data['text']).'<br>';
+                    echo '<div>'.bbCode($data['text']).'<br>';
 
                     if (!empty($data['edit_user_id'])) {
                         echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.date_fixed($data['updated_at']).')</small><br>';
@@ -66,7 +66,7 @@ if (is_admin()) {
                 }
                 echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
 
-                App::pagination($page);
+                pagination($page);
 
                 echo 'Всего сообщений: <b>'.$total.'</b><br><br>';
 
@@ -74,7 +74,7 @@ if (is_admin()) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/book?act=alldel&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы уверены что хотите удалить все сообщения?\')">Очистить</a><br>';
                 }
             } else {
-                App::showError('Сообщений еще нет!');
+                showError('Сообщений еще нет!');
             }
         break;
 
@@ -89,7 +89,7 @@ if (is_admin()) {
                 echo '<b>Добавление ответа</b><br><br>';
 
                 echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> '.user_title($post->user) . user_online($post->user).' <small>('.date_fixed($post['created_at']).')</small></div>';
-                echo '<div>Сообщение: '.App::bbCode($post['text']).'</div><hr>';
+                echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?id='.$id.'&amp;act=addreply&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -97,7 +97,7 @@ if (is_admin()) {
                 echo '<textarea cols="25" rows="5" name="reply">'.$post['reply'].'</textarea>';
                 echo '<br><input type="submit" value="Ответить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Сообщения для ответа не существует!');
+                showError('Ошибка! Сообщения для ответа не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br>';
@@ -112,7 +112,7 @@ if (is_admin()) {
             $reply = check($_POST['reply']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($reply) >= 5 && utf_strlen($reply) < Setting::get('guesttextlength')) {
+                if (utf_strlen($reply) >= 5 && utf_strlen($reply) < setting('guesttextlength')) {
 
                     $post = Guest::find($id);
 
@@ -121,16 +121,16 @@ if (is_admin()) {
                         $post->reply = $reply;
                         $post->save();
 
-                        App::setFlash('success', 'Ответ успешно добавлен!');
-                        App::redirect("/admin/book?page=$page");
+                        setFlash('success', 'Ответ успешно добавлен!');
+                        redirect("/admin/book?page=$page");
                     } else {
-                        App::showError('Ошибка! Сообщения для ответа не существует!');
+                        showError('Ошибка! Сообщения для ответа не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный или короткий текст ответа!');
+                    showError('Ошибка! Слишком длинный или короткий текст ответа!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?act=reply&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -156,7 +156,7 @@ if (is_admin()) {
                 echo '<textarea cols="50" rows="5" name="msg">'.$post['text'].'</textarea><br><br>';
                 echo '<input type="submit" value="Изменить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Сообщения для редактирования не существует!');
+                showError('Ошибка! Сообщения для редактирования не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br>';
@@ -171,26 +171,26 @@ if (is_admin()) {
             $msg = check($_POST['msg']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < Setting::get('guesttextlength')) {
+                if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < setting('guesttextlength')) {
 
                     $post = Guest::find($id);
                     if ($post) {
 
                         $post->text = $msg;
-                        $post->edit_user_id = App::getUserId();
+                        $post->edit_user_id = getUserId();
                         $post->updated_at = SITETIME;
                         $post->save();
 
-                        App::setFlash('success', 'Сообщение успешно отредактировано!');
-                        App::redirect("/admin/book?page=$page");
+                        setFlash('success', 'Сообщение успешно отредактировано!');
+                        redirect("/admin/book?page=$page");
                     } else {
-                        App::showError('Ошибка! Сообщения для редактирования не существует!');
+                        showError('Ошибка! Сообщения для редактирования не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинный или короткий текст сообщения!');
+                    showError('Ошибка! Слишком длинный или короткий текст сообщения!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -209,13 +209,13 @@ if (is_admin()) {
 
                     Guest::whereIn('id', $postIds)->delete();
 
-                    App::setFlash('success', 'Выбранные сообщения успешно удалены!');
-                    App::redirect("/admin/book?page=$page");
+                    setFlash('success', 'Выбранные сообщения успешно удалены!');
+                    redirect("/admin/book?page=$page");
                 } else {
-                    App::showError('Ошибка! Отсутствуют выбранные сообщения!');
+                    showError('Ошибка! Отсутствуют выбранные сообщения!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book?page='.$page.'">Вернуться</a><br>';
@@ -232,13 +232,13 @@ if (is_admin()) {
                 if ($uid == $_SESSION['token']) {
                     Guest::truncate();
 
-                    App::setFlash('success', 'Гостевая книга успешно очищена!');
-                    App::redirect("/admin/book");
+                    setFlash('success', 'Гостевая книга успешно очищена!');
+                    redirect("/admin/book");
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Очищать гостевую могут только суперадмины!');
+                showError('Ошибка! Очищать гостевую могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/book">Вернуться</a><br>';
@@ -249,7 +249,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -76,7 +76,7 @@ if (is_admin()) {
                     echo '</div>';
                 }
             } else {
-                App::showError('Разделы форума еще не созданы!');
+                showError('Разделы форума еще не созданы!');
             }
 
             if (is_admin([101])) {
@@ -102,14 +102,14 @@ if (is_admin()) {
                 if ($token == $_SESSION['token']) {
                     restatement('forum');
 
-                    App::setFlash('success', 'Все данные успешно пересчитаны!');
-                    App::redirect("/admin/forum");
+                    setFlash('success', 'Все данные успешно пересчитаны!');
+                    redirect("/admin/forum");
 
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Пересчитывать сообщения могут только суперадмины!');
+                showError('Ошибка! Пересчитывать сообщения могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
@@ -129,17 +129,17 @@ if (is_admin()) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `forums`;");
                         DB::run() -> query("INSERT INTO `forums` (sort, `title`) VALUES (?, ?);", [$maxorder, $title]);
 
-                        App::setFlash('success', 'Новый раздел успешно добавлен!');
-                        App::redirect("/admin/forum");
+                        setFlash('success', 'Новый раздел успешно добавлен!');
+                        redirect("/admin/forum");
 
                     } else {
-                        App::showError('Ошибка! Слишком длинное или короткое название раздела!');
+                        showError('Ошибка! Слишком длинное или короткое название раздела!');
                     }
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Добавлять разделы могут только суперадмины!');
+                showError('Ошибка! Добавлять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
@@ -187,10 +187,10 @@ if (is_admin()) {
 
                     echo '<input type="submit" value="Изменить"></form></div><br>';
                 } else {
-                    App::showError('Ошибка! Данного раздела не существует!');
+                    showError('Ошибка! Данного раздела не существует!');
                 }
             } else {
-                App::showError('Ошибка! Изменять разделы могут только суперадмины!');
+                showError('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
@@ -218,26 +218,26 @@ if (is_admin()) {
                                 if (empty($forums) || empty($parent_id)) {
                                     DB::run() -> query("UPDATE `forums` SET sort=?, parent_id=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $title, $desc, $closed, $fid]);
 
-                                    App::setFlash('success', 'Раздел успешно отредактирован!');
-                                    App::redirect("/admin/forum");
+                                    setFlash('success', 'Раздел успешно отредактирован!');
+                                    redirect("/admin/forum");
 
                                 } else {
-                                    App::showError('Ошибка! Данный раздел имеет подфорумы!');
+                                    showError('Ошибка! Данный раздел имеет подфорумы!');
                                 }
                             } else {
-                                App::showError('Ошибка! Недопустимый выбор родительского форума!');
+                                showError('Ошибка! Недопустимый выбор родительского форума!');
                             }
                         } else {
-                            App::showError('Ошибка! Слишком длинный текст описания раздела!');
+                            showError('Ошибка! Слишком длинный текст описания раздела!');
                         }
                     } else {
-                        App::showError('Ошибка! Слишком длинное или короткое название раздела!');
+                        showError('Ошибка! Слишком длинное или короткое название раздела!');
                     }
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Изменять разделы могут только суперадмины!');
+                showError('Ошибка! Изменять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum?act=editforum&amp;fid='.$fid.'">Вернуться</a><br>';
@@ -266,23 +266,23 @@ if (is_admin()) {
 
                                 $forum->delete();
 
-                                App::setFlash('success', 'Раздел успешно удален!');
-                                App::redirect("/admin/forum");
+                                setFlash('success', 'Раздел успешно удален!');
+                                redirect("/admin/forum");
 
                             } else {
-                                App::showError('Ошибка! В данном разделе имеются темы!');
+                                showError('Ошибка! В данном разделе имеются темы!');
                             }
                         } else {
-                            App::showError('Ошибка! Данный раздел имеет подфорумы!');
+                            showError('Ошибка! Данный раздел имеет подфорумы!');
                         }
                     } else {
-                        App::showError('Ошибка! Данного раздела не существует!');
+                        showError('Ошибка! Данного раздела не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
             } else {
-                App::showError('Ошибка! Удалять разделы могут только суперадмины!');
+                showError('Ошибка! Удалять разделы могут только суперадмины!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum">Вернуться</a><br>';
@@ -296,7 +296,7 @@ if (is_admin()) {
             $forum = Forum::with('parent')->find($fid);
 
             if (!$forum) {
-                App::abort('default', 'Данного раздела не существует!');
+                abort('default', 'Данного раздела не существует!');
             }
 
             $forum->children = Forum::where('parent_id', $forum->id)
@@ -312,12 +312,12 @@ if (is_admin()) {
 
             if ($total > 0) {
 
-                $page = App::paginate(Setting::get('forumtem'), $total);
+                $page = paginate(setting('forumtem'), $total);
 
                 $topics = Topic::where('forum_id', $fid)
                     ->orderBy('locked', 'desc')
                     ->orderBy('updated_at', 'desc')
-                    ->limit(Setting::get('forumtem'))
+                    ->limit(setting('forumtem'))
                     ->offset($page['offset'])
                     ->with('lastPost.user')
                     ->get();
@@ -348,15 +348,15 @@ if (is_admin()) {
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
-                App::pagination($page);
+                pagination($page);
             } else {
                 if (empty($forum['closed'])) {
-                    App::showError('Тем еще нет, будь первым!');
+                    showError('Тем еще нет, будь первым!');
                 }
             }
 
             if (!empty($forum['closed'])) {
-                App::showError('В данном разделе запрещено создавать темы!');
+                showError('В данном разделе запрещено создавать темы!');
             }
 
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br>';
@@ -393,7 +393,7 @@ if (is_admin()) {
 
                 echo '<br><input type="submit" value="Изменить"></form></div><br>';
             } else {
-                App::showError('Ошибка! Данной темы не существует!');
+                showError('Ошибка! Данной темы не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topics['forum_id'].'&amp;page='.$page.'">Вернуться</a><br>';
@@ -422,17 +422,17 @@ if (is_admin()) {
                         if ($locked == 1) {
                             $page = 1;
                         }
-                        App::setFlash('success', 'Тема успешно отредактирована!');
-                        App::redirect("/admin/forum?act=forum&fid=$fid&page=$page");
+                        setFlash('success', 'Тема успешно отредактирована!');
+                        redirect("/admin/forum?act=forum&fid=$fid&page=$page");
 
                     } else {
-                        App::showError('Ошибка! Слишком длинное объявление (Не более 250 символов)!');
+                        showError('Ошибка! Слишком длинное объявление (Не более 250 символов)!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинное или короткое название темы!');
+                    showError('Ошибка! Слишком длинное или короткое название темы!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=edittopic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -483,12 +483,12 @@ if (is_admin()) {
 
                     echo '<button class="btn btn-primary">Переместить</button></form></div><br>';
                 } elseif(count($forums) == 1) {
-                    App::showError('Нет разделов для перемещения!');
+                    showError('Нет разделов для перемещения!');
                 }else {
-                    App::showError('Разделы форума еще не созданы!');
+                    showError('Разделы форума еще не созданы!');
                 }
             } else {
-                App::showError('Ошибка! Данной темы не существует!');
+                showError('Ошибка! Данной темы не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$topic['forum_id'].'&amp;page='.$page.'">Вернуться</a><br>';
@@ -519,17 +519,17 @@ if (is_admin()) {
 
                         DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$newlast['id'], $newlast['forum_id']]);
 
-                        App::setFlash('success', 'Тема успешно перемещена!');
-                        App::redirect("/admin/forum?act=forum&fid=$section");
+                        setFlash('success', 'Тема успешно перемещена!');
+                        redirect("/admin/forum?act=forum&fid=$section");
 
                     } else {
-                        App::showError('Ошибка! В закрытый раздел запрещено перемещать темы!');
+                        showError('Ошибка! В закрытый раздел запрещено перемещать темы!');
                     }
                 } else {
-                    App::showError('Ошибка! Выбранного раздела не существует!');
+                    showError('Ошибка! Выбранного раздела не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=movetopic&amp;tid='.$tid.'">Вернуться</a><br>';
@@ -599,14 +599,14 @@ if (is_admin()) {
                         DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['parent_id']]);
                     }
 
-                    App::setFlash('success', 'Выбранные темы успешно удалены!');
-                    App::redirect("/admin/forum?act=forum&fid=$fid&page=$page");
+                    setFlash('success', 'Выбранные темы успешно удалены!');
+                    redirect("/admin/forum?act=forum&fid=$fid&page=$page");
 
                 } else {
-                    App::showError('Ошибка! Отсутствуют выбранные темы форума!');
+                    showError('Ошибка! Отсутствуют выбранные темы форума!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=forum&amp;fid='.$fid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -636,8 +636,8 @@ if (is_admin()) {
                                 VotePoll::where('vote_id', $vote['id'])->delete();
                             }
 
-                            App::setFlash('success', 'Тема успешно закрыта!');
-                            App::redirect("/admin/forum?act=topic&tid=$tid&page=$page");
+                            setFlash('success', 'Тема успешно закрыта!');
+                            redirect("/admin/forum?act=topic&tid=$tid&page=$page");
                             break;
 
                         case 'open':
@@ -649,30 +649,30 @@ if (is_admin()) {
                                 $vote->save();
                             }
 
-                            App::setFlash('success', 'Тема успешно открыта!');
-                            App::redirect("/admin/forum?act=topic&tid=$tid&page=$page");
+                            setFlash('success', 'Тема успешно открыта!');
+                            redirect("/admin/forum?act=topic&tid=$tid&page=$page");
                             break;
 
                         case 'locked':
                             DB::run() -> query("UPDATE `topics` SET `locked`=? WHERE `id`=?;", [1, $tid]);
-                            App::setFlash('success', 'Тема успешно закреплена!');
-                            App::redirect("/admin/forum?act=topic&tid=$tid&page=$page");
+                            setFlash('success', 'Тема успешно закреплена!');
+                            redirect("/admin/forum?act=topic&tid=$tid&page=$page");
                             break;
 
                         case 'unlocked':
                             DB::run() -> query("UPDATE `topics` SET `locked`=? WHERE `id`=?;", [0, $tid]);
-                            App::setFlash('success', 'Тема успешно откреплена!');
-                            App::redirect("/admin/forum?act=topic&tid=$tid&page=$page");
+                            setFlash('success', 'Тема успешно откреплена!');
+                            redirect("/admin/forum?act=topic&tid=$tid&page=$page");
                             break;
 
                         default:
-                            App::showError('Ошибка! Не выбрано действие для темы!');
+                            showError('Ошибка! Не выбрано действие для темы!');
                             endswitch;
                     } else {
-                        App::showError('Ошибка! Данной темы не существует!');
+                        showError('Ошибка! Данной темы не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
                 }
 
                 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br>';
@@ -709,7 +709,7 @@ if (is_admin()) {
                     }
 
                     if (!empty($topic['note'])){
-                        echo '<div class="info">'.App::bbCode($topic['note']).'</div>';
+                        echo '<div class="info">'.bbCode($topic['note']).'</div>';
                     }
 
                     echo '<hr>';
@@ -733,7 +733,7 @@ if (is_admin()) {
                     $total = DB::run() -> querySingle("SELECT count(*) FROM `posts` WHERE `topic_id`=?;", [$tid]);
 
                     if ($total > 0) {
-                        $page = App::paginate(Setting::get('forumpost'), $total);
+                        $page = paginate(setting('forumpost'), $total);
 
 
 
@@ -745,7 +745,7 @@ if (is_admin()) {
                             })
                             ->with('files', 'user', 'editUser')
                             ->offset($page['offset'])
-                            ->limit(Setting::get('forumpost'))
+                            ->limit(setting('forumpost'))
                             ->orderBy('created_at', 'asc')
                             ->get();
 
@@ -767,7 +767,7 @@ if (is_admin()) {
                             echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.date_fixed($data['created_at']).')</small><br>';
                             echo user_title($data->user).' '.user_online($data->user).'</div>';
 
-                            echo '<div>'.App::bbCode($data['text']).'<br>';
+                            echo '<div>'.bbCode($data['text']).'<br>';
 
                             // -- Прикрепленные файлы -- //
                             if ($data->files->isNotEmpty()) {
@@ -792,10 +792,10 @@ if (is_admin()) {
 
                         echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
 
-                        App::pagination($page);
+                        pagination($page);
 
                     } else {
-                        App::showError('Сообщений еще нет, будь первым!');
+                        showError('Сообщений еще нет, будь первым!');
                     }
 
                     if (empty($topic['closed'])) {
@@ -809,8 +809,8 @@ if (is_admin()) {
                         echo '<div class="js-attach-form" style="display: none;">
                             Прикрепить файл:<br><input type="file" name="file"><br>
                             <div class="info">
-                                Максимальный вес файла: <b>'.round(Setting::get('forumloadsize')/1024).'</b> Kb<br>
-                                Допустимые расширения: '.str_replace(',', ', ', Setting::get('forumextload')).'
+                                Максимальный вес файла: <b>'.round(setting('forumloadsize')/1024).'</b> Kb<br>
+                                Допустимые расширения: '.str_replace(',', ', ', setting('forumextload')).'
                             </div><br>
                         </div>';
 
@@ -820,13 +820,13 @@ if (is_admin()) {
                         echo '</form></div><br>';
 
                     } else {
-                        App::showError('Данная тема закрыта для обсуждения!');
+                        showError('Данная тема закрыта для обсуждения!');
                     }
                 } else {
-                    App::showError('Ошибка! Данной темы не существует!');
+                    showError('Ошибка! Данной темы не существует!');
                 }
             } else {
-                App::showError('Ошибка! Не выбрана тема!');
+                showError('Ошибка! Не выбрана тема!');
             }
             echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/forum">К форумам</a><br>';
         break;
@@ -861,14 +861,14 @@ if (is_admin()) {
                     DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $tid]);
                     DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topics['forum_id']]);
 
-                    App::setFlash('success', 'Выбранные сообщения успешно удалены!');
-                    App::redirect("/admin/forum?act=topic&tid=$tid&page=$page");
+                    setFlash('success', 'Выбранные сообщения успешно удалены!');
+                    redirect("/admin/forum?act=topic&tid=$tid&page=$page");
 
                 } else {
-                    App::showError('Ошибка! Отсутствуют выбранные сообщения!');
+                    showError('Ошибка! Отсутствуют выбранные сообщения!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -903,7 +903,7 @@ if (is_admin()) {
 
                 echo '<input value="Редактировать" name="do" type="submit"></form></div><br>';
             } else {
-                App::showError('Ошибка! Данного сообщения не существует!');
+                showError('Ошибка! Данного сообщения не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=topic&amp;tid='.$tid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -920,11 +920,11 @@ if (is_admin()) {
             $delfile = intar(Request::input('delfile'));
 
             if ($token == $_SESSION['token']) {
-                if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= Setting::get('forumtextlength')) {
+                if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= setting('forumtextlength')) {
                     $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
                     if (!empty($post)) {
 
-                        DB::run() -> query("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, App::getUserId(), SITETIME, $pid]);
+                        DB::run() -> query("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, getUserId(), SITETIME, $pid]);
 
                         // ------ Удаление загруженных файлов -------//
                         if ($delfile) {
@@ -942,17 +942,17 @@ if (is_admin()) {
                         // ------ Удаление загруженных файлов -------//
 
 
-                        App::setFlash('success', 'Сообщение успешно отредактировано!');
-                        App::redirect("/admin/forum?act=topic&tid=$tid&page=$page");
+                        setFlash('success', 'Сообщение успешно отредактировано!');
+                        redirect("/admin/forum?act=topic&tid=$tid&page=$page");
 
                     } else {
-                        App::showError('Ошибка! Данного сообщения не существует!');
+                        showError('Ошибка! Данного сообщения не существует!');
                     }
                 } else {
-                    App::showError('Ошибка! Слишком длинное или короткое сообщение!');
+                    showError('Ошибка! Слишком длинное или короткое сообщение!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$pid.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -963,7 +963,7 @@ if (is_admin()) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

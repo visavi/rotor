@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -37,11 +37,11 @@ if (is_admin([101, 102])) {
             echo '<b>Cписок последних зарегистрированных</b><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
-            $page = App::paginate(Setting::get('userlist'), $total);
+            $page = paginate(setting('userlist'), $total);
 
             if ($total > 0) {
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".Setting::get('userlist').";");
+                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".setting('userlist').";");
 
                 while ($data = $queryusers -> fetch()) {
                     if (empty($data['email'])) {
@@ -53,11 +53,11 @@ if (is_admin([101, 102])) {
                     echo 'Зарегистрирован: '.date_fixed($data['joined']).'</div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
 
 
             } else {
-                App::showError('Пользователей еще нет!');
+                showError('Пользователей еще нет!');
             }
             echo '<br><br>';
         break;
@@ -80,11 +80,11 @@ if (is_admin([101, 102])) {
                 }
 
                 $total = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE LOWER(`login`) ".$search.";");
-                $page = App::paginate(Setting::get('usersearch'), $total);
+                $page = paginate(setting('usersearch'), $total);
 
                 if ($total > 0) {
 
-                    $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".Setting::get('usersearch').";");
+                    $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".setting('usersearch').";");
 
                     while ($data = $queryuser -> fetch()) {
 
@@ -93,14 +93,14 @@ if (is_admin([101, 102])) {
                         echo user_online($data['login']).' ('.points($data['point']).')<br>';
                     }
 
-                    App::pagination($page);
+                    pagination($page);
 
                     echo 'Найдено совпадений: '.$total.'<br><br>';
                 } else {
-                    App::showError('Совпадений не найдено!');
+                    showError('Совпадений не найдено!');
                 }
             } else {
-                App::showError('Ошибка! Не выбраны критерии поиска пользователей!');
+                showError('Ошибка! Не выбраны критерии поиска пользователей!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>';
@@ -118,15 +118,15 @@ if (is_admin([101, 102])) {
 
                 echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br><br>';
 
-                if (App::getUsername() == Setting::get('nickname') || App::getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
-                    if ($user['login'] == App::getUsername()) {
+                if (getUsername() == setting('nickname') || getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                    if ($user['login'] == getUsername()) {
                         echo '<b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br><br>';
                     }
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/admin/users?act=upgrade&amp;uz='.$user['login'].'&amp;uid='.$_SESSION['token'].'">';
 
-                    if (App::getUsername() == Setting::get('nickname')) {
+                    if (getUsername() == setting('nickname')) {
                         $arr_access = [101, 102, 103, 105, 107];
 
                         echo 'Уровень доступа:<br>';
@@ -199,7 +199,7 @@ if (is_admin([101, 102])) {
                     if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                         echo '<div class="form">';
                         echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br>';
-                        echo 'Последняя причина: '.App::bbCode($user['reasonban']).'<br>';
+                        echo 'Последняя причина: '.bbCode($user['reasonban']).'<br>';
                         echo 'Забанил: '.profile($user['loginsendban']).'</div>';
                     }
                     echo 'Строгих банов: <b>'.$user['totalban'].'</b><br><br>';
@@ -208,10 +208,10 @@ if (is_admin([101, 102])) {
                         echo '<i class="fa fa-times"></i> <b><a href="/admin/users?act=poddel&amp;uz='.$uz.'">Удалить профиль</a></b><br>';
                     }
                 } else {
-                    App::showError('Ошибка! У вас недостаточно прав для редактирования этого профиля!');
+                    showError('Ошибка! У вас недостаточно прав для редактирования этого профиля!');
                 }
             } else {
-                App::showError('Ошибка! Пользователя с данным логином не существует!');
+                showError('Ошибка! Пользователя с данным логином не существует!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>';
@@ -250,7 +250,7 @@ if (is_admin([101, 102])) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
-                    if (App::getUsername() == Setting::get('nickname') || App::getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                    if (getUsername() == setting('nickname') || getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
 
                         if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
                             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
@@ -258,7 +258,7 @@ if (is_admin([101, 102])) {
                                     if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
                                         if ($gender == 1 || $gender == 2) {
                                             if (utf_strlen($info) <= 1000) {
-                                                if (App::getUsername() == Setting::get('nickname')) {
+                                                if (getUsername() == setting('nickname')) {
                                                     $access = $level;
                                                 } else {
                                                     $access = $user['level'];
@@ -287,31 +287,31 @@ if (is_admin([101, 102])) {
 
                                                 echo '<i class="fa fa-check"></i> <b>Данные пользователя успешно изменены!</b><br><br>';
                                             } else {
-                                                App::showError('Ошибка! Слишком большая информация в графе о себе, не более 1000 символов!');
+                                                showError('Ошибка! Слишком большая информация в графе о себе, не более 1000 символов!');
                                             }
                                         } else {
-                                            App::showError('Ошибка! Вы не указали пол пользователя!');
+                                            showError('Ошибка! Вы не указали пол пользователя!');
                                         }
                                     } else {
-                                        App::showError('Ошибка! Недопустимая дата дня рождения, необходим формат (дд.мм.гггг)!');
+                                        showError('Ошибка! Недопустимая дата дня рождения, необходим формат (дд.мм.гггг)!');
                                     }
                                 } else {
-                                    App::showError('Ошибка! Недопустимая дата регистрации, необходим формат (дд.мм.гггг)!');
+                                    showError('Ошибка! Недопустимая дата регистрации, необходим формат (дд.мм.гггг)!');
                                 }
                             } else {
-                                App::showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
+                                showError('Ошибка! Недопустимый адрес сайта, необходим формат http://site.domen!');
                             }
                         } else {
-                            App::showError('Ошибка! Вы ввели неверный адрес email, необходим формат name@site.domen!');
+                            showError('Ошибка! Вы ввели неверный адрес email, необходим формат name@site.domen!');
                         }
                     } else {
-                        App::showError('Ошибка! У вас недостаточно прав для редактирования этого профиля!');
+                        showError('Ошибка! У вас недостаточно прав для редактирования этого профиля!');
                     }
                 } else {
-                    App::showError('Ошибка! Пользователя с данным логином не существует!');
+                    showError('Ошибка! Пользователя с данным логином не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users?act=edit&amp;uz='.$uz.'">Вернуться</a><br>';
@@ -372,7 +372,7 @@ if (is_admin([101, 102])) {
                         if (!empty($mailblack)) {
                             $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $user['email']]);
                             if (empty($blackmail) && !empty($user['email'])) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], App::getUsername(), SITETIME]);
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], getUsername(), SITETIME]);
                             }
                         }
 
@@ -380,7 +380,7 @@ if (is_admin([101, 102])) {
                         if (!empty($loginblack)) {
                             $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($user['login'])]);
                             if (empty($blacklogin)) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], App::getUsername(), SITETIME]);
+                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], getUsername(), SITETIME]);
                             }
                         }
 
@@ -457,13 +457,13 @@ if (is_admin([101, 102])) {
 
                         echo '<i class="fa fa-check"></i> <b>Профиль пользователя успешно удален!</b><br><br>';
                     } else {
-                        App::showError('Ошибка! У вас недостаточно прав для удаления этого профиля!');
+                        showError('Ошибка! У вас недостаточно прав для удаления этого профиля!');
                     }
                 } else {
-                    App::showError('Ошибка! Пользователя с данным логином не существует!');
+                    showError('Ошибка! Пользователя с данным логином не существует!');
                 }
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/users">Вернуться</a><br>';
@@ -474,7 +474,7 @@ if (is_admin([101, 102])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

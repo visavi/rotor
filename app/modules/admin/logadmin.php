@@ -1,5 +1,5 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (isset($_GET['act'])) {
     $act = check($_GET['act']);
@@ -17,11 +17,11 @@ if (is_admin([101])) {
         case "index":
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM admlog;");
-            $page = App::paginate(Setting::get('loglist'), $total);
+            $page = paginate(setting('loglist'), $total);
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".Setting::get('loglist').";");
+                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";");
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -32,11 +32,11 @@ if (is_admin([101])) {
                     echo '<small><span style="color:#cc00cc">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
                 }
 
-                App::pagination($page);
+                pagination($page);
 
                 echo '<i class="fa fa-times"></i> <a href="/admin/logadmin?act=del&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br>';
             } else {
-                App::showError('Записей еще нет!');
+                showError('Записей еще нет!');
             }
         break;
 
@@ -50,10 +50,10 @@ if (is_admin([101])) {
             if ($uid == $_SESSION['token']) {
                 DB::run() -> query("DELETE FROM admlog;");
 
-                App::setFlash('success', 'Лог-файл успешно очищен!');
-                App::redirect("/admin/logadmin");
+                setFlash('success', 'Лог-файл успешно очищен!');
+                redirect("/admin/logadmin");
             } else {
-                App::showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
+                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/logadmin">Вернуться</a><br>';
@@ -64,7 +64,7 @@ if (is_admin([101])) {
     echo '<i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>';
 
 } else {
-    App::redirect('/');
+    redirect('/');
 }
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');

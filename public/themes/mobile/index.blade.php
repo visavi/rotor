@@ -5,7 +5,7 @@ header('Content-type:text/html; charset=utf-8');
 <html lang="ru">
     <title>
         @section('title')
-            {{ Setting::get('title') }}
+            {{ setting('title') }}
         @show
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -32,12 +32,12 @@ header('Content-type:text/html; charset=utf-8');
         <td width="580">
 
             <div class="a" id="up">
-                <!-- <a href="/"><span class="logotype"><?= Setting::get('title') ?></span></a><br> -->
-                <a href="/"><img src="<?= Setting::get('logotip') ?>" alt="<?= Setting::get('title') ?>"/></a><br/>
-                <?= Setting::get('logos') ?>
+                <!-- <a href="/"><span class="logotype"><?= setting('title') ?></span></a><br> -->
+                <a href="/"><img src="<?= setting('logotip') ?>" alt="<?= setting('title') ?>"/></a><br/>
+                <?= setting('logos') ?>
             </div>
 
-            <?php App::view('app/_menu'); ?>
+            <?php view('app/_menu'); ?>
 
             <div class="site">
-<?= App::view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

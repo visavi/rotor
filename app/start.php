@@ -1,19 +1,27 @@
 <?php
 
+
+use App\Classes\Registry;
+use App\Classes\Request;
+use App\Models\Setting;
+use App\Models\User;
+use App\Models\Admlog;
+use Illuminate\Database\Capsule\Manager as DB;
+
 require __DIR__.'/bootstrap.php';
 
 ob_start();
 session_name('SID');
 session_start();
 
-date_default_timezone_set(Setting::get('timezone'));
+date_default_timezone_set(setting('timezone'));
 
 /**
  * Проверка на ip-бан
  */
-if ($ipBan = App::ipBan()) {
+if ($ipBan = ipBan()) {
 
-    $ipSplit = explode('.', App::getClientIp());
+    $ipSplit = explode('.', getClientIp());
 
     foreach($ipBan as $ip) {
         $matches = 0;
@@ -26,7 +34,7 @@ if ($ipBan = App::ipBan()) {
         }
 
         if ($matches == 4 && ! Request::is('banip', 'captcha')) {
-            App::redirect('/banip');
+            redirect('/banip');
         }
     }
 }
@@ -34,7 +42,7 @@ if ($ipBan = App::ipBan()) {
 /**
  * Счетчик запросов
  */
-if (Setting::get('doslimit')) {
+if (setting('doslimit')) {
     if (is_writeable(STORAGE.'/antidos')) {
 
         $dosfiles = glob(STORAGE.'/antidos/*.dat');
@@ -45,46 +53,46 @@ if (Setting::get('doslimit')) {
             }
         }
         // -------------------------- Проверка на время -----------------------------//
-        if (file_exists(STORAGE.'/antidos/'.App::getClientIp().'.dat')) {
-            $file_dos = file(STORAGE.'/antidos/'.App::getClientIp().'.dat');
+        if (file_exists(STORAGE.'/antidos/'.getClientIp().'.dat')) {
+            $file_dos = file(STORAGE.'/antidos/'.getClientIp().'.dat');
             $file_str = explode('|', $file_dos[0]);
             if ($file_str[0] < (time() - 60)) {
-                @unlink(STORAGE.'/antidos/'.App::getClientIp().'.dat');
+                @unlink(STORAGE.'/antidos/'.getClientIp().'.dat');
             }
         }
         // ------------------------------ Запись логов -------------------------------//
-        $write = time().'|'.App::server('REQUEST_URI').'|'.App::server('HTTP_REFERER').'|'.App::getUserAgent().'|'.App::getUsername().'|';
-        write_files(STORAGE.'/antidos/'.App::getClientIp().'.dat', $write."\r\n", 0, 0666);
+        $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getUserAgent().'|'.getUsername().'|';
+        write_files(STORAGE.'/antidos/'.getClientIp().'.dat', $write."\r\n", 0, 0666);
         // ----------------------- Автоматическая блокировка ------------------------//
-        if (counter_string(STORAGE.'/antidos/'.App::getClientIp().'.dat') > Setting::get('doslimit')) {
+        if (counter_string(STORAGE.'/antidos/'.getClientIp().'.dat') > setting('doslimit')) {
 
-            if (!empty(Setting::get('errorlog'))){
+            if (!empty(setting('errorlog'))){
 
-                $banip = Ban::where('ip', App::getClientIp())->first();
+                $banip = Ban::where('ip', getClientIp())->first();
 
                 if (! $banip) {
 
                     Log::create([
                         'code'       => 666,
-                        'request'    => utf_substr(App::server('REQUEST_URI'), 0, 200),
-                        'referer'    => utf_substr(App::server('HTTP_REFERER'), 0, 200),
-                        'user_id'    => App::getUserId(),
-                        'ip'         => App::getClientIp(),
-                        'brow'       => App::getUserAgent(),
+                        'request'    => utf_substr(server('REQUEST_URI'), 0, 200),
+                        'referer'    => utf_substr(server('HTTP_REFERER'), 0, 200),
+                        'user_id'    => getUserId(),
+                        'ip'         => getClientIp(),
+                        'brow'       => getUserAgent(),
                         'created_at' => SITETIME,
 
                     ]);
 
-                    Capsule::insert(
+                    DB::insert(
                         "INSERT IGNORE INTO ban (`ip`, `created_at`) VALUES (?, ?);",
-                        [App::getClientIp(), SITETIME]
+                        [getClientIp(), SITETIME]
                     );
 
-                    App::ipBan(true);
+                    ipBan(true);
                 }
             }
 
-            unlink(STORAGE.'/antidos/'.App::getClientIp().'.dat');
+            unlink(STORAGE.'/antidos/'.getClientIp().'.dat');
         }
     }
 }
@@ -115,14 +123,14 @@ if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
 
                     Login::create([
                         'user_id' => $user->id,
-                        'ip' => App::getClientIp(),
-                        'brow' => App::getUserAgent(),
+                        'ip' => getClientIp(),
+                        'brow' => getUserAgent(),
                         'created_at' => SITETIME,
                     ]);
                 }
 
                 $user->update([
-                    'visits' => Capsule::raw('visits + 1'),
+                    'visits' => DB::raw('visits + 1'),
                     'timelastlogin' => SITETIME
                 ]);
             }
@@ -147,46 +155,46 @@ if ($user = is_user()) {
 
     Registry::set('user', $user);
 
-    $setting['themes'] = App::user('themes');
+    $setting['themes'] = user('themes');
 
     // Забанен
-    if (App::user('ban')) {
+    if (user('ban')) {
         if (! Request::is('ban', 'rules', 'logout')) {
-            App::redirect('/ban?log='.App::getUsername());
+            redirect('/ban?log='.getUsername());
         }
     }
 
     // Подтверждение регистрации
-    if (Setting::get('regkeys') > 0 && App::user('confirmreg') > 0 && empty(App::user('ban'))) {
+    if (setting('regkeys') > 0 && user('confirmreg') > 0 && empty(user('ban'))) {
         if (! Request::is('key', 'login', 'logout')) {
-            App::redirect('/key?log='.App::getUsername());
+            redirect('/key?log='.getUsername());
         }
     }
 
     // ---------------------- Получение ежедневного бонуса -----------------------//
-    if (App::user('timebonus') < SITETIME - 82800) {
-        $user = User::where('id', App::getUserId());
+    if (user('timebonus') < SITETIME - 82800) {
+        $user = User::where('id', getUserId());
         $user->update([
             'timebonus' => SITETIME,
-            'money' => Capsule::raw('money + '.Setting::get('bonusmoney')),
+            'money' => DB::raw('money + '.setting('bonusmoney')),
         ]);
 
-        App::setFlash('success', 'Получен ежедневный бонус '.moneys(Setting::get('bonusmoney')).'!');
+        setFlash('success', 'Получен ежедневный бонус '.moneys(setting('bonusmoney')).'!');
     }
 
     // ------------------ Запись текущей страницы для админов --------------------//
     if (Request::segment(1) == 'admin') {
 
         Admlog::create([
-            'user_id'    => App::getUserId(),
-            'request'    => App::server('REQUEST_URI'),
-            'referer'    => App::server('HTTP_REFERER'),
-            'ip'         => App::getClientIp(),
-            'brow'       => App::getUserAgent(),
+            'user_id'    => getUserId(),
+            'request'    => server('REQUEST_URI'),
+            'referer'    => server('HTTP_REFERER'),
+            'ip'         => getClientIp(),
+            'brow'       => getUserAgent(),
             'created_at' => SITETIME,
         ]);
 
-        Capsule::delete('
+        DB::delete('
             DELETE FROM admlog WHERE created_at < (
                 SELECT MIN(created_at) FROM (
                     SELECT created_at FROM admlog ORDER BY created_at DESC LIMIT 500
@@ -197,14 +205,14 @@ if ($user = is_user()) {
 }
 
 // Сайт закрыт для всех
-if (Setting::get('closedsite') == 2 && !is_admin() && ! Request::is('closed', 'login')) {
-    App::redirect('/closed');
+if (setting('closedsite') == 2 && !is_admin() && ! Request::is('closed', 'login')) {
+    redirect('/closed');
 }
 
 // Сайт закрыт для гостей
-if (Setting::get('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
-    App::setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
-    App::redirect('/login');
+if (setting('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
+    setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
+    redirect('/login');
 }
 
 /**
@@ -213,14 +221,14 @@ if (Setting::get('closedsite') == 1 && !is_user() && ! Request::is('register', '
 $browser_detect = new Mobile_Detect();
 
 if (! is_user() || empty($setting['themes'])) {
-    if (! empty(Setting::get('touchthemes'))) {
+    if (! empty(setting('touchthemes'))) {
         if ($browser_detect->isTablet()) {
-            $setting['themes'] = Setting::get('touchthemes');
+            $setting['themes'] = setting('touchthemes');
         }
     }
-    if (! empty(Setting::get('webthemes'))) {
+    if (! empty(setting('webthemes'))) {
         if (! $browser_detect->isMobile() && ! $browser_detect->isTablet()) {
-            $setting['themes'] = Setting::get('webthemes');
+            $setting['themes'] = setting('webthemes');
         }
     }
 }

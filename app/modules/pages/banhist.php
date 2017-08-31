@@ -1,8 +1,8 @@
 <?php
-App::view(Setting::get('themes').'/index');
+view(setting('themes').'/index');
 
 if (empty($_GET['uz'])) {
-    $uz = check(App::getUsername());
+    $uz = check(getUsername());
 } else {
     $uz = check(strval($_GET['uz']));
 }
@@ -11,11 +11,11 @@ if (is_user()) {
     //show_title('История банов '.$uz);
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
-    $page = App::paginate(Setting::get('listbanhist'), $total);
+    $page = paginate(setting('listbanhist'), $total);
 
     if ($total > 0) {
 
-        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE user=? ORDER BY time DESC LIMIT ".$page['offset'].", ".Setting::get('listbanhist').";", [$uz]);
+        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE user=? ORDER BY time DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";", [$uz]);
 
         while ($data = $queryhist -> fetch()) {
             echo '<div class="b">';
@@ -24,7 +24,7 @@ if (is_user()) {
 
             echo '<div>';
             if (!empty($data['type'])) {
-                echo 'Причина: '.App::bbCode($data['reason']).'<br>';
+                echo 'Причина: '.bbCode($data['reason']).'<br>';
                 echo 'Срок: '.formattime($data['term']).'<br>';
             }
 
@@ -41,16 +41,16 @@ if (is_user()) {
             echo '</div>';
         }
 
-        App::pagination($page);
+        pagination($page);
 
         echo 'Всего действий: <b>'.$total.'</b><br><br>';
     } else {
-        App::showError('В истории еще ничего нет!');
+        showError('В истории еще ничего нет!');
     }
 } else {
-    App::showError('Для просмотра истории необходимо авторизоваться');
+    showError('Для просмотра истории необходимо авторизоваться');
 }
 
 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/user/'.$uz.'">В анкету</a><br>';
 
-App::view(Setting::get('themes').'/foot');
+view(setting('themes').'/foot');
