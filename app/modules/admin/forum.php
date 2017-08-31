@@ -18,7 +18,7 @@ if (isset($_GET['tid'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin()) {
+if (isAdmin()) {
     //show_title('Управление форумом');
 
     switch ($action):
@@ -45,7 +45,7 @@ if (is_admin()) {
                         echo '<br><small>'.$data['desc'].'</small>';
                     }
 
-                    if (is_admin([101])) {
+                    if (isAdmin([101])) {
                         echo '<br><a href="/admin/forum?act=editforum&amp;fid='.$data['id'].'">Редактировать</a> / ';
                         echo '<a href="/admin/forum?act=delforum&amp;fid='.$data['id'].'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы уверены что хотите удалить данный раздел? \')">Удалить</a>';
                     }
@@ -56,7 +56,7 @@ if (is_admin()) {
                         foreach($data->children as $datasub) {
                             echo '<i class="fa fa-angle-right"></i> ';
                             echo '<b>'.$datasub['sort'].'. <a href="/admin/forum?act=forum&amp;fid='.$datasub['id'].'">'.$datasub['title'].'</a></b>  ('.$datasub['topics'].'/'.$datasub['posts'].') ';
-                            if (is_admin([101])) {
+                            if (isAdmin([101])) {
                                 echo '(<a href="/admin/forum?act=editforum&amp;fid='.$datasub['id'].'">Редактировать</a> / ';
                                 echo '<a href="/admin/forum?act=delforum&amp;fid='.$datasub['id'].'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы уверены что хотите удалить данный раздел? \')">Удалить</a>)';
                             }
@@ -79,7 +79,7 @@ if (is_admin()) {
                 showError('Разделы форума еще не созданы!');
             }
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 echo '<hr><form action="/admin/forum?act=addforum" method="post">';
                 echo '<input type="hidden" name="token" value="'. $_SESSION['token'] .'">';
                 echo 'Заголовок:<br>';
@@ -98,7 +98,7 @@ if (is_admin()) {
 
             $token = check($_GET['token']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($token == $_SESSION['token']) {
                     restatement('forum');
 
@@ -123,7 +123,7 @@ if (is_admin()) {
             $token = check($_POST['token']);
             $title = check($_POST['title']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($token == $_SESSION['token']) {
                     if (utfStrlen($title) >= 3 && utfStrlen($title) <= 50) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `forums`;");
@@ -150,7 +150,7 @@ if (is_admin()) {
         ############################################################################################
         case 'editforum':
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 $forums = DB::run() -> queryFetch("SELECT * FROM `forums` WHERE `id`=? LIMIT 1;", [$fid]);
                 if (!empty($forums)) {
                     echo '<b><big>Редактирование</big></b><br><br>';
@@ -208,7 +208,7 @@ if (is_admin()) {
             $order = abs(intval($_POST['order']));
             $closed = (empty($_POST['closed'])) ? 0 : 1;
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($token == $_SESSION['token']) {
                     if (utfStrlen($title) >= 3 && utfStrlen($title) <= 50) {
                         if (utfStrlen($desc) <= 100) {
@@ -251,7 +251,7 @@ if (is_admin()) {
 
             $token = check($_GET['token']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($token == $_SESSION['token']) {
 
                     $forum = Forum::where('id', $fid)
@@ -765,7 +765,7 @@ if (is_admin()) {
 
 
                             echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.dateFixed($data['created_at']).')</small><br>';
-                            echo userStatus($data->user).' '.user_online($data->user).'</div>';
+                            echo userStatus($data->user).' '.userOnline($data->user).'</div>';
 
                             echo '<div>'.bbCode($data['text']).'<br>';
 

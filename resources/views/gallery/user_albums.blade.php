@@ -21,7 +21,7 @@
                 @endif
             </div>
             <div>
-                <a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]) !!}</a><br>
+                <a href="/gallery/{{ $data['id'] }}">{!! resizeImage('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]) !!}</a><br>
 
                 @if ($data['text'])
                    {{ bbCode($data['text']) }}<br>

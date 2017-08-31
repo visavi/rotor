@@ -39,18 +39,18 @@ class BookController extends BaseController
             ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
         /* Проерка для гостей */
-        if (!is_user() && setting('bookadds')) {
+        if (!isUser() && setting('bookadds')) {
             $protect = check(strtolower(Request::input('protect')));
             $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
         } else {
-            $validation->addRule('bool', is_user(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
+            $validation->addRule('bool', isUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
         }
 
         if ($validation->run()) {
 
             $msg = antimat($msg);
 
-            if (is_user()) {
+            if (isUser()) {
                 $bookscores = (setting('bookscores')) ? 1 : 0;
 
                 $user = User::where('id', getUserId());
@@ -61,7 +61,7 @@ class BookController extends BaseController
                 ]);
             }
 
-            $username = is_user() ? getUserId() : 0;
+            $username = isUser() ? getUserId() : 0;
 
             Guest::create([
                 'user_id'    => $username,
@@ -85,7 +85,7 @@ class BookController extends BaseController
      */
     public function edit($id)
     {
-        if (!is_user()) abort(403);
+        if (!isUser()) abort(403);
 
         $post = Guest::where('user_id', getUserId())->find($id);
 

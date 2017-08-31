@@ -1,7 +1,7 @@
 <?php
 view(setting('themes').'/index');
 
-if (is_admin([101])) {
+if (isAdmin([101])) {
 //show_title('Очистка кэша');
 
 switch ($action):

@@ -23,7 +23,8 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Jenssegers\Blade\Blade;
 
 // --------------------------- Функция перевода секунд во время -----------------------------//
-function makeTime($time) {
+function makeTime($time)
+{
     if ($time < 3600) {
         $time = sprintf("%02d:%02d", (int)($time / 60) % 60, $time % 60);
     } else {
@@ -55,7 +56,8 @@ function dateFixed($timestamp, $format = "d.m.y / H:i")
 }
 
 // --------------- Функция удаление картинки с проверкой -------------------//
-function unlink_image($dir, $image) {
+function unlink_image($dir, $image)
+{
     if (!empty($image)) {
         $prename = str_replace('/', '_' ,$dir.$image);
 
@@ -189,7 +191,8 @@ function isUtf($str)
 }
 
 // ----------------------- Функция экранирования основных знаков --------------------------//
-function check($msg) {
+function check($msg)
+{
     if (is_array($msg)) {
         foreach($msg as $key => $val) {
             $msg[$key] = check($val);
@@ -207,7 +210,8 @@ function check($msg) {
 }
 
 // --------------- Функция правильного вывода веса файла -------------------//
-function formatSize($file_size) {
+function formatSize($file_size)
+{
     if ($file_size >= 1048576000) {
         $file_size = round(($file_size / 1073741824), 2)." Gb";
     } elseif ($file_size >= 1024000) {
@@ -221,7 +225,8 @@ function formatSize($file_size) {
 }
 
 // --------------- Функция форматированного вывода размера файла -------------------//
-function formatFileSize($file) {
+function formatFileSize($file)
+{
     if (file_exists($file) && is_file($file)) {
         return formatSize(filesize($file));
     } else {
@@ -230,7 +235,8 @@ function formatFileSize($file) {
 }
 
 // --------------- Функция правильного вывода времени -------------------//
-function formatTime($file_time, $round = 1) {
+function formatTime($file_time, $round = 1)
+{
     if ($file_time >= 86400) {
         $file_time = round((($file_time / 60) / 60) / 24, $round).' дн.';
     } elseif ($file_time >= 3600) {
@@ -244,7 +250,8 @@ function formatTime($file_time, $round = 1) {
 }
 
 // ------------------ Функция антимата --------------------//
-function antimat($str) {
+function antimat($str)
+{
     $querymat = DB::run() -> query("SELECT `string` FROM `antimat` ORDER BY CHAR_LENGTH(`string`) DESC;");
     $arrmat = $querymat -> fetchAll(PDO::FETCH_COLUMN);
 
@@ -278,7 +285,8 @@ function userLevel($level)
 }
 
 // ---------------- Функция кэширования статусов ------------------//
-function saveStatus($time = 0) {
+function saveStatus($time = 0)
+{
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
 
     $users = User::select('users.id', 'users.status', 'status.name', 'status.color')
@@ -327,7 +335,8 @@ function saveSetting() {
 }
 
 // ------------------ Функция вывода рейтинга --------------------//
-function ratingVote($rating) {
+function ratingVote($rating)
+{
 
     $rating = round($rating / 0.5) * 0.5;
 
@@ -345,7 +354,8 @@ function ratingVote($rating) {
 }
 
 // --------------- Функция листинга всех файлов и папок ---------------//
-function scan_check($dirname) {
+function scan_check($dirname)
+{
     global $arr;
 
     if (empty($arr['files'])) {
@@ -381,7 +391,8 @@ function scan_check($dirname) {
 }
 
 // --------------- Функция вывода календаря---------------//
-function make_calendar($month, $year) {
+function make_calendar($month, $year)
+{
     $wday = date("w", mktime(0, 0, 0, $month, 1, $year));
     if ($wday == 0) {
         $wday = 7;
@@ -406,7 +417,8 @@ function make_calendar($month, $year) {
 }
 
 // --------------- Функция сохранения количества денег  у юзера ---------------//
-function saveUserMoney($time = 0) {
+function saveUserMoney($time = 0)
+{
     if (empty($time) || @filemtime(STORAGE."/temp/money.dat") < time() - $time) {
         $queryuser = DB::run() -> query("SELECT `login`, `money` FROM `users` WHERE `money`>?;", [0]);
         $alluser = $queryuser -> fetchAssoc();
@@ -415,7 +427,8 @@ function saveUserMoney($time = 0) {
 }
 
 // --------------- Функция подсчета денег у юзера ---------------//
-function userMoney($login) {
+function userMoney($login)
+{
     static $arrmoney;
 
     if (empty($arrmoney)) {
@@ -427,7 +440,8 @@ function userMoney($login) {
 }
 
 // --------------- Функция сохранения количества писем ---------------//
-function saveUserMail($time = 0) {
+function saveUserMail($time = 0)
+{
     if (empty($time) || @filemtime(STORAGE."/temp/usermail.dat") < time() - $time) {
 
         $messages = Inbox::select('user_id', DB::raw('count(*) as total'))
@@ -440,7 +454,8 @@ function saveUserMail($time = 0) {
 }
 
 // --------------- Функция подсчета писем у юзера ---------------//
-function userMail($user) {
+function userMail($user)
+{
     saveUserMail(3600);
     $arrmail = unserialize(file_get_contents(STORAGE."/temp/usermail.dat"));
     return (isset($arrmail[$user->id])) ? $arrmail[$user->id] : 0;
@@ -508,12 +523,14 @@ function userIgnore($user)
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
-function userWall($user) {
+function userWall($user)
+{
     return Wall::where('user_id', $user->id)->count();
 }
 
 // ------------------ Функция подсчета пользователей онлайн -----------------//
-function statsOnline($cache = 30) {
+function statsOnline($cache = 30)
+{
     if (@filemtime(STORAGE."/temp/online.dat") < time()-$cache) {
 
         $online[0] = Online::whereNotNull('user_id')->count();
@@ -537,7 +554,8 @@ function showOnline()
 }
 
 // ------------------ Функция подсчета посещений -----------------//
-function statsCounter() {
+function statsCounter()
+{
     if (@filemtime(STORAGE."/temp/counter.dat") < time()-10) {
         $counts = Counter::count();
         file_put_contents(STORAGE."/temp/counter.dat", serialize($counts), LOCK_EX);
@@ -549,7 +567,7 @@ function statsCounter() {
 // ------------------ Функция вывода счетчика посещений -----------------//
 function showCounter()
 {
-    if (is_user()) {
+    if (isUser()) {
 
         //$visitPage = !empty(setting('newtitle')) ? setting('newtitle') : null;
 
@@ -575,7 +593,8 @@ function showCounter()
 }
 
 // --------------- Функция вывода количества зарегистрированных ---------------//
-function statsUsers() {
+function statsUsers()
+{
     if (@filemtime(STORAGE."/temp/statusers.dat") < time()-3600) {
         $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
         $new = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `joined`>UNIX_TIMESTAMP(CURDATE());");
@@ -593,7 +612,8 @@ function statsUsers() {
 }
 
 // --------------- Функция вывода количества админов и модеров --------------------//
-function statsAdmins() {
+function statsAdmins()
+{
     if (@filemtime(STORAGE."/temp/statadmins.dat") < time()-3600) {
         $stat = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
 
@@ -604,31 +624,37 @@ function statsAdmins() {
 }
 
 // --------------- Функция вывода количества жалоб --------------------//
-function stats_spam() {
+function statsSpam()
+{
     return Spam::count();
 }
 // --------------- Функция вывода количества забаненных --------------------//
-function stats_banned() {
+function statsBanned()
+{
     return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", [1, SITETIME]);
 }
 
 // --------------- Функция вывода истории банов --------------------//
-function stats_banhist() {
+function statsBanHist()
+{
     return DB::run() -> querySingle("SELECT count(*) FROM `banhist`;");
 }
 
 // ------------ Функция вывода количества ожидающих регистрации -----------//
-function stats_reglist() {
+function statsRegList()
+{
     return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", [0]);
 }
 
 // --------------- Функция вывода количества забаненных IP --------------------//
-function stats_ipbanned() {
+function statsIpBanned()
+{
     return DB::run() -> querySingle("SELECT count(*) FROM `ban`;");
 }
 
 // --------------- Функция вывода количества фотографий --------------------//
-function stats_gallery() {
+function statsGallery()
+{
     if (@filemtime(STORAGE."/temp/statgallery.dat") < time()-900) {
         $total = Photo::count();
         $totalnew = Photo::where('created_at', '>', SITETIME-86400 * 3)->count();
@@ -646,12 +672,14 @@ function stats_gallery() {
 }
 
 // --------------- Функция вывода количества новостей--------------------//
-function stats_allnews() {
+function statsNews()
+{
     return News::count();
 }
 
 // ---------- Функция вывода записей в черном списке ------------//
-function stats_blacklist() {
+function statsBlacklist()
+{
     $query = DB::run() -> query("SELECT `type`, count(*) FROM `blacklist` GROUP BY `type`;");
     $blacklist = $query -> fetchAssoc();
     $list = $blacklist + array_fill(1, 3, 0);
@@ -659,17 +687,20 @@ function stats_blacklist() {
 }
 
 // --------------- Функция вывода количества заголовков ----------------//
-function stats_antimat() {
+function statsAntimat()
+{
     return DB::run() -> querySingle("SELECT count(*) FROM `antimat`;");
 }
 
 // --------------- Функция вывода количества смайлов ----------------//
-function stats_smiles() {
+function statsSmiles()
+{
     return DB::run() -> querySingle("SELECT count(*) FROM `smiles`;");
 }
 
 // ----------- Функция вывода даты последнего сканирования -------------//
-function stats_checker() {
+function statsChecker()
+{
     if (file_exists(STORAGE."/temp/checker.dat")) {
         return dateFixed(filemtime(STORAGE."/temp/checker.dat"), "j.m.y");
     } else {
@@ -678,14 +709,16 @@ function stats_checker() {
 }
 
 // --------------- Функция вывода количества приглашений --------------//
-function stats_invite() {
+function statsInvite()
+{
     $invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", [0]);
     $used_invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", [1]);
     return $invite.'/'.$used_invite;
 }
 
 // --------------- Функция определение онлайн-статуса ---------------//
-function user_online($user) {
+function userOnline($user)
+{
     static $visits;
 
     $online = '<i class="fa fa-asterisk text-danger"></i>';
@@ -712,7 +745,8 @@ function user_online($user) {
 }
 
 // --------------- Функция определение пола пользователя ---------------//
-function user_gender($user) {
+function userGender($user)
+{
     static $genders;
 
     $gender = 'male';
@@ -738,7 +772,8 @@ function user_gender($user) {
 }
 
 // --------------- Функция вывода пользователей онлайн ---------------//
-function allonline() {
+function allOnline()
+{
     if (@filemtime(STORAGE."/temp/allonline.dat") < time()-30) {
         $visits = Visit::select('user_id')
             ->where('updated_at', '>', SITETIME - 600)
@@ -753,7 +788,8 @@ function allonline() {
 }
 
 // ------------------ Функция определение последнего посещения ----------------//
-function user_visit($user) {
+function userVisit($user)
+{
     $state = '(Оффлайн)';
 
     if ( ! $user) {
@@ -774,7 +810,8 @@ function user_visit($user) {
 }
 
 // ---------- Функция обработки строк данных и ссылок ---------//
-function check_string($string) {
+function checkString($string)
+{
     $string = strtolower($string);
     $string = str_replace(['http://www.', 'http://wap.', 'http://', 'https://'], '', $string);
     $string = strtok($string, '/?');
@@ -782,7 +819,8 @@ function check_string($string) {
 }
 
 // --------------------- Функция вывода навигации в галерее ------------------------//
-function photo_navigation($id) {
+function photoNavigation($id)
+{
 
     if (empty($id)) {
         return false;
@@ -795,7 +833,7 @@ function photo_navigation($id) {
 }
 
 // --------------------- Функция вывода статистики блогов ------------------------//
-function stats_blog()
+function statsBlog()
 {
     if (@filemtime(STORAGE."/temp/statblogblog.dat") < time()-900) {
 
@@ -815,7 +853,8 @@ function stats_blog()
 }
 
 // --------------------- Функция вывода статистики форума ------------------------//
-function stats_forum() {
+function statsForum()
+{
     if (@filemtime(STORAGE."/temp/statforum.dat") < time()-600) {
 
         $topics = Topic::count();
@@ -828,7 +867,7 @@ function stats_forum() {
 }
 
 // --------------------- Функция вывода статистики гостевой ------------------------//
-function stats_guest()
+function statsGuest()
 {
     if (@filemtime(STORAGE."/temp/statguest.dat") < time()-600) {
 
@@ -841,18 +880,21 @@ function stats_guest()
 }
 
 // -------------------- Функция вывода статистики админ-чата -----------------------//
-function stats_chat() {
+function statsChat()
+{
     return Chat::count();
 }
 
 // ------------------ Функция вывода времени последнего сообщения --------------------//
-function stats_newchat() {
+function statsNewChat()
+{
     return Chat::max('created_at');
     //return intval(DB::run() -> querySingle("SELECT MAX(`created_at`) FROM `chat`;"));
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//
-function stats_load($cats=0) {
+function statsLoad($cats=0)
+{
     if (empty($cats)){
 
         if (@filemtime(STORAGE."/temp/statload.dat") < time()-900) {
@@ -892,7 +934,8 @@ function stats_load($cats=0) {
 }
 
 // --------------------- Функция подсчета непроверенных файлов ------------------------//
-function stats_newload() {
+function statsNewLoad()
+{
     $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [0]);
     $totalcheck = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `app`=?;", [0, 1]);
 
@@ -904,7 +947,8 @@ function stats_newload() {
 }
 
 // --------------------- Функция шифровки Email-адреса ------------------------//
-function crypt_mail($mail) {
+function cryptMail($mail)
+{
     $output = "";
     $strlen = strlen($mail);
     for ($i = 0; $i < $strlen; $i++) {
@@ -914,7 +958,8 @@ function crypt_mail($mail) {
 }
 
 // ------------------- Функция обработки массива (int) --------------------//
-function intar($string) {
+function intar($string)
+{
     if (empty($string)) return false;
 
     if (is_array($string)) {
@@ -942,7 +987,8 @@ function statVotes()
 }
 
 // ------------------- Функция показа даты последней новости --------------------//
-function stats_news() {
+function statsNewsDate()
+{
     if (@filemtime(STORAGE."/temp/statnews.dat") < time()-900) {
         $stat = 0;
 
@@ -962,7 +1008,7 @@ function stats_news() {
 }
 
 // --------------------------- Функция вывода новостей -------------------------//
-function last_news()
+function lastNews()
 {
     if (setting('lastnews') > 0) {
 
@@ -995,7 +1041,8 @@ function last_news()
 }*/
 
 // ------------------------- Функция проверки авторизации  ------------------------//
-function is_user() {
+function isUser()
+{
     static $user = 0;
     if (empty($user)) {
         if (isset($_SESSION['id']) && isset($_SESSION['password'])) {
@@ -1012,12 +1059,13 @@ function is_user() {
 }
 
 // ------------------------- Функция проверки администрации  ------------------------//
-function is_admin($access = []) {
+function isAdmin($access = [])
+{
     if (empty($access)) {
         $access = [101, 102, 103, 105];
     }
 
-    if (is_user()) {
+    if (isUser()) {
         if (in_array(user('level'), $access)) {
             return true;
         }
@@ -1027,7 +1075,8 @@ function is_admin($access = []) {
 }
 
 // ------------------ Функция вывода иконки расширения --------------------//
-function icons($ext) {
+function icons($ext)
+{
     switch ($ext) {
         case 'php':
             $ico = 'file-code-o';
@@ -1086,7 +1135,8 @@ function icons($ext) {
 }
 
 // ------------------ Функция смешивания ассоциативного массива --------------------//
-function shuffle_assoc(&$array) {
+function shuffleAssoc(&$array)
+{
     $keys = array_keys($array);
 
     shuffle($keys);
@@ -1101,16 +1151,16 @@ function shuffle_assoc(&$array) {
 }
 
 // --------------- Функция обрезки слов -------------------//
-function strip_str($str, $words = 20) {
+function stripString($str, $words = 20) {
     return implode(' ', array_slice(explode(' ', strip_tags($str)), 0, $words));
 }
 
 // ------------------ Функция вывода пользовательской рекламы --------------------//
-function show_advertuser()
+function showAdvertUser()
 {
     if (!empty(setting('rekusershow'))) {
         if (@filemtime(STORAGE."/temp/rekuser.dat") < time()-1800) {
-            save_advertuser();
+            saveAdvertUser();
         }
 
         $datafile = unserialize(file_get_contents(STORAGE."/temp/rekuser.dat"));
@@ -1138,8 +1188,8 @@ function show_advertuser()
 }
 
 // --------------- Функция кэширования пользовательской рекламы -------------------//
-function save_advertuser() {
-
+function saveAdvertUser()
+{
     $data = RekUser::where('created_at', '>', SITETIME)->get();
 
     $links = [];
@@ -1164,7 +1214,8 @@ function save_advertuser() {
 }
 
 // ----------- Функция закачки файла через curl ------------//
-function curl_connect($url, $user_agent = 'Mozilla/5.0', $proxy = null) {
+function curlConnect($url, $user_agent = 'Mozilla/5.0', $proxy = null)
+{
     if (function_exists('curl_init')) {
         $ch = curl_init();
         curl_setopt ($ch, CURLOPT_URL, $url);
@@ -1181,7 +1232,7 @@ function curl_connect($url, $user_agent = 'Mozilla/5.0', $proxy = null) {
 }
 
 // --------------------------- Функция показа фотографий ---------------------------//
-function recentphotos($show = 5)
+function recentPhotos($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
 
@@ -1194,7 +1245,7 @@ function recentphotos($show = 5)
 
     if ($photos->isNotEmpty()) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/'.$data['id'].'">'.resize_image('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title'], 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery/'.$data['id'].'">'.resizeImage('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title'], 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br>';
@@ -1202,7 +1253,8 @@ function recentphotos($show = 5)
 }
 
 // --------------- Функция кэширования последних тем форума -------------------//
-function recenttopics($show = 5) {
+function recentTopics($show = 5)
+{
     if (@filemtime(STORAGE."/temp/recenttopics.dat") < time()-180) {
         $topics = Topic::orderBy('updated_at', 'desc')->limit($show)->get();
         file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($topics), LOCK_EX);
@@ -1219,7 +1271,8 @@ function recenttopics($show = 5) {
 }
 
 // ------------- Функция кэширования последних файлов в загрузках -----------------//
-function recentfiles($show = 5) {
+function recentFiles($show = 5)
+{
     if (@filemtime(STORAGE."/temp/recentfiles.dat") < time()-600) {
         $queryfiles = DB::run() -> query("SELECT * FROM `downs` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$show.";", [1]);
         $recent = $queryfiles -> fetchAll();
@@ -1239,7 +1292,8 @@ function recentfiles($show = 5) {
 }
 
 // ------------- Функция кэширования последних статей в блогах -----------------//
-function recentblogs() {
+function recentBlogs()
+{
     if (@filemtime(STORAGE."/temp/recentblog.dat") < time()-600) {
         $queryblogs = DB::run() -> query("SELECT * FROM `blogs` ORDER BY `created_at` DESC LIMIT 5;");
         $recent = $queryblogs -> fetchAll();
@@ -1257,7 +1311,8 @@ function recentblogs() {
 }
 
 // ------------- Функция вывода количества предложений и пожеланий -------------//
-function stats_offers() {
+function statsOffers()
+{
     if (@filemtime(STORAGE."/temp/offers.dat") < time()-10800) {
         $offers = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [0]);
         $problems = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [1]);
@@ -1305,7 +1360,8 @@ function fn_close($fp, $method) {
 }
 
 // ------------------ Функция пересчета сообщений и комментарий ---------------//
-function restatement($mode) {
+function restatement($mode)
+{
     switch ($mode) {
         case 'forum':
             DB::run() -> query("UPDATE `topics` SET `posts`=(SELECT count(*) FROM `posts` WHERE `topics`.`id`=`posts`.`topic_id`);");
@@ -1335,7 +1391,8 @@ function restatement($mode) {
 }
 
 // ------------------------ Функция записи в файл ------------------------//
-function write_files($filename, $text, $clear = 0, $chmod = 0) {
+function writeFiles($filename, $text, $clear = 0, $chmod = 0)
+{
 
     if (empty($clear)) {
         file_put_contents($filename, $text, FILE_APPEND | LOCK_EX);
@@ -1349,7 +1406,8 @@ function write_files($filename, $text, $clear = 0, $chmod = 0) {
 }
 
 // ------------------- Функция подсчета строк в файле--------------------//
-function counter_string($files) {
+function counterString($files)
+{
     $count_lines = 0;
     if (file_exists($files)) {
         $lines = file($files);
@@ -1359,7 +1417,8 @@ function counter_string($files) {
 }
 
 // ------------- Функция кэширования админских ссылок -------------//
-function cache_admin_links($cache=10800) {
+function cacheAdminLinks($cache=10800)
+{
     if (@filemtime(STORAGE.'/temp/adminlinks.dat') < time()-$cache) {
         $files = array_diff(scandir(APP.'/modules/admin/links'), ['.', '..']);
         $links = [];
@@ -1375,9 +1434,9 @@ function cache_admin_links($cache=10800) {
 }
 
 // ------------- Функция вывода админских ссылок -------------//
-function show_admin_links($level = 0) {
-
-    $links = cache_admin_links();
+function showAdminLinks($level = 0)
+{
+    $links = cacheAdminLinks();
 
     if (!empty($links[$level])){
         foreach ($links[$level] as $link){
@@ -1389,7 +1448,8 @@ function show_admin_links($level = 0) {
 }
 
 // ------------- Функция кэширования уменьшенных изображений -------------//
-function resize_image($dir, $name, $size, $params = []) {
+function resizeImage($dir, $name, $size, $params = [])
+{
     if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
 
         $prename = str_replace('/', '_', $dir.$name);
@@ -1452,7 +1512,7 @@ function profile($user, $color = false)
  * @param integer $num
  * @return string
  */
-function format_num($num)
+function formatNum($num)
 {
     if ($num > 0) {
         return '<span style="color:#00aa00">+'.$num.'</span>';
@@ -1464,7 +1524,8 @@ function format_num($num)
 }
 
 // ------------- Подключение стилей -------------//
-function include_style(){
+function includeStyle()
+{
     echo '<link rel="stylesheet" href="/assets/css/bootstrap.min.css">'."\r\n";
     echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css">'."\r\n";
     echo '<link rel="stylesheet" href="/assets/css/prettify.css">'."\r\n";
@@ -1477,7 +1538,8 @@ function include_style(){
 }
 
 // ------------- Подключение javascript -------------//
-function include_javascript(){
+function includeScript()
+{
     echo '<script src="/assets/js/jquery-3.2.1.min.js"></script>'."\r\n";
     echo '<script src="/assets/js/popper.min.js"></script>'."\r\n";
     echo '<script src="/assets/js/bootstrap.min.js"></script>'."\r\n";
@@ -1491,21 +1553,9 @@ function include_javascript(){
     echo '<script src="/assets/js/app.js"></script>'."\r\n";
 }
 
-// ------------- Прогресс бар -------------//
-function progress_bar($percent, $title = false){
-
-    if (! $title){
-        $title = $percent.'%';
-    }
-
-    echo '<div class="progress" style="width: 250px;">
-        <div class="progress-bar progress-bar-success" style="width: '.$percent.'%;"></div>
-        <span style="float:right; color:#000; margin-right:5px;">'.$title.'</span>
-    </div>';
-}
-
 // ------------- Добавление пользовательского файла в ZIP-архив -------------//
-function copyright_archive($filename){
+function copyrightArchive($filename)
+{
 
     $readme_file = HOME.'/assets/Visavi_Readme.txt';
     $ext = getExtension($filename);
@@ -1519,7 +1569,7 @@ function copyright_archive($filename){
 }
 
 // ------------- Функция загрузки и обработки изображений -------------//
-function upload_image($file, $weight, $size, $newName = false)
+function uploadImage($file, $weight, $size, $newName = false)
 {
     $handle = new FileUpload($file);
 
@@ -1559,8 +1609,8 @@ function upload_image($file, $weight, $size, $newName = false)
 }
 
 // ----- Функция определения входит ли пользователь в контакты -----//
-function isContact($user, $contactUser){
-
+function isContact($user, $contactUser)
+{
     $isContact = Contact::where('user_id', $user->id)
         ->where('contact_id', $contactUser->id)
         ->first();
@@ -1573,7 +1623,8 @@ function isContact($user, $contactUser){
 }
 
 // ----- Функция определения входит ли пользователь в игнор -----//
-function isIgnore($user, $ignoreUser){
+function isIgnore($user, $ignoreUser)
+{
 
     $isIgnore = Ignore::where('user_id', $user->id)
         ->where('ignore_id', $ignoreUser->id)
@@ -1587,7 +1638,8 @@ function isIgnore($user, $ignoreUser){
 }
 
 // ----- Функция рекурсивного удаления директории -----//
-function removeDir($dir){
+function removeDir($dir)
+{
     if (file_exists($dir)){
         if ($files = glob($dir.'/*')) {
             foreach($files as $file) {
@@ -1599,7 +1651,8 @@ function removeDir($dir){
 }
 
 // ----- Функция отправки приватного сообщения -----//
-function send_private($userId, $authorId, $text, $time = SITETIME){
+function sendPrivate($userId, $authorId, $text, $time = SITETIME)
+{
     if (User::find($userId)) {
 
         DB::run() -> query("INSERT INTO `inbox` (`user_id`, `author_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);",
@@ -1614,8 +1667,8 @@ function send_private($userId, $authorId, $text, $time = SITETIME){
 }
 
 // ----- Функция подготовки приватного сообщения -----//
-function text_private($id, $replace = []){
-
+function textPrivate($id, $replace = [])
+{
     $message = DB::run() -> querySingle("SELECT `text` FROM `notice` WHERE `id`=? LIMIT 1;", [$id]);
 
     if (!empty($message)){
@@ -1634,9 +1687,9 @@ function text_private($id, $replace = []){
 }*/
 
 // ------------ Функция статистики производительности -----------//
-function perfomance(){
-
-    if (is_admin() && setting('performance')){
+function perfomance()
+{
+    if (isAdmin() && setting('performance')){
 
         $queries = env('APP_DEBUG') ? getQueryLog() : [];
 
@@ -2118,7 +2171,7 @@ function user($key = null)
  */
 function login($login, $password, $remember = true)
 {
-    $domain = check_string(setting('home'));
+    $domain = checkString(setting('home'));
 
     if (!empty($login) && !empty($password)) {
 
@@ -2199,7 +2252,7 @@ function login($login, $password, $remember = true)
  */
 function socialLogin($token)
 {
-    $domain = check_string(setting('home'));
+    $domain = checkString(setting('home'));
 
     $curl = new Curl\Curl();
     $network = $curl->get('http://ulogin.ru/token.php', [

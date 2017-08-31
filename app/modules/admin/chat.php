@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin()) {
+if (isAdmin()) {
     //show_title('Админ-чат');
 
     switch ($action):
@@ -24,8 +24,8 @@ if (is_admin()) {
             $total = DB::run() -> querySingle("SELECT count(*) FROM `chat`;");
             $page = paginate(setting('chatpost'), $total);
 
-            if (user('newchat') != stats_newchat()) {
-                DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), getUsername()]);
+            if (user('newchat') != statsNewChat()) {
+                DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [statsNewChat(), getUsername()]);
             }
 
             if ($total > 0) {
@@ -37,7 +37,7 @@ if (is_admin()) {
                     echo '<div class="img">'.userAvatar($data['user']).'</div>';
 
                     echo '<b>'.profile($data['user']).'</b> <small>('.dateFixed($data['time']).')</small><br>';
-                    echo userStatus($data['user']).' '.user_online($data['user']).'</div>';
+                    echo userStatus($data['user']).' '.userOnline($data['user']).'</div>';
 
                     if (getUsername() != $data['user']) {
                         echo '<div class="right">';
@@ -70,7 +70,7 @@ if (is_admin()) {
             echo '<textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>';
             echo '<input type="submit" value="Написать"></form></div><br>';
 
-            if (is_admin([101]) && $total > 0) {
+            if (isAdmin([101]) && $total > 0) {
                 echo '<i class="fa fa-times"></i> <a href="/admin/chat?act=prodel">Очистить чат</a><br>';
             }
         break;
@@ -97,7 +97,7 @@ if (is_admin()) {
                         DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [getUsername(), $msg, getClientIp(), getUserAgent(), SITETIME]);
                     }
 
-                    DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [stats_newchat(), getUsername()]);
+                    DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [statsNewChat(), getUsername()]);
 
                     setFlash('success', 'Сообщение успешно добавлено!');
                     redirect ("/admin/chat");
@@ -124,7 +124,7 @@ if (is_admin()) {
             $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($post)) {
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_online($post['user']).' <small>('.dateFixed($post['time']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.userOnline($post['user']).' <small>('.dateFixed($post['time']).')</small></div>';
                 echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
                 echo '<div class="form">';
@@ -244,7 +244,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("TRUNCATE `chat`;");
 

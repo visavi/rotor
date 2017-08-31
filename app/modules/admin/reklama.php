@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin()) {
+if (isAdmin()) {
     //show_title('Пользовательская реклама');
 
     switch ($action):
@@ -123,7 +123,7 @@ if (is_admin()) {
                                 $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", [$id]);
                                 if (!empty($data)) {
                                     DB::run() -> query("UPDATE `rekuser` SET `site`=?, `name`=?, `color`=?, `bold`=? WHERE `id`=?", [$site, $name, $color, $bold, $id]);
-                                    save_advertuser();
+                                    saveAdvertUser();
 
                                     setFlash('success', 'Рекламная ссылка успешно изменена!');
                                     redirect("/admin/reklama?page=$page");
@@ -166,7 +166,7 @@ if (is_admin()) {
                     $del = implode(',', $del);
 
                     DB::run() -> query("DELETE FROM `rekuser` WHERE `id` IN (".$del.");");
-                    save_advertuser();
+                    saveAdvertUser();
 
                     setFlash('success', 'Выбранные ссылки успешно удалены!');
                     redirect("/admin/reklama?page=$page");

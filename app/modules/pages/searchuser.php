@@ -9,7 +9,7 @@ if (isset($_GET['act'])) {
 
 //show_title('Поиск пользователей');
 
-if (is_user()) {
+if (isUser()) {
 switch ($action):
 ############################################################################################
 ##                                    Главная страница                                    ##
@@ -52,8 +52,8 @@ switch ($action):
                 $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".setting('usersearch').";");
                 while ($data = $queryuser -> fetch()) {
 
-                    echo user_gender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
-                    echo user_online($data['login']).' ('.points($data['point']).')<br>';
+                    echo userGender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
+                    echo userOnline($data['login']).' ('.points($data['point']).')<br>';
                 }
 
                 pagination($page);
@@ -84,12 +84,12 @@ switch ($action):
 
             if ($total > 0) {
                 foreach($result as $value) {
-                    echo user_gender($value['login']);
+                    echo userGender($value['login']);
 
                     if ($find == $value['login']) {
-                        echo '<b><big>'.profile($value['login'], '#ff0000').'</big></b> '.user_online($value['login']).' ('.points($value['point']).')<br>';
+                        echo '<b><big>'.profile($value['login'], '#ff0000').'</big></b> '.userOnline($value['login']).' ('.points($value['point']).')<br>';
                     } else {
-                        echo '<b>'.profile($value['login']).'</b> '.user_online($value['login']).' ('.points($value['point']).')<br>';
+                        echo '<b>'.profile($value['login']).'</b> '.userOnline($value['login']).' ('.points($value['point']).')<br>';
                     }
                 }
 

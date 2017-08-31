@@ -12,7 +12,7 @@
 
     @if ($voters->isNotEmpty())
         @foreach ($voters as $voter)
-            {!! user_gender($voter['user']) !!} {!! profile($voter['user']) !!} ({{ dateFixed($voter['created_at']) }})<br>
+            {!! userGender($voter['user']) !!} {!! profile($voter['user']) !!} ({{ dateFixed($voter['created_at']) }})<br>
         @endforeach
     @else
         {{ showError('В голосовании никто не участвовал!') }}

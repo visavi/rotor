@@ -17,7 +17,7 @@
     <a href="/forum/{{ $topic->getForum()->id }}">{{ $topic->getForum()->title }}</a> /
     <a href="/topic/{{ $topic['id'] }}/print">Печать</a> / <a href="/topic/{{ $topic['id'] }}/rss">RSS-лента</a>
 
-    @if (is_user())
+    @if (isUser())
         @if ($topic->getUser()->id == getUserId() && empty($topic['closed']) && user('point') >= setting('editforumpoint'))
            / <a href="/topic/{{ $topic['id'] }}/close?token={{ $_SESSION['token'] }}">Закрыть</a>
            / <a href="/topic/{{ $topic['id'] }}/edit">Изменить</a>
@@ -45,7 +45,7 @@
 
     <hr>
 
-    @if (is_admin())
+    @if (isAdmin())
         @if (empty($topic['closed']))
             <a href="/admin/forum?act=acttopic&amp;do=closed&amp;tid={{ $topic['id'] }}&amp;page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}">Закрыть</a> /
         @else
@@ -67,7 +67,7 @@
     @if ($vote['answers'])
         <h3>{{ $vote['title'] }}</h3>
 
-        @if (!is_user() || $vote['poll'] || $vote['closed'])
+        @if (!isUser() || $vote['poll'] || $vote['closed'])
             @foreach ($vote['voted'] as $key => $data)
                 <?php $proc = round(($data * 100) / $vote['sum'], 1); ?>
                 <?php $maxproc = round(($data * 100) / $vote['max']); ?>
@@ -119,7 +119,7 @@
                         @unless (getUserId() == $data['user_id'])
                             <a class="post-rating-down{{ $data->vote == -1 ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="Post" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                         @endunless
-                        <span>{!! format_num($data['rating']) !!}</span>
+                        <span>{!! formatNum($data['rating']) !!}</span>
                         @unless (getUserId() == $data['user_id'])
                             <a class="post-rating-up{{ $data->vote == 1 ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="Post" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                         @endunless
@@ -129,7 +129,7 @@
                 <div class="img">{!! userAvatar($data->user) !!}</div>
 
                 {{ $num }}. <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data['created_at']) }})</small><br>
-                {!! userStatus($data->user) !!} {!! user_online($data->user) !!}
+                {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
             </div>
 
             <div class="message">
@@ -144,7 +144,7 @@
                     {!! icons($ext) !!}
                     <a href="/uploads/forum/{{ $topic['id'] }}/{{ $file['hash'] }}">{{ $file['name'] }}</a> ({{ formatSize($file['size']) }})<br>
                     @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
-                        <a href="/uploads/forum/{{ $topic['id'] }}/{{ $file['hash'] }}" class="gallery" data-group="{{ $data['id'] }}">{!! resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], setting('previewsize'), ['alt' => $file['name']]) !!}</a><br>
+                        <a href="/uploads/forum/{{ $topic['id'] }}/{{ $file['hash'] }}" class="gallery" data-group="{{ $data['id'] }}">{!! resizeImage('uploads/forum/', $topic['id'].'/'.$file['hash'], setting('previewsize'), ['alt' => $file['name']]) !!}</a><br>
                     @endif
                 @endforeach
                 </div>
@@ -154,7 +154,7 @@
                 <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->getEditUser()->login }}({{ dateFixed($data['updated_at']) }})</small><br>
             @endif
 
-            @if (is_admin())
+            @if (isAdmin())
                 <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
             @endif
 
@@ -174,7 +174,7 @@
 
     {{ pagination($page) }}
 
-    @if (is_user())
+    @if (isUser())
         @if (empty($topic['closed']))
             <div class="form">
                 <form action="/topic/{{ $topic['id'] }}/create" method="post" enctype="multipart/form-data">

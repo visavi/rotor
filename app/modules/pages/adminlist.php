@@ -11,14 +11,14 @@ $total = count($arradmin);
 
 if ($total > 0) {
     foreach($arradmin as $value) {
-        echo user_gender($value['login']).' <b>'.profile($value['login']).'</b>  ('.userLevel($value['level']).') '.user_online($value['login']).'<br>';
+        echo userGender($value['login']).' <b>'.profile($value['login']).'</b>  ('.userLevel($value['level']).') '.userOnline($value['login']).'<br>';
     }
 
     echo '<br>Всего в администрации: <b>'.$total.'</b><br><br>';
     ############################################################################################
     ##                                     Быстрая почта                                      ##
     ############################################################################################
-    if (is_user()) {
+    if (isUser()) {
         echo '<big><b>Быстрая почта</b></big><br><br>';
 
         echo '<div class="form">';

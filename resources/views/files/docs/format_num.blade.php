@@ -16,9 +16,9 @@
 
 <?php
 echo bbCode(check('[code]<?php
-echo format_num(5); /* <span style="color:#00aa00">+5</span> */
-echo format_num(-3); /* <span style="color:#ff0000">-5</span> */
-echo format_num(0); /* 0 */
+echo formatNum(5); /* <span style="color:#00aa00">+5</span> */
+echo formatNum(-3); /* <span style="color:#ff0000">-5</span> */
+echo formatNum(0); /* 0 */
 ?>[/code]'));
 ?>
 

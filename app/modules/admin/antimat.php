@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin([101, 102, 103])) {
+if (isAdmin([101, 102, 103])) {
     //show_title('Управление антиматом');
 
     switch ($action):
@@ -46,7 +46,7 @@ if (is_admin([101, 102, 103])) {
 
             echo 'Всего слов в базе: <b>'.$total.'</b><br><br>';
 
-            if (is_admin([101]) && $total > 0) {
+            if (isAdmin([101]) && $total > 0) {
                 echo '<i class="fa fa-times"></i> <a href="/admin/antimat?act=prodel">Очистить</a><br>';
             }
         break;
@@ -124,7 +124,7 @@ if (is_admin([101, 102, 103])) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("DELETE FROM antimat;");
 

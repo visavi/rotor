@@ -5,7 +5,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $used = (!empty($_GET['used'])) ? 1  : 0;
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin([101, 102, 103])) {
+if (isAdmin([101, 102, 103])) {
     //show_title('Приглашения');
 
 switch ($action):
@@ -92,7 +92,7 @@ case 'new':
     echo '</select><br>';
     echo '<input type="submit" value="Отправить"></form></div><br>';
 
-    if (is_admin([101])){
+    if (isAdmin([101])){
         echo '<b><big>Рассылка ключей:</big></b><br>';
         echo '<div class="form">';
         echo 'Разослать ключи активным пользователям:<br>';
@@ -143,7 +143,7 @@ case 'send':
             }
 
             $text = 'Вы получили пригласительные ключи в количестве '.count($listkeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listkeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на этот сайт!';
-            send_private($user, getUsername(), $text);
+            sendPrivate($user, getUsername(), $text);
 
             setFlash('success', 'Ключи успешно отправлены!');
             redirect("/admin/invitations");
@@ -166,7 +166,7 @@ case 'mailing':
     $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
 
     if ($uid == $_SESSION['token']) {
-        if (is_admin([101])){
+        if (isAdmin([101])){
 
             $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
             $users = $query->fetchAll(PDO::FETCH_COLUMN);

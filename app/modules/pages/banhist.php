@@ -7,7 +7,7 @@ if (empty($_GET['uz'])) {
     $uz = check(strval($_GET['uz']));
 }
 
-if (is_user()) {
+if (isUser()) {
     //show_title('История банов '.$uz);
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);

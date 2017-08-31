@@ -8,13 +8,13 @@ $montime = date("d.m", SITETIME);
 
 echo '<div class="b"><b>Пользователи онлайн:</b></div>';
 
-$allonline = allonline();
+$allonline = allOnline();
 $total = count($allonline);
 
 if ($total > 0) {
     foreach($allonline as $key => $value) {
         $comma = (empty($key)) ? '' : ', ';
-        echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
+        echo $comma.userGender($value).'<b>'.profile($value).'</b>';
     }
 
     echo '<br>Всего пользователей: '.$total.' чел.<br><br>';
@@ -31,7 +31,7 @@ $total = count($arrhappy);
 if ($total > 0) {
     foreach($arrhappy as $key => $value) {
         $comma = (empty($key)) ? '' : ', ';
-        echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
+        echo $comma.userGender($value).'<b>'.profile($value).'</b>';
     }
 
     echo '<br>Всего именниников: '.$total.' чел.<br><br>';
@@ -48,7 +48,7 @@ $total = count($arrnovice);
 if ($total > 0) {
     foreach($arrnovice as $key => $value) {
         $comma = (empty($key)) ? '' : ', ';
-        echo $comma.user_gender($value).'<b>'.profile($value).'</b>';
+        echo $comma.userGender($value).'<b>'.profile($value).'</b>';
     }
 
     echo '<br>Всего новичков: '.$total.' чел.<br><br>';

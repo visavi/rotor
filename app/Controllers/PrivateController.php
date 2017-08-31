@@ -9,7 +9,7 @@ class PrivateController extends BaseController
      */
     public function __construct()
     {
-        if (!is_user()) {
+        if (!isUser()) {
             abort(403, 'Для просмотра писем необходимо авторизоваться!');
         }
     }

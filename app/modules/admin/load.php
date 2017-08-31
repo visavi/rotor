@@ -6,7 +6,7 @@ $cid = isset($_GET['cid']) ? abs(intval($_GET['cid'])) : 0;
 $act = isset($_GET['act']) ? check($_GET['act']) : 'index';
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
 //show_title('Управление загрузками');
 
 switch ($action):
@@ -36,7 +36,7 @@ case 'index':
 
             echo '('.$data['count'] . $subcnt . $new.')<br>';
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 echo '<a href="/admin/load?act=editcats&amp;cid='.$data['id'].'">Редактировать</a> / ';
                 echo '<a href="/admin/load?act=prodelcats&amp;cid='.$data['id'].'">Удалить</a><br>';
             }
@@ -51,7 +51,7 @@ case 'index':
 
                     echo '('.$odata['count'] . $subcnt . $new.')';
 
-                    if (is_admin([101])) {
+                    if (isAdmin([101])) {
                         echo ' (<a href="/admin/load?act=editcats&amp;cid='.$odata['id'].'">Редактировать</a> / ';
                         echo '<a href="/admin/load?act=prodelcats&amp;cid='.$odata['id'].'">Удалить</a>)';
                     }
@@ -63,7 +63,7 @@ case 'index':
         showError('Разделы загрузок еще не созданы!');
     }
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         echo '<br><div class="form">';
         echo '<form action="/admin/load?act=addcats&amp;uid='.$_SESSION['token'].'" method="post">';
         echo '<b>Раздел:</b><br>';
@@ -83,7 +83,7 @@ break;
 case 'newimport':
     //setting('newtitle') = 'FTP-импорт';
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         if (file_exists(HOME.'/uploads/loader')) {
             $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
             $downs = $querydown -> fetchAll();
@@ -376,7 +376,7 @@ case 'restatement':
 
     $uid = check($_GET['uid']);
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         if ($uid == $_SESSION['token']) {
             restatement('load');
 
@@ -400,7 +400,7 @@ case 'addcats':
     $uid = check($_GET['uid']);
     $name = check($_POST['name']);
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         if ($uid == $_SESSION['token']) {
             if (utfStrlen($name) >= 4 && utfStrlen($name) < 50) {
                 $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `cats`;");
@@ -426,7 +426,7 @@ break;
 ############################################################################################
 case 'editcats':
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         $downs = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
 
         if (!empty($downs)) {
@@ -487,7 +487,7 @@ case 'addeditcats':
     $folder = strtolower(check($_POST['folder']));
     $closed = (empty($_POST['closed'])) ? 0 : 1;
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         if ($uid == $_SESSION['token']) {
             if (utfStrlen($name) >= 4 && utfStrlen($name) < 50) {
             if (preg_match('/^[\w\-]{0,50}$/', $folder)) {
@@ -588,7 +588,7 @@ break;
 ############################################################################################
 case 'prodelcats':
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         $downs = DB::run() -> queryFetch("SELECT `c1`.*, count(`c2`.`id`) AS `subcnt` FROM `cats` `c1` LEFT JOIN `cats` `c2` ON `c2`.`parent` = `c1`.`id` WHERE `c1`.`id`=? GROUP BY `id` LIMIT 1;", [$cid]);
 
         if (!empty($downs['id'])) {
@@ -615,7 +615,7 @@ case 'delcats':
 
     $uid = check($_GET['uid']);
 
-    if (is_admin([101]) && getUsername() == setting('nickname')) {
+    if (isAdmin([101]) && getUsername() == setting('nickname')) {
         if ($uid == $_SESSION['token']) {
             $downs = DB::run() -> queryFetch("SELECT `c1`.*, count(`c2`.`id`) AS `subcnt` FROM `cats` `c1` LEFT JOIN `cats` `c2` ON `c2`.`parent` = `c1`.`id` WHERE `c1`.`id`=? GROUP BY `id` LIMIT 1;", [$cid]);
 
@@ -711,7 +711,7 @@ case 'down':
 
             $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
-            $is_admin = (is_admin([101]) && getUsername() == setting('nickname'));
+            $is_admin = (isAdmin([101]) && getUsername() == setting('nickname'));
 
             if ($is_admin) {
                 echo '<form action="/admin/load?act=deldown&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -812,7 +812,7 @@ case 'editdown':
                     echo '<input value="Загрузить" type="submit"></form></div><br>';
                 } else {
                     echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                    echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
+                    echo resizeImage('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                 }
             }
         }
@@ -965,7 +965,7 @@ case 'copyfile':
                                 if (@copy($loadfile, HOME.'/uploads/files/'.$folder.$filename)) {
                                     @chmod(HOME.'/uploads/files/'.$folder.$filename, 0666);
 
-                                    copyright_archive(HOME.'/uploads/files/'.$folder.$filename);
+                                    copyrightArchive(HOME.'/uploads/files/'.$folder.$filename);
 
                                     DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
@@ -1030,7 +1030,7 @@ case 'loadfile':
                                     move_uploaded_file($_FILES['loadfile']['tmp_name'], HOME.'/uploads/files/'.$folder.$filename);
                                     @chmod(HOME.'/uploads/files/'.$folder.$filename, 0666);
 
-                                    copyright_archive(HOME.'/uploads/files/'.$folder.$filename);
+                                    copyrightArchive(HOME.'/uploads/files/'.$folder.$filename);
 
                                     DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
@@ -1080,7 +1080,7 @@ case 'loadscreen':
             if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
                 // ------------------------------------------------------//
-                $handle = upload_image($_FILES['screen'], setting('screenupload'), setting('screenupsize'), $down['link']);
+                $handle = uploadImage($_FILES['screen'], setting('screenupload'), setting('screenupsize'), $down['link']);
                 if ($handle) {
                     $folder = $down['folder'] ? $down['folder'].'/' : '';
 
@@ -1273,7 +1273,7 @@ case 'deldown':
     $uid = check($_GET['uid']);
     $del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
 
-    if (is_admin([101]) && getUsername() == setting('nickname')) {
+    if (isAdmin([101]) && getUsername() == setting('nickname')) {
         if ($uid == $_SESSION['token']) {
             if ($del > 0) {
                 $del = implode(',', $del);

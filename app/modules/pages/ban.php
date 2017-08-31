@@ -9,7 +9,7 @@ if (isset($_GET['act'])) {
 
 //show_title('Бан пользователя');
 
-if (is_user()) {
+if (isUser()) {
     if (user('ban') == 1) {
         if (user('timeban') > SITETIME) {
             switch ($action):

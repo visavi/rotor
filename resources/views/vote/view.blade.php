@@ -8,7 +8,7 @@
 
     <h1>{{ $vote->title }}</h1>
 
-    @if ((is_user() && empty($vote['poll'])) && empty($show))
+    @if ((isUser() && empty($vote['poll'])) && empty($show))
         <form action="/votes/{{ $vote->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 

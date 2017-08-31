@@ -5,7 +5,7 @@ $act = check(Request::input('act', 'index'));
 $id = abs(intval(Request::input('id')));
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin()) {
+if (isAdmin()) {
     //show_title('Просмотр новых файлов');
 
     switch ($action):
@@ -75,7 +75,7 @@ if (is_admin()) {
 
                     if (count($downs) > 0) {
 
-                        if (is_admin([101]) && getUsername() == setting('nickname')) {
+                        if (isAdmin([101]) && getUsername() == setting('nickname')) {
                             echo '<a href="/admin/newload?act=allow&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете публикацию файла?\')">Опубликовать</a> / ';
                         }
 
@@ -91,14 +91,14 @@ if (is_admin()) {
 
                         if (!empty($new['screen'])) {
                             echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                            echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
+                            echo resizeImage('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                         } else {
                             echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br>';
                         }
 
                         echo '<br><b><big>Редактирование</big></b><br><br>';
 
-                        echo 'Добавлено: <b>'.profile($new['user']).'</b> '.user_visit($new['user']).'<br>';
+                        echo 'Добавлено: <b>'.profile($new['user']).'</b> '.userVisit($new['user']).'<br>';
                         echo 'Время последнего изменения:  ('.dateFixed($new['time']).')<br><br>';
 
                         echo '<div class="form">';
@@ -288,7 +288,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101]) && getUsername() == setting('nickname')) {
+            if (isAdmin([101]) && getUsername() == setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 

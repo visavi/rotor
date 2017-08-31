@@ -17,7 +17,7 @@ if (count($downs) > 0) {
         $output[$fp][$id] = $row;
     }
 
-    if (is_user()) {
+    if (isUser()) {
         echo 'Мои: <a href="/load/active?act=files">файлы</a>, <a href="/load/active?act=comments">комментарии</a> / ';
     }
 

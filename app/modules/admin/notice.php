@@ -4,7 +4,7 @@ view(setting('themes').'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
-if (! is_admin([101])) redirect('/admin/');
+if (! isAdmin([101])) redirect('/admin/');
 
 //show_title('Шаблоны писем');
 

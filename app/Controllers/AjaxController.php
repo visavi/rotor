@@ -81,7 +81,7 @@ class AjaxController extends BaseController
         $validation = new Validation();
         $validation
             ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', is_user(), 'Для отправки жалобы необходимо авторизоваться')
+            ->addRule('bool', isUser(), 'Для отправки жалобы необходимо авторизоваться')
             ->addRule('bool', $data, 'Выбранное вами сообщение для жалобы не существует!')
             ->addRule('bool', ! $spam, 'Жалоба на данное сообщение уже отправлена!');
 
@@ -108,7 +108,7 @@ class AjaxController extends BaseController
      */
     public function delComment()
     {
-        if (! is_admin()) {
+        if (! isAdmin()) {
             exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
         }
 
@@ -155,7 +155,7 @@ class AjaxController extends BaseController
         // Время хранения голосов
         $expiresRating = SITETIME + 3600 * 24 * 30;
 
-        if (! is_user()) {
+        if (! isUser()) {
             exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
         }
 
@@ -212,7 +212,7 @@ class AjaxController extends BaseController
         echo json_encode([
             'status' => 'success',
             'cancel' => $cancel,
-            'rating' => format_num($post['rating'])
+            'rating' => formatNum($post['rating'])
         ]);
     }
 }

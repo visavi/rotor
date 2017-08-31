@@ -25,7 +25,7 @@
                         <div class="float-right">
                             @if (!empty(user('picture')) && file_exists(HOME.'/uploads/photos/'.user('picture')))
                                 <a class="gallery" href="/uploads/photos/{{ user('picture') }}">
-                                    {!! resize_image('uploads/photos/', user('picture'), setting('previewsize'), ['alt' => user('login'), 'class' => 'img-fluid rounded']) !!}
+                                    {!! resizeImage('uploads/photos/', user('picture'), setting('previewsize'), ['alt' => user('login'), 'class' => 'img-fluid rounded']) !!}
                                 </a>
                                 <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
                             @else

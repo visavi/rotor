@@ -3,7 +3,7 @@
 <div style="text-align:center">
     @include('advert.top_all')
 
-    <?= show_advertuser(); ?>
+    <?= showAdvertUser(); ?>
 </div>
 
 {{ getFlash() }}

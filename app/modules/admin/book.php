@@ -5,7 +5,7 @@ $act = check(Request::input('act', 'index'));
 $page = abs(intval(Request::input('page')));
 $id = abs(intval(Request::input('id')));
 
-if (is_admin()) {
+if (isAdmin()) {
     //show_title('Управление гостевой');
 
     switch ($action):
@@ -41,7 +41,7 @@ if (is_admin()) {
                         echo '<b>'.$data->getUser()->login.'</b> <small>('.dateFixed($data['created_at']).')</small>';
                     } else {
                         echo '<b>'.profile($data->user).'</b> <small>('.dateFixed($data['created_at']).')</small><br>';
-                        echo userStatus($data->user).' '.user_online($data->user);
+                        echo userStatus($data->user).' '.userOnline($data->user);
                     }
 
                     echo '</div>';
@@ -70,7 +70,7 @@ if (is_admin()) {
 
                 echo 'Всего сообщений: <b>'.$total.'</b><br><br>';
 
-                if (is_admin([101])) {
+                if (isAdmin([101])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/book?act=alldel&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы уверены что хотите удалить все сообщения?\')">Очистить</a><br>';
                 }
             } else {
@@ -88,7 +88,7 @@ if (is_admin()) {
             if ($post) {
                 echo '<b>Добавление ответа</b><br><br>';
 
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> '.userStatus($post->user) . user_online($post->user).' <small>('.dateFixed($post['created_at']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> '.userStatus($post->user) . userOnline($post->user).' <small>('.dateFixed($post['created_at']).')</small></div>';
                 echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
                 echo '<div class="form">';
@@ -228,7 +228,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
                     Guest::truncate();
 

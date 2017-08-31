@@ -4,13 +4,13 @@
     {{ $news['title'] }} - @parent
 @stop
 
-@section('description', strip_str($news['text']))
+@section('description', stripString($news['text']))
 
 @section('content')
 
     <h1>{{ $news['title'] }} <small> ({{ dateFixed($news['created_at']) }})</small></h1>
 
-    @if (is_admin())
+    @if (isAdmin())
         <div class="form">
             <a href="/admin/news?act=edit&amp;id={{ $news->id }}">Редактировать</a> /
             <a href="/admin/news?act=del&amp;del={{ $news->id }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную новость?')">Удалить</a>
@@ -19,7 +19,7 @@
 
     @if ($news['image'])
         <div class="img">
-            <a href="/uploads/news/{{ $news['image'] }}">{!! resize_image('uploads/news/', $news['image'], 75, ['alt' => $news['title']]) !!}</a></div>
+            <a href="/uploads/news/{{ $news['image'] }}">{!! resizeImage('uploads/news/', $news['image'], 75, ['alt' => $news['title']]) !!}</a></div>
     @endif
 
     <div>{!! bbCode($news['text']) !!}</div>
@@ -39,13 +39,13 @@
 
                 <b>{!! profile($comm['user']) !!}</b>
                 <small> ({{ dateFixed($comm['created_at']) }})</small><br>
-                {!! userStatus($comm['user']) !!} {!! user_online($comm['user']) !!}
+                {!! userStatus($comm['user']) !!} {!! userOnline($comm['user']) !!}
             </div>
 
             <div>
                 {!! bbCode($comm['text']) !!}<br>
 
-                @if (is_admin())
+                @if (isAdmin())
                  <span class="data">({{ $comm['brow'] }}, {{ $comm['ip'] }})</span>
                 @endif
             </div>
@@ -64,7 +64,7 @@
             {{ showError('Комментариев еще нет!') }}
         @endif
 
-        @if (is_user())
+        @if (isUser())
             <div class="form">
                 <form action="/news/{{ $news->id }}/create?read=1" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

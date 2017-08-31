@@ -19,8 +19,8 @@
 <b>Примеры использования</b><br>
 <?php
 echo bbCode(check('[code]<?php
-$links = cache_admin_links();
-// Вызывается внутри функции show_admin_links()
+$links = cacheAdminLinks();
+// Вызывается внутри функции showAdminLinks()
 ?>[/code]'));
 ?>
 

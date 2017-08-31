@@ -5,7 +5,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
 //show_title('Мои данные');
 
-if (is_user()) {
+if (isUser()) {
 switch ($action):
 
 /**

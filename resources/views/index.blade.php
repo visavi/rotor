@@ -8,32 +8,32 @@
 
     @include('advert/top')
 
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> (<?=stats_news()?>)<br> <?=last_news()?>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> (<?=statsNewsDate()?>)<br> <?=lastNews()?>
 
     <div class="b">
         <i class="fa fa-comment fa-lg text-muted"></i> <b><a href="/page/recent">Общение</a></b>
     </div>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a class="index" href="/book">Гостевая книга</a> (<?=stats_guest()?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> (<?=stats_gallery()?>)<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a class="index" href="/book">Гостевая книга</a> (<?=statsGuest()?>)<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> (<?=statsGallery()?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes">Голосования</a> (<?=statVotes()?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> (<?php /*stats_offers()*/?>)<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> (<?php /*statsOffers()*/?>)<br>
 
     <div class="b">
         <i class="fa fa-forumbee fa-lg text-muted"></i>
-        <b><a href="/forum">Форум</a></b> (<?=stats_forum()?>)
+        <b><a href="/forum">Форум</a></b> (<?=statsForum()?>)
     </div>
-    <?=recenttopics()?>
+    <?=recentTopics()?>
 
     <div class="b">
-        <i class="fa fa-download fa-lg text-muted"></i> <b><a href="/load">Загрузки</a></b> (<?php /*stats_load()*/?>)
+        <i class="fa fa-download fa-lg text-muted"></i> <b><a href="/load">Загрузки</a></b> (<?php /*statsLoad()*/?>)
     </div>
-    <?php /*recentfiles()*/?>
+    <?php /*recentFiles()*/?>
 
     <div class="b">
         <i class="fa fa-globe fa-lg text-muted"></i>
-        <b><a href="/blog">Блоги</a></b> (<?=stats_blog()?>)
+        <b><a href="/blog">Блоги</a></b> (<?=statsBlog()?>)
     </div>
-    <?php /*recentblogs()*/?>
+    <?php /*recentBlogs()*/?>
 
     <div class="b">
         <i class="fa fa-cog fa-lg text-muted"></i>

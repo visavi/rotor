@@ -62,9 +62,9 @@ if (setting('doslimit')) {
         }
         // ------------------------------ Запись логов -------------------------------//
         $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getUserAgent().'|'.getUsername().'|';
-        write_files(STORAGE.'/antidos/'.getClientIp().'.dat', $write."\r\n", 0, 0666);
+        writeFiles(STORAGE.'/antidos/'.getClientIp().'.dat', $write."\r\n", 0, 0666);
         // ----------------------- Автоматическая блокировка ------------------------//
-        if (counter_string(STORAGE.'/antidos/'.getClientIp().'.dat') > setting('doslimit')) {
+        if (counterString(STORAGE.'/antidos/'.getClientIp().'.dat') > setting('doslimit')) {
 
             if (!empty(setting('errorlog'))){
 
@@ -151,7 +151,7 @@ if (empty($_SESSION['protect'])) {
 /**
  * Операции с пользователями
  */
-if ($user = is_user()) {
+if ($user = isUser()) {
 
     Registry::set('user', $user);
 
@@ -205,12 +205,12 @@ if ($user = is_user()) {
 }
 
 // Сайт закрыт для всех
-if (setting('closedsite') == 2 && !is_admin() && ! Request::is('closed', 'login')) {
+if (setting('closedsite') == 2 && !isAdmin() && ! Request::is('closed', 'login')) {
     redirect('/closed');
 }
 
 // Сайт закрыт для гостей
-if (setting('closedsite') == 1 && !is_user() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
+if (setting('closedsite') == 1 && !isUser() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
     setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
     redirect('/login');
 }
@@ -220,7 +220,7 @@ if (setting('closedsite') == 1 && !is_user() && ! Request::is('register', 'login
  */
 $browser_detect = new Mobile_Detect();
 
-if (! is_user() || empty($setting['themes'])) {
+if (! isUser() || empty($setting['themes'])) {
     if (! empty(setting('touchthemes'))) {
         if ($browser_detect->isTablet()) {
             $setting['themes'] = setting('touchthemes');

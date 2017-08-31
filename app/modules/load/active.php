@@ -55,7 +55,7 @@ case 'comments':
 
     if ($total > 0) {
 
-        $is_admin = is_admin();
+        $is_admin = isAdmin();
 
         $querypost = DB::run() -> query("SELECT `c`.*, `title`, `comments` FROM `comments` c LEFT JOIN `downs` d ON `c`.`relate_id`=`d`.`id` WHERE relate_type=? AND c.`user`=? ORDER BY c.`time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";", ['down', $uz]);
 
@@ -125,7 +125,7 @@ case 'del':
         $id = 0;
     }
 
-    if (is_admin()) {
+    if (isAdmin()) {
         if ($uid == $_SESSION['token']) {
             $downs = DB::run() -> querySingle("SELECT `down` FROM `comments` WHERE relate_type=? AND `id`=?;", ['down', $id]);
             if (!empty($downs)) {

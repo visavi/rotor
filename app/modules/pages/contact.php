@@ -3,7 +3,7 @@ view(setting('themes').'/index');
 
 $page = abs(intval(Request::input('page', 1)));
 
-if (! is_user()) abort(403);
+if (! isUser()) abort(403);
 
 //show_title('Контакт-лист');
 
@@ -33,7 +33,7 @@ case 'index':
             echo '<div class="img">'.userAvatar($contact->contactor).'</div>';
 
             echo '<b>'.profile($contact->contactor).'</b> <small>('.dateFixed($contact['created_at']).')</small><br>';
-            echo userStatus($contact->contactor).' '.user_online($contact->contactor).'</div>';
+            echo userStatus($contact->contactor).' '.userOnline($contact->contactor).'</div>';
 
             echo '<div>';
             if ($contact['text']) {
@@ -92,7 +92,7 @@ case 'create':
             if (! isIgnore($user, user())) {
 
                 $message = 'Пользователь [b]'.getUsername().'[/b] добавил вас в свой контакт-лист!';
-                send_private($user->id, getUserId(), $message);
+                sendPrivate($user->id, getUserId(), $message);
             }
 
         setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');
@@ -141,7 +141,7 @@ case 'note':
         }
     }
 
-    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$contact->getContact()->login.'</b> '.user_online($contact->contactor).':<br><br>';
+    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$contact->getContact()->login.'</b> '.userOnline($contact->contactor).':<br><br>';
 
     echo '<div class="form">';
     echo '<form method="post" action="/contact/note/'.$id.'">';

@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = '404';
 }
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
     //show_title('Просмотр лог-файлов');
 
     if (empty(setting('errorlog'))){
@@ -39,7 +39,7 @@ if (is_admin([101, 102])) {
 
                 pagination($page);
 
-                if (is_admin([101])) {
+                if (isAdmin([101])) {
                     echo '<i class="fa fa-times"></i> <a href="/admin/logs?act=clear&amp;uid='.$_SESSION['token'].'">Очистить логи</a><br>';
                 }
             } else {
@@ -111,7 +111,7 @@ if (is_admin([101, 102])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if (is_admin([101])) {
+                if (isAdmin([101])) {
                     DB::run() -> query("TRUNCATE `error`;");
 
                     setFlash('success', 'Лог-файлы успешно очищены!');

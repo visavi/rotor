@@ -21,7 +21,7 @@ if ($total > 0) {
             $lastvisit = formatTime(SITETIME - $data['nowtime'], 0).' назад';
         }
 
-        echo '<div class="b">'.user_gender($data['user']).' <b>'.profile($data['user']).'</b> ('.$lastvisit.')</div>';
+        echo '<div class="b">'.userGender($data['user']).' <b>'.profile($data['user']).'</b> ('.$lastvisit.')</div>';
 
         $position = (!empty($data['page'])) ? $data['page'] : 'Не определено';
         echo '<div>Находится: '.$position.'<br>';

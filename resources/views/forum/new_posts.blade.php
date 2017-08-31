@@ -17,9 +17,9 @@
         <div>
             {!! bbCode($data['text']) !!}<br>
 
-            Написал: {{ $data->getUser()->login }} {!! user_online($data->user) !!} <small>({{ dateFixed($data['created_at']) }})</small><br>
+            Написал: {{ $data->getUser()->login }} {!! userOnline($data->user) !!} <small>({{ dateFixed($data['created_at']) }})</small><br>
 
-            @if (is_admin())
+            @if (isAdmin())
                 <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
             @endif
 

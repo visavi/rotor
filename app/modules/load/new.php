@@ -65,7 +65,7 @@ case 'comments':
 
             echo 'Написал: '.profile($data['user']).' <small>('.dateFixed($data['time']).')</small><br>';
 
-            if (is_admin()) {
+            if (isAdmin()) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
             }
 

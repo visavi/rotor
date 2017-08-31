@@ -14,7 +14,7 @@ header('Content-type:text/html; charset=utf-8');
     <link rel="icon" href="/favicon.ico">
     <link rel="image_src" href="/assets/img/images/icon.png">
     @section('styles')
-        <?= include_style() ?>
+        <?= includeStyle() ?>
     @show
     @stack('styles')
     <link rel="stylesheet" href="/themes/motor/css/style.css">
@@ -48,14 +48,14 @@ header('Content-type:text/html; charset=utf-8');
 
                     <span class="mright">
 
-<?php if (is_user()): ?>
-    <?php if (is_admin()): ?>
+<?php if (isUser()): ?>
+    <?php if (isAdmin()): ?>
 
-        <?php if (stats_spam()>0): ?>
+        <?php if (statsSpam()>0): ?>
             <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
         <?php endif; ?>
 
-        <?php if ( user('newchat') < stats_newchat()): ?>
+        <?php if ( user('newchat') < statsNewChat()): ?>
             <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
         <?php endif; ?>
 

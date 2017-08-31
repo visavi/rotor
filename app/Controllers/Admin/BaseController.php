@@ -8,7 +8,7 @@ Class AdminController extends BaseController
 {
     public function __construct()
     {
-        if (! is_admin()) {
+        if (! isAdmin()) {
             abort('403', 'Доступ запрещен!');
         }
     }

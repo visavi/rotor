@@ -14,7 +14,7 @@ if (isset($_POST['uz'])) {
     $uz = '';
 }
 
-if (is_admin([101, 102, 103])) {
+if (isAdmin([101, 102, 103])) {
     //show_title('Бан/Разбан');
 
     switch ($action):
@@ -42,7 +42,7 @@ if (is_admin([101, 102, 103])) {
             if (!empty($user)) {
                 $uz = $user['login'];
 
-                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br><br>';
+                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.userVisit($user['login']).'<br><br>';
 
                 if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                     echo '<div class="form">';
@@ -110,7 +110,7 @@ if (is_admin([101, 102, 103])) {
 
             $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
             if (!empty($user)) {
-                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br><br>';
+                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.userVisit($user['login']).'<br><br>';
 
                 if ($user['level'] < 101 || $user['level'] > 105) {
                     if (!empty($user['ban']) && $user['timeban'] > SITETIME) {

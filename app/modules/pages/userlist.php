@@ -43,7 +43,7 @@ switch ($action):
                     echo ($page['offset'] + $i).'. <b>'.profile($data['login']).'</b> ';
                 }
                 echo '('.points($data['point']).')<br>';
-                echo userStatus($data['login']).' '.user_online($data['login']);
+                echo userStatus($data['login']).' '.userOnline($data['login']);
                 echo '</div>';
 
                 echo '<div>';

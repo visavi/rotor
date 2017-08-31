@@ -74,7 +74,7 @@ class ForumActiveController extends BaseController
     public function delete()
     {
         if (!Request::ajax()) redirect('/');
-        if (!is_admin()) abort(403, 'Удалять сообщения могут только модераторы!');
+        if (!isAdmin()) abort(403, 'Удалять сообщения могут только модераторы!');
 
         $token = check(Request::input('token'));
         $tid = abs(intval(Request::input('tid')));

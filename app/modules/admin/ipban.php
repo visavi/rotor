@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
     //show_title('IP-бан панель');
 
     switch ($action):
@@ -61,7 +61,7 @@ if (is_admin([101, 102])) {
             echo 'Примеры банов: 127.0.0.1 без отступов и пробелов<br>';
             echo 'Или по маске 127.0.0.* , 127.0.*.* , будут забанены все IP совпадающие по начальным цифрам<br><br>';
 
-            if ($total > 0 && is_admin([101])) {
+            if ($total > 0 && isAdmin([101])) {
                 echo '<i class="fa fa-times"></i> <a href="/admin/ipban?act=clear&amp;uid='.$_SESSION['token'].'">Очистить список</a><br>';
             }
         break;
@@ -134,7 +134,7 @@ if (is_admin([101, 102])) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("TRUNCATE `ban`;");
                     ipBan(true);

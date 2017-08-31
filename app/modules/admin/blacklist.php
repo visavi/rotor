@@ -14,7 +14,7 @@ if (isset($_GET['main'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
     //show_title('Черный список');
 
     switch ($main) {

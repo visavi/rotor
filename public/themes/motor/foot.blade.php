@@ -19,7 +19,7 @@
     </div>
 </div>
 @section('scripts')
-    <?= include_javascript() ?>
+    <?= includeScript() ?>
 @show
 @stack('scripts')
 </body>

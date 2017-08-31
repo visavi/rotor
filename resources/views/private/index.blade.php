@@ -40,7 +40,7 @@
                     <div class="img">{!! userAvatar($data->author) !!}</div>
                     @if ($data->author)
                         <b>{!! profile($data->author) !!}</b> ({{ dateFixed($data['created_at']) }})<br>
-                        {!! userStatus($data->author) !!} {!! user_online($data->author) !!}
+                        {!! userStatus($data->author) !!} {!! userOnline($data->author) !!}
                     @else
                         <b>Система</b>
                     @endif

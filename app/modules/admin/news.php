@@ -4,7 +4,7 @@ view(setting('themes').'/index');
 $act = check(Request::input('act', 'index'));
 $id  = abs(intval(Request::input('id', 0)));
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
     //show_title('Управление новостями');
 
 switch ($action):
@@ -41,7 +41,7 @@ case 'index':
             echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
             if (!empty($data['image'])) {
-                echo '<div class="img"><a href="/uploads/news/'.$data['image'].'">'.resize_image('uploads/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
+                echo '<div class="img"><a href="/uploads/news/'.$data['image'].'">'.resizeImage('uploads/news/', $data['image'], 75, ['alt' => $data['title']]).'</a></div>';
             }
 
             if (!empty($data['top'])){
@@ -70,7 +70,7 @@ case 'index':
 
     echo '<i class="fa fa-check"></i> <a href="/admin/news?act=add">Добавить</a><br>';
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/news?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br>';
     }
 break;
@@ -96,7 +96,7 @@ case 'edit':
 
         if (!empty($datanews['image']) && file_exists(HOME.'/uploads/news/'.$datanews['image'])){
 
-            echo '<a href="/uploads/news/'.$datanews['image'].'">'.resize_image('uploads/news/', $datanews['image'], 75, ['alt' => $datanews['title']]).'</a><br>';
+            echo '<a href="/uploads/news/'.$datanews['image'].'">'.resizeImage('uploads/news/', $datanews['image'], 75, ['alt' => $datanews['title']]).'</a><br>';
             echo '<b>'.$datanews['image'].'</b> ('.formatFileSize(HOME.'/uploads/news/'.$datanews['image']).')<br><br>';
         }
 
@@ -145,7 +145,7 @@ case 'change':
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-            $handle = upload_image($_FILES['image'], setting('filesize'), setting('fileupfoto'), $id);
+            $handle = uploadImage($_FILES['image'], setting('filesize'), setting('fileupfoto'), $id);
             if ($handle) {
 
                 // Удаление старой картинки
@@ -231,7 +231,7 @@ case 'addnews':
         }
 
         // ---------------------------- Загрузка изображения -------------------------------//
-        $handle = upload_image($_FILES['image'], setting('filesize'), setting('fileupfoto'), $lastid);
+        $handle = uploadImage($_FILES['image'], setting('filesize'), setting('fileupfoto'), $lastid);
         if ($handle) {
 
             $handle -> process(HOME.'/uploads/news/');
@@ -263,7 +263,7 @@ case 'restatement':
 
     $token = check(Request::input('token'));
 
-    if (is_admin([101])) {
+    if (isAdmin([101])) {
         if ($token == $_SESSION['token']) {
             restatement('news');
 

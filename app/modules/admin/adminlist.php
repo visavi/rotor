@@ -1,7 +1,7 @@
 <?php
 view(setting('themes').'/index');
 
-if (is_admin([101, 102, 103])) {
+if (isAdmin([101, 102, 103])) {
     //show_title('Администрация сайта');
     ############################################################################################
     ##                                     Вывод администрации                                ##
@@ -12,9 +12,9 @@ if (is_admin([101, 102, 103])) {
 
     if ($total > 0) {
         foreach($arradmin as $value) {
-            echo '<i class="fa fa-user-circle-o"></i> <b>'.profile($value['login']).'</b>  ('.userLevel($value['level']).') '.user_online($value['login']).'<br>';
+            echo '<i class="fa fa-user-circle-o"></i> <b>'.profile($value['login']).'</b>  ('.userLevel($value['level']).') '.userOnline($value['login']).'<br>';
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 echo '<i class="fa fa-pencil"></i> <a href="/admin/users?act=edit&amp;uz='.$value['login'].'">Изменить</a><br>';
             }
         }

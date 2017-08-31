@@ -47,7 +47,7 @@ class Flood extends BaseModel
         if (user('point') >= 5000) {
             $period = round(setting('floodstime') / 6);
         }
-        if (is_admin()) {
+        if (isAdmin()) {
             $period = 0;
         }
 

@@ -12,10 +12,10 @@
 
     <?php
     $links = [
-        ['url' => '/admin/gallery?act=edit&amp;gid='.$photo['id'], 'label' => 'Редактировать', 'show' => is_admin()],
-        ['url' => '/admin/gallery?act=del&amp;del='.$photo['id'].'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => is_admin()],
-        ['url' => '/gallery/'.$photo['id'].'/edit', 'label' => 'Редактировать', 'show' => (($photo['user'] == getUsername()) && !is_admin())],
-        ['url' => '/gallery/'.$photo['id'].'/delete?token='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == getUsername()) && !is_admin())],
+        ['url' => '/admin/gallery?act=edit&amp;gid='.$photo['id'], 'label' => 'Редактировать', 'show' => isAdmin()],
+        ['url' => '/admin/gallery?act=del&amp;del='.$photo['id'].'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => isAdmin()],
+        ['url' => '/gallery/'.$photo['id'].'/edit', 'label' => 'Редактировать', 'show' => (($photo['user'] == getUsername()) && !isAdmin())],
+        ['url' => '/gallery/'.$photo['id'].'/delete?token='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == getUsername()) && !isAdmin())],
     ];
     ?>
 
@@ -37,7 +37,7 @@
             @unless (getUserId() == $photo['user_id'])
                 <a class="post-rating-down<?= $photo->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="{{ Photo::class }}" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
             @endunless
-            <span>{!! format_num($photo['rating']) !!}</span>
+            <span>{!! formatNum($photo['rating']) !!}</span>
             @unless (getUserId() == $photo['user_id'])
                 <a class="post-rating-up<?= $photo->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="{{ Photo::class }}" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
             @endunless
@@ -50,7 +50,7 @@
     </div>
     <br>
 
-    <?php $nav = photo_navigation($photo['id']); ?>
+    <?php $nav = photoNavigation($photo['id']); ?>
 
     @if ($nav['next'] || $nav['prev'])
         <div class="form" style="text-align:center">

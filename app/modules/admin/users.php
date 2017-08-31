@@ -15,7 +15,7 @@ if (isset($_POST['uz'])) {
     $uz = '';
 }
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
     //show_title('Управление пользователями');
 
     switch ($action):
@@ -48,7 +48,7 @@ if (is_admin([101, 102])) {
                         $data['email'] = 'Не указан';
                     }
 
-                    echo '<hr><div>'.user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (email: '.$data['email'].')<br>';
+                    echo '<hr><div>'.userGender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (email: '.$data['email'].')<br>';
 
                     echo 'Зарегистрирован: '.dateFixed($data['joined']).'</div>';
                 }
@@ -88,9 +88,9 @@ if (is_admin([101, 102])) {
 
                     while ($data = $queryuser -> fetch()) {
 
-                        echo user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> ';
+                        echo userGender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> ';
 
-                        echo user_online($data['login']).' ('.points($data['point']).')<br>';
+                        echo userOnline($data['login']).' ('.points($data['point']).')<br>';
                     }
 
                     pagination($page);
@@ -116,7 +116,7 @@ if (is_admin([101, 102])) {
             if (!empty($user)) {
                 $uz = $user['login'];
 
-                echo user_gender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.user_visit($user['login']).'<br><br>';
+                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.userVisit($user['login']).'<br><br>';
 
                 if (getUsername() == setting('nickname') || getUsername() == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
                     if ($user['login'] == getUsername()) {

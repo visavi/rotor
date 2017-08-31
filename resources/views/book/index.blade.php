@@ -12,7 +12,7 @@
     <a href="/smiles">Смайлы</a> /
     <a href="/tags">Теги</a>
 
-    <?php if (is_admin()):?>
+    <?php if (isAdmin()):?>
         / <a href="/admin/book?page=<?=$page['current']?>">Управление</a>
     <?php endif;?>
     <hr>
@@ -23,7 +23,7 @@
             <div class="post">
                 <div class="b">
 
-                    <?php if (is_user() && getUserId() != $data['user_id']): ?>
+                    <?php if (isUser() && getUserId() != $data['user_id']): ?>
 
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
@@ -46,7 +46,7 @@
                         <b><?= setting('guestsuser') ?></b> <small>(<?=dateFixed($data['created_at'])?>)</small>
                     <?php else: ?>
                         <b><?=profile($data->user)?></b> <small>(<?=dateFixed($data['created_at'])?>)</small><br>
-                        <?=userStatus($data->user)?> <?=user_online($data->user)?>
+                        <?=userStatus($data->user)?> <?=userOnline($data->user)?>
                     <?php endif; ?>
                 </div>
 
@@ -56,7 +56,7 @@
                     <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=dateFixed($data['updated_at'])?>)</small><br>
                 <?php endif; ?>
 
-                <?php if (is_admin()): ?>
+                <?php if (isAdmin()): ?>
                     <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
                 <?php endif; ?>
 
@@ -74,7 +74,7 @@
     <?php endif; ?>
 
 
-    <?php if (is_user()): ?>
+    <?php if (isUser()): ?>
         <div class="form">
             <form action="book/add" method="post">
                 <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">

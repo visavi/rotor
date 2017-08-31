@@ -4,7 +4,7 @@
 if (@filemtime(STORAGE."/temp/courses.dat") < time()-3600 || @filesize(STORAGE."/temp/courses.dat") == 0) {
 
 	#$xml_str = file_get_contents("http://www.cbr.ru/scripts/XML_daily.asp");
-	if ($xml_str = curl_connect("http://www.cbr.ru/scripts/XML_daily.asp")){
+	if ($xml_str = curlConnect("http://www.cbr.ru/scripts/XML_daily.asp")){
 
 		$xml = new SimpleXMLElement($xml_str);
 

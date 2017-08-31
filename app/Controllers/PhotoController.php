@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\Photo;
+
 class PhotoController extends BaseController
 {
     /**
@@ -48,7 +50,7 @@ class PhotoController extends BaseController
      */
     public function create()
     {
-        if (!is_user()) {
+        if (!isUser()) {
             abort(403, 'Для добавления фотографий небходимо авторизоваться!');
         }
 
@@ -65,7 +67,7 @@ class PhotoController extends BaseController
                 ->addRule('string', $text, ['text' => 'Слишком длинное описание!'], true, 0, 1000)
                 ->addRule('bool', Flood::isFlood(), ['text' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
-            $handle = upload_image(
+            $handle = uploadImage(
                 $_FILES['photo'],
                 setting('filesize'),
                 setting('fileupfoto'),
@@ -110,7 +112,7 @@ class PhotoController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!is_user()) {
+        if (!isUser()) {
             abort(403, 'Авторизуйтесь для редактирования фотографии!');
         }
 
@@ -170,7 +172,7 @@ class PhotoController extends BaseController
 
             $validation = new Validation();
             $validation
-                ->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->addRule('bool', isUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                 ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
                 ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!'])
@@ -231,7 +233,7 @@ class PhotoController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!is_user()) {
+        if (!isUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
@@ -290,7 +292,7 @@ class PhotoController extends BaseController
 
         $token = check(Request::input('token'));
 
-        if (!is_user()) {
+        if (!isUser()) {
             abort(403, 'Для удаления фотографий небходимо авторизоваться!');
         }
 

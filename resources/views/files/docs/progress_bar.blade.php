@@ -18,13 +18,13 @@
 
 <?php
 echo bbCode(check('[code]<?php
-progress_bar(55);
-progress_bar(35, \'Батарейка\');
+progressBar(55);
+progressBar(35, \'Батарейка\');
 /* Результат выполнения функции представлен ниже */
 ?>[/code]'));
 
-progress_bar(55).'<br>';
-progress_bar(35, 'Батарейка').'<br>';
+progressBar(55).'<br>';
+progressBar(35, 'Батарейка').'<br>';
 ?>
 
 <br>

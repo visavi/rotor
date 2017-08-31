@@ -38,7 +38,7 @@ class TopicController extends BaseController
             abort('default', 'Данной темы не существует!');
         }
 
-        if (is_user()) {
+        if (isUser()) {
             if ($topic['posts'] > $topic['bookmark_posts']) {
                 Bookmark::where('topic_id', $tid)
                     ->where('user_id', getUserId())
@@ -89,7 +89,7 @@ class TopicController extends BaseController
         $msg = check(Request::input('msg'));
         $token = check(Request::input('token'));
 
-        if (!is_user()) abort(403, 'Авторизуйтесь для добавления сообщения!');
+        if (!isUser()) abort(403, 'Авторизуйтесь для добавления сообщения!');
 
         $topics = DB::run()->queryFetch("SELECT `topics`.*, `forums`.`parent_id` FROM `topics` LEFT JOIN `forums` ON `topics`.`forum_id`=`forums`.`id` WHERE `topics`.`id`=? LIMIT 1;", [$tid]);
 
@@ -151,7 +151,7 @@ class TopicController extends BaseController
                     if ($user['login']) {
 
                         if ($user['notify']) {
-                            send_private($user['login'], getUsername(), 'Пользователь ' . getUsername() . ' ответил вам в теме [url=' . setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / setting('forumpost')) . '#post_' . $lastid . ']' . $newTopic['title'] . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
+                            sendPrivate($user['login'], getUsername(), 'Пользователь ' . getUsername() . ' ответил вам в теме [url=' . setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / setting('forumpost')) . '#post_' . $lastid . ']' . $newTopic['title'] . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
                         }
                     }
                 }
@@ -244,7 +244,7 @@ class TopicController extends BaseController
 
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', is_user(), 'Для закрытия тем необходимо авторизоваться')
+            ->addRule('bool', isUser(), 'Для закрытия тем необходимо авторизоваться')
             ->addRule('not_empty', $del, 'Отстутствуют выбранные сообщения для удаления!')
             ->addRule('empty', $topic['closed'], 'Редактирование невозможно. Данная тема закрыта!')
             ->addRule('equal', [$isModer, true], 'Удалять сообщения могут только кураторы темы!');
@@ -287,7 +287,7 @@ class TopicController extends BaseController
 
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', is_user(), 'Для закрытия тем необходимо авторизоваться')
+            ->addRule('bool', isUser(), 'Для закрытия тем необходимо авторизоваться')
             ->addRule('max', [user('point'), setting('editforumpoint')], 'Для закрытия тем вам необходимо набрать ' . points(setting('editforumpoint')) . '!')
             ->addRule('not_empty', $topic, 'Выбранная вами тема не существует, возможно она была удалена!')
             ->addRule('equal', [$topic['user_id'], getUserId()], 'Вы не автор данной темы!')
@@ -319,7 +319,7 @@ class TopicController extends BaseController
      */
     public function edit($tid)
     {
-        if (!is_user()) abort(403, 'Авторизуйтесь для изменения темы!');
+        if (!isUser()) abort(403, 'Авторизуйтесь для изменения темы!');
 
         if (user('point') < setting('editforumpoint')) {
             abort('default', 'У вас недостаточно актива для изменения темы!');
@@ -387,7 +387,7 @@ class TopicController extends BaseController
     {
         $page = abs(intval(Request::input('page')));
 
-        if (!is_user()) abort(403, 'Авторизуйтесь для изменения сообщения!');
+        if (!isUser()) abort(403, 'Авторизуйтесь для изменения сообщения!');
 
         $post = Post::select('posts.*', 'moderators', 'closed')
             ->leftJoin('topics', 'posts.topic_id', '=', 'topics.id')
@@ -462,7 +462,7 @@ class TopicController extends BaseController
      */
     public function vote($tid)
     {
-        if (!is_user()) abort(403, 'Авторизуйтесь для голосования!');
+        if (!isUser()) abort(403, 'Авторизуйтесь для голосования!');
 
         $vote = Vote::where('topic_id', $tid)->first();
         if (!$vote) {

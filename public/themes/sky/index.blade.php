@@ -11,10 +11,10 @@ header("Content-type:text/html; charset=utf-8");
         @show
     </title>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-<?= include_style(); ?>
+<?= includeStyle(); ?>
 <link rel="stylesheet" href="/themes/sky/css/style.css" media="screen">
 <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
-<?= include_javascript(); ?>
+<?= includeScript(); ?>
 <meta name="keywords" content="@yield('keywords', setting('keywords'))">
 <meta name="description" content="@yield('description', setting('description'))">
 <meta name="generator" content="RotorCMS <?= env('VERSION') ?>">
@@ -80,7 +80,7 @@ header("Content-type:text/html; charset=utf-8");
                                  <li><a href="/adminlist">Администрация</a></li>
                                  <li><a href="/userlist">Пользователи</a></li>
                 		   </ul> </li>
-<?php if (!is_user()): ?>
+<?php if (!isUser()): ?>
 <li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
  <?php else: ?>
   <li><a href="/logout" onclick="return confirm(\'Вы действительно хотите выйти?\')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
@@ -105,17 +105,17 @@ header("Content-type:text/html; charset=utf-8");
                                         <div>
 
 
-<?php if (is_user()): ?>
+<?php if (isUser()): ?>
 
-<?php if (is_admin()): ?>
+<?php if (isAdmin()): ?>
     <div class="nmenu">
     <i class="fa fa-wrench"></i> <a href="/admin">Панель</a>
 
-    <?php if (stats_spam()>0): ?>
+    <?php if (statsSpam()>0): ?>
         &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
     <?php endif; ?>
 
-    <?php if (user('newchat')<stats_newchat()): ?>
+    <?php if (user('newchat')<statsNewChat()): ?>
         &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
     <?php endif; ?>
 

@@ -11,7 +11,7 @@
     <div class="form">
         <form method="post" action="/mail">
 
-            @if (! is_user())
+            @if (! isUser())
                 Ваше имя:<br><input name="name" maxlength="20"><br>
                 Ваш email:<br><input name="email" maxlength="50"><br>
             @else

@@ -13,7 +13,7 @@
 
 <?php
 echo bbCode(check('[code]<?php
-if(is_user()) {
+if(isUser()) {
 	echo \'Пользователь авторизирован\';
 } else {
 	echo \'Пользователь не авторизирован\';

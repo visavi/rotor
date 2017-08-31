@@ -14,7 +14,7 @@
     <code>app/views/search/index.blade.php</code><br><br>
     Вставьте сюда сформированный код<br><br>
 
-    @if (is_admin([101]))
+    @if (isAdmin([101]))
         <a href="/admin/files?act=edit&amp;path=search/&amp;file=index">Ссылка на редактирование</a><br><br>
     @endif
 

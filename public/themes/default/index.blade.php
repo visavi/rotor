@@ -13,7 +13,7 @@ header("Content-type:text/html; charset=utf-8");
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="image_src" href="/assets/img/images/icon.png">
     @section('styles')
-        <?= include_style() ?>
+        <?= includeStyle() ?>
     @show
     @stack('styles')
     <link rel="stylesheet" href="/themes/default/css/style.css">

@@ -6,7 +6,7 @@
 <br><br>
 
 <pre class="d">
-<b>include_javascript();</b>
+<b>includeScript();</b>
 </pre><br>
 
 <b>Параметры функции</b><br>
@@ -17,7 +17,7 @@
 <b>Примеры использования</b><br>
 <?php
 echo bbCode(check('[code]<?php
-include_javascript();
+includeScript();
 ?>[/code]'));
 ?>
 

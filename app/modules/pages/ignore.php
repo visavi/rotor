@@ -3,7 +3,7 @@ view(setting('themes').'/index');
 
 $page = abs(intval(Request::input('page', 1)));
 
-if (! is_user()) abort(403);
+if (! isUser()) abort(403);
 
 //show_title('Игнор-лист');
 
@@ -33,7 +33,7 @@ case 'index':
             echo '<div class="img">'.userAvatar($data->ignoring).'</div>';
 
             echo '<b>'.profile($data->ignoring).'</b> <small>('.dateFixed($data['created_at']).')</small><br>';
-            echo userStatus($data->ignoring).' '.user_online($data->ignoring).'</div>';
+            echo userStatus($data->ignoring).' '.userOnline($data->ignoring).'</div>';
 
             echo '<div>';
             if ($data['text']) {
@@ -92,7 +92,7 @@ case 'create':
 
         if (! isIgnore($user, user())) {
             $message = 'Пользователь [b]' . getUsername() . '[/b] добавил вас в свой игнор-лист!';
-            send_private($user->id, getUserId(), $message);
+            sendPrivate($user->id, getUserId(), $message);
         }
 
         setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
@@ -140,7 +140,7 @@ case 'note':
         }
     }
 
-    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$ignore->getIgnore()->login.'</b> '.user_online($ignore->ignoring).':<br><br>';
+    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$ignore->getIgnore()->login.'</b> '.userOnline($ignore->ignoring).':<br><br>';
 
     echo '<div class="form">';
     echo '<form method="post" action="/ignore/note/'.$id.'">';

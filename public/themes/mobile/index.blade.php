@@ -10,10 +10,10 @@ header('Content-type:text/html; charset=utf-8');
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="image_src" href="/assets/img/images/icon.png"/>
-    <?= include_style() ?>
+    <?= includeStyle() ?>
     <link rel="stylesheet" href="/themes/mobile/css/style.css"/>
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml"/>
-    <?= include_javascript() ?>
+    <?= includeScript() ?>
     <meta name="keywords" content="%KEYWORDS%"/>
     <meta name="description" content="%DESCRIPTION%"/>
     <meta name="generator" content="RotorCMS <?= env('VERSION') ?>"/>

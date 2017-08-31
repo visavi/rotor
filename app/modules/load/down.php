@@ -27,7 +27,7 @@ case 'index':
             <?php //show_title($cats['name']); ?>
 
             <?php
-            if (is_admin([101, 102])) {
+            if (isAdmin([101, 102])) {
                 echo '<a href="/admin/load?act=down&amp;cid='.$cid.'&amp;page='.$page.'">Управление</a>';
             }
             ?>
@@ -42,7 +42,7 @@ case 'index':
                 <li class="active"><?= $cats['name'] ?></li>
             </ol>
 
-            <?php if (is_user() && ! $cats['closed']): ?>
+            <?php if (isUser() && ! $cats['closed']): ?>
                 <div class="float-right">
                     <a class="btn btn-success" href="/load/add?cid=<?= $cid ?>">Добавить файл</a>
                 </div><br>
@@ -166,13 +166,13 @@ case 'view':
     if (!empty($downs)) {
         if (!empty($downs['active']) || $downs['user'] == getUsername()) {
 
-            if (is_admin([101, 102])) {
+            if (isAdmin([101, 102])) {
                 echo ' <a href="/admin/load?act=editdown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Редактировать</a> / ';
                 echo '<a href="/admin/load?act=movedown&amp;cid='.$downs['category_id'].'&amp;id='.$id.'">Переместить</a>';
             }
 
             //show_title($downs['title']);
-            //setting('description') =  strip_str($downs['text']);
+            //setting('description') =  stripString($downs['text']);
 
             $folder = $downs['cats_folder'] ? $downs['cats_folder'].'/' : '';
 ?>
@@ -196,7 +196,7 @@ case 'view':
             $ext = getExtension($downs['link']);
 
             if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resize_image('uploads/files/'.$folder, $downs['link'], setting('previewsize'), ['alt' => $downs['title']]).'</a><br>';
+                echo '<a href="/uploads/files/'.$folder.$downs['link'].'" class="gallery">'.resizeImage('uploads/files/'.$folder, $downs['link'], setting('previewsize'), ['alt' => $downs['title']]).'</a><br>';
             }
 
             echo '<div class="message">'.bbCode($downs['text']).'</div><br>';
@@ -207,7 +207,7 @@ case 'view':
 
                 if ($ext != 'mp4') {
                     echo 'Скриншот:<br>';
-                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resize_image('uploads/screen/'.$folder, $downs['screen'], setting('previewsize'), ['alt' => $downs['title']]).'</a><br><br>';
+                    echo '<a href="/uploads/screen/'.$folder.$downs['screen'].'" class="gallery">'.resizeImage('uploads/screen/'.$folder, $downs['screen'], setting('previewsize'), ['alt' => $downs['title']]).'</a><br><br>';
                 }
             }
 
@@ -248,7 +248,7 @@ case 'view':
 
                 $filesize = (!empty($downs['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$downs['link']) : 0;
 
-                if (is_user()) {
+                if (isUser()) {
                     echo '<i class="fa fa-download"></i> <b><a href="/load/down?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br>';
                 } else {
                     echo '<div class="form">';
@@ -268,7 +268,7 @@ case 'view':
                 echo '<br>Рейтинг: '.ratingVote($rating).'<br>';
                 echo 'Всего голосов: <b>'.$downs['rated'].'</b><br><br>';
 
-                if (is_user()) {
+                if (isUser()) {
                     echo '<form action="/load/down?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo '<select name="score">';
                     echo '<option value="5">Отлично</option>';
@@ -285,7 +285,7 @@ case 'view':
                     echo 'Последнее скачивание: '.dateFixed($downs['last_load']).'<br>';
                 }
 
-                if (is_user()) {
+                if (isUser()) {
                     echo '<br>Скопировать адрес:<br>';
                     echo '<input name="text" size="40" value="'.setting('home').'/uploads/files/'.$folder.$downs['link'].'"><br>';
                 }
@@ -312,7 +312,7 @@ case 'load':
 
     $protect = check(Request::input('protect'));
 
-    if (is_user() || $protect == $_SESSION['protect']) {
+    if (isUser() || $protect == $_SESSION['protect']) {
 
         $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id`=? LIMIT 1;", [$id]);
 
@@ -360,7 +360,7 @@ case 'vote':
         $score = 0;
     }
 
-    if (is_user()) {
+    if (isUser()) {
         if ($uid == $_SESSION['token']) {
             if ($score > 0 && $score <= 5) {
                 $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
@@ -426,7 +426,7 @@ case 'comments':
             if ($total > 0) {
 
 
-                $is_admin = is_admin();
+                $is_admin = isAdmin();
                 if ($is_admin) {
                     echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
@@ -442,7 +442,7 @@ case 'comments':
                     }
 
                     echo '<b>'.profile($data['user']).'</b> <small>('.dateFixed($data['time']).')</small><br>';
-                    echo userStatus($data['user']).' '.user_online($data['user']).'</div>';
+                    echo userStatus($data['user']).' '.userOnline($data['user']).'</div>';
 
                     if (!empty(getUsername()) && getUsername() != $data['user']) {
                         echo '<div class="right">';
@@ -457,7 +457,7 @@ case 'comments':
 
                     echo '<div class="message">'.bbCode($data['text']).'<br>';
 
-                    if (is_admin()) {
+                    if (isAdmin()) {
                         echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
                     }
                     echo '</div>';
@@ -472,7 +472,7 @@ case 'comments':
                 showError('Комментариев еще нет!');
             }
 
-            if (is_user()) {
+            if (isUser()) {
                 echo '<div class="form">';
                 echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<b>Сообщение:</b><br>';
@@ -503,7 +503,7 @@ case 'add':
     $uid = check($_GET['uid']);
     $msg = check($_POST['msg']);
 
-    if (is_user()) {
+    if (isUser()) {
         if ($uid == $_SESSION['token']) {
             if (utfStrlen($msg) >= 5 && utfStrlen($msg) < 1000) {
 
@@ -552,7 +552,7 @@ case 'spam':
     $uid = check($_GET['uid']);
     $pid = abs(intval($_GET['pid']));
 
-    if (is_user()) {
+    if (isUser()) {
         if ($uid == $_SESSION['token']) {
             $data = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
@@ -593,11 +593,11 @@ case 'reply':
 
     echo '<b><big>Ответ на сообщение</big></b><br><br>';
 
-    if (is_user()) {
+    if (isUser()) {
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
         if (!empty($post)) {
-            echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.userStatus($post['user']).' '.user_online($post['user']).' <small>('.dateFixed($post['time']).')</small></div>';
+            echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.userStatus($post['user']).' '.userOnline($post['user']).' <small>('.dateFixed($post['time']).')</small></div>';
             echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
             echo '<div class="form">';
@@ -623,7 +623,7 @@ case 'quote':
     $pid = abs(intval($_GET['pid']));
 
     echo '<b><big>Цитирование</big></b><br><br>';
-    if (is_user()) {
+    if (isUser()) {
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
         if (!empty($post)) {
@@ -651,7 +651,7 @@ case 'edit':
 
     $pid = abs(intval($_GET['pid']));
 
-    if (is_user()) {
+    if (isUser()) {
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, getUsername()]);
 
         if (!empty($post)) {
@@ -686,7 +686,7 @@ case 'editpost':
     $pid = abs(intval($_GET['pid']));
     $msg = check($_POST['msg']);
 
-    if (is_user()) {
+    if (isUser()) {
         if ($uid == $_SESSION['token']) {
             if (utfStrlen($msg) >= 5 && utfStrlen($msg) < 1000) {
                 $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, getUsername()]);
@@ -731,7 +731,7 @@ case 'del':
         $del = 0;
     }
 
-    if (is_admin()) {
+    if (isAdmin()) {
         if ($uid == $_SESSION['token']) {
             if (!empty($del)) {
                 $del = implode(',', $del);

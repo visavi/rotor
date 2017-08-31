@@ -28,20 +28,20 @@
                             <a title="Редактировать" href="/news/{{ $news->id }}/{{ $data['id'] }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
                         @endif
 
-                        @if (is_admin())
+                        @if (isAdmin())
                             <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data['relate_id'] }}" data-id="{{ $data['id'] }}" data-type="{{ News::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove text-muted"></i></a>
                         @endif
                     </div>
 
                     <b>{!! profile($data['user']) !!}</b>
                     <small> ({{ dateFixed($data['created_at']) }})</small><br>
-                    {!! userStatus($data['user']) !!} {!! user_online($data['user']) !!}
+                    {!! userStatus($data['user']) !!} {!! userOnline($data['user']) !!}
                 </div>
 
                 <div class="message">
                     {!! bbCode($data['text']) !!}<br>
 
-                    @if (is_admin())
+                    @if (isAdmin())
                         <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
                     @endif
                 </div>
@@ -57,7 +57,7 @@
             {{ showError('Комментариев еще нет!') }}
         @endif
 
-        @if (is_user())
+        @if (isUser())
             <div class="form">
                 <form action="/news/{{ $news->id }}/comments" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

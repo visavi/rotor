@@ -1,15 +1,15 @@
 <div class="menu">
-    @if (is_user())
-        {!! user_gender(user()) !!}
+    @if (isUser())
+        {!! userGender(user()) !!}
         {!! profile(user()) !!} &bull;
 
-        @if (is_admin())
+        @if (isAdmin())
             <a href="/admin">Панель</a> &bull;
-            @if (stats_spam()>0)
+            @if (statsSpam()>0)
                 <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a> &bull;
             @endif
 
-            @if (user('newchat')<stats_newchat())
+            @if (user('newchat')<statsNewChat())
                 <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a> &bull;
             @endif
         @endif

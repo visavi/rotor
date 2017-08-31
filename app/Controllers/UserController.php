@@ -21,7 +21,7 @@ class UserController extends BaseController
      */
     public function note($login)
     {
-        if (! is_admin()) {
+        if (! isAdmin()) {
             abort(403, 'Данная страница доступна только администрации!');
         }
 
@@ -68,7 +68,7 @@ class UserController extends BaseController
      */
     public function rating($login)
     {
-        if (! is_user()) {
+        if (! isUser()) {
             abort(403, 'Для изменения рейтинга небходимо авторизоваться!');
         }
 
@@ -142,7 +142,7 @@ class UserController extends BaseController
                     ]);
                 }
 
-                send_private($user->id, getUserId(), $text);
+                sendPrivate($user->id, getUserId(), $text);
 
                 setFlash('success', 'Репутация успешно изменена!');
                 redirect('/user/'.$user->login);
@@ -160,7 +160,7 @@ class UserController extends BaseController
      */
     public function register()
     {
-        if (is_user()) {
+        if (isUser()) {
             abort('403', 'Вы уже регистрировались, запрещено создавать несколько аккаунтов!');
         }
 
@@ -266,8 +266,8 @@ class UserController extends BaseController
                     ]);
 
                     // ----- Уведомление в приват ----//
-                    $textpriv = text_private(1, ['%USERNAME%' => $logs, '%SITENAME%' => setting('home')]);
-                    send_private($user->id, 0, $textpriv);
+                    $textpriv = textPrivate(1, ['%USERNAME%' => $logs, '%SITENAME%' => setting('home')]);
+                    sendPrivate($user->id, 0, $textpriv);
 
                     $subject = 'Регистрация на сайте ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'), true);
@@ -297,7 +297,7 @@ class UserController extends BaseController
      */
     public function login()
     {
-        if (is_user()) {
+        if (isUser()) {
             abort('403', 'Вы уже авторизованы!');
         }
 
@@ -336,7 +336,7 @@ class UserController extends BaseController
      */
     public function logout()
     {
-        $domain = check_string(setting('home'));
+        $domain = checkString(setting('home'));
 
         $_SESSION = [];
         setcookie('password', '', SITETIME - 3600, '/', $domain, null, true);
@@ -351,7 +351,7 @@ class UserController extends BaseController
      */
     public function profile()
     {
-        if (! is_user()) {
+        if (! isUser()) {
             abort(403, 'Авторизуйтесь для изменения данных в профиле!');
         }
 

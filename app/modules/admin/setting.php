@@ -3,7 +3,7 @@ view(setting('themes').'/index');
 
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 
-if (is_admin([101])) {
+if (isAdmin([101])) {
     //show_title('Настройки сайта');
 
     $queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");

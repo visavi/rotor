@@ -17,7 +17,7 @@ if (isset($_GET['type'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
     //show_title('Предложения и проблемы');
 
     switch ($action):
@@ -82,7 +82,7 @@ if (is_admin([101, 102])) {
                 showError('Записей еще нет!');
             }
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/offers?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
         break;
@@ -332,7 +332,7 @@ if (is_admin([101, 102])) {
 
             $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
                     DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `comments` WHERE `offers`.`id`=`comments`.`relate_id` AND relate_type='offer');");
 

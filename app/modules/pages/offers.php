@@ -45,7 +45,7 @@ switch ($action):
             echo '<a href="/offers?type=0">Предложения</a> ('.$total2.') / <b>Проблемы</b> ('.$total.')';
         }
 
-        if (is_admin([101, 102])) {
+        if (isAdmin([101, 102])) {
             echo ' / <a href="/admin/offers?type='.$type.'&amp;page='.$page['current'].'">Управление</a>';
         }
 
@@ -134,7 +134,7 @@ switch ($action):
         echo '<i class="fa fa-book"></i> <a href="/offers?type=0">Предложения</a>  ('.$total.') / ';
         echo '<a href="/offers?type=1">Проблемы</a> ('.$total2.')';
 
-        if (is_admin([101, 102])) {
+        if (isAdmin([101, 102])) {
             echo ' / <a href="/admin/offers?act=view&amp;id='.$id.'">Управление</a>';
         }
         echo '<hr>';
@@ -196,11 +196,11 @@ switch ($action):
 
                     echo '<b>'.profile($comm['user']).'</b>';
                     echo '<small> ('.dateFixed($comm['time']).')</small><br>';
-                    echo userStatus($comm['user']).' '.user_online($comm['user']).'</div>';
+                    echo userStatus($comm['user']).' '.userOnline($comm['user']).'</div>';
 
                     echo '<div>'.bbCode($comm['text']).'<br>';
 
-                    if (is_admin()) {
+                    if (isAdmin()) {
                         echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
                     }
 
@@ -211,7 +211,7 @@ switch ($action):
                 showError('Комментариев еще нет!');
             }
 
-            if (is_user()) {
+            if (isUser()) {
                 if (empty($queryoff['closed'])) {
                     echo '<div class="form"><form action="/offers?act=addcomm&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo '<b>Комментарий:</b><br>';
@@ -240,7 +240,7 @@ switch ($action):
     ############################################################################################
     case 'edit':
 
-        if (is_user()) {
+        if (isUser()) {
             $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
             if (!empty($queryoff)) {
                 if ($queryoff['status'] <= 1) {
@@ -284,7 +284,7 @@ switch ($action):
         $types = (empty($_POST['types'])) ? 0 : 1;
 
         if ($uid == $_SESSION['token']) {
-            if (is_user()) {
+            if (isUser()) {
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
@@ -340,7 +340,7 @@ switch ($action):
 
             if ($total > 0) {
 
-                $is_admin = is_admin();
+                $is_admin = isAdmin();
 
                 if ($is_admin) {
                     echo '<form action="/offers?act=delcomm&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -357,7 +357,7 @@ switch ($action):
                     }
 
                     echo '<b>'.profile($data['user']).'</b> <small>('.dateFixed($data['time']).')</small><br>';
-                    echo userStatus($data['user']).' '.user_online($data['user']).'</div>';
+                    echo userStatus($data['user']).' '.userOnline($data['user']).'</div>';
 
                     echo '<div>'.bbCode($data['text']).'<br>';
 
@@ -377,7 +377,7 @@ switch ($action):
                 showError('Комментариев еще нет!');
             }
 
-            if (is_user()) {
+            if (isUser()) {
                 if (empty($queryoff['closed'])) {
                     echo '<div class="form">';
                     echo '<form action="/offers?act=addcomm&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -411,7 +411,7 @@ switch ($action):
 
         //setting('newtitle') = 'Добавление комментария';
 
-        if (is_user()) {
+        if (isUser()) {
             if ($uid == $_SESSION['token']) {
                 if (utfStrlen($msg) >= 5 && utfStrlen($msg) <= 1000) {
                     $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
@@ -456,7 +456,7 @@ switch ($action):
 
         $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
 
-        if (is_user()) {
+        if (isUser()) {
             if ($uid == $_SESSION['token']) {
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
@@ -578,7 +578,7 @@ switch ($action):
             $del = 0;
         }
 
-        if (is_admin()) {
+        if (isAdmin()) {
             if ($uid == $_SESSION['token']) {
                 if (!empty($del)) {
                     $del = implode(',', $del);

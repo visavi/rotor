@@ -60,7 +60,7 @@ case 'index':
 ############################################################################################
 case 'create':
 
-    if (is_user()) {
+    if (isUser()) {
         if (user('point') >= 50) {
 
             if (Request::isMethod('post')) {
@@ -118,7 +118,7 @@ case 'create':
                                 $user->money -= $price;
                                 $user->save();
 
-                                save_advertuser();
+                                saveAdvertUser();
 
                                 setFlash('success', 'Рекламная ссылка успешно размещена (Cписано: '.moneys($price).')');
                                 redirect("/reklama");

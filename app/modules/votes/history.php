@@ -76,7 +76,7 @@ switch ($action):
                         $maxproc = round(($data * 100) / $max);
 
                         echo '<b>'.$key.'</b> (Голосов: '.$data.')<br>';
-                        progress_bar($maxproc, $proc.'%').'<br><br>';
+                        progressBar($maxproc, $proc.'%').'<br><br>';
                     }
 
                     echo 'Вариантов: <b>'.$total.'</b><br><br>';

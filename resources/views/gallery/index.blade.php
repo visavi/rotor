@@ -11,11 +11,11 @@
 <?php
 
 $links = [
-    ['url' => '/gallery/album/'.user('login'), 'label' => 'Мои альбом', 'show' => is_user()],
-    ['url' => '/gallery/comments/'.user('login'), 'label' => 'Мои комментарии', 'show' => is_user()],
+    ['url' => '/gallery/album/'.user('login'), 'label' => 'Мои альбом', 'show' => isUser()],
+    ['url' => '/gallery/comments/'.user('login'), 'label' => 'Мои комментарии', 'show' => isUser()],
     ['url' => '/gallery/albums', 'label' => 'Все альбомы'],
     ['url' => '/gallery/comments', 'label' => 'Все комментарии'],
-    ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => is_admin()],
+    ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => isAdmin()],
 ];
 ?>
     <ol class="breadcrumb">
@@ -29,11 +29,11 @@ $links = [
 
             <div class="b"><i class="fa fa-picture-o"></i>
                 <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b>
-                ({{ formatFileSize(HOME.'/uploads/pictures/'.$data['link']) }}) (Рейтинг: {!! format_num($data['rating']) !!})
+                ({{ formatFileSize(HOME.'/uploads/pictures/'.$data['link']) }}) (Рейтинг: {!! formatNum($data['rating']) !!})
             </div>
 
             <div>
-                <a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]) !!}</a><br>
+                <a href="/gallery/{{ $data['id'] }}">{!! resizeImage('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]) !!}</a><br>
 
                 @if ($data['text'])
                     {!! bbCode($data['text']) !!}<br>

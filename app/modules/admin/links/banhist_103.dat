@@ -1,1 +1,1 @@
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/banhist">История банов</a> (<?=stats_banhist()?>)<br>
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/banhist">История банов</a> (<?=statsBanHist()?>)<br>

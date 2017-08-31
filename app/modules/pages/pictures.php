@@ -1,6 +1,6 @@
 <?php
 
-if (! is_user()) {
+if (! isUser()) {
     abort(403, 'Чтобы загружать фотографии необходимо авторизоваться');
 }
 
@@ -18,7 +18,7 @@ case 'index':
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-        $handle = upload_image($_FILES['photo'], setting('filesize'), setting('fileupfoto'), $newName);
+        $handle = uploadImage($_FILES['photo'], setting('filesize'), setting('fileupfoto'), $newName);
         if (! $handle) {
             $validation -> addError(['photo' => 'Не удалось загрузить фотографию!']);
         }

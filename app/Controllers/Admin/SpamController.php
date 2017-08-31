@@ -16,7 +16,7 @@ class SpamController extends AdminController
 
     public function __construct()
     {
-        if (! is_admin([101, 102, 103])) {
+        if (! isAdmin([101, 102, 103])) {
             abort('403', 'Доступ запрещен!');
         }
 

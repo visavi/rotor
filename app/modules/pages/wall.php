@@ -28,7 +28,7 @@ if (!empty($queryuser)) {
 
             if ($total > 0) {
 
-                $is_admin = is_admin();
+                $is_admin = isAdmin();
 
                 if ($is_admin) {
                     echo '<form action="/wall?act=del&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -47,7 +47,7 @@ if (!empty($queryuser)) {
                     }
 
                     echo '<b>'.profile($data['login']).'</b> <small>('.dateFixed($data['time']).')</small><br>';
-                    echo userStatus($data['login']).' '.user_online($data['login']).'</div>';
+                    echo userStatus($data['login']).' '.userOnline($data['login']).'</div>';
 
                     if ($uz == getUsername() && getUsername() != $data['login']) {
                         echo '<div class="right">';
@@ -68,7 +68,7 @@ if (!empty($queryuser)) {
                 showError('Записок еще нет!');
             }
 
-            if (is_user()) {
+            if (isUser()) {
 
                 echo '<div class="form">';
                 echo '<form action="/wall?act=add&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -91,8 +91,8 @@ if (!empty($queryuser)) {
             $uid = check($_GET['uid']);
             $msg = check($_POST['msg']);
 
-            if (is_user()) {
-                if ($uz == getUsername() || is_admin() || is_contact($uz, getUsername())){
+            if (isUser()) {
+                if ($uz == getUsername() || isAdmin() || is_contact($uz, getUsername())){
                     if ($uid == $_SESSION['token']) {
                         if (utfStrlen($msg) >= 5 && utfStrlen($msg) < 1000) {
                             $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, getUsername()]);
@@ -141,7 +141,7 @@ if (!empty($queryuser)) {
             $uid = check($_GET['uid']);
             $id = abs(intval($_GET['id']));
 
-            if (is_user()) {
+            if (isUser()) {
                 if ($uid == $_SESSION['token']) {
                     $data = DB::run() -> queryFetch("SELECT * FROM `wall` WHERE `user`=? AND `id`=? LIMIT 1;", [getUsername(), $id]);
 
@@ -219,7 +219,7 @@ if (!empty($queryuser)) {
                 $del = 0;
             }
 
-            if (is_admin()) {
+            if (isAdmin()) {
                 if ($uid == $_SESSION['token']) {
                     if (!empty($del)) {
                         $del = implode(',', $del);

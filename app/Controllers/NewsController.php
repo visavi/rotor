@@ -63,7 +63,7 @@ class NewsController extends BaseController
 
             $validation = new Validation();
 
-            $validation->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
+            $validation->addRule('bool', isUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                 ->addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
                 ->addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
@@ -131,7 +131,7 @@ class NewsController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!is_user()) {
+        if (!isUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 

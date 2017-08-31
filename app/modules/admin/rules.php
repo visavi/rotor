@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
     //show_title('Правила сайта');
 
     switch ($action):

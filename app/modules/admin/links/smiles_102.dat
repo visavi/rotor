@@ -1,1 +1,1 @@
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> (<?=stats_smiles()?>)<br>
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> (<?=statsSmiles()?>)<br>

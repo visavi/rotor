@@ -61,7 +61,7 @@ class ForumController extends BaseController
     {
         $fid = abs(intval(Request::input('fid')));
 
-        if (! is_user()) abort(403);
+        if (! isUser()) abort(403);
 
         $forums = Forum::where('parent_id', 0)
             ->with('children')

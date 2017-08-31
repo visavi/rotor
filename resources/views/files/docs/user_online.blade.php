@@ -15,7 +15,7 @@
 <b>Примеры использования</b><br>
 <?php
 echo bbCode(check('[code]<?php
-echo user_online(\'Vantuz\'); /* [On] или [Off] */
+echo userOnline(\'Vantuz\'); /* [On] или [Off] */
 ?>[/code]'));
 ?>
 

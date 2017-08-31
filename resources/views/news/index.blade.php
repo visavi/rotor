@@ -8,7 +8,7 @@
 
     <h1>Новости сайта</h1>
 
-    @if (is_admin([101, 102]))
+    @if (isAdmin([101, 102]))
         <div class="form"><a href="/admin/news">Управление новостями</a></div>
     @endif
 
@@ -21,7 +21,7 @@
 
             @if ($data['image'])
                 <div class="img">
-                    <a href="/uploads/news/{{ $data['image'] }}">{!! resize_image('uploads/news/', $data['image'], 75, ['alt' => $data['title']]) !!}</a>
+                    <a href="/uploads/news/{{ $data['image'] }}">{!! resizeImage('uploads/news/', $data['image'], 75, ['alt' => $data['title']]) !!}</a>
                 </div>
             @endif
 

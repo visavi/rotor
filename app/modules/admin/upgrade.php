@@ -1,7 +1,7 @@
 <?php
 view(setting('themes').'/index');
 
-if (is_admin()) {
+if (isAdmin()) {
 
 //show_title('Апгрейд системы');
 

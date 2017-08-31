@@ -5,8 +5,8 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $cid = (isset($_GET['cid'])) ? abs(intval($_GET['cid'])) : 0;
 $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 
-if (is_user()) {
-if (is_admin() || setting('downupload') == 1) {
+if (isUser()) {
+if (isAdmin() || setting('downupload') == 1) {
 
 switch ($action):
 /**
@@ -256,7 +256,7 @@ case 'view':
 
                             } else {
                                 echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
-                                echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
+                                echo resizeImage('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                             }
                         }
                     }
@@ -429,7 +429,7 @@ case 'loadfile':
                                             move_uploaded_file($_FILES['loadfile']['tmp_name'], HOME.'/uploads/files/'.$folder.$filename);
                                             @chmod(HOME.'/uploads/files/'.$folder.$filename, 0666);
 
-                                            copyright_archive(HOME.'/uploads/files/'.$folder.$filename);
+                                            copyrightArchive(HOME.'/uploads/files/'.$folder.$filename);
 
                                             DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
@@ -528,7 +528,7 @@ case 'loadscreen':
                     if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
 
                         // ------------------------------------------------------//
-                        $handle = upload_image($_FILES['screen'], setting('screenupload'), setting('screenupsize'),  $down['link']);
+                        $handle = uploadImage($_FILES['screen'], setting('screenupload'), setting('screenupsize'),  $down['link']);
                         if ($handle) {
                             $folder = $down['folder'] ? $down['folder'].'/' : '';
 

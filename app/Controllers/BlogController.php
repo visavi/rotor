@@ -118,7 +118,7 @@ class BlogController extends BaseController
      */
     public function edit($id)
     {
-        if (! is_user()) {
+        if (! isUser()) {
             abort(403, 'Для редактирования статьи необходимо авторизоваться');
         }
 
@@ -211,7 +211,7 @@ class BlogController extends BaseController
     {
         $cid = abs(intval(Request::input('cid')));
 
-        if (! is_user()) {
+        if (! isUser()) {
             abort(403, 'Для публикации новой статьи необходимо авторизоваться');
         }
 
@@ -290,7 +290,7 @@ class BlogController extends BaseController
 
             $validation = new Validation();
             $validation
-                ->addRule('bool', is_user(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->addRule('bool', isUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                 ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
                 ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
@@ -350,7 +350,7 @@ class BlogController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!is_user()) {
+        if (!isUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
@@ -521,7 +521,7 @@ class BlogController extends BaseController
 
                 arsort($tags);
                 array_splice($tags, 100);
-                shuffle_assoc($tags);
+                shuffleAssoc($tags);
 
                 file_put_contents(STORAGE."/temp/tagcloud.dat", serialize($tags), LOCK_EX);
             }
@@ -694,7 +694,7 @@ class BlogController extends BaseController
         $type    = abs(intval(Request::input('type')));
         $where   = abs(intval(Request::input('where')));
 
-        if (! is_user()) {
+        if (! isUser()) {
             abort('default', 'Чтобы использовать поиск, необходимо авторизоваться');
         }
 

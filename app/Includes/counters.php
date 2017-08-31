@@ -7,7 +7,7 @@ DB::run() -> query("DELETE FROM `online` WHERE `updated_at`<?;", [SITETIME - set
 
 $newhost = 0;
 
-if (is_user()) {
+if (isUser()) {
     $queryonline = DB::run() -> querySingle("SELECT `id` FROM `online` WHERE `ip`=? OR `user_id`=? ORDER BY user_id=? desc LIMIT 1;", [getClientIp(), getUsername(), getUserId()]);
     if (empty($queryonline)) {
         DB::run() -> query("INSERT INTO `online` (`ip`, `brow`, `updated_at`, `user_id`) VALUES (?, ?, ?, ?);", [getClientIp(), getUserAgent(), SITETIME, getUserId()]);

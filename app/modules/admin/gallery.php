@@ -4,7 +4,7 @@ view(setting('themes').'/index');
 $act = check(Request::input('act', 'index'));
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin()) {
+if (isAdmin()) {
     //show_title('Управление галереей');
 
     switch ($action):
@@ -37,7 +37,7 @@ if (is_admin()) {
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resize_image('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]).'</a><br>';
+                    echo '<div><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.resizeImage('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]).'</a><br>';
 
                     if (!empty($data['text'])){
                         echo bbCode($data['text']).'<br>';
@@ -58,7 +58,7 @@ if (is_admin()) {
                 showError('Фотографий еще нет!');
             }
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/gallery?act=restatement&amp;token='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
         break;
@@ -184,7 +184,7 @@ if (is_admin()) {
 
             $token = check(Request::input('token'));
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($token == $_SESSION['token']) {
                     restatement('photo');
 

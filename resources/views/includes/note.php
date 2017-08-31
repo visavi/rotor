@@ -1,4 +1,4 @@
-<?php if (is_user()): ?>
+<?php if (isUser()): ?>
     <?php if (!empty(user('newprivat'))): ?>
         <?php if (! App\Classes\Request::is('ban', 'key', 'private', 'rules', 'closed', 'login', 'register')): ?>
             <i class="fa fa-envelope"></i> <b><a href="/private"><span style="color:#ff0000">Приватное сообщение! (<?=user('newprivat')?>)</span></a></b><br>

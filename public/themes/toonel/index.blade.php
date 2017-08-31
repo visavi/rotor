@@ -11,10 +11,10 @@ header("Content-type:text/html; charset=utf-8");
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
-    <?= include_style() ?>
+    <?= includeStyle() ?>
     <link rel="stylesheet" href="/themes/toonel/css/style.css"/>
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml"/>
-    <?= include_javascript() ?>
+    <?= includeScript() ?>
     <meta name="keywords" content="%KEYWORDS%"/>
     <meta name="description" content="%DESCRIPTION%"/>
     <meta name="generator" content="RotorCMS <?= env('VERSION') ?>"/>
@@ -33,7 +33,7 @@ header("Content-type:text/html; charset=utf-8");
             <a title="Центр общения" class="menu" href="/forum">Форум</a> |
             <a title="Гостевая комната" class="menu" href="/book">Гостевая</a> |
             <a title="Скрипты для wap-мастеров" class="menu" href="/load">Скрипты</a> |
-            <?php if (is_user()): ?>
+            <?php if (isUser()): ?>
                 <a title="Управление настройками" class="menu" href="/menu">Меню</a> |
                 <a title="Выход" class="menu" href="/logout"
                    onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
@@ -57,16 +57,16 @@ header("Content-type:text/html; charset=utf-8");
     <tr>
         <td class="left_mid">&nbsp;</td>
         <td valign="top" class="lr">
-            <?php if (is_admin()): ?>
+            <?php if (isAdmin()): ?>
                 <div class="nmenu">
                     <i class="fa fa-wrench"></i> <a
                         href="/admin">Панель</a>
 
-                    <?php if (stats_spam() > 0): ?>
+                    <?php if (statsSpam() > 0): ?>
                         &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
                     <?php endif; ?>
 
-                    <?php if (user('newchat') < stats_newchat()): ?>
+                    <?php if (user('newchat') < statsNewChat()): ?>
                         &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
                     <?php endif; ?>
                 </div>

@@ -15,7 +15,7 @@ if (
     $path = '';
 }
 
-if (is_admin([101]) && getUsername() == setting('nickname')) {
+if (isAdmin([101]) && getUsername() == setting('nickname')) {
     //show_title('Редактирование страниц');
 
     switch ($action):

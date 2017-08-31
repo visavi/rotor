@@ -9,7 +9,7 @@ class BookmarkController extends BaseController
      */
     public function __construct()
     {
-        if (!is_user()) {
+        if (!isUser()) {
             abort('default', 'Для управления закладками, необходимо авторизоваться!');
         }
     }

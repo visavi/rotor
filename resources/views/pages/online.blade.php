@@ -16,10 +16,10 @@
 
         @foreach ($online as $data)
             <div class="b">
-                {!!  user_gender($data->user) !!} <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
+                {!!  userGender($data->user) !!} <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
             </div>
 
-            @if (is_admin())
+            @if (isAdmin())
                 <div>
                     <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
                 </div>

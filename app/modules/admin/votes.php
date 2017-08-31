@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin([101, 102, 103])) {
+if (isAdmin([101, 102, 103])) {
     //show_title('Управление голосованием');
 
     switch ($action):
@@ -32,7 +32,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<a href="/admin/votes?act=edit&amp;id='.$valvote['id'].'">Изменить</a>';
                     echo ' / <a href="/admin/votes?act=action&amp;do=close&amp;id='.$valvote['id'].'&amp;uid='.$_SESSION['token'].'">Закрыть</a>';
 
-                    if (is_admin([101])) {
+                    if (isAdmin([101])) {
                         echo ' / <a href="/admin/votes?act=del&amp;id='.$valvote['id'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете удаление голосования?\')">Удалить</a>';
                     }
 
@@ -49,7 +49,7 @@ if (is_admin([101, 102, 103])) {
             echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes?act=new">Создать голосование</a><br>';
             echo '<i class="fa fa-briefcase"></i> <a href="/admin/votes?act=history">История голосований</a><br>';
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/votes?act=rest&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
             }
 
@@ -250,7 +250,7 @@ if (is_admin([101, 102, 103])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if (is_admin([101])) {
+                if (isAdmin([101])) {
                     $queryvote = DB::run() -> querySingle("SELECT `id` FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryvote)) {
                         DB::run() -> query("DELETE FROM `vote` WHERE `id`=?;", [$id]);
@@ -278,7 +278,7 @@ if (is_admin([101, 102, 103])) {
         case 'rest':
             $uid = check($_GET['uid']);
             if ($uid == $_SESSION['token']) {
-                if (is_admin([101])) {
+                if (isAdmin([101])) {
                     DB::run() -> query("UPDATE `vote` SET `count`=(SELECT SUM(`result`) FROM `voteanswer` WHERE `vote`.id=`voteanswer`.`vote_id`) WHERE `closed`=?;", [0]);
 
                     setFlash('success', 'Все данные успешно пересчитаны!');
@@ -311,7 +311,7 @@ if (is_admin([101, 102, 103])) {
 
                     echo '<a href="/admin/votes?act=action&amp;do=open&amp;id='.$data['id'].'&amp;uid='.$_SESSION['token'].'">Открыть</a>';
 
-                    if (is_admin([101])) {
+                    if (isAdmin([101])) {
                         echo ' / <a href="/admin/votes?act=del&amp;id='.$data['id'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете удаление голосования?\')">Удалить</a>';
                     }
 

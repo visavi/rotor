@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>RotorCMS</title>
-    {{ include_style() }}
-    {{ include_javascript() }}
+    {{ includeStyle() }}
+    {{ includeScript() }}
 </head>
 <body>
     {!! bbCode($message) !!}

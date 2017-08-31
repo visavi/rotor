@@ -17,7 +17,7 @@
                     <b><a href="/article/{{ $data['relate_id']}}/{{ $data['id']}}">{{ $data['title'] }}</a></b> ({{ $data['comments'] }})
 
                     <div class="float-right">
-                        @if (is_admin())
+                        @if (isAdmin())
                             <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data['relate_id'] }}" data-id="{{ $data['id'] }}" data-type="{{ Blog::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove text-muted"></i></a>
                         @endif
                     </div>
@@ -28,7 +28,7 @@
                     <br>
 
                     Написал: {!! profile($data['user']) !!} <small>({{ dateFixed($data['time']) }})</small><br>
-                    @if (is_admin())
+                    @if (isAdmin())
                         <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
                     @endif
                 </div>

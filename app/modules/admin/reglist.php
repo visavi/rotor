@@ -8,7 +8,7 @@ if (isset($_GET['act'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin([101, 102, 103])) {
+if (isAdmin([101, 102, 103])) {
     //show_title('Ожидающие регистрации');
 
     switch ($action):
@@ -67,7 +67,7 @@ if (is_admin([101, 102, 103])) {
 
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="arrayusers[]" value="'.$data['login'].'"> ';
-                    echo user_gender($data['login']).' <b>'.profile($data['login']).'</b>';
+                    echo userGender($data['login']).' <b>'.profile($data['login']).'</b>';
                     echo '(email: '.$data['email'].')</div>';
 
                     echo '<div>Зарегистрирован: '.dateFixed($data['joined']).'</div>';

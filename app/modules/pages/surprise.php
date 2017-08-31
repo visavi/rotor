@@ -8,7 +8,7 @@ $surpriseRating = mt_rand(3, 7);
 
 $currentYear = date('Y');
 
-if (! is_user()) {
+if (! isUser()) {
     abort('default', 'Для того чтобы получить сюрприз, необходимо авторизоваться!');
 }
 
@@ -39,7 +39,7 @@ $user->update([
 
 $text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.points($surprisePoint).PHP_EOL.moneys($surpriseMoney).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
 
-send_private(getUsername(), setting('nickname'), $text);
+sendPrivate(getUsername(), setting('nickname'), $text);
 
 $surprise = Surprise::create([
     'user_id' => getUserId(),

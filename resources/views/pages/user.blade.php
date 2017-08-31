@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>{!! userAvatar($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user) }}</small></h1>
+    <h1>{!! userAvatar($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ userVisit($user) }}</small></h1>
 
     @if ($user['confirmreg'] == 1)
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>
@@ -31,7 +31,7 @@
 
                     @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
                         <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
-                            {!! resize_image('uploads/photos/', $user['picture'], setting('previewsize'), ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}</a>
+                            {!! resizeImage('uploads/photos/', $user['picture'], setting('previewsize'), ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}</a>
                     @else
                         <img src="/assets/img/images/photo.jpg" alt="Фото" class="float-right img-fluid rounded">
                     @endif
@@ -41,7 +41,7 @@
             <div class="col-md-6 pull-md-6">
                 Cтатус: <b><a href="/statusfaq">{!! userStatus($user) !!}</a></b><br>
 
-                {!! user_gender($user) !!}
+                {!! userGender($user) !!}
                 Пол:
                 {{  ($user['gender'] == 1) ? 'Мужской' : 'Женский' }}<br>
 
@@ -92,9 +92,9 @@
 
                 <a href="/banhist?uz={{ $user['login'] }}">Строгих нарушений: {{ $user['totalban'] }}</a><br>
 
-                <a href="/rating/{{ $user->login }}/received">Репутация: <b>{!! format_num($user['rating']) !!}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br>
+                <a href="/rating/{{ $user->login }}/received">Репутация: <b>{!! formatNum($user['rating']) !!}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br>
 
-                @if (is_user() && getUsername() != $user['login'])
+                @if (isUser() && getUsername() != $user['login'])
                     [ <a href="/user/{{ $user['login'] }}/rating?vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
                     <a href="/user/{{ $user['login'] }}/rating?vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br>
                 @endif
@@ -115,7 +115,7 @@
         </div>
     </div>
 
-    @if (is_admin())
+    @if (isAdmin())
         <?php $usernote = Note::where('user_id', $user['id'])->first(); ?>
     <div class="alert alert-success">
         <i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/{{ $user['login'] }}/note">Изменить</a>)<br>
@@ -145,14 +145,14 @@
                 <i class="fa fa-home"></i> <a href="{{ $user['site'] }}">Перейти на сайт {{ $user['login'] }}</a><br>
             @endif
 
-            @if (is_admin([101, 102, 103]))
+            @if (isAdmin([101, 102, 103]))
                 @if (!empty(setting('invite')))
                     <i class="fa fa-ban"></i> <a href="/admin/invitations?act=send&amp;user={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">Отправить инвайт</a><br>
                 @endif
             <i class="fa fa-ban"></i> <a href="/admin/ban?act=edit&amp;uz={{ $user['login'] }}">Бан / Разбан</a><br>
             @endif
 
-            @if (is_admin([101, 102]))
+            @if (isAdmin([101, 102]))
                 <i class="fa fa-wrench"></i> <a href="/admin/users?act=edit&amp;uz={{ $user['login'] }}">Редактировать</a><br>
             @endif
         @else

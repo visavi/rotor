@@ -18,13 +18,13 @@
 
             <div class="b">
                 @if ($data->user)
-                    {!!  user_gender($data->user) !!} <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
+                    {!!  userGender($data->user) !!} <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
                 @else
                     <i class="fa fa-user-circle-o"></i> <b>{{ setting('guestsuser') }}</b>  (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
                 @endif
             </div>
 
-            @if (is_admin())
+            @if (isAdmin())
                 <div>
                     <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
                 </div>

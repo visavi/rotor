@@ -34,7 +34,7 @@
                         <small>({{ dateFixed($data->relate->created_at, "d.m.y / H:i:s") }})</small>
 
                         <div class="float-right">
-                            @if (is_admin())
+                            @if (isAdmin())
                                 <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
                             @endif
                         </div>
@@ -45,7 +45,7 @@
                         <i class="fa fa-file-o"></i> <b>Сообщение не найдено</b>
 
                         <div class="float-right">
-                            @if (is_admin())
+                            @if (isAdmin())
                                 <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
                             @endif
                         </div>

@@ -12,10 +12,10 @@ header("Content-type:text/html; charset=utf-8");
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="image_src" href="/assets/img/images/icon.png">
-    <?= include_style() ?>
+    <?= includeStyle() ?>
     <link rel="stylesheet" href="/themes/bluewater/css/style.css">
     <link rel="alternate" href="/news/rsss" title="RSS News" type="application/rss+xml">
-    <?= include_javascript() ?>
+    <?= includeScript() ?>
     <meta name="keywords" content="%KEYWORDS%">
     <meta name="description" content="%DESCRIPTION%">
     <meta name="generator" content="RotorCMS <?= env('VERSION') ?>">
@@ -32,17 +32,17 @@ header("Content-type:text/html; charset=utf-8");
             <p>
 
 <?php
-if (is_user()){
+if (isUser()){
 
-    echo user_gender(user()).profile(user());
-    if (is_admin()){
+    echo userGender(user()).profile(user());
+    if (isAdmin()){
 
         echo ' | <a href="/admin">Админ-панель</a>';
-        if (stats_spam()>0){
+        if (statsSpam()>0){
         echo ' | <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>';
         }
 
-        if (user('newchat')<stats_newchat()){
+        if (user('newchat')<statsNewChat()){
         echo ' | <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>';
         }
 
@@ -73,7 +73,7 @@ if (is_user()){
         <div id="sidebar">
 
             <?php
-            if (is_user()) {
+            if (isUser()) {
                 include (APP.'/views/main/menu.blade.php');
             } else {
                 include (APP.'/views/main/recent.blade.php');

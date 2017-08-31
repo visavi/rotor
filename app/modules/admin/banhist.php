@@ -4,7 +4,7 @@ view(setting('themes').'/index');
 $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin([101, 102, 103])) {
+if (isAdmin([101, 102, 103])) {
     //show_title('История банов');
 
     switch ($action):
@@ -25,7 +25,7 @@ if (is_admin([101, 102, 103])) {
                 while ($data = $queryhist -> fetch()) {
                     echo '<div class="b">';
                     echo '<div class="img">'.userAvatar($data['user']).'</div>';
-                    echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
+                    echo '<b>'.profile($data['user']).'</b> '.userOnline($data['user']).' ';
 
                     echo '<small>('.dateFixed($data['time']).')</small><br>';
 
@@ -88,7 +88,7 @@ if (is_admin([101, 102, 103])) {
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
                         echo '<div class="img">'.userAvatar($data['user']).'</div>';
-                        echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
+                        echo '<b>'.profile($data['user']).'</b> '.userOnline($data['user']).' ';
 
                         echo '<small>('.dateFixed($data['time']).')</small><br>';
 

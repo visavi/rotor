@@ -1,7 +1,7 @@
 <?php
 view(setting('themes').'/index');
 
-if (is_admin([101, 102])) {
+if (isAdmin([101, 102])) {
     //show_title('PHP-info');
 
     echo 'PHP version: <b>'.phpversion().'</b><br>';

@@ -34,7 +34,7 @@ switch ($action):
             while ($data = $queryusers -> fetch()) {
                 ++$i;
 
-                echo '<div class="b">'.($page['offset'] + $i).'. '.user_gender($data['login']);
+                echo '<div class="b">'.($page['offset'] + $i).'. '.userGender($data['login']);
 
                 if ($uz == $data['login']) {
                     echo ' <b><big>'.profile($data['login'], '#ff0000').'</big></b> ('.moneys($data['money']).')</div>';

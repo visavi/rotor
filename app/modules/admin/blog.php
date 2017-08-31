@@ -18,7 +18,7 @@ if (isset($_GET['cid'])) {
 }
 $page = abs(intval(Request::input('page', 1)));
 
-if (is_admin()) {
+if (isAdmin()) {
     //show_title('Управление блогами');
 
     switch ($action):
@@ -35,7 +35,7 @@ if (is_admin()) {
                     echo '<i class="fa fa-folder-open"></i> ';
                     echo '<b>'.$data['sort'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ('.$data['count'].')<br>';
 
-                    if (is_admin([101])) {
+                    if (isAdmin([101])) {
                         echo '<a href="/admin/blog?act=editcats&amp;cid='.$data['id'].'">Редактировать</a> / ';
                         echo '<a href="/admin/blog?act=prodelcats&amp;cid='.$data['id'].'">Удалить</a>';
                     }
@@ -45,7 +45,7 @@ if (is_admin()) {
                 showError('Разделы блогов еще не созданы!');
             }
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 echo '<br><div class="form">';
                 echo '<form action="/admin/blog?act=addcats&amp;uid='.$_SESSION['token'].'" method="post">';
                 echo '<b>Заголовок:</b><br>';
@@ -63,7 +63,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
                     restatement('blog');
 
@@ -88,7 +88,7 @@ if (is_admin()) {
             $uid = check($_GET['uid']);
             $name = check($_POST['name']);
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (utfStrlen($name) >= 3 && utfStrlen($name) < 50) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `catsblog`;");
@@ -115,7 +115,7 @@ if (is_admin()) {
         ############################################################################################
         case 'editcats':
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                 if (!empty($blogs)) {
@@ -148,7 +148,7 @@ if (is_admin()) {
             $name = check($_POST['name']);
             $order = abs(intval($_POST['order']));
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
                     if (utfStrlen($name) >= 3 && utfStrlen($name) < 50) {
                         $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
@@ -181,7 +181,7 @@ if (is_admin()) {
         ############################################################################################
         case 'prodelcats':
 
-            if (is_admin([101])) {
+            if (isAdmin([101])) {
                 $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                 if (!empty($blogs)) {
@@ -204,7 +204,7 @@ if (is_admin()) {
 
             $uid = check($_GET['uid']);
 
-            if (is_admin([101]) && getUsername() == setting('nickname')) {
+            if (isAdmin([101]) && getUsername() == setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
@@ -255,7 +255,7 @@ if (is_admin()) {
                     while ($data = $queryblog -> fetch()) {
 
                         echo '<div class="b"><i class="fa fa-pencil"></i> ';
-                        echo '<b><a href="/blog/blog?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.format_num($data['rating']).')<br>';
+                        echo '<b><a href="/blog/blog?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.formatNum($data['rating']).')<br>';
 
                         echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
 

@@ -16,11 +16,11 @@
 
     / {{ $forum['title'] }}
 
-    @if (is_admin())
+    @if (isAdmin())
         / <a href="/admin/forum?act=forum&amp;fid={{  $forum->id  }}&amp;page={{ $page['current'] }}">Управление</a>
     @endif
 
-    @if (is_user() && empty($forum['closed']))
+    @if (isUser() && empty($forum['closed']))
         <div class="float-right">
             <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
         </div>

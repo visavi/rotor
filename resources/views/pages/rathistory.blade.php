@@ -23,7 +23,7 @@
                     <b>{!! profile($data->user) !!}</b> ({{ dateFixed($data['created_at']) }})
 
                     <div class="float-right">
-                        @if (is_admin())
+                        @if (isAdmin())
                             <a href="#" onclick="return deleteRating(this)" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
                         @endif
                     </div>

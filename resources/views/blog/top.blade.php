@@ -25,7 +25,7 @@
 
             <div class="b">
                 <i class="fa fa-pencil"></i>
-                <b><a href="/article/{{  $data['id'] }}">{{ $data['title'] }}</a></b> ({!! format_num($data['rating']) !!})
+                <b><a href="/article/{{  $data['id'] }}">{{ $data['title'] }}</a></b> ({!! formatNum($data['rating']) !!})
             </div>
 
             <div>
