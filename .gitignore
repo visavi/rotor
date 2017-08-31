@@ -1,9 +1,7 @@
-/app/storage/antidos/
-/app/storage/backup/
-/app/storage/board/
-/app/storage/cache/
-/app/storage/chat/
-/app/storage/temp/
+/resources/storage/antidos/
+/resources/storage/backup/
+/resources/storage/cache/
+/resources/storage/temp/
 /public/uploads/files/
 /public/uploads/screen/
 /public/uploads/loader/

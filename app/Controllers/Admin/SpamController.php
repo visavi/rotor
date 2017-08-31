@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Admin;
 
-class SpamController extends BaseController
+class SpamController extends AdminController
 {
     /**
      * @var array

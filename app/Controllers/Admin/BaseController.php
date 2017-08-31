@@ -2,7 +2,9 @@
 
 namespace App\Controllers\Admin;
 
-Class BaseController
+use App\Controllers\BaseController;
+
+Class AdminController extends BaseController
 {
     public function __construct()
     {
