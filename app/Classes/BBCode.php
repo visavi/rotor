@@ -2,6 +2,9 @@
 
 namespace App\Classes;
 
+use App\Models\Smile;
+use Illuminate\Database\Capsule\Manager as DB;
+
 /**
  * Класс обработки BB-кодов
  *

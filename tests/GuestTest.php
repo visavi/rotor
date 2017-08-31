@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use App\Models\Guest;
 
 class GuestTest extends TestCase
 {
