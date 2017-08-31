@@ -35,7 +35,7 @@ if (is_admin()) {
                     echo '<a href="/admin/reklama?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a>';
                     echo '</div>';
 
-                    echo 'Истекает: '.date_fixed($data['time']).'<br>';
+                    echo 'Истекает: '.dateFixed($data['time']).'<br>';
 
                     if (!empty($data['color'])) {
                         echo 'Цвет: <span style="color:'.$data['color'].'">'.$data['color'].'</span>, ';
@@ -117,8 +117,8 @@ if (is_admin()) {
 
             if ($uid == $_SESSION['token']) {
                 if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=])+)+$#iu', $site)) {
-                    if (utf_strlen($site) >= 5 && utf_strlen($site) <= 50) {
-                        if (utf_strlen($name) >= 5 && utf_strlen($name) <= 35) {
+                    if (utfStrlen($site) >= 5 && utfStrlen($site) <= 50) {
+                        if (utfStrlen($name) >= 5 && utfStrlen($name) <= 35) {
                             if (preg_match('|^#+[A-f0-9]{6}$|', $color) || empty($color)) {
                                 $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", [$id]);
                                 if (!empty($data)) {

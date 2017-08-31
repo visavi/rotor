@@ -30,10 +30,10 @@ case 'index':
 
         foreach ($contacts as $contact) {
             echo '<div class="b">';
-            echo '<div class="img">'.user_avatars($contact->contactor).'</div>';
+            echo '<div class="img">'.userAvatar($contact->contactor).'</div>';
 
-            echo '<b>'.profile($contact->contactor).'</b> <small>('.date_fixed($contact['created_at']).')</small><br>';
-            echo user_title($contact->contactor).' '.user_online($contact->contactor).'</div>';
+            echo '<b>'.profile($contact->contactor).'</b> <small>('.dateFixed($contact['created_at']).')</small><br>';
+            echo userStatus($contact->contactor).' '.user_online($contact->contactor).'</div>';
 
             echo '<div>';
             if ($contact['text']) {

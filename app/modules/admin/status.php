@@ -87,7 +87,7 @@ if (is_admin([101, 102])) {
             $color = check($_POST['color']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($name) >= 5 && utf_strlen($name) < 30) {
+                if (utfStrlen($name) >= 5 && utfStrlen($name) < 30) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
                         DB::run() -> query("UPDATE `status` SET `topoint`=?, `point`=?, `name`=?, `color`=? WHERE `id`=?;", [$topoint, $point, $name, $color, $id]);
 
@@ -141,7 +141,7 @@ if (is_admin([101, 102])) {
             $color = check($_POST['color']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($name) >= 5 && utf_strlen($name) < 30) {
+                if (utfStrlen($name) >= 5 && utfStrlen($name) < 30) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
                         DB::run() -> query("INSERT INTO `status` (`topoint`, `point`, `name`, `color`) VALUES (?, ?, ?, ?);", [$topoint, $point, $name, $color]);
 

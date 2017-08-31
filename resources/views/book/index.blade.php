@@ -43,17 +43,17 @@
                     <div class="img"><?=userAvatar($data->user)?></div>
 
                     <?php if (empty($data['user_id'])): ?>
-                        <b><?= setting('guestsuser') ?></b> <small>(<?=date_fixed($data['created_at'])?>)</small>
+                        <b><?= setting('guestsuser') ?></b> <small>(<?=dateFixed($data['created_at'])?>)</small>
                     <?php else: ?>
-                        <b><?=profile($data->user)?></b> <small>(<?=date_fixed($data['created_at'])?>)</small><br>
-                        <?=user_title($data->user)?> <?=user_online($data->user)?>
+                        <b><?=profile($data->user)?></b> <small>(<?=dateFixed($data['created_at'])?>)</small><br>
+                        <?=userStatus($data->user)?> <?=user_online($data->user)?>
                     <?php endif; ?>
                 </div>
 
                 <div class="message"><?=bbCode($data['text'])?></div>
 
                 <?php if (!empty($data['edit_user_id'])): ?>
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=date_fixed($data['updated_at'])?>)</small><br>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=dateFixed($data['updated_at'])?>)</small><br>
                 <?php endif; ?>
 
                 <?php if (is_admin()): ?>

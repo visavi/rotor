@@ -17,7 +17,7 @@
         </div>
 
         <div>{!! bbCode($post['text']) !!}<br>
-            Написал: {!! profile($post->user) !!} {!! user_online($post->user) !!} <small>({{ date_fixed($post['created_at']) }})</small><br>
+            Написал: {!! profile($post->user) !!} {!! user_online($post->user) !!} <small>({{ dateFixed($post['created_at']) }})</small><br>
         </div>
 
     @endforeach

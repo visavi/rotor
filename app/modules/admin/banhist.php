@@ -24,10 +24,10 @@ if (is_admin([101, 102, 103])) {
 
                 while ($data = $queryhist -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<div class="img">'.userAvatar($data['user']).'</div>';
                     echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                    echo '<small>('.date_fixed($data['time']).')</small><br>';
+                    echo '<small>('.dateFixed($data['time']).')</small><br>';
 
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
 
@@ -36,7 +36,7 @@ if (is_admin([101, 102, 103])) {
                     echo '<div>';
                     if (!empty($data['type'])) {
                         echo 'Причина: '.bbCode($data['reason']).'<br>';
-                        echo 'Срок: '.formattime($data['term']).'<br>';
+                        echo 'Срок: '.formatTime($data['term']).'<br>';
                     }
 
                     switch ($data['type']) {
@@ -87,10 +87,10 @@ if (is_admin([101, 102, 103])) {
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
-                        echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                        echo '<div class="img">'.userAvatar($data['user']).'</div>';
                         echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                        echo '<small>('.date_fixed($data['time']).')</small><br>';
+                        echo '<small>('.dateFixed($data['time']).')</small><br>';
 
                         echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
                         echo '<a href="/admin/ban?act=editban&amp;uz='.$data['user'].'">Изменить</a></div>';
@@ -98,7 +98,7 @@ if (is_admin([101, 102, 103])) {
                         echo '<div>';
                         if (!empty($data['type'])) {
                             echo 'Причина: '.bbCode($data['reason']).'<br>';
-                            echo 'Срок: '.formattime($data['term']).'<br>';
+                            echo 'Срок: '.formatTime($data['term']).'<br>';
                         }
 
                         switch ($data['type']) {

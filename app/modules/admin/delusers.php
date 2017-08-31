@@ -33,7 +33,7 @@ if (is_admin([101]) && getUsername() == setting('nickname')) {
             echo '<input type="text" name="point" value="0"><br>';
             echo '<input value="Анализ" type="submit"></form></div><br>';
 
-            echo 'Всего пользователей: <b>'.stats_users().'</b><br><br>';
+            echo 'Всего пользователей: <b>'.statsUsers().'</b><br><br>';
         break;
 
         ############################################################################################

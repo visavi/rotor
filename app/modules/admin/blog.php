@@ -90,7 +90,7 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    if (utf_strlen($name) >= 3 && utf_strlen($name) < 50) {
+                    if (utfStrlen($name) >= 3 && utfStrlen($name) < 50) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `catsblog`;");
                         DB::run() -> query("INSERT INTO `catsblog` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
@@ -150,7 +150,7 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    if (utf_strlen($name) >= 3 && utf_strlen($name) < 50) {
+                    if (utfStrlen($name) >= 3 && utfStrlen($name) < 50) {
                         $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                         if (!empty($blogs)) {
@@ -262,7 +262,7 @@ if (is_admin()) {
                         echo '<a href="/admin/blog?act=editblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a> / ';
                         echo '<a href="/admin/blog?act=moveblog&amp;cid='.$cid.'&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Переместить</a></div>';
 
-                        echo '<div>Автор: '.profile($data['user']).' ('.date_fixed($data['time']).')<br>';
+                        echo '<div>Автор: '.profile($data['user']).' ('.dateFixed($data['time']).')<br>';
                         echo 'Просмотров: '.$data['visits'].'<br>';
                         echo '<a href="/blog/blog?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].')<br>';
                         echo '</div>';
@@ -324,9 +324,9 @@ if (is_admin()) {
             $tags = check($_POST['tags']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($text) >= 100 && utf_strlen($text) <= setting('maxblogpost')) {
-                        if (utf_strlen($tags) >= 2 && utf_strlen($tags) <= 50) {
+                if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
+                    if (utfStrlen($text) >= 100 && utfStrlen($text) <= setting('maxblogpost')) {
+                        if (utfStrlen($tags) >= 2 && utfStrlen($tags) <= 50) {
                             if (preg_match('|^[a-z0-9\-]+$|i', $user)) {
                                 $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
                                 if (!empty($queryblog)) {

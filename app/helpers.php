@@ -3,6 +3,7 @@
 use App\Models\Chat;
 use App\Models\Counter;
 use App\Models\User;
+use App\Models\Ban;
 use App\Models\News;
 use App\Models\Guest;
 use App\Models\Photo;
@@ -17,11 +18,12 @@ use App\Models\Blog;
 use App\Classes\Request;
 use App\Classes\Registry;
 use App\Classes\BBCode;
+use App\Models\RekUser;
 use Illuminate\Database\Capsule\Manager as DB;
 use Jenssegers\Blade\Blade;
 
 // --------------------------- Функция перевода секунд во время -----------------------------//
-function maketime($time) {
+function makeTime($time) {
     if ($time < 3600) {
         $time = sprintf("%02d:%02d", (int)($time / 60) % 60, $time % 60);
     } else {
@@ -31,7 +33,7 @@ function maketime($time) {
 }
 
 // --------------------------- Функция временного сдвига -----------------------------//
-function date_fixed($timestamp, $format = "d.m.y / H:i")
+function dateFixed($timestamp, $format = "d.m.y / H:i")
 {
     if (!is_numeric($timestamp)) {
         $timestamp = SITETIME;
@@ -147,41 +149,41 @@ function points($sum)
 }
 
 // ------------------ Функция перекодировки из UTF в WIN --------------------//
-function utf_to_win($str)
+function utfToWin($str)
 {
     return mb_convert_encoding($str, 'windows-1251', 'utf-8');
 }
 
 // ------------------ Функция перекодировки из WIN в UTF --------------------//
-function win_to_utf($str)
+function winToUtf($str)
 {
     return mb_convert_encoding($str, 'utf-8', 'windows-1251');
 }
 
 // ------------------ Функция преобразования в нижний регистр для UTF ------------------//
-function utf_lower($str)
+function utfLower($str)
 {
     return mb_strtolower($str, 'utf-8');
 }
 
 // ---------- Аналог функции substr для UTF-8 ---------//
-function utf_substr($str, $offset, $length = null)
+function utfSubstr($str, $offset, $length = null)
 {
     if ($length === null) {
-        $length = utf_strlen($str);
+        $length = utfStrlen($str);
     }
 
     return mb_substr($str, $offset, $length, 'utf-8');
 }
 
 // ---------------------- Аналог функции strlen для UTF-8 -----------------------//
-function utf_strlen($str)
+function utfStrlen($str)
 {
     return mb_strlen($str, 'utf-8');
 }
 
 // ----------------------- Функция определения кодировки ------------------------//
-function is_utf($str)
+function isUtf($str)
 {
     return mb_check_encoding($str, 'utf-8');
 }
@@ -205,7 +207,7 @@ function check($msg) {
 }
 
 // --------------- Функция правильного вывода веса файла -------------------//
-function formatsize($file_size) {
+function formatSize($file_size) {
     if ($file_size >= 1048576000) {
         $file_size = round(($file_size / 1073741824), 2)." Gb";
     } elseif ($file_size >= 1024000) {
@@ -219,16 +221,16 @@ function formatsize($file_size) {
 }
 
 // --------------- Функция форматированного вывода размера файла -------------------//
-function read_file($file) {
+function formatFileSize($file) {
     if (file_exists($file) && is_file($file)) {
-        return formatsize(filesize($file));
+        return formatSize(filesize($file));
     } else {
         return 0;
     }
 }
 
 // --------------- Функция правильного вывода времени -------------------//
-function formattime($file_time, $round = 1) {
+function formatTime($file_time, $round = 1) {
     if ($file_time >= 86400) {
         $file_time = round((($file_time / 60) / 60) / 24, $round).' дн.';
     } elseif ($file_time >= 3600) {
@@ -256,7 +258,7 @@ function antimat($str) {
 }
 
 // ------------------ Функция должности юзера --------------------//
-function user_status($level)
+function userLevel($level)
 {
     $name = explode(',', setting('statusname'));
 
@@ -276,7 +278,7 @@ function user_status($level)
 }
 
 // ---------------- Функция кэширования статусов ------------------//
-function save_title($time = 0) {
+function saveStatus($time = 0) {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
 
     $users = User::select('users.id', 'users.status', 'status.name', 'status.color')
@@ -302,8 +304,8 @@ function save_title($time = 0) {
         file_put_contents(STORAGE.'/temp/status.dat', serialize($statuses), LOCK_EX);
     }
 }
-
-function user_title($user)
+// ------------- Функция вывода статусов пользователей -----------//
+function userStatus($user)
 {
     static $status;
 
@@ -312,21 +314,20 @@ function user_title($user)
     }
 
     if (is_null($status)) {
-        save_title(3600);
+        saveStatus(3600);
         $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
     }
     return isset($status[$user->id]) ? $status[$user->id] : setting('statusdef');
 }
-// ------------- Функция вывода статусов пользователей -----------//
 
 // --------------- Функция кэширования настроек -------------------//
-function save_setting() {
+function saveSetting() {
     $setting = Setting::pluck('value', 'name')->all();
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
 }
 
 // ------------------ Функция вывода рейтинга --------------------//
-function rating_vote($rating) {
+function ratingVote($rating) {
 
     $rating = round($rating / 0.5) * 0.5;
 
@@ -364,7 +365,7 @@ function scan_check($dirname) {
             $ext = getExtension($file);
 
             if (!in_array($ext, explode(',',setting('nocheck')) )) {
-                $arr['files'][] = $dirname.'/'.$file.' - '.date_fixed(filemtime($dirname.'/'.$file), 'j.m.Y / H:i').' - '.read_file($dirname.'/'.$file);
+                $arr['files'][] = $dirname.'/'.$file.' - '.dateFixed(filemtime($dirname.'/'.$file), 'j.m.Y / H:i').' - '.formatFileSize($dirname.'/'.$file);
                 $arr['totalfiles']++;
             }
         }
@@ -405,7 +406,7 @@ function make_calendar($month, $year) {
 }
 
 // --------------- Функция сохранения количества денег  у юзера ---------------//
-function save_money($time = 0) {
+function saveUserMoney($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/money.dat") < time() - $time) {
         $queryuser = DB::run() -> query("SELECT `login`, `money` FROM `users` WHERE `money`>?;", [0]);
         $alluser = $queryuser -> fetchAssoc();
@@ -414,11 +415,11 @@ function save_money($time = 0) {
 }
 
 // --------------- Функция подсчета денег у юзера ---------------//
-function user_money($login) {
+function userMoney($login) {
     static $arrmoney;
 
     if (empty($arrmoney)) {
-        save_money(3600);
+        saveUserMoney(3600);
         $arrmoney = unserialize(file_get_contents(STORAGE."/temp/money.dat"));
     }
 
@@ -426,7 +427,7 @@ function user_money($login) {
 }
 
 // --------------- Функция сохранения количества писем ---------------//
-function save_usermail($time = 0) {
+function saveUserMail($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/usermail.dat") < time() - $time) {
 
         $messages = Inbox::select('user_id', DB::raw('count(*) as total'))
@@ -439,14 +440,14 @@ function save_usermail($time = 0) {
 }
 
 // --------------- Функция подсчета писем у юзера ---------------//
-function user_mail($user) {
-    save_usermail(3600);
+function userMail($user) {
+    saveUserMail(3600);
     $arrmail = unserialize(file_get_contents(STORAGE."/temp/usermail.dat"));
     return (isset($arrmail[$user->id])) ? $arrmail[$user->id] : 0;
 }
 
 // --------------- Функция кэширования аватаров -------------------//
-function save_avatar($time = 0) {
+/*function saveAvatar($time = 0) {
     if (empty($time) || @filemtime(STORAGE."/temp/avatars.dat") < time() - $time) {
 
         $avatars = User::select('id', 'avatar')
@@ -456,10 +457,10 @@ function save_avatar($time = 0) {
 
         file_put_contents(STORAGE."/temp/avatars.dat", serialize($avatars), LOCK_EX);
     }
-}
+}*/
 
 // --------------- Функция вывода аватара пользователя ---------------//
-function user_avatars($user) {
+/*function user_avatars($user) {
     static $avatars;
 
     if (! $user) {
@@ -467,7 +468,7 @@ function user_avatars($user) {
     }
 
     if (is_null($avatars)) {
-        save_avatar(3600);
+        saveAvatar(3600);
         $avatars = unserialize(file_get_contents(STORAGE."/temp/avatars.dat"));
     }
 
@@ -476,7 +477,7 @@ function user_avatars($user) {
     }
 
     return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
-}
+}*/
 
 
 // --------------- Функция вывода аватара пользователя ---------------//
@@ -495,24 +496,24 @@ function userAvatar($user)
 
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
-function user_contact($user)
+function userContact($user)
 {
     return Contact::where('user_id', $user->id)->count();
 }
 
 // --------------- Функция подсчета человек в игнор-листе ---------------//
-function user_ignore($user)
+function userIgnore($user)
 {
     return Ignore::where('user_id', $user->id)->count();
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
-function user_wall($user) {
+function userWall($user) {
     return Wall::where('user_id', $user->id)->count();
 }
 
 // ------------------ Функция подсчета пользователей онлайн -----------------//
-function stats_online($cache = 30) {
+function statsOnline($cache = 30) {
     if (@filemtime(STORAGE."/temp/online.dat") < time()-$cache) {
 
         $online[0] = Online::whereNotNull('user_id')->count();
@@ -527,16 +528,16 @@ function stats_online($cache = 30) {
 }
 
 // ------------------ Функция вывода пользователей онлайн -----------------//
-function show_online()
+function showOnline()
 {
     if (setting('onlines') == 1) {
-        $online = stats_online();
+        $online = statsOnline();
         view('app/_online', compact('online'));
     }
 }
 
 // ------------------ Функция подсчета посещений -----------------//
-function stats_counter() {
+function statsCounter() {
     if (@filemtime(STORAGE."/temp/counter.dat") < time()-10) {
         $counts = Counter::count();
         file_put_contents(STORAGE."/temp/counter.dat", serialize($counts), LOCK_EX);
@@ -546,7 +547,7 @@ function stats_counter() {
 }
 
 // ------------------ Функция вывода счетчика посещений -----------------//
-function show_counter()
+function showCounter()
 {
     if (is_user()) {
 
@@ -567,14 +568,14 @@ function show_counter()
     include_once (APP."/Includes/counters.php");
 
     if (setting('incount') > 0) {
-        $count = stats_counter();
+        $count = statsCounter();
 
         view('includes/counter', compact('count'));
     }
 }
 
 // --------------- Функция вывода количества зарегистрированных ---------------//
-function stats_users() {
+function statsUsers() {
     if (@filemtime(STORAGE."/temp/statusers.dat") < time()-3600) {
         $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
         $new = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `joined`>UNIX_TIMESTAMP(CURDATE());");
@@ -592,7 +593,7 @@ function stats_users() {
 }
 
 // --------------- Функция вывода количества админов и модеров --------------------//
-function stats_admins() {
+function statsAdmins() {
     if (@filemtime(STORAGE."/temp/statadmins.dat") < time()-3600) {
         $stat = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
 
@@ -670,7 +671,7 @@ function stats_smiles() {
 // ----------- Функция вывода даты последнего сканирования -------------//
 function stats_checker() {
     if (file_exists(STORAGE."/temp/checker.dat")) {
-        return date_fixed(filemtime(STORAGE."/temp/checker.dat"), "j.m.y");
+        return dateFixed(filemtime(STORAGE."/temp/checker.dat"), "j.m.y");
     } else {
         return 0;
     }
@@ -765,7 +766,7 @@ function user_visit($user) {
         if ($visit['updated_at'] > SITETIME - 600) {
             $state = '(Сейчас на сайте)';
         } else {
-            $state = '(Последний визит: '.date_fixed($visit['updated_at']).')';
+            $state = '(Последний визит: '.dateFixed($visit['updated_at']).')';
         }
     }
 
@@ -948,7 +949,7 @@ function stats_news() {
         $news = News::orderBy('created_at', 'desc')->first();
 
         if ($news) {
-            $stat = date_fixed($news['created_at'], "d.m.y");
+            $stat = dateFixed($news['created_at'], "d.m.y");
             if ($stat == 'Сегодня') {
                 $stat = '<span style="color:#ff0000">Сегодня</span>';
             }
@@ -1138,27 +1139,28 @@ function show_advertuser()
 
 // --------------- Функция кэширования пользовательской рекламы -------------------//
 function save_advertuser() {
-    /*$queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `created_at`>?;", [SITETIME]);
-    $data = $queryrek -> fetchAll();
 
-    $arraylink = [];
+    $data = RekUser::where('created_at', '>', SITETIME)->get();
 
-    if (count($data) > 0) {
+    $links = [];
+
+    if ($data->isNotEmpty()) {
         foreach ($data as $val) {
-            if (!empty($val['color'])) {
+            if ($val['color']) {
                 $val['name'] = '<span style="color:'.$val['color'].'">'.$val['name'].'</span>';
             }
+
             $link = '<a href="'.$val['site'].'" target="_blank" rel="nofollow">'.$val['name'].'</a>';
 
-            if (!empty($val['bold'])) {
+            if ($val['bold']) {
                 $link = '<b>'.$link.'</b>';
             }
 
-            $arraylink[] = $link;
+            $links[] = $link;
         }
     }
 
-    file_put_contents(STORAGE."/temp/rekuser.dat", serialize($arraylink), LOCK_EX);*/
+    file_put_contents(STORAGE."/temp/rekuser.dat", serialize($links), LOCK_EX);
 }
 
 // ----------- Функция закачки файла через curl ------------//
@@ -1230,7 +1232,7 @@ function recentfiles($show = 5) {
     if (is_array($files) && count($files) > 0) {
         foreach ($files as $file){
 
-            $filesize = (!empty($file['link'])) ? read_file(HOME.'/uploads/files/'.$file['link']) : 0;
+            $filesize = (!empty($file['link'])) ? formatFileSize(HOME.'/uploads/files/'.$file['link']) : 0;
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['id'].'">'.$file['title'].'</a> ('.$filesize.')<br>';
         }
     }
@@ -1605,7 +1607,7 @@ function send_private($userId, $authorId, $text, $time = SITETIME){
 
         DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `id`=? LIMIT 1;", [$userId]);
 
-        save_usermail();
+        saveUserMail();
         return true;
     }
     return false;
@@ -1722,8 +1724,8 @@ function abort($code, $message = null)
 
         $error = new Log();
         $error->code = $code;
-        $error->request = utf_substr(server('REQUEST_URI'), 0, 200);
-        $error->referer = utf_substr(server('HTTP_REFERER'), 0, 200);
+        $error->request = utfSubstr(server('REQUEST_URI'), 0, 200);
+        $error->referer = utfSubstr(server('HTTP_REFERER'), 0, 200);
         $error->user_id = getUserId();
         $error->ip = getClientIp();
         $error->brow = getUserAgent();

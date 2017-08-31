@@ -187,14 +187,14 @@ case 'editstatus':
         -> addRule('string', $status, 'Слишком длинный или короткий статус!', false, 3, 20);
 
     if (!empty($status)) {
-        $checkstatus = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE lower(`status`)=? LIMIT 1;", [utf_lower($status)]);
+        $checkstatus = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE lower(`status`)=? LIMIT 1;", [utfLower($status)]);
         $validation -> addRule('empty', $checkstatus, 'Выбранный вами статус уже используется на сайте!');
     }
 
     if ($validation->run()) {
 
         DB::run() -> query("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", [$status, $cost, getUsername()]);
-        save_title();
+        saveStatus();
 
         setFlash('success', 'Ваш статус успешно изменен!');
         redirect("/account");

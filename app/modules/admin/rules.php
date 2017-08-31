@@ -23,7 +23,7 @@ if (is_admin([101, 102])) {
 
                 echo bbCode($rules['text']).'<hr>';
 
-                echo 'Последнее изменение: '.date_fixed($rules['time']).'<br><br>';
+                echo 'Последнее изменение: '.dateFixed($rules['time']).'<br><br>';
             } else {
                 showError('Правила сайта еще не установлены!');
             }
@@ -60,7 +60,7 @@ if (is_admin([101, 102])) {
             $msg = check($_POST['msg']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($msg) > 0) {
+                if (utfStrlen($msg) > 0) {
                     $msg = str_replace('&#37;', '%', $msg);
 
                     DB::run() -> query("REPLACE INTO `rules` (`id`, `text`, `time`) VALUES (?,?,?);", [1, $msg, SITETIME]);

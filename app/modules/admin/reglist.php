@@ -70,7 +70,7 @@ if (is_admin([101, 102, 103])) {
                     echo user_gender($data['login']).' <b>'.profile($data['login']).'</b>';
                     echo '(email: '.$data['email'].')</div>';
 
-                    echo '<div>Зарегистрирован: '.date_fixed($data['joined']).'</div>';
+                    echo '<div>Зарегистрирован: '.dateFixed($data['joined']).'</div>';
                 }
 
                 echo '<br><select name="choice">';

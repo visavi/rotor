@@ -29,7 +29,7 @@ $links = [
 
             <div class="b"><i class="fa fa-picture-o"></i>
                 <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b>
-                ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }}) (Рейтинг: {!! format_num($data['rating']) !!})
+                ({{ formatFileSize(HOME.'/uploads/pictures/'.$data['link']) }}) (Рейтинг: {!! format_num($data['rating']) !!})
             </div>
 
             <div>
@@ -39,7 +39,7 @@ $links = [
                     {!! bbCode($data['text']) !!}<br>
                 @endif
 
-                Добавлено: {!! profile($data->user) !!} ({{ date_fixed($data['created_at']) }})<br>
+                Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data['created_at']) }})<br>
                 <a href="/gallery/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
                 <a href="/gallery/{{ $data['id'] }}/end">&raquo;</a>
             </div>

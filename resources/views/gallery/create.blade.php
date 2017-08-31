@@ -22,7 +22,7 @@
     </div><br>
 
     Разрешается добавлять фотки с расширением jpg, jpeg, gif и png<br>
-    Весом не более {{ formatsize(setting('filesize')) }} и размером от 100 до {{ setting('fileupfoto') }} px<br><br>
+    Весом не более {{ formatSize(setting('filesize')) }} и размером от 100 до {{ setting('fileupfoto') }} px<br><br>
 
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>

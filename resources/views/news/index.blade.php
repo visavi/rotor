@@ -16,7 +16,7 @@
         @foreach ($news as $data)
             <div class="b">
                 {!! $data['closed'] == 0 ? '<i class="fa fa-plus-square-o"></i> ' : '<i class="fa fa-minus-square-o"></i>' !!}
-                <b><a href="/news/{{ $data['id'] }}">{{ $data['title'] }}</a></b><small> ({{ date_fixed($data['created_at']) }})</small>
+                <b><a href="/news/{{ $data['id'] }}">{{ $data['title'] }}</a></b><small> ({{ dateFixed($data['created_at']) }})</small>
             </div>
 
             @if ($data['image'])

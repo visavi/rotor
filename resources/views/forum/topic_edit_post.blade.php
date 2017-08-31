@@ -7,7 +7,7 @@
 @section('content')
     <h1>Изменение сообщения</h1>
 
-    <i class="fa fa-pencil"></i> <b>{{ $post->getUser()->login }}</b> <small>({{ date_fixed($post['created_at']) }})</small><br><br>
+    <i class="fa fa-pencil"></i> <b>{{ $post->getUser()->login }}</b> <small>({{ dateFixed($post['created_at']) }})</small><br><br>
 
     <div class="form">
         <form action="/topic/{{ $post['topic_id'] }}/{{ $post['id'] }}/edit?page={{ $page }}" method="post">
@@ -23,7 +23,7 @@
                 <i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br>
                 @foreach ($files as $file)
                     <input type="checkbox" name="delfile[]" value="{{ $file['id'] }}">
-                    <a href="/uploads/forum/{{ $post['topic_id'] }}/{{ $file['hash'] }}" target="_blank">{{ $file['name'] }}</a> ({{ formatsize($file['size']) }})<br>
+                    <a href="/uploads/forum/{{ $post['topic_id'] }}/{{ $file['hash'] }}" target="_blank">{{ $file['name'] }}</a> ({{ formatSize($file['size']) }})<br>
                 @endforeach
                 <br>
             @endif

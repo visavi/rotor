@@ -24,7 +24,7 @@ if (! is_admin()) {
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/ban">Бан / Разбан</a><br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/banlist">Список забаненых</a> (<?=stats_banned()?>)<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/spam">Список жалоб</a> (<?=stats_spam()?>)<br>
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> (<?=stats_admins()?>)<br>
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/adminlist">Список старших</a> (<?=statsAdmins()?>)<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/reglist">Список ожидающих</a> (<?=stats_reglist()?>)<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/votes">Голосования</a> (<?=statVotes()?>)<br>
         <?=show_admin_links(103);?>
@@ -34,7 +34,7 @@ if (! is_admin()) {
         <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Администратор</b></div>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/rules">Правила сайта</a><br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/news">Новости</a> (<?=stats_allnews()?>)<br>
-        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> (<?=stats_users()?>)<br>
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> (<?=statsUsers()?>)<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/ipban">IP-бан панель</a> (<?=stats_ipbanned()?>)<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> (<?=phpversion()?>)<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> (<?=stats_load()?>)<br>
@@ -57,7 +57,7 @@ if (! is_admin()) {
         <?php if ($admin['level'] != 101) {?>
 
             <br><div class="b"><b><span style="color:#ff0000">Внимание!!! Cуперадминистратор не имеет достаточных прав!</span></b><br>
-            Профилю назначен уровень доступа <b><?=$admin['level']?> - <?=user_status($admin['level'])?></b></div>
+            Профилю назначен уровень доступа <b><?=$admin['level']?> - <?=userLevel($admin['level'])?></b></div>
 
         <?php }?>
 

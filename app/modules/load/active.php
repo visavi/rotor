@@ -27,7 +27,7 @@ case 'files':
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-            $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+            $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
             echo '<div class="b"><i class="fa fa-file-o"></i> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
@@ -71,7 +71,7 @@ case 'comments':
             echo '</div>';
             echo '<div>'.bbCode($data['text']).'<br>';
 
-            echo 'Написал: '.$data['user'].' <small>('.date_fixed($data['time']).')</small><br>';
+            echo 'Написал: '.$data['user'].' <small>('.dateFixed($data['time']).')</small><br>';
 
             if ($is_admin) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';

@@ -317,10 +317,10 @@ case 'addfile':
 
     if ($uid == $_SESSION['token']) {
         if (!empty($cid)) {
-            if (utf_strlen($title) >= 5 && utf_strlen($title) < 50) {
-                if (utf_strlen($text) >= 10 && utf_strlen($text) < 5000) {
-                    if (utf_strlen($author) <= 50) {
-                        if (utf_strlen($site) <= 50) {
+            if (utfStrlen($title) >= 5 && utfStrlen($title) < 50) {
+                if (utfStrlen($text) >= 10 && utfStrlen($text) < 5000) {
+                    if (utfStrlen($author) <= 50) {
+                        if (utfStrlen($site) <= 50) {
                             if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                                 $downs = Category::find_one($cid);
                                 if (!empty($downs)) {
@@ -402,7 +402,7 @@ case 'addcats':
 
     if (is_admin([101])) {
         if ($uid == $_SESSION['token']) {
-            if (utf_strlen($name) >= 4 && utf_strlen($name) < 50) {
+            if (utfStrlen($name) >= 4 && utfStrlen($name) < 50) {
                 $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `cats`;");
                 DB::run() -> query("INSERT INTO `cats` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
@@ -489,7 +489,7 @@ case 'addeditcats':
 
     if (is_admin([101])) {
         if ($uid == $_SESSION['token']) {
-            if (utf_strlen($name) >= 4 && utf_strlen($name) < 50) {
+            if (utfStrlen($name) >= 4 && utfStrlen($name) < 50) {
             if (preg_match('/^[\w\-]{0,50}$/', $folder)) {
                 if ($cid != $parent) {
 
@@ -718,7 +718,7 @@ case 'down':
             }
 
              while ($data = $querydown -> fetch()) {
-                $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+                $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
                 echo '<div class="b">';
                 echo '<i class="fa fa-file-o"></i> ';
@@ -799,7 +799,7 @@ case 'editdown':
         } else {
             $folder = $new['folder'] ? $new['folder'].'/' : '';
 
-            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/admin/load?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
+            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/admin/load?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
 
             $ext = getExtension($new['link']);
             if (! in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
@@ -811,7 +811,7 @@ case 'editdown':
                     echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br><input type="file" name="screen"><br>';
                     echo '<input value="Загрузить" type="submit"></form></div><br>';
                 } else {
-                    echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                    echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
                     echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                 }
             }
@@ -855,10 +855,10 @@ case 'changedown':
     $loadfile = check(strtolower($_POST['loadfile']));
 
     if ($uid == $_SESSION['token']) {
-        if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-            if (utf_strlen($text) >= 10 && utf_strlen($text) <= 5000) {
-                if (utf_strlen($author) <= 50) {
-                    if (utf_strlen($site) <= 50) {
+        if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
+            if (utfStrlen($text) >= 10 && utfStrlen($text) <= 5000) {
+                if (utfStrlen($author) <= 50) {
+                    if (utfStrlen($site) <= 50) {
                         if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                             if (strlen($loadfile) <= 50) {
                                 if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $loadfile)) {
@@ -1040,7 +1040,7 @@ case 'loadfile':
                                     showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                                 }
                             } else {
-                                showError('Ошибка! Максимальный размер загружаемого файла '.formatsize(setting('fileupload')).'!');
+                                showError('Ошибка! Максимальный размер загружаемого файла '.formatSize(setting('fileupload')).'!');
                             }
                         } else {
                             showError('Ошибка! Недопустимое расширение файла!');
@@ -1170,7 +1170,7 @@ case 'movedown':
     if (!empty($downs)) {
         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
-        echo '<i class="fa fa-download"></i> <b>'.$downs['title'].'</b> ('.read_file(HOME.'/uploads/files/'.$folder.$downs['link']).')<br><br>';
+        echo '<i class="fa fa-download"></i> <b>'.$downs['title'].'</b> ('.formatFileSize(HOME.'/uploads/files/'.$folder.$downs['link']).')<br><br>';
 
         $querycats = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
         $cats = $querycats -> fetchAll();

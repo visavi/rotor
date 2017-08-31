@@ -1,8 +1,8 @@
 </div>
 <div class="lol" id="down">
     <a href="/">{{ setting('copy') }}</a><br>
-    <?= show_online() ?>
-    <?= show_counter() ?>
+    <?= showOnline() ?>
+    <?= showCounter() ?>
 </div>
 <div class="site" style="text-align:center">
     <?= perfomance() ?>

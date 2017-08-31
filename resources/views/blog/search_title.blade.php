@@ -21,7 +21,7 @@
         <div>
             Категория: <a href="/blog/{{ $data['category_id'] }}">{{ $data['name'] }}</a><br>
             Просмотров: {{ $data['visits'] }}<br>
-            Автор: {!! profile($data['user']) !!}  ({{ date_fixed($data['created_at']) }})
+            Автор: {!! profile($data['user']) !!}  ({{ dateFixed($data['created_at']) }})
         </div>
     @endforeach
 

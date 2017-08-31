@@ -4,7 +4,7 @@
 $week_day = date('w');
 $arr_week = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
 
-$count = stats_counter();
+$count = statsCounter();
 
 if (file_exists(STORAGE.'/temp/counter7.dat')) {
 	$host_data = unserialize(file_get_contents(STORAGE.'/temp/counter7.dat'));

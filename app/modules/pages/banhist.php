@@ -20,12 +20,12 @@ if (is_user()) {
         while ($data = $queryhist -> fetch()) {
             echo '<div class="b">';
             echo '<i class="fa fa-history"></i> ';
-            echo '<b>'.profile($data['user']).'</b> ('.date_fixed($data['time']).')</div>';
+            echo '<b>'.profile($data['user']).'</b> ('.dateFixed($data['time']).')</div>';
 
             echo '<div>';
             if (!empty($data['type'])) {
                 echo 'Причина: '.bbCode($data['reason']).'<br>';
-                echo 'Срок: '.formattime($data['term']).'<br>';
+                echo 'Срок: '.formatTime($data['term']).'<br>';
             }
 
             switch ($data['type']) {

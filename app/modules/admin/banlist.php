@@ -13,9 +13,9 @@ if (is_admin([101, 102, 103])) {
 
         while ($data = $queryusers -> fetch()) {
             echo '<div class="b">';
-            echo user_gender($data['login']).' <b>'.profile($data['login']).'</b> (Забанен: '.date_fixed($data['timelastban']).')</div>';
+            echo user_gender($data['login']).' <b>'.profile($data['login']).'</b> (Забанен: '.dateFixed($data['timelastban']).')</div>';
 
-            echo '<div>До окончания бана осталось '.formattime($data['timeban'] - SITETIME).'<br>';
+            echo '<div>До окончания бана осталось '.formatTime($data['timeban'] - SITETIME).'<br>';
             echo 'Забанил: <b>'.profile($data['loginsendban']).'</b><br>';
             echo 'Причина: '.bbCode($data['reasonban']).'<br>';
             echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=edit&amp;uz='.$data['login'].'">Редактировать</a></div>';

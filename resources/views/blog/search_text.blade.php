@@ -19,9 +19,9 @@
         </div>
 
         <?php
-        if (utf_strlen($data['text']) > 200):
+        if (utfStrlen($data['text']) > 200):
             $data['text'] = strip_tags(bbCode($data['text']), '<br>');
-            $data['text'] = utf_substr($data['text'], 0, 200).'...';
+            $data['text'] = utfSubstr($data['text'], 0, 200).'...';
             endif;
         ?>
 
@@ -29,7 +29,7 @@
             {!! $data['text'] !!}<br>
 
             Категория: <a href="/blog/{{ $data['category_id'] }}">{{ $data['name'] }}</a><br>
-            Автор: {!! profile($data['user']) !!}  ({{ date_fixed($data['created_at']) }})
+            Автор: {!! profile($data['user']) !!}  ({{ dateFixed($data['created_at']) }})
         </div>
     @endforeach
 

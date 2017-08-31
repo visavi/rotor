@@ -12,8 +12,8 @@ switch ($action):
 
 		echo '<h1>Количество посещений</h1>';
 
-		$online = stats_online();
-		$count = stats_counter();
+		$online = statsOnline();
+		$count = statsCounter();
 
 		echo 'Всего посетителей на сайте: <b>'.$online[1].'</b><br>';
 		echo 'Всего авторизованных: <b>'.$online[0].'</b><br>';
@@ -95,7 +95,7 @@ switch ($action):
 
 			echo '<b>Время — Хосты / Хиты</b><br>';
 			for ($i = 0, $tekhours = $hours; $i < $currhour; $tekhours -= 1, $i++) {
-				echo date_fixed(floor(($tekhours-1) * 3600), 'H:i').' - '.date_fixed(floor($tekhours * 3600), 'H:i').' — <b>'.$host_data[$tekhours].'</b> / <b>'.$hits_data[$tekhours].'</b><br>';
+				echo dateFixed(floor(($tekhours-1) * 3600), 'H:i').' - '.dateFixed(floor($tekhours * 3600), 'H:i').' — <b>'.$host_data[$tekhours].'</b> / <b>'.$hits_data[$tekhours].'</b><br>';
 			}
 
 			echo '<br>';
@@ -151,7 +151,7 @@ switch ($action):
 
 			echo '<b>Дата — Хосты / Хиты</b><br>';
 			for ($i = 1, $tekdays = $days; $i < $currday; $tekdays -= 1, $i++) {
-				echo date_fixed(floor(($tekdays-1) * 86400), 'd.m').' - '.date_fixed(floor($tekdays * 86400), 'd.m').' — <b>'.$host_data[$tekdays].'</b> / <b>'.$hits_data[$tekdays].'</b><br>';
+				echo dateFixed(floor(($tekdays-1) * 86400), 'd.m').' - '.dateFixed(floor($tekdays * 86400), 'd.m').' — <b>'.$host_data[$tekdays].'</b> / <b>'.$hits_data[$tekdays].'</b><br>';
 			}
 
 			echo '<br>';

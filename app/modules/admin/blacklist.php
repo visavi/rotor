@@ -71,7 +71,7 @@ if (is_admin([101, 102])) {
 
                     echo '<i class="fa fa-pencil"></i> <b>'.$data['value'].'</b></div>';
                     echo '<div>Добавлено: '.profile($data['user']).'<br>';
-                    echo 'Время: '.date_fixed($data['time']).'</div>';
+                    echo 'Время: '.dateFixed($data['time']).'</div>';
                 }
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
 
@@ -96,10 +96,10 @@ if (is_admin([101, 102])) {
         case 'add':
 
             $uid = check($_GET['uid']);
-            $value = check(utf_lower($_POST['value']));
+            $value = check(utfLower($_POST['value']));
 
             if ($uid == $_SESSION['token']) {
-                if (!empty($value) && utf_strlen($value) <= 100) {
+                if (!empty($value) && utfStrlen($value) <= 100) {
                     if ($main != 'mail' || preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $value)) {
                         if ($main != 'login' || preg_match('|^[a-z0-9\-]+$|', $value)) {
                             if ($main != 'domain' || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $value)) {

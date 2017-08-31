@@ -33,17 +33,17 @@ if (is_admin()) {
                         echo '<i class="fa fa-check"></i> ';
                     }
 
-                    echo '<b><a href="/admin/newload?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.date_fixed($data['time']).')</div>';
+                    echo '<b><a href="/admin/newload?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.dateFixed($data['time']).')</div>';
                     echo '<div>';
                     echo 'Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br>';
                     echo 'Добавлено: '.profile($data['user']).'<br>';
                     if (!empty($data['link'])) {
-                        echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/uploads/files/'.$data['link']).')<br>';
+                        echo 'Файл: '.$data['link'].' ('.formatFileSize(HOME.'/uploads/files/'.$data['link']).')<br>';
                     } else {
                         echo 'Файл: Не загружен<br>';
                     }
                     if (!empty($data['screen'])) {
-                        echo 'Скрин: '.$data['screen'].' ('.read_file(HOME.'/uploads/screen/'.$data['screen']).')<br>';
+                        echo 'Скрин: '.$data['screen'].' ('.formatFileSize(HOME.'/uploads/screen/'.$data['screen']).')<br>';
                     } else {
                         echo 'Скрин: Не загружен<br>';
                     }
@@ -84,13 +84,13 @@ if (is_admin()) {
                         $folder = $new['folder'] ? $new['folder'].'/' : '';
 
                         if (!empty($new['link'])) {
-                            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
+                            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(HOME.'/uploads/files/'.$folder.$new['link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
                         } else {
                             echo '<i class="fa fa-download"></i> <b>Не загружен</b><br>';
                         }
 
                         if (!empty($new['screen'])) {
-                            echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                            echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
                             echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                         } else {
                             echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br>';
@@ -99,7 +99,7 @@ if (is_admin()) {
                         echo '<br><b><big>Редактирование</big></b><br><br>';
 
                         echo 'Добавлено: <b>'.profile($new['user']).'</b> '.user_visit($new['user']).'<br>';
-                        echo 'Время последнего изменения:  ('.date_fixed($new['time']).')<br><br>';
+                        echo 'Время последнего изменения:  ('.dateFixed($new['time']).')<br><br>';
 
                         echo '<div class="form">';
                         echo '<form action="/admin/newload?act=edit&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -183,9 +183,9 @@ if (is_admin()) {
             $app = (empty($_POST['app'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($title) >= 5 && utf_strlen($title) < 50) {
-                    if (utf_strlen($text) >= 10 && utf_strlen($text) < 5000) {
-                        if (utf_strlen($author) <= 50) {
+                if (utfStrlen($title) >= 5 && utfStrlen($title) < 50) {
+                    if (utfStrlen($text) >= 10 && utfStrlen($text) < 5000) {
+                        if (utfStrlen($author) <= 50) {
                             if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                                 if (strlen($link) <= 50) {
                                     if (!preg_match('/\.(php|pl|cgi|phtml|htaccess)/i', $link)) {

@@ -101,16 +101,16 @@ case 'waiting':
 
             echo '<i class="fa fa-download"></i> ';
 
-            echo '<b><a href="/load/add?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.date_fixed($data['time']).')</div>';
+            echo '<b><a href="/load/add?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.dateFixed($data['time']).')</div>';
             echo '<div>';
             echo 'Категория: '.$data['name'].'<br>';
             if (!empty($data['link'])) {
-                echo 'Файл: '.$data['link'].' ('.read_file(HOME.'/uploads/files/'.$data['link']).')<br>';
+                echo 'Файл: '.$data['link'].' ('.formatFileSize(HOME.'/uploads/files/'.$data['link']).')<br>';
             } else {
                 echo 'Файл: <span style="color:#ff0000">Не загружен</span><br>';
             }
             if (!empty($data['screen'])) {
-                echo 'Скрин: '.$data['screen'].' ('.read_file(HOME.'/uploads/files/'.$data['screen']).')<br>';
+                echo 'Скрин: '.$data['screen'].' ('.formatFileSize(HOME.'/uploads/files/'.$data['screen']).')<br>';
             } else {
                 echo 'Скрин: <span style="color:#ff0000">Не загружен</span><br>';
             }
@@ -141,10 +141,10 @@ case 'add':
 
     if ($uid == $_SESSION['token']) {
         if (!empty($cid)) {
-            if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                if (utf_strlen($text) >= 50 && utf_strlen($text) <= 5000) {
-                    if (utf_strlen($author) <= 50) {
-                        if (utf_strlen($site) <= 50) {
+            if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
+                if (utfStrlen($text) >= 50 && utfStrlen($text) <= 5000) {
+                    if (utfStrlen($author) <= 50) {
+                        if (utfStrlen($site) <= 50) {
                             if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
 
                                 $downs = Category::find_one($cid);
@@ -236,11 +236,11 @@ case 'view':
                         echo 'Прикрепить файл* ('.setting('allowextload').'):<br><input type="file" name="loadfile"><br>';
                         echo '<input value="Загрузить" type="submit"></form><br>';
 
-                        echo 'Максимальный вес файла: '.formatsize(setting('fileupload')).'</div><br>';
+                        echo 'Максимальный вес файла: '.formatSize(setting('fileupload')).'</div><br>';
 
                     } else {
 
-                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.read_file(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
+                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
 
                         $ext = getExtension($new['link']);
                         if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
@@ -251,11 +251,11 @@ case 'view':
                                 echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br><input type="file" name="screen"><br>';
                                 echo '<input value="Загрузить" type="submit"></form><br>';
 
-                                echo 'Максимальный вес скриншота: '.formatsize(setting('screenupload')).'<br>';
+                                echo 'Максимальный вес скриншота: '.formatSize(setting('screenupload')).'<br>';
                                 echo 'Требуемый размер скриншота: от 100 до '.setting('screenupsize').' px</div><br><br>';
 
                             } else {
-                                echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.read_file(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                                echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
                                 echo resize_image('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                             }
                         }
@@ -334,10 +334,10 @@ case 'edit':
     $site = ($_POST['site'] != 'http://') ? check($_POST['site']) : '';
 
     if ($uid == $_SESSION['token']) {
-        if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-            if (utf_strlen($text) >= 50 && utf_strlen($text) <= 5000) {
-                if (utf_strlen($author) <= 50) {
-                    if (utf_strlen($site) <= 50) {
+        if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
+            if (utfStrlen($text) >= 50 && utfStrlen($text) <= 5000) {
+                if (utfStrlen($author) <= 50) {
+                    if (utfStrlen($site) <= 50) {
                         if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
                             $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
                             if (!empty($new)) {
@@ -480,7 +480,7 @@ case 'loadfile':
                                             showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
                                         }
                                     } else {
-                                        showError('Ошибка! Максимальный размер загружаемого файла '.formatsize(setting('fileupload')).'!');
+                                        showError('Ошибка! Максимальный размер загружаемого файла '.formatSize(setting('fileupload')).'!');
                                     }
                                 } else {
                                     showError('Ошибка! Недопустимое расширение файла!');
@@ -681,8 +681,8 @@ case 'rules':
 
         echo '<b>Ограничения:</b><br>';
         echo 'К загрузке допускаются архивы в формате zip, скриншоты можно загружать в форматах jpg, jpeg, gif и png<br>';
-        echo 'Максимальный вес архива: '.formatsize(setting('fileupload')).'<br>';
-        echo 'Максимальный вес скриншота: '.formatsize(setting('screenupload')).'<br>';
+        echo 'Максимальный вес архива: '.formatSize(setting('fileupload')).'<br>';
+        echo 'Максимальный вес скриншота: '.formatSize(setting('screenupload')).'<br>';
         echo 'Требуемый размер скриншота: от 100 до '.setting('screenupsize').' px<br><br>';
 
         echo '<b>Рекомендации:</b><br>';

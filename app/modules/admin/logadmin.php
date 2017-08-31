@@ -26,7 +26,7 @@ if (is_admin([101])) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-file-o"></i> <b>'.profile($data['user']).'</b>';
-                    echo ' ('.date_fixed($data['time']).')</div>';
+                    echo ' ('.dateFixed($data['time']).')</div>';
                     echo '<div>Страница: '.$data['request'].'<br>';
                     echo 'Откуда: '.$data['referer'].'<br>';
                     echo '<small><span style="color:#cc00cc">('.$data['brow'].', '.$data['ip'].')</span></small></div>';

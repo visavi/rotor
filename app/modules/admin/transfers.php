@@ -21,10 +21,10 @@ if (is_admin([101, 102, 103])) {
 
                 while ($data = $querytrans -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<div class="img">'.userAvatar($data['user']).'</div>';
                     echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                    echo '<small>('.date_fixed($data['time']).')</small><br>';
+                    echo '<small>('.dateFixed($data['time']).')</small><br>';
 
                     echo '<a href="/admin/transfers?act=view&amp;uz='.$data['user'].'">Все переводы</a></div>';
 
@@ -69,10 +69,10 @@ if (is_admin([101, 102, 103])) {
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';
-                        echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                        echo '<div class="img">'.userAvatar($data['user']).'</div>';
                         echo '<b>'.profile($data['user']).'</b> '.user_online($data['user']).' ';
 
-                        echo '<small>('.date_fixed($data['time']).')</small>';
+                        echo '<small>('.dateFixed($data['time']).')</small>';
                         echo '</div>';
 
                         echo '<div>';

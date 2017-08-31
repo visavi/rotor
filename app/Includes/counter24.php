@@ -1,7 +1,7 @@
 <?php
 
 $imagecache = '/uploads/counters/counter24.gif';
-if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmYH") != date_fixed(SITETIME, "dmYH")){
+if (!file_exists($imagecache) || dateFixed(@filemtime($imagecache), "dmYH") != dateFixed(SITETIME, "dmYH")){
 
 	$hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
 
@@ -99,4 +99,4 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmYH") != 
 	imagedestroy($img);
 }
 
-echo '<img src="'.$imagecache.'?'.date_fixed(SITETIME, "dmYH").'" alt="Сутки"><br><br>';
+echo '<img src="'.$imagecache.'?'.dateFixed(SITETIME, "dmYH").'" alt="Сутки"><br><br>';

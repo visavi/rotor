@@ -41,7 +41,7 @@ case 'index':
             if (!empty($data['invited'])) {
                 echo 'Приглашенный: '.profile($data['invited']).'<br>';
             }
-            echo 'Создан: '.date_fixed($data['time']).'<br>';
+            echo 'Создан: '.dateFixed($data['time']).'<br>';
             echo '</div>';
         }
 

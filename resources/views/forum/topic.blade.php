@@ -126,10 +126,10 @@
                     </div>
                 </div>
 
-                <div class="img">{!! user_avatars($data->user) !!}</div>
+                <div class="img">{!! userAvatar($data->user) !!}</div>
 
-                {{ $num }}. <b>{!! profile($data->user) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br>
-                {!! user_title($data->user) !!} {!! user_online($data->user) !!}
+                {{ $num }}. <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data['created_at']) }})</small><br>
+                {!! userStatus($data->user) !!} {!! user_online($data->user) !!}
             </div>
 
             <div class="message">
@@ -142,7 +142,7 @@
                     <?php $ext = getExtension($file['hash']); ?>
 
                     {!! icons($ext) !!}
-                    <a href="/uploads/forum/{{ $topic['id'] }}/{{ $file['hash'] }}">{{ $file['name'] }}</a> ({{ formatsize($file['size']) }})<br>
+                    <a href="/uploads/forum/{{ $topic['id'] }}/{{ $file['hash'] }}">{{ $file['name'] }}</a> ({{ formatSize($file['size']) }})<br>
                     @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png']))
                         <a href="/uploads/forum/{{ $topic['id'] }}/{{ $file['hash'] }}" class="gallery" data-group="{{ $data['id'] }}">{!! resize_image('uploads/forum/', $topic['id'].'/'.$file['hash'], setting('previewsize'), ['alt' => $file['name']]) !!}</a><br>
                     @endif
@@ -151,7 +151,7 @@
             @endif
 
             @if ($data['edit_user_id'])
-                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->getEditUser()->login }}({{ date_fixed($data['updated_at']) }})</small><br>
+                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->getEditUser()->login }}({{ dateFixed($data['updated_at']) }})</small><br>
             @endif
 
             @if (is_admin())

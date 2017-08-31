@@ -1,6 +1,6 @@
 <ul class="list-inline hiding text-left">
     <li class="list-inline-item" data-toggle="tooltip" title="MySQL запросы"><i class="fa fa-database"></i> {{ count($queries) }}</li>
-    <li class="list-inline-item" data-toggle="tooltip" title="Потребление ОЗУ"><i class="fa fa-bolt"></i> {{ formatsize(memory_get_usage()) }}</li>
+    <li class="list-inline-item" data-toggle="tooltip" title="Потребление ОЗУ"><i class="fa fa-bolt"></i> {{ formatSize(memory_get_usage()) }}</li>
 
     <?php if (function_exists('sys_getloadavg')): ?>
         <?php $cpu = sys_getloadavg(); ?>

@@ -1,8 +1,8 @@
 </div>
 <div class="c" id="down">
     <a href="<?= setting('home') ?>"><?= setting('copy') ?></a><br/>
-    <?= show_counter() ?>
-    <?= show_online() ?>
+    <?= showCounter() ?>
+    <?= showOnline() ?>
 </div>
 <div class="foot">
     <?= perfomance() ?>

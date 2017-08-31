@@ -19,5 +19,5 @@ use App\Models\Setting;
 <?php endif; ?>
 
 <?php if (setting('incount') == 5): ?>
-	<a href="/counter"><img src="/uploads/counters/counter.png?<?= date_fixed(SITETIME, "dmYHi") ?>" alt="counter"></a><br>
+	<a href="/counter"><img src="/uploads/counters/counter.png?<?= dateFixed(SITETIME, "dmYHi") ?>" alt="counter"></a><br>
 <?php endif; ?>

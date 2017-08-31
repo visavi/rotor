@@ -57,7 +57,7 @@ if (is_admin([101, 102, 103])) {
         case "add":
 
             $uid = check($_GET['uid']);
-            $mat = check(utf_lower($_POST['mat']));
+            $mat = check(utfLower($_POST['mat']));
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($mat)) {

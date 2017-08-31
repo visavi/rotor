@@ -40,7 +40,7 @@ if (is_admin([101, 102])) {
                         echo '<b>Автоматически</b><br>';
                     }
 
-                    echo 'Время: '.date_fixed($data['time']).'</div>';
+                    echo 'Время: '.dateFixed($data['time']).'</div>';
                 }
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';

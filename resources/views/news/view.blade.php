@@ -8,7 +8,7 @@
 
 @section('content')
 
-    <h1>{{ $news['title'] }} <small> ({{ date_fixed($news['created_at']) }})</small></h1>
+    <h1>{{ $news['title'] }} <small> ({{ dateFixed($news['created_at']) }})</small></h1>
 
     @if (is_admin())
         <div class="form">
@@ -35,11 +35,11 @@
 
         @foreach ($comments as $comm)
             <div class="b">
-                <div class="img">{!! user_avatars($comm['user']) !!}</div>
+                <div class="img">{!! userAvatar($comm['user']) !!}</div>
 
                 <b>{!! profile($comm['user']) !!}</b>
-                <small> ({{ date_fixed($comm['created_at']) }})</small><br>
-                {!! user_title($comm['user']) !!} {!! user_online($comm['user']) !!}
+                <small> ({{ dateFixed($comm['created_at']) }})</small><br>
+                {!! userStatus($comm['user']) !!} {!! user_online($comm['user']) !!}
             </div>
 
             <div>

@@ -27,7 +27,7 @@ if (is_admin([101])) {
                 arsort($globfiles);
 
                 foreach($globfiles as $value) {
-                    echo '<i class="fa fa-archive"></i> <b>'.basename($value).'</b> ('.read_file($value).') (<a href="/admin/backup?act=del&amp;backup='.basename($value).'&amp;uid='.$_SESSION['token'].'">Удалить</a>)<br>';
+                    echo '<i class="fa fa-archive"></i> <b>'.basename($value).'</b> ('.formatFileSize($value).') (<a href="/admin/backup?act=del&amp;backup='.basename($value).'&amp;uid='.$_SESSION['token'].'">Удалить</a>)<br>';
                 }
 
                 echo '<br>Всего бэкапов: <b>'.$total.'</b><br><br>';
@@ -57,7 +57,7 @@ if (is_admin([101])) {
 
                 foreach ($tables as $data) {
                     echo '<input type="checkbox" name="tables[]" value="'.$data['Name'].'"> ';
-                    echo '<i class="fa fa-database"></i> <b>'.$data['Name'].'</b> (Записей: '.$data['Rows'].' / Размер: '.formatsize($data['Data_length']).')<br>';
+                    echo '<i class="fa fa-database"></i> <b>'.$data['Name'].'</b> (Записей: '.$data['Rows'].' / Размер: '.formatSize($data['Data_length']).')<br>';
                 }
 
                 echo '<br>Метод сжатия:<br>';

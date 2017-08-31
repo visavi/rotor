@@ -176,7 +176,7 @@ class UserController extends BaseController
                 $protect = check(strtolower(Request::input('protect')));
                 $invite = (!empty(setting('invite'))) ? check(Request::input('invite')) : '';
                 $meil = strtolower(check(Request::input('meil')));
-                $domain = utf_substr(strrchr($meil, '@'), 1);
+                $domain = utfSubstr(strrchr($meil, '@'), 1);
                 $gender = Request::input('gender') == 1 ? 1 : 2;
                 $activateKey = '';
 
@@ -305,7 +305,7 @@ class UserController extends BaseController
         if (Request::isMethod('post')) {
             if (Request::has('login') && Request::has('pass')) {
                 $return = Request::input('return', '');
-                $login = check(utf_lower(Request::input('login')));
+                $login = check(utfLower(Request::input('login')));
                 $pass = trim(Request::input('pass'));
                 $remember = Request::input('remember');
 
@@ -378,9 +378,9 @@ class UserController extends BaseController
 
             if ($validation->run()) {
 
-                $name    = utf_substr($name, 0, 20);
-                $country = utf_substr($country, 0, 30);
-                $city    = utf_substr($city, 0, 50);
+                $name    = utfSubstr($name, 0, 20);
+                $country = utfSubstr($country, 0, 30);
+                $city    = utfSubstr($city, 0, 50);
 
                 DB::run()->query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `info`=? WHERE `login`=? LIMIT 1;", [$name, $country, $city, $icq, $skype, $site, $birthday, $info, getUsername()]);
 

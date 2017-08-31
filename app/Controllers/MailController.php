@@ -30,7 +30,7 @@ class MailController extends BaseController
 
             if ($validation->run()) {
 
-                $message .= '<br><br>IP: ' . getClientIp() . '<br>Браузер: ' . getUserAgent() . '<br>Отправлено: ' . date_fixed(SITETIME, 'j.m.Y / H:i');
+                $message .= '<br><br>IP: ' . getClientIp() . '<br>Браузер: ' . getUserAgent() . '<br>Отправлено: ' . dateFixed(SITETIME, 'j.m.Y / H:i');
 
                 $subject = 'Письмо с сайта ' . setting('title');
                 $body = view('mailer.default', compact('subject', 'message'), true);

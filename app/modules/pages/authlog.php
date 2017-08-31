@@ -28,7 +28,7 @@ if (is_user()) {
             } else {
                 echo '<b>Авторизация</b>';
             }
-            echo ' <small>('.date_fixed($data['time']).')</small>';
+            echo ' <small>('.dateFixed($data['time']).')</small>';
 
             echo '</div>';
 

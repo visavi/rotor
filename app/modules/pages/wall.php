@@ -40,14 +40,14 @@ if (!empty($queryuser)) {
 
                 while ($data = $querywall -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['login']).'</div>';
+                    echo '<div class="img">'.userAvatar($data['login']).'</div>';
 
                     if ($is_admin || $uz == getUsername()) {
                         echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
                     }
 
-                    echo '<b>'.profile($data['login']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
-                    echo user_title($data['login']).' '.user_online($data['login']).'</div>';
+                    echo '<b>'.profile($data['login']).'</b> <small>('.dateFixed($data['time']).')</small><br>';
+                    echo userStatus($data['login']).' '.user_online($data['login']).'</div>';
 
                     if ($uz == getUsername() && getUsername() != $data['login']) {
                         echo '<div class="right">';
@@ -94,7 +94,7 @@ if (!empty($queryuser)) {
             if (is_user()) {
                 if ($uz == getUsername() || is_admin() || is_contact($uz, getUsername())){
                     if ($uid == $_SESSION['token']) {
-                        if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
+                        if (utfStrlen($msg) >= 5 && utfStrlen($msg) < 1000) {
                             $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, getUsername()]);
                             if (empty($ignorstr)) {
                                 if (Flood::isFlood()) {

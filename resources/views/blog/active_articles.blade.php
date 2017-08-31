@@ -15,7 +15,7 @@
                 <b><a href="/article/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({!! format_num($data['rating']) !!})
             </div>
 
-            <div>Автор: {!! profile($data['user']) !!} ({{ date_fixed($data['time']) }})<br>
+            <div>Автор: {!! profile($data['user']) !!} ({{ dateFixed($data['time']) }})<br>
                 <i class="fa fa-comment"></i> <a href="/article/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
                 <a href="/article/{{ $data['id'] }}/end">&raquo;</a>
             </div>

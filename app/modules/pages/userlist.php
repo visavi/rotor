@@ -35,7 +35,7 @@ switch ($action):
                 ++$i;
 
                 echo '<div class="b"> ';
-                echo '<div class="img">'.user_avatars($data['login']).'</div>';
+                echo '<div class="img">'.userAvatar($data['login']).'</div>';
 
                 if ($uz == $data['login']) {
                     echo ($page['offset'] + $i).'. <b><big>'.profile($data['login'], '#ff0000').'</big></b> ';
@@ -43,14 +43,14 @@ switch ($action):
                     echo ($page['offset'] + $i).'. <b>'.profile($data['login']).'</b> ';
                 }
                 echo '('.points($data['point']).')<br>';
-                echo user_title($data['login']).' '.user_online($data['login']);
+                echo userStatus($data['login']).' '.user_online($data['login']);
                 echo '</div>';
 
                 echo '<div>';
                 echo 'Форум: '.$data['allforum'].' | Гостевая: '.$data['allguest'].' | Коммент: '.$data['allcomments'].'<br>';
                 echo 'Посещений: '.$data['visits'].'<br>';
-                echo 'Деньги: '.user_money($data['login']).'<br>';
-                echo 'Дата регистрации: '.date_fixed($data['joined'], 'j F Y').'</div>';
+                echo 'Деньги: '.userMoney($data['login']).'<br>';
+                echo 'Дата регистрации: '.dateFixed($data['joined'], 'j F Y').'</div>';
             }
 
             pagination($page);

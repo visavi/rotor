@@ -42,8 +42,8 @@
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/files/docs">Документация RotorCMS</a><br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/search">Поиск по сайту</a><br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/mail">Обратная связь</a><br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> (<?php /*stats_users()*/?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> (<?php /*stats_admins()*/?>)<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> (<?php /*statsUsers()*/?>)<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> (<?php /*statsAdmins()*/?>)<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/page/stat">Информация</a><br>
 
     <div class="b">

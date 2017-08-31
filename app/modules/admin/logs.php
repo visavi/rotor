@@ -31,7 +31,7 @@ if (is_admin([101, 102])) {
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.date_fixed($data['time']).')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.dateFixed($data['time']).')</small></div>';
                     echo '<div>Referer: '.($data['referer'] ?: 'Не определено').'<br>';
                     echo 'Пользователь: '.$data['username'].'<br>';
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
@@ -63,7 +63,7 @@ if (is_admin([101, 102])) {
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.date_fixed($data['time']).')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.dateFixed($data['time']).')</small></div>';
                     echo '<div>Referer: '.($data['referer'] ?: 'Не определено').'<br>';
                     echo 'Пользователь: '.$data['username'].'<br>';
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';
@@ -91,7 +91,7 @@ if (is_admin([101, 102])) {
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.date_fixed($data['time']).')</small></div>';
+                    echo '<i class="fa fa-file-o"></i> <b>'.$data['request'].'</b> <small>('.dateFixed($data['time']).')</small></div>';
                     echo '<div>Referer: '.($data['referer'] ?: 'Не определено').'<br>';
                     echo 'Пользователь: '.$data['username'].'<br>';
                     echo '<small><span class="data">('.$data['brow'].', '.$data['ip'].')</span></small></div>';

@@ -59,7 +59,7 @@ case 'add':
     echo '<input type="submit" value="Загрузить"></form></div><br>';
 
     echo 'Разрешается добавлять смайлы с расширением jpg, jpeg, gif, png, bmp<br>';
-    echo 'Весом не более '.formatsize(setting('smilemaxsize')).' и размером до '.setting('smilemaxweight').' px<br><br>';
+    echo 'Весом не более '.formatSize(setting('smilemaxsize')).' и размером до '.setting('smilemaxweight').' px<br><br>';
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?page='.$page.'">Вернуться</a><br>';
 break;
@@ -72,7 +72,7 @@ case 'load':
     //setting('newtitle') = 'Результат добавления';
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
-    $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
+    $code = (isset($_POST['code'])) ? check(utfLower($_POST['code'])) : '';
 
     if (is_writeable(HOME.'/uploads/smiles')){
 
@@ -163,7 +163,7 @@ break;
 case 'change':
 
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
-    $code = (isset($_POST['code'])) ? check(utf_lower($_POST['code'])) : '';
+    $code = (isset($_POST['code'])) ? check(utfLower($_POST['code'])) : '';
 
     $smile = Smile::find_one($id);
 

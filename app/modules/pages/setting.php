@@ -54,7 +54,7 @@ case 'index':
         $selected = (user('timezone') == $zone) ? ' selected="selected"' : '';
         echo '<option value="'.$zone.'"'.$selected.'>'.$zone.'</option>';
     }
-    echo '</select> - '.date_fixed(SITETIME, 'H:i').'<br>';
+    echo '</select> - '.dateFixed(SITETIME, 'H:i').'<br>';
 
 ?>
     <?php $checked = (user('privacy') == 1) ? ' checked="checked"' : ''; ?>

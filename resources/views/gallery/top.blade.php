@@ -29,14 +29,14 @@
         @foreach ($photos as $data)
             <div class="b">
                 <i class="fa fa-picture-o"></i>
-                <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }}) ({!! format_num($data['rating']) !!})
+                <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ formatFileSize(HOME.'/uploads/pictures/'.$data['link']) }}) ({!! format_num($data['rating']) !!})
             </div>
 
             <div><a href="/gallery/{{ $data['id'] }}">{!! resize_image('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]) !!}</a>
 
                 <br>{!! bbCode($data['text']) !!}<br>
 
-                Добавлено: {!! profile($data['user']) !!} ({{ date_fixed($data['time']) }})<br>
+                Добавлено: {!! profile($data['user']) !!} ({{ dateFixed($data['time']) }})<br>
                 <a href="/gallery/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
                 <a href="/gallery/{{ $data['id'] }}/end">&raquo;</a>
             </div>

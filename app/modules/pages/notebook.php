@@ -23,7 +23,7 @@ if (is_user()) {
                 echo '<div>Личная запись:<br>';
                 echo bbCode($note['text']).'</div><br>';
 
-                echo 'Последнее изменение: '.date_fixed($note['time']).'<br><br>';
+                echo 'Последнее изменение: '.dateFixed($note['time']).'<br><br>';
             } else {
                 showError('Запись пустая или отсутствует!');
             }
@@ -57,7 +57,7 @@ if (is_user()) {
             $msg = check($_POST['msg']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($msg) < 10000) {
+                if (utfStrlen($msg) < 10000) {
 
                     $querynote = DB::run() -> querySingle("SELECT `id` FROM `notebook` WHERE `user`=? LIMIT 1;", [getUsername()]);
                     if (!empty($querynote)) {

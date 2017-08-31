@@ -13,7 +13,7 @@ if ($total > 0) {
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-        $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+        $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
         echo '<div class="b">';
 
@@ -31,7 +31,7 @@ if ($total > 0) {
         echo 'Скачиваний: '.$data['loads'].'<br>';
         echo '<a href="/load/down?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
         echo '<a href="/load/down?act=end&amp;id='.$data['id'].'">&raquo;</a><br>';
-        echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
+        echo 'Добавлено: '.profile($data['user']).' ('.dateFixed($data['time']).')</div>';
     }
 
     pagination($page);

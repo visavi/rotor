@@ -36,7 +36,7 @@ case 'index':
             $icon = (empty($data['closed'])) ? 'unlock' : 'lock';
             echo '<i class="fa fa-'.$icon.'"></i> ';
 
-            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.date_fixed($data['created_at']).')</small><br>';
+            echo '<b><a href="/news/'.$data['id'].'">'.$data['title'].'</a></b><small> ('.dateFixed($data['created_at']).')</small><br>';
             echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
             echo '<a href="/admin/news?act=edit&amp;id='.$data['id'].'&amp;page='.$page['current'].'">Редактировать</a></div>';
 
@@ -97,7 +97,7 @@ case 'edit':
         if (!empty($datanews['image']) && file_exists(HOME.'/uploads/news/'.$datanews['image'])){
 
             echo '<a href="/uploads/news/'.$datanews['image'].'">'.resize_image('uploads/news/', $datanews['image'], 75, ['alt' => $datanews['title']]).'</a><br>';
-            echo '<b>'.$datanews['image'].'</b> ('.read_file(HOME.'/uploads/news/'.$datanews['image']).')<br><br>';
+            echo '<b>'.$datanews['image'].'</b> ('.formatFileSize(HOME.'/uploads/news/'.$datanews['image']).')<br><br>';
         }
 
         echo 'Прикрепить картинку:<br><input type="file" name="image"><br><br>';
@@ -227,7 +227,7 @@ case 'addnews':
         // Выводим на главную если там нет новостей
         if (!empty($top) && empty(setting('lastnews'))) {
             DB::run() -> query("UPDATE `setting` SET `value`=? WHERE `name`=?;", [1, 'lastnews']);
-            save_setting();
+            saveSetting();
         }
 
         // ---------------------------- Загрузка изображения -------------------------------//

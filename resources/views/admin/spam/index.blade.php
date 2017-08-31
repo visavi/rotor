@@ -31,7 +31,7 @@
                     <div class="b">
                         <i class="fa fa-file-o"></i>
                         <b>{!! profile($data->relate->user) !!}</b>
-                        <small>({{ date_fixed($data->relate->created_at, "d.m.y / H:i:s") }})</small>
+                        <small>({{ dateFixed($data->relate->created_at, "d.m.y / H:i:s") }})</small>
 
                         <div class="float-right">
                             @if (is_admin())
@@ -56,7 +56,7 @@
                     @if ($data['path'])
                         <a href="{{ $data['path'] }}">Перейти к сообщению</a><br>
                     @endif
-                    Жалоба: {!! profile($data->user) !!} ({{ date_fixed($data['created_at']) }})
+                    Жалоба: {!! profile($data->user) !!} ({{ dateFixed($data['created_at']) }})
                 </div>
             </div>
         @endforeach

@@ -17,7 +17,7 @@ if (is_admin([101])) {
         case 'index':
 
             if (file_exists(STORAGE."/temp/checker.dat")) {
-                echo 'Последнее сканирование: <b>'.date_fixed(filemtime(STORAGE."/temp/checker.dat")).'</b><br><br>';
+                echo 'Последнее сканирование: <b>'.dateFixed(filemtime(STORAGE."/temp/checker.dat")).'</b><br><br>';
 
                 $arr = scan_check('../');
                 $arr['files'] = str_replace('..//', '', $arr['files']);

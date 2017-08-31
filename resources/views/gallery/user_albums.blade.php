@@ -13,7 +13,7 @@
         @foreach ($photos as $data)
             <div class="b">
                 <i class="fa fa-picture-o"></i>
-                <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ read_file(HOME.'/uploads/pictures/'.$data['link']) }})<br>
+                <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ formatFileSize(HOME.'/uploads/pictures/'.$data['link']) }})<br>
 
                 @if ($moder)
                     <a href="/gallery/{{ $data['id'] }}/edit?page={{ $page['current'] }}">Редактировать</a> /
@@ -27,7 +27,7 @@
                    {{ bbCode($data['text']) }}<br>
                 @endif
 
-                Добавлено: {!! profile($data->user) !!} ({{ date_fixed($data['created_at']) }})<br>
+                Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data['created_at']) }})<br>
                 <a href="/gallery/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
             </div>
         @endforeach

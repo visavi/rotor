@@ -68,7 +68,7 @@ if (is_admin()) {
 
                         Тема: <a href="/topic/<?= $data->getLastTopic()->id ?>/end"><?= $data->getLastTopic()->title ?></a>
                         <br/>
-                        Сообщение: <?php $data->getLastTopic()->getLastPost()->getUser()->login ?> (<?= date_fixed($data->getLastTopic()->getLastPost()->created_at) ?>)
+                        Сообщение: <?php $data->getLastTopic()->getLastPost()->getUser()->login ?> (<?= dateFixed($data->getLastTopic()->getLastPost()->created_at) ?>)
                     <?php else: ?>
                         Темы еще не созданы!
                     <?php endif ?>
@@ -125,7 +125,7 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($token == $_SESSION['token']) {
-                    if (utf_strlen($title) >= 3 && utf_strlen($title) <= 50) {
+                    if (utfStrlen($title) >= 3 && utfStrlen($title) <= 50) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `forums`;");
                         DB::run() -> query("INSERT INTO `forums` (sort, `title`) VALUES (?, ?);", [$maxorder, $title]);
 
@@ -210,8 +210,8 @@ if (is_admin()) {
 
             if (is_admin([101])) {
                 if ($token == $_SESSION['token']) {
-                    if (utf_strlen($title) >= 3 && utf_strlen($title) <= 50) {
-                        if (utf_strlen($desc) <= 100) {
+                    if (utfStrlen($title) >= 3 && utfStrlen($title) <= 50) {
+                        if (utfStrlen($desc) <= 100) {
                             if ($fid != $parent) {
                                 $forums = DB::run() -> queryFetch("SELECT `id` FROM `forums` WHERE `parent_id`=? LIMIT 1;", [$fid]);
 
@@ -343,7 +343,7 @@ if (is_admin()) {
                     echo '<div>';
                     /*Forum::pagination($topic);*/
 
-                    echo 'Сообщение: '.$topic->getLastPost()->getUser()->login.' ('.date_fixed($topic->getLastPost()->created_at).')</div>';
+                    echo 'Сообщение: '.$topic->getLastPost()->getUser()->login.' ('.dateFixed($topic->getLastPost()->created_at).')</div>';
                 }
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
@@ -412,8 +412,8 @@ if (is_admin()) {
             $closed = (empty($_POST['closed'])) ? 0 : 1;
 
             if ($token == $_SESSION['token']) {
-                if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($note) <= 250) {
+                if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
+                    if (utfStrlen($note) <= 250) {
 
                         $moderators = implode(',', preg_split('/[\s]*[,][\s]*/', $moderators));
 
@@ -760,12 +760,12 @@ if (is_admin()) {
 
                             echo '<div class="b">';
 
-                            echo '<div class="img">'.user_avatars($data->user).'</div>';
+                            echo '<div class="img">'.userAvatar($data->user).'</div>';
                             echo '<span class="imgright"><a href="/admin/forum?act=editpost&amp;tid='.$tid.'&amp;pid='.$data['id'].'&amp;page='.$page['current'].'">Ред.</a> <input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
 
 
-                            echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.date_fixed($data['created_at']).')</small><br>';
-                            echo user_title($data->user).' '.user_online($data->user).'</div>';
+                            echo $num.'. <b>'.profile($data['user']).'</b>  <small>('.dateFixed($data['created_at']).')</small><br>';
+                            echo userStatus($data->user).' '.user_online($data->user).'</div>';
 
                             echo '<div>'.bbCode($data['text']).'<br>';
 
@@ -776,7 +776,7 @@ if (is_admin()) {
                                     $ext = getExtension($file['hash']);
                                     echo icons($ext).' ';
 
-                                    echo '<a href="/uploads/forum/'.$data['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br>';
+                                    echo '<a href="/uploads/forum/'.$data['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatSize($file['size']).')<br>';
                                 }
                                 echo '</div>';
 
@@ -784,7 +784,7 @@ if (is_admin()) {
                             // --------------------------//
 
                             if (!empty($data['updated_at'])) {
-                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.date_fixed($data['updated_at']).')</small><br>';
+                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.dateFixed($data['updated_at']).')</small><br>';
                             }
 
                             echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';
@@ -885,7 +885,7 @@ if (is_admin()) {
 
             if (!empty($post)) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> <small>('.date_fixed($post['created_at']).')</small><br><br>';
+                echo '<i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> <small>('.dateFixed($post['created_at']).')</small><br><br>';
 
                 echo '<div class="form" id="form">';
                 echo '<form action="/admin/forum?act=addeditpost&amp;tid='.$post['topic_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'" method="post">';
@@ -896,7 +896,7 @@ if (is_admin()) {
                     echo '<i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br>';
                     foreach ($post->files as $file){
                         echo '<input type="checkbox" name="delfile[]" value="'.$file['id'].'"> ';
-                        echo '<a href="/uploads/forum/'.$post['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatsize($file['size']).')<br>';
+                        echo '<a href="/uploads/forum/'.$post['topic_id'].'/'.$file['hash'].'" target="_blank">'.$file['name'].'</a> ('.formatSize($file['size']).')<br>';
                     }
                     echo '<br>';
                 }
@@ -920,7 +920,7 @@ if (is_admin()) {
             $delfile = intar(Request::input('delfile'));
 
             if ($token == $_SESSION['token']) {
-                if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= setting('forumtextlength')) {
+                if (utfStrlen($msg) >= 5 && utfStrlen($msg) <= setting('forumtextlength')) {
                     $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
                     if (!empty($post)) {
 

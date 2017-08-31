@@ -18,7 +18,7 @@ if ($total > 0) {
         if (SITETIME - $data['nowtime'] < 600) {
             $lastvisit = '<span style="color:#00ff00">Oнлайн</span>';
         } else {
-            $lastvisit = formattime(SITETIME - $data['nowtime'], 0).' назад';
+            $lastvisit = formatTime(SITETIME - $data['nowtime'], 0).' назад';
         }
 
         echo '<div class="b">'.user_gender($data['user']).' <b>'.profile($data['user']).'</b> ('.$lastvisit.')</div>';

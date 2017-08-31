@@ -7,8 +7,8 @@
 
         <a href="/"><?= setting('copy') ?></a><br>
         <?php
-        show_online();
-        show_counter();
+        showOnline();
+        showCounter();
         perfomance();
         ?>
     </div>

@@ -96,7 +96,7 @@ class ForumController extends BaseController
                 $answers = array_unique(array_diff($answers, ['']));
 
                 foreach ($answers as $answer) {
-                    if (utf_strlen($answer) > 50) {
+                    if (utfStrlen($answer) > 50) {
                         $validation->addError(['answer' => 'Длина вариантов ответа не должна быть более 50 символов!']);
                         break;
                     }
@@ -188,17 +188,17 @@ class ForumController extends BaseController
 
             $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
 
-            if (!is_utf($find)) {
-                $find = win_to_utf($find);
+            if (!isUtf($find)) {
+                $find = winToUtf($find);
             }
 
-            if (utf_strlen($find) >= 3 && utf_strlen($find) <= 50) {
+            if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
 
-                $findmewords = explode(' ', utf_lower($find));
+                $findmewords = explode(' ', utfLower($find));
 
                 $arrfind = [];
                 foreach ($findmewords as $val) {
-                    if (utf_strlen($val) >= 3) {
+                    if (utfStrlen($val) >= 3) {
                         $arrfind[] = (empty($type)) ? '+' . $val . '*' : $val . '*';
                     }
                 }

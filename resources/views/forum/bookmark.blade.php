@@ -25,7 +25,7 @@
                     {{ Forum::pagination($topic) }}
                     Автор: {{ $topic->getTopic()->getUser()->login }} /
                     Посл.: {{ $topic->getTopic()->getLastPost()->getUser()->login }}
-                    ({{ date_fixed($topic->getTopic()->getLastPost()->created_at) }})
+                    ({{ dateFixed($topic->getTopic()->getLastPost()->created_at) }})
                 </div>
             @endforeach
 

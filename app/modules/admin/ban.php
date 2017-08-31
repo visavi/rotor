@@ -46,7 +46,7 @@ if (is_admin([101, 102, 103])) {
 
                 if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                     echo '<div class="form">';
-                    echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br>';
+                    echo 'Последний бан: '.dateFixed($user['timelastban'], 'j F Y / H:i').'<br>';
                     echo 'Последняя причина: '.bbCode($user['reasonban']).'<br>';
                     echo 'Забанил: '.profile($user['loginsendban']).'</div><br>';
                 }
@@ -88,7 +88,7 @@ if (is_admin([101, 102, 103])) {
                         }
                     } else {
                         echo '<b><span style="color:#ff0000">Внимание, данный аккаунт заблокирован!</span></b><br>';
-                        echo 'До окончания бана: '.formattime($user['timeban'] - SITETIME).'<br><br>';
+                        echo 'До окончания бана: '.formatTime($user['timeban'] - SITETIME).'<br><br>';
 
                         echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Изменить</a><br>';
                         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/ban?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr>';
@@ -115,11 +115,11 @@ if (is_admin([101, 102, 103])) {
                 if ($user['level'] < 101 || $user['level'] > 105) {
                     if (!empty($user['ban']) && $user['timeban'] > SITETIME) {
                         if (!empty($user['timelastban'])) {
-                            echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br>';
+                            echo 'Последний бан: '.dateFixed($user['timelastban'], 'j F Y / H:i').'<br>';
                             echo 'Забанил: '.profile($user['loginsendban']).'<br>';
                         }
                         echo 'Строгих нарушений: <b>'.$user['totalban'].'</b><br>';
-                        echo 'До окончания бана: '.formattime($user['timeban'] - SITETIME).'<br><br>';
+                        echo 'До окончания бана: '.formatTime($user['timeban'] - SITETIME).'<br><br>';
 
                         if ($user['timeban'] - SITETIME >= 86400) {
                             $type = 'sut';
@@ -190,8 +190,8 @@ if (is_admin([101, 102, 103])) {
 
                             if ($bantotaltime > 0) {
                                 if ($bantotaltime <= setting('maxbantime')) {
-                                    if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
-                                        if (utf_strlen($note) <= 1000) {
+                                    if (utfStrlen($reasonban) >= 5 && utfStrlen($reasonban) <= 1000) {
+                                        if (utfStrlen($note) <= 1000) {
 
                                             DB::run() -> query("UPDATE `users` SET `ban`=?, `timeban`=?, `reasonban`=?, `loginsendban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), $reasonban, getUsername(), $uz]);
 
@@ -256,8 +256,8 @@ if (is_admin([101, 102, 103])) {
 
                             if ($bantotaltime > 0) {
                                 if ($bantotaltime <= setting('maxbantime')) {
-                                    if (utf_strlen($reasonban) >= 5 && utf_strlen($reasonban) <= 1000) {
-                                        if (utf_strlen($notice) <= 1000) {
+                                    if (utfStrlen($reasonban) >= 5 && utfStrlen($reasonban) <= 1000) {
+                                        if (utfStrlen($notice) <= 1000) {
 
                                             if ($bantotaltime > 720) {
                                                 $bancount = 1;

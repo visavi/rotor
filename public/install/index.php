@@ -284,7 +284,7 @@ header("Content-type:text/html; charset=utf-8");
         $password = isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '';
         $password2 = isset($_POST['password2']) ? ($_POST['password2']) : '';
         $email = isset($_POST['email']) ? strtolower(htmlspecialchars($_POST['email'])) : '';
-        $site = isset($_POST['site']) ? utf_lower(htmlspecialchars($_POST['site'])) : $servername;
+        $site = isset($_POST['site']) ? utfLower(htmlspecialchars($_POST['site'])) : $servername;
         ?>
 
         <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
@@ -321,7 +321,7 @@ header("Content-type:text/html; charset=utf-8");
                 Setting::where('name', 'email')->update(['value' => $email]);
                 Setting::where('name', 'site')->update(['value' => $site]);
 
-                save_setting();
+                saveSetting();
 
                 // -------------- Приват ---------------//
                 $textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';

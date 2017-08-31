@@ -76,7 +76,7 @@ switch ($action):
 
         $find = check(strtolower($_POST['find']));
 
-        if (utf_strlen($find)>=3 && utf_strlen($find)<=20) {
+        if (utfStrlen($find)>=3 && utfStrlen($find)<=20) {
             $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? ORDER BY `point` DESC LIMIT ".setting('usersearch').";", ['%'.$find.'%']);
 
             $result = $querysearch -> fetchAll();

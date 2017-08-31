@@ -40,7 +40,7 @@ if (is_admin([101])) {
 
             if ($uid == $_SESSION['token']) {
                 if ($rec>=1 && $rec<=4){
-                    if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
+                    if (utfStrlen($msg) >= 5 && utfStrlen($msg) < 1000) {
 
                         // Рассылка пользователям, которые в онлайне
                         if ($rec==1){

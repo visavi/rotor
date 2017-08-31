@@ -21,7 +21,7 @@
 
                 <div>
                     {!! bbCode($data['text']) !!}<br>
-                    Написал: <b>{!! profile($data['user']) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br>
+                    Написал: <b>{!! profile($data['user']) !!}</b> <small>({{ dateFixed($data['created_at']) }})</small><br>
 
                     @if (is_admin())
                         <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>

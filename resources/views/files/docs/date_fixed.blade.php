@@ -18,11 +18,11 @@
 <b>Примеры использования</b><br>
 
 <pre class="prettyprint linenums">
-echo date_fixed(time()); /* Сегодня / 22:00 */
-echo date_fixed(time(), "j F Y / H:i"); /* 13 Ноября 2011 / 22:00 */
+echo dateFixed(time()); /* Сегодня / 22:00 */
+echo dateFixed(time(), "j F Y / H:i"); /* 13 Ноября 2011 / 22:00 */
 
 $mktime = mktime(0, 0, 0, 7, 1, 2010);
-echo date_fixed($mktime); /* 01.07.10 / 00:00 */
+echo dateFixed($mktime); /* 01.07.10 / 00:00 */
 </pre>
 
 <br>

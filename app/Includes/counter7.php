@@ -1,7 +1,7 @@
 <?php
 
 $imagecache = '/uploads/counters/counter7.gif';
-if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != date_fixed(SITETIME, "dmY")){
+if (!file_exists($imagecache) || dateFixed(@filemtime($imagecache), "dmY") != dateFixed(SITETIME, "dmY")){
 
 	$week_day = date("w") - 1;
 	$arr_week = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
@@ -89,4 +89,4 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 	imagedestroy($img);
 }
 
-echo '<img src="'.$imagecache.'?'.date_fixed(SITETIME, "dmY").'" alt="Неделя"><br><br>';
+echo '<img src="'.$imagecache.'?'.dateFixed(SITETIME, "dmY").'" alt="Неделя"><br><br>';

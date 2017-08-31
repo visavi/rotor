@@ -43,7 +43,7 @@ switch ($action):
                 }
 
                 echo '<div>Плюсов: '.$data['posrating'].' / Минусов: '.$data['negrating'].'<br>';
-                echo 'Дата регистрации: '.date_fixed($data['joined'], 'j F Y').'</div>';
+                echo 'Дата регистрации: '.dateFixed($data['joined'], 'j F Y').'</div>';
             }
 
             pagination($page);

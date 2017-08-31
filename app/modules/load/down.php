@@ -108,7 +108,7 @@ case 'index':
 
                 while ($data = $querydown -> fetch()) {
 
-                    $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+                    $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b">';
                     echo '<i class="fa fa-file-o"></i> ';
@@ -224,7 +224,7 @@ case 'view':
                 echo 'Сайт автора: <a href="'.$downs['site'].'">'.$downs['site'].'</a><br>';
             }
 
-            echo 'Добавлено: '.profile($downs['user']).' ('.date_fixed($downs['time']).')<hr>';
+            echo 'Добавлено: '.profile($downs['user']).' ('.dateFixed($downs['time']).')<hr>';
 
             // -----------------------------------------------------------//
             if (!empty($downs['link']) && file_exists(HOME.'/uploads/files/'.$folder.$downs['link'])) {
@@ -246,7 +246,7 @@ case 'view':
                     echo '<i class="fa fa-archive"></i> <b><a href="/load/zip?id='.$id.'">Просмотреть архив</a></b><br>';
                 }
 
-                $filesize = (!empty($downs['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$downs['link']) : 0;
+                $filesize = (!empty($downs['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$downs['link']) : 0;
 
                 if (is_user()) {
                     echo '<i class="fa fa-download"></i> <b><a href="/load/down?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br>';
@@ -265,7 +265,7 @@ case 'view':
                 echo '<a href="/load/down?act=end&amp;id='.$id.'">&raquo;</a><br>';
 
                 $rating = (!empty($downs['rated'])) ? round($downs['rating'] / $downs['rated'], 1) : 0;
-                echo '<br>Рейтинг: '.rating_vote($rating).'<br>';
+                echo '<br>Рейтинг: '.ratingVote($rating).'<br>';
                 echo 'Всего голосов: <b>'.$downs['rated'].'</b><br><br>';
 
                 if (is_user()) {
@@ -282,7 +282,7 @@ case 'view':
 
                 echo 'Всего скачиваний: <b>'.$downs['loads'].'</b><br>';
                 if (!empty($downs['last_load'])) {
-                    echo 'Последнее скачивание: '.date_fixed($downs['last_load']).'<br>';
+                    echo 'Последнее скачивание: '.dateFixed($downs['last_load']).'<br>';
                 }
 
                 if (is_user()) {
@@ -435,14 +435,14 @@ case 'comments':
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<div class="img">'.userAvatar($data['user']).'</div>';
 
                     if ($is_admin) {
                         echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
                     }
 
-                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
-                    echo user_title($data['user']).' '.user_online($data['user']).'</div>';
+                    echo '<b>'.profile($data['user']).'</b> <small>('.dateFixed($data['time']).')</small><br>';
+                    echo userStatus($data['user']).' '.user_online($data['user']).'</div>';
 
                     if (!empty(getUsername()) && getUsername() != $data['user']) {
                         echo '<div class="right">';
@@ -505,7 +505,7 @@ case 'add':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
+            if (utfStrlen($msg) >= 5 && utfStrlen($msg) < 1000) {
 
                 $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
@@ -597,7 +597,7 @@ case 'reply':
         $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? LIMIT 1;", ['down', $pid]);
 
         if (!empty($post)) {
-            echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.user_title($post['user']).' '.user_online($post['user']).' <small>('.date_fixed($post['time']).')</small></div>';
+            echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.userStatus($post['user']).' '.user_online($post['user']).' <small>('.dateFixed($post['time']).')</small></div>';
             echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
             echo '<div class="form">';
@@ -630,7 +630,7 @@ case 'quote':
             echo '<div class="form">';
             echo '<form action="/load/down?act=add&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
             echo 'Сообщение:<br>';
-            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.date_fixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br>';
+            echo '<textarea cols="25" rows="5" name="msg" id="msg">[quote][b]'.$post['user'].'[/b] ('.dateFixed($post['time']).')'."\r\n".$post['text'].'[/quote]'."\r\n".'</textarea><br>';
             echo '<input type="submit" value="Цитировать"></form></div><br>';
         } else {
             showError('Ошибка! Выбранное вами сообщение для цитирования не существует!');
@@ -657,7 +657,7 @@ case 'edit':
         if (!empty($post)) {
             if ($post['time'] + 600 > SITETIME) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.date_fixed($post['time']).')</small><br><br>';
+                echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.dateFixed($post['time']).')</small><br><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/load/down?act=editpost&amp;id='.$post['relate_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -688,7 +688,7 @@ case 'editpost':
 
     if (is_user()) {
         if ($uid == $_SESSION['token']) {
-            if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
+            if (utfStrlen($msg) >= 5 && utfStrlen($msg) < 1000) {
                 $post = DB::run() -> queryFetch("SELECT * FROM `comments` WHERE relate_type=? AND `id`=? AND `user`=? LIMIT 1;", ['down', $pid, getUsername()]);
 
                 if (!empty($post)) {

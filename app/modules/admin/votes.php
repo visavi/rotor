@@ -38,7 +38,7 @@ if (is_admin([101, 102, 103])) {
 
                     echo '</div>';
 
-                    echo '<div>Создано: '.date_fixed($valvote['time']).'<br>';
+                    echo '<div>Создано: '.dateFixed($valvote['time']).'<br>';
                     echo 'Всего голосов: '.$valvote['count'].'</div>';
                 }
                 echo '<br>';
@@ -90,7 +90,7 @@ if (is_admin([101, 102, 103])) {
             $answer = check($_POST['answer']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($title) >= 3 && utf_strlen($title) <= 100) {
+                if (utfStrlen($title) >= 3 && utfStrlen($title) <= 100) {
                     $answer = array_diff($answer, ['']);
 
                     if (count($answer) > 1) {
@@ -164,7 +164,7 @@ if (is_admin([101, 102, 103])) {
             $answer = check($_POST['answer']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($title) >= 3 && utf_strlen($title) <= 100) {
+                if (utfStrlen($title) >= 3 && utfStrlen($title) <= 100) {
                     $queryvote = DB::run() -> querySingle("SELECT `id` FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryvote)) {
                         if (!in_array('', $answer)) {
@@ -316,7 +316,7 @@ if (is_admin([101, 102, 103])) {
                     }
 
                     echo '</div>';
-                    echo '<div>Создано: '.date_fixed($data['time']).'<br>';
+                    echo '<div>Создано: '.dateFixed($data['time']).'<br>';
                     echo 'Всего голосов: '.$data['count'].'</div>';
                 }
 

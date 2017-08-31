@@ -44,17 +44,17 @@ case "search":
 
     $find = str_replace(['@', '+', '-', '*', '~', '<', '>', '(', ')', '"', "'"], '', $find);
 
-    if (!is_utf($find)){
-        $find = win_to_utf($find);
+    if (!isUtf($find)){
+        $find = winToUtf($find);
     }
 
-    if (utf_strlen($find) >= 3 && utf_strlen($find) <= 50) {
+    if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
 
-        $findmewords = explode(" ", utf_lower($find));
+        $findmewords = explode(" ", utfLower($find));
 
         $arrfind = [];
         foreach ($findmewords as $val) {
-            if (utf_strlen($val) >= 3) {
+            if (utfStrlen($val) >= 3) {
                 $arrfind[] = (empty($type)) ? '+'.$val.'*' : $val.'*';
             }
         }
@@ -98,14 +98,14 @@ case "search":
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-                    $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+                    $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b"><i class="fa fa-file-o"></i> ';
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
                     echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br>';
                     echo 'Скачиваний: '.$data['loads'].'<br>';
-                    echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
+                    echo 'Добавил: '.profile($data['user']).' ('.dateFixed($data['time']).')</div>';
                 }
 
                 pagination($page);
@@ -140,20 +140,20 @@ case "search":
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-                    $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+                    $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b"><i class="fa fa-file-o"></i> ';
                     echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
-                    if (utf_strlen($data['text']) > 300) {
+                    if (utfStrlen($data['text']) > 300) {
                         $data['text'] = strip_tags(bbCode($data['text']), '<br>');
-                        $data['text'] = utf_substr($data['text'], 0, 300).'...';
+                        $data['text'] = utfSubstr($data['text'], 0, 300).'...';
                     }
 
                     echo '<div>'.$data['text'].'<br>';
 
                     echo 'Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br>';
-                    echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
+                    echo 'Добавил: '.profile($data['user']).' ('.dateFixed($data['time']).')</div>';
                 }
 
                 pagination($page);

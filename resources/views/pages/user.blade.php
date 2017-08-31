@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>{!! user_avatars($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user) }}</small></h1>
+    <h1>{!! userAvatar($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ user_visit($user) }}</small></h1>
 
     @if ($user['confirmreg'] == 1)
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>
@@ -15,13 +15,13 @@
     @if ($user['ban'] == 1 && $user['timeban'] > SITETIME)
         <div class="form">
             <b><span style="color:#ff0000">Внимание, пользователь забанен!</span></b><br>
-            До окончания бана осталось {{ formattime($user['timeban'] - SITETIME) }}<br>
+            До окончания бана осталось {{ formatTime($user['timeban'] - SITETIME) }}<br>
             Причина: {{ bbCode($user['reasonban']) }}
         </div>
     @endif
 
     @if ($user['level'] >= 101 && $user['level'] <= 105)
-        <div class="alert alert-info">Должность: <b>{{ user_status($user['level']) }}</b></div>
+        <div class="alert alert-info">Должность: <b>{{ userLevel($user['level']) }}</b></div>
     @endif
 
     <div class="container-fluid">
@@ -39,7 +39,7 @@
             </div>
 
             <div class="col-md-6 pull-md-6">
-                Cтатус: <b><a href="/statusfaq">{!! user_title($user) !!}</a></b><br>
+                Cтатус: <b><a href="/statusfaq">{!! userStatus($user) !!}</a></b><br>
 
                 {!! user_gender($user) !!}
                 Пол:
@@ -81,14 +81,14 @@
                 @if (!empty($user['themes']))
                 Используемый скин: {{ $user['themes'] }}<br>
                 @endif
-                Дата регистрации: {{ date_fixed($user['joined'], 'j F Y') }}<br>
+                Дата регистрации: {{ dateFixed($user['joined'], 'j F Y') }}<br>
 
                 <?php $invite = Invite::where('invite_user_id', $user['id'])->first(); ?>
                 @if (!empty($invite))
                     Зарегистрирован по приглашению: {!! profile($invite->user) !!}<br>
                 @endif
 
-                Последняя авторизация: {{ date_fixed($user['timelastlogin']) }}<br>
+                Последняя авторизация: {{ dateFixed($user['timelastlogin']) }}<br>
 
                 <a href="/banhist?uz={{ $user['login'] }}">Строгих нарушений: {{ $user['totalban'] }}</a><br>
 
@@ -122,7 +122,7 @@
 
         @if (!empty($usernote['text']))
             {!! bbCode($usernote['text']) !!}<br>
-            Изменено: {!! profile($usernote->editUser) !!} ({{ date_fixed($usernote['updated_at']) }})<br>
+            Изменено: {!! profile($usernote->editUser) !!} ({{ dateFixed($usernote['updated_at']) }})<br>
         @else
             Записей еще нет!<br>
         @endif
@@ -131,7 +131,7 @@
     @endif
 
     <div class="alert alert-info">
-        <i class="fa fa-sticky-note"></i> <a href="/wall?uz={{ $user['login'] }}">Стена сообщений</a> ({{ user_wall($user) }})<br>
+        <i class="fa fa-sticky-note"></i> <a href="/wall?uz={{ $user['login'] }}">Стена сообщений</a> ({{ userWall($user) }})<br>
 
         @if ($user['login'] != getUsername())
             <i class="fa fa-address-book"></i> Добавить в

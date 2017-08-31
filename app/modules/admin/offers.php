@@ -68,7 +68,7 @@ if (is_admin([101, 102])) {
                     echo '<a href="/admin/offers?act=reply&amp;id='.$data['id'].'">Ответить</a></div>';
 
                     echo '<div>'.bbCode($data['text']).'<br>';
-                    echo 'Добавлено: '.profile($data['user']).'  ('.date_fixed($data['time']).')<br>';
+                    echo 'Добавлено: '.profile($data['user']).'  ('.dateFixed($data['time']).')<br>';
                     echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                     echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
                 }
@@ -123,7 +123,7 @@ if (is_admin([101, 102])) {
                 echo '<a href="/admin/offers?act=reply&amp;id='.$id.'">Ответить</a></div>';
 
                 echo '<div>'.bbCode($queryoff['text']).'<br>';
-                echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br>';
+                echo 'Добавлено: '.profile($queryoff['user']).' ('.dateFixed($queryoff['time']).')<br>';
 
                 echo '<a href="/offers?act=comments&amp;id='.$id.'">Комментарии</a> ('.$queryoff['comments'].') ';
                 echo '<a href="/offers?act=end&amp;id='.$id.'">&raquo;</a></div><br>';
@@ -131,7 +131,7 @@ if (is_admin([101, 102])) {
                 if (!empty($queryoff['text_reply'])) {
                     echo '<div class="b"><b>Официальный ответ</b></div>';
                     echo '<div class="q">'.bbCode($queryoff['text_reply']).'<br>';
-                    echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br>';
+                    echo profile($queryoff['user_reply']).' ('.dateFixed($queryoff['time_reply']).')</div><br>';
                 }
             } else {
                 showError('Ошибка! Данного предложения или проблемы не существует!');
@@ -190,7 +190,7 @@ if (is_admin([101, 102])) {
             if ($uid == $_SESSION['token']) {
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
-                    if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
+                    if (utfStrlen($text) >= 5 && utfStrlen($text) <= 1000) {
                         if ($status >= 0 && $status <= 3) {
 
                             $text = antimat($text);
@@ -267,8 +267,8 @@ if (is_admin([101, 102])) {
             if ($uid == $_SESSION['token']) {
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
-                    if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                        if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
+                    if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
+                        if (utfStrlen($text) >= 5 && utfStrlen($text) <= 1000) {
 
                             $title = antimat($title);
                             $text = antimat($text);

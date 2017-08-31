@@ -1,7 +1,7 @@
 <?php
 
 $imagecache = '/uploads/counters/counter31.gif';
-if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != date_fixed(SITETIME, "dmY")){
+if (!file_exists($imagecache) || dateFixed(@filemtime($imagecache), "dmY") != dateFixed(SITETIME, "dmY")){
 
 	$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 
@@ -96,4 +96,4 @@ if (!file_exists($imagecache) || date_fixed(@filemtime($imagecache), "dmY") != d
 	imagedestroy($img);
 }
 
-echo '<img src="'.$imagecache.'?'.date_fixed(SITETIME, "dmY").'" alt="Месяц"><br><br>';
+echo '<img src="'.$imagecache.'?'.dateFixed(SITETIME, "dmY").'" alt="Месяц"><br><br>';

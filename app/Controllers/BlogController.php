@@ -469,11 +469,11 @@ class BlogController extends BaseController
         if ($tag) {
             $tag = urldecode($tag);
 
-            if (! is_utf($tag)){
-                $tag = win_to_utf($tag);
+            if (! isUtf($tag)){
+                $tag = winToUtf($tag);
             }
 
-            if (utf_strlen($tag) < 2) {
+            if (utfStrlen($tag) < 2) {
                 setFlash('danger', 'Ошибка! Необходимо не менее 2-х символов в запросе!');
                 redirect('/blog/tags');
             }
@@ -702,17 +702,17 @@ class BlogController extends BaseController
             view('blog/search');
         } else {
 
-            if (! is_utf($find)) {
-                $find = win_to_utf($find);
+            if (! isUtf($find)) {
+                $find = winToUtf($find);
             }
 
-            if (utf_strlen($find) >= 3 && utf_strlen($find) <= 50) {
-                $findme = utf_lower($find);
+            if (utfStrlen($find) >= 3 && utfStrlen($find) <= 50) {
+                $findme = utfLower($find);
                 $findmewords = explode(" ", $findme);
 
                 $arrfind = [];
                 foreach ($findmewords as $valfind) {
-                    if (utf_strlen($valfind) >= 3) {
+                    if (utfStrlen($valfind) >= 3) {
                         $arrfind[] = $valfind;
                     }
                 }

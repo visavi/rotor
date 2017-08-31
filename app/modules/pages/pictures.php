@@ -61,7 +61,7 @@ case 'index':
                     $user->avatar = $avatar;
                     $user->save();
 
-                    save_avatar();
+                    saveAvatar();
                 }
 
                 setFlash('success', 'Фотография успешно загружена!');

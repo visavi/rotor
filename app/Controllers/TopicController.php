@@ -108,9 +108,9 @@ class TopicController extends BaseController
 
             $msg = antimat($msg);
 
-            if (getUserId() == $post['user_id'] && $post['created_at'] + 600 > SITETIME && (utf_strlen($msg) + utf_strlen($post['text']) <= setting('forumtextlength'))) {
+            if (getUserId() == $post['user_id'] && $post['created_at'] + 600 > SITETIME && (utfStrlen($msg) + utfStrlen($post['text']) <= setting('forumtextlength'))) {
 
-                $newpost = $post['text'] . "\n\n" . '[i][size=1]Добавлено через ' . maketime(SITETIME - $post['created_at']) . ' сек.[/size][/i]' . "\n" . $msg;
+                $newpost = $post['text'] . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post['created_at']) . ' сек.[/size][/i]' . "\n" . $msg;
 
                 DB::run()->query("UPDATE `posts` SET `text`=? WHERE `id`=? LIMIT 1;", [$newpost, $post['id']]);
                 $lastid = $post['id'];
@@ -163,7 +163,7 @@ class TopicController extends BaseController
                     if (is_uploaded_file($_FILES['file']['tmp_name'])) {
 
                         $filename = check($_FILES['file']['name']);
-                        $filename = (!is_utf($filename)) ? utf_lower(win_to_utf($filename)) : utf_lower($filename);
+                        $filename = (!isUtf($filename)) ? utfLower(winToUtf($filename)) : utfLower($filename);
                         $filesize = $_FILES['file']['size'];
 
                         if ($filesize > 0 && $filesize <= setting('forumloadsize')) {
@@ -172,8 +172,8 @@ class TopicController extends BaseController
 
                             if (in_array($ext, $arrext, true)) {
 
-                                if (utf_strlen($filename) > 50) {
-                                    $filename = utf_substr($filename, 0, 45) . '.' . $ext;
+                                if (utfStrlen($filename) > 50) {
+                                    $filename = utfSubstr($filename, 0, 45) . '.' . $ext;
                                 }
 
                                 if (!file_exists(HOME . '/uploads/forum/' . $topics['id'])) {
@@ -205,7 +205,7 @@ class TopicController extends BaseController
                                 $fileError = 'Файл не загружен! Недопустимое расширение!';
                             }
                         } else {
-                            $fileError = 'Файл не загружен! Максимальный размер ' . formatsize(setting('forumloadsize')) . '!';
+                            $fileError = 'Файл не загружен! Максимальный размер ' . formatSize(setting('forumloadsize')) . '!';
                         }
                     } else {
                         $fileError = 'Ошибка! Не удалось загрузить файл!';

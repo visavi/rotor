@@ -30,10 +30,10 @@ case 'index':
 
         foreach ($ignores as $data) {
             echo '<div class="b">';
-            echo '<div class="img">'.user_avatars($data->ignoring).'</div>';
+            echo '<div class="img">'.userAvatar($data->ignoring).'</div>';
 
-            echo '<b>'.profile($data->ignoring).'</b> <small>('.date_fixed($data['created_at']).')</small><br>';
-            echo user_title($data->ignoring).' '.user_online($data->ignoring).'</div>';
+            echo '<b>'.profile($data->ignoring).'</b> <small>('.dateFixed($data['created_at']).')</small><br>';
+            echo userStatus($data->ignoring).' '.user_online($data->ignoring).'</div>';
 
             echo '<div>';
             if ($data['text']) {

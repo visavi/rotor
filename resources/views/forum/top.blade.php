@@ -18,7 +18,7 @@
         <div>
             {{ Forum::pagination($data) }}
             Автор: {{ $data->getUser()->login }}<br>
-            Сообщение: {{ $data->getLastPost()->getUser()->login }} ({{ date_fixed($data->getLastPost()->created_at) }})
+            Сообщение: {{ $data->getLastPost()->getUser()->login }} ({{ dateFixed($data->getLastPost()->created_at) }})
         </div>
     @endforeach
 

@@ -19,8 +19,8 @@
     <tr>
         <td align="center" colspan="3" class="ftexttd">
 
-            <?= show_counter() ?>
-            <?= show_online() ?>
+            <?= showCounter() ?>
+            <?= showOnline() ?>
             <a href="<?= setting('home') ?>"><?= setting('copy') ?></a><br/>
 
         </td>

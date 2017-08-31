@@ -19,7 +19,7 @@
                     <i class="fa fa-thumbs-up text-success"></i>
                 @endif
 
-                <b>{!! profile($data->recipient) !!}</b> ({{ date_fixed($data['created_at']) }})
+                <b>{!! profile($data->recipient) !!}</b> ({{ dateFixed($data['created_at']) }})
             </div>
             <div>
                 Комментарий:

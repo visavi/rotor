@@ -23,7 +23,7 @@
                 {!! bbCode($data['text']) !!}<br>
 
                 Написал: {{ $data->getUser()->login }}
-                <small>({{ date_fixed($data['created_at']) }})</small>
+                <small>({{ dateFixed($data['created_at']) }})</small>
                 <br>
 
                 @if (is_admin())

@@ -71,8 +71,8 @@ echo '</div>
                         <a href="/news/rss" class="art-rss-tag-icon" title="RSS"></a>
                         <div class="art-Footer-text">';
 echo '<a href="'.setting('home').'">'.setting('copy').'</a><br>';
-    show_online();
-    show_counter();
+    showOnline();
+    showCounter();
 echo '</div>';
 
     perfomance();

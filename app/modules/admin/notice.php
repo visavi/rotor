@@ -39,7 +39,7 @@ case 'index':
 
             echo profile($notice['user']);
 
-            echo ' ('.date_fixed($notice['updated_at']).')';
+            echo ' ('.dateFixed($notice['updated_at']).')';
 
             echo '</div>';
         }

@@ -139,7 +139,7 @@ class PrivateController extends BaseController
                 DB::run()->query("INSERT INTO `outbox` (`user_id`, `recipient_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [getUserId(), $user->id, $msg, SITETIME]);
 
                 DB::run()->query("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [getUserId(), getUserId()]);
-                save_usermail(60);
+                saveUserMail(60);
 
                 $deliveryUsers = User::where('sendprivatmail', 0)
                     ->where('confirmreg', 0)
@@ -209,7 +209,7 @@ class PrivateController extends BaseController
                 DB::run()->query("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [$deltrash, getUserId()]);
 
                 DB::run()->query("DELETE FROM `inbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [getUserId()]);
-                save_usermail(60);
+                saveUserMail(60);
             }
 
             setFlash('success', 'Выбранные сообщения успешно удалены!');
@@ -248,7 +248,7 @@ class PrivateController extends BaseController
                 DB::run()->query("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `user_id`=?;", [$deltrash, getUserId()]);
 
                 DB::run()->query("DELETE FROM `inbox` WHERE `user_id`=?;", [getUserId()]);
-                save_usermail(60);
+                saveUserMail(60);
             }
 
             setFlash('success', 'Ящик успешно очищен!');

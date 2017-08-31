@@ -37,10 +37,10 @@
             @foreach ($messages as $data)
 
                 <div class="b">
-                    <div class="img">{!! user_avatars($data->author) !!}</div>
+                    <div class="img">{!! userAvatar($data->author) !!}</div>
                     @if ($data->author)
-                        <b>{!! profile($data->author) !!}</b> ({{ date_fixed($data['created_at']) }})<br>
-                        {!! user_title($data->author) !!} {!! user_online($data->author) !!}
+                        <b>{!! profile($data->author) !!}</b> ({{ dateFixed($data['created_at']) }})<br>
+                        {!! userStatus($data->author) !!} {!! user_online($data->author) !!}
                     @else
                         <b>Система</b>
                     @endif

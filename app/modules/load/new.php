@@ -23,14 +23,14 @@ case 'files':
         while ($data = $querydown -> fetch()) {
             $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-            $filesize = (!empty($data['link'])) ? read_file(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+            $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
 
             echo '<div class="b"><i class="fa fa-file-o"></i> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
             echo '<div>Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br>';
             echo 'Скачиваний: '.$data['loads'].'<br>';
-            echo 'Добавил: '.profile($data['user']).' ('.date_fixed($data['time']).')</div>';
+            echo 'Добавил: '.profile($data['user']).' ('.dateFixed($data['time']).')</div>';
         }
 
         pagination($page);
@@ -63,7 +63,7 @@ case 'comments':
 
             echo '<div>'.bbCode($data['text']).'<br>';
 
-            echo 'Написал: '.profile($data['user']).' <small>('.date_fixed($data['time']).')</small><br>';
+            echo 'Написал: '.profile($data['user']).' <small>('.dateFixed($data['time']).')</small><br>';
 
             if (is_admin()) {
                 echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';

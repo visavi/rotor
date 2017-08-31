@@ -43,8 +43,8 @@
             @endunless
         </div>
 
-        Размер: {{ read_file(HOME.'/uploads/pictures/'.$photo['link']) }}<br>
-        Добавлено: {!! profile($photo['user']) !!} ({{ date_fixed($photo['time']) }})<br>
+        Размер: {{ formatFileSize(HOME.'/uploads/pictures/'.$photo['link']) }}<br>
+        Добавлено: {!! profile($photo['user']) !!} ({{ dateFixed($photo['time']) }})<br>
         <a href="/gallery/{{ $photo['id'] }}/comments">Комментарии</a> ({{ $photo['comments'] }})
         <a href="/gallery/{{ $photo['id'] }}/end">&raquo;</a>
     </div>

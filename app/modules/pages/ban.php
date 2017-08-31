@@ -21,7 +21,7 @@ if (is_user()) {
                     echo '<i class="fa fa-times"></i> <b>Вас забанили</b><br><br>';
                     echo '<b><span style="color:#ff0000">Причина бана: '.bbCode(user('reasonban')).'</span></b><br><br>';
 
-                    echo 'До окончания бана осталось <b>'.formattime(user('timeban') - SITETIME).'</b><br><br>';
+                    echo 'До окончания бана осталось <b>'.formatTime(user('timeban') - SITETIME).'</b><br><br>';
 
                     echo 'Чтобы не терять время зря, рекомендуем вам ознакомиться с <b><a href="/rules">Правилами сайта</a></b><br><br>';
 
@@ -52,7 +52,7 @@ if (is_user()) {
 
                     if (setting('addbansend') == 1) {
                         if (user('explainban') == 1) {
-                            if (utf_strlen($msg) >= 5 && utf_strlen($msg) < 1000) {
+                            if (utfStrlen($msg) >= 5 && utfStrlen($msg) < 1000) {
                                 $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [user('loginsendban')]);
                                 if (!empty($queryuser)) {
 

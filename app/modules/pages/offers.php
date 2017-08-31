@@ -108,7 +108,7 @@ switch ($action):
 
                 echo '</div>';
                 echo '<div>'.bbCode($data['text']).'<br>';
-                echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br>';
+                echo 'Добавлено: '.profile($data['user']).' ('.dateFixed($data['time']).')<br>';
                 echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                 echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
             }
@@ -164,7 +164,7 @@ switch ($action):
             }
 
             echo '<div>'.bbCode($queryoff['text']).'<br>';
-            echo 'Добавлено: '.profile($queryoff['user']).' ('.date_fixed($queryoff['time']).')<br>';
+            echo 'Добавлено: '.profile($queryoff['user']).' ('.dateFixed($queryoff['time']).')<br>';
 
             if ($queryoff['status'] <= 1 && getUsername() != $queryoff['user']) {
                 $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
@@ -182,7 +182,7 @@ switch ($action):
             if (!empty($queryoff['text_reply'])) {
                 echo '<div class="b"><b>Официальный ответ</b></div>';
                 echo '<div class="q">'.bbCode($queryoff['text_reply']).'<br>';
-                echo profile($queryoff['user_reply']).' ('.date_fixed($queryoff['time_reply']).')</div><br>';
+                echo profile($queryoff['user_reply']).' ('.dateFixed($queryoff['time_reply']).')</div><br>';
             }
             // ------------------------------------------------//
             echo '<div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br>';
@@ -192,11 +192,11 @@ switch ($action):
 
                 while ($comm = $querycomm -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($comm['user']).'</div>';
+                    echo '<div class="img">'.userAvatar($comm['user']).'</div>';
 
                     echo '<b>'.profile($comm['user']).'</b>';
-                    echo '<small> ('.date_fixed($comm['time']).')</small><br>';
-                    echo user_title($comm['user']).' '.user_online($comm['user']).'</div>';
+                    echo '<small> ('.dateFixed($comm['time']).')</small><br>';
+                    echo userStatus($comm['user']).' '.user_online($comm['user']).'</div>';
 
                     echo '<div>'.bbCode($comm['text']).'<br>';
 
@@ -288,8 +288,8 @@ switch ($action):
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
-                        if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                            if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
+                        if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
+                            if (utfStrlen($text) >= 5 && utfStrlen($text) <= 1000) {
 
                                 $title = antimat($title);
                                 $text = antimat($text);
@@ -350,14 +350,14 @@ switch ($action):
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
-                    echo '<div class="img">'.user_avatars($data['user']).'</div>';
+                    echo '<div class="img">'.userAvatar($data['user']).'</div>';
 
                     if ($is_admin) {
                         echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
                     }
 
-                    echo '<b>'.profile($data['user']).'</b> <small>('.date_fixed($data['time']).')</small><br>';
-                    echo user_title($data['user']).' '.user_online($data['user']).'</div>';
+                    echo '<b>'.profile($data['user']).'</b> <small>('.dateFixed($data['time']).')</small><br>';
+                    echo userStatus($data['user']).' '.user_online($data['user']).'</div>';
 
                     echo '<div>'.bbCode($data['text']).'<br>';
 
@@ -413,7 +413,7 @@ switch ($action):
 
         if (is_user()) {
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($msg) >= 5 && utf_strlen($msg) <= 1000) {
+                if (utfStrlen($msg) >= 5 && utfStrlen($msg) <= 1000) {
                     $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryoff)) {
                         if (empty($queryoff['closed'])) {
@@ -533,8 +533,8 @@ switch ($action):
 
         if ($uid == $_SESSION['token']) {
             if (user('point') >= setting('addofferspoint')) {
-                if (utf_strlen($title) >= 5 && utf_strlen($title) <= 50) {
-                    if (utf_strlen($text) >= 5 && utf_strlen($text) <= 1000) {
+                if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
+                    if (utfStrlen($text) >= 5 && utfStrlen($text) <= 1000) {
                         if (Flood::isFlood()) {
 
                             $title = antimat($title);

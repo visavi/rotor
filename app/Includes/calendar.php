@@ -2,9 +2,9 @@
 
 use App\Models\News;
 
-$cal_den = date_fixed(SITETIME, "j");
-$cal_mon = date_fixed(SITETIME, "m");
-$cal_year = date_fixed(SITETIME, "Y");
+$cal_den = dateFixed(SITETIME, "j");
+$cal_mon = dateFixed(SITETIME, "m");
+$cal_year = dateFixed(SITETIME, "Y");
 
 $array_news = [];
 $array_komm = [];
@@ -13,14 +13,14 @@ $news = News::whereRaw('EXTRACT(YEAR_MONTH FROM FROM_UNIXTIME(`created_at`))=EXT
     ->get();
 
 foreach($news as $data) {
-    $arrday = date_fixed($data['created_at'], 'j');
+    $arrday = dateFixed($data['created_at'], 'j');
     $array_news[] = $arrday;
     $array_komm[$arrday] = $data['id'];
 }
 
 $calend = make_calendar($cal_mon, $cal_year);
 
-echo '<table><caption><b>'.date_fixed(SITETIME, 'j F Y').'</b></caption>';
+echo '<table><caption><b>'.dateFixed(SITETIME, 'j F Y').'</b></caption>';
 
 echo '<thead><tr>';
 echo '<th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th><span style="color:#ff6666">Сб</span></th><th><span style="color:#ff6666">Вс</span></th>';

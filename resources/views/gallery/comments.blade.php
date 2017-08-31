@@ -14,7 +14,7 @@
         @foreach ($comments as $data)
             <div class="post">
                 <div class="b">
-                    <div class="img">{!! user_avatars($data->user) !!}</div>
+                    <div class="img">{!! userAvatar($data->user) !!}</div>
                     <div class="float-right">
                         @if (getUserId() != $data['user_id'])
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
@@ -33,8 +33,8 @@
                         @endif
                     </div>
 
-                    <b>{!! profile($data->user) !!}</b> <small>({{ date_fixed($data['created_at']) }})</small><br>
-                    {!! user_title($data->user) !!} {!! user_online($data->user) !!}
+                    <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data['created_at']) }})</small><br>
+                    {!! userStatus($data->user) !!} {!! user_online($data->user) !!}
                 </div>
                 <div class="message">
                     {!! bbCode($data['text']) !!}

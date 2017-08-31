@@ -52,7 +52,7 @@ case 'index':
                                 } else {
                                     echo $list[$i]['filename'];
                                 }
-                                echo ' ('.formatsize($list[$i]['size']).')<br>';
+                                echo ' ('.formatSize($list[$i]['size']).')<br>';
                             }
                         }
 
@@ -98,14 +98,14 @@ case 'preview':
 
                 echo '<i class="fa fa-archive"></i> <b>'.$downs['title'].'</b><br><br>';
 
-                echo '<b>'.$filename.'</b> ('.formatsize($content[0]['size']).')<hr>';
+                echo '<b>'.$filename.'</b> ('.formatSize($content[0]['size']).')<hr>';
 
                 if (!preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $filename)) {
                     if ($content[0]['size'] > 0) {
-                        if (is_utf($filecontent)) {
+                        if (isUtf($filecontent)) {
                             echo '<pre class="prettyprint linenums">'.htmlspecialchars($filecontent).'</pre><br>';
                         } else {
-                            echo '<pre class="prettyprint linenums">'.win_to_utf(htmlspecialchars($filecontent)).'</pre><br>';
+                            echo '<pre class="prettyprint linenums">'.winToUtf(htmlspecialchars($filecontent)).'</pre><br>';
                         }
                     } else {
                         showError('Данный файл пустой!');

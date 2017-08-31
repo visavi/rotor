@@ -30,7 +30,7 @@ case 'index':
             echo '<i class="fa fa-check-circle"></i> ';
             echo '<b><a href="'.$data['site'].'">'.$data['name'].'</a></b> ('.profile($data['user']).')</div>';
 
-            echo 'Истекает: '.date_fixed($data['time']).'<br>';
+            echo 'Истекает: '.dateFixed($data['time']).'<br>';
 
             if (! empty($data['color'])) {
                 echo 'Цвет: <span style="color:'.$data['color'].'">'.$data['color'].'</span>, ';

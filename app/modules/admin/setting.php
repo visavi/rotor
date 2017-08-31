@@ -91,7 +91,7 @@ if (is_admin([101])) {
                                     $dbr -> execute($login, 'nickname');
                                     $dbr -> execute($mail, 'emails');
 
-                                    save_setting();
+                                    saveSetting();
 
                                     setFlash('success', 'Настройки сайта успешно изменены!');
                                     redirect("/admin/setting?act=setzero");
@@ -250,7 +250,7 @@ if (is_admin([101])) {
                         $dbr -> execute($openreg, 'openreg');
                         $dbr -> execute($closedsite, 'closedsite');
 
-                        save_setting();
+                        saveSetting();
 
                         setFlash('success', 'Настройки сайта успешно изменены!');
                         redirect("/admin/setting?act=setone");
@@ -306,7 +306,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['sendprivatmailday']), 'sendprivatmailday');
                     $dbr -> execute(intval($_POST['sendmailpacket']), 'sendmailpacket');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=mail");
@@ -370,7 +370,7 @@ if (is_admin([101])) {
                     $dbr -> execute($onlines, 'onlines');
                     $dbr -> execute(intval($_POST['timeonline'] * 60), 'timeonline');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=settwo");
@@ -451,7 +451,7 @@ if (is_admin([101])) {
                     $dbr -> execute($bookadds, 'bookadds');
                     $dbr -> execute($bookscores, 'bookscores');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setthree");
@@ -515,7 +515,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['photoexprated']), 'photoexprated');
                     $dbr -> execute(intval($_POST['photogroup']), 'photogroup');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setfour");
@@ -576,7 +576,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['limitignore']), 'limitignore');
                     $dbr -> execute(intval($_POST['allvotes']), 'allvotes');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setfive");
@@ -641,7 +641,7 @@ if (is_admin([101])) {
                     $dbr -> execute(check($_POST['allowextload']), 'allowextload');
                     $dbr -> execute($downupload, 'downupload');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setload");
@@ -697,7 +697,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['maxblogpost']), 'maxblogpost');
                     $dbr -> execute(intval($_POST['blogvotepoint']), 'blogvotepoint');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setblog");
@@ -777,7 +777,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['loginauthlist']), 'loginauthlist');
                     $dbr -> execute(intval($_POST['listtransfers']), 'listtransfers');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setseven");
@@ -851,7 +851,7 @@ if (is_admin([101])) {
                     $dbr -> execute($addbansend, 'addbansend');
                     $dbr -> execute(check($_POST['proxy']), 'proxy');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=seteight");
@@ -913,7 +913,7 @@ if (is_admin([101])) {
         * $dbr->execute(intval($_POST['regusercache']), 'regusercache');
         * $dbr->execute(intval($_POST['themescache']), 'themescache');
         *
-        * save_setting();
+        * saveSetting();
         *
         * setFlash('success', 'Настройки сайта успешно изменены!');
         * redirect("/admin/setting");
@@ -981,7 +981,7 @@ if (is_admin([101])) {
                             $dbr -> execute($captcha_offset, 'captcha_offset');
                             $dbr -> execute($captcha_distortion, 'captcha_distortion');
                             $dbr -> execute($captcha_interpolation, 'captcha_interpolation');
-                            save_setting();
+                            saveSetting();
 
                             setFlash('success', 'Настройки сайта успешно изменены!');
                             redirect("/admin/setting?act=setten");
@@ -1055,7 +1055,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['bonusmoney']), 'bonusmoney');
                     $dbr -> execute(intval($_POST['registermoney']), 'registermoney');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=seteleven");
@@ -1109,7 +1109,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['rekusertotal']), 'rekusertotal');
                     $dbr -> execute(intval($_POST['rekuserpost']), 'rekuserpost');
 
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setadv");
@@ -1172,7 +1172,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['screensize']), 'screensize');
                     $dbr -> execute(intval($_POST['previewsize']), 'previewsize');
                     $dbr -> execute($copyfoto, 'copyfoto');
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setimage");
@@ -1222,7 +1222,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['smilemaxsize'] * 1024), 'smilemaxsize');
                     $dbr -> execute(intval($_POST['smilemaxweight']), 'smilemaxweight');
                     $dbr -> execute(intval($_POST['smileminweight']), 'smileminweight');
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setsmile");
@@ -1270,7 +1270,7 @@ if (is_admin([101])) {
                     $dbr -> execute(intval($_POST['postoffers']), 'postoffers');
                     $dbr -> execute(intval($_POST['postcommoffers']), 'postcommoffers');
                     $dbr -> execute(intval($_POST['addofferspoint']), 'addofferspoint');
-                    save_setting();
+                    saveSetting();
 
                     setFlash('success', 'Настройки сайта успешно изменены!');
                     redirect("/admin/setting?act=setoffer");

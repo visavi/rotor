@@ -3,7 +3,7 @@
 
 use App\Classes\Registry;
 use App\Classes\Request;
-use App\Models\Setting;
+use App\Models\login;
 use App\Models\User;
 use App\Models\Admlog;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -74,8 +74,8 @@ if (setting('doslimit')) {
 
                     Log::create([
                         'code'       => 666,
-                        'request'    => utf_substr(server('REQUEST_URI'), 0, 200),
-                        'referer'    => utf_substr(server('HTTP_REFERER'), 0, 200),
+                        'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
+                        'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
                         'user_id'    => getUserId(),
                         'ip'         => getClientIp(),
                         'brow'       => getUserAgent(),

@@ -52,7 +52,7 @@ if (is_admin([101]) && getUsername() == setting('nickname')) {
                         echo 'Объектов: '.count(array_diff(scandir(APP.'/views/'.$path.$file), ['.', '..'])).'</li>';
                     } else {
 
-                        $size = formatsize(filesize(APP.'/views/'.$path.$file));
+                        $size = formatSize(filesize(APP.'/views/'.$path.$file));
                         $strok = count(file(APP.'/views/'.$path.$file));
 
                         echo '<li class="list-group-item"><div class="float-right">';
@@ -61,7 +61,7 @@ if (is_admin([101]) && getUsername() == setting('nickname')) {
                         echo '<i class="fa fa-file-o"></i> ';
                         echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.basename($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br>';
                         echo 'Строк: ' . $strok . ' / ';
-                        echo 'Изменен: ' . date_fixed(filemtime(APP.'/views/'.$path.$file)) . '</li>';
+                        echo 'Изменен: ' . dateFixed(filemtime(APP.'/views/'.$path.$file)) . '</li>';
                     }
                 }
                 echo '</ul>';

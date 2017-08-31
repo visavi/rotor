@@ -21,9 +21,9 @@
 
             @foreach ($messages as $data)
                 <div class="b">
-                    <div class="img">{!! user_avatars($data['recipient']) !!}</div>
-                    <b>{!! profile($data['recipient']) !!}</b>  ({{ date_fixed($data['created_at']) }})<br>
-                    {!! user_title($data['recipient']) !!} {!! user_online($data['recipient']) !!}</div>
+                    <div class="img">{!! userAvatar($data['recipient']) !!}</div>
+                    <b>{!! profile($data['recipient']) !!}</b>  ({{ dateFixed($data['created_at']) }})<br>
+                    {!! userStatus($data['recipient']) !!} {!! user_online($data['recipient']) !!}</div>
 
                 <div>{!! bbCode($data['text']) !!}<br>
 

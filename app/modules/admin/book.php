@@ -38,10 +38,10 @@ if (is_admin()) {
                     echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
 
                     if (empty($data['user_id'])) {
-                        echo '<b>'.$data->getUser()->login.'</b> <small>('.date_fixed($data['created_at']).')</small>';
+                        echo '<b>'.$data->getUser()->login.'</b> <small>('.dateFixed($data['created_at']).')</small>';
                     } else {
-                        echo '<b>'.profile($data->user).'</b> <small>('.date_fixed($data['created_at']).')</small><br>';
-                        echo user_title($data->user).' '.user_online($data->user);
+                        echo '<b>'.profile($data->user).'</b> <small>('.dateFixed($data['created_at']).')</small><br>';
+                        echo userStatus($data->user).' '.user_online($data->user);
                     }
 
                     echo '</div>';
@@ -53,7 +53,7 @@ if (is_admin()) {
                     echo '<div>'.bbCode($data['text']).'<br>';
 
                     if (!empty($data['edit_user_id'])) {
-                        echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.date_fixed($data['updated_at']).')</small><br>';
+                        echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.dateFixed($data['updated_at']).')</small><br>';
                     }
 
                     echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span>';
@@ -88,7 +88,7 @@ if (is_admin()) {
             if ($post) {
                 echo '<b>Добавление ответа</b><br><br>';
 
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> '.user_title($post->user) . user_online($post->user).' <small>('.date_fixed($post['created_at']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> '.userStatus($post->user) . user_online($post->user).' <small>('.dateFixed($post['created_at']).')</small></div>';
                 echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
                 echo '<div class="form">';
@@ -112,7 +112,7 @@ if (is_admin()) {
             $reply = check($_POST['reply']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen($reply) >= 5 && utf_strlen($reply) < setting('guesttextlength')) {
+                if (utfStrlen($reply) >= 5 && utfStrlen($reply) < setting('guesttextlength')) {
 
                     $post = Guest::find($id);
 
@@ -148,7 +148,7 @@ if (is_admin()) {
 
                 echo '<b>Редактирование сообщения</b><br><br>';
 
-                echo '<i class="fa fa-pencil"></i> <b>'.$post->getUser()->login.'</b> <small>('.date_fixed($post['created_at']).')</small><br><br>';
+                echo '<i class="fa fa-pencil"></i> <b>'.$post->getUser()->login.'</b> <small>('.dateFixed($post['created_at']).')</small><br><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?act=addedit&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -171,7 +171,7 @@ if (is_admin()) {
             $msg = check($_POST['msg']);
 
             if ($uid == $_SESSION['token']) {
-                if (utf_strlen(trim($msg)) >= 5 && utf_strlen($msg) < setting('guesttextlength')) {
+                if (utfStrlen(trim($msg)) >= 5 && utfStrlen($msg) < setting('guesttextlength')) {
 
                     $post = Guest::find($id);
                     if ($post) {

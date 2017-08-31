@@ -50,7 +50,7 @@ if (is_admin([101, 102])) {
 
                     echo '<hr><div>'.user_gender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> (email: '.$data['email'].')<br>';
 
-                    echo 'Зарегистрирован: '.date_fixed($data['joined']).'</div>';
+                    echo 'Зарегистрирован: '.dateFixed($data['joined']).'</div>';
                 }
 
                 pagination($page);
@@ -133,7 +133,7 @@ if (is_admin([101, 102])) {
                         echo '<select name="level">';
                         foreach ($arr_access as $value) {
                             $selected = ($user['level'] == $value) ? ' selected="selected"' : '';
-                            echo '<option value="'.$value.'"'.$selected.'>'.user_status($value).'</option>';
+                            echo '<option value="'.$value.'"'.$selected.'>'.userLevel($value).'</option>';
                         }
                         echo '</select><br>';
                     }
@@ -149,7 +149,7 @@ if (is_admin([101, 102])) {
                     echo 'Сайт:<br>';
                     echo '<input type="text" name="site" maxlength="50" value="'.$user['site'].'"><br>';
                     echo 'Зарегистрирован:<br>';
-                    echo '<input type="text" name="joined" maxlength="10" value="'.date_fixed($user['joined'], "d.m.Y").'"><br>';
+                    echo '<input type="text" name="joined" maxlength="10" value="'.dateFixed($user['joined'], "d.m.Y").'"><br>';
                     echo 'Дата рождения:<br>';
                     echo '<input type="text" name="birthday" maxlength="10" value="'.$user['birthday'].'"><br>';
                     echo 'ICQ:<br>';
@@ -189,7 +189,7 @@ if (is_admin([101, 102])) {
 
                     $visit = DB::run() -> queryFetch("SELECT `ip`, `nowtime` FROM `visit` WHERE `user`=? LIMIT 1;", [$uz]);
                     if (!empty($visit)) {
-                        echo '<b>Последний визит:</b> '.date_fixed($visit['nowtime'], 'j F Y / H:i').'<br>';
+                        echo '<b>Последний визит:</b> '.dateFixed($visit['nowtime'], 'j F Y / H:i').'<br>';
                         echo '<b>Последний IP:</b> '.$visit['ip'].'<br>';
                     }
 
@@ -198,7 +198,7 @@ if (is_admin([101, 102])) {
                     }
                     if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                         echo '<div class="form">';
-                        echo 'Последний бан: '.date_fixed($user['timelastban'], 'j F Y / H:i').'<br>';
+                        echo 'Последний бан: '.dateFixed($user['timelastban'], 'j F Y / H:i').'<br>';
                         echo 'Последняя причина: '.bbCode($user['reasonban']).'<br>';
                         echo 'Забанил: '.profile($user['loginsendban']).'</div>';
                     }
@@ -257,7 +257,7 @@ if (is_admin([101, 102])) {
                                 if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $joined)) {
                                     if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
                                         if ($gender == 1 || $gender == 2) {
-                                            if (utf_strlen($info) <= 1000) {
+                                            if (utfStrlen($info) <= 1000) {
                                                 if (getUsername() == setting('nickname')) {
                                                     $access = $level;
                                                 } else {
@@ -275,15 +275,15 @@ if (is_admin([101, 102])) {
                                                 list($uday, $umonth, $uyear) = explode(".", $joined);
                                                 $joined = mktime('0', '0', '0', $umonth, $uday, $uyear);
 
-                                                $name = utf_substr($name, 0, 20);
-                                                $country = utf_substr($country, 0, 30);
-                                                $city = utf_substr($city, 0, 50);
+                                                $name = utfSubstr($name, 0, 20);
+                                                $country = utfSubstr($country, 0, 30);
+                                                $city = utfSubstr($city, 0, 50);
                                                 $rating = $posrating - $negrating;
 
                                                 DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=? `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
 
-                                                save_title();
-                                                save_money();
+                                                saveStatus();
+                                                saveUserMoney();
 
                                                 echo '<i class="fa fa-check"></i> <b>Данные пользователя успешно изменены!</b><br><br>';
                                             } else {

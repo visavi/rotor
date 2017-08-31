@@ -31,7 +31,7 @@ switch ($action):
             while ($data = $queryvote -> fetch()) {
                 echo '<div class="b">';
                 echo '<i class="fa fa-briefcase"></i> <b><a href="/votes/history?act=result&amp;id='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b></div>';
-                echo '<div>Создано: '.date_fixed($data['time']).'<br>';
+                echo '<div>Создано: '.dateFixed($data['time']).'<br>';
                 echo 'Всего голосов: '.$data['count'].'</div>';
             }
 

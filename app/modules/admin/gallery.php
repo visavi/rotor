@@ -33,7 +33,7 @@ if (is_admin()) {
                 foreach ($photos as $data) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-picture-o"></i> ';
-                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.read_file(HOME.'/uploads/pictures/'.$data['link']).')<br>';
+                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.formatFileSize(HOME.'/uploads/pictures/'.$data['link']).')<br>';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
@@ -43,7 +43,7 @@ if (is_admin()) {
                         echo bbCode($data['text']).'<br>';
                     }
 
-                    echo 'Добавлено: '.profile($data['user']).' ('.date_fixed($data['time']).')<br>';
+                    echo 'Добавлено: '.profile($data['user']).' ('.dateFixed($data['time']).')<br>';
                     echo '<a href="/gallery?act=comments&amp;gid='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
                     echo '<a href="/gallery?act=end&amp;gid='.$data['id'].'">&raquo;</a>';
                     echo '</div>';
@@ -107,8 +107,8 @@ if (is_admin()) {
                 $photo = DB::run() -> queryFetch("SELECT * FROM `photo` WHERE `id`=? LIMIT 1;", [$gid]);
 
                 if (!empty($photo)) {
-                    if (utf_strlen($title) >= 5 && utf_strlen($title) < 50) {
-                        if (utf_strlen($text) <= 1000) {
+                    if (utfStrlen($title) >= 5 && utfStrlen($title) < 50) {
+                        if (utfStrlen($text) <= 1000) {
 
                             $text = antimat($text);
 
