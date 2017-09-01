@@ -2,6 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\Rule;
+use App\Models\Smile;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class PageController extends BaseController
 {
     /**

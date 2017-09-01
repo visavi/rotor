@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\Post;
+use App\Models\Topic;
+
 class ForumNewController extends BaseController
 {
     /**

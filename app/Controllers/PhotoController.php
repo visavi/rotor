@@ -2,7 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Comment;
+use App\Models\Flood;
 use App\Models\Photo;
+use App\Models\User;
 
 class PhotoController extends BaseController
 {

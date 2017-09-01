@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use Gregwar\Captcha\PhraseBuilder;
+use Gregwar\Captcha\CaptchaBuilder;
+
 class HomeController extends BaseController
 {
     /**
@@ -18,10 +21,10 @@ class HomeController extends BaseController
     public function captcha()
     {
         header('Content-type: image/jpeg');
-        $phrase = new Gregwar\Captcha\PhraseBuilder;
+        $phrase = new PhraseBuilder;
         $phrase = $phrase->build(setting('captcha_maxlength'), setting('captcha_symbols'));
 
-        $builder = new Gregwar\Captcha\CaptchaBuilder($phrase);
+        $builder = new CaptchaBuilder($phrase);
         $builder->setBackgroundColor(mt_rand(200,255), mt_rand(200,255), mt_rand(200,255));
         $builder->setMaxOffset(setting('captcha_offset'));
         $builder->setMaxAngle(setting('captcha_angle'));

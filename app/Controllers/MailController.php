@@ -2,6 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class MailController extends BaseController
 {
     /**

@@ -2,6 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Models\Inbox;
+use App\Models\Post;
+use App\Models\Topic;
+use App\Models\User;
+
 class ApiController extends BaseController
 {
     /**
@@ -20,7 +26,7 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="user.json";');
 
-        $token = check(Request::get('token'));
+        $token = check(Request::input('token'));
 
         if (! $token) {
             echo json_encode(['error'=>'no token']);
@@ -67,8 +73,8 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="private.json";');
 
-        $token = check(Request::get('token'));
-        $count = abs(intval(Request::get('count', 10)));
+        $token = check(Request::input('token'));
+        $count = abs(intval(Request::input('count', 10)));
 
         if (! $token) {
             echo json_encode(['error'=>'no token']);
@@ -120,8 +126,8 @@ class ApiController extends BaseController
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="forum.json";');
 
-        $token = check(Request::get('token'));
-        $id    = abs(intval(Request::get('id')));
+        $token = check(Request::input('token'));
+        $id    = abs(intval(Request::input('id')));
 
         if (! $token) {
             echo json_encode(['error'=>'no token']);

@@ -2,8 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
 use App\Models\Forum;
 use App\Models\Topic;
+use App\Models\Vote;
+use App\Models\VoteAnswer;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class ForumController extends BaseController
 {

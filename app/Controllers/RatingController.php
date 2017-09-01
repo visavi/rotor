@@ -2,6 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Rating;
+use App\Models\User;
+
 class RatingController extends BaseController
 {
     /**

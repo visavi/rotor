@@ -8,6 +8,7 @@ use App\Models\Invite;
 use App\Models\Note;
 use App\Models\Rating;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class UserController extends BaseController
 {

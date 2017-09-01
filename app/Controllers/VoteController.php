@@ -2,6 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Vote;
+use App\Models\VoteAnswer;
+use App\Models\VotePoll;
+
 class VoteController extends BaseController
 {
     /**

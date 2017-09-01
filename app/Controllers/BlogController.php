@@ -2,6 +2,16 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Blog;
+use App\Models\CatsBlog;
+use App\Models\Comment;
+use App\Models\Flood;
+use App\Models\Read;
+use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class BlogController extends BaseController
 {
     /**

@@ -2,6 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Comment;
+use App\Models\Flood;
+use App\Models\News;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class NewsController extends BaseController
 {
     /**

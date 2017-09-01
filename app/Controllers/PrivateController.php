@@ -2,6 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Contact;
+use App\Models\Flood;
+use App\Models\Ignore;
+use App\Models\Inbox;
+use App\Models\Outbox;
+use App\Models\Trash;
+use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class PrivateController extends BaseController
 {
     /**
@@ -9,7 +20,7 @@ class PrivateController extends BaseController
      */
     public function __construct()
     {
-        if (!isUser()) {
+        if (! isUser()) {
             abort(403, 'Для просмотра писем необходимо авторизоваться!');
         }
     }

@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\Online;
+
 class OnlineController extends BaseController
 {
     /**

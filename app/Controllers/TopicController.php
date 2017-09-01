@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\File;
 use App\Models\Post;
 use App\Models\Bookmark;
 use App\Models\Topic;
@@ -12,6 +13,7 @@ use App\Models\VotePoll;
 use App\Models\Flood;
 use App\Classes\Request;
 use App\Classes\Validation;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class TopicController extends BaseController
 {
@@ -246,8 +248,8 @@ class TopicController extends BaseController
     public function delete($tid)
     {
         $token = check(Request::input('token'));
-        $del = intar(Request::input('del'));
-        $page = abs(intval(Request::input('page')));
+        $del   = intar(Request::input('del'));
+        $page  = abs(intval(Request::input('page')));
 
         $topic = DB::run()->queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
 

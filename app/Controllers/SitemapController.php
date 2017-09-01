@@ -2,6 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Models\Blog;
+use App\Models\Down;
+use App\Models\News;
+use App\Models\Topic;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class SitemapController extends BaseController
 {
     /**
