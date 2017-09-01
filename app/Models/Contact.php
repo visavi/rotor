@@ -30,7 +30,7 @@ class Contact extends BaseModel
      */
     public function contactor()
     {
-        return $this->belongsTo('User', 'contact_id');
+        return $this->belongsTo(User::class, 'contact_id');
     }
 
     /**

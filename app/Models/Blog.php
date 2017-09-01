@@ -27,7 +27,7 @@ class Blog extends BaseModel
      */
     public function lastComments($limit = 15)
     {
-        return $this->hasMany('Comment', 'relate_id')
+        return $this->hasMany(Comment::class, 'relate_id')
             ->where('relate_type', self::class)
             ->limit($limit);
     }
@@ -40,7 +40,7 @@ class Blog extends BaseModel
      */
     public function category()
     {
-        return $this->belongsTo('CatsBlog', 'category_id');
+        return $this->belongsTo(CatsBlog::class, 'category_id');
     }
 
     /**

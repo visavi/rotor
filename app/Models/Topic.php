@@ -60,8 +60,7 @@ class Topic extends BaseModel
 
     /**
      * Генерирует постраничную навигация для форума
-     * @param  array  $topic массив данных
-     * @return string        сформированный блок
+     * @return string сформированный блок
      */
     public function pagination()
     {
@@ -98,7 +97,7 @@ class Topic extends BaseModel
                 );
             }
 
-            return view('forum._pagination', compact('pages', 'link'));
+            return view('forum/_pagination', compact('pages', 'link'));
         }
     }
 }

@@ -30,7 +30,7 @@ class Ignore extends BaseModel
      */
     public function ignoring()
     {
-        return $this->belongsTo('User', 'ignore_id');
+        return $this->belongsTo(User::class, 'ignore_id');
     }
 
     /**

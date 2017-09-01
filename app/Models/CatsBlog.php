@@ -32,7 +32,7 @@ class CatsBlog extends BaseModel
      */
     public function new()
     {
-        return $this->hasOne('Blog', 'category_id')
+        return $this->hasOne(Blog::class, 'category_id')
             ->select('category_id', DB::raw('count(*) as count'))
             ->where('created_at', '>', SITETIME - 86400 * 3)
             ->groupBy('category_id');

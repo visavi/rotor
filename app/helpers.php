@@ -1072,12 +1072,8 @@ function isUser()
 }
 
 // ------------------------- Функция проверки администрации  ------------------------//
-function isAdmin($access = [])
+function isAdmin($access = [101, 102, 103, 105])
 {
-    if (empty($access)) {
-        $access = [101, 102, 103, 105];
-    }
-
     if (isUser()) {
         if (in_array(user('level'), $access)) {
             return true;

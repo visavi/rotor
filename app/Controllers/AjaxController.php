@@ -2,6 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Blog;
+use App\Models\Comment;
+use App\Models\News;
+use App\Models\Photo;
+use App\Models\Polling;
+use App\Models\Post;
+use App\Models\Spam;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class AjaxController extends BaseController
 {
     /**
@@ -147,9 +158,16 @@ class AjaxController extends BaseController
      */
     public function rating()
     {
+        $types = [
+            Post::class,
+            Blog::class,
+            News::class,
+            Photo::class,
+        ];
+
         $id    = abs(intval(Request::input('id')));
-        $type  = check(Request::input('type'));
-        $vote  = check(Request::input('vote'));
+        $type  = Request::input('type');
+        $vote  = intval(Request::input('vote'));
         $token = check(Request::input('token'));
 
         // Время хранения голосов
@@ -165,6 +183,10 @@ class AjaxController extends BaseController
 
         if (! in_array($vote, [-1, 1])) {
             exit(json_encode(['status' => 'error', 'message' => 'Invalid rating']));
+        }
+
+        if (! in_array($type, $types, true)) {
+            exit(json_encode(['status' => 'error', 'message' => 'Type invalid']));
         }
 
         Polling::where('relate_type', $type)

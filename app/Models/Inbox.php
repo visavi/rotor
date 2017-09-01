@@ -30,7 +30,7 @@ class Inbox extends BaseModel
      */
     public function author()
     {
-        return $this->belongsTo('User', 'author_id');
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     /**

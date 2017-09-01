@@ -30,7 +30,7 @@ class Outbox extends BaseModel
      */
     public function recipient()
     {
-        return $this->belongsTo('User', 'recipient_id');
+        return $this->belongsTo(User::class, 'recipient_id');
     }
 
     /**

@@ -24,7 +24,7 @@ class Bookmark extends BaseModel
      */
     public function topic()
     {
-        return $this->belongsTo('Topic', 'topic_id');
+        return $this->belongsTo(Topic::class, 'topic_id');
     }
 
     /**
