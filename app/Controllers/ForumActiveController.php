@@ -41,7 +41,7 @@ class ForumActiveController extends BaseController
             ->with('forum', 'user', 'lastPost.user')
             ->get();
 
-        view('forum/active_themes', compact('topics', 'user', 'page'));
+        return view('forum/active_themes', compact('topics', 'user', 'page'));
     }
 
     /**
@@ -65,7 +65,7 @@ class ForumActiveController extends BaseController
             ->with('topic', 'user')
             ->get();
 
-        view('forum/active_posts', compact('posts', 'user', 'page'));
+        return view('forum/active_posts', compact('posts', 'user', 'page'));
     }
 
     /**

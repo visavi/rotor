@@ -9,7 +9,7 @@ class HomeController extends BaseController
      */
     public function index()
     {
-        view('index');
+        return view('index');
     }
 
     /**

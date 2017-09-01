@@ -25,7 +25,7 @@ class BookController extends BaseController
             ->with('user', 'editUser')
             ->get();
 
-        view('book/index', compact('posts', 'page'));
+        return view('book/index', compact('posts', 'page'));
     }
 
     /**
@@ -126,6 +126,6 @@ class BookController extends BaseController
             }
         }
 
-        view('book/edit', compact('post', 'id'));
+        return view('book/edit', compact('post', 'id'));
     }
 }

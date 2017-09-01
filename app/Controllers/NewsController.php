@@ -18,7 +18,7 @@ class NewsController extends BaseController
             ->with('user')
             ->get();
 
-        view('news/index', compact('news', 'page'));
+        return view('news/index', compact('news', 'page'));
     }
 
     /**
@@ -43,7 +43,7 @@ class NewsController extends BaseController
 
         $comments = $comments->reverse();
 
-        view('news/view', compact('news', 'comments'));
+        return view('news/view', compact('news', 'comments'));
     }
 
     /**
@@ -121,7 +121,7 @@ class NewsController extends BaseController
             ->with('user')
             ->get();
 
-        view('news/comments', compact('news', 'comments', 'page'));
+        return view('news/comments', compact('news', 'comments', 'page'));
     }
 
     /**
@@ -171,7 +171,7 @@ class NewsController extends BaseController
                 setFlash('danger', $validation->getErrors());
             }
         }
-        view('news/editcomment', compact('comment', 'page'));
+        return view('news/editcomment', compact('comment', 'page'));
     }
 
     /**
@@ -200,7 +200,7 @@ class NewsController extends BaseController
             abort('default', 'Новости не найдены!');
         }
 
-        view('news/rss', compact('newses'));
+        return view('news/rss', compact('newses'));
     }
 
     /**
@@ -225,7 +225,7 @@ class NewsController extends BaseController
             ->with('user')
             ->get();
 
-        view('news/allcomments', compact('comments', 'page'));
+        return view('news/allcomments', compact('comments', 'page'));
     }
 
     /**

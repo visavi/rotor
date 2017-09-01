@@ -39,7 +39,7 @@ class PrivateController extends BaseController
             DB::run()->query("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `id`=? LIMIT 1;", [0, 0, getUserId()]);
         }
 
-        view('private/index', compact('messages', 'page', 'newprivat'));
+        return view('private/index', compact('messages', 'page', 'newprivat'));
     }
 
     /**
@@ -60,7 +60,7 @@ class PrivateController extends BaseController
         $page['totalInbox'] = Inbox::where('user_id', getUserId())->count();
         $page['totalTrash'] = Trash::where('user_id', getUserId())->count();
 
-        view('private/outbox', compact('messages', 'page'));
+        return view('private/outbox', compact('messages', 'page'));
     }
 
     /**
@@ -81,7 +81,7 @@ class PrivateController extends BaseController
             ->with('author')
             ->get();
 
-        view('private/trash', compact('messages', 'page'));
+        return view('private/trash', compact('messages', 'page'));
     }
 
     /**
@@ -178,7 +178,7 @@ class PrivateController extends BaseController
             ->orderBy('users.login')
             ->get();
 
-        view('private/send', compact('user', 'contacts'));
+        return view('private/send', compact('user', 'contacts'));
     }
 
     /**
@@ -295,6 +295,6 @@ class PrivateController extends BaseController
             ->with('author')
             ->get();
 
-        view('private/history', compact('messages', 'page', 'user'));
+        return view('private/history', compact('messages', 'page', 'user'));
     }
 }

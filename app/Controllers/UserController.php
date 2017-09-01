@@ -23,7 +23,7 @@ class UserController extends BaseController
         $note = Note::where('user_id', $user->id)->first();
         $invite = Invite::where('invite_user_id', $user->id)->first();
 
-        view('pages/user', compact('user', 'invite', 'note'));
+        return view('pages/user', compact('user', 'invite', 'note'));
     }
 
     /**
@@ -70,7 +70,7 @@ class UserController extends BaseController
             }
         }
 
-        view('pages/user_note', compact('note', 'user'));
+        return view('pages/user_note', compact('note', 'user'));
     }
 
     /**
@@ -162,7 +162,7 @@ class UserController extends BaseController
             }
         }
 
-        view('pages/rating', compact('user', 'vote'));
+        return view('pages/rating', compact('user', 'vote'));
     }
 
     /**
@@ -299,7 +299,7 @@ class UserController extends BaseController
             }
         }
 
-        view('pages/registration');
+        return view('pages/registration');
     }
 
     /**
@@ -338,7 +338,7 @@ class UserController extends BaseController
             }
         }
 
-        view('pages/login', compact('cooklog'));
+        return view('pages/login', compact('cooklog'));
     }
 
     /**
@@ -403,6 +403,6 @@ class UserController extends BaseController
             }
         }
 
-        view('pages/profile', compact('udata'));
+        return view('pages/profile', compact('udata'));
     }
 }

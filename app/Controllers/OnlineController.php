@@ -21,7 +21,7 @@ class OnlineController extends BaseController
             ->limit(setting('onlinelist'))
             ->get();
 
-        view('pages/online', compact('online', 'page', 'all'));
+        return view('pages/online', compact('online', 'page', 'all'));
     }
 
     /**
@@ -40,6 +40,6 @@ class OnlineController extends BaseController
             ->limit(setting('onlinelist'))
             ->get();
 
-        view('pages/online_all', compact('online', 'page', 'registered'));
+        return view('pages/online_all', compact('online', 'page', 'registered'));
     }
 }

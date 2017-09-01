@@ -22,7 +22,7 @@ class ForumController extends BaseController
             abort('default', 'Разделы форума еще не созданы!');
         }
 
-        view('forum/index', compact('forums'));
+        return view('forum/index', compact('forums'));
     }
 
     /**
@@ -52,7 +52,7 @@ class ForumController extends BaseController
             ->with('lastPost.user')
             ->get();
 
-        view('forum/forum', compact('forum', 'topics', 'page'));
+        return view('forum/forum', compact('forum', 'topics', 'page'));
     }
 
     /**
@@ -157,7 +157,7 @@ class ForumController extends BaseController
             }
         }
 
-        view('forum/forum_create', compact('forums', 'fid'));
+        return view('forum/forum_create', compact('forums', 'fid'));
     }
 
     /**
@@ -183,7 +183,7 @@ class ForumController extends BaseController
                 abort('default', 'Разделы форума еще не созданы!');
             }
 
-            view('forum/search', compact('forums', 'fid'));
+            return view('forum/search', compact('forums', 'fid'));
 
         } else {
 
@@ -246,7 +246,7 @@ class ForumController extends BaseController
                             ->limit(setting('forumtem'))
                             ->get();
 
-                        view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
+                        return view('forum/search_topics', compact('topics', 'page', 'find', 'type', 'where', 'section', 'period'));
 
                     } else {
                         setInput(Request::all());
@@ -285,7 +285,7 @@ class ForumController extends BaseController
                             ->limit(setting('forumpost'))
                             ->get();
 
-                        view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
+                        return view('forum/search_posts', compact('posts', 'page', 'find', 'type', 'where', 'section', 'period'));
 
                     } else {
                         setInput(Request::all());
@@ -317,7 +317,7 @@ class ForumController extends BaseController
             abort('default', 'Нет тем для отображения!');
         }
 
-        view('forum/rss', compact('topics'));
+        return view('forum/rss', compact('topics'));
     }
 
     /**
@@ -337,7 +337,7 @@ class ForumController extends BaseController
             ->limit(15)
             ->get();
 
-        view('forum/rss_posts', compact('topic', 'posts'));
+        return view('forum/rss_posts', compact('topic', 'posts'));
     }
 
     /**
@@ -362,7 +362,7 @@ class ForumController extends BaseController
                 ->with('forum', 'user', 'lastPost.user')
                 ->get();
 
-            view('forum/top', compact('topics', 'page'));
+            return view('forum/top', compact('topics', 'page'));
 
         } else {
             showError('Созданных тем еще нет!');
@@ -390,7 +390,7 @@ class ForumController extends BaseController
                 ->with('topic', 'user')
                 ->get();
 
-            view('forum/top_posts', compact('posts', 'page'));
+            return view('forum/top_posts', compact('posts', 'page'));
 
         } else {
             showError('Созданных тем еще нет!');

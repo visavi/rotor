@@ -217,7 +217,7 @@ $router->map('GET|POST', '/admin/delusers', 'admin/delusers.php');
 $router->map('GET',      '/admin/upgrade', 'admin/upgrade.php');
 
 $router->map( 'GET', '/search', function() {
-    view('search/index');
+    return view('search/index');
 });
 
 App\Classes\Registry::set('router', $router);

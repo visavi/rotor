@@ -25,7 +25,7 @@ class SitemapController extends BaseController
             ];
         }
 
-        view('sitemap/index', compact('locs'));
+        return view('sitemap/index', compact('locs'));
     }
 
     /**
@@ -57,7 +57,7 @@ class SitemapController extends BaseController
                 'priority'   => $new ? '1.0' : '0.5',
             ];
         }
-        view('sitemap/url', compact('locs'));
+        return view('sitemap/url', compact('locs'));
     }
     /**
      * Генерируем новости
@@ -88,7 +88,7 @@ class SitemapController extends BaseController
                 'priority'   => $new ? '1.0' : '0.5',
             ];
         }
-        view('sitemap/url', compact('locs'));
+        return view('sitemap/url', compact('locs'));
     }
 
     /**
@@ -111,7 +111,7 @@ class SitemapController extends BaseController
                 'priority'   => $new ? '1.0' : '0.5',
             ];
         }
-        view('sitemap/url', compact('locs'));
+        return view('sitemap/url', compact('locs'));
     }
 
     /**
@@ -143,7 +143,7 @@ class SitemapController extends BaseController
                 'priority'   => $new ? '1.0' : '0.5',
             ];
         }
-        view('sitemap/url', compact('locs'));
+        return view('sitemap/url', compact('locs'));
     }
 
     /**

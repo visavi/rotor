@@ -18,7 +18,7 @@ class BlogController extends BaseController
             abort('default', 'Разделы блогов еще не созданы!');
         }
 
-        view('blog/index', compact('blogs'));
+        return view('blog/index', compact('blogs'));
     }
 
     /**
@@ -43,7 +43,7 @@ class BlogController extends BaseController
             ->with('user')
             ->get();
 
-        view('blog/blog', compact('blogs', 'category', 'page'));
+        return view('blog/blog', compact('blogs', 'category', 'page'));
     }
 
     /**
@@ -110,7 +110,7 @@ class BlogController extends BaseController
             $tags .= $comma . '<a href="/blog/tags/' . urlencode($value) . '">' . $value . '</a>';
         }
 
-        view('blog/view', compact('blog', 'tags', 'page'));
+        return view('blog/view', compact('blog', 'tags', 'page'));
     }
 
     /**
@@ -178,7 +178,7 @@ class BlogController extends BaseController
             ->pluck('name', 'id')
             ->all();
 
-        view('blog/edit', compact('blog', 'cats'));
+        return view('blog/edit', compact('blog', 'cats'));
     }
 
     /**
@@ -201,7 +201,7 @@ class BlogController extends BaseController
             ->orderBy('cnt', 'desc')
             ->get();
 
-        view('blog/user_blogs', compact('blogs', 'page'));
+        return view('blog/user_blogs', compact('blogs', 'page'));
     }
 
     /**
@@ -270,7 +270,7 @@ class BlogController extends BaseController
             }
         }
 
-        view('blog/create', ['cats' => $cats, 'cid' => $cid]);
+        return view('blog/create', ['cats' => $cats, 'cid' => $cid]);
     }
 
     /**
@@ -340,7 +340,7 @@ class BlogController extends BaseController
             ->limit(setting('blogcomm'))
             ->get();
 
-        view('blog/comments', compact('blog', 'comments', 'page'));
+        return view('blog/comments', compact('blog', 'comments', 'page'));
     }
 
     /**
@@ -392,7 +392,7 @@ class BlogController extends BaseController
             }
         }
 
-        view('blog/editcomment', compact('comment', 'page'));
+        return view('blog/editcomment', compact('comment', 'page'));
     }
 
     /**
@@ -428,7 +428,7 @@ class BlogController extends BaseController
 
         $blog['text'] = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog['text']);
 
-        view('blog/print', compact('blog'));
+        return view('blog/print', compact('blog'));
     }
 
     /**
@@ -444,7 +444,7 @@ class BlogController extends BaseController
             abort('default', 'Блоги не найдены!');
         }
 
-        view('blog/rss', compact('blogs'));
+        return view('blog/rss', compact('blogs'));
     }
 
     /**
@@ -458,7 +458,7 @@ class BlogController extends BaseController
             abort('default', 'Статья не найдена!');
         }
 
-        view('blog/rss_comments', compact('blog'));
+        return view('blog/rss_comments', compact('blog'));
     }
 
     /**
@@ -505,7 +505,7 @@ class BlogController extends BaseController
                 ->with('user')
                 ->get();
 
-            view('blog/tags_search', compact('blogs', 'tag', 'page'));
+            return view('blog/tags_search', compact('blogs', 'tag', 'page'));
 
         } else {
             if (@filemtime(STORAGE."/temp/tagcloud.dat") < time() - 3600) {
@@ -531,7 +531,7 @@ class BlogController extends BaseController
             $max = max($tags);
             $min = min($tags);
 
-            view('blog/tags', compact('tags', 'max', 'min'));
+            return view('blog/tags', compact('tags', 'max', 'min'));
         }
     }
 
@@ -553,7 +553,7 @@ class BlogController extends BaseController
             ->with('user')
             ->get();
 
-        view('blog/new_articles', compact('blogs', 'page'));
+        return view('blog/new_articles', compact('blogs', 'page'));
     }
 
     /**
@@ -577,7 +577,7 @@ class BlogController extends BaseController
             ->with('user')
             ->get();
 
-        view('blog/new_comments', compact('comments', 'page'));
+        return view('blog/new_comments', compact('comments', 'page'));
     }
 
     /**
@@ -602,7 +602,7 @@ class BlogController extends BaseController
             ->orderBy('created_at', 'desc')
             ->get();
 
-        view('blog/active_articles', compact('blogs', 'user', 'page'));
+        return view('blog/active_articles', compact('blogs', 'user', 'page'));
     }
 
     /**
@@ -633,7 +633,7 @@ class BlogController extends BaseController
             ->with('user')
             ->get();
 
-            view('blog/active_comments', compact('comments', 'user', 'page'));
+            return view('blog/active_comments', compact('comments', 'user', 'page'));
     }
 
     /**
@@ -682,7 +682,7 @@ class BlogController extends BaseController
             ->with('user')
             ->get();
 
-        view('blog/top', compact('blogs', 'order', 'page'));
+        return view('blog/top', compact('blogs', 'order', 'page'));
     }
 
     /**
@@ -699,7 +699,7 @@ class BlogController extends BaseController
         }
 
         if (empty($find)) {
-            view('blog/search');
+            return view('blog/search');
         } else {
 
             if (! isUtf($find)) {
@@ -757,7 +757,7 @@ class BlogController extends BaseController
                                 ->with('user')
                                 ->get();
 
-                            view('blog/search_title', compact('blogs', 'find', 'page'));
+                            return view('blog/search_title', compact('blogs', 'find', 'page'));
                         } else {
                             setInput(Request::all());
                             setFlash('danger', 'По вашему запросу ничего не найдено!');
@@ -798,7 +798,7 @@ class BlogController extends BaseController
                                 ->with('user')
                                 ->get();
 
-                            view('blog/search_text', compact('blogs', 'find', 'page'));
+                            return view('blog/search_text', compact('blogs', 'find', 'page'));
                         } else {
                             setInput(Request::all());
                             setFlash('danger', 'По вашему запросу ничего не найдено!');

@@ -30,7 +30,7 @@ class RatingController extends BaseController
             ->with('user')
             ->get();
 
-        view('pages/rathistory', compact('ratings', 'user'));
+        return view('pages/rathistory', compact('ratings', 'user'));
     }
 
     /**
@@ -49,7 +49,7 @@ class RatingController extends BaseController
             ->with('recipient')
             ->get();
 
-        view('pages/rathistory_gave', compact('ratings', 'user'));
+        return view('pages/rathistory_gave', compact('ratings', 'user'));
     }
 
     /**

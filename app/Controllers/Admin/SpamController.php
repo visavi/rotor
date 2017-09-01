@@ -58,7 +58,7 @@ class SpamController extends AdminController
 
         $total = $this->total;
 
-        view('admin/spam/index', compact('records', 'page', 'total', 'type'));
+        return view('admin/spam/index', compact('records', 'page', 'total', 'type'));
     }
 
     /**

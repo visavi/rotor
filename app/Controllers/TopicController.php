@@ -89,7 +89,7 @@ class TopicController extends BaseController
             }
         }
 
-        view('forum/topic', compact('topic', 'posts', 'page', 'vote'));
+        return view('forum/topic', compact('topic', 'posts', 'page', 'vote'));
     }
 
     /**
@@ -388,7 +388,7 @@ class TopicController extends BaseController
             }
         }
 
-        view('forum/topic_edit', compact('post', 'topic'));
+        return view('forum/topic_edit', compact('post', 'topic'));
     }
 
     /**
@@ -464,7 +464,7 @@ class TopicController extends BaseController
         $queryfiles = DB::run()->query("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=?;", [$id, Post::class]);
         $files = $queryfiles->fetchAll();
 
-        view('forum/topic_edit_post', compact('post', 'files', 'page'));
+        return view('forum/topic_edit_post', compact('post', 'files', 'page'));
     }
 
 
@@ -547,7 +547,7 @@ class TopicController extends BaseController
             ->orderBy('created_at')
             ->get();
 
-        view('forum/print', compact('topic', 'posts'));
+        return view('forum/print', compact('topic', 'posts'));
     }
 
     /**

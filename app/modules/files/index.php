@@ -17,7 +17,7 @@ if (!empty($page)){
         abort('default', 'Ошибка! Данной страницы не существует!');
     }
 
-    view('files/layout', compact('page'));
+    return view('files/layout', compact('page'));
 } else {
-    view('files/index');
+    return view('files/index');
 }

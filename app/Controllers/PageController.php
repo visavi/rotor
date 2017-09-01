@@ -21,7 +21,7 @@ class PageController extends BaseController
             abort(404);
         }
 
-        view('main/'.$action);
+        return view('main/'.$action);
     }
 
     /**
@@ -29,7 +29,7 @@ class PageController extends BaseController
      */
     public function tags()
     {
-        view('pages/tags');
+        return view('pages/tags');
     }
 
     /**
@@ -47,7 +47,7 @@ class PageController extends BaseController
             );
         }
 
-        view('pages/rules', compact('rules'));
+        return view('pages/rules', compact('rules'));
     }
 
     /**
@@ -64,6 +64,6 @@ class PageController extends BaseController
             ->offset($page['offset'])
             ->get();
 
-        view('pages/smiles', compact('smiles', 'page'));
+        return view('pages/smiles', compact('smiles', 'page'));
     }
 }

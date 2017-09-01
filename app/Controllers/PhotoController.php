@@ -20,7 +20,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        view('gallery/index', compact('photos', 'page'));
+        return view('gallery/index', compact('photos', 'page'));
     }
 
     /**
@@ -42,7 +42,7 @@ class PhotoController extends BaseController
             abort(404, 'Фотография не найдена');
         }
 
-        view('gallery/view', compact('photo', 'page'));
+        return view('gallery/view', compact('photo', 'page'));
     }
 
     /**
@@ -102,7 +102,7 @@ class PhotoController extends BaseController
             setFlash('danger', $validation->getErrors());
         }
 
-        view('gallery/create');
+        return view('gallery/create');
     }
 
     /**
@@ -152,7 +152,7 @@ class PhotoController extends BaseController
 
         $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
 
-        view('gallery/edit', compact('photo', 'checked', 'page'));
+        return view('gallery/edit', compact('photo', 'checked', 'page'));
     }
 
     /**
@@ -223,7 +223,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        view('gallery/comments', compact('photo', 'comments', 'page'));
+        return view('gallery/comments', compact('photo', 'comments', 'page'));
     }
 
     /**
@@ -280,7 +280,7 @@ class PhotoController extends BaseController
                 setFlash('danger', $validation->getErrors());
             }
         }
-        view('gallery/editcomment', compact('comment', 'page'));
+        return view('gallery/editcomment', compact('comment', 'page'));
     }
 
     /**
@@ -366,7 +366,7 @@ class PhotoController extends BaseController
             ->orderBy('cnt', 'desc')
             ->get();
 
-        view('gallery/albums', compact('albums', 'page'));
+        return view('gallery/albums', compact('albums', 'page'));
     }
 
     /**
@@ -393,7 +393,7 @@ class PhotoController extends BaseController
 
         $moder = (getUserId() == $user->id) ? 1 : 0;
 
-        view('gallery/user_albums', compact('photos', 'moder', 'page', 'user'));
+        return view('gallery/user_albums', compact('photos', 'moder', 'page', 'user'));
     }
 
     /**
@@ -423,7 +423,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        view('gallery/top', compact('photos', 'page', 'order'));
+        return view('gallery/top', compact('photos', 'page', 'order'));
     }
 
     /**
@@ -443,7 +443,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        view('gallery/all_comments', compact('comments', 'page'));
+        return view('gallery/all_comments', compact('comments', 'page'));
     }
 
     /**
@@ -473,7 +473,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        view('gallery/user_comments', compact('comments', 'page', 'user'));
+        return view('gallery/user_comments', compact('comments', 'page', 'user'));
     }
 
     /**

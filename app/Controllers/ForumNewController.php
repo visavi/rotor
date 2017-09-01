@@ -27,7 +27,7 @@ class ForumNewController extends BaseController
             ->with('forum', 'user', 'lastPost.user')
             ->get();
 
-        view('forum/new_themes', compact('topics', 'page'));
+        return view('forum/new_themes', compact('topics', 'page'));
     }
 
     /**
@@ -53,6 +53,6 @@ class ForumNewController extends BaseController
             ->with('topic', 'user')
             ->get();
 
-        view('forum/new_posts', compact('posts', 'page'));
+        return view('forum/new_posts', compact('posts', 'page'));
     }
 }

@@ -44,7 +44,7 @@ class MailController extends BaseController
             }
         }
 
-        view('mail/index');
+        return view('mail/index');
     }
 
     /**
@@ -94,7 +94,7 @@ class MailController extends BaseController
             }
         }
 
-        view('mail/recovery', compact('cookieLogin'));
+        return view('mail/recovery', compact('cookieLogin'));
     }
 
     /**
@@ -133,7 +133,7 @@ class MailController extends BaseController
             $body = view('mailer.default', compact('subject', 'message'), true);
             sendMail($user['email'], $subject, $body);
 
-            view('mail/restore', ['login' => $user['login'], 'password' => $newpass]);
+            return view('mail/restore', ['login' => $user['login'], 'password' => $newpass]);
         } else {
             setFlash('danger', current($validation->getErrors()));
             redirect('/');

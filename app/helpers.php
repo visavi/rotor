@@ -559,7 +559,7 @@ function showOnline()
 {
     if (setting('onlines') == 1) {
         $online = statsOnline();
-        view('app/_online', compact('online'));
+        return view('app/_online', compact('online'));
     }
 }
 
@@ -598,7 +598,7 @@ function showCounter()
     if (setting('incount') > 0) {
         $count = statsCounter();
 
-        view('includes/counter', compact('count'));
+        return view('includes/counter', compact('count'));
     }
 }
 
@@ -1707,7 +1707,7 @@ function perfomance()
 
         $queries = env('APP_DEBUG') ? getQueryLog() : [];
 
-        view('app/_perfomance', compact('queries'));
+        return view('app/_perfomance', compact('queries'));
     }
 }
 
@@ -1757,7 +1757,6 @@ function returnUrl($url = null)
  * @param  array $params массив параметров
  * @param  boolean $return выводить или возвращать код
  * @return string сформированный код
- * @internal param string $view имя шаблона
  */
 function view($template, $params = [], $return = false)
 {
@@ -1813,7 +1812,7 @@ function abort($code, $message = null)
         ]);
     } else {
         $referer = Request::header('referer') ?? null;
-        view('errors/'.$code, compact('message', 'referer'));
+        return view('errors/'.$code, compact('message', 'referer'));
     }
 
     exit();
@@ -1859,7 +1858,7 @@ function setFlash($status, $message)
  */
 function getFlash()
 {
-    view('app/_flash');
+    return view('app/_flash');
 }
 
 /**
@@ -1874,7 +1873,7 @@ function showError($errors)
         $errors = implode('<br><i class="fa fa-exclamation-circle fa-lg text-danger"></i> ', $errors);
     }
 
-    view('app/_error', compact('errors'));
+    return view('app/_error', compact('errors'));
 }
 
 /**
@@ -2389,7 +2388,7 @@ function pagination($page)
             ];
         }
 
-        view('app/_pagination', compact('pages', 'request'));
+        return view('app/_pagination', compact('pages', 'request'));
     }
 }
 
@@ -2471,7 +2470,7 @@ function progressBar($percent, $title = false)
         $title = $percent.'%';
     }
 
-    view('app/_progressbar', compact('percent', 'title'));
+    return view('app/_progressbar', compact('percent', 'title'));
 }
 
 /**

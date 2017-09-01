@@ -13,7 +13,7 @@ class VoteController extends BaseController
             ->orderBy('created_at')
             ->get();
 
-        view('vote/index', compact('votes'));
+        return view('vote/index', compact('votes'));
     }
 
     /**
@@ -88,7 +88,7 @@ class VoteController extends BaseController
         $vote['sum'] = ($vote['count'] > 0) ? $vote['count'] : 1;
         $vote['max'] = ($max > 0) ? $max : 1;
 
-        view('vote/view', compact('vote', 'show'));
+        return view('vote/view', compact('vote', 'show'));
     }
 
     /**
@@ -107,6 +107,6 @@ class VoteController extends BaseController
             ->limit(50)
             ->get();
 
-        view('vote/voters', compact('vote', 'voters'));
+        return view('vote/voters', compact('vote', 'voters'));
     }
 }

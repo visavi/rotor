@@ -76,7 +76,7 @@ case 'index':
     }
 
     $user = User::where('login', getUsername())->first();
-    view('pages/picture', compact('user'));
+    return view('pages/picture', compact('user'));
 break;
 
 

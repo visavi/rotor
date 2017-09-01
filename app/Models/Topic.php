@@ -98,7 +98,7 @@ class Topic extends BaseModel
                 );
             }
 
-            view('forum._pagination', compact('pages', 'link'));
+            return view('forum._pagination', compact('pages', 'link'));
         }
     }
 }

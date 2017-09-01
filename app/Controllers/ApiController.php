@@ -9,7 +9,7 @@ class ApiController extends BaseController
      */
     public function index()
     {
-        view('api/index');
+        return view('api/index');
     }
 
     /**

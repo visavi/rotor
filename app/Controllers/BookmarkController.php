@@ -31,7 +31,7 @@ class BookmarkController extends BaseController
             ->limit(setting('forumtem'))
             ->get();
 
-        view('forum/bookmark', compact('topics', 'page'));
+        return view('forum/bookmark', compact('topics', 'page'));
     }
 
     /**
