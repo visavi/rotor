@@ -78,13 +78,12 @@
                 Актив: {{ points($user['point']) }}<br>
                 Денег: {{ moneys($user['money']) }}<br>
 
-                @if (!empty($user['themes']))
-                Используемый скин: {{ $user['themes'] }}<br>
+                @if ($user['themes'])
+                    Используемый скин: {{ $user['themes'] }}<br>
                 @endif
                 Дата регистрации: {{ dateFixed($user['joined'], 'j F Y') }}<br>
 
-                <?php $invite = Invite::where('invite_user_id', $user['id'])->first(); ?>
-                @if (!empty($invite))
+                @if ($invite)
                     Зарегистрирован по приглашению: {!! profile($invite->user) !!}<br>
                 @endif
 
@@ -116,13 +115,12 @@
     </div>
 
     @if (isAdmin())
-        <?php $usernote = Note::where('user_id', $user['id'])->first(); ?>
     <div class="alert alert-success">
         <i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/{{ $user['login'] }}/note">Изменить</a>)<br>
 
-        @if (!empty($usernote['text']))
-            {!! bbCode($usernote['text']) !!}<br>
-            Изменено: {!! profile($usernote->editUser) !!} ({{ dateFixed($usernote['updated_at']) }})<br>
+        @if (!empty($note['text']))
+            {!! bbCode($note['text']) !!}<br>
+            Изменено: {!! profile($note->editUser) !!} ({{ dateFixed($note['updated_at']) }})<br>
         @else
             Записей еще нет!<br>
         @endif

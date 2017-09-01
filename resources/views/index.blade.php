@@ -14,9 +14,9 @@
         <i class="fa fa-comment fa-lg text-muted"></i> <b><a href="/page/recent">Общение</a></b>
     </div>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a class="index" href="/book">Гостевая книга</a> (<?=statsGuest()?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> (<?=statsGallery()?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes">Голосования</a> (<?=statVotes()?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> (<?php /*statsOffers()*/?>)<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> ({{ statsGallery() }})<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes">Голосования</a> ({{ statVotes()}})<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
 
     <div class="b">
         <i class="fa fa-forumbee fa-lg text-muted"></i>
@@ -42,8 +42,8 @@
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/files/docs">Документация RotorCMS</a><br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/search">Поиск по сайту</a><br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/mail">Обратная связь</a><br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> (<?php /*statsUsers()*/?>)<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> (<?php /*statsAdmins()*/?>)<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> ({{  statsUsers() }})<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> ({{ statsAdmins() }})<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/page/stat">Информация</a><br>
 
     <div class="b">

@@ -16,7 +16,7 @@
             <b><a href="/topic/{{ $topic['id'] }}">{{ $topic['title'] }}</a></b> ({{ $topic['posts'] }})
         </div>
         <div>
-            {{ Forum::pagination($topic) }}
+            {{ $topic->pagination() }}
             Сообщение: {{ $topic->getLastPost()->getUser()->login }} ({{ dateFixed($topic->getLastPost()->created_at) }})
         </div>
     @endforeach

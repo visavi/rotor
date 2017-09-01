@@ -22,7 +22,7 @@
                 </div>
 
                 <div>
-                    {{ Forum::pagination($topic) }}
+                    {{ $topic->pagination() }}
                     Автор: {{ $topic->getTopic()->getUser()->login }} /
                     Посл.: {{ $topic->getTopic()->getLastPost()->getUser()->login }}
                     ({{ dateFixed($topic->getTopic()->getLastPost()->created_at) }})

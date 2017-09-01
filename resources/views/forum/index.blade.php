@@ -7,6 +7,9 @@
 @section('content')
 
     <h1>Форум {{ setting('title') }}</h1>
+
+    @include('advert/forum')
+
     @if (isUser())
         Мои: <a href="/forum/active/themes">темы</a>, <a href="/forum/active/posts">сообщения</a>, <a href="/forum/bookmark">закладки</a> /
     @endif

@@ -1,26 +1,35 @@
 <?php
 
-use App\Models\Chat;
-use App\Models\Counter;
-use App\Models\User;
-use App\Models\Ban;
-use App\Models\News;
-use App\Models\Guest;
-use App\Models\Photo;
-use App\Models\Setting;
-use App\Models\Visit;
-use App\Models\Spam;
-use App\Models\Online;
-use App\Models\Vote;
-use App\Models\Topic;
-use App\Models\Post;
-use App\Models\Blog;
 use App\Classes\Request;
 use App\Classes\Registry;
 use App\Classes\BBCode;
-use App\Models\RekUser;
 use Illuminate\Database\Capsule\Manager as DB;
 use Jenssegers\Blade\Blade;
+
+use App\Models\{
+    Antimat,
+    Banhist,
+    Chat,
+    Contact,
+    Counter,
+    Ignore,
+    Offer,
+    User,
+    Ban,
+    News,
+    Guest,
+    Photo,
+    Setting,
+    Visit,
+    Spam,
+    Online,
+    Vote,
+    Topic,
+    Post,
+    Blog,
+    RekUser,
+    Wall
+};
 
 // --------------------------- Функция перевода секунд во время -----------------------------//
 function makeTime($time)
@@ -252,12 +261,13 @@ function formatTime($file_time, $round = 1)
 // ------------------ Функция антимата --------------------//
 function antimat($str)
 {
-    $querymat = DB::run() -> query("SELECT `string` FROM `antimat` ORDER BY CHAR_LENGTH(`string`) DESC;");
-    $arrmat = $querymat -> fetchAll(PDO::FETCH_COLUMN);
+    $words = Antimat::orderBy(DB::raw('CHAR_LENGTH(string)'), 'desc')
+        ->pluck('string')
+        ->all();
 
-    if (count($arrmat) > 0) {
-        foreach($arrmat as $val) {
-            $str = preg_replace('|'.preg_quote($val).'|iu', '***', $str);
+    if ($words) {
+        foreach($words as $word) {
+            $str = preg_replace('|'.preg_quote($word).'|iu', '***', $str);
         }
     }
 
@@ -596,13 +606,14 @@ function showCounter()
 function statsUsers()
 {
     if (@filemtime(STORAGE."/temp/statusers.dat") < time()-3600) {
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `users`;");
-        $new = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `joined`>UNIX_TIMESTAMP(CURDATE());");
 
-        if (empty($new)) {
-            $stat = $total;
-        } else {
+        $total = User::count();
+        $new   = User::whereRaw('joined > UNIX_TIMESTAMP(CURDATE())')->count();
+
+        if ($new) {
             $stat = $total.'/+'.$new;
+        } else {
+            $stat = $total;
         }
 
         file_put_contents(STORAGE."/temp/statusers.dat", $stat, LOCK_EX);
@@ -615,9 +626,10 @@ function statsUsers()
 function statsAdmins()
 {
     if (@filemtime(STORAGE."/temp/statadmins.dat") < time()-3600) {
-        $stat = DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
 
-        file_put_contents(STORAGE."/temp/statadmins.dat", $stat, LOCK_EX);
+        $total = User::whereBetween('level', [101, 105])->count();
+
+        file_put_contents(STORAGE."/temp/statadmins.dat", $total, LOCK_EX);
     }
 
     return file_get_contents(STORAGE."/temp/statadmins.dat");
@@ -631,25 +643,25 @@ function statsSpam()
 // --------------- Функция вывода количества забаненных --------------------//
 function statsBanned()
 {
-    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `ban`=? AND `timeban`>?;", [1, SITETIME]);
+    return User::where('ban', 1)->where()->count('timeban', '>', SITETIME);
 }
 
 // --------------- Функция вывода истории банов --------------------//
 function statsBanHist()
 {
-    return DB::run() -> querySingle("SELECT count(*) FROM `banhist`;");
+    return Banhist::count();
 }
 
 // ------------ Функция вывода количества ожидающих регистрации -----------//
 function statsRegList()
 {
-    return DB::run() -> querySingle("SELECT count(*) FROM `users` WHERE `confirmreg`>?;", [0]);
+    return User::where('confirmreg', '>', 0)->count();
 }
 
 // --------------- Функция вывода количества забаненных IP --------------------//
 function statsIpBanned()
 {
-    return DB::run() -> querySingle("SELECT count(*) FROM `ban`;");
+    return Ban::count();
 }
 
 // --------------- Функция вывода количества фотографий --------------------//
@@ -976,11 +988,11 @@ function statVotes()
 {
     if (@filemtime(STORAGE."/temp/statvote.dat") < time()-900) {
 
-        $votes = Vote::select(DB::raw('count(*) AS count', 'sum(count) AS sum'))
+        $votes = Vote::select(DB::raw('count(*) AS cnt'), DB::raw('sum(count) AS sum'))
             ->where('closed', 0)
-            ->count();
+            ->first();
 
-        file_put_contents(STORAGE."/temp/statvote.dat", $votes['count'].'/'.$votes['sum'], LOCK_EX);
+        file_put_contents(STORAGE."/temp/statvote.dat", $votes['cnt'].'/'.$votes['sum'], LOCK_EX);
     }
 
     return file_get_contents(STORAGE."/temp/statvote.dat");
@@ -1044,10 +1056,11 @@ function lastNews()
 function isUser()
 {
     static $user = 0;
-    if (empty($user)) {
+
+    if (! $user) {
         if (isset($_SESSION['id']) && isset($_SESSION['password'])) {
 
-            $data = User::find(intval($_SESSION['id']));
+            $data = User::find($_SESSION['id']);
 
             if ($data && $_SESSION['password'] == md5(env('APP_KEY').$data['password'])) {
                 $user = $data;
@@ -1314,8 +1327,9 @@ function recentBlogs()
 function statsOffers()
 {
     if (@filemtime(STORAGE."/temp/offers.dat") < time()-10800) {
-        $offers = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [0]);
-        $problems = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [1]);
+
+        $offers   = Offer::where('type', 0)->count();
+        $problems = Offer::where('type', 1)->count();
 
         file_put_contents(STORAGE."/temp/offers.dat", $offers.'/'.$problems, LOCK_EX);
     }
@@ -2143,7 +2157,22 @@ function getUserId()
 }
 
 /**
- * Возвращает данные пользователя по ключу
+ * Возвращает объект пользователя по логину
+ *
+ * @param  string $key ключ массива
+ * @return string      данные
+ */
+function getUser($login)
+{
+    if (! $login) {
+        return false;
+    }
+
+    return User::where('login', $login)->first();
+}
+
+/**
+ * Возвращает настройки пользователя по ключу
  *
  * @param  string $key ключ массива
  * @return string      данные
@@ -2360,7 +2389,7 @@ function pagination($page)
             ];
         }
 
-        view('app._pagination', compact('pages', 'request'));
+        view('app/_pagination', compact('pages', 'request'));
     }
 }
 
@@ -2441,10 +2470,8 @@ function progressBar($percent, $title = false)
     if (! $title){
         $title = $percent.'%';
     }
-    echo '<div class="progress">
-        <div class="progress-bar progress-bar-warning" style="width:'.$percent.'%;"></div>
-        <span class="progress-completed">'.$title.'</span>
-    </div>';
+
+    view('app/_progressbar', compact('percent', 'title'));
 }
 
 /**

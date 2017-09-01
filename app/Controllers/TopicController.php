@@ -2,6 +2,17 @@
 
 namespace App\Controllers;
 
+use App\Models\Post;
+use App\Models\Bookmark;
+use App\Models\Topic;
+use App\Models\User;
+use App\Models\Vote;
+use App\Models\VoteAnswer;
+use App\Models\VotePoll;
+use App\Models\Flood;
+use App\Classes\Request;
+use App\Classes\Validation;
+
 class TopicController extends BaseController
 {
     /**
@@ -462,16 +473,18 @@ class TopicController extends BaseController
      */
     public function vote($tid)
     {
-        if (!isUser()) abort(403, 'Авторизуйтесь для голосования!');
+        if (! isUser()) {
+            abort(403, 'Авторизуйтесь для голосования!');
+        }
 
         $vote = Vote::where('topic_id', $tid)->first();
-        if (!$vote) {
+        if (! $vote) {
             abort(404, 'Голосование не найдено!');
         }
 
         $token = check(Request::input('token'));
-        $poll = abs(intval(Request::input('poll')));
-        $page = abs(intval(Request::input('page')));
+        $poll  = abs(intval(Request::input('poll')));
+        $page  = abs(intval(Request::input('page')));
 
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');

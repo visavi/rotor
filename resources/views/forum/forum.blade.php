@@ -60,7 +60,7 @@
             </div>
             <div>
                 @if ($topic->lastPost)
-                    {{ Forum::pagination($topic) }}
+                    {{ $topic->pagination($topic) }}
                     Сообщение: {{ $topic->lastPost->getUser()->login }} ({{ dateFixed($topic->lastPost->created_at) }})
                 @endif
             </div>

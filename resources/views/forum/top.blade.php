@@ -16,7 +16,7 @@
             <b><a href="/topic/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ $data['posts'] }})
         </div>
         <div>
-            {{ Forum::pagination($data) }}
+            {{ $data->pagination() }}
             Автор: {{ $data->getUser()->login }}<br>
             Сообщение: {{ $data->getLastPost()->getUser()->login }} ({{ dateFixed($data->getLastPost()->created_at) }})
         </div>

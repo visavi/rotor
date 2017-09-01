@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\Forum;
+use App\Models\Topic;
+
 class ForumController extends BaseController
 {
     /**
@@ -9,8 +12,6 @@ class ForumController extends BaseController
      */
     public function index()
     {
-        include_once(APP . '/views/advert/forum.blade.php');
-
         $forums = Forum::where('parent_id', 0)
             ->with('lastTopic.lastPost.user')
             ->with('children')

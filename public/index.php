@@ -8,7 +8,6 @@
 #            Phone  :  +79167407574           #
 #---------------------------------------------#
 
-
 use App\Classes\Registry;
 
 include_once __DIR__.'/../app/start.php';

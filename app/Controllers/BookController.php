@@ -2,9 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Flood;
 use App\Models\Guest;
-use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class BookController extends BaseController
 {

@@ -23,7 +23,7 @@ class Post extends BaseModel
      */
     public function editUser()
     {
-        return $this->belongsTo('User', 'edit_user_id');
+        return $this->belongsTo(User::class, 'edit_user_id');
     }
 
     /**
@@ -39,7 +39,7 @@ class Post extends BaseModel
      */
     public function topic()
     {
-        return $this->belongsTo('Topic', 'topic_id');
+        return $this->belongsTo(Topic::class, 'topic_id');
     }
 
     /**
@@ -47,7 +47,7 @@ class Post extends BaseModel
      */
     public function files()
     {
-        return $this->morphMany('File', 'relate');
+        return $this->morphMany(File::class, 'relate');
     }
 
     /**

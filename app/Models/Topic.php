@@ -16,7 +16,7 @@ class Topic extends BaseModel
      */
     public function lastPost()
     {
-        return $this->belongsTo('Post', 'last_post_id');
+        return $this->belongsTo(Post::class, 'last_post_id');
     }
 
     /**
@@ -24,7 +24,7 @@ class Topic extends BaseModel
      */
     public function forum()
     {
-        return $this->belongsTo('Forum', 'forum_id');
+        return $this->belongsTo(Forum::class, 'forum_id');
     }
 
     /**
@@ -56,5 +56,49 @@ class Topic extends BaseModel
         else
             $icon = 'fa-folder-open';
         return $icon;
+    }
+
+    /**
+     * Генерирует постраничную навигация для форума
+     * @param  array  $topic массив данных
+     * @return string        сформированный блок
+     */
+    public function pagination()
+    {
+        if ($this->posts) {
+
+            $pages = [];
+            $link = '/topic/'.$this->id;
+
+            $pg_cnt = ceil($this->posts / setting('forumpost'));
+
+            for ($i = 1; $i <= 5; $i++) {
+                if ($i <= $pg_cnt) {
+                    $pages[] = [
+                        'page' => $i,
+                        'title' => $i.' страница',
+                        'name' => $i,
+                    ];
+                }
+            }
+
+            if (5 < $pg_cnt) {
+
+                if (6 < $pg_cnt) {
+                    $pages[] = array(
+                        'separator' => true,
+                        'name' => ' ... ',
+                    );
+                }
+
+                $pages[] = array(
+                    'page' => $pg_cnt,
+                    'title' => $pg_cnt.' страница',
+                    'name' => $pg_cnt,
+                );
+            }
+
+            view('forum._pagination', compact('pages', 'link'));
+        }
     }
 }

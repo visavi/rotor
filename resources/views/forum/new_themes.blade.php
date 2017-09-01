@@ -16,7 +16,7 @@
         </div>
 
         <div>
-            {{ Forum::pagination($data) }}
+            {{ $data->pagination() }}
             Форум: <a href="/forum/{{  $data->getForum()->id }}">{{  $data->getForum()->title }}</a><br>
             Автор: {{ $data->getUser()->login }} / Посл.: {{ $data->getLastPost()->getUser()->login }} ({{ dateFixed($data['created_at']) }})
         </div>

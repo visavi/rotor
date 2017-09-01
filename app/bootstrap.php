@@ -1,6 +1,9 @@
 <?php
 
+use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as DB;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
 
 define('STARTTIME', microtime(1));
 define('BASEDIR', dirname(__DIR__));
@@ -14,22 +17,14 @@ define('VERSION', '7.0');
 
 require_once BASEDIR.'/vendor/autoload.php';
 
-/**
- * Регистрация классов
- */
-/*$aliases = [
-    'Capsule' => 'Illuminate\Database\Capsule\Manager',
-];
-AliasLoader::getInstance($aliases)->register();*/
-
 if (! env('APP_ENV')) {
-    $dotenv = new Dotenv\Dotenv(BASEDIR);
+    $dotenv = new Dotenv(BASEDIR);
     $dotenv->load();
 }
 
 if (env('APP_DEBUG')) {
-    $whoops = new Whoops\Run();
-    $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler);
+    $whoops = new Run();
+    $whoops->pushHandler(new PrettyPageHandler);
     $whoops->pushHandler(function() {
         $_SERVER = array_except($_SERVER, array_keys($_ENV));
         $_ENV = [];

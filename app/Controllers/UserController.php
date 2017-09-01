@@ -2,6 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Invite;
+use App\Models\Note;
+use App\Models\Rating;
+use App\Models\User;
+
 class UserController extends BaseController
 {
     /**
@@ -9,11 +16,14 @@ class UserController extends BaseController
      */
     public function index($login)
     {
-        if (! $user = user($login)) {
+        if (! $user = getUser($login)) {
             abort('default', 'Пользователя с данным логином не существует!');
         }
 
-        view('pages/user', compact('user'));
+        $note = Note::where('user_id', $user->id)->first();
+        $invite = Invite::where('invite_user_id', $user->id)->first();
+
+        view('pages/user', compact('user', 'invite', 'note'));
     }
 
     /**
