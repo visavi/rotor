@@ -66,7 +66,7 @@
 
         @if (isUser())
             <div class="form">
-                <form action="/news/{{ $news->id }}/create?read=1" method="post">
+                <form action="/news/{{ $news->id }}/comments?read=1" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                     <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
                     <button class="btn btn-success">Написать</button>

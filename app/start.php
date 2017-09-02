@@ -3,7 +3,7 @@
 
 use App\Classes\Registry;
 use App\Classes\Request;
-use App\Models\login;
+use App\Models\Login;
 use App\Models\User;
 use App\Models\Admlog;
 use Illuminate\Database\Capsule\Manager as DB;

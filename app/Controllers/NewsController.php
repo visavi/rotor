@@ -7,6 +7,7 @@ use App\Classes\Validation;
 use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\News;
+use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class NewsController extends BaseController
@@ -102,7 +103,7 @@ class NewsController extends BaseController
 
                 setFlash('success', 'Комментарий успешно добавлен!');
 
-                if (isset($_GET['read'])) {
+                if (Request::has('read')) {
                     redirect('/news/' . $news->id);
                 }
 

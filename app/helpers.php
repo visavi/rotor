@@ -1,35 +1,35 @@
 <?php
 
-use App\Classes\Request;
-use App\Classes\Registry;
 use App\Classes\BBCode;
+use App\Classes\FileUpload;
+use App\Classes\Registry;
+use App\Classes\Request;
+use App\Models\Antimat;
+use App\Models\Ban;
+use App\Models\Banhist;
+use App\Models\Blog;
+use App\Models\Chat;
+use App\Models\Contact;
+use App\Models\Counter;
+use App\Models\Guest;
+use App\Models\Ignore;
+use App\Models\Inbox;
+use App\Models\Log;
+use App\Models\News;
+use App\Models\Offer;
+use App\Models\Online;
+use App\Models\Photo;
+use App\Models\Post;
+use App\Models\RekUser;
+use App\Models\Setting;
+use App\Models\Spam;
+use App\Models\Topic;
+use App\Models\User;
+use App\Models\Visit;
+use App\Models\Vote;
+use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
 use Jenssegers\Blade\Blade;
-
-use App\Models\{
-    Antimat,
-    Banhist,
-    Chat,
-    Contact,
-    Counter,
-    Ignore,
-    Offer,
-    User,
-    Ban,
-    News,
-    Guest,
-    Photo,
-    Setting,
-    Visit,
-    Spam,
-    Online,
-    Vote,
-    Topic,
-    Post,
-    Blog,
-    RekUser,
-    Wall
-};
 
 // --------------------------- Функция перевода секунд во время -----------------------------//
 function makeTime($time)
@@ -901,7 +901,6 @@ function statsChat()
 function statsNewChat()
 {
     return Chat::max('created_at');
-    //return intval(DB::run() -> querySingle("SELECT MAX(`created_at`) FROM `chat`;"));
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//
