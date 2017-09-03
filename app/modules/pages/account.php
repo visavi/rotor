@@ -111,10 +111,8 @@ case 'changemail':
 
         $genkey = str_random(rand(15,20));
 
-        $siteLink = starts_with(setting('home'), '//') ? 'http:'. setting('home') : setting('home');
-
         $subject = 'Изменение email на сайте '.setting('title');
-        $message = 'Здравствуйте, '.getUsername().'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.$siteLink.'/account?act=editmail&key='.$genkey.'">'.$siteLink.'/account?act=editmail&key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).', для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+        $message = 'Здравствуйте, '.getUsername().'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteLink(setting('home')).'/account?act=editmail&key='.$genkey.'">'.siteLink(setting('home')).'/account?act=editmail&key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).', для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
         $body = view('mailer.default', compact('subject', 'message'), true);
         sendMail($meil, $subject, $body);

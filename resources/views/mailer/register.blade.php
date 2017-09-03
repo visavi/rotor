@@ -28,7 +28,7 @@
                 @endif
 
                 @if (setting('regkeys') == 0)
-                    <a href="{{ setting('home') }}/login" class="btn-primary" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background: #5cb85c; margin: 0; padding: 8px 15px; border-color: #4cae4c; border-style: solid; border-width: 1px;">Войти на сайт</a><br><br>
+                    <a href="{{ siteLink(setting('home')) }}/login" class="btn-primary" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background: #5cb85c; margin: 0; padding: 8px 15px; border-color: #4cae4c; border-style: solid; border-width: 1px;">Войти на сайт</a><br><br>
                 @endif
 
                 Надеемся вам понравится на нашем портале! <br>

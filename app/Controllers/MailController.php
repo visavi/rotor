@@ -78,10 +78,8 @@ class MailController extends BaseController
                 ->addRule('min', [$user['timepasswd'], SITETIME], 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
 
             if ($validation->run()) {
-
-                $sitelink = starts_with(setting('home'), '//') ? 'http:' . setting('home') : setting('home');
                 $resetKey = str_random();
-                $resetLink = $sitelink . '/recovery/restore?key=' . $resetKey;
+                $resetLink = siteLink(setting('home')) . '/recovery/restore?key=' . $resetKey;
 
                 DB::run()->query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `id`=?;", [$resetKey, SITETIME + 43200, $user->id]);
 

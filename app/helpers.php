@@ -2581,3 +2581,14 @@ function setting($key = null)
 
     return isset(Registry::get('setting')[$key]) ? Registry::get('setting')[$key] : null;
 }
+
+/**
+ * Возвращает путь к сайту независимо от протокола
+ *
+ * @param  string $link  адрес сайта
+ * @return string        адрес сайта с протоколом
+ */
+function siteLink($link)
+{
+    return starts_with($link, '//') ? 'http:' . $link : $link;
+}

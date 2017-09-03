@@ -58,7 +58,7 @@
                         <a href="/ignore?act=add&amp;uz={{ $data->getAuthor()->login }}&amp;token={{ $_SESSION['token'] }}">Игнор</a>
                         /
 
-                        <a href="#" onclick="return sendComplaint(this)" data-type="{{ Inbox::class }} " data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                        <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Inbox::class }} " data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                     @endif
 
                 </div>

@@ -162,12 +162,10 @@ class PrivateController extends BaseController
                     ->limit(setting('sendmailpacket'))
                     ->get();
 
-                $sitelink = starts_with(setting('home'), '//') ? 'http:' . setting('home') : setting('home');
-
                 foreach ($deliveryUsers as $deliveryUser) {
 
                     $subject = $deliveryUser['newprivat'] . ' непрочитанных сообщений (' . setting('title') . ')';
-                    $message = 'Здравствуйте ' . $deliveryUser['login'] . '!<br>У вас имеются непрочитанные сообщения (' . $deliveryUser['newprivat'] . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . $sitelink . '/private">' . $sitelink . '/private</a>';
+                    $message = 'Здравствуйте ' . $deliveryUser['login'] . '!<br>У вас имеются непрочитанные сообщения (' . $deliveryUser['newprivat'] . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteLink(setting('home')) . '/private">' . siteLink(setting('home')) . '/private</a>';
                     $body = view('mailer.default', compact('subject', 'message'), true);
                     sendMail($deliveryUser['email'], $subject, $body, ['subscribe' => $deliveryUser['subscribe']]);
 

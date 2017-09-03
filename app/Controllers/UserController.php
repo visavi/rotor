@@ -251,12 +251,11 @@ class UserController extends BaseController
                 if ($validation->run()) {
 
                     // --- Уведомление о регистрации на email ---//
-                    $message = 'Добро пожаловать, ' . $logs . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . setting('home') . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $logs . '</b><br><b>Пароль: ' . $pars . '</b><br><br>';
+                    $message = 'Добро пожаловать, ' . $logs . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteLink(setting('home')) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $logs . '</b><br><b>Пароль: ' . $pars . '</b><br><br>';
 
                     if (setting('regkeys') == 1) {
-                        $siteLink = starts_with(setting('home'), '//') ? 'http:'. setting('home') : setting('home');
                         $activateKey = str_random();
-                        $activateLink = $siteLink.'/key?code=' . $activateKey;
+                        $activateLink = siteLink(setting('home')).'/key?code=' . $activateKey;
 
                         echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br>';
                         echo 'Мастер-ключ был выслан вам на почтовый ящик: ' . $meil . '</span></b><br><br>';

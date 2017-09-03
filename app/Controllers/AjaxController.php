@@ -6,6 +6,8 @@ use App\Classes\Request;
 use App\Classes\Validation;
 use App\Models\Blog;
 use App\Models\Comment;
+use App\Models\Guest;
+use App\Models\Inbox;
 use App\Models\News;
 use App\Models\Photo;
 use App\Models\Polling;
@@ -46,43 +48,43 @@ class AjaxController extends BaseController
         $path  = null;
         $data  = false;
         $id    = abs(intval(Request::input('id')));
-        $type  = check(Request::input('type'));
+        $type  = Request::input('type');
         $page  = check(Request::input('page'));
         $token = check(Request::input('token'));
 
         switch ($type):
-            case 'News':
+            case News::class:
                 $data = Comment::where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
                 $path = '/news/'.$data['relate_id'].'/comments?page='.$page;
                 break;
 
-            case 'Blog':
+            case Blog::class:
                 $data = Comment::where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
                 $path = '/blog?page='.$page;
                 break;
 
-            case 'Photo':
+            case Photo::class:
                 $data = Comment::where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
                 $path = '/gallery/'.$data['relate_id'].'/comments?page='.$page;
                 break;
 
-            case 'Guest':
+            case Guest::class:
                 $data = $type::find($id);
                 $path = '/book?page='.$page;
                 break;
 
-            case 'Post':
+            case Post::class:
                 $data = $type::find($id);
                 $path = '/topic/'.$data['topic_id'].'?page='.$page;
                 break;
 
-            case 'Inbox':
+            case Inbox::class:
                 $data = $type::find($id);
                 break;
         endswitch;
@@ -97,13 +99,13 @@ class AjaxController extends BaseController
             ->addRule('bool', ! $spam, 'Жалоба на данное сообщение уже отправлена!');
 
         if ($validation->run()) {
-            $spam = new Spam();
-            $spam->relate_type = $type;
-            $spam->relate_id   = $data['id'];
-            $spam->user_id     = getUserId();
-            $spam->path        = $path;
-            $spam->created_at  = SITETIME;
-            $spam->save();
+            Spam::create([
+                'relate_type' => $type,
+                'relate_id'   => $data['id'],
+                'user_id'     => getUserId(),
+                'path'        => $path,
+                'created_at'  => SITETIME,
+            ]);
 
             echo json_encode(['status' => 'success']);
         } else {
