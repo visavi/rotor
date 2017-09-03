@@ -19,7 +19,7 @@
 
 <?php
 echo bbCode(check('[code]<?php
-unlink_image("uploads/photos/", "Vantuz.gif");
+deleteImage("uploads/photos/", "Vantuz.gif");
 /* Удаляет файл Vantuz.gif сначала в директории uploads/photos, а затем в uploads/thumbnail */
 ?>[/code]'));
 ?>

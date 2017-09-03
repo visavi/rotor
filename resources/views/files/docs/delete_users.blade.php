@@ -18,7 +18,7 @@
 
 <?php
 echo bbCode(check('[code]<?php
-delete_users("Vantuz"); /* Полностью удаляет пользователя Vantuz */
+deleteUser("Vantuz"); /* Полностью удаляет пользователя Vantuz */
 ?>[/code]'));
 ?>
 

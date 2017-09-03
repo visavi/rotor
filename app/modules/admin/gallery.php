@@ -155,7 +155,7 @@ if (isAdmin()) {
                                 DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$delete['id']]);
                                 DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", [Photo::class, $delete['id']]);
 
-                                unlink_image('uploads/pictures/', $delete['link']);
+                                deleteImage('uploads/pictures/', $delete['link']);
                             }
 
                             setFlash('success', 'Выбранные фотографии успешно удалены!');

@@ -515,7 +515,7 @@ case 'addeditcats':
                                 if (! empty($down['screen']) && file_exists(HOME.'/uploads/screen/'.$cat['folder'].'/'.$down['screen'])) {
 
                                     rename(HOME.'/uploads/screen/'.$cat['folder'].'/'.$down['screen'], HOME.'/uploads/screen/'.$down['screen']);
-                                    unlink_image('uploads/screen/'.$cat['folder'], $down['screen']);
+                                    deleteImage('uploads/screen/'.$cat['folder'], $down['screen']);
                                 }
                             }
 
@@ -545,7 +545,7 @@ case 'addeditcats':
                                     if (! empty($down['screen']) && file_exists(HOME.'/uploads/screen/'.$down['screen'])) {
 
                                         rename(HOME.'/uploads/screen/'.$down['screen'], HOME.'/uploads/screen/'.$folder.'/'.$down['screen']);
-                                        unlink_image('uploads/screen/', $down['screen']);
+                                        deleteImage('uploads/screen/', $down['screen']);
                                     }
                                 }
 
@@ -636,7 +636,7 @@ case 'delcats':
                                 unlink(HOME.'/uploads/files/'.$folder.$delfile['link']);
                             }
 
-                            unlink_image('uploads/screen/'.$folder, $delfile['screen']);
+                            deleteImage('uploads/screen/'.$folder, $delfile['screen']);
                         }
 
                         if (! empty($folder)) {
@@ -889,7 +889,7 @@ case 'changedown':
 
                                                             $screen = $loadfile.'.'.getExtension($new['screen']);
                                                             rename(HOME.'/uploads/screen/'.$folder.$new['screen'], HOME.'/uploads/screen/'.$folder.$screen);
-                                                            unlink_image('uploads/screen/'.$folder, $new['screen']);
+                                                            deleteImage('uploads/screen/'.$folder, $new['screen']);
                                                         }
                                                         DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", [$loadfile, $screen, $id]);
                                                     }
@@ -1125,7 +1125,7 @@ case 'delfile':
             unlink(HOME.'/uploads/files/'.$folder.$link['link']);
         }
 
-        unlink_image('uploads/screen/'.$folder, $link['screen']);
+        deleteImage('uploads/screen/'.$folder, $link['screen']);
 
         DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
@@ -1147,7 +1147,7 @@ case 'delscreen':
     if (!empty($screen)) {
         $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
-        unlink_image('uploads/screen/'.$folder, $screen['screen']);
+        deleteImage('uploads/screen/'.$folder, $screen['screen']);
 
         DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
@@ -1294,7 +1294,7 @@ case 'deldown':
                             unlink(HOME.'/uploads/files/'.$folder.$delfile['link']);
                         }
 
-                        unlink_image('uploads/screen/'.$folder, $delfile['screen']);
+                        deleteImage('uploads/screen/'.$folder, $delfile['screen']);
                     }
 
                     setFlash('success', 'Выбранные файлы успешно удалены!');

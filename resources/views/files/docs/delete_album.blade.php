@@ -18,7 +18,7 @@
 
 <?php
 echo bbCode(check('[code]<?php
-delete_album("Vantuz");
+deleteAlbum("Vantuz");
 /* Полностью удаляет фотоальбом пользователя Vantuz, а также аватар и персональную фотографию в анкете */
 ?>[/code]'));
 ?>

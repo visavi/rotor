@@ -98,8 +98,8 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
 
                     if ($total > 0) {
                         foreach ($users as $value) {
-                            delete_album($value);
-                            delete_users($value);
+                            deleteAlbum($value);
+                            deleteUser($value);
                         }
 
                         echo 'Пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней, успешно удалены!<br>';

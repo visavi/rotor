@@ -18,7 +18,7 @@ foreach($news as $data) {
     $array_komm[$arrday] = $data['id'];
 }
 
-$calend = make_calendar($cal_mon, $cal_year);
+$calend = makeCalendar($cal_mon, $cal_year);
 
 echo '<table><caption><b>'.dateFixed(SITETIME, 'j F Y').'</b></caption>';
 

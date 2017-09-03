@@ -218,7 +218,7 @@ if (isAdmin()) {
 
                                                                         $screen = $link.'.'.getExtension($new['screen']);
                                                                         rename(HOME.'/uploads/screen/'.$folder.$new['screen'], HOME.'/uploads/screen/'.$screen);
-                                                                        unlink_image('uploads/screen/'.$folder, $new['screen']);
+                                                                        deleteImage('uploads/screen/'.$folder, $new['screen']);
                                                                     }
                                                                     DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", [$link, $screen, $id]);
                                                                 }
@@ -345,7 +345,7 @@ if (isAdmin()) {
                         unlink(HOME.'/uploads/files/'.$folder.$link['link']);
                     }
 
-                    unlink_image('uploads/screen/'.$folder, $link['screen']);
+                    deleteImage('uploads/screen/'.$folder, $link['screen']);
 
                     DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
@@ -374,7 +374,7 @@ if (isAdmin()) {
             if (!empty($screen)) {
                 if (empty($screen['active'])) {
 
-                    unlink_image('uploads/screen/'.$folder, $screen['screen']);
+                    deleteImage('uploads/screen/'.$folder, $screen['screen']);
 
                     DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
@@ -422,7 +422,7 @@ if (isAdmin()) {
                             unlink(HOME.'/uploads/files/'.$folder.$delfile['link']);
                         }
 
-                        unlink_image('uploads/screen/'.$folder, $delfile['screen']);
+                        deleteImage('uploads/screen/'.$folder, $delfile['screen']);
                     }
 
                     setFlash('success', 'Выбранные файлы успешно удалены!');

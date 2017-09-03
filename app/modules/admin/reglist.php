@@ -44,8 +44,8 @@ if (isAdmin([101, 102, 103])) {
                         }
                         echo $comma.'<b>'.$value.'</b>';
 
-                        delete_album($value);
-                        delete_users($value);
+                        deleteAlbum($value);
+                        deleteUser($value);
                     }
                     echo '<br><br>';
                 }
@@ -117,8 +117,8 @@ if (isAdmin([101, 102, 103])) {
                         // ----------------------------------- Запрет регистрации -------------------------------------//
                         if ($choice == 2) {
                             foreach($arrayusers as $value) {
-                                delete_album($value);
-                                delete_users($value);
+                                deleteAlbum($value);
+                                deleteUser($value);
                             }
 
                             setFlash('success', 'Выбранные пользователи успешно удалены!');

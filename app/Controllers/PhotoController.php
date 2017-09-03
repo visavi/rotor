@@ -314,7 +314,7 @@ class PhotoController extends BaseController
             ->addRule('empty', $photo['comments'], 'Запрещено удалять фотографии к которым имеются комментарии!');
 
         if ($validation->run()) {
-            unlink_image('uploads/pictures/', $photo['link']);
+            deleteImage('uploads/pictures/', $photo['link']);
 
             Comment::where('relate_type', Photo::class)
                 ->where('relate_id', $photo->id)

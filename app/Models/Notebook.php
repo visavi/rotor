@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-class Banhist extends BaseModel
+class Notebook extends BaseModel
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'banhist';
+    protected $table = 'notebook';
 
     /**
      * Indicates if the model should be timestamped.

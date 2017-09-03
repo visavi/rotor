@@ -19,7 +19,7 @@ if (isAdmin([101])) {
             if (file_exists(STORAGE."/temp/checker.dat")) {
                 echo 'Последнее сканирование: <b>'.dateFixed(filemtime(STORAGE."/temp/checker.dat")).'</b><br><br>';
 
-                $arr = scan_check('../');
+                $arr = scanFiles('../');
                 $arr['files'] = str_replace('..//', '', $arr['files']);
 
                 $arrnewskan = unserialize(file_get_contents(STORAGE."/temp/checker.dat"));
@@ -75,7 +75,7 @@ if (isAdmin([101])) {
 
             if ($uid == $_SESSION['token']) {
                 if (is_writeable(STORAGE."/temp")) {
-                    $arr = scan_check('../');
+                    $arr = scanFiles('../');
                     $arr['files'] = str_replace('..//', '', $arr['files']);
 
                     file_put_contents(STORAGE."/temp/checker.dat", serialize($arr['files']), LOCK_EX);

@@ -28,8 +28,8 @@ case 'index':
             $user = User::find(getUserId());
 
             if ($user['picture']) {
-                unlink_image('uploads/photos/', $user['picture']);
-                unlink_image('uploads/avatars/', $user['avatar']);
+                deleteImage('uploads/photos/', $user['picture']);
+                deleteImage('uploads/avatars/', $user['avatar']);
 
                 $user->picture = null;
                 $user->avatar = null;
@@ -97,8 +97,8 @@ case 'delete':
 
     if ($validation->run()) {
 
-        unlink_image('uploads/photos/', $user['picture']);
-        unlink_image('uploads/avatars/', $user['avatar']);
+        deleteImage('uploads/photos/', $user['picture']);
+        deleteImage('uploads/avatars/', $user['avatar']);
 
         $user->picture = null;
         $user->avatar = null;

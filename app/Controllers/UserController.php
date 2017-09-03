@@ -18,7 +18,7 @@ class UserController extends BaseController
      */
     public function index($login)
     {
-        if (! $user = getUser($login)) {
+        if (! $user = getUserByLogin($login)) {
             abort('default', 'Пользователя с данным логином не существует!');
         }
 
@@ -37,7 +37,7 @@ class UserController extends BaseController
             abort(403, 'Данная страница доступна только администрации!');
         }
 
-        if (! $user = user($login)) {
+        if (! $user = getUserByLogin($login)) {
             abort('default', 'Пользователя с данным логином не существует!');
         }
 
@@ -297,7 +297,7 @@ class UserController extends BaseController
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'), true);
                     sendMail($meil, $subject, $body);
 
-                    login($logs, $pars);
+                    User::login($logs, $pars);
 
                     setFlash('success', 'Добро пожаловать, ' . $logs . '!');
                     redirect('/');
@@ -309,7 +309,7 @@ class UserController extends BaseController
             }
 
             if (Request::has('token')) {
-                socialLogin(Request::input('token'));
+                User::socialLogin(Request::input('token'));
             }
         }
 
@@ -333,7 +333,7 @@ class UserController extends BaseController
                 $pass = trim(Request::input('pass'));
                 $remember = Request::input('remember');
 
-                if ($user = login($login, $pass, $remember)) {
+                if ($user = User::login($login, $pass, $remember)) {
                     setFlash('success', 'Добро пожаловать, '.$user->login.'!');
 
                     if ($return) {
@@ -348,7 +348,7 @@ class UserController extends BaseController
             }
 
             if (Request::has('token')) {
-                socialLogin(Request::input('token'));
+                User::socialLogin(Request::input('token'));
             }
         }
 
@@ -360,7 +360,7 @@ class UserController extends BaseController
      */
     public function logout()
     {
-        $domain = checkString(setting('home'));
+        $domain = siteDomain(setting('home'));
 
         $_SESSION = [];
         setcookie('password', '', SITETIME - 3600, '/', $domain, null, true);

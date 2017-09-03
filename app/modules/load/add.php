@@ -582,8 +582,8 @@ case 'delfile':
                     unlink(HOME.'/uploads/files/'.$folder.$link['link']);
                 }
 
-                unlink_image('uploads/files/'.$folder, $link['link']);
-                unlink_image('uploads/screen/'.$folder, $link['screen']);
+                deleteImage('uploads/files/'.$folder, $link['link']);
+                deleteImage('uploads/screen/'.$folder, $link['screen']);
 
                 DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
@@ -615,7 +615,7 @@ case 'delscreen':
             if (empty($screen['active'])) {
                 $folder = $screen['folder'] ? $screen['folder'].'/' : '';
 
-                unlink_image('uploads/screen/'.$folder, $screen['screen']);
+                deleteImage('uploads/screen/'.$folder, $screen['screen']);
 
                 DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 

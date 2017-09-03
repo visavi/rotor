@@ -272,7 +272,7 @@ class TopicController extends BaseController
 
             if (!empty($files)) {
                 foreach ($files as $file) {
-                    unlink_image('uploads/forum/', $topic['id'] . '/' . $file);
+                    deleteImage('uploads/forum/', $topic['id'] . '/' . $file);
                 }
                 DB::run()->query("DELETE FROM `files` WHERE `relate_id` IN (" . $del . ")  AND relate_type=?;", [Post::class]);
             }
@@ -448,7 +448,7 @@ class TopicController extends BaseController
 
                     if (!empty($files)) {
                         foreach ($files as $file) {
-                            unlink_image('uploads/forum/', $post['topic_id'] . '/' . $file['hash']);
+                            deleteImage('uploads/forum/', $post['topic_id'] . '/' . $file['hash']);
                         }
                         DB::run()->query("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (" . $del . ");", [$id, Post::class]);
                     }

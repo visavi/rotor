@@ -8,24 +8,32 @@ use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
 use App\Models\Blog;
+use App\Models\Bookmark;
 use App\Models\Chat;
+use App\Models\Comment;
 use App\Models\Contact;
 use App\Models\Counter;
 use App\Models\Guest;
 use App\Models\Ignore;
 use App\Models\Inbox;
+use App\Models\Invite;
 use App\Models\Log;
 use App\Models\Login;
 use App\Models\News;
+use App\Models\Note;
+use App\Models\Notebook;
 use App\Models\Notice;
 use App\Models\Offer;
 use App\Models\Online;
+use App\Models\Outbox;
 use App\Models\Photo;
 use App\Models\Post;
+use App\Models\Rating;
 use App\Models\RekUser;
 use App\Models\Setting;
 use App\Models\Spam;
 use App\Models\Topic;
+use App\Models\Trash;
 use App\Models\User;
 use App\Models\Visit;
 use App\Models\Vote;
@@ -67,7 +75,7 @@ function dateFixed($timestamp, $format = "d.m.y / H:i")
 }
 
 // --------------- Функция удаление картинки с проверкой -------------------//
-function unlink_image($dir, $image)
+function deleteImage($dir, $image)
 {
     if (!empty($image)) {
         $prename = str_replace('/', '_' ,$dir.$image);
@@ -83,46 +91,49 @@ function unlink_image($dir, $image)
 }
 
 // ------------------- Функция полного удаления юзера --------------------//
-function delete_users($user)
+/**
+ * Удаляет записи пользователя из всех таблиц
+ *
+ * @param User $user
+ */
+function deleteUser(User $user)
 {
-    if ($user){
+    deleteImage('uploads/photos/', $user['picture']);
+    deleteImage('uploads/avatars/', $user['avatar']);
 
-        unlink_image('uploads/photos/', $user['picture']);
-        unlink_image('uploads/avatars/', $user['avatar']);
+    Inbox::where('user_id', $user->id)->delete();
+    Outbox::where('user_id', $user->id)->delete();
+    Trash::where('user_id', $user->id)->delete();
+    Contact::where('user_id', $user->id)->delete();
+    Ignore::where('user_id', $user->id)->delete();
+    Rating::where('user_id', $user->id)->delete();
+    Visit::where('user_id', $user->id)->delete();
+    Wall::where('user_id', $user->id)->delete();
+    Note::where('user_id', $user->id)->delete();
+    Notebook::where('user_id', $user->id)->delete();
+    Banhist::where('user_id', $user->id)->delete();
+    Bookmark::where('user_id', $user->id)->delete();
+    Login::where('user_id', $user->id)->delete();
+    Invite::where('user_id', $user->id)->orWhere('invite_user_id', $user->id)->delete();
 
-        DB::run() -> query("DELETE FROM `inbox` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `outbox` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `trash` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `contact` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM ignoring WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `rating` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `visit` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `wall` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `notebook` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `banhist` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `note` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `bookmarks` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `login` WHERE `user_id`=?;", [$user->id]);
-        DB::run() -> query("DELETE FROM `invite` WHERE `user_id`=? OR `invite_user_id`=?;", [$user->id, $user->id]);
-
-        $user->delete();
-    }
+    $user->delete();
 }
 
 // ------------------- Функция удаления фотоальбома юзера --------------------//
-function delete_album($user)
+function deleteAlbum(User $user)
 {
-    if ($user){
-        $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `user_id`=?;", [$user->id]);
-        $arr_photo = $querydel -> fetchAll();
+    $photos = Photo::where('user_id', $user->id)->get();
 
-        if (count($arr_photo) > 0) {
-            foreach ($arr_photo as $delete) {
-                DB::run() -> query("DELETE FROM `photo` WHERE `id`=?;", [$delete['id']]);
-                DB::run() -> query("DELETE FROM `comments` WHERE `relate_type`=? AND relate_id=?;", [Photo::class, $delete['id']]);
 
-                unlink_image('uploads/pictures/', $delete['link']);
-            }
+    if ($photos->isNotEmpty()) {
+        foreach ($photos as $photo) {
+
+            Photo::where('id', $photo->id)->delete();
+            Comment::where('relate_type', Photo::class)
+                ->where('relate_id', $photo->id)
+                ->delete();
+
+            deleteImage('uploads/pictures/', $photo->link);
         }
     }
 }
@@ -325,7 +336,7 @@ function saveStatus($time = 0)
     }
 }
 // ------------- Функция вывода статусов пользователей -----------//
-function userStatus($user)
+function userStatus(User $user)
 {
     static $status;
 
@@ -366,7 +377,7 @@ function ratingVote($rating)
 }
 
 // --------------- Функция листинга всех файлов и папок ---------------//
-function scan_check($dirname)
+function scanFiles($dirname)
 {
     global $arr;
 
@@ -395,7 +406,7 @@ function scan_check($dirname)
         if (is_dir($dirname.'/'.$file)) {
             $arr['files'][] = $dirname.'/'.$file;
             $arr['totaldirs']++;
-            scan_check($dirname.'/'.$file);
+            scanFiles($dirname.'/'.$file);
         }
     }
 
@@ -403,7 +414,7 @@ function scan_check($dirname)
 }
 
 // --------------- Функция вывода календаря---------------//
-function make_calendar($month, $year)
+function makeCalendar($month, $year)
 {
     $wday = date("w", mktime(0, 0, 0, $month, 1, $year));
     if ($wday == 0) {
@@ -432,23 +443,26 @@ function make_calendar($month, $year)
 function saveUserMoney($time = 0)
 {
     if (empty($time) || @filemtime(STORAGE."/temp/money.dat") < time() - $time) {
-        $queryuser = DB::run() -> query("SELECT `login`, `money` FROM `users` WHERE `money`>?;", [0]);
-        $alluser = $queryuser -> fetchAssoc();
-        file_put_contents(STORAGE."/temp/money.dat", serialize($alluser), LOCK_EX);
+
+        $users = User::where('money', '>', 0)
+            ->pluck('money', 'id')
+            ->all();
+
+        file_put_contents(STORAGE."/temp/money.dat", serialize($users), LOCK_EX);
     }
 }
 
 // --------------- Функция подсчета денег у юзера ---------------//
-function userMoney($login)
+function userMoney(User $user)
 {
-    static $arrmoney;
+    static $userMoneys;
 
-    if (empty($arrmoney)) {
+    if (empty($userMoneys)) {
         saveUserMoney(3600);
-        $arrmoney = unserialize(file_get_contents(STORAGE."/temp/money.dat"));
+        $userMoneys = unserialize(file_get_contents(STORAGE."/temp/money.dat"));
     }
 
-    return (isset($arrmoney[$login])) ? $arrmoney[$login] : 0;
+    return $userMoneys[$user->id] ?? 0;
 }
 
 // --------------- Функция сохранения количества писем ---------------//
@@ -466,49 +480,15 @@ function saveUserMail($time = 0)
 }
 
 // --------------- Функция подсчета писем у юзера ---------------//
-function userMail($user)
+function userMail(User $user)
 {
     saveUserMail(3600);
-    $arrmail = unserialize(file_get_contents(STORAGE."/temp/usermail.dat"));
-    return (isset($arrmail[$user->id])) ? $arrmail[$user->id] : 0;
+    $userMails = unserialize(file_get_contents(STORAGE."/temp/usermail.dat"));
+    return $userMails[$user->id] ?? 0;
 }
 
-// --------------- Функция кэширования аватаров -------------------//
-/*function saveAvatar($time = 0) {
-    if (empty($time) || @filemtime(STORAGE."/temp/avatars.dat") < time() - $time) {
-
-        $avatars = User::select('id', 'avatar')
-            ->where('avatar', '<>', '')
-            ->pluck('avatar', 'id')
-            ->all();
-
-        file_put_contents(STORAGE."/temp/avatars.dat", serialize($avatars), LOCK_EX);
-    }
-}*/
-
 // --------------- Функция вывода аватара пользователя ---------------//
-/*function user_avatars($user) {
-    static $avatars;
-
-    if (! $user) {
-        return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
-    }
-
-    if (is_null($avatars)) {
-        saveAvatar(3600);
-        $avatars = unserialize(file_get_contents(STORAGE."/temp/avatars.dat"));
-    }
-
-    if (isset($avatars[$user->id]) && file_exists(HOME.'/uploads/avatars/'.$avatars[$user->id])) {
-        return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$avatars[$user->id].'" alt=""></a> ';
-    }
-
-    return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
-}*/
-
-
-// --------------- Функция вывода аватара пользователя ---------------//
-function userAvatar($user)
+function userAvatar(User $user)
 {
     if (! $user) {
         return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
@@ -523,19 +503,19 @@ function userAvatar($user)
 
 
 // --------------- Функция подсчета человек в контакт-листе ---------------//
-function userContact($user)
+function userContact(User $user)
 {
     return Contact::where('user_id', $user->id)->count();
 }
 
 // --------------- Функция подсчета человек в игнор-листе ---------------//
-function userIgnore($user)
+function userIgnore(User $user)
 {
     return Ignore::where('user_id', $user->id)->count();
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
-function userWall($user)
+function userWall(User $user)
 {
     return Wall::where('user_id', $user->id)->count();
 }
@@ -823,19 +803,9 @@ function userVisit($user)
     return $state;
 }
 
-// ---------- Функция обработки строк данных и ссылок ---------//
-function checkString($string)
-{
-    $string = strtolower($string);
-    $string = str_replace(['http://www.', 'http://wap.', 'http://', 'https://'], '', $string);
-    $string = strtok($string, '/?');
-    return $string;
-}
-
 // --------------------- Функция вывода навигации в галерее ------------------------//
 function photoNavigation($id)
 {
-
     if (empty($id)) {
         return false;
     }
@@ -1044,14 +1014,6 @@ function lastNews()
         }
     }
 }
-
-// --------------------- Функция получения данных аккаунта  --------------------//
-/*function user($login) {
-    if (! empty($login)) {
-        return User::where('login', $login)->first();
-    }
-    return false;
-}*/
 
 // ------------------------- Функция проверки авторизации  ------------------------//
 function isUser()
@@ -2156,16 +2118,23 @@ function getUserId()
 /**
  * Возвращает объект пользователя по логину
  *
- * @param  string $key ключ массива
- * @return string      данные
+ * @param  string    $login логин пользователя
+ * @return User|null        объект пользователя
  */
-function getUser($login)
+function getUserByLogin($login)
 {
-    if (! $login) {
-        return false;
-    }
-
     return User::where('login', $login)->first();
+}
+
+/**
+ * Возвращает объект пользователя по id
+ *
+ * @param  int       $id ID пользователя
+ * @return User|null     объект пользователя
+ */
+function getUserById($id)
+{
+    return User::find($id);
 }
 
 /**
@@ -2185,126 +2154,6 @@ function user($key = null)
     }
 
     return null;
-}
-
-/**
- * Авторизует пользователя
- *
- * @param  string  $login    Логин
- * @param  string  $password Пароль пользователя
- * @param  boolean $remember Запомнить пароль
- * @return boolean           Результат авторизации
- */
-function login($login, $password, $remember = true)
-{
-    $domain = checkString(setting('home'));
-
-    if (!empty($login) && !empty($password)) {
-
-        $user = User::whereRaw('LOWER(login) = ?', [$login])
-            ->first();
-
-        /* Миграция старых паролей */
-        if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
-        {
-            if (md5(md5($password)) == $user['password']) {
-                $user['password'] = password_hash($password, PASSWORD_BCRYPT);
-
-                $user = User::where('login', $user['login'])->first();
-                $user->password = $user['password'];
-                $user->save();
-            }
-        }
-
-        if ($user && password_verify($password, $user['password'])) {
-
-            if ($remember) {
-                setcookie('login', $user['login'], SITETIME + 3600 * 24 * 365, '/', $domain);
-                setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
-            }
-
-            $_SESSION['id'] = $user->id;
-            $_SESSION['password'] = md5(env('APP_KEY').$user->password);
-
-            // Сохранение привязки к соц. сетям
-            if (!empty($_SESSION['social'])) {
-
-                $social = new Social();
-                $social->user = $user->login;
-                $social->network = $_SESSION['social']->network;
-                $social->uid = $_SESSION['social']->uid;
-                $social->save();
-            }
-
-            $authorization = Login::where('user_id', $user->id)
-                ->where('created_at', '>', SITETIME - 30)
-                ->first();
-
-            if (! $authorization) {
-
-                Login::create([
-                    'user_id' => $user->id,
-                    'ip' => getClientIp(),
-                    'brow' => getUserAgent(),
-                    'created_at' => SITETIME,
-                    'type' => 1,
-                ]);
-
-                DB::delete('
-                    DELETE FROM login WHERE created_at < (
-                        SELECT MIN(created_at) FROM (
-                            SELECT created_at FROM guest ORDER BY created_at DESC LIMIT 50
-                        ) AS del
-                    );'
-                );
-            }
-
-            $user->update([
-                'visits' => DB::raw('visits + 1'),
-                'timelastlogin' => SITETIME
-            ]);
-
-            return $user;
-        }
-    }
-
-    return false;
-}
-
-/**
- * Авторизует через социальные сети
- *
- * @param string $token идентификатор Ulogin
- */
-function socialLogin($token)
-{
-    $domain = checkString(setting('home'));
-
-    $curl = new Curl\Curl();
-    $network = $curl->get('http://ulogin.ru/token.php', [
-        'token' => $token,
-        'host' => $_SERVER['HTTP_HOST']
-    ]);
-
-    if ($network && empty($network->error)) {
-        $_SESSION['social'] = $network;
-
-        $social = ORM::for_table('socials')->
-        where(['network' => $network->network, 'uid' => $network->uid])->
-        find_one();
-
-        if ($social && $user = user($social['user'])) {
-
-            setcookie('login', $user['login'], SITETIME + 3600 * 24 * 365, '/', $domain);
-            setcookie('password', md5($user['password'].env('APP_KEY')), SITETIME + 3600 * 24 * 365, '/', $domain, null, true);
-
-            $_SESSION['id'] = $user['id'];
-            $_SESSION['password'] = md5(env('APP_KEY').$user['password']);
-
-            setFlash('success', 'Добро пожаловать, '.$user['login'].'!');
-            redirect('/');
-        }
-    }
 }
 
 /**
@@ -2583,12 +2432,27 @@ function setting($key = null)
 }
 
 /**
- * Возвращает путь к сайту независимо от протокола
+ * Преобразует путь к сайту независимо от протокола
  *
- * @param  string $link  адрес сайта
- * @return string        адрес сайта с протоколом
+ * @param  string $link адрес сайта
+ * @return string       адрес сайта с протоколом
  */
 function siteLink($link)
 {
     return starts_with($link, '//') ? 'http:' . $link : $link;
+}
+
+/**
+ * Возвращает имя сайта из ссылки
+ *
+ * @param  string $link ссылка на сайт
+ * @return string       имя сайта
+ */
+function siteDomain($link)
+{
+    $link = strtolower($link);
+    $link = str_replace(['http://www.', 'http://', 'https://', '//'], '', $link);
+    $link = strtok($link, '/?');
+
+    return $link;
 }

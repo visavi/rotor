@@ -850,7 +850,7 @@ if (isAdmin()) {
 
                     if (!empty($files)){
                         foreach ($files as $file){
-                            unlink_image('uploads/forum/', $topics['id'].'/'.$file);
+                            deleteImage('uploads/forum/', $topics['id'].'/'.$file);
                         }
                     }
 
@@ -934,7 +934,7 @@ if (isAdmin()) {
 
                             if (!empty($files)){
                                 foreach ($files as $file){
-                                    unlink_image('uploads/forum/', $post['topic_id'].'/'.$file['hash']);
+                                    deleteImage('uploads/forum/', $post['topic_id'].'/'.$file['hash']);
                                 }
                                 DB::run() -> query("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$pid, Post::class]);
                             }

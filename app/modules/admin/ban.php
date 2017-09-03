@@ -371,8 +371,8 @@ if (isAdmin([101, 102, 103])) {
                                 DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], getUsername(), SITETIME]);
                             }
 
-                            delete_album($uz);
-                            delete_users($uz);
+                            deleteAlbum($uz);
+                            deleteUser($uz);
 
                             echo 'Данные занесены в черный список!<br>';
                             echo '<i class="fa fa-check"></i> <b>Профиль пользователя успешно удален!</b><br><br>';

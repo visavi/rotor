@@ -150,7 +150,7 @@ case 'change':
 
                 // Удаление старой картинки
                 if (!empty($datanews['image'])) {
-                    unlink_image('uploads/news/', $datanews['image']);
+                    deleteImage('uploads/news/', $datanews['image']);
                 }
 
                 $handle -> process(HOME.'/uploads/news/');
@@ -300,7 +300,7 @@ case 'del':
 
                 if (count($arr_image)>0){
                     foreach ($arr_image as $delete){
-                        unlink_image('uploads/news/', $delete['image']);
+                        deleteImage('uploads/news/', $delete['image']);
                     }
                 }
 
