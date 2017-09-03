@@ -435,7 +435,7 @@ class UserController extends BaseController
     function key()
     {
         if (! $user = isUser()) {
-            abort(403, 'Для подтверждение регистрации  необходимо быть авторизованным!');
+            abort(403, 'Для подтверждения регистрации  необходимо быть авторизованным!');
         }
 
         if (! setting('regkeys')) {
@@ -456,11 +456,11 @@ class UserController extends BaseController
                     'confirmregkey' => null,
                 ]);
 
-                setFlash('success', 'Мастер-код успешно подтвержден!');
+                setFlash('success', 'Аккаунт успешно активирован!');
                 redirect("/");
 
             } else {
-                setFlash('danger', 'Мастер-код не совпадает с данными, проверьте правильность ввода');
+                setFlash('danger', 'Ключ не совпадает с данными, проверьте правильность ввода');
             }
         }
 
