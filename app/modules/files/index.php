@@ -13,7 +13,7 @@ if (!empty($page)){
         $page = $page.'/index';
     }
 
-    if (! file_exists(APP.'/views/files/'.$page.'.blade.php')) {
+    if (! file_exists(RESOURCES.'/views/files/'.$page.'.blade.php')) {
         abort('default', 'Ошибка! Данной страницы не существует!');
     }
 

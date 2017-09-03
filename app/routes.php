@@ -87,6 +87,7 @@ $router->map('GET',      '/logout', 'UserController@logout', 'logout');
 $router->map('GET|POST', '/register', 'UserController@register', 'register');
 $router->map('GET|POST', '/user/[user:login]/[rating:action]', 'UserController@rating');
 $router->map('GET|POST', '/profile', 'UserController@profile');
+$router->map('GET',      '/key', 'UserController@key');
 
 $router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'RatingController');
 $router->map('POST', '/rating/delete', 'RatingController@delete');
@@ -127,8 +128,6 @@ $router->map('POST',     '/ignore/[create|delete:action]', 'pages/ignore.php');
 $router->map('GET',      '/contact', 'pages/contact.php');
 $router->map('GET|POST', '/contact/[note:action]/[i:id]', 'pages/contact.php');
 $router->map('POST',     '/contact/[create|delete:action]', 'pages/contact.php');
-
-$router->map('GET', '/key', 'pages/key.php');
 
 $router->map('GET|POST', '/account', 'pages/account.php');
 $router->map('GET|POST', '/offers', 'pages/offers.php');

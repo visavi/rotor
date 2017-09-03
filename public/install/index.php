@@ -1,4 +1,8 @@
 <?php
+
+use App\Models\Inbox;
+use App\Models\Setting;
+
 ob_start();
 
 $level = 0;

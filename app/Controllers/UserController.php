@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Classes\Validation;
+use App\Models\BlackList;
 use App\Models\Invite;
 use App\Models\Note;
 use App\Models\Rating;
@@ -185,7 +186,7 @@ class UserController extends BaseController
                 $pars = trim(Request::input('pars'));
                 $pars2 = trim(Request::input('pars2'));
                 $protect = check(strtolower(Request::input('protect')));
-                $invite = (!empty(setting('invite'))) ? check(Request::input('invite')) : '';
+                $invite = setting('invite') ? check(Request::input('invite')) : '';
                 $meil = strtolower(check(Request::input('meil')));
                 $domain = utfSubstr(strrchr($meil, '@'), 1);
                 $gender = Request::input('gender') == 1 ? 1 : 2;
@@ -208,31 +209,41 @@ class UserController extends BaseController
                     $validation->addError(['logs' => 'Запрещено использовать в логине слишком много дефисов!']);
                 }
 
-                if (!empty($logs)) {
+                if (! empty($logs)) {
                     // Проверка логина на существование
-                    $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($logs)]);
-                    $validation->addRule('empty', $reglogin, ['logs' => 'Пользователь с данным логином уже зарегистрирован!']);
+                    $checkLogin = User::whereRaw('LOWER(login) = ?', [strtolower($logs)])->count();
+                    $validation->addRule('empty', $checkLogin, ['logs' => 'Пользователь с данным логином уже зарегистрирован!']);
 
                     // Проверка логина в черном списке
-                    $blacklogin = DB::run()->querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($logs)]);
-                    $validation->addRule('empty', $blacklogin, ['logs' => 'Выбранный вами логин занесен в черный список!']);
+                    $blackLogin = Blacklist::where('type', 2)
+                        ->where('value', strtolower($logs))
+                        ->count();
+                    $validation->addRule('empty', $blackLogin, ['logs' => 'Выбранный вами логин занесен в черный список!']);
                 }
 
                 // Проверка email на существование
-                $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$meil]);
-                $validation->addRule('empty', $regmail, ['meil' => 'Указанный вами адрес email уже используется в системе!']);
+                $checkMail = User::where('email', $meil)->count();
+                $validation->addRule('empty', $checkMail, ['meil' => 'Указанный вами адрес email уже используется в системе!']);
 
                 // Проверка домена от email в черном списке
-                $blackdomain = DB::run()->querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [3, $domain]);
-                $validation->addRule('empty', $blackdomain, ['meil' => 'Домен от вашего адреса email занесен в черный список!']);
+                $blackDomain = Blacklist::where('type', 3)
+                    ->where('value', $domain)
+                    ->count();
+                $validation->addRule('empty', $blackDomain, ['meil' => 'Домен от вашего адреса email занесен в черный список!']);
 
                 // Проверка email в черном списке
-                $blackmail = DB::run()->querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $meil]);
-                $validation->addRule('empty', $blackmail, ['meil' => 'Указанный вами адрес email занесен в черный список!']);
+                $blackMail = Blacklist::where('type', 1)
+                    ->where('value', $meil)
+                    ->count();
+                $validation->addRule('empty', $blackMail, ['meil' => 'Указанный вами адрес email занесен в черный список!']);
 
                 // Проверка пригласительного ключа
-                if (!empty(setting('invite'))) {
-                    $invitation = DB::run()->querySingle("SELECT `id` FROM `invite` WHERE `hash`=? AND `used`=? LIMIT 1;", [$invite, 0]);
+                if (setting('invite')) {
+                    $invitation = Invite::select('id')
+                        ->where('hash', $invite)
+                        ->where('used', 0)
+                        ->first();
+
                     $validation->addRule('not_empty', $invitation, ['invite' => 'Ключ приглашения недействителен!']);
                 }
 
@@ -255,11 +266,6 @@ class UserController extends BaseController
                         echo '<b><span style="color:#ff0000">Внимание! Ваш аккаунт будет активирован только после проверки администрацией!</span></b><br><br>';
                     }
 
-                    // Активация пригласительного ключа
-                    if (!empty(setting('invite'))) {
-                        DB::run()->query("UPDATE `invite` SET `used`=?, `invited`=? WHERE `key`=? LIMIT 1;", [1, $logs, $invite]);
-                    }
-
                     $user = User::create([
                         'login' => $logs,
                         'password' => password_hash($pars, PASSWORD_BCRYPT),
@@ -276,9 +282,17 @@ class UserController extends BaseController
                         'subscribe' => str_random(32),
                     ]);
 
+                    // Активация пригласительного ключа
+                    if (setting('invite')) {
+                        $invitation->update([
+                            'used'           => 1,
+                            'invite_user_id' => $user->id,
+                        ]);
+                    }
+
                     // ----- Уведомление в приват ----//
-                    $textpriv = textPrivate(1, ['%USERNAME%' => $logs, '%SITENAME%' => setting('home')]);
-                    sendPrivate($user->id, 0, $textpriv);
+                    $textPrivate = textPrivate(1, ['%USERNAME%' => $logs, '%SITENAME%' => setting('home')]);
+                    sendPrivate($user->id, 0, $textPrivate);
 
                     $subject = 'Регистрация на сайте ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'), true);
@@ -362,7 +376,7 @@ class UserController extends BaseController
      */
     public function profile()
     {
-        if (! isUser()) {
+        if (! $user = isUser()) {
             abort(403, 'Авторизуйтесь для изменения данных в профиле!');
         }
 
@@ -393,7 +407,16 @@ class UserController extends BaseController
                 $country = utfSubstr($country, 0, 30);
                 $city    = utfSubstr($city, 0, 50);
 
-                DB::run()->query("UPDATE `users` SET `name`=?, `country`=?, `city`=?, `icq`=?, `skype`=?, `site`=?, `birthday`=?, `info`=? WHERE `login`=? LIMIT 1;", [$name, $country, $city, $icq, $skype, $site, $birthday, $info, getUsername()]);
+                $user->update([
+                    'name'     => $name,
+                    'country'  => $country,
+                    'city'     => $city,
+                    'icq'      => $icq,
+                    'skype'    => $skype,
+                    'site'     => $site,
+                    'birthday' => $birthday,
+                    'info'     => $info,
+                ]);
 
                 setFlash('success', 'Ваш профиль успешно изменен!');
                 redirect("/profile");
@@ -404,6 +427,44 @@ class UserController extends BaseController
             }
         }
 
-        return view('pages/profile', compact('udata'));
+        return view('pages/profile', compact('user'));
+    }
+
+    /*
+     * Подтверждение регистрации
+     */
+    function key()
+    {
+        if (! $user = isUser()) {
+            abort(403, 'Для подтверждение регистрации  необходимо быть авторизованным!');
+        }
+
+        if (! setting('regkeys')) {
+            abort('default', 'Подтверждение регистрации выключено на сайте!');
+        }
+
+        if (! $user->confirmreg) {
+            abort('default', 'Вашему профилю не требуется подтверждение регистрации!');
+        }
+
+        if (Request::has('code')) {
+            $code = check(trim(Request::input('code')));
+
+            if ($code == user('confirmregkey')) {
+
+                $user->update([
+                    'confirmreg'    => 0,
+                    'confirmregkey' => null,
+                ]);
+
+                setFlash('success', 'Мастер-код успешно подтвержден!');
+                redirect("/");
+
+            } else {
+                setFlash('danger', 'Мастер-код не совпадает с данными, проверьте правильность ввода');
+            }
+        }
+
+        view('pages/key');
     }
 }

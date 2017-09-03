@@ -17,7 +17,7 @@ class PageController extends BaseController
             abort(404);
         }
 
-        if (! file_exists(APP.'/views/main/'.$action.'.blade.php')){
+        if (! file_exists(RESOURCES.'/views/main/'.$action.'.blade.php')){
             abort(404);
         }
 

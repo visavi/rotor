@@ -122,7 +122,7 @@ header("Content-type:text/html; charset=utf-8");
     </div>
 <?php endif; ?>
 
-  <?php include (APP.'/views/main/menu.blade.php'); ?>
+  <?php include (RESOURCES.'/views/main/menu.blade.php'); ?>
 
 <?php else: ?>
 

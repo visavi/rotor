@@ -14,7 +14,7 @@
         Для подтверждения регистрации вам необходимо ввести мастер-ключ, который был отправлен вам на email<br><br>
 
         <div class="form">
-            Мастер-код:<br>
+            Код подтверждения:<br>
             <form method="get" action="/key">
                 <input class="form-control" name="code" maxlength="30">
                 <button class="btn btn-primary">Подтвердить</button>

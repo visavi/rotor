@@ -74,9 +74,9 @@ if (isUser()){
 
             <?php
             if (isUser()) {
-                include (APP.'/views/main/menu.blade.php');
+                include (RESOURCES.'/views/main/menu.blade.php');
             } else {
-                include (APP.'/views/main/recent.blade.php');
+                include (RESOURCES.'/views/main/recent.blade.php');
             }
             ?>
         </div>

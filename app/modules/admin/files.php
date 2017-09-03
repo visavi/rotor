@@ -6,8 +6,8 @@ $file = check(Request::input('file'));
 $path = check(Request::input('path'));
 
 if (
-    !file_exists(APP.'/views/'.$path) ||
-    !is_dir(APP.'/views/'.$path) ||
+    !file_exists(RESOURCES.'/views/'.$path) ||
+    !is_dir(RESOURCES.'/views/'.$path) ||
     str_contains($path, '.') ||
     starts_with($path, '/') ||
     !ends_with($path, '/')
@@ -24,13 +24,13 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
     ############################################################################################
         case 'index':
 
-            $files = preg_grep('/^([^.])/', scandir(APP.'/views/'.$path.$file));
+            $files = preg_grep('/^([^.])/', scandir(RESOURCES.'/views/'.$path.$file));
 
             usort($files, function($a, $b) use($path) {
-                if (is_file(APP.'/views/'.$path.$a) && is_file(APP.'/views/'.$path.$b)) {
+                if (is_file(RESOURCES.'/views/'.$path.$a) && is_file(APP.'/views/'.$path.$b)) {
                     return 0;
                 }
-                return (is_dir(APP.'/views/'.$path.$a)) ? -1 : 1;
+                return (is_dir(RESOURCES.'/views/'.$path.$a)) ? -1 : 1;
             });
 
             $total = count($files);
@@ -42,18 +42,18 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
                 echo '<ul class="list-group">';
                 foreach ($files as $file) {
 
-                    if (is_dir(APP.'/views/'.$path.$file)) {
+                    if (is_dir(RESOURCES.'/views/'.$path.$file)) {
                         echo '<li class="list-group-item">';
                         echo '<div class="float-right">';
 
                         echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.$file.'&amp;type=dir&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить эту директорию\')"><i class="fa fa-remove"></i></a></div>';
 
                         echo '<i class="fa fa-folder-o"></i> <b><a href="/admin/files?path='.$path.$file.'/">'.$file.'</a></b><br>';
-                        echo 'Объектов: '.count(array_diff(scandir(APP.'/views/'.$path.$file), ['.', '..'])).'</li>';
+                        echo 'Объектов: '.count(array_diff(scandir(RESOURCES.'/views/'.$path.$file), ['.', '..'])).'</li>';
                     } else {
 
-                        $size = formatSize(filesize(APP.'/views/'.$path.$file));
-                        $strok = count(file(APP.'/views/'.$path.$file));
+                        $size = formatSize(filesize(RESOURCES.'/views/'.$path.$file));
+                        $strok = count(file(RESOURCES.'/views/'.$path.$file));
 
                         echo '<li class="list-group-item"><div class="float-right">';
                         echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.basename($file, '.blade.php').'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
@@ -61,7 +61,7 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
                         echo '<i class="fa fa-file-o"></i> ';
                         echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.basename($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br>';
                         echo 'Строк: ' . $strok . ' / ';
-                        echo 'Изменен: ' . dateFixed(filemtime(APP.'/views/'.$path.$file)) . '</li>';
+                        echo 'Изменен: ' . dateFixed(filemtime(RESOURCES.'/views/'.$path.$file)) . '</li>';
                     }
                 }
                 echo '</ul>';
@@ -81,8 +81,8 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
         case 'edit':
 
             if ((preg_match('#^([a-z0-9_\-/]+|)$#', $path)) && preg_match('#^[a-z0-9_\-/]+$#', $file)) {
-                if (file_exists(APP.'/views/'.$path.$file.'.blade.php')) {
-                    if (is_writeable(APP.'/views/'.$path.$file.'.blade.php')) {
+                if (file_exists(RESOURCES.'/views/'.$path.$file.'.blade.php')) {
+                    if (is_writeable(RESOURCES.'/views/'.$path.$file.'.blade.php')) {
 
                         if (Request::isMethod('post')) {
                             $token = check(Request::input('token'));
@@ -90,7 +90,7 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
 
                             if ($token == $_SESSION['token']) {
 
-                                file_put_contents(APP.'/views/'.$path.$file.'.blade.php', $msg);
+                                file_put_contents(RESOURCES.'/views/'.$path.$file.'.blade.php', $msg);
 
                                 setFlash('success', 'Файл успешно сохранен!');
                                 redirect ("/admin/files?act=edit&path=$path&file=$file");
@@ -100,7 +100,7 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
                             }
                         }
 
-                        $mainfile = file_get_contents(APP.'/views/'.$path.$file.'.blade.php');
+                        $mainfile = file_get_contents(RESOURCES.'/views/'.$path.$file.'.blade.php');
 
                         echo '<div class="form" id="form">';
                         echo '<b>Редактирование файла '.$file.'</b><br>';
@@ -133,7 +133,7 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
 
             echo '<b>Создание нового файла</b><br><br>';
 
-            if (is_writeable(APP.'/views/'.$path)) {
+            if (is_writeable(RESOURCES.'/views/'.$path)) {
 
                 if (Request::isMethod('post')) {
                     $token = check(Request::input('token'));
@@ -144,10 +144,10 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
                         if (preg_match('|^[a-z0-9_\-]+$|', $name)) {
 
                             if ($type == 'file') {
-                                if (!file_exists(APP .'/views/'.$path.$name.'.blade.php')) {
+                                if (!file_exists(RESOURCES .'/views/'.$path.$name.'.blade.php')) {
 
-                                    file_put_contents(APP.'/views/'.$path.$name.'.blade.php', '');
-                                    chmod(APP.'/views/'.$path.$name.'.blade.php', 0666);
+                                    file_put_contents(RESOURCES.'/views/'.$path.$name.'.blade.php', '');
+                                    chmod(RESOURCES.'/views/'.$path.$name.'.blade.php', 0666);
 
                                     setFlash('success', 'Новый файл успешно создан!');
                                     redirect('/admin/files?act=edit&file='.$name.'&path='.$path);
@@ -156,9 +156,9 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
                                     showError('Ошибка! Файл с данным названием уже существует!');
                                 }
                             } else {
-                                if (!file_exists(APP .'/views/'.$path.$name)) {
+                                if (!file_exists(RESOURCES .'/views/'.$path.$name)) {
                                     $old = umask(0);
-                                    mkdir(APP .'/views/'.$path.$name, 0777, true);
+                                    mkdir(RESOURCES .'/views/'.$path.$name, 0777, true);
                                     umask($old);
 
                                     setFlash('success', 'Новая директория успешно создана!');
@@ -209,21 +209,21 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
             $type = check(Request::input('type'));
 
             if ($token == $_SESSION['token']) {
-                if (is_writeable(APP.'/views/'.$path)) {
+                if (is_writeable(RESOURCES.'/views/'.$path)) {
                     if (preg_match('|^[a-z0-9_\-]+$|', $name)) {
 
                         if ($type == 'dir') {
-                            if (file_exists(APP .'/views/'.$path.$name)) {
-                                removeDir(APP . '/views/' . $path . $name);
+                            if (file_exists(RESOURCES .'/views/'.$path.$name)) {
+                                removeDir(RESOURCES . '/views/' . $path . $name);
                                 setFlash('success', 'Директория успешно удалена!');
                                 redirect('/admin/files?path=' . $path);
                             } else {
                                 showError('Ошибка! Данного директории не существует!');
                             }
                         } else {
-                            if (file_exists(APP .'/views/'.$path.$name.'.blade.php')) {
+                            if (file_exists(RESOURCES .'/views/'.$path.$name.'.blade.php')) {
 
-                                if (unlink(APP .'/views/'.$path.$name.'.blade.php')) {
+                                if (unlink(RESOURCES .'/views/'.$path.$name.'.blade.php')) {
                                     setFlash('success', 'Файл успешно удален!');
                                     redirect ('/admin/files?path='.$path);
 

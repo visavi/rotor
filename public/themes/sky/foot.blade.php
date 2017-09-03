@@ -56,7 +56,7 @@ echo '<div class="art-Block">
                                 <div class="art-BlockContent">
                                     <div class="art-BlockContent-body">
                                         <div>';
-include (APP.'/views/main/recent.blade.php');
+include (RESOURCES.'/views/main/recent.blade.php');
 echo '</div>
                                     </div>
                                 </div>

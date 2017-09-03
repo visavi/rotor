@@ -15,7 +15,9 @@ use App\Models\Guest;
 use App\Models\Ignore;
 use App\Models\Inbox;
 use App\Models\Log;
+use App\Models\Login;
 use App\Models\News;
+use App\Models\Notice;
 use App\Models\Offer;
 use App\Models\Online;
 use App\Models\Photo;
@@ -1662,38 +1664,39 @@ function removeDir($dir)
 // ----- Функция отправки приватного сообщения -----//
 function sendPrivate($userId, $authorId, $text, $time = SITETIME)
 {
-    if (User::find($userId)) {
+    if ($user = User::find($userId)) {
 
-        DB::run() -> query("INSERT INTO `inbox` (`user_id`, `author_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);",
-        [$userId, $authorId, $text, $time]);
+        Inbox::create([
+            'user_id'    => $userId,
+            'author_id'  => $authorId,
+            'text'       => $text,
+            'created_at' => $time,
+        ]);
 
-        DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `id`=? LIMIT 1;", [$userId]);
-
+        $user->increment('newprivat');
         saveUserMail();
+
         return true;
     }
+
     return false;
 }
 
 // ----- Функция подготовки приватного сообщения -----//
 function textPrivate($id, $replace = [])
 {
-    $message = DB::run() -> querySingle("SELECT `text` FROM `notice` WHERE `id`=? LIMIT 1;", [$id]);
+    $message = Notice::find($id);
 
-    if (!empty($message)){
-        foreach ($replace as $key=>$val){
-            $message = str_replace($key, $val, $message);
-        }
-    } else {
-        $message = 'Отсутствует текст сообщения!';
+    if (! $message) {
+        return 'Отсутствует текст сообщения!';
     }
+
+    foreach ($replace as $key => $val){
+        $message = str_replace($key, $val, $message);
+    }
+
     return $message;
 }
-
-// ------------ Функция записи flash уведомлений -----------//
-/*function notice($message, $status = 'success'){
-    $_SESSION['note'][$status][] = $message;
-}*/
 
 // ------------ Функция статистики производительности -----------//
 function perfomance()
@@ -1807,7 +1810,7 @@ function abort($code, $message = null)
         ]);
     } else {
         $referer = Request::header('referer') ?? null;
-        return view('errors/'.$code, compact('message', 'referer'));
+        view('errors/'.$code, compact('message', 'referer'));
     }
 
     exit();
