@@ -2,6 +2,17 @@
 
 namespace App\Controllers\Admin;
 
+use App\Classes\Request;
+use App\Classes\Validation;
+use App\Models\Blog;
+use App\Models\Guest;
+use App\Models\Inbox;
+use App\Models\Photo;
+use App\Models\Post;
+use App\Models\Spam;
+use App\Models\Wall;
+use Illuminate\Database\Capsule\Manager as DB;
+
 class SpamController extends AdminController
 {
     /**
@@ -16,6 +27,8 @@ class SpamController extends AdminController
 
     public function __construct()
     {
+        parent::__construct();
+
         if (! isAdmin([101, 102, 103])) {
             abort('403', 'Доступ запрещен!');
         }
@@ -30,12 +43,12 @@ class SpamController extends AdminController
         ];
 
         $this->total = Spam::select(DB::raw("
-            SUM(relate_type='".Post::class."') post,
-            SUM(relate_type='".Guest::class."') guest,
-            SUM(relate_type='".Photo::class."') photo,
-            SUM(relate_type='".Blog::class."') blog,
-            SUM(relate_type='".Inbox::class."') inbox,
-            SUM(relate_type='".Wall::class."') wall
+            SUM(relate_type='".addslashes(Post::class)."') post,
+            SUM(relate_type='".addslashes(Guest::class)."') guest,
+            SUM(relate_type='".addslashes(Photo::class)."') photo,
+            SUM(relate_type='".addslashes(Blog::class)."') blog,
+            SUM(relate_type='".addslashes(Inbox::class)."') inbox,
+            SUM(relate_type='".addslashes(Wall::class)."') wall
         "))->first();
     }
 
