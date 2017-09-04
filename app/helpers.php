@@ -338,7 +338,7 @@ function saveStatus($time = 0)
     }
 }
 // ------------- Функция вывода статусов пользователей -----------//
-function userStatus(User $user)
+function userStatus(User $user = null)
 {
     static $status;
 
@@ -490,7 +490,7 @@ function userMail(User $user)
 }
 
 // --------------- Функция вывода аватара пользователя ---------------//
-function userAvatar(User $user)
+function userAvatar(User $user = null)
 {
     if (! $user) {
         return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
@@ -2316,6 +2316,7 @@ function imageBase64($path, array $params = [])
  *
  * @param int  $percent
  * @param bool $title
+ * @return string
  */
 function progressBar($percent, $title = false)
 {

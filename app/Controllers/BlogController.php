@@ -527,7 +527,7 @@ class BlogController extends BaseController
                 $alltag = implode(',', $tags);
 
                 $dumptags = preg_split('/[\s]*[,][\s]*/s', $alltag);
-                $tags = array_count_values(array_map('utf_lower', $dumptags));
+                $tags = array_count_values(array_map('utfLower', $dumptags));
 
                 arsort($tags);
                 array_splice($tags, 100);
