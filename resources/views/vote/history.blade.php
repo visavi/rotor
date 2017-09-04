@@ -1,18 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Голосования (Стр. {{ $page['current'] }}) - @parent
+    История голосований (Стр. {{ $page['current'] }}) - @parent
 @stop
 
 @section('content')
 
-    <h1>Голосования</h1>
+    <h1>История голосований</h1>
 
     @if ($votes->isNotEmpty())
         @foreach ($votes as $vote)
             <div class="b">
-                <i class="fa fa-bar-chart"></i>
-                <b><a href="/votes/{{ $vote['id'] }}">{{ $vote['title'] }}</a></b>
+                <i class="fa fa-briefcase"></i>
+                <b><a href="/votes/history/{{ $vote->id }}">{{ $vote->title }}</a></b>
             </div>
             <div>
                 @if ($vote->topic)
@@ -20,14 +20,14 @@
                 @endif
 
                 Создано: {{ dateFixed($vote['created_at']) }}<br>
-                Всего голосов: {{ $vote['count'] }}<br>D
+                Всего голосов: {{ $vote['count'] }}<br>
             </div>
         @endforeach
 
         {{ pagination($page) }}
     @else
-        {{ showError('Открытых голосований еще нет!') }}
+        {{ showError('Голосований в архиве еще нет!') }}
     @endif
 
-    <i class="fa fa-briefcase"></i> <a href="/votes/history">Архив голосований</a><br>
+    <i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>
 @stop

@@ -15,11 +15,16 @@ class VoteController extends BaseController
      */
     public function index()
     {
+        $total = Vote::where('closed', 0)->count();
+        $page = paginate(setting('allvotes'), $total);
+
         $votes = Vote::where('closed', 0)
-            ->orderBy('created_at')
+            ->orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit(setting('allvotes'))
             ->get();
 
-        return view('vote/index', compact('votes'));
+        return view('vote/index', compact('votes', 'page'));
     }
 
     /**
@@ -35,7 +40,7 @@ class VoteController extends BaseController
             abort(404, 'Данного голосования не существует!');
         }
 
-        if (! empty($votes['closed'])) {
+        if ($vote['closed']) {
             abort('default', 'Данный опрос закрыт для голосования!');
         }
 
@@ -114,5 +119,58 @@ class VoteController extends BaseController
             ->get();
 
         return view('vote/voters', compact('vote', 'voters'));
+    }
+
+    /**
+     * История голосований
+     */
+    public function history()
+    {
+        $total = Vote::where('closed', 1)->count();
+        $page = paginate(setting('allvotes'), $total);
+
+        $votes = Vote::where('closed', 1)
+            ->orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit(setting('allvotes'))
+            ->get();
+
+        return view('vote/history', compact('votes', 'page'));
+    }
+
+    /**
+     * Результаты истории голосований
+     */
+    public function viewHistory($id)
+    {
+        $vote = Vote::find($id);
+
+        if (! $vote) {
+            abort(404, 'Данного голосования не существует!');
+        }
+
+        if (! $vote['closed']) {
+            abort('default', 'Данный опрос еще не в архиве!');
+        }
+
+        $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
+            ->orderBy('id')
+            ->get();
+
+        if ($vote['answers']->isEmpty()) {
+            abort('default', 'Для данного голосования не созданы варианты ответов');
+        }
+
+        $results = array_pluck($vote['answers'], 'result', 'answer');
+        $max = max($results);
+
+        arsort($results);
+
+        $vote['voted'] = $results;
+
+        $vote['sum'] = ($vote['count'] > 0) ? $vote['count'] : 1;
+        $vote['max'] = ($max > 0) ? $max : 1;
+
+        return view('vote/view_history', compact('vote'));
     }
 }

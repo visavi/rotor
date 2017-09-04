@@ -20,8 +20,8 @@
     <a href="/admin/spam?type=inbox" class="badge badge-{{ $active }}">Приват {{ $total['inbox'] }}</a>
     <?php $active = ($type == 'wall') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">Стена {{ $total['wall'] }}</a>
-    <?php $active = ($type == 'load') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=load" class="badge badge-{{ $active }}">Загрузки{{ $total['down'] }}</a>
+    <?php $active = ($type == 'down') ? 'success' : 'light'; ?>
+    <a href="/admin/spam?type=down" class="badge badge-{{ $active }}">Загрузки {{ $total['down'] }}</a>
         <br><br>
 
     @if ($records->isNotEmpty())
