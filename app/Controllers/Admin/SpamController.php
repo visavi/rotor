@@ -5,8 +5,10 @@ namespace App\Controllers\Admin;
 use App\Classes\Request;
 use App\Classes\Validation;
 use App\Models\Blog;
+use App\Models\Down;
 use App\Models\Guest;
 use App\Models\Inbox;
+use App\Models\News;
 use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Spam;
@@ -23,7 +25,7 @@ class SpamController extends AdminController
     /**
      * @var array
      */
-    public $total;
+    public $total = [];
 
     public function __construct()
     {
@@ -40,16 +42,18 @@ class SpamController extends AdminController
             'blog'  => Blog::class,
             'inbox' => Inbox::class,
             'wall'  => Wall::class,
+            'news'  => News::class,
+            'down'  => Down::class,
         ];
 
-        $this->total = Spam::select(DB::raw("
-            SUM(relate_type='".addslashes(Post::class)."') post,
-            SUM(relate_type='".addslashes(Guest::class)."') guest,
-            SUM(relate_type='".addslashes(Photo::class)."') photo,
-            SUM(relate_type='".addslashes(Blog::class)."') blog,
-            SUM(relate_type='".addslashes(Inbox::class)."') inbox,
-            SUM(relate_type='".addslashes(Wall::class)."') wall
-        "))->first();
+        $spam = Spam::select('relate_type', DB::raw('count(*) as total'))
+            ->groupBy('relate_type')
+            ->pluck('total', 'relate_type')
+            ->all();
+
+        foreach ($this->types as $key => $value) {
+            $this->total[$key] = $spam[$value] ?? 0;
+        }
     }
 
     /**
@@ -60,7 +64,7 @@ class SpamController extends AdminController
         $type = check(Request::input('type'));
         $type = isset($this->types[$type]) ? $type : 'post';
 
-        $page = paginate(setting('spamlist'),  $this->total['post']);
+        $page = paginate(setting('spamlist'),  $this->total[$type]);
 
         $records = Spam::where('relate_type', $this->types[$type])
             ->orderBy('created_at', 'desc')

@@ -21,7 +21,7 @@
     <?php $active = ($type == 'wall') ? 'success' : 'light'; ?>
     <a href="/admin/spam?type=wall" class="badge badge-{{ $active }}">Стена {{ $total['wall'] }}</a>
     <?php $active = ($type == 'load') ? 'success' : 'light'; ?>
-    <a href="/admin/spam?type=load" class="badge badge-{{ $active }}">Загрузки{{ $total['load'] }}</a>
+    <a href="/admin/spam?type=load" class="badge badge-{{ $active }}">Загрузки{{ $total['down'] }}</a>
         <br><br>
 
     @if ($records->isNotEmpty())

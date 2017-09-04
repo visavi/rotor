@@ -3,9 +3,9 @@
 
 use App\Classes\Registry;
 use App\Classes\Request;
+use App\Models\Log;
 use App\Models\Login;
 use App\Models\User;
-use App\Models\Admlog;
 use Illuminate\Database\Capsule\Manager as DB;
 
 require __DIR__.'/bootstrap.php';
@@ -181,38 +181,6 @@ if ($user = isUser()) {
 
         setFlash('success', 'Получен ежедневный бонус '.moneys(setting('bonusmoney')).'!');
     }
-
-    // ------------------ Запись текущей страницы для админов --------------------//
-    if (Request::segment(1) == 'admin') {
-
-        Admlog::create([
-            'user_id'    => getUserId(),
-            'request'    => server('REQUEST_URI'),
-            'referer'    => server('HTTP_REFERER'),
-            'ip'         => getClientIp(),
-            'brow'       => getUserAgent(),
-            'created_at' => SITETIME,
-        ]);
-
-        DB::delete('
-            DELETE FROM admlog WHERE created_at < (
-                SELECT MIN(created_at) FROM (
-                    SELECT created_at FROM admlog ORDER BY created_at DESC LIMIT 500
-                ) AS del
-            );'
-        );
-    }
-}
-
-// Сайт закрыт для всех
-if (setting('closedsite') == 2 && !isAdmin() && ! Request::is('closed', 'login')) {
-    redirect('/closed');
-}
-
-// Сайт закрыт для гостей
-if (setting('closedsite') == 1 && !isUser() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
-    setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
-    redirect('/login');
 }
 
 /**

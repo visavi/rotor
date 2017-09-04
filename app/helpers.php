@@ -7,6 +7,7 @@ use App\Classes\Request;
 use App\Models\Antimat;
 use App\Models\Ban;
 use App\Models\Banhist;
+use App\Models\BlackList;
 use App\Models\Blog;
 use App\Models\Bookmark;
 use App\Models\Chat;
@@ -31,6 +32,7 @@ use App\Models\Post;
 use App\Models\Rating;
 use App\Models\RekUser;
 use App\Models\Setting;
+use App\Models\Smile;
 use App\Models\Spam;
 use App\Models\Topic;
 use App\Models\Trash;
@@ -674,22 +676,26 @@ function statsNews()
 // ---------- Функция вывода записей в черном списке ------------//
 function statsBlacklist()
 {
-    $query = DB::run() -> query("SELECT `type`, count(*) FROM `blacklist` GROUP BY `type`;");
-    $blacklist = $query -> fetchAssoc();
+    $blacklist = BlackList::select('type', DB::raw('count(*) as total'))
+        ->groupBy('type')
+        ->pluck('total', 'type')
+        ->all();
+
     $list = $blacklist + array_fill(1, 3, 0);
+
     return $list[1].'/'.$list[2].'/'.$list[3];
 }
 
 // --------------- Функция вывода количества заголовков ----------------//
 function statsAntimat()
 {
-    return DB::run() -> querySingle("SELECT count(*) FROM `antimat`;");
+    return Antimat::count();
 }
 
 // --------------- Функция вывода количества смайлов ----------------//
 function statsSmiles()
 {
-    return DB::run() -> querySingle("SELECT count(*) FROM `smiles`;");
+    return Smile::count();
 }
 
 // ----------- Функция вывода даты последнего сканирования -------------//
