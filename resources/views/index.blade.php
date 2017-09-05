@@ -22,18 +22,18 @@
         <i class="fa fa-forumbee fa-lg text-muted"></i>
         <b><a href="/forum">Форум</a></b> (<?=statsForum()?>)
     </div>
-    <?=recentTopics()?>
+    {{ recentTopics() }}
 
     <div class="b">
-        <i class="fa fa-download fa-lg text-muted"></i> <b><a href="/load">Загрузки</a></b> (<?php /*statsLoad()*/?>)
+        <i class="fa fa-download fa-lg text-muted"></i> <b><a href="/load">Загрузки</a></b> ({{ statsLoad() }})
     </div>
-    <?php /*recentFiles()*/?>
+    {{ recentFiles() }}
 
     <div class="b">
         <i class="fa fa-globe fa-lg text-muted"></i>
-        <b><a href="/blog">Блоги</a></b> (<?=statsBlog()?>)
+        <b><a href="/blog">Блоги</a></b> ({{ statsBlog() }})
     </div>
-    <?php /*recentBlogs()*/?>
+    {{ recentBlogs() }}
 
     <div class="b">
         <i class="fa fa-cog fa-lg text-muted"></i>

@@ -10,10 +10,12 @@ use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Blog;
 use App\Models\Bookmark;
+use App\Models\Cats;
 use App\Models\Chat;
 use App\Models\Comment;
 use App\Models\Contact;
 use App\Models\Counter;
+use App\Models\Down;
 use App\Models\Guest;
 use App\Models\Ignore;
 use App\Models\Inbox;
@@ -882,19 +884,20 @@ function statsNewChat()
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//
-function statsLoad($cats=0)
+function statsLoad($cats = 0)
 {
-    if (empty($cats)){
+    if (! $cats){
 
-        if (@filemtime(STORAGE."/temp/statload.dat") < time()-900) {
-            $totalloads = DB::run() -> querySingle("SELECT SUM(`count`) FROM `cats`;");
-            $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `time`>?;", [1, SITETIME-86400 * 5]);
+        if (@filemtime(STORAGE."/temp/statload.dat") < time() - 900) {
 
-            if (empty($totalnew)) {
-                $stat = intval($totalloads);
-            } else {
-                $stat = $totalloads.'/+'.$totalnew;
-            }
+            $totalLoads = Cats::sum('count');
+
+            $totalNew = Down::where('active', 1)
+                ->where('time', '>', SITETIME - 86400 * 5)
+                ->count();
+
+            $stat = ($totalNew) ? $totalLoads.'/+'.$totalNew : $totalLoads;
+
             file_put_contents(STORAGE."/temp/statload.dat", $stat, LOCK_EX);
         }
 
@@ -902,7 +905,7 @@ function statsLoad($cats=0)
 
     } else {
 
-        if (@filemtime(STORAGE."/temp/statloadcats.dat") < time()-900) {
+        if (@filemtime(STORAGE."/temp/statloadcats.dat") < time() - 900) {
 
         $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `category_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400*5]);
         $downs = $querydown->fetchAll();
@@ -1252,38 +1255,42 @@ function recentTopics($show = 5)
 function recentFiles($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentfiles.dat") < time()-600) {
-        $queryfiles = DB::run() -> query("SELECT * FROM `downs` WHERE `active`=? ORDER BY `time` DESC LIMIT ".$show.";", [1]);
-        $recent = $queryfiles -> fetchAll();
 
-        file_put_contents(STORAGE."/temp/recentfiles.dat", serialize($recent), LOCK_EX);
+        $files = Down::where('active', 1)
+            ->orderBy('time', 'desc')
+            ->limit($show)
+            ->get();
+
+        file_put_contents(STORAGE."/temp/recentfiles.dat", serialize($files), LOCK_EX);
     }
 
     $files = unserialize(file_get_contents(STORAGE."/temp/recentfiles.dat"));
 
-    if (is_array($files) && count($files) > 0) {
+    if ($files->isNotEmpty()) {
         foreach ($files as $file){
 
-            $filesize = (!empty($file['link'])) ? formatFileSize(HOME.'/uploads/files/'.$file['link']) : 0;
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file['id'].'">'.$file['title'].'</a> ('.$filesize.')<br>';
+            $filesize = $file['link'] ? formatFileSize(HOME.'/uploads/files/'.$file['link']) : 0;
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
         }
     }
 }
 
 // ------------- Функция кэширования последних статей в блогах -----------------//
-function recentBlogs()
+function recentBlogs($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentblog.dat") < time()-600) {
-        $queryblogs = DB::run() -> query("SELECT * FROM `blogs` ORDER BY `created_at` DESC LIMIT 5;");
-        $recent = $queryblogs -> fetchAll();
+        $blogs = Blog::orderBy('created_at', 'desc')
+            ->limit($show)
+            ->get();
 
-        file_put_contents(STORAGE."/temp/recentblog.dat", serialize($recent), LOCK_EX);
+        file_put_contents(STORAGE."/temp/recentblog.dat", serialize($blogs), LOCK_EX);
     }
 
     $blogs = unserialize(file_get_contents(STORAGE."/temp/recentblog.dat"));
 
-    if (is_array($blogs) && count($blogs) > 0) {
+    if ($blogs->isNotEmpty()) {
         foreach ($blogs as $blog) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/article/'.$blog['id'].'">'.$blog['title'].'</a> ('.$blog['comments'].')<br>';
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/article/'.$blog->id.'">'.$blog->title.'</a> ('.$blog->comments.')<br>';
         }
     }
 }
