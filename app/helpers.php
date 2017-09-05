@@ -713,9 +713,10 @@ function statsChecker()
 // --------------- Функция вывода количества приглашений --------------//
 function statsInvite()
 {
-    $invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", [0]);
-    $used_invite = DB::run() -> querySingle("SELECT count(*) FROM `invite` WHERE `used`=?;", [1]);
-    return $invite.'/'.$used_invite;
+    $invited     = Invite::where('used', 0)->count();
+    $usedInvited = Invite::where('used', 1)->count();
+
+    return $invited.'/'.$usedInvited;
 }
 
 // --------------- Функция определение онлайн-статуса ---------------//
@@ -818,10 +819,17 @@ function photoNavigation($id)
         return false;
     }
 
-    $next_id = DB::run() -> querySingle("SELECT `id` FROM `photo` WHERE `id`>? ORDER BY `id` ASC LIMIT 1;", [$id]);
-    $prev_id = DB::run() -> querySingle("SELECT `id` FROM `photo` WHERE `id`<? ORDER BY `id` DESC LIMIT 1;", [$id]);
-    return ['next' => $next_id, 'prev' => $prev_id];
+    $next = Photo::where('id', '>', $id)
+        ->orderBy('id')
+        ->pluck('id')
+        ->first();
 
+    $prev = Photo::where('id', '<', $id)
+        ->orderBy('id', 'desc')
+        ->pluck('id')
+        ->first();
+
+    return ['next' => $next, 'prev' =>$prev];
 }
 
 // --------------------- Функция вывода статистики блогов ------------------------//
@@ -928,14 +936,14 @@ function statsLoad($cats = 0)
 // --------------------- Функция подсчета непроверенных файлов ------------------------//
 function statsNewLoad()
 {
-    $totalnew = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=?;", [0]);
-    $totalcheck = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `app`=?;", [0, 1]);
+    $totalNew = Down::where('active', 0)
+        ->count();
 
-    if (empty($totalcheck)) {
-        return intval($totalnew);
-    } else {
-        return $totalnew.'/+'.$totalcheck;
-    }
+    $totalApprove = Down::where('active', 0)
+        ->where('app', 1)
+        ->count();
+
+    return ($totalApprove) ? $totalNew.'/+'.$totalApprove : $totalNew;
 }
 
 // --------------------- Функция шифровки Email-адреса ------------------------//
