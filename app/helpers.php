@@ -892,45 +892,22 @@ function statsNewChat()
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//
-function statsLoad($cats = 0)
+function statsLoad()
 {
-    if (! $cats){
+    if (@filemtime(STORAGE."/temp/statload.dat") < time() - 900) {
 
-        if (@filemtime(STORAGE."/temp/statload.dat") < time() - 900) {
+        $totalLoads = Cats::sum('count');
 
-            $totalLoads = Cats::sum('count');
+        $totalNew = Down::where('active', 1)
+            ->where('time', '>', SITETIME - 86400 * 5)
+            ->count();
 
-            $totalNew = Down::where('active', 1)
-                ->where('time', '>', SITETIME - 86400 * 5)
-                ->count();
+        $stat = ($totalNew) ? $totalLoads.'/+'.$totalNew : $totalLoads;
 
-            $stat = ($totalNew) ? $totalLoads.'/+'.$totalNew : $totalLoads;
-
-            file_put_contents(STORAGE."/temp/statload.dat", $stat, LOCK_EX);
-        }
-
-        return file_get_contents(STORAGE."/temp/statload.dat");
-
-    } else {
-
-        if (@filemtime(STORAGE."/temp/statloadcats.dat") < time() - 900) {
-
-        $querydown = DB::run()->query("SELECT `c`.*, (SELECT SUM(`count`) FROM `cats` WHERE `parent`=`c`.`id`) AS `subcnt`, (SELECT COUNT(*) FROM `downs` WHERE `category_id`=`id` AND `active`=? AND `time` > ?) AS `new` FROM `cats` `c` ORDER BY sort ASC;", [1, SITETIME-86400*5]);
-        $downs = $querydown->fetchAll();
-
-            if (!empty($downs)){
-                foreach ($downs as $data){
-                    $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
-                    $new = (empty($data['new'])) ? '' : '/<span style="color:#ff0000">+'.$data['new'].'</span>';
-                    $stat[$data['id']] = $data['count'].$subcnt.$new;
-                }
-            }
-            file_put_contents(STORAGE."/temp/statloadcats.dat", serialize($stat), LOCK_EX);
-        }
-
-        $statcats = unserialize(file_get_contents(STORAGE."/temp/statloadcats.dat"));
-        return (isset($statcats[$cats])) ? $statcats[$cats] : 0;
+        file_put_contents(STORAGE."/temp/statload.dat", $stat, LOCK_EX);
     }
+
+    return file_get_contents(STORAGE."/temp/statload.dat");
 }
 
 // --------------------- Функция подсчета непроверенных файлов ------------------------//
