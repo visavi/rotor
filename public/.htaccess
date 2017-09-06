@@ -1,3 +1,7 @@
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+Options -Indexes
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -6,112 +10,35 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
-DirectoryIndex index.php
-AddDefaultCharset UTF-8
-Options -Indexes
-
 FileETag MTime Size
 <ifmodule mod_expires.c>
 <filesmatch ".(ico|jpg|gif|png|css|js)$">
- ExpiresActive on
- ExpiresDefault "access plus 1 month"
+    ExpiresActive on
+    ExpiresDefault "access plus 1 month"
 </filesmatch>
 </ifmodule>
 
 <IfModule mod_expires.c>
-ExpiresActive On
- ExpiresByType image/x-icon "access plus 2 weeks"
- ExpiresByType image/png "access plus 2 weeks"
- ExpiresByType image/jpeg "access plus 2 weeks"
- ExpiresByType image/gif "access plus 2 weeks"
- ExpiresByType text/javascript "access plus 1 week"
- ExpiresByType text/css "access plus 1 week"
+    ExpiresActive On
+    ExpiresByType image/x-icon "access plus 2 weeks"
+    ExpiresByType image/png "access plus 2 weeks"
+    ExpiresByType image/jpeg "access plus 2 weeks"
+    ExpiresByType image/gif "access plus 2 weeks"
+    ExpiresByType text/javascript "access plus 1 week"
+    ExpiresByType text/css "access plus 1 week"
 </IfModule>
 
 <IfModule mod_headers.c>
 <FilesMatch .*\.(js|css)$>
- Header set Cache-control: private
+    Header set Cache-control: private
 </FilesMatch>
 
 <FilesMatch .*\.(gif|jpg|png)$>
- Header set Cache-control: public
+    Header set Cache-control: public
 </FilesMatch>
 </IfModule>
 
-AddType audio/basic .au .snd
-AddType audio/mpeg .mpga .mp2 .mp3
-AddType audio/x-pn-realaudio-plugin .rpm
-AddType audio/x-realaudio .ra
-AddType audio/x-wav .wav
-AddType video/x-sgi-movie .movie
-AddType model/vrml .wrl .vrml
-AddType text/css .css
-AddType text/richtext .rtx
-AddType text/sgml .sgml .sgm
-AddType text/xml .xml
-AddType application/msword .doc
-AddType application/vnd.ms-excel .xls
-AddType application/vnd.ms-powerpoint .ppt
-AddType application/postscript .ai .eps .ps
-AddType application/x-shockwave-flash .swf
-AddType text/html .html .htm
-AddType text/plain .txt .asc
-AddType application/octet-stream .bin .exe
-AddType application/oda .oda
-AddType application/pdf .pdf
-AddType application/rtf .rtf
-AddType image/gif .gif .gif
-AddType image/ief .ief
-AddType image/jpeg .jpeg .jpg .jpe .JPG
-AddType image/tiff .tiff .tif
-AddType image/x-portable-anymap .pnm
-AddType image/x-portable-bitmap .pbm
-AddType image/x-portable-graymap .pgm
-AddType image/x-portable-pixmap .ppm
-AddType image/x-rgb .rgb
-AddType image/x-xbitmap .xbm
-AddType image/x-xpixmap .xpm
-AddType image/x-xwindowdump .xwd
-AddType audio/x-aiff .aif .aiff .aifc
-AddType audio/x-pn-realaudio .ram .rm
-AddType video/mpeg .mpeg .mpg .mpe
-AddType video/quicktime .qt .mov
-AddType video/x-msvideo .avi
-Addtype application/vnd.sonyericsson.mms-template .tpl
-Addtype application/vnd.wap.wmlc .wmlc
-Addtype application/vnd.wap.wmlscriptc .wmlsc
-Addtype application/vnd.eri.thm .thm
-Addtype application/vnd.mophun.application .mpn
-Addtype application/vnd.mophun.certificate .mpc
-Addtype application/x-gtar .gtar
-Addtype application/x-tar .tar
-Addtype application/x-zip-compressed .zip
-Addtype application/x-rar-compressed .rar
-Addtype application/vnd.wap.mms-message .mms
-Addtype application/smil .smil
-Addtype application/smil .smi
-Addtype application/java-archive .jar
-Addtype application/vnd.symbian.install .sis
-Addtype application/vnd.smaf .mmf
-Addtype application/x-tar .hid
-Addtype text/vnd.wap.wml;charset=utf-8 .wml
-Addtype text/vnd.wap.wmlscript .wmls
-Addtype text/x-vmel .mel
-Addtype text/vnd.sun.j2me.app-descriptor;charset=UTF-8 .jad
-Addtype text/x-vmel .emy
-Addtype text/x-imelody .imy
-Addtype text/x-emelody .emy
-Addtype text/x-vcard .vcf
-Addtype text/x-vcalendar .vcs
-Addtype text/calendar .ics
-Addtype audio/imelody .imy
-Addtype audio/amr .amr
-Addtype audio/x-wav .wav
-Addtype audio/wav .wav
-Addtype audio/midi .midi .mid
-Addtype audio/rmf .rmf
-Addtype image/png .png
-Addtype image/bmp .bmp
-Addtype image/vnd.wap.wbmp .wbmp
-Addtype video/mp4 .mp4
-Addtype video/3gpp .3gp
+<Files ~ "app|resources|rotor">
+    Order allow,deny
+    Deny from all
+</Files>
