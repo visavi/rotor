@@ -12,6 +12,6 @@ class BlacklistSeeder extends AbstractSeed
         $this->execute('TRUNCATE blacklist');
 
         $table = $this->table('blacklist');
-        $table->insert(['type' => 3, 'value' => 'asdasd.ru', 'time' => SITETIME])->save();
+        $table->insert(['type' => 'domain', 'value' => 'asdasd.ru', 'created_at' => SITETIME])->save();
     }
 }
