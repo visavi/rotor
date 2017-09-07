@@ -99,22 +99,27 @@ class TopicController extends BaseController
      */
     public function create($tid)
     {
-        $msg = check(Request::input('msg'));
+        $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
 
-        if (!isUser()) abort(403, 'Авторизуйтесь для добавления сообщения!');
+        if (! $user = isUser()) {
+            abort(403, 'Авторизуйтесь для добавления сообщения!');
+        }
 
-        $topics = DB::run()->queryFetch("SELECT `topics`.*, `forums`.`parent_id` FROM `topics` LEFT JOIN `forums` ON `topics`.`forum_id`=`forums`.`id` WHERE `topics`.`id`=? LIMIT 1;", [$tid]);
+        $topic = Topic::select('topics.*', 'forums.parent_id')
+            ->where('topics.id', $tid)
+            ->leftJoin('forums', 'topics.forum_id', '=', 'forums.id')
+            ->first();
 
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->addRule('not_empty', $topics, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
-            ->addRule('empty', $topics['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
+            ->addRule('not_empty', $topic, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
+            ->addRule('empty', $topic['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
             ->addRule('equal', [Flood::isFlood(), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!'])
             ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, setting('forumtextlength'));
 
         // Проверка сообщения на схожесть
-        $post = DB::run()->queryFetch("SELECT * FROM `posts` WHERE `topic_id`=? ORDER BY `id` DESC LIMIT 1;", [$tid]);
+        $post = Post::where('topic_id', $topic->id)->orderBy('id', 'desc')->first();
         $validation->addRule('not_equal', [$msg, $post['text']], ['msg' => 'Ваше сообщение повторяет предыдущий пост!']);
 
         if ($validation->run()) {
@@ -125,22 +130,42 @@ class TopicController extends BaseController
 
                 $newpost = $post['text'] . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post['created_at']) . ' сек.[/size][/i]' . "\n" . $msg;
 
-                DB::update("UPDATE `posts` SET `text`=? WHERE `id`=? LIMIT 1;", [$newpost, $post['id']]);
-                $lastid = $post['id'];
-
+                $post->update([
+                    'text' => $newpost,
+                ]);
             } else {
 
-                DB::insert("INSERT INTO `posts` (`topic_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$tid, getUserId(), $msg, SITETIME, getClientIp(), getUserAgent()]);
-                $lastid = DB::run()->lastInsertId();
+                $post = Post::create([
+                    'topic_id'   => $topic->id,
+                    'user_id'    => getUserId(),
+                    'text'       => $msg,
+                    'created_at' => SITETIME,
+                    'ip'         => getClientIp(),
+                    'brow'       => getUserAgent(),
+                ]);
 
-                DB::update("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=? LIMIT 1;", [getUserId()]);
+                $user->update([
+                    'allforum' => DB::raw('allforum + 1'),
+                    'point'    => DB::raw('point + 1'),
+                    'money'    => DB::raw('money + 5'),
+                ]);
 
-                DB::update("UPDATE `topics` SET `posts`=`posts`+1, `last_post_id`=? WHERE `id`=?;", [$lastid, $tid]);
+                $topic->update([
+                    'posts'        => DB::raw('posts + 1'),
+                    'last_post_id' => $post->id,
+                    'updated_at'   => SITETIME,
+                ]);
 
-                DB::update("UPDATE `forums` SET `posts`=`posts`+1, `last_topic_id`=? WHERE `id`=?;", [$tid, $topics['forum_id']]);
+                $topic->forum->update([
+                    'posts'         => DB::raw('posts + 1'),
+                    'last_topic_id' => $topic->id,
+                ]);
+
                 // Обновление родительского форума
-                if ($topics['parent_id'] > 0) {
-                    DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$tid, $topics['parent_id']]);
+                if ($topic->parent_id) {
+                    $topic->forum->parent->update([
+                        'last_topic_id' => $topic->id,
+                    ]);
                 }
             }
 
@@ -149,10 +174,10 @@ class TopicController extends BaseController
 
             preg_match_all('|\[b\](.*?)\[\/b\]|s', $parseText, $matches);
 
+
             if (isset($matches[1])) {
                 $usersAnswer = array_unique($matches[1]);
 
-                $newTopic = Topic::find($tid);
                 foreach ($usersAnswer as $login) {
 
                     if ($login == getUsername()) {
@@ -160,18 +185,16 @@ class TopicController extends BaseController
                     }
 
                     $user = User::where('login', $login)->first();
-
-                    if ($user['login']) {
-
+                    if ($user) {
                         if ($user['notify']) {
-                            sendPrivate($user['login'], getUsername(), 'Пользователь ' . getUsername() . ' ответил вам в теме [url=' . setting('home') . '/topic/' . $newTopic['id'] . '?page=' . ceil($newTopic['posts'] / setting('forumpost')) . '#post_' . $lastid . ']' . $newTopic['title'] . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
+                            sendPrivate($user->id, getUserId(), 'Пользователь ' . getUsername() . ' ответил вам в теме [url=' . setting('home') . '/topic/' . $topic->id . '/' . $post->id . ']' . $topic->title . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
                         }
                     }
                 }
             }
 
             // Загрузка файла
-            if (!empty($_FILES['file']['name']) && !empty($lastid)) {
+            if (! empty($_FILES['file']['name'])) {
                 if (user('point') >= setting('forumloadpoints')) {
                     if (is_uploaded_file($_FILES['file']['tmp_name'])) {
 
@@ -189,30 +212,30 @@ class TopicController extends BaseController
                                     $filename = utfSubstr($filename, 0, 45) . '.' . $ext;
                                 }
 
-                                if (!file_exists(HOME . '/uploads/forum/' . $topics['id'])) {
+                                if (!file_exists(HOME . '/uploads/forum/' . $topic->id)) {
                                     $old = umask(0);
-                                    mkdir(HOME . '/uploads/forum/' . $topics['id'], 0777, true);
+                                    mkdir(HOME . '/uploads/forum/' . $topic->id, 0777, true);
                                     umask($old);
                                 }
 
                                 $num = 0;
-                                $hash = $lastid . '.' . $ext;
-                                while (file_exists(HOME . '/uploads/forum/' . $topics['id'] . '/' . $hash)) {
+                                $hash = $post->id . '.' . $ext;
+                                while (file_exists(HOME . '/uploads/forum/' . $topic->id . '/' . $hash)) {
                                     $num++;
-                                    $hash = $lastid . '_' . $num . '.' . $ext;
+                                    $hash = $post->id . '_' . $num . '.' . $ext;
                                 }
 
-                                move_uploaded_file($_FILES['file']['tmp_name'], HOME . '/uploads/forum/' . $topics['id'] . '/' . $hash);
+                                move_uploaded_file($_FILES['file']['tmp_name'], HOME . '/uploads/forum/' . $topic->id . '/' . $hash);
 
-                                $file = new File();
-                                $file->relate_type = Post::class;
-                                $file->relate_id = $lastid;
-                                $file->hash = $hash;
-                                $file->name = $filename;
-                                $file->size = $filesize;
-                                $file->user_id = getUserId();
-                                $file->created_at = SITETIME;
-                                $file->save();
+                                File::create([
+                                    'relate_type' => Post::class,
+                                    'relate_id'   => $post->id,
+                                    'hash'        => $hash,
+                                    'name'        => $filename,
+                                    'size'        => $filesize,
+                                    'user_id'     => getUserId(),
+                                    'created_at'  => SITETIME,
+                                ]);
 
                             } else {
                                 $fileError = 'Файл не загружен! Недопустимое расширение!';
@@ -239,7 +262,7 @@ class TopicController extends BaseController
             setFlash('danger', $validation->getErrors());
         }
 
-        redirect('/topic/' . $tid . '/end');
+        redirect('/topic/' . $topic->id . '/end');
     }
 
     /**
@@ -251,7 +274,7 @@ class TopicController extends BaseController
         $del   = intar(Request::input('del'));
         $page  = abs(intval(Request::input('page')));
 
-        $topic = DB::run()->queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
+        $topic = Topic::find($tid);
 
         $isModer = in_array(getUserId(), explode(',', $topic['moderators'])) ? true : false;
 

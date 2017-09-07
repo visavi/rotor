@@ -12,6 +12,13 @@ class Forum extends BaseModel
     public $timestamps = false;
 
     /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
+
+    /**
      * Возвращает связь родительского форума
      */
     public function parent()
