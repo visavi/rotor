@@ -112,7 +112,7 @@ $router->map('POST', '/ajax/complaint', 'AjaxController@complaint');
 $router->map('GET|POST', '/wall', 'pages/wall.php', 'wall');
 $router->map('GET|POST', '/setting', 'pages/setting.php');
 
-$router->map('GET',      '/private/[outbox|trash|history|clear:action]?', 'PrivateController');
+$router->map('GET',      '/private/[outbox|trash|history|clear:action]?', 'PrivateController@index');
 $router->map('POST',     '/private/[delete:action]', 'PrivateController');
 $router->map('GET|POST', '/private/[send:action]', 'PrivateController');
 

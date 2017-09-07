@@ -37,9 +37,9 @@ switch ($action):
                 echo '<div class="b">'.($page['offset'] + $i).'. '.userGender($data['login']);
 
                 if ($uz == $data['login']) {
-                    echo ' <b><big>'.profile($data['login'], '#ff0000').'</big></b> ('.moneys($data['money']).')</div>';
+                    echo ' <b><big>'.profile($data['login'], '#ff0000').'</big></b> ('.plural($data['money'], setting('moneyname')).')</div>';
                 } else {
-                    echo ' <b>'.profile($data['login']).'</b> ('.moneys($data['money']).')</div>';
+                    echo ' <b>'.profile($data['login']).'</b> ('.plural($data['money'], setting('moneyname')).')</div>';
                 }
             }
 

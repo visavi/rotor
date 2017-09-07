@@ -9,7 +9,7 @@ echo 'После регистрации у вас появятся новые в
 
 echo '<b>1</b>. Повышать свой статус (после 6 месяцев пребывания на сайте, вы сможете изменить статус на персональный)<br>';
 echo '<b>2</b>. Добавлять свои фотографии в галерею и анкету (Вес картинки не должен превышать '.formatSize(setting('filesize')).')<br>';
-echo '<b>3</b>. Изменять репутацию другим  пользователям сайта положительными или отрицательным голосом (При активе '.points(setting('editratingpoint')).')<br>';
+echo '<b>3</b>. Изменять репутацию другим  пользователям сайта положительными или отрицательным голосом (При активе '.plural(setting('editratingpoint'), setting('scorename')).')<br>';
 echo '<b>4</b>. Иметь свой собственный контакт и игнор-листы<br>';
 echo '<b>5</b>. Изменять темы/скины по своему желанию, которая будет включаться автоматически при авторизации (Большой выбор скинов)<br>';
 echo '<b>6</b>. Общаться по внутренней почте сайта с пользователями сайта, писать под своим аккаунтом в гостевой, комментариях, форуме<br>';
@@ -20,22 +20,22 @@ echo '<b>9</b>. Изменять под себя настройки сайта, 
 echo '<br>При наборе определенного количества актива, пользователю открываются новые возможности:<br>';
 
 if (!empty(setting('addofferspoint'))) {
-    echo '<b>'.points(setting('addofferspoint')).'</b> - создание тем в "Предложенияx и проблемах"<br>';
+    echo '<b>'.plural(setting('addofferspoint'), setting('scorename')).'</b> - создание тем в "Предложенияx и проблемах"<br>';
 }
 if (!empty(setting('forumloadpoints'))) {
-    echo '<b>'.points(setting('forumloadpoints')).'</b> - Прикрепление файлов в форуме<br>';
+    echo '<b>'.plural(setting('forumloadpoints'), setting('scorename')).'</b> - Прикрепление файлов в форуме<br>';
 }
 if (!empty(setting('sendmoneypoint'))) {
-    echo '<b>'.points(setting('sendmoneypoint')).'</b> - перечисление игровых денег<br>';
+    echo '<b>'.plural(setting('sendmoneypoint'), setting('scorename')).'</b> - перечисление игровых денег<br>';
 }
 if (!empty(setting('editratingpoint'))) {
-    echo '<b>'.points(setting('editratingpoint')).'</b> - изменение репутации пользователям<br>';
+    echo '<b>'.plural(setting('editratingpoint'), setting('scorename')).'</b> - изменение репутации пользователям<br>';
 }
 if (!empty(setting('editforumpoint'))) {
-    echo '<b>'.points(setting('editforumpoint')).'</b> - изменение и закрытие своих тем на форуме<br>';
+    echo '<b>'.plural(setting('editforumpoint'), setting('scorename')).'</b> - изменение и закрытие своих тем на форуме<br>';
 }
 if (!empty(setting('advertpoint'))) {
-    echo '<b>'.points(setting('advertpoint')).'</b> - исчезает вся реклама на главной странице сайта<br>';
+    echo '<b>'.plural(setting('advertpoint'), setting('scorename')).'</b> - исчезает вся реклама на главной странице сайта<br>';
 }
 echo '<br>';
 

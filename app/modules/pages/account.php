@@ -42,12 +42,12 @@ case 'index':
             echo '<input value="Изменить" type="submit"></form>';
 
             if (!empty(setting('editstatusmoney'))) {
-                echo '<br><i>Стоимость: '.moneys(setting('editstatusmoney')).'</i>';
+                echo '<br><i>Стоимость: '.plural(setting('editstatusmoney'), setting('moneyname')).'</i>';
             }
 
             echo '</div><br>';
         } else {
-            showError('Изменять статус могут пользователи у которых более '.points(setting('editstatuspoint')).'!');
+            showError('Изменять статус могут пользователи у которых более '.plural(setting('editstatuspoint'), setting('scorename')).'!');
         }
     }
 

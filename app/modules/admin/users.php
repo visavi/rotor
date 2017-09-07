@@ -90,7 +90,7 @@ if (isAdmin([101, 102])) {
 
                         echo userGender($data['login']).' <b><a href="/admin/users?act=edit&amp;uz='.$data['login'].'">'.$data['login'].'</a></b> ';
 
-                        echo userOnline($data['login']).' ('.points($data['point']).')<br>';
+                        echo userOnline($data['login']).' ('.plural($data['point'], setting('scorename')).')<br>';
                     }
 
                     pagination($page);

@@ -18,9 +18,9 @@ if ($total>0){
         echo '<i class="fa fa-user-circle-o"></i> ';
 
         if (empty($statval['color'])){
-            echo '<b>'.$statval['name'].'</b> — '.points($statval['topoint']).'<br>';
+            echo '<b>'.$statval['name'].'</b> — '.plural($statval['topoint'], setting('scorename')).'<br>';
         } else {
-            echo '<b><span style="color:'.$statval['color'].'">'.$statval['name'].'</span></b> — '.points($statval['topoint']).'<br>';
+            echo '<b><span style="color:'.$statval['color'].'">'.$statval['name'].'</span></b> — '.plural($statval['topoint'], setting('scorename')).'<br>';
         }
     }
 

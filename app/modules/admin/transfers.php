@@ -30,7 +30,7 @@ if (isAdmin([101, 102, 103])) {
 
                     echo '<div>';
                     echo 'Кому: '.profile($data['login']).'<br>';
-                    echo 'Сумма: '.moneys($data['summ']).'<br>';
+                    echo 'Сумма: '.plural($data['summ'], setting('moneyname')).'<br>';
                     echo 'Комментарий: '.$data['text'].'<br>';
                     echo '</div>';
                 }
@@ -77,7 +77,7 @@ if (isAdmin([101, 102, 103])) {
 
                         echo '<div>';
                         echo 'Кому: '.profile($data['login']).'<br>';
-                        echo 'Сумма: '.moneys($data['summ']).'<br>';
+                        echo 'Сумма: '.plural($data['summ'], setting('moneyname')).'<br>';
                         echo 'Комментарий: '.$data['text'].'<br>';
                         echo '</div>';
                     }

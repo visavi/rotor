@@ -17,7 +17,7 @@ if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y')
 }
 
 if (user('point') < $surprise['requiredPoint']) {
-    abort('default', 'Для того получения сюрприза необходимо '.points($surprise['requiredPoint']).'!');
+    abort('default', 'Для того получения сюрприза необходимо '.plural($surprise['requiredPoint'], setting('scorename')).'!');
 }
 
 $existSurprise = Surprise::where('user_id', getUserId())
@@ -37,7 +37,7 @@ $user->update([
     'posrating' => DB::raw('posrating + '.$surpriseRating),
 ]);
 
-$text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.points($surprisePoint).PHP_EOL.moneys($surpriseMoney).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
+$text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.plural($surprisePoint, setting('scorename')).PHP_EOL.plural($surpriseMoney, setting('moneyname')).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
 
 sendPrivate(getUsername(), setting('nickname'), $text);
 

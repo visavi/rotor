@@ -42,7 +42,7 @@ switch ($action):
                 } else {
                     echo ($page['offset'] + $i).'. <b>'.profile($data['login']).'</b> ';
                 }
-                echo '('.points($data['point']).')<br>';
+                echo '('.plural($data['point'], setting('scorename')).')<br>';
                 echo userStatus($data['login']).' '.userOnline($data['login']);
                 echo '</div>';
 

@@ -74,7 +74,7 @@ case 'create':
                 $validation = new Validation();
 
                 $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                    -> addRule('max', [user('point'), 50], 'Для покупки рекламы вам необходимо набрать '.points(50).'!')
+                    -> addRule('max', [user('point'), 50], 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
                     -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
                     -> addRule('regex', [$site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'], 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)
                     -> addRule('string', $site, 'Слишком длинный или короткий адрес ссылки!', true, 5, 50)
@@ -120,7 +120,7 @@ case 'create':
 
                                 saveAdvertUser();
 
-                                setFlash('success', 'Рекламная ссылка успешно размещена (Cписано: '.moneys($price).')');
+                                setFlash('success', 'Рекламная ссылка успешно размещена (Cписано: '.plural($price, setting('moneyname')).')');
                                 redirect("/reklama");
 
                             } else {
@@ -144,7 +144,7 @@ case 'create':
                 $rekuser = RekUser::where('user', getUsername())->where_gt('time', SITETIME)->find_one();
 
                 if (empty($rekuser)) {
-                    echo 'У вас в наличии: <b>'.moneys(user('money')).'</b><br><br>';
+                    echo 'У вас в наличии: <b>'.plural(user('money'), setting('moneyname')).'</b><br><br>';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/reklama/create">';
@@ -173,8 +173,8 @@ case 'create':
 
                     echo '<br><input value="Купить" type="submit"></form></div><br>';
 
-                    echo 'Стоимость размещения ссылки '.moneys(setting('rekuserprice')).' за '.setting('rekusertime').' часов<br>';
-                    echo 'Цвет и жирность опционально, стоимость каждой опции '.moneys(setting('rekuseroptprice')).'<br>';
+                    echo 'Стоимость размещения ссылки '.plural(setting('rekuserprice'), setting('moneyname')).' за '.setting('rekusertime').' часов<br>';
+                    echo 'Цвет и жирность опционально, стоимость каждой опции '.plural(setting('rekuseroptprice'), setting('moneyname')).'<br>';
                     echo 'Ссылка прокручивается на всех страницах сайта с другими ссылками пользователей<br>';
                     echo 'В названии ссылки запрещено использовать любые ненормативные и матные слова<br>';
                     echo 'Адрес ссылки не должен направлять на прямое скачивание какого-либо контента<br>';
@@ -188,7 +188,7 @@ case 'create':
                 showError('В данный момент нет свободных мест для размещения рекламы!');
             }
         } else {
-            showError('Ошибка! Для покупки рекламы вам необходимо набрать '.points(50).'!');
+            showError('Ошибка! Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!');
         }
     } else {
         showError('Для покупки рекламы необходимо авторизоваться');

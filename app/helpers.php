@@ -45,7 +45,12 @@ use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
 use Jenssegers\Blade\Blade;
 
-// --------------------------- Функция перевода секунд во время -----------------------------//
+/**
+ * Форматирует вывод времени из секунд
+ *
+ * @param  int    $time секунды
+ * @return string       форматированный вывод
+ */
 function makeTime($time)
 {
     if ($time < 3600) {
@@ -53,52 +58,63 @@ function makeTime($time)
     } else {
         $time = sprintf("%02d:%02d:%02d", (int)($time / 3600) % 24, (int)($time / 60) % 60, $time % 60);
     }
+
     return $time;
 }
 
-// --------------------------- Функция временного сдвига -----------------------------//
+/**
+ * Форматирует время с учетом часовых поясов
+ *
+ * @param  integer $timestamp секунды
+ * @param  string  $format    формат времени
+ * @return string             форматированный вывод
+ */
 function dateFixed($timestamp, $format = "d.m.y / H:i")
 {
     if (!is_numeric($timestamp)) {
         $timestamp = SITETIME;
     }
+
     $shift = user('timezone') * 3600;
-    $datestamp = date($format, $timestamp + $shift);
+    $dateStamp = date($format, $timestamp + $shift);
 
     $today = date("d.m.y", SITETIME + $shift);
     $yesterday = date("d.m.y", strtotime("-1 day", SITETIME + $shift));
 
-    $datestamp = str_replace($today, 'Сегодня', $datestamp);
-    $datestamp = str_replace($yesterday, 'Вчера', $datestamp);
+    $dateStamp = str_replace($today, 'Сегодня', $dateStamp);
+    $dateStamp = str_replace($yesterday, 'Вчера', $dateStamp);
 
     $search = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     $replace = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
-    $datestamp = str_replace($search, $replace, $datestamp);
+    $dateStamp = str_replace($search, $replace, $dateStamp);
 
-    return $datestamp;
+    return $dateStamp;
 }
 
-// --------------- Функция удаление картинки с проверкой -------------------//
+/**
+ * Удаляет изображение и превью
+ *
+ * @param string $dir   директория с изображение
+ * @param string $image имя изображения
+ */
 function deleteImage($dir, $image)
 {
-    if (!empty($image)) {
-        $prename = str_replace('/', '_' ,$dir.$image);
+    $path = str_replace('/', '_', $dir.$image);
 
-        if (file_exists(HOME.'/'.$dir.$image)) {
-            unlink(HOME.'/'.$dir.$image);
-        }
+    if (file_exists(HOME.'/'.$dir.$image)) {
+        unlink(HOME.'/'.$dir.$image);
+    }
 
-        if (file_exists(HOME.'/uploads/thumbnail/'.$prename)) {
-            unlink(HOME.'/uploads/thumbnail/'.$prename);
-        }
+    if (file_exists(HOME.'/uploads/thumbnail/'.$path)) {
+        unlink(HOME.'/uploads/thumbnail/'.$path);
     }
 }
 
-// ------------------- Функция полного удаления юзера --------------------//
 /**
  * Удаляет записи пользователя из всех таблиц
  *
- * @param User $user
+ * @param  User    $user
+ * @return boolean       результат удаления
  */
 function deleteUser(User $user)
 {
@@ -120,60 +136,32 @@ function deleteUser(User $user)
     Login::where('user_id', $user->id)->delete();
     Invite::where('user_id', $user->id)->orWhere('invite_user_id', $user->id)->delete();
 
-    $user->delete();
+    return $user->delete();
 }
 
 // ------------------- Функция удаления фотоальбома юзера --------------------//
+/**
+ * Удаляет альбом пользователя
+ *
+ * @param  User $user
+ * @return void
+ */
 function deleteAlbum(User $user)
 {
     $photos = Photo::where('user_id', $user->id)->get();
 
-
     if ($photos->isNotEmpty()) {
         foreach ($photos as $photo) {
 
-            Photo::where('id', $photo->id)->delete();
             Comment::where('relate_type', Photo::class)
                 ->where('relate_id', $photo->id)
                 ->delete();
 
+            Photo::where('id', $photo->id)->delete();
+
             deleteImage('uploads/pictures/', $photo->link);
         }
     }
-}
-
-// --------------- Функция правильного окончания для денег -------------------//
-function moneys($sum)
-{
-    $sum = (int)$sum;
-    $money = explode(',', setting('moneyname'));
-    if (count($money) == 3) {
-        $str1 = abs($sum) % 100;
-        $str2 = $sum % 10;
-
-        if ($str1 > 10 && $str1 < 20) return $sum.' '.$money[0];
-        if ($str2 > 1 && $str2 < 5) return $sum.' '.$money[1];
-        if ($str2 == 1) return $sum.' '.$money[2];
-    }
-
-    return $sum.' '.$money[0];
-}
-
-// --------------- Функция правильного окончания для актива -------------------//
-function points($sum)
-{
-    $sum = (int)$sum;
-    $score = explode(',', setting('scorename'));
-    if (count($score) == 3) {
-        $str1 = abs($sum) % 100;
-        $str2 = $sum % 10;
-
-        if ($str1 > 10 && $str1 < 20) return $sum.' '.$score[0];
-        if ($str2 > 1 && $str2 < 5) return $sum.' '.$score[1];
-        if ($str2 == 1) return $sum.' '.$score[2];
-    }
-
-    return $sum.' '.$score[0];
 }
 
 // ------------------ Функция перекодировки из UTF в WIN --------------------//
@@ -899,7 +887,7 @@ function statsLoad()
         $totalLoads = Cats::sum('count');
 
         $totalNew = Down::where('active', 1)
-            ->where('time', '>', SITETIME - 86400 * 5)
+            ->where('created_at', '>', SITETIME - 86400 * 5)
             ->count();
 
         $stat = ($totalNew) ? $totalLoads.'/+'.$totalNew : $totalLoads;
@@ -917,7 +905,7 @@ function statsNewLoad()
         ->count();
 
     $totalApprove = Down::where('active', 0)
-        ->where('app', 1)
+        ->where('approved', 1)
         ->count();
 
     return ($totalApprove) ? $totalNew.'/+'.$totalApprove : $totalNew;
@@ -1242,7 +1230,7 @@ function recentFiles($show = 5)
     if (@filemtime(STORAGE."/temp/recentfiles.dat") < time()-600) {
 
         $files = Down::where('active', 1)
-            ->orderBy('time', 'desc')
+            ->orderBy('created_at', 'desc')
             ->limit($show)
             ->get();
 
@@ -1331,34 +1319,39 @@ function fn_close($fp, $method) {
 }
 
 // ------------------ Функция пересчета сообщений и комментарий ---------------//
+/**
+ * Пересчитывает счетчики
+ *
+ * @param  string $mode сервис счетчиков
+ * @return void
+ */
 function restatement($mode)
 {
     switch ($mode) {
         case 'forum':
-            DB::run() -> query("UPDATE `topics` SET `posts`=(SELECT count(*) FROM `posts` WHERE `topics`.`id`=`posts`.`topic_id`);");
-            DB::run() -> query("UPDATE `forums` SET `topics`=(SELECT count(*) FROM `topics` WHERE `forums`.`id`=`topics`.`forum_id`);");
-            DB::run() -> query("UPDATE `forums` SET `posts`=(SELECT SUM(posts) FROM `topics` WHERE `forums`.`id`=`topics`.`forum_id`);");
+            DB::update('update topics set posts = (select count(*) from posts where topics.id = posts.topic_id)');
+            DB::update('update forums set topics = (select count(*) from topics where forums.id = topics.forum_id)');
+            DB::update('update forums set posts = (select SUM(posts) from topics where forums.id = topics.forum_id)');
             break;
 
         case 'blog':
-            DB::run() -> query("UPDATE `catsblog` SET `count`=(SELECT count(*) FROM `blogs` WHERE `catsblog`.`id`=`blogs`.`category_id`);");
-            DB::run() -> query("UPDATE `blogs` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='".Blog::class."' AND `blogs`.`id`=`comments`.`relate_id`);");
+            DB::update('update catsblog set count = (select count(*) from blogs where catsblog.id = blogs.category_id)');
+            DB::update('update blogs set comments = (select count(*) from comments where relate_type = "'.Blog::class.'" and blogs.id = comments.relate_id)');
             break;
 
         case 'load':
-            DB::run() -> query("UPDATE `cats` SET `count`=(SELECT count(*) FROM `downs` WHERE `cats`.`id`=`downs`.`category_id` AND `active`=?);", [1]);
-            DB::run() -> query("UPDATE `downs` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='Down' AND `downs`.`id`=`comments`.`relate_id`);");
+            DB::update('update cats set count = (select count(*) from downs where cats.id = downs.category_id and active = ?)', [1]);
+            DB::update('update downs set comments = (select count(*) from comments where relate_type = "'.Down::class.'" and downs.id = comments.relate_id)');
             break;
 
         case 'news':
-            DB::run() -> query("UPDATE `news` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='News' AND `news`.`id`=`comments`.`relate_id`);");
+            DB::update('update news set comments = (select count(*) from comments where relate_type = "'.News::class.'" and news.id = comments.relate_id)');
             break;
 
         case 'photo':
-            DB::run() -> query("UPDATE `photo` SET `comments`=(SELECT count(*) FROM `comments` WHERE relate_type='".Photo::class."' AND `photo`.`id`=`comments`.`relate_id`);");
+            DB::update('update photo set comments = (select count(*) from comments where relate_type=  "'.Photo::class.'" and photo.id = comments.relate_id)');
             break;
     }
-    return true;
 }
 
 // ------------------------ Функция записи в файл ------------------------//
@@ -2003,11 +1996,19 @@ function sizeFormat($filename, $decimals = 1)
  * Склоняет числа
  *
  * @param  integer $num  число
- * @param  array   $forms массив склоняемых слов (один, два, много)
+ * @param  mixed   $forms массив склоняемых слов (один, два, много)
  * @return string  форматированная строка
  */
-function plural($num, array $forms)
+function plural($num, $forms)
 {
+    if (! is_array($forms)) {
+        $forms = explode(',', $forms);
+    }
+
+    if (count($forms) == 1) {
+        return $num.' '.$forms[0];
+    }
+
     if ($num % 100 > 10 &&  $num % 100 < 15) return $num.' '.$forms[2];
     if ($num % 10 == 1) return $num.' '.$forms[0];
     if ($num % 10 > 1 && $num %10 < 5) return $num.' '.$forms[1];

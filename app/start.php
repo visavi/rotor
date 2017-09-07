@@ -179,7 +179,7 @@ if ($user = isUser()) {
             'money' => DB::raw('money + '.setting('bonusmoney')),
         ]);
 
-        setFlash('success', 'Получен ежедневный бонус '.moneys(setting('bonusmoney')).'!');
+        setFlash('success', 'Получен ежедневный бонус '.plural(setting('bonusmoney'), setting('moneyname')).'!');
     }
 }
 

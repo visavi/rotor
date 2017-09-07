@@ -75,8 +75,8 @@
                 Сообщений на форуме: {{ $user['allforum'] }}<br>
                 Сообщений в гостевой: {{ $user['allguest'] }}<br>
                 Комментариев: {{ $user['allcomments'] }}<br>
-                Актив: {{ points($user['point']) }}<br>
-                Денег: {{ moneys($user['money']) }}<br>
+                Актив: {{ plural($user['point'], setting('scorename')) }}<br>
+                Денег: {{ plural($user['money'], setting('moneyname')) }}<br>
 
                 @if ($user['themes'])
                     Используемый скин: {{ $user['themes'] }}<br>

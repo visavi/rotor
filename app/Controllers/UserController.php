@@ -95,7 +95,7 @@ class UserController extends BaseController
         }
 
         if (user('point') < setting('editratingpoint')) {
-            abort('default', 'Для изменения репутации необходимо набрать '.points(setting('editratingpoint')).'!');
+            abort('default', 'Для изменения репутации необходимо набрать '.plural(setting('editratingpoint'), setting('scorename')).'!');
         }
 
         // Голосовать за того же пользователя можно через 90 дней

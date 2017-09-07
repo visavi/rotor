@@ -515,7 +515,7 @@ switch ($action):
             echo '<textarea cols="25" rows="5" name="text"></textarea><br>';
             echo '<input type="submit" value="Добавить"></form></div><br>';
         } else {
-            showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.points(setting('addofferspoint')).'!');
+            showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.plural(setting('addofferspoint'), setting('scorename')).'!');
         }
 
         echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br>';
@@ -557,7 +557,7 @@ switch ($action):
                     showError('Ошибка! Слишком длинный или короткий заголовок (От 5 до 50 символов)!');
                 }
             } else {
-                showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.points(setting('addofferspoint')).'!');
+                showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.plural(setting('addofferspoint'), setting('scorename')).'!');
             }
         } else {
             showError('Ошибка! Неверный идентификатор сессии, повторите действие!');

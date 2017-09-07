@@ -24,7 +24,7 @@ if (isUser()) {
     ############################################################################################
         case 'index':
 
-            echo 'В наличии: '.moneys(user('money')).'<br><br>';
+            echo 'В наличии: '.plural(user('money'), setting('moneyname')).'<br><br>';
 
             if (user('point') >= setting('sendmoneypoint')) {
                 if (empty($uz)) {
@@ -48,7 +48,7 @@ if (isUser()) {
                     echo '<input type="submit" value="Перевести"></form></div><br>';
                 }
             } else {
-                showError('Ошибка! Для перевода денег вам необходимо набрать '.points(setting('sendmoneypoint')).'!');
+                showError('Ошибка! Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), , setting('scorename')).'!');
             }
         break;
 
@@ -76,7 +76,7 @@ if (isUser()) {
 
                                             $comment = (!empty($msg)) ? $msg : 'Не указано';
                                             // ------------------------Уведомление по привату------------------------//
-                                            $textpriv = 'Пользователь [b]'.getUsername().'[/b] перечислил вам '.moneys($money).''.PHP_EOL.'Примечание: '.$comment;
+                                            $textpriv = 'Пользователь [b]'.getUsername().'[/b] перечислил вам '.plural($money, setting('moneyname')).''.PHP_EOL.'Примечание: '.$comment;
 
                                             DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, getUsername(), $textpriv, SITETIME]);
                                             // ------------------------ Запись логов ------------------------//
@@ -103,7 +103,7 @@ if (isUser()) {
                             showError('Ошибка! Недостаточно средств для перевода такого количества денег!');
                         }
                     } else {
-                        showError('Ошибка! Для перевода денег вам необходимо набрать '.points(setting('sendmoneypoint')).'!');
+                        showError('Ошибка! Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), setting('scorename')).'!');
                     }
                 } else {
                     showError('Ошибка! Перевод невозможен указана неверная сумма!');

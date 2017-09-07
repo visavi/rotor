@@ -53,7 +53,7 @@ switch ($action):
                 while ($data = $queryuser -> fetch()) {
 
                     echo userGender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
-                    echo userOnline($data['login']).' ('.points($data['point']).')<br>';
+                    echo userOnline($data['login']).' ('.plural($data['point'], setting('scorename')).')<br>';
                 }
 
                 pagination($page);
@@ -87,9 +87,9 @@ switch ($action):
                     echo userGender($value['login']);
 
                     if ($find == $value['login']) {
-                        echo '<b><big>'.profile($value['login'], '#ff0000').'</big></b> '.userOnline($value['login']).' ('.points($value['point']).')<br>';
+                        echo '<b><big>'.profile($value['login'], '#ff0000').'</big></b> '.userOnline($value['login']).' ('.plural($value['point'], setting('scorename')).')<br>';
                     } else {
-                        echo '<b>'.profile($value['login']).'</b> '.userOnline($value['login']).' ('.points($value['point']).')<br>';
+                        echo '<b>'.profile($value['login']).'</b> '.userOnline($value['login']).' ('.plural($value['point'], setting('scorename')).')<br>';
                     }
                 }
 

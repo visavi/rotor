@@ -301,7 +301,7 @@ class TopicController extends BaseController
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
             ->addRule('bool', isUser(), 'Для закрытия тем необходимо авторизоваться')
-            ->addRule('max', [user('point'), setting('editforumpoint')], 'Для закрытия тем вам необходимо набрать ' . points(setting('editforumpoint')) . '!')
+            ->addRule('max', [user('point'), setting('editforumpoint')], 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
             ->addRule('not_empty', $topic, 'Выбранная вами тема не существует, возможно она была удалена!')
             ->addRule('equal', [$topic['user_id'], getUserId()], 'Вы не автор данной темы!')
             ->addRule('empty', $topic['closed'], 'Данная тема уже закрыта!');

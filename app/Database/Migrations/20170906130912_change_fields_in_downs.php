@@ -27,6 +27,7 @@ class ChangeFieldsInDowns extends AbstractMigration
             ->removeColumn('author')
             ->removeColumn('site')
             ->changeColumn('user', 'integer')
+            ->addColumn('updated_at', 'integer', ['null' => true])
             ->save();
 
         $table->renameColumn('user', 'user_id');
@@ -48,6 +49,7 @@ class ChangeFieldsInDowns extends AbstractMigration
         $table->addColumn('last_load', 'integer')
             ->addColumn('author', 'string', ['limit' => 50])
             ->addColumn('site', 'string', ['limit' => 100])
+            ->removeColumn('updated_at')
             ->save();
 
         $table->renameColumn('user_id', 'user');

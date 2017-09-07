@@ -53,7 +53,7 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
 
                 if ($total > 0) {
                     echo 'Будут удалены пользователи не посещавшие сайт более <b>'.$deldate.'</b> дней <br>';
-                    echo 'И имеющие в своем активе не более '.points($point).'<br><br>';
+                    echo 'И имеющие в своем активе не более '.plural($point, setting('scorename')).'<br><br>';
 
                     echo '<b>Список:</b> ';
 
