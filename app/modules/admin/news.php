@@ -141,7 +141,7 @@ case 'change':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `news` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", [$title, $msg, $closed, $top, $id]);
+        DB::update("UPDATE `news` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", [$title, $msg, $closed, $top, $id]);
 
         // ---------------------------- Загрузка изображения -------------------------------//
         if (is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -157,7 +157,7 @@ case 'change':
 
                 if ($handle -> processed) {
 
-                    DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
+                    DB::update("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $id]);
 
                 } else {
                     setFlash('danger', $handle->error);
@@ -220,13 +220,13 @@ case 'addnews':
 
     if ($validation->run()) {
 
-        DB::run() -> query("INSERT INTO `news` (`title`, `text`, `user_id`, `created_at`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, getUserId(), SITETIME, 0, $closed, $top]);
+        DB::insert("INSERT INTO `news` (`title`, `text`, `user_id`, `created_at`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, getUserId(), SITETIME, 0, $closed, $top]);
 
         $lastid = DB::run() -> lastInsertId();
 
         // Выводим на главную если там нет новостей
         if (!empty($top) && empty(setting('lastnews'))) {
-            DB::run() -> query("UPDATE `setting` SET `value`=? WHERE `name`=?;", [1, 'lastnews']);
+            DB::update("UPDATE `setting` SET `value`=? WHERE `name`=?;", [1, 'lastnews']);
             saveSetting();
         }
 
@@ -237,7 +237,7 @@ case 'addnews':
             $handle -> process(HOME.'/uploads/news/');
 
             if ($handle -> processed) {
-                DB::run() -> query("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
+                DB::update("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
 
             } else {
                 setFlash('danger', $handle->error);
@@ -295,7 +295,7 @@ case 'del':
 
                 $del = implode(',', $del);
 
-                $querydel = DB::run()->query("SELECT `image` FROM `news` WHERE `id` IN (".$del.");");
+                $querydel = DB::select("SELECT `image` FROM `news` WHERE `id` IN (".$del.");");
                 $arr_image = $querydel->fetchAll();
 
                 if (count($arr_image)>0){
@@ -304,8 +304,8 @@ case 'del':
                     }
                 }
 
-                DB::run() -> query("DELETE FROM `news` WHERE `id` IN (".$del.");");
-                DB::run() -> query("DELETE FROM `comments` WHERE relate_type = 'News' AND `relate_id` IN (".$del.");");
+                DB::delete("DELETE FROM `news` WHERE `id` IN (".$del.");");
+                DB::delete("DELETE FROM `comments` WHERE relate_type = 'News' AND `relate_id` IN (".$del.");");
 
                 setFlash('success', 'Выбранные новости успешно удалены!');
                 redirect("/admin/news?page=$page");

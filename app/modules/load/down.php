@@ -85,7 +85,7 @@ case 'index':
                 echo '<a href="/load/down?cid='.$cid.'&amp;sort=comm">Комментарии</a>';
             }
 
-            $querysub = DB::run() -> query("SELECT * FROM `cats` WHERE `parent`=?;", [$cid]);
+            $querysub = DB::select("SELECT * FROM `cats` WHERE `parent`=?;", [$cid]);
             $sub = $querysub -> fetchAll();
 
             if (count($sub) > 0 && $page == 1) {
@@ -102,7 +102,7 @@ case 'index':
             if ($total > 0) {
 
 
-                $querydown = DB::run() -> query("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".setting('downlist').";", [$cid, 1]);
+                $querydown = DB::select("SELECT * FROM `downs` WHERE `category_id`=? AND `active`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".setting('downlist').";", [$cid, 1]);
 
                 $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
@@ -326,9 +326,9 @@ case 'load':
                     if (empty($queryloads)) {
                         $expiresloads = SITETIME + 3600 * setting('expiresloads');
 
-                        DB::run() -> query("DELETE FROM loads WHERE time<?;", [SITETIME]);
-                        DB::run() -> query("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, getClientIp(), $expiresloads]);
-                        DB::run() -> query("UPDATE downs SET loads=loads+1, last_load=? WHERE id=?", [SITETIME, $id]);
+                        DB::delete("DELETE FROM loads WHERE time<?;", [SITETIME]);
+                        DB::insert("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, getClientIp(), $expiresloads]);
+                        DB::update("UPDATE downs SET loads=loads+1, last_load=? WHERE id=?", [SITETIME, $id]);
                     }
 
                     redirect("/uploads/files/".$folder.$downs['link']);
@@ -373,9 +373,9 @@ case 'vote':
                             if (empty($queryrated)) {
                                 $expiresrated = SITETIME + 3600 * setting('expiresrated');
 
-                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['down', SITETIME]);
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, getUsername(), $expiresrated]);
-                                DB::run() -> query("UPDATE `downs` SET `rating`=`rating`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
+                                DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['down', SITETIME]);
+                                DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, getUsername(), $expiresrated]);
+                                DB::update("UPDATE `downs` SET `rating`=`rating`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
 
                                 echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br>';
                                 echo 'Всего оценивало: '.($downs['rated'] + 1).'<br>';
@@ -431,7 +431,7 @@ case 'comments':
                     echo '<form action="/load/down?act=del&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".setting('downcomm').";", ['down', $id]);
+                $querycomm = DB::select("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".setting('downcomm').";", ['down', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -515,10 +515,10 @@ case 'add':
 
                             $msg = antimat($msg);
 
-                            DB::run() -> query("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, getUsername(), SITETIME, getClientIp(), getUserAgent()]);
+                            DB::insert("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, getUsername(), SITETIME, getClientIp(), getUserAgent()]);
 
-                            DB::run() -> query("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
-                            DB::run() -> query("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [getUsername()]);
+                            DB::update("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
+                            DB::update("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [getUsername()]);
 
                             setFlash('success', 'Сообщение успешно добавлено!');
                             redirect("/load/down?act=end&id=$id");
@@ -561,7 +561,7 @@ case 'spam':
 
                 if (empty($queryspam)) {
                     if (Flood::isFlood()) {
-                        DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, setting('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
+                        DB::insert("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], getUsername(), $data['user'], $data['text'], $data['time'], SITETIME, setting('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         setFlash('success', 'Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&page=$page");
@@ -696,7 +696,7 @@ case 'editpost':
 
                         $msg = antimat($msg);
 
-                        DB::run() -> query("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'down', $pid]);
+                        DB::update("UPDATE `comments` SET `text`=? WHERE relate_type=? AND `id`=?", [$msg, 'down', $pid]);
 
                         setFlash('success', 'Сообщение успешно отредактировано!');
                         redirect("/load/down?act=comments&id=$id&page=$page");
@@ -737,7 +737,7 @@ case 'del':
                 $del = implode(',', $del);
 
                 $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='down' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
-                DB::run() -> query("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
+                DB::update("UPDATE `downs` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                 setFlash('success', 'Выбранные комментарии успешно удалены!');
                 redirect("/load/down?act=comments&id=$id&page=$page");

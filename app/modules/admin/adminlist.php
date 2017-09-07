@@ -6,7 +6,7 @@ if (isAdmin([101, 102, 103])) {
     ############################################################################################
     ##                                     Вывод администрации                                ##
     ############################################################################################
-    $queryadmin = DB::run() -> query("SELECT login, level FROM users WHERE level>=? AND level<=?;", [101, 105]);
+    $queryadmin = DB::select("SELECT login, level FROM users WHERE level>=? AND level<=?;", [101, 105]);
     $arradmin = $queryadmin -> fetchAll();
     $total = count($arradmin);
 

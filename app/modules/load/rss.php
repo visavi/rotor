@@ -28,7 +28,7 @@ if (!empty($down)) {
         echo '<webMaster>'.setting('emails').'</webMaster>';
         echo '<lastBuildDate>'.date("r", SITETIME).'</lastBuildDate>';
 
-        $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 15;", ['down', $id]);
+        $querycomm = DB::select("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 15;", ['down', $id]);
 
         while ($data = $querycomm -> fetch()) {
             $data['text'] = bbCode($data['text']);

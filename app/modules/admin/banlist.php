@@ -9,7 +9,7 @@ if (isAdmin([101, 102, 103])) {
 
     if ($total > 0) {
 
-        $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `ban`=? AND `timeban`>? ORDER BY `timelastban` DESC LIMIT ".$page['offset'].", ".setting('reglist').";", [1, SITETIME]);
+        $queryusers = DB::select("SELECT * FROM `users` WHERE `ban`=? AND `timeban`>? ORDER BY `timelastban` DESC LIMIT ".$page['offset'].", ".setting('reglist').";", [1, SITETIME]);
 
         while ($data = $queryusers -> fetch()) {
             echo '<div class="b">';

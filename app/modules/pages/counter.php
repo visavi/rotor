@@ -63,7 +63,7 @@ switch ($action):
 		if ($currhour > 0) {
 			$hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
 
-			$querycount = DB::run() -> query("SELECT * FROM `counter24` ORDER BY `hour` DESC;");
+			$querycount = DB::select("SELECT * FROM `counter24` ORDER BY `hour` DESC;");
 			$counts = $querycount -> fetchAll();
 
 			$arrhits = [];
@@ -119,7 +119,7 @@ switch ($action):
 		if ($currday > 1) {
 			$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 
-			$querycount = DB::run() -> query("SELECT * FROM `counter31` ORDER BY `days` DESC;");
+			$querycount = DB::select("SELECT * FROM `counter31` ORDER BY `days` DESC;");
 			$counts = $querycount -> fetchAll();
 
 			$arrhits = [];

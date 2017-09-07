@@ -49,7 +49,7 @@ switch ($action):
 
             if ($total > 0) {
 
-                $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".setting('usersearch').";");
+                $queryuser = DB::select("SELECT `login`, `point` FROM `users` WHERE lower(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".setting('usersearch').";");
                 while ($data = $queryuser -> fetch()) {
 
                     echo userGender($data['login']).' <b>'.profile($data['login'], false, false).'</b> ';
@@ -77,7 +77,7 @@ switch ($action):
         $find = check(strtolower($_POST['find']));
 
         if (utfStrlen($find)>=3 && utfStrlen($find)<=20) {
-            $querysearch = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? ORDER BY `point` DESC LIMIT ".setting('usersearch').";", ['%'.$find.'%']);
+            $querysearch = DB::select("SELECT `login`, `point` FROM `users` WHERE lower(`login`) LIKE ? ORDER BY `point` DESC LIMIT ".setting('usersearch').";", ['%'.$find.'%']);
 
             $result = $querysearch -> fetchAll();
             $total = count($result);

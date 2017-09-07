@@ -23,7 +23,7 @@ if (!empty($queryuser)) {
 
             if ($uz == getUsername() && user('newwall') > 0) {
                 echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.user('newwall').'</span></b></div>';
-                DB::run() -> query("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, getUsername()]);
+                DB::update("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, getUsername()]);
             }
 
             if ($total > 0) {
@@ -36,7 +36,7 @@ if (!empty($queryuser)) {
                     echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querywall = DB::run() -> query("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('wallpost').";", [$uz]);
+                $querywall = DB::select("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('wallpost').";", [$uz]);
 
                 while ($data = $querywall -> fetch()) {
                     echo '<div class="b">';
@@ -102,12 +102,12 @@ if (!empty($queryuser)) {
                                     $msg = antimat($msg);
 
                                     if ($uz != getUsername()) {
-                                        DB::run() -> query("UPDATE `users` SET `newwall`=`newwall`+1 WHERE `login`=?", [$uz]);
+                                        DB::update("UPDATE `users` SET `newwall`=`newwall`+1 WHERE `login`=?", [$uz]);
                                     }
 
-                                    DB::run() -> query("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, getUsername(), $msg, SITETIME]);
+                                    DB::insert("INSERT INTO `wall` (`user`, `login`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, getUsername(), $msg, SITETIME]);
 
-                                    DB::run() -> query("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".setting('wallmaxpost').") AS del);", [$uz, $uz]);
+                                    DB::delete("DELETE FROM `wall` WHERE `user`=? AND `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".setting('wallmaxpost').") AS del);", [$uz, $uz]);
 
                                     setFlash('success', 'Запись успешно добавлена!');
                                     redirect("/wall?uz=$uz");
@@ -150,7 +150,7 @@ if (!empty($queryuser)) {
 
                         if (empty($queryspam)) {
                             if (Flood::isFlood()) {
-                                DB::run() -> query("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, setting('home').'/wall?uz='.$uz.'&amp;page='.$page]);
+                                DB::insert("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [4, $data['id'], getUsername(), $data['login'], $data['text'], $data['time'], SITETIME, setting('home').'/wall?uz='.$uz.'&amp;page='.$page]);
 
                                 setFlash('success', 'Жалоба успешно отправлена!');
                                 redirect("/wall?uz=$uz&page=$page");
@@ -190,7 +190,7 @@ if (!empty($queryuser)) {
                     if (!empty($del)) {
                         $del = implode(',', $del);
 
-                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [getUsername()]);
+                        $delcomments = DB::delete("DELETE FROM `wall` WHERE `id` IN (".$del.") AND `user`=?;", [getUsername()]);
 
                         setFlash('success', 'Выбранные записи успешно удалены!');
                         redirect("/wall?uz=$uz&page=$page");
@@ -224,7 +224,7 @@ if (!empty($queryuser)) {
                     if (!empty($del)) {
                         $del = implode(',', $del);
 
-                        $delcomments = DB::run() -> query("DELETE FROM `wall` WHERE `id` IN (".$del.");");
+                        $delcomments = DB::delete("DELETE FROM `wall` WHERE `id` IN (".$del.");");
 
                         setFlash('success', 'Выбранные записи успешно удалены!');
                         redirect("/wall?uz=$uz&page=$page");

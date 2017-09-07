@@ -21,7 +21,7 @@ if (isAdmin([101])) {
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";");
+                $queryban = DB::select("SELECT * FROM `admlog` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";");
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -48,7 +48,7 @@ if (isAdmin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                DB::run() -> query("DELETE FROM admlog;");
+                DB::delete("DELETE FROM admlog;");
 
                 setFlash('success', 'Лог-файл успешно очищен!');
                 redirect("/admin/logadmin");

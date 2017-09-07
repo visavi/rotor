@@ -81,7 +81,7 @@ class MailController extends BaseController
                 $resetKey = str_random();
                 $resetLink = siteLink(setting('home')) . '/recovery/restore?key=' . $resetKey;
 
-                DB::run()->query("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `id`=?;", [$resetKey, SITETIME + 43200, $user->id]);
+                DB::update("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `id`=?;", [$resetKey, SITETIME + 43200, $user->id]);
 
                 //Инструкция по восстановлению пароля на email
                 $subject = 'Восстановление пароля на сайте ' . setting('title');
@@ -127,7 +127,7 @@ class MailController extends BaseController
             $newpass = str_random();
             $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
 
-            DB::run()->query("UPDATE `users` SET `password`=?, `keypasswd`=?, `timepasswd`=? WHERE `id`=?;", [$hashnewpas, '', 0, $user->id]);
+            DB::update("UPDATE `users` SET `password`=?, `keypasswd`=?, `timepasswd`=? WHERE `id`=?;", [$hashnewpas, '', 0, $user->id]);
 
             // Восстановление пароля на email
             $subject = 'Восстановление пароля на сайте ' . setting('title');

@@ -28,7 +28,7 @@ if (isAdmin([101, 102, 103])) {
             }
             // --------------- Удаление не подтвердивших регистрацию -----------//
             if (setting('regkeys') == 1) {
-                $querydeluser = DB::run() -> query("SELECT `login` FROM `users` WHERE `confirmreg`>? AND `joined`<?;", [0, SITETIME-86400]);
+                $querydeluser = DB::select("SELECT `login` FROM `users` WHERE `confirmreg`>? AND `joined`<?;", [0, SITETIME-86400]);
                 $arrdelusers = $querydeluser -> fetchAll(PDO::FETCH_COLUMN);
 
                 $deltotal = count($arrdelusers);
@@ -56,7 +56,7 @@ if (isAdmin([101, 102, 103])) {
 
             if ($total > 0) {
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".setting('reglist').";", [0]);
+                $queryusers = DB::select("SELECT * FROM `users` WHERE `confirmreg`>? ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".setting('reglist').";", [0]);
 
                 echo '<form action="/admin/reglist?act=choice&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -109,7 +109,7 @@ if (isAdmin([101, 102, 103])) {
                         // -------------------------------- Разрешение регистрации -------------------------------------//
                         if ($choice == 1) {
                             $arrayusers = implode(',', $arrayusers);
-                            DB::run() -> query("UPDATE `users` SET `confirmreg`=?, `confirmregkey`=? WHERE `login` IN ('".$arrayusers."');", [0, '']);
+                            DB::update("UPDATE `users` SET `confirmreg`=?, `confirmregkey`=? WHERE `login` IN ('".$arrayusers."');", [0, '']);
 
                             setFlash('success', 'Выбранные аккаунты успешно одобрены!');
                             redirect("/admin/reglist?page=$page");

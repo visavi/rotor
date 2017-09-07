@@ -47,7 +47,7 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
             if ($deldate >= 180) {
                 $deltime = $deldate * 24 * 3600;
 
-                $queryusers = DB::run() -> query("SELECT login FROM users WHERE timelastlogin<? AND point<=?;", [SITETIME - $deltime, $point]);
+                $queryusers = DB::select("SELECT login FROM users WHERE timelastlogin<? AND point<=?;", [SITETIME - $deltime, $point]);
                 $users = $queryusers -> fetchAll(PDO::FETCH_COLUMN);
                 $total = count($users);
 
@@ -92,7 +92,7 @@ if (isAdmin([101]) && getUsername() == setting('nickname')) {
                 if ($deldate >= 180) {
                     $deltime = $deldate * 24 * 3600;
 
-                    $queryusers = DB::run() -> query("SELECT login FROM users WHERE timelastlogin<? AND point<=?;", [SITETIME - $deltime, $point]);
+                    $queryusers = DB::select("SELECT login FROM users WHERE timelastlogin<? AND point<=?;", [SITETIME - $deltime, $point]);
                     $users = $queryusers -> fetchAll(PDO::FETCH_COLUMN);
                     $total = count($users);
 

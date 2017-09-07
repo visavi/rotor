@@ -17,7 +17,7 @@ if (isAdmin([101, 102, 103])) {
 
             if ($total > 0) {
 
-                $querytrans = DB::run() -> query("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listtransfers').";");
+                $querytrans = DB::select("SELECT * FROM `transfers` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listtransfers').";");
 
                 while ($data = $querytrans -> fetch()) {
                     echo '<div class="b">';
@@ -65,7 +65,7 @@ if (isAdmin([101, 102, 103])) {
 
                 if ($total > 0) {
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listtransfers').";", [$uz]);
+                    $queryhist = DB::select("SELECT * FROM `transfers` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listtransfers').";", [$uz]);
 
                     while ($data = $queryhist -> fetch()) {
                         echo '<div class="b">';

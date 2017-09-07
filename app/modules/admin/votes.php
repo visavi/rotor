@@ -22,7 +22,7 @@ if (isAdmin([101, 102, 103])) {
     ############################################################################################
         case 'index':
 
-            $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC;", [0]);
+            $queryvote = DB::select("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC;", [0]);
             $votes = $queryvote -> fetchAll();
 
             if (count($votes) > 0) {
@@ -94,7 +94,7 @@ if (isAdmin([101, 102, 103])) {
                     $answer = array_diff($answer, ['']);
 
                     if (count($answer) > 1) {
-                        DB::run() -> query("INSERT INTO `vote` (`title`, `time`) VALUES (?, ?);", [$title, SITETIME]);
+                        DB::insert("INSERT INTO `vote` (`title`, `time`) VALUES (?, ?);", [$title, SITETIME]);
                         $lastid = DB::run() -> lastInsertId();
 
                         $dbr = DB::run() -> prepare("INSERT INTO `voteanswer` (`vote_id`, `answer`) VALUES (?, ?);");
@@ -133,7 +133,7 @@ if (isAdmin([101, 102, 103])) {
                 echo 'Вопрос:<br>';
                 echo '<input type="text" name="title" size="50" maxlength="100" value="'.$votes['title'].'"><br>';
 
-                $queryanswer = DB::run() -> query("SELECT * FROM `voteanswer` WHERE `vote_id`=? ORDER BY `id`;", [$id]);
+                $queryanswer = DB::select("SELECT * FROM `voteanswer` WHERE `vote_id`=? ORDER BY `id`;", [$id]);
                 $answer = $queryanswer -> fetchAll();
 
                 for ($i = 0; $i < 10; $i++) {
@@ -168,7 +168,7 @@ if (isAdmin([101, 102, 103])) {
                     $queryvote = DB::run() -> querySingle("SELECT `id` FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryvote)) {
                         if (!in_array('', $answer)) {
-                            DB::run() -> query("UPDATE `vote` SET `title`=? WHERE `id`=?;", [$title, $id]);
+                            DB::update("UPDATE `vote` SET `title`=? WHERE `id`=?;", [$title, $id]);
 
                             $dbr = DB::run() -> prepare("UPDATE `voteanswer` SET `answer`=? WHERE `id`=?;");
                             foreach ($answer as $key => $data) {
@@ -218,14 +218,14 @@ if (isAdmin([101, 102, 103])) {
                     $queryvote = DB::run() -> querySingle("SELECT `id` FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryvote)) {
                         if ($do == 'close') {
-                            DB::run() -> query("UPDATE `vote` SET `closed`=? WHERE `id`=?;", [1, $id]);
-                            DB::run() -> query("DELETE FROM `votepoll` WHERE `vote_id`=?;", [$id]);
+                            DB::update("UPDATE `vote` SET `closed`=? WHERE `id`=?;", [1, $id]);
+                            DB::delete("DELETE FROM `votepoll` WHERE `vote_id`=?;", [$id]);
                             setFlash('success', 'Голосование успешно закрыто!');
                             redirect("/admin/votes");
                         }
 
                         if ($do == 'open') {
-                            DB::run() -> query("UPDATE `vote` SET `closed`=? WHERE `id`=?;", [0, $id]);
+                            DB::update("UPDATE `vote` SET `closed`=? WHERE `id`=?;", [0, $id]);
                             setFlash('success', 'Голосование успешно открыто!');
                             redirect("/admin/votes?act=history");
                         }
@@ -253,9 +253,9 @@ if (isAdmin([101, 102, 103])) {
                 if (isAdmin([101])) {
                     $queryvote = DB::run() -> querySingle("SELECT `id` FROM `vote` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryvote)) {
-                        DB::run() -> query("DELETE FROM `vote` WHERE `id`=?;", [$id]);
-                        DB::run() -> query("DELETE FROM `voteanswer` WHERE `vote_id`=?;", [$id]);
-                        DB::run() -> query("DELETE FROM `votepoll` WHERE `vote_id`=?;", [$id]);
+                        DB::delete("DELETE FROM `vote` WHERE `id`=?;", [$id]);
+                        DB::delete("DELETE FROM `voteanswer` WHERE `vote_id`=?;", [$id]);
+                        DB::delete("DELETE FROM `votepoll` WHERE `vote_id`=?;", [$id]);
 
                         setFlash('success', 'Голосование успешно удалено!');
                         redirect("/admin/votes");
@@ -279,7 +279,7 @@ if (isAdmin([101, 102, 103])) {
             $uid = check($_GET['uid']);
             if ($uid == $_SESSION['token']) {
                 if (isAdmin([101])) {
-                    DB::run() -> query("UPDATE `vote` SET `count`=(SELECT SUM(`result`) FROM `voteanswer` WHERE `vote`.id=`voteanswer`.`vote_id`) WHERE `closed`=?;", [0]);
+                    DB::update("UPDATE `vote` SET `count`=(SELECT SUM(`result`) FROM `voteanswer` WHERE `vote`.id=`voteanswer`.`vote_id`) WHERE `closed`=?;", [0]);
 
                     setFlash('success', 'Все данные успешно пересчитаны!');
                     redirect("/admin/votes");
@@ -303,7 +303,7 @@ if (isAdmin([101, 102, 103])) {
 
             if ($total > 0) {
 
-                $queryvote = DB::run() -> query("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('allvotes').";", [1]);
+                $queryvote = DB::select("SELECT * FROM `vote` WHERE `closed`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('allvotes').";", [1]);
 
                 while ($data = $queryvote -> fetch()) {
                     echo '<div class="b">';

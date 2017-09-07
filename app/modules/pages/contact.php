@@ -87,7 +87,7 @@ case 'create':
 
     if ($validation->run()) {
 
-            DB::run() -> query("INSERT INTO `contact` (`user_id`, `contact_id`, `created_at`) VALUES (?, ?, ?);", [getUserId(), $user->id, SITETIME]);
+            DB::insert("INSERT INTO `contact` (`user_id`, `contact_id`, `created_at`) VALUES (?, ?, ?);", [getUserId(), $user->id, SITETIME]);
 
             if (! isIgnore($user, user())) {
 
@@ -131,7 +131,7 @@ case 'note':
 
         if ($validation->run()) {
 
-            DB::run() -> query("UPDATE contact SET text=? WHERE id=? AND user_id=?;", [$msg, $id, getUserId()]);
+            DB::update("UPDATE contact SET text=? WHERE id=? AND user_id=?;", [$msg, $id, getUserId()]);
 
             setFlash('success', 'Заметка успешно отредактирована!');
             redirect("/contact");
@@ -169,7 +169,7 @@ case 'delete':
     if ($validation->run()) {
 
         $del = implode(',', $del);
-        DB::run() -> query("DELETE FROM contact WHERE id IN (".$del.") AND user_id=?;", [getUserId()]);
+        DB::delete("DELETE FROM contact WHERE id IN (".$del.") AND user_id=?;", [getUserId()]);
 
         setFlash('success', 'Выбранные пользователи успешно удалены!');
     } else {

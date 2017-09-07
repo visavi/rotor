@@ -29,7 +29,7 @@ case 'index':
 
     if ($total > 0) {
 
-        $invitations = DB::run() -> query("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listinvite').";", [$used]);
+        $invitations = DB::select("SELECT * FROM `invite` WHERE `used`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listinvite').";", [$used]);
 
         echo '<form action="/admin/invitations?act=del&amp;used='.$used.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -107,7 +107,7 @@ break;
 ##                                       Список ключей                                    ##
 ############################################################################################
 case 'list':
-    $invitations = DB::run() -> query("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [getUsername(), 0]);
+    $invitations = DB::select("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [getUsername(), 0]);
     $invite = $invitations -> fetchAll(PDO::FETCH_COLUMN);
     $total = count($invite);
 
@@ -168,7 +168,7 @@ case 'mailing':
     if ($uid == $_SESSION['token']) {
         if (isAdmin([101])){
 
-            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
+            $query = DB::select("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
             $users = $query->fetchAll(PDO::FETCH_COLUMN);
 
             $users = array_diff($users, [getUsername()]);
@@ -249,7 +249,7 @@ case 'del':
 
             $del = implode(',', $del);
 
-            DB::run() -> query("DELETE FROM `invite` WHERE `id` IN (".$del.");");
+            DB::delete("DELETE FROM `invite` WHERE `id` IN (".$del.");");
 
             setFlash('success', 'Выбранные ключи успешно удалены!');
             redirect("/admin/invitations?used=$used&page=$page");

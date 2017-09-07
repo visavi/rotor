@@ -22,7 +22,7 @@ if (isAdmin()) {
 
             if ($total > 0) {
 
-                $queryrek = DB::run() -> query("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('rekuserpost').";", [SITETIME]);
+                $queryrek = DB::select("SELECT * FROM `rekuser` WHERE `time`>? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('rekuserpost').";", [SITETIME]);
 
                 echo '<form action="/admin/reklama?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -122,7 +122,7 @@ if (isAdmin()) {
                             if (preg_match('|^#+[A-f0-9]{6}$|', $color) || empty($color)) {
                                 $data = DB::run() -> queryFetch("SELECT * FROM `rekuser` WHERE `id`=? LIMIT 1;", [$id]);
                                 if (!empty($data)) {
-                                    DB::run() -> query("UPDATE `rekuser` SET `site`=?, `name`=?, `color`=?, `bold`=? WHERE `id`=?", [$site, $name, $color, $bold, $id]);
+                                    DB::update("UPDATE `rekuser` SET `site`=?, `name`=?, `color`=?, `bold`=? WHERE `id`=?", [$site, $name, $color, $bold, $id]);
                                     saveAdvertUser();
 
                                     setFlash('success', 'Рекламная ссылка успешно изменена!');
@@ -165,7 +165,7 @@ if (isAdmin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `rekuser` WHERE `id` IN (".$del.");");
+                    DB::delete("DELETE FROM `rekuser` WHERE `id` IN (".$del.");");
                     saveAdvertUser();
 
                     setFlash('success', 'Выбранные ссылки успешно удалены!');

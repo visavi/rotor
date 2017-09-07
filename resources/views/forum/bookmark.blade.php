@@ -18,11 +18,11 @@
 
                     <i class="fa {{ $topic->getTopic()->getIcon() }} text-muted"></i>
                     <b><a href="/topic/{{ $topic['id'] }}">{{ $topic['title'] }}</a></b>
-                    ({{ $topic['posts'] }}{!! ($topic['posts'] > $topic['book_posts']) ? '<span style="color:#00cc00">+ ' . ($topic['posts'] - $topic['book_posts']) . '</span>' : '' !!})
+                    ({{ $topic['posts'] }}{!! ($topic['posts'] > $topic['book_posts']) ? '/<span style="color:#00cc00">+' . ($topic['posts'] - $topic['book_posts']) . '</span>' : '' !!})
                 </div>
 
                 <div>
-                    {{ $topic->pagination() }}
+                    {{ $topic->getTopic()->pagination() }}
                     Автор: {{ $topic->getTopic()->getUser()->login }} /
                     Посл.: {{ $topic->getTopic()->getLastPost()->getUser()->login }}
                     ({{ dateFixed($topic->getTopic()->getLastPost()->created_at) }})

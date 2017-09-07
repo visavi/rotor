@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Classes\Validation;
+use App\Models\Flood;
 use App\Models\Forum;
 use App\Models\Topic;
 use App\Models\Vote;
@@ -118,28 +119,25 @@ class ForumController extends BaseController
                 $title = antimat($title);
                 $msg = antimat($msg);
 
-                DB::run() -> query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [getUsername()]);
+                DB::update("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [getUsername()]);
 
-                DB::run() -> query("INSERT INTO `topics` (`forum_id`, `title`, `user_id`, `posts`, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?);", [$fid, $title, getUserId(), 1, SITETIME, SITETIME]);
+                $topicId = DB::insert("INSERT INTO `topics` (`forum_id`, `title`, `user_id`, `posts`, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?);", [$fid, $title, getUserId(), 1, SITETIME, SITETIME]);
 
-                $lastid = DB::run() -> lastInsertId();
+                $postId = DB::insert("INSERT INTO `posts` (`topic_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$topicId, getUserId(), $msg, SITETIME, getClientIp(), getUserAgent()]);
 
-                DB::run() -> query("INSERT INTO `posts` (`topic_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$lastid, getUserId(), $msg, SITETIME, getClientIp(), getUserAgent()]);
-                $lastPostId = DB::run() -> lastInsertId();
+                Topic::where('id', $topicId)->update(['last_post_id' => $postId]);
 
-                Topic::where('id', $lastid)->update(['last_post_id' => $lastPostId]);
-
-                DB::run() -> query("UPDATE `forums` SET `topics`=`topics`+1, `posts`=`posts`+1, `last_topic_id`=? WHERE `id`=?", [$lastid, $fid]);
+                DB::update("UPDATE `forums` SET `topics`=`topics`+1, `posts`=`posts`+1, `last_topic_id`=? WHERE `id`=?", [$topicId, $fid]);
                 // Обновление родительского форума
                 if ($forum->parent) {
-                    DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?", [$lastid, $forum->parent->id]);
+                    DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?", [$topicId, $forum->parent->id]);
                 }
 
                 // Создание голосования
                 if ($vote) {
                     $vote = new Vote();
                     $vote->title = $question;
-                    $vote->topic_id = $lastid;
+                    $vote->topic_id = $topicId;
                     $vote->time = SITETIME;
                     $vote->save();
 
@@ -155,7 +153,7 @@ class ForumController extends BaseController
                 }
 
                 setFlash('success', 'Новая тема успешно создана!');
-                redirect('/topic/'.$lastid);
+                redirect('/topic/'.$topicId);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validation->getErrors());

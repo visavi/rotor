@@ -103,7 +103,7 @@ case 'changemail':
     $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $meil]);
     $validation -> addRule('empty', $blackmail, 'Указанный вами адрес email занесен в черный список!');
 
-    DB::run() -> query("DELETE FROM `changemail` WHERE `created_at`<?;", [SITETIME]);
+    DB::delete("DELETE FROM `changemail` WHERE `created_at`<?;", [SITETIME]);
     $changemail = DB::run() -> querySingle("SELECT `id` FROM `changemail` WHERE `user_id`=? LIMIT 1;", [getUserId()]);
     $validation -> addRule('empty', $changemail, 'Вы уже отправили код подтверждения на новый адрес почты!');
 
@@ -117,7 +117,7 @@ case 'changemail':
         $body = view('mailer.default', compact('subject', 'message'), true);
         sendMail($meil, $subject, $body);
 
-        DB::run() -> query("INSERT INTO `changemail` (`user_id`, `mail`, hash, `created_at`) VALUES (?, ?, ?, ?);", [getUserId(), $meil, $genkey, SITETIME + 86400]);
+        DB::insert("INSERT INTO `changemail` (`user_id`, `mail`, hash, `created_at`) VALUES (?, ?, ?, ?);", [getUserId(), $meil, $genkey, SITETIME + 86400]);
 
         setFlash('success', 'На новый адрес почты отправлено письмо для подтверждения!');
         redirect("/account");
@@ -136,7 +136,7 @@ case 'editmail':
 
     $key = (isset($_GET['key'])) ? check(strval($_GET['key'])) : '';
 
-    DB::run() -> query("DELETE FROM `changemail` WHERE `created_at`<?;", [SITETIME]);
+    DB::delete("DELETE FROM `changemail` WHERE `created_at`<?;", [SITETIME]);
     $armail = DB::run() -> queryFetch("SELECT * FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, getUserId()]);
 
     $validation = new Validation();
@@ -153,8 +153,8 @@ case 'editmail':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], getUsername()]);
-        DB::run() -> query("DELETE FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, getUserId()]);
+        DB::update("UPDATE `users` SET `email`=? WHERE `login`=? LIMIT 1;", [$armail['mail'], getUsername()]);
+        DB::delete("DELETE FROM `changemail` WHERE hash=? AND `user_id`=? LIMIT 1;", [$key, getUserId()]);
 
         setFlash('success', 'Адрес электронной почты успешно изменен!');
         redirect("/account");
@@ -191,7 +191,7 @@ case 'editstatus':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", [$status, $cost, getUsername()]);
+        DB::update("UPDATE `users` SET `status`=?, `money`=`money`-? WHERE `login`=? LIMIT 1;", [$status, $cost, getUsername()]);
         saveStatus();
 
         setFlash('success', 'Ваш статус успешно изменен!');
@@ -229,7 +229,7 @@ case 'editpass':
 
     if ($validation->run()) {
 
-        DB::run() -> query("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), getUsername()]);
+        DB::update("UPDATE `users` SET `password`=? WHERE `login`=? LIMIT 1;", [password_hash($newpass, PASSWORD_BCRYPT), getUsername()]);
 
         $subject = 'Изменение пароля на сайте '.setting('title');
         $message = 'Здравствуйте, '.getUsername().'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.getClientIp().'<br>Браузер: '.getUserAgent().'<br>Время: '.date('j.m.y / H:i', SITETIME);
@@ -259,7 +259,7 @@ case 'apikey':
 
         $key = str_random();
 
-        DB::run() -> query("UPDATE `users` SET `apikey`=? WHERE `login`=?;", [md5(getUsername().$key), getUsername()]);
+        DB::update("UPDATE `users` SET `apikey`=? WHERE `login`=?;", [md5(getUsername().$key), getUsername()]);
 
         setFlash('success', 'Новый ключ успешно сгенерирован!');
         redirect("/account");

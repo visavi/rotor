@@ -127,7 +127,7 @@ if (isAdmin()) {
                 if ($token == $_SESSION['token']) {
                     if (utfStrlen($title) >= 3 && utfStrlen($title) <= 50) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `forums`;");
-                        DB::run() -> query("INSERT INTO `forums` (sort, `title`) VALUES (?, ?);", [$maxorder, $title]);
+                        DB::insert("INSERT INTO `forums` (sort, `title`) VALUES (?, ?);", [$maxorder, $title]);
 
                         setFlash('success', 'Новый раздел успешно добавлен!');
                         redirect("/admin/forum");
@@ -160,7 +160,7 @@ if (isAdmin()) {
                     echo 'Раздел: <br>';
                     echo '<input type="text" name="title" maxlength="50" value="'.$forums['title'].'"><br>';
 
-                    $query = DB::run() -> query("SELECT `id`, `title`, `parent_id` FROM `forums` WHERE `parent_id`=? ORDER BY sort ASC;", [0]);
+                    $query = DB::select("SELECT `id`, `title`, `parent_id` FROM `forums` WHERE `parent_id`=? ORDER BY sort ASC;", [0]);
                     $section = $query -> fetchAll();
 
                     echo 'Родительский форум:<br>';
@@ -216,7 +216,7 @@ if (isAdmin()) {
                                 $forums = DB::run() -> queryFetch("SELECT `id` FROM `forums` WHERE `parent_id`=? LIMIT 1;", [$fid]);
 
                                 if (empty($forums) || empty($parent_id)) {
-                                    DB::run() -> query("UPDATE `forums` SET sort=?, parent_id=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $title, $desc, $closed, $fid]);
+                                    DB::update("UPDATE `forums` SET sort=?, parent_id=?, `title`=?, `desc`=?, `closed`=? WHERE `id`=?;", [$order, $parent, $title, $desc, $closed, $fid]);
 
                                     setFlash('success', 'Раздел успешно отредактирован!');
                                     redirect("/admin/forum");
@@ -417,7 +417,7 @@ if (isAdmin()) {
 
                         $moderators = implode(',', preg_split('/[\s]*[,][\s]*/', $moderators));
 
-                        DB::run() -> query("UPDATE `topics` SET `title`=?, `closed`=?, `locked`=?, `moderators`=?, `note`=? WHERE `id`=?;", [$title, $closed, $locked, $moderators, $note, $tid]);
+                        DB::update("UPDATE `topics` SET `title`=?, `closed`=?, `locked`=?, `moderators`=?, `note`=? WHERE `id`=?;", [$title, $closed, $locked, $moderators, $note, $tid]);
 
                         if ($locked == 1) {
                             $page = 1;
@@ -509,15 +509,15 @@ if (isAdmin()) {
                 if (!empty($forums)) {
                     if (empty($forums['closed'])) {
                         // Обновление номера раздела
-                        DB::run() -> query("UPDATE `topics` SET `forum_id`=? WHERE `id`=?;", [$section, $tid]);
+                        DB::update("UPDATE `topics` SET `forum_id`=? WHERE `id`=?;", [$section, $tid]);
 
                         // Ищем последние темы в форумах для обновления списка последних тем
                         $oldlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `updated_at` DESC LIMIT 1;", [$topics['forum_id']]);
                         $newlast = DB::run() -> queryFetch("SELECT * FROM `topics` WHERE `forum_id`=? ORDER BY `updated_at` DESC LIMIT 1;", [$section]);
 
-                        DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['forum_id']]);
+                        DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['forum_id']]);
 
-                        DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$newlast['id'], $newlast['forum_id']]);
+                        DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$newlast['id'], $newlast['forum_id']]);
 
                         setFlash('success', 'Тема успешно перемещена!');
                         redirect("/admin/forum?act=forum&fid=$section");
@@ -563,7 +563,7 @@ if (isAdmin()) {
 
                         if ($delPosts) {
                             $delFilesIds = implode(',', $delPosts);
-                            DB::run()->query("DELETE FROM `files` WHERE `id` IN (" . $delFilesIds . ");");
+                            DB::delete("DELETE FROM `files` WHERE `id` IN (" . $delFilesIds . ");");
                         }
                     }
                     // ------ Удаление загруженных файлов -------//
@@ -580,10 +580,10 @@ if (isAdmin()) {
                     $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `topic_id` IN (".$delId.");");
 
                     // Удаление закладок
-                    DB::run() -> query("DELETE FROM `bookmarks` WHERE `topic_id` IN (".$delId.");");
+                    DB::delete("DELETE FROM `bookmarks` WHERE `topic_id` IN (".$delId.");");
 
                     // Обновление счетчиков
-                    DB::run() -> query("UPDATE `forums` SET `topics`=`topics`-?, `posts`=`posts`-? WHERE `id`=?;", [$deltopics, $delposts, $fid]);
+                    DB::update("UPDATE `forums` SET `topics`=`topics`-?, `posts`=`posts`-? WHERE `id`=?;", [$deltopics, $delposts, $fid]);
 
                     // ------------------------------------------------------------//
                     $oldlast = DB::run() -> queryFetch("SELECT `t`.id, `f`.parent_id FROM `topics` t LEFT JOIN `forums` f ON `t`.`forum_id`=`f`.`id` WHERE `t`.`forum_id`=? ORDER BY `t`.`updated_at` DESC LIMIT 1;", [$fid]);
@@ -592,11 +592,11 @@ if (isAdmin()) {
                         $oldlast['id'] = 0;
                     }
 
-                    DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $fid]);
+                    DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $fid]);
 
                     // Обновление родительского форума
                     if (! empty($oldlast['parent_id'])) {
-                        DB::run() -> query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['parent_id']]);
+                        DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$oldlast['id'], $oldlast['parent_id']]);
                     }
 
                     setFlash('success', 'Выбранные темы успешно удалены!');
@@ -626,7 +626,7 @@ if (isAdmin()) {
                 if (!empty($topics)) {
                     switch ($do):
                         case 'closed':
-                            DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
+                            DB::update("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
 
                             $vote = Vote::where('topic_id', $tid)->first();
                             if ($vote) {
@@ -641,7 +641,7 @@ if (isAdmin()) {
                             break;
 
                         case 'open':
-                            DB::run() -> query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [0, $tid]);
+                            DB::update("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [0, $tid]);
 
                             $vote = Vote::where('topic_id', $tid)->first();
                             if ($vote) {
@@ -654,13 +654,13 @@ if (isAdmin()) {
                             break;
 
                         case 'locked':
-                            DB::run() -> query("UPDATE `topics` SET `locked`=? WHERE `id`=?;", [1, $tid]);
+                            DB::update("UPDATE `topics` SET `locked`=? WHERE `id`=?;", [1, $tid]);
                             setFlash('success', 'Тема успешно закреплена!');
                             redirect("/admin/forum?act=topic&tid=$tid&page=$page");
                             break;
 
                         case 'unlocked':
-                            DB::run() -> query("UPDATE `topics` SET `locked`=? WHERE `id`=?;", [0, $tid]);
+                            DB::update("UPDATE `topics` SET `locked`=? WHERE `id`=?;", [0, $tid]);
                             setFlash('success', 'Тема успешно откреплена!');
                             redirect("/admin/forum?act=topic&tid=$tid&page=$page");
                             break;
@@ -845,7 +845,7 @@ if (isAdmin()) {
                     $del = implode(',', $del);
 
                     // ------ Удаление загруженных файлов -------//
-                    $queryfiles = DB::run() -> query("SELECT `hash` FROM `files_forum` WHERE `post_id` IN (".$del.");");
+                    $queryfiles = DB::select("SELECT `hash` FROM `files_forum` WHERE `post_id` IN (".$del.");");
                     $files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
 
                     if (!empty($files)){
@@ -854,12 +854,12 @@ if (isAdmin()) {
                         }
                     }
 
-                    DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id` IN (".$del.");");
+                    DB::delete("DELETE FROM `files_forum` WHERE `post_id` IN (".$del.");");
                     // ------ Удаление загруженных файлов -------//
 
                     $delposts = DB::run() -> exec("DELETE FROM `posts` WHERE `id` IN (".$del.") AND `topic_id`=".$tid.";");
-                    DB::run() -> query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $tid]);
-                    DB::run() -> query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topics['forum_id']]);
+                    DB::update("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $tid]);
+                    DB::update("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topics['forum_id']]);
 
                     setFlash('success', 'Выбранные сообщения успешно удалены!');
                     redirect("/admin/forum?act=topic&tid=$tid&page=$page");
@@ -924,19 +924,19 @@ if (isAdmin()) {
                     $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
                     if (!empty($post)) {
 
-                        DB::run() -> query("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, getUserId(), SITETIME, $pid]);
+                        DB::update("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, getUserId(), SITETIME, $pid]);
 
                         // ------ Удаление загруженных файлов -------//
                         if ($delfile) {
                             $del = implode(',', $delfile);
-                            $queryfiles = DB::run() -> query("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$pid, Post::class]);
+                            $queryfiles = DB::select("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$pid, Post::class]);
                             $files = $queryfiles->fetchAll();
 
                             if (!empty($files)){
                                 foreach ($files as $file){
                                     deleteImage('uploads/forum/', $post['topic_id'].'/'.$file['hash']);
                                 }
-                                DB::run() -> query("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$pid, Post::class]);
+                                DB::delete("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (".$del.");", [$pid, Post::class]);
                             }
                         }
                         // ------ Удаление загруженных файлов -------//

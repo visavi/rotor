@@ -5,7 +5,7 @@ if (!file_exists($imagecache) || dateFixed(@filemtime($imagecache), "dmY") != da
 
 	$days = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 
-	$querycount = DB::run() -> query("SELECT * FROM `counter31` ORDER BY `days` DESC;");
+	$querycount = DB::select("SELECT * FROM `counter31` ORDER BY `days` DESC;");
 	$counts = $querycount -> fetchAll();
 
 	$arrhits = [];

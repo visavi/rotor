@@ -88,7 +88,7 @@ case 'create':
 
     if ($validation->run()) {
 
-        DB::run() -> query("INSERT INTO `ignoring` (`user_id`, `ignore_id`, `created_at`) VALUES (?, ?, ?);", [getUserId(), $user->id, SITETIME]);
+        DB::insert("INSERT INTO `ignoring` (`user_id`, `ignore_id`, `created_at`) VALUES (?, ?, ?);", [getUserId(), $user->id, SITETIME]);
 
         if (! isIgnore($user, user())) {
             $message = 'Пользователь [b]' . getUsername() . '[/b] добавил вас в свой игнор-лист!';
@@ -130,7 +130,7 @@ case 'note':
 
         if ($validation->run()) {
 
-            DB::run() -> query("UPDATE ignoring SET text=? WHERE id=? AND user_id=?;", [$msg, $id, getUserId()]);
+            DB::update("UPDATE ignoring SET text=? WHERE id=? AND user_id=?;", [$msg, $id, getUserId()]);
 
             setFlash('success', 'Заметка успешно отредактирована!');
             redirect("/ignore");
@@ -167,7 +167,7 @@ case 'delete':
     if ($validation->run()) {
 
         $del = implode(',', $del);
-        DB::run() -> query("DELETE FROM ignoring WHERE `id` IN (".$del.") AND `user_id`=?;", [getUserId()]);
+        DB::delete("DELETE FROM ignoring WHERE `id` IN (".$del.") AND `user_id`=?;", [getUserId()]);
 
         setFlash('success', 'Выбранные пользователи успешно удалены!');
     } else {

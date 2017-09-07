@@ -27,7 +27,7 @@ if (isAdmin()) {
     ############################################################################################
         case 'index':
 
-            $queryblog = DB::run() -> query("SELECT * FROM `catsblog` ORDER BY sort ASC;");
+            $queryblog = DB::select("SELECT * FROM `catsblog` ORDER BY sort ASC;");
             $blogs = $queryblog -> fetchAll();
 
             if (count($blogs) > 0) {
@@ -92,7 +92,7 @@ if (isAdmin()) {
                 if ($uid == $_SESSION['token']) {
                     if (utfStrlen($name) >= 3 && utfStrlen($name) < 50) {
                         $maxorder = DB::run() -> querySingle("SELECT IFNULL(MAX(sort),0)+1 FROM `catsblog`;");
-                        DB::run() -> query("INSERT INTO `catsblog` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
+                        DB::insert("INSERT INTO `catsblog` (sort, `name`) VALUES (?, ?);", [$maxorder, $name]);
 
                         setFlash('success', 'Новый раздел успешно добавлен!');
                         redirect("/admin/blog");
@@ -154,7 +154,7 @@ if (isAdmin()) {
                         $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                         if (!empty($blogs)) {
-                            DB::run() -> query("UPDATE `catsblog` SET sort=?, `name`=? WHERE `id`=?;", [$order, $name, $cid]);
+                            DB::update("UPDATE `catsblog` SET sort=?, `name`=? WHERE `id`=?;", [$order, $name, $cid]);
 
                             setFlash('success', 'Раздел успешно отредактирован!');
                             redirect("/admin/blog");
@@ -209,9 +209,9 @@ if (isAdmin()) {
                     $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 
                     if (!empty($blogs)) {
-                        DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_category_id`=?;", ['blog', $cid]);
-                        DB::run() -> query("DELETE FROM `blogs` WHERE `category_id`=?;", [$cid]);
-                        DB::run() -> query("DELETE FROM `catsblog` WHERE `id`=?;", [$cid]);
+                        DB::delete("DELETE FROM `comments` WHERE relate_type=? AND `relate_category_id`=?;", ['blog', $cid]);
+                        DB::delete("DELETE FROM `blogs` WHERE `category_id`=?;", [$cid]);
+                        DB::delete("DELETE FROM `catsblog` WHERE `id`=?;", [$cid]);
 
                         setFlash('success', 'Раздел успешно удален!');
                         redirect("/admin/blog");
@@ -248,7 +248,7 @@ if (isAdmin()) {
 
                 if ($total > 0) {
 
-                    $queryblog = DB::run() -> query("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('blogpost').";", [$cid]);
+                    $queryblog = DB::select("SELECT * FROM `blogs` WHERE `category_id`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('blogpost').";", [$cid]);
 
                     echo '<form action="/admin/blog?act=delblog&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -331,7 +331,7 @@ if (isAdmin()) {
                                 $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
                                 if (!empty($queryblog)) {
 
-                                    DB::run() -> query("UPDATE `blogs` SET `title`=?, `text`=?, `user`=?, `tags`=? WHERE `id`=?;", [$title, $text, $user, $tags, $id]);
+                                    DB::update("UPDATE `blogs` SET `title`=?, `text`=?, `user`=?, `tags`=? WHERE `id`=?;", [$title, $text, $user, $tags, $id]);
 
                                     setFlash('success', 'Статья успешно отредактирована!');
                                     redirect("/admin/blog?act=blog&cid=$cid&page=$page");
@@ -369,7 +369,7 @@ if (isAdmin()) {
             if (!empty($blogs)) {
                 echo '<i class="fa fa-file-o"></i> <b>'.$blogs['title'].'</b><br><br>';
 
-                $querycats = DB::run() -> query("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
+                $querycats = DB::select("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
                 $cats = $querycats -> fetchAll();
 
                 if (count($cats) > 1) {
@@ -413,11 +413,11 @@ if (isAdmin()) {
                 if (!empty($querycats)) {
                     $queryblog = DB::run() -> querySingle("SELECT `id` FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
                     if (!empty($queryblog)) {
-                        DB::run() -> query("UPDATE `blogs` SET `category_id`=? WHERE `id`=?;", [$section, $id]);
-                        DB::run() -> query("UPDATE `comments` SET `relate_category_id`=? WHERE relate_type=? AND `relate_id`=?;", [$section, 'blog', $id]);
+                        DB::update("UPDATE `blogs` SET `category_id`=? WHERE `id`=?;", [$section, $id]);
+                        DB::update("UPDATE `comments` SET `relate_category_id`=? WHERE relate_type=? AND `relate_id`=?;", [$section, 'blog', $id]);
                         // Обновление счетчиков
-                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$section]);
-                        DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$cid]);
+                        DB::update("UPDATE `catsblog` SET `count`=`count`+1 WHERE `id`=?", [$section]);
+                        DB::update("UPDATE `catsblog` SET `count`=`count`-1 WHERE `id`=?", [$cid]);
 
                         setFlash('success', 'Статья успешно перемещена!');
                         redirect("/admin/blog?act=blog&cid=$section");
@@ -454,10 +454,10 @@ if (isAdmin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `comments` WHERE relate_type='blog' AND `relate_id` IN (".$del.");");
+                    DB::delete("DELETE FROM `comments` WHERE relate_type='blog' AND `relate_id` IN (".$del.");");
                     $delblogs = DB::run() -> exec("DELETE FROM `blogs` WHERE `id` IN (".$del.");");
                     // Обновление счетчиков
-                    DB::run() -> query("UPDATE `catsblog` SET `count`=`count`-? WHERE `id`=?", [$delblogs, $cid]);
+                    DB::update("UPDATE `catsblog` SET `count`=`count`-? WHERE `id`=?", [$delblogs, $cid]);
 
                     setFlash('success', 'Выбранные статьи успешно удалены!');
                     redirect("/admin/blog?act=blog&cid=$cid&page=$page");

@@ -8,7 +8,7 @@ echo 'При наборе определенного количества акт
 echo 'Актив - это сумма постов на форуме, гостевой, в комментариях и пр.<br><br>';
 
 
-$querystatus = DB::run()->query("SELECT * FROM `status` ORDER BY `topoint` DESC;");
+$querystatus = DB::select("SELECT * FROM `status` ORDER BY `topoint` DESC;");
 $status = $querystatus->fetchAll();
 $total = count($status);
 

@@ -47,7 +47,7 @@ class PrivateController extends BaseController
 
 
         if ($newprivat > 0) {
-            DB::run()->query("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `id`=? LIMIT 1;", [0, 0, getUserId()]);
+            DB::update("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `id`=? LIMIT 1;", [0, 0, getUserId()]);
         }
 
         return view('private/index', compact('messages', 'page', 'newprivat'));
@@ -144,12 +144,12 @@ class PrivateController extends BaseController
 
                 $msg = antimat($msg);
 
-                DB::run()->query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `id`=? LIMIT 1;", [$user->id]);
-                DB::run()->query("INSERT INTO `inbox` (`user_id`, `author_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [$user->id, getUserId(), $msg, SITETIME]);
+                DB::update("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `id`=? LIMIT 1;", [$user->id]);
+                DB::insert("INSERT INTO `inbox` (`user_id`, `author_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [$user->id, getUserId(), $msg, SITETIME]);
 
-                DB::run()->query("INSERT INTO `outbox` (`user_id`, `recipient_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [getUserId(), $user->id, $msg, SITETIME]);
+                DB::insert("INSERT INTO `outbox` (`user_id`, `recipient_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [getUserId(), $user->id, $msg, SITETIME]);
 
-                DB::run()->query("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [getUserId(), getUserId()]);
+                DB::delete("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [getUserId(), getUserId()]);
                 saveUserMail(60);
 
                 $deliveryUsers = User::where('sendprivatmail', 0)
@@ -209,15 +209,15 @@ class PrivateController extends BaseController
             $del = implode(',', $del);
 
             if ($type == 'outbox') {
-                DB::run()->query("DELETE FROM `outbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [getUserId()]);
+                DB::delete("DELETE FROM `outbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [getUserId()]);
             } else {
                 $deltrash = SITETIME + 86400 * setting('expiresmail');
 
-                DB::run()->query("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
+                DB::delete("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
 
-                DB::run()->query("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [$deltrash, getUserId()]);
+                DB::insert("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [$deltrash, getUserId()]);
 
-                DB::run()->query("DELETE FROM `inbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [getUserId()]);
+                DB::delete("DELETE FROM `inbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [getUserId()]);
                 saveUserMail(60);
             }
 
@@ -246,17 +246,17 @@ class PrivateController extends BaseController
         if ($validation->run()) {
 
             if ($type == 'outbox') {
-                DB::run()->query("DELETE FROM `outbox` WHERE `user_id`=?;", [getUserId()]);
+                DB::delete("DELETE FROM `outbox` WHERE `user_id`=?;", [getUserId()]);
             } elseif ($type == 'trash') {
-                DB::run()->query("DELETE FROM `trash` WHERE `user_id`=?;", [getUserId()]);
+                DB::delete("DELETE FROM `trash` WHERE `user_id`=?;", [getUserId()]);
             } else {
                 $deltrash = SITETIME + 86400 * setting('expiresmail');
 
-                DB::run()->query("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
+                DB::delete("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
 
-                DB::run()->query("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `user_id`=?;", [$deltrash, getUserId()]);
+                DB::insert("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `user_id`=?;", [$deltrash, getUserId()]);
 
-                DB::run()->query("DELETE FROM `inbox` WHERE `user_id`=?;", [getUserId()]);
+                DB::delete("DELETE FROM `inbox` WHERE `user_id`=?;", [getUserId()]);
                 saveUserMail(60);
             }
 

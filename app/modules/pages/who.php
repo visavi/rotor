@@ -11,7 +11,7 @@ if ($total > 0) {
     }
     $page = paginate(setting('showuser'), $total);
 
-    $queryvisit = DB::run() -> query("SELECT * FROM `visit` ORDER BY `nowtime` DESC LIMIT ".$page['offset'].", ".setting('showuser').";");
+    $queryvisit = DB::select("SELECT * FROM `visit` ORDER BY `nowtime` DESC LIMIT ".$page['offset'].", ".setting('showuser').";");
 
     while ($data = $queryvisit -> fetch()) {
 

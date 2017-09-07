@@ -44,7 +44,7 @@ if (isAdmin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".setting('postoffers').";", [$type]);
+                $queryoffers = DB::select("SELECT * FROM `offers` WHERE `type`=? ORDER BY `votes` DESC, `time` DESC LIMIT ".$page['offset'].", ".setting('postoffers').";", [$type]);
 
                 echo '<form action="/admin/offers?act=del&amp;type='.$type.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -195,10 +195,10 @@ if (isAdmin([101, 102])) {
 
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, getUsername(), SITETIME, $id]);
+                            DB::update("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, getUsername(), SITETIME, $id]);
 
                             if ($queryoff['status'] >= 2) {
-                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
+                                DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);
                             }
 
                             setFlash('success', 'Данные успешно отправлены!');
@@ -273,7 +273,7 @@ if (isAdmin([101, 102])) {
                             $title = antimat($title);
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `offers` SET `type`=?, `closed`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $closed, $title, $text, $id]);
+                            DB::update("UPDATE `offers` SET `type`=?, `closed`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $closed, $title, $text, $id]);
 
                             setFlash('success', 'Данные успешно отредактированы!');
                             redirect("/admin/offers?act=view&id=$id");
@@ -309,9 +309,9 @@ if (isAdmin([101, 102])) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `offers` WHERE `id` IN (".$del.");");
-                    DB::run() -> query("DELETE FROM `comments` WHERE relate_type='offer' AND `relate_id` IN (".$del.");");
-                    DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id` IN (".$del.");");
+                    DB::delete("DELETE FROM `offers` WHERE `id` IN (".$del.");");
+                    DB::delete("DELETE FROM `comments` WHERE relate_type='offer' AND `relate_id` IN (".$del.");");
+                    DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id` IN (".$del.");");
 
                     setFlash('success', 'Выбранные пункты успешно удалены!');
                     redirect("/admin/offers?type=$type&page=$page");
@@ -334,7 +334,7 @@ if (isAdmin([101, 102])) {
 
             if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    DB::run() -> query("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `comments` WHERE `offers`.`id`=`comments`.`relate_id` AND relate_type='offer');");
+                    DB::update("UPDATE `offers` SET `comments`=(SELECT count(*) FROM `comments` WHERE `offers`.`id`=`comments`.`relate_id` AND relate_type='offer');");
 
                     setFlash('success', 'Комментарии успешно пересчитаны!');
                     redirect("/admin/offers");

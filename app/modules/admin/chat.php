@@ -25,12 +25,12 @@ if (isAdmin()) {
             $page = paginate(setting('chatpost'), $total);
 
             if (user('newchat') != statsNewChat()) {
-                DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [statsNewChat(), getUsername()]);
+                DB::update("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [statsNewChat(), getUsername()]);
             }
 
             if ($total > 0) {
 
-                $querychat = DB::run() -> query("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('chatpost').";");
+                $querychat = DB::select("SELECT * FROM `chat` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('chatpost').";");
 
                 while ($data = $querychat -> fetch()) {
                     echo '<div class="b">';
@@ -90,14 +90,14 @@ if (isAdmin()) {
                     if (getUsername() == $post['user'] && $post['time'] + 1800 > SITETIME && (utfStrlen($msg) + utfStrlen($post['text']) <= 1500)) {
 
                         $newpost = $post['text']."\n\n".'[i][size=1]Добавлено через '.makeTime(SITETIME - $post['time']).' сек.[/size][/i]'."\n".$msg;
-                        DB::run() -> query("UPDATE `chat` SET `text`=? WHERE `id`=? LIMIT 1;", [$newpost, $post['id']]);
+                        DB::update("UPDATE `chat` SET `text`=? WHERE `id`=? LIMIT 1;", [$newpost, $post['id']]);
 
                     } else {
 
-                        DB::run() -> query("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [getUsername(), $msg, getClientIp(), getUserAgent(), SITETIME]);
+                        DB::insert("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [getUsername(), $msg, getClientIp(), getUserAgent(), SITETIME]);
                     }
 
-                    DB::run() -> query("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [statsNewChat(), getUsername()]);
+                    DB::update("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [statsNewChat(), getUsername()]);
 
                     setFlash('success', 'Сообщение успешно добавлено!');
                     redirect ("/admin/chat");
@@ -205,7 +205,7 @@ if (isAdmin()) {
                     if (!empty($post)) {
                         if ($post['time'] + 600 > SITETIME) {
 
-                            DB::run() -> query("UPDATE `chat` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=? LIMIT 1;", [$msg, getUsername(), SITETIME, $id]);
+                            DB::update("UPDATE `chat` SET `text`=?, `edit`=?, `edit_time`=? WHERE `id`=? LIMIT 1;", [$msg, getUsername(), SITETIME, $id]);
 
                             setFlash('success', 'Сообщение успешно отредактировано!');
                             redirect ("/admin/chat?page=$page");

@@ -28,7 +28,7 @@ switch ($action):
 
         if ($total > 0) {
 
-            $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `rating` DESC, `login` ASC LIMIT ".$page['offset'].", ".setting('avtorlist').";");
+            $queryusers = DB::select("SELECT * FROM `users` ORDER BY `rating` DESC, `login` ASC LIMIT ".$page['offset'].", ".setting('avtorlist').";");
 
             $i = 0;
             while ($data = $queryusers -> fetch()) {
@@ -69,7 +69,7 @@ switch ($action):
             $queryuser = DB::run() -> querySingle("SELECT `login` FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($uz)]);
 
             if (!empty($queryuser)) {
-                $queryrating = DB::run() -> query("SELECT `login` FROM `users` ORDER BY `rating` DESC, `login` ASC;");
+                $queryrating = DB::select("SELECT `login` FROM `users` ORDER BY `rating` DESC, `login` ASC;");
                 $ratusers = $queryrating -> fetchAll(PDO::FETCH_COLUMN);
 
                 foreach ($ratusers as $key => $ratval) {

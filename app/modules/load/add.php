@@ -26,7 +26,7 @@ case 'index':
         echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br>';
     }
 
-    $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY `sort` ASC;");
+    $querydown = DB::select("SELECT * FROM `cats` ORDER BY `sort` ASC;");
     $downs = $querydown -> fetchAll();
 
     if (count($downs) > 0) {
@@ -94,7 +94,7 @@ case 'waiting':
     $total = DB::run() -> querySingle("SELECT count(*) FROM `downs` WHERE `active`=? AND `user`=?;", [0, getUsername()]);
 
     if ($total > 0) {
-        $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC;", [0, getUsername()]);
+        $querynew = DB::select("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? AND `user`=? ORDER BY `time` DESC;", [0, getUsername()]);
 
         while ($data = $querynew -> fetch()) {
             echo '<div class="b">';
@@ -154,8 +154,8 @@ case 'add':
                                         $downtitle = DB::run() -> querySingle("SELECT `title` FROM `downs` WHERE `title`=? LIMIT 1;", [$title]);
                                         if (empty($downtitle)) {
 
-                                            //DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `category_id`=?", array($cid));
-                                            DB::run() -> query("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', getUsername(), $author, $site, '', SITETIME]);
+                                            //DB::update("UPDATE `cats` SET `count`=`count`+1 WHERE `category_id`=?", array($cid));
+                                            DB::insert("INSERT INTO `downs` (`category_id`, `title`, `text`, `link`, `user`, `author`, `site`, `screen`, `time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", [$cid, $title, $text, '', getUsername(), $author, $site, '', SITETIME]);
 
                                             $lastid = DB::run() -> lastInsertId();
 
@@ -210,7 +210,7 @@ case 'view':
     $new = DB::run() -> queryFetch("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
 
     if (!empty($new)) {
-        $downs = DB::run() -> query("SELECT `id`, `parent`, `name` FROM `cats` WHERE `closed`=0 ORDER BY `sort` ASC;") -> fetchAll();
+        $downs = DB::select("SELECT `id`, `parent`, `name` FROM `cats` WHERE `closed`=0 ORDER BY `sort` ASC;") -> fetchAll();
         if (count($downs) > 0) {
             if ($new['user'] == getUsername()) {
                 if (empty($new['active'])) {
@@ -351,7 +351,7 @@ case 'edit':
                                                 $newtitle = DB::run() -> querySingle("SELECT `title` FROM `downs` WHERE `title`=? AND `id`<>? LIMIT 1;", [$title, $id]);
                                                 if (empty($newtitle)) {
 
-                                                    DB::run() -> query("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `time`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $new['time'], $id]);
+                                                    DB::update("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `time`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $new['time'], $id]);
 
                                                     setFlash('success', 'Данные успешно изменены!');
                                                     redirect("/load/add?act=view&id=$id");
@@ -431,7 +431,7 @@ case 'loadfile':
 
                                             copyrightArchive(HOME.'/uploads/files/'.$folder.$filename);
 
-                                            DB::run() -> query("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
+                                            DB::update("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
                                             // Обработка видео
                                             if ($isVideo && env('FFMPEG_ENABLED')) {
@@ -452,7 +452,7 @@ case 'loadfile':
                                                 $frame->save(HOME . '/uploads/screen/' . $folder . '/' . $filename . '.jpg');
 
                                                 if (file_exists(HOME . '/uploads/screen/' . $folder . '/' . $filename . '.jpg')) {
-                                                    DB::run()->query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$filename . '.jpg', $id]);
+                                                    DB::update("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$filename . '.jpg', $id]);
                                                 }
 
                                                 // Перекодируем видео в h264
@@ -535,7 +535,7 @@ case 'loadscreen':
                             $handle -> process(HOME.'/uploads/screen/'.$folder);
                             if ($handle -> processed) {
 
-                                DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$handle -> file_dst_name, $id]);
+                                DB::update("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$handle -> file_dst_name, $id]);
                                 $handle -> clean();
 
                                 setFlash('success', 'Скриншот успешно загружен!');
@@ -585,7 +585,7 @@ case 'delfile':
                 deleteImage('uploads/files/'.$folder, $link['link']);
                 deleteImage('uploads/screen/'.$folder, $link['screen']);
 
-                DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
+                DB::update("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
                 setFlash('success', 'Файл успешно удален!');
                 redirect("/load/add?act=view&id=$id");
@@ -617,7 +617,7 @@ case 'delscreen':
 
                 deleteImage('uploads/screen/'.$folder, $screen['screen']);
 
-                DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
+                DB::update("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
                 setFlash('success', 'Скриншот успешно удален!');
                 redirect("/load/add?act=view&id=$id");

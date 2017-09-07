@@ -112,7 +112,7 @@ if (isAdmin()) {
 
                             $text = antimat($text);
 
-                            DB::run() -> query("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", [$title, $text, $closed, $gid]);
+                            DB::update("UPDATE `photo` SET `title`=?, `text`=?, `closed`=? WHERE `id`=?;", [$title, $text, $closed, $gid]);
 
                             setFlash('success', 'Фотография успешно отредактирована!');
                             redirect("/admin/gallery?page=$page");
@@ -147,13 +147,13 @@ if (isAdmin()) {
                     $del = implode(',', $del);
 
                     if (is_writeable(HOME.'/uploads/pictures')) {
-                        $querydel = DB::run() -> query("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.");");
+                        $querydel = DB::select("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.");");
                         $arr_photo = $querydel -> fetchAll();
 
                         if (count($arr_photo) > 0) {
                             foreach ($arr_photo as $delete) {
-                                DB::run() -> query("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$delete['id']]);
-                                DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", [Photo::class, $delete['id']]);
+                                DB::delete("DELETE FROM `photo` WHERE `id`=? LIMIT 1;", [$delete['id']]);
+                                DB::delete("DELETE FROM `comments` WHERE relate_type=? AND `relate_id`=?;", [Photo::class, $delete['id']]);
 
                                 deleteImage('uploads/pictures/', $delete['link']);
                             }

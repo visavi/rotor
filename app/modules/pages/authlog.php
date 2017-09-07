@@ -18,7 +18,7 @@ if (isUser()) {
 
     if ($total > 0) {
 
-        $querylogin = DB::run() -> query("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loginauthlist').";", [getUsername()]);
+        $querylogin = DB::select("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loginauthlist').";", [getUsername()]);
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';

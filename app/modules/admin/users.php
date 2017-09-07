@@ -41,7 +41,7 @@ if (isAdmin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryusers = DB::run() -> query("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".setting('userlist').";");
+                $queryusers = DB::select("SELECT * FROM `users` ORDER BY `joined` DESC LIMIT ".$page['offset'].", ".setting('userlist').";");
 
                 while ($data = $queryusers -> fetch()) {
                     if (empty($data['email'])) {
@@ -84,7 +84,7 @@ if (isAdmin([101, 102])) {
 
                 if ($total > 0) {
 
-                    $queryuser = DB::run() -> query("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".setting('usersearch').";");
+                    $queryuser = DB::select("SELECT `login`, `point` FROM `users` WHERE LOWER(`login`) ".$search." ORDER BY `point` DESC LIMIT ".$page['offset'].", ".setting('usersearch').";");
 
                     while ($data = $queryuser -> fetch()) {
 
@@ -280,7 +280,7 @@ if (isAdmin([101, 102])) {
                                                 $city = utfSubstr($city, 0, 50);
                                                 $rating = $posrating - $negrating;
 
-                                                DB::run() -> query("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=? `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
+                                                DB::update("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=? `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
 
                                                 saveStatus();
                                                 saveUserMoney();
@@ -372,7 +372,7 @@ if (isAdmin([101, 102])) {
                         if (!empty($mailblack)) {
                             $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $user['email']]);
                             if (empty($blackmail) && !empty($user['email'])) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], getUsername(), SITETIME]);
+                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], getUsername(), SITETIME]);
                             }
                         }
 
@@ -380,7 +380,7 @@ if (isAdmin([101, 102])) {
                         if (!empty($loginblack)) {
                             $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($user['login'])]);
                             if (empty($blacklogin)) {
-                                DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], getUsername(), SITETIME]);
+                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], getUsername(), SITETIME]);
                             }
                         }
 
@@ -392,7 +392,7 @@ if (isAdmin([101, 102])) {
                         // ------ Удаление тем в форуме -------//
                         if (!empty($delpostforum) || !empty($deltopicforum)) {
 
-                            $query = DB::run() -> query("SELECT `id` FROM `topics` WHERE `author`=?;", [$uz]);
+                            $query = DB::select("SELECT `id` FROM `topics` WHERE `author`=?;", [$uz]);
                             $topics = $query -> fetchAll(PDO::FETCH_COLUMN);
 
                             if (!empty($topics)){
@@ -402,19 +402,19 @@ if (isAdmin([101, 102])) {
                                 foreach($topics as $delDir){
                                     removeDir(HOME.'/uploads/forum/'.$delDir);
                                 }
-                                DB::run() -> query("DELETE FROM `files_forum` WHERE `post_id` IN (".$strtopics.");");
+                                DB::delete("DELETE FROM `files_forum` WHERE `post_id` IN (".$strtopics.");");
                                 // ------ Удаление загруженных файлов -------//
 
-                                DB::run() -> query("DELETE FROM `posts` WHERE `topic_id` IN (".$strtopics.");");
-                                DB::run() -> query("DELETE FROM `topics` WHERE `id` IN (".$strtopics.");");
+                                DB::delete("DELETE FROM `posts` WHERE `topic_id` IN (".$strtopics.");");
+                                DB::delete("DELETE FROM `topics` WHERE `id` IN (".$strtopics.");");
                             }
 
                             // ------ Удаление сообщений в форуме -------//
                             if (!empty($delpostforum)) {
-                                DB::run() -> query("DELETE FROM `posts` WHERE `user`=?;", [$uz]);
+                                DB::delete("DELETE FROM `posts` WHERE `user`=?;", [$uz]);
 
                                 // ------ Удаление загруженных файлов -------//
-                                $queryfiles = DB::run() -> query("SELECT * FROM `files_forum` WHERE `user`=?;", [$uz]);
+                                $queryfiles = DB::select("SELECT * FROM `files_forum` WHERE `user`=?;", [$uz]);
                                 $files = $queryfiles->fetchAll();
 
                                 if (!empty($files)){
@@ -423,7 +423,7 @@ if (isAdmin([101, 102])) {
                                             unlink(HOME.'/uploads/forum/'.$file['topic_id'].'/'.$file['hash']);
                                         }
                                     }
-                                    DB::run() -> query("DELETE FROM `files_forum` WHERE `user`=?;", [$uz]);
+                                    DB::delete("DELETE FROM `files_forum` WHERE `user`=?;", [$uz]);
                                 }
                                 // ------ Удаление загруженных файлов -------//
                             }
@@ -433,22 +433,22 @@ if (isAdmin([101, 102])) {
 
                         // ------ Удаление коментарий -------//
                         if (!empty($delcommblog)) {
-                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['blog', $uz]);
+                            DB::delete("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['blog', $uz]);
                             restatement('blog');
                         }
 
                         if (!empty($delcommload)) {
-                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['down', $uz]);
+                            DB::delete("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['down', $uz]);
                             restatement('load');
                         }
 
                         if (!empty($delcommphoto)) {
-                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", [Photo::class, $uz]);
+                            DB::delete("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", [Photo::class, $uz]);
                             restatement('photo');
                         }
 
                         if (!empty($delcommnews)) {
-                            DB::run() -> query("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['news', $uz]);
+                            DB::delete("DELETE FROM `comments` WHERE relate_type=? AND `user`=?;", ['news', $uz]);
                             restatement('news');
                         }
 // @TODO: добавит остальные комментарии всего их 6 тут 4

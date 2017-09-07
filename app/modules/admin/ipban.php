@@ -23,7 +23,7 @@ if (isAdmin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('ipbanlist').";");
+                $queryban = DB::select("SELECT * FROM `ban` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('ipbanlist').";");
 
                 echo '<form action="/admin/ipban?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -78,7 +78,7 @@ if (isAdmin([101, 102])) {
                 if (preg_match('|^[0-9]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}$|', $ips)) {
                     $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", [$ips]);
                     if (empty($banip)) {
-                        DB::run() -> query("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, getUsername(), SITETIME]);
+                        DB::insert("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, getUsername(), SITETIME]);
                         ipBan(true);
 
                         setFlash('success', 'IP успешно занесен в список!');
@@ -112,7 +112,7 @@ if (isAdmin([101, 102])) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `ban` WHERE `id` IN (".$del.");");
+                    DB::delete("DELETE FROM `ban` WHERE `id` IN (".$del.");");
                     ipBan(true);
 
                     setFlash('success', 'Выбранные IP успешно удалены из списка!');

@@ -44,25 +44,25 @@ if (isAdmin([101])) {
 
                         // Рассылка пользователям, которые в онлайне
                         if ($rec==1){
-                            $query = DB::run() -> query("SELECT `user` FROM `visit` WHERE `nowtime`>?;", [SITETIME-600]);
+                            $query = DB::select("SELECT `user` FROM `visit` WHERE `nowtime`>?;", [SITETIME-600]);
                             $arrusers = $query -> fetchAll(PDO::FETCH_COLUMN);
                         }
 
                         // Рассылка активным пользователям, которые посещали сайт менее недели назад
                         if ($rec==2){
-                            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
+                            $query = DB::select("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
                         // Рассылка администрации
                         if ($rec==3){
-                            $query = DB::run()->query("SELECT `login` FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
+                            $query = DB::select("SELECT `login` FROM `users` WHERE `level`>=? AND `level`<=?;", [101, 105]);
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
                         // Рассылка всем пользователям сайта
                         if ($rec==4){
-                            $query = DB::run()->query("SELECT `login` FROM `users`;");
+                            $query = DB::select("SELECT `login` FROM `users`;");
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 

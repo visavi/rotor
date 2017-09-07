@@ -5,7 +5,7 @@ if (!file_exists($imagecache) || dateFixed(@filemtime($imagecache), "dmYH") != d
 
 	$hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
 
-	$querycount = DB::run() -> query("SELECT * FROM `counter24` ORDER BY `hour` DESC;");
+	$querycount = DB::select("SELECT * FROM `counter24` ORDER BY `hour` DESC;");
 	$counts = $querycount -> fetchAll();
 
 	$arrhits = [];

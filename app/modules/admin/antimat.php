@@ -19,7 +19,7 @@ if (isAdmin([101, 102, 103])) {
             echo 'Все слова в списке будут заменяться на ***<br>';
             echo 'Чтобы удалить слово нажмите на него, добавить слово можно в форме ниже<br><br>';
 
-            $querymat = DB::run() -> query("SELECT * FROM antimat;");
+            $querymat = DB::select("SELECT * FROM antimat;");
             $arrmat = $querymat -> fetchAll();
             $total = count($arrmat);
 
@@ -63,7 +63,7 @@ if (isAdmin([101, 102, 103])) {
                 if (!empty($mat)) {
                     $querymat = DB::run() -> querySingle("SELECT id FROM antimat WHERE string=? LIMIT 1;", [$mat]);
                     if (empty($querymat)) {
-                        DB::run() -> query("INSERT INTO antimat (string) VALUES (?);", [$mat]);
+                        DB::insert("INSERT INTO antimat (string) VALUES (?);", [$mat]);
 
                         setFlash('success', 'Слово успешно добавлено в список антимата!');
                         redirect("/admin/antimat");
@@ -91,7 +91,7 @@ if (isAdmin([101, 102, 103])) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($id)) {
-                    DB::run() -> query("DELETE FROM antimat WHERE id=?;", [$id]);
+                    DB::delete("DELETE FROM antimat WHERE id=?;", [$id]);
 
                     setFlash('success', 'Слово успешно удалено из списка антимата!');
                     redirect("/admin/antimat");
@@ -126,7 +126,7 @@ if (isAdmin([101, 102, 103])) {
 
             if (isAdmin([101])) {
                 if ($uid == $_SESSION['token']) {
-                    DB::run() -> query("DELETE FROM antimat;");
+                    DB::delete("DELETE FROM antimat;");
 
                     setFlash('success', 'Список антимата успешно очищен!');
                     redirect("/admin/antimat");

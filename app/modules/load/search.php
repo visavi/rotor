@@ -77,7 +77,7 @@ case "search":
 
             if (empty($_SESSION['loadfindres']) || $loadfind!=$_SESSION['loadfind']) {
 
-                $querysearch = DB::run() -> query("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`title`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", [1]);
+                $querysearch = DB::select("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`title`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", [1]);
                 $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
                 $_SESSION['loadfind'] = $loadfind;
@@ -93,7 +93,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";");
+                $querydown = DB::select("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';
@@ -119,7 +119,7 @@ case "search":
 
             if (empty($_SESSION['loadfindres']) || $loadfind!=$_SESSION['loadfind']) {
 
-                $querysearch = DB::run() -> query("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`text`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", [1]);
+                $querysearch = DB::select("SELECT `id` FROM `downs` WHERE `active`=? AND MATCH (`text`) AGAINST ('".$findme."' IN BOOLEAN MODE) LIMIT 100;", [1]);
                 $result = $querysearch -> fetchAll(PDO::FETCH_COLUMN);
 
                 $_SESSION['loadfind'] = $loadfind;
@@ -135,7 +135,7 @@ case "search":
 
                 $result = implode(',', $_SESSION['loadfindres']);
 
-                $querydown = DB::run() -> query("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";");
+                $querydown = DB::select("SELECT `downs`.*, `name`, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$result.") ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('downlist').";");
 
                 while ($data = $querydown -> fetch()) {
                     $folder = $data['folder'] ? $data['folder'].'/' : '';

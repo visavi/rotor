@@ -97,9 +97,9 @@ class ForumActiveController extends BaseController
 
         if ($validation->run()) {
 
-            DB::run()->query("DELETE FROM `posts` WHERE `id`=? AND `topic_id`=?;", [$tid, $post['topic_id']]);
-            DB::run()->query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post['topic_id']]);
-            DB::run()->query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post->getTopic()->getForum()->id]);
+            DB::delete("DELETE FROM `posts` WHERE `id`=? AND `topic_id`=?;", [$tid, $post['topic_id']]);
+            DB::update("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post['topic_id']]);
+            DB::update("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post->getTopic()->getForum()->id]);
 
             exit(json_encode(['status' => 'success']));
         } else {

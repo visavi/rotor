@@ -142,7 +142,7 @@ if (isAdmin([101])) {
                                 fn_write($fp, "--\n-- Дамп данных таблицы `{$data}`\n--\n\n", $method);
                                 fn_write($fp, "INSERT INTO `{$data}` VALUES ", $method);
 
-                                $col = DB::run() -> query("SELECT * FROM `{$data}`;");
+                                $col = DB::select("SELECT * FROM `{$data}`;");
 
                                 $num = 0;
                                 while ($row = $col -> fetch(PDO::FETCH_NUM)) {

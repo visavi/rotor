@@ -61,9 +61,9 @@ if (isUser()) {
 
                     $querynote = DB::run() -> querySingle("SELECT `id` FROM `notebook` WHERE `user`=? LIMIT 1;", [getUsername()]);
                     if (!empty($querynote)) {
-                        DB::run() -> query("UPDATE `notebook` SET `text`=?, `time`=? WHERE `user`=?", [$msg, SITETIME, getUsername()]);
+                        DB::update("UPDATE `notebook` SET `text`=?, `time`=? WHERE `user`=?", [$msg, SITETIME, getUsername()]);
                     } else {
-                        DB::run() -> query("INSERT INTO `notebook` (`user`, `text`, `time`) VALUES (?, ?, ?);", [getUsername(), $msg, SITETIME]);
+                        DB::insert("INSERT INTO `notebook` (`user`, `text`, `time`) VALUES (?, ?, ?);", [getUsername(), $msg, SITETIME]);
                     }
 
                     setFlash('success', 'Запись успешно сохранена!');

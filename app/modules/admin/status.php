@@ -16,7 +16,7 @@ if (isAdmin([101, 102])) {
     ############################################################################################
         case "index":
 
-            $querystatus = DB::run() -> query("SELECT * FROM `status` ORDER BY `topoint` DESC;");
+            $querystatus = DB::select("SELECT * FROM `status` ORDER BY `topoint` DESC;");
             $status = $querystatus -> fetchAll();
             $total = count($status);
 
@@ -89,7 +89,7 @@ if (isAdmin([101, 102])) {
             if ($uid == $_SESSION['token']) {
                 if (utfStrlen($name) >= 5 && utfStrlen($name) < 30) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
-                        DB::run() -> query("UPDATE `status` SET `topoint`=?, `point`=?, `name`=?, `color`=? WHERE `id`=?;", [$topoint, $point, $name, $color, $id]);
+                        DB::update("UPDATE `status` SET `topoint`=?, `point`=?, `name`=?, `color`=? WHERE `id`=?;", [$topoint, $point, $name, $color, $id]);
 
                         setFlash('success', 'Статус успешно изменен!');
                         redirect("/admin/status");
@@ -143,7 +143,7 @@ if (isAdmin([101, 102])) {
             if ($uid == $_SESSION['token']) {
                 if (utfStrlen($name) >= 5 && utfStrlen($name) < 30) {
                     if (preg_match('|^#+[A-z0-9]{6}$|', $color) || empty($color)) {
-                        DB::run() -> query("INSERT INTO `status` (`topoint`, `point`, `name`, `color`) VALUES (?, ?, ?, ?);", [$topoint, $point, $name, $color]);
+                        DB::insert("INSERT INTO `status` (`topoint`, `point`, `name`, `color`) VALUES (?, ?, ?, ?);", [$topoint, $point, $name, $color]);
 
                         setFlash('success', 'Статус успешно добавлен!');
                         redirect("/admin/status");
@@ -170,7 +170,7 @@ if (isAdmin([101, 102])) {
 
             if ($uid == $_SESSION['token']) {
                 if (!empty($id)) {
-                    DB::run() -> query("DELETE FROM `status` WHERE `id`=?;", [$id]);
+                    DB::delete("DELETE FROM `status` WHERE `id`=?;", [$id]);
 
                     setFlash('success', 'Статус успешно удален!');
                     redirect("/admin/status");

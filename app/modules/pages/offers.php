@@ -89,7 +89,7 @@ switch ($action):
 
         if ($total > 0) {
 
-            $queryoffers = DB::run() -> query("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".setting('postoffers').";", [$type]);
+            $queryoffers = DB::select("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".setting('postoffers').";", [$type]);
 
             while ($data = $queryoffers -> fetch()) {
                 echo '<div class="b">';
@@ -188,7 +188,7 @@ switch ($action):
             echo '<div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br>';
 
             if ($queryoff['comments'] > 0) {
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 5;", ['offer', $id]);
+                $querycomm = DB::select("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 5;", ['offer', $id]);
 
                 while ($comm = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -294,7 +294,7 @@ switch ($action):
                                 $title = antimat($title);
                                 $text = antimat($text);
 
-                                DB::run() -> query("UPDATE `offers` SET `type`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $title, $text, $id]);
+                                DB::update("UPDATE `offers` SET `type`=?, `title`=?, `text`=? WHERE `id`=?;", [$types, $title, $text, $id]);
 
                                 setFlash('success', 'Данные успешно отредактированы!');
                                 redirect("/offers?act=view&type=$types&id=$id");
@@ -346,7 +346,7 @@ switch ($action):
                     echo '<form action="/offers?act=delcomm&amp;id='.$id.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
                 }
 
-                $querycomm = DB::run() -> query("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".setting('postcommoffers').";", ['offer', $id]);
+                $querycomm = DB::select("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` ASC LIMIT ".$page['offset'].", ".setting('postcommoffers').";", ['offer', $id]);
 
                 while ($data = $querycomm -> fetch()) {
                     echo '<div class="b">';
@@ -421,9 +421,9 @@ switch ($action):
 
                                 $msg = antimat($msg);
 
-                                DB::run() -> query("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, getUsername(), SITETIME, getClientIp(), getUserAgent()]);
+                                DB::insert("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, getUsername(), SITETIME, getClientIp(), getUserAgent()]);
 
-                                DB::run() -> query("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
+                                DB::update("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 
                                 setFlash('success', 'Комментарий успешно добавлен!');
                                 redirect("/offers?act=end&id=$id");
@@ -464,12 +464,12 @@ switch ($action):
                         if (getUsername() != $queryoff['user']) {
                             $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
                             if (empty($queryrated)) {
-                                DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, getUsername(), SITETIME]);
-                                DB::run() -> query("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", [$id]);
+                                DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, getUsername(), SITETIME]);
+                                DB::update("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", [$id]);
                             } else {
-                                DB::run() -> query("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
+                                DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
                                 if ($queryoff['votes'] > 0) {
-                                    DB::run() -> query("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", [$id]);
+                                    DB::update("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", [$id]);
                                 }
                             }
 
@@ -540,10 +540,10 @@ switch ($action):
                             $title = antimat($title);
                             $text = antimat($text);
 
-                            DB::run() -> query("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, getUsername(), 1, SITETIME]);
+                            DB::insert("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, getUsername(), 1, SITETIME]);
                             $lastid = DB::run() -> lastInsertId();
 
-                            DB::run() -> query("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, getUsername(), SITETIME]);
+                            DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, getUsername(), SITETIME]);
 
                             setFlash('success', 'Сообщение успешно добавлено!');
                             redirect("/offers?act=view&type=$types&id=$lastid");
@@ -584,7 +584,7 @@ switch ($action):
                     $del = implode(',', $del);
 
                     $delcomments = DB::run() -> exec("DELETE FROM `comments` WHERE relate_type='offer' AND `id` IN (".$del.") AND `relate_id`=".$id.";");
-                    DB::run() -> query("UPDATE `offers` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
+                    DB::update("UPDATE `offers` SET `comments`=`comments`-? WHERE `id`=?;", [$delcomments, $id]);
 
                     setFlash('success', 'Выбранные комментарии успешно удалены!');
                     redirect("/offers?act=comments&id=$id&page=$page");

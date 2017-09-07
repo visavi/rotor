@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Classes\Request;
 use App\Classes\Validation;
 use App\Models\Bookmark;
+use App\Models\Topic;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class BookmarkController extends BaseController
@@ -44,7 +45,7 @@ class BookmarkController extends BaseController
      */
     public function perform()
     {
-        if (!Request::ajax()) redirect('/');
+        if (! Request::ajax()) redirect('/');
 
         $token = check(Request::input('token'));
         $tid   = abs(intval(Request::input('tid')));
@@ -52,21 +53,26 @@ class BookmarkController extends BaseController
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
 
-        $topic = DB::run()->queryFetch("SELECT * FROM `topics` WHERE `id`=? LIMIT 1;", [$tid]);
+        $topic = Topic::find($tid);
         $validation->addRule('custom', $topic, 'Ошибка! Данной темы не существует!');
 
         if ($validation->run()) {
 
-            $bookmark = DB::run()->querySingle("SELECT `id` FROM `bookmarks` WHERE `topic_id`=? AND `user_id`=? LIMIT 1;", [$tid, getUserId()]);
+            $bookmark = Bookmark::where('topic_id', $tid)
+                ->where('user_id', getUserId())
+                ->first();
 
             if ($bookmark) {
-                DB::run()->query("DELETE FROM `bookmarks` WHERE `topic_id`=? AND `user_id`=?;", [$tid, getUserId()]);
+                $bookmark->delete();
                 exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
             } else {
-                DB::run()->query("INSERT INTO `bookmarks` (`user_id`, `topic_id`, `posts`) VALUES (?, ?, ?);", [getUserId(), $tid, $topic['posts']]);
+                Bookmark::create([
+                    'user_id'  => getUserId(),
+                    'topic_id' => $tid,
+                    'posts'    => $topic['posts'],
+                ]);
                 exit(json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']));
             }
-
         } else {
             exit(json_encode(['status' => 'error', 'message' => current($validation->getErrors())]));
         }
@@ -86,9 +92,10 @@ class BookmarkController extends BaseController
             ->addRule('not_empty', $topicIds, 'Ошибка! Отсутствуют выбранные закладки!');
 
         if ($validation->run()) {
-            $topicIds = implode(',', $topicIds);
 
-            DB::run()->query("DELETE FROM `bookmarks` WHERE `topic_id` IN (" . $topicIds . ") AND `user_id`=?;", [getUserId()]);
+            Bookmark::whereIn('topic_id', $topicIds)
+                ->where('user_id', getUserId())
+                ->delete();
 
             setFlash('success', 'Выбранные темы успешно удалены из закладок!');
         } else {

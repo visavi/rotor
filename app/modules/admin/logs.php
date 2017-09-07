@@ -27,7 +27,7 @@ if (isAdmin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [404]);
+                $queryban = DB::select("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [404]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -59,7 +59,7 @@ if (isAdmin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [403]);
+                $queryban = DB::select("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [403]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
@@ -87,7 +87,7 @@ if (isAdmin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryban = DB::run() -> query("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [666]);
+                $queryban = DB::select("SELECT * FROM `error` WHERE `num`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loglist').";", [666]);
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';

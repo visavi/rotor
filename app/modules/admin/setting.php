@@ -6,7 +6,7 @@ $act = (isset($_GET['act'])) ? check($_GET['act']) : 'index';
 if (isAdmin([101])) {
     //show_title('Настройки сайта');
 
-    $queryset = DB::run() -> query("SELECT `name`, `value` FROM `setting`;");
+    $queryset = DB::select("SELECT `name`, `value` FROM `setting`;");
     $setting = $queryset -> fetchAssoc();
 
     switch ($action):
@@ -84,7 +84,7 @@ if (isAdmin([101])) {
                                 if (!empty($queryuser)){
 
                                     if ($login!=$setting['nickname']){
-                                        DB::run() -> query("UPDATE `users` SET `level`=? WHERE `login`=? LIMIT 1;", [101, $login]);
+                                        DB::update("UPDATE `users` SET `level`=? WHERE `login`=? LIMIT 1;", [101, $login]);
                                     }
 
                                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");

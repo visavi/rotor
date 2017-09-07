@@ -15,7 +15,7 @@ if (isUser()) {
 
     if ($total > 0) {
 
-        $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE user=? ORDER BY time DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";", [$uz]);
+        $queryhist = DB::select("SELECT * FROM `banhist` WHERE user=? ORDER BY time DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";", [$uz]);
 
         while ($data = $queryhist -> fetch()) {
             echo '<div class="b">';

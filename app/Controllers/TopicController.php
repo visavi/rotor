@@ -125,22 +125,22 @@ class TopicController extends BaseController
 
                 $newpost = $post['text'] . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post['created_at']) . ' сек.[/size][/i]' . "\n" . $msg;
 
-                DB::run()->query("UPDATE `posts` SET `text`=? WHERE `id`=? LIMIT 1;", [$newpost, $post['id']]);
+                DB::update("UPDATE `posts` SET `text`=? WHERE `id`=? LIMIT 1;", [$newpost, $post['id']]);
                 $lastid = $post['id'];
 
             } else {
 
-                DB::run()->query("INSERT INTO `posts` (`topic_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$tid, getUserId(), $msg, SITETIME, getClientIp(), getUserAgent()]);
+                DB::insert("INSERT INTO `posts` (`topic_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$tid, getUserId(), $msg, SITETIME, getClientIp(), getUserAgent()]);
                 $lastid = DB::run()->lastInsertId();
 
-                DB::run()->query("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=? LIMIT 1;", [getUserId()]);
+                DB::update("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `id`=? LIMIT 1;", [getUserId()]);
 
-                DB::run()->query("UPDATE `topics` SET `posts`=`posts`+1, `last_post_id`=? WHERE `id`=?;", [$lastid, $tid]);
+                DB::update("UPDATE `topics` SET `posts`=`posts`+1, `last_post_id`=? WHERE `id`=?;", [$lastid, $tid]);
 
-                DB::run()->query("UPDATE `forums` SET `posts`=`posts`+1, `last_topic_id`=? WHERE `id`=?;", [$tid, $topics['forum_id']]);
+                DB::update("UPDATE `forums` SET `posts`=`posts`+1, `last_topic_id`=? WHERE `id`=?;", [$tid, $topics['forum_id']]);
                 // Обновление родительского форума
                 if ($topics['parent_id'] > 0) {
-                    DB::run()->query("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$tid, $topics['parent_id']]);
+                    DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?;", [$tid, $topics['parent_id']]);
                 }
             }
 
@@ -267,19 +267,19 @@ class TopicController extends BaseController
             $del = implode(',', $del);
 
             // ------ Удаление загруженных файлов -------//
-            $queryfiles = DB::run()->query("SELECT `hash` FROM `files` WHERE `relate_id` IN (" . $del . ") AND relate_type=?;", [Post::class]);
+            $queryfiles = DB::select("SELECT `hash` FROM `files` WHERE `relate_id` IN (" . $del . ") AND relate_type=?;", [Post::class]);
             $files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
 
             if (!empty($files)) {
                 foreach ($files as $file) {
                     deleteImage('uploads/forum/', $topic['id'] . '/' . $file);
                 }
-                DB::run()->query("DELETE FROM `files` WHERE `relate_id` IN (" . $del . ")  AND relate_type=?;", [Post::class]);
+                DB::delete("DELETE FROM `files` WHERE `relate_id` IN (" . $del . ")  AND relate_type=?;", [Post::class]);
             }
 
             $delposts = DB::run()->exec("DELETE FROM `posts` WHERE `id` IN (" . $del . ") AND `topic_id`=" . $tid . ";");
-            DB::run()->query("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $tid]);
-            DB::run()->query("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topic['forum_id']]);
+            DB::update("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $tid]);
+            DB::update("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topic['forum_id']]);
 
             setFlash('success', 'Выбранные сообщения успешно удалены!');
         } else {
@@ -308,7 +308,7 @@ class TopicController extends BaseController
 
         if ($validation->run()) {
 
-            DB::run()->query("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
+            DB::update("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
 
             $vote = Vote::where('topic_id', $tid)->first();
             if ($vote) {
@@ -375,10 +375,10 @@ class TopicController extends BaseController
                 $title = antimat($title);
                 $msg = antimat($msg);
 
-                DB::run()->query("UPDATE `topics` SET `title`=? WHERE id=?;", [$title, $tid]);
+                DB::update("UPDATE `topics` SET `title`=? WHERE id=?;", [$title, $tid]);
 
                 if ($post) {
-                    DB::run()->query("UPDATE `posts` SET `user_id`=?, `text`=?, `ip`=?, `brow`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [getUserId(), $msg, getClientIp(), getUserAgent(), getUserId(), SITETIME, $post['id']]);
+                    DB::update("UPDATE `posts` SET `user_id`=?, `text`=?, `ip`=?, `brow`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [getUserId(), $msg, getClientIp(), getUserAgent(), getUserId(), SITETIME, $post['id']]);
                 }
 
                 setFlash('success', 'Тема успешно изменена!');
@@ -438,19 +438,19 @@ class TopicController extends BaseController
 
                 $msg = antimat($msg);
 
-                DB::run()->query("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, getUserId(), SITETIME, $id]);
+                DB::update("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, getUserId(), SITETIME, $id]);
 
                 // ------ Удаление загруженных файлов -------//
                 if ($delfile) {
                     $del = implode(',', $delfile);
-                    $queryfiles = DB::run()->query("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (" . $del . ");", [$id, Post::class]);
+                    $queryfiles = DB::select("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (" . $del . ");", [$id, Post::class]);
                     $files = $queryfiles->fetchAll();
 
                     if (!empty($files)) {
                         foreach ($files as $file) {
                             deleteImage('uploads/forum/', $post['topic_id'] . '/' . $file['hash']);
                         }
-                        DB::run()->query("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (" . $del . ");", [$id, Post::class]);
+                        DB::delete("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (" . $del . ");", [$id, Post::class]);
                     }
                 }
 
@@ -463,7 +463,7 @@ class TopicController extends BaseController
             }
         }
 
-        $queryfiles = DB::run()->query("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=?;", [$id, Post::class]);
+        $queryfiles = DB::select("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=?;", [$id, Post::class]);
         $files = $queryfiles->fetchAll();
 
         return view('forum/topic_edit_post', compact('post', 'files', 'page'));

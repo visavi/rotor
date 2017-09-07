@@ -19,7 +19,7 @@ if (isAdmin()) {
 
             if ($total > 0) {
 
-                $querynew = DB::run() -> query("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".setting('downlist').";", [0]);
+                $querynew = DB::select("SELECT `downs`.*, `name` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE `active`=? ORDER BY `app` DESC, `time` DESC  LIMIT ".$page['offset'].", ".setting('downlist').";", [0]);
 
                 echo '<form action="/admin/newload?act=deldown&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -70,7 +70,7 @@ if (isAdmin()) {
             if (!empty($new)) {
                 if (empty($new['active'])) {
 
-                    $querydown = DB::run() -> query("SELECT * FROM `cats` ORDER BY sort ASC;");
+                    $querydown = DB::select("SELECT * FROM `cats` ORDER BY sort ASC;");
                     $downs = $querydown -> fetchAll();
 
                     if (count($downs) > 0) {
@@ -220,7 +220,7 @@ if (isAdmin()) {
                                                                         rename(HOME.'/uploads/screen/'.$folder.$new['screen'], HOME.'/uploads/screen/'.$screen);
                                                                         deleteImage('uploads/screen/'.$folder, $new['screen']);
                                                                     }
-                                                                    DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", [$link, $screen, $id]);
+                                                                    DB::update("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", [$link, $screen, $id]);
                                                                 }
                                                             }
 
@@ -229,13 +229,13 @@ if (isAdmin()) {
                                                                 if (user($new['user'])) {
                                                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.setting('home').'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUsername(), $textpriv, SITETIME]);
+                                                                    DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUsername(), $textpriv, SITETIME]);
 
-                                                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
+                                                                    DB::update("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                                                 }
                                                             }
 
-                                                            DB::run() -> query("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `notice`=?, `time`=?, `app`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $notice, $new['time'], $app, $id]);
+                                                            DB::update("UPDATE `downs` SET `category_id`=?, `title`=?, `text`=?, `author`=?, `site`=?, `notice`=?, `time`=?, `app`=? WHERE `id`=?;", [$cid, $title, $text, $author, $site, $notice, $new['time'], $app, $id]);
 
                                                             setFlash('success', 'Данные успешно изменены!');
                                                             redirect("/admin/newload?act=view&id=$id");
@@ -296,15 +296,15 @@ if (isAdmin()) {
                         if (empty($new['active'])) {
                             if (!empty($new['link'])) {
 
-                                DB::run() -> query("UPDATE `downs` SET `notice`=?, `time`=?, `app`=?, `active`=? WHERE `id`=?;", ['', SITETIME, 0, 1, $id]);
+                                DB::update("UPDATE `downs` SET `notice`=?, `time`=?, `app`=?, `active`=? WHERE `id`=?;", ['', SITETIME, 0, 1, $id]);
 
-                                DB::run() -> query("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$new['category_id']]);
+                                DB::update("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$new['category_id']]);
 
                                 if (user($new['user'])) {
                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.setting('home').'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                    DB::run() -> query("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUsername(), $textpriv, SITETIME]);
-                                    DB::run() -> query("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
+                                    DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUsername(), $textpriv, SITETIME]);
+                                    DB::update("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                 }
 
                                 setFlash('success', 'Файл успешно опубликован!');
@@ -347,7 +347,7 @@ if (isAdmin()) {
 
                     deleteImage('uploads/screen/'.$folder, $link['screen']);
 
-                    DB::run() -> query("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
+                    DB::update("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", ['', '', $id]);
 
                     setFlash('success', 'Файл успешно удален!');
                     redirect("/admin/newload?act=view&id=$id");
@@ -376,7 +376,7 @@ if (isAdmin()) {
 
                     deleteImage('uploads/screen/'.$folder, $screen['screen']);
 
-                    DB::run() -> query("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
+                    DB::update("UPDATE `downs` SET `screen`=? WHERE `id`=?;", ['', $id]);
 
                     setFlash('success', 'Скриншот успешно удален!');
                     redirect("/admin/newload?act=view&id=$id");
@@ -410,10 +410,10 @@ if (isAdmin()) {
                     $del = implode(',', $del);
 
 
-                    $querydel = DB::run() -> query("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$del.");");
+                    $querydel = DB::select("SELECT `downs`.*, `cats`.`folder` FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id` IN (".$del.");");
                     $arr_files = $querydel -> fetchAll();
 
-                    DB::run() -> query("DELETE FROM `downs` WHERE `id` IN (".$del.");");
+                    DB::delete("DELETE FROM `downs` WHERE `id` IN (".$del.");");
 
                     foreach ($arr_files as $delfile) {
                         $folder = $delfile['folder'] ? $delfile['folder'].'/' : '';

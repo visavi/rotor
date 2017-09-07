@@ -18,7 +18,7 @@ if (isAdmin([101, 102, 103])) {
 
             if ($total > 0) {
 
-                $queryhist = DB::run() -> query("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";");
+                $queryhist = DB::select("SELECT * FROM `banhist` ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";");
 
                 echo '<form action="/admin/banhist?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -81,7 +81,7 @@ if (isAdmin([101, 102, 103])) {
 
                 if ($total > 0) {
 
-                    $queryhist = DB::run() -> query("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";", [$uz]);
+                    $queryhist = DB::select("SELECT * FROM `banhist` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('listbanhist').";", [$uz]);
 
                     echo '<form action="/admin/banhist?act=del&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -145,7 +145,7 @@ if (isAdmin([101, 102, 103])) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `banhist` WHERE `id` IN (".$del.");");
+                    DB::delete("DELETE FROM `banhist` WHERE `id` IN (".$del.");");
 
                     setFlash('success', 'Выбранные баны успешно удалены!');
                     redirect("/admin/banhist?page=$page");

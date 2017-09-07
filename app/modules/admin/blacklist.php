@@ -61,7 +61,7 @@ if (isAdmin([101, 102])) {
 
             if ($total > 0) {
 
-                $queryblack = DB::run() -> query("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('blacklist').";", [$type]);
+                $queryblack = DB::select("SELECT * FROM `blacklist` WHERE `type`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('blacklist').";", [$type]);
 
                 echo '<form action="/admin/blacklist?act=del&amp;main='.$main.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -108,7 +108,7 @@ if (isAdmin([101, 102])) {
 
                                 $black = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [$type, $value]);
                                 if (empty($black)) {
-                                    DB::run() -> query("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [$type, $value, getUsername(), SITETIME]);
+                                    DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [$type, $value, getUsername(), SITETIME]);
 
                                     setFlash('success', 'Запись успешно добавлена в черный список!');
                                     redirect("/admin/blacklist?main=$main");
@@ -152,7 +152,7 @@ if (isAdmin([101, 102])) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    DB::run() -> query("DELETE FROM `blacklist` WHERE `type`=? AND `id` IN (".$del.");", [$type]);
+                    DB::delete("DELETE FROM `blacklist` WHERE `type`=? AND `id` IN (".$del.");", [$type]);
 
                     setFlash('success', 'Выбранные записи успешно удалены!');
                     redirect("/admin/blacklist?main=$main&page=$page");
