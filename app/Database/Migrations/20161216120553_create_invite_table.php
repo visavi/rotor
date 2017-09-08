@@ -14,7 +14,7 @@ class CreateInviteTable extends AbstractMigration
             $table->addColumn('hash', 'string', ['limit' => 15])
                 ->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('invited', 'string', ['limit' => 20, 'null' => true])
-                ->addColumn('used', 'boolean', ['default' => 0])
+                ->addColumn('used', 'boolean', ['default' =>false])
                 ->addColumn('time', 'integer')
                 ->addIndex('user')
                 ->addIndex('used')

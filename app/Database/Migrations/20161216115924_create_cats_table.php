@@ -17,7 +17,7 @@ class CreateCatsTable extends AbstractMigration
                 ->addColumn('name', 'string', ['limit' => 100])
                 ->addColumn('count', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
                 ->addColumn('folder', 'string', ['limit' => 50, 'null' => true])
-                ->addColumn('closed', 'boolean', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => false])
                 ->create();
         }
     }

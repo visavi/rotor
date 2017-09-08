@@ -13,7 +13,7 @@ class CreateBanhistTable extends AbstractMigration
             $table = $this->table('banhist', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
             $table->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('send', 'string', ['limit' => 20])
-                ->addColumn('type', 'boolean', ['default' => 0])
+                ->addColumn('type', 'boolean', ['default' => false])
                 ->addColumn('reason', 'text', ['null' => true])
                 ->addColumn('term', 'integer', ['default' => 0])
                 ->addColumn('time', 'integer')

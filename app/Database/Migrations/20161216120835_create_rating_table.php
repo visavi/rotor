@@ -14,7 +14,7 @@ class CreateRatingTable extends AbstractMigration
             $table->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('login', 'string', ['limit' => 20])
                 ->addColumn('text', 'text', ['null' => true])
-                ->addColumn('vote', 'boolean', ['default' => 0])
+                ->addColumn('vote', 'boolean', ['default' => false])
                 ->addColumn('time', 'integer')
                 ->addIndex('user')
                 ->create();

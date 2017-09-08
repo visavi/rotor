@@ -14,9 +14,9 @@ class CreatePollingsTable extends AbstractMigration
             $table->addColumn('relate_type', 'string', ['limit' => 20])
                 ->addColumn('relate_id', 'integer')
                 ->addColumn('user', 'string', ['limit' => 20])
-                ->addColumn('vote', 'boolean', ['default' => 1])
+                ->addColumn('vote', 'boolean', ['default' => true])
                 ->addColumn('time', 'integer')
-                ->addIndex(['relate_type', 'relate_id', 'user'], ['name' => 'relate_type'])
+                ->addIndex(['relate_type', 'relate_id', 'user'], ['name' => 'relate_type_idx'])
                 ->create();
         }
     }

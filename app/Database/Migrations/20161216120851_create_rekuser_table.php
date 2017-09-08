@@ -14,7 +14,7 @@ class CreateRekuserTable extends AbstractMigration
             $table->addColumn('site', 'string', ['limit' => 50])
                 ->addColumn('name', 'string', ['limit' => 50])
                 ->addColumn('color', 'string', ['limit' => 10, 'null' => true])
-                ->addColumn('bold', 'boolean', ['default' => 0])
+                ->addColumn('bold', 'boolean', ['default' => false])
                 ->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('time', 'integer')
                 ->create();

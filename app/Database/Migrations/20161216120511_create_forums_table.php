@@ -22,7 +22,7 @@ class CreateForumsTable extends AbstractMigration
                 ->addColumn('last_themes', 'string', ['limit' => 50, 'null' => true])
                 ->addColumn('last_user', 'string', ['limit' => 20, 'null' => true])
                 ->addColumn('last_time', 'integer', ['signed' => false, 'default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => false])
                 ->create();
         }
     }

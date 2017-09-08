@@ -18,7 +18,7 @@ class CreatePhotoTable extends AbstractMigration
                 ->addColumn('link', 'string', ['limit' => 30])
                 ->addColumn('time', 'integer')
                 ->addColumn('rating', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => false])
                 ->addColumn('comments', 'integer', ['signed' => false, 'default' => 0])
                 ->addIndex('time')
                 ->addIndex('user')

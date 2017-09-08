@@ -9,7 +9,7 @@ class DeleteSessionInSetting extends AbstractMigration
      */
     public function up()
     {
-        $this->execute("DELETE FROM setting WHERE name='session' LIMIT 1;");
+        $this->execute("DELETE FROM setting WHERE name='session';");
     }
 
     /**

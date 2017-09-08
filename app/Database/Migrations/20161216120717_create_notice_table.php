@@ -15,7 +15,7 @@ class CreateNoticeTable extends AbstractMigration
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('user', 'string', ['limit' => 20, 'null' => true])
                 ->addColumn('time', 'integer')
-                ->addColumn('protect', 'boolean', ['default' => 0])
+                ->addColumn('protect', 'boolean', ['default' => false])
                 ->create();
         }
     }

@@ -18,8 +18,8 @@ class CreateNewsTable extends AbstractMigration
                 ->addColumn('image', 'string', ['limit' => 30, 'null' => true])
                 ->addColumn('time', 'integer')
                 ->addColumn('comments', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false, 'default' => 0])
-                ->addColumn('closed', 'boolean', ['default' => 0])
-                ->addColumn('top', 'boolean', ['default' => 0])
+                ->addColumn('closed', 'boolean', ['default' => false])
+                ->addColumn('top', 'boolean', ['default' => false])
                 ->addIndex('time')
                 ->create();
         }

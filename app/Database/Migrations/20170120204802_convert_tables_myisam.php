@@ -9,10 +9,10 @@ class ConvertTablesMyisam extends AbstractMigration
      */
     public function up()
     {
-        $tables = $this->fetchAll('SHOW FULL TABLES');
+/*        $tables = $this->fetchAll('SHOW FULL TABLES');
         foreach ($tables as $table) {
             $this->execute("ALTER TABLE `".$table[0]."` ENGINE=MyISAM;");
-        }
+        }*/
     }
 
     /**
@@ -20,9 +20,9 @@ class ConvertTablesMyisam extends AbstractMigration
      */
     public function down()
     {
-        $tables = $this->fetchAll('SHOW FULL TABLES');
+/*        $tables = $this->fetchAll('SHOW FULL TABLES');
         foreach ($tables as $table) {
             $this->execute("ALTER TABLE `".$table[0]."` ENGINE=InnoDB;");
-        }
+        }*/
     }
 }
