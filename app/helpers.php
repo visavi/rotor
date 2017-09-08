@@ -139,7 +139,6 @@ function deleteUser(User $user)
     return $user->delete();
 }
 
-// ------------------- Функция удаления фотоальбома юзера --------------------//
 /**
  * Удаляет альбом пользователя
  *
@@ -1645,10 +1644,10 @@ function textPrivate($id, $replace = [])
     }
 
     foreach ($replace as $key => $val){
-        $message = str_replace($key, $val, $message);
+        $message->text = str_replace($key, $val, $message->text);
     }
 
-    return $message;
+    return $message->text;
 }
 
 // ------------ Функция статистики производительности -----------//

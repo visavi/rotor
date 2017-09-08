@@ -6,6 +6,7 @@ use App\Classes\Request;
 use App\Classes\Validation;
 use App\Models\Flood;
 use App\Models\Forum;
+use App\Models\Post;
 use App\Models\Topic;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
@@ -68,15 +69,17 @@ class ForumController extends BaseController
     {
         $fid = abs(intval(Request::input('fid')));
 
-        if (! isUser()) abort(403);
-
         $forums = Forum::where('parent_id', 0)
             ->with('children')
             ->orderBy('sort')
             ->get();
 
-        if (empty(count($forums))) {
+        if ($forums->isEmpty()) {
             abort('default', 'Разделы форума еще не созданы!');
+        }
+
+        if (! $user = isUser()) {
+            abort(403);
         }
 
         if (Request::isMethod('post')) {
@@ -117,35 +120,60 @@ class ForumController extends BaseController
             if ($validation->run()) {
 
                 $title = antimat($title);
-                $msg = antimat($msg);
+                $msg   = antimat($msg);
 
-                DB::update("UPDATE `users` SET `allforum`=`allforum`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [getUsername()]);
+                $user->update([
+                    'allforum' => DB::raw('allforum + 1'),
+                    'point'    => DB::raw('point + 1'),
+                    'money'    => DB::raw('money + 5'),
+                ]);
 
-                $topicId = DB::insert("INSERT INTO `topics` (`forum_id`, `title`, `user_id`, `posts`, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?);", [$fid, $title, getUserId(), 1, SITETIME, SITETIME]);
+                $topic = Topic::create([
+                    'forum_id'   => $forum->id,
+                    'title'      => $title,
+                    'user_id'    => getUserId(),
+                    'posts'      => 1,
+                    'created_at' => SITETIME,
+                    'updated_at' => SITETIME,
+                ]);
 
-                $postId = DB::insert("INSERT INTO `posts` (`topic_id`, `user_id`, `text`, `created_at`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?);", [$topicId, getUserId(), $msg, SITETIME, getClientIp(), getUserAgent()]);
+                $post = Post::create([
+                    'topic_id'   => $topic->id,
+                    'user_id'    => getUserId(),
+                    'text'       => $msg,
+                    'created_at' => SITETIME,
+                    'ip'         => getClientIp(),
+                    'brow'       => getUserAgent(),
+                ]);
 
-                Topic::where('id', $topicId)->update(['last_post_id' => $postId]);
+                Topic::where('id', $topic->id)->update(['last_post_id' => $post->id]);
 
-                DB::update("UPDATE `forums` SET `topics`=`topics`+1, `posts`=`posts`+1, `last_topic_id`=? WHERE `id`=?", [$topicId, $fid]);
+                $forum->update([
+                    'topics'        => DB::raw('topics + 1'),
+                    'posts'         => DB::raw('posts + 1'),
+                    'last_topic_id' => $topic->id,
+                ]);
+
                 // Обновление родительского форума
                 if ($forum->parent) {
-                    DB::update("UPDATE `forums` SET `last_topic_id`=? WHERE `id`=?", [$topicId, $forum->parent->id]);
+                    $forum->parent->update([
+                        'last_topic_id' => $topic->id
+                    ]);
                 }
 
                 // Создание голосования
                 if ($vote) {
-                    $vote = new Vote();
-                    $vote->title = $question;
-                    $vote->topic_id = $topicId;
-                    $vote->time = SITETIME;
-                    $vote->save();
+                    $vote = Vote::create([
+                        'title'    => $question,
+                        'topic_id' => $topic->id,
+                        'time'     => SITETIME,
+                    ]);
 
                     $prepareAnswers = [];
                     foreach ($answers as $answer) {
                         $prepareAnswers[] = [
                             'vote_id' => $vote->id,
-                            'answer' => $answer
+                            'answer'  => $answer
                         ];
                     }
 
@@ -153,7 +181,7 @@ class ForumController extends BaseController
                 }
 
                 setFlash('success', 'Новая тема успешно создана!');
-                redirect('/topic/'.$topicId);
+                redirect('/topic/'.$topic->id);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validation->getErrors());
