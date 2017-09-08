@@ -14,6 +14,8 @@ class RatingController extends BaseController
      */
     public function __construct()
     {
+        parent::__construct();
+
         if (! isUser()) {
             abort(403, 'Для просмотра истории небходимо авторизоваться!');
         }

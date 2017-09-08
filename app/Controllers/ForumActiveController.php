@@ -18,6 +18,8 @@ class ForumActiveController extends BaseController
      */
     public function __construct()
     {
+        parent::__construct();
+
         $login = check(Request::input('user', getUsername()));
 
         $this->user = User::where('login', $login)->first();

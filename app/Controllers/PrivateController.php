@@ -20,6 +20,8 @@ class PrivateController extends BaseController
      */
     public function __construct()
     {
+        parent::__construct();
+
         if (! isUser()) {
             abort(403, 'Для просмотра писем необходимо авторизоваться!');
         }
@@ -46,8 +48,12 @@ class PrivateController extends BaseController
             ->get();
 
 
-        if ($newprivat > 0) {
-            DB::update("UPDATE `users` SET `newprivat`=?, `sendprivatmail`=? WHERE `id`=? LIMIT 1;", [0, 0, getUserId()]);
+        if ($newprivat) {
+            $user = User::find(getUserId());
+            $user->update([
+                'newprivat'      => 0,
+                'sendprivatmail' => 0,
+            ]);
         }
 
         return view('private/index', compact('messages', 'page', 'newprivat'));

@@ -15,6 +15,8 @@ class BookmarkController extends BaseController
      */
     public function __construct()
     {
+        parent::__construct();
+
         if (!isUser()) {
             abort('default', 'Для управления закладками, необходимо авторизоваться!');
         }

@@ -22,6 +22,8 @@ class AjaxController extends BaseController
      */
     public function __construct()
     {
+        parent::__construct();
+
         if (! Request::ajax()) {
             exit(json_encode([
                 'status' => 'error',
