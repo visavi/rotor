@@ -65,7 +65,7 @@ function makeTime($time)
 /**
  * Форматирует время с учетом часовых поясов
  *
- * @param  integer $timestamp секунды
+ * @param  int     $timestamp секунды
  * @param  string  $format    формат времени
  * @return string             форматированный вывод
  */
@@ -404,13 +404,21 @@ function scanFiles($dirname)
     return $arr;
 }
 
-// --------------- Функция вывода календаря---------------//
+/**
+ * Формирует календарь
+ *
+ * @param  int   $month
+ * @param  int   $year
+ * @return array
+ */
 function makeCalendar($month, $year)
 {
     $wday = date("w", mktime(0, 0, 0, $month, 1, $year));
+
     if ($wday == 0) {
         $wday = 7;
     }
+
     $n = - ($wday-2);
     $cal = [];
     for ($y = 0; $y < 6; $y++) {
@@ -547,23 +555,25 @@ function statsCounter()
     return unserialize(file_get_contents(STORAGE."/temp/counter.dat"));
 }
 
-// ------------------ Функция вывода счетчика посещений -----------------//
+/**
+ * Выводит счетчик посещений
+ *
+ * @return string
+ */
 function showCounter()
 {
     if (isUser()) {
+        //$visitPage =  setting('newtitle') ?? null;
 
-        //$visitPage = !empty(setting('newtitle')) ? setting('newtitle') : null;
+        $visit = Visit::firstOrNew(['user_id' => getUserId()]);
 
-        Visit::updateOrCreate(
-            ['user_id' => getUserId()],
-            [
-                'self'       => server('PHP_SELF'),
-                'page'       => null, //$visitPage,
-                'ip'         => getClientIp(),
-                'count'      => DB::raw('count + 1'),
-                'updated_at' => SITETIME,
-            ]
-        );
+        $visit->fill([
+            'self'       => server('PHP_SELF'),
+            'page'       => null, //$visitPage,
+            'ip'         => getClientIp(),
+            'count'      => $visit->exists ? DB::raw('count + 1') : 0,
+            'updated_at' => SITETIME,
+        ])->save();
     }
 
     include_once (APP."/Includes/counters.php");
@@ -580,8 +590,10 @@ function statsUsers()
 {
     if (@filemtime(STORAGE."/temp/statusers.dat") < time()-3600) {
 
+        $startMonth = mktime(0, 0, 0, dateFixed(SITETIME, "n"), 1);
+
         $total = User::count();
-        $new   = User::whereRaw('joined > UNIX_TIMESTAMP(CURDATE())')->count();
+        $new   = User::where('joined', '>', $startMonth)->count();
 
         if ($new) {
             $stat = $total.'/+'.$new;

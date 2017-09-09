@@ -3,7 +3,7 @@
 use App\Models\News;
 
 $date['day']  = dateFixed(SITETIME, "j");
-$date['mon']  = dateFixed(SITETIME, "m");
+$date['mon']  = dateFixed(SITETIME, "n");
 $date['year'] = dateFixed(SITETIME, "Y");
 $startMonth   = mktime(0, 0, 0, $date['mon'], 1);
 
