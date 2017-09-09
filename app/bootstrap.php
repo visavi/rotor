@@ -27,7 +27,7 @@ if (env('APP_DEBUG')) {
     $whoops->pushHandler(new PrettyPageHandler);
     $whoops->pushHandler(function() {
         $_SERVER = array_except($_SERVER, array_keys($_ENV));
-        $_ENV = [];
+        $_ENV    = [];
     });
     $whoops->register();
 }
@@ -40,8 +40,8 @@ $db->addConnection([
     'database'  => env('DB_DATABASE'),
     'username'  => env('DB_USERNAME'),
     'password'  => env('DB_PASSWORD'),
-    'charset'   => 'utf8mb4',
-    'collation' => 'utf8mb4_unicode_ci',
+    'charset'   => env('DB_CHARSET'),
+    'collation' => env('DB_COLLATION'),
 ]);
 
 /*use Illuminate\Events\Dispatcher;

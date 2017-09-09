@@ -9,8 +9,8 @@ return [
         'default_database'        => 'default',
         'default' => [
             'adapter'   => env('DB_DRIVER'),
-            'charset'   => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
+            'charset'   => env('DB_CHARSET'),
+            'collation' => env('DB_COLLATION'),
             'host'      => env('DB_HOST'),
             'name'      => env('DB_DATABASE'),
             'user'      => env('DB_USERNAME'),
