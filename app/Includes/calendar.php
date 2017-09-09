@@ -2,50 +2,25 @@
 
 use App\Models\News;
 
-$cal_den = dateFixed(SITETIME, "j");
-$cal_mon = dateFixed(SITETIME, "m");
-$cal_year = dateFixed(SITETIME, "Y");
+$date['day']  = dateFixed(SITETIME, "j");
+$date['mon']  = dateFixed(SITETIME, "m");
+$date['year'] = dateFixed(SITETIME, "Y");
+$startMonth   = mktime(0, 0, 0, $date['mon'], 1);
 
-$array_news = [];
-$array_komm = [];
+$newsDays = [];
+$newsIds  = [];
 
-$news = News::whereRaw('EXTRACT(YEAR_MONTH FROM FROM_UNIXTIME(`created_at`))=EXTRACT(YEAR_MONTH FROM NOW())')
-    ->get();
+$news = News::where('created_at', '>', $startMonth)->get();
 
-foreach($news as $data) {
-    $arrday = dateFixed($data['created_at'], 'j');
-    $array_news[] = $arrday;
-    $array_komm[$arrday] = $data['id'];
-}
-
-$calend = makeCalendar($cal_mon, $cal_year);
-
-echo '<table><caption><b>'.dateFixed(SITETIME, 'j F Y').'</b></caption>';
-
-echo '<thead><tr>';
-echo '<th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th><span style="color:#ff6666">Сб</span></th><th><span style="color:#ff6666">Вс</span></th>';
-echo '</tr></thead><tbody>';
-
-foreach ($calend as $valned) {
-    echo '<tr>';
-    foreach ($valned as $keyday => $valday) {
-        if ($cal_den == $valday) {
-            echo '<td><b><span style="color:#ff0000">'.$valday.'</span></b></td>';
-            continue;
-        }
-
-        if (in_array($valday, $array_news)) {
-            echo '<td><a href="/news/'.$array_komm[$valday].'"><span style="color:#ff0000">'.$valday.'</span></a></td>';
-            continue;
-        }
-
-        if ($keyday == 5 || $keyday == 6) {
-            echo '<td><span style="color:#ff6666">'.$valday.'</span></td>';
-            continue;
-        }
-
-        echo '<td>'.$valday.'</td>';
+if ($news->isNotEmpty()) {
+    foreach ($news as $data) {
+        $curDay           = dateFixed($data['created_at'], 'j');
+        $newsDays[]       = $curDay;
+        $newsIds[$curDay] = $data['id'];
     }
-    echo '</tr>';
 }
-echo '</tbody></table>';
+
+$calendar = makeCalendar($date['mon'], $date['year']);
+
+view('app/_calendar', compact('calendar', 'date', 'newsDays', 'newsIds'));
+
