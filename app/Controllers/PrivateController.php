@@ -9,7 +9,6 @@ use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\Inbox;
 use App\Models\Outbox;
-use App\Models\Trash;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -33,12 +32,9 @@ class PrivateController extends BaseController
     public function index()
     {
         $total = Inbox::where('user_id', getUserId())->count();
-        $page = paginate(setting('privatpost'), $total);
+        $page  = paginate(setting('privatpost'), $total);
 
         $page['totalOutbox'] = Outbox::where('user_id', getUserId())->count();
-        $page['totalTrash'] = Trash::where('user_id', getUserId())->count();
-
-        $newprivat = user('newprivat');
 
         $messages = Inbox::where('user_id', getUserId())
             ->orderBy('created_at', 'desc')
@@ -47,6 +43,7 @@ class PrivateController extends BaseController
             ->with('author')
             ->get();
 
+        $newprivat = user('newprivat');
 
         if ($newprivat) {
             $user = User::find(getUserId());
@@ -75,30 +72,8 @@ class PrivateController extends BaseController
             ->get();
 
         $page['totalInbox'] = Inbox::where('user_id', getUserId())->count();
-        $page['totalTrash'] = Trash::where('user_id', getUserId())->count();
 
         return view('private/outbox', compact('messages', 'page'));
-    }
-
-    /**
-     * Корзина
-     */
-    public function trash()
-    {
-        $total = Trash::where('user_id', getUserId())->count();
-        $page = paginate(setting('privatpost'), $total);
-
-        $page['totalInbox'] = Inbox::where('user_id', getUserId())->count();
-        $page['totalOutbox'] = Outbox::where('user_id', getUserId())->count();
-
-        $messages = Trash::where('user_id', getUserId())
-            ->orderBy('created_at', 'desc')
-            ->offset($page['offset'])
-            ->limit($page['limit'])
-            ->with('author')
-            ->get();
-
-        return view('private/trash', compact('messages', 'page'));
     }
 
     /**
@@ -116,8 +91,8 @@ class PrivateController extends BaseController
 
         if (Request::isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $msg = check(Request::input('msg'));
+            $token   = check(Request::input('token'));
+            $msg     = check(Request::input('msg'));
             $provkod = check(Request::input('provkod'));
 
             $validation = new Validation();
@@ -150,10 +125,21 @@ class PrivateController extends BaseController
 
                 $msg = antimat($msg);
 
-                DB::update("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `id`=? LIMIT 1;", [$user->id]);
-                DB::insert("INSERT INTO `inbox` (`user_id`, `author_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [$user->id, getUserId(), $msg, SITETIME]);
+                $user->increment('newprivat');
 
-                DB::insert("INSERT INTO `outbox` (`user_id`, `recipient_id`, `text`, `created_at`) VALUES (?, ?, ?, ?);", [getUserId(), $user->id, $msg, SITETIME]);
+                Inbox::create([
+                    'user_id'    => $user->id,
+                    'author_id'  => getUserId(),
+                    'text'       => $msg,
+                    'created_at' => SITETIME,
+                ]);
+
+                Outbox::create([
+                    'user_id'       => getUserId(),
+                    'recipient_id'  => $user->id,
+                    'text'          => $msg,
+                    'created_at'    => SITETIME,
+                ]);
 
                 DB::delete("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [getUserId(), getUserId()]);
                 saveUserMail(60);
@@ -212,18 +198,14 @@ class PrivateController extends BaseController
 
         if ($validation->run()) {
 
-            $del = implode(',', $del);
-
             if ($type == 'outbox') {
-                DB::delete("DELETE FROM `outbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [getUserId()]);
+                Outbox::where('user_id', getUserId())
+                    ->whereIn('id', $del)
+                    ->delete();
             } else {
-                $deltrash = SITETIME + 86400 * setting('expiresmail');
-
-                DB::delete("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
-
-                DB::insert("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [$deltrash, getUserId()]);
-
-                DB::delete("DELETE FROM `inbox` WHERE `id` IN (" . $del . ") AND `user_id`=?;", [getUserId()]);
+                Inbox::where('user_id', getUserId())
+                    ->whereIn('id', $del)
+                    ->delete();
                 saveUserMail(60);
             }
 
@@ -252,17 +234,9 @@ class PrivateController extends BaseController
         if ($validation->run()) {
 
             if ($type == 'outbox') {
-                DB::delete("DELETE FROM `outbox` WHERE `user_id`=?;", [getUserId()]);
-            } elseif ($type == 'trash') {
-                DB::delete("DELETE FROM `trash` WHERE `user_id`=?;", [getUserId()]);
+                Outbox::where('user_id', getUserId())->delete();
             } else {
-                $deltrash = SITETIME + 86400 * setting('expiresmail');
-
-                DB::delete("DELETE FROM `trash` WHERE `deleted_at`<?;", [SITETIME]);
-
-                DB::insert("INSERT INTO `trash` (`user_id`, `author_id`, `text`, `created_at`, `deleted_at`) SELECT `user_id`, `author_id`, `text`, `created_at`, ? FROM `inbox` WHERE `user_id`=?;", [$deltrash, getUserId()]);
-
-                DB::delete("DELETE FROM `inbox` WHERE `user_id`=?;", [getUserId()]);
+                Inbox::where('user_id', getUserId())->delete();
                 saveUserMail(60);
             }
 
@@ -290,7 +264,7 @@ class PrivateController extends BaseController
             abort('default', 'Отсутствует переписка с самим собой!');
         }
 
-        $totalInbox = Inbox::where('user_id', getUserId())->where('author_id', $user->id)->count();
+        $totalInbox  = Inbox::where('user_id', getUserId())->where('author_id', $user->id)->count();
         $totalOutbox = Outbox::where('user_id', getUserId())->where('recipient_id', $user->id)->count();
 
         $total = $totalInbox + $totalOutbox;

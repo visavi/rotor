@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Classes\Request;
 use App\Classes\Validation;
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class MailController extends BaseController
 {
@@ -17,8 +16,8 @@ class MailController extends BaseController
         if (Request::isMethod('post')) {
 
             $message = nl2br(check(Request::input('message')));
-            $name = check(Request::input('name'));
-            $email = check(Request::input('email'));
+            $name    = check(Request::input('name'));
+            $email   = check(Request::input('email'));
             $protect = check(Request::input('protect'));
 
             if (isUser()) {
@@ -68,7 +67,7 @@ class MailController extends BaseController
             $protect = check(Request::input('protect'));
 
             $user = User::where('login', $login)->orWhere('email', $login)->first();
-            if (!$user) {
+            if (! $user) {
                 abort('default', 'Пользователь с данным логином или email не найден!');
             }
 
@@ -78,10 +77,13 @@ class MailController extends BaseController
                 ->addRule('min', [$user['timepasswd'], SITETIME], 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
 
             if ($validation->run()) {
-                $resetKey = str_random();
+                $resetKey  = str_random();
                 $resetLink = siteLink(setting('home')) . '/recovery/restore?key=' . $resetKey;
 
-                DB::update("UPDATE `users` SET `keypasswd`=?, `timepasswd`=? WHERE `id`=?;", [$resetKey, SITETIME + 43200, $user->id]);
+                $user->update([
+                    'keypasswd'  => $resetKey,
+                    'timepasswd' => SITETIME + 43200,
+                ]);
 
                 //Инструкция по восстановлению пароля на email
                 $subject = 'Восстановление пароля на сайте ' . setting('title');
@@ -112,7 +114,7 @@ class MailController extends BaseController
         $key = check(Request::input('key'));
 
         $user = User::where('keypasswd', $key)->first();
-        if (!$user) {
+        if (! $user) {
             abort('default', 'Ключ для восстановления недействителен!');
         }
 
@@ -124,10 +126,14 @@ class MailController extends BaseController
 
         if ($validation->run()) {
 
-            $newpass = str_random();
+            $newpass    = str_random();
             $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
 
-            DB::update("UPDATE `users` SET `password`=?, `keypasswd`=?, `timepasswd`=? WHERE `id`=?;", [$hashnewpas, '', 0, $user->id]);
+            $user->update([
+                'password'   => $hashnewpas,
+                'keypasswd'  => null,
+                'timepasswd' => 0,
+            ]);
 
             // Восстановление пароля на email
             $subject = 'Восстановление пароля на сайте ' . setting('title');

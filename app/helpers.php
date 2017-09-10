@@ -37,7 +37,6 @@ use App\Models\Setting;
 use App\Models\Smile;
 use App\Models\Spam;
 use App\Models\Topic;
-use App\Models\Trash;
 use App\Models\User;
 use App\Models\Visit;
 use App\Models\Vote;
@@ -123,7 +122,6 @@ function deleteUser(User $user)
 
     Inbox::where('user_id', $user->id)->delete();
     Outbox::where('user_id', $user->id)->delete();
-    Trash::where('user_id', $user->id)->delete();
     Contact::where('user_id', $user->id)->delete();
     Ignore::where('user_id', $user->id)->delete();
     Rating::where('user_id', $user->id)->delete();

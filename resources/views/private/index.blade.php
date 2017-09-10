@@ -21,8 +21,7 @@
     @endif
 
     <i class="fa fa-envelope"></i> <b>Входящие ({{ $page['total'] }})</b> /
-    <a href="/private/outbox">Отправленные ({{  $page['totalOutbox'] }})</a> /
-    <a href="/private/trash">Корзина ({{ $page['totalTrash'] }})</a>
+    <a href="/private/outbox">Отправленные ({{  $page['totalOutbox'] }})</a>
     <hr>
 
     @if ($messages->isNotEmpty())

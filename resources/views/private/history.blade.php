@@ -9,8 +9,7 @@
     <h1>История переписки</h1>
 
     <i class="fa fa-envelope"></i> <a href="/private">Входящие</a> /
-    <a href="/private/outbox">Отправленные</a> /
-    <a href="/private/trash">Корзина</a>
+    <a href="/private/outbox">Отправленные</a>
     <hr>
 
     @if ($messages->isNotEmpty())
