@@ -19,6 +19,17 @@ class BaseModel extends Model
      */
     public function getUser()
     {
-        return $this->user ? $this->user : new User();
+        return $this->user ?? new User();
+    }
+
+    /**
+     * Возвращает логин пользователя
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getLoginAttribute($value)
+    {
+        return $value ?? setting('guestsuser');
     }
 }
