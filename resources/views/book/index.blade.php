@@ -12,19 +12,18 @@
     <a href="/smiles">Смайлы</a> /
     <a href="/tags">Теги</a>
 
-    <?php if (isAdmin()):?>
-        / <a href="/admin/book?page=<?=$page['current']?>">Управление</a>
-    <?php endif;?>
+    @if (isAdmin())
+        / <a href="/admin/book?page={{ $page['current'] }}">Управление</a>
+    @endif
     <hr>
 
-    <?php if ($page['total'] > 0): ?>
-        <?php foreach ($posts as $data): ?>
+    @if ($posts->isNotEmpty())
+        @foreach ($posts as $data)
 
             <div class="post">
                 <div class="b">
 
-                    <?php if (isUser() && getUserId() != $data['user_id']): ?>
-
+                    @if (isUser() && getUserId() != $data['user_id'])
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
@@ -32,52 +31,50 @@
                             <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guest::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         </div>
 
-                    <?php endif; ?>
+                    @endif
 
-                    <?php if (getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME): ?>
+                    @if (isUser() && getUserId() == $data['user_id'] && $data['created_at'] + 600 > SITETIME)
                         <div class="float-right">
-                            <a href="/book/edit/<?=$data['id']?>" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                            <a href="/book/edit/{{ $data['id'] }}" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         </div>
-                    <?php endif; ?>
+                    @endif
 
-                    <div class="img"><?=userAvatar($data->user)?></div>
+                    <div class="img">{!! userAvatar($data->user) !!}</div>
 
-                    <?php if (empty($data['user_id'])): ?>
-                        <b><?= setting('guestsuser') ?></b> <small>(<?=dateFixed($data['created_at'])?>)</small>
-                    <?php else: ?>
-                        <b><?=profile($data->user)?></b> <small>(<?=dateFixed($data['created_at'])?>)</small><br>
-                        <?=userStatus($data->user)?> <?=userOnline($data->user)?>
-                    <?php endif; ?>
+                    @if (empty($data['user_id']))
+                        <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data['created_at']) }})</small>
+                    @else
+                        <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data['created_at']) }})</small><br>
+                        {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
+                    @endif
                 </div>
 
-                <div class="message"><?=bbCode($data['text'])?></div>
+                <div class="message">{!! bbCode($data['text']) !!}</div>
 
-                <?php if (!empty($data['edit_user_id'])): ?>
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: <?= $data->getEditUser()->login ?> (<?=dateFixed($data['updated_at'])?>)</small><br>
-                <?php endif; ?>
+                @if ($data['edit_user_id'])
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->getEditUser()->login }} ({{ dateFixed($data['updated_at']) }})</small><br>
+                @endif
 
-                <?php if (isAdmin()): ?>
-                    <span class="data">(<?=$data['brow']?>, <?=$data['ip']?>)</span>
-                <?php endif; ?>
+                @if (isAdmin())
+                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                @endif
 
-                <?php if (!empty($data['reply'])): ?>
-                    <br><span style="color:#ff0000">Ответ: <?=bbCode($data['reply'])?></span>
-                <?php endif; ?>
-
+                @if ($data['reply']))
+                    <br><span style="color:#ff0000">Ответ: {!! bbCode($data['reply']) !!}</span>
+                @endif
             </div>
-        <?php endforeach; ?>
+        @endforeach
 
-        <?php pagination($page) ?>
+        {{ pagination($page) }}
 
-    <?php else: ?>
-        <?php showError('Сообщений нет, будь первым!'); ?>
-    <?php endif; ?>
+    @else
+        {{ showError('Сообщений нет, будь первым!') }}
+    @endif
 
-
-    <?php if (isUser()): ?>
+    @if (isUser())
         <div class="form">
             <form action="book/add" method="post">
-                <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
+                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="markItUp">Сообщение:</label>
                     <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg') }}</textarea>
@@ -88,11 +85,11 @@
             </form>
         </div><br>
 
-    <?php elseif (setting('bookadds') == 1): ?>
+    @elseif (setting('bookadds') == 1)
 
         <div class="form">
             <form action="book/add" method="post">
-                <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
+                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="inputText">Сообщение:</label>
@@ -111,7 +108,7 @@
             </form>
         </div><br>
 
-    <?php else: ?>
-        <?php showError('Для добавления сообщения необходимо авторизоваться'); ?>
-    <?php endif; ?>
+    @else
+        {{ showError('Для добавления сообщения необходимо авторизоваться') }}
+    @endif
 @stop

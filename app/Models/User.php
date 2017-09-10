@@ -29,7 +29,7 @@ class User extends BaseModel
      * @param  boolean $remember Запомнить пароль
      * @return User|boolean      Результат авторизации
      */
-    public static function login($login, $password, $remember = true)
+    public static function auth($login, $password, $remember = true)
     {
         $domain = siteDomain(setting('home'));
 
@@ -108,7 +108,7 @@ class User extends BaseModel
      *
      * @param string $token идентификатор Ulogin
      */
-    public static function socialLogin($token)
+    public static function socialAuth($token)
     {
         $domain = siteDomain(setting('home'));
 

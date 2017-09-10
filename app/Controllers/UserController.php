@@ -297,7 +297,7 @@ class UserController extends BaseController
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'), true);
                     sendMail($meil, $subject, $body);
 
-                    User::login($logs, $pars);
+                    User::auth($logs, $pars);
 
                     setFlash('success', 'Добро пожаловать, ' . $logs . '!');
                     redirect('/');
@@ -309,7 +309,7 @@ class UserController extends BaseController
             }
 
             if (Request::has('token')) {
-                User::socialLogin(Request::input('token'));
+                User::socialAuth(Request::input('token'));
             }
         }
 
@@ -333,7 +333,7 @@ class UserController extends BaseController
                 $pass = trim(Request::input('pass'));
                 $remember = Request::input('remember');
 
-                if ($user = User::login($login, $pass, $remember)) {
+                if ($user = User::auth($login, $pass, $remember)) {
                     setFlash('success', 'Добро пожаловать, '.$user->login.'!');
 
                     if ($return) {
@@ -348,7 +348,7 @@ class UserController extends BaseController
             }
 
             if (Request::has('token')) {
-                User::socialLogin(Request::input('token'));
+                User::socialAuth(Request::input('token'));
             }
         }
 

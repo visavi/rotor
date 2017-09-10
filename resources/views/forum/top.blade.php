@@ -10,17 +10,21 @@
 
     <a href="/forum">Форум</a>
 
-    @foreach ($topics as $data)
-        <div class="b">
-            <i class="fa {{ $data->getIcon() }} text-muted"></i>
-            <b><a href="/topic/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ $data['posts'] }})
-        </div>
-        <div>
-            {{ $data->pagination() }}
-            Автор: {{ $data->getUser()->login }}<br>
-            Сообщение: {{ $data->getLastPost()->getUser()->login }} ({{ dateFixed($data->getLastPost()->created_at) }})
-        </div>
-    @endforeach
+    @if ($topics->isNotEmpty())
+        @foreach ($topics as $data)
+            <div class="b">
+                <i class="fa {{ $data->getIcon() }} text-muted"></i>
+                <b><a href="/topic/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ $data['posts'] }})
+            </div>
+            <div>
+                {{ $data->pagination() }}
+                Автор: {{ $data->getUser()->login }}<br>
+                Сообщение: {{ $data->getLastPost()->getUser()->login }} ({{ dateFixed($data->getLastPost()->created_at) }})
+            </div>
+        @endforeach
 
-    {{ pagination($page) }}
+        {{ pagination($page) }}
+    @else
+        {{ showError('Созданных тем еще нет!') }}
+    @endif
 @stop

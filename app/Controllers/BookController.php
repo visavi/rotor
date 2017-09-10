@@ -126,6 +126,6 @@ class BookController extends BaseController
             }
         }
 
-        return view('book/edit', compact('post', 'id'));
+        return view('book/edit', compact('post'));
     }
 }

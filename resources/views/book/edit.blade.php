@@ -7,11 +7,11 @@
 @section('content')
     <h1>Редактирование сообщения</h1>
 
-    <i class="fa fa-pencil text-muted"></i> <b><?=profile($post->user)?></b> (<?=dateFixed($post['time'])?>)<br><br>
+    <i class="fa fa-pencil text-muted"></i> <b>{!! $post->getUser()->login !!}</b> ({{ dateFixed($post['time']) }})<br><br>
 
     <div class="form">
-        <form action="/book/edit/<?= $id ?>" method="post">
-            <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>">
+        <form action="/book/edit/{{ $post->id }}" method="post">
+            <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
                 <label for="markItUp">Сообщение:</label>

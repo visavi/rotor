@@ -378,26 +378,20 @@ class ForumController extends BaseController
     {
         $total = Topic::count();
 
-        if ($total > 0) {
-
-            if ($total > 500) {
-                $total = 500;
-            }
-
-            $page = paginate(setting('forumtem'), $total);
-
-            $topics = Topic::where('closed', 0)
-                ->orderBy('posts', 'desc')
-                ->limit(setting('forumtem'))
-                ->offset($page['offset'])
-                ->with('forum', 'user', 'lastPost.user')
-                ->get();
-
-            return view('forum/top', compact('topics', 'page'));
-
-        } else {
-            showError('Созданных тем еще нет!');
+        if ($total > 500) {
+            $total = 500;
         }
+
+        $page = paginate(setting('forumtem'), $total);
+
+        $topics = Topic::where('closed', 0)
+            ->orderBy('posts', 'desc')
+            ->limit(setting('forumtem'))
+            ->offset($page['offset'])
+            ->with('forum', 'user', 'lastPost.user')
+            ->get();
+
+        return view('forum/top', compact('topics', 'page'));
     }
 
     /**
@@ -407,24 +401,18 @@ class ForumController extends BaseController
     {
         $total = Post::count();
 
-        if ($total > 0) {
-
-            if ($total > 500) {
-                $total = 500;
-            }
-
-            $page = paginate(setting('forumpost'), $total);
-
-            $posts = Post::orderBy('rating', 'desc')
-                ->limit(setting('forumpost'))
-                ->offset($page['offset'])
-                ->with('topic', 'user')
-                ->get();
-
-            return view('forum/top_posts', compact('posts', 'page'));
-
-        } else {
-            showError('Созданных тем еще нет!');
+        if ($total > 500) {
+            $total = 500;
         }
+
+        $page = paginate(setting('forumpost'), $total);
+
+        $posts = Post::orderBy('rating', 'desc')
+            ->limit(setting('forumpost'))
+            ->offset($page['offset'])
+            ->with('topic', 'user')
+            ->get();
+
+        return view('forum/top_posts', compact('posts', 'page'));
     }
 }
