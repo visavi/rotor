@@ -66,7 +66,7 @@ $router->map('GET',      '/topic/[i:tid]/[i:id]', 'TopicController@viewpost');
 $router->map('POST',     '/topic/[i:tid]/vote', 'TopicController@vote');
 $router->map('GET',      '/topic/[i:tid]/[end|close:action]', 'TopicController');
 $router->map('POST',     '/topic/[i:tid]/[create|delete:action]', 'TopicController');
-$router->map('GET|POST', '/topic/[i:tid]/[i:id]/edit', 'TopicController@editpost');
+$router->map('GET|POST', '/topic/[i:tid]/[i:id]/edit', 'TopicController@editPost');
 $router->map('GET|POST', '/topic/[i:tid]/[edit:action]', 'TopicController');
 $router->map('GET',      '/forum/bookmark', 'BookmarkController@index');
 $router->map('POST',     '/forum/bookmark/[delete|perform:action]', 'BookmarkController');

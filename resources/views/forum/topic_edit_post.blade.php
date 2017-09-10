@@ -19,7 +19,7 @@
                 {!! textError('msg') !!}
             </div>
 
-            @if (!empty($files))
+            @if ($files->isNotEmpty())
                 <i class="fa fa-paperclip"></i> <b>Удаление файлов:</b><br>
                 @foreach ($files as $file)
                     <input type="checkbox" name="delfile[]" value="{{ $file['id'] }}">

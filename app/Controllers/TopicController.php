@@ -276,7 +276,7 @@ class TopicController extends BaseController
 
         $topic = Topic::find($tid);
 
-        $isModer = in_array(getUserId(), explode(',', $topic['moderators'])) ? true : false;
+        $isModer = in_array(getUserId(), explode(',', $topic['moderators']), true) ? true : false;
 
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -287,22 +287,23 @@ class TopicController extends BaseController
 
         if ($validation->run()) {
 
-            $del = implode(',', $del);
-
             // ------ Удаление загруженных файлов -------//
-            $queryfiles = DB::select("SELECT `hash` FROM `files` WHERE `relate_id` IN (" . $del . ") AND relate_type=?;", [Post::class]);
-            $files = $queryfiles->fetchAll(PDO::FETCH_COLUMN);
+            $files = File::where('relate_type', Post::class)
+                ->whereIn('relate_id', $del)
+                ->get();
 
-            if (!empty($files)) {
+            if ($files->isNotEmpty()) {
                 foreach ($files as $file) {
-                    deleteImage('uploads/forum/', $topic['id'] . '/' . $file);
+                    $file->delete();
+                    deleteImage('uploads/forum/', $topic->id . '/' . $file->hash);
                 }
-                DB::delete("DELETE FROM `files` WHERE `relate_id` IN (" . $del . ")  AND relate_type=?;", [Post::class]);
+
             }
 
-            $delposts = DB::run()->exec("DELETE FROM `posts` WHERE `id` IN (" . $del . ") AND `topic_id`=" . $tid . ";");
-            DB::update("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $tid]);
-            DB::update("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [$delposts, $topic['forum_id']]);
+            $delPosts = Post::whereIn('id', $del)->delete();
+
+            $topic->decrement('posts', $delPosts);
+            $topic->getForum()->decrement('posts', $delPosts);
 
             setFlash('success', 'Выбранные сообщения успешно удалены!');
         } else {
@@ -331,7 +332,7 @@ class TopicController extends BaseController
 
         if ($validation->run()) {
 
-            DB::update("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
+            $topic->update(['closed' => 1]);
 
             $vote = Vote::where('topic_id', $tid)->first();
             if ($vote) {
@@ -355,7 +356,9 @@ class TopicController extends BaseController
      */
     public function edit($tid)
     {
-        if (!isUser()) abort(403, 'Авторизуйтесь для изменения темы!');
+        if (! isUser()) {
+            abort(403, 'Авторизуйтесь для изменения темы!');
+        }
 
         if (user('point') < setting('editforumpoint')) {
             abort('default', 'У вас недостаточно актива для изменения темы!');
@@ -393,15 +396,20 @@ class TopicController extends BaseController
             if ($post) {
                 $validation->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, setting('forumtextlength'));
             }
+
             if ($validation->run()) {
 
                 $title = antimat($title);
-                $msg = antimat($msg);
+                $msg   = antimat($msg);
 
-                DB::update("UPDATE `topics` SET `title`=? WHERE id=?;", [$title, $tid]);
+                $topic->update(['title' => $title]);
 
                 if ($post) {
-                    DB::update("UPDATE `posts` SET `user_id`=?, `text`=?, `ip`=?, `brow`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [getUserId(), $msg, getClientIp(), getUserAgent(), getUserId(), SITETIME, $post['id']]);
+                    $post->update([
+                        'text'         => $msg,
+                        'edit_user_id' => getUserId(),
+                        'updated_at'   => SITETIME,
+                    ]);
                 }
 
                 setFlash('success', 'Тема успешно изменена!');
@@ -419,19 +427,22 @@ class TopicController extends BaseController
     /**
      * Редактирование сообщения
      */
-    public function editpost($tid, $id)
+    public function editPost($tid, $id)
     {
         $page = abs(intval(Request::input('page')));
 
-        if (!isUser()) abort(403, 'Авторизуйтесь для изменения сообщения!');
+        if (! isUser()) {
+            abort(403, 'Авторизуйтесь для изменения сообщения!');
+        }
 
         $post = Post::select('posts.*', 'moderators', 'closed')
             ->leftJoin('topics', 'posts.topic_id', '=', 'topics.id')
-            ->where('posts.id', $id)->first();
+            ->where('posts.id', $id)
+            ->first();
 
         $isModer = in_array(getUserId(), explode(',', $post['moderators'], true)) ? true : false;
 
-        if (empty($post)) {
+        if (! $post) {
             abort('default', 'Данного сообщения не существует!');
         }
 
@@ -439,18 +450,18 @@ class TopicController extends BaseController
             abort('default', 'Редактирование невозможно, данная тема закрыта!');
         }
 
-        if (!$isModer && $post['user_id'] != getUserId()) {
+        if (! $isModer && $post['user_id'] != getUserId()) {
             abort('default', 'Редактировать сообщения может только автор или кураторы темы!');
         }
 
-        if (!$isModer && $post['created_at'] + 600 < SITETIME) {
+        if (! $isModer && $post['created_at'] + 600 < SITETIME) {
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 
         if (Request::isMethod('post')) {
 
-            $token = check(Request::input('token'));
-            $msg = check(Request::input('msg'));
+            $token   = check(Request::input('token'));
+            $msg     = check(Request::input('msg'));
             $delfile = intar(Request::input('delfile'));
 
             $validation = new Validation();
@@ -461,33 +472,38 @@ class TopicController extends BaseController
 
                 $msg = antimat($msg);
 
-                DB::update("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, getUserId(), SITETIME, $id]);
+                $post->update([
+                    'text'         => $msg,
+                    'edit_user_id' => getUserId(),
+                    'updated_at'   => SITETIME,
+                ]);
 
                 // ------ Удаление загруженных файлов -------//
                 if ($delfile) {
-                    $del = implode(',', $delfile);
-                    $queryfiles = DB::select("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (" . $del . ");", [$id, Post::class]);
-                    $files = $queryfiles->fetchAll();
+                    $files = File::where('relate_type', Post::class)
+                        ->where('relate_id', $post->id)
+                        ->whereIn('id', $delfile)
+                        ->get();
 
-                    if (!empty($files)) {
+                    if ($files->isNotEmpty()) {
                         foreach ($files as $file) {
-                            deleteImage('uploads/forum/', $post['topic_id'] . '/' . $file['hash']);
+                            $file->delete();
+                            deleteImage('uploads/forum/', $post->topic_id . '/' . $file->hash);
                         }
-                        DB::delete("DELETE FROM `files` WHERE `relate_id`=? AND relate_type=? AND `id` IN (" . $del . ");", [$id, Post::class]);
                     }
                 }
 
                 setFlash('success', 'Сообщение успешно отредактировано!');
                 redirect('/topic/' . $tid . '?page=' . $page);
-
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validation->getErrors());
             }
         }
 
-        $queryfiles = DB::select("SELECT * FROM `files` WHERE `relate_id`=? AND relate_type=?;", [$id, Post::class]);
-        $files = $queryfiles->fetchAll();
+        $files = File::where('relate_type', Post::class)
+            ->where('relate_id', $id)
+            ->get();
 
         return view('forum/topic_edit_post', compact('post', 'files', 'page'));
     }
@@ -536,17 +552,14 @@ class TopicController extends BaseController
 
         if ($validation->run()) {
 
-            $vote->count = DB::raw('count + 1');
-            $vote->save();
+            $vote->increment('count');
+            $voteAnswer->increment('result');
 
-            $voteAnswer->result = DB::raw('result + 1');
-            $voteAnswer->save();
-
-            $votePoll = new VotePoll();
-            $votePoll->vote_id = $vote['id'];
-            $votePoll->user_id = getUserId();
-            $votePoll->created_at = SITETIME;
-            $votePoll->save();
+            VotePoll::create([
+                'vote_id'    => $vote['id'],
+                'user_id'    => getUserId(),
+                'created_at' => SITETIME,
+            ]);
 
             setFlash('success', 'Ваш голос успешно принят!');
         } else {

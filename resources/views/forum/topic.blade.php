@@ -151,7 +151,7 @@
             @endif
 
             @if ($data['edit_user_id'])
-                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->getEditUser()->login }}({{ dateFixed($data['updated_at']) }})</small><br>
+                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->getEditUser()->login }} ({{ dateFixed($data['updated_at']) }})</small><br>
             @endif
 
             @if (isAdmin())

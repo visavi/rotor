@@ -37,7 +37,7 @@ class ForumActiveController extends BaseController
         $user  = $this->user;
         $total = Topic::where('user_id', $user->id)->count();
 
-        if (!$total) {
+        if (! $total) {
             abort('default', 'Созданных тем еще нет!');
         }
 
@@ -61,7 +61,7 @@ class ForumActiveController extends BaseController
         $user  = $this->user;
         $total = Post::where('user_id', $user->id)->count();
 
-        if (!$total) {
+        if (! $total) {
             abort('default', 'Созданных сообщений еще нет!');
         }
 
@@ -82,8 +82,13 @@ class ForumActiveController extends BaseController
      */
     public function delete()
     {
-        if (!Request::ajax()) redirect('/');
-        if (!isAdmin()) abort(403, 'Удалять сообщения могут только модераторы!');
+        if (! Request::ajax()) {
+            redirect('/');
+        }
+
+        if (! isAdmin()) {
+            abort(403, 'Удалять сообщения могут только модераторы!');
+        }
 
         $token = check(Request::input('token'));
         $tid = abs(intval(Request::input('tid')));
@@ -99,9 +104,9 @@ class ForumActiveController extends BaseController
 
         if ($validation->run()) {
 
-            DB::delete("DELETE FROM `posts` WHERE `id`=? AND `topic_id`=?;", [$tid, $post['topic_id']]);
-            DB::update("UPDATE `topics` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post['topic_id']]);
-            DB::update("UPDATE `forums` SET `posts`=`posts`-? WHERE `id`=?;", [1, $post->getTopic()->getForum()->id]);
+            $post->delete();
+            $post->getTopic()->decrement('posts');
+            $post->getTopic()->getForum()->decrement('posts');
 
             exit(json_encode(['status' => 'success']));
         } else {

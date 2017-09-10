@@ -164,9 +164,9 @@ class ForumController extends BaseController
                 // Создание голосования
                 if ($vote) {
                     $vote = Vote::create([
-                        'title'    => $question,
-                        'topic_id' => $topic->id,
-                        'time'     => SITETIME,
+                        'title'      => $question,
+                        'topic_id'   => $topic->id,
+                        'created_at' => SITETIME,
                     ]);
 
                     $prepareAnswers = [];
