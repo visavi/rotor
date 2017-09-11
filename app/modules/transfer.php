@@ -48,7 +48,7 @@ if (isUser()) {
                     echo '<input type="submit" value="Перевести"></form></div><br>';
                 }
             } else {
-                showError('Ошибка! Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), , setting('scorename')).'!');
+                showError('Ошибка! Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), setting('scorename')).'!');
             }
         break;
 

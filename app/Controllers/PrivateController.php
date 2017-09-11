@@ -118,7 +118,7 @@ class PrivateController extends BaseController
                     ->where('ignore_id', getUserId())
                     ->first();
 
-                $validation->addRule('not_equal', [$ignoring, false], ['user' => 'Вы внесены в игнор-лист получателя!']);
+                $validation->addRule('empty', $ignoring, ['user' => 'Вы внесены в игнор-лист получателя!']);
             }
 
             if ($validation->run()) {
@@ -143,27 +143,6 @@ class PrivateController extends BaseController
 
                 DB::delete("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [getUserId(), getUserId()]);
                 saveUserMail(60);
-
-                $deliveryUsers = User::where('sendprivatmail', 0)
-                    ->where('confirmreg', 0)
-                    ->where('newprivat', '>', 0)
-                    ->where('timelastlogin', '<', SITETIME - 86400 * setting('sendprivatmailday'))
-                    ->where('subscribe', '<>', '')
-                    ->where('email', '<>', '')
-                    ->orderBy('timelastlogin')
-                    ->limit(setting('sendmailpacket'))
-                    ->get();
-
-                foreach ($deliveryUsers as $deliveryUser) {
-
-                    $subject = $deliveryUser['newprivat'] . ' непрочитанных сообщений (' . setting('title') . ')';
-                    $message = 'Здравствуйте ' . $deliveryUser['login'] . '!<br>У вас имеются непрочитанные сообщения (' . $deliveryUser['newprivat'] . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteLink(setting('home')) . '/private">' . siteLink(setting('home')) . '/private</a>';
-                    $body = view('mailer.default', compact('subject', 'message'), true);
-                    sendMail($deliveryUser['email'], $subject, $body, ['subscribe' => $deliveryUser['subscribe']]);
-
-                    $user = User::where('id', $deliveryUser->id);
-                    $user->update(['sendprivatmail' => 1]);
-                }
 
                 setFlash('success', 'Ваше письмо успешно отправлено!');
                 redirect('/private');

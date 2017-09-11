@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Classes\Registry;
 use App\Classes\Request;
 use App\Models\Log;
