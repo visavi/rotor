@@ -16,6 +16,14 @@ class HomeController extends BaseController
     }
 
     /**
+     * Закрытие сайта
+     */
+    public function closed()
+    {
+        return view('pages/closed');
+    }
+
+    /**
      * Защитная картинка
      */
     public function captcha()

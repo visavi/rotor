@@ -130,6 +130,7 @@ $router->map('GET',      '/contact', 'pages/contact.php');
 $router->map('GET|POST', '/contact/[note:action]/[i:id]', 'pages/contact.php');
 $router->map('POST',     '/contact/[create|delete:action]', 'pages/contact.php');
 
+$router->map('GET',      '/closed', 'HomeController@closed');
 $router->map('GET|POST', '/account', 'pages/account.php');
 $router->map('GET|POST', '/offers', 'pages/offers.php');
 $router->map('GET|POST', '/notebook', 'pages/notebook.php');
@@ -150,7 +151,6 @@ $router->map('GET|POST', '/banhist', 'pages/banhist.php');
 $router->map('GET|POST', '/statusfaq', 'pages/statusfaq.php');
 $router->map('GET|POST', '/ratinglist', 'pages/ratinglist.php');
 $router->map('GET|POST', '/faq', 'pages/faq.php');
-$router->map('GET|POST', '/closed', 'pages/closed.php');
 $router->map('GET|POST', '/pictures', 'pages/pictures.php');
 $router->map('GET',      '/pictures/[delete:action]', 'pages/pictures.php');
 $router->map('GET',      '/surprise', 'pages/surprise.php');
