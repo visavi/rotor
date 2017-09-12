@@ -72,4 +72,4 @@ header("Content-type:text/html; charset=utf-8");
                 </div>
             <?php endif; ?>
             <div>
-<?= view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= view('app/_note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

@@ -79,4 +79,4 @@ header('Content-type:text/html; charset=utf-8');
         <div class="backgr">
             <div class="bcontent">
                 <div class="mcontentwide">
-<?= view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= view('app/_note'); /*Временно пока шаблоны подключаются напрямую*/ ?>

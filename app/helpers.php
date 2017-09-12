@@ -579,7 +579,7 @@ function showCounter()
     if (setting('incount') > 0) {
         $count = statsCounter();
 
-        return view('includes/counter', compact('count'));
+        return view('app/_counter', compact('count'));
     }
 }
 

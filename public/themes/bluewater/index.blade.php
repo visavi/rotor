@@ -82,4 +82,4 @@ if (isUser()){
         </div>
         <div id="main">
             <div class="body_center">
-<?= view('includes/note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+<?= view('app/_note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
