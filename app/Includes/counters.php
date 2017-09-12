@@ -85,18 +85,18 @@ if ($counter->days != $days) {
 // -----------------------------------------------------------//
 if ($newHost) {
     $counter->update([
-        'allhits' => DB::raw('allhits + 1'),
-        'dayhits' => DB::raw('dayhits + 1'),
-        'hits24'  => DB::raw('hits24 + 1'),
-    ]);
-} else {
-    $counter->update([
         'allhosts' => DB::raw('allhosts + 1'),
         'allhits'  => DB::raw('allhits + 1'),
         'dayhosts' => DB::raw('dayhosts + 1'),
         'dayhits'  => DB::raw('dayhits + 1'),
         'hosts24'  => DB::raw('hosts24 + 1'),
         'hits24'   => DB::raw('hits24 + 1'),
+    ]);
+} else {
+    $counter->update([
+        'allhits' => DB::raw('allhits + 1'),
+        'dayhits' => DB::raw('dayhits + 1'),
+        'hits24'  => DB::raw('hits24 + 1'),
     ]);
 }
 
