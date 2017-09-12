@@ -17,7 +17,7 @@
         </div>
         <div>
             {{ $topic->pagination() }}
-            Сообщение: {{ $topic->getLastPost()->getUser()->login }} ({{ dateFixed($topic->getLastPost()->created_at) }})
+            Сообщение: {{ $topic->lastPost->user->login }} ({{ dateFixed($topic->lastPost->created_at) }})
         </div>
     @endforeach
 

@@ -303,7 +303,7 @@ class TopicController extends BaseController
             $delPosts = Post::whereIn('id', $del)->delete();
 
             $topic->decrement('posts', $delPosts);
-            $topic->getForum()->decrement('posts', $delPosts);
+            $topic->forum->decrement('posts', $delPosts);
 
             setFlash('success', 'Выбранные сообщения успешно удалены!');
         } else {

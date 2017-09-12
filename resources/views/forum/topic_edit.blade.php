@@ -8,7 +8,7 @@
 
     <h1>Изменение темы</h1>
 
-    <i class="fa fa-pencil"></i> <b>{{ $post->getUser()->login }}</b> <small>({{ dateFixed($post['time']) }})</small><br><br>
+    <i class="fa fa-pencil"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post['time']) }})</small><br><br>
 
     <div class="form">
         <form action="/topic/{{ $topic['id'] }}/edit" method="post">

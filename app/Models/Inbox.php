@@ -30,14 +30,6 @@ class Inbox extends BaseModel
      */
     public function author()
     {
-        return $this->belongsTo(User::class, 'author_id');
-    }
-
-    /**
-     * Возвращает объект пользователя
-     */
-    public function getAuthor()
-    {
-        return $this->author ? $this->author : new User();
+        return $this->belongsTo(User::class, 'author_id')->withDefault();
     }
 }

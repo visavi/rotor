@@ -30,14 +30,6 @@ class Outbox extends BaseModel
      */
     public function recipient()
     {
-        return $this->belongsTo(User::class, 'recipient_id');
-    }
-
-    /**
-     * Возвращает объект пользователя
-     */
-    public function getRecipient()
-    {
-        return $this->recipient ? $this->recipient : new User();
+        return $this->belongsTo(User::class, 'recipient_id')->withDefault();
     }
 }

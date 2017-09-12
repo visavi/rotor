@@ -17,8 +17,8 @@
 
         <div>
             {{ $data->pagination() }}
-            Форум: <a href="/forum/{{  $data->getForum()->id }}">{{  $data->getForum()->title }}</a><br>
-            Автор: {{ $data->getUser()->login }} / Посл.: {{ $data->getLastPost()->getUser()->login }} ({{ dateFixed($data['created_at']) }})
+            Форум: <a href="/forum/{{  $data->forum->id }}">{{  $data->forum->title }}</a><br>
+            Автор: {{ $data->user->login }} / Посл.: {{ $data->lastPost->user->login }} ({{ dateFixed($data['created_at']) }})
         </div>
 
     @endforeach

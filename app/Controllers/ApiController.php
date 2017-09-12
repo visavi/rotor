@@ -106,7 +106,7 @@ class ApiController extends BaseController
 
             $messages[] = [
                 'author_id'  => $data->author_id,
-                'login'      => $data->getAuthor()->login,
+                'login'      => $data->author->login,
                 'text'       => $data['text'],
                 'created_at' => $data['created_at'],
             ];
@@ -158,7 +158,7 @@ class ApiController extends BaseController
             $messages[] = [
                 'post_id'    => $post->id,
                 'user_id'    => $post->user_id,
-                'login'      => $post->getUser()->login,
+                'login'      => $post->user->login,
                 'text'       => $post->text,
                 'rating'     => $post->rating,
                 'updated_at' => $post->updated_at,
@@ -170,7 +170,7 @@ class ApiController extends BaseController
             'id'         => $topic->id,
             'forum_id'   => $topic->forum_id,
             'user_id'    => $topic->user_id,
-            'login'      => $topic->getUser()->login,
+            'login'      => $topic->user->login,
             'title'      => $topic->title,
             'closed'     => $topic->closed,
             'locked'     => $topic->locked,

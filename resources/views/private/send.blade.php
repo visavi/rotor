@@ -52,7 +52,7 @@
                         <option value="0">Список контактов</option>
 
                         @foreach ($contacts as $data)
-                            <option value="{{ $data->getContact()->login }}">{{ $data->getContact()->login }}</option>
+                            <option value="{{ $data->contactor->login }}">{{ $data->contactor->login }}</option>
                         @endforeach
                     </select><br>
                 @endif

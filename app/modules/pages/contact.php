@@ -41,8 +41,8 @@ case 'index':
             }
 
             echo '<input type="checkbox" name="del[]" value="'.$contact['id'].'"> ';
-            echo '<a href="/private/send?user='.$contact->getContact()->login.'">Написать</a> | ';
-            echo '<a href="/transfer?uz='.$contact->getContact()->login.'">Перевод</a> | ';
+            echo '<a href="/private/send?user='.$contact->contactor->login.'">Написать</a> | ';
+            echo '<a href="/transfer?uz='.$contact->contactor->login.'">Перевод</a> | ';
             echo '<a href="/contact/note/'.$contact['id'].'">Заметка</a>';
             echo '</div>';
         }
@@ -141,7 +141,7 @@ case 'note':
         }
     }
 
-    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$contact->getContact()->login.'</b> '.userOnline($contact->contactor).':<br><br>';
+    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$contact->contactor->login.'</b> '.userOnline($contact->contactor).':<br><br>';
 
     echo '<div class="form">';
     echo '<form method="post" action="/contact/note/'.$id.'">';

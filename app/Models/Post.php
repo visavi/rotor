@@ -23,15 +23,7 @@ class Post extends BaseModel
      */
     public function editUser()
     {
-        return $this->belongsTo(User::class, 'edit_user_id');
-    }
-
-    /**
-     * Возвращает объект пользователя
-     */
-    public function getEditUser()
-    {
-        return $this->editUser ? $this->editUser : new User();
+        return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
     }
 
     /**
@@ -39,7 +31,7 @@ class Post extends BaseModel
      */
     public function topic()
     {
-        return $this->belongsTo(Topic::class, 'topic_id');
+        return $this->belongsTo(Topic::class, 'topic_id')->withDefault();
     }
 
     /**
@@ -48,13 +40,5 @@ class Post extends BaseModel
     public function files()
     {
         return $this->morphMany(File::class, 'relate');
-    }
-
-    /**
-     * Возвращает модель топика
-     */
-    public function getTopic()
-    {
-        return $this->topic ? $this->topic : new Topic();
     }
 }

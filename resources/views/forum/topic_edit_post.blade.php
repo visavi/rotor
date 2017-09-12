@@ -7,7 +7,7 @@
 @section('content')
     <h1>Изменение сообщения</h1>
 
-    <i class="fa fa-pencil"></i> <b>{{ $post->getUser()->login }}</b> <small>({{ dateFixed($post['created_at']) }})</small><br><br>
+    <i class="fa fa-pencil"></i> <b>{{ $post->user->login }}</b> <small>({{ dateFixed($post['created_at']) }})</small><br><br>
 
     <div class="form">
         <form action="/topic/{{ $post['topic_id'] }}/{{ $post['id'] }}/edit?page={{ $page }}" method="post">

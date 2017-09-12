@@ -30,14 +30,6 @@ class Vote extends BaseModel
      */
     public function topic()
     {
-        return $this->belongsTo(Topic::class, 'topic_id');
-    }
-
-    /**
-     * Возвращает модель топика
-     */
-    public function getTopic()
-    {
-        return $this->topic ? $this->topic : new Topic();
+        return $this->belongsTo(Topic::class, 'topic_id')->withDefault();
     }
 }

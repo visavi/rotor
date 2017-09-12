@@ -105,8 +105,8 @@ class ForumActiveController extends BaseController
         if ($validation->run()) {
 
             $post->delete();
-            $post->getTopic()->decrement('posts');
-            $post->getTopic()->getForum()->decrement('posts');
+            $post->topic->decrement('posts');
+            $post->topic->forum->decrement('posts');
 
             exit(json_encode(['status' => 'success']));
         } else {

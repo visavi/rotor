@@ -14,7 +14,7 @@
             <title>{{ $data['text'] }}</title>
             <link>{{ setting('home') }}/article/{{ $blog['id'] }}/comments</link>
             <description>{{ $blog['title'] }}</description>
-            <author>{{ $data->getUser()->login }}</author>
+            <author>{{ $data->user->login }}</author>
             <pubDate>{{ date("r", $data['created_at']) }}</pubDate>
             <category>Комментарии</category>
             <guid>{{ setting('home') }}/article/{{ $blog['id'] }}/comments?pid={{ $data['id'] }}</guid>

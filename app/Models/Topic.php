@@ -23,7 +23,7 @@ class Topic extends BaseModel
      */
     public function lastPost()
     {
-        return $this->belongsTo(Post::class, 'last_post_id');
+        return $this->belongsTo(Post::class, 'last_post_id')->withDefault();
     }
 
     /**
@@ -31,23 +31,7 @@ class Topic extends BaseModel
      */
     public function forum()
     {
-        return $this->belongsTo(Forum::class, 'forum_id');
-    }
-
-    /**
-     * Возвращает последнее сообщение
-     */
-    public function getLastPost()
-    {
-        return $this->lastPost ? $this->lastPost : new Post();
-    }
-
-    /**
-     * Возвращает модель форума
-     */
-    public function getForum()
-    {
-        return $this->forum ? $this->forum : new Forum();
+        return $this->belongsTo(Forum::class, 'forum_id')->withDefault();
     }
 
     /**

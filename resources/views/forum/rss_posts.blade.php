@@ -14,7 +14,7 @@
             <title>{{ $data['text'] }}</title>
             <link>{{ setting('home') }}/topic/{{ $topic['id'] }}/{{  $data['id'] }}</link>
             <description>{{ $topic['title'] }} </description>
-            <author>{{ $data->getUser()->login }}</author>
+            <author>{{ $data->user->login }}</author>
             <pubDate>{{ date("r", $data['created_at']) }}</pubDate>
             <category>Сообщения</category>
             <guid>{{ setting('home') }}/topic/{{ $topic['id'] }}/{{  $data['id'] }}</guid>

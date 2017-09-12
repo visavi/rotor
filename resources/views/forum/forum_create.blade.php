@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Форум - @parent
+    Создание новой темы - @parent
 @stop
 
 @section('content')

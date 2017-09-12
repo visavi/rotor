@@ -30,14 +30,6 @@ class Contact extends BaseModel
      */
     public function contactor()
     {
-        return $this->belongsTo(User::class, 'contact_id');
-    }
-
-    /**
-     * Возвращает объект пользователя
-     */
-    public function getContact()
-    {
-        return $this->contactor ? $this->contactor : new User();
+        return $this->belongsTo(User::class, 'contact_id')->withDefault();
     }
 }

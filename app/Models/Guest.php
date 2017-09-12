@@ -30,14 +30,6 @@ class Guest extends BaseModel
      */
     public function editUser()
     {
-        return $this->belongsTo(User::class, 'edit_user_id');
-    }
-
-    /**
-     * Возвращает объект пользователя
-     */
-    public function getEditUser()
-    {
-        return $this->editUser ? $this->editUser : new User();
+        return $this->belongsTo(User::class, 'edit_user_id')->withDefault();
     }
 }

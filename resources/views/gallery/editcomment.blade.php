@@ -8,7 +8,7 @@
 
     <h1>Редактирование комментария</h1>
 
-    <i class="fa fa-pencil"></i> <b>{{ $comment->getUser()->login }}</b> <small>({{ dateFixed($comment['created_at']) }})</small><br><br>
+    <i class="fa fa-pencil"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment['created_at']) }})</small><br><br>
 
     <div class="form">
         <form method="post">

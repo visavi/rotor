@@ -64,11 +64,11 @@ if (isAdmin()) {
                         }
                     } ?>
 
-                    <?php if ($data->getLastTopic()->lastPost): ?>
+                    <?php if ($data->lastTopic->lastPost): ?>
 
-                        Тема: <a href="/topic/<?= $data->getLastTopic()->id ?>/end"><?= $data->getLastTopic()->title ?></a>
+                        Тема: <a href="/topic/<?= $data->lastTopic->id ?>/end"><?= $data->lastTopic->title ?></a>
                         <br/>
-                        Сообщение: <?php $data->getLastTopic()->getLastPost()->getUser()->login ?> (<?= dateFixed($data->getLastTopic()->getLastPost()->created_at) ?>)
+                        Сообщение: <?php $data->lastTopic->lastPost->user->login ?> (<?= dateFixed($data->lastTopic->lastPost->created_at) ?>)
                     <?php else: ?>
                         Темы еще не созданы!
                     <?php endif ?>
@@ -343,7 +343,7 @@ if (isAdmin()) {
                     echo '<div>';
                     /*Forum::pagination($topic);*/
 
-                    echo 'Сообщение: '.$topic->getLastPost()->getUser()->login.' ('.dateFixed($topic->getLastPost()->created_at).')</div>';
+                    echo 'Сообщение: '.$topic->lastPost->user->login.' ('.dateFixed($topic->lastPost->created_at).')</div>';
                 }
 
                 echo '<br><input type="submit" value="Удалить выбранное"></form>';
@@ -447,7 +447,7 @@ if (isAdmin()) {
             $topic = Topic::find($tid);
 
             if (!empty($topic)) {
-                echo '<i class="fa fa-folder-open"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic->getUser()->login.')<br><br>';
+                echo '<i class="fa fa-folder-open"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic->user->login.')<br><br>';
 
                 $forums = Forum::where('parent_id', 0)
                     ->with('children')
@@ -784,7 +784,7 @@ if (isAdmin()) {
                             // --------------------------//
 
                             if (!empty($data['updated_at'])) {
-                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->getEditUser()->login.' ('.dateFixed($data['updated_at']).')</small><br>';
+                                echo '<small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: '.$data->editUser->login.' ('.dateFixed($data['updated_at']).')</small><br>';
                             }
 
                             echo '<span class="data">('.$data['brow'].', '.$data['ip'].')</span></div>';

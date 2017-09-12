@@ -63,7 +63,7 @@
             @endif
         </div>
     @endif
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">В альбом</a><br>
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->user->login }}">В альбом</a><br>
 
     @else
         {{ showError('Ошибка! Данного изображения нет в базе') }}

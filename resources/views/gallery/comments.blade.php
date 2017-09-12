@@ -75,6 +75,6 @@
         {{ showError('Комментирование данной фотографии закрыто!') }}
     @endif
 
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->getUser()->login }}">Альбом</a><br>
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->user->login }}">Альбом</a><br>
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

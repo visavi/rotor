@@ -14,7 +14,7 @@
             <title>{{ $topic['title'] }}</title>
             <link>{{ setting('home') }}/topic/{{ $topic['id'] }}</link>
             <description>{{ $topic['text'] }} </description>
-            <author>{{ $topic->getLastPost()->getUser()->login }}</author>
+            <author>{{ $topic->lastPost->user->login }}</author>
             <pubDate>{{ date("r", $topic['updated_at']) }}</pubDate>
             <category>Темы</category>
             <guid>{{ setting('home') }}/topic/{{ $topic['id'] }}</guid>

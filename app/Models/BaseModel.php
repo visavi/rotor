@@ -11,15 +11,7 @@ class BaseModel extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Возвращает объект пользователя
-     */
-    public function getUser()
-    {
-        return $this->user ?? new User();
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 
     /**

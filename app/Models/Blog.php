@@ -40,14 +40,6 @@ class Blog extends BaseModel
      */
     public function category()
     {
-        return $this->belongsTo(CatsBlog::class, 'category_id');
-    }
-
-    /**
-     * Возвращает модель категории блога
-     */
-    public function getСategory()
-    {
-        return $this->category ?? new CatsBlog();
+        return $this->belongsTo(CatsBlog::class, 'category_id')->withDefault();
     }
 }

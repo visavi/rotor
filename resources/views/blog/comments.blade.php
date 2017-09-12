@@ -25,7 +25,7 @@
 
                         @endif
 
-                        @if (getUserId() == $data->getUser()->id && $data['created_at'] + 600 > SITETIME)
+                        @if (getUserId() == $data->user->id && $data['created_at'] + 600 > SITETIME)
                             <a href="/article/<?=$blog['id']?>/<?=$data['id']?>/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
                         @endif
 

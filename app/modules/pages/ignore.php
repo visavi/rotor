@@ -41,7 +41,7 @@ case 'index':
             }
 
             echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
-            echo '<a href="/private/send?user='.$data->getIgnore()->login.'">Написать</a> | ';
+            echo '<a href="/private/send?user='.$data->ignoring->login.'">Написать</a> | ';
             echo '<a href="/ignore/note/'.$data['id'].'">Заметка</a>';
             echo '</div>';
         }
@@ -140,7 +140,7 @@ case 'note':
         }
     }
 
-    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$ignore->getIgnore()->login.'</b> '.userOnline($ignore->ignoring).':<br><br>';
+    echo '<i class="fa fa-pencil"></i> Заметка для пользователя <b>'.$ignore->ignoring->login.'</b> '.userOnline($ignore->ignoring).':<br><br>';
 
     echo '<div class="form">';
     echo '<form method="post" action="/ignore/note/'.$id.'">';

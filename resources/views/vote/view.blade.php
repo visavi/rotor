@@ -9,7 +9,7 @@
     <h1>{{ $vote->title }}</h1>
 
     @if ($vote->topic)
-        Тема: <a href="/topic/{{ $vote->getTopic()->id }}">{{ $vote->getTopic()->title }}</a><br><br>
+        Тема: <a href="/topic/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br><br>
     @endif
 
     @if ((isUser() && empty($vote['poll'])) && empty($show))

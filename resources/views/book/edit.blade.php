@@ -7,7 +7,7 @@
 @section('content')
     <h1>Редактирование сообщения</h1>
 
-    <i class="fa fa-pencil text-muted"></i> <b>{!! $post->getUser()->login !!}</b> ({{ dateFixed($post['time']) }})<br><br>
+    <i class="fa fa-pencil text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post['time']) }})<br><br>
 
     <div class="form">
         <form action="/book/edit/{{ $post->id }}" method="post">

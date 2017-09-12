@@ -30,14 +30,6 @@ class Ignore extends BaseModel
      */
     public function ignoring()
     {
-        return $this->belongsTo(User::class, 'ignore_id');
-    }
-
-    /**
-     * Возвращает объект пользователя
-     */
-    public function getIgnore()
-    {
-        return $this->ignoring ? $this->ignoring : new User();
+        return $this->belongsTo(User::class, 'ignore_id')->withDefault();
     }
 }

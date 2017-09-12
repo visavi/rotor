@@ -27,14 +27,6 @@ class Forum extends BaseModel
     }
 
     /**
-     * Возвращает связь родительского форума
-     */
-    public function lastTopic()
-    {
-        return $this->belongsTo(Topic::class, 'last_topic_id');
-    }
-
-    /**
      * Возвращает связь подкатегорий форума
      */
     public function children()
@@ -43,11 +35,10 @@ class Forum extends BaseModel
     }
 
     /**
-     * Возвращает последнюю тему
-     * @return mixed|Topic
+     * Возвращает связь последней темы
      */
-    public function getLastTopic()
+    public function lastTopic()
     {
-        return $this->lastTopic ? $this->lastTopic : new Topic();
+        return $this->belongsTo(Topic::class, 'last_topic_id')->withDefault();
     }
 }

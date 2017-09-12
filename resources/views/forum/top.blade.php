@@ -18,8 +18,8 @@
             </div>
             <div>
                 {{ $data->pagination() }}
-                Автор: {{ $data->getUser()->login }}<br>
-                Сообщение: {{ $data->getLastPost()->getUser()->login }} ({{ dateFixed($data->getLastPost()->created_at) }})
+                Автор: {{ $data->user->login }}<br>
+                Сообщение: {{ $data->lastPost->user->login }} ({{ dateFixed($data->lastPost->created_at) }})
             </div>
         @endforeach
 

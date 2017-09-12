@@ -16,7 +16,7 @@
             </div>
 
             <div>
-                Категория: <a href="/blog/{{ $data['category_id'] }}">{{ $data->getСategory()->name }}</a><br>
+                Категория: <a href="/blog/{{ $data['category_id'] }}">{{ $data->category->name }}</a><br>
                 Просмотров: {{ $data['visits'] }}<br>
                 Добавил: {!! profile($data['user']) !!}  ({{  dateFixed($data['created_at']) }})
             </div>

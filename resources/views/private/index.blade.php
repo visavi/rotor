@@ -51,10 +51,10 @@
 
                     @if ($data->author)
 
-                        <a href="/private/send?user={{ $data->getAuthor()->login }}">Ответить</a> /
-                        <a href="/private/history?user={{ $data->getAuthor()->login }}">История</a> /
-                        <a href="/contact?act=add&amp;uz={{ $data->getAuthor()->login }}&amp;token={{ $_SESSION['token'] }}">В контакт</a> /
-                        <a href="/ignore?act=add&amp;uz={{ $data->getAuthor()->login }}&amp;token={{ $_SESSION['token'] }}">Игнор</a>
+                        <a href="/private/send?user={{ $data->author->login }}">Ответить</a> /
+                        <a href="/private/history?user={{ $data->author->login }}">История</a> /
+                        <a href="/contact?act=add&amp;uz={{ $data->author->login }}&amp;token={{ $_SESSION['token'] }}">В контакт</a> /
+                        <a href="/ignore?act=add&amp;uz={{ $data->author->login }}&amp;token={{ $_SESSION['token'] }}">Игнор</a>
                         /
 
                         <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Inbox::class }} " data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>

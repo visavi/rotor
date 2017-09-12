@@ -30,6 +30,6 @@ class Rating extends BaseModel
      */
     public function recipient()
     {
-        return $this->belongsTo(User::class, 'recipient_id');
+        return $this->belongsTo(User::class, 'recipient_id')->withDefault();
     }
 }

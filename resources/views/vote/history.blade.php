@@ -16,7 +16,7 @@
             </div>
             <div>
                 @if ($vote->topic)
-                    Тема: <a href="/topic/{{ $vote->getTopic()->id }}">{{ $vote->getTopic()->title }}</a><br>
+                    Тема: <a href="/topic/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
                 @endif
 
                 Создано: {{ dateFixed($vote['created_at']) }}<br>

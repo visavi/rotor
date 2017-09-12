@@ -157,7 +157,8 @@ $router->map('GET',      '/surprise', 'pages/surprise.php');
 
 $router->map('GET|POST', '/files/[*:page]?', 'files/index.php', 'files');
 
-$router->map('GET|POST', '/load', 'load/index.php');
+$router->map('GET',      '/load', 'LoadController@index');
+
 $router->map('GET|POST', '/load/active', 'load/active.php');
 $router->map('GET|POST', '/load/add', 'load/add.php');
 $router->map('GET|POST', '/load/down', 'load/down.php');

@@ -28,8 +28,8 @@
                 <div>{!! bbCode($data['text']) !!}<br>
 
                     <input type="checkbox" name="del[]" value="{{ $data['id'] }}">
-                    <a href="/private/send?user={{ $data->getRecipient()->login }}">Написать еще</a> /
-                    <a href="/private/history?user={{ $data->getRecipient()->login }}">История</a></div>
+                    <a href="/private/send?user={{ $data->recipient->login }}">Написать еще</a> /
+                    <a href="/private/history?user={{ $data->recipient->login }}">История</a></div>
             @endforeach
 
             <br><input type="submit" value="Удалить выбранное"></form>

@@ -14,7 +14,7 @@
             <title>{{ $news['title'] }}</title>
             <link>{{  setting('home') }}/news/{{ $news['id'] }}</link>
             <description>{{ $news['text'] }}</description>
-            <author>{{ $news->getUser()->login }}</author>
+            <author>{{ $news->user->login }}</author>
             <pubDate>{{ date("r", $news['created_at']) }}</pubDate>
             <category>Новости</category>
             <guid>{{ setting('home') }}/news/{{ $news['id'] }}</guid>

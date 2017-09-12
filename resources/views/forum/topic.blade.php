@@ -10,15 +10,15 @@
     <h1>{{ $topic['title'] }}</h1>
     <a href="/forum">Форум</a> /
 
-    @if ($topic->getForum()->parent)
-        <a href="/forum/{{ $topic->getForum()->parent->id }}">{{ $topic->getForum()->parent->title }}</a> /
+    @if ($topic->forum->parent)
+        <a href="/forum/{{ $topic->forum->parent->id }}">{{ $topic->forum->parent->title }}</a> /
     @endif
 
-    <a href="/forum/{{ $topic->getForum()->id }}">{{ $topic->getForum()->title }}</a> /
+    <a href="/forum/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a> /
     <a href="/topic/{{ $topic['id'] }}/print">Печать</a> / <a href="/topic/{{ $topic['id'] }}/rss">RSS-лента</a>
 
     @if (isUser())
-        @if ($topic->getUser()->id == getUserId() && empty($topic['closed']) && user('point') >= setting('editforumpoint'))
+        @if ($topic->user->id == getUserId() && empty($topic['closed']) && user('point') >= setting('editforumpoint'))
            / <a href="/topic/{{ $topic['id'] }}/close?token={{ $_SESSION['token'] }}">Закрыть</a>
            / <a href="/topic/{{ $topic['id'] }}/edit">Изменить</a>
         @endif
@@ -151,7 +151,7 @@
             @endif
 
             @if ($data['edit_user_id'])
-                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->getEditUser()->login }} ({{ dateFixed($data['updated_at']) }})</small><br>
+                <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->login }} ({{ dateFixed($data['updated_at']) }})</small><br>
             @endif
 
             @if (isAdmin())

@@ -18,7 +18,7 @@
 
     <a href="/blog">Блоги</a> / <a href="/blog/{{ $blog['category_id'] }}">{{ $blog['name'] }}</a> / <a href="/article/{{ $blog['id'] }}/print">Печать</a> / <a href="/article/{{ $blog['id'] }}/rss">RSS-лента</a>
 
-    @if ($blog->getUser()->id == getUserId())
+    @if ($blog->user->id == getUserId())
          / <a href="/article/{{ $blog['id'] }}/edit">Изменить</a>
     @endif
 

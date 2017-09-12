@@ -14,7 +14,7 @@
             <title>{{ $blog['title'] }}</title>
             <link>{{  setting('home') }}/article/{{ $blog['id'] }}</link>
             <description>{{ $blog['text'] }}</description>
-            <author>{{ $blog->getUser()->login }}</author>
+            <author>{{ $blog->user->login }}</author>
             <pubDate>{{ date("r", $blog['created_at']) }}</pubDate>
             <category>Блоги</category>
             <guid>{{ setting('home') }}/article/{{ $blog['id'] }}</guid>
