@@ -626,7 +626,7 @@ function statsSpam()
 // --------------- Функция вывода количества забаненных --------------------//
 function statsBanned()
 {
-    return User::where('ban', 1)->where()->count('timeban', '>', SITETIME);
+    return User::where('ban', 1)->where('timeban', '>', SITETIME)->count();
 }
 
 // --------------- Функция вывода истории банов --------------------//

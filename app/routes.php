@@ -173,10 +173,10 @@ $router->map('GET', '/api/user', 'ApiController@user');
 $router->map('GET', '/api/forum', 'ApiController@forum');
 $router->map('GET', '/api/private', 'ApiController@private');
 
-$router->map('GET',  '/admin/spam', 'Admin\SpamController@index');
-$router->map('POST', '/admin/spam/delete', 'Admin\SpamController@delete');
+$router->map('GET',      '/admin', 'Admin\AdminController@index', 'admin');
+$router->map('GET',      '/admin/spam', 'Admin\SpamController@index');
+$router->map('POST',     '/admin/spam/delete', 'Admin\SpamController@delete');
 
-$router->map('GET',      '/admin', 'admin/index.php', 'admin');
 $router->map('GET|POST', '/admin/book', 'admin/book.php');
 $router->map('GET|POST', '/admin/blog', 'admin/blog.php');
 $router->map('GET|POST', '/admin/chat', 'admin/chat.php');

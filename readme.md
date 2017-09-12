@@ -64,6 +64,12 @@ RotorCMS 7.0
 
 Выполнение сида `php rotor seed:run` или `php rotor seed:run -s UsersSeeder` для отдельного сида
 
+### Настройки cron
+
+```
+* * * * * php path-to-site/app/cron.php 2>&1
+```
+
 ### Настройки nginx
 
 Чтобы пути обрабатывались правильно необходимо настроить сайт

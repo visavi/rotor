@@ -28,4 +28,12 @@ Class AdminController extends BaseController
         ]);
 
     }
+
+    /**
+     * Главная страница
+     */
+    public function index()
+    {
+        return view('admin/index');
+    }
 }
