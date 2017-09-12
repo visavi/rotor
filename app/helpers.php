@@ -1176,24 +1176,6 @@ function saveAdvertUser()
     file_put_contents(STORAGE."/temp/rekuser.dat", serialize($links), LOCK_EX);
 }
 
-// ----------- Функция закачки файла через curl ------------//
-function curlConnect($url, $user_agent = 'Mozilla/5.0', $proxy = null)
-{
-    if (function_exists('curl_init')) {
-        $ch = curl_init();
-        curl_setopt ($ch, CURLOPT_URL, $url);
-        curl_setopt ($ch, CURLOPT_USERAGENT, $user_agent);
-        curl_setopt ($ch, CURLOPT_HEADER, 0);
-        curl_setopt ($ch, CURLOPT_REFERER, $url);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt ($ch, CURLOPT_TIMEOUT, 10);
-        if ($proxy) curl_setopt ($ch, CURLOPT_PROXY, $proxy);
-        $result = curl_exec ($ch);
-        curl_close ($ch);
-        return $result;
-    }
-}
-
 // --------------------------- Функция показа фотографий ---------------------------//
 function recentPhotos($show = 5)
 {

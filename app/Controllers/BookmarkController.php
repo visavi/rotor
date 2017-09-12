@@ -6,7 +6,6 @@ use App\Classes\Request;
 use App\Classes\Validation;
 use App\Models\Bookmark;
 use App\Models\Topic;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class BookmarkController extends BaseController
 {

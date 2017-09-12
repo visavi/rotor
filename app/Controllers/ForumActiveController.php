@@ -7,7 +7,6 @@ use App\Classes\Validation;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class ForumActiveController extends BaseController
 {

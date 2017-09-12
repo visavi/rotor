@@ -40,7 +40,7 @@ class Cats extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany(Cats::class, 'parent_id')->orderBy('sort', 'desc');
+        return $this->hasMany(Cats::class, 'parent_id')->orderBy('sort');
     }
 
     /**

@@ -31,7 +31,7 @@ class Forum extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany(Forum::class, 'parent_id')->orderBy('sort', 'desc');
+        return $this->hasMany(Forum::class, 'parent_id')->orderBy('sort');
     }
 
     /**
