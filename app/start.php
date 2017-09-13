@@ -83,7 +83,7 @@ if (setting('doslimit')) {
                     ]);
 
                     DB::insert(
-                        "INSERT IGNORE INTO ban (`ip`, `created_at`) VALUES (?, ?);",
+                        "insert ignore into ban (`ip`, `created_at`) values (?, ?);",
                         [getClientIp(), SITETIME]
                     );
 
