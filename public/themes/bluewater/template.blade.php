@@ -82,4 +82,22 @@ if (isUser()){
         </div>
         <div id="main">
             <div class="body_center">
-<?= view('app/_note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+                @yield('layout')
+            </div>
+        </div>
+    </div>
+
+    <!--footer starts here-->
+    <div id="footer">
+
+        <a href="/"><?= setting('copy') ?></a><br>
+        <?php
+        showOnline();
+        showCounter();
+        perfomance();
+        ?>
+    </div>
+</div>
+</body>
+</html>
+

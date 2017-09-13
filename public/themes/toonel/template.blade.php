@@ -72,4 +72,49 @@ header("Content-type:text/html; charset=utf-8");
                 </div>
             <?php endif; ?>
             <div>
-<?= view('app/_note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+                @yield('layout')
+            </div>
+
+        </td>
+        <td class="right_mid">&nbsp;</td></tr>
+    <tr>
+        <td align="left" valign="top" class="lefbot"></td>
+        <td class="borbottom"></td>
+        <td align="right" valign="top" class="rightbot"></td>
+    </tr>
+</table>
+
+<table class="tab2" border="0" align="center" cellpadding="0" cellspacing="0">
+    <tr>
+        <td width="120" valign="top" class="fottopleft"></td>
+        <td class="ftop"></td>
+        <td width="120" valign="top" class="fottopright"></td>
+    </tr>
+
+    <tr>
+        <td align="center" colspan="3" class="ftexttd">
+
+            <?= showCounter() ?>
+            <?= showOnline() ?>
+            <a href="<?= setting('home') ?>"><?= setting('copy') ?></a><br/>
+
+        </td>
+    </tr>
+
+    <tr>
+        <td valign="top" class="footer_left"></td>
+        <td valign="top" class="fbottom"></td>
+        <td valign="top" class="footer_right"></td>
+    </tr>
+</table>
+
+<table class="tab2" align="center">
+    <tr>
+        <td align="center">
+
+            <?= perfomance() ?>
+
+        </td>
+    </tr>
+</table>
+</body></html>

@@ -88,6 +88,7 @@ $router->map('GET|POST', '/register', 'UserController@register', 'register');
 $router->map('GET|POST', '/user/[user:login]/[rating:action]', 'UserController@rating');
 $router->map('GET|POST', '/profile', 'UserController@profile');
 $router->map('GET',      '/key', 'UserController@key');
+$router->map('GET|POST', '/setting', 'UserController@setting');
 
 $router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'RatingController');
 $router->map('POST', '/rating/delete', 'RatingController@delete');
@@ -110,7 +111,6 @@ $router->map('POST', '/ajax/rating', 'AjaxController@rating');
 $router->map('POST', '/ajax/complaint', 'AjaxController@complaint');
 
 $router->map('GET|POST', '/wall', 'pages/wall.php', 'wall');
-$router->map('GET|POST', '/setting', 'pages/setting.php');
 
 $router->map('GET',      '/private/[outbox|history|clear:action]?', 'PrivateController@index');
 $router->map('POST',     '/private/[delete:action]', 'PrivateController');

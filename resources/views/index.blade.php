@@ -8,19 +8,19 @@
 
     @include('advert/top')
 
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> (<?=statsNewsDate()?>)<br> <?=lastNews()?>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> ({{ statsNewsDate() }})<br> {{ lastNews() }}
 
     <div class="b">
         <i class="fa fa-comment fa-lg text-muted"></i> <b><a href="/page/recent">Общение</a></b>
     </div>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a class="index" href="/book">Гостевая книга</a> (<?=statsGuest()?>)<br>
+    <i class="fa fa-circle-o fa-lg text-muted"></i> <a class="index" href="/book">Гостевая книга</a> ({{  statsGuest() }})<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> ({{ statsGallery() }})<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes">Голосования</a> ({{ statVotes()}})<br>
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
 
     <div class="b">
         <i class="fa fa-forumbee fa-lg text-muted"></i>
-        <b><a href="/forum">Форум</a></b> (<?=statsForum()?>)
+        <b><a href="/forum">Форум</a></b> ({{  statsForum() }})
     </div>
     {{ recentTopics() }}
 

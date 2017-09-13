@@ -1,14 +1,12 @@
-@include(setting('themes').'.index' )
+@extends(setting('themes').'/template')
 
-<div style="text-align:center">
-    @include('advert.top_all')
+@section('layout')
+    @include('advert/top_all')
+    {{ getAdvertUser() }}
+    {{ getNote() }}
+    {{ getFlash() }}
 
-    <?= showAdvertUser(); ?>
-</div>
+    @yield('content')
 
-{{ getFlash() }}
-
-@yield('content')
-
-@include('advert.bottom_all')
-@include(setting('themes').'.foot')
+    @include('advert/bottom_all')
+@stop

@@ -1119,7 +1119,7 @@ function stripString($str, $words = 20) {
 }
 
 // ------------------ Функция вывода пользовательской рекламы --------------------//
-function showAdvertUser()
+function getAdvertUser()
 {
     if (!empty(setting('rekusershow'))) {
         if (@filemtime(STORAGE."/temp/rekuser.dat") < time()-1800) {
@@ -1796,11 +1796,21 @@ function setFlash($status, $message)
 /**
  * Возвращает flash уведомления
  *
- * @return void сформированный блок с уведомлениями
+ * @return string сформированный блок с уведомлениями
  */
 function getFlash()
 {
     return view('app/_flash');
+}
+
+/**
+ * Возвращает уведомления сайта
+ *
+ * @return string сформированный блок с уведомлениями
+ */
+function getNote()
+{
+    return view('app/_note');
 }
 
 /**

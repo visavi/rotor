@@ -83,7 +83,7 @@ header("Content-type:text/html; charset=utf-8");
 <?php if (!isUser()): ?>
 <li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
  <?php else: ?>
-  <li><a href="/logout" onclick="return confirm(\'Вы действительно хотите выйти?\')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
+  <li><a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
 <?php endif; ?>
 
 </ul></div>
@@ -130,8 +130,8 @@ header("Content-type:text/html; charset=utf-8");
 
 <div class="divb">Авторизация</div>
 
-<form method="post" action="/login<?= returnUrl() ?>">
-Логин:<br><input name="login" value="'.$cooklog.'"><br>
+<form method="post" action="/login{{ returnUrl() }}">
+Логин:<br><input name="login"><br>
 Пароль:<br><input name="pass" type="password"><br>
 Запомнить меня:
 <input name="cookietrue" type="checkbox" value="1" checked="checked"><br>
@@ -200,13 +200,13 @@ header("Content-type:text/html; charset=utf-8");
                         <div class="art-Post-inner">
 
 <div class="art-PostMetadataHeader">
-<?= view('app/_note'); ?>
+{{-- note --}}
 </div>
 
 
                                 <h2 class="art-PostHeaderIcon-wrapper">
                                     <img src="/themes/sky/img/PostHeaderIcon.png" width="29" height="29" alt="PostHeaderIcon">
-                                    <span class="art-PostHeader"><?= setting('title') ?></span>
+                                    <span class="art-PostHeader">{{ setting('title') }}</span>
                                 </h2>
 
                             <div class="art-PostContent">
@@ -214,3 +214,65 @@ header("Content-type:text/html; charset=utf-8");
 
 
 <div>
+    @yield('layout')
+
+
+
+</div></div>
+                            <div class="cleared"></div>
+                        </div>
+
+                            </div>
+                        </div>
+
+
+</div>
+
+<div class="art-sidebar2">
+
+<div class="art-Block">
+                            <div class="art-Block-tl"></div>
+                            <div class="art-Block-tr"></div>
+                            <div class="art-Block-bl"></div>
+                            <div class="art-Block-br"></div>
+                            <div class="art-Block-tc"></div>
+                            <div class="art-Block-bc"></div>
+                            <div class="art-Block-cl"></div>
+                            <div class="art-Block-cr"></div>
+                            <div class="art-Block-cc"></div>
+                            <div class="art-Block-body">
+                                <div class="art-BlockContent">
+                                    <div class="art-BlockContent-body">
+                                        <div>';
+<?php include (RESOURCES.'/views/main/recent.blade.php'); ?>
+echo '</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+</div>
+
+</div>
+                <div class="cleared"></div><div class="art-Footer">
+                    <div class="art-Footer-inner">
+                        <a href="/news/rss" class="art-rss-tag-icon" title="RSS"></a>
+                        <div class="art-Footer-text">
+<a href="{{ setting('home') }}">{{  setting('copy') }}</a><br>
+{{ showOnline() }}
+{{ showCounter() }}
+</div>
+
+{{ perfomance() }}
+</div><div class="art-Footer-background"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div style="text-align:center"><small>
+<a href="/faq">FAQ (Чаво)</a> |
+<a href="/rules">Правила</a> |
+<a href="/mail">Поддержка</a>
+</small></div>';
+echo '</body></html>

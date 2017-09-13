@@ -1,8 +1,8 @@
+<div><b>{{ dateFixed(SITETIME, 'j F Y') }}</b></div>
 <table>
-    <thead><b>{{ dateFixed(SITETIME, 'j F Y') }}</b></thead>
     <thead>
         <tr>
-            <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th><span style="color:#ff6666">Сб</span></th><th><span style="color:#ff6666">Вс</span>
+            <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th><span  class="text-danger">Сб</span></th><th><span class="text-danger">Вс</span>
             </th>
         </tr>
     </thead>
@@ -21,7 +21,7 @@
                     @endif
 
                     @if ($keyDay == 5 || $keyDay == 6)
-                        <td><span style="color:#ff6666">{{ $valDay }}</span></td>
+                        <td><span class="text-danger">{{ $valDay }}</span></td>
                         @continue
                     @endif
 

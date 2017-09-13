@@ -40,4 +40,23 @@ header('Content-type:text/html; charset=utf-8');
             <?php view('app/_menu'); ?>
 
             <div class="site">
-<?= view('app/_note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+                @yield('layout')
+            </div>
+            <div class="c" id="down">
+                <a href="<?= setting('home') ?>"><?= setting('copy') ?></a><br/>
+                <?= showCounter() ?>
+                <?= showOnline() ?>
+            </div>
+            <div class="foot">
+                <?= perfomance() ?>
+            </div>
+
+        </td>
+        <td width="10" style="background-image:url(/themes/mobile/img/border_right.gif);"></td>
+    </tr>
+    <tr>
+        <td width="10" height="10" style="background-image:url(/themes/mobile/img/border_bottom_left.gif);"></td>
+        <td width="580" height="10" style="background-image:url(/themes/mobile/img/border_bottom.gif);"></td>
+        <td width="10" height="10" style="background-image:url(/themes/mobile/img/border_bottom_right.gif);"></td>
+    </tr>
+</table></body></html>

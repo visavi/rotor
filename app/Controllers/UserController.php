@@ -466,4 +466,58 @@ class UserController extends BaseController
 
         view('pages/key');
     }
+
+    /*
+     * Настройки
+     */
+    function setting()
+    {
+        if (! $user = isUser()) {
+            abort(403, 'Для изменения настроек необходимо авторизоваться!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token     = check(Request::input('token'));
+            $themes    = check(Request::input('themes'));
+            $timezone  = check(Request::input('timezone'), 0);
+            $notify    = Request::has('notify') ? 1 : 0;
+            $subscribe = Request::has('subscribe') ? str_random(32) : null;
+
+            $validation = new Validation();
+
+            $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
+                ->addRule('regex', [$themes, '|^[a-z0-9_\-]+$|i'], 'Недопустимое название темы!', true)
+                ->addRule('bool', (file_exists(HOME.'/themes/'.$themes) || $themes == 0), 'Данная тема не установлен на сайте!', true)
+                ->addRule('regex', [$timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|'], 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!', true);
+
+            if ($validation->run()) {
+
+                $user->update([
+                    'themes'    => $themes,
+                    'timezone'  => $timezone,
+                    'notify'    => $notify,
+                    'subscribe' => $subscribe,
+                ]);
+
+                setFlash('success', 'Настройки успешно изменены!');
+                redirect("/setting");
+
+            } else {
+                showError($validation->getErrors());
+            }
+        }
+
+        $setting['themes']    = glob(HOME."/themes/*", GLOB_ONLYDIR);
+        $setting['languages'] = glob(RESOURCES."/lang/*", GLOB_ONLYDIR);
+
+        $setting['langShort'] = [
+            'ru' => 'русский',
+            'en' => 'English',
+        ];
+
+        $setting['timezones'] = range(-12, 12);
+
+        return view('user/setting', compact('user', 'setting'));
+    }
 }

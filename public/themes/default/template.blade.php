@@ -35,4 +35,20 @@ header("Content-type:text/html; charset=utf-8");
 <?php view('app/_menu'); ?>
 
 <div class="site">
-<?= view('app/_note'); /*Временно пока шаблоны подключаются напрямую*/ ?>
+    @yield('layout')
+</div>
+<div class="lol" id="down">
+    <a href="/">{{ setting('copy') }}</a><br>
+    <?= showOnline() ?>
+    <?= showCounter() ?>
+</div>
+<div class="site" style="text-align:center">
+    <?= perfomance() ?>
+</div>
+
+@section('scripts')
+    <?= includeScript() ?>
+@show
+@stack('scripts')
+</body>
+</html>
