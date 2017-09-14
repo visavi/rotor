@@ -126,9 +126,9 @@ $router->map('GET',      '/ignore', 'pages/ignore.php');
 $router->map('GET|POST', '/ignore/[note:action]/[i:id]', 'pages/ignore.php');
 $router->map('POST',     '/ignore/[create|delete:action]', 'pages/ignore.php');
 
-$router->map('GET',      '/contact', 'pages/contact.php');
-$router->map('GET|POST', '/contact/[note:action]/[i:id]', 'pages/contact.php');
-$router->map('POST',     '/contact/[create|delete:action]', 'pages/contact.php');
+$router->map('GET|POST', '/contact', 'ContactController@index');
+$router->map('GET|POST', '/contact/note/[i:id]', 'ContactController@note');
+$router->map('POST',     '/contact/delete', 'ContactController@delete');
 
 $router->map('GET',      '/closed', 'HomeController@closed');
 $router->map('GET|POST', '/account', 'pages/account.php');
