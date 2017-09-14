@@ -1,4 +1,4 @@
-@extends(setting('themes').'/template')
+@extends(setting('themes').'/theme')
 
 @section('layout')
     @include('advert/top_all')
