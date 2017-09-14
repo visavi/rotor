@@ -25,7 +25,7 @@ class PageController extends BaseController
             abort(404);
         }
 
-        return view('main/'.$action);
+        return view('main/layout', compact('action'));
     }
 
     /**

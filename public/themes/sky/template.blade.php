@@ -11,17 +11,17 @@ header("Content-type:text/html; charset=utf-8");
         @show
     </title>
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-<?= includeStyle(); ?>
+{{ includeStyle() }}
 <link rel="stylesheet" href="/themes/sky/css/style.css" media="screen">
 <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
-<?= includeScript(); ?>
+{{ includeScript() }}
 <meta name="keywords" content="@yield('keywords', setting('keywords'))">
 <meta name="description" content="@yield('description', setting('description'))">
-<meta name="generator" content="RotorCMS <?= env('VERSION') ?>">
+<meta name="generator" content="RotorCMS {{ env('VERSION') }}">
 </head><body>
 <!--Themes by TurikUs-->
 
-<div id="art-page-background-simple-gradient">
+    <div id="art-page-background-simple-gradient">
         <div id="art-page-background-gradient"></div>
     </div>
     <div id="art-page-background-glare">
@@ -40,53 +40,51 @@ header("Content-type:text/html; charset=utf-8");
             <div class="art-Sheet-cc"></div>
             <div class="art-Sheet-body">
                 <div class="art-nav">
-                	<div class="l"></div>
-                	<div class="r"></div>
-                	<ul class="art-menu">
-                		<li><a href="/"><span class="l"></span><span class="r"></span><span class="t">Главная</span></a></li>
-                		<li><a href="/forum"><span class="l"></span><span class="r"></span><span class="t">Форум</span></a>
-                           <ul>
+                    <div class="l"></div>
+                    <div class="r"></div>
+                    <ul class="art-menu">
+                        <li><a href="/"><span class="l"></span><span class="r"></span><span class="t">Главная</span></a></li>
+                        <li><a href="/forum"><span class="l"></span><span class="r"></span><span class="t">Форум</span></a>
+                            <ul>
                                  <li><a href="/forum/new/themes">Новые темы</a></li>
                                  <li><a href="/forum/new/posts">Новые сообщения</a></li>
-                		   </ul></li>
-
-
-
-                		<li><a href="/book"><span class="l"></span><span class="r"></span><span class="t">Гостевая</span></a></li>
+                            </ul></li>
+                        <li><a href="/book"><span class="l"></span><span class="r"></span><span class="t">Гостевая</span></a></li>
 
                         <li><a href="/load"><span class="l"></span><span class="r"></span><span class="t">Файлы</span></a>
                            <ul>
                                  <li><a href="/load/new?act=files">Новые файлы</a></li>
                                  <li><a href="/load/new?act=comments">Новые комментарии</a></li>
-                		   </ul></li>
+                           </ul></li>
 
                         <li><a href="/blog"><span class="l"></span><span class="r"></span><span class="t">Блоги</span></a>
                            <ul>
                                  <li><a href="/blog/new?act=blogs">Новые статьи</a></li>
                                  <li><a href="/blog/new?act=comments">Новые комментарии</a></li>
-                		   </ul></li>
-
+                           </ul></li>
 
                         <li><a href="/gallery"><span class="l"></span><span class="r"></span><span class="t">Галерея</span></a>
                            <ul>
                                  <li><a href="/gallery/top">Топ фото</a></li>
                                  <li><a href="/gallery/albums">Все альбомы</a></li>
-											<li><a href="/gallery/comments">Все комментарии</a></li>
-                		   </ul></li>
+                                            <li><a href="/gallery/comments">Все комментарии</a></li>
+                           </ul></li>
 
 
-                		<li><a href="#"><span class="l"></span><span class="r"></span><span class="t">Актив сайта</span></a>
+                        <li><a href="#"><span class="l"></span><span class="r"></span><span class="t">Актив сайта</span></a>
                            <ul>
                                  <li><a href="/adminlist">Администрация</a></li>
                                  <li><a href="/userlist">Пользователи</a></li>
-                		   </ul> </li>
-<?php if (!isUser()): ?>
-<li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
- <?php else: ?>
-  <li><a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
-<?php endif; ?>
+                           </ul>
+                        </li>
 
-</ul></div>
+                        @if (!isUser())
+                        <li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
+                         #else
+                          <li><a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
+                        @endif
+
+            </ul></div>
                 <div class="art-contentLayout">
                     <div class="art-sidebar1">
                         <div class="art-Block">
@@ -105,42 +103,38 @@ header("Content-type:text/html; charset=utf-8");
                                         <div>
 
 
-<?php if (isUser()): ?>
+@if (isUser())
 
-<?php if (isAdmin()): ?>
-    <div class="nmenu">
-    <i class="fa fa-wrench"></i> <a href="/admin">Панель</a>
+    @if (isAdmin())
+        <div class="nmenu">
+            <i class="fa fa-wrench"></i> <a href="/admin">Панель</a>
 
-    <?php if (statsSpam()>0): ?>
-        &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
-    <?php endif; ?>
+            @if (statsSpam()>0)
+                &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
+            @endif
 
-    <?php if (user('newchat')<statsNewChat()): ?>
-        &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
-    <?php endif; ?>
+            @if (user('newchat')<statsNewChat())
+                &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
+            @endif
+        </div>
+    @endif
 
-    </div>
-<?php endif; ?>
+    @include('main/menu')
+@else
 
-  <?php include (RESOURCES.'/views/main/menu.blade.php'); ?>
+    <div class="divb">Авторизация</div>
 
-<?php else: ?>
+    <form method="post" action="/login{{ returnUrl() }}">
+    Логин:<br><input name="login"><br>
+    Пароль:<br><input name="pass" type="password"><br>
+    Запомнить меня:
+    <input name="remember" type="checkbox" value="1" checked="checked"><br>
 
-<?php $cooklog = (isset($_COOKIE['login'])) ? check($_COOKIE['login']): ''; ?>
+    <input value="Войти" type="submit"></form>
 
-<div class="divb">Авторизация</div>
-
-<form method="post" action="/login{{ returnUrl() }}">
-Логин:<br><input name="login"><br>
-Пароль:<br><input name="pass" type="password"><br>
-Запомнить меня:
-<input name="cookietrue" type="checkbox" value="1" checked="checked"><br>
-
-<input value="Войти" type="submit"></form>
-
-<a href="/register">Регистрация</a><br>
-<a href="/recovery">Забыли пароль?</a>
-<?php endif; ?>
+    <a href="/register">Регистрация</a><br>
+    <a href="/recovery">Забыли пароль?</a>
+@endif
 
 
 </div>
@@ -243,9 +237,10 @@ header("Content-type:text/html; charset=utf-8");
                             <div class="art-Block-body">
                                 <div class="art-BlockContent">
                                     <div class="art-BlockContent-body">
-                                        <div>';
-<?php include (RESOURCES.'/views/main/recent.blade.php'); ?>
-echo '</div>
+                                        <div>
+
+    @include('main/recent')
+</div>
                                     </div>
                                 </div>
                             </div>
@@ -274,5 +269,5 @@ echo '</div>
 <a href="/faq">FAQ (Чаво)</a> |
 <a href="/rules">Правила</a> |
 <a href="/mail">Поддержка</a>
-</small></div>';
-echo '</body></html>
+</small></div>
+</body></html>
