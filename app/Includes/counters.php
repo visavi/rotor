@@ -58,15 +58,15 @@ if (isUser()) {
 $counter = Counter::first();
 
 if ($counter->hours != $hours) {
-    DB::insert("INSERT IGNORE INTO `counter24` (`hour`, `hosts`, `hits`) VALUES (?, ?, ?);", [$hours, $counter->hosts24, $counter->hits24]);
-    DB::update("UPDATE `counter` SET `hours`=?, `hosts24`=?, `hits24`=?;", [$hours, 0, 0]);
-    DB::delete("DELETE FROM `counter24` WHERE `hour` < (SELECT MIN(`hour`) FROM (SELECT `hour` FROM `counter24` ORDER BY `hour` DESC LIMIT 24) AS del);");
+    DB::insert("insert ignore into `counter24` (`hour`, `hosts`, `hits`) values (?, ?, ?);", [$hours, $counter->hosts24, $counter->hits24]);
+    DB::update("update `counter` set `hours`=?, `hosts24`=?, `hits24`=?;", [$hours, 0, 0]);
+    DB::delete("delete from `counter24` where `hour` < (select min(`hour`) from (select `hour` from `counter24` order by `hour` desc limit 24) as del);");
 }
 
 if ($counter->days != $days) {
-    DB::insert("INSERT IGNORE INTO `counter31` (`days`, `hosts`, `hits`) VALUES (?, ?, ?);", [$days, $counter->dayhosts, $counter->dayhits]);
-    DB::update("UPDATE `counter` SET `days`=?, `dayhosts`=?, `dayhits`=?;", [$days, 0, 0]);
-    DB::delete("DELETE FROM `counter31` WHERE `days` < (SELECT MIN(`days`) FROM (SELECT `days` FROM `counter31` ORDER BY `days` DESC LIMIT 31) AS del);");
+    DB::insert("insert ignore into `counter31` (`days`, `hosts`, `hits`) values (?, ?, ?);", [$days, $counter->dayhosts, $counter->dayhits]);
+    DB::update("update `counter` set `days`=?, `dayhosts`=?, `dayhits`=?;", [$days, 0, 0]);
+    DB::delete("delete from `counter31` where `days` < (select min(`days`) from (select `days` from `counter31` order by `days` desc limit 31) as del);");
     // ---------------------------------------------------//
 
     $week = Counter31::orderBy('days', 'desc')
