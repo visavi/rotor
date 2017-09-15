@@ -33,7 +33,7 @@ class ApiController extends BaseController
             exit();
         }
 
-        $user = User::where('apikey', $token)->first();
+        $user = User::query()->where('apikey', $token)->first();
 
         if (! $user) {
             echo json_encode(['error'=>'no user']);
@@ -81,13 +81,13 @@ class ApiController extends BaseController
             exit();
         }
 
-        $user = User::where('apikey', $token)->first();
+        $user = User::query()->where('apikey', $token)->first();
         if (! $user) {
             echo json_encode(['error'=>'no user']);
             exit();
         }
 
-        $inbox = Inbox::where('user_id', $user->id)
+        $inbox = Inbox::query()->where('user_id', $user->id)
             ->orderBy('created_at')
             ->limit($count)
             ->get();
@@ -134,19 +134,20 @@ class ApiController extends BaseController
             exit();
         }
 
-        $user = User::where('apikey', $token)->first();
+        $user = User::query()->where('apikey', $token)->first();
         if (! $user) {
             echo json_encode(['error'=>'no user']);
             exit();
         }
 
-        $topic = Topic::find($id);
+        $topic = Topic::query()->find($id);
         if (! $topic) {
             echo json_encode(['error'=>'no topic']);
             exit();
         }
 
-        $posts = Post::where('topic_id', $id)
+        $posts = Post::query()
+            ->where('topic_id', $id)
             ->orderBy('created_at', 'asc')
             ->get();
 

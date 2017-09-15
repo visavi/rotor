@@ -2,11 +2,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>
-        @section('title')
-            {{ setting('title') }}
-        @show
-    </title>
+    <title>@yield('title') {{ setting('title') }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>

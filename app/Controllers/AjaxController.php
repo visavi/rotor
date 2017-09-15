@@ -56,42 +56,45 @@ class AjaxController extends BaseController
 
         switch ($type):
             case News::class:
-                $data = Comment::where('relate_type', $type)
+                $data = Comment::query()
+                    ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
                 $path = '/news/'.$data['relate_id'].'/comments?page='.$page;
                 break;
 
             case Blog::class:
-                $data = Comment::where('relate_type', $type)
+                $data = Comment::query()
+                    ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
                 $path = '/blog?page='.$page;
                 break;
 
             case Photo::class:
-                $data = Comment::where('relate_type', $type)
+                $data = Comment::query()
+                    ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
                 $path = '/gallery/'.$data['relate_id'].'/comments?page='.$page;
                 break;
 
             case Guest::class:
-                $data = $type::find($id);
+                $data = $type::query()->find($id);
                 $path = '/book?page='.$page;
                 break;
 
             case Post::class:
-                $data = $type::find($id);
+                $data = $type::query()->find($id);
                 $path = '/topic/'.$data['topic_id'].'?page='.$page;
                 break;
 
             case Inbox::class:
-                $data = $type::find($id);
+                $data = $type::query()->find($id);
                 break;
         endswitch;
 
-        $spam = Spam::where(['relate_type' => $type, 'relate_id' => $id])->first();
+        $spam = Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->first();
 
         $validation = new Validation();
         $validation
@@ -101,7 +104,7 @@ class AjaxController extends BaseController
             ->addRule('bool', ! $spam, 'Жалоба на данное сообщение уже отправлена!');
 
         if ($validation->run()) {
-            Spam::create([
+            Spam::query()->create([
                 'relate_type' => $type,
                 'relate_id'   => $data['id'],
                 'user_id'     => getUserId(),
@@ -136,7 +139,8 @@ class AjaxController extends BaseController
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($validation->run()) {
-            $delComments = Comment::where('relate_type', $type)
+            $delComments = Comment::query()
+                ->where('relate_type', $type)
                 ->where('relate_id', $rid)
                 ->where('id', $id)
                 ->delete();
@@ -193,11 +197,12 @@ class AjaxController extends BaseController
             exit(json_encode(['status' => 'error', 'message' => 'Type invalid']));
         }
 
-        Polling::where('relate_type', $type)
+        Polling::query()
+            ->where('relate_type', $type)
             ->where('created_at', '<', SITETIME)
             ->delete();
 
-        $post = $type::where('user_id', '<>', getUserId())->find($id);
+        $post = $type::query()->where('user_id', '<>', getUserId())->find($id);
         if (! $post) {
             exit(json_encode([
                 'status' => 'error',
@@ -205,7 +210,8 @@ class AjaxController extends BaseController
             ]));
         }
 
-        $polling = Polling::where('relate_type', $type)
+        $polling = Polling::query()
+            ->where('relate_type', $type)
             ->where('relate_id', $id)
             ->where('user_id', getUserId())
             ->first();
@@ -221,7 +227,7 @@ class AjaxController extends BaseController
                 $cancel = true;
             }
         } else {
-            Polling::create([
+            Polling::query()->create([
                 'relate_type' => $type,
                 'relate_id'   => $id,
                 'user_id'     => getUserId(),

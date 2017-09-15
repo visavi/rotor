@@ -15,10 +15,11 @@ Class AdminController extends BaseController
             abort('403', 'Доступ запрещен!');
         }
 
-        Admlog::where('created_at', '<', SITETIME - 3600 * 24 * setting('maxlogdat'))
+        Admlog::query()
+            ->where('created_at', '<', SITETIME - 3600 * 24 * setting('maxlogdat'))
             ->delete();
 
-        Admlog::create([
+        Admlog::query()->create([
             'user_id'    => getUserId(),
             'request'    => server('REQUEST_URI'),
             'referer'    => server('HTTP_REFERER'),

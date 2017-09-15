@@ -68,7 +68,7 @@ header('Content-type:text/html; charset=utf-8');
 
             <div id="footer">
                 <div id="text">
-                    &copy; Copyright 2005-<?=date('Y')?> {{ setting('title') }}
+                    &copy; Copyright 2005-{{ date('Y') }} {{ setting('title') }}
                 </div>
                 <div id="image">
                     <a href="/"><img src="/themes/motor/img/smalllogo2.gif" alt="smalllogo"></a>

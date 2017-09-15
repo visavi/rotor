@@ -4,20 +4,16 @@ header("Content-type:text/html; charset=utf-8");
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>
-        @section('title')
-            {{ setting('title') }}
-        @show
-    </title>
+    <title>@yield('title') {{ setting('title') }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
-    <?= includeStyle() ?>
+    @yield('styles')
+    @stack('styles')
     <link rel="stylesheet" href="/themes/toonel/css/style.css"/>
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml"/>
-    <?= includeScript() ?>
     <meta name="keywords" content="%KEYWORDS%"/>
     <meta name="description" content="%DESCRIPTION%"/>
-    <meta name="generator" content="RotorCMS <?= env('VERSION') ?>"/>
+    <meta name="generator" content="RotorCMS {{ env('VERSION') }}"/>
 </head>
 <body>
 <!--Design by Vantuz (http://pizdec.ru)-->
@@ -25,7 +21,7 @@ header("Content-type:text/html; charset=utf-8");
     <tr>
         <td class="t1">
             <a href="/">
-                <img src="/themes/toonel/img/logo.gif" alt="<?= setting('title') ?>"/>
+                <img src="/themes/toonel/img/logo.gif" alt="{{ setting('title') }}"/>
             </a>
         </td>
         <td class="t2"></td>
@@ -33,15 +29,15 @@ header("Content-type:text/html; charset=utf-8");
             <a title="Центр общения" class="menu" href="/forum">Форум</a> |
             <a title="Гостевая комната" class="menu" href="/book">Гостевая</a> |
             <a title="Скрипты для wap-мастеров" class="menu" href="/load">Скрипты</a> |
-            <?php if (isUser()): ?>
+            @if (isUser())
                 <a title="Управление настройками" class="menu" href="/menu">Меню</a> |
                 <a title="Выход" class="menu" href="/logout"
                    onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
-            <?php else: ?>
+            @else
                 <a title="Страница авторизации" class="menu" href="/login">Вход</a> |
                 <a title="Страница регистрации" class="menu"
                    href="/register">Регистрация</a>
-            <?php endif ?>
+            @endif
         </td>
         <td class="t4"></td>
     </tr>
@@ -57,22 +53,27 @@ header("Content-type:text/html; charset=utf-8");
     <tr>
         <td class="left_mid">&nbsp;</td>
         <td valign="top" class="lr">
-            <?php if (isAdmin()): ?>
+            @if (isAdmin())
                 <div class="nmenu">
                     <i class="fa fa-wrench"></i> <a
                         href="/admin">Панель</a>
 
-                    <?php if (statsSpam() > 0): ?>
+                    @if (statsSpam() > 0)
                         &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
-                    <?php endif; ?>
+                    @endif
 
-                    <?php if (user('newchat') < statsNewChat()): ?>
+                    @if (user('newchat') < statsNewChat())
                         &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
-                    <?php endif; ?>
+                    @endif
                 </div>
-            <?php endif; ?>
+            @endif
             <div>
+                @yield('advertTop')
+                @yield('advertUser')
+                @yield('note')
+                @yield('flash')
                 @yield('layout')
+                @yield('advertBottom')
             </div>
 
         </td>
@@ -93,11 +94,9 @@ header("Content-type:text/html; charset=utf-8");
 
     <tr>
         <td align="center" colspan="3" class="ftexttd">
-
-            <?= showCounter() ?>
-            <?= showOnline() ?>
-            <a href="<?= setting('home') ?>"><?= setting('copy') ?></a><br/>
-
+            @yield('counter')
+            @yield('online')
+            <a href="{{ setting('home') }}">{{ setting('copy') }}</a><br/>
         </td>
     </tr>
 
@@ -111,10 +110,10 @@ header("Content-type:text/html; charset=utf-8");
 <table class="tab2" align="center">
     <tr>
         <td align="center">
-
-            <?= perfomance() ?>
-
+            @yield('performance')
         </td>
     </tr>
 </table>
+@yield('scripts')
+@stack('scripts')
 </body></html>

@@ -46,7 +46,8 @@ class SpamController extends AdminController
             'down'  => Down::class,
         ];
 
-        $spam = Spam::select('relate_type', DB::raw('count(*) as total'))
+        $spam = Spam::query()
+            ->select('relate_type', DB::raw('count(*) as total'))
             ->groupBy('relate_type')
             ->pluck('total', 'relate_type')
             ->all();
@@ -66,7 +67,8 @@ class SpamController extends AdminController
 
         $page = paginate(setting('spamlist'),  $this->total[$type]);
 
-        $records = Spam::where('relate_type', $this->types[$type])
+        $records = Spam::query()
+            ->where('relate_type', $this->types[$type])
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit(setting('spamlist'))
@@ -94,7 +96,7 @@ class SpamController extends AdminController
 
         if ($validation->run()) {
 
-            Spam::find($id)->delete();
+            Spam::query()->find($id)->delete();
 
             echo json_encode(['status' => 'success']);
         } else {

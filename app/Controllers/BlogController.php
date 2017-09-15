@@ -19,12 +19,13 @@ class BlogController extends BaseController
      */
     public function index()
     {
-        $blogs = CatsBlog::orderBy('sort')
+        $blogs = CatsBlog::query()
+            ->orderBy('sort')
             ->with('new')
             ->get()
             ->all();
 
-        if (!$blogs) {
+        if (! $blogs) {
             abort('default', 'Разделы блогов еще не созданы!');
         }
 
@@ -36,17 +37,18 @@ class BlogController extends BaseController
      */
     public function blog($cid)
     {
-        $category = CatsBlog::find($cid);
+        $category = CatsBlog::query()->find($cid);
 
         if (! $category) {
             abort('default', 'Данного раздела не существует!');
         }
 
-        $total = Blog::where('category_id', $cid)->count();
+        $total = Blog::query()->where('category_id', $cid)->count();
 
         $page = paginate(setting('blogpost'), $total);
 
-        $blogs = Blog::where('category_id', $cid)
+        $blogs = Blog::query()
+            ->where('category_id', $cid)
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit(setting('blogpost'))
@@ -61,7 +63,8 @@ class BlogController extends BaseController
      */
     public function view($id)
     {
-        $blog = Blog::select('blogs.*', 'catsblog.name', 'pollings.vote')
+        $blog = Blog::query()
+            ->select('blogs.*', 'catsblog.name', 'pollings.vote')
             ->where('blogs.id', $id)
             ->leftJoin('catsblog', function ($join) {
                 $join->on('blogs.category_id', '=', 'catsblog.id');
@@ -83,7 +86,8 @@ class BlogController extends BaseController
         $page = paginate(1, $total);
 
         if ($page['current'] == 1) {
-            $reads = Read::where('relate_type', Blog::class)
+            $reads = Read::query()
+                ->where('relate_type', Blog::class)
                 ->where('relate_id', $id)
                 ->where('ip', getClientIp())
                 ->first();
@@ -91,11 +95,12 @@ class BlogController extends BaseController
             if (! $reads) {
                 $expiresRead = SITETIME + 3600 * setting('blogexpread');
 
-                Read::where('relate_type', Blog::class)
+                Read::query()
+                    ->where('relate_type', Blog::class)
                     ->where('created_at', '<', SITETIME)
                     ->delete();
 
-                Read::create([
+                Read::query()->create([
                     'relate_type' => Blog::class,
                     'relate_id'   => $id,
                     'ip'          => getClientIp(),
@@ -132,7 +137,7 @@ class BlogController extends BaseController
             abort(403, 'Для редактирования статьи необходимо авторизоваться');
         }
 
-        $blog = Blog::find($id);
+        $blog = Blog::query()->find($id);
 
         if (! $blog) {
             abort(404, 'Данной статьи не существует!');
@@ -150,7 +155,7 @@ class BlogController extends BaseController
             $text  = check(Request::input('text'));
             $tags  = check(Request::input('tags'));
 
-            $category = CatsBlog::find($cid);
+            $category = CatsBlog::query()->find($cid);
 
             $validation = new Validation();
             $validation
@@ -166,7 +171,7 @@ class BlogController extends BaseController
                 // Обновление счетчиков
                 if ($blog->category_id != $category->id) {
                     $category->increment('count');
-                    CatsBlog::where('id', $blog->category_id)->decrement('count');
+                    CatsBlog::query()->where('id', $blog->category_id)->decrement('count');
                 }
 
                 $blog->update([
@@ -184,7 +189,8 @@ class BlogController extends BaseController
             }
         }
 
-        $cats = CatsBlog::select('id', 'name')
+        $cats = CatsBlog::query()
+            ->select('id', 'name')
             ->pluck('name', 'id')
             ->all();
 
@@ -196,13 +202,15 @@ class BlogController extends BaseController
      */
     public function blogs()
     {
-        $total = Blog::distinct('user_id')
+        $total = Blog::query()
+            ->distinct('user_id')
             ->join('users', 'blogs.user_id', '=', 'users.id')
             ->count('user_id');
 
         $page = paginate(setting('bloggroup'), $total);
 
-        $blogs = Blog::select('user_id', 'login')
+        $blogs = Blog::query()
+            ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(comments) as comments')
             ->join('users', 'blogs.user_id', '=', 'users.id')
             ->offset($page['offset'])
@@ -225,7 +233,8 @@ class BlogController extends BaseController
             abort(403, 'Для публикации новой статьи необходимо авторизоваться');
         }
 
-        $cats = CatsBlog::select('id', 'name')
+        $cats = CatsBlog::query()
+            ->select('id', 'name')
             ->pluck('name', 'id')
             ->all();
 
@@ -240,7 +249,7 @@ class BlogController extends BaseController
             $text  = check(Request::input('text'));
             $tags  = check(Request::input('tags'));
 
-            $category = CatsBlog::find($cid);
+            $category = CatsBlog::query()->find($cid);
 
             $validation = new Validation();
             $validation
@@ -255,7 +264,7 @@ class BlogController extends BaseController
 
                 $text = antimat($text);
 
-                $article = Blog::create([
+                $article = Blog::query()->create([
                     'category_id' => $cid,
                     'user_id'     => getUserId(),
                     'title'       => $title,
@@ -266,7 +275,7 @@ class BlogController extends BaseController
 
                 $category->increment('count');
 
-                $user = User::where('id', getUserId());
+                $user = User::query()->where('id', getUserId());
                 $user->update([
                     'point' => DB::raw('point + 5'),
                     'money' => DB::raw('money + 100'),
@@ -288,7 +297,7 @@ class BlogController extends BaseController
      */
     public function comments($id)
     {
-        $blog = Blog::where('id', $id)->first();
+        $blog = Blog::query()->where('id', $id)->first();
 
         if (!$blog) {
             abort('default', 'Данной статьи не существует!');
@@ -308,7 +317,7 @@ class BlogController extends BaseController
             if ($validation->run()) {
                 $msg = antimat($msg);
 
-                Comment::create([
+                Comment::query()->create([
                     'relate_type' => Blog::class,
                     'relate_id'   => $blog->id,
                     'text'        => $msg,
@@ -318,7 +327,7 @@ class BlogController extends BaseController
                     'brow'        => getUserAgent(),
                 ]);
 
-                $user = User::where('id', getUserId());
+                $user = User::query()->where('id', getUserId());
                 $user->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
@@ -337,13 +346,15 @@ class BlogController extends BaseController
             }
         }
 
-        $total = Comment::where('relate_type', Blog::class)
+        $total = Comment::query()
+            ->where('relate_type', Blog::class)
             ->where('relate_id', $id)
             ->count();
 
         $page = paginate(setting('blogcomm'), $total);
 
-        $comments = Comment::where('relate_type', Blog::class)
+        $comments = Comment::query()
+            ->where('relate_type', Blog::class)
             ->where('relate_id', $id)
             ->orderBy('created_at')
             ->offset($page['offset'])
@@ -364,7 +375,8 @@ class BlogController extends BaseController
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
-        $comment = Comment::where('relate_type', Blog::class)
+        $comment = Comment::query()
+            ->where('relate_type', Blog::class)
             ->where('id', $cid)
             ->where('user_id', getUserId())
             ->first();
@@ -411,13 +423,14 @@ class BlogController extends BaseController
     public function end($id)
     {
 
-        $blog = Blog::find($id);
+        $blog = Blog::query()->find($id);
 
         if (empty($blog)) {
             abort(404, 'Выбранная вами статья не существует, возможно она была удалена!');
         }
 
-        $total = Comment::where('relate_type', Blog::class)
+        $total = Comment::query()
+            ->where('relate_type', Blog::class)
             ->where('relate_id', $id)
             ->count();
 
@@ -430,7 +443,7 @@ class BlogController extends BaseController
      */
     public function print($id)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::query()->find($id);
 
         if (empty($blog)) {
             abort('default', 'Данной статьи не существует!');
@@ -446,7 +459,8 @@ class BlogController extends BaseController
      */
     public function rss()
     {
-        $blogs = Blog::orderBy('created_at', 'desc')
+        $blogs = Blog::query()
+            ->orderBy('created_at', 'desc')
             ->limit(15)
             ->get();
 
@@ -462,7 +476,7 @@ class BlogController extends BaseController
      */
     public function rssComments($id)
     {
-        $blog = Blog::where('id', $id)->with('lastComments')->first();
+        $blog = Blog::query()->where('id', $id)->with('lastComments')->first();
 
         if (!$blog) {
             abort('default', 'Статья не найдена!');
@@ -493,7 +507,8 @@ class BlogController extends BaseController
                 empty($_SESSION['blogfind'])   ||
                 $tag != $_SESSION['blogfind']
             ) {
-                $result = Blog::select('id')
+                $result = Blog::query()
+                    ->select('id')
                     ->where('tags', 'like', '%'.$tag.'%')
                     ->limit(500)
                     ->pluck('id')
@@ -506,7 +521,8 @@ class BlogController extends BaseController
             $total = count($_SESSION['findresult']);
             $page = paginate(setting('blogpost'), $total);
 
-            $blogs = Blog::select('blogs.*', 'catsblog.name')
+            $blogs = Blog::query()
+                ->select('blogs.*', 'catsblog.name')
                 ->whereIn('blogs.id', $_SESSION['findresult'])
                 ->join('catsblog', 'blogs.category_id', '=', 'catsblog.id')
                 ->orderBy('created_at', 'desc')
@@ -520,7 +536,8 @@ class BlogController extends BaseController
         } else {
             if (@filemtime(STORAGE."/temp/tagcloud.dat") < time() - 3600) {
 
-                $tags =  Blog::select('tags')
+                $tags =  Blog::query()
+                    ->select('tags')
                     ->pluck('tags')
                     ->all();
 
@@ -550,14 +567,15 @@ class BlogController extends BaseController
      */
     public function newArticles()
     {
-        $total = Blog::count();
+        $total = Blog::query()->count();
 
         if ($total > 500) {
             $total = 500;
         }
         $page = paginate(setting('blogpost'), $total);
 
-        $blogs = Blog::orderBy('created_at', 'desc')
+        $blogs = Blog::query()
+            ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit(setting('blogpost'))
             ->with('user')
@@ -571,14 +589,15 @@ class BlogController extends BaseController
      */
     public function newComments()
     {
-        $total = Comment::where('relate_type', Blog::class)->count();
+        $total = Comment::query()->where('relate_type', Blog::class)->count();
 
         if ($total > 500) {
             $total = 500;
         }
         $page = paginate(setting('blogpost'), $total);
 
-        $comments = Comment::select('comments.*', 'title', 'comments')
+        $comments = Comment::query()
+            ->select('comments.*', 'title', 'comments')
             ->where('relate_type', Blog::class)
             ->leftJoin('blogs', 'comments.relate_id', '=', 'blogs.id')
             ->offset($page['offset'])
@@ -597,16 +616,16 @@ class BlogController extends BaseController
     {
         $login = check(Request::input('user', getUsername()));
 
-        $user = User::where('login', $login)->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
             abort('default', 'Пользователь не найден!');
         }
 
-        $total = Blog::where('user_id', $user->id)->count();
+        $total = Blog::query()->where('user_id', $user->id)->count();
         $page  = paginate(setting('blogpost'), $total);
 
-        $blogs = Blog::where('user_id', $user->id)
+        $blogs = Blog::query()->where('user_id', $user->id)
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->orderBy('created_at', 'desc')
@@ -622,18 +641,20 @@ class BlogController extends BaseController
     {
         $login = check(Request::input('user', getUsername()));
 
-        $user = User::where('login', $login)->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
             abort('default', 'Пользователь не найден!');
         }
 
-        $total = Comment::where('relate_type', Blog::class)
+        $total = Comment::query()
+            ->where('relate_type', Blog::class)
             ->where('user_id', $user->id)
             ->count();
         $page = paginate(setting('blogpost'), $total);
 
-        $comments = Comment::select('comments.*', 'title', 'comments')
+        $comments = Comment::query()
+            ->select('comments.*', 'title', 'comments')
             ->where('relate_type', Blog::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('blogs', 'comments.relate_id', '=', 'blogs.id')
@@ -651,7 +672,8 @@ class BlogController extends BaseController
      */
     public function viewComment($id, $сid)
     {
-        $total = Comment::where('relate_type', Blog::class)
+        $total = Comment::query()
+            ->where('relate_type', Blog::class)
             ->where('relate_id', $id)
             ->where('id', '<=', $сid)
             ->orderBy('created_at')
@@ -671,7 +693,7 @@ class BlogController extends BaseController
      */
     public function top()
     {
-        $sort =check(Request::get('sort', 'visits'));
+        $sort = check(Request::get('sort', 'visits'));
 
         switch ($sort) {
             case 'rated': $order = 'rating';
@@ -681,10 +703,11 @@ class BlogController extends BaseController
             default: $order = 'visits';
         }
 
-        $total = Blog::count();
+        $total = Blog::query()->count();
         $page = paginate(setting('blogpost'), $total);
 
-        $blogs = Blog::select('blogs.*', 'catsblog.name')
+        $blogs = Blog::query()
+            ->select('blogs.*', 'catsblog.name')
             ->leftJoin('catsblog', 'blogs.category_id', '=', 'catsblog.id')
             ->offset($page['offset'])
             ->limit($page['limit'])
@@ -744,7 +767,8 @@ class BlogController extends BaseController
 
                         if (empty($_SESSION['blogfindres']) || $blogfind != $_SESSION['blogfind']) {
 
-                            $result = Blog::select('id')
+                            $result = Blog::query()
+                                ->select('id')
                                 ->whereRaw("title like '%".$arrfind[0]."%'".$search1.$search2)
                                 ->limit(500)
                                 ->pluck('id')
@@ -758,7 +782,8 @@ class BlogController extends BaseController
                         $page = paginate(setting('blogpost'), $total);
 
                         if ($total > 0) {
-                            $blogs = Blog::select('blogs.*', 'catsblog.name')
+                            $blogs = Blog::query()
+                                ->select('blogs.*', 'catsblog.name')
                                 ->whereIn('blogs.id', $_SESSION['blogfindres'])
                                 ->join('catsblog', 'blogs.category_id', '=', 'catsblog.id')
                                 ->orderBy('created_at', 'desc')
@@ -785,7 +810,8 @@ class BlogController extends BaseController
 
                         if (empty($_SESSION['blogfindres']) || $blogfind != $_SESSION['blogfind']) {
 
-                            $result = Blog::select('id')
+                            $result = Blog::query()
+                                ->select('id')
                                 ->whereRaw("text like '%".$arrfind[0]."%'".$search1.$search2)
                                 ->limit(500)
                                 ->pluck('id')
@@ -799,7 +825,8 @@ class BlogController extends BaseController
                         $page = paginate(setting('blogpost'), $total);
 
                         if ($total > 0) {
-                            $blogs = Blog::select('blogs.*', 'catsblog.name')
+                            $blogs = Blog::query()
+                                ->select('blogs.*', 'catsblog.name')
                                 ->whereIn('blogs.id', $_SESSION['blogfindres'])
                                 ->join('catsblog', 'blogs.category_id', '=', 'catsblog.id')
                                 ->orderBy('created_at', 'desc')

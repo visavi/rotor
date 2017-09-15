@@ -8,6 +8,8 @@
 
     @include('advert/_top')
 
+    <h1>{{ setting('title') }}</h1>
+
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> ({{ statsNewsDate() }})<br> {{ lastNews() }}
 
     <div class="b">
