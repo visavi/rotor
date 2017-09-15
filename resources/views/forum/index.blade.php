@@ -8,7 +8,7 @@
 
     <h1>Форум {{ setting('title') }}</h1>
 
-    @include('advert/forum')
+    @include('advert/_forum')
 
     @if (isUser())
         Мои: <a href="/forum/active/themes">темы</a>, <a href="/forum/active/posts">сообщения</a>, <a href="/forum/bookmark">закладки</a> /

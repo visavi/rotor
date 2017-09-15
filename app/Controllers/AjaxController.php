@@ -39,7 +39,7 @@ class AjaxController extends BaseController
     {
         $message = check(Request::input('data'));
 
-        return view('app/bbcode', compact('message'));
+        return view('app/_bbcode', compact('message'));
     }
 
     /**

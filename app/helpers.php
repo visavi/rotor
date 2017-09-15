@@ -120,19 +120,19 @@ function deleteUser(User $user)
     deleteImage('uploads/photos/', $user['picture']);
     deleteImage('uploads/avatars/', $user['avatar']);
 
-    Inbox::where('user_id', $user->id)->delete();
-    Outbox::where('user_id', $user->id)->delete();
-    Contact::where('user_id', $user->id)->delete();
-    Ignore::where('user_id', $user->id)->delete();
-    Rating::where('user_id', $user->id)->delete();
-    Visit::where('user_id', $user->id)->delete();
-    Wall::where('user_id', $user->id)->delete();
-    Note::where('user_id', $user->id)->delete();
-    Notebook::where('user_id', $user->id)->delete();
-    Banhist::where('user_id', $user->id)->delete();
-    Bookmark::where('user_id', $user->id)->delete();
-    Login::where('user_id', $user->id)->delete();
-    Invite::where('user_id', $user->id)->orWhere('invite_user_id', $user->id)->delete();
+    Inbox::query()->where('user_id', $user->id)->delete();
+    Outbox::query()->where('user_id', $user->id)->delete();
+    Contact::query()->where('user_id', $user->id)->delete();
+    Ignore::query()->where('user_id', $user->id)->delete();
+    Rating::query()->where('user_id', $user->id)->delete();
+    Visit::query()->where('user_id', $user->id)->delete();
+    Wall::query()->where('user_id', $user->id)->delete();
+    Note::query()->where('user_id', $user->id)->delete();
+    Notebook::query()->where('user_id', $user->id)->delete();
+    Banhist::query()->where('user_id', $user->id)->delete();
+    Bookmark::query()->where('user_id', $user->id)->delete();
+    Login::query()->where('user_id', $user->id)->delete();
+    Invite::query()->where('user_id', $user->id)->orWhere('invite_user_id', $user->id)->delete();
 
     return $user->delete();
 }
@@ -145,16 +145,17 @@ function deleteUser(User $user)
  */
 function deleteAlbum(User $user)
 {
-    $photos = Photo::where('user_id', $user->id)->get();
+    $photos = Photo::query()->where('user_id', $user->id)->get();
 
     if ($photos->isNotEmpty()) {
         foreach ($photos as $photo) {
 
-            Comment::where('relate_type', Photo::class)
+            Comment::query()
+                ->where('relate_type', Photo::class)
                 ->where('relate_id', $photo->id)
                 ->delete();
 
-            Photo::where('id', $photo->id)->delete();
+            Photo::query()->where('id', $photo->id)->delete();
 
             deleteImage('uploads/pictures/', $photo->link);
         }
@@ -263,7 +264,8 @@ function formatTime($file_time, $round = 1)
 // ------------------ Функция антимата --------------------//
 function antimat($str)
 {
-    $words = Antimat::orderBy(DB::raw('CHAR_LENGTH(string)'), 'desc')
+    $words = Antimat::query()
+        ->orderBy(DB::raw('CHAR_LENGTH(string)'), 'desc')
         ->pluck('string')
         ->all();
 
@@ -301,7 +303,8 @@ function saveStatus($time = 0)
 {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
 
-    $users = User::select('users.id', 'users.status', 'status.name', 'status.color')
+    $users = User::query()
+        ->select('users.id', 'users.status', 'status.name', 'status.color')
         ->leftJoin('status', 'users.point', 'between', DB::raw('status.topoint and status.point'))
         ->where('users.point', '>', 0)
         ->get();
@@ -342,7 +345,7 @@ function userStatus(User $user = null)
 
 // --------------- Функция кэширования настроек -------------------//
 function saveSetting() {
-    $setting = Setting::pluck('value', 'name')->all();
+    $setting = Setting::query()->pluck('value', 'name')->all();
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
 }
 
@@ -441,7 +444,8 @@ function saveUserMoney($time = 0)
 {
     if (empty($time) || @filemtime(STORAGE."/temp/money.dat") < time() - $time) {
 
-        $users = User::where('money', '>', 0)
+        $users = User::query()
+            ->where('money', '>', 0)
             ->pluck('money', 'id')
             ->all();
 
@@ -467,7 +471,8 @@ function saveUserMail($time = 0)
 {
     if (empty($time) || @filemtime(STORAGE."/temp/usermail.dat") < time() - $time) {
 
-        $messages = Inbox::select('user_id', DB::raw('count(*) as total'))
+        $messages = Inbox::query()
+            ->select('user_id', DB::raw('count(*) as total'))
             ->groupBy('user_id')
             ->pluck('total', 'user_id')
             ->all();
@@ -502,19 +507,19 @@ function userAvatar(User $user = null)
 // --------------- Функция подсчета человек в контакт-листе ---------------//
 function userContact(User $user)
 {
-    return Contact::where('user_id', $user->id)->count();
+    return Contact::query()->where('user_id', $user->id)->count();
 }
 
 // --------------- Функция подсчета человек в игнор-листе ---------------//
 function userIgnore(User $user)
 {
-    return Ignore::where('user_id', $user->id)->count();
+    return Ignore::query()->where('user_id', $user->id)->count();
 }
 
 // --------------- Функция подсчета записей на стене ---------------//
 function userWall(User $user)
 {
-    return Wall::where('user_id', $user->id)->count();
+    return Wall::query()->where('user_id', $user->id)->count();
 }
 
 // ------------------ Функция подсчета пользователей онлайн -----------------//
@@ -522,8 +527,8 @@ function statsOnline($cache = 30)
 {
     if (@filemtime(STORAGE."/temp/online.dat") < time()-$cache) {
 
-        $online[0] = Online::whereNotNull('user_id')->count();
-        $online[1] = Online::count();
+        $online[0] = Online::query()->whereNotNull('user_id')->count();
+        $online[1] = Online::query()->count();
 
         include_once(APP.'/Includes/count.php');
 
@@ -546,7 +551,7 @@ function showOnline()
 function statsCounter()
 {
     if (@filemtime(STORAGE."/temp/counter.dat") < time()-10) {
-        $counts = Counter::count();
+        $counts = Counter::query()->count();
         file_put_contents(STORAGE."/temp/counter.dat", serialize($counts), LOCK_EX);
     }
 
@@ -563,7 +568,7 @@ function showCounter()
     if (isUser()) {
         //$visitPage =  setting('newtitle') ?? null;
 
-        $visit = Visit::firstOrNew(['user_id' => getUserId()]);
+        $visit = Visit::query()->firstOrNew(['user_id' => getUserId()]);
 
         $visit->fill([
             'self'       => server('PHP_SELF'),
@@ -590,8 +595,8 @@ function statsUsers()
 
         $startMonth = mktime(0, 0, 0, dateFixed(SITETIME, "n"), 1);
 
-        $total = User::count();
-        $new   = User::where('joined', '>', $startMonth)->count();
+        $total = User::query()->count();
+        $new   = User::query()->where('joined', '>', $startMonth)->count();
 
         if ($new) {
             $stat = $total.'/+'.$new;
@@ -610,7 +615,7 @@ function statsAdmins()
 {
     if (@filemtime(STORAGE."/temp/statadmins.dat") < time()-3600) {
 
-        $total = User::whereBetween('level', [101, 105])->count();
+        $total = User::query()->whereBetween('level', [101, 105])->count();
 
         file_put_contents(STORAGE."/temp/statadmins.dat", $total, LOCK_EX);
     }
@@ -621,38 +626,38 @@ function statsAdmins()
 // --------------- Функция вывода количества жалоб --------------------//
 function statsSpam()
 {
-    return Spam::count();
+    return Spam::query()->count();
 }
 // --------------- Функция вывода количества забаненных --------------------//
 function statsBanned()
 {
-    return User::where('ban', 1)->where('timeban', '>', SITETIME)->count();
+    return User::query()->where('ban', 1)->where('timeban', '>', SITETIME)->count();
 }
 
 // --------------- Функция вывода истории банов --------------------//
 function statsBanHist()
 {
-    return Banhist::count();
+    return Banhist::query()->count();
 }
 
 // ------------ Функция вывода количества ожидающих регистрации -----------//
 function statsRegList()
 {
-    return User::where('confirmreg', '>', 0)->count();
+    return User::query()->where('confirmreg', '>', 0)->count();
 }
 
 // --------------- Функция вывода количества забаненных IP --------------------//
 function statsIpBanned()
 {
-    return Ban::count();
+    return Ban::query()->count();
 }
 
 // --------------- Функция вывода количества фотографий --------------------//
 function statsGallery()
 {
     if (@filemtime(STORAGE."/temp/statgallery.dat") < time()-900) {
-        $total = Photo::count();
-        $totalnew = Photo::where('created_at', '>', SITETIME-86400 * 3)->count();
+        $total = Photo::query()->count();
+        $totalnew = Photo::query()->where('created_at', '>', SITETIME-86400 * 3)->count();
 
         if (empty($totalnew)) {
             $stat = $total;
@@ -669,13 +674,13 @@ function statsGallery()
 // --------------- Функция вывода количества новостей--------------------//
 function statsNews()
 {
-    return News::count();
+    return News::query()->count();
 }
 
 // ---------- Функция вывода записей в черном списке ------------//
 function statsBlacklist()
 {
-    $blacklist = BlackList::select('type', DB::raw('count(*) as total'))
+    $blacklist = BlackList::query()->select('type', DB::raw('count(*) as total'))
         ->groupBy('type')
         ->pluck('total', 'type')
         ->all();
@@ -688,13 +693,13 @@ function statsBlacklist()
 // --------------- Функция вывода количества заголовков ----------------//
 function statsAntimat()
 {
-    return Antimat::count();
+    return Antimat::query()->count();
 }
 
 // --------------- Функция вывода количества смайлов ----------------//
 function statsSmiles()
 {
-    return Smile::count();
+    return Smile::query()->count();
 }
 
 // ----------- Функция вывода даты последнего сканирования -------------//
@@ -710,8 +715,8 @@ function statsChecker()
 // --------------- Функция вывода количества приглашений --------------//
 function statsInvite()
 {
-    $invited     = Invite::where('used', 0)->count();
-    $usedInvited = Invite::where('used', 1)->count();
+    $invited     = Invite::query()->where('used', 0)->count();
+    $usedInvited = Invite::query()->where('used', 1)->count();
 
     return $invited.'/'.$usedInvited;
 }
@@ -726,7 +731,7 @@ function userOnline($user)
     if (is_null($visits)) {
         if (@filemtime(STORAGE."/temp/visit.dat") < time() - 10) {
 
-            $visits = Visit::select('user_id')
+            $visits = Visit::query()->select('user_id')
                 ->where('updated_at', '>', SITETIME - 600)
                 ->pluck('user_id', 'user_id')
                 ->all();
@@ -754,7 +759,7 @@ function userGender($user)
     if (is_null($genders)) {
         if (@filemtime(STORAGE."/temp/gender.dat") < time() - 600) {
 
-            $genders = User::select('id')
+            $genders = User::query()->select('id')
                 ->where('gender', 2)
                 ->pluck('id', 'id')
                 ->all();
@@ -775,7 +780,7 @@ function userGender($user)
 function allOnline()
 {
     if (@filemtime(STORAGE."/temp/allonline.dat") < time()-30) {
-        $visits = Visit::select('user_id')
+        $visits = Visit::query()->select('user_id')
             ->where('updated_at', '>', SITETIME - 600)
             ->orderBy('updated_at', 'desc')
             ->pluck('user_id')
@@ -796,7 +801,7 @@ function userVisit($user)
         return $state;
     }
 
-    $visit = Visit::select('updated_at')->where('user_id', $user->id)->first();
+    $visit = Visit::query()->select('updated_at')->where('user_id', $user->id)->first();
 
     if ($visit) {
         if ($visit['updated_at'] > SITETIME - 600) {
@@ -816,12 +821,14 @@ function photoNavigation($id)
         return false;
     }
 
-    $next = Photo::where('id', '>', $id)
+    $next = Photo::query()
+        ->where('id', '>', $id)
         ->orderBy('id')
         ->pluck('id')
         ->first();
 
-    $prev = Photo::where('id', '<', $id)
+    $prev = Photo::query()
+        ->where('id', '<', $id)
         ->orderBy('id', 'desc')
         ->pluck('id')
         ->first();
@@ -834,8 +841,8 @@ function statsBlog()
 {
     if (@filemtime(STORAGE."/temp/statblogblog.dat") < time()-900) {
 
-        $totalblog = Blog::count();
-        $totalnew  = Blog::where('created_at', '>', SITETIME - 86400 * 3)->count();
+        $totalblog = Blog::query()->count();
+        $totalnew  = Blog::query()->where('created_at', '>', SITETIME - 86400 * 3)->count();
 
         if ($totalnew) {
             $stat = $totalblog.'/+'.$totalnew;
@@ -854,8 +861,8 @@ function statsForum()
 {
     if (@filemtime(STORAGE."/temp/statforum.dat") < time()-600) {
 
-        $topics = Topic::count();
-        $posts = Post::count();
+        $topics = Topic::query()->count();
+        $posts  = Post::query()->count();
 
         file_put_contents(STORAGE."/temp/statforum.dat", $topics.'/'.$posts, LOCK_EX);
     }
@@ -868,7 +875,7 @@ function statsGuest()
 {
     if (@filemtime(STORAGE."/temp/statguest.dat") < time()-600) {
 
-        $total = Guest::count();
+        $total = Guest::query()->count();
 
         file_put_contents(STORAGE."/temp/statguest.dat", $total, LOCK_EX);
     }
@@ -879,13 +886,13 @@ function statsGuest()
 // -------------------- Функция вывода статистики админ-чата -----------------------//
 function statsChat()
 {
-    return Chat::count();
+    return Chat::query()->count();
 }
 
 // ------------------ Функция вывода времени последнего сообщения --------------------//
 function statsNewChat()
 {
-    return Chat::max('created_at');
+    return Chat::query()->max('created_at');
 }
 
 // --------------------- Функция вывода статистики загрузок ------------------------//
@@ -893,9 +900,9 @@ function statsLoad()
 {
     if (@filemtime(STORAGE."/temp/statload.dat") < time() - 900) {
 
-        $totalLoads = Cats::sum('count');
+        $totalLoads = Cats::query()->sum('count');
 
-        $totalNew = Down::where('active', 1)
+        $totalNew = Down::query()->where('active', 1)
             ->where('created_at', '>', SITETIME - 86400 * 5)
             ->count();
 
@@ -910,10 +917,10 @@ function statsLoad()
 // --------------------- Функция подсчета непроверенных файлов ------------------------//
 function statsNewLoad()
 {
-    $totalNew = Down::where('active', 0)
+    $totalNew = Down::query()->where('active', 0)
         ->count();
 
-    $totalApprove = Down::where('active', 0)
+    $totalApprove = Down::query()->where('active', 0)
         ->where('approved', 1)
         ->count();
 
@@ -950,7 +957,8 @@ function statVotes()
 {
     if (@filemtime(STORAGE."/temp/statvote.dat") < time()-900) {
 
-        $votes = Vote::select(DB::raw('count(*) AS cnt'), DB::raw('sum(count) AS sum'))
+        $votes = Vote::query()
+            ->select(DB::raw('count(*) AS cnt'), DB::raw('sum(count) AS sum'))
             ->where('closed', 0)
             ->first();
 
@@ -966,7 +974,7 @@ function statsNewsDate()
     if (@filemtime(STORAGE."/temp/statnews.dat") < time()-900) {
         $stat = 0;
 
-        $news = News::orderBy('created_at', 'desc')->first();
+        $news = News::query()->orderBy('created_at', 'desc')->first();
 
         if ($news) {
             $stat = dateFixed($news['created_at'], "d.m.y");
@@ -986,7 +994,8 @@ function lastNews()
 {
     if (setting('lastnews') > 0) {
 
-        $news = News::where('top', 1)
+        $news = News::query()
+            ->where('top', 1)
             ->orderBy('created_at', 'desc')
             ->limit(setting('lastnews'))
             ->get();
@@ -1014,7 +1023,7 @@ function isUser()
     if (! $user) {
         if (isset($_SESSION['id']) && isset($_SESSION['password'])) {
 
-            $data = User::find($_SESSION['id']);
+            $data = User::query()->find($_SESSION['id']);
 
             if ($data && $_SESSION['password'] == md5(env('APP_KEY').$data['password'])) {
                 $user = $data;
@@ -1122,7 +1131,7 @@ function stripString($str, $words = 20) {
 function getAdvertUser()
 {
     if (!empty(setting('rekusershow'))) {
-        if (@filemtime(STORAGE."/temp/rekuser.dat") < time()-1800) {
+        if (@filemtime(STORAGE."/temp/rekuser.dat") < time() - 1800) {
             saveAdvertUser();
         }
 
@@ -1145,7 +1154,7 @@ function getAdvertUser()
                 $result = $datafile[$quot_rand];
             }
 
-            return $result.' <small><a href="/reklama" rel="nofollow">[+]</a></small>';
+            return view('advert/_user', compact('result'));
         }
     }
 }
@@ -1153,7 +1162,7 @@ function getAdvertUser()
 // --------------- Функция кэширования пользовательской рекламы -------------------//
 function saveAdvertUser()
 {
-    $data = RekUser::where('created_at', '>', SITETIME)->get();
+    $data = RekUser::query()->where('created_at', '>', SITETIME)->get();
 
     $links = [];
 
@@ -1181,7 +1190,7 @@ function recentPhotos($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
 
-        $recent = Photo::orderBy('created_at', 'desc')->limit($show)->get();
+        $recent = Photo::query()->orderBy('created_at', 'desc')->limit($show)->get();
 
         file_put_contents(STORAGE."/temp/recentphotos.dat", serialize($recent), LOCK_EX);
     }
@@ -1201,7 +1210,7 @@ function recentPhotos($show = 5)
 function recentTopics($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recenttopics.dat") < time()-180) {
-        $topics = Topic::orderBy('updated_at', 'desc')->limit($show)->get();
+        $topics = Topic::query()->orderBy('updated_at', 'desc')->limit($show)->get();
         file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($topics), LOCK_EX);
     }
 
@@ -1220,7 +1229,8 @@ function recentFiles($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentfiles.dat") < time()-600) {
 
-        $files = Down::where('active', 1)
+        $files = Down::query()
+            ->where('active', 1)
             ->orderBy('created_at', 'desc')
             ->limit($show)
             ->get();
@@ -1243,7 +1253,8 @@ function recentFiles($show = 5)
 function recentBlogs($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentblog.dat") < time()-600) {
-        $blogs = Blog::orderBy('created_at', 'desc')
+        $blogs = Blog::query()
+            ->orderBy('created_at', 'desc')
             ->limit($show)
             ->get();
 
@@ -1264,8 +1275,8 @@ function statsOffers()
 {
     if (@filemtime(STORAGE."/temp/offers.dat") < time()-10800) {
 
-        $offers   = Offer::where('type', 0)->count();
-        $problems = Offer::where('type', 1)->count();
+        $offers   = Offer::query()->where('type', 0)->count();
+        $problems = Offer::query()->where('type', 1)->count();
 
         file_put_contents(STORAGE."/temp/offers.dat", $offers.'/'.$problems, LOCK_EX);
     }
@@ -1478,36 +1489,6 @@ function formatNum($num)
    }
 }
 
-// ------------- Подключение стилей -------------//
-function includeStyle()
-{
-    echo '<link rel="stylesheet" href="/assets/css/bootstrap.min.css">'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/css/font-awesome.min.css">'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/css/prettify.css">'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/js/markitup/style.css">'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/css/toastr.min.css">'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/js/mediaelement/mediaelementplayer.min.css">'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/js/mediaelement/mejs-skins.css">'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/js/colorbox/colorbox.css">'."\r\n";
-    echo '<link rel="stylesheet" href="/assets/css/app.css">'."\r\n";
-}
-
-// ------------- Подключение javascript -------------//
-function includeScript()
-{
-    echo '<script src="/assets/js/jquery-3.2.1.min.js"></script>'."\r\n";
-    echo '<script src="/assets/js/popper.min.js"></script>'."\r\n";
-    echo '<script src="/assets/js/bootstrap.min.js"></script>'."\r\n";
-    echo '<script src="/assets/js/prettify.js"></script>'."\r\n";
-    echo '<script src="/assets/js/markitup/jquery.markitup.js"></script>'."\r\n";
-    echo '<script src="/assets/js/markitup/markitup.set.js"></script>'."\r\n";
-    echo '<script src="/assets/js/bootbox.min.js"></script>'."\r\n";
-    echo '<script src="/assets/js/toastr.min.js"></script>'."\r\n";
-    echo '<script src="/assets/js/mediaelement/mediaelement-and-player.min.js"></script>'."\r\n";
-    echo '<script src="/assets/js/colorbox/jquery.colorbox-min.js"></script>'."\r\n";
-    echo '<script src="/assets/js/app.js"></script>'."\r\n";
-}
-
 // ------------- Добавление пользовательского файла в ZIP-архив -------------//
 function copyrightArchive($filename)
 {
@@ -1566,7 +1547,8 @@ function uploadImage($file, $weight, $size, $newName = false)
 // ----- Функция определения входит ли пользователь в контакты -----//
 function isContact($user, $contactUser)
 {
-    $isContact = Contact::where('user_id', $user->id)
+    $isContact = Contact::query()
+        ->where('user_id', $user->id)
         ->where('contact_id', $contactUser->id)
         ->first();
 
@@ -1581,7 +1563,8 @@ function isContact($user, $contactUser)
 function isIgnore($user, $ignoreUser)
 {
 
-    $isIgnore = Ignore::where('user_id', $user->id)
+    $isIgnore = Ignore::query()
+        ->where('user_id', $user->id)
         ->where('ignore_id', $ignoreUser->id)
         ->first();
 
@@ -1610,7 +1593,7 @@ function sendPrivate($userId, $authorId, $text, $time = SITETIME)
 {
     if ($user = User::find($userId)) {
 
-        Inbox::create([
+        Inbox::query()->create([
             'user_id'    => $userId,
             'author_id'  => $authorId,
             'text'       => $text,
@@ -1629,7 +1612,7 @@ function sendPrivate($userId, $authorId, $text, $time = SITETIME)
 // ----- Функция подготовки приватного сообщения -----//
 function textPrivate($id, $replace = [])
 {
-    $message = Notice::find($id);
+    $message = Notice::query()->find($id);
 
     if (! $message) {
         return 'Отсутствует текст сообщения!';
@@ -1643,13 +1626,13 @@ function textPrivate($id, $replace = [])
 }
 
 // ------------ Функция статистики производительности -----------//
-function perfomance()
+function performance()
 {
     if (isAdmin() && setting('performance')){
 
         $queries = env('APP_DEBUG') ? getQueryLog() : [];
 
-        return view('app/_perfomance', compact('queries'));
+        return view('app/_performance', compact('queries'));
     }
 }
 
@@ -1740,7 +1723,8 @@ function abort($code, $message = null)
         $error->created_at = SITETIME;
         $error->save();
 
-        Log::where('code', $code)
+        Log::query()
+            ->where('code', $code)
             ->where('created_at', '<', SITETIME - 3600 * 24 * setting('maxlogdat'))
             ->delete();
     }
@@ -1791,26 +1775,6 @@ function redirect($url, $permanent = false)
 function setFlash($status, $message)
 {
     $_SESSION['flash'][$status] = $message;
-}
-
-/**
- * Возвращает flash уведомления
- *
- * @return string сформированный блок с уведомлениями
- */
-function getFlash()
-{
-    return view('app/_flash');
-}
-
-/**
- * Возвращает уведомления сайта
- *
- * @return string сформированный блок с уведомлениями
- */
-function getNote()
-{
-    return view('app/_note');
 }
 
 /**
@@ -2123,7 +2087,7 @@ function getUserId()
  */
 function getUserByLogin($login)
 {
-    return User::where('login', $login)->first();
+    return User::query()->where('login', $login)->first();
 }
 
 /**
@@ -2134,7 +2098,7 @@ function getUserByLogin($login)
  */
 function getUserById($id)
 {
-    return User::find($id);
+    return User::query()->find($id);
 }
 
 /**
@@ -2399,7 +2363,7 @@ function ipBan($save = false)
     if (! $save && file_exists(STORAGE.'/temp/ipban.dat')) {
         $ipBan = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
     } else {
-        $ipBan = Ban::pluck('ip')->all();
+        $ipBan = Ban::query()->pluck('ip')->all();
         file_put_contents(STORAGE."/temp/ipban.dat", serialize($ipBan), LOCK_EX);
     }
 
@@ -2417,7 +2381,7 @@ function setting($key = null)
     if (! Registry::has('setting')) {
 
         if (! file_exists(STORAGE.'/temp/setting.dat')) {
-            $setting = Setting::pluck('value', 'name')->all();
+            $setting = Setting::query()->pluck('value', 'name')->all();
             file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
         }
         $setting = unserialize(file_get_contents(STORAGE.'/temp/setting.dat'));

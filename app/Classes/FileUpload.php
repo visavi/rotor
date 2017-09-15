@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use upload;
+
 /**
  * class FileUpload
  * Дополнительно реализовано, расширеные подсказки в ошибках
@@ -12,7 +14,6 @@ class FileUpload extends upload
 
     function translate($str, $tokens = [])
     {
-
         // sets default language
         $this->translation = [];
         $this->translation['file_error']                  = 'Файловая ошибка. Попробуйте еще раз.';

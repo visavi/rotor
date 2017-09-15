@@ -4,18 +4,12 @@ header('Content-type:text/html; charset=utf-8');
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>
-        @section('title')
-            {{ setting('title') }}
-        @show
-    </title>
+    <title>@yield('title') {{ setting('title') }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="/favicon.ico">
     <link rel="image_src" href="/assets/img/images/icon.png">
-    @section('styles')
-        <?= includeStyle() ?>
-    @show
+    @yield('styles')
     @stack('styles')
     <link rel="stylesheet" href="/themes/motor/css/style.css">
     <link rel="alternate" href="/news/rss" title="RSS News" type="application/rss+xml">
@@ -40,38 +34,15 @@ header('Content-type:text/html; charset=utf-8');
                 </div>
 
                 <div class="menu">
-                    <a href="/forum">Форум</a>
-                    <a href="/book">Гостевая</a>
-                    <a href="/news">Новости</a>
-                    <a href="/load">Скрипты</a>
+                    <a href="/forum">Форум</a> &bull;
+                    <a href="/book">Гостевая</a> &bull;
+                    <a href="/news">Новости</a> &bull;
+                    <a href="/load">Скрипты</a> &bull;
                     <a href="/blog">Блоги</a>
 
                     <span class="mright">
-
-<?php if (isUser()): ?>
-    <?php if (isAdmin()): ?>
-
-        <?php if (statsSpam()>0): ?>
-            <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
-        <?php endif; ?>
-
-        <?php if ( user('newchat') < statsNewChat()): ?>
-            <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
-        <?php endif; ?>
-
-            <a href="/admin">Панель</a>
-    <?php endif; ?>
-
-    <a href="/menu">Меню</a>
-    <a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
-
-<?php else: ?>
-    <a href="/login{{ returnUrl() }}">Авторизация</a>/
-    <a href="/register">Регистрация</a>
-<?php endif; ?>
-
+                        @yield('menu')
                     </span>
-
                 </div>
             </div>
         </div>
@@ -80,12 +51,17 @@ header('Content-type:text/html; charset=utf-8');
             <div class="bcontent">
                 <div class="mcontentwide">
 
+                    @yield('advertTop')
+                    @yield('advertUser')
+                    @yield('note')
+                    @yield('flash')
                     @yield('layout')
+                    @yield('advertBottom')
 
                     <div class="small" id="down">
-                        <?= showCounter() ?>
-                        <?= showOnline() ?>
-                        <?= perfomance() ?>
+                        @yield('counter')
+                        @yield('online')
+                        @yield('performance')
                     </div>
                 </div>
             </div>
@@ -102,9 +78,7 @@ header('Content-type:text/html; charset=utf-8');
         </div>
     </div>
 </div>
-@section('scripts')
-    <?= includeScript() ?>
-@show
+@yield('scripts')
 @stack('scripts')
 </body>
 </html>

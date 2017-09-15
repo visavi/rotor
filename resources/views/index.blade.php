@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @include('advert/top')
+    @include('advert/_top')
 
     <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> ({{ statsNewsDate() }})<br> {{ lastNews() }}
 
@@ -56,5 +56,5 @@
     </div>
     <?php include_once(APP.'/Includes/calendar.php') ?>
 
-    @include('advert/bottom')
+    @include('advert/_bottom')
 @stop
