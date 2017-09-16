@@ -122,9 +122,9 @@ $router->map('GET',      '/votes/[i:id]/voters', 'VoteController@voters');
 $router->map('GET',      '/votes/history', 'VoteController@history');
 $router->map('GET',      '/votes/history/[i:id]', 'VoteController@viewHistory');
 
-$router->map('GET',      '/ignore', 'pages/ignore.php');
-$router->map('GET|POST', '/ignore/[note:action]/[i:id]', 'pages/ignore.php');
-$router->map('POST',     '/ignore/[create|delete:action]', 'pages/ignore.php');
+$router->map('GET|POST', '/ignore', 'IgnoreController@index');
+$router->map('GET|POST', '/ignore/note/[i:id]', 'IgnoreController@note');
+$router->map('POST',     '/ignore/delete', 'IgnoreController@delete');
 
 $router->map('GET|POST', '/contact', 'ContactController@index');
 $router->map('GET|POST', '/contact/note/[i:id]', 'ContactController@note');

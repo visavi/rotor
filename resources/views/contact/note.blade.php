@@ -1,17 +1,12 @@
 @extends('layout')
 
 @section('title')
-    Заметка для - @parent
+    Заметка для {{ $contact->contactor->login }} - @parent
 @stop
 
 @section('content')
 
-    <h1>Заметка для </h1>
-
-    <i class="fa fa-pencil"></i>
-    Заметка для пользователя <b>{{ $contact->contactor->login }}</b>
-    {!! userOnline($contact->contactor) !!}:
-    <br><br>
+    <h1>Заметка для {{ $contact->contactor->login }}</h1>
 
     <div class="form">
         <form method="post" action="/contact/note/{{ $contact->id }}">

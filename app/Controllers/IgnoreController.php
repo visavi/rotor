@@ -4,10 +4,10 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Classes\Validation;
-use App\Models\Contact;
+use App\Models\Ignore;
 use App\Models\User;
 
-class ContactController extends BaseController
+class IgnoreController extends BaseController
 {
     /**
      * Конструктор
@@ -17,7 +17,7 @@ class ContactController extends BaseController
         parent::__construct();
 
         if (! isUser()) {
-            abort(403, 'Для просмотра контактов необходимо авторизоваться!');
+            abort(403, 'Для просмотра игнор-листа необходимо авторизоваться!');
         }
     }
 
@@ -27,7 +27,7 @@ class ContactController extends BaseController
     public function index()
     {
         if (Request::isMethod('post')) {
-            $page  = abs(intval(Request::input('page', 1)));
+            $page = abs(intval(Request::input('page', 1)));
             $token = check(Request::input('token'));
             $login = check(Request::input('user'));
 
@@ -40,46 +40,47 @@ class ContactController extends BaseController
             if ($user) {
                 $validation->addRule('not_equal', [$user->login, getUsername()], 'Запрещено добавлять свой логин!');
 
-                $totalContact = Contact::query()->where('user_id', getUserId())->count();
-                $validation->addRule('min', [$totalContact, setting('limitcontact')], 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
+                $totalIgnore = Ignore::query()->where('user_id', getUserId())->count();
+                $validation->addRule('min', [$totalIgnore, setting('limitignore')], 'Ошибка! Игнор-лист переполнен (Максимум ' . setting('limitignore') . ' пользователей!)');
 
-                $validation->addRule('custom', ! isContact(user(), $user), 'Данный пользователь уже есть в контакт-листе!');
+                $validation->addRule('custom', ! isIgnore(user(), $user), 'Данный пользователь уже есть в игнор-листе!');
+
+                $validation->addRule('custom', ! in_array($user->level, [101, 102, 103, 105]), 'Запрещено добавлять в игнор администрацию сайта');
             }
 
             if ($validation->run()) {
 
-                Contact::query()->create([
+                Ignore::query()->create([
                     'user_id'    => getUserId(),
-                    'contact_id' => $user->id,
+                    'ignore_id'  => $user->id,
                     'created_at' => SITETIME,
                 ]);
 
                 if (! isIgnore($user, user())) {
-                    $message = 'Пользователь [b]'.getUsername().'[/b] добавил вас в свой контакт-лист!';
+                    $message = 'Пользователь [b]' . getUsername() . '[/b] добавил вас в свой игнор-лист!';
                     sendPrivate($user->id, getUserId(), $message);
                 }
 
-                setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');
-                redirect('/contact?page='.$page);
-
+                setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
+                redirect('/ignore?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validation->getErrors());
             }
         }
 
-        $total = Contact::query()->where('user_id', getUserId())->count();
-        $page = paginate(setting('contactlist'), $total);
+        $total = Ignore::query()->where('user_id', getUserId())->count();
+        $page = paginate(setting('ignorlist'), $total);
 
-        $contacts = Contact::query()
+        $ignores = Ignore::query()
             ->where('user_id', getUserId())
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
-            ->with('contactor')
+            ->with('ignoring')
             ->get();
 
-        return view('contact/index', compact('contacts', 'page'));
+        return view('ignore/index', compact('ignores', 'page'));
     }
 
     /**
@@ -87,12 +88,12 @@ class ContactController extends BaseController
      */
     public function note($id)
     {
-        $contact = Contact::query()
+        $ignore = Ignore::query()
             ->where('user_id', getUserId())
             ->where('id', $id)
             ->first();
 
-        if (! $contact) {
+        if (! $ignore) {
             abort('default', 'Запись не найдена');
         }
 
@@ -107,19 +108,19 @@ class ContactController extends BaseController
 
             if ($validation->run()) {
 
-                $contact->update([
+                $ignore->update([
                     'text' => $msg,
                 ]);
 
                 setFlash('success', 'Заметка успешно отредактирована!');
-                redirect("/contact");
+                redirect("/ignore");
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validation->getErrors());
             }
         }
 
-        return view('contact/note', compact('contact'));
+        return view('ignore/note', compact('ignore'));
     }
 
     /**
@@ -137,7 +138,7 @@ class ContactController extends BaseController
 
         if ($validation->run()) {
 
-            Contact::query()
+            Ignore::query()
                 ->where('user_id', getUserId())
                 ->whereIn('id', $del)
                 ->delete();
@@ -147,6 +148,6 @@ class ContactController extends BaseController
             setFlash('danger', $validation->getErrors());
         }
 
-        redirect("/contact?page=$page");
+        redirect("/ignore?page=$page");
     }
 }

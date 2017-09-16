@@ -46,7 +46,8 @@
     <div class="form">
         <form method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            <b>Логин:</b><br><input name="user">
+            <b>Логин:</b><br>
+            <input name="user">
             <input value="Добавить" type="submit">
         </form>
     </div>
