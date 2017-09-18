@@ -16,10 +16,11 @@ class BookController extends BaseController
      */
     public function index()
     {
-        $total = Guest::count();
+        $total = Guest::query()->count();
         $page = paginate(setting('bookpost'), $total);
 
-        $posts = Guest::orderBy('created_at', 'desc')
+        $posts = Guest::query()
+            ->orderBy('created_at', 'desc')
             ->limit(setting('bookpost'))
             ->offset($page['offset'])
             ->with('user', 'editUser')
@@ -33,7 +34,7 @@ class BookController extends BaseController
      */
     public function add()
     {
-        $msg = check(Request::input('msg'));
+        $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
 
         $validation = new Validation();
@@ -56,7 +57,7 @@ class BookController extends BaseController
             if (isUser()) {
                 $bookscores = (setting('bookscores')) ? 1 : 0;
 
-                $user = User::where('id', getUserId());
+                $user = User::query()->where('id', getUserId());
                 $user->update([
                     'allguest' => DB::raw('allguest + 1'),
                     'point'    => DB::raw('point + ' . $bookscores),
@@ -66,7 +67,7 @@ class BookController extends BaseController
 
             $username = isUser() ? getUserId() : 0;
 
-            Guest::create([
+            Guest::query()->create([
                 'user_id'    => $username,
                 'text'       => $msg,
                 'ip'         => getClientIp(),
@@ -88,11 +89,13 @@ class BookController extends BaseController
      */
     public function edit($id)
     {
-        if (!isUser()) abort(403);
+        if (! isUser()) {
+            abort(403);
+        }
 
-        $post = Guest::where('user_id', getUserId())->find($id);
+        $post = Guest::query()->where('user_id', getUserId())->find($id);
 
-        if (!$post) {
+        if (! $post) {
             abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
         }
 
@@ -102,7 +105,7 @@ class BookController extends BaseController
 
         if (Request::isMethod('post')) {
 
-            $msg = check(Request::input('msg'));
+            $msg   = check(Request::input('msg'));
             $token = check(Request::input('token'));
 
             $validation = new Validation();

@@ -1015,11 +1015,6 @@ if (isAdmin([101])) {
             echo 'Актива для изменения тем форума: <br><input name="editforumpoint" maxlength="4" value="'.$setting['editforumpoint'].'"><br>';
             echo 'Актива для скрытия рекламы: <br><input name="advertpoint" maxlength="4" value="'.$setting['advertpoint'].'"><br><hr>';
 
-
-
-            $checked = ($setting['editstatus'] == 1) ? ' checked="checked"' : '';
-            echo '<input name="editstatus" type="checkbox" value="1"'.$checked.'> Разрешить менять статус<br>';
-
             echo 'Актива для изменения статуса: <br><input name="editstatuspoint" maxlength="4" value="'.$setting['editstatuspoint'].'"><br>';
             echo 'Стоимость изменения статуса: <br><input name="editstatusmoney" maxlength="9" value="'.$setting['editstatusmoney'].'"><br><hr>';
 
@@ -1037,8 +1032,6 @@ if (isAdmin([101])) {
         case 'editeleven':
 
             $uid = check($_GET['uid']);
-            $editstatus = (empty($_POST['editstatus'])) ? 0 : 1;
-
             if ($uid == $_SESSION['token']) {
                 if ($_POST['sendmoneypoint'] != "" && $_POST['editratingpoint'] != "" && $_POST['editforumpoint'] != "" && $_POST['editstatuspoint'] != "" && $_POST['editstatusmoney'] != "" && $_POST['bonusmoney'] != "" && $_POST['registermoney'] != "") {
 
@@ -1047,7 +1040,6 @@ if (isAdmin([101])) {
                     $dbr -> execute(intval($_POST['editratingpoint']), 'editratingpoint');
                     $dbr -> execute(intval($_POST['editforumpoint']), 'editforumpoint');
                     $dbr -> execute(intval($_POST['advertpoint']), 'advertpoint');
-                    $dbr -> execute($editstatus, 'editstatus');
                     $dbr -> execute(intval($_POST['editstatuspoint']), 'editstatuspoint');
                     $dbr -> execute(intval($_POST['editstatusmoney']), 'editstatusmoney');
                     $dbr -> execute(intval($_POST['bonusmoney']), 'bonusmoney');

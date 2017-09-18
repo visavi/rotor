@@ -86,7 +86,7 @@ form {
 .menu a {
 	text-decoration : none;
 	color : #5c5c5c;
-	padding : 0 8px;
+	padding : 0 3px;
 	font-weight : bold;
 }
 .menu a:hover {
