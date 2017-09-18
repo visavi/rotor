@@ -489,7 +489,26 @@ function userMail(User $user)
     return $userMails[$user->id] ?? 0;
 }
 
-// --------------- Функция вывода аватара пользователя ---------------//
+/**
+ * Возвращает аватар для пользователя по умолчанию
+ *
+ * @param string  $login логин пользователя
+ * @return string        код аватара
+ */
+function defaultAvatar($login)
+{
+    $color  = '#'.substr(dechex(crc32($login)), 0, 6);
+    $letter = utfSubstr($login, 0, 1);
+
+    return '<div class="avatar" style="background:'.$color.'"><a href="/user/'.$login.'">'.$letter.'</a></div>';
+}
+
+/**
+ * Возвращает аватар пользователя
+ *
+ * @param  User|null $user объект пользователя
+ * @return string          аватар пользователя
+ */
 function userAvatar(User $user = null)
 {
     if (! $user) {
@@ -500,7 +519,8 @@ function userAvatar(User $user = null)
         return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$user->avatar.'" alt=""></a> ';
     }
 
-    return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
+    return defaultAvatar($user->login);
+    //return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
 }
 
 

@@ -146,3 +146,18 @@ blockquote small:before {
   position: absolute;
   right: 3px;
 }
+
+.avatar {
+  height: 48px;
+  width: 48px;
+  line-height: 48px;
+  text-align: center;
+}
+
+.avatar a {
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: bold;
+  color: #fff;
+  display: block;
+}
