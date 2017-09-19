@@ -21,9 +21,9 @@ pre.prettyprint code {
 pre.prettyprint, code.prettyprint {
   overflow: auto;
   word-wrap: normal;
-  -moz-tab-size: 2;
   tab-size: 2;
   display: block;
+  max-height: 200px;
 }
 
 .prettyprint {

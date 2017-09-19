@@ -7,7 +7,7 @@ $app->setName('RotorCMS by Vantuz - http://visavi.net');
 $app->setVersion(VERSION);
 
 $app->addCommands([
-        new \App\Commands\Install(),
-    ]);
+    new \App\Commands\Install(),
+]);
 
 $app->run();

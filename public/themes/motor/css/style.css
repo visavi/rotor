@@ -1,9 +1,9 @@
 body {
-	margin-top : 0;
-	font-size : 10pt;
-	color : #5c5c5c;
-	font-family : Verdana, Arial, Helvetica, sans-serif;
-	background: #f0f0f0 url(../img/back.gif) repeat-x scroll;
+    margin-top : 0;
+    font-size : 10pt;
+    color : #5c5c5c;
+    font-family : Verdana, Arial, Helvetica, sans-serif;
+    background: #f0f0f0 url(../img/back.gif) repeat-x scroll;
 }
 
 h1 {
@@ -11,195 +11,195 @@ h1 {
 }
 
 h1 small {
-	font-weight: normal;
-	line-height: 1;
-	color: #999;
-	font-size: 80%;
+    font-weight: normal;
+    line-height: 1;
+    color: #999;
+    font-size: 80%;
 }
 
 h2 {
-	font-size: 18px;
+    font-size: 18px;
 }
 
 h3 {
-	font-size: 17px;
+    font-size: 17px;
 }
 
 pre {
-	tab-size: 16;
-	-moz-tab-size: 4;
+    tab-size: 16;
+    -moz-tab-size: 4;
 }
 p {
-	margin-top : 5px;
-	margin-bottom : 20px;
+    margin-top : 5px;
+    margin-bottom : 20px;
 }
 img {
-	border : 0;
+    border : 0;
 }
 form {
-	margin : 0;
-	padding : 0;
+    margin : 0;
+    padding : 0;
 }
 #wrapper {
-	margin-top : 0;
+    margin-top : 0;
 }
 .main {
-	width : 841px;
-	background-color : #fff;
-	margin-left : auto;
-	margin-right : auto;
-	margin-top : 0;
+    width : 841px;
+    background-color : #fff;
+    margin-left : auto;
+    margin-right : auto;
+    margin-top : 0;
 }
 .backgr_top {
-	background: url(../img/back_top.gif) repeat-y;
+    background: url(../img/back_top.gif) repeat-y;
 }
 .backgr {
-	background: url(../img/back_l.gif) repeat-y;
+    background: url(../img/back_l.gif) repeat-y;
 }
 .container {
-	float : left;
-	width : 100%;
-	margin-left : -6px;
+    float : left;
+    width : 100%;
+    margin-left : -6px;
 }
 .content {
-	background-color : #fff;
-	text-align : left;
-	margin-left : 2px;
-	margin-right : 2px;
-	padding-top : 0;
+    background-color : #fff;
+    text-align : left;
+    margin-left : 2px;
+    margin-right : 2px;
+    padding-top : 0;
 }
 .logo {
-	padding : 0 0 0 25px;
+    padding : 0 0 0 25px;
 }
 .logo img {
-	vertical-align : middle;
-	margin-left : 12px;
+    vertical-align : middle;
+    margin-left : 12px;
 }
 .menu {
-	margin-top : 4px;
-	padding : 7px 24px;
-	background-color : #eee;
-	vertical-align : middle;
-	border-top : 2px solid #ccc;
-	border-bottom : 2px solid #ccc;
+    margin-top : 4px;
+    padding : 7px 24px;
+    background-color : #eee;
+    vertical-align : middle;
+    border-top : 2px solid #ccc;
+    border-bottom : 2px solid #ccc;
 }
 .menu a {
-	text-decoration : none;
-	color : #5c5c5c;
-	padding : 0 3px;
-	font-weight : bold;
+    text-decoration : none;
+    color : #5c5c5c;
+    padding : 0 3px;
+    font-weight : bold;
 }
 .menu a:hover {
-	text-decoration : underline;
+    text-decoration : underline;
 }
 
 .mright {
-	float : right;
+    float : right;
 }
 
 .mcontent {
-	float : left;
-	width : 550px;
-	padding : 10px 20px 0 30px;
-	line-height : 1.5em;
+    float : left;
+    width : 550px;
+    padding : 10px 20px 0 30px;
+    line-height : 1.5em;
 }
 .mcontent img {
-	vertical-align : middle;
+    vertical-align : middle;
 }
 .mcontentwide {
-	padding : 5px 30px;
-	line-height : 1.5em;
+    padding : 5px 30px;
+    line-height : 1.5em;
 }
 .rcontent {
-	width : 170px;
-	float : right;
-	margin : 0 5px 5px 5px;
-	line-height : 1.3em;
+    width : 170px;
+    float : right;
+    margin : 0 5px 5px 5px;
+    line-height : 1.3em;
 }
 .bcontent {
-	background-color : #ffffff;
-	text-align : left;
-	padding : 4px 4px 0 4px;
-	margin-left : 6px;
-	margin-right : 6px;
+    background-color : #ffffff;
+    text-align : left;
+    padding : 4px 4px 0 4px;
+    margin-left : 6px;
+    margin-right : 6px;
 }
 .fdivider {
-	clear : both;
-	background: url(../img/footerdiver.gif) repeat-x bottom;
-	margin : 0 14px 0 14px;
-	padding-top : 10px;
+    clear : both;
+    background: url(../img/footerdiver.gif) repeat-x bottom;
+    margin : 0 14px 0 14px;
+    padding-top : 10px;
 }
 .fdivider img {
-	padding : 0 2px 0 2px;
+    padding : 0 2px 0 2px;
 }
 #footer {
-	clear : both;
-	font-size : 0.8em;
-	color : #666666;
-	text-align : left;
-	padding: 20px 40px;
-	height : 22px;
+    clear : both;
+    font-size : 0.8em;
+    color : #666666;
+    text-align : left;
+    padding: 20px 40px;
+    height : 22px;
 }
 #footer #text {
-	color : #666666;
-	float : left;
-	padding-top : 13px;
-	width : 92%;
+    color : #666666;
+    float : left;
+    padding-top : 13px;
+    width : 92%;
 }
 #footer #text a {
-	color : #006699;
+    color : #006699;
 }
 #footer #image {
-	float : right;
+    float : right;
 }
 #linkfooter {
-	text-align : center;
+    text-align : center;
 }
 #linkfooter a {
-	font-size : 0.9em;
-	color : #006699;
+    font-size : 0.9em;
+    color : #006699;
 }
 
 a.imgblock {
-	display : block;
-	padding : 2px;
-	border : 3px solid #e6bd1a;
+    display : block;
+    padding : 2px;
+    border : 3px solid #e6bd1a;
 }
 a:hover.imgblock {
-	border : 3px solid #05c005;
+    border : 3px solid #05c005;
 }
 
 .img {
-	background-color: #fff;
-	border: 1px solid #ccc;
-	float: left;
-	padding: 1px;
-	margin : 1px 5px 1px 1px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    float: left;
+    padding: 1px;
+    margin : 1px 5px 1px 1px;
 }
 
 .imgright {
-	float:right;
-	margin : 5px;
+    float:right;
+    margin : 5px;
 }
 
 input {
-	background-color : #fff;
-	border:1px solid #ccc;
-	border-radius: 5px;
-	color:#666;
-	text-decoration:none;
-	padding: 1px 4px 2px 4px;
+    background-color : #fff;
+    border:1px solid #ccc;
+    border-radius: 5px;
+    color:#666;
+    text-decoration:none;
+    padding: 1px 4px 2px 4px;
 }
 
 .b {
-	font-size : 1.2em;
-	color : #333;
-	background-color : #ebf9eb;
-	padding : 3px;
-	margin : 3px 0 3px 0;
-	overflow:hidden;
-	border:1px solid #eee;
-	border-radius: 5px;
+    font-size : 1.2em;
+    color : #333;
+    background-color : #ebf9eb;
+    padding : 3px;
+    margin : 3px 0 3px 0;
+    overflow:hidden;
+    border:1px solid #eee;
+    border-radius: 5px;
 }
 
 .b .pull-right i {
@@ -208,80 +208,80 @@ input {
 }
 
 hr {
-	border : 1px dotted #ccc;
+    border : 1px dotted #ccc;
 }
 
 textarea {
-	background-color: #fff;
-	width : 100%;
-	font-size : 10pt;
-	padding : 5px;
-	color:#666;
-	border:1px solid #ccc;
-	border-radius: 5px;
+    background-color: #fff;
+    width : 100%;
+    font-size : 10pt;
+    padding : 5px;
+    color:#666;
+    border:1px solid #ccc;
+    border-radius: 5px;
 }
 
 .small {
-	font-size : 0.8em;
-	color : #666666;
-	text-align : center;
+    font-size : 0.8em;
+    color : #666666;
+    text-align : center;
 }
 
 .form {
-	color: #666;
-	padding : 3px;
-	background: #ddd url(../img/bp.gif);
-	border: 1px solid #ccc;
-	border-radius:5px;
+    color: #666;
+    padding : 3px;
+    background: #ddd url(../img/bp.gif);
+    border: 1px solid #ccc;
+    border-radius:5px;
 }
 
 .login {
-	color: #666;
-	padding : 10px;
-	margin : 0 0 10px 0;
-	background-color: #ebf9eb;
-	border: 1px solid #ccc;
+    color: #666;
+    padding : 10px;
+    margin : 0 0 10px 0;
+    background-color: #ebf9eb;
+    border: 1px solid #ccc;
 }
 
 .data {
-	 color: #cc00cc;
-	 font-size: x-small;
+     color: #cc00cc;
+     font-size: x-small;
 }
 
 .note {
-	color: #777;
-	background: #eff5fb;
-	border: 1px solid #81bef7;
-	padding: 5px;
-	margin : 5px;
-	text-align: center;
-	font-weight: bold;
-	border-radius:9px;
+    color: #777;
+    background: #eff5fb;
+    border: 1px solid #81bef7;
+    padding: 5px;
+    margin : 5px;
+    text-align: center;
+    font-weight: bold;
+    border-radius:9px;
 }
 
 .right {
-	 text-align: right;
-	 font-size: x-small;
+     text-align: right;
+     font-size: x-small;
 }
 
 .info {
-	color : #992a2a;
-	background : #f2dddd;
-	border: 1px solid #e3c0c0;
-	padding: 3px;
-	border-radius:5px;
+    color : #992a2a;
+    background : #f2dddd;
+    border: 1px solid #e3c0c0;
+    padding: 3px;
+    border-radius:5px;
 }
 
 .act {
-	color: #888888;
-	background : #e4eaf2;
-	border: 1px solid #c3cfe1;
-	padding: 3px;
-	margin :  1px 0 1px 0;
-	border-radius:5px;
+    color: #888888;
+    background : #e4eaf2;
+    border: 1px solid #c3cfe1;
+    padding: 3px;
+    margin :  1px 0 1px 0;
+    border-radius:5px;
 }
 
 .message {
-	overflow: hidden;
-	text-overflow: ellipsis;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
