@@ -135,6 +135,7 @@ $router->map('POST',     '/ignore/delete', 'IgnoreController@delete');
 $router->map('GET|POST', '/contact', 'ContactController@index');
 $router->map('GET|POST', '/contact/note/[i:id]', 'ContactController@note');
 $router->map('POST',     '/contact/delete', 'ContactController@delete');
+$router->map('GET',      '/counter/[day|month:action]?', 'CounterController@index');
 
 $router->map('GET',      '/closed', 'HomeController@closed');
 $router->map('GET|POST', '/offers', 'pages/offers.php');
@@ -147,7 +148,6 @@ $router->map('GET|POST', '/onlinewho', 'pages/onlinewho.php');
 $router->map('GET|POST', '/who', 'pages/who.php');
 $router->map('GET|POST', '/adminlist', 'pages/adminlist.php');
 $router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
-$router->map('GET',      '/counter/[24|31:action]?', 'pages/counter.php');
 $router->map('GET|POST', '/authoritylist', 'pages/authoritylist.php');
 $router->map('GET|POST', '/ban', 'pages/ban.php');
 $router->map('GET|POST', '/banip', 'pages/banip.php');

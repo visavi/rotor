@@ -571,7 +571,7 @@ function showOnline()
 function statsCounter()
 {
     if (@filemtime(STORAGE."/temp/counter.dat") < time()-10) {
-        $counts = Counter::query()->count();
+        $counts = Counter::query()->first();
         file_put_contents(STORAGE."/temp/counter.dat", serialize($counts), LOCK_EX);
     }
 
