@@ -44,7 +44,15 @@ RotorCMS 7.0
 9. Выполните заполнение БД с помощью команды `php rotor seed:run`
 
 ### Установка одной командой
-Перейдите в консоли в директорию с сайтом и выполните команду `composer create-project visavi/rotor .`
+Для установки стабильной версии перейдите в консоли в директорию с сайтом и выполните команду 
+```
+composer create-project visavi/rotor .
+```
+
+Для установки последней версии выполните команду
+```
+composer create-project --prefer-dist --stability=dev visavi/rotor .
+```
 
 ### Требования
 
