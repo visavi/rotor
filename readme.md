@@ -51,7 +51,7 @@ composer create-project visavi/rotor .
 
 Для установки последней версии выполните команду
 ```
-composer create-project --prefer-dist --stability=dev visavi/rotor .
+composer create-project --stability=dev visavi/rotor .
 ```
 
 ### Требования
