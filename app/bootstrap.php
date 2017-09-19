@@ -2,6 +2,7 @@
 
 use Dotenv\Dotenv;
 use Illuminate\Database\Capsule\Manager as DB;
+use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
@@ -24,7 +25,13 @@ if (! env('APP_ENV')) {
 
 if (env('APP_DEBUG')) {
     $whoops = new Run();
-    $whoops->pushHandler(new PrettyPageHandler);
+
+    if (Whoops\Util\Misc::isCommandLine()){
+        $whoops->pushHandler(new PlainTextHandler);
+    } else {
+        $whoops->pushHandler(new PrettyPageHandler);
+    }
+
     $whoops->pushHandler(function() {
         $_SERVER = array_except($_SERVER, array_keys($_ENV));
         $_ENV    = [];
