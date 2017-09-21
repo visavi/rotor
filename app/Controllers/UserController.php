@@ -200,6 +200,7 @@ class UserController extends BaseController
                 $validation = new Validation();
                 $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
                     ->addRule('regex', [$logs, '|^[a-z0-9\-]+$|i'], ['logs' => 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!'], true)
+                    ->addRule('regex', [utfSubstr($logs, 0, 1), '|^[a-z0-9]+$|i'], ['logs' => 'Логин должен начинаться с буквы или цифры!'], true)
                     ->addRule('email', $meil, ['meil' => 'Вы ввели неверный адрес email, необходим формат name@site.domen!'], true)
                     ->addRule('string', $invite, ['invite' => 'Слишком длинный или короткий пригласительный ключ!'], setting('invite'), 12, 15)
                     ->addRule('string', $logs, ['logs' => 'Слишком длинный или короткий логин!'], true, 3, 20)
