@@ -143,14 +143,14 @@
                 <i class="fa fa-home"></i> <a href="{{ $user['site'] }}">Перейти на сайт {{ $user['login'] }}</a><br>
             @endif
 
-            @if (isAdmin([101, 102, 103]))
+            @if ($isModer)
                 @if (!empty(setting('invite')))
                     <i class="fa fa-ban"></i> <a href="/admin/invitations?act=send&amp;user={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">Отправить инвайт</a><br>
                 @endif
             <i class="fa fa-ban"></i> <a href="/admin/ban?act=edit&amp;uz={{ $user['login'] }}">Бан / Разбан</a><br>
             @endif
 
-            @if (isAdmin([101, 102]))
+            @if ($isAdmin)
                 <i class="fa fa-wrench"></i> <a href="/admin/users?act=edit&amp;uz={{ $user['login'] }}">Редактировать</a><br>
             @endif
         @else

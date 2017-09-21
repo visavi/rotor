@@ -162,35 +162,51 @@ function deleteAlbum(User $user)
     }
 }
 
-// ------------------ Функция перекодировки из UTF в WIN --------------------//
-function utfToWin($str)
-{
-    return mb_convert_encoding($str, 'windows-1251', 'utf-8');
-}
-
-// ------------------ Функция перекодировки из WIN в UTF --------------------//
+/**
+ * Конвертирует строку в кодировку utf-8
+ *
+ * @param  string $str строка
+ * @return string      конвертированная строка
+ */
 function winToUtf($str)
 {
     return mb_convert_encoding($str, 'utf-8', 'windows-1251');
 }
 
-// ------------------ Функция преобразования в нижний регистр для UTF ------------------//
+/**
+ * Преобразует строку в нижний регистр
+ *
+ * @param  string $str строка
+ * @return string      преобразованная строка
+ */
 function utfLower($str)
 {
     return mb_strtolower($str, 'utf-8');
 }
 
-// ---------- Аналог функции substr для UTF-8 ---------//
-function utfSubstr($str, $offset, $length = null)
+/**
+ * Обрезает строку
+ *
+ * @param string  $str    строка
+ * @param int     $start  начало позиции
+ * @param int     $length конец позиции
+ * @return string         обрезанная строка
+ */
+function utfSubstr($str, $start, $length = null)
 {
     if ($length === null) {
         $length = utfStrlen($str);
     }
 
-    return mb_substr($str, $offset, $length, 'utf-8');
+    return mb_substr($str, $start, $length, 'utf-8');
 }
 
-// ---------------------- Аналог функции strlen для UTF-8 -----------------------//
+/**
+ * Возвращает длину строки
+ *
+ * @param string $str строка
+ * @return int        длина строка
+ */
 function utfStrlen($str)
 {
     return mb_strlen($str, 'utf-8');
@@ -284,15 +300,21 @@ function userLevel($level)
     $name = explode(',', setting('statusname'));
 
     switch ($level) {
-        case '101': $status = $name[0];
+        case User::OWNER: $status = $name[0];
             break;
-        case '102': $status = $name[1];
+        case User::ADMIN: $status = $name[1];
             break;
-        case '103': $status = $name[2];
+        case User::MODER: $status = $name[2];
             break;
-        case '105': $status = $name[3];
+        case User::EDITOR: $status = $name[3];
             break;
-        default: $status = $name[4];
+        case User::USER: $status = $name[4];
+            break;
+        case User::GUEST: $status = $name[5];
+            break;
+        case User::BANNED: $status = $name[6];
+            break;
+        default: $status = setting('statusdef');
     }
 
     return $status;
@@ -498,7 +520,7 @@ function userMail(User $user)
 function defaultAvatar($login)
 {
     $color  = '#'.substr(dechex(crc32($login)), 0, 6);
-    $letter = utfSubstr($login, 0, 1);
+    $letter = mb_strtoupper(utfSubstr($login, 0, 1), 'utf-8');;
 
     return '<div class="avatar" style="background:'.$color.'"><a href="/user/'.$login.'">'.$letter.'</a></div>';
 }
@@ -1035,10 +1057,14 @@ function lastNews()
     }
 }
 
-// ------------------------- Функция проверки авторизации  ------------------------//
+/**
+ * Возвращает является ли пользователь авторизованным
+ *
+ * @return mixed
+ */
 function isUser()
 {
-    static $user = 0;
+    static $user = null;
 
     if (! $user) {
         if (isset($_SESSION['id']) && isset($_SESSION['password'])) {
@@ -1054,19 +1080,38 @@ function isUser()
     return $user;
 }
 
-// ------------------------- Функция проверки администрации  ------------------------//
-function isAdmin($access = [101, 102, 103, 105])
+/**
+ * Возвращает входит ли пользователь в группу администрации
+ *
+ * @param array $access массив уровней доступа
+ * @return bool         является ли пользователь администратором
+ */
+function isAdmin($access = User::MAIN_GROUP)
 {
-    if (isUser()) {
-        if (in_array(user('level'), $access)) {
-            return true;
-        }
+    if (isUser() && in_array(user('level'), $access, true)) {
+        return true;
     }
 
     return false;
 }
 
-// ------------------ Функция вывода иконки расширения --------------------//
+function access($level)
+{
+    $access = constant('App\\Models\\User::'.strtoupper($level).'_GROUP');
+
+    if (isUser() && in_array(user('level'), $access, true)) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Возвращает иконку расширения
+ *
+ * @param  string $ext расширение файла
+ * @return string      иконка
+ */
 function icons($ext)
 {
     switch ($ext) {

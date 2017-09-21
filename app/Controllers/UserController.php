@@ -26,7 +26,10 @@ class UserController extends BaseController
         $note = Note::query()->where('user_id', $user->id)->first();
         $invite = Invite::query()->where('invite_user_id', $user->id)->first();
 
-        return view('pages/user', compact('user', 'invite', 'note'));
+        $isAdmin = isAdmin(User::ADMIN_GROUP);
+        $isModer = isAdmin(User::MODER_GROUP);
+
+        return view('pages/user', compact('user', 'invite', 'note', 'isAdmin', 'isModer'));
     }
 
     /**

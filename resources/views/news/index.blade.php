@@ -8,7 +8,7 @@
 
     <h1>Новости сайта</h1>
 
-    @if (isAdmin([101, 102]))
+    @if ($isModer)
         <div class="form"><a href="/admin/news">Управление новостями</a></div>
     @endif
 

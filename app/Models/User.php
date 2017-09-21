@@ -7,6 +7,42 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class User extends BaseModel
 {
+    const OWNER   = 'owner';   // Владелец
+    const ADMIN   = 'admin';   // Админ
+    const MODER   = 'moder';   // Модератор
+    const MANAGER = 'manager'; // Менеджер
+    const EDITOR  = 'editor';  // Редактор
+    const USER    = 'user';    // Пользователь
+    const PENDED  = 'pended';  // Ожидающий
+    const BANNED  = 'banned';  // Забаненный
+
+    /**
+     * Группа администраторов
+     */
+    const ADMIN_GROUP = [
+        self::OWNER,
+        self::ADMIN,
+    ];
+
+    /**
+     * Группа модераторов
+     */
+    const MODER_GROUP = [
+        self::OWNER,
+        self::ADMIN,
+        self::MODER,
+    ];
+
+    /**
+     * Группа старших
+     */
+    const MAIN_GROUP = [
+        self::OWNER,
+        self::ADMIN,
+        self::MODER,
+        self::EDITOR,
+    ];
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -83,10 +119,10 @@ class User extends BaseModel
                     ]);
 
                     DB::delete('
-                        DELETE FROM login WHERE created_at < (
-                            SELECT MIN(created_at) FROM (
-                                SELECT created_at FROM guest ORDER BY created_at DESC LIMIT 50
-                            ) AS del
+                        delete from login where created_at < (
+                            select min(created_at) from (
+                                select created_at from guest order by created_at desc limit 50
+                            ) as del
                         );'
                     );
                 }

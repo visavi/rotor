@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\Admlog;
+use App\Models\User;
 
 Class AdminController extends BaseController
 {
@@ -35,6 +36,10 @@ Class AdminController extends BaseController
      */
     public function index()
     {
-        return view('admin/index');
+        $isOwner = isAdmin([User::OWNER]);
+        $isAdmin = isAdmin(User::ADMIN_GROUP);
+        $isModer = isAdmin(User::MODER_GROUP);
+
+        return view('admin/index', compact('isOwner', 'isAdmin', 'isModer'));
     }
 }

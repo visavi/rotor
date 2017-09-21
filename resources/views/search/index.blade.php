@@ -11,12 +11,8 @@
     Откройте в редакторе файлов страницу:<br>
     <code>search/index</code><br><br>
     или через файловую систему:<br>
-    <code>app/views/search/index.blade.php</code><br><br>
+    <code>/resources/views/search/index.blade.php</code><br><br>
     Вставьте сюда сформированный код<br><br>
-
-    @if (isAdmin([101]))
-        <a href="/admin/files?act=edit&amp;path=search/&amp;file=index">Ссылка на редактирование</a><br><br>
-    @endif
 
     Сссылка на документацию по созданию поиска:<br>
     <a href="https://site.yandex.ru">Yandex - поиск для сайта</a><br>

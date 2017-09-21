@@ -12,6 +12,7 @@ use App\Models\News;
 use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Spam;
+use App\Models\User;
 use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -31,7 +32,7 @@ class SpamController extends AdminController
     {
         parent::__construct();
 
-        if (! isAdmin([101, 102, 103])) {
+        if (! isAdmin(User::MODER_GROUP)) {
             abort('403', 'Доступ запрещен!');
         }
 

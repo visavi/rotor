@@ -26,7 +26,9 @@ class NewsController extends BaseController
             ->with('user')
             ->get();
 
-        return view('news/index', compact('news', 'page'));
+        $isModer = isAdmin(User::MODER_GROUP);
+
+        return view('news/index', compact('news', 'page', 'isModer'));
     }
 
     /**

@@ -11,8 +11,8 @@
             <title>Сообщения RSS - {{ setting('title') }}</title>
             <link>{{ setting('home') }}/</link>
         </image>
-        <managingEditor>{{ setting('emails') }} ({{ setting('nickname') }})</managingEditor>
-        <webMaster>{{ setting('emails') }} ({{ setting('nickname') }})</webMaster>
+        <managingEditor>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</managingEditor>
+        <webMaster>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</webMaster>
         <lastBuildDate>{{ date("r", SITETIME) }}</lastBuildDate>
 
             @yield('content')
