@@ -32,7 +32,7 @@ class SpamController extends AdminController
     {
         parent::__construct();
 
-        if (! isAdmin(User::MODER_GROUP)) {
+        if (! isAdmin(User::MODER)) {
             abort('403', 'Доступ запрещен!');
         }
 

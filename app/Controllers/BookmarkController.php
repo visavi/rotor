@@ -16,7 +16,7 @@ class BookmarkController extends BaseController
     {
         parent::__construct();
 
-        if (!isUser()) {
+        if (!getUser()) {
             abort('default', 'Для управления закладками, необходимо авторизоваться!');
         }
     }
@@ -26,11 +26,11 @@ class BookmarkController extends BaseController
      */
     public function index()
     {
-        $total = Bookmark::where('user_id', user('id'))->count();
+        $total = Bookmark::where('user_id', getUser('id'))->count();
         $page  = paginate(setting('forumtem'), $total);
 
         $topics = Bookmark::select('bookmarks.posts as book_posts', 'bookmarks.topic_id', 'topics.*')
-            ->where('bookmarks.user_id', user('id'))
+            ->where('bookmarks.user_id', getUser('id'))
             ->leftJoin('topics', 'bookmarks.topic_id', '=', 'topics.id')
             ->with('topic.user', 'topic.lastPost.user')
             ->orderBy('updated_at', 'desc')
@@ -60,7 +60,7 @@ class BookmarkController extends BaseController
         if ($validation->run()) {
 
             $bookmark = Bookmark::where('topic_id', $tid)
-                ->where('user_id', user('id'))
+                ->where('user_id', getUser('id'))
                 ->first();
 
             if ($bookmark) {
@@ -68,7 +68,7 @@ class BookmarkController extends BaseController
                 exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
             } else {
                 Bookmark::create([
-                    'user_id'  => user('id'),
+                    'user_id'  => getUser('id'),
                     'topic_id' => $tid,
                     'posts'    => $topic['posts'],
                 ]);
@@ -95,7 +95,7 @@ class BookmarkController extends BaseController
         if ($validation->run()) {
 
             Bookmark::whereIn('topic_id', $topicIds)
-                ->where('user_id', user('id'))
+                ->where('user_id', getUser('id'))
                 ->delete();
 
             setFlash('success', 'Выбранные темы успешно удалены из закладок!');

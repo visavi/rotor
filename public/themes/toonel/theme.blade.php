@@ -29,7 +29,7 @@ header("Content-type:text/html; charset=utf-8");
             <a title="Центр общения" class="menu" href="/forum">Форум</a> |
             <a title="Гостевая комната" class="menu" href="/book">Гостевая</a> |
             <a title="Скрипты для wap-мастеров" class="menu" href="/load">Скрипты</a> |
-            @if (isUser())
+            @if (getUser())
                 <a title="Управление настройками" class="menu" href="/menu">Меню</a> |
                 <a title="Выход" class="menu" href="/logout"
                    onclick="return confirm('Вы действительно хотите выйти?')">Выход</a>
@@ -62,7 +62,7 @@ header("Content-type:text/html; charset=utf-8");
                         &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
                     @endif
 
-                    @if (user('newchat') < statsNewChat())
+                    @if (getUser('newchat') < statsNewChat())
                         &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
                     @endif
                 </div>

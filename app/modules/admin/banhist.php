@@ -75,7 +75,7 @@ if (isAdmin([101, 102, 103])) {
         case 'view':
             $uz = (isset($_GET['uz'])) ? check($_GET['uz']) : '';
 
-            if (user($uz)) {
+            if (getUser($uz)) {
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);
                 $page = paginate(setting('listbanhist'), $total);
 

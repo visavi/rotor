@@ -23,7 +23,7 @@
             <div class="post">
                 <div class="b">
 
-                    @if (isUser() && user('id') != $data['user_id'])
+                    @if (getUser() && getUser('id') != $data['user_id'])
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
@@ -33,7 +33,7 @@
 
                     @endif
 
-                    @if (isUser() && user('id') == $data['user_id'] && $data['created_at'] + 600 > SITETIME)
+                    @if (getUser() && getUser('id') == $data['user_id'] && $data['created_at'] + 600 > SITETIME)
                         <div class="float-right">
                             <a href="/book/edit/{{ $data['id'] }}" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         </div>
@@ -71,7 +71,7 @@
         {{ showError('Сообщений нет, будь первым!') }}
     @endif
 
-    @if (isUser())
+    @if (getUser())
         <div class="form">
             <form action="book/add" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

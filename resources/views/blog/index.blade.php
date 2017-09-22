@@ -8,7 +8,7 @@
 
     <h1>Блоги</h1>
 
-    @if (isUser())
+    @if (getUser())
         Мои: <a href="/blog/active/articles">статьи</a>, <a href="/blog/active/comments">комментарии</a> /
     @endif
 

@@ -99,7 +99,7 @@ class AjaxController extends BaseController
         $validation = new Validation();
         $validation
             ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', isUser(), 'Для отправки жалобы необходимо авторизоваться')
+            ->addRule('bool', getUser(), 'Для отправки жалобы необходимо авторизоваться')
             ->addRule('bool', $data, 'Выбранное вами сообщение для жалобы не существует!')
             ->addRule('bool', ! $spam, 'Жалоба на данное сообщение уже отправлена!');
 
@@ -107,7 +107,7 @@ class AjaxController extends BaseController
             Spam::query()->create([
                 'relate_type' => $type,
                 'relate_id'   => $data['id'],
-                'user_id'     => user('id'),
+                'user_id'     => getUser('id'),
                 'path'        => $path,
                 'created_at'  => SITETIME,
             ]);
@@ -181,7 +181,7 @@ class AjaxController extends BaseController
         // Время хранения голосов
         $expiresRating = SITETIME + 3600 * 24 * 30;
 
-        if (! isUser()) {
+        if (! getUser()) {
             exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
         }
 
@@ -202,7 +202,7 @@ class AjaxController extends BaseController
             ->where('created_at', '<', SITETIME)
             ->delete();
 
-        $post = $type::query()->where('user_id', '<>', user('id'))->find($id);
+        $post = $type::query()->where('user_id', '<>', getUser('id'))->find($id);
         if (! $post) {
             exit(json_encode([
                 'status' => 'error',
@@ -213,7 +213,7 @@ class AjaxController extends BaseController
         $polling = Polling::query()
             ->where('relate_type', $type)
             ->where('relate_id', $id)
-            ->where('user_id', user('id'))
+            ->where('user_id', getUser('id'))
             ->first();
 
         $cancel = false;
@@ -230,7 +230,7 @@ class AjaxController extends BaseController
             Polling::query()->create([
                 'relate_type' => $type,
                 'relate_id'   => $id,
-                'user_id'     => user('id'),
+                'user_id'     => getUser('id'),
                 'vote'        => $vote,
                 'created_at'  => $expiresRating,
             ]);

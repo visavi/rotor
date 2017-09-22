@@ -195,7 +195,7 @@ if (isAdmin([101, 102])) {
 
                             $text = antimat($text);
 
-                            DB::update("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, user('login'), SITETIME, $id]);
+                            DB::update("UPDATE `offers` SET `status`=?, `closed`=?, `text_reply`=?, `user_reply`=?, `time_reply`=? WHERE `id`=?;", [$status, $closed, $text, getUser('login'), SITETIME, $id]);
 
                             if ($queryoff['status'] >= 2) {
                                 DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=?;", ['offer', $id]);

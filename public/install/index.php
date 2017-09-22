@@ -307,7 +307,7 @@ header("Content-type:text/html; charset=utf-8");
             $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$email]);
             if (!$regmail) {
 
-                $registration = new User();
+                $registration = new getUser();
                 $registration->login = $login;
                 $registration->password = password_hash($password, PASSWORD_BCRYPT);
                 $registration->email = $email;

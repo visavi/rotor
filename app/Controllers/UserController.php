@@ -26,8 +26,8 @@ class UserController extends BaseController
         $note = Note::query()->where('user_id', $user->id)->first();
         $invite = Invite::query()->where('invite_user_id', $user->id)->first();
 
-        $isAdmin = isAdmin(User::ADMIN_GROUP);
-        $isModer = isAdmin(User::MODER_GROUP);
+        $isAdmin = isAdmin(User::ADMIN);
+        $isModer = isAdmin(User::MODER);
 
         return view('pages/user', compact('user', 'invite', 'note', 'isAdmin', 'isModer'));
     }
@@ -61,7 +61,7 @@ class UserController extends BaseController
                 $record = [
                     'user_id'      => $user->id,
                     'text'         => $notice,
-                    'edit_user_id' => user('id'),
+                    'edit_user_id' => getUser('id'),
                     'updated_at'   => SITETIME,
                 ];
 
@@ -84,7 +84,7 @@ class UserController extends BaseController
      */
     public function rating($login)
     {
-        if (! isUser()) {
+        if (! getUser()) {
             abort(403, 'Для изменения рейтинга небходимо авторизоваться!');
         }
 
@@ -94,17 +94,17 @@ class UserController extends BaseController
             abort('default', 'Данного пользователя не существует!');
         }
 
-        if (user('id') == $user->id) {
+        if (getUser('id') == $user->id) {
             abort('default', 'Запрещено изменять репутацию самому себе!');
         }
 
-        if (user('point') < setting('editratingpoint')) {
+        if (getUser('point') < setting('editratingpoint')) {
             abort('default', 'Для изменения репутации необходимо набрать '.plural(setting('editratingpoint'), setting('scorename')).'!');
         }
 
         // Голосовать за того же пользователя можно через 90 дней
         $getRating = Rating::query()
-            ->where('user_id', user('id'))
+            ->where('user_id', getUser('id'))
             ->where('recipient_id', $user->id)
             ->where('created_at', '>', SITETIME - 3600 * 24 * 90)
             ->first();
@@ -125,7 +125,7 @@ class UserController extends BaseController
             $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                 ->addRule('string', $text, ['text' => 'Слишком длинный или короткий комментарий!'], true, 5, 250);
 
-            if (user('rating') < 10 && empty($vote)) {
+            if (getUser('rating') < 10 && empty($vote)) {
                 $validation->addError('Уменьшать репутацию могут только пользователи с рейтингом 10 или выше!');
             }
 
@@ -134,7 +134,7 @@ class UserController extends BaseController
                 $text = antimat($text);
 
                 Rating::query()->create([
-                    'user_id'      => user('id'),
+                    'user_id'      => getUser('id'),
                     'recipient_id' => $user->id,
                     'text'         => $text,
                     'vote'         => $vote,
@@ -142,7 +142,7 @@ class UserController extends BaseController
                 ]);
 
                 if ($vote == 1) {
-                    $text = 'Пользователь [b]' . user('login') . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+                    $text = 'Пользователь [b]' . getUser('login') . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
                     $user->update([
                         'rating' => DB::raw('posrating - negrating + 1'),
@@ -151,7 +151,7 @@ class UserController extends BaseController
 
                 } else {
 
-                    $text = 'Пользователь [b]' . user('login') . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($user['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+                    $text = 'Пользователь [b]' . getUser('login') . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($user['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
 
                     $user->update([
                         'rating' => DB::raw('posrating - negrating - 1'),
@@ -159,7 +159,7 @@ class UserController extends BaseController
                     ]);
                 }
 
-                sendPrivate($user->id, user('id'), $text);
+                sendPrivate($user->id, getUser('id'), $text);
 
                 setFlash('success', 'Репутация успешно изменена!');
                 redirect('/user/'.$user->login);
@@ -177,7 +177,7 @@ class UserController extends BaseController
      */
     public function register()
     {
-        if (isUser()) {
+        if (getUser()) {
             abort('403', 'Вы уже регистрировались, запрещено создавать несколько аккаунтов!');
         }
 
@@ -331,7 +331,7 @@ class UserController extends BaseController
      */
     public function login()
     {
-        if (isUser()) {
+        if (getUser()) {
             abort('403', 'Вы уже авторизованы!');
         }
 
@@ -385,7 +385,7 @@ class UserController extends BaseController
      */
     public function profile()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Авторизуйтесь для изменения данных в профиле!');
         }
 
@@ -444,7 +444,7 @@ class UserController extends BaseController
      */
     function key()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Для подтверждения регистрации  необходимо быть авторизованным!');
         }
 
@@ -482,7 +482,7 @@ class UserController extends BaseController
      */
     function setting()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Для изменения настроек необходимо авторизоваться!');
         }
 
@@ -536,7 +536,7 @@ class UserController extends BaseController
      */
     public function account()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
         }
 
@@ -548,7 +548,7 @@ class UserController extends BaseController
      */
     public function changeMail()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
         }
 
@@ -604,7 +604,7 @@ class UserController extends BaseController
      */
     public function editMail()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
         }
 
@@ -649,7 +649,7 @@ class UserController extends BaseController
      */
     public function editStatus()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
         }
 
@@ -691,7 +691,7 @@ class UserController extends BaseController
      */
     public function editPassword()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
         }
 
@@ -706,7 +706,7 @@ class UserController extends BaseController
             ->addRule('equal', [$newpass, $newpass2], 'Новые пароли не одинаковые!')
             ->addRule('string', $newpass, 'Слишком длинный или короткий новый пароль!', true, 6, 20)
             ->addRule('regex', [$newpass, '|^[a-z0-9\-]+$|i'], 'Недопустимые символы в пароле, разрешены знаки латинского алфавита, цифры и дефис!', true)
-            ->addRule('not_equal', [user('login'), $newpass], 'Пароль и логин должны отличаться друг от друга!');
+            ->addRule('not_equal', [getUser('login'), $newpass], 'Пароль и логин должны отличаться друг от друга!');
 
         if (ctype_digit($newpass)) {
             $validation->addError('Запрещен пароль состоящий только из цифр, используйте буквы!');
@@ -719,7 +719,7 @@ class UserController extends BaseController
             ]);
 
             $subject = 'Изменение пароля на сайте '.setting('title');
-            $message = 'Здравствуйте, '.user('login').'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.getClientIp().'<br>Браузер: '.getUserAgent().'<br>Время: '.date('j.m.y / H:i', SITETIME);
+            $message = 'Здравствуйте, '.getUser('login').'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.getClientIp().'<br>Браузер: '.getUserAgent().'<br>Время: '.date('j.m.y / H:i', SITETIME);
 
             $body = view('mailer.default', compact('subject', 'message'), true);
             sendMail($user->email, $subject, $body);
@@ -739,7 +739,7 @@ class UserController extends BaseController
      */
     public function apikey()
     {
-        if (! $user = isUser()) {
+        if (! $user = getUser()) {
             abort(403, 'Для изменения данных необходимо авторизоваться!');
         }
 
@@ -750,7 +750,7 @@ class UserController extends BaseController
             $key = str_random();
 
             $user->update([
-                'apikey' => md5(user('login').str_random()),
+                'apikey' => md5(getUser('login').str_random()),
             ]);
 
             setFlash('success', 'Новый ключ успешно сгенерирован!');

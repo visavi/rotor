@@ -9,13 +9,13 @@ if (isset($_GET['act'])) {
 
 //show_title('Блокнот');
 
-if (isUser()) {
+if (getUser()) {
     switch ($action):
         ############################################################################################
         ##                                    Главная страница                                    ##
         ############################################################################################
         case "index":
-            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", [user('login')]);
+            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", [getUser('login')]);
 
             echo 'Здесь вы можете хранить отрывки сообщений или любую другую важную информацию<br><br>';
 
@@ -36,7 +36,7 @@ if (isUser()) {
         ############################################################################################
         case "edit":
 
-            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", [user('login')]);
+            $note = DB::run() -> queryFetch("SELECT * FROM `notebook` WHERE `user`=? LIMIT 1;", [getUser('login')]);
 
             echo '<div class="form">';
             echo '<form action="/notebook?act=change&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -59,11 +59,11 @@ if (isUser()) {
             if ($uid == $_SESSION['token']) {
                 if (utfStrlen($msg) < 10000) {
 
-                    $querynote = DB::run() -> querySingle("SELECT `id` FROM `notebook` WHERE `user`=? LIMIT 1;", [user('login')]);
+                    $querynote = DB::run() -> querySingle("SELECT `id` FROM `notebook` WHERE `user`=? LIMIT 1;", [getUser('login')]);
                     if (!empty($querynote)) {
-                        DB::update("UPDATE `notebook` SET `text`=?, `time`=? WHERE `user`=?", [$msg, SITETIME, user('login')]);
+                        DB::update("UPDATE `notebook` SET `text`=?, `time`=? WHERE `user`=?", [$msg, SITETIME, getUser('login')]);
                     } else {
-                        DB::insert("INSERT INTO `notebook` (`user`, `text`, `time`) VALUES (?, ?, ?);", [user('login'), $msg, SITETIME]);
+                        DB::insert("INSERT INTO `notebook` (`user`, `text`, `time`) VALUES (?, ?, ?);", [getUser('login'), $msg, SITETIME]);
                     }
 
                     setFlash('success', 'Запись успешно сохранена!');

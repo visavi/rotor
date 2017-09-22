@@ -159,15 +159,15 @@ switch ($action):
 
             echo '</div>';
 
-            if ($queryoff['status'] <= 1 && user('login') == $queryoff['user']) {
+            if ($queryoff['status'] <= 1 && getUser('login') == $queryoff['user']) {
                 echo '<div class="right"><a href="/offers?act=edit&amp;id='.$id.'">Редактировать</a></div>';
             }
 
             echo '<div>'.bbCode($queryoff['text']).'<br>';
             echo 'Добавлено: '.profile($queryoff['user']).' ('.dateFixed($queryoff['time']).')<br>';
 
-            if ($queryoff['status'] <= 1 && user('login') != $queryoff['user']) {
-                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, user('login')]);
+            if ($queryoff['status'] <= 1 && getUser('login') != $queryoff['user']) {
+                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUser('login')]);
 
                 if (empty($queryrated)) {
                     echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br>';
@@ -211,7 +211,7 @@ switch ($action):
                 showError('Комментариев еще нет!');
             }
 
-            if (isUser()) {
+            if (getUser()) {
                 if (empty($queryoff['closed'])) {
                     echo '<div class="form"><form action="/offers?act=addcomm&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
                     echo '<b>Комментарий:</b><br>';
@@ -240,8 +240,8 @@ switch ($action):
     ############################################################################################
     case 'edit':
 
-        if (isUser()) {
-            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, user('login')]);
+        if (getUser()) {
+            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUser('login')]);
             if (!empty($queryoff)) {
                 if ($queryoff['status'] <= 1) {
 
@@ -284,8 +284,8 @@ switch ($action):
         $types = (empty($_POST['types'])) ? 0 : 1;
 
         if ($uid == $_SESSION['token']) {
-            if (isUser()) {
-                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, user('login')]);
+            if (getUser()) {
+                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUser('login')]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
                         if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
@@ -377,7 +377,7 @@ switch ($action):
                 showError('Комментариев еще нет!');
             }
 
-            if (isUser()) {
+            if (getUser()) {
                 if (empty($queryoff['closed'])) {
                     echo '<div class="form">';
                     echo '<form action="/offers?act=addcomm&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -411,7 +411,7 @@ switch ($action):
 
         //setting('newtitle') = 'Добавление комментария';
 
-        if (isUser()) {
+        if (getUser()) {
             if ($uid == $_SESSION['token']) {
                 if (utfStrlen($msg) >= 5 && utfStrlen($msg) <= 1000) {
                     $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
@@ -421,7 +421,7 @@ switch ($action):
 
                                 $msg = antimat($msg);
 
-                                DB::insert("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, user('login'), SITETIME, getClientIp(), getUserAgent()]);
+                                DB::insert("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, getUser('login'), SITETIME, getClientIp(), getUserAgent()]);
 
                                 DB::update("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 
@@ -456,18 +456,18 @@ switch ($action):
 
         $uid = (isset($_GET['uid'])) ? check($_GET['uid']) : '';
 
-        if (isUser()) {
+        if (getUser()) {
             if ($uid == $_SESSION['token']) {
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
-                        if (user('login') != $queryoff['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, user('login')]);
+                        if (getUser('login') != $queryoff['user']) {
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUser('login')]);
                             if (empty($queryrated)) {
-                                DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, user('login'), SITETIME]);
+                                DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, getUser('login'), SITETIME]);
                                 DB::update("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", [$id]);
                             } else {
-                                DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, user('login')]);
+                                DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUser('login')]);
                                 if ($queryoff['votes'] > 0) {
                                     DB::update("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", [$id]);
                                 }
@@ -500,7 +500,7 @@ switch ($action):
     case 'new':
         echo '<b><big>Добавление</big></b><br><br>';
 
-        if (user('point') >= setting('addofferspoint')) {
+        if (getUser('point') >= setting('addofferspoint')) {
             echo '<div class="form">';
             echo '<form action="/offers?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
 
@@ -532,7 +532,7 @@ switch ($action):
         $types = (empty($_POST['types'])) ? 0 : 1;
 
         if ($uid == $_SESSION['token']) {
-            if (user('point') >= setting('addofferspoint')) {
+            if (getUser('point') >= setting('addofferspoint')) {
                 if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
                     if (utfStrlen($text) >= 5 && utfStrlen($text) <= 1000) {
                         if (Flood::isFlood()) {
@@ -540,10 +540,10 @@ switch ($action):
                             $title = antimat($title);
                             $text = antimat($text);
 
-                            DB::insert("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, user('login'), 1, SITETIME]);
+                            DB::insert("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, getUser('login'), 1, SITETIME]);
                             $lastid = DB::run() -> lastInsertId();
 
-                            DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, user('login'), SITETIME]);
+                            DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, getUser('login'), SITETIME]);
 
                             setFlash('success', 'Сообщение успешно добавлено!');
                             redirect("/offers?act=view&type=$types&id=$lastid");

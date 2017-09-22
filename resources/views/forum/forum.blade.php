@@ -20,7 +20,7 @@
         / <a href="/admin/forum?act=forum&amp;fid={{  $forum->id  }}&amp;page={{ $page['current'] }}">Управление</a>
     @endif
 
-    @if (isUser() && empty($forum['closed']))
+    @if (getUser() && empty($forum['closed']))
         <div class="float-right">
             <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
         </div>

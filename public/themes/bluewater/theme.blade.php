@@ -46,7 +46,7 @@ header("Content-type:text/html; charset=utf-8");
     <div id="content-wrap">
         <div id="sidebar">
 
-            @if (isUser())
+            @if (getUser())
                 @include('main/menu')
             @else
                 @include('main/recent')

@@ -14,8 +14,8 @@
     $links = [
         ['url' => '/admin/gallery?act=edit&amp;gid='.$photo['id'], 'label' => 'Редактировать', 'show' => isAdmin()],
         ['url' => '/admin/gallery?act=del&amp;del='.$photo['id'].'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => isAdmin()],
-        ['url' => '/gallery/'.$photo['id'].'/edit', 'label' => 'Редактировать', 'show' => (($photo['user'] == user('login')) && !isAdmin())],
-        ['url' => '/gallery/'.$photo['id'].'/delete?token='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == user('login')) && !isAdmin())],
+        ['url' => '/gallery/'.$photo['id'].'/edit', 'label' => 'Редактировать', 'show' => (($photo['user'] == getUser('login')) && !isAdmin())],
+        ['url' => '/gallery/'.$photo['id'].'/delete?token='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo['user'] == getUser('login')) && !isAdmin())],
     ];
     ?>
 
@@ -34,11 +34,11 @@
         @endif
 
         <div class="js-rating">Рейтинг:
-            @unless (user('id') == $photo['user_id'])
+            @unless (getUser('id') == $photo['user_id'])
                 <a class="post-rating-down<?= $photo->vote == -1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="{{ App\Models\Photo::class }}" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
             @endunless
             <span>{!! formatNum($photo['rating']) !!}</span>
-            @unless (user('id') == $photo['user_id'])
+            @unless (getUser('id') == $photo['user_id'])
                 <a class="post-rating-up<?= $photo->vote == 1 ? ' active' : '' ?>" href="#" onclick="return changeRating(this);" data-id="{{ $photo['id'] }}" data-type="{{ App\Models\Photo::class }}" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
             @endunless
         </div>

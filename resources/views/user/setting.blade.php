@@ -23,7 +23,7 @@
                 <option value="0">Автоматически</option>
 
                 @foreach ($setting['themes'] as $theme)
-                    <?php $selected = (user('themes') == basename($theme)) ? ' selected="selected"' : ''; ?>
+                    <?php $selected = (getUser('themes') == basename($theme)) ? ' selected="selected"' : ''; ?>
                     echo '<option value="{{ basename($theme) }}"{{ $selected }}>{{ basename($theme) }}</option>
                 @endforeach
             </select>
@@ -32,7 +32,7 @@
             Язык:<br>
             <select name="lang">
                 @foreach ($setting['languages'] as $lang) {
-                    <?php $selected = (user('lang') == basename($lang)) ? ' selected="selected"' : ''; ?>
+                    <?php $selected = (getUser('lang') == basename($lang)) ? ' selected="selected"' : ''; ?>
                     <option value="{{ basename($lang) }}"{{ $selected }}>{{ $setting['langShort'][basename($lang)] }}</option>
                 @endforeach
             </select><br>
@@ -40,19 +40,19 @@
             Временной сдвиг:<br>
             <select name="timezone">';
                 @foreach($setting['timezones'] as $timezone)
-                    <?php $selected = (user('timezone') == $timezone) ? ' selected="selected"' : ''; ?>
+                    <?php $selected = (getUser('timezone') == $timezone) ? ' selected="selected"' : ''; ?>
                     <option value="{{ $timezone }}"{{ $selected }}>{{ $timezone }}</option>
                 @endforeach
             </select> - {{ dateFixed(SITETIME, 'H:i') }}<br>
 
-            <?php $checked = (user('notify') == 1) ? ' checked="checked"' : ''; ?>
+            <?php $checked = (getUser('notify') == 1) ? ' checked="checked"' : ''; ?>
             <div class="checkbox">
                 <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения">
                     <input name="notify" type="checkbox" value="1"{{ $checked }}> Получать уведомления об ответах
                 </label>
             </div>
 
-            <?php $checked = (! empty(user('subscribe'))) ? ' checked="checked"' : ''; ?>
+            <?php $checked = (! empty(getUser('subscribe'))) ? ' checked="checked"' : ''; ?>
             <div class="checkbox">
                 <label data-toggle="tooltip" title="Получение информационных писем с сайта на email">
                     <input name="subscribe" type="checkbox" value="1"{{ $checked }}> Получать информационные письма

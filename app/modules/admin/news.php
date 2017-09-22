@@ -220,7 +220,7 @@ case 'addnews':
 
     if ($validation->run()) {
 
-        DB::insert("INSERT INTO `news` (`title`, `text`, `user_id`, `created_at`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, user('id'), SITETIME, 0, $closed, $top]);
+        DB::insert("INSERT INTO `news` (`title`, `text`, `user_id`, `created_at`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, getUser('id'), SITETIME, 0, $closed, $top]);
 
         $lastid = DB::run() -> lastInsertId();
 

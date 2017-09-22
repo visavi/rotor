@@ -58,7 +58,7 @@ if (isAdmin([101, 102, 103])) {
 
             $uz = (isset($_GET['uz'])) ? check($_GET['uz']) : '';
 
-            if (user($uz)) {
+            if (getUser($uz)) {
 
                 $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `transfers` WHERE `user`=?;", [$uz]);
                 $page = paginate(setting('listtransfers'), $total);

@@ -2,12 +2,12 @@
 view(setting('themes').'/index');
 
 if (empty($_GET['uz'])) {
-    $uz = check(user('login'));
+    $uz = check(getUser('login'));
 } else {
     $uz = check(strval($_GET['uz']));
 }
 
-if (isUser()) {
+if (getUser()) {
     //show_title('История банов '.$uz);
 
     $total = DB::run() -> querySingle("SELECT COUNT(*) FROM `banhist` WHERE `user`=?;", [$uz]);

@@ -11,8 +11,8 @@
 <?php
 
 $links = [
-    ['url' => '/gallery/album/'.user('login'), 'label' => 'Мои альбом', 'show' => isUser()],
-    ['url' => '/gallery/comments/'.user('login'), 'label' => 'Мои комментарии', 'show' => isUser()],
+    ['url' => '/gallery/album/'.getUser('login'), 'label' => 'Мои альбом', 'show' => getUser()],
+    ['url' => '/gallery/comments/'.getUser('login'), 'label' => 'Мои комментарии', 'show' => getUser()],
     ['url' => '/gallery/albums', 'label' => 'Все альбомы'],
     ['url' => '/gallery/comments', 'label' => 'Все комментарии'],
     ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => isAdmin()],

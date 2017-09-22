@@ -35,16 +35,16 @@ class Flood extends BaseModel
     {
         $period = setting('floodstime');
 
-        if (user('point') < 50) {
+        if (getUser('point') < 50) {
             $period = round(setting('floodstime') * 2);
         }
-        if (user('point') >= 500) {
+        if (getUser('point') >= 500) {
             $period = round(setting('floodstime') / 2);
         }
-        if (user('point') >= 1000) {
+        if (getUser('point') >= 1000) {
             $period = round(setting('floodstime') / 3);
         }
-        if (user('point') >= 5000) {
+        if (getUser('point') >= 5000) {
             $period = round(setting('floodstime') / 6);
         }
         if (isAdmin()) {
@@ -62,7 +62,7 @@ class Flood extends BaseModel
      */
     public static function isFlood($period = 0)
     {
-        $userId = user('id');
+        $userId = getUser('id');
         $period = $period ?: self::getPeriod();
 
         if (empty($period)) {

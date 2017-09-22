@@ -10,7 +10,7 @@
 
     @include('advert/_forum')
 
-    @if (isUser())
+    @if (getUser())
         Мои: <a href="/forum/active/themes">темы</a>, <a href="/forum/active/posts">сообщения</a>, <a href="/forum/bookmark">закладки</a> /
     @endif
 

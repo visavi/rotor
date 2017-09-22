@@ -17,8 +17,8 @@
     <a href="/forum/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a> /
     <a href="/topic/{{ $topic['id'] }}/print">Печать</a> / <a href="/topic/{{ $topic['id'] }}/rss">RSS-лента</a>
 
-    @if (isUser())
-        @if ($topic->user->id == user('id') && empty($topic['closed']) && user('point') >= setting('editforumpoint'))
+    @if (getUser())
+        @if ($topic->user->id == getUser('id') && empty($topic['closed']) && getUser('point') >= setting('editforumpoint'))
            / <a href="/topic/{{ $topic['id'] }}/close?token={{ $_SESSION['token'] }}">Закрыть</a>
            / <a href="/topic/{{ $topic['id'] }}/edit">Изменить</a>
         @endif
@@ -67,7 +67,7 @@
     @if ($vote['answers'])
         <h3>{{ $vote['title'] }}</h3>
 
-        @if (!isUser() || $vote['poll'] || $vote['closed'])
+        @if (!getUser() || $vote['poll'] || $vote['closed'])
             @foreach ($vote['voted'] as $key => $data)
                 <?php $proc = round(($data * 100) / $vote['sum'], 1); ?>
                 <?php $maxproc = round(($data * 100) / $vote['max']); ?>
@@ -100,7 +100,7 @@
             <div class="b" id="post_{{ $data['id'] }}">
 
                 <div class="float-right">
-                    @if (user('id') != $data['user_id'])
+                    @if (getUser('id') != $data['user_id'])
                         <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                         <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
@@ -108,7 +108,7 @@
                         <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Post::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                     @endif
 
-                    @if ((user('id') == $data['user_id'] && $data['created_at'] + 600 > SITETIME) || $topic['isModer'])
+                    @if ((getUser('id') == $data['user_id'] && $data['created_at'] + 600 > SITETIME) || $topic['isModer'])
                         <a href="/topic/{{ $topic['id'] }}/{{ $data['id'] }}/edit?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         @if ($topic['isModer'])
                             <input type="checkbox" name="del[]" value="{{ $data['id'] }}">
@@ -116,11 +116,11 @@
                     @endif
 
                     <div class="js-rating">
-                        @unless (user('id') == $data['user_id'])
+                        @unless (getUser('id') == $data['user_id'])
                             <a class="post-rating-down{{ $data->vote == -1 ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="{{ App\Models\Post::class }}" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                         @endunless
                         <span>{!! formatNum($data['rating']) !!}</span>
-                        @unless (user('id') == $data['user_id'])
+                        @unless (getUser('id') == $data['user_id'])
                             <a class="post-rating-up{{ $data->vote == 1 ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data['id'] }}" data-type="{{ App\Models\Post::class }}" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                         @endunless
                     </div>
@@ -174,7 +174,7 @@
 
     {{ pagination($page) }}
 
-    @if (isUser())
+    @if (getUser())
         @if (empty($topic['closed']))
             <div class="form">
                 <form action="/topic/{{ $topic['id'] }}/create" method="post" enctype="multipart/form-data">
@@ -186,7 +186,7 @@
                         {!! textError('msg') !!}
                     </div>
 
-                    @if (user('point') >= setting('forumloadpoints'))
+                    @if (getUser('point') >= setting('forumloadpoints'))
                         <div class="js-attach-form" style="display: none;">
 
                             <label class="btn btn-sm btn-secondary" for="inputFile">

@@ -78,7 +78,7 @@ if (isAdmin([101, 102])) {
                 if (preg_match('|^[0-9]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}\.[0-9,*]{1,3}$|', $ips)) {
                     $banip = DB::run() -> querySingle("SELECT `id` FROM `ban` WHERE `ip`=? LIMIT 1;", [$ips]);
                     if (empty($banip)) {
-                        DB::insert("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, user('login'), SITETIME]);
+                        DB::insert("INSERT INTO ban (`ip`, `user`, `time`) VALUES (?, ?, ?);", [$ips, getUser('login'), SITETIME]);
                         ipBan(true);
 
                         setFlash('success', 'IP успешно занесен в список!');

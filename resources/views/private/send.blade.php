@@ -13,7 +13,7 @@
         <i class="fa fa-envelope"></i> Сообщение для <b>{!! profile($user) !!}</b> {{ userVisit($user)  }}:<br>
         <i class="fa fa-history"></i> <a href="/private/history?user={{ $user->login  }}">История переписки</a><br>
 
-        @if (isIgnore(user(), $user))
+        @if (isIgnore(getUser(), $user))
             <b><span style="color:#ff0000">Внимание, данный пользователь находится в игнор-листе!</span></b><br>
         @endif
 
@@ -25,7 +25,7 @@
                 <label for="markItUp">Сообщение:</label>
                 <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
 
-                @if (user('point') < setting('privatprotect'))
+                @if (getUser('point') < setting('privatprotect'))
                     Проверочный код:<br>
                     <img src="/captcha" alt=""><br>
                     <input name="provkod" size="6" maxlength="6"><br>
@@ -63,7 +63,7 @@
                           required>{{ getInput('msg') }}</textarea>
 
 
-                @if (user('point') < setting('privatprotect'))
+                @if (getUser('point') < setting('privatprotect'))
                     Проверочный код:<br>
                     <img src="/captcha" alt=""><br>
                     <input name="provkod" size="6" maxlength="6"><br>

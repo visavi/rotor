@@ -21,7 +21,7 @@ Class AdminController extends BaseController
             ->delete();
 
         Admlog::query()->create([
-            'user_id'    => user('id'),
+            'user_id'    => getUser('id'),
             'request'    => server('REQUEST_URI'),
             'referer'    => server('HTTP_REFERER'),
             'ip'         => getClientIp(),

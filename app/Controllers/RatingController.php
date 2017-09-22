@@ -16,7 +16,7 @@ class RatingController extends BaseController
     {
         parent::__construct();
 
-        if (! isUser()) {
+        if (! getUser()) {
             abort(403, 'Для просмотра истории небходимо авторизоваться!');
         }
     }
@@ -70,7 +70,7 @@ class RatingController extends BaseController
         $validation = new Validation();
         $validation
             ->addRule('bool', Request::ajax(), 'Это не ajax запрос!')
-            ->addRule('bool', isAdmin(User::ADMIN_GROUP), 'Удалять рейтинг могут только администраторы')
+            ->addRule('bool', isAdmin(User::ADMIN), 'Удалять рейтинг могут только администраторы')
             ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
             ->addRule('not_empty', $id, ['Не выбрана запись для удаление!']);
 

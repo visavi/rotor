@@ -118,15 +118,15 @@ if (isAdmin([101, 102])) {
 
                 echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.userVisit($user['login']).'<br><br>';
 
-                if (user('login') == setting('nickname') || user('login') == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
-                    if ($user['login'] == user('login')) {
+                if (getUser('login') == setting('nickname') || getUser('login') == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                    if ($user['login'] == getUser('login')) {
                         echo '<b><span style="color:#ff0000">Внимание! Вы редактируете cобственный аккаунт!</span></b><br><br>';
                     }
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/admin/users?act=upgrade&amp;uz='.$user['login'].'&amp;uid='.$_SESSION['token'].'">';
 
-                    if (user('login') == setting('nickname')) {
+                    if (getUser('login') == setting('nickname')) {
                         $arr_access = [101, 102, 103, 105, 107];
 
                         echo 'Уровень доступа:<br>';
@@ -250,7 +250,7 @@ if (isAdmin([101, 102])) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
-                    if (user('login') == setting('nickname') || user('login') == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
+                    if (getUser('login') == setting('nickname') || getUser('login') == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
 
                         if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email) || empty($email)) {
                             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site) || empty($site)) {
@@ -258,7 +258,7 @@ if (isAdmin([101, 102])) {
                                     if (preg_match('#^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$#', $birthday) || empty($birthday)) {
                                         if ($gender == 1 || $gender == 2) {
                                             if (utfStrlen($info) <= 1000) {
-                                                if (user('login') == setting('nickname')) {
+                                                if (getUser('login') == setting('nickname')) {
                                                     $access = $level;
                                                 } else {
                                                     $access = $user['level'];
@@ -372,7 +372,7 @@ if (isAdmin([101, 102])) {
                         if (!empty($mailblack)) {
                             $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $user['email']]);
                             if (empty($blackmail) && !empty($user['email'])) {
-                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], user('login'), SITETIME]);
+                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], getUser('login'), SITETIME]);
                             }
                         }
 
@@ -380,7 +380,7 @@ if (isAdmin([101, 102])) {
                         if (!empty($loginblack)) {
                             $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($user['login'])]);
                             if (empty($blacklogin)) {
-                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], user('login'), SITETIME]);
+                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], getUser('login'), SITETIME]);
                             }
                         }
 

@@ -9,7 +9,7 @@ Class BaseController
     public function __construct()
     {
         // Сайт закрыт для гостей
-        if (setting('closedsite') == 1 && ! isUser() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
+        if (setting('closedsite') == 1 && ! getUser() && ! Request::is('register', 'login', 'recovery', 'captcha')) {
             setFlash('danger', 'Для входа на сайт необходимо авторизоваться!');
             redirect('/login');
         }

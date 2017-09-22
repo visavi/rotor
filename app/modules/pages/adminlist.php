@@ -18,7 +18,7 @@ if ($total > 0) {
     ############################################################################################
     ##                                     Быстрая почта                                      ##
     ############################################################################################
-    if (isUser()) {
+    if (getUser()) {
         echo '<big><b>Быстрая почта</b></big><br><br>';
 
         echo '<div class="form">';
@@ -33,7 +33,7 @@ if ($total > 0) {
         echo 'Сообщение:<br>';
         echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
 
-        if (user('point') < setting('privatprotect')) {
+        if (getUser('point') < setting('privatprotect')) {
             echo 'Проверочный код:<br> ';
             echo '<img src="/captcha" alt=""><br>';
             echo '<input name="provkod" size="6" maxlength="6"><br>';

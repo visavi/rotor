@@ -9,7 +9,7 @@
     <h1>Приватные сообщения</h1>
 
     @if ($newprivat > 0)
-        <div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: {{ user('newprivat') }}</span></b></div>
+        <div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: {{ getUser('newprivat') }}</span></b></div>
     @endif
 
     @if ($page['total'] >= (setting('limitmail') - (setting('limitmail') / 10)) && $page['total'] < setting('limitmail'))

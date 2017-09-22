@@ -74,7 +74,7 @@ function dateFixed($timestamp, $format = "d.m.y / H:i")
         $timestamp = SITETIME;
     }
 
-    $shift = user('timezone') * 3600;
+    $shift = getUser('timezone') * 3600;
     $dateStamp = date($format, $timestamp + $shift);
 
     $today = date("d.m.y", SITETIME + $shift);
@@ -617,10 +617,10 @@ function statsCounter()
  */
 function showCounter()
 {
-    if (isUser()) {
+    if (getUser()) {
         //$visitPage =  setting('newtitle') ?? null;
 
-        $visit = Visit::query()->firstOrNew(['user_id' => user('id')]);
+        $visit = Visit::query()->firstOrNew(['user_id' => getUser('id')]);
 
         $visit->fill([
             'self'       => server('PHP_SELF'),
@@ -1072,22 +1072,18 @@ function lastNews()
  *
  * @return mixed
  */
-function isUser()
+function checkAuth()
 {
-    static $user = null;
+    if (isset($_SESSION['id']) && isset($_SESSION['password'])) {
 
-    if (! $user) {
-        if (isset($_SESSION['id']) && isset($_SESSION['password'])) {
+        $user = User::query()->find($_SESSION['id']);
 
-            $data = User::query()->find($_SESSION['id']);
-
-            if ($data && $_SESSION['password'] == md5(env('APP_KEY').$data['password'])) {
-                $user = $data;
-            }
+        if ($user && $_SESSION['password'] == md5(env('APP_KEY').$user['password'])) {
+            return $user;
         }
     }
 
-    return $user;
+    return false;
 }
 
 /**
@@ -1112,10 +1108,10 @@ function access($level)
     $access = array_flip(User::GROUPS);
 
     if (
-        user()
+        getUser()
         && isset($access[$level])
-        && isset($access[user('level')])
-        && $access[user('level')] <= $access[$level]
+        && isset($access[getUser('level')])
+        && $access[getUser('level')] <= $access[$level]
     ) {
         return true;
     }
@@ -1799,7 +1795,7 @@ function abort($code, $message = null)
             'code'       => $code,
             'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
             'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
-            'user_id'    => user('id'),
+            'user_id'    => getUser('id'),
             'ip'         => getClientIp(),
             'brow'       => getUserAgent(),
             'created_at' => SITETIME,
@@ -2169,7 +2165,7 @@ function getUserById($id)
  * @param  string $key ключ массива
  * @return string      данные
  */
-function user($key = null)
+function getUser($key = null)
 {
     if (Registry::has('user')) {
         if (empty($key)) {

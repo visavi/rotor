@@ -83,12 +83,12 @@ addRule('numeric', $count, 'Слишком больше или маленько�
 
 <h3 id="validateMax">validateMax</h3>
 <pre class="prettyprint linenums">
-addRule('max', array(user('point'), 50), 'У вас недостаточно актива!')
+addRule('max', array(getUser('point'), 50), 'У вас недостаточно актива!')
 </pre>
 
 <h3 id="validateMin">validateMin</h3>
 <pre class="prettyprint linenums">
-addRule('min', array(user('timenickname'), SITETIME), 'Изменять ник можно не чаще чем 1 раз в сутки!')
+addRule('min', array(getUser('timenickname'), SITETIME), 'Изменять ник можно не чаще чем 1 раз в сутки!')
 </pre>
 
 <h3 id="validateEqual">validateEqual</h3>

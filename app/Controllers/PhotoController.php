@@ -38,7 +38,7 @@ class PhotoController extends BaseController
             ->leftJoin('pollings', function ($join) {
                 $join->on('photo.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Photo::class)
-                    ->where('pollings.user_id', user('id'));
+                    ->where('pollings.user_id', getUser('id'));
             })
             ->with('user')
             ->first();
@@ -55,7 +55,7 @@ class PhotoController extends BaseController
      */
     public function create()
     {
-        if (!isUser()) {
+        if (!getUser()) {
             abort(403, 'Для добавления фотографий небходимо авторизоваться!');
         }
 
@@ -88,7 +88,7 @@ class PhotoController extends BaseController
                 $handle->process(HOME . '/uploads/pictures/');
                 if ($handle->processed) {
                     $photo = new Photo();
-                    $photo->user_id = user('id');
+                    $photo->user_id = getUser('id');
                     $photo->title = $title;
                     $photo->text = antimat($text);
                     $photo->link = $handle->file_dst_name;
@@ -117,11 +117,11 @@ class PhotoController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!isUser()) {
+        if (!getUser()) {
             abort(403, 'Авторизуйтесь для редактирования фотографии!');
         }
 
-        $photo = Photo::where('user_id', user('id'))->find($gid);
+        $photo = Photo::where('user_id', getUser('id'))->find($gid);
 
         if (!$photo) {
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
@@ -148,7 +148,7 @@ class PhotoController extends BaseController
                 ]);
 
                 setFlash('success', 'Фотография успешно отредактирована!');
-                redirect('/gallery/album/' . user('login') . '?page=' . $page);
+                redirect('/gallery/album/' . getUser('login') . '?page=' . $page);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validation->getErrors());
@@ -177,7 +177,7 @@ class PhotoController extends BaseController
 
             $validation = new Validation();
             $validation
-                ->addRule('bool', isUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->addRule('bool', getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                 ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
                 ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!'])
@@ -190,13 +190,13 @@ class PhotoController extends BaseController
                     'relate_type' => Photo::class,
                     'relate_id'   => $photo->id,
                     'text'        => $msg,
-                    'user_id'     => user('id'),
+                    'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
                     'ip'          => getClientIp(),
                     'brow'        => getUserAgent(),
                 ]);
 
-                $user = User::where('id', user('id'));
+                $user = User::where('id', getUser('id'));
                 $user->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
@@ -238,14 +238,14 @@ class PhotoController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!isUser()) {
+        if (!getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
         $comment = Comment::select('comments.*', 'photo.closed')
             ->where('relate_type', Photo::class)
             ->where('comments.id', $id)
-            ->where('comments.user_id', user('id'))
+            ->where('comments.user_id', getUser('id'))
             ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
             ->first();
 
@@ -297,11 +297,11 @@ class PhotoController extends BaseController
 
         $token = check(Request::input('token'));
 
-        if (!isUser()) {
+        if (!getUser()) {
             abort(403, 'Для удаления фотографий небходимо авторизоваться!');
         }
 
-        $photo = Photo::where('user_id', user('id'))->find($gid);
+        $photo = Photo::where('user_id', getUser('id'))->find($gid);
 
         if (!$photo) {
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
@@ -328,7 +328,7 @@ class PhotoController extends BaseController
             setFlash('danger', $validation->getErrors());
         }
 
-        redirect('/gallery/album/' . user('login') . '?page=' . $page);
+        redirect('/gallery/album/' . getUser('login') . '?page=' . $page);
     }
 
 
@@ -396,7 +396,7 @@ class PhotoController extends BaseController
             ->with('user')
             ->get();
 
-        $moder = (user('id') == $user->id) ? 1 : 0;
+        $moder = (getUser('id') == $user->id) ? 1 : 0;
 
         return view('gallery/user_albums', compact('photos', 'moder', 'page', 'user'));
     }

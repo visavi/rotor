@@ -9,7 +9,7 @@ if (isset($_GET['act'])) {
 
 //show_title('Исправительная');
 
-if (isUser()) {
+if (getUser()) {
     switch ($action):
     ############################################################################################
     ##                                    Главная страница                                    ##
@@ -21,19 +21,19 @@ if (isUser()) {
             echo 'Снять нарушение можно раз в месяц при условии, что с вашего последнего бана вы не нарушали правил и были добросовестным участником сайта<br>';
             echo 'Также вы должны будете выплатить банку штраф в размере '.plural(100000, setting('moneyname')).'<br>';
             echo 'Если с момента вашего последнего бана прошло менее месяца или у вас нет на руках суммы для штрафа, тогда строгое нарушение снять не удастся<br><br>';
-            echo 'Общее число строгих нарушений: <b>'.user('totalban').'</b><br>';
+            echo 'Общее число строгих нарушений: <b>'.getUser('totalban').'</b><br>';
 
-            $daytime = round(((SITETIME - user('timelastban')) / 3600) / 24);
+            $daytime = round(((SITETIME - getUser('timelastban')) / 3600) / 24);
 
-            if (user('timelastban') > 0 && user('totalban') > 0) {
+            if (getUser('timelastban') > 0 && getUser('totalban') > 0) {
                 echo 'Суток прошедших с момента последнего нарушения: <b>'.$daytime.'</b><br>';
             } else {
                 echo 'Дата последнего нарушения не указана<br>';
             }
 
-            echo 'Денег на руках: <b>'.plural(user('money'), setting('moneyname')).'</b><br><br>';
+            echo 'Денег на руках: <b>'.plural(getUser('money'), setting('moneyname')).'</b><br><br>';
 
-            if (user('totalban') > 0 && $daytime >= 30 && user('money') >= 100000) {
+            if (getUser('totalban') > 0 && $daytime >= 30 && getUser('money') >= 100000) {
                 echo '<i class="fa fa-check"></i> <b><a href="/razban?act=go">Снять нарушение</a></b><br>';
                 echo 'У вас имеется возможность снять нарушение<br><br>';
             } else {
@@ -47,9 +47,9 @@ if (isUser()) {
         ############################################################################################
         case "go":
 
-            $daytime = round(((SITETIME - user('timelastban')) / 3600) / 24);
-            if (user('totalban') > 0 && $daytime >= 30 && user('money') >= 100000) {
-                DB::update("UPDATE users SET timelastban=?, totalban=totalban-1, money=money-? WHERE login=?", [SITETIME, 100000, user('login')]);
+            $daytime = round(((SITETIME - getUser('timelastban')) / 3600) / 24);
+            if (getUser('totalban') > 0 && $daytime >= 30 && getUser('money') >= 100000) {
+                DB::update("UPDATE users SET timelastban=?, totalban=totalban-1, money=money-? WHERE login=?", [SITETIME, 100000, getUser('login')]);
 
                 echo 'Нарушение успешно списано, с вашего счета списано <b>'.plural(100000, setting('moneyname')).'</b><br>';
                 echo 'Следующее нарушение вы сможете снять не ранее чем через 30 суток<br><br>';

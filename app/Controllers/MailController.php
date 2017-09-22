@@ -20,9 +20,9 @@ class MailController extends BaseController
             $email   = check(Request::input('email'));
             $protect = check(Request::input('protect'));
 
-            if (isUser()) {
-                $name = user('login');
-                $email = user('email');
+            if (getUser()) {
+                $name = getUser('login');
+                $email = getUser('email');
             }
 
             $validation = new Validation();
@@ -56,7 +56,7 @@ class MailController extends BaseController
      */
     public function recovery()
     {
-        if (isUser()) {
+        if (getUser()) {
             abort('default', 'Вы авторизованы, восстановление пароля невозможно!');
         }
 
@@ -107,7 +107,7 @@ class MailController extends BaseController
      */
     public function restore()
     {
-        if (isUser()) {
+        if (getUser()) {
             abort('default', 'Вы авторизованы, восстановление пароля невозможно!');
         }
 

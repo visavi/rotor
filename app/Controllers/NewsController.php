@@ -26,7 +26,7 @@ class NewsController extends BaseController
             ->with('user')
             ->get();
 
-        $isModer = isAdmin(User::MODER_GROUP);
+        $isModer = isAdmin(User::MODER);
 
         return view('news/index', compact('news', 'page', 'isModer'));
     }
@@ -73,7 +73,7 @@ class NewsController extends BaseController
 
             $validation = new Validation();
 
-            $validation->addRule('bool', isUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
+            $validation->addRule('bool', getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                 ->addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
                 ->addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
@@ -86,13 +86,13 @@ class NewsController extends BaseController
                     'relate_type' => News::class,
                     'relate_id'   => $news->id,
                     'text'        => $msg,
-                    'user_id'     => user('id'),
+                    'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
                     'ip'          => getClientIp(),
                     'brow'        => getUserAgent(),
                 ]);
 
-                $user = User::where('id', user('id'));
+                $user = User::where('id', getUser('id'));
                 $user->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
@@ -141,13 +141,13 @@ class NewsController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!isUser()) {
+        if (!getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
         $comment = Comment::where('relate_type', News::class)
             ->where('comments.id', $id)
-            ->where('comments.user_id', user('id'))
+            ->where('comments.user_id', getUser('id'))
             ->first();
 
         if (! $comment) {

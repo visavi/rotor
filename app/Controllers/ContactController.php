@@ -16,7 +16,7 @@ class ContactController extends BaseController
     {
         parent::__construct();
 
-        if (! isUser()) {
+        if (! getUser()) {
             abort(403, 'Для просмотра контактов необходимо авторизоваться!');
         }
     }
@@ -38,25 +38,25 @@ class ContactController extends BaseController
             $validation->addRule('not_empty', $user, 'Данного пользователя не существует!');
 
             if ($user) {
-                $validation->addRule('not_equal', [$user->login, user('login')], 'Запрещено добавлять свой логин!');
+                $validation->addRule('not_equal', [$user->login, getUser('login')], 'Запрещено добавлять свой логин!');
 
-                $totalContact = Contact::query()->where('user_id', user('id'))->count();
+                $totalContact = Contact::query()->where('user_id', getUser('id'))->count();
                 $validation->addRule('min', [$totalContact, setting('limitcontact')], 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
 
-                $validation->addRule('custom', ! isContact(user(), $user), 'Данный пользователь уже есть в контакт-листе!');
+                $validation->addRule('custom', ! isContact(getUser(), $user), 'Данный пользователь уже есть в контакт-листе!');
             }
 
             if ($validation->run()) {
 
                 Contact::query()->create([
-                    'user_id'    => user('id'),
+                    'user_id'    => getUser('id'),
                     'contact_id' => $user->id,
                     'created_at' => SITETIME,
                 ]);
 
-                if (! isIgnore($user, user())) {
-                    $message = 'Пользователь [b]'.user('login').'[/b] добавил вас в свой контакт-лист!';
-                    sendPrivate($user->id, user('id'), $message);
+                if (! isIgnore($user, getUser())) {
+                    $message = 'Пользователь [b]'.getUser('login').'[/b] добавил вас в свой контакт-лист!';
+                    sendPrivate($user->id, getUser('id'), $message);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');
@@ -68,11 +68,11 @@ class ContactController extends BaseController
             }
         }
 
-        $total = Contact::query()->where('user_id', user('id'))->count();
+        $total = Contact::query()->where('user_id', getUser('id'))->count();
         $page = paginate(setting('contactlist'), $total);
 
         $contacts = Contact::query()
-            ->where('user_id', user('id'))
+            ->where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
@@ -88,7 +88,7 @@ class ContactController extends BaseController
     public function note($id)
     {
         $contact = Contact::query()
-            ->where('user_id', user('id'))
+            ->where('user_id', getUser('id'))
             ->where('id', $id)
             ->first();
 
@@ -138,7 +138,7 @@ class ContactController extends BaseController
         if ($validation->run()) {
 
             Contact::query()
-                ->where('user_id', user('id'))
+                ->where('user_id', getUser('id'))
                 ->whereIn('id', $del)
                 ->delete();
 

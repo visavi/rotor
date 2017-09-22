@@ -64,7 +64,7 @@
             {{ showError('Комментариев еще нет!') }}
         @endif
 
-        @if (isUser())
+        @if (getUser())
             <div class="form">
                 <form action="/news/{{ $news->id }}/comments?read=1" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">

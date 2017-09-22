@@ -1,5 +1,5 @@
-@if (isUser())
-    <i class="fa fa-user-circle fa-lg"></i> {!! profile(user()) !!} &bull;
+@if (getUser())
+    <i class="fa fa-user-circle fa-lg"></i> {!! profile(getUser()) !!} &bull;
 
     @if (isAdmin())
         <a href="/admin">Панель</a> &bull;
@@ -7,7 +7,7 @@
             <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a> &bull;
         @endif
 
-        @if (user('newchat') < statsNewChat())
+        @if (getUser('newchat') < statsNewChat())
             <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a> &bull;
         @endif
     @endif

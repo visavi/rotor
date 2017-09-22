@@ -21,7 +21,7 @@ class PageController extends BaseController
             abort(404);
         }
 
-        if (! isUser() && $action == 'menu'){
+        if (! getUser() && $action == 'menu'){
             abort(404);
         }
 

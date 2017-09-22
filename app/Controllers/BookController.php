@@ -43,21 +43,21 @@ class BookController extends BaseController
             ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
         /* Проерка для гостей */
-        if (!isUser() && setting('bookadds')) {
+        if (!getUser() && setting('bookadds')) {
             $protect = check(strtolower(Request::input('protect')));
             $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
         } else {
-            $validation->addRule('bool', isUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
+            $validation->addRule('bool', getUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
         }
 
         if ($validation->run()) {
 
             $msg = antimat($msg);
 
-            if (isUser()) {
+            if (getUser()) {
                 $bookscores = (setting('bookscores')) ? 1 : 0;
 
-                $user = User::query()->where('id', user('id'));
+                $user = User::query()->where('id', getUser('id'));
                 $user->update([
                     'allguest' => DB::raw('allguest + 1'),
                     'point'    => DB::raw('point + ' . $bookscores),
@@ -65,7 +65,7 @@ class BookController extends BaseController
                 ]);
             }
 
-            $username = isUser() ? user('id') : 0;
+            $username = getUser() ? getUser('id') : 0;
 
             Guest::query()->create([
                 'user_id'    => $username,
@@ -89,11 +89,11 @@ class BookController extends BaseController
      */
     public function edit($id)
     {
-        if (! isUser()) {
+        if (! getUser()) {
             abort(403);
         }
 
-        $post = Guest::query()->where('user_id', user('id'))->find($id);
+        $post = Guest::query()->where('user_id', getUser('id'))->find($id);
 
         if (! $post) {
             abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
@@ -117,7 +117,7 @@ class BookController extends BaseController
                 $msg = antimat($msg);
 
                 $post->text = $msg;
-                $post->edit_user_id = user('id');
+                $post->edit_user_id = getUser('id');
                 $post->updated_at = SITETIME;
                 $post->save();
 

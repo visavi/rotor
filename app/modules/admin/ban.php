@@ -193,9 +193,9 @@ if (isAdmin([101, 102, 103])) {
                                     if (utfStrlen($reasonban) >= 5 && utfStrlen($reasonban) <= 1000) {
                                         if (utfStrlen($note) <= 1000) {
 
-                                            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `reasonban`=?, `loginsendban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), $reasonban, user('login'), $uz]);
+                                            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `reasonban`=?, `loginsendban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), $reasonban, getUser('login'), $uz]);
 
-                                            DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, user('login'), 2, $reasonban, $bantotaltime * 60, SITETIME]);
+                                            DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUser('login'), 2, $reasonban, $bantotaltime * 60, SITETIME]);
 
                                             setFlash('success', 'Данные успешно изменены!');
                                             redirect("/admin/ban?act=edit&uz=$uz");
@@ -265,16 +265,16 @@ if (isAdmin([101, 102, 103])) {
                                                 $bancount = 0;
                                             }
 
-                                            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `timelastban`=?, `reasonban`=?, `loginsendban`=?, `totalban`=`totalban`+?, `explainban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, user('login'), $bancount, 1, $uz]);
+                                            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `timelastban`=?, `reasonban`=?, `loginsendban`=?, `totalban`=`totalban`+?, `explainban`=? WHERE `login`=? LIMIT 1;", [1, SITETIME + ($bantotaltime * 60), SITETIME, $reasonban, getUser('login'), $bancount, 1, $uz]);
 
-                                            DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, user('login'), 1, $reasonban, $bantotaltime * 60, SITETIME]);
+                                            DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUser('login'), 1, $reasonban, $bantotaltime * 60, SITETIME]);
 
                                             $note = Note::where('user', $uz)->find_one();
 
                                             $record = [
                                                 'user' => $uz,
                                                 'text' => $notice,
-                                                'edit' => user('login'),
+                                                'edit' => getUser('login'),
                                                 'time' => SITETIME,
                                             ];
 
@@ -330,7 +330,7 @@ if (isAdmin([101, 102, 103])) {
 
                         DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `totalban`=`totalban`-?, `explainban`=? WHERE `login`=? LIMIT 1;", [0, 0, $bancount, 0, $uz]);
 
-                        DB::insert("INSERT INTO `banhist` (`user`, `send`, `time`) VALUES (?, ?, ?);", [$uz, user('login'), SITETIME]);
+                        DB::insert("INSERT INTO `banhist` (`user`, `send`, `time`) VALUES (?, ?, ?);", [$uz, getUser('login'), SITETIME]);
 
                         setFlash('success', 'Аккаунт успешно разблокирован!');
                         redirect("/admin/ban?act=edit&uz=$uz");
@@ -363,12 +363,12 @@ if (isAdmin([101, 102, 103])) {
 
                             $blackmail = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [1, $user['email']]);
                             if (empty($blackmail) && !empty($user['email'])) {
-                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], user('login'), SITETIME]);
+                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [1, $user['email'], getUser('login'), SITETIME]);
                             }
 
                             $blacklogin = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [2, strtolower($user['login'])]);
                             if (empty($blacklogin)) {
-                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], user('login'), SITETIME]);
+                                DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [2, $user['login'], getUser('login'), SITETIME]);
                             }
 
                             deleteAlbum($uz);

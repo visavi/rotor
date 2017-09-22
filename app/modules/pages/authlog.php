@@ -9,16 +9,16 @@ if (isset($_GET['act'])) {
 
 //show_title('История моих авторизаций');
 
-if (isUser()) {
+if (getUser()) {
     ############################################################################################
     ##                                   История авторизаций                                  ##
     ############################################################################################
-    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [user('login')]);
+    $total = DB::run() -> querySingle("SELECT count(*) FROM `login` WHERE `user`=?;", [getUser('login')]);
     $page = paginate(setting('loginauthlist'), $total);
 
     if ($total > 0) {
 
-        $querylogin = DB::select("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loginauthlist').";", [user('login')]);
+        $querylogin = DB::select("SELECT * FROM `login` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('loginauthlist').";", [getUser('login')]);
         while ($data = $querylogin -> fetch()) {
             echo '<div class="b">';
             echo' <i class="fa fa-clock-o"></i>  ';

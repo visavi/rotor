@@ -60,7 +60,7 @@ if (setting('doslimit')) {
             }
         }
         // ------------------------------ Запись логов -------------------------------//
-        $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getUserAgent().'|'.user('login').'|';
+        $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getUserAgent().'|'.getUser('login').'|';
         writeFiles(STORAGE.'/antidos/'.getClientIp().'.dat', $write."\r\n", 0, 0666);
         // ----------------------- Автоматическая блокировка ------------------------//
         if (counterString(STORAGE.'/antidos/'.getClientIp().'.dat') > setting('doslimit')) {
@@ -75,7 +75,7 @@ if (setting('doslimit')) {
                         'code'       => 666,
                         'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
                         'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
-                        'user_id'    => user('id'),
+                        'user_id'    => getUser('id'),
                         'ip'         => getClientIp(),
                         'brow'       => getUserAgent(),
                         'created_at' => SITETIME,
@@ -150,29 +150,29 @@ if (empty($_SESSION['protect'])) {
 /**
  * Операции с пользователями
  */
-if ($user = isUser()) {
+if ($user = checkAuth()) {
 
     Registry::set('user', $user);
 
-    $setting['themes'] = user('themes');
+    $setting['themes'] = getUser('themes');
 
     // Забанен
-    if (user('ban')) {
+    if (getUser('ban')) {
         if (! Request::is('ban', 'rules', 'logout')) {
-            redirect('/ban?log='.user('login'));
+            redirect('/ban?log='.getUser('login'));
         }
     }
 
     // Подтверждение регистрации
-    if (setting('regkeys') > 0 && user('confirmreg') > 0 && empty(user('ban'))) {
+    if (setting('regkeys') > 0 && getUser('confirmreg') > 0 && empty(getUser('ban'))) {
         if (! Request::is('key', 'login', 'logout')) {
-            redirect('/key?log='.user('login'));
+            redirect('/key?log='.getUser('login'));
         }
     }
 
     // ---------------------- Получение ежедневного бонуса -----------------------//
-    if (user('timebonus') < SITETIME - 82800) {
-        $user = User::where('id', user('id'));
+    if (getUser('timebonus') < SITETIME - 82800) {
+        $user = User::where('id', getUser('id'));
         $user->update([
             'timebonus' => SITETIME,
             'money' => DB::raw('money + '.setting('bonusmoney')),
@@ -187,7 +187,7 @@ if ($user = isUser()) {
  */
 $browser_detect = new Mobile_Detect();
 
-if (! isUser() || empty($setting['themes'])) {
+if (! getUser() || empty($setting['themes'])) {
     if (! empty(setting('touchthemes'))) {
         if ($browser_detect->isTablet()) {
             $setting['themes'] = setting('touchthemes');

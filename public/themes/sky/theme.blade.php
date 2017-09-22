@@ -77,7 +77,7 @@ header("Content-type:text/html; charset=utf-8");
                            </ul>
                         </li>
 
-                        @if (!isUser())
+                        @if (!getUser())
                         <li><a href="/register" ><span class="l"></span><span class="r"></span><span class="t">Регистрация</span></a></li>
                          #else
                           <li><a href="/logout" onclick="return confirm('Вы действительно хотите выйти?')"><span class="l"></span><span class="r"></span><span class="t">Выход</span></a></li>
@@ -101,7 +101,7 @@ header("Content-type:text/html; charset=utf-8");
                                     <div class="art-BlockContent-body">
                                         <div>
 
-                    @if (isUser())
+                    @if (getUser())
 
                         @if (isAdmin())
                             <div class="nmenu">
@@ -111,7 +111,7 @@ header("Content-type:text/html; charset=utf-8");
                                     &bull; <a href="/admin/spam"><span style="color:#ff0000">Спам!</span></a>
                                 @endif
 
-                                @if (user('newchat')<statsNewChat())
+                                @if (getUser('newchat')<statsNewChat())
                                     &bull; <a href="/admin/chat"><span style="color:#ff0000">Чат</span></a>
                                 @endif
                             </div>

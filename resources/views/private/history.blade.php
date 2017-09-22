@@ -38,7 +38,7 @@
             <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
 
 
-            @if (user('point') < setting('privatprotect'))
+            @if (getUser('point') < setting('privatprotect'))
                 Проверочный код:<br>
                 <img src="/captcha" alt=""><br>
                 <input name="provkod" size="6" maxlength="6"><br>

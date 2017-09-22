@@ -66,7 +66,7 @@ if (isAdmin([101])) {
                             $arrusers = $query->fetchAll(PDO::FETCH_COLUMN);
                         }
 
-                        $arrusers = array_diff($arrusers, [user('login')]);
+                        $arrusers = array_diff($arrusers, [getUser('login')]);
                         $total = count($arrusers);
 
                         // Рассылка сообщений с подготовкой запросов
@@ -77,7 +77,7 @@ if (isAdmin([101])) {
 
                             foreach ($arrusers as $uzval){
                                 $updateusers -> execute($uzval);
-                                $insertprivat -> execute($uzval, user('login'), $msg, SITETIME);
+                                $insertprivat -> execute($uzval, getUser('login'), $msg, SITETIME);
                             }
 
                             setFlash('success', 'Сообщение успешно разослано! (Отправлено: '.$total.')');

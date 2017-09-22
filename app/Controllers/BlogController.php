@@ -72,7 +72,7 @@ class BlogController extends BaseController
             ->leftJoin('pollings', function ($join) {
                 $join->on('blogs.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Blog::class)
-                    ->where('pollings.user_id', user('id'));
+                    ->where('pollings.user_id', getUser('id'));
             })
             ->first();
 
@@ -133,7 +133,7 @@ class BlogController extends BaseController
      */
     public function edit($id)
     {
-        if (! isUser()) {
+        if (! getUser()) {
             abort(403, 'Для редактирования статьи необходимо авторизоваться');
         }
 
@@ -143,7 +143,7 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        if ($blog->user_id != user('id')) {
+        if ($blog->user_id != getUser('id')) {
             abort('default', 'Изменение невозможно, вы не автор данной статьи!');
         }
 
@@ -229,7 +229,7 @@ class BlogController extends BaseController
     {
         $cid = abs(intval(Request::input('cid')));
 
-        if (! isUser()) {
+        if (! getUser()) {
             abort(403, 'Для публикации новой статьи необходимо авторизоваться');
         }
 
@@ -266,7 +266,7 @@ class BlogController extends BaseController
 
                 $article = Blog::query()->create([
                     'category_id' => $cid,
-                    'user_id'     => user('id'),
+                    'user_id'     => getUser('id'),
                     'title'       => $title,
                     'text'        => $text,
                     'tags'        => $tags,
@@ -275,7 +275,7 @@ class BlogController extends BaseController
 
                 $category->increment('count');
 
-                $user = User::query()->where('id', user('id'));
+                $user = User::query()->where('id', getUser('id'));
                 $user->update([
                     'point' => DB::raw('point + 5'),
                     'money' => DB::raw('money + 100'),
@@ -309,7 +309,7 @@ class BlogController extends BaseController
 
             $validation = new Validation();
             $validation
-                ->addRule('bool', isUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->addRule('bool', getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
                 ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
                 ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
@@ -321,13 +321,13 @@ class BlogController extends BaseController
                     'relate_type' => Blog::class,
                     'relate_id'   => $blog->id,
                     'text'        => $msg,
-                    'user_id'     => user('id'),
+                    'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
                     'ip'          => getClientIp(),
                     'brow'        => getUserAgent(),
                 ]);
 
-                $user = User::query()->where('id', user('id'));
+                $user = User::query()->where('id', getUser('id'));
                 $user->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
@@ -371,14 +371,14 @@ class BlogController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!isUser()) {
+        if (!getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
         $comment = Comment::query()
             ->where('relate_type', Blog::class)
             ->where('id', $cid)
-            ->where('user_id', user('id'))
+            ->where('user_id', getUser('id'))
             ->first();
 
         if (!$comment) {
@@ -614,7 +614,7 @@ class BlogController extends BaseController
      */
     public function userArticles()
     {
-        $login = check(Request::input('user', user('login')));
+        $login = check(Request::input('user', getUser('login')));
 
         $user = User::query()->where('login', $login)->first();
 
@@ -639,7 +639,7 @@ class BlogController extends BaseController
      */
     public function userComments()
     {
-        $login = check(Request::input('user', user('login')));
+        $login = check(Request::input('user', getUser('login')));
 
         $user = User::query()->where('login', $login)->first();
 
@@ -727,7 +727,7 @@ class BlogController extends BaseController
         $type    = abs(intval(Request::input('type')));
         $where   = abs(intval(Request::input('where')));
 
-        if (! isUser()) {
+        if (! getUser()) {
             abort('default', 'Чтобы использовать поиск, необходимо авторизоваться');
         }
 

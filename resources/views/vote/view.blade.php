@@ -12,7 +12,7 @@
         Тема: <a href="/topic/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br><br>
     @endif
 
-    @if ((isUser() && empty($vote['poll'])) && empty($show))
+    @if ((getUser() && empty($vote['poll'])) && empty($show))
         <form action="/votes/{{ $vote->id }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 

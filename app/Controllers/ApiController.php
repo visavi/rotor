@@ -21,7 +21,7 @@ class ApiController extends BaseController
     /**
      * Api пользователей
      */
-    public function user()
+    public function getUser()
     {
         header('Content-type: application/json');
         header('Content-Disposition: inline; filename="user.json";');

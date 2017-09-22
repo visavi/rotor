@@ -21,7 +21,7 @@ class PrivateController extends BaseController
     {
         parent::__construct();
 
-        if (! isUser()) {
+        if (! getUser()) {
             abort(403, 'Для просмотра писем необходимо авторизоваться!');
         }
     }
@@ -31,22 +31,22 @@ class PrivateController extends BaseController
      */
     public function index()
     {
-        $total = Inbox::where('user_id', user('id'))->count();
+        $total = Inbox::where('user_id', getUser('id'))->count();
         $page  = paginate(setting('privatpost'), $total);
 
-        $page['totalOutbox'] = Outbox::where('user_id', user('id'))->count();
+        $page['totalOutbox'] = Outbox::where('user_id', getUser('id'))->count();
 
-        $messages = Inbox::where('user_id', user('id'))
+        $messages = Inbox::where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->with('author')
             ->get();
 
-        $newprivat = user('newprivat');
+        $newprivat = getUser('newprivat');
 
         if ($newprivat) {
-            $user = User::find(user('id'));
+            $user = User::find(getUser('id'));
             $user->update([
                 'newprivat'      => 0,
                 'sendprivatmail' => 0,
@@ -61,17 +61,17 @@ class PrivateController extends BaseController
      */
     public function outbox()
     {
-        $total = Outbox::where('user_id', user('id'))->count();
+        $total = Outbox::where('user_id', getUser('id'))->count();
         $page = paginate(setting('privatpost'), $total);
 
-        $messages = Outbox::where('user_id', user('id'))
+        $messages = Outbox::where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->with('recipient')
             ->get();
 
-        $page['totalInbox'] = Inbox::where('user_id', user('id'))->count();
+        $page['totalInbox'] = Inbox::where('user_id', getUser('id'))->count();
 
         return view('private/outbox', compact('messages', 'page'));
     }
@@ -103,9 +103,9 @@ class PrivateController extends BaseController
 
             if ($user) {
 
-                $validation->addRule('not_equal', [$user->id, user('id')], ['user' => 'Нельзя отправлять письмо самому себе!']);
+                $validation->addRule('not_equal', [$user->id, getUser('id')], ['user' => 'Нельзя отправлять письмо самому себе!']);
 
-                if (user('point') < setting('privatprotect') && $provkod != $_SESSION['protect']) {
+                if (getUser('point') < setting('privatprotect') && $provkod != $_SESSION['protect']) {
                     $validation->addError(['provkod' => 'Проверочное число не совпало с данными на картинке!']);
                 }
 
@@ -115,7 +115,7 @@ class PrivateController extends BaseController
 
                 // Проверка на игнор
                 $ignoring = Ignore::where('user_id', $user->id)
-                    ->where('ignore_id', user('id'))
+                    ->where('ignore_id', getUser('id'))
                     ->first();
 
                 $validation->addRule('empty', $ignoring, ['user' => 'Вы внесены в игнор-лист получателя!']);
@@ -129,19 +129,19 @@ class PrivateController extends BaseController
 
                 Inbox::create([
                     'user_id'    => $user->id,
-                    'author_id'  => user('id'),
+                    'author_id'  => getUser('id'),
                     'text'       => $msg,
                     'created_at' => SITETIME,
                 ]);
 
                 Outbox::create([
-                    'user_id'       => user('id'),
+                    'user_id'       => getUser('id'),
                     'recipient_id'  => $user->id,
                     'text'          => $msg,
                     'created_at'    => SITETIME,
                 ]);
 
-                DB::delete("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [user('id'), user('id')]);
+                DB::delete("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [getUser('id'), getUser('id')]);
                 saveUserMail(60);
 
                 setFlash('success', 'Ваше письмо успешно отправлено!');
@@ -153,7 +153,7 @@ class PrivateController extends BaseController
             }
         }
 
-        $contacts = Contact::where('user_id', user('id'))
+        $contacts = Contact::where('user_id', getUser('id'))
             ->rightJoin('users', 'contact.contact_id', '=', 'users.id')
             ->orderBy('users.login')
             ->get();
@@ -178,11 +178,11 @@ class PrivateController extends BaseController
         if ($validation->run()) {
 
             if ($type == 'outbox') {
-                Outbox::where('user_id', user('id'))
+                Outbox::where('user_id', getUser('id'))
                     ->whereIn('id', $del)
                     ->delete();
             } else {
-                Inbox::where('user_id', user('id'))
+                Inbox::where('user_id', getUser('id'))
                     ->whereIn('id', $del)
                     ->delete();
                 saveUserMail(60);
@@ -208,14 +208,14 @@ class PrivateController extends BaseController
 
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('empty', user('newprivat'), 'У вас имеются непрочитанные сообщения!');
+            ->addRule('empty', getUser('newprivat'), 'У вас имеются непрочитанные сообщения!');
 
         if ($validation->run()) {
 
             if ($type == 'outbox') {
-                Outbox::where('user_id', user('id'))->delete();
+                Outbox::where('user_id', getUser('id'))->delete();
             } else {
-                Inbox::where('user_id', user('id'))->delete();
+                Inbox::where('user_id', getUser('id'))->delete();
                 saveUserMail(60);
             }
 
@@ -239,22 +239,22 @@ class PrivateController extends BaseController
             abort('default', 'Пользователя с данным логином не существует!');
         }
 
-        if ($user->id == user('id')) {
+        if ($user->id == getUser('id')) {
             abort('default', 'Отсутствует переписка с самим собой!');
         }
 
-        $totalInbox  = Inbox::where('user_id', user('id'))->where('author_id', $user->id)->count();
-        $totalOutbox = Outbox::where('user_id', user('id'))->where('recipient_id', $user->id)->count();
+        $totalInbox  = Inbox::where('user_id', getUser('id'))->where('author_id', $user->id)->count();
+        $totalOutbox = Outbox::where('user_id', getUser('id'))->where('recipient_id', $user->id)->count();
 
         $total = $totalInbox + $totalOutbox;
 
         $page = paginate(setting('privatpost'), $total);
 
         $outbox = Outbox::select('id', 'user_id', 'user_id as author_id', 'text', 'created_at')
-            ->where('user_id', user('id'))
+            ->where('user_id', getUser('id'))
             ->where('recipient_id', $user->id);
 
-        $messages = Inbox::where('user_id', user('id'))
+        $messages = Inbox::where('user_id', getUser('id'))
             ->where('author_id', $user->id)
             ->unionAll($outbox)
             ->orderBy('created_at', 'desc')

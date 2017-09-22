@@ -11,11 +11,11 @@
     <div class="form">
         <form method="post" action="/mail">
 
-            @if (! isUser())
+            @if (! getUser())
                 Ваше имя:<br><input name="name" maxlength="20"><br>
                 Ваш email:<br><input name="email" maxlength="50"><br>
             @else
-                @if (empty(user('email')))
+                @if (empty(getUser('email')))
                     Ваш email:<br><input name="email" maxlength="50"><br>
                 @endif
             @endif

@@ -60,8 +60,8 @@ case 'index':
 ############################################################################################
 case 'create':
 
-    if (isUser()) {
-        if (user('point') >= 50) {
+    if (getUser()) {
+        if (getUser('point') >= 50) {
 
             if (Request::isMethod('post')) {
                 $token = !empty($_POST['token']) ? check($_POST['token']) : 0;
@@ -74,7 +74,7 @@ case 'create':
                 $validation = new Validation();
 
                 $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                    -> addRule('max', [user('point'), 50], 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
+                    -> addRule('max', [getUser('point'), 50], 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
                     -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
                     -> addRule('regex', [$site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'], 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)
                     -> addRule('string', $site, 'Слишком длинный или короткий адрес ссылки!', true, 5, 50)
@@ -89,7 +89,7 @@ case 'create':
 
                     if ($total < setting('rekusertotal')) {
 
-                        $rekuser = RekUser::where('user', user('login'))->find_one();
+                        $rekuser = RekUser::where('user', getUser('login'))->find_one();
 
                         if (empty($rekuser)) {
                             $price = setting('rekuserprice');
@@ -102,7 +102,7 @@ case 'create':
                                 $price = $price + setting('rekuseroptprice');
                             }
 
-                            if (user('money') >= $price) {
+                            if (getUser('money') >= $price) {
 
                                 $reklama = RekUser::create();
                                 $reklama->set([
@@ -110,11 +110,11 @@ case 'create':
                                     'name'  => $name,
                                     'color' => $color,
                                     'bold' => $bold,
-                                    'user' => user('login'),
+                                    'user' => getUser('login'),
                                     'time' => SITETIME + (setting('rekusertime') * 3600),
                                 ])->save();
 
-                                $user = User::find_one(user('id'));
+                                $user = User::find_one(getUser('id'));
                                 $user->money -= $price;
                                 $user->save();
 
@@ -141,10 +141,10 @@ case 'create':
 
             if ($total < setting('rekusertotal')) {
 
-                $rekuser = RekUser::where('user', user('login'))->where_gt('time', SITETIME)->find_one();
+                $rekuser = RekUser::where('user', getUser('login'))->where_gt('time', SITETIME)->find_one();
 
                 if (empty($rekuser)) {
-                    echo 'У вас в наличии: <b>'.plural(user('money'), setting('moneyname')).'</b><br><br>';
+                    echo 'У вас в наличии: <b>'.plural(getUser('money'), setting('moneyname')).'</b><br><br>';
 
                     echo '<div class="form">';
                     echo '<form method="post" action="/reklama/create">';

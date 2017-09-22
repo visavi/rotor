@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @if (isUser())
+    @if (getUser())
         <div class="float-right">
             <a class="btn btn-success" href="/blog/create?cid={{ $category['id'] }}">Добавить статью</a>
         </div>
