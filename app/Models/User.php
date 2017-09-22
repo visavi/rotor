@@ -19,28 +19,26 @@ class User extends BaseModel
     /**
      * Группа администраторов
      */
-    const ADMIN_GROUP = [
-        self::OWNER,
-        self::ADMIN,
-    ];
-
-    /**
-     * Группа модераторов
-     */
-    const MODER_GROUP = [
+    const GROUP_ADMINS = [
         self::OWNER,
         self::ADMIN,
         self::MODER,
-    ];
-
-    /**
-     * Группа старших
-     */
-    const MAIN_GROUP = [
-        self::OWNER,
-        self::ADMIN,
-        self::MODER,
+        self::MANAGER,
         self::EDITOR,
+    ];
+
+    /**
+     * Все пользователи
+     */
+    const GROUP_USERS = [
+        self::OWNER,
+        self::ADMIN,
+        self::MODER,
+        self::MANAGER,
+        self::EDITOR,
+        self::USER,
+        self::PENDED,
+        self::BANNED,
     ];
 
     /**

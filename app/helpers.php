@@ -1083,23 +1083,35 @@ function isUser()
 /**
  * Возвращает входит ли пользователь в группу администрации
  *
- * @param array $access массив уровней доступа
+ * @param string $level уровень доступа
  * @return bool         является ли пользователь администратором
  */
-function isAdmin($access = User::MAIN_GROUP)
+function isAdmin($level = null)
 {
-    if (isUser() && in_array(user('level'), $access, true)) {
+    if ($level) {
+        return access($level);
+    }
+
+    $access = array_flip(User::GROUP_ADMINS);
+
+    if (user() && isset($access[user('level')])) {
         return true;
     }
 
     return false;
 }
 
+/**
+ * Возвращает имеет ли пользователь доступ по уровню
+ *
+ * @param  string $level уровень доступа
+ * @return bool          разрешен ли доступ
+ */
 function access($level)
 {
-    $access = constant('App\\Models\\User::'.strtoupper($level).'_GROUP');
+    $access = array_flip(User::GROUP_USERS);
 
-    if (isUser() && in_array(user('level'), $access, true)) {
+    if (user() && isset($access[$level]) && $access[user('level')] <= $access[$level]) {
         return true;
     }
 
@@ -1778,15 +1790,15 @@ function abort($code, $message = null)
 
     if (setting('errorlog') && in_array($code, [403, 404])) {
 
-        $error = new Log();
-        $error->code = $code;
-        $error->request = utfSubstr(server('REQUEST_URI'), 0, 200);
-        $error->referer = utfSubstr(server('HTTP_REFERER'), 0, 200);
-        $error->user_id = getUserId();
-        $error->ip = getClientIp();
-        $error->brow = getUserAgent();
-        $error->created_at = SITETIME;
-        $error->save();
+        Log::query()->create([
+            'code'       => $code,
+            'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
+            'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
+            'user_id'    => getUserId(),
+            'ip'         => getClientIp(),
+            'brow'       => getUserAgent(),
+            'created_at' => SITETIME,
+        ]);
 
         Log::query()
             ->where('code', $code)

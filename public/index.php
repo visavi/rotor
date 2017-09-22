@@ -30,8 +30,6 @@ if ($router['target'] && is_callable($router['target'])) {
     abort(404);
 }
 
-var_dump(access('admin'));
-
 // setting expiresmail, editstatus
 // users confirmreg, ban, emails, nickname
 // проверка чтобы логин начинался с буквы или цифры
