@@ -131,7 +131,7 @@ class ForumController extends BaseController
                 $topic = Topic::create([
                     'forum_id'   => $forum->id,
                     'title'      => $title,
-                    'user_id'    => getUserId(),
+                    'user_id'    => user('id'),
                     'posts'      => 1,
                     'created_at' => SITETIME,
                     'updated_at' => SITETIME,
@@ -139,7 +139,7 @@ class ForumController extends BaseController
 
                 $post = Post::create([
                     'topic_id'   => $topic->id,
-                    'user_id'    => getUserId(),
+                    'user_id'    => user('id'),
                     'text'       => $msg,
                     'created_at' => SITETIME,
                     'ip'         => getClientIp(),

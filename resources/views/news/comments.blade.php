@@ -15,7 +15,7 @@
                     <div class="img">{!! userAvatar($data['user']) !!}</div>
 
                     <div class="float-right">
-                        @if (getUserId() != $data['user_id'])
+                        @if (user('id') != $data['user_id'])
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
@@ -24,7 +24,7 @@
 
                         @endif
 
-                        @if ($data->user_id == getUserId() && $data['created_at'] + 600 > SITETIME)
+                        @if ($data->user_id == user('id') && $data['created_at'] + 600 > SITETIME)
                             <a title="Редактировать" href="/news/{{ $news->id }}/{{ $data['id'] }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
                         @endif
 

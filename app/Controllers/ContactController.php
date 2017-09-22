@@ -38,9 +38,9 @@ class ContactController extends BaseController
             $validation->addRule('not_empty', $user, 'Данного пользователя не существует!');
 
             if ($user) {
-                $validation->addRule('not_equal', [$user->login, getUsername()], 'Запрещено добавлять свой логин!');
+                $validation->addRule('not_equal', [$user->login, user('login')], 'Запрещено добавлять свой логин!');
 
-                $totalContact = Contact::query()->where('user_id', getUserId())->count();
+                $totalContact = Contact::query()->where('user_id', user('id'))->count();
                 $validation->addRule('min', [$totalContact, setting('limitcontact')], 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
 
                 $validation->addRule('custom', ! isContact(user(), $user), 'Данный пользователь уже есть в контакт-листе!');
@@ -49,14 +49,14 @@ class ContactController extends BaseController
             if ($validation->run()) {
 
                 Contact::query()->create([
-                    'user_id'    => getUserId(),
+                    'user_id'    => user('id'),
                     'contact_id' => $user->id,
                     'created_at' => SITETIME,
                 ]);
 
                 if (! isIgnore($user, user())) {
-                    $message = 'Пользователь [b]'.getUsername().'[/b] добавил вас в свой контакт-лист!';
-                    sendPrivate($user->id, getUserId(), $message);
+                    $message = 'Пользователь [b]'.user('login').'[/b] добавил вас в свой контакт-лист!';
+                    sendPrivate($user->id, user('id'), $message);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в контакт-лист!');
@@ -68,11 +68,11 @@ class ContactController extends BaseController
             }
         }
 
-        $total = Contact::query()->where('user_id', getUserId())->count();
+        $total = Contact::query()->where('user_id', user('id'))->count();
         $page = paginate(setting('contactlist'), $total);
 
         $contacts = Contact::query()
-            ->where('user_id', getUserId())
+            ->where('user_id', user('id'))
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
@@ -88,7 +88,7 @@ class ContactController extends BaseController
     public function note($id)
     {
         $contact = Contact::query()
-            ->where('user_id', getUserId())
+            ->where('user_id', user('id'))
             ->where('id', $id)
             ->first();
 
@@ -138,7 +138,7 @@ class ContactController extends BaseController
         if ($validation->run()) {
 
             Contact::query()
-                ->where('user_id', getUserId())
+                ->where('user_id', user('id'))
                 ->whereIn('id', $del)
                 ->delete();
 

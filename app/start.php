@@ -60,7 +60,7 @@ if (setting('doslimit')) {
             }
         }
         // ------------------------------ Запись логов -------------------------------//
-        $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getUserAgent().'|'.getUsername().'|';
+        $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getUserAgent().'|'.user('login').'|';
         writeFiles(STORAGE.'/antidos/'.getClientIp().'.dat', $write."\r\n", 0, 0666);
         // ----------------------- Автоматическая блокировка ------------------------//
         if (counterString(STORAGE.'/antidos/'.getClientIp().'.dat') > setting('doslimit')) {
@@ -75,7 +75,7 @@ if (setting('doslimit')) {
                         'code'       => 666,
                         'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
                         'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
-                        'user_id'    => getUserId(),
+                        'user_id'    => user('id'),
                         'ip'         => getClientIp(),
                         'brow'       => getUserAgent(),
                         'created_at' => SITETIME,
@@ -159,20 +159,20 @@ if ($user = isUser()) {
     // Забанен
     if (user('ban')) {
         if (! Request::is('ban', 'rules', 'logout')) {
-            redirect('/ban?log='.getUsername());
+            redirect('/ban?log='.user('login'));
         }
     }
 
     // Подтверждение регистрации
     if (setting('regkeys') > 0 && user('confirmreg') > 0 && empty(user('ban'))) {
         if (! Request::is('key', 'login', 'logout')) {
-            redirect('/key?log='.getUsername());
+            redirect('/key?log='.user('login'));
         }
     }
 
     // ---------------------- Получение ежедневного бонуса -----------------------//
     if (user('timebonus') < SITETIME - 82800) {
-        $user = User::where('id', getUserId());
+        $user = User::where('id', user('id'));
         $user->update([
             'timebonus' => SITETIME,
             'money' => DB::raw('money + '.setting('bonusmoney')),

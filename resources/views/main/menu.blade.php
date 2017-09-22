@@ -11,7 +11,7 @@
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/ignore">Игнор-лист</a> ({{ userIgnore(user()) }})<br>
 
 <div class="b"><i class="fa fa-wrench fa-lg text-muted"></i> <b>Анкета / Настройки</b></div>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/user/{{ getUsername() }}">Моя анкета</a><br>
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/user/{{ user('login') }}">Моя анкета</a><br>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/profile">Мой профиль</a><br>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/account">Мои данные</a><br>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/setting">Настройки</a><br>

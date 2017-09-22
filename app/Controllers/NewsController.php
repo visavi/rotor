@@ -86,13 +86,13 @@ class NewsController extends BaseController
                     'relate_type' => News::class,
                     'relate_id'   => $news->id,
                     'text'        => $msg,
-                    'user_id'     => getUserId(),
+                    'user_id'     => user('id'),
                     'created_at'  => SITETIME,
                     'ip'          => getClientIp(),
                     'brow'        => getUserAgent(),
                 ]);
 
-                $user = User::where('id', getUserId());
+                $user = User::where('id', user('id'));
                 $user->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
@@ -147,7 +147,7 @@ class NewsController extends BaseController
 
         $comment = Comment::where('relate_type', News::class)
             ->where('comments.id', $id)
-            ->where('comments.user_id', getUserId())
+            ->where('comments.user_id', user('id'))
             ->first();
 
         if (! $comment) {

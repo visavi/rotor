@@ -14,8 +14,8 @@ $newHost = false;
 
 if (isUser()) {
     $online = Online::where('ip', getClientIp())
-        ->orWhere('user_id', getUserId())
-        ->orderByRaw('user_id = ? desc', [getUserId()])
+        ->orWhere('user_id', user('id'))
+        ->orderByRaw('user_id = ? desc', [user('id')])
         ->first();
 
     if ($online) {
@@ -23,14 +23,14 @@ if (isUser()) {
             'ip'         => getClientIp(),
             'brow'       => getUserAgent(),
             'updated_at' => SITETIME,
-            'user_id'    => getUserId(),
+            'user_id'    => user('id'),
         ]);
     } else {
         Online::create([
             'ip'         => getClientIp(),
             'brow'       => getUserAgent(),
             'updated_at' => SITETIME,
-            'user_id'    => getUserId(),
+            'user_id'    => user('id'),
         ]);
         $newHost = true;
     }

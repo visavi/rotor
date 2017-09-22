@@ -22,6 +22,6 @@
         </form>
     </div><br>
 
-    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ getUsername() }}">Альбом</a><br>
+    <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ user('login') }}">Альбом</a><br>
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">Галерея</a><br>
 @stop

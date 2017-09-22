@@ -7,7 +7,7 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
-if (isAdmin([101]) && getUsername() == setting('nickname')) {
+if (isAdmin([101]) && user('login') == setting('nickname')) {
     //show_title('Очистка базы юзеров');
 
     switch ($action):

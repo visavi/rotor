@@ -60,9 +60,9 @@ if (isUser()) {
 
                                     $textpriv = 'Объяснение нарушения: '.$msg;
 
-                                    DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [user('loginsendban'), getUsername(), $textpriv, SITETIME]);
+                                    DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [user('loginsendban'), user('login'), $textpriv, SITETIME]);
 
-                                    DB::update("UPDATE `users` SET `explainban`=? WHERE `login`=?;", [0, getUsername()]);
+                                    DB::update("UPDATE `users` SET `explainban`=? WHERE `login`=?;", [0, user('login')]);
                                     DB::update("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?;", [user('loginsendban')]);
 
                                     setFlash('success', 'Объяснение успешно отправлено!');
@@ -100,7 +100,7 @@ if (isUser()) {
             echo 'Также у вас есть возможность исправиться и снять строгое нарушение.<br>';
             echo 'Если прошло более 1 месяца после последнего бана, то на странице <b><a href="/razban">Исправительная</a></b> заплатив штраф вы можете снять 1 строгое нарушение<br><br>';
 
-            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `explainban`=? WHERE `login`=?;", [0, 0, 0, getUsername()]);
+            DB::update("UPDATE `users` SET `ban`=?, `timeban`=?, `explainban`=? WHERE `login`=?;", [0, 0, 0, user('login')]);
         }
     } else {
         showError('Ошибка! Вы не забанены или срок бана истек!');

@@ -123,7 +123,7 @@ case 'save':
         $note = [
             'name'       => $name,
             'text'       => $text,
-            'user_id'    => getUserId(),
+            'user_id'    => user('id'),
             'protect'    => $protect,
             'created_at' => SITETIME,
             'updated_at' => SITETIME,

@@ -177,7 +177,7 @@ if (isAdmin()) {
                     if ($post) {
 
                         $post->text = $msg;
-                        $post->edit_user_id = getUserId();
+                        $post->edit_user_id = user('id');
                         $post->updated_at = SITETIME;
                         $post->save();
 

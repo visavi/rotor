@@ -57,7 +57,7 @@ class BookController extends BaseController
             if (isUser()) {
                 $bookscores = (setting('bookscores')) ? 1 : 0;
 
-                $user = User::query()->where('id', getUserId());
+                $user = User::query()->where('id', user('id'));
                 $user->update([
                     'allguest' => DB::raw('allguest + 1'),
                     'point'    => DB::raw('point + ' . $bookscores),
@@ -65,7 +65,7 @@ class BookController extends BaseController
                 ]);
             }
 
-            $username = isUser() ? getUserId() : 0;
+            $username = isUser() ? user('id') : 0;
 
             Guest::query()->create([
                 'user_id'    => $username,
@@ -93,7 +93,7 @@ class BookController extends BaseController
             abort(403);
         }
 
-        $post = Guest::query()->where('user_id', getUserId())->find($id);
+        $post = Guest::query()->where('user_id', user('id'))->find($id);
 
         if (! $post) {
             abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
@@ -117,7 +117,7 @@ class BookController extends BaseController
                 $msg = antimat($msg);
 
                 $post->text = $msg;
-                $post->edit_user_id = getUserId();
+                $post->edit_user_id = user('id');
                 $post->updated_at = SITETIME;
                 $post->save();
 

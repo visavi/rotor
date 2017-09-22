@@ -25,7 +25,7 @@ case 'index':
 
         if ($validation->run()) {
             //-------- Удаляем старую фотку и аватар ----------//
-            $user = User::find(getUserId());
+            $user = User::find(user('id'));
 
             if ($user['picture']) {
                 deleteImage('uploads/photos/', $user['picture']);
@@ -56,7 +56,7 @@ case 'index':
 
                 if ($handle->processed) {
 
-                    $user = User::find(getUserId());
+                    $user = User::find(user('id'));
                     $user->picture = $picture;
                     $user->avatar = $avatar;
                     $user->save();
@@ -75,7 +75,7 @@ case 'index':
         setFlash('danger', $validation->getErrors());
     }
 
-    $user = User::where('login', getUsername())->first();
+    $user = User::where('login', user('login'))->first();
     return view('pages/picture', compact('user'));
 break;
 
@@ -90,7 +90,7 @@ case 'delete':
     $validation = new Validation();
     $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
-    $user = User::find(getUserId());
+    $user = User::find(user('id'));
     if (! $user || ! $user['picture']) {
         $validation -> addError('Фотографии для удаления не существует!');
     }

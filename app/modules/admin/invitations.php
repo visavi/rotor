@@ -107,7 +107,7 @@ break;
 ##                                       Список ключей                                    ##
 ############################################################################################
 case 'list':
-    $invitations = DB::select("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [getUsername(), 0]);
+    $invitations = DB::select("SELECT hash FROM `invite` WHERE `user`=? AND `used`=? ORDER BY `time` DESC;", [user('login'), 0]);
     $invite = $invitations -> fetchAll(PDO::FETCH_COLUMN);
     $total = count($invite);
 
@@ -143,7 +143,7 @@ case 'send':
             }
 
             $text = 'Вы получили пригласительные ключи в количестве '.count($listkeys).'шт.'.PHP_EOL.'Список ключей: '.implode(', ', $listkeys).PHP_EOL.'С помощью этих ключей вы можете пригласить ваших друзей на этот сайт!';
-            sendPrivate($user, getUsername(), $text);
+            sendPrivate($user, user('login'), $text);
 
             setFlash('success', 'Ключи успешно отправлены!');
             redirect("/admin/invitations");
@@ -171,7 +171,7 @@ case 'mailing':
             $query = DB::select("SELECT `login` FROM `users` WHERE `timelastlogin`>?;", [SITETIME - (86400 * 7)]);
             $users = $query->fetchAll(PDO::FETCH_COLUMN);
 
-            $users = array_diff($users, [getUsername()]);
+            $users = array_diff($users, [user('login')]);
             $total = count($users);
 
             // Рассылка сообщений с подготовкой запросов
@@ -186,7 +186,7 @@ case 'mailing':
                 foreach ($users as $user){
                     $key = str_random(rand(12, 15));
                     $updateusers -> execute($user);
-                    $insertprivat -> execute($user, getUsername(), sprintf($text, $key), SITETIME);
+                    $insertprivat -> execute($user, user('login'), sprintf($text, $key), SITETIME);
                     $dbr -> execute($key, $user, SITETIME);
                 }
 
@@ -220,7 +220,7 @@ case 'generate':
 
             for($i = 0; $i < $keys; $i++) {
                 $key = str_random(rand(12, 15));
-                $dbr -> execute($key, getUsername(), SITETIME);
+                $dbr -> execute($key, user('login'), SITETIME);
             }
 
             setFlash('success', 'Ключи успешно сгенерированы!');

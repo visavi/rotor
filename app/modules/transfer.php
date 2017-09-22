@@ -65,22 +65,22 @@ if (isUser()) {
                 if ($money > 0) {
                     if (user('point') >= setting('sendmoneypoint')) {
                         if ($money <= user('money')) {
-                            if ($uz != getUsername()) {
+                            if ($uz != user('login')) {
                                 if ($msg <= 1000) {
                                     $queryuser = DB::run() -> querySingle("SELECT `id` FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
                                     if (!empty($queryuser)) {
-                                        $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, getUsername()]);
+                                        $ignorstr = DB::run() -> querySingle("SELECT `id` FROM ignoring WHERE `user`=? AND `name`=? LIMIT 1;", [$uz, user('login')]);
                                         if (empty($ignorstr)) {
-                                            DB::update("UPDATE `users` SET `money`=`money`-? WHERE `login`=?;", [$money, getUsername()]);
+                                            DB::update("UPDATE `users` SET `money`=`money`-? WHERE `login`=?;", [$money, user('login')]);
                                             DB::update("UPDATE `users` SET `money`=`money`+?, `newprivat`=`newprivat`+1 WHERE `login`=?;", [$money, $uz]);
 
                                             $comment = (!empty($msg)) ? $msg : 'Не указано';
                                             // ------------------------Уведомление по привату------------------------//
-                                            $textpriv = 'Пользователь [b]'.getUsername().'[/b] перечислил вам '.plural($money, setting('moneyname')).''.PHP_EOL.'Примечание: '.$comment;
+                                            $textpriv = 'Пользователь [b]'.user('login').'[/b] перечислил вам '.plural($money, setting('moneyname')).''.PHP_EOL.'Примечание: '.$comment;
 
-                                            DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, getUsername(), $textpriv, SITETIME]);
+                                            DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$uz, user('login'), $textpriv, SITETIME]);
                                             // ------------------------ Запись логов ------------------------//
-                                            DB::insert("INSERT INTO `transfers` (`user`, `login`, `text`, `summ`, `time`) VALUES (?, ?, ?, ?, ?);", [getUsername(), $uz, $comment, $money, SITETIME]);
+                                            DB::insert("INSERT INTO `transfers` (`user`, `login`, `text`, `summ`, `time`) VALUES (?, ?, ?, ?, ?);", [user('login'), $uz, $comment, $money, SITETIME]);
 
                                             DB::delete("DELETE FROM `transfers` WHERE `time` < (SELECT MIN(`time`) FROM (SELECT `time` FROM `transfers` ORDER BY `time` DESC LIMIT 1000) AS del);");
 

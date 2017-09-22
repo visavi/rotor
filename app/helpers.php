@@ -620,7 +620,7 @@ function showCounter()
     if (isUser()) {
         //$visitPage =  setting('newtitle') ?? null;
 
-        $visit = Visit::query()->firstOrNew(['user_id' => getUserId()]);
+        $visit = Visit::query()->firstOrNew(['user_id' => user('id')]);
 
         $visit->fill([
             'self'       => server('PHP_SELF'),
@@ -1799,7 +1799,7 @@ function abort($code, $message = null)
             'code'       => $code,
             'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
             'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
-            'user_id'    => getUserId(),
+            'user_id'    => user('id'),
             'ip'         => getClientIp(),
             'brow'       => getUserAgent(),
             'created_at' => SITETIME,
@@ -2142,26 +2142,6 @@ function server($key = null, $default = null)
 }
 
 /**
- * Возвращает логин пользователя
- *
- * @return string
- */
-function getUsername()
-{
-    return user('login') ? user('login') : setting('guestsuser');
-}
-
-/**
- * Возвращает ID пользователя
- *
- * @return int
- */
-function getUserId()
-{
-    return isset($_SESSION['id']) ? intval($_SESSION['id']) : 0;
-}
-
-/**
  * Возвращает объект пользователя по логину
  *
  * @param  string    $login логин пользователя
@@ -2304,25 +2284,6 @@ function paginate($limit, $total)
     $offset = intval(($current * $limit) - $limit);
 
     return compact('current', 'offset', 'limit', 'total');
-}
-
-/**
- * Устанавливает права доступа на папки
- *
- * @return void
- */
-function install()
-{
-    $storage = glob(dirname(__DIR__).'/storage/*', GLOB_ONLYDIR);
-    $uploads = glob(dirname(dirname(__DIR__)).'/public/uploads/*', GLOB_ONLYDIR);
-
-    $dirs = array_merge($storage, $uploads);
-
-    foreach ($dirs as $dir) {
-        $old = umask(0);
-        chmod ($dir, 0777);
-        umask($old);
-    }
 }
 
 /**

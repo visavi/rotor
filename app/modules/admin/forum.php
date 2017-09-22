@@ -924,7 +924,7 @@ if (isAdmin()) {
                     $post = DB::run() -> queryFetch("SELECT * FROM `posts` WHERE `id`=? LIMIT 1;", [$pid]);
                     if (!empty($post)) {
 
-                        DB::update("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, getUserId(), SITETIME, $pid]);
+                        DB::update("UPDATE `posts` SET `text`=?, `edit_user_id`=?, `updated_at`=? WHERE `id`=?;", [$msg, user('id'), SITETIME, $pid]);
 
                         // ------ Удаление загруженных файлов -------//
                         if ($delfile) {

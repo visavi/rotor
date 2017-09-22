@@ -26,11 +26,11 @@ class BookmarkController extends BaseController
      */
     public function index()
     {
-        $total = Bookmark::where('user_id', getUserId())->count();
+        $total = Bookmark::where('user_id', user('id'))->count();
         $page  = paginate(setting('forumtem'), $total);
 
         $topics = Bookmark::select('bookmarks.posts as book_posts', 'bookmarks.topic_id', 'topics.*')
-            ->where('bookmarks.user_id', getUserId())
+            ->where('bookmarks.user_id', user('id'))
             ->leftJoin('topics', 'bookmarks.topic_id', '=', 'topics.id')
             ->with('topic.user', 'topic.lastPost.user')
             ->orderBy('updated_at', 'desc')
@@ -60,7 +60,7 @@ class BookmarkController extends BaseController
         if ($validation->run()) {
 
             $bookmark = Bookmark::where('topic_id', $tid)
-                ->where('user_id', getUserId())
+                ->where('user_id', user('id'))
                 ->first();
 
             if ($bookmark) {
@@ -68,7 +68,7 @@ class BookmarkController extends BaseController
                 exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
             } else {
                 Bookmark::create([
-                    'user_id'  => getUserId(),
+                    'user_id'  => user('id'),
                     'topic_id' => $tid,
                     'posts'    => $topic['posts'],
                 ]);
@@ -95,7 +95,7 @@ class BookmarkController extends BaseController
         if ($validation->run()) {
 
             Bookmark::whereIn('topic_id', $topicIds)
-                ->where('user_id', getUserId())
+                ->where('user_id', user('id'))
                 ->delete();
 
             setFlash('success', 'Выбранные темы успешно удалены из закладок!');

@@ -89,7 +89,7 @@ case 'create':
 
                     if ($total < setting('rekusertotal')) {
 
-                        $rekuser = RekUser::where('user', getUsername())->find_one();
+                        $rekuser = RekUser::where('user', user('login'))->find_one();
 
                         if (empty($rekuser)) {
                             $price = setting('rekuserprice');
@@ -110,11 +110,11 @@ case 'create':
                                     'name'  => $name,
                                     'color' => $color,
                                     'bold' => $bold,
-                                    'user' => getUsername(),
+                                    'user' => user('login'),
                                     'time' => SITETIME + (setting('rekusertime') * 3600),
                                 ])->save();
 
-                                $user = User::find_one(getUserId());
+                                $user = User::find_one(user('id'));
                                 $user->money -= $price;
                                 $user->save();
 
@@ -141,7 +141,7 @@ case 'create':
 
             if ($total < setting('rekusertotal')) {
 
-                $rekuser = RekUser::where('user', getUsername())->where_gt('time', SITETIME)->find_one();
+                $rekuser = RekUser::where('user', user('login'))->where_gt('time', SITETIME)->find_one();
 
                 if (empty($rekuser)) {
                     echo 'У вас в наличии: <b>'.plural(user('money'), setting('moneyname')).'</b><br><br>';

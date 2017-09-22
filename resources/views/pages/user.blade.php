@@ -93,7 +93,7 @@
 
                 <a href="/rating/{{ $user->login }}/received">Репутация: <b>{!! formatNum($user['rating']) !!}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br>
 
-                @if (isUser() && getUsername() != $user['login'])
+                @if (isUser() && user('login') != $user['login'])
                     [ <a href="/user/{{ $user['login'] }}/rating?vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
                     <a href="/user/{{ $user['login'] }}/rating?vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br>
                 @endif
@@ -131,7 +131,7 @@
     <div class="alert alert-info">
         <i class="fa fa-sticky-note"></i> <a href="/wall?uz={{ $user['login'] }}">Стена сообщений</a> ({{ userWall($user) }})<br>
 
-        @if ($user['login'] != getUsername())
+        @if ($user['login'] != user('login'))
             <i class="fa fa-address-book"></i> Добавить в
             <a href="/contact?act=add&amp;uz={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">контакт</a> /
             <a href="/ignore?act=add&amp;uz={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">игнор</a><br>

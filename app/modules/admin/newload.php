@@ -75,7 +75,7 @@ if (isAdmin()) {
 
                     if (count($downs) > 0) {
 
-                        if (isAdmin([101]) && getUsername() == setting('nickname')) {
+                        if (isAdmin([101]) && user('login') == setting('nickname')) {
                             echo '<a href="/admin/newload?act=allow&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете публикацию файла?\')">Опубликовать</a> / ';
                         }
 
@@ -229,7 +229,7 @@ if (isAdmin()) {
                                                                 if (user($new['user'])) {
                                                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.setting('home').'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                                                    DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUsername(), $textpriv, SITETIME]);
+                                                                    DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], user('login'), $textpriv, SITETIME]);
 
                                                                     DB::update("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                                                 }
@@ -288,7 +288,7 @@ if (isAdmin()) {
 
             $uid = check($_GET['uid']);
 
-            if (isAdmin([101]) && getUsername() == setting('nickname')) {
+            if (isAdmin([101]) && user('login') == setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
@@ -303,7 +303,7 @@ if (isAdmin()) {
                                 if (user($new['user'])) {
                                     $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.setting('home').'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
 
-                                    DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUsername(), $textpriv, SITETIME]);
+                                    DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], user('login'), $textpriv, SITETIME]);
                                     DB::update("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);
                                 }
 

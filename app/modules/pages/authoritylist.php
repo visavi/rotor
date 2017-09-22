@@ -51,7 +51,7 @@ switch ($action):
             echo '<div class="form">';
             echo '<b>Поиск пользователя:</b><br>';
             echo '<form action="/authoritylist?act=search&amp;page='.$page['current'].'" method="post">';
-            echo '<input type="text" name="uz" value="'.getUsername().'">';
+            echo '<input type="text" name="uz" value="'.user('login').'">';
             echo '<input type="submit" value="Искать"></form></div><br>';
 
             echo 'Всего пользователей: <b>'.$total.'</b><br><br>';

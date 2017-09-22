@@ -72,7 +72,7 @@ class BlogController extends BaseController
             ->leftJoin('pollings', function ($join) {
                 $join->on('blogs.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Blog::class)
-                    ->where('pollings.user_id', getUserId());
+                    ->where('pollings.user_id', user('id'));
             })
             ->first();
 
@@ -143,7 +143,7 @@ class BlogController extends BaseController
             abort(404, 'Данной статьи не существует!');
         }
 
-        if ($blog->user_id != getUserId()) {
+        if ($blog->user_id != user('id')) {
             abort('default', 'Изменение невозможно, вы не автор данной статьи!');
         }
 
@@ -266,7 +266,7 @@ class BlogController extends BaseController
 
                 $article = Blog::query()->create([
                     'category_id' => $cid,
-                    'user_id'     => getUserId(),
+                    'user_id'     => user('id'),
                     'title'       => $title,
                     'text'        => $text,
                     'tags'        => $tags,
@@ -275,7 +275,7 @@ class BlogController extends BaseController
 
                 $category->increment('count');
 
-                $user = User::query()->where('id', getUserId());
+                $user = User::query()->where('id', user('id'));
                 $user->update([
                     'point' => DB::raw('point + 5'),
                     'money' => DB::raw('money + 100'),
@@ -321,13 +321,13 @@ class BlogController extends BaseController
                     'relate_type' => Blog::class,
                     'relate_id'   => $blog->id,
                     'text'        => $msg,
-                    'user_id'     => getUserId(),
+                    'user_id'     => user('id'),
                     'created_at'  => SITETIME,
                     'ip'          => getClientIp(),
                     'brow'        => getUserAgent(),
                 ]);
 
-                $user = User::query()->where('id', getUserId());
+                $user = User::query()->where('id', user('id'));
                 $user->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
@@ -378,7 +378,7 @@ class BlogController extends BaseController
         $comment = Comment::query()
             ->where('relate_type', Blog::class)
             ->where('id', $cid)
-            ->where('user_id', getUserId())
+            ->where('user_id', user('id'))
             ->first();
 
         if (!$comment) {
@@ -614,7 +614,7 @@ class BlogController extends BaseController
      */
     public function userArticles()
     {
-        $login = check(Request::input('user', getUsername()));
+        $login = check(Request::input('user', user('login')));
 
         $user = User::query()->where('login', $login)->first();
 
@@ -639,7 +639,7 @@ class BlogController extends BaseController
      */
     public function userComments()
     {
-        $login = check(Request::input('user', getUsername()));
+        $login = check(Request::input('user', user('login')));
 
         $user = User::query()->where('login', $login)->first();
 

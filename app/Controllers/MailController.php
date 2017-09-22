@@ -21,7 +21,7 @@ class MailController extends BaseController
             $protect = check(Request::input('protect'));
 
             if (isUser()) {
-                $name = getUsername();
+                $name = user('login');
                 $email = user('email');
             }
 

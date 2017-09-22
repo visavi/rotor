@@ -108,7 +108,7 @@ if (isAdmin([101, 102])) {
 
                                 $black = DB::run() -> querySingle("SELECT `id` FROM `blacklist` WHERE `type`=? AND `value`=? LIMIT 1;", [$type, $value]);
                                 if (empty($black)) {
-                                    DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [$type, $value, getUsername(), SITETIME]);
+                                    DB::insert("INSERT INTO `blacklist` (`type`, `value`, `user`, `time`) VALUES (?, ?, ?, ?);", [$type, $value, user('login'), SITETIME]);
 
                                     setFlash('success', 'Запись успешно добавлена в черный список!');
                                     redirect("/admin/blacklist?main=$main");

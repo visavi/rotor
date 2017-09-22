@@ -204,7 +204,7 @@ if (isAdmin()) {
 
             $uid = check($_GET['uid']);
 
-            if (isAdmin([101]) && getUsername() == setting('nickname')) {
+            if (isAdmin([101]) && user('login') == setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     $blogs = DB::run() -> queryFetch("SELECT * FROM `catsblog` WHERE `id`=? LIMIT 1;", [$cid]);
 

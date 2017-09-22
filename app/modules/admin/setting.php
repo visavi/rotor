@@ -15,7 +15,7 @@ if (isAdmin([101])) {
     ############################################################################################
         case 'index':
 
-            if (getUsername() == setting('nickname')) {
+            if (user('login') == setting('nickname')) {
                 echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setzero">Администраторская</a><br>';
                 echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setone">Основные настройки</a><br>';
             }
@@ -42,7 +42,7 @@ if (isAdmin([101])) {
         ##                          Форма администраторских настроек                              ##
         ############################################################################################
         case 'setzero':
-            if (getUsername() == setting('nickname')) {
+            if (user('login') == setting('nickname')) {
                 echo '<b>Администраторская</b><br><hr>';
 
                 echo '<div class="form">';
@@ -73,7 +73,7 @@ if (isAdmin([101])) {
             $mail = check($_POST['emails']);
             $pass = check($_POST['pass']);
 
-            if (getUsername() == setting('nickname')) {
+            if (user('login') == setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     if (!empty($login) && !empty($mail) && !empty($pass)) {
 
@@ -123,7 +123,7 @@ if (isAdmin([101])) {
         ############################################################################################
         case 'setone':
 
-            if (getUsername() == setting('nickname')) {
+            if (user('login') == setting('nickname')) {
                 echo '<b>Основные настройки</b><br><hr>';
 
                 echo '<div class="form">';
@@ -229,7 +229,7 @@ if (isAdmin([101])) {
             $regkeys = (isset($_POST['regkeys'])) ? abs(intval($_POST['regkeys'])) : 0;
             $closedsite = (isset($_POST['closedsite'])) ? abs(intval($_POST['closedsite'])) : 0;
 
-            if (getUsername() == setting('nickname')) {
+            if (user('login') == setting('nickname')) {
                 if ($uid == $_SESSION['token']) {
                     if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
 
@@ -275,7 +275,7 @@ if (isAdmin([101])) {
 
             echo '<b>Настройки почты и рассылок</b><br><hr>';
 
-            if (getUsername() == setting('nickname')) {
+            if (user('login') == setting('nickname')) {
                 echo '<div class="form">';
                 echo '<form method="post" action="/admin/setting?act=editmail&amp;uid='.$_SESSION['token'].'">';
 

@@ -159,15 +159,15 @@ switch ($action):
 
             echo '</div>';
 
-            if ($queryoff['status'] <= 1 && getUsername() == $queryoff['user']) {
+            if ($queryoff['status'] <= 1 && user('login') == $queryoff['user']) {
                 echo '<div class="right"><a href="/offers?act=edit&amp;id='.$id.'">Редактировать</a></div>';
             }
 
             echo '<div>'.bbCode($queryoff['text']).'<br>';
             echo 'Добавлено: '.profile($queryoff['user']).' ('.dateFixed($queryoff['time']).')<br>';
 
-            if ($queryoff['status'] <= 1 && getUsername() != $queryoff['user']) {
-                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
+            if ($queryoff['status'] <= 1 && user('login') != $queryoff['user']) {
+                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, user('login')]);
 
                 if (empty($queryrated)) {
                     echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br>';
@@ -241,7 +241,7 @@ switch ($action):
     case 'edit':
 
         if (isUser()) {
-            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
+            $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, user('login')]);
             if (!empty($queryoff)) {
                 if ($queryoff['status'] <= 1) {
 
@@ -285,7 +285,7 @@ switch ($action):
 
         if ($uid == $_SESSION['token']) {
             if (isUser()) {
-                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, getUsername()]);
+                $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? AND `user`=? LIMIT 1;", [$id, user('login')]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
                         if (utfStrlen($title) >= 5 && utfStrlen($title) <= 50) {
@@ -421,7 +421,7 @@ switch ($action):
 
                                 $msg = antimat($msg);
 
-                                DB::insert("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, getUsername(), SITETIME, getClientIp(), getUserAgent()]);
+                                DB::insert("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, user('login'), SITETIME, getClientIp(), getUserAgent()]);
 
                                 DB::update("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 
@@ -461,13 +461,13 @@ switch ($action):
                 $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
                 if (!empty($queryoff)) {
                     if ($queryoff['status'] <= 1) {
-                        if (getUsername() != $queryoff['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
+                        if (user('login') != $queryoff['user']) {
+                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, user('login')]);
                             if (empty($queryrated)) {
-                                DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, getUsername(), SITETIME]);
+                                DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $id, user('login'), SITETIME]);
                                 DB::update("UPDATE `offers` SET `votes`=`votes`+1 WHERE `id`=?;", [$id]);
                             } else {
-                                DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUsername()]);
+                                DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, user('login')]);
                                 if ($queryoff['votes'] > 0) {
                                     DB::update("UPDATE `offers` SET `votes`=`votes`-1 WHERE `id`=?;", [$id]);
                                 }
@@ -540,10 +540,10 @@ switch ($action):
                             $title = antimat($title);
                             $text = antimat($text);
 
-                            DB::insert("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, getUsername(), 1, SITETIME]);
+                            DB::insert("INSERT INTO `offers` (`type`, `title`, `text`, `user`, `votes`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$types, $title, $text, user('login'), 1, SITETIME]);
                             $lastid = DB::run() -> lastInsertId();
 
-                            DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, getUsername(), SITETIME]);
+                            DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['offer', $lastid, user('login'), SITETIME]);
 
                             setFlash('success', 'Сообщение успешно добавлено!');
                             redirect("/offers?act=view&type=$types&id=$lastid");

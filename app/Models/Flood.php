@@ -62,7 +62,7 @@ class Flood extends BaseModel
      */
     public static function isFlood($period = 0)
     {
-        $userId = getUserId();
+        $userId = user('id');
         $period = $period ?: self::getPeriod();
 
         if (empty($period)) {

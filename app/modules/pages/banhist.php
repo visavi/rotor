@@ -2,7 +2,7 @@
 view(setting('themes').'/index');
 
 if (empty($_GET['uz'])) {
-    $uz = check(getUsername());
+    $uz = check(user('login'));
 } else {
     $uz = check(strval($_GET['uz']));
 }

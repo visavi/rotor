@@ -38,9 +38,9 @@ class IgnoreController extends BaseController
             $validation->addRule('not_empty', $user, 'Данного пользователя не существует!');
 
             if ($user) {
-                $validation->addRule('not_equal', [$user->login, getUsername()], 'Запрещено добавлять свой логин!');
+                $validation->addRule('not_equal', [$user->login, user('login')], 'Запрещено добавлять свой логин!');
 
-                $totalIgnore = Ignore::query()->where('user_id', getUserId())->count();
+                $totalIgnore = Ignore::query()->where('user_id', user('id'))->count();
                 $validation->addRule('min', [$totalIgnore, setting('limitignore')], 'Ошибка! Игнор-лист переполнен (Максимум ' . setting('limitignore') . ' пользователей!)');
 
                 $validation->addRule('custom', ! isIgnore(user(), $user), 'Данный пользователь уже есть в игнор-листе!');
@@ -51,14 +51,14 @@ class IgnoreController extends BaseController
             if ($validation->run()) {
 
                 Ignore::query()->create([
-                    'user_id'    => getUserId(),
+                    'user_id'    => user('id'),
                     'ignore_id'  => $user->id,
                     'created_at' => SITETIME,
                 ]);
 
                 if (! isIgnore($user, user())) {
-                    $message = 'Пользователь [b]' . getUsername() . '[/b] добавил вас в свой игнор-лист!';
-                    sendPrivate($user->id, getUserId(), $message);
+                    $message = 'Пользователь [b]' . user('login') . '[/b] добавил вас в свой игнор-лист!';
+                    sendPrivate($user->id, user('id'), $message);
                 }
 
                 setFlash('success', 'Пользователь успешно добавлен в игнор-лист!');
@@ -69,11 +69,11 @@ class IgnoreController extends BaseController
             }
         }
 
-        $total = Ignore::query()->where('user_id', getUserId())->count();
+        $total = Ignore::query()->where('user_id', user('id'))->count();
         $page = paginate(setting('ignorlist'), $total);
 
         $ignores = Ignore::query()
-            ->where('user_id', getUserId())
+            ->where('user_id', user('id'))
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
@@ -89,7 +89,7 @@ class IgnoreController extends BaseController
     public function note($id)
     {
         $ignore = Ignore::query()
-            ->where('user_id', getUserId())
+            ->where('user_id', user('id'))
             ->where('id', $id)
             ->first();
 
@@ -139,7 +139,7 @@ class IgnoreController extends BaseController
         if ($validation->run()) {
 
             Ignore::query()
-                ->where('user_id', getUserId())
+                ->where('user_id', user('id'))
                 ->whereIn('id', $del)
                 ->delete();
 

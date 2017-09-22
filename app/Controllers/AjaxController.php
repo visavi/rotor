@@ -107,7 +107,7 @@ class AjaxController extends BaseController
             Spam::query()->create([
                 'relate_type' => $type,
                 'relate_id'   => $data['id'],
-                'user_id'     => getUserId(),
+                'user_id'     => user('id'),
                 'path'        => $path,
                 'created_at'  => SITETIME,
             ]);
@@ -202,7 +202,7 @@ class AjaxController extends BaseController
             ->where('created_at', '<', SITETIME)
             ->delete();
 
-        $post = $type::query()->where('user_id', '<>', getUserId())->find($id);
+        $post = $type::query()->where('user_id', '<>', user('id'))->find($id);
         if (! $post) {
             exit(json_encode([
                 'status' => 'error',
@@ -213,7 +213,7 @@ class AjaxController extends BaseController
         $polling = Polling::query()
             ->where('relate_type', $type)
             ->where('relate_id', $id)
-            ->where('user_id', getUserId())
+            ->where('user_id', user('id'))
             ->first();
 
         $cancel = false;
@@ -230,7 +230,7 @@ class AjaxController extends BaseController
             Polling::query()->create([
                 'relate_type' => $type,
                 'relate_id'   => $id,
-                'user_id'     => getUserId(),
+                'user_id'     => user('id'),
                 'vote'        => $vote,
                 'created_at'  => $expiresRating,
             ]);

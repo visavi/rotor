@@ -53,7 +53,7 @@ class VoteController extends BaseController
         }
 
         $vote['poll'] = VotePoll::where('vote_id', $vote['id'])
-            ->where('user_id', getUserId())
+            ->where('user_id', user('id'))
             ->first();
 
         if (Request::isMethod('post')) {
@@ -77,7 +77,7 @@ class VoteController extends BaseController
 
                 VotePoll::create([
                     'vote_id'    => $vote->id,
-                    'user_id'    => getUserId(),
+                    'user_id'    => user('id'),
                     'created_at' => SITETIME,
                 ]);
 
