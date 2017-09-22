@@ -541,9 +541,9 @@ function defaultAvatar($login)
  * @param  User|null $user объект пользователя
  * @return string          аватар пользователя
  */
-function userAvatar(User $user = null)
+function userAvatar(User $user)
 {
-    if (! $user) {
+    if (! $user->id) {
         return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
     }
 
@@ -2093,6 +2093,17 @@ function bbCode($text, $parse = true)
 }
 
 /**
+ * Определяет IP пользователя
+ *
+ * @return string IP пользователя
+ */
+function getClientIp()
+{
+    $ip = Request::ip();
+    return $ip == '::1' ? '127.0.0.1' : $ip;
+}
+
+/**
  * Определяет браузер
  *
  * @param string|null $userAgent
@@ -2108,17 +2119,6 @@ function getUserAgent($userAgent = null)
     $brow = $browser->getBrowser();
     $version = implode('.', array_slice(explode('.', $browser->getVersion()), 0, 2));
     return mb_substr($version == 'unknown' ? $brow : $brow.' '.$version, 0, 25, 'utf-8');
-}
-
-/**
- * Определяет IP пользователя
- *
- * @return string IP пользователя
- */
-function getClientIp()
-{
-    $ip = Request::ip();
-    return $ip == '::1' ? '127.0.0.1' : $ip;
 }
 
 /**
@@ -2141,7 +2141,7 @@ function server($key = null, $default = null)
  * Возвращает объект пользователя по логину
  *
  * @param  string    $login логин пользователя
- * @return User|null        объект пользователя
+ * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
  */
 function getUserByLogin($login)
 {
@@ -2152,7 +2152,7 @@ function getUserByLogin($login)
  * Возвращает объект пользователя по id
  *
  * @param  int       $id ID пользователя
- * @return User|null     объект пользователя
+ * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
  */
 function getUserById($id)
 {

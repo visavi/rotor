@@ -71,7 +71,7 @@ if (setting('doslimit')) {
 
                 if (! $banip) {
 
-                    Log::create([
+                    Log::query()->create([
                         'code'       => 666,
                         'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
                         'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
@@ -105,7 +105,7 @@ if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
         $cookLogin = check($_COOKIE['login']);
         $cookPass = check($_COOKIE['password']);
 
-        $user = User::where('login', $cookLogin)->first();
+        $user = User::query()->where('login', $cookLogin)->first();
 
         if ($user) {
             if ($cookLogin == $user->login && $cookPass == md5($user->password.env('APP_KEY'))) {
@@ -114,13 +114,14 @@ if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
                 $_SESSION['id'] = $user->id;
                 $_SESSION['password'] = md5(env('APP_KEY').$user->password);
 
-                $authorization = Login::where('user_id', $user->id)
+                $authorization = Login::query()
+                    ->where('user_id', $user->id)
                     ->where('created_at', '>', SITETIME - 30)
                     ->first();
 
                 if (! $authorization) {
 
-                    Login::create([
+                    Login::query()->create([
                         'user_id' => $user->id,
                         'ip' => getClientIp(),
                         'brow' => getUserAgent(),
@@ -154,25 +155,24 @@ if ($user = checkAuth()) {
 
     Registry::set('user', $user);
 
-    $setting['themes'] = getUser('themes');
+    $setting['themes'] = $user->themes;
 
     // Забанен
-    if (getUser('ban')) {
+    if ($user->level == User::BANNED) {
         if (! Request::is('ban', 'rules', 'logout')) {
-            redirect('/ban?log='.getUser('login'));
+            redirect('/ban?log='.$user->login);
         }
     }
 
     // Подтверждение регистрации
-    if (setting('regkeys') > 0 && getUser('confirmreg') > 0 && empty(getUser('ban'))) {
-        if (! Request::is('key', 'login', 'logout')) {
-            redirect('/key?log='.getUser('login'));
+    if (setting('regkeys') > 0 && $user->level == User::PENDED) {
+        if (! Request::is('key', 'ban', 'login', 'logout')) {
+            redirect('/key?log='.$user->login);
         }
     }
 
     // ---------------------- Получение ежедневного бонуса -----------------------//
-    if (getUser('timebonus') < SITETIME - 82800) {
-        $user = User::where('id', getUser('id'));
+    if ($user->timebonus < SITETIME - 82800) {
         $user->update([
             'timebonus' => SITETIME,
             'money' => DB::raw('money + '.setting('bonusmoney')),
