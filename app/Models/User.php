@@ -7,7 +7,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class User extends BaseModel
 {
-    const OWNER   = 'owner';   // Владелец
+    const BOSS   =  'boss';    // Владелец
     const ADMIN   = 'admin';   // Админ
     const MODER   = 'moder';   // Модератор
     const MANAGER = 'manager'; // Менеджер
@@ -17,21 +17,10 @@ class User extends BaseModel
     const BANNED  = 'banned';  // Забаненный
 
     /**
-     * Группа администраторов
-     */
-    const GROUP_ADMINS = [
-        self::OWNER,
-        self::ADMIN,
-        self::MODER,
-        self::MANAGER,
-        self::EDITOR,
-    ];
-
-    /**
      * Все пользователи
      */
-    const GROUP_USERS = [
-        self::OWNER,
+    const GROUPS = [
+        self::BOSS,
         self::ADMIN,
         self::MODER,
         self::MANAGER,

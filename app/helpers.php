@@ -300,19 +300,29 @@ function userLevel($level)
     $name = explode(',', setting('statusname'));
 
     switch ($level) {
-        case User::OWNER: $status = $name[0];
+        case User::BOSS:
+            $status = $name[0];
             break;
-        case User::ADMIN: $status = $name[1];
+        case User::ADMIN:
+            $status = $name[1];
             break;
-        case User::MODER: $status = $name[2];
+        case User::MODER:
+            $status = $name[2];
             break;
-        case User::EDITOR: $status = $name[3];
+        case User::MANAGER:
+            $status = $name[3];
             break;
-        case User::USER: $status = $name[4];
+        case User::EDITOR:
+            $status = $name[4];
             break;
-        case User::GUEST: $status = $name[5];
+        case User::USER:
+            $status = $name[5];
             break;
-        case User::BANNED: $status = $name[6];
+        case User::PENDED:
+            $status = $name[6];
+            break;
+        case User::BANNED:
+            $status = $name[7];
             break;
         default: $status = setting('statusdef');
     }
@@ -1081,24 +1091,14 @@ function isUser()
 }
 
 /**
- * Возвращает входит ли пользователь в группу администрации
+ * Возвращает является ли пользователь администратором
  *
  * @param string $level уровень доступа
  * @return bool         является ли пользователь администратором
  */
-function isAdmin($level = null)
+function isAdmin($level = User::EDITOR)
 {
-    if ($level) {
-        return access($level);
-    }
-
-    $access = array_flip(User::GROUP_ADMINS);
-
-    if (user() && isset($access[user('level')])) {
-        return true;
-    }
-
-    return false;
+    return access($level);
 }
 
 /**
@@ -1109,9 +1109,14 @@ function isAdmin($level = null)
  */
 function access($level)
 {
-    $access = array_flip(User::GROUP_USERS);
+    $access = array_flip(User::GROUPS);
 
-    if (user() && isset($access[$level]) && $access[user('level')] <= $access[$level]) {
+    if (
+        user()
+        && isset($access[$level])
+        && isset($access[user('level')])
+        && $access[user('level')] <= $access[$level]
+    ) {
         return true;
     }
 

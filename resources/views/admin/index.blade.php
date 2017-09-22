@@ -43,7 +43,7 @@
     @endif
 
     @if ($isOwner)
-        <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Суперадмин</b></div>
+        <div class="b"><i class="fa fa-cog fa-lg text-muted"></i> <b>Босс</b></div>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/setting">Настройки сайта</a><br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br>
         {{ showAdminLinks(101) }}
