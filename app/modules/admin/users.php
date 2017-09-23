@@ -183,7 +183,7 @@ if (isAdmin([101, 102])) {
                     echo '<input value="Изменить" type="submit"></form></div><br>';
 
                     echo '<div class="b"><b>Дополнительная информация</b></div>';
-                    if ($user['confirmreg'] == 1) {
+                    if ($user['level'] == 'pended') {
                         echo '<span style="color:#ff0000"><b>Аккаунт не активирован</b></span><br>';
                     }
 
@@ -193,7 +193,7 @@ if (isAdmin([101, 102])) {
                         echo '<b>Последний IP:</b> '.$visit['ip'].'<br>';
                     }
 
-                    if ($user['ban'] == 1 && $user['timeban'] > SITETIME) {
+                    if ($user['level'] == 'banned' && $user['timeban'] > SITETIME) {
                         echo '<span style="color:#ff0000"><b>Пользователь забанен</b></span><br>';
                     }
                     if (!empty($user['timelastban']) && !empty($user['reasonban'])) {

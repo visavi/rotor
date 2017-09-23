@@ -195,7 +195,8 @@ class UserController extends BaseController
                 $meil        = strtolower(check(Request::input('meil')));
                 $domain      = utfSubstr(strrchr($meil, '@'), 1);
                 $gender      = Request::input('gender') == 1 ? 1 : 2;
-                $activateKey = '';
+                $activateKey = null;
+                $level       = User::USER;
 
                 $validation = new Validation();
                 $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
@@ -263,32 +264,25 @@ class UserController extends BaseController
                     // --- Уведомление о регистрации на email ---//
                     $message = 'Добро пожаловать, ' . $logs . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteLink(setting('home')) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $logs . '</b><br><b>Пароль: ' . $pars . '</b><br><br>';
 
-                    if (setting('regkeys') == 1) {
-                        $activateKey = str_random();
+                    if (setting('regkeys')) {
+                        $activateKey  = str_random();
                         $activateLink = siteLink(setting('home')).'/key?code=' . $activateKey;
-
-                        echo '<b><span style="color:#ff0000">Внимание! После входа на сайт, вам будет необходимо ввести мастер-ключ для подтверждения регистрации<br>';
-                        echo 'Мастер-ключ был выслан вам на почтовый ящик: ' . $meil . '</span></b><br><br>';
-                    }
-
-                    if (setting('regkeys') == 2) {
-                        echo '<b><span style="color:#ff0000">Внимание! Ваш аккаунт будет активирован только после проверки администрацией!</span></b><br><br>';
+                        $level        = User::PENDED;
                     }
 
                     $user = User::query()->create([
-                        'login' => $logs,
-                        'password' => password_hash($pars, PASSWORD_BCRYPT),
-                        'email' => $meil,
-                        'joined' => SITETIME,
-                        'level' => 107,
-                        'gender' => $gender,
-                        'themes' => 0,
-                        'point' => 0,
-                        'money' => setting('registermoney'),
+                        'login'         => $logs,
+                        'password'      => password_hash($pars, PASSWORD_BCRYPT),
+                        'email'         => $meil,
+                        'joined'        => SITETIME,
+                        'level'         => $level,
+                        'gender'        => $gender,
+                        'themes'        => 0,
+                        'point'         => 0,
+                        'money'         => setting('registermoney'),
                         'timelastlogin' => SITETIME,
-                        'confirmreg' => setting('regkeys'),
                         'confirmregkey' => $activateKey,
-                        'subscribe' => str_random(32),
+                        'subscribe'     => str_random(32),
                     ]);
 
                     // Активация пригласительного ключа
@@ -452,7 +446,7 @@ class UserController extends BaseController
             abort('default', 'Подтверждение регистрации выключено на сайте!');
         }
 
-        if (! $user->confirmreg) {
+        if ($user->level != User::PENDED) {
             abort('default', 'Вашему профилю не требуется подтверждение регистрации!');
         }
 
@@ -462,8 +456,8 @@ class UserController extends BaseController
             if ($code == $user->confirmregkey) {
 
                 $user->update([
-                    'confirmreg'    => 0,
                     'confirmregkey' => null,
+                    'level'         => User::USER,
                 ]);
 
                 setFlash('success', 'Аккаунт успешно активирован!');

@@ -8,11 +8,11 @@
 
     <h1 style="display:inline;">{!! userAvatar($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ userVisit($user) }}</small></h1>
 
-    @if ($user['confirmreg'] == 1)
+    @if ($user['level'] == 'pended')
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>
     @endif
 
-    @if ($user['ban'] == 1 && $user['timeban'] > SITETIME)
+    @if ($user['level'] == 'banned' && $user['timeban'] > SITETIME)
         <div class="form">
             <b><span style="color:#ff0000">Внимание, пользователь забанен!</span></b><br>
             До окончания бана осталось {{ formatTime($user['timeban'] - SITETIME) }}<br>

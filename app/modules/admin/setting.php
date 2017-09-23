@@ -182,17 +182,6 @@ if (isAdmin([101])) {
                 }
                 echo '</select><br>';
 
-                echo 'Подтверждение регистрации:<br>';
-                echo '<select name="regkeys">';
-                $regist = [0 => 'Выключить', 1 => 'Автоматически', 2 => 'Вручную'];
-
-                foreach($regist as $k => $v) {
-                    $selected = ($k == $setting['regkeys']) ? ' selected="selected"' : '';
-
-                    echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
-                }
-                echo '</select><br>';
-
                 echo 'Доступ к сайту:<br>';
                 echo '<select name="closedsite">';
                 $statsite = [0 => 'Сайт открыт', 1 => 'Закрыто для гостей', 2 => 'Закрыто для всех'];
@@ -204,10 +193,14 @@ if (isAdmin([101])) {
                 }
                 echo '</select><br>';
 
-                $checked = ($setting['openreg'] == 1) ? ' checked="checked"' : '';
+                echo 'Подтверждение регистрации:<br>';
+                $checked = $setting['regkeys'] ? ' checked="checked"' : '';
+                echo '<input name="regkeys" id="regkeys" type="checkbox" value="1"'.$checked.'> <label for="openreg">Включить подтверждение</label><br>';
+
+                $checked = $setting['openreg'] ? ' checked="checked"' : '';
                 echo '<input name="openreg" id="openreg" type="checkbox" value="1"'.$checked.'> <label for="openreg">Разрешить регистрацию</label><br>';
 
-                $checked = ($setting['invite'] == 1) ? ' checked="checked"' : '';
+                $checked = $setting['invite'] ? ' checked="checked"' : '';
                 echo '<input name="invite" id="invite" type="checkbox" value="1"'.$checked.' title="Для регистрация необходимо ввести специальный пригласительный ключ"> <label for="invite">Регистрация по приглашениям</label><br>';
 
                 echo '<input value="Изменить" type="submit"></form></div><br>';
@@ -226,7 +219,7 @@ if (isAdmin([101])) {
             $uid = check($_GET['uid']);
             $invite = (empty($_POST['invite'])) ? 0 : 1;
             $openreg = (empty($_POST['openreg'])) ? 0 : 1;
-            $regkeys = (isset($_POST['regkeys'])) ? abs(intval($_POST['regkeys'])) : 0;
+            $regkeys = (empty($_POST['regkeys'])) ? 0 : 1;
             $closedsite = (isset($_POST['closedsite'])) ? abs(intval($_POST['closedsite'])) : 0;
 
             if (getUser('login') == setting('nickname')) {

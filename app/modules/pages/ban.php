@@ -10,7 +10,7 @@ if (isset($_GET['act'])) {
 //show_title('Бан пользователя');
 
 if (getUser()) {
-    if (getUser('ban') == 1) {
+    if (getUser('level') == User::BANNED) {
         if (getUser('timeban') > SITETIME) {
             switch ($action):
             ############################################################################################

@@ -17,17 +17,14 @@ if (isAdmin([101, 102, 103])) {
     ############################################################################################
         case "index":
 
-            if (setting('regkeys') == 0) {
+            if (setting('regkeys')) {
+                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включено автоматическое подтверждение регистраций!</span></b><br><br>';
+            } else {
                 echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Подтверждение регистрации отключено!</span></b><br><br>';
             }
-            if (setting('regkeys') == 1) {
-                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включено автоматическое подтверждение регистраций!</span></b><br><br>';
-            }
-            if (setting('regkeys') == 2) {
-                echo '<i class="fa fa-exclamation-circle"></i> <b><span style="color:#ff0000">Включена модерация регистраций!</span></b><br><br>';
-            }
+
             // --------------- Удаление не подтвердивших регистрацию -----------//
-            if (setting('regkeys') == 1) {
+            if (setting('regkeys')) {
                 $querydeluser = DB::select("SELECT `login` FROM `users` WHERE `confirmreg`>? AND `joined`<?;", [0, SITETIME-86400]);
                 $arrdelusers = $querydeluser -> fetchAll(PDO::FETCH_COLUMN);
 

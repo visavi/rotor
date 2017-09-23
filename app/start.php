@@ -165,7 +165,7 @@ if ($user = checkAuth()) {
     }
 
     // Подтверждение регистрации
-    if (setting('regkeys') > 0 && $user->level == User::PENDED) {
+    if (setting('regkeys') && $user->level == User::PENDED) {
         if (! Request::is('key', 'ban', 'login', 'logout')) {
             redirect('/key?log='.$user->login);
         }

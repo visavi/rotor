@@ -683,7 +683,7 @@ function statsSpam()
 // --------------- Функция вывода количества забаненных --------------------//
 function statsBanned()
 {
-    return User::query()->where('ban', 1)->where('timeban', '>', SITETIME)->count();
+    return User::query()->where('level', User::BANNED)->where('timeban', '>', SITETIME)->count();
 }
 
 // --------------- Функция вывода истории банов --------------------//
@@ -695,7 +695,7 @@ function statsBanHist()
 // ------------ Функция вывода количества ожидающих регистрации -----------//
 function statsRegList()
 {
-    return User::query()->where('confirmreg', '>', 0)->count();
+    return User::query()->where('level', User::PENDED)->count();
 }
 
 // --------------- Функция вывода количества забаненных IP --------------------//

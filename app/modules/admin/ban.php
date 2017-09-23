@@ -57,7 +57,7 @@ if (isAdmin([101, 102, 103])) {
                 echo '<i class="fa fa-history"></i> <b><a href="/admin/banhist?act=view&amp;uz='.$uz.'">История банов</a></b> ('.$total.')<br><br>';
 
                 if ($user['level'] < 101 || $user['level'] > 105) {
-                    if (empty($user['ban']) || $user['timeban'] < SITETIME) {
+                    if ($user['level'] != User::BANNED || $user['timeban'] < SITETIME) {
                         if ($user['totalban'] < 5) {
                             echo '<div class="form">';
                             echo '<form method="post" action="/admin/ban?act=zaban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">';
@@ -113,7 +113,7 @@ if (isAdmin([101, 102, 103])) {
                 echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.userVisit($user['login']).'<br><br>';
 
                 if ($user['level'] < 101 || $user['level'] > 105) {
-                    if (!empty($user['ban']) && $user['timeban'] > SITETIME) {
+                    if ($user['level'] == User::BANNED && $user['timeban'] > SITETIME) {
                         if (!empty($user['timelastban'])) {
                             echo 'Последний бан: '.dateFixed($user['timelastban'], 'j F Y / H:i').'<br>';
                             echo 'Забанил: '.profile($user['loginsendban']).'<br>';
@@ -176,7 +176,7 @@ if (isAdmin([101, 102, 103])) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
-                    if (!empty($user['ban']) && $user['timeban'] > SITETIME) {
+                    if ($user['level'] == User::BANNED && $user['timeban'] > SITETIME) {
                         if ($user['level'] < 101 || $user['level'] > 105) {
                             if ($bantype == 'min') {
                                 $bantotaltime = $bantime;
@@ -242,7 +242,7 @@ if (isAdmin([101, 102, 103])) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
-                    if (empty($user['ban']) || $user['timeban'] < SITETIME) {
+                    if ($user['level'] != User::BANNED || $user['timeban'] < SITETIME) {
                         if ($user['level'] < 101 || $user['level'] > 105) {
                             if ($bantype == 'min') {
                                 $bantotaltime = $bantime;
@@ -321,7 +321,7 @@ if (isAdmin([101, 102, 103])) {
                 $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
 
                 if (!empty($user)) {
-                    if ($user['ban'] == 1) {
+                    if ($user['level'] == User::BANNED) {
                         if ($user['totalban'] > 0 && $user['timeban'] > SITETIME + 43200) {
                             $bancount = 1;
                         } else {
