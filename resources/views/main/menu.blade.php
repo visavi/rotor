@@ -15,7 +15,7 @@
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/profile">Мой профиль</a><br>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/account">Мои данные</a><br>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/setting">Настройки</a><br>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/wall">Моя стена</a> ({{ userWall(getUser()) }})<br>
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/wall/{{ getUser('login') }}">Моя стена</a> ({{ userWall(getUser()) }})<br>
 
 <div class="b"><i class="fa fa-star fa-lg text-muted"></i> <b>Активность</b></div>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/notebook">Блокнот</a><br>

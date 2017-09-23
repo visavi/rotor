@@ -8,6 +8,7 @@ $app->setVersion(VERSION);
 
 $app->addCommands([
     new \App\Commands\Install(),
+    new \App\Commands\KeyGenerate(),
 ]);
 
 $app->run();

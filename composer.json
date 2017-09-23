@@ -36,8 +36,9 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "php -r \"copy('.env.example', '.env');\"",
-            "php rotor install"
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php rotor install",
+            "@php rotor key:generate"
         ]
     },
     "autoload": {
@@ -55,3 +56,4 @@
         }
     }
 }
+
