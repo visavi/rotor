@@ -13,22 +13,22 @@
         @foreach ($photos as $data)
             <div class="b">
                 <i class="fa fa-picture-o"></i>
-                <b><a href="/gallery/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ formatFileSize(HOME.'/uploads/pictures/'.$data['link']) }})<br>
+                <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(HOME.'/uploads/pictures/'.$data->link) }})<br>
 
                 @if ($moder)
-                    <a href="/gallery/{{ $data['id'] }}/edit?page={{ $page['current'] }}">Редактировать</a> /
-                    <a href="/gallery/{{ $data['id'] }}/delete?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
+                    <a href="/gallery/{{ $data->id }}/edit?page={{ $page['current'] }}">Редактировать</a> /
+                    <a href="/gallery/{{ $data->id }}/delete?page={{ $page['current'] }}&amp;token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a>
                 @endif
             </div>
             <div>
-                <a href="/gallery/{{ $data['id'] }}">{!! resizeImage('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title']]) !!}</a><br>
+                <a href="/gallery/{{ $data->id }}">{!! resizeImage('uploads/pictures/', $data->link, setting('previewsize'), ['alt' => $data->title]) !!}</a><br>
 
-                @if ($data['text'])
-                   {{ bbCode($data['text']) }}<br>
+                @if ($data->text)
+                   {{ bbCode($data->text) }}<br>
                 @endif
 
-                Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data['created_at']) }})<br>
-                <a href="/gallery/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
+                Добавлено: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
+                <a href="/gallery/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
             </div>
         @endforeach
 
