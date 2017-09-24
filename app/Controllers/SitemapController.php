@@ -39,7 +39,8 @@ class SitemapController extends BaseController
      */
     public function blog()
     {
-        $blogs = Blog::select('blogs.*', DB::raw('MAX(c.created_at) as last_time'))
+        $blogs = Blog::query()
+            ->select('blogs.*', DB::raw('MAX(c.created_at) as last_time'))
             ->leftJoin('comments as c', function($join){
                 $join->on('blogs.id', '=', 'c.relate_id')
                     ->where('relate_type', '=', Blog::class);
@@ -70,7 +71,8 @@ class SitemapController extends BaseController
      */
     public function news()
     {
-        $newses = News::select('news.*', DB::raw('MAX(c.created_at) as last_time'))
+        $newses = News::query()
+            ->select('news.*', DB::raw('MAX(c.created_at) as last_time'))
             ->leftJoin('comments as c', function($join){
                 $join->on('news.id', '=', 'c.relate_id')
                     ->where('relate_type', '=', News::class);
@@ -102,7 +104,7 @@ class SitemapController extends BaseController
      */
     public function topics()
     {
-        $topics = Topic::orderBy('updated_at', 'desc')->limit(25000)->get();
+        $topics = Topic::query()->orderBy('updated_at', 'desc')->limit(25000)->get();
 
         $locs = [];
         foreach ($topics as $topic) {
@@ -125,7 +127,8 @@ class SitemapController extends BaseController
      */
     public function downs()
     {
-        $downs = Down::select('downs.*', DB::raw('MAX(c.created_at) as last_time'))
+        $downs = Down::query()
+            ->select('downs.*', DB::raw('MAX(c.created_at) as last_time'))
             ->leftJoin('comments as c', function($join){
                 $join->on('downs.id', '=', 'c.relate_id')
                     ->where('relate_type', '=', Down::class);

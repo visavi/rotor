@@ -27,7 +27,7 @@ class IgnoreController extends BaseController
     public function index()
     {
         if (Request::isMethod('post')) {
-            $page = abs(intval(Request::input('page', 1)));
+            $page  = abs(intval(Request::input('page', 1)));
             $token = check(Request::input('token'));
             $login = check(Request::input('user'));
 

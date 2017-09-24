@@ -17,10 +17,11 @@ class NewsController extends BaseController
      */
     public function index()
     {
-        $total = News::count();
+        $total = News::query()->count();
         $page = paginate(setting('postnews'), $total);
 
-        $news = News::orderBy('created_at', 'desc')
+        $news = News::query()
+            ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->with('user')
@@ -36,7 +37,7 @@ class NewsController extends BaseController
      */
     public function view($id)
     {
-        $news = News::find($id);
+        $news = News::query()->find($id);
 
         if (! $news) {
             abort(404, 'Новость не существует, возможно она была удалена!');
@@ -44,7 +45,8 @@ class NewsController extends BaseController
 
         $news['text'] = str_replace('[cut]', '', $news['text']);
 
-        $comments = Comment::where('relate_type', News::class)
+        $comments = Comment::query()
+            ->where('relate_type', News::class)
             ->where('relate_id', $id)
             ->limit(5)
             ->orderBy('created_at', 'desc')
@@ -61,7 +63,7 @@ class NewsController extends BaseController
      */
     public function comments($id)
     {
-        $news = News::find($id);
+        $news = News::query()->find($id);
 
         if (! $news) {
             abort(404, 'Новость не существует, возможно она была удалена!');
@@ -82,7 +84,7 @@ class NewsController extends BaseController
             if ($validation->run()) {
                 $msg = antimat($msg);
 
-                Comment::create([
+                Comment::query()->create([
                     'relate_type' => News::class,
                     'relate_id'   => $news->id,
                     'text'        => $msg,
@@ -92,7 +94,7 @@ class NewsController extends BaseController
                     'brow'        => getUserAgent(),
                 ]);
 
-                $user = User::where('id', getUser('id'));
+                $user = User::query()->where('id', getUser('id'));
                 $user->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
@@ -117,13 +119,15 @@ class NewsController extends BaseController
             }
         }
 
-        $total = Comment::where('relate_type', News::class)
+        $total = Comment::query()
+            ->where('relate_type', News::class)
             ->where('relate_id', $id)
             ->count();
 
         $page = paginate(setting('postnews'), $total);
 
-        $comments = Comment::where('relate_type', News::class)
+        $comments = Comment::query()
+            ->where('relate_type', News::class)
             ->where('relate_id', $id)
             ->offset($page['offset'])
             ->limit($page['limit'])
@@ -145,7 +149,8 @@ class NewsController extends BaseController
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
-        $comment = Comment::where('relate_type', News::class)
+        $comment = Comment::query()
+            ->where('relate_type', News::class)
             ->where('comments.id', $id)
             ->where('comments.user_id', getUser('id'))
             ->first();
@@ -189,7 +194,7 @@ class NewsController extends BaseController
      */
     public function end($id)
     {
-        $news = News::find($id);
+        $news = News::query()->find($id);
 
         if (empty($news)) {
             abort(404, 'Ошибка! Данной новости не существует!');
@@ -204,7 +209,7 @@ class NewsController extends BaseController
      */
     public function rss()
     {
-        $newses = News::orderBy('created_at', 'desc')->limit(15)->get();
+        $newses = News::query()->orderBy('created_at', 'desc')->limit(15)->get();
 
         if ($newses->isEmpty()) {
             abort('default', 'Новости не найдены!');
@@ -218,7 +223,7 @@ class NewsController extends BaseController
      */
     public function allComments()
     {
-        $total = Comment::where('relate_type', News::class)->count();
+        $total = Comment::query()->where('relate_type', News::class)->count();
 
         if ($total > 500) {
             $total = 500;
@@ -226,7 +231,8 @@ class NewsController extends BaseController
 
         $page = paginate(setting('postnews'), $total);
 
-        $comments = Comment::select('comments.*', 'title', 'comments')
+        $comments = Comment::query()
+            ->select('comments.*', 'title', 'comments')
             ->where('relate_type', News::class)
             ->leftJoin('news', 'comments.relate_id', '=', 'news.id')
             ->offset($page['offset'])
@@ -243,13 +249,14 @@ class NewsController extends BaseController
      */
     public function viewComment($id, $cid)
     {
-        $news = News::find($id);
+        $news = News::query()->find($id);
 
         if (empty($news)) {
             abort(404, 'Ошибка! Данной новости не существует!');
         }
 
-        $total = Comment::where('relate_type', News::class)
+        $total = Comment::query()
+            ->where('relate_type', News::class)
             ->where('relate_id', $id)
             ->where('id', '<=', $cid)
             ->orderBy('created_at')

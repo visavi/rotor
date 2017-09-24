@@ -26,10 +26,11 @@ class BookmarkController extends BaseController
      */
     public function index()
     {
-        $total = Bookmark::where('user_id', getUser('id'))->count();
+        $total = Bookmark::query()->where('user_id', getUser('id'))->count();
         $page  = paginate(setting('forumtem'), $total);
 
-        $topics = Bookmark::select('bookmarks.posts as book_posts', 'bookmarks.topic_id', 'topics.*')
+        $topics = Bookmark::query()
+            ->select('bookmarks.posts as book_posts', 'bookmarks.topic_id', 'topics.*')
             ->where('bookmarks.user_id', getUser('id'))
             ->leftJoin('topics', 'bookmarks.topic_id', '=', 'topics.id')
             ->with('topic.user', 'topic.lastPost.user')
@@ -54,7 +55,7 @@ class BookmarkController extends BaseController
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
 
-        $topic = Topic::find($tid);
+        $topic = Topic::query()->find($tid);
         $validation->addRule('custom', $topic, 'Ошибка! Данной темы не существует!');
 
         if ($validation->run()) {
@@ -67,7 +68,7 @@ class BookmarkController extends BaseController
                 $bookmark->delete();
                 exit(json_encode(['status' => 'deleted', 'message' => 'Тема успешно удалена из закладок!']));
             } else {
-                Bookmark::create([
+                Bookmark::query()->create([
                     'user_id'  => getUser('id'),
                     'topic_id' => $tid,
                     'posts'    => $topic['posts'],
@@ -94,7 +95,8 @@ class BookmarkController extends BaseController
 
         if ($validation->run()) {
 
-            Bookmark::whereIn('topic_id', $topicIds)
+            Bookmark::query()
+                ->whereIn('topic_id', $topicIds)
                 ->where('user_id', getUser('id'))
                 ->delete();
 

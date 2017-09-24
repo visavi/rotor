@@ -31,12 +31,13 @@ class PrivateController extends BaseController
      */
     public function index()
     {
-        $total = Inbox::where('user_id', getUser('id'))->count();
+        $total = Inbox::query()->where('user_id', getUser('id'))->count();
         $page  = paginate(setting('privatpost'), $total);
 
-        $page['totalOutbox'] = Outbox::where('user_id', getUser('id'))->count();
+        $page['totalOutbox'] = Outbox::query()->where('user_id', getUser('id'))->count();
 
-        $messages = Inbox::where('user_id', getUser('id'))
+        $messages = Inbox::query()
+            ->where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
@@ -46,7 +47,7 @@ class PrivateController extends BaseController
         $newprivat = getUser('newprivat');
 
         if ($newprivat) {
-            $user = User::find(getUser('id'));
+            $user = User::query()->find(getUser('id'));
             $user->update([
                 'newprivat'      => 0,
                 'sendprivatmail' => 0,
@@ -61,17 +62,18 @@ class PrivateController extends BaseController
      */
     public function outbox()
     {
-        $total = Outbox::where('user_id', getUser('id'))->count();
+        $total = Outbox::query()->where('user_id', getUser('id'))->count();
         $page = paginate(setting('privatpost'), $total);
 
-        $messages = Outbox::where('user_id', getUser('id'))
+        $messages = Outbox::query()
+            ->where('user_id', getUser('id'))
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->with('recipient')
             ->get();
 
-        $page['totalInbox'] = Inbox::where('user_id', getUser('id'))->count();
+        $page['totalInbox'] = Inbox::query()->where('user_id', getUser('id'))->count();
 
         return view('private/outbox', compact('messages', 'page'));
     }
@@ -87,7 +89,7 @@ class PrivateController extends BaseController
             $login = check(Request::input('contact'));
         }
 
-        $user = User::where('login', $login)->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (Request::isMethod('post')) {
 
@@ -110,11 +112,12 @@ class PrivateController extends BaseController
                 }
 
                 // лимит ящика
-                $totalInbox = Inbox::where('user_id', $user->id)->count();
+                $totalInbox = Inbox::query()->where('user_id', $user->id)->count();
                 $validation->addRule('min', [$totalInbox, setting('limitmail')], 'Ящик получателя переполнен!');
 
                 // Проверка на игнор
-                $ignoring = Ignore::where('user_id', $user->id)
+                $ignoring = Ignore::query()
+                    ->where('user_id', $user->id)
                     ->where('ignore_id', getUser('id'))
                     ->first();
 
@@ -127,14 +130,14 @@ class PrivateController extends BaseController
 
                 $user->increment('newprivat');
 
-                Inbox::create([
+                Inbox::query()->create([
                     'user_id'    => $user->id,
                     'author_id'  => getUser('id'),
                     'text'       => $msg,
                     'created_at' => SITETIME,
                 ]);
 
-                Outbox::create([
+                Outbox::query()->create([
                     'user_id'       => getUser('id'),
                     'recipient_id'  => $user->id,
                     'text'          => $msg,
@@ -153,7 +156,8 @@ class PrivateController extends BaseController
             }
         }
 
-        $contacts = Contact::where('user_id', getUser('id'))
+        $contacts = Contact::query()
+            ->where('user_id', getUser('id'))
             ->rightJoin('users', 'contact.contact_id', '=', 'users.id')
             ->orderBy('users.login')
             ->get();
@@ -178,11 +182,13 @@ class PrivateController extends BaseController
         if ($validation->run()) {
 
             if ($type == 'outbox') {
-                Outbox::where('user_id', getUser('id'))
+                Outbox::query()
+                    ->where('user_id', getUser('id'))
                     ->whereIn('id', $del)
                     ->delete();
             } else {
-                Inbox::where('user_id', getUser('id'))
+                Inbox::query()
+                    ->where('user_id', getUser('id'))
                     ->whereIn('id', $del)
                     ->delete();
                 saveUserMail(60);
@@ -213,9 +219,9 @@ class PrivateController extends BaseController
         if ($validation->run()) {
 
             if ($type == 'outbox') {
-                Outbox::where('user_id', getUser('id'))->delete();
+                Outbox::query()->where('user_id', getUser('id'))->delete();
             } else {
-                Inbox::where('user_id', getUser('id'))->delete();
+                Inbox::query()->where('user_id', getUser('id'))->delete();
                 saveUserMail(60);
             }
 
@@ -243,18 +249,20 @@ class PrivateController extends BaseController
             abort('default', 'Отсутствует переписка с самим собой!');
         }
 
-        $totalInbox  = Inbox::where('user_id', getUser('id'))->where('author_id', $user->id)->count();
-        $totalOutbox = Outbox::where('user_id', getUser('id'))->where('recipient_id', $user->id)->count();
+        $totalInbox  = Inbox::query()->where('user_id', getUser('id'))->where('author_id', $user->id)->count();
+        $totalOutbox = Outbox::query()->where('user_id', getUser('id'))->where('recipient_id', $user->id)->count();
 
         $total = $totalInbox + $totalOutbox;
 
         $page = paginate(setting('privatpost'), $total);
 
-        $outbox = Outbox::select('id', 'user_id', 'user_id as author_id', 'text', 'created_at')
+        $outbox = Outbox::query()
+            ->select('id', 'user_id', 'user_id as author_id', 'text', 'created_at')
             ->where('user_id', getUser('id'))
             ->where('recipient_id', $user->id);
 
-        $messages = Inbox::where('user_id', getUser('id'))
+        $messages = Inbox::query()
+            ->where('user_id', getUser('id'))
             ->where('author_id', $user->id)
             ->unionAll($outbox)
             ->orderBy('created_at', 'desc')

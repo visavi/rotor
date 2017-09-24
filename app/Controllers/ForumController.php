@@ -19,7 +19,8 @@ class ForumController extends BaseController
      */
     public function index()
     {
-        $forums = Forum::where('parent_id', 0)
+        $forums = Forum::query()
+            ->where('parent_id', 0)
             ->with('lastTopic.lastPost.user')
             ->with('children')
             ->orderBy('sort')
@@ -43,15 +44,17 @@ class ForumController extends BaseController
             abort('default', 'Данного раздела не существует!');
         }
 
-        $forum->children = Forum::where('parent_id', $forum->id)
+        $forum->children = Forum::query()
+            ->where('parent_id', $forum->id)
             ->with('lastTopic.lastPost.user')
             ->get();
 
-        $total = Topic::where('forum_id', $fid)->count();
+        $total = Topic::query()->where('forum_id', $fid)->count();
 
         $page = paginate(setting('forumtem'), $total);
 
-        $topics = Topic::where('forum_id', $fid)
+        $topics = Topic::query()
+            ->where('forum_id', $fid)
             ->orderBy('locked', 'desc')
             ->orderBy('updated_at', 'desc')
             ->limit(setting('forumtem'))
@@ -69,7 +72,8 @@ class ForumController extends BaseController
     {
         $fid = abs(intval(Request::input('fid')));
 
-        $forums = Forum::where('parent_id', 0)
+        $forums = Forum::query()
+            ->where('parent_id', 0)
             ->with('children')
             ->orderBy('sort')
             ->get();
@@ -91,7 +95,7 @@ class ForumController extends BaseController
             $question = check(Request::input('question'));
             $answers  = check(Request::input('answer'));
 
-            $forum = Forum::find($fid);
+            $forum = Forum::query()->find($fid);
 
             $validation = new Validation();
             $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -128,7 +132,7 @@ class ForumController extends BaseController
                     'money'    => DB::raw('money + 5'),
                 ]);
 
-                $topic = Topic::create([
+                $topic = Topic::query()->create([
                     'forum_id'   => $forum->id,
                     'title'      => $title,
                     'user_id'    => getUser('id'),
@@ -137,7 +141,7 @@ class ForumController extends BaseController
                     'updated_at' => SITETIME,
                 ]);
 
-                $post = Post::create([
+                $post = Post::query()->create([
                     'topic_id'   => $topic->id,
                     'user_id'    => getUser('id'),
                     'text'       => $msg,
@@ -146,7 +150,7 @@ class ForumController extends BaseController
                     'brow'       => getUserAgent(),
                 ]);
 
-                Topic::where('id', $topic->id)->update(['last_post_id' => $post->id]);
+                Topic::query()->where('id', $topic->id)->update(['last_post_id' => $post->id]);
 
                 $forum->update([
                     'topics'        => DB::raw('topics + 1'),
@@ -163,7 +167,7 @@ class ForumController extends BaseController
 
                 // Создание голосования
                 if ($vote) {
-                    $vote = Vote::create([
+                    $vote = Vote::query()->create([
                         'title'      => $question,
                         'topic_id'   => $topic->id,
                         'created_at' => SITETIME,
@@ -177,7 +181,7 @@ class ForumController extends BaseController
                         ];
                     }
 
-                    VoteAnswer::insert($prepareAnswers);
+                    VoteAnswer::query()->insert($prepareAnswers);
                 }
 
                 setFlash('success', 'Новая тема успешно создана!');
@@ -205,7 +209,8 @@ class ForumController extends BaseController
 
         if (empty($find)) {
 
-            $forums = Forum::where('parent_id', 0)
+            $forums = Forum::query()
+                ->where('parent_id', 0)
                 ->with('children')
                 ->orderBy('sort')
                 ->get();
@@ -255,7 +260,8 @@ class ForumController extends BaseController
                         $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
                         $searchper = ($period > 0) ? "updated_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
-                        $result = Topic::select('id')
+                        $result = Topic::query()
+                            ->select('id')
                             ->whereRaw($searchsec . ' ' . $searchper . ' MATCH (`title`) AGAINST (? IN BOOLEAN MODE)', [$findme])
                             ->limit(100)
                             ->pluck('id')
@@ -270,7 +276,8 @@ class ForumController extends BaseController
                     if ($total > 0) {
                         $page = paginate(setting('forumtem'), $total);
 
-                        $topics = Topic::whereIn('id', $_SESSION['forumfindres'])
+                        $topics = Topic::query()
+                            ->whereIn('id', $_SESSION['forumfindres'])
                             ->with('lastPost.user')
                             ->orderBy('updated_at', 'desc')
                             ->offset($page['offset'])
@@ -309,7 +316,8 @@ class ForumController extends BaseController
                     if ($total > 0) {
                         $page = paginate(setting('forumpost'), $total);
 
-                        $posts = Post::whereIn('id', $_SESSION['forumfindres'])
+                        $posts = Post::query()
+                            ->whereIn('id', $_SESSION['forumfindres'])
                             ->with('user', 'topic')
                             ->orderBy('created_at', 'desc')
                             ->offset($page['offset'])
@@ -338,7 +346,8 @@ class ForumController extends BaseController
      */
     public function rss()
     {
-        $topics = Topic::where('closed', 0)
+        $topics = Topic::query()
+            ->where('closed', 0)
             ->with('lastPost.user')
             ->orderBy('updated_at', 'desc')
             ->limit(15)
@@ -356,13 +365,14 @@ class ForumController extends BaseController
      */
     public function rssPosts($tid)
     {
-        $topic = Topic::find($tid);
+        $topic = Topic::query()->find($tid);
 
         if (empty($topic)) {
             abort('default', 'Данной темы не существует!');
         }
 
-        $posts = Post::where('topic_id', $tid)
+        $posts = Post::query()
+            ->where('topic_id', $tid)
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->limit(15)
@@ -376,7 +386,7 @@ class ForumController extends BaseController
      */
     public function topThemes()
     {
-        $total = Topic::count();
+        $total = Topic::query()->count();
 
         if ($total > 500) {
             $total = 500;
@@ -384,7 +394,8 @@ class ForumController extends BaseController
 
         $page = paginate(setting('forumtem'), $total);
 
-        $topics = Topic::where('closed', 0)
+        $topics = Topic::query()
+            ->where('closed', 0)
             ->orderBy('posts', 'desc')
             ->limit(setting('forumtem'))
             ->offset($page['offset'])
@@ -399,7 +410,7 @@ class ForumController extends BaseController
      */
     public function topPosts()
     {
-        $total = Post::count();
+        $total = Post::query()->count();
 
         if ($total > 500) {
             $total = 500;
@@ -407,7 +418,8 @@ class ForumController extends BaseController
 
         $page = paginate(setting('forumpost'), $total);
 
-        $posts = Post::orderBy('rating', 'desc')
+        $posts = Post::query()
+            ->orderBy('rating', 'desc')
             ->limit(setting('forumpost'))
             ->offset($page['offset'])
             ->with('topic', 'user')

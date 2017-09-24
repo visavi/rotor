@@ -15,10 +15,11 @@ class VoteController extends BaseController
      */
     public function index()
     {
-        $total = Vote::where('closed', 0)->count();
+        $total = Vote::query()->where('closed', 0)->count();
         $page = paginate(setting('allvotes'), $total);
 
-        $votes = Vote::where('closed', 0)
+        $votes = Vote::query()
+            ->where('closed', 0)
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit(setting('allvotes'))
@@ -32,9 +33,9 @@ class VoteController extends BaseController
      */
     public function view($id)
     {
-        $show = Request::get('show');
+        $show = Request::input('show');
 
-        $vote = Vote::find($id);
+        $vote = Vote::query()->find($id);
 
         if (! $vote) {
             abort(404, 'Данного голосования не существует!');
@@ -44,7 +45,8 @@ class VoteController extends BaseController
             abort('default', 'Данный опрос закрыт для голосования!');
         }
 
-        $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
+        $vote['answers'] = VoteAnswer::query()
+            ->where('vote_id', $vote['id'])
             ->orderBy('id')
             ->get();
 
@@ -52,7 +54,8 @@ class VoteController extends BaseController
             abort('default', 'Для данного голосования не созданы варианты ответов');
         }
 
-        $vote['poll'] = VotePoll::where('vote_id', $vote['id'])
+        $vote['poll'] = VotePoll::query()
+            ->where('vote_id', $vote['id'])
             ->where('user_id', getUser('id'))
             ->first();
 
@@ -65,7 +68,7 @@ class VoteController extends BaseController
                 ->addRule('empty', $vote['poll'], 'Вы уже проголосовали в этом опросе!')
                 ->addRule('not_empty', $poll, 'Вы не выбрали вариант ответа!');
 
-            $answer = VoteAnswer::where('id', $poll)->where('vote_id', $vote->id)->first();
+            $answer = VoteAnswer::query()->where('id', $poll)->where('vote_id', $vote->id)->first();
 
             if ($poll) {
                 $validation->addRule('not_empty', $answer, 'Ответ для данного голосования не найден!');
@@ -75,7 +78,7 @@ class VoteController extends BaseController
                 $vote->increment('count');
                 $answer->increment('result');
 
-                VotePoll::create([
+                VotePoll::query()->create([
                     'vote_id'    => $vote->id,
                     'user_id'    => getUser('id'),
                     'created_at' => SITETIME,
@@ -107,13 +110,14 @@ class VoteController extends BaseController
      */
     public function voters($id)
     {
-        $vote = Vote::find($id);
+        $vote = Vote::query()->find($id);
 
         if (! $vote) {
             abort(404, 'Данного голосования не существует!');
         }
 
-        $voters = VotePoll::where('vote_id', $vote['id'])
+        $voters = VotePoll::query()
+            ->where('vote_id', $vote['id'])
             ->orderBy('created_at', 'desc')
             ->limit(50)
             ->get();
@@ -126,10 +130,11 @@ class VoteController extends BaseController
      */
     public function history()
     {
-        $total = Vote::where('closed', 1)->count();
+        $total = Vote::query()->where('closed', 1)->count();
         $page = paginate(setting('allvotes'), $total);
 
-        $votes = Vote::where('closed', 1)
+        $votes = Vote::query()
+            ->where('closed', 1)
             ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit(setting('allvotes'))
@@ -143,7 +148,7 @@ class VoteController extends BaseController
      */
     public function viewHistory($id)
     {
-        $vote = Vote::find($id);
+        $vote = Vote::query()->find($id);
 
         if (! $vote) {
             abort(404, 'Данного голосования не существует!');
@@ -153,7 +158,8 @@ class VoteController extends BaseController
             abort('default', 'Данный опрос еще не в архиве!');
         }
 
-        $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
+        $vote['answers'] = VoteAnswer::query()
+            ->where('vote_id', $vote['id'])
             ->orderBy('id')
             ->get();
 

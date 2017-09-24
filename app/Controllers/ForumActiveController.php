@@ -21,7 +21,7 @@ class ForumActiveController extends BaseController
 
         $login = check(Request::input('user', getUser('login')));
 
-        $this->user = User::where('login', $login)->first();
+        $this->user = User::query()->where('login', $login)->first();
 
         if (! $this->user) {
             abort('default', 'Пользователь не найден!');
@@ -34,7 +34,7 @@ class ForumActiveController extends BaseController
     public function themes()
     {
         $user  = $this->user;
-        $total = Topic::where('user_id', $user->id)->count();
+        $total = Topic::query()->where('user_id', $user->id)->count();
 
         if (! $total) {
             abort('default', 'Созданных тем еще нет!');
@@ -42,7 +42,8 @@ class ForumActiveController extends BaseController
 
         $page = paginate(setting('forumtem'), $total);
 
-        $topics = Topic::where('user_id', $user->id)
+        $topics = Topic::query()
+            ->where('user_id', $user->id)
             ->orderBy('updated_at', 'desc')
             ->limit(setting('forumtem'))
             ->offset($page['offset'])
@@ -58,7 +59,7 @@ class ForumActiveController extends BaseController
     public function posts()
     {
         $user  = $this->user;
-        $total = Post::where('user_id', $user->id)->count();
+        $total = Post::query()->where('user_id', $user->id)->count();
 
         if (! $total) {
             abort('default', 'Созданных сообщений еще нет!');
@@ -66,7 +67,8 @@ class ForumActiveController extends BaseController
 
         $page = paginate(setting('forumpost'), $total);
 
-        $posts = Post::where('user_id', $user->id)
+        $posts = Post::query()
+            ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->limit(setting('forumpost'))
             ->offset($page['offset'])
@@ -95,7 +97,8 @@ class ForumActiveController extends BaseController
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
 
-        $post = Post::where('id', $tid)
+        $post = Post::query()
+            ->where('id', $tid)
             ->with('topic.forum')
             ->first();
 

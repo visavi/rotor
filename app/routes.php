@@ -116,8 +116,9 @@ $router->map('POST', '/ajax/delcomment', 'AjaxController@delComment');
 $router->map('POST', '/ajax/rating', 'AjaxController@rating');
 $router->map('POST', '/ajax/complaint', 'AjaxController@complaint');
 
-$router->map('GET|POST', '/wall/[user:login]', 'WallController@index', 'wall');
-$router->map('POST', '/wall/delete', 'WallController@delete');
+$router->map('GET',  '/wall/[user:login]', 'WallController@index', 'wall');
+$router->map('POST', '/wall/[user:login]/create', 'WallController@create');
+$router->map('POST', '/wall/[user:login]/delete', 'WallController@delete');
 
 $router->map('GET',      '/private/[outbox|history|clear:action]?', 'PrivateController@index');
 $router->map('POST',     '/private/[delete:action]', 'PrivateController');

@@ -12,7 +12,8 @@ class LoadController extends BaseController
      */
     public function index()
     {
-        $cats = Cats::where('parent_id', 0)
+        $cats = Cats::query()
+            ->where('parent_id', 0)
             ->with('children', 'new', 'children.new')
             ->orderBy('sort')
             ->get();
@@ -21,7 +22,8 @@ class LoadController extends BaseController
             abort('default', 'Разделы загрузок еще не созданы!');
         }
 
-        $new = Down::where('active', 1)
+        $new = Down::query()
+            ->where('active', 1)
             ->where('created_at', '>', SITETIME-3600 * 120)
             ->count();
 

@@ -41,7 +41,7 @@ class PageController extends BaseController
      */
     public function rules()
     {
-        $rules = Rule::first();
+        $rules = Rule::query()->first();
 
         if ($rules) {
             $rules['text'] = str_replace(
@@ -59,10 +59,11 @@ class PageController extends BaseController
      */
     public function smiles()
     {
-        $total = Smile::count();
+        $total = Smile::query()->count();
         $page = paginate(setting('smilelist'), $total);
 
-        $smiles = Smile::orderBy(DB::raw('CHAR_LENGTH(`code`)'))
+        $smiles = Smile::query()
+            ->orderBy(DB::raw('CHAR_LENGTH(`code`)'))
             ->orderBy('name')
             ->limit(setting('smilelist'))
             ->offset($page['offset'])

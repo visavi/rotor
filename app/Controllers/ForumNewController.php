@@ -12,7 +12,7 @@ class ForumNewController extends BaseController
      */
     public function themes()
     {
-        $total = Topic::count();
+        $total = Topic::query()->count();
 
         if (!$total) {
             abort('default', 'Созданных тем еще нет!');
@@ -24,7 +24,8 @@ class ForumNewController extends BaseController
 
         $page = paginate(setting('forumtem'), $total);
 
-        $topics = Topic::orderBy('updated_at', 'desc')
+        $topics = Topic::query()
+            ->orderBy('updated_at', 'desc')
             ->limit(setting('forumtem'))
             ->offset($page['offset'])
             ->with('forum', 'user', 'lastPost.user')
@@ -38,7 +39,7 @@ class ForumNewController extends BaseController
      */
     public function posts()
     {
-        $total = Post::count();
+        $total = Post::query()->count();
 
         if (!$total) {
             abort('default', 'Созданных сообщений еще нет!');
@@ -50,7 +51,8 @@ class ForumNewController extends BaseController
 
         $page = paginate(setting('forumpost'), $total);
 
-        $posts = Post::orderBy('created_at', 'desc')
+        $posts = Post::query()
+            ->orderBy('created_at', 'desc')
             ->limit(setting('forumpost'))
             ->offset($page['offset'])
             ->with('topic', 'user')

@@ -66,7 +66,7 @@ class MailController extends BaseController
             $login = check(Request::input('user'));
             $protect = check(Request::input('protect'));
 
-            $user = User::where('login', $login)->orWhere('email', $login)->first();
+            $user = User::query()->where('login', $login)->orWhere('email', $login)->first();
             if (! $user) {
                 abort('default', 'Пользователь с данным логином или email не найден!');
             }
@@ -113,7 +113,7 @@ class MailController extends BaseController
 
         $key = check(Request::input('key'));
 
-        $user = User::where('keypasswd', $key)->first();
+        $user = User::query()->where('keypasswd', $key)->first();
         if (! $user) {
             abort('default', 'Ключ для восстановления недействителен!');
         }
@@ -160,7 +160,7 @@ class MailController extends BaseController
             abort('default', 'Отсутствует ключ для отписки от рассылки');
         }
 
-        $user = User::where('subscribe', $key)->first();
+        $user = User::query()->where('subscribe', $key)->first();
 
         if (! $user) {
             abort('default', 'Ключ для отписки от рассылки устарел!');

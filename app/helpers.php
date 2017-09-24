@@ -732,7 +732,8 @@ function statsNews()
 // ---------- Функция вывода записей в черном списке ------------//
 function statsBlacklist()
 {
-    $blacklist = BlackList::query()->select('type', DB::raw('count(*) as total'))
+    $blacklist = BlackList::query()
+        ->select('type', DB::raw('count(*) as total'))
         ->groupBy('type')
         ->pluck('total', 'type')
         ->all();
@@ -1540,13 +1541,14 @@ function resizeImage($dir, $name, $size, $params = [])
 // ------------- Функция вывода ссылки на анкету -------------//
 function profile($user, $color = false)
 {
-    if ($user){
+    if ($user->id){
         if ($color){
             return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$user->login.'</span></a>';
         } else {
             return '<a href="/user/'.$user->login.'">'.$user->login.'</a>';
         }
     }
+
     return setting('guestsuser');
 }
 
@@ -2163,15 +2165,15 @@ function getUserById($id)
  * Возвращает настройки пользователя по ключу
  *
  * @param  string $key ключ массива
- * @return string      данные
+ * @return string|\Illuminate\Database\Query\Builder
  */
 function getUser($key = null)
 {
     if (Registry::has('user')) {
-        if (empty($key)) {
-            return Registry::get('user');
-        } else {
+        if ($key) {
             return Registry::get('user')[$key] ?? null;
+        } else {
+            return Registry::get('user');
         }
     }
 

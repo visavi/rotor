@@ -22,10 +22,11 @@ class TopicController extends BaseController
      */
     public function index($tid)
     {
-        $total = Post::where('topic_id', $tid)->count();
+        $total = Post::query()->where('topic_id', $tid)->count();
         $page = paginate(setting('forumpost'), $total);
 
-        $topic = Topic::select('topics.*', 'bookmarks.posts as bookmark_posts')
+        $topic = Topic::query()
+            ->select('topics.*', 'bookmarks.posts as bookmark_posts')
             ->where('topics.id', $tid)
             ->leftJoin('bookmarks', function ($join) {
                 $join->on('topics.id', '=', 'bookmarks.topic_id')
@@ -34,7 +35,8 @@ class TopicController extends BaseController
             ->with('forum.parent')
             ->first();
 
-        $posts = Post::select('posts.*', 'pollings.vote')
+        $posts = Post::query()
+            ->select('posts.*', 'pollings.vote')
             ->where('topic_id', $tid)
             ->leftJoin('pollings', function ($join) {
                 $join->on('posts.id', '=', 'pollings.relate_id')
@@ -53,7 +55,8 @@ class TopicController extends BaseController
 
         if (getUser()) {
             if ($topic['posts'] > $topic['bookmark_posts']) {
-                Bookmark::where('topic_id', $tid)
+                Bookmark::query()
+                    ->where('topic_id', $tid)
                     ->where('user_id', getUser('id'))
                     ->update(['posts' => $topic['posts']]);
             }
@@ -61,19 +64,21 @@ class TopicController extends BaseController
 
         // --------------------------------------------------------------//
         if (!empty($topic['moderators'])) {
-            $topic['curators'] = User::whereIn('id', explode(',', $topic['moderators']))->get();
+            $topic['curators'] = User::query()->whereIn('id', explode(',', $topic['moderators']))->get();
             $topic['isModer'] = $topic['curators']->where('id', getUser('id'))->isNotEmpty();
         }
 
         // Голосование
-        $vote = Vote::where('topic_id', $tid)->first();
+        $vote = Vote::query()->where('topic_id', $tid)->first();
 
         if ($vote) {
-            $vote['poll'] = VotePoll::where('vote_id', $vote['id'])
+            $vote['poll'] = VotePoll::query()
+                ->where('vote_id', $vote['id'])
                 ->where('user_id', getUser('id'))
                 ->first();
 
-            $vote['answers'] = VoteAnswer::where('vote_id', $vote['id'])
+            $vote['answers'] = VoteAnswer::query()
+                ->where('vote_id', $vote['id'])
                 ->orderBy('id')
                 ->get();
 
@@ -106,7 +111,8 @@ class TopicController extends BaseController
             abort(403, 'Авторизуйтесь для добавления сообщения!');
         }
 
-        $topic = Topic::select('topics.*', 'forums.parent_id')
+        $topic = Topic::query()
+            ->select('topics.*', 'forums.parent_id')
             ->where('topics.id', $tid)
             ->leftJoin('forums', 'topics.forum_id', '=', 'forums.id')
             ->first();
@@ -119,7 +125,7 @@ class TopicController extends BaseController
             ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, setting('forumtextlength'));
 
         // Проверка сообщения на схожесть
-        $post = Post::where('topic_id', $topic->id)->orderBy('id', 'desc')->first();
+        $post = Post::query()->where('topic_id', $topic->id)->orderBy('id', 'desc')->first();
         $validation->addRule('not_equal', [$msg, $post['text']], ['msg' => 'Ваше сообщение повторяет предыдущий пост!']);
 
         if ($validation->run()) {
@@ -135,7 +141,7 @@ class TopicController extends BaseController
                 ]);
             } else {
 
-                $post = Post::create([
+                $post = Post::query()->create([
                     'topic_id'   => $topic->id,
                     'user_id'    => getUser('id'),
                     'text'       => $msg,
@@ -184,7 +190,7 @@ class TopicController extends BaseController
                         continue;
                     }
 
-                    $user = User::where('login', $login)->first();
+                    $user = User::query()->where('login', $login)->first();
                     if ($user) {
                         if ($user['notify']) {
                             sendPrivate($user->id, getUser('id'), 'Пользователь ' . getUser('login') . ' ответил вам в теме [url=' . setting('home') . '/topic/' . $topic->id . '/' . $post->id . ']' . $topic->title . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
@@ -227,7 +233,7 @@ class TopicController extends BaseController
 
                                 move_uploaded_file($_FILES['file']['tmp_name'], HOME . '/uploads/forum/' . $topic->id . '/' . $hash);
 
-                                File::create([
+                                File::query()->create([
                                     'relate_type' => Post::class,
                                     'relate_id'   => $post->id,
                                     'hash'        => $hash,
@@ -274,7 +280,7 @@ class TopicController extends BaseController
         $del   = intar(Request::input('del'));
         $page  = abs(intval(Request::input('page')));
 
-        $topic = Topic::find($tid);
+        $topic = Topic::query()->find($tid);
 
         $isModer = in_array(getUser('id'), explode(',', $topic['moderators']), true) ? true : false;
 
@@ -288,7 +294,8 @@ class TopicController extends BaseController
         if ($validation->run()) {
 
             // ------ Удаление загруженных файлов -------//
-            $files = File::where('relate_type', Post::class)
+            $files = File::query()
+                ->where('relate_type', Post::class)
                 ->whereIn('relate_id', $del)
                 ->get();
 
@@ -300,7 +307,7 @@ class TopicController extends BaseController
 
             }
 
-            $delPosts = Post::whereIn('id', $del)->delete();
+            $delPosts = Post::query()->whereIn('id', $del)->delete();
 
             $topic->decrement('posts', $delPosts);
             $topic->forum->decrement('posts', $delPosts);
@@ -320,7 +327,7 @@ class TopicController extends BaseController
     {
         $token = check(Request::input('token'));
 
-        $topic = Topic::find($tid);
+        $topic = Topic::query()->find($tid);
 
         $validation = new Validation();
         $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
@@ -334,13 +341,13 @@ class TopicController extends BaseController
 
             $topic->update(['closed' => 1]);
 
-            $vote = Vote::where('topic_id', $tid)->first();
+            $vote = Vote::query()->where('topic_id', $tid)->first();
             if ($vote) {
 
                 $vote->closed = 1;
                 $vote->save();
 
-                VotePoll::where('vote_id', $vote['id'])->delete();
+                VotePoll::query()->where('vote_id', $vote['id'])->delete();
             }
 
             setFlash('success', 'Тема успешно закрыта!');
@@ -364,7 +371,7 @@ class TopicController extends BaseController
             abort('default', 'У вас недостаточно актива для изменения темы!');
         }
 
-        $topic = Topic::find($tid);
+        $topic = Topic::query()->find($tid);
 
         if (empty($topic)) {
             abort('default', 'Выбранная вами тема не существует, возможно она была удалена!');
@@ -378,7 +385,7 @@ class TopicController extends BaseController
             abort('default', ' Изменение невозможно, данная тема закрыта!');
         }
 
-        $post = Post::where('topic_id', $tid)
+        $post = Post::query()->where('topic_id', $tid)
             ->orderBy('id')
             ->first();
 
@@ -386,7 +393,7 @@ class TopicController extends BaseController
 
             $token = check(Request::input('token'));
             $title = check(Request::input('title'));
-            $msg = check(Request::input('msg'));
+            $msg   = check(Request::input('msg'));
 
 
             $validation = new Validation();
@@ -435,7 +442,8 @@ class TopicController extends BaseController
             abort(403, 'Авторизуйтесь для изменения сообщения!');
         }
 
-        $post = Post::select('posts.*', 'moderators', 'closed')
+        $post = Post::query()
+            ->select('posts.*', 'moderators', 'closed')
             ->leftJoin('topics', 'posts.topic_id', '=', 'topics.id')
             ->where('posts.id', $id)
             ->first();
@@ -480,7 +488,8 @@ class TopicController extends BaseController
 
                 // ------ Удаление загруженных файлов -------//
                 if ($delfile) {
-                    $files = File::where('relate_type', Post::class)
+                    $files = File::query()
+                        ->where('relate_type', Post::class)
                         ->where('relate_id', $post->id)
                         ->whereIn('id', $delfile)
                         ->get();
@@ -501,7 +510,8 @@ class TopicController extends BaseController
             }
         }
 
-        $files = File::where('relate_type', Post::class)
+        $files = File::query()
+            ->where('relate_type', Post::class)
             ->where('relate_id', $id)
             ->get();
 
@@ -518,7 +528,7 @@ class TopicController extends BaseController
             abort(403, 'Авторизуйтесь для голосования!');
         }
 
-        $vote = Vote::where('topic_id', $tid)->first();
+        $vote = Vote::query()->where('topic_id', $tid)->first();
         if (! $vote) {
             abort(404, 'Голосование не найдено!');
         }
@@ -534,7 +544,8 @@ class TopicController extends BaseController
             $validation->addError('Данное голосование закрыто!');
         }
 
-        $votePoll = VotePoll::where('vote_id', $vote['id'])
+        $votePoll = VotePoll::query()
+            ->where('vote_id', $vote['id'])
             ->where('user_id', getUser('id'))
             ->first();
 
@@ -542,7 +553,8 @@ class TopicController extends BaseController
             $validation->addError('Вы уже проголосовали в этом опросе!');
         }
 
-        $voteAnswer = VoteAnswer::where('id', $poll)
+        $voteAnswer = VoteAnswer::query()
+            ->where('id', $poll)
             ->where('vote_id', $vote['id'])
             ->first();
 
@@ -555,7 +567,7 @@ class TopicController extends BaseController
             $vote->increment('count');
             $voteAnswer->increment('result');
 
-            VotePoll::create([
+            VotePoll::query()->create([
                 'vote_id'    => $vote['id'],
                 'user_id'    => getUser('id'),
                 'created_at' => SITETIME,
@@ -574,13 +586,14 @@ class TopicController extends BaseController
      */
     public function print($tid)
     {
-        $topic = Topic::find($tid);
+        $topic = Topic::query()->find($tid);
 
         if (empty($topic)) {
             abort('default', 'Данной темы не существует!');
         }
 
-        $posts = Post::where('topic_id', $tid)
+        $posts = Post::query()
+            ->where('topic_id', $tid)
             ->with('user')
             ->orderBy('created_at')
             ->get();
@@ -594,7 +607,8 @@ class TopicController extends BaseController
     public function viewpost($tid, $id)
     {
 
-        $countTopics = Post::where('id', '<=', $id)
+        $countTopics = Post::query()
+            ->where('id', '<=', $id)
             ->where('topic_id', $tid)
             ->count();
 
@@ -612,7 +626,7 @@ class TopicController extends BaseController
     public function end($tid)
     {
 
-        $topic = Topic::find($tid);
+        $topic = Topic::query()->find($tid);
 
         if (empty($topic)) {
             abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');

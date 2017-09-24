@@ -11,12 +11,13 @@ class OnlineController extends BaseController
      */
     public function index()
     {
-        $total = Online::whereNotNull('user_id')->count();
-        $all   = Online::count();
+        $total = Online::query()->whereNotNull('user_id')->count();
+        $all   = Online::query()->count();
 
         $page = paginate(setting('onlinelist'), $total);
 
-        $online = Online::whereNotNull('user_id')
+        $online = Online::query()
+            ->whereNotNull('user_id')
             ->with('user')
             ->orderBy('updated_at', 'desc')
             ->offset($page['offset'])
@@ -31,8 +32,8 @@ class OnlineController extends BaseController
      */
     public function all()
     {
-        $total      = Online::count();
-        $registered = Online::whereNotNull('user_id')->count();
+        $total      = Online::query()->count();
+        $registered = Online::query()->whereNotNull('user_id')->count();
 
         $page = paginate(setting('onlinelist'), $total);
 

@@ -334,7 +334,7 @@ function deleteWall(el)
 {
     $.ajax({
         data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
-        dataType: 'JSON', type: 'POST', url: '/wall/delete',
+        dataType: 'JSON', type: 'POST', url: '/wall/' + $(el).data('login') + '/delete',
         success: function(data) {
 
             if (data.status === 'error'){

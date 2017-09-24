@@ -26,13 +26,14 @@ class RatingController extends BaseController
      */
     public function received($login)
     {
-        $user = User::where('login', $login)->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
             abort('default', 'Данного пользователя не существует!');
         }
 
-        $ratings = Rating::where('recipient_id', $user->id)
+        $ratings = Rating::query()
+            ->where('recipient_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->get();
@@ -45,13 +46,14 @@ class RatingController extends BaseController
      */
     public function gave($login)
     {
-        $user = User::where('login', $login)->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
             abort('default', 'Данного пользователя не существует!');
         }
 
-        $ratings = Rating::where('user_id', $user->id)
+        $ratings = Rating::query()
+            ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->with('recipient')
             ->get();
@@ -76,7 +78,7 @@ class RatingController extends BaseController
 
         if ($validation->run()) {
 
-            Rating::find($id)->delete();
+            Rating::query()->find($id)->delete();
 
             echo json_encode(['status' => 'success']);
         } else {
