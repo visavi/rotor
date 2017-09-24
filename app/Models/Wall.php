@@ -24,4 +24,12 @@ class Wall extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователей
+     */
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id')->withDefault();
+    }
 }

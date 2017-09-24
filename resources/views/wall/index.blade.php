@@ -8,4 +8,58 @@
 
     <h1>Стена пользователя {{ $user->login }}</h1>
 
+    @if ($newWall)
+        <div style="text-align:center"><b><span style="color:#ff0000">Новых записей: {{ $newWall }}</span></b></div>
+    @endif
+
+    @if ($messages->isNotEmpty())
+        @foreach ($messages as $data)
+            <div class="post">
+                <div class="b">
+                    <div class="img">{!! userAvatar($data->author) !!}</div>
+
+                    <b>{!! profile($data->author) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
+                    {!! userStatus($data->author) !!} {!! userOnline($data->author) !!}
+
+                    @if ($user->id == getUser('id') && getUser('id') != $data->id)
+                        <div class="float-right">
+                            <a href="/private/send?user={{ $data->author->login }}" title="Приват"><i class="fa fa-envelope text-muted"></i></a>
+                            <a href="/wall/{{ $data->author->login }}" title="Стена"><i class="fa fa-sticky-note text-muted"></i></a>
+                            <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Wall::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+
+                            @if (isAdmin() || $user->id == getUser('id'))
+                                <a href="#" onclick="return deleteWall(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove text-muted"></i></a>
+                            @endif
+                        </div>
+                    @endif
+
+                </div>
+                <div class="message">{!! bbCode($data->text) !!}</div>
+            </div>
+        @endforeach
+
+        {{ pagination($page) }}
+    @else
+        {{ showError('Записок еще нет!') }}
+    @endif
+
+    @if (getUser())
+
+        <div class="form">
+            <form action="/wall/{{ $user->login }}" method="post">
+                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+                Сообщение:<br>
+                <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
+                <input type="submit" value="Написать">
+            </form>
+        </div><br>
+
+    @else
+        {{ showError('Для добавления сообщения необходимо авторизоваться') }}
+    @endif
+
+    Всего записей: <b>{{ $page['total'] }}</b><br><br>
 @stop

@@ -17,10 +17,11 @@ class PhotoController extends BaseController
      */
     public function index()
     {
-        $total = Photo::count();
+        $total = Photo::query()->count();
         $page = paginate(setting('fotolist'), $total);
 
-        $photos = Photo::orderBy('created_at', 'desc')
+        $photos = Photo::query()
+            ->orderBy('created_at', 'desc')
             ->offset($page['offset'])
             ->limit(setting('fotolist'))
             ->with('user')
@@ -34,7 +35,8 @@ class PhotoController extends BaseController
      */
     public function view($gid)
     {
-        $photo = Photo::select('photo.*', 'pollings.vote')
+        $photo = Photo::query()
+            ->select('photo.*', 'pollings.vote')
             ->where('photo.id', $gid)
             ->leftJoin('pollings', function ($join) {
                 $join->on('photo.id', '=', 'pollings.relate_id')
@@ -118,20 +120,20 @@ class PhotoController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!getUser()) {
+        if (! getUser()) {
             abort(403, 'Авторизуйтесь для редактирования фотографии!');
         }
 
-        $photo = Photo::where('user_id', getUser('id'))->find($gid);
+        $photo = Photo::query()->where('user_id', getUser('id'))->find($gid);
 
-        if (!$photo) {
+        if (! $photo) {
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
         }
 
         if (Request::isMethod('post')) {
-            $token = check(Request::input('token'));
-            $title = check(Request::input('title'));
-            $text = check(Request::input('text'));
+            $token  = check(Request::input('token'));
+            $title  = check(Request::input('title'));
+            $text   = check(Request::input('text'));
             $closed = Request::has('closed') ? 1 : 0;
 
             $validation = new Validation();
@@ -166,7 +168,7 @@ class PhotoController extends BaseController
      */
     public function comments($gid)
     {
-        $photo = Photo::find($gid);
+        $photo = Photo::query()->find($gid);
 
         if (! $photo) {
             abort('default', 'Фотография не найдена');
@@ -187,7 +189,7 @@ class PhotoController extends BaseController
             if ($validation->run()) {
                 $msg = antimat($msg);
 
-                Comment::create([
+                Comment::query()->create([
                     'relate_type' => Photo::class,
                     'relate_id'   => $photo->id,
                     'text'        => $msg,
@@ -197,7 +199,7 @@ class PhotoController extends BaseController
                     'brow'        => getUserAgent(),
                 ]);
 
-                $user = User::where('id', getUser('id'));
+                $user = User::query()->where('id', getUser('id'));
                 $user->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
@@ -216,12 +218,14 @@ class PhotoController extends BaseController
             }
         }
 
-        $total = Comment::where('relate_type', Photo::class)
+        $total = Comment::query()
+            ->where('relate_type', Photo::class)
             ->where('relate_id', $gid)
             ->count();
         $page = paginate(setting('postgallery'), $total);
 
-        $comments = Comment::where('relate_type', Photo::class)
+        $comments = Comment::query()
+            ->where('relate_type', Photo::class)
             ->where('relate_id', $gid)
             ->offset($page['offset'])
             ->limit($page['limit'])
@@ -243,7 +247,8 @@ class PhotoController extends BaseController
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
-        $comment = Comment::select('comments.*', 'photo.closed')
+        $comment = Comment::query()
+            ->select('comments.*', 'photo.closed')
             ->where('relate_type', Photo::class)
             ->where('comments.id', $id)
             ->where('comments.user_id', getUser('id'))
@@ -302,7 +307,7 @@ class PhotoController extends BaseController
             abort(403, 'Для удаления фотографий небходимо авторизоваться!');
         }
 
-        $photo = Photo::where('user_id', getUser('id'))->find($gid);
+        $photo = Photo::query()->where('user_id', getUser('id'))->find($gid);
 
         if (!$photo) {
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
@@ -317,7 +322,8 @@ class PhotoController extends BaseController
         if ($validation->run()) {
             deleteImage('uploads/pictures/', $photo['link']);
 
-            Comment::where('relate_type', Photo::class)
+            Comment::query()
+                ->where('relate_type', Photo::class)
                 ->where('relate_id', $photo->id)
                 ->delete();
 
@@ -338,13 +344,14 @@ class PhotoController extends BaseController
      */
     public function end($gid)
     {
-        $photo = Photo::find($gid);
+        $photo = Photo::query()->find($gid);
 
         if (empty($photo)) {
             abort(404, 'Выбранное вами фото не найдено, возможно оно было удалено!');
         }
 
-        $total = Comment::where('relate_type', Photo::class)
+        $total = Comment::query()
+            ->where('relate_type', Photo::class)
             ->where('relate_id', $gid)
             ->count();
 
@@ -357,13 +364,15 @@ class PhotoController extends BaseController
      */
     public function albums()
     {
-        $total = Photo::distinct('user_id')
+        $total = Photo::query()
+            ->distinct()
             ->join('users', 'photo.user_id', '=', 'users.id')
             ->count('user_id');
 
         $page = paginate(setting('photogroup'), $total);
 
-        $albums = Photo::select('user_id', 'login')
+        $albums = Photo::query()
+            ->select('user_id', 'login')
             ->selectRaw('count(*) as cnt, sum(comments) as comments')
             ->join('users', 'photo.user_id', '=', 'users.id')
             ->offset($page['offset'])
@@ -380,17 +389,18 @@ class PhotoController extends BaseController
      */
     public function album($login)
     {
-        $user = User::where('login', $login)->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (!$user) {
             abort('default', 'Пользователь не найден!');
         }
 
-        $total = Photo::where('user_id', $user->id)->count();
+        $total = Photo::query()->where('user_id', $user->id)->count();
 
         $page = paginate(setting('fotolist'), $total);
 
-        $photos = Photo::where('user_id', $user->id)
+        $photos = Photo::query()
+            ->where('user_id', $user->id)
             ->offset($page['offset'])
             ->limit($page['limit'])
             ->orderBy('created_at', 'desc')
@@ -420,10 +430,11 @@ class PhotoController extends BaseController
                 $order = 'rating';
         }
 
-        $total = Photo::count();
+        $total = Photo::query()->count();
         $page = paginate(setting('fotolist'), $total);
 
-        $photos = Photo::orderBy($order, 'desc')
+        $photos = Photo::query()
+            ->orderBy($order, 'desc')
             ->offset($page['offset'])
             ->limit(setting('fotolist'))
             ->with('user')
@@ -437,10 +448,11 @@ class PhotoController extends BaseController
      */
     public function allComments()
     {
-        $total = Comment::where('relate_type', Photo::class)->count();
+        $total = Comment::query()->where('relate_type', Photo::class)->count();
         $page = paginate(setting('postgallery'), $total);
 
-        $comments = Comment::select('comments.*', 'title')
+        $comments = Comment::query()
+            ->select('comments.*', 'title')
             ->where('relate_type', Photo::class)
             ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
             ->offset($page['offset'])
@@ -457,19 +469,21 @@ class PhotoController extends BaseController
      */
     public function UserComments($login)
     {
-        $user = User::where('login', $login)->first();
+        $user = User::query()->where('login', $login)->first();
 
         if (!$user) {
             abort('default', 'Пользователь не найден!');
         }
 
-        $total = Comment::where('relate_type', Photo::class)
+        $total = Comment::query()
+            ->where('relate_type', Photo::class)
             ->where('user_id', $user->id)
             ->count();
 
         $page = paginate(setting('postgallery'), $total);
 
-        $comments = Comment::select('comments.*', 'title')
+        $comments = Comment::query()
+            ->select('comments.*', 'title')
             ->where('relate_type', Photo::class)
             ->where('comments.user_id', $user->id)
             ->leftJoin('photo', 'comments.relate_id', '=', 'photo.id')
@@ -487,7 +501,8 @@ class PhotoController extends BaseController
      */
     public function viewComment($gid, $id)
     {
-        $total = Comment::where('relate_type', Photo::class)
+        $total = Comment::query()
+            ->where('relate_type', Photo::class)
             ->where('relate_id', $gid)
             ->where('id', '<=', $id)
             ->orderBy('created_at')

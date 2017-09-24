@@ -7,7 +7,7 @@
 
     @if (getUser('newwall'))
         @if (! App\Classes\Request::is('ban', 'key', 'wall', 'rules', 'closed', 'login', 'register'))
-            <a class="btn btn-primary btn-sm" href="/wall"><i class="fa fa-users"></i> Запись на стене! <span class="badge badge-light">{{ getUser('newwall') }}</span></a>
+            <a class="btn btn-primary btn-sm" href="/wall/{{ getUser('login') }}"><i class="fa fa-sticky-note"></i> Запись на стене! <span class="badge badge-light">{{ getUser('newwall') }}</span></a>
         @endif
     @endif
 @endif

@@ -15,72 +15,7 @@ if (!empty($queryuser)) {
     ############################################################################################
         case 'index':
 
-            //setting('newtitle') = 'Стена пользователя '.$uz;
-            echo '<i class="fa fa-sticky-note"></i> <b>Стена  пользователя '.$uz.'</b><br><br>';
 
-            $total = DB::run() -> querySingle("SELECT count(*) FROM `wall` WHERE `user`=?;", [$uz]);
-            $page = paginate(setting('wallpost'), $total);
-
-            if ($uz == getUser('login') && getUser('newwall') > 0) {
-                echo '<div style="text-align:center"><b><span style="color:#ff0000">Новых записей: '.getUser('newwall').'</span></b></div>';
-                DB::update("UPDATE `users` SET `newwall`=? WHERE `login`=?;", [0, getUser('login')]);
-            }
-
-            if ($total > 0) {
-
-                $is_admin = isAdmin();
-
-                if ($is_admin) {
-                    echo '<form action="/wall?act=del&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                } elseif ($uz == getUser('login')) {
-                    echo '<form action="/wall?act=delete&amp;uz='.$uz.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
-                }
-
-                $querywall = DB::select("SELECT * FROM `wall` WHERE `user`=? ORDER BY `time` DESC LIMIT ".$page['offset'].", ".setting('wallpost').";", [$uz]);
-
-                while ($data = $querywall -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<div class="img">'.userAvatar($data['login']).'</div>';
-
-                    if ($is_admin || $uz == getUser('login')) {
-                        echo '<span class="imgright"><input type="checkbox" name="del[]" value="'.$data['id'].'"></span>';
-                    }
-
-                    echo '<b>'.profile($data['login']).'</b> <small>('.dateFixed($data['time']).')</small><br>';
-                    echo userStatus($data['login']).' '.userOnline($data['login']).'</div>';
-
-                    if ($uz == getUser('login') && getUser('login') != $data['login']) {
-                        echo '<div class="right">';
-                        echo '<a href="/private?act=submit&amp;uz='.$data['login'].'">Приват</a> / ';
-                        echo '<a href="/wall?uz='.$data['login'].'">Стена</a> / ';
-                        echo '<a href="/wall?act=spam&amp;id='.$data['id'].'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете факт спама?\')" rel="nofollow">Спам</a></div>';
-                    }
-
-                    echo '<div>'.bbCode($data['text']).'</div>';
-                }
-
-                if ($is_admin || $uz == getUser('login')) {
-                    echo '<span class="imgright"><input type="submit" value="Удалить выбранное"></span></form>';
-                }
-
-                pagination($page);
-            } else {
-                showError('Записок еще нет!');
-            }
-
-            if (getUser()) {
-
-                echo '<div class="form">';
-                echo '<form action="/wall?act=add&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                echo 'Сообщение:<br>';
-                echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
-                echo '<input type="submit" value="Написать"></form></div><br>';
-
-            } else {
-                showError('Для добавления сообщения необходимо авторизоваться');
-            }
-
-            echo 'Всего записей: <b>'.$total.'</b><br><br>';
         break;
 
         ############################################################################################

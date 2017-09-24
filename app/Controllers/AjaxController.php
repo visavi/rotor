@@ -13,6 +13,7 @@ use App\Models\Photo;
 use App\Models\Polling;
 use App\Models\Post;
 use App\Models\Spam;
+use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class AjaxController extends BaseController
@@ -60,7 +61,7 @@ class AjaxController extends BaseController
                     ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
-                $path = '/news/'.$data['relate_id'].'/comments?page='.$page;
+                $path = '/news/'.$data->relate_id.'/comments?page='.$page;
                 break;
 
             case Blog::class:
@@ -76,7 +77,7 @@ class AjaxController extends BaseController
                     ->where('relate_type', $type)
                     ->where('id', $id)
                     ->first();
-                $path = '/gallery/'.$data['relate_id'].'/comments?page='.$page;
+                $path = '/gallery/'.$data->relate_id.'/comments?page='.$page;
                 break;
 
             case Guest::class:
@@ -86,11 +87,16 @@ class AjaxController extends BaseController
 
             case Post::class:
                 $data = $type::query()->find($id);
-                $path = '/topic/'.$data['topic_id'].'?page='.$page;
+                $path = '/topic/'.$data->topic_id.'?page='.$page;
                 break;
 
             case Inbox::class:
                 $data = $type::query()->find($id);
+                break;
+
+            case Wall::class:
+                $data = $type::query()->find($id);
+                $path = '/wall/'.$data->user->login.'?page='.$page;
                 break;
         endswitch;
 
@@ -106,7 +112,7 @@ class AjaxController extends BaseController
         if ($validation->run()) {
             Spam::query()->create([
                 'relate_type' => $type,
-                'relate_id'   => $data['id'],
+                'relate_id'   => $data->id,
                 'user_id'     => getUser('id'),
                 'path'        => $path,
                 'created_at'  => SITETIME,

@@ -203,7 +203,7 @@ class BlogController extends BaseController
     public function blogs()
     {
         $total = Blog::query()
-            ->distinct('user_id')
+            ->distinct()
             ->join('users', 'blogs.user_id', '=', 'users.id')
             ->count('user_id');
 
