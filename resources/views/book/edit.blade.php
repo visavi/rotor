@@ -7,7 +7,7 @@
 @section('content')
     <h1>Редактирование сообщения</h1>
 
-    <i class="fa fa-pencil text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post['time']) }})<br><br>
+    <i class="fa fa-pencil text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->time) }})<br><br>
 
     <div class="form">
         <form action="/book/edit/{{ $post->id }}" method="post">
@@ -15,7 +15,7 @@
 
             <div class="form-group{{ hasError('msg') }}">
                 <label for="markItUp">Сообщение:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg', $post['text']) }}</textarea>
+                <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg', $post->text) }}</textarea>
                 {!! textError('msg') !!}
             </div>
 

@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\Photo;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class PhotoController extends BaseController
 {

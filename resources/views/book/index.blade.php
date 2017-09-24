@@ -23,44 +23,44 @@
             <div class="post">
                 <div class="b">
 
-                    @if (getUser() && getUser('id') != $data['user_id'])
+                    @if (getUser() && getUser('id') != $data->user_id)
                         <div class="float-right">
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
                             <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guest::class }}" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guest::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                         </div>
 
                     @endif
 
-                    @if (getUser() && getUser('id') == $data['user_id'] && $data['created_at'] + 600 > SITETIME)
+                    @if (getUser() && getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME)
                         <div class="float-right">
-                            <a href="/book/edit/{{ $data['id'] }}" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                            <a href="/book/edit/{{ $data->id }}" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
                         </div>
                     @endif
 
                     <div class="img">{!! userAvatar($data->user) !!}</div>
 
-                    @if (empty($data['user_id']))
-                        <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data['created_at']) }})</small>
+                    @if (empty($data->user_id))
+                        <b>{{ setting('guestsuser') }}</b> <small>({{ dateFixed($data->created_at) }})</small>
                     @else
-                        <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data['created_at']) }})</small><br>
+                        <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                         {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}
                     @endif
                 </div>
 
-                <div class="message">{!! bbCode($data['text']) !!}</div>
+                <div class="message">{!! bbCode($data->text) !!}</div>
 
-                @if ($data['edit_user_id'])
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->login }} ({{ dateFixed($data['updated_at']) }})</small><br>
+                @if ($data->edit_user_id)
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
                 @endif
 
                 @if (isAdmin())
-                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                 @endif
 
-                @if ($data['reply']))
-                    <br><span style="color:#ff0000">Ответ: {!! bbCode($data['reply']) !!}</span>
+                @if ($data->reply))
+                    <br><span style="color:#ff0000">Ответ: {!! bbCode($data->reply) !!}</span>
                 @endif
             </div>
         @endforeach
