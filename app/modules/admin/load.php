@@ -615,7 +615,7 @@ case 'delcats':
 
     $uid = check($_GET['uid']);
 
-    if (isAdmin([101]) && getUser('login') == setting('nickname')) {
+    if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
         if ($uid == $_SESSION['token']) {
             $downs = DB::run() -> queryFetch("SELECT `c1`.*, count(`c2`.`id`) AS `subcnt` FROM `cats` `c1` LEFT JOIN `cats` `c2` ON `c2`.`parent` = `c1`.`id` WHERE `c1`.`id`=? GROUP BY `id` LIMIT 1;", [$cid]);
 
@@ -711,7 +711,7 @@ case 'down':
 
             $folder = $cats['folder'] ? $cats['folder'].'/' : '';
 
-            $is_admin = (isAdmin([101]) && getUser('login') == setting('nickname'));
+            $is_admin = (isAdmin([101]) && getUser('login') == env('SITE_ADMIN'));
 
             if ($is_admin) {
                 echo '<form action="/admin/load?act=deldown&amp;cid='.$cid.'&amp;page='.$page['current'].'&amp;uid='.$_SESSION['token'].'" method="post">';
@@ -1273,7 +1273,7 @@ case 'deldown':
     $uid = check($_GET['uid']);
     $del = (isset($_POST['del'])) ? intar($_POST['del']) : 0;
 
-    if (isAdmin([101]) && getUser('login') == setting('nickname')) {
+    if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
         if ($uid == $_SESSION['token']) {
             if ($del > 0) {
                 $del = implode(',', $del);

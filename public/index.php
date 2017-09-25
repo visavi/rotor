@@ -29,6 +29,3 @@ if ($router['target'] && is_callable($router['target'])) {
 } else {
     abort(404);
 }
-
-// setting expiresmail, editstatus
-// users confirmreg, ban, emails, nickname

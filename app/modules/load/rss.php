@@ -24,8 +24,8 @@ if (!empty($down)) {
         echo '<link>'.setting('home').'</link></image>';
         echo '<language>ru</language>';
         echo '<copyright>'.setting('copy').'</copyright>';
-        echo '<managingEditor>'.setting('emails').'</managingEditor>';
-        echo '<webMaster>'.setting('emails').'</webMaster>';
+        echo '<managingEditor>'.env('SITE_EMAIL').'</managingEditor>';
+        echo '<webMaster>'.env('SITE_EMAIL').'</webMaster>';
         echo '<lastBuildDate>'.date("r", SITETIME).'</lastBuildDate>';
 
         $querycomm = DB::select("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 15;", ['down', $id]);

@@ -51,7 +51,7 @@
         {{ showAdminLinks() }}
     @endif
 {{--
-    @if ($admin = getUserByLogin(setting('nickname')))
+    @if ($admin = getUserByLogin(env('SITE_ADMIN')))
         @if ($admin['level'] != 101)
             <br><div class="b"><b><span style="color:#ff0000">Внимание!!! Cуперадминистратор не имеет достаточных прав!</span></b><br>
         Профилю назначен уровень доступа <b>{{ $admin['level'] }} - {{ userLevel($admin['level']) }}</b></div>
@@ -59,7 +59,7 @@
     @else
 
         <br><div class="b"><b><span style="color:#ff0000">Внимание!!! Отсутствует профиль суперадмина</span></b><br>
-        Профиль администратора <b>{{ setting('nickname') }}</b> не задействован на сайте</div>
+        Профиль администратора <b>{{ env('SITE_ADMIN') }}</b> не задействован на сайте</div>
     @endif--}}
 
     @if (file_exists(HOME.'/install'))

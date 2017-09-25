@@ -15,8 +15,7 @@ if (isAdmin([101])) {
     ############################################################################################
         case 'index':
 
-            if (getUser('login') == setting('nickname')) {
-                echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setzero">Администраторская</a><br>';
+            if (getUser('login') == env('SITE_ADMIN')) {
                 echo '<i class="fa fa-pencil"></i> <a href="/admin/setting?act=setone">Основные настройки</a><br>';
             }
 
@@ -39,91 +38,11 @@ if (isAdmin([101])) {
         break;
 
         ############################################################################################
-        ##                          Форма администраторских настроек                              ##
-        ############################################################################################
-        case 'setzero':
-            if (getUser('login') == setting('nickname')) {
-                echo '<b>Администраторская</b><br><hr>';
-
-                echo '<div class="form">';
-                echo '<form method="post" action="/admin/setting?act=editzero&amp;uid='.$_SESSION['token'].'">';
-
-                echo 'Логин администратора:<br><input name="nickname" maxlength="20" value="'.$setting['nickname'].'"><br>';
-                echo 'Email администратора:<br><input name="emails" maxlength="50" value="'.$setting['emails'].'"><br>';
-                echo 'Подтвердите пароль:<br><input name="pass" type="password" maxlength="20"><br>';
-                echo '<input value="Изменить" type="submit"></form></div><br>';
-
-                echo '<b><span style="color:#ff0000">Внимание!</span></b> При изменении логина вы передаете права на управление сайтом другому человеку<br>';
-                echo 'После этого доступ к данной странице и к основным настройкам вам будет закрыт<br>';
-                echo 'Будет произведена проверка нового пользователя и назначены ему все администраторские права<br><br>';
-
-            } else {
-                showError('Ошибка! Данные настройки доступны только владельцу сайта!');
-            }
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';
-        break;
-
-        ############################################################################################
-        ##                         Изменение администраторских настроек                           ##
-        ############################################################################################
-        case 'editzero':
-
-            $uid = check($_GET['uid']);
-            $login = check($_POST['nickname']);
-            $mail = check($_POST['emails']);
-            $pass = check($_POST['pass']);
-
-            if (getUser('login') == setting('nickname')) {
-                if ($uid == $_SESSION['token']) {
-                    if (!empty($login) && !empty($mail) && !empty($pass)) {
-
-                        if (password_verify($pass, getUser('password'))) {
-                            if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $mail)) {
-
-                                $queryuser = DB::run()->queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$login]);
-                                if (!empty($queryuser)){
-
-                                    if ($login!=$setting['nickname']){
-                                        DB::update("UPDATE `users` SET `level`=? WHERE `login`=? LIMIT 1;", [101, $login]);
-                                    }
-
-                                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                                    $dbr -> execute($login, 'nickname');
-                                    $dbr -> execute($mail, 'emails');
-
-                                    saveSetting();
-
-                                    setFlash('success', 'Настройки сайта успешно изменены!');
-                                    redirect("/admin/setting?act=setzero");
-
-                                } else {
-                                    showError('Ошибка! Аккаунт пользователя '.$login.' не найден в базе');
-                                }
-                            } else {
-                                showError('Неправильный адрес email, необходим формат name@site.domen!');
-                            }
-                        } else {
-                            showError('Ошибка! Пароль не совпадает с данными в профиле!');
-                        }
-                    } else {
-                        showError('Ошибка! Все поля настроек обязательны для заполнения!');
-                    }
-                } else {
-                    showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
-                }
-            } else {
-                showError('Ошибка! Данные настройки доступны только владельцу сайта!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setzero">Вернуться</a><br>';
-        break;
-
-        ############################################################################################
         ##                               Форма основных настроек                                  ##
         ############################################################################################
         case 'setone':
 
-            if (getUser('login') == setting('nickname')) {
+            if (getUser('login') == env('SITE_ADMIN')) {
                 echo '<b>Основные настройки</b><br><hr>';
 
                 echo '<div class="form">';
@@ -222,7 +141,7 @@ if (isAdmin([101])) {
             $regkeys = (empty($_POST['regkeys'])) ? 0 : 1;
             $closedsite = (isset($_POST['closedsite'])) ? abs(intval($_POST['closedsite'])) : 0;
 
-            if (getUser('login') == setting('nickname')) {
+            if (getUser('login') == env('SITE_ADMIN')) {
                 if ($uid == $_SESSION['token']) {
                     if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
 
@@ -268,7 +187,7 @@ if (isAdmin([101])) {
 
             echo '<b>Настройки почты и рассылок</b><br><hr>';
 
-            if (getUser('login') == setting('nickname')) {
+            if (getUser('login') == env('SITE_ADMIN')) {
                 echo '<div class="form">';
                 echo '<form method="post" action="/admin/setting?act=editmail&amp;uid='.$_SESSION['token'].'">';
 

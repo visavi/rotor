@@ -75,7 +75,7 @@ if (isAdmin()) {
 
                     if (count($downs) > 0) {
 
-                        if (isAdmin([101]) && getUser('login') == setting('nickname')) {
+                        if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
                             echo '<a href="/admin/newload?act=allow&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" onclick="return confirm(\'Вы подтверждаете публикацию файла?\')">Опубликовать</a> / ';
                         }
 
@@ -288,7 +288,7 @@ if (isAdmin()) {
 
             $uid = check($_GET['uid']);
 
-            if (isAdmin([101]) && getUser('login') == setting('nickname')) {
+            if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
                 if ($uid == $_SESSION['token']) {
                     $new = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
 
