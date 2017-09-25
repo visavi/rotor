@@ -44,6 +44,9 @@ class WallController extends BaseController
         return view('wall/index', compact('messages', 'user', 'page', 'newWall'));
     }
 
+    /**
+     * Добавление сообщения
+     */
     public function create($login)
     {
         $user = User::query()->where('login', $login)->first();

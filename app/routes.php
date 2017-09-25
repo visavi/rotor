@@ -6,6 +6,7 @@ $router->addMatchTypes(['user' => '[0-9A-Za-z-_]++']);
 
 $router->map('GET', '/', 'HomeController@index', 'home');
 $router->map('GET', '/captcha', 'HomeController@captcha', 'captcha');
+$router->map('GET', '/closed', 'HomeController@closed');
 
 $router->map('GET',      '/book', 'BookController@index', 'book');
 $router->map('POST',     '/book/add', 'BookController@add');
@@ -139,7 +140,9 @@ $router->map('GET|POST', '/contact/note/[i:id]', 'ContactController@note');
 $router->map('POST',     '/contact/delete', 'ContactController@delete');
 $router->map('GET',      '/counter/[day|month:action]?', 'CounterController@index');
 
-$router->map('GET',      '/closed', 'HomeController@closed');
+$router->map('GET',      '/transfer', 'TransferController@index');
+$router->map('POST',     '/transfer/send', 'TransferController@send');
+
 $router->map('GET|POST', '/offers', 'pages/offers.php');
 $router->map('GET|POST', '/notebook', 'pages/notebook.php');
 $router->map('GET',      '/reklama', 'pages/reklama.php');

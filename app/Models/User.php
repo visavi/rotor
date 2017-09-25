@@ -50,7 +50,7 @@ class User extends BaseModel
      * @param  string  $login    Логин
      * @param  string  $password Пароль пользователя
      * @param  boolean $remember Запомнить пароль
-     * @return User|boolean      Результат авторизации
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|bool
      */
     public static function auth($login, $password, $remember = true)
     {
@@ -58,7 +58,7 @@ class User extends BaseModel
 
         if (!empty($login) && !empty($password)) {
 
-            $user = self::whereRaw('LOWER(login) = ?', [$login])->first();
+            $user = self::query()->whereRaw('LOWER(login) = ?', [$login])->first();
 
             /* Миграция старых паролей */
             if (preg_match('/^[a-f0-9]{32}$/', $user['password']))
@@ -66,7 +66,7 @@ class User extends BaseModel
                 if (md5(md5($password)) == $user['password']) {
                     $user['password'] = password_hash($password, PASSWORD_BCRYPT);
 
-                    $user = self::where('login', $user['login'])->first();
+                    $user = self::query()->where('login', $user['login'])->first();
                     $user->password = $user['password'];
                     $user->save();
                 }
@@ -84,20 +84,21 @@ class User extends BaseModel
 
                 // Сохранение привязки к соц. сетям
                 if (! empty($_SESSION['social'])) {
-                    Social::create([
+                    Social::query()->create([
                         'user_id' => $user->id,
                         'network' => $_SESSION['social']->network,
                         'uid'     => $_SESSION['social']->uid,
                     ]);
                 }
 
-                $authorization = Login::where('user_id', $user->id)
+                $authorization = Login::query()
+                    ->where('user_id', $user->id)
                     ->where('created_at', '>', SITETIME - 30)
                     ->first();
 
                 if (! $authorization) {
 
-                    Login::create([
+                    Login::query()->create([
                         'user_id' => $user->id,
                         'ip' => getClientIp(),
                         'brow' => getUserAgent(),
@@ -146,7 +147,8 @@ class User extends BaseModel
         if ($network && empty($network->error)) {
             $_SESSION['social'] = $network;
 
-            $social = Social::where('network', $network->network)
+            $social = Social::query()
+                ->where('network', $network->network)
                 ->where('uid', $network->uid)
                 ->first();
 
