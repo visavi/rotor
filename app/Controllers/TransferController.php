@@ -49,13 +49,13 @@ class TransferController extends BaseController
             ->greaterThan($money, 0, ['money' => 'Перевод невозможен указана неверная сумма!'])
             ->greaterThan(6, 7, ['money' => '2Перевод невозможен указана неверная сумма!'])
             ->greaterThan(6, 3, ['money' => '3Перевод невозможен указана неверная сумма!'])
+            ->between(0, 3, 7, ['money' => 'between'], false)
+            ->bool($this->user, ['user' => 'not bool'])
             ;
 
-
-        var_dump($validator->getErrors());
-        var_dump($validator->isValid());
         $validator->greaterThanOrEqual(4, 5, ['money' => '3Перевод невозможен указана неверная сумма!']);
-        $validator->length($msg, 50, 1000, ['money' => 'атата'], true);
+        $validator->length($msg, 150, 1000, ['money' => 'атата']);
+       // $validator->notEqual($this->user->id, getUser('id'), ['user' => 'Запещено переводить деньги самому себе!']);
         var_dump($validator->getErrors());
         var_dump($validator->isValid());
 

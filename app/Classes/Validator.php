@@ -17,33 +17,65 @@ class Validator
      */
     private $errors = [];
 
-    public function length($var, $min, $max = null, $label, $required = true)
+    /**
+     * Проверяет длину строки
+     *
+     * @param  string $input
+     * @param  int    $min
+     * @param  int    $max
+     * @param  mixed  $label
+     * @param  bool   $required
+     * @return $this
+     */
+    public function length($input, $min, $max, $label, $required = true)
     {
-        if ($required == false && mb_strlen($var, 'utf-8') == 0) {
+        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
             return $this;
         }
 
-        if (mb_strlen($var, 'utf-8') < $min) {
-            $this->addError($label, ' (Не менее ' . $min . ' симв.)');
-        } elseif (mb_strlen($var, 'utf-8') > $max) {
-            $this->addError($label, ' (Не более ' . $max . ' симв.)');
+        if (mb_strlen($input, 'utf-8') < $min) {
+            $this->addError($label, ' (Не менее '.$min.' симв.)');
+        } elseif (mb_strlen($input, 'utf-8') > $max) {
+            $this->addError($label, ' (Не более '.$max.' симв.)');
         }
 
         return $this;
     }
 
+    /**
+     * Проверяет число на вхождение в диапазон
+     *
+     * @param  int   $input
+     * @param  int   $min
+     * @param  int   $max
+     * @param  mixed $label
+     * @param  bool  $required
+     * @return $this
+     */
+    public function between($input, $min, $max, $label, $required = true)
+    {
+        if ($required === false && $input === 0) {
+            return $this;
+        }
+
+        if ($input < $min || $input > $max) {
+            $this->addError($label, ' (Между '.$min.' и '.$max.')');
+        }
+
+        return $this;
+    }
 
     /**
      * Проверяет на больше чем число
      *
-     * @param  int   $var
-     * @param  int   $var2
+     * @param  int   $input
+     * @param  int   $input2
      * @param  mixed $label
      * @return $this
      */
-    public function greaterThan($var, $var2, $label)
+    public function greaterThan($input, $input2, $label)
     {
-        if ($var <= $var2) {
+        if ($input <= $input2) {
             $this->addError($label);
         }
 
@@ -53,14 +85,14 @@ class Validator
     /**
      * Проверяет на больше чем или равно
      *
-     * @param  int   $var
-     * @param  int   $var2
+     * @param  int   $input
+     * @param  int   $input2
      * @param  mixed $label
      * @return $this
      */
-    public function greaterThanOrEqual($var, $var2, $label)
+    public function greaterThanOrEqual($input, $input2, $label)
     {
-        if ($var < $var2) {
+        if ($input < $input2) {
             $this->addError($label);
         }
 
@@ -70,14 +102,14 @@ class Validator
     /**
      * Проверяет на меньше чем число
      *
-     * @param  int   $var
-     * @param  int   $var2
+     * @param  int   $input
+     * @param  int   $input2
      * @param  mixed $label
      * @return $this
      */
-    public function lessThan($var, $var2, $label)
+    public function lessThan($input, $input2, $label)
     {
-        if ($var >= $var2) {
+        if ($input >= $input2) {
             $this->addError($label);
         }
 
@@ -87,14 +119,14 @@ class Validator
     /**
      * Проверяет на меньше чем или равно
      *
-     * @param  int   $var
-     * @param  int   $var2
+     * @param  int   $input
+     * @param  int   $input2
      * @param  mixed $label
      * @return $this
      */
-    public function lessThanOrEqual($var, $var2, $label)
+    public function lessThanOrEqual($input, $input2, $label)
     {
-        if ($var > $var2) {
+        if ($input > $input2) {
             $this->addError($label);
         }
 
@@ -104,19 +136,46 @@ class Validator
     /**
      * Проверяет эквивалентны ли данные
      *
-     * @param  mixed $var
-     * @param  mixed $var2
+     * @param  mixed $input
+     * @param  mixed $input2
      * @param  mixed $label
      * @return $this
      */
-    public function equal($var, $var2, $label)
+    public function equal($input, $input2, $label)
     {
-        if ($var !== $var2) {
+        if ($input !== $input2) {
             $this->addError($label);
         }
 
         return $this;
     }
+
+    /**
+     * Проверяет не эквивалентны ли данные
+     *
+     * @param  mixed $input
+     * @param  mixed $input2
+     * @param  mixed $label
+     * @return $this
+     */
+    public function notEqual($input, $input2, $label)
+    {
+        if ($input === $input2) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    public function bool($input, $label)
+    {
+        if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
 
     /**
      * Добавляет ошибки в массив
