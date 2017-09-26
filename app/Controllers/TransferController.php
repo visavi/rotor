@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Classes\Validation;
-use App\Models\Flood;
+use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -40,6 +40,51 @@ class TransferController extends BaseController
         $money = abs(intval(Request::input('money')));
         $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
+
+
+        $validator = new Validator();
+        $validator
+            ->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->equal(3, 4, ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->greaterThan($money, 0, ['money' => 'Перевод невозможен указана неверная сумма!'])
+            ->greaterThan(6, 7, ['money' => '2Перевод невозможен указана неверная сумма!'])
+            ->greaterThan(6, 3, ['money' => '3Перевод невозможен указана неверная сумма!'])
+            ;
+
+
+        var_dump($validator->getErrors());
+        var_dump($validator->isValid());
+        $validator->greaterThanOrEqual(4, 5, ['money' => '3Перевод невозможен указана неверная сумма!']);
+        $validator->length($msg, 50, 1000, ['money' => 'атата'], true);
+        var_dump($validator->getErrors());
+        var_dump($validator->isValid());
+
+        exit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         $validation = new Validation();
