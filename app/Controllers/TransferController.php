@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+//use App\Classes\Validation;
 use App\Classes\Validator;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -41,24 +41,20 @@ class TransferController extends BaseController
         $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
 
-
         $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->equal(3, 4, ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->bool($this->user, ['user' => 'Ошибка! Пользователь не найден!'])
+            ->length($msg, 0, 1000, ['msg' => 'Слишком длинное сообщение!'])
+            ->greaterThanOrEqual(getUser('point'), setting('sendmoneypoint'), ['money' => 'Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), setting('scorename'))])
             ->greaterThan($money, 0, ['money' => 'Перевод невозможен указана неверная сумма!'])
-            ->greaterThan(6, 7, ['money' => '2Перевод невозможен указана неверная сумма!'])
-            ->greaterThan(6, 3, ['money' => '3Перевод невозможен указана неверная сумма!'])
-            ->between(0, 3, 7, ['money' => 'between'], false)
-            ->bool($this->user, ['user' => 'not bool'])
+            ->lessThanOrEqual($money, getUser('money'), ['money' => 'Недостаточно средств для перевода такого количества денег!'])
+            ->notEqual($this->user->id, getUser('id'), ['user' => 'Запрещено переводить деньги самому себе!'])
             ;
 
-        $validator->greaterThanOrEqual(4, 5, ['money' => '3Перевод невозможен указана неверная сумма!']);
-        $validator->length($msg, 150, 1000, ['money' => 'атата']);
-       // $validator->notEqual($this->user->id, getUser('id'), ['user' => 'Запещено переводить деньги самому себе!']);
         var_dump($validator->getErrors());
         var_dump($validator->isValid());
-
+var_dump(isIgnore($this->user, getUser()));
         exit;
 
 
@@ -97,7 +93,7 @@ class TransferController extends BaseController
 
         if ($this->user) {
             $validation
-                ->addRule('not_equal', [$this->user->id, getUser('id')], ['user' => 'Запещено переводить деньги самому себе!'])
+                ->addRule('not_equal', [$this->user->id, getUser('id')], ['user' => 'Запрещено переводить деньги самому себе!'])
                 ->addRule('custom', ! isIgnore($this->user, getUser()), 'Вы внесены в игнор-лист получателя!');
         }
 
