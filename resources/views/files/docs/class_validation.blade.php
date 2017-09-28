@@ -6,7 +6,7 @@
 
 Пример проверки регистрации пользователей
 <pre class="prettyprint linenums">
-$validation = new Validation();
+$validator = new Validator();
 
 $validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
 	-> addRule('regex', array($logs, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!', true)
@@ -18,10 +18,10 @@ $validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Пров
 	-> addRule('equal', array($pars, $pars2), 'Ошибка! Введенные пароли отличаются друг от друга!')
 	-> addRule('not_equal', array($logs, $pars), 'Пароль и логин должны отличаться друг от друга!');
 
-if ($validation->run()){
+if ($validator->isValid()){
 	echo 'Все отлично, ошибок нет!';
 } else {
-	showError($validation->getErrors());
+	showError($validator->getErrors());
 }
 </pre>
 
@@ -48,10 +48,10 @@ if ($validation->run()){
 Запускает проверку и возвращает true если все условия выполнены или массив со списком ошибок<br>
 
 <pre class="prettyprint linenums">
-if ($validation->run()){
+if ($validator->isValid()){
 	echo 'Все отлично, ошибок нет!';
 } else {
-	showError($validation->getErrors());
+	showError($validator->getErrors());
 }
 </pre>
 

@@ -3,7 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\Down;
 use App\Models\Guest;
@@ -89,13 +89,13 @@ class SpamController extends AdminController
         $id    = abs(intval(Request::input('id')));
         $token = check(Request::input('token'));
 
-        $validation = new Validation();
-        $validation
-            ->addRule('bool', Request::ajax(), 'Это не ajax запрос!')
-            ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('not_empty', $id, ['Не выбрана запись для удаление!']);
+        $validator = new Validator();
+        $validator
+            ->true(Request::ajax(), 'Это не ajax запрос!')
+            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->notEmpty($id, 'Не выбрана запись для удаление!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             Spam::query()->find($id)->delete();
 
@@ -103,7 +103,7 @@ class SpamController extends AdminController
         } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => current($validation->getErrors())
+                'message' => current($validator->getErrors())
             ]);
         }
     }

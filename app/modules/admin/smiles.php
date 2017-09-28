@@ -77,15 +77,15 @@ case 'load':
     if (is_writeable(HOME.'/uploads/smiles')){
 
         $smile = Smile::where('code', $code)->find_one();
-        $validation = new Validation();
 
-        $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            -> addRule('empty', $smile, 'Смайл с данным кодом уже имеется в списке!')
-            -> addRule('string', $code, 'Слишком длинный или короткий код смайла!', true, 2, 20)
-            -> addRule('regex', [$code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i'], 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
+        $validator = new Validator();
+        $validator->equal($uid, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->empty($smile, 'Смайл с данным кодом уже имеется в списке!')
+            ->length($code, 2, 20, 'Слишком длинный или короткий код смайла!')
+            ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!');
 
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             $handle = new FileUpload($_FILES['smile']);
 
@@ -125,7 +125,7 @@ case 'load':
                 showError($handle->error);
             }
         } else {
-            showError($validation->getErrors());
+            showError($validator->getErrors());
         }
     } else {
         showError('Ошибка! Не установлены атрибуты доступа на дирекоторию со смайлами!');
@@ -172,15 +172,14 @@ case 'change':
         ->where_not_equal('id', $id)
         ->find_one($id);
 
-    $validation = new Validation();
+    $validator = new Validator();
+    $validator->equal($uid, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        ->notEmpty($smile, 'Не найден смайл для редактирования!')
+        ->empty($checkcode, 'Смайл с данным кодом уже имеется в списке!')
+        ->length($code, 1, 20, 'Слишком длинный или короткий код смайла!')
+        ->regex($code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i', 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!');
 
-    $validation -> addRule('equal', [$uid, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('not_empty', $smile, 'Не найден смайл для редактирования!')
-        -> addRule('empty', $checkcode, 'Смайл с данным кодом уже имеется в списке!')
-        -> addRule('string', $code, 'Слишком длинный или короткий код смайла!', true, 1, 20)
-        -> addRule('regex', [$code, '|^:+[a-яa-z0-9_\-/\(\)]+$|i'], 'Код смайла должен начинаться с двоеточия. Разрешены буквы, цифры и дефис!', true);
-
-    if ($validation->run()) {
+    if ($validator->isValid()) {
 
         $smile->code = $code;
         $smile->save();
@@ -192,7 +191,7 @@ case 'change':
 
 
     } else {
-        showError($validation->getErrors());
+        showError($validator->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/smiles?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';

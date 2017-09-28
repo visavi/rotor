@@ -17,6 +17,17 @@ class User extends BaseModel
     const BANNED  = 'banned';  // Забаненный
 
     /**
+     * Администраторы
+     */
+    const ADMIN_GROUPS = [
+        self::BOSS,
+        self::ADMIN,
+        self::MODER,
+        self::MANAGER,
+        self::EDITOR,
+    ];
+
+    /**
      * Все пользователи
      */
     const GROUPS = [

@@ -12,7 +12,7 @@ use App\Models\VoteAnswer;
 use App\Models\VotePoll;
 use App\Models\Flood;
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class TopicController extends BaseController
@@ -117,18 +117,18 @@ class TopicController extends BaseController
             ->leftJoin('forums', 'topics.forum_id', '=', 'forums.id')
             ->first();
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->addRule('not_empty', $topic, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
-            ->addRule('empty', $topic['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
-            ->addRule('equal', [Flood::isFlood(), true], ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!'])
-            ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, setting('forumtextlength'));
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->notEmpty($topic, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
+            ->empty($topic['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
+            ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!'])
+            ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
 
         // Проверка сообщения на схожесть
         $post = Post::query()->where('topic_id', $topic->id)->orderBy('id', 'desc')->first();
-        $validation->addRule('not_equal', [$msg, $post['text']], ['msg' => 'Ваше сообщение повторяет предыдущий пост!']);
+        $validator->notEqual($msg, $post['text'], ['msg' => 'Ваше сообщение повторяет предыдущий пост!']);
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             $msg = antimat($msg);
 
@@ -265,7 +265,7 @@ class TopicController extends BaseController
 
         } else {
             setInput(Request::all());
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect('/topic/' . $topic->id . '/end');
@@ -284,14 +284,14 @@ class TopicController extends BaseController
 
         $isModer = in_array(getUser('id'), explode(',', $topic['moderators']), true) ? true : false;
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', getUser(), 'Для закрытия тем необходимо авторизоваться')
-            ->addRule('not_empty', $del, 'Отстутствуют выбранные сообщения для удаления!')
-            ->addRule('empty', $topic['closed'], 'Редактирование невозможно. Данная тема закрыта!')
-            ->addRule('equal', [$isModer, true], 'Удалять сообщения могут только кураторы темы!');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
+            ->notEmpty($del, 'Отстутствуют выбранные сообщения для удаления!')
+            ->empty($topic['closed'], 'Редактирование невозможно. Данная тема закрыта!')
+            ->equal($isModer, true, 'Удалять сообщения могут только кураторы темы!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             // ------ Удаление загруженных файлов -------//
             $files = File::query()
@@ -314,7 +314,7 @@ class TopicController extends BaseController
 
             setFlash('success', 'Выбранные сообщения успешно удалены!');
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect('/topic/' . $tid . '?page=' . $page);
@@ -329,15 +329,15 @@ class TopicController extends BaseController
 
         $topic = Topic::query()->find($tid);
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', getUser(), 'Для закрытия тем необходимо авторизоваться')
-            ->addRule('max', [getUser('point'), setting('editforumpoint')], 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
-            ->addRule('not_empty', $topic, 'Выбранная вами тема не существует, возможно она была удалена!')
-            ->addRule('equal', [$topic['user_id'], getUser('id')], 'Вы не автор данной темы!')
-            ->addRule('empty', $topic['closed'], 'Данная тема уже закрыта!');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
+            ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
+            ->notEmpty($topic, 'Выбранная вами тема не существует, возможно она была удалена!')
+            ->equal($topic['user_id'], getUser('id'), 'Вы не автор данной темы!')
+            ->empty($topic['closed'], 'Данная тема уже закрыта!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             $topic->update(['closed' => 1]);
 
@@ -352,7 +352,7 @@ class TopicController extends BaseController
 
             setFlash('success', 'Тема успешно закрыта!');
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect('/topic/' . $tid);
@@ -396,15 +396,15 @@ class TopicController extends BaseController
             $msg   = check(Request::input('msg'));
 
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50);
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название темы!']);
 
             if ($post) {
-                $validation->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, setting('forumtextlength'));
+                $validator->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинный или короткий текст сообщения!']);
             }
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $title = antimat($title);
                 $msg   = antimat($msg);
@@ -424,7 +424,7 @@ class TopicController extends BaseController
 
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -472,11 +472,11 @@ class TopicController extends BaseController
             $msg     = check(Request::input('msg'));
             $delfile = intar(Request::input('delfile'));
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое сообщение!'], true, 5, setting('forumtextlength'));
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $msg = antimat($msg);
 
@@ -506,7 +506,7 @@ class TopicController extends BaseController
                 redirect('/topic/' . $tid . '?page=' . $page);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -537,11 +537,11 @@ class TopicController extends BaseController
         $poll  = abs(intval(Request::input('poll')));
         $page  = abs(intval(Request::input('page')));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         if ($vote['closed']) {
-            $validation->addError('Данное голосование закрыто!');
+            $validator->addError('Данное голосование закрыто!');
         }
 
         $votePoll = VotePoll::query()
@@ -550,7 +550,7 @@ class TopicController extends BaseController
             ->first();
 
         if ($votePoll) {
-            $validation->addError('Вы уже проголосовали в этом опросе!');
+            $validator->addError('Вы уже проголосовали в этом опросе!');
         }
 
         $voteAnswer = VoteAnswer::query()
@@ -559,10 +559,10 @@ class TopicController extends BaseController
             ->first();
 
         if (!$voteAnswer) {
-            $validation->addError('Вы не выбрали вариант ответа!');
+            $validator->addError('Вы не выбрали вариант ответа!');
         }
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             $vote->increment('count');
             $voteAnswer->increment('result');
@@ -575,7 +575,7 @@ class TopicController extends BaseController
 
             setFlash('success', 'Ваш голос успешно принят!');
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect('/topic/' . $tid . '?page=' . $page);

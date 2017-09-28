@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Rating;
 use App\Models\User;
 
@@ -69,14 +69,14 @@ class RatingController extends BaseController
         $id    = abs(intval(Request::input('id')));
         $token = check(Request::input('token'));
 
-        $validation = new Validation();
-        $validation
-            ->addRule('bool', Request::ajax(), 'Это не ajax запрос!')
-            ->addRule('bool', isAdmin(User::ADMIN), 'Удалять рейтинг могут только администраторы')
-            ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('not_empty', $id, ['Не выбрана запись для удаление!']);
+        $validator = new Validator();
+        $validator
+            ->true(Request::ajax(), 'Это не ajax запрос!')
+            ->true(isAdmin(User::ADMIN), 'Удалять рейтинг могут только администраторы')
+            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->notEmpty($id, ['Не выбрана запись для удаление!']);
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             Rating::query()->find($id)->delete();
 
@@ -84,7 +84,7 @@ class RatingController extends BaseController
         } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => current($validation->getErrors())
+                'message' => current($validator->getErrors())
             ]);
         }
     }

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\Comment;
 use App\Models\Guest;
@@ -102,14 +102,14 @@ class AjaxController extends BaseController
 
         $spam = Spam::query()->where(['relate_type' => $type, 'relate_id' => $id])->first();
 
-        $validation = new Validation();
-        $validation
-            ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', getUser(), 'Для отправки жалобы необходимо авторизоваться')
-            ->addRule('bool', $data, 'Выбранное вами сообщение для жалобы не существует!')
-            ->addRule('bool', ! $spam, 'Жалоба на данное сообщение уже отправлена!');
+        $validator = new Validator();
+        $validator
+            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true(getUser(), 'Для отправки жалобы необходимо авторизоваться')
+            ->true($data, 'Выбранное вами сообщение для жалобы не существует!')
+            ->false($spam, 'Жалоба на данное сообщение уже отправлена!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
             Spam::query()->create([
                 'relate_type' => $type,
                 'relate_id'   => $data->id,
@@ -122,7 +122,7 @@ class AjaxController extends BaseController
         } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => current($validation->getErrors())
+                'message' => current($validator->getErrors())
             ]);
         }
     }
@@ -141,10 +141,10 @@ class AjaxController extends BaseController
         $rid   = abs(intval(Request::input('rid')));
         $id    = abs(intval(Request::input('id')));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
             $delComments = Comment::query()
                 ->where('relate_type', $type)
                 ->where('relate_id', $rid)
@@ -162,7 +162,7 @@ class AjaxController extends BaseController
         } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => current($validation->getErrors())
+                'message' => current($validator->getErrors())
             ]);
         }
     }

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Bookmark;
 use App\Models\Topic;
 
@@ -52,15 +52,16 @@ class BookmarkController extends BaseController
         $token = check(Request::input('token'));
         $tid   = abs(intval(Request::input('tid')));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         $topic = Topic::query()->find($tid);
-        $validation->addRule('custom', $topic, 'Ошибка! Данной темы не существует!');
+        $validator->true($topic, 'Ошибка! Данной темы не существует!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
-            $bookmark = Bookmark::where('topic_id', $tid)
+            $bookmark = Bookmark::query()
+                ->where('topic_id', $tid)
                 ->where('user_id', getUser('id'))
                 ->first();
 
@@ -76,7 +77,7 @@ class BookmarkController extends BaseController
                 exit(json_encode(['status' => 'added', 'message' => 'Тема успешно добавлена в закладки!']));
             }
         } else {
-            exit(json_encode(['status' => 'error', 'message' => current($validation->getErrors())]));
+            exit(json_encode(['status' => 'error', 'message' => current($validator->getErrors())]));
         }
     }
 
@@ -89,11 +90,11 @@ class BookmarkController extends BaseController
         $topicIds = intar(Request::input('del'));
         $page     = abs(intval(Request::input('page')));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('not_empty', $topicIds, 'Ошибка! Отсутствуют выбранные закладки!');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->notEmpty($topicIds, 'Ошибка! Отсутствуют выбранные закладки!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             Bookmark::query()
                 ->whereIn('topic_id', $topicIds)
@@ -102,7 +103,7 @@ class BookmarkController extends BaseController
 
             setFlash('success', 'Выбранные темы успешно удалены из закладок!');
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect('/forum/bookmark?page=' . $page);

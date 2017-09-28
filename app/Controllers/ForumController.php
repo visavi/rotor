@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Forum;
 use App\Models\Post;
@@ -97,31 +97,31 @@ class ForumController extends BaseController
 
             $forum = Forum::query()->find($fid);
 
-            $validation = new Validation();
-            $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                -> addRule('not_empty', $forum, ['fid' => 'Раздела для новой темы не существует!'])
-                -> addRule('empty', $forum['closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
-                -> addRule('equal', [Flood::isFlood(), true], ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.Flood::getPeriod().' сек!'])
-                -> addRule('string', $title, ['title' => 'Слишком длинное или короткое название темы!'], true, 5, 50)
-                -> addRule('string', $msg, ['msg' => 'Слишком длинный или короткий текст сообщения!'], true, 5, setting('forumtextlength'));
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->notEmpty($forum, ['fid' => 'Раздела для новой темы не существует!'])
+                ->empty($forum['closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
+                ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.Flood::getPeriod().' сек!'])
+                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название темы!'])
+                ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинный или короткий текст сообщения!']);
 
             if ($vote) {
-                $validation->addRule('string', $question, ['question' => 'Слишком длинный или короткий текст вопроса!'], true, 5, 100);
+                $validator->length($question, 5, 100, ['question' => 'Слишком длинный или короткий текст вопроса!']);
                 $answers = array_unique(array_diff($answers, ['']));
 
                 foreach ($answers as $answer) {
                     if (utfStrlen($answer) > 50) {
-                        $validation->addError(['answer' => 'Длина вариантов ответа не должна быть более 50 символов!']);
+                        $validator->addError(['answer' => 'Длина вариантов ответа не должна быть более 50 символов!']);
                         break;
                     }
                 }
 
-                $validation->addRule('numeric', count($answers), ['answer' => 'Необходимо от 2 до 10 варианта ответов!'], true, 2, 10);
+                $validator->between(count($answers), 2, 10, ['answer' => 'Необходимо от 2 до 10 варианта ответов!']);
             }
 
             /* TODO: Сделать проверку поиска похожей темы */
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $title = antimat($title);
                 $msg   = antimat($msg);
@@ -188,7 +188,7 @@ class ForumController extends BaseController
                 redirect('/topic/'.$topic->id);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 

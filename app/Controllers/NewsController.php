@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\News;
@@ -73,15 +73,14 @@ class NewsController extends BaseController
             $msg   = check(Request::input('msg'));
             $token = check(Request::input('token'));
 
-            $validation = new Validation();
+            $validator = new Validator();
+            $validator->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
+                ->length($msg, 5, 1000, 'Слишком длинный или короткий комментарий!')
+                ->empty($news['closed'], 'Комментирование данной новости запрещено!');
 
-            $validation->addRule('bool', getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
-                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
-                ->addRule('string', $msg, 'Слишком длинный или короткий комментарий!', true, 5, 1000)
-                ->addRule('empty', $news['closed'], 'Комментирование данной новости запрещено!');
-
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $msg = antimat($msg);
 
                 Comment::query()->create([
@@ -115,7 +114,7 @@ class NewsController extends BaseController
 
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -167,12 +166,12 @@ class NewsController extends BaseController
             $msg   = check(Request::input('msg'));
             $token = check(Request::input('token'));
 
-            $validation = new Validation();
-            $validation
-                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий комментарий!'], true, 5, 1000);
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $msg = antimat($msg);
 
                 $comment->update([
@@ -183,7 +182,7 @@ class NewsController extends BaseController
                 redirect('/news/' . $nid . '/comments?page=' . $page);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
         return view('news/editcomment', compact('comment', 'page'));

@@ -15,15 +15,15 @@ case 'index':
         $newName = uniqid();
         $token   = check(Request::input('token'));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
         $handle = uploadImage($_FILES['photo'], setting('filesize'), setting('fileupfoto'), $newName);
         if (! $handle) {
-            $validation -> addError(['photo' => 'Не удалось загрузить фотографию!']);
+            $validator->addError(['photo' => 'Не удалось загрузить фотографию!']);
         }
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
             //-------- Удаляем старую фотку и аватар ----------//
             $user = User::find(getUser('id'));
 
@@ -67,12 +67,12 @@ case 'index':
                 setFlash('success', 'Фотография успешно загружена!');
                 redirect('/profile');
             } else {
-                $validation -> addError(['photo' => $handle->error]);
+                $validator->addError(['photo' => $handle->error]);
             }
         }
 
         setInput(Request::all());
-        setFlash('danger', $validation->getErrors());
+        setFlash('danger', $validator->getErrors());
     }
 
     $user = User::where('login', getUser('login'))->first();
@@ -87,15 +87,15 @@ case 'delete':
 
     $token = check(Request::input('token'));
 
-    $validation = new Validation();
-    $validation->addRule('equal', [$token, $_SESSION['token']], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
+    $validator = new Validator();
+    $validator->equal($token, $_SESSION['token'], ['photo' => 'Неверный идентификатор сессии, повторите действие!']);
 
     $user = User::find(getUser('id'));
     if (! $user || ! $user['picture']) {
-        $validation -> addError('Фотографии для удаления не существует!');
+        $validator->addError('Фотографии для удаления не существует!');
     }
 
-    if ($validation->run()) {
+    if ($validator->isValid()) {
 
         deleteImage('uploads/photos/', $user['picture']);
         deleteImage('uploads/avatars/', $user['avatar']);
@@ -106,7 +106,7 @@ case 'delete':
 
         setFlash('success', 'Фотография успешно удалена!');
     } else {
-        setFlash('danger', $validation->getErrors());
+        setFlash('danger', $validator->getErrors());
     }
 
     redirect('/profile');

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Contact;
 use App\Models\User;
 
@@ -31,22 +31,22 @@ class ContactController extends BaseController
             $token = check(Request::input('token'));
             $login = check(Request::input('user'));
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
             $user = User::query()->where('login', $login)->first();
-            $validation->addRule('not_empty', $user, 'Данного пользователя не существует!');
+            $validator->notEmpty($user, 'Данного пользователя не существует!');
 
             if ($user) {
-                $validation->addRule('not_equal', [$user->login, getUser('login')], 'Запрещено добавлять свой логин!');
+                $validator->notEqual($user->login, getUser('login'), 'Запрещено добавлять свой логин!');
 
                 $totalContact = Contact::query()->where('user_id', getUser('id'))->count();
-                $validation->addRule('min', [$totalContact, setting('limitcontact')], 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
+                $validator->lte($totalContact, setting('limitcontact'), 'Ошибка! Контакт-лист переполнен (Максимум ' . setting('limitcontact') . ' пользователей!)');
 
-                $validation->addRule('custom', ! isContact(getUser(), $user), 'Данный пользователь уже есть в контакт-листе!');
+                $validator->false(isContact(getUser(), $user), 'Данный пользователь уже есть в контакт-листе!');
             }
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 Contact::query()->create([
                     'user_id'    => getUser('id'),
@@ -64,7 +64,7 @@ class ContactController extends BaseController
 
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -101,11 +101,11 @@ class ContactController extends BaseController
             $token = check(Request::input('token'));
             $msg   = check(Request::input('msg'));
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->addRule('string', $msg, ['msg' => 'Слишком большая заметка, не более 1000 символов!'], true, 0, 1000);
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+                ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка, не более 1000 символов!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $contact->update([
                     'text' => $msg,
@@ -115,7 +115,7 @@ class ContactController extends BaseController
                 redirect("/contact");
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -131,11 +131,11 @@ class ContactController extends BaseController
         $token = check(Request::input('token'));
         $del   = intar(Request::input('del'));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', $del, 'Ошибка удаления! Отсутствуют выбранные пользователи');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($del, 'Ошибка удаления! Отсутствуют выбранные пользователи');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             Contact::query()
                 ->where('user_id', getUser('id'))
@@ -144,7 +144,7 @@ class ContactController extends BaseController
 
             setFlash('success', 'Выбранные пользователи успешно удалены!');
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect("/contact?page=$page");

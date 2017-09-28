@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\CatsBlog;
 use App\Models\Comment;
@@ -157,16 +157,16 @@ class BlogController extends BaseController
 
             $category = CatsBlog::query()->find($cid);
 
-            $validation = new Validation();
-            $validation
-                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $title, ['title' => 'Слишком длинный или короткий заголовок!'], true, 5, 50)
-                ->addRule('string', $text, ['text' => 'Слишком длинный или короткий текст статьи!'], true, 100, setting('maxblogpost'))
-                ->addRule('string', $tags, ['tags' => 'Слишком длинные или короткие метки статьи!'], true, 2, 50)
-                ->addRule('bool', Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->addRule('not_empty', $category, ['cid' => 'Раздела для статьи не существует!']);
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
+                ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
+                ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
+                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->notEmpty($category, ['cid' => 'Раздела для статьи не существует!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 // Обновление счетчиков
                 if ($blog->category_id != $category->id) {
@@ -185,7 +185,7 @@ class BlogController extends BaseController
                 redirect('/article/'.$blog->id);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -251,16 +251,16 @@ class BlogController extends BaseController
 
             $category = CatsBlog::query()->find($cid);
 
-            $validation = new Validation();
-            $validation
-                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $title, ['title' => 'Слишком длинный или короткий заголовок!'], true, 5, 50)
-                ->addRule('string', $text, ['text' => 'Слишком длинный или короткий текст статьи!'], true, 100, setting('maxblogpost'))
-                ->addRule('string', $tags, ['tags' => 'Слишком длинные или короткие метки статьи!'], true, 2, 50)
-                ->addRule('bool', Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->addRule('not_empty', $category, ['cid' => 'Раздела для новой статьи не существует!']);
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинный или короткий заголовок!'])
+                ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
+                ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
+                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->notEmpty($category, ['cid' => 'Раздела для новой статьи не существует!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $text = antimat($text);
 
@@ -285,7 +285,7 @@ class BlogController extends BaseController
                 redirect('/article/'.$article->id);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -307,14 +307,14 @@ class BlogController extends BaseController
             $token = check(Request::input('token'));
             $msg = check(Request::input('msg'));
 
-            $validation = new Validation();
-            $validation
-                ->addRule('bool', getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
-                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
-                ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
+            $validator = new Validator();
+            $validator
+                ->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое название!'])
+                ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $msg = antimat($msg);
 
                 Comment::query()->create([
@@ -342,7 +342,7 @@ class BlogController extends BaseController
                 redirect('/article/' . $blog->id . '/end');
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -394,12 +394,12 @@ class BlogController extends BaseController
             $msg   = check(Request::input('msg'));
             $page  = abs(intval(Request::input('page', 1)));
 
-            $validation = new Validation();
-            $validation
-                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий комментарий!'], true, 5, 1000);
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $msg = antimat($msg);
 
                 $comment->update([
@@ -410,7 +410,7 @@ class BlogController extends BaseController
                 redirect('/article/' . $id . '/comments?page=' . $page);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 

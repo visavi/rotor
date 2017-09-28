@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\User;
 
 class MailController extends BaseController
@@ -25,14 +25,13 @@ class MailController extends BaseController
                 $email = getUser('email');
             }
 
-            $validation = new Validation();
+            $validator = new Validator();
+            $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+                ->length($name, 5, 100, ['name' => 'Слишком длинное или короткое имя'])
+                ->length($message, 5, 50000, ['message' => 'Слишком длинное или короткое сообшение'])
+                ->email($email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!']);
 
-            $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
-                ->addRule('string', $name, ['name' => 'Слишком длинное или короткое имя'], true, 5, 100)
-                ->addRule('string', $message, ['message' => 'Слишком длинное или короткое сообшение'], true, 5, 50000)
-                ->addRule('email', $email, ['email' => 'Неправильный адрес email, необходим формат name@site.domen!'], true);
-
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $message .= '<br><br>IP: ' . getClientIp() . '<br>Браузер: ' . getUserAgent() . '<br>Отправлено: ' . dateFixed(SITETIME, 'j.m.Y / H:i');
 
@@ -44,7 +43,7 @@ class MailController extends BaseController
                 redirect("/");
 
             } else {
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -71,12 +70,11 @@ class MailController extends BaseController
                 abort('default', 'Пользователь с данным логином или email не найден!');
             }
 
-            $validation = new Validation();
+            $validator = new Validator();
+            $validator->equal($protect, $_SESSION['protect'], 'Проверочное число не совпало с данными на картинке!')
+                ->lte($user['timepasswd'], SITETIME, 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
 
-            $validation->addRule('equal', [$protect, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
-                ->addRule('min', [$user['timepasswd'], SITETIME], 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
-
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $resetKey  = str_random();
                 $resetLink = siteLink(setting('home')) . '/recovery/restore?key=' . $resetKey;
 
@@ -95,7 +93,7 @@ class MailController extends BaseController
                 setFlash('success', 'Восстановление пароля инициализировано!');
                 redirect('/recovery');
             } else {
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -118,13 +116,12 @@ class MailController extends BaseController
             abort('default', 'Ключ для восстановления недействителен!');
         }
 
-        $validation = new Validation();
+        $validator = new Validator();
+        $validator->notEmpty($key, 'Отсутствует секретный код в ссылке для восстановления пароля!')
+            ->notEmpty($user['keypasswd'], 'Данный пользователь не запрашивал восстановление пароля!')
+            ->gte($user['timepasswd'], SITETIME, 'Секретный ключ для восстановления уже устарел!');
 
-        $validation->addRule('not_empty', $key, 'Отсутствует секретный код в ссылке для восстановления пароля!')
-            ->addRule('not_empty', $user['keypasswd'], 'Данный пользователь не запрашивал восстановление пароля!')
-            ->addRule('max', [$user['timepasswd'], SITETIME], 'Секретный ключ для восстановления уже устарел!');
-
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             $newpass    = str_random();
             $hashnewpas = password_hash($newpass, PASSWORD_BCRYPT);
@@ -144,7 +141,7 @@ class MailController extends BaseController
 
             return view('mail/restore', ['login' => $user['login'], 'password' => $newpass]);
         } else {
-            setFlash('danger', current($validation->getErrors()));
+            setFlash('danger', current($validator->getErrors()));
             redirect('/');
         }
     }

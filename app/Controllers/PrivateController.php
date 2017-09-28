@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Contact;
 use App\Models\Flood;
 use App\Models\Ignore;
@@ -97,23 +97,23 @@ class PrivateController extends BaseController
             $msg     = check(Request::input('msg'));
             $provkod = check(Request::input('provkod'));
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->addRule('bool', $user, ['user' => 'Ошибка! Пользователь не найден!'])
-                ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, 1000)
-                ->addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!');
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+                ->true($user, ['user' => 'Ошибка! Пользователь не найден!'])
+                ->length($msg, 5, 1000, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'])
+                ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!');
 
             if ($user) {
 
-                $validation->addRule('not_equal', [$user->id, getUser('id')], ['user' => 'Нельзя отправлять письмо самому себе!']);
+                $validator->notEqual($user->id, getUser('id'), ['user' => 'Нельзя отправлять письмо самому себе!']);
 
                 if (getUser('point') < setting('privatprotect') && $provkod != $_SESSION['protect']) {
-                    $validation->addError(['provkod' => 'Проверочное число не совпало с данными на картинке!']);
+                    $validator->addError(['provkod' => 'Проверочное число не совпало с данными на картинке!']);
                 }
 
                 // лимит ящика
                 $totalInbox = Inbox::query()->where('user_id', $user->id)->count();
-                $validation->addRule('min', [$totalInbox, setting('limitmail')], 'Ящик получателя переполнен!');
+                $validator->lte($totalInbox, setting('limitmail'), 'Ящик получателя переполнен!');
 
                 // Проверка на игнор
                 $ignoring = Ignore::query()
@@ -121,10 +121,10 @@ class PrivateController extends BaseController
                     ->where('ignore_id', getUser('id'))
                     ->first();
 
-                $validation->addRule('empty', $ignoring, ['user' => 'Вы внесены в игнор-лист получателя!']);
+                $validator->empty($ignoring, ['user' => 'Вы внесены в игнор-лист получателя!']);
             }
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $msg = antimat($msg);
 
@@ -152,7 +152,7 @@ class PrivateController extends BaseController
 
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -175,11 +175,11 @@ class PrivateController extends BaseController
         $del   = intar(Request::input('del'));
         $page  = abs(intval(Request::input('page', 1)));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', $del, 'Ошибка удаления! Отсутствуют выбранные сообщения');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($del, 'Ошибка удаления! Отсутствуют выбранные сообщения');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             if ($type == 'outbox') {
                 Outbox::query()
@@ -196,7 +196,7 @@ class PrivateController extends BaseController
 
             setFlash('success', 'Выбранные сообщения успешно удалены!');
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         $type = $type ? '/' . $type : '';
@@ -212,11 +212,11 @@ class PrivateController extends BaseController
         $type  = check(Request::input('type'));
         $page  = abs(intval(Request::input('page', 1)));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('empty', getUser('newprivat'), 'У вас имеются непрочитанные сообщения!');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->empty(getUser('newprivat'), 'У вас имеются непрочитанные сообщения!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             if ($type == 'outbox') {
                 Outbox::query()->where('user_id', getUser('id'))->delete();
@@ -227,7 +227,7 @@ class PrivateController extends BaseController
 
             setFlash('success', 'Ящик успешно очищен!');
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         $type = $type ? '/' . $type : '';

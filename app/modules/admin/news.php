@@ -132,14 +132,13 @@ case 'change':
 
     $datanews = DB::run() -> queryFetch("SELECT * FROM `news` WHERE `id`=? LIMIT 1;", [$id]);
 
-    $validation = new Validation();
+    $validator = new Validator();
+    $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        ->notEmpty($datanews, 'Выбранной новости не существует, возможно она была удалена!')
+        ->length($title, 5, 50, 'Слишком длинный или короткий заголовок новости!')
+        ->length($msg, 5, 10000, 'Слишком длинный или короткий текст новости!');
 
-    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('not_empty', $datanews, 'Выбранной новости не существует, возможно она была удалена!')
-        -> addRule('string', $title, 'Слишком длинный или короткий заголовок новости!', true, 5, 50)
-        -> addRule('string', $msg, 'Слишком длинный или короткий текст новости!', true, 5, 10000);
-
-    if ($validation->run()) {
+    if ($validator->isValid()) {
 
         DB::update("UPDATE `news` SET `title`=?, `text`=?, `closed`=?, `top`=? WHERE `id`=? LIMIT 1;", [$title, $msg, $closed, $top, $id]);
 
@@ -170,7 +169,7 @@ case 'change':
         redirect("/admin/news?page=$page");
 
     } else {
-        showError($validation->getErrors());
+        showError($validator->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=edit&amp;id='.$id.'&amp;page='.$page.'">Вернуться</a><br>';
@@ -212,13 +211,12 @@ case 'addnews':
     $closed = (empty($_POST['closed'])) ? 0 : 1;
 
 
-    $validation = new Validation();
+    $validator = new Validator();
+    $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        ->length($title, 5, 50, 'Слишком длинный или короткий заголовок новости!')
+        ->length($msg, 5, 10000, 'Слишком длинный или короткий текст новости!');
 
-    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('string', $title, 'Слишком длинный или короткий заголовок новости!', true, 5, 50)
-        -> addRule('string', $msg, 'Слишком длинный или короткий текст новости!', true, 5, 10000);
-
-    if ($validation->run()) {
+    if ($validator->isValid()) {
 
         DB::insert("INSERT INTO `news` (`title`, `text`, `user_id`, `created_at`, `comments`, `closed`, `top`) VALUES (?, ?, ?, ?, ?, ?, ?);", [$title, $msg, getUser('id'), SITETIME, 0, $closed, $top]);
 
@@ -249,7 +247,7 @@ case 'addnews':
         redirect("/admin/news");
 
     } else {
-        showError($validation->getErrors());
+        showError($validator->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/news?act=add">Вернуться</a><br>';

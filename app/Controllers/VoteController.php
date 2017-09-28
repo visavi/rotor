@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Vote;
 use App\Models\VoteAnswer;
 use App\Models\VotePoll;
@@ -63,18 +63,18 @@ class VoteController extends BaseController
             $token = check(Request::input('token'));
             $poll  = abs(intval(Request::input('poll')));
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('empty', $vote['poll'], 'Вы уже проголосовали в этом опросе!')
-                ->addRule('not_empty', $poll, 'Вы не выбрали вариант ответа!');
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->empty($vote['poll'], 'Вы уже проголосовали в этом опросе!')
+                ->notEmpty($poll, 'Вы не выбрали вариант ответа!');
 
             $answer = VoteAnswer::query()->where('id', $poll)->where('vote_id', $vote->id)->first();
 
             if ($poll) {
-                $validation->addRule('not_empty', $answer, 'Ответ для данного голосования не найден!');
+                $validator->notEmpty($answer, 'Ответ для данного голосования не найден!');
             }
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $vote->increment('count');
                 $answer->increment('result');
 
@@ -88,7 +88,7 @@ class VoteController extends BaseController
                 redirect('/votes/'.$vote->id);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 

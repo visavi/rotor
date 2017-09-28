@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\Photo;
@@ -69,11 +69,11 @@ class PhotoController extends BaseController
             $text   = check(Request::input('text'));
             $closed = Request::has('closed') ? 1 : 0;
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $title, ['title' => 'Слишком длинное или короткое название!'], true, 5, 50)
-                ->addRule('string', $text, ['text' => 'Слишком длинное описание!'], true, 0, 1000)
-                ->addRule('bool', Flood::isFlood(), ['text' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
+                ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!'])
+                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
             $handle = uploadImage(
                 $_FILES['photo'],
@@ -83,10 +83,10 @@ class PhotoController extends BaseController
             );
 
             if (!$handle) {
-                $validation->addError(['photo' => 'Не удалось загрузить фотографию!']);
+                $validator->addError(['photo' => 'Не удалось загрузить фотографию!']);
             }
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $handle->process(HOME . '/uploads/pictures/');
                 if ($handle->processed) {
@@ -102,12 +102,12 @@ class PhotoController extends BaseController
                     setFlash('success', 'Фотография успешно загружена!');
                     redirect('/gallery/' . $photo->id);
                 } else {
-                    $validation->addError(['photo' => $handle->error]);
+                    $validator->addError(['photo' => $handle->error]);
                 }
             }
 
             setInput(Request::all());
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         return view('gallery/create');
@@ -136,12 +136,12 @@ class PhotoController extends BaseController
             $text   = check(Request::input('text'));
             $closed = Request::has('closed') ? 1 : 0;
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $title, ['title' => 'Слишком длинное или короткое название!'], true, 5, 50)
-                ->addRule('string', $text, ['text' => 'Слишком длинное описание!'], true, 0, 1000);
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
+                ->length($text, 0, 1000, ['text' => 'Слишком длинное описание!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $text = antimat($text);
 
                 $photo->update([
@@ -154,7 +154,7 @@ class PhotoController extends BaseController
                 redirect('/gallery/album/' . getUser('login') . '?page=' . $page);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -178,15 +178,15 @@ class PhotoController extends BaseController
             $msg   = check(Request::input('msg'));
             $token = check(Request::input('token'));
 
-            $validation = new Validation();
-            $validation
-                ->addRule('bool', getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
-                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $msg, ['msg' => 'Слишком длинное или короткое название!'], true, 5, 1000)
-                ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->addRule('empty', $photo['closed'], 'Комментирование данной фотографии запрещено!');
+            $validator = new Validator();
+            $validator
+                ->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое название!'])
+                ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->empty($photo['closed'], 'Комментирование данной фотографии запрещено!');
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $msg = antimat($msg);
 
                 Comment::query()->create([
@@ -214,7 +214,7 @@ class PhotoController extends BaseController
                 redirect('/gallery/' . $photo->id . '/end');
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -271,13 +271,13 @@ class PhotoController extends BaseController
             $msg   = check(Request::input('msg'));
             $token = check(Request::input('token'));
 
-            $validation = new Validation();
-            $validation
-                ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                ->addRule('string', $msg, ['msg' => 'Слишком длинный или короткий комментарий!'], true, 5, 1000)
-                ->addRule('empty', $comment['closed'], 'Комментирование данной фотографии запрещено!');
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!'])
+                ->empty($comment['closed'], 'Комментирование данной фотографии запрещено!');
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
                 $msg = antimat($msg);
 
                 $comment->update([
@@ -288,7 +288,7 @@ class PhotoController extends BaseController
                 redirect('/gallery/' . $gid . '/comments?page=' . $page);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
         return view('gallery/editcomment', compact('comment', 'page'));
@@ -313,13 +313,13 @@ class PhotoController extends BaseController
             abort(404, 'Выбранное вами фото не найдено или вы не автор этой фотографии!');
         }
 
-        $validation = new Validation();
-        $validation
-            ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', is_writeable(HOME . '/uploads/pictures'), ['Не установлены атрибуты доступа на дирекоторию с фотографиями!'])
-            ->addRule('empty', $photo['comments'], 'Запрещено удалять фотографии к которым имеются комментарии!');
+        $validator = new Validator();
+        $validator
+            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true(is_writeable(HOME . '/uploads/pictures'), ['Не установлены атрибуты доступа на дирекоторию с фотографиями!'])
+            ->empty($photo['comments'], 'Запрещено удалять фотографии к которым имеются комментарии!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
             deleteImage('uploads/pictures/', $photo['link']);
 
             Comment::query()
@@ -332,7 +332,7 @@ class PhotoController extends BaseController
             setFlash('success', 'Фотография успешно удалена!');
 
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect('/gallery/album/' . getUser('login') . '?page=' . $page);

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Ignore;
 use App\Models\User;
@@ -63,20 +63,20 @@ class WallController extends BaseController
                 abort(403, 'Для отправки сообщений необходимо авторизоваться!');
             }
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->addRule('bool', $user, 'Ошибка! Пользователь не найден!')
-                ->addRule('string', $msg, 'Ошибка! Слишком длинное или короткое сообщение!', true, 5, 1000)
-                ->addRule('equal', [Flood::isFlood(), true], 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!');
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+                ->true($user, 'Ошибка! Пользователь не найден!')
+                ->length($msg, 5, 1000, 'Ошибка! Слишком длинное или короткое сообщение!')
+                ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!');
 
             $ignoring = Ignore::query()
                 ->where('user_id', $user->id)
                 ->where('ignore_id', getUser('id'))
                 ->first();
 
-            $validation->addRule('empty', $ignoring, 'Вы внесены в игнор-лист получателя!');
+            $validator->empty($ignoring, 'Вы внесены в игнор-лист получателя!');
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 if ($user->id != getUser('id')) {
                     $user->increment('newwall');
@@ -101,7 +101,7 @@ class WallController extends BaseController
                 setFlash('success', 'Запись успешно добавлена!');
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
 
             redirect('/wall/' . $user->login);
@@ -118,15 +118,15 @@ class WallController extends BaseController
 
         $user = User::query()->where('login', $login)->first();
 
-        $validation = new Validation();
-        $validation
-            ->addRule('bool', Request::ajax(), 'Это не ajax запрос!')
-            ->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('not_empty', $id, 'Не выбрана запись для удаление!')
-            ->addRule('not_empty', $user, 'Пользователь не найден!')
-            ->addRule('bool', (isAdmin() || $user->id == getUser('id')), 'Записи может удалять только владелец и администрация!');
+        $validator = new Validator();
+        $validator
+            ->true(Request::ajax(), 'Это не ajax запрос!')
+            ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->notEmpty($id, 'Не выбрана запись для удаление!')
+            ->notEmpty($user, 'Пользователь не найден!')
+            ->true((isAdmin() || $user->id == getUser('id')), 'Записи может удалять только владелец и администрация!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             Wall::query()
                 ->where('id', $id)
@@ -137,7 +137,7 @@ class WallController extends BaseController
         } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => current($validation->getErrors())
+                'message' => current($validator->getErrors())
             ]);
         }
     }

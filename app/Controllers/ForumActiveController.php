@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
@@ -94,17 +94,17 @@ class ForumActiveController extends BaseController
         $token = check(Request::input('token'));
         $tid = abs(intval(Request::input('tid')));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
         $post = Post::query()
             ->where('id', $tid)
             ->with('topic.forum')
             ->first();
 
-        $validation->addRule('custom', $post, 'Ошибка! Данного сообщения не существует!');
+        $validator->true($post, 'Ошибка! Данного сообщения не существует!');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             $post->delete();
             $post->topic->decrement('posts');
@@ -112,7 +112,7 @@ class ForumActiveController extends BaseController
 
             exit(json_encode(['status' => 'success']));
         } else {
-            exit(json_encode(['status' => 'error', 'message' => current($validation->getErrors())]));
+            exit(json_encode(['status' => 'error', 'message' => current($validator->getErrors())]));
         }
     }
 }

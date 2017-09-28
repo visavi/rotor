@@ -71,17 +71,16 @@ case 'create':
                 $bold = (empty($_POST['bold'])) ? 0 : 1;
                 $provkod = isset($_POST['provkod']) ? check(strtolower($_POST['provkod'])) : '';
 
-                $validation = new Validation();
+                $validator = new Validator();
+                $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                    ->gte(getUser('point'), 50, 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
+                    ->equal($provkod, $_SESSION['protect'], 'Проверочное число не совпало с данными на картинке!')
+                    ->regex($site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu', 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!')
+                    ->length($site, 5, 50, 'Слишком длинный или короткий адрес ссылки!')
+                    ->length($name, 5, 35, 'Слишком длинное или короткое название ссылки!')
+                    ->regex($color, '|^#+[A-f0-9]{6}$|', 'Недопустимый формат цвета ссылки! (пример #ff0000)', false);
 
-                $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-                    -> addRule('max', [getUser('point'), 50], 'Для покупки рекламы вам необходимо набрать '.plural(50, setting('scorename')).'!')
-                    -> addRule('equal', [$provkod, $_SESSION['protect']], 'Проверочное число не совпало с данными на картинке!')
-                    -> addRule('regex', [$site, '|^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/\-?_=#])+)+$|iu'], 'Недопустимый адрес сайта!. Разрешены символы [а-яa-z0-9_-.?=#/]!', true)
-                    -> addRule('string', $site, 'Слишком длинный или короткий адрес ссылки!', true, 5, 50)
-                    -> addRule('string', $name, 'Слишком длинное или короткое название ссылки!', true, 5, 35)
-                    -> addRule('regex', [$color, '|^#+[A-f0-9]{6}$|'], 'Недопустимый формат цвета ссылки! (пример #ff0000)', false);
-
-                if ($validation->run()) {
+                if ($validator->isValid()) {
 
                     RekUser::where_lt('time', SITETIME)->delete_many();
 
@@ -133,7 +132,7 @@ case 'create':
                         showError('Ошибка! В данный момент нет свободных мест для размещения рекламы!');
                     }
                 } else {
-                    showError($validation->getErrors());
+                    showError($validator->getErrors());
                 }
             }
 

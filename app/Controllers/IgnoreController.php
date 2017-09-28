@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Ignore;
 use App\Models\User;
 
@@ -31,24 +31,23 @@ class IgnoreController extends BaseController
             $token = check(Request::input('token'));
             $login = check(Request::input('user'));
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!');
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
             $user = User::query()->where('login', $login)->first();
-            $validation->addRule('not_empty', $user, 'Данного пользователя не существует!');
+            $validator->notEmpty($user, 'Данного пользователя не существует!');
 
             if ($user) {
-                $validation->addRule('not_equal', [$user->login, getUser('login')], 'Запрещено добавлять свой логин!');
+                $validator->notEqual($user->login, getUser('login'), 'Запрещено добавлять свой логин!');
 
                 $totalIgnore = Ignore::query()->where('user_id', getUser('id'))->count();
-                $validation->addRule('min', [$totalIgnore, setting('limitignore')], 'Ошибка! Игнор-лист переполнен (Максимум ' . setting('limitignore') . ' пользователей!)');
+                $validator->lte($totalIgnore, setting('limitignore'), 'Ошибка! Игнор-лист переполнен (Максимум ' . setting('limitignore') . ' пользователей!)');
 
-                $validation->addRule('custom', ! isIgnore(getUser(), $user), 'Данный пользователь уже есть в игнор-листе!');
-
-                $validation->addRule('custom', ! in_array($user->level, [101, 102, 103, 105]), 'Запрещено добавлять в игнор администрацию сайта');
+                $validator->false(isIgnore(getUser(), $user), 'Данный пользователь уже есть в игнор-листе!');
+                $validator->notIn($user->level, User::ADMIN_GROUPS, 'Запрещено добавлять в игнор администрацию сайта');
             }
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 Ignore::query()->create([
                     'user_id'    => getUser('id'),
@@ -65,7 +64,7 @@ class IgnoreController extends BaseController
                 redirect('/ignore?page=' . $page);
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -102,11 +101,11 @@ class IgnoreController extends BaseController
             $token = check(Request::input('token'));
             $msg   = check(Request::input('msg'));
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->addRule('string', $msg, ['msg' => 'Слишком большая заметка, не более 1000 символов!'], true, 0, 1000);
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+                ->length($msg, 0, 1000, ['msg' => 'Слишком большая заметка, не более 1000 символов!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $ignore->update([
                     'text' => $msg,
@@ -116,7 +115,7 @@ class IgnoreController extends BaseController
                 redirect("/ignore");
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
@@ -132,11 +131,11 @@ class IgnoreController extends BaseController
         $token = check(Request::input('token'));
         $del   = intar(Request::input('del'));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-            ->addRule('bool', $del, 'Ошибка удаления! Отсутствуют выбранные пользователи');
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+            ->true($del, 'Ошибка удаления! Отсутствуют выбранные пользователи');
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             Ignore::query()
                 ->where('user_id', getUser('id'))
@@ -145,7 +144,7 @@ class IgnoreController extends BaseController
 
             setFlash('success', 'Выбранные пользователи успешно удалены!');
         } else {
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect("/ignore?page=$page");

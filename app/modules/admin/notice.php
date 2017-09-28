@@ -112,13 +112,12 @@ case 'save':
     $text = isset($_POST['text']) ? check($_POST['text']) : '';
     $protect = ! empty($_POST['protect']) ? 1 : 0;
 
-    $validation = new Validation();
+    $validator = new Validator();
+    $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        ->length($name, 5, 100, 'Слишком длинный или короткий заголовок шаблона!')
+        ->length($text, 10, 65000, 'Слишком длинный или короткий текст шаблона!');
 
-    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('string', $name, 'Слишком длинный или короткий заголовок шаблона!', true, 5, 100)
-        -> addRule('string', $text, 'Слишком длинный или короткий текст шаблона!', true, 10, 65000);
-
-    if ($validation->run()) {
+    if ($validator->isValid()) {
 
         $note = [
             'name'       => $name,
@@ -138,7 +137,7 @@ case 'save':
         redirect('/admin/notice?act=edit&id='.$notice->id);
 
     } else {
-        showError($validation->getErrors());
+        showError($validator->getErrors());
     }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/notice?act=edit&amp;id='.$id.'">Вернуться</a><br>';
@@ -153,13 +152,12 @@ case 'del':
 
     $notice = Notice::find($id);
 
-    $validation = new Validation();
+    $validator = new Validator();
+    $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+        ->notEmpty($notice, 'Не найден шаблон для удаления!')
+        ->empty($notice['protect'], 'Запрещено удалять защищенный шаблон!');
 
-    $validation -> addRule('equal', [$token, $_SESSION['token']], 'Неверный идентификатор сессии, повторите действие!')
-        -> addRule('not_empty', $notice, 'Не найден шаблон для удаления!')
-        -> addRule('empty', $notice['protect'], 'Запрещено удалять защищенный шаблон!');
-
-    if ($validation->run()) {
+    if ($validator->isValid()) {
 
         $notice->delete();
 
@@ -167,7 +165,7 @@ case 'del':
         redirect('/admin/notice');
 
     } else {
-        showError($validation->getErrors());
+        showError($validator->getErrors());
     }
 
     echo '<i class="fa-arrow-circle-left"></i> <a href="/admin/notice">Вернуться</a><br>';

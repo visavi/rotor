@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Classes\Request;
-use App\Classes\Validation;
+use App\Classes\Validator;
 use App\Models\Flood;
 use App\Models\Guest;
 use App\Models\User;
@@ -37,20 +37,20 @@ class BookController extends BaseController
         $msg   = check(Request::input('msg'));
         $token = check(Request::input('token'));
 
-        $validation = new Validation();
-        $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-            ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, setting('guesttextlength'))
-            ->addRule('bool', Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
+        $validator = new Validator();
+        $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+            ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'])
+            ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
 
         /* Проерка для гостей */
         if (!getUser() && setting('bookadds')) {
             $protect = check(strtolower(Request::input('protect')));
-            $validation->addRule('equal', [$protect, $_SESSION['protect']], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
+            $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!']);
         } else {
-            $validation->addRule('bool', getUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
+            $validator->true(getUser(), ['msg' => 'Для добавления сообщения необходимо авторизоваться']);
         }
 
-        if ($validation->run()) {
+        if ($validator->isValid()) {
 
             $msg = antimat($msg);
 
@@ -78,7 +78,7 @@ class BookController extends BaseController
             setFlash('success', 'Сообщение успешно добавлено!');
         } else {
             setInput(Request::all());
-            setFlash('danger', $validation->getErrors());
+            setFlash('danger', $validator->getErrors());
         }
 
         redirect("/book");
@@ -108,11 +108,11 @@ class BookController extends BaseController
             $msg   = check(Request::input('msg'));
             $token = check(Request::input('token'));
 
-            $validation = new Validation();
-            $validation->addRule('equal', [$token, $_SESSION['token']], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
-                ->addRule('string', $msg, ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!'], true, 5, setting('guesttextlength'));
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+                ->length($msg, 5, setting('guesttextlength'), ['msg' => 'Ошибка! Слишком длинное или короткое сообщение!']);
 
-            if ($validation->run()) {
+            if ($validator->isValid()) {
 
                 $msg = antimat($msg);
 
@@ -125,7 +125,7 @@ class BookController extends BaseController
                 redirect('/book');
             } else {
                 setInput(Request::all());
-                setFlash('danger', $validation->getErrors());
+                setFlash('danger', $validator->getErrors());
             }
         }
 
