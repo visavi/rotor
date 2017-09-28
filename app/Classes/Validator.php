@@ -29,7 +29,7 @@ class Validator
      */
     public function length($input, $min, $max, $label, $required = true)
     {
-        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
             return $this;
         }
 
@@ -52,12 +52,8 @@ class Validator
      * @param  bool  $required
      * @return $this
      */
-    public function between($input, $min, $max, $label, $required = true)
+    public function between($input, $min, $max, $label)
     {
-        if ($required === false && $input === 0) {
-            return $this;
-        }
-
         if ($input < $min || $input > $max) {
             $this->addError($label, ' (Между '.$min.' и '.$max.')');
         }
@@ -276,7 +272,7 @@ class Validator
      */
     public function regex($input, $pattern, $label, $required = false)
     {
-        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
             return $this;
         }
 
@@ -297,7 +293,7 @@ class Validator
      */
     public function float($input, $label, $required = false)
     {
-        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
             return $this;
         }
 
@@ -318,7 +314,7 @@ class Validator
      */
     public function url($input, $label, $required = false)
     {
-        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
             return $this;
         }
 
@@ -339,7 +335,7 @@ class Validator
      */
     public function email($input, $label, $required = false)
     {
-        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+        if ($required == false && mb_strlen($input, 'utf-8') === 0) {
             return $this;
         }
 

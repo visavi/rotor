@@ -37,7 +37,7 @@
 
                 <div class="b">
                     <div class="img">{!! userAvatar($data->author) !!}</div>
-                    @if ($data->author)
+                    @if ($data->author->id)
                         <b>{!! profile($data->author) !!}</b> ({{ dateFixed($data['created_at']) }})<br>
                         {!! userStatus($data->author) !!} {!! userOnline($data->author) !!}
                     @else
@@ -49,7 +49,7 @@
 
                     <input type="checkbox" name="del[]" value="{{ $data['id'] }}">
 
-                    @if ($data->author)
+                    @if ($data->author->id)
 
                         <a href="/private/send?user={{ $data->author->login }}">Ответить</a> /
                         <a href="/private/history?user={{ $data->author->login }}">История</a> /

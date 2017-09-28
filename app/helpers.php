@@ -524,15 +524,16 @@ function userMail(User $user)
 /**
  * Возвращает аватар для пользователя по умолчанию
  *
- * @param string  $login логин пользователя
- * @return string        код аватара
+ * @param  User   $user логин пользователя
+ * @return string       код аватара
  */
-function defaultAvatar($login)
+function defaultAvatar($user)
 {
-    $color  = '#'.substr(dechex(crc32($login)), 0, 6);
-    $letter = mb_strtoupper(utfSubstr($login, 0, 1), 'utf-8');;
+    $name   = empty($user->name) ? $user->login : $user->name;
+    $color  = '#'.substr(dechex(crc32($user->login)), 0, 6);
+    $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');;
 
-    return '<div class="avatar" style="background:'.$color.'"><a href="/user/'.$login.'">'.$letter.'</a></div>';
+    return '<div class="avatar" style="background:'.$color.'"><a href="/user/'.$user->login.'">'.$letter.'</a></div>';
 }
 
 /**
@@ -551,7 +552,7 @@ function userAvatar(User $user)
         return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$user->avatar.'" alt=""></a> ';
     }
 
-    return defaultAvatar($user->login);
+    return defaultAvatar($user);
     //return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
 }
 
@@ -1542,10 +1543,12 @@ function resizeImage($dir, $name, $size, $params = [])
 function profile($user, $color = false)
 {
     if ($user->id){
+        $name = empty($user->name) ? $user->login : $user->name;
+
         if ($color){
-            return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$user->login.'</span></a>';
+            return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$name.'</span></a>';
         } else {
-            return '<a href="/user/'.$user->login.'">'.$user->login.'</a>';
+            return '<a href="/user/'.$user->login.'">'.$name.'</a>';
         }
     }
 
