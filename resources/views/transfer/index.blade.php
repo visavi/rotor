@@ -11,32 +11,35 @@
     В наличии: {{ plural(getUser('money'), setting('moneyname')) }}<br><br>
 
     @if (getUser('point') >= setting('sendmoneypoint'))
-        @if ($user)
-            <div class="form">
-                Перевод для <b>{{ $user->login }}</b>:<br><br>
-                <form action="/transfer/send?user={{ $user->login }}" method="post">
-                    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                    Кол-во денег:<br>
-                    <input type="text" name="money"><br>
-                    Примечание:<br>
-                    <textarea cols="25" rows="5" name="msg"></textarea><br>
-                    <input type="submit" value="Перевести">
-                </form>
-            </div><br>
-        @else
-            <div class="form">
-                <form action="/transfer/send" method="post">
-                    <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                    Логин юзера:<br>
-                    <input type="text" name="user" maxlength="20"><br>
-                    Кол-во денег:<br>
-                    <input type="text" name="money"><br>
-                    Примечание:<br>
-                    <textarea cols="25" rows="5" name="msg"></textarea><br>
-                    <input type="submit" value="Перевести">
-                </form>
-            </div><br>
-        @endif
+        <div class="form">
+            <form action="/transfer/send" method="post">
+                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
+
+                @if ($user)
+                    Перевод для <b>{{ $user->login }}</b>:<br><br>
+                @else
+                    <div class="form-group{{ hasError('user') }}">
+                        <label for="inputUser">Логин пользователя</label>
+                        <input name="user" class="form-control" id="inputUser" maxlength="20" placeholder="Логин пользователя" value="{{ getInput('user') }}" required>
+                        {!! textError('user') !!}
+                    </div>
+                @endif
+
+                <div class="form-group{{ hasError('money') }}">
+                    <label for="inputMoney">Сумма</label>
+                    <input name="money" class="form-control" id="inputMoney" maxlength="20" placeholder="Сумма" value="{{ getInput('money') }}" required>
+                    {!! textError('money') !!}
+                </div>
+
+                <div class="form-group{{ hasError('msg') }}">
+                    <label for="inputText">Комментарий:</label>
+                    <textarea class="form-control" id="inputText" rows="5" name="msg" placeholder="Комментарий">{{ getInput('msg') }}</textarea>
+                    {!! textError('msg') !!}
+                </div>
+
+                <button class="btn btn-primary">Перевести</button>
+            </form>
+        </div><br>
     @else
        {{ showError('Ошибка! Для перевода денег вам необходимо набрать '.plural(setting('sendmoneypoint'), setting('scorename')).'!') }}
     @endif

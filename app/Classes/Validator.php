@@ -73,7 +73,7 @@ class Validator
      * @param  mixed $label
      * @return $this
      */
-    public function greaterThan($input, $input2, $label)
+    public function gt($input, $input2, $label)
     {
         if ($input <= $input2) {
             $this->addError($label);
@@ -90,7 +90,7 @@ class Validator
      * @param  mixed $label
      * @return $this
      */
-    public function greaterThanOrEqual($input, $input2, $label)
+    public function gte($input, $input2, $label)
     {
         if ($input < $input2) {
             $this->addError($label);
@@ -107,7 +107,7 @@ class Validator
      * @param  mixed $label
      * @return $this
      */
-    public function lessThan($input, $input2, $label)
+    public function lt($input, $input2, $label)
     {
         if ($input >= $input2) {
             $this->addError($label);
@@ -124,7 +124,7 @@ class Validator
      * @param  mixed $label
      * @return $this
      */
-    public function lessThanOrEqual($input, $input2, $label)
+    public function lte($input, $input2, $label)
     {
         if ($input > $input2) {
             $this->addError($label);
@@ -167,7 +167,46 @@ class Validator
         return $this;
     }
 
-    public function bool($input, $label)
+    /**
+     * Проверяет пустые ли данные
+     *
+     * @param  mixed $input
+     * @param  mixed $label
+     * @return $this
+     */
+    public function empty($input, $label)
+    {
+        if (! empty($input)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Проверяет не пустые ли данные
+     *
+     * @param  mixed $input
+     * @param  mixed $label
+     * @return $this
+     */
+    public function notEmpty($input, $label)
+    {
+        if (empty($input)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Тестирует на true
+     *
+     * @param  mixed $input
+     * @param  mixed $label
+     * @return $this
+     */
+    public function true($input, $label)
     {
         if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
             $this->addError($label);
@@ -176,6 +215,21 @@ class Validator
         return $this;
     }
 
+    /**
+     * Тестирует на false
+     *
+     * @param  mixed $input
+     * @param  mixed $label
+     * @return $this
+     */
+    public function false($input, $label)
+    {
+        if (filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== false) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
 
     /**
      * Добавляет ошибки в массив
@@ -207,6 +261,16 @@ class Validator
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    /**
+     * Очищает список ошибок
+     *
+     * @return void
+     */
+    public function clearErrors()
+    {
+        $this->errors = [];
     }
 
     /**
