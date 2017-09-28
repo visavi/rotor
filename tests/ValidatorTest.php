@@ -247,6 +247,128 @@ class ValidatorTest extends TestCase
     }
 
     /**
+     * Тестирует на вхождение в массив
+     */
+    public function testIn()
+    {
+        $this->validator->in('bar', ['foo', 'bar'], 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->in(5, [1, 2, 3, 4, 5], 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->in(true, [1, 2, 3, 4, 5], 'error');
+        $this->assertFalse($this->validator->isValid());
+
+        $this->validator->clearErrors();
+
+        $this->validator->in(6, [1, 2, 3, 4, 5], ['key' => 'error']);
+        $this->assertFalse($this->validator->isValid());
+        $this->assertArrayHasKey('key', $this->validator->getErrors());
+    }
+
+    /**
+     * Тестирует на вхождение в массив
+     */
+    public function testNotIn()
+    {
+        $this->validator->notIn('test', ['foo', 'bar'], 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->notIn(6, [1, 2, 3, 4, 5], 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->notIn(true, [1, 2, 3, 4, 5], 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->notIn([], [1, 2, 3, 4, 5], 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->notIn(5, [1, 2, 3, 4, 5], ['key' => 'error']);
+        $this->assertFalse($this->validator->isValid());
+        $this->assertArrayHasKey('key', $this->validator->getErrors());
+    }
+
+    /**
+     * Тестирует по регулярному выражению
+     */
+    public function testRegex()
+    {
+        $this->validator->regex('fooBAR', '/^[a-z0-9\-]+$/i', 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->regex('11.12.1991', '/^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$/', 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->regex('', '/^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$/', 'error', false);
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->regex(null, '/^[0-9]{2}+\.[0-9]{2}+\.[0-9]{4}$/', 'error', false);
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->regex('foo%BAR', '/^[a-z0-9\-]+$/i', ['key' => 'error']);
+        $this->assertFalse($this->validator->isValid());
+        $this->assertArrayHasKey('key', $this->validator->getErrors());
+    }
+
+    /**
+     * Тестирует на число в плавающей точкой
+     */
+    public function testFloat()
+    {
+        $this->validator->float(0.0, 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->float(1e5, 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->float(null, 'error', false);
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->float(5, ['key' => 'error']);
+        $this->assertFalse($this->validator->isValid());
+        $this->assertArrayHasKey('key', $this->validator->getErrors());
+    }
+
+    /**
+     * Тестирует проверку адреса сайта
+     */
+    public function testUrl()
+    {
+        $this->validator->url('http://visavi.net', 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->url('https://visavi.net', 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->url('http://сайт.рф', 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->url(null, 'error', false);
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->url('http://сайт/.рф', ['key' => 'error']);
+        $this->assertFalse($this->validator->isValid());
+        $this->assertArrayHasKey('key', $this->validator->getErrors());
+    }
+
+    /**
+     * Тестирует проверку email адреса
+     */
+    public function testEmail()
+    {
+        $this->validator->email('admin@visavi.net', 'error');
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->email(null, 'error', false);
+        $this->assertTrue($this->validator->isValid());
+
+        $this->validator->email('fob@bar', ['key' => 'error']);
+        $this->assertFalse($this->validator->isValid());
+        $this->assertArrayHasKey('key', $this->validator->getErrors());
+    }
+
+    /**
      * Тестирует добавление ошибки
      */
     public function testAddError()

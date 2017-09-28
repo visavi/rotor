@@ -200,7 +200,7 @@ class Validator
     }
 
     /**
-     * Тестирует на true
+     * Проверяет на true
      *
      * @param  mixed $input
      * @param  mixed $label
@@ -216,7 +216,7 @@ class Validator
     }
 
     /**
-     * Тестирует на false
+     * Проверяет на false
      *
      * @param  mixed $input
      * @param  mixed $label
@@ -232,10 +232,130 @@ class Validator
     }
 
     /**
+     * Проверяет на вхождение в массив
+     *
+     * @param  mixed $input
+     * @param  array $haystack
+     * @param  mixed $label
+     * @return $this
+     */
+    public function in($input, $haystack, $label)
+    {
+        if (! is_array($haystack) || ! in_array($input, $haystack, true)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Проверяет на не вхождение в массив
+     *
+     * @param  mixed $input
+     * @param  array $haystack
+     * @param  mixed $label
+     * @return $this
+     */
+    public function notIn($input, $haystack, $label)
+    {
+        if (! is_array($haystack) || in_array($input, $haystack, true)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Проверяет по регулярному выражению
+     *
+     * @param  string $input
+     * @param  string $pattern
+     * @param  mixed  $label
+     * @param  bool   $required
+     * @return $this
+     */
+    public function regex($input, $pattern, $label, $required = false)
+    {
+        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+            return $this;
+        }
+
+        if (! preg_match($pattern, $input)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Тестирует на число в плавающей точкой
+     *
+     * @param  float $input
+     * @param  mixed $label
+     * @param  bool  $required
+     * @return $this
+     */
+    public function float($input, $label, $required = false)
+    {
+        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+            return $this;
+        }
+
+        if (! is_float($input)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Проверяет адрес сайта
+     *
+     * @param  string $input
+     * @param  mixed  $label
+     * @param  bool   $required
+     * @return $this
+     */
+    public function url($input, $label, $required = false)
+    {
+        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+            return $this;
+        }
+
+        if (! preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $input)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Проверяет email
+     *
+     * @param  string $input
+     * @param  mixed  $label
+     * @param  bool   $required
+     * @return $this
+     */
+    public function email($input, $label, $required = false)
+    {
+        if ($required === false && mb_strlen($input, 'utf-8') === 0) {
+            return $this;
+        }
+
+        if (! preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $input)) {
+            $this->addError($label);
+        }
+
+        return $this;
+    }
+
+    /**
      * Добавляет ошибки в массив
      *
-     * @param mixed  $error       текст ошибки
-     * @param string $description
+     * @param  mixed  $error       текст ошибки
+     * @param  string $description
+     * @return array
      */
     public function addError($error, $description = null)
     {
