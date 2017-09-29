@@ -116,7 +116,7 @@ class ForumController extends BaseController
                     }
                 }
 
-                $validator->between(count($answers), 2, 10, ['answer' => 'Необходимо от 2 до 10 варианта ответов!']);
+                $validator->between(count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
             }
 
             /* TODO: Сделать проверку поиска похожей темы */

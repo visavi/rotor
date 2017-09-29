@@ -55,7 +55,7 @@ class Validator
     public function between($input, $min, $max, $label)
     {
         if ($input < $min || $input > $max) {
-            $this->addError($label, ' (Между '.$min.' и '.$max.')');
+            $this->addError($label, ' (От '.$min.' до '.$max.')');
         }
 
         return $this;

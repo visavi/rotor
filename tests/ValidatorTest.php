@@ -37,9 +37,6 @@ class ValidatorTest extends TestCase
         $this->validator->between(15, 10, 20, 'error');
         $this->assertTrue($this->validator->isValid());
 
-        $this->validator->between(0, 10, 20, 'error', false);
-        $this->assertTrue($this->validator->isValid());
-
         $this->validator->between(30, 10, 20, ['key' => 'error']);
         $this->assertFalse($this->validator->isValid());
         $this->assertArrayHasKey('key', $this->validator->getErrors());
