@@ -143,8 +143,10 @@ $router->map('GET',      '/counter/[day|month:action]?', 'CounterController@inde
 $router->map('GET',      '/transfer', 'TransferController@index');
 $router->map('POST',     '/transfer/send', 'TransferController@send');
 
+$router->map('GET',      '/notebook', 'NotebookController@index');
+$router->map('GET|POST', '/notebook/edit', 'NotebookController@edit');
+
 $router->map('GET|POST', '/offers', 'pages/offers.php');
-$router->map('GET|POST', '/notebook', 'pages/notebook.php');
 $router->map('GET',      '/reklama', 'pages/reklama.php');
 $router->map('GET|POST', '/reklama/[create:action]', 'pages/reklama.php');
 $router->map('GET|POST', '/authlog', 'pages/authlog.php');

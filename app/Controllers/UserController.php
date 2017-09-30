@@ -466,7 +466,7 @@ class UserController extends BaseController
             }
         }
 
-        view('pages/key');
+        return view('pages/key');
     }
 
     /*
