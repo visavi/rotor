@@ -19,8 +19,8 @@
 
 <div class="b"><i class="fa fa-star fa-lg text-muted"></i> <b>Активность</b></div>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/notebook">Блокнот</a><br>
-<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/rathist">Голосования</a><br>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/reklama">Реклама</a><br>
+<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/rathist">История репутации</a><br>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/authlog">История авторизаций</a><br>
 <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/transfer">Перевод денег</a><br>
 

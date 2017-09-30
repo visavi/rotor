@@ -26,7 +26,7 @@ class ForumController extends BaseController
             ->orderBy('sort')
             ->get();
 
-        if (empty(count($forums))) {
+        if ($forums->isEmpty()) {
             abort('default', 'Разделы форума еще не созданы!');
         }
 
@@ -40,7 +40,7 @@ class ForumController extends BaseController
     {
         $forum = Forum::with('parent')->find($fid);
 
-        if (!$forum) {
+        if (! $forum) {
             abort('default', 'Данного раздела не существует!');
         }
 
@@ -215,7 +215,7 @@ class ForumController extends BaseController
                 ->orderBy('sort')
                 ->get();
 
-            if (empty(count($forums))) {
+            if ($forums->isEmpty()) {
                 abort('default', 'Разделы форума еще не созданы!');
             }
 
