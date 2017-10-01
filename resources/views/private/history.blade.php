@@ -41,7 +41,7 @@
             @if (getUser('point') < setting('privatprotect'))
                 Проверочный код:<br>
                 <img src="/captcha" alt=""><br>
-                <input name="provkod" size="6" maxlength="6"><br>
+                <input name="protect" size="6" maxlength="6"><br>
             @endif
 
             <button class="btn btn-primary">Быстрый ответ</button></form></div><br>

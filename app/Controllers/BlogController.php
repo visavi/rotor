@@ -728,7 +728,7 @@ class BlogController extends BaseController
         $where   = abs(intval(Request::input('where')));
 
         if (! getUser()) {
-            abort('default', 'Чтобы использовать поиск, необходимо авторизоваться');
+            abort(403, 'Чтобы использовать поиск, необходимо авторизоваться');
         }
 
         if (empty($find)) {

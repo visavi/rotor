@@ -49,6 +49,10 @@ class WallController extends BaseController
      */
     public function create($login)
     {
+        if (! getUser()) {
+            abort(403, 'Для отправки сообщений необходимо авторизоваться!');
+        }
+
         $user = User::query()->where('login', $login)->first();
 
         if (! $user) {
@@ -58,10 +62,6 @@ class WallController extends BaseController
         if (Request::isMethod('post')) {
             $token = check(Request::input('token'));
             $msg   = check(Request::input('msg'));
-
-            if (! getUser()) {
-                abort(403, 'Для отправки сообщений необходимо авторизоваться!');
-            }
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])

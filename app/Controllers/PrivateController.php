@@ -95,7 +95,7 @@ class PrivateController extends BaseController
 
             $token   = check(Request::input('token'));
             $msg     = check(Request::input('msg'));
-            $provkod = check(Request::input('provkod'));
+            $protect = check(Request::input('protect'));
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
@@ -107,8 +107,8 @@ class PrivateController extends BaseController
 
                 $validator->notEqual($user->id, getUser('id'), ['user' => 'Нельзя отправлять письмо самому себе!']);
 
-                if (getUser('point') < setting('privatprotect') && $provkod != $_SESSION['protect']) {
-                    $validator->addError(['provkod' => 'Проверочное число не совпало с данными на картинке!']);
+                if (getUser('point') < setting('privatprotect') && $protect != $_SESSION['protect']) {
+                    $validator->addError(['protect' => 'Проверочное число не совпало с данными на картинке!']);
                 }
 
                 // лимит ящика

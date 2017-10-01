@@ -28,7 +28,7 @@
 
                 <div class="form-group{{ hasError('money') }}">
                     <label for="inputMoney">Сумма</label>
-                    <input name="money" class="form-control" id="inputMoney" maxlength="20" placeholder="Сумма" value="{{ getInput('money') }}" required>
+                    <input name="money" class="form-control" id="inputMoney" placeholder="Сумма" value="{{ getInput('money') }}" required>
                     {!! textError('money') !!}
                 </div>
 

@@ -8,7 +8,7 @@
 <pre class="prettyprint linenums">
 $validator = new Validator();
 
-$validation -> addRule('equal', array($provkod, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
+$validation -> addRule('equal', array($protect, $_SESSION['protect']), 'Проверочное число не совпало с данными на картинке!')
 	-> addRule('regex', array($logs, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в логине. Разрешены знаки латинского алфавита, цифры и дефис!', true)
 	-> addRule('regex', array($pars, '|^[a-z0-9\-]+$|i'), 'Недопустимые символы в пароле. Разрешены знаки латинского алфавита, цифры и дефис!', true)
 	-> addRule('email', $meil, 'Вы ввели неверный адрес email, необходим формат name@site.domen!')

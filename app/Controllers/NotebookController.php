@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Notebook;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class NotebookController extends BaseController
 {
@@ -19,7 +18,7 @@ class NotebookController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort('default', 'Для управления блокнотом, необходимо авторизоваться!');
+            abort(403, 'Для управления блокнотом, необходимо авторизоваться!');
         }
 
         $this->note = Notebook::query()

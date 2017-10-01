@@ -36,7 +36,7 @@ if ($total > 0) {
         if (getUser('point') < setting('privatprotect')) {
             echo 'Проверочный код:<br> ';
             echo '<img src="/captcha" alt=""><br>';
-            echo '<input name="provkod" size="6" maxlength="6"><br>';
+            echo '<input name="protect" size="6" maxlength="6"><br>';
         }
 
         echo '<input value="Отправить" type="submit"></form></div><br>';

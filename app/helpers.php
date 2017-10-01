@@ -1242,7 +1242,7 @@ function getAdvertUser()
 // --------------- Функция кэширования пользовательской рекламы -------------------//
 function saveAdvertUser()
 {
-    $data = RekUser::query()->where('created_at', '>', SITETIME)->get();
+    $data = RekUser::query()->where('deleted_at', '>', SITETIME)->get();
 
     $links = [];
 

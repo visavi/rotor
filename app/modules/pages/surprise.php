@@ -9,7 +9,7 @@ $surpriseRating = mt_rand(3, 7);
 $currentYear = date('Y');
 
 if (! getUser()) {
-    abort('default', 'Для того чтобы получить сюрприз, необходимо авторизоваться!');
+    abort(403, 'Для того чтобы получить сюрприз, необходимо авторизоваться!');
 }
 
 if (strtotime(date('d.m.Y')) > strtotime($surprise['requiredDate'].'.'.date('Y'))) {

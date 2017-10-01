@@ -146,9 +146,10 @@ $router->map('POST',     '/transfer/send', 'TransferController@send');
 $router->map('GET',      '/notebook', 'NotebookController@index');
 $router->map('GET|POST', '/notebook/edit', 'NotebookController@edit');
 
+$router->map('GET',      '/reklama', 'RekUserController@index');
+$router->map('GET|POST', '/reklama/create', 'RekUserController@create');
+
 $router->map('GET|POST', '/offers', 'pages/offers.php');
-$router->map('GET',      '/reklama', 'pages/reklama.php');
-$router->map('GET|POST', '/reklama/[create:action]', 'pages/reklama.php');
 $router->map('GET|POST', '/authlog', 'pages/authlog.php');
 $router->map('GET|POST', '/userlist', 'pages/userlist.php');
 $router->map('GET|POST', '/onlinewho', 'pages/onlinewho.php');
