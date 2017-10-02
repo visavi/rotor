@@ -16,7 +16,7 @@
 
         @foreach ($online as $data)
             <div class="b">
-                {!!  userGender($data->user) !!} <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
+                {!! $data->user->getGender() !!} <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
             </div>
 
             @if (isAdmin())

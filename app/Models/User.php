@@ -56,6 +56,20 @@ class User extends BaseModel
     protected $guarded = [];
 
     /**
+     * Возвращает пол пользователя
+     *
+     * @return string пол пользователя
+     */
+    public function getGender()
+    {
+        if ($this->gender == 2) {
+            return '<i class="fa fa-female fa-lg"></i>';
+        } else {
+            return '<i class="fa fa-male fa-lg"></i>';
+        }
+    }
+
+    /**
      * Авторизует пользователя
      *
      * @param  string  $login    Логин

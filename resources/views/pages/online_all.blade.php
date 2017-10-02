@@ -18,7 +18,7 @@
 
             <div class="b">
                 @if ($data->user)
-                    {!!  userGender($data->user) !!} <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
+                    {!! $data->user->getGender() !!} <b>{!! profile($data->user) !!}</b> (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
                 @else
                     <i class="fa fa-user-circle-o"></i> <b>{{ setting('guestsuser') }}</b>  (Время: {{ dateFixed($data['updated_at'], 'H:i:s') }})
                 @endif

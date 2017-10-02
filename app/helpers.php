@@ -140,7 +140,7 @@ function deleteUser(User $user)
 /**
  * Удаляет альбом пользователя
  *
- * @param  User $user
+ * @param  User $user объект пользователя
  * @return void
  */
 function deleteAlbum(User $user)
@@ -271,8 +271,8 @@ function formatSize($fileSize)
 /**
  * Возвращает размер файла человекочитаемом формате
  *
- * @param  string $file путь к файлу
- * @return int|string   размер в читаемом формате
+ * @param  string     $file путь к файлу
+ * @return int|string       размер в читаемом формате
  */
 function formatFileSize($file)
 {
@@ -306,7 +306,7 @@ function formatTime($fileTime, $round = 1)
 }
 
 /**
- * Очищает строку от мата по базе
+ * Очищает строку от мата по базе слов
  *
  * @param  string $str строка
  * @return string      обработанная строка
@@ -405,8 +405,8 @@ function saveStatus($time = 0)
 /**
  * Возвращает статус пользователя
  *
- * @param  User $user объект пользователя
- * @return string     статус пользователя
+ * @param  User   $user объект пользователя
+ * @return string       статус пользователя
  */
 function userStatus(User $user)
 {
@@ -435,8 +435,8 @@ function saveSetting() {
 /**
  * Возвращает рейтинг в виде звезд
  *
- * @param  int $rating рейтинг
- * @return string      преобразованный рейтинг
+ * @param  int    $rating рейтинг
+ * @return string         преобразованный рейтинг
  */
 function ratingVote($rating)
 {
@@ -524,8 +524,8 @@ function userMail(User $user)
 /**
  * Возвращает аватар для пользователя по умолчанию
  *
- * @param  User $user логин пользователя
- * @return string     код аватара
+ * @param  User   $user логин пользователя
+ * @return string       код аватара
  */
 function defaultAvatar($user)
 {
@@ -539,8 +539,8 @@ function defaultAvatar($user)
 /**
  * Возвращает аватар пользователя
  *
- * @param  User $user объект пользователя
- * @return string     аватар пользователя
+ * @param  User   $user объект пользователя
+ * @return string       аватар пользователя
  */
 function userAvatar(User $user)
 {
@@ -589,7 +589,12 @@ function userWall(User $user)
     return Wall::query()->where('user_id', $user->id)->count();
 }
 
-// ------------------ Функция подсчета пользователей онлайн -----------------//
+/**
+ * Возвращает количество пользователей онлайн по типам
+ *
+ * @param  int   $cache время кеширования данных
+ * @return array        массив данных
+ */
 function statsOnline($cache = 30)
 {
     if (@filemtime(STORAGE."/temp/online.dat") < time()-$cache) {
@@ -605,24 +610,30 @@ function statsOnline($cache = 30)
     return unserialize(file_get_contents(STORAGE."/temp/online.dat"));
 }
 
-// ------------------ Функция вывода пользователей онлайн -----------------//
+/**
+ * Возвращает количество пользователей онлайн
+ *
+ * @return string
+ */
 function showOnline()
 {
     if (setting('onlines') == 1) {
         $online = statsOnline();
         return view('app/_online', compact('online'));
     }
+
+    return null;
 }
 
 // ------------------ Функция подсчета посещений -----------------//
 function statsCounter()
 {
-    if (@filemtime(STORAGE."/temp/counter.dat") < time()-10) {
+    if (@filemtime(STORAGE.'/temp/counter.dat') < time()-10) {
         $counts = Counter::query()->first();
-        file_put_contents(STORAGE."/temp/counter.dat", serialize($counts), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/counter.dat', serialize($counts), LOCK_EX);
     }
 
-    return unserialize(file_get_contents(STORAGE."/temp/counter.dat"));
+    return unserialize(file_get_contents(STORAGE.'/temp/counter.dat'));
 }
 
 /**
@@ -646,19 +657,25 @@ function showCounter()
         ])->save();
     }
 
-    include_once (APP."/Includes/counters.php");
+    include_once (APP.'/Includes/counters.php');
 
     if (setting('incount') > 0) {
         $count = statsCounter();
 
         return view('app/_counter', compact('count'));
     }
+
+    return null;
 }
 
-// --------------- Функция вывода количества зарегистрированных ---------------//
+/**
+ * Возвращает количество пользователей
+ *
+ * @return int количество пользователей
+ */
 function statsUsers()
 {
-    if (@filemtime(STORAGE."/temp/statusers.dat") < time()-3600) {
+    if (@filemtime(STORAGE.'/temp/statusers.dat') < time() - 3600) {
 
         $startMonth = mktime(0, 0, 0, dateFixed(SITETIME, "n"), 1);
 
@@ -671,65 +688,97 @@ function statsUsers()
             $stat = $total;
         }
 
-        file_put_contents(STORAGE."/temp/statusers.dat", $stat, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statusers.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statusers.dat");
+    return file_get_contents(STORAGE.'/temp/statusers.dat');
 }
 
-// --------------- Функция вывода количества админов и модеров --------------------//
+/**
+ * Возвращает количество администраторов
+ *
+ * @return int количество администраторов
+ */
 function statsAdmins()
 {
-    if (@filemtime(STORAGE."/temp/statadmins.dat") < time()-3600) {
+    if (@filemtime(STORAGE.'/temp/statadmins.dat') < time() - 3600) {
 
-        $total = User::query()->whereBetween('level', [101, 105])->count();
+        $total = User::query()->whereIn('level', User::ADMIN_GROUPS)->count();
 
-        file_put_contents(STORAGE."/temp/statadmins.dat", $total, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statadmins.dat', $total, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statadmins.dat");
+    return file_get_contents(STORAGE.'/temp/statadmins.dat');
 }
 
-// --------------- Функция вывода количества жалоб --------------------//
+/**
+ * Возвращает количество спама
+ *
+ * @return int количество спама
+ */
 function statsSpam()
 {
     return Spam::query()->count();
 }
-// --------------- Функция вывода количества забаненных --------------------//
+
+/**
+ * Возвращает количество забанненых пользователей
+ *
+ * @return int количество забаненных
+ */
 function statsBanned()
 {
-    return User::query()->where('level', User::BANNED)->where('timeban', '>', SITETIME)->count();
+    return User::query()
+        ->where('level', User::BANNED)
+        ->where('timeban', '>', SITETIME)
+        ->count();
 }
 
-// --------------- Функция вывода истории банов --------------------//
+/**
+ * Возвращает количество записей в истории банов
+ *
+ * @return int количество записей
+ */
 function statsBanHist()
 {
     return Banhist::query()->count();
 }
 
-// ------------ Функция вывода количества ожидающих регистрации -----------//
+/**
+ * Возвращает количество ожидающих подтверждения регистрации
+ *
+ * @return int количество ожидающих
+ */
 function statsRegList()
 {
     return User::query()->where('level', User::PENDED)->count();
 }
 
-// --------------- Функция вывода количества забаненных IP --------------------//
+/**
+ * Возвращает количество забаненных по IP
+ *
+ * @return int количество забаненных
+ */
 function statsIpBanned()
 {
     return Ban::query()->count();
 }
 
-// --------------- Функция вывода количества фотографий --------------------//
+/**
+ * Возвращает количество фотографий в галерее
+ *
+ * @return int количество фотографий
+ */
 function statsGallery()
 {
     if (@filemtime(STORAGE."/temp/statgallery.dat") < time()-900) {
         $total = Photo::query()->count();
-        $totalnew = Photo::query()->where('created_at', '>', SITETIME-86400 * 3)->count();
+        $totalNew = Photo::query()->where('created_at', '>', SITETIME-86400 * 3)->count();
 
-        if (empty($totalnew)) {
-            $stat = $total;
+        if ($totalNew) {
+            $stat = $total.'/+'.$totalNew;
         } else {
-            $stat = $total.'/+'.$totalnew;
+            $stat = $total;
         }
 
         file_put_contents(STORAGE."/temp/statgallery.dat", $stat, LOCK_EX);
@@ -738,13 +787,21 @@ function statsGallery()
     return file_get_contents(STORAGE."/temp/statgallery.dat");
 }
 
-// --------------- Функция вывода количества новостей--------------------//
+/**
+ * Возвращает количество новостей
+ *
+ * @return int количество новостей
+ */
 function statsNews()
 {
     return News::query()->count();
 }
 
-// ---------- Функция вывода записей в черном списке ------------//
+/**
+ * Возвращает количество записей в черном списке
+ *
+ * @return string количество записей
+ */
 function statsBlacklist()
 {
     $blacklist = BlackList::query()
@@ -758,19 +815,31 @@ function statsBlacklist()
     return $list[1].'/'.$list[2].'/'.$list[3];
 }
 
-// --------------- Функция вывода количества заголовков ----------------//
+/**
+ * Возвращает количество записей в антимате
+ *
+ * @return int количество записей
+ */
 function statsAntimat()
 {
     return Antimat::query()->count();
 }
 
-// --------------- Функция вывода количества смайлов ----------------//
+/**
+ * Возвращает количество смайлов
+ *
+ * @return int количество смайлов
+ */
 function statsSmiles()
 {
     return Smile::query()->count();
 }
 
-// ----------- Функция вывода даты последнего сканирования -------------//
+/**
+ * Возвращает дату последнего сканирования сайта
+ *
+ * @return int|string дата последнего сканирования
+ */
 function statsChecker()
 {
     if (file_exists(STORAGE."/temp/checker.dat")) {
@@ -780,7 +849,11 @@ function statsChecker()
     }
 }
 
-// --------------- Функция вывода количества приглашений --------------//
+/**
+ * Возвращает количество приглашений на регистрацию
+ *
+ * @return int количество приглашений
+ */
 function statsInvite()
 {
     $invited     = Invite::query()->where('used', 0)->count();
@@ -789,8 +862,13 @@ function statsInvite()
     return $invited.'/'.$usedInvited;
 }
 
-// --------------- Функция определение онлайн-статуса ---------------//
-function userOnline($user)
+/**
+ * Возвращает онлайн-статус пользователя
+ *
+ * @param  User   $user объект пользователя
+ * @return string       онлайн-статус
+ */
+function userOnline(User $user)
 {
     static $visits;
 
@@ -810,41 +888,18 @@ function userOnline($user)
         $visits = unserialize(file_get_contents(STORAGE."/temp/visit.dat"));
     }
 
-    if ($user && isset($visits[$user->id])) {
+    if (isset($visits[$user->id])) {
         $online = '<i class="fa fa-asterisk fa-spin text-success"></i>';
     }
 
     return $online;
 }
 
-// --------------- Функция определение пола пользователя ---------------//
-function userGender($user)
-{
-    static $genders;
-
-    $gender = 'male';
-
-    if (is_null($genders)) {
-        if (@filemtime(STORAGE."/temp/gender.dat") < time() - 600) {
-
-            $genders = User::query()->select('id')
-                ->where('gender', 2)
-                ->pluck('id', 'id')
-                ->all();
-
-            file_put_contents(STORAGE."/temp/gender.dat", serialize($genders), LOCK_EX);
-        }
-        $genders = unserialize(file_get_contents(STORAGE."/temp/gender.dat"));
-    }
-
-    if ($user && isset($genders[$user->id])){
-        $gender = 'female';
-    }
-
-    return '<i class="fa fa-'.$gender.' fa-lg"></i>';
-}
-
-// --------------- Функция вывода пользователей онлайн ---------------//
+/**
+ * Подсчитывает пользователей онлайн
+ *
+ * @return mixed
+ */
 function allOnline()
 {
     if (@filemtime(STORAGE."/temp/allonline.dat") < time()-30) {
@@ -860,8 +915,13 @@ function allOnline()
     return unserialize(file_get_contents(STORAGE."/temp/allonline.dat"));
 }
 
-// ------------------ Функция определение последнего посещения ----------------//
-function userVisit($user)
+/**
+ * Возращает последнее посещение пользователя
+ *
+ * @param  User   $user объект пользователя
+ * @return string       последнее посещение
+ */
+function userVisit(User $user)
 {
     $state = '(Оффлайн)';
 
@@ -2182,7 +2242,7 @@ function getUserById($id)
  * Возвращает настройки пользователя по ключу
  *
  * @param  string $key ключ массива
- * @return string|\Illuminate\Database\Query\Builder
+ * @return string|\Illuminate\Database\Query\Builder|User
  */
 function getUser($key = null)
 {

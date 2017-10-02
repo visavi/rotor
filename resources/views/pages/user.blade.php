@@ -41,7 +41,7 @@
             <div class="col-md-6 pull-md-6">
                 Cтатус: <b><a href="/statusfaq">{!! userStatus($user) !!}</a></b><br>
 
-                {!! userGender($user) !!}
+                {!! $user->getGender() !!}
                 Пол:
                 {{  ($user['gender'] == 1) ? 'Мужской' : 'Женский' }}<br>
 
