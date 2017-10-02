@@ -360,7 +360,7 @@ function saveStatus($time = 0)
     }
 }
 // ------------- Функция вывода статусов пользователей -----------//
-function userStatus(User $user = null)
+function userStatus(User $user)
 {
     static $status;
 

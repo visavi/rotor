@@ -97,7 +97,7 @@ $router->map('POST',     '/account/editstatus', 'UserController@editStatus');
 $router->map('POST',     '/account/editpassword', 'UserController@editPassword');
 $router->map('POST',     '/account/apikey', 'UserController@apikey');
 
-$router->map('GET',  '/rating/[user:login]/[received|gave:action]', 'RatingController');
+$router->map('GET',  '/rating/[user:login]/[received|gave:action]?', 'RatingController@received');
 $router->map('POST', '/rating/delete', 'RatingController@delete');
 
 $router->map('GET|POST', '/mail', 'MailController@index', 'mail');
@@ -149,8 +149,9 @@ $router->map('GET|POST', '/notebook/edit', 'NotebookController@edit');
 $router->map('GET',      '/reklama', 'RekUserController@index');
 $router->map('GET|POST', '/reklama/create', 'RekUserController@create');
 
+$router->map('GET', '/authlog', 'LoginController@index');
+
 $router->map('GET|POST', '/offers', 'pages/offers.php');
-$router->map('GET|POST', '/authlog', 'pages/authlog.php');
 $router->map('GET|POST', '/userlist', 'pages/userlist.php');
 $router->map('GET|POST', '/onlinewho', 'pages/onlinewho.php');
 $router->map('GET|POST', '/who', 'pages/who.php');

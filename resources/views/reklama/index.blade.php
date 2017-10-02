@@ -15,7 +15,7 @@
                 <b><a href="{{ $data->site }}">{{ $data->name }}</a></b> ({!! profile($data->user) !!})
             </div>
 
-            Истекает: {{ dateFixed($data->created_at) }}<br>
+            Истекает: {{ dateFixed($data->deleted_at) }}<br>
 
             @if ($data->color)
                 Цвет: <span style="color:{{ $data->color }}">{{ $data->color }}</span>,

@@ -12,6 +12,9 @@ class TransferController extends BaseController
 {
     public $user;
 
+    /**
+     * Конструктор
+     */
     public function __construct()
     {
         parent::__construct();

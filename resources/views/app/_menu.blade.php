@@ -1,5 +1,5 @@
 @if (getUser())
-    <i class="fa fa-user-circle fa-lg"></i> {!! profile(getUser()) !!} &bull;
+    <i class="fa fa-user-circle fa-lg"></i> <a href="/user/{{ getUser('login') }}">{{ getUser('login') }}</a> &bull;
 
     @if (isAdmin())
         <a href="/admin">Панель</a> &bull;
