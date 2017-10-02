@@ -70,7 +70,7 @@ function makeTime($time)
  */
 function dateFixed($timestamp, $format = "d.m.y / H:i")
 {
-    if (!is_numeric($timestamp)) {
+    if (! is_numeric($timestamp)) {
         $timestamp = SITETIME;
     }
 
@@ -112,7 +112,7 @@ function deleteImage($dir, $image)
 /**
  * Удаляет записи пользователя из всех таблиц
  *
- * @param  User    $user
+ * @param  User    $user объект пользователя
  * @return boolean       результат удаления
  */
 function deleteUser(User $user)
@@ -212,13 +212,23 @@ function utfStrlen($str)
     return mb_strlen($str, 'utf-8');
 }
 
-// ----------------------- Функция определения кодировки ------------------------//
+/**
+ * Определяет является ли кодировка utf-8
+ *
+ * @param  string $str строка
+ * @return bool
+ */
 function isUtf($str)
 {
     return mb_check_encoding($str, 'utf-8');
 }
 
-// ----------------------- Функция экранирования основных знаков --------------------------//
+/**
+ * Преобразует специальные символы в HTML-сущности
+ *
+ * @param  mixed $msg строка или массив строк
+ * @return mixed      обработанные данные
+ */
 function check($msg)
 {
     if (is_array($msg)) {
@@ -237,22 +247,33 @@ function check($msg)
     return $msg;
 }
 
-// --------------- Функция правильного вывода веса файла -------------------//
-function formatSize($file_size)
+/**
+ * Возвращает размер в человекочитаемом формате
+ *
+ * @param  int    $fileSize размер в байтах
+ * @return string           размер в читаемом формате
+ */
+function formatSize($fileSize)
 {
-    if ($file_size >= 1048576000) {
-        $file_size = round(($file_size / 1073741824), 2)." Gb";
-    } elseif ($file_size >= 1024000) {
-        $file_size = round(($file_size / 1048576), 2)." Mb";
-    } elseif ($file_size >= 1000) {
-        $file_size = round(($file_size / 1024), 2)." Kb";
+    if ($fileSize >= 1048576000) {
+        $fileSize = round(($fileSize / 1073741824), 2).' Gb';
+    } elseif ($fileSize >= 1024000) {
+        $fileSize = round(($fileSize / 1048576), 2).' Mb';
+    } elseif ($fileSize >= 1000) {
+        $fileSize = round(($fileSize / 1024), 2).' Kb';
     } else {
-        $file_size = round($file_size)." byte";
+        $fileSize = round($fileSize).' byte';
     }
-    return $file_size;
+
+    return $fileSize;
 }
 
-// --------------- Функция форматированного вывода размера файла -------------------//
+/**
+ * Возвращает размер файла человекочитаемом формате
+ *
+ * @param  string $file путь к файлу
+ * @return int|string   размер в читаемом формате
+ */
 function formatFileSize($file)
 {
     if (file_exists($file) && is_file($file)) {
@@ -262,22 +283,34 @@ function formatFileSize($file)
     }
 }
 
-// --------------- Функция правильного вывода времени -------------------//
-function formatTime($file_time, $round = 1)
+/**
+ * Возвращает секунды в человекочитаемом формате
+ *
+ * @param  int    $fileTime кол. секунд timestamp
+ * @param  int    $round    кол. символов после запятой
+ * @return string           время в читаемом формате
+ */
+function formatTime($fileTime, $round = 1)
 {
-    if ($file_time >= 86400) {
-        $file_time = round((($file_time / 60) / 60) / 24, $round).' дн.';
-    } elseif ($file_time >= 3600) {
-        $file_time = round(($file_time / 60) / 60, $round).' час.';
-    } elseif ($file_time >= 60) {
-        $file_time = round($file_time / 60).' мин.';
+    if ($fileTime >= 86400) {
+        $fileTime = round((($fileTime / 60) / 60) / 24, $round).' дн.';
+    } elseif ($fileTime >= 3600) {
+        $fileTime = round(($fileTime / 60) / 60, $round).' час.';
+    } elseif ($fileTime >= 60) {
+        $fileTime = round($fileTime / 60).' мин.';
     } else {
-        $file_time = round($file_time).' сек.';
+        $fileTime = round($fileTime).' сек.';
     }
-    return $file_time;
+
+    return $fileTime;
 }
 
-// ------------------ Функция антимата --------------------//
+/**
+ * Очищает строку от мата по базе
+ *
+ * @param  string $str строка
+ * @return string      обработанная строка
+ */
 function antimat($str)
 {
     $words = Antimat::query()
@@ -294,7 +327,12 @@ function antimat($str)
     return $str;
 }
 
-// ------------------ Функция должности юзера --------------------//
+/**
+ * Возвращает имя уровня пользователя
+ *
+ * @param  string $level уровень пользователя
+ * @return mixed         имя уровня
+ */
 function userLevel($level)
 {
     $name = explode(',', setting('statusname'));
@@ -330,7 +368,11 @@ function userLevel($level)
     return $status;
 }
 
-// ---------------- Функция кэширования статусов ------------------//
+/**
+ * Кеширует статусы пользователей
+ *
+ * @param int $time время кеширования
+ */
 function saveStatus($time = 0)
 {
     if (empty($time) || @filemtime(STORAGE.'/temp/status.dat') < time() - $time) {
@@ -359,7 +401,13 @@ function saveStatus($time = 0)
         file_put_contents(STORAGE.'/temp/status.dat', serialize($statuses), LOCK_EX);
     }
 }
-// ------------- Функция вывода статусов пользователей -----------//
+
+/**
+ * Возвращает статус пользователя
+ *
+ * @param  User $user объект пользователя
+ * @return string     статус пользователя
+ */
 function userStatus(User $user)
 {
     static $status;
@@ -372,19 +420,26 @@ function userStatus(User $user)
         saveStatus(3600);
         $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
     }
-    return isset($status[$user->id]) ? $status[$user->id] : setting('statusdef');
+
+    return $status[$user->id] ?? setting('statusdef');
 }
 
-// --------------- Функция кэширования настроек -------------------//
+/**
+ * Кеширует настройки сайта
+ */
 function saveSetting() {
     $setting = Setting::query()->pluck('value', 'name')->all();
     file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
 }
 
-// ------------------ Функция вывода рейтинга --------------------//
+/**
+ * Возвращает рейтинг в виде звезд
+ *
+ * @param  int $rating рейтинг
+ * @return string      преобразованный рейтинг
+ */
 function ratingVote($rating)
 {
-
     $rating = round($rating / 0.5) * 0.5;
 
     $full_stars = floor($rating);
@@ -400,49 +455,12 @@ function ratingVote($rating)
     return $output;
 }
 
-// --------------- Функция листинга всех файлов и папок ---------------//
-function scanFiles($dirname)
-{
-    global $arr;
-
-    if (empty($arr['files'])) {
-        $arr['files'] = [];
-    }
-    if (empty($arr['totalfiles'])) {
-        $arr['totalfiles'] = 0;
-    }
-    if (empty($arr['totaldirs'])) {
-        $arr['totaldirs'] = 0;
-    }
-
-    $files = preg_grep('/^([^.])/', scandir($dirname));
-
-    foreach ($files as $file) {
-        if (is_file($dirname.'/'.$file)) {
-            $ext = getExtension($file);
-
-            if (!in_array($ext, explode(',',setting('nocheck')) )) {
-                $arr['files'][] = $dirname.'/'.$file.' - '.dateFixed(filemtime($dirname.'/'.$file), 'j.m.Y / H:i').' - '.formatFileSize($dirname.'/'.$file);
-                $arr['totalfiles']++;
-            }
-        }
-
-        if (is_dir($dirname.'/'.$file)) {
-            $arr['files'][] = $dirname.'/'.$file;
-            $arr['totaldirs']++;
-            scanFiles($dirname.'/'.$file);
-        }
-    }
-
-    return $arr;
-}
-
 /**
  * Формирует календарь
  *
- * @param  int   $month
- * @param  int   $year
- * @return array
+ * @param  int   $month месяц
+ * @param  int   $year  год
+ * @return array        сформированный массив
  */
 function makeCalendar($month, $year)
 {
@@ -471,34 +489,11 @@ function makeCalendar($month, $year)
     return $cal;
 }
 
-// --------------- Функция сохранения количества денег  у юзера ---------------//
-function saveUserMoney($time = 0)
-{
-    if (empty($time) || @filemtime(STORAGE."/temp/money.dat") < time() - $time) {
-
-        $users = User::query()
-            ->where('money', '>', 0)
-            ->pluck('money', 'id')
-            ->all();
-
-        file_put_contents(STORAGE."/temp/money.dat", serialize($users), LOCK_EX);
-    }
-}
-
-// --------------- Функция подсчета денег у юзера ---------------//
-function userMoney(User $user)
-{
-    static $userMoneys;
-
-    if (empty($userMoneys)) {
-        saveUserMoney(3600);
-        $userMoneys = unserialize(file_get_contents(STORAGE."/temp/money.dat"));
-    }
-
-    return $userMoneys[$user->id] ?? 0;
-}
-
-// --------------- Функция сохранения количества писем ---------------//
+/**
+ * Кеширует количество писем пользователей
+ *
+ * @param int $time время кеширования
+ */
 function saveUserMail($time = 0)
 {
     if (empty($time) || @filemtime(STORAGE."/temp/usermail.dat") < time() - $time) {
@@ -513,7 +508,12 @@ function saveUserMail($time = 0)
     }
 }
 
-// --------------- Функция подсчета писем у юзера ---------------//
+/**
+ * Возвращает количество писем пользователя
+ *
+ * @param  User $user объект пользователя
+ * @return int        количество писем
+ */
 function userMail(User $user)
 {
     saveUserMail(3600);
@@ -524,8 +524,8 @@ function userMail(User $user)
 /**
  * Возвращает аватар для пользователя по умолчанию
  *
- * @param  User   $user логин пользователя
- * @return string       код аватара
+ * @param  User $user логин пользователя
+ * @return string     код аватара
  */
 function defaultAvatar($user)
 {
@@ -539,8 +539,8 @@ function defaultAvatar($user)
 /**
  * Возвращает аватар пользователя
  *
- * @param  User|null $user объект пользователя
- * @return string          аватар пользователя
+ * @param  User $user объект пользователя
+ * @return string     аватар пользователя
  */
 function userAvatar(User $user)
 {
@@ -556,20 +556,34 @@ function userAvatar(User $user)
     //return '<a href="/user/'.$user->login.'"><img src="/assets/img/images/avatar_default.png" alt=""></a> ';
 }
 
-
-// --------------- Функция подсчета человек в контакт-листе ---------------//
+/**
+ * Возвращает размер контакт-листа
+ *
+ * @param  User $user объект пользователя
+ * @return int        количество контактов
+ */
 function userContact(User $user)
 {
     return Contact::query()->where('user_id', $user->id)->count();
 }
 
-// --------------- Функция подсчета человек в игнор-листе ---------------//
+/**
+ * Возвращает размер игнор-листа
+ *
+ * @param  User $user объект пользователя
+ * @return int        количество игнорируемых
+ */
 function userIgnore(User $user)
 {
     return Ignore::query()->where('user_id', $user->id)->count();
 }
 
-// --------------- Функция подсчета записей на стене ---------------//
+/**
+ * Возвращает количество записей на стене сообщений
+ *
+ * @param  User $user объект пользователя
+ * @return int        количество записей
+ */
 function userWall(User $user)
 {
     return Wall::query()->where('user_id', $user->id)->count();

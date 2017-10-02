@@ -7,6 +7,44 @@ if (isset($_GET['act'])) {
     $act = 'index';
 }
 
+// --------------- Функция листинга всех файлов и папок ---------------//
+function scanFiles($dirname)
+{
+    global $arr;
+
+    if (empty($arr['files'])) {
+        $arr['files'] = [];
+    }
+    if (empty($arr['totalfiles'])) {
+        $arr['totalfiles'] = 0;
+    }
+    if (empty($arr['totaldirs'])) {
+        $arr['totaldirs'] = 0;
+    }
+
+    $files = preg_grep('/^([^.])/', scandir($dirname));
+
+    foreach ($files as $file) {
+        if (is_file($dirname.'/'.$file)) {
+            $ext = getExtension($file);
+
+            if (!in_array($ext, explode(',',setting('nocheck')) )) {
+                $arr['files'][] = $dirname.'/'.$file.' - '.dateFixed(filemtime($dirname.'/'.$file), 'j.m.Y / H:i').' - '.formatFileSize($dirname.'/'.$file);
+                $arr['totalfiles']++;
+            }
+        }
+
+        if (is_dir($dirname.'/'.$file)) {
+            $arr['files'][] = $dirname.'/'.$file;
+            $arr['totaldirs']++;
+            scanFiles($dirname.'/'.$file);
+        }
+    }
+
+    return $arr;
+}
+
+
 if (isAdmin([101])) {
     //show_title('Сканирование сайта');
 

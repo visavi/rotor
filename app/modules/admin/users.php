@@ -283,7 +283,7 @@ if (isAdmin([101, 102])) {
                                                 DB::update("UPDATE `users` SET `password`=?, `email`=?, `joined`=?, `level`=?, `name`=? `country`=?, `city`=?, `info`=?, `site`=?, `icq`=?, `gender`=?, `birthday`=?, `themes`=?, `point`=?, `money`=?, `status`=?, `rating`=?, `posrating`=?, `negrating`=? WHERE `login`=? LIMIT 1;", [$mdpass, $email, $joined, $access, $name, $country, $city, $info, $site, $icq, $gender, $birthday, $themes, $point, $money, $status, $rating, $posrating, $negrating, $uz]);
 
                                                 saveStatus();
-                                                saveUserMoney();
+
 
                                                 echo '<i class="fa fa-check"></i> <b>Данные пользователя успешно изменены!</b><br><br>';
                                             } else {

@@ -20,7 +20,7 @@
                 @endif
 
                 Создано: {{ dateFixed($vote['created_at']) }}<br>
-                Всего голосов: {{ $vote['count'] }}<br>D
+                Всего голосов: {{ $vote['count'] }}<br>
             </div>
         @endforeach
 

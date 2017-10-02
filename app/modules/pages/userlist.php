@@ -49,7 +49,7 @@ switch ($action):
                 echo '<div>';
                 echo 'Форум: '.$data['allforum'].' | Гостевая: '.$data['allguest'].' | Коммент: '.$data['allcomments'].'<br>';
                 echo 'Посещений: '.$data['visits'].'<br>';
-                echo 'Деньги: '.userMoney($data['login']).'<br>';
+                echo 'Деньги: '.$data->money.'<br>';
                 echo 'Дата регистрации: '.dateFixed($data['joined'], 'j F Y').'</div>';
             }
 

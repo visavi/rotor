@@ -2,13 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Classes\Request;
-use App\Classes\Validator;
-use App\Models\Flood;
-use App\Models\Guest;
 use App\Models\Login;
-use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class LoginController extends BaseController
 {

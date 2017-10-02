@@ -4,10 +4,7 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Classes\Validator;
-use App\Models\Guest;
 use App\Models\RekUser;
-use App\Models\User;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class RekUserController extends BaseController
 {
