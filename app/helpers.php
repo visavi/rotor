@@ -248,6 +248,23 @@ function check($msg)
 }
 
 /**
+ * Преобразует все элементы массива в int
+ *
+ * @param  mixed $string массив или число
+ * @return array         обработанные данные
+ */
+function intar($string)
+{
+    if (is_array($string)) {
+        $newString = array_map('intval', $string);
+    } else {
+        $newString = [abs(intval($string))];
+    }
+
+    return $newString;
+}
+
+/**
  * Возвращает размер в человекочитаемом формате
  *
  * @param  int    $fileSize размер в байтах
@@ -625,7 +642,11 @@ function showOnline()
     return null;
 }
 
-// ------------------ Функция подсчета посещений -----------------//
+/**
+ * Возвращает статистику посещений
+ *
+ * @return array статистика посещений
+ */
 function statsCounter()
 {
     if (@filemtime(STORAGE.'/temp/counter.dat') < time()-10) {
@@ -942,10 +963,15 @@ function userVisit(User $user)
     return $state;
 }
 
-// --------------------- Функция вывода навигации в галерее ------------------------//
+/**
+ * Возвращает следующею и предыдущую фотографию в галерее
+ *
+ * @param  int   $id Id фотографи
+ * @return mixed     массив данных
+ */
 function photoNavigation($id)
 {
-    if (empty($id)) {
+    if (! $id) {
         return false;
     }
 
@@ -961,13 +987,17 @@ function photoNavigation($id)
         ->pluck('id')
         ->first();
 
-    return ['next' => $next, 'prev' =>$prev];
+    return compact('next', 'prev');
 }
 
-// --------------------- Функция вывода статистики блогов ------------------------//
+/**
+ * Возвращает количество статей в блогах
+ *
+ * @return string количество статей
+ */
 function statsBlog()
 {
-    if (@filemtime(STORAGE."/temp/statblogblog.dat") < time()-900) {
+    if (@filemtime(STORAGE."/temp/statblogblog.dat") < time() - 900) {
 
         $totalblog = Blog::query()->count();
         $totalnew  = Blog::query()->where('created_at', '>', SITETIME - 86400 * 3)->count();
@@ -984,10 +1014,14 @@ function statsBlog()
     return file_get_contents(STORAGE."/temp/statblog.dat");
 }
 
-// --------------------- Функция вывода статистики форума ------------------------//
+/**
+ * Возвращает количество тем и сообщений в форуме
+ *
+ * @return string количество тем и сообщений
+ */
 function statsForum()
 {
-    if (@filemtime(STORAGE."/temp/statforum.dat") < time()-600) {
+    if (@filemtime(STORAGE."/temp/statforum.dat") < time() - 600) {
 
         $topics = Topic::query()->count();
         $posts  = Post::query()->count();
@@ -998,10 +1032,14 @@ function statsForum()
     return file_get_contents(STORAGE."/temp/statforum.dat");
 }
 
-// --------------------- Функция вывода статистики гостевой ------------------------//
+/**
+ * Возвращает количество сообщений в гостевой книге
+ *
+ * @return int количество сообщений
+ */
 function statsGuest()
 {
-    if (@filemtime(STORAGE."/temp/statguest.dat") < time()-600) {
+    if (@filemtime(STORAGE."/temp/statguest.dat") < time() - 600) {
 
         $total = Guest::query()->count();
 
@@ -1011,19 +1049,31 @@ function statsGuest()
     return file_get_contents(STORAGE."/temp/statguest.dat");
 }
 
-// -------------------- Функция вывода статистики админ-чата -----------------------//
+/**
+ * Возвращает количество сообщений в админ-чате
+ *
+ * @return int количество сообщений
+ */
 function statsChat()
 {
     return Chat::query()->count();
 }
 
-// ------------------ Функция вывода времени последнего сообщения --------------------//
+/**
+ * Возвращает время последнего сообщения в админ-чате
+ *
+ * @return string время сообщения
+ */
 function statsNewChat()
 {
     return Chat::query()->max('created_at');
 }
 
-// --------------------- Функция вывода статистики загрузок ------------------------//
+/**
+ * Возвращает количество файлов в загруз-центре
+ *
+ * @return string количество файлов
+ */
 function statsLoad()
 {
     if (@filemtime(STORAGE."/temp/statload.dat") < time() - 900) {
@@ -1042,7 +1092,11 @@ function statsLoad()
     return file_get_contents(STORAGE."/temp/statload.dat");
 }
 
-// --------------------- Функция подсчета непроверенных файлов ------------------------//
+/**
+ * Возвращает количество файлов на одобрении
+ *
+ * @return string количество файлов
+ */
 function statsNewLoad()
 {
     $totalNew = Down::query()->where('active', 0)
@@ -1055,29 +1109,20 @@ function statsNewLoad()
     return ($totalApprove) ? $totalNew.'/+'.$totalApprove : $totalNew;
 }
 
-// --------------------- Функция шифровки Email-адреса ------------------------//
+/**
+ * Обфусцирует email
+ *
+ * @param  string $mail email
+ * @return string       обфусцированный email
+ */
 function cryptMail($mail)
 {
-    $output = "";
+    $output = '';
     $strlen = strlen($mail);
     for ($i = 0; $i < $strlen; $i++) {
         $output .= '&#'.ord($mail[$i]).';';
     }
     return $output;
-}
-
-// ------------------- Функция обработки массива (int) --------------------//
-function intar($string)
-{
-    if (empty($string)) return false;
-
-    if (is_array($string)) {
-        $newstring = array_map('intval', $string);
-    } else {
-        $newstring = [abs(intval($string))];
-    }
-
-    return $newstring;
 }
 
 // ------------------- Функция подсчета голосований --------------------//

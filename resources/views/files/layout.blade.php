@@ -2,6 +2,6 @@
 
 @section('content')
 
-    @include('files/'.$page)
+    @include('files/'.$action)
 
 @stop

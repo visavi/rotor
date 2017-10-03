@@ -169,7 +169,7 @@ $router->map('GET|POST', '/pictures', 'pages/pictures.php');
 $router->map('GET',      '/pictures/[delete:action]', 'pages/pictures.php');
 $router->map('GET',      '/surprise', 'pages/surprise.php');
 
-$router->map('GET|POST', '/files/[*:page]?', 'files/index.php', 'files');
+$router->map('GET|POST', '/files/[*:action]?', 'FileController@', 'files');
 
 $router->map('GET',      '/load', 'LoadController@index');
 
