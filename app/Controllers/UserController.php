@@ -773,6 +773,19 @@ class UserController extends BaseController
     }
 
     /**
+     * Список админов
+     */
+    public function adminlist()
+    {
+        $users = User::query()
+            ->whereIn('level', User::ADMIN_GROUPS)
+            ->orderByRaw("FIELD(level, '".implode(',', User::ADMIN_GROUPS)."')")
+            ->get();
+
+        return view('user/adminlist', compact('users'));
+    }
+
+    /**
      * Поиск пользователя в рейтинге
      */
     public function searchUser()
