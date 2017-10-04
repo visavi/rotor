@@ -751,4 +751,58 @@ class UserController extends BaseController
 
         redirect("/account");
     }
+
+    /**
+     * Список пользователей
+     */
+    public function userlist()
+    {
+        $total = User::query()->count();
+        $page = paginate(setting('userlist'), $total);
+
+        $users = User::query()
+            ->orderBy('point', 'desc')
+            ->orderBy('login')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
+
+        $user = check(Request::input('user', getUser('login')));
+
+        return view('user/userlist', compact('users', 'page', 'user'));
+    }
+
+    /**
+     * Поиск пользователя в рейтинге
+     */
+    public function searchUser()
+    {
+        $login = check(Request::input('user'));
+        $user  = User::query()->where('login', $login)->first();
+
+        if (! $user) {
+            showError('Пользователь не найден!');
+            redirect('/userlist');
+        }
+
+        $rating = User::query()
+            ->orderBy('point', 'desc')
+            ->orderBy('login')
+            ->pluck('login')
+            ->all();
+
+        $position = false;
+
+        foreach ($rating as $key => $login) {
+            if ($user->login == $login) {
+                $position = $key + 1;
+                break;
+            }
+        }
+
+        $end = ceil($position / setting('userlist'));
+
+        setFlash('success', 'Позиция в рейтинге: '.$position);
+        redirect('/userlist?page='.$end.'&user='.$user->login);
+    }
 }

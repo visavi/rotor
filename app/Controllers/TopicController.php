@@ -588,7 +588,7 @@ class TopicController extends BaseController
     {
         $topic = Topic::query()->find($tid);
 
-        if (empty($topic)) {
+        if (! $topic) {
             abort('default', 'Данной темы не существует!');
         }
 
@@ -606,13 +606,12 @@ class TopicController extends BaseController
      */
     public function viewpost($tid, $id)
     {
-
         $countTopics = Post::query()
             ->where('id', '<=', $id)
             ->where('topic_id', $tid)
             ->count();
 
-        if (!$countTopics) {
+        if (! $countTopics) {
             abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
         }
 
@@ -625,10 +624,9 @@ class TopicController extends BaseController
      */
     public function end($tid)
     {
-
         $topic = Topic::query()->find($tid);
 
-        if (empty($topic)) {
+        if (! $topic) {
             abort(404, 'Выбранная вами тема не существует, возможно она была удалена!');
         }
 

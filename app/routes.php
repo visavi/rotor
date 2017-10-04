@@ -151,8 +151,13 @@ $router->map('GET|POST', '/reklama/create', 'RekUserController@create');
 
 $router->map('GET', '/authlog', 'LoginController@index');
 
+$router->map('GET',  '/userlist', 'UserController@userlist');
+$router->map('POST', '/userlist/search', 'UserController@searchUser');
+
+
+
+
 $router->map('GET|POST', '/offers', 'pages/offers.php');
-$router->map('GET|POST', '/userlist', 'pages/userlist.php');
 $router->map('GET|POST', '/onlinewho', 'pages/onlinewho.php');
 $router->map('GET|POST', '/who', 'pages/who.php');
 $router->map('GET|POST', '/adminlist', 'pages/adminlist.php');
