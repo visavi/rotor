@@ -20,6 +20,10 @@ class HomeController extends BaseController
      */
     public function closed()
     {
+        if (setting('closedsite') != 2) {
+            redirect('/');
+        }
+
         return view('pages/closed');
     }
 

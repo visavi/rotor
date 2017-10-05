@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Rule;
 use App\Models\Smile;
+use App\Models\Status;
 use App\Models\Surprise;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -134,5 +135,18 @@ class PageController extends BaseController
     public function faq()
     {
         return view('pages/faq');
+    }
+
+
+    /**
+     * FAQ по статусам
+     */
+    public function statusfaq()
+    {
+        $statuses = Status::query()
+            ->orderBy('topoint', 'desc')
+            ->get();
+
+        return view('pages/statusfaq', compact('statuses'));
     }
 }
