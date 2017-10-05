@@ -769,6 +769,25 @@ class UserController extends BaseController
 
         $user = check(Request::input('user', getUser('login')));
 
+        if (Request::isMethod('post')) {
+
+            $position = User::query()
+                ->orderBy('point', 'desc')
+                ->orderBy('login')
+                ->get()
+                ->where('login', $user)
+                ->keys()
+                ->first();
+
+            if (isset($position)) {
+                $position += 1;
+                $end = ceil($position / setting('avtorlist'));
+
+                setFlash('success', 'Позиция в рейтинге: '.$position);
+                redirect('/userlist?page='.$end.'&user='.$user);
+            }
+        }
+
         return view('user/userlist', compact('users', 'page', 'user'));
     }
 
@@ -779,43 +798,48 @@ class UserController extends BaseController
     {
         $users = User::query()
             ->whereIn('level', User::ADMIN_GROUPS)
-            ->orderByRaw("FIELD(level, '".implode(',', User::ADMIN_GROUPS)."')")
+            ->orderByRaw("field(level, '".implode(',', User::ADMIN_GROUPS)."')")
             ->get();
 
         return view('user/adminlist', compact('users'));
     }
 
     /**
-     * Поиск пользователя в рейтинге
+     * Рейтинг авторитетов
      */
-    public function searchUser()
+    public function authoritylist()
     {
-        $login = check(Request::input('user'));
-        $user  = User::query()->where('login', $login)->first();
+        $total = User::query()->count();
+        $page = paginate(setting('avtorlist'), $total);
 
-        if (! $user) {
-            showError('Пользователь не найден!');
-            redirect('/userlist');
-        }
-
-        $rating = User::query()
-            ->orderBy('point', 'desc')
+        $users = User::query()
+            ->orderBy('rating', 'desc')
             ->orderBy('login')
-            ->pluck('login')
-            ->all();
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
 
-        $position = false;
+        $user = check(Request::input('user', getUser('login')));
 
-        foreach ($rating as $key => $login) {
-            if ($user->login == $login) {
-                $position = $key + 1;
-                break;
+        if (Request::isMethod('post')) {
+
+            $position = User::query()
+                ->orderBy('rating', 'desc')
+                ->orderBy('login')
+                ->get()
+                ->where('login', $user)
+                ->keys()
+                ->first();
+
+            if (isset($position)) {
+                $position += 1;
+                $end = ceil($position / setting('avtorlist'));
+
+                setFlash('success', 'Позиция в рейтинге: '.$position);
+                redirect('/authoritylist?page='.$end.'&user='.$user);
             }
         }
 
-        $end = ceil($position / setting('userlist'));
-
-        setFlash('success', 'Позиция в рейтинге: '.$position);
-        redirect('/userlist?page='.$end.'&user='.$user->login);
+        return view('user/authoritylist', compact('users', 'page', 'user'));
     }
 }

@@ -1,32 +1,31 @@
 @extends('layout')
 
 @section('title')
-    Список пользователей (Стр. {{ $page['current'] }})
+    Рейтинг репутации (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
 
-    <h1>Список пользователей</h1>
+    <h1>Рейтинг репутации</h1>
 
     @if ($users->isNotEmpty())
         @foreach($users as $key => $data)
-
             <div class="b">
                 <div class="img">{!! userAvatar($data) !!}</div>
 
+                {{ ($page['offset'] + $key + 1) }}.
+
                 @if ($user == $data->login)
-                    {{ ($page['offset'] + $key + 1) }}. <b>{!! profile($data, '#ff0000') !!}</b>
+                    <b>{!! profile($data, '#ff0000') !!}</b>
                 @else
-                    {{ ($page['offset'] + $key + 1) }}. <b>{!! profile($data) !!}</b>
+                    <b>{!! profile($data) !!}</b>
                 @endif
-                ({{ plural($data->point, setting('scorename')) }})<br>
+                (Репутация: {{ $data->rating }})<br>
                 {!! userStatus($data) !!} {!! userOnline($data) !!}
             </div>
 
             <div>
-                Форум: {{ $data->allforum }} | Гостевая: {{ $data->allguest }} | Коммент: {{ $data->allcomments }}<br>
-                Посещений: {{ $data->visits }}<br>
-                Деньги: {{ $data->money }}<br>
+                Плюсов: {{ $data->posrating }} / Минусов: {{ $data->negrating }}<br>
                 Дата регистрации: {{ dateFixed($data->joined, 'j F Y') }}
             </div>
         @endforeach
@@ -35,8 +34,8 @@
 
         <div class="form">
             <b>Поиск пользователя:</b><br>
-            <form action="/userlist" method="post">
-                <input type="text" name="user" value="{{ getUser('login') }}">
+            <form action="/authoritylist" method="post">
+                <input type="text" name="user" value="{{ $user }}">
                 <input type="submit" value="Искать">
             </form>
         </div>
@@ -46,6 +45,4 @@
     @else
         {{ showError('Пользователей еще нет!') }}
     @endif
-
-    <i class="fa fa-users"></i> <a href="/onlinewho">Новички</a><br>
 @stop

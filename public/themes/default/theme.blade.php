@@ -15,7 +15,7 @@ header("Content-type:text/html; charset=utf-8");
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="@yield('description', setting('description'))">
     <meta name="keywords" content="@yield('keywords', setting('keywords'))">
-    <meta name="generator" content="RotorCMS {{ env('VERSION') }}">
+    <meta name="generator" content="RotorCMS {{ VERSION }}">
 </head>
 <body>
 
