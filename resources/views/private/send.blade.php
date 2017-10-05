@@ -10,7 +10,7 @@
 
     @if ($user)
 
-        <i class="fa fa-envelope"></i> Сообщение для <b>{!! profile($user) !!}</b> {{ userVisit($user)  }}:<br>
+        <i class="fa fa-envelope"></i> Сообщение для <b>{!! profile($user) !!}</b>:<br>
         <i class="fa fa-history"></i> <a href="/private/history?user={{ $user->login  }}">История переписки</a><br>
 
         @if (isIgnore(getUser(), $user))

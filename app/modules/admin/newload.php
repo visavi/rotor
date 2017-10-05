@@ -98,7 +98,7 @@ if (isAdmin()) {
 
                         echo '<br><b><big>Редактирование</big></b><br><br>';
 
-                        echo 'Добавлено: <b>'.profile($new['user']).'</b> '.userVisit($new['user']).'<br>';
+                        echo 'Добавлено: <b>'.profile($new['user']).'</b><br>';
                         echo 'Время последнего изменения:  ('.dateFixed($new['time']).')<br><br>';
 
                         echo '<div class="form">';

@@ -125,7 +125,6 @@ function deleteUser(User $user)
     Contact::query()->where('user_id', $user->id)->delete();
     Ignore::query()->where('user_id', $user->id)->delete();
     Rating::query()->where('user_id', $user->id)->delete();
-    Visit::query()->where('user_id', $user->id)->delete();
     Wall::query()->where('user_id', $user->id)->delete();
     Note::query()->where('user_id', $user->id)->delete();
     Notebook::query()->where('user_id', $user->id)->delete();
@@ -664,20 +663,6 @@ function statsCounter()
  */
 function showCounter()
 {
-    if (getUser()) {
-        //$visitPage =  setting('newtitle') ?? null;
-
-        $visit = Visit::query()->firstOrNew(['user_id' => getUser('id')]);
-
-        $visit->fill([
-            'self'       => server('PHP_SELF'),
-            'page'       => null, //$visitPage,
-            'ip'         => getClientIp(),
-            'count'      => $visit->exists ? DB::raw('count + 1') : 0,
-            'updated_at' => SITETIME,
-        ])->save();
-    }
-
     include_once (APP.'/Includes/counters.php');
 
     if (setting('incount') > 0) {
@@ -898,8 +883,8 @@ function userOnline(User $user)
     if (is_null($visits)) {
         if (@filemtime(STORAGE."/temp/visit.dat") < time() - 10) {
 
-            $visits = Visit::query()->select('user_id')
-                ->where('updated_at', '>', SITETIME - 600)
+            $visits = Online::query()
+                ->whereNotNull('user_id')
                 ->pluck('user_id', 'user_id')
                 ->all();
 
@@ -914,53 +899,6 @@ function userOnline(User $user)
     }
 
     return $online;
-}
-
-/**
- * Подсчитывает пользователей онлайн
- *
- * @return mixed
- */
-function allOnline()
-{
-    if (@filemtime(STORAGE."/temp/allonline.dat") < time()-30) {
-        $visits = Visit::query()->select('user_id')
-            ->where('updated_at', '>', SITETIME - 600)
-            ->orderBy('updated_at', 'desc')
-            ->pluck('user_id')
-            ->all();
-
-        file_put_contents(STORAGE."/temp/allonline.dat", serialize($visits), LOCK_EX);
-    }
-
-    return unserialize(file_get_contents(STORAGE."/temp/allonline.dat"));
-}
-
-/**
- * Возращает последнее посещение пользователя
- *
- * @param  User   $user объект пользователя
- * @return string       последнее посещение
- */
-function userVisit(User $user)
-{
-    $state = '(Оффлайн)';
-
-    if ( ! $user) {
-        return $state;
-    }
-
-    $visit = Visit::query()->select('updated_at')->where('user_id', $user->id)->first();
-
-    if ($visit) {
-        if ($visit['updated_at'] > SITETIME - 600) {
-            $state = '(Сейчас на сайте)';
-        } else {
-            $state = '(Последний визит: '.dateFixed($visit['updated_at']).')';
-        }
-    }
-
-    return $state;
 }
 
 /**

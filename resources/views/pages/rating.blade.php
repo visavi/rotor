@@ -8,7 +8,7 @@
 
     <h1>Изменения репутации пользователя {{ $user->login }}</h1>
 
-    <div class="b">{!! userAvatar($user) !!} <b>{{ $user->login }} </b> {{ userVisit($user) }}</div>
+    <div class="b">{!! userAvatar($user) !!} <b>{{ $user->login }} </b></div>
 
     <div class="form">
         <form method="post">

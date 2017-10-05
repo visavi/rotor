@@ -8,7 +8,7 @@ $montime = date("d.m", SITETIME);
 
 echo '<div class="b"><b>Пользователи онлайн:</b></div>';
 
-$allonline = allOnline();
+$allonline = statsOnline();
 $total = count($allonline);
 
 if ($total > 0) {

@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1 style="display:inline;">{!! userAvatar($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }} {{ userVisit($user) }}</small></h1>
+    <h1 style="display:inline;">{!! userAvatar($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }}</small></h1>
 
     @if ($user['level'] == 'pended')
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>

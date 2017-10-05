@@ -116,7 +116,7 @@ if (isAdmin([101, 102])) {
             if (!empty($user)) {
                 $uz = $user['login'];
 
-                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.userVisit($user['login']).'<br><br>';
+                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b><br><br>';
 
                 if (getUser('login') == env('SITE_ADMIN') || getUser('login') == $user['login'] || ($user['level'] < 101 || $user['level'] > 105)) {
                     if ($user['login'] == getUser('login')) {

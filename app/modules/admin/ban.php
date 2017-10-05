@@ -42,7 +42,7 @@ if (isAdmin([101, 102, 103])) {
             if (!empty($user)) {
                 $uz = $user['login'];
 
-                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.userVisit($user['login']).'<br><br>';
+                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b><br><br>';
 
                 if (!empty($user['timelastban']) && !empty($user['reasonban'])) {
                     echo '<div class="form">';
@@ -110,7 +110,7 @@ if (isAdmin([101, 102, 103])) {
 
             $user = DB::run() -> queryFetch("SELECT * FROM `users` WHERE `login`=? LIMIT 1;", [$uz]);
             if (!empty($user)) {
-                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> '.userVisit($user['login']).'<br><br>';
+                echo userGender($user['login']).' <b>Профиль '.profile($user['login']).'</b> <br><br>';
 
                 if ($user['level'] < 101 || $user['level'] > 105) {
                     if ($user['level'] == User::BANNED && $user['timeban'] > SITETIME) {
