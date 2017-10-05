@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Топ популярных постов - @parent
+    Топ популярных постов
 @stop
 
 @section('content')

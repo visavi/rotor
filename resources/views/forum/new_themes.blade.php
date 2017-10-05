@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список новых тем - @parent
+    Список новых тем
 @stop
 
 @section('content')

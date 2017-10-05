@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ trans('book.title', ['page' => $page['current']]) }} - @parent
+    {{ trans('book.title', ['page' => $page['current']]) }}
 @stop
 
 @section('content')

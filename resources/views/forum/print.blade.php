@@ -1,7 +1,7 @@
 @extends('layout_simple')
 
 @section('title')
-    {{ $topic['title'] }} - @parent
+    {{ $topic['title'] }}
 @stop
 
 @section('content')

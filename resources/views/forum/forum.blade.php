@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum['title'] }} (Стр. {{ $page['current'] }}) - @parent
+    {{ $forum['title'] }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

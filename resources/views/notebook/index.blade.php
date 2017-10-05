@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блокнот - @parent
+    Блокнот
 @stop
 
 @section('content')

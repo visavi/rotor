@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Мой профиль - @parent
+    Мой профиль
 @stop
 
 @section('content')

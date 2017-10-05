@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Восстановление пароля - @parent
+    Восстановление пароля
 @stop
 
 @section('content')

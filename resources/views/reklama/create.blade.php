@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Размещение рекламы - @parent
+    Размещение рекламы
 @stop
 
 @section('content')

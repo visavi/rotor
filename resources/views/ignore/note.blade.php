@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Заметка для {{ $ignore->ignoring->login }} - @parent
+    Заметка для {{ $ignore->ignoring->login }}
 @stop
 
 @section('content')

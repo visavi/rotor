@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Управление жалобами - @parent
+    Управление жалобами
 @stop
 
 @section('content')

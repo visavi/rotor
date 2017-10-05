@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $topic['title'] }} (Стр. {{ $page['current'] }}) - @parent
+    {{ $topic['title'] }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('description', 'Обсуждение темы: '.$topic['title'].' (Стр. '.$page['current'].')')

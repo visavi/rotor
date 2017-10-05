@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список администраторов - @parent
+    Список администраторов
 @stop
 
 @section('content')

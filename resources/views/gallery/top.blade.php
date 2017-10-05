@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Топ популярных фотографий - @parent
+    Топ популярных фотографий
 @stop
 
 @section('content')

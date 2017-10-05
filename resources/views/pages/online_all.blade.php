@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Кто в онлайне - @parent
+    Кто в онлайне
 @stop
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Топ статей (Стр. {{ $page['current'] }}) - @parent
+    Топ статей (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

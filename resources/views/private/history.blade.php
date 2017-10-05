@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    История переписки - @parent
+    История переписки
 @stop
 
 @section('content')

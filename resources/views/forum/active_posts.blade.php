@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список сообщений {{ $user->login }} - @parent
+    Список сообщений {{ $user->login }}
 @stop
 
 @section('content')

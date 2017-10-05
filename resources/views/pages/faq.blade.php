@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    FAQ по сайту - @parent
+    FAQ по сайту
 @stop
 
 @section('content')

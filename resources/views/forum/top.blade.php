@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Топ популярных тем - @parent
+    Топ популярных тем
 @stop
 
 @section('content')

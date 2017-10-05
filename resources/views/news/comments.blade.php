@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $news['title'] }} - Комментарии (Стр. {{ $page['current']}}) - @parent
+    {{ $news['title'] }} - Комментарии (Стр. {{ $page['current']}})
 @stop
 
 @section('content')

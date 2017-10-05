@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Отданные голоса {{ $user->login }} - @parent
+    Отданные голоса {{ $user->login }}
 @stop
 
 @section('content')

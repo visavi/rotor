@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $blog['title'] }} - Комментарии - @parent
+    {{ $blog['title'] }} - Комментарии
 @stop
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $category['name'] }} (Стр. {{ $page['current'] }}) - @parent
+    {{ $category['name'] }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

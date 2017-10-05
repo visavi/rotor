@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Изменение темы - @parent
+    Изменение темы
 @stop
 
 @section('content')

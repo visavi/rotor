@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Заметка для пользователя {{ $user->login }} - @parent
+    Заметка для пользователя {{ $user->login }}
 @stop
 
 @section('content')

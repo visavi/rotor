@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Публикация новой статьи - @parent
+    Публикация новой статьи
 @stop
 
 @section('content')

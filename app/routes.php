@@ -4,9 +4,10 @@ $router = new AltoRouter();
 
 $router->addMatchTypes(['user' => '[0-9A-Za-z-_]++']);
 
-$router->map('GET', '/', 'HomeController@index', 'home');
-$router->map('GET', '/captcha', 'HomeController@captcha', 'captcha');
-$router->map('GET', '/closed', 'HomeController@closed');
+$router->map('GET',      '/', 'HomeController@index', 'home');
+$router->map('GET',      '/captcha', 'HomeController@captcha', 'captcha');
+$router->map('GET',      '/closed', 'HomeController@closed');
+$router->map('GET|POST', '/banip', 'HomeController@banip');
 
 $router->map('GET',      '/book', 'BookController@index', 'book');
 $router->map('POST',     '/book/add', 'BookController@add');
@@ -165,7 +166,6 @@ $router->map('GET|POST', '/who', 'pages/who.php');
 $router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
 $router->map('GET|POST', '/authoritylist', 'pages/authoritylist.php');
 $router->map('GET|POST', '/ban', 'pages/ban.php');
-$router->map('GET|POST', '/banip', 'pages/banip.php');
 $router->map('GET|POST', '/razban', 'pages/razban.php');
 $router->map('GET|POST', '/banhist', 'pages/banhist.php');
 $router->map('GET|POST', '/ratinglist', 'pages/ratinglist.php');

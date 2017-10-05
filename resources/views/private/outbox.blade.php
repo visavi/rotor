@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Отправленные сообщения - @parent
+    Отправленные сообщения
 @stop
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $photo->title }} - Комментарии - @parent
+    {{ $photo->title }} - Комментарии
 @stop
 
 @section('content')

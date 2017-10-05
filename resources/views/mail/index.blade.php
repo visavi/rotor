@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Обратная связь - @parent
+    Обратная связь
 @stop
 
 @section('content')

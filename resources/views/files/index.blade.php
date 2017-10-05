@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Собственные страницы сайта - @parent
+    Собственные страницы сайта
 @stop
 
 @section('content')

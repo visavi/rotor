@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Мои настройки - @parent
+    Мои настройки
 @stop
 
 @section('content')

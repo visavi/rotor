@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Последние комментарии - @parent
+    Последние комментарии
 @stop
 
 @section('content')

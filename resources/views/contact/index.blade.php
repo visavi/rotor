@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Контакт-лист - @parent
+    Контакт-лист
 @stop
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Перевод денег - @parent
+    Перевод денег
 @stop
 
 @section('content')

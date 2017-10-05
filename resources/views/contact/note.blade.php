@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Заметка для {{ $contact->contactor->login }} - @parent
+    Заметка для {{ $contact->contactor->login }}
 @stop
 
 @section('content')

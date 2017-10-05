@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список смайлов - @parent
+    Список смайлов
 @stop
 
 @section('content')

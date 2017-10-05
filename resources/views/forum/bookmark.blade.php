@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Мои закладки - @parent
+    Мои закладки
 @stop
 
 @section('content')

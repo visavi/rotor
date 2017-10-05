@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Последние проголосовавшие - @parent
+    Последние проголосовавшие
 @stop
 
 @section('content')

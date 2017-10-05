@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Создание новой темы - @parent
+    Создание новой темы
 @stop
 
 @section('content')

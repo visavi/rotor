@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $photo->title }} - @parent
+    {{ $photo->title }}
 @stop
 
 @section('content')

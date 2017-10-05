@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список всех статей {{ $user->login }} (Стр. {{ $page['current'] }}) - @parent
+    Список всех статей {{ $user->login }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

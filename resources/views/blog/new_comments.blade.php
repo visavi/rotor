@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги - Новые комментарии (Стр. {{ $page['current'] }}) - @parent
+    Блоги - Новые комментарии (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Статьи пользователей - @parent
+    Статьи пользователей
 @stop
 
 @section('content')

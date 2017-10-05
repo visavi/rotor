@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $vote->title }} - @parent
+    {{ $vote->title }}
 @stop
 
 @section('content')

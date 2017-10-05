@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ошибка 403 - @parent
+    Ошибка 403
 @stop
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Статистика за сутки - @parent
+    Статистика за сутки
 @stop
 
 @section('content')

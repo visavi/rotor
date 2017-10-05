@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Подтверждение регистрации - @parent
+    Подтверждение регистрации
 @stop
 
 @section('content')

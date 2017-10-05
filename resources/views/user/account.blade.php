@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Мои данные - @parent
+    Мои данные
 @stop
 
 @section('content')

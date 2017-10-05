@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Регистрация - @parent
+    Регистрация
 @stop
 
 @section('content')

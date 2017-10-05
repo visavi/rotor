@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    RSS новостей - @parent
+    RSS новостей
 @stop
 
 @section('content')

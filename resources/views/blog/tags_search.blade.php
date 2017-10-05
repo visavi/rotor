@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Поиск по тегам - @parent
+    Поиск по тегам
 @stop
 
 @section('content')

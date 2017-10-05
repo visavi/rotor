@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список всех комментариев (Стр. {{ $page['current']}}) - @parent
+    Список всех комментариев (Стр. {{ $page['current']}})
 @stop
 
 @section('content')

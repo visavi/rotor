@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Поиск запроса {{ $find }} - @parent
+    Поиск запроса {{ $find }}
 @stop
 
 @section('content')

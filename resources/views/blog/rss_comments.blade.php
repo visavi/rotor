@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    {{ $blog['title'] }} - @parent
+    {{ $blog['title'] }}
 @stop
 
 @section('content')

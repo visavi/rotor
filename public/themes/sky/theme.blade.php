@@ -5,7 +5,7 @@ header("Content-type:text/html; charset=utf-8");
 <html lang="ru">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>@yield('title') {{ setting('title') }}</title>
+    <title>@yield('title') - {{ setting('title') }}</title>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     @yield('styles')
     @stack('styles')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Галерея сайта (Стр. {{ $page['current'] }}) - @parent
+    Галерея сайта (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

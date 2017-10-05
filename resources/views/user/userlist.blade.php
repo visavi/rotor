@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список пользователей (Стр. {{ $page['current'] }}) - @parent
+    Список пользователей (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

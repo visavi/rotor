@@ -1,5 +1,5 @@
 @section('title')
-    Функция is_user - @parent
+    Функция is_user
 @stop
 
 <h1>Функция is_user</h1>

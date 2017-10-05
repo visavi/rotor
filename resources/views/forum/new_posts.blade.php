@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список новых сообщений - @parent
+    Список новых сообщений
 @stop
 
 @section('content')

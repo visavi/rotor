@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    Темы форума - @parent
+    Темы форума
 @stop
 
 @section('content')

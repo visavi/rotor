@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ошибка 404 - @parent
+    Ошибка 404
 @stop
 
 @section('content')

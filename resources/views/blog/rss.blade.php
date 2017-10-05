@@ -1,7 +1,7 @@
 @extends('layout_rss')
 
 @section('title')
-    RSS блогов - @parent
+    RSS блогов
 @stop
 
 @section('content')

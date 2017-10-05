@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Загрузка фотографии - @parent
+    Загрузка фотографии
 @stop
 
 @section('content')

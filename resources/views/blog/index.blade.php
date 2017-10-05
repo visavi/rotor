@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Блоги - Список разделов - @parent
+    Блоги - Список разделов
 @stop
 
 @section('content')

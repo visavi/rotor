@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Изменение сообщения - @parent
+    Изменение сообщения
 @stop
 
 @section('content')

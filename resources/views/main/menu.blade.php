@@ -1,5 +1,5 @@
 @section('title')
-    Мое меню - @parent
+    Мое меню
 @stop
 
 <h1>Мое меню</h1>

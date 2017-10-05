@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    История авторизаций - @parent
+    История авторизаций
 @stop
 
 @section('content')

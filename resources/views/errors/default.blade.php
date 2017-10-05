@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Ошибка - @parent
+    Ошибка
 @stop
 
 @section('content')

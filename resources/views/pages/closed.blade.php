@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Сайт закрыт - @parent
+    Сайт закрыт
 @stop
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Загрузки - @parent
+    Загрузки
 @stop
 
 @section('content')

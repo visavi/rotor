@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Игнор-лист - @parent
+    Игнор-лист
 @stop
 
 @section('content')

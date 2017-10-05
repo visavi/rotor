@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Правила сайта - @parent
+    Правила сайта
 @stop
 
 @section('content')

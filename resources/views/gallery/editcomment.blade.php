@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование комментария - @parent
+    Редактирование комментария
 @stop
 
 @section('content')

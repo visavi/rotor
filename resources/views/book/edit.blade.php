@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Редактирование сообщения - @parent
+    Редактирование сообщения
 @stop
 
 @section('content')

@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Classes\Request;
+use App\Models\Ban;
 use Gregwar\Captcha\PhraseBuilder;
 use Gregwar\Captcha\CaptchaBuilder;
 
@@ -25,6 +27,36 @@ class HomeController extends BaseController
         }
 
         return view('pages/closed');
+    }
+
+    /**
+     * Бан по IP
+     */
+    public function banip()
+    {
+        header($_SERVER["SERVER_PROTOCOL"].' 403 Forbidden');
+
+        $ban = Ban::query()
+            ->where('ip', getClientIp())
+            ->whereNull('user_id')
+            ->first();
+
+        if (Request::isMethod('post')) {
+
+            $protect = check(Request::input('protect'));
+
+            if ($ban && $protect == $_SESSION['protect']) {
+
+                $ban->delete();
+
+                ipBan(true);
+
+                setFlash('success', 'IP успешно разбанен!');
+                redirect('/');
+            }
+        }
+
+        view('pages/banip', compact('ban'));
     }
 
     /**

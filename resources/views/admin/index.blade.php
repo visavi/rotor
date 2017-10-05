@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Панель управления - @parent
+    Панель управления
 @stop
 
 @section('content')

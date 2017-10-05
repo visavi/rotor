@@ -2,7 +2,6 @@
 
 use App\Classes\Registry;
 use App\Classes\Request;
-use App\Models\Log;
 use App\Models\Login;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -14,87 +13,6 @@ session_name('SID');
 session_start();
 
 date_default_timezone_set(setting('timezone'));
-
-/**
- * Проверка на ip-бан
- */
-if ($ipBan = ipBan()) {
-
-    $ipSplit = explode('.', getClientIp());
-
-    foreach($ipBan as $ip) {
-        $matches = 0;
-        $dbSplit = explode('.', $ip);
-
-        foreach($ipSplit as $key => $split) {
-            if (isset($dbSplit[$key]) && ($split == $dbSplit[$key] || $dbSplit[$key] == '*')) {
-                $matches += 1;
-            }
-        }
-
-        if ($matches == 4 && ! Request::is('banip', 'captcha')) {
-            redirect('/banip');
-        }
-    }
-}
-
-/**
- * Счетчик запросов
- */
-if (setting('doslimit')) {
-    if (is_writeable(STORAGE.'/antidos')) {
-
-        $dosfiles = glob(STORAGE.'/antidos/*.dat');
-        foreach ($dosfiles as $filename) {
-            $array_filemtime = @filemtime($filename);
-            if ($array_filemtime < (time() - 60)) {
-                @unlink($filename);
-            }
-        }
-        // -------------------------- Проверка на время -----------------------------//
-        if (file_exists(STORAGE.'/antidos/'.getClientIp().'.dat')) {
-            $file_dos = file(STORAGE.'/antidos/'.getClientIp().'.dat');
-            $file_str = explode('|', $file_dos[0]);
-            if ($file_str[0] < (time() - 60)) {
-                @unlink(STORAGE.'/antidos/'.getClientIp().'.dat');
-            }
-        }
-        // ------------------------------ Запись логов -------------------------------//
-        $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getUserAgent().'|'.getUser('login').'|';
-        writeFiles(STORAGE.'/antidos/'.getClientIp().'.dat', $write."\r\n", 0, 0666);
-        // ----------------------- Автоматическая блокировка ------------------------//
-        if (counterString(STORAGE.'/antidos/'.getClientIp().'.dat') > setting('doslimit')) {
-
-            if (!empty(setting('errorlog'))){
-
-                $banip = Ban::where('ip', getClientIp())->first();
-
-                if (! $banip) {
-
-                    Log::query()->create([
-                        'code'       => 666,
-                        'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
-                        'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
-                        'user_id'    => getUser('id'),
-                        'ip'         => getClientIp(),
-                        'brow'       => getUserAgent(),
-                        'created_at' => SITETIME,
-
-                    ]);
-
-                    DB::insert(
-                        "insert ignore into ban (`ip`, `created_at`) values (?, ?);",
-                        [getClientIp(), SITETIME]
-                    );
-
-                    ipBan(true);
-                }
-            }
-
-            unlink(STORAGE.'/antidos/'.getClientIp().'.dat');
-        }
-    }
-}
 
 /**
  * Авторизация по кукам

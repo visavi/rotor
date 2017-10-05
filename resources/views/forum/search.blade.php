@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Поиск по форуму - @parent
+    Поиск по форуму
 @stop
 
 @section('content')

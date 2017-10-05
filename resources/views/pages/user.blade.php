@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Анкета пользователя {{ $user['login'] }} - @parent
+    Анкета пользователя {{ $user['login'] }}
 @stop
 
 @section('content')

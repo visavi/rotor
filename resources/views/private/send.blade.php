@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Новое сообщение - @parent
+    Новое сообщение
 @stop
 
 @section('content')

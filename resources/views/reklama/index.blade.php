@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Реклама на сайте - @parent
+    Реклама на сайте
 @stop
 
 @section('content')

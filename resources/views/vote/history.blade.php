@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    История голосований (Стр. {{ $page['current'] }}) - @parent
+    История голосований (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

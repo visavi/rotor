@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $news['title'] }} - @parent
+    {{ $news['title'] }}
 @stop
 
 @section('description', stripString($news['text']))

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Поиск в блогах - @parent
+    Поиск в блогах
 @stop
 
 @section('content')

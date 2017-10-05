@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $blog['title'] }} - @parent
+    {{ $blog['title'] }}
 @stop
 
 @section('keywords')

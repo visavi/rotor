@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Приватные сообщения - @parent
+    Приватные сообщения
 @stop
 
 @section('content')

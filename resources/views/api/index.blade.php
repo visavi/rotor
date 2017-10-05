@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    API интерфейс - @parent
+    API интерфейс
 @stop
 
 @section('content')

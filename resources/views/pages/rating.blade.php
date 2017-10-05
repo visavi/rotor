@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Изменения репутации пользователя {{ $user->login }} - @parent
+    Изменения репутации пользователя {{ $user->login }}
 @stop
 
 @section('content')

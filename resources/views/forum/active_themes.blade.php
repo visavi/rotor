@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Список тем {{ $user->login }} - @parent
+    Список тем {{ $user->login }}
 @stop
 
 @section('content')

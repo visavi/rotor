@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Стена пользователя {{ $user->login }} - @parent
+    Стена пользователя {{ $user->login }}
 @stop
 
 @section('content')

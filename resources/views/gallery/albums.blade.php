@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Альбомы пользователей (Стр. {{ $page['current'] }}) - @parent
+    Альбомы пользователей (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Количество посещений - @parent
+    Количество посещений
 @stop
 
 @section('content')

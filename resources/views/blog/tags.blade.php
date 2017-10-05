@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    Облако тегов - @parent
+    Облако тегов
 @stop
 
 @section('content')
