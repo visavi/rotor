@@ -155,6 +155,9 @@ $router->map('GET',  '/userlist', 'UserController@userlist');
 $router->map('POST', '/userlist/search', 'UserController@searchUser');
 $router->map('GET',  '/adminlist', 'UserController@adminlist');
 
+$router->map('GET', '/faq', 'PageController@faq');
+$router->map('GET', '/surprise', 'PageController@surprise');
+
 $router->map('GET|POST', '/offers', 'pages/offers.php');
 $router->map('GET|POST', '/onlinewho', 'pages/onlinewho.php');
 $router->map('GET|POST', '/who', 'pages/who.php');
@@ -166,10 +169,9 @@ $router->map('GET|POST', '/razban', 'pages/razban.php');
 $router->map('GET|POST', '/banhist', 'pages/banhist.php');
 $router->map('GET|POST', '/statusfaq', 'pages/statusfaq.php');
 $router->map('GET|POST', '/ratinglist', 'pages/ratinglist.php');
-$router->map('GET|POST', '/faq', 'pages/faq.php');
+
 $router->map('GET|POST', '/pictures', 'pages/pictures.php');
 $router->map('GET',      '/pictures/[delete:action]', 'pages/pictures.php');
-$router->map('GET',      '/surprise', 'pages/surprise.php');
 
 $router->map('GET|POST', '/files/[*:action]?', 'FileController@', 'files');
 
