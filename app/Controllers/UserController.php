@@ -781,7 +781,7 @@ class UserController extends BaseController
 
             if (isset($position)) {
                 $position += 1;
-                $end = ceil($position / setting('avtorlist'));
+                $end = ceil($position / $page['limit']);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
                 redirect('/userlist?page='.$end.'&user='.$user);
@@ -805,7 +805,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Рейтинг авторитетов
+     * Рейтинг репутации
      */
     public function authoritylist()
     {
@@ -833,7 +833,7 @@ class UserController extends BaseController
 
             if (isset($position)) {
                 $position += 1;
-                $end = ceil($position / setting('avtorlist'));
+                $end = ceil($position / $page['limit']);
 
                 setFlash('success', 'Позиция в рейтинге: '.$position);
                 redirect('/authoritylist?page='.$end.'&user='.$user);
@@ -841,5 +841,45 @@ class UserController extends BaseController
         }
 
         return view('user/authoritylist', compact('users', 'page', 'user'));
+    }
+
+
+    /**
+     * Рейтинг толстосумов
+     */
+    public function ratinglist()
+    {
+        $total = User::query()->count();
+        $page = paginate(setting('userlist'), $total);
+
+        $users = User::query()
+            ->orderBy('money', 'desc')
+            ->orderBy('login')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
+
+        $user = check(Request::input('user', getUser('login')));
+
+        if (Request::isMethod('post')) {
+
+            $position = User::query()
+                ->orderBy('money', 'desc')
+                ->orderBy('login')
+                ->get()
+                ->where('login', $user)
+                ->keys()
+                ->first();
+
+            if (isset($position)) {
+                $position += 1;
+                $end = ceil($position / $page['limit']);
+
+                setFlash('success', 'Позиция в рейтинге: '.$position);
+                redirect('/ratinglist?page='.$end.'&user='.$user);
+            }
+        }
+
+        return view('user/ratinglist', compact('users', 'page', 'user'));
     }
 }
