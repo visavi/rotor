@@ -11,7 +11,6 @@ class DeleteBanInUsers extends AbstractMigration
     {
         $table = $this->table('users');
         $table
-            ->removeColumn('timeban')
             ->removeColumn('timelastban')
             ->removeColumn('reasonban')
             ->removeColumn('loginsendban')
@@ -26,7 +25,6 @@ class DeleteBanInUsers extends AbstractMigration
     {
         $table = $this->table('users');
         $table
-            ->addColumn('timeban', 'integer', ['default' => 0])
             ->addColumn('timelastban', 'integer', ['default' => 0])
             ->addColumn('reasonban', 'text', ['null' => true])
             ->addColumn('loginsendban', 'string', ['limit' => 20, 'null' => true])

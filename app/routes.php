@@ -156,6 +156,7 @@ $router->map('GET',      '/adminlist', 'UserController@adminlist');
 $router->map('GET|POST', '/userlist', 'UserController@userlist');
 $router->map('GET|POST', '/authoritylist', 'UserController@authoritylist');
 $router->map('GET|POST', '/ratinglist', 'UserController@ratinglist');
+$router->map('GET|POST', '/ban', 'UserController@ban');
 
 $router->map('GET', '/faq', 'PageController@faq');
 $router->map('GET', '/statusfaq', 'PageController@statusfaq');
@@ -165,7 +166,6 @@ $router->map('GET|POST', '/offers', 'pages/offers.php');
 $router->map('GET|POST', '/onlinewho', 'pages/onlinewho.php');
 $router->map('GET|POST', '/who', 'pages/who.php');
 $router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
-$router->map('GET|POST', '/ban', 'pages/ban.php');
 $router->map('GET|POST', '/razban', 'pages/razban.php');
 $router->map('GET|POST', '/banhist', 'pages/banhist.php');
 

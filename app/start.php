@@ -78,14 +78,14 @@ if ($user = checkAuth()) {
     // Забанен
     if ($user->level == User::BANNED) {
         if (! Request::is('ban', 'rules', 'logout')) {
-            redirect('/ban?log='.$user->login);
+            redirect('/ban?user='.$user->login);
         }
     }
 
     // Подтверждение регистрации
     if (setting('regkeys') && $user->level == User::PENDED) {
         if (! Request::is('key', 'ban', 'login', 'logout')) {
-            redirect('/key?log='.$user->login);
+            redirect('/key?user='.$user->login);
         }
     }
 
