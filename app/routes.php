@@ -168,10 +168,10 @@ $router->map('GET', '/surprise', 'PageController@surprise');
 $router->map('GET|POST', '/offers', 'pages/offers.php');
 $router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
 
-$router->map('GET|POST', '/pictures', 'pages/pictures.php');
-$router->map('GET',      '/pictures/[delete:action]', 'pages/pictures.php');
+$router->map('GET|POST', '/pictures', 'PictureController@index');
+$router->map('GET',      '/pictures/delete', 'PictureController@delete');
 
-$router->map('GET|POST', '/files/[*:action]?', 'FileController@', 'files');
+$router->map('GET|POST', '/files/[*:action]?', 'FileController', 'files');
 
 $router->map('GET',      '/load', 'LoadController@index');
 

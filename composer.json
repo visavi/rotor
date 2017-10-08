@@ -25,7 +25,7 @@
         "swiftmailer/swiftmailer": "~6.0",
         "vlucas/phpdotenv": "^2.4",
         "robmorgan/phinx": "^0.9",
-        "verot/class.upload.php": "^0.33",
+        "verot/class.upload.php": "dev-master",
         "php-curl-class/php-curl-class": "^7.4",
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.1"

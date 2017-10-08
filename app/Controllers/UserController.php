@@ -980,7 +980,6 @@ class UserController extends BaseController
         return view('user/authoritylist', compact('users', 'page', 'user'));
     }
 
-
     /**
      * Рейтинг толстосумов
      */
@@ -1029,7 +1028,6 @@ class UserController extends BaseController
             ->whereNotNull('user_id')
             ->with('user')
             ->get();
-
 
         $birthdays = User::query()
             ->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME))
