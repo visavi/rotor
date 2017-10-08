@@ -47,5 +47,5 @@
         {{ showError('Пользователей еще нет!') }}
     @endif
 
-    <i class="fa fa-users"></i> <a href="/onlinewho">Новички</a><br>
+    <i class="fa fa-users"></i> <a href="/who">Новички</a><br>
 @stop

@@ -9,6 +9,7 @@ use App\Models\BlackList;
 use App\Models\ChangeMail;
 use App\Models\Invite;
 use App\Models\Note;
+use App\Models\Online;
 use App\Models\Rating;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -1017,5 +1018,27 @@ class UserController extends BaseController
         }
 
         return view('user/ratinglist', compact('users', 'page', 'user'));
+    }
+
+    /**
+     * Пользователь онлайн
+     */
+    public function who()
+    {
+        $online = Online::query()
+            ->whereNotNull('user_id')
+            ->with('user')
+            ->get();
+
+
+        $birthdays = User::query()
+            ->whereRaw('substr(birthday, 1, 5) = ?', date('d.m', SITETIME))
+            ->get();
+
+        $novices = User::query()
+            ->where('joined', '>', SITETIME - 86400)
+            ->get();
+
+        return view('user/who', compact('online', 'birthdays', 'novices'));
     }
 }
