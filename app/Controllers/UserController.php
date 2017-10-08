@@ -533,6 +533,32 @@ class UserController extends BaseController
         return view('user/ban', compact('user', 'banhist'));
     }
 
+    /**
+     * История банов
+     */
+    public function banhist()
+    {
+        $login = check(Request::input('user', getUser('login')));
+
+        $user = User::query()->where('login', $login)->first();
+
+        if (! $user) {
+            abort('default', 'Пользователь не найден!');
+        }
+
+        $total = Banhist::query()->where('user_id', $user->id)->count();
+        $page = paginate(setting('listbanhist'), $total);
+
+        $banhist = Banhist::query()
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
+
+        return view('user/banhist', compact('user', 'banhist', 'page'));
+    }
+
     /*
      * Настройки
      */

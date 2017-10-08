@@ -24,4 +24,12 @@ class Banhist extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает связь пользователей
+     */
+    public function sendUser()
+    {
+        return $this->belongsTo(User::class, 'send_user_id')->withDefault();
+    }
 }

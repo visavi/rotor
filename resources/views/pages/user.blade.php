@@ -89,7 +89,7 @@
 
                 Последняя авторизация: {{ dateFixed($user['timelastlogin']) }}<br>
 
-                <a href="/banhist?uz={{ $user['login'] }}">Строгих нарушений: {{ $user['totalban'] }}</a><br>
+                <a href="/banhist?user={{ $user['login'] }}">Строгих нарушений: {{ $user['totalban'] }}</a><br>
 
                 <a href="/rating/{{ $user->login }}">Репутация: <b>{!! formatNum($user['rating']) !!}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br>
 
