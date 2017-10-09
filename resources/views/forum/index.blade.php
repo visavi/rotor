@@ -20,7 +20,7 @@
     @foreach ($forums as $forum)
         <div class="b">
             <i class="fa fa-file-text-o fa-lg text-muted"></i>
-            <b><a href="/forum/{{ $forum['id'] }}">{{ $forum['title'] }}</a></b>
+            <b><a href="/forum/{{ $forum['id'] }}">{{ $forum->title }}</a></b>
             ({{ $forum->topics }}/{{ $forum->posts }})
 
             @if (!empty($forum['desc']))
