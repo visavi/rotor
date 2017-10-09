@@ -17,18 +17,18 @@
                 <div class="b">
                     <div class="img">{!! userAvatar($contact->contactor) !!}</div>
 
-                    <b>{!! profile($contact->contactor) !!}</b> <small>({{ dateFixed($contact['created_at']) }})</small><br>
+                    <b>{!! profile($contact->contactor) !!}</b> <small>({{ dateFixed($contact->created_at) }})</small><br>
                     {!! userStatus($contact->contactor) !!} {!! userOnline($contact->contactor) !!}
                 </div>
                 <div>
-                    @if ($contact['text'])
-                        Заметка: {!! bbCode($contact['text']) !!}<br>
+                    @if ($contact->text)
+                        Заметка: {!! bbCode($contact->text) !!}<br>
                     @endif
 
-                    <input type="checkbox" name="del[]" value="{{ $contact['id'] }}">
+                    <input type="checkbox" name="del[]" value="{{ $contact->id }}">
                     <a href="/private/send?user={{ $contact->contactor->login }}">Написать</a> |
                     <a href="/transfer?uz={{ $contact->contactor->login }}">Перевод</a> |
-                    <a href="/contact/note/{{ $contact['id'] }}">Заметка</a>
+                    <a href="/contact/note/{{ $contact->id }}">Заметка</a>
                 </div>
             @endforeach
 
