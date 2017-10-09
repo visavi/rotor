@@ -12,7 +12,7 @@
         <form method="post" action="/ignore/note/{{ $ignore->id }}">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             Заметка:<br>
-            <textarea cols="25" rows="5" name="msg" id="markItUp">{{ $ignore['text'] }}</textarea><br>
+            <textarea cols="25" rows="5" name="msg" id="markItUp">{{ $ignore->text }}</textarea><br>
             <input value="Редактировать" type="submit">
         </form>
     </div>
