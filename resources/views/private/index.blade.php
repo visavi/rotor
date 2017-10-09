@@ -12,21 +12,21 @@
         <div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: {{ getUser('newprivat') }}</span></b></div>
     @endif
 
-    @if ($page->total >= (setting('limitmail') - (setting('limitmail') / 10)) && $page->total < setting('limitmail'))
+    @if ($page['total'] >= (setting('limitmail') - (setting('limitmail') / 10)) && $page['total'] < setting('limitmail'))
         <div style="text-align:center"><b><span style="color:#ff0000">Ваш ящик почти заполнен, необходимо очистить или удалить старые сообщения!</span></b></div>
     @endif
 
-    @if ($page->total >= setting('limitmail'))
+    @if ($page['total'] >= setting('limitmail'))
         <div style="text-align:center"><b><span style="color:#ff0000">Ваш ящик переполнен, вы не сможете получать письма пока не очистите его!</span></b></div>
     @endif
 
-    <i class="fa fa-envelope"></i> <b>Входящие ({{ $page->total }})</b> /
-    <a href="/private/outbox">Отправленные ({{  $page->totalOutbox }})</a>
+    <i class="fa fa-envelope"></i> <b>Входящие ({{ $page['total'] }})</b> /
+    <a href="/private/outbox">Отправленные ({{  $page['totalOutbox'] }})</a>
     <hr>
 
     @if ($messages->isNotEmpty())
 
-        <form action="/private/delete?page={{ $page->current }}" method="post">
+        <form action="/private/delete?page={{ $page['current'] }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             <div class="form">
                 <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
@@ -67,7 +67,7 @@
 
         {{ pagination($page) }}
 
-        Всего писем: <b>{{ $page->total }}</b><br>
+        Всего писем: <b>{{ $page['total'] }}</b><br>
         Объем ящика: <b>{{ setting('limitmail') }}</b><br><br>
 
         <i class="fa fa-times"></i> <a href="/private/clear?token={{ $_SESSION['token'] }}">Очистить ящик</a><br>
