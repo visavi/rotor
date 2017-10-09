@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    {{ $news['title'] }} - Комментарии (Стр. {{ $page['current']}})
+    {{ $news->title }} - Комментарии (Стр. {{ $page['current']}})
 @stop
 
 @section('content')
 
-    <h1><a href="/news/{{ $news['id'] }}">{{ $news['title'] }}</a></h1>
+    <h1><a href="/news/{{ $news->id }}">{{ $news->title }}</a></h1>
 
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
@@ -51,7 +51,7 @@
         {{ pagination($page) }}
     @endif
 
-    @if (! $news['closed'])
+    @if (!$news->closed)
 
         @if ($comments->isEmpty())
             {{ showError('Комментариев еще нет!') }}
