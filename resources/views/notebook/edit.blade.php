@@ -11,7 +11,7 @@
     <div class="form">
         <form action="/notebook/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            <textarea id="markItUp" cols="25" rows="10" name="msg">{{ $note['text'] }}</textarea><br>
+            <textarea id="markItUp" cols="25" rows="10" name="msg">{{ $note->text }}</textarea><br>
             <button class="btn btn-primary">Сохранить</button>
         </form>
     </div><br>

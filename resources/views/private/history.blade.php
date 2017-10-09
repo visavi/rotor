@@ -16,11 +16,11 @@
 
         @foreach ($messages as $data)
             <div class="b">
-                {!! userAvatar($data['author']) !!}
-                <b>{!! profile($data['author']) !!}</b> {!! userOnline($data['author']) !!}
-                ({{  dateFixed($data['created_at']) }})
+                {!! userAvatar($data->author) !!}
+                <b>{!! profile($data->author) !!}</b> {!! userOnline($data->author) !!}
+                ({{  dateFixed($data->created_at) }})
             </div>
-            <div>{!! bbCode($data['text']) !!}</div>
+            <div>{!! bbCode($data->text) !!}</div>
         @endforeach
 
         {{ pagination($page) }}
@@ -46,7 +46,7 @@
 
             <button class="btn btn-primary">Быстрый ответ</button></form></div><br>
 
-    Всего писем: <b>{{ $page['total'] }}</b><br><br>
+    Всего писем: <b>{{ $page->total }}</b><br><br>
 
     <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br>
     <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br>
