@@ -17,18 +17,18 @@
                 <div class="b">
                     <div class="img">{!! userAvatar($data->ignoring) !!}</div>
 
-                    <b>{!! profile($data->ignoring) !!}</b> <small>({{ dateFixed($data['created_at']) }})</small><br>
+                    <b>{!! profile($data->ignoring) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! userStatus($data->ignoring) !!} {!! userOnline($data->ignoring) !!}
                 </div>
 
                 <div>
-                    @if ($data['text'])
-                        Заметка: {!! bbCode($data['text']) !!}<br>
+                    @if ($data->text)
+                        Заметка: {!! bbCode($data->text) !!}<br>
                     @endif
 
-                    <input type="checkbox" name="del[]" value="{{ $data['id'] }}">
+                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
                     <a href="/private/send?user={{ $data->ignoring->login }}">Написать</a> |
-                    <a href="/ignore/note/{{ $data['id'] }}">Заметка</a>
+                    <a href="/ignore/note/{{ $data->id }}">Заметка</a>
                 </div>
             @endforeach
 
