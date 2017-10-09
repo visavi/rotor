@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('title')
-    {{ $news['title'] }}
+    {{ $news->title }}
 @stop
 
-@section('description', stripString($news['text']))
+@section('description', stripString($news->text))
 
 @section('content')
 
-    <h1>{{ $news['title'] }} <small> ({{ dateFixed($news['created_at']) }})</small></h1>
+    <h1>{{ $news->title }} <small> ({{ dateFixed($news->created_at) }})</small></h1>
 
     @if (isAdmin())
         <div class="form">
@@ -17,15 +17,15 @@
         </div>
     @endif
 
-    @if ($news['image'])
+    @if ($news->image)
         <div class="img">
-            <a href="/uploads/news/{{ $news['image'] }}">{!! resizeImage('uploads/news/', $news['image'], 75, ['alt' => $news['title']]) !!}</a></div>
+            <a href="/uploads/news/{{ $news->image }}">{!! resizeImage('uploads/news/', $news->image, 75, ['alt' => $news->title]) !!}</a></div>
     @endif
 
-    <div>{!! bbCode($news['text']) !!}</div>
+    <div>{!! bbCode($news->text) !!}</div>
 
     <div style="clear:both;">
-        Добавлено: {!! profile($news['user']) !!}
+        Добавлено: {!! profile($news->user) !!}
     </div><br>
 
     @if ($comments->isNotEmpty())
@@ -51,15 +51,15 @@
             </div>
         @endforeach
 
-        @if ($news['comments'] > 5)
+        @if ($news->comments > 5)
             <div class="act">
-                <b><a href="/news/{{ $news['id'] }}/comments">Все комментарии</a></b> ({{ $news['comments'] }})
-                <a href="/news/{{ $news['id'] }}/end">&raquo;</a>
+                <b><a href="/news/{{ $news->id }}/comments">Все комментарии</a></b> ({{ $news->comments }})
+                <a href="/news/{{ $news->id }}/end">&raquo;</a>
             </div><br>
         @endif
     @endif
 
-    @if (! $news['closed'])
+    @if (! $news->closed)
         @if ($comments->isEmpty())
             {{ showError('Комментариев еще нет!') }}
         @endif
