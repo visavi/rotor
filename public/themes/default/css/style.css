@@ -226,6 +226,7 @@ img {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .avatar a {
     border: none;
     color: #fff;
