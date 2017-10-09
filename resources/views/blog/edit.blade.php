@@ -13,22 +13,22 @@
     <a href="/blog/blogs">Все статьи</a><hr>
 
     <div class="form next">
-        <form action="/article/{{ $blog['id'] }}/edit" method="post">
+        <form action="/article/{{ $blog->id }}/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             Раздел:<br>
             <select name="cid">
                 @foreach ($cats as $key => $value)
-                    <?php $selected = ($blog['category_id'] == $key) ? ' selected="selected"' : ''; ?>
+                    <?php $selected = ($blog->category_id == $key) ? ' selected="selected"' : ''; ?>
                     <option value="{{ $key }}"{{ $selected }}>{{ $value }}</option>
                 @endforeach
             </select><br>
 
             Заголовок:<br>
-            <input name="title" size="50" maxlength="50" value="{{ $blog['title'] }}"><br>
+            <input name="title" size="50" maxlength="50" value="{{ $blog->title }}"><br>
             Текст:<br>
-            <textarea id="markItUp" cols="25" rows="15" name="text">{{ $blog['text'] }}</textarea><br>
+            <textarea id="markItUp" cols="25" rows="15" name="text">{{ $blog->text }}</textarea><br>
             Метки:<br>
-            <input name="tags" size="50" maxlength="100" value="{{ $blog['tags'] }}"><br>
+            <input name="tags" size="50" maxlength="100" value="{{ $blog->tags }}"><br>
 
             <button class="btn btn-primary">Изменить</button>
         </form>

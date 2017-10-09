@@ -11,15 +11,15 @@
     @if ($comments->isNotEmpty())
         @foreach ($comments as $data)
             <div class="b">
-                <i class="fa fa-comment"></i> <b><a href="/article/{{ $data['relate_id'] }}/comments">{{ $data['title'] }}</a></b> ({{ $data['comments'] }})
+                <i class="fa fa-comment"></i> <b><a href="/article/{{ $data->relate_id }}/comments">{{ $data->title }}</a></b> ({{ $data->comments }})
             </div>
 
             <div>
-                {!! bbCode($data['text']) !!}<br>
-                Написал: {!! profile($data['user']) !!} <small>({{ dateFixed($data['time']) }})</small><br>
+                {!! bbCode($data->text) !!}<br>
+                Написал: {!! profile($data->user) !!} <small>({{ dateFixed($data->time) }})</small><br>
 
                 @if (isAdmin())
-                    <span class="data">({{ $data['brow'] }}, {{ $data['ip'] }})</span>
+                    <span class="data">({{ $data->brow }}, {{ $data->ip }})</span>
                 @endif
             </div>
         @endforeach

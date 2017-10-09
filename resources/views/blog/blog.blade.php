@@ -1,22 +1,22 @@
 @extends('layout')
 
 @section('title')
-    {{ $category['name'] }} (Стр. {{ $page['current'] }})
+    {{ $category->name }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
 
     @if (getUser())
         <div class="float-right">
-            <a class="btn btn-success" href="/blog/create?cid={{ $category['id'] }}">Добавить статью</a>
+            <a class="btn btn-success" href="/blog/create?cid={{ $category->id }}">Добавить статью</a>
         </div>
     @endif
 
-    <h1>{{ $category['name'] }} <small>(Статей: {{ $category['count'] }})</small></h1>
+    <h1>{{ $category->name }} <small>(Статей: {{ $category->count }})</small></h1>
     <a href="/blog">Блоги</a>
 
     @if (isAdmin())
-        / <a href="/admin/blog?act=blog&amp;cid={{ $category['id'] }}&amp;page={{ $page['current'] }}">Управление</a>
+        / <a href="/admin/blog?act=blog&amp;cid={{ $category->id }}&amp;page={{ $page['current'] }}">Управление</a>
     @endif
     <hr>
 
@@ -24,13 +24,13 @@
         @foreach ($blogs as $data)
             <div class="b">
                 <i class="fa fa-pencil"></i>
-                <b><a href="/article/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({!! formatNum($data['rating']) !!})
+                <b><a href="/article/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
             </div>
             <div>
-                Автор: {!! profile($data['user']) !!} ({{ dateFixed($data['created_at']) }})<br>
-                Просмотров: {{ $data['visits'] }}<br>
-                <a href="/article/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
-                <a href="/article/{{ $data['id'] }}/end">&raquo;</a>
+                Автор: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})<br>
+                Просмотров: {{ $data->visits }}<br>
+                <a href="/article/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
+                <a href="/article/{{ $data->id }}/end">&raquo;</a>
             </div>
         @endforeach
 

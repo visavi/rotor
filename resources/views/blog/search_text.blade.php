@@ -15,21 +15,21 @@
 
         <div class="b">
             <i class="fa fa-pencil"></i>
-            <b><a href="/article/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({!! formatNum($data['rating']) !!})
+            <b><a href="/article/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
         </div>
 
         <?php
-        if (utfStrlen($data['text']) > 200):
-            $data['text'] = strip_tags(bbCode($data['text']), '<br>');
-            $data['text'] = utfSubstr($data['text'], 0, 200).'...';
+        if (utfStrlen($data->text) > 200):
+            $data->text = strip_tags(bbCode($data->text), '<br>');
+            $data->text = utfSubstr($data->text, 0, 200).'...';
             endif;
         ?>
 
         <div>
-            {!! $data['text'] !!}<br>
+            {!! $data->text !!}<br>
 
-            Категория: <a href="/blog/{{ $data['category_id'] }}">{{ $data['name'] }}</a><br>
-            Автор: {!! profile($data['user']) !!}  ({{ dateFixed($data['created_at']) }})
+            Категория: <a href="/blog/{{ $data->category_id }}">{{ $data->name }}</a><br>
+            Автор: {!! profile($data->user) !!}  ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 
