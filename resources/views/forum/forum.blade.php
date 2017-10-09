@@ -1,12 +1,12 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum['title'] }} (Стр. {{ $page['current'] }})
+    {{ $forum->title }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
 
-    <h1>{{ $forum['title'] }}</h1>
+    <h1>{{ $forum->title }}</h1>
 
     <a href="/forum">Форум</a>
 
@@ -14,7 +14,7 @@
         / <a href="/forum/{{ $forum->parent->id }}">{{ $forum->parent->title }}</a>
     @endif
 
-    / {{ $forum['title'] }}
+    / {{ $forum->title }}
 
     @if (isAdmin())
         / <a href="/admin/forum?act=forum&amp;fid={{  $forum->id  }}&amp;page={{ $page['current'] }}">Управление</a>
