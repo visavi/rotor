@@ -26,19 +26,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6 push-md-6">
-                <div class="float-right">
-
-                    @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
-                        <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
-                            {!! resizeImage('uploads/photos/', $user['picture'], setting('previewsize'), ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}</a>
-                    @else
-                        <img src="/assets/img/images/photo.jpg" alt="Фото" class="float-right img-fluid rounded">
-                    @endif
-                </div>
-            </div>
-
-            <div class="col-md-6 pull-md-6">
+            <div class="col-md-6">
                 Cтатус: <b><a href="/statusfaq">{!! userStatus($user) !!}</a></b><br>
 
                 {!! $user->getGender() !!}
@@ -100,6 +88,14 @@
 
             </div>
 
+            <div class="col-md-6">
+                @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
+                    <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
+                        {!! resizeImage('uploads/photos/', $user['picture'], setting('previewsize'), ['alt' => $user['login'], 'class' => 'float-right img-fluid rounded']) !!}</a>
+                @else
+                    <img src="/assets/img/images/photo.jpg" alt="Фото" class="float-right img-fluid rounded">
+                @endif
+            </div>
             <div class="col-md-12">
 
                 @if (!empty($user['info']))
