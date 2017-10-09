@@ -20,19 +20,19 @@
     @foreach ($forums as $forum)
         <div class="b">
             <i class="fa fa-file-text-o fa-lg text-muted"></i>
-            <b><a href="/forum/{{ $forum['id'] }}">{{ $forum->title }}</a></b>
+            <b><a href="/forum/{{ $forum->id }}">{{ $forum->title }}</a></b>
             ({{ $forum->topics }}/{{ $forum->posts }})
 
-            @if (!empty($forum['desc']))
+            @if (!empty($forum->desc))
                 <br/>
-                <small>{{ $forum['desc'] }}</small>
+                <small>{{ $forum->desc }}</small>
             @endif
         </div>
 
         <div>
             @if ($forum->children->isNotEmpty())
                 @foreach ($forum->children as $child)
-                    <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $child['id'] }}">{{ $child['title'] }}</a></b>
+                    <i class="fa fa-files-o text-muted"></i> <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b>
                     ({{ $child->topics }}/{{ $child->posts }})<br/>
                 @endforeach
             @endif

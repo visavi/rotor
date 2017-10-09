@@ -8,12 +8,12 @@
 
     <h1>Поиск запроса {{ $find }}</h1>
 
-    <p>Найдено совпадений в темах: {{ $page['total'] }}</p>
+    <p>Найдено совпадений в темах: {{ $page->total }}</p>
 
     @foreach ($topics as $topic)
         <div class="b">
             <i class="fa {{ $topic->getIcon() }} text-muted"></i>
-            <b><a href="/topic/{{ $topic['id'] }}">{{ $topic['title'] }}</a></b> ({{ $topic['posts'] }})
+            <b><a href="/topic/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->posts }})
         </div>
         <div>
             {{ $topic->pagination() }}

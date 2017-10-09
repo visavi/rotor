@@ -12,13 +12,13 @@
     @foreach ($topics as $data)
         <div class="b">
             <i class="fa {{ $data->getIcon() }} text-muted"></i>
-            <b><a href="/topic/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({{ $data['posts'] }})
+            <b><a href="/topic/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $data->posts }})
         </div>
 
         <div>
             {{ $data->pagination() }}
             Форум: <a href="/forum/{{  $data->forum->id }}">{{  $data->forum->title }}</a><br>
-            Автор: {{ $data->user->login }} / Посл.: {{ $data->lastPost->user->login }} ({{ dateFixed($data['created_at']) }})
+            Автор: {{ $data->user->login }} / Посл.: {{ $data->lastPost->user->login }} ({{ dateFixed($data->created_at) }})
         </div>
 
     @endforeach

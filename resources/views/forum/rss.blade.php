@@ -7,17 +7,17 @@
 @section('content')
 
     @foreach ($topics as $topic)
-        <?php $topic['text'] = bbCode($topic['text']); ?>
-        <?php $topic['text'] = str_replace('/uploads/smiles', setting('home').'/uploads/smiles', $topic['text']); ?>
+        <?php $topic->text = bbCode($topic->text); ?>
+        <?php $topic->text = str_replace('/uploads/smiles', setting('home').'/uploads/smiles', $topic->text); ?>
 
         <item>
-            <title>{{ $topic['title'] }}</title>
-            <link>{{ setting('home') }}/topic/{{ $topic['id'] }}</link>
-            <description>{{ $topic['text'] }} </description>
+            <title>{{ $topic->title }}</title>
+            <link>{{ setting('home') }}/topic/{{ $topic->id }}</link>
+            <description>{{ $topic->text }} </description>
             <author>{{ $topic->lastPost->user->login }}</author>
-            <pubDate>{{ date("r", $topic['updated_at']) }}</pubDate>
+            <pubDate>{{ date("r", $topic->updated_at) }}</pubDate>
             <category>Темы</category>
-            <guid>{{ setting('home') }}/topic/{{ $topic['id'] }}</guid>
+            <guid>{{ setting('home') }}/topic/{{ $topic->id }}</guid>
         </item>
     @endforeach
 @stop
