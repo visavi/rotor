@@ -147,11 +147,22 @@ blockquote small:before {
   right: 3px;
 }
 
+.avatar-box {
+  height: 48px;
+  display: block;
+}
+
+.avatar-box a {
+  border: none;
+}
+
 .avatar {
   height: 48px;
   width: 48px;
   line-height: 48px;
   text-align: center;
+  margin-right: 10px;
+  float: left;
 }
 
 .avatar a {
