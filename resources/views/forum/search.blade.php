@@ -21,15 +21,15 @@
                     <option value="0">Не имеет значения</option>
 
                     @foreach ($forums as $data)
-                        <?php $selected = (getInput('section') == $data['id'] || $fid == $data['id']) ? ' selected' : ''; ?>
+                        <?php $selected = (getInput('section') == $data->id || $fid == $data->id) ? ' selected' : ''; ?>
 
-                        <option value="{{ $data['id'] }}"{{ $selected }}>{{ $data['title'] }}</option>
+                        <option value="{{ $data->id }}"{{ $selected }}>{{ $data->title }}</option>
 
                         @if ($data->children)
                             @foreach($data->children as $datasub)
-                                <?php $selected = (getInput('section') == $data['id'] || $fid == $datasub['id']) ? ' selected' : ''; ?>
+                                <?php $selected = (getInput('section') == $data->id || $fid == $datasub->id) ? ' selected' : ''; ?>
 
-                                <option value="{{ $datasub['id'] }}"{{ $selected }}>– {{ $datasub['title'] }}</option>
+                                <option value="{{ $datasub->id }}"{{ $selected }}>– {{ $datasub->title }}</option>
                             @endforeach
                         @endif
                     @endforeach
