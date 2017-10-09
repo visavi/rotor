@@ -8,7 +8,7 @@
 
     <h1>Поиск запроса {{ $find }}</h1>
 
-    <p>Найдено совпадений в темах: {{ $page->total }}</p>
+    <p>Найдено совпадений в темах: {{ $page['total'] }}</p>
 
     @foreach ($topics as $topic)
         <div class="b">

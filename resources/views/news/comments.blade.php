@@ -51,7 +51,7 @@
         {{ pagination($page) }}
     @endif
 
-    @if (!$news->closed)
+    @if (! $news->closed)
 
         @if ($comments->isEmpty())
             {{ showError('Комментариев еще нет!') }}

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    {{ $forum->title }} (Стр. {{ $page->current }})
+    {{ $forum->title }} (Стр. {{ $page['current'] }})
 @stop
 
 @section('content')
@@ -17,7 +17,7 @@
     / {{ $forum->title }}
 
     @if (isAdmin())
-        / <a href="/admin/forum?act=forum&amp;fid={{  $forum->id  }}&amp;page={{ $page->current }}">Управление</a>
+        / <a href="/admin/forum?act=forum&amp;fid={{  $forum->id  }}&amp;page={{ $page['current'] }}">Управление</a>
     @endif
 
     @if (getUser() && empty($forum['closed']))
@@ -28,7 +28,7 @@
 
     <hr>
 
-    @if (!$forum->children->isEmpty() && $page->current == 1)
+    @if (!$forum->children->isEmpty() && $page['current'] == 1)
         <div class="act">
 
         @foreach ($forum->children as $child)
