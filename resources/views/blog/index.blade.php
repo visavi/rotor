@@ -15,7 +15,7 @@
     Новые: <a href="/blog/new/articles">статьи</a>, <a href="/blog/new/comments">комментарии</a><hr>
 
     @foreach ($blogs as $key => $data)
-        <i class="fa fa-folder-open"></i> <b><a href="/blog/{{ $data['id'] }}">{{ $data['name'] }}</a></b>
+        <i class="fa fa-folder-open"></i> <b><a href="/blog/{{ $data->id }}">{{ $data->name }}</a></b>
 
         @if ($data->new)
             ({{ $data->count }}/+{{ $data->new->count }})<br>

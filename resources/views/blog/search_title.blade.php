@@ -15,13 +15,13 @@
 
         <div class="b">
             <i class="fa fa-pencil"></i>
-            <b><a href="/article/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({!! formatNum($data['rating']) !!})
+            <b><a href="/article/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
         </div>
 
         <div>
-            Категория: <a href="/blog/{{ $data['category_id'] }}">{{ $data['name'] }}</a><br>
-            Просмотров: {{ $data['visits'] }}<br>
-            Автор: {!! profile($data['user']) !!}  ({{ dateFixed($data['created_at']) }})
+            Категория: <a href="/blog/{{ $data->category_id }}">{{ $data->name }}</a><br>
+            Просмотров: {{ $data->visits }}<br>
+            Автор: {!! profile($data->user) !!}  ({{ dateFixed($data->created_at) }})
         </div>
     @endforeach
 

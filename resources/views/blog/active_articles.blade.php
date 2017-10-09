@@ -12,12 +12,12 @@
         @foreach ($blogs as $data)
             <div class="b">
                 <i class="fa fa-pencil"></i>
-                <b><a href="/article/{{ $data['id'] }}">{{ $data['title'] }}</a></b> ({!! formatNum($data['rating']) !!})
+                <b><a href="/article/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
             </div>
 
-            <div>Автор: {!! profile($data['user']) !!} ({{ dateFixed($data['time']) }})<br>
-                <i class="fa fa-comment"></i> <a href="/article/{{ $data['id'] }}/comments">Комментарии</a> ({{ $data['comments'] }})
-                <a href="/article/{{ $data['id'] }}/end">&raquo;</a>
+            <div>Автор: {!! profile($data->user) !!} ({{ dateFixed($data->time) }})<br>
+                <i class="fa fa-comment"></i> <a href="/article/{{ $data->id }}/comments">Комментарии</a> ({{ $data->comments }})
+                <a href="/article/{{ $data->id }}/end">&raquo;</a>
             </div>
         @endforeach
 

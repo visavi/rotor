@@ -7,21 +7,21 @@
 @section('content')
     <h1>Поиск по тегам</h1>
 
-    <h3>Поиск запроса &quot;<?= $tag ?>&quot; в метках</h3>
-    Найдено совпадений: <b><?= $page['total'] ?></b><br>
+    <h3>Поиск запроса &quot;{{ $tag }}&quot; в метках</h3>
+    Найдено совпадений: <b>{{ $page['total'] }}</b><br>
 
     <?php foreach($blogs as $data): ?>
 
         <div class="b">
             <i class="fa fa-pencil"></i>
-            <b><a href="/article/<?=$data['id']?>"><?=$data['title']?></a></b> (<?=formatNum($data['rating'])?>)
+            <b><a href="/article/{{ $data->id }}">{{ $data->title }}</a></b> (<?=formatNum($data->rating)?>)
         </div>
 
         <div>
-            Категория: <a href="/blog/<?=$data['category_id']?>"><?=$data['name']?></a><br>
-            Просмотров: <?=$data['visits']?><br>
-            Метки: <?=$data['tags']?><br>
-            Автор: <?=profile($data['user'])?>  (<?=dateFixed($data['created_at'])?>)
+            Категория: <a href="/blog/{{ $data->category_id }}">{{ $data->name }}</a><br>
+            Просмотров: {{ $data->visits }}<br>
+            Метки: {{ $data->tags }}<br>
+            Автор: <?= profile($data->user) ?>  (<?=dateFixed($data->created_at)?>)
         </div>
     <?php endforeach; ?>
 
