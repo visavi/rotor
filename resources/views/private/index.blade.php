@@ -12,21 +12,21 @@
         <div style="text-align:center"><b><span style="color:#ff0000">Получено новых писем: {{ getUser('newprivat') }}</span></b></div>
     @endif
 
-    @if ($page['total'] >= (setting('limitmail') - (setting('limitmail') / 10)) && $page['total'] < setting('limitmail'))
+    @if ($page->total >= (setting('limitmail') - (setting('limitmail') / 10)) && $page->total < setting('limitmail'))
         <div style="text-align:center"><b><span style="color:#ff0000">Ваш ящик почти заполнен, необходимо очистить или удалить старые сообщения!</span></b></div>
     @endif
 
-    @if ($page['total'] >= setting('limitmail'))
+    @if ($page->total >= setting('limitmail'))
         <div style="text-align:center"><b><span style="color:#ff0000">Ваш ящик переполнен, вы не сможете получать письма пока не очистите его!</span></b></div>
     @endif
 
-    <i class="fa fa-envelope"></i> <b>Входящие ({{ $page['total'] }})</b> /
-    <a href="/private/outbox">Отправленные ({{  $page['totalOutbox'] }})</a>
+    <i class="fa fa-envelope"></i> <b>Входящие ({{ $page->total }})</b> /
+    <a href="/private/outbox">Отправленные ({{  $page->totalOutbox }})</a>
     <hr>
 
     @if ($messages->isNotEmpty())
 
-        <form action="/private/delete?page={{ $page['current'] }}" method="post">
+        <form action="/private/delete?page={{ $page->current }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
             <div class="form">
                 <input type="checkbox" id="all" onchange="var o=this.form.elements;for(var i=0;i&lt;o.length;i++)o[i].checked=this.checked">
@@ -38,16 +38,16 @@
                 <div class="b">
                     <div class="img">{!! userAvatar($data->author) !!}</div>
                     @if ($data->author->id)
-                        <b>{!! profile($data->author) !!}</b> ({{ dateFixed($data['created_at']) }})<br>
+                        <b>{!! profile($data->author) !!}</b> ({{ dateFixed($data->created_at) }})<br>
                         {!! userStatus($data->author) !!} {!! userOnline($data->author) !!}
                     @else
                         <b>Система</b>
                     @endif
 
                 </div>
-                <div>{!! bbCode($data['text']) !!}<br>
+                <div>{!! bbCode($data->text) !!}<br>
 
-                    <input type="checkbox" name="del[]" value="{{ $data['id'] }}">
+                    <input type="checkbox" name="del[]" value="{{ $data->id }}">
 
                     @if ($data->author->id)
 
@@ -57,7 +57,7 @@
                         <a href="/ignore?act=add&amp;uz={{ $data->author->login }}&amp;token={{ $_SESSION['token'] }}">Игнор</a>
                         /
 
-                        <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Inbox::class }} " data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                        <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Inbox::class }} " data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
                     @endif
 
                 </div>
@@ -67,7 +67,7 @@
 
         {{ pagination($page) }}
 
-        Всего писем: <b>{{ $page['total'] }}</b><br>
+        Всего писем: <b>{{ $page->total }}</b><br>
         Объем ящика: <b>{{ setting('limitmail') }}</b><br><br>
 
         <i class="fa fa-times"></i> <a href="/private/clear?token={{ $_SESSION['token'] }}">Очистить ящик</a><br>
