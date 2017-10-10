@@ -20,7 +20,7 @@ class KeyGenerate extends AbstractCommand
     }
 
     /**
-     * Setting permissions on folders
+     * Setting application key
      *
      * @param InputInterface $input
      * @param OutputInterface $output

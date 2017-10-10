@@ -20,7 +20,7 @@ class CacheClear extends AbstractCommand
     }
 
     /**
-     * Setting permissions on folders
+     * Cache cleared
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -28,6 +28,14 @@ class CacheClear extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $cacheFiles = glob(STORAGE.'/cache/*.php');
+
+        if ($cacheFiles) {
+            foreach ($cacheFiles as $file) {
+                unlink($file);
+            }
+        }
+
         $output->writeln('<info>Cache cleared successfully.</info>');
     }
 }

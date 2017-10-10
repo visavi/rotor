@@ -37,7 +37,7 @@ RotorCMS 7.0
 
 `CREATE DATABASE rotorcms CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
 
-7. Установите права на запись всем директория внутри `public/uploads` и `app/storage`
+7. Установите права на запись всем директориям внутри `public/uploads` и `storage` или выполните команду `php rotor install`
 
 8. Выполните миграции с помощью консольной команды `php rotor migrate`
 
