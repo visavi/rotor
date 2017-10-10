@@ -165,7 +165,9 @@ $router->map('GET', '/faq', 'PageController@faq');
 $router->map('GET', '/statusfaq', 'PageController@statusfaq');
 $router->map('GET', '/surprise', 'PageController@surprise');
 
-$router->map('GET|POST', '/offers', 'pages/offers.php');
+$router->map('GET', '/offers/[offer|issue:type]?', 'OfferController@index');
+$router->map('GET', '/offers/[i:id]', 'OfferController@view');
+
 $router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
 
 $router->map('GET|POST', '/pictures', 'PictureController@index');

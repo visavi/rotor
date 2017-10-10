@@ -1,238 +1,24 @@
 <?php
-view(setting('themes').'/index');
 
-if (isset($_GET['act'])) {
-    $act = check($_GET['act']);
-} else {
-    $act = 'index';
-}
-if (isset($_GET['sort'])) {
-    $sort = check($_GET['sort']);
-} else {
-    $sort = 'vote';
-}
-if (isset($_GET['id'])) {
-    $id = abs(intval($_GET['id']));
-} else {
-    $id = 0;
-}
+
 if (isset($_GET['type'])) {
     $type = abs(intval($_GET['type']));
 } else {
     $type = 0;
 }
-$page = abs(intval(Request::input('page', 1)));
 
-//show_title('Предложения и проблемы');
+
 
 switch ($action):
-############################################################################################
-##                                    Главная страница                                    ##
-############################################################################################
-    case 'index':
-        $type2 = (empty($type))? 1 : 0;
-
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type]);
-        $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [$type2]);
-
-        $page = paginate(setting('postoffers'), $total);
-
-        echo '<i class="fa fa-book"></i> ';
-
-        if (empty($type)) {
-            echo '<b>Предложения</b> ('.$total.') / <a href="/offers?type=1">Проблемы</a> ('.$total2.')';
-        } else {
-            echo '<a href="/offers?type=0">Предложения</a> ('.$total2.') / <b>Проблемы</b> ('.$total.')';
-        }
-
-        if (isAdmin([101, 102])) {
-            echo ' / <a href="/admin/offers?type='.$type.'&amp;page='.$page['current'].'">Управление</a>';
-        }
-
-        switch ($sort) {
-            case 'time': $order = 'time';
-                break;
-            case 'stat': $order = 'status';
-                break;
-            case 'comm': $order = 'comments';
-                break;
-            default: $order = 'votes';
-        }
-
-        echo '<br>Сортировать: ';
-
-        if ($order == 'votes') {
-            echo '<b>Голоса</b> / ';
-        } else {
-            echo '<a href="/offers?type='.$type.'&amp;sort=vote">Голоса</a> / ';
-        }
-
-        if ($order == 'time') {
-            echo '<b>Дата</b> / ';
-        } else {
-            echo '<a href="/offers?type='.$type.'&amp;sort=time">Дата</a> / ';
-        }
-
-        if ($order == 'status') {
-            echo '<b>Статус</b> / ';
-        } else {
-            echo '<a href="/offers?type='.$type.'&amp;sort=stat">Статус</a> / ';
-        }
-
-        if ($order == 'comments') {
-            echo '<b>Комментарии</b>';
-        } else {
-            echo '<a href="/offers?type='.$type.'&amp;sort=comm">Комментарии</a>';
-        }
-
-        echo '<hr>';
-
-        if ($total > 0) {
-
-            $queryoffers = DB::select("SELECT * FROM `offers` WHERE `type`=? ORDER BY ".$order." DESC LIMIT ".$page['offset'].", ".setting('postoffers').";", [$type]);
-
-            while ($data = $queryoffers -> fetch()) {
-                echo '<div class="b">';
-                echo '<i class="fa fa-file-o"></i> ';
-                echo '<b><a href="/offers?act=view&amp;type='.$type.'&amp;id='.$data['id'].'">'.$data['title'].'</a></b> (Голосов: '.$data['votes'].')<br>';
-
-                switch ($data['status']) {
-                    case '1': echo '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b>';
-                        break;
-                    case '2': echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Выполнено</span></b>';
-                        break;
-                    case '3': echo '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">Закрыто</span></b>';
-                        break;
-                    default: echo '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">Под вопросом</span></b>';
-                }
-
-                echo '</div>';
-                echo '<div>'.bbCode($data['text']).'<br>';
-                echo 'Добавлено: '.profile($data['user']).' ('.dateFixed($data['time']).')<br>';
-                echo '<a href="/offers?act=comments&amp;id='.$data['id'].'">Комментарии</a> ('.$data['comments'].') ';
-                echo '<a href="/offers?act=end&amp;id='.$data['id'].'">&raquo;</a></div>';
-            }
-
-            pagination($page);
-
-            echo 'Всего записей: <b>'.$total.'</b><br><br>';
-        } else {
-            showError('Записей еще нет!');
-        }
-
-        echo '<i class="fa fa-check"></i> <a href="/offers?act=new">Добавить</a><br>';
-    break;
 
     ############################################################################################
     ##                                     Просмотр записи                                    ##
     ############################################################################################
     case 'view':
 
-        $total = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [0]);
-        $total2 = DB::run() -> querySingle("SELECT count(*) FROM `offers` WHERE `type`=?;", [1]);
 
-        echo '<i class="fa fa-book"></i> <a href="/offers?type=0">Предложения</a>  ('.$total.') / ';
-        echo '<a href="/offers?type=1">Проблемы</a> ('.$total2.')';
 
-        if (isAdmin([101, 102])) {
-            echo ' / <a href="/admin/offers?act=view&amp;id='.$id.'">Управление</a>';
-        }
-        echo '<hr>';
 
-        $queryoff = DB::run() -> queryFetch("SELECT * FROM `offers` WHERE `id`=? LIMIT 1;", [$id]);
-        if (!empty($queryoff)) {
-            //setting('newtitle') = $queryoff['title'];
-
-            echo '<div class="b">';
-            echo '<i class="fa fa-file-o"></i> ';
-            echo '<b>'.$queryoff['title'].'</b> (Голосов: '.$queryoff['votes'].')<br>';
-
-            switch ($queryoff['status']) {
-                case '1': echo '<i class="fa fa-spinner"></i> <b><span style="color:#0000ff">В процессе</span></b>';
-                    break;
-                case '2': echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Выполнено</span></b>';
-                    break;
-                case '3': echo '<i class="fa fa-times-circle"></i> <b><span style="color:#ff0000">Закрыто</span></b>';
-                    break;
-                default: echo '<i class="fa fa-question-circle"></i> <b><span style="color:#ffa500">Под вопросом</span></b>';
-            }
-
-            echo '</div>';
-
-            if ($queryoff['status'] <= 1 && getUser('login') == $queryoff['user']) {
-                echo '<div class="right"><a href="/offers?act=edit&amp;id='.$id.'">Редактировать</a></div>';
-            }
-
-            echo '<div>'.bbCode($queryoff['text']).'<br>';
-            echo 'Добавлено: '.profile($queryoff['user']).' ('.dateFixed($queryoff['time']).')<br>';
-
-            if ($queryoff['status'] <= 1 && getUser('login') != $queryoff['user']) {
-                $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['offer', $id, getUser('login')]);
-
-                if (empty($queryrated)) {
-                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br>';
-                } else {
-                    echo '<b><a href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-down"></i> Передумал</a></b><br>';
-                }
-            }
-
-            echo '<a href="/offers?act=comments&amp;id='.$id.'">Комментарии</a> ('.$queryoff['comments'].') ';
-            echo '<a href="/offers?act=end&amp;id='.$id.'">&raquo;</a></div><br>';
-
-            if (!empty($queryoff['text_reply'])) {
-                echo '<div class="b"><b>Официальный ответ</b></div>';
-                echo '<div class="q">'.bbCode($queryoff['text_reply']).'<br>';
-                echo profile($queryoff['user_reply']).' ('.dateFixed($queryoff['time_reply']).')</div><br>';
-            }
-            // ------------------------------------------------//
-            echo '<div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br>';
-
-            if ($queryoff['comments'] > 0) {
-                $querycomm = DB::select("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 5;", ['offer', $id]);
-
-                while ($comm = $querycomm -> fetch()) {
-                    echo '<div class="b">';
-                    echo '<div class="img">'.userAvatar($comm['user']).'</div>';
-
-                    echo '<b>'.profile($comm['user']).'</b>';
-                    echo '<small> ('.dateFixed($comm['time']).')</small><br>';
-                    echo userStatus($comm['user']).' '.userOnline($comm['user']).'</div>';
-
-                    echo '<div>'.bbCode($comm['text']).'<br>';
-
-                    if (isAdmin()) {
-                        echo '<span class="data">('.$comm['brow'].', '.$comm['ip'].')</span>';
-                    }
-
-                    echo '</div>';
-                }
-                echo '<br>';
-            } else {
-                showError('Комментариев еще нет!');
-            }
-
-            if (getUser()) {
-                if (empty($queryoff['closed'])) {
-                    echo '<div class="form"><form action="/offers?act=addcomm&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'" method="post">';
-                    echo '<b>Комментарий:</b><br>';
-                    echo '<textarea cols="25" rows="5" name="msg"></textarea><br>';
-                    echo '<input type="submit" value="Написать"></form></div>';
-
-                    echo '<br>';
-                    echo '<a href="/rules">Правила</a> / ';
-                    echo '<a href="/smiles">Смайлы</a> / ';
-                    echo '<a href="/tags">Теги</a><br><br>';
-                } else {
-                    showError('Комментирование данного предложения или проблемы закрыто!');
-                }
-            } else {
-                showError('Для добавления сообщения необходимо авторизоваться');
-            }
-        } else {
-            showError('Ошибка! Данного предложения или проблемы не существует!');
-        }
-
-        echo '<i class="fa fa-arrow-circle-left"></i> <a href="/offers?type='.$type.'">Вернуться</a><br>';
     break;
 
     ############################################################################################

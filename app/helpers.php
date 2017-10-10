@@ -1412,8 +1412,8 @@ function statsOffers()
 {
     if (@filemtime(STORAGE."/temp/offers.dat") < time()-10800) {
 
-        $offers   = Offer::query()->where('type', 0)->count();
-        $problems = Offer::query()->where('type', 1)->count();
+        $offers   = Offer::query()->where('type', 'offer')->count();
+        $problems = Offer::query()->where('type', 'issue')->count();
 
         file_put_contents(STORAGE."/temp/offers.dat", $offers.'/'.$problems, LOCK_EX);
     }
