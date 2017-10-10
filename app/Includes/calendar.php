@@ -10,7 +10,7 @@ $startMonth   = mktime(0, 0, 0, $date['mon'], 1);
 $newsDays = [];
 $newsIds  = [];
 
-$news = News::where('created_at', '>', $startMonth)->get();
+$news = News::query()->where('created_at', '>', $startMonth)->get();
 
 if ($news->isNotEmpty()) {
     foreach ($news as $data) {

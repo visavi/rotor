@@ -8,12 +8,13 @@ use Illuminate\Database\Capsule\Manager as DB;
 $days  = floor((gmmktime(0, 0, 0, date("m"), date("d"), date("Y")) - gmmktime(0, 0, 0, 1, 1, 1970)) / 86400);
 $hours = floor((gmmktime(date("H"), 0, 0, date("m"), date("d"), date("Y")) - gmmktime((date("Z") / 3600), 0, 0, 1, 1, 1970)) / 3600);
 
-Online::where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
+Online::query()->where('updated_at', '<', SITETIME - setting('timeonline'))->delete();
 
 $newHost = false;
 
 if (getUser()) {
-    $online = Online::where('ip', getClientIp())
+    $online = Online::query()
+        ->where('ip', getClientIp())
         ->orWhere('user_id', getUser('id'))
         ->orderByRaw('user_id = ? desc', [getUser('id')])
         ->first();
@@ -26,7 +27,7 @@ if (getUser()) {
             'user_id'    => getUser('id'),
         ]);
     } else {
-        Online::create([
+        Online::query()->create([
             'ip'         => getClientIp(),
             'brow'       => getUserAgent(),
             'updated_at' => SITETIME,
@@ -35,7 +36,8 @@ if (getUser()) {
         $newHost = true;
     }
 } else {
-    $online = Online::where('ip', getClientIp())
+    $online = Online::query()
+        ->where('ip', getClientIp())
         ->orderByRaw('user_id IS NULL desc')
         ->first();
 
@@ -46,7 +48,7 @@ if (getUser()) {
             'user_id'    => null,
         ]);
     } else {
-        Online::create([
+        Online::query()->create([
             'ip'         => getClientIp(),
             'brow'       => getUserAgent(),
             'updated_at' => SITETIME,
@@ -55,7 +57,7 @@ if (getUser()) {
     }
 }
 // -----------------------------------------------------------//
-$counter = Counter::first();
+$counter = Counter::query()->first();
 
 if ($counter->hours != $hours) {
     DB::insert("insert ignore into `counter24` (`hour`, `hosts`, `hits`) values (?, ?, ?);", [$hours, $counter->hosts24, $counter->hits24]);
@@ -69,7 +71,8 @@ if ($counter->days != $days) {
     DB::delete("delete from `counter31` where `days` < (select min(`days`) from (select `days` from `counter31` order by `days` desc limit 31) as del);");
     // ---------------------------------------------------//
 
-    $week = Counter31::orderBy('days', 'desc')
+    $week = Counter31::query()
+        ->orderBy('days', 'desc')
         ->limit(6)
         ->pluck('hosts', 'days')
         ->all();

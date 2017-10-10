@@ -36,6 +36,18 @@ class CacheClear extends AbstractCommand
             }
         }
 
+        $cacheFiles = glob(STORAGE.'/temp/*.dat');
+        $cacheFiles = array_diff($cacheFiles, [
+            STORAGE.'/temp/checker.dat',
+            STORAGE.'/temp/counter7.dat',
+        ]);
+
+        if ($cacheFiles){
+            foreach ($cacheFiles as $file) {
+                unlink ($file);
+            }
+        }
+
         $output->writeln('<info>Cache cleared successfully.</info>');
     }
 }
