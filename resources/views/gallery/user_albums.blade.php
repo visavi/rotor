@@ -13,7 +13,7 @@
         @foreach ($photos as $data)
             <div class="b">
                 <i class="fa fa-picture-o"></i>
-                <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(HOME.'/uploads/pictures/'.$data->link) }})<br>
+                <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }})<br>
 
                 @if ($moder)
                     <a href="/gallery/{{ $data->id }}/edit?page={{ $page['current'] }}">Редактировать</a> /

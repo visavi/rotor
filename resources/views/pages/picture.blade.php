@@ -9,7 +9,7 @@
     <h1>Загрузка фотографии</h1>
 
     <div class="form">
-        @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
+        @if (!empty($user['picture']) && file_exists(UPLOADS.'/photos/'.$user['picture']))
             {!! resizeImage('uploads/photos/', $user['picture'], setting('previewsize'), ['alt' => $user['login'], 'class' => 'img-fluid rounded']) !!}
         @else
             <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото">

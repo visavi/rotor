@@ -13,7 +13,7 @@ if ($total > 0) {
     while ($data = $querydown -> fetch()) {
         $folder = $data['folder'] ? $data['folder'].'/' : '';
 
-        $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+        $filesize = (!empty($data['link'])) ? formatFileSize(UPLOADS.'/files/'.$folder.$data['link']) : 0;
 
         echo '<div class="b">';
 

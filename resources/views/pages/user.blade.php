@@ -89,7 +89,7 @@
             </div>
 
             <div class="col-md-6">
-                @if (!empty($user['picture']) && file_exists(HOME.'/uploads/photos/'.$user['picture']))
+                @if (!empty($user['picture']) && file_exists(UPLOADS.'/photos/'.$user['picture']))
                     <a class="gallery" href="/uploads/photos/{{ $user['picture'] }}">
                         {!! resizeImage('uploads/photos/', $user['picture'], setting('previewsize'), ['alt' => $user['login'], 'class' => 'float-right img-fluid rounded']) !!}</a>
                 @else

@@ -23,7 +23,7 @@
 
                     <div class="col-6 col-md-push-6">
                         <div class="float-right">
-                            @if ($user->picture && file_exists(HOME.'/uploads/photos/'.$user->picture))
+                            @if ($user->picture && file_exists(UPLOADS.'/photos/'.$user->picture))
                                 <a class="gallery" href="/uploads/photos/{{ getUser('picture') }}">
                                     {!! resizeImage('uploads/photos/', getUser('picture'), setting('previewsize'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) !!}
                                 </a>

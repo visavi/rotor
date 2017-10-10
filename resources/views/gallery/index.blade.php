@@ -29,7 +29,7 @@ $links = [
 
             <div class="b"><i class="fa fa-picture-o"></i>
                 <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b>
-                ({{ formatFileSize(HOME.'/uploads/pictures/'.$data->link) }}) (Рейтинг: {!! formatNum($data->rating) !!})
+                ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }}) (Рейтинг: {!! formatNum($data->rating) !!})
             </div>
 
             <div>

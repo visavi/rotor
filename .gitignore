@@ -1,7 +1,4 @@
-/resources/storage/antidos/
-/resources/storage/backup/
-/resources/storage/cache/
-/resources/storage/temp/
+
 /public/uploads/files/
 /public/uploads/screen/
 /public/uploads/loader/

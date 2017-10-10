@@ -74,7 +74,7 @@ case 'load':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utfLower($_POST['code'])) : '';
 
-    if (is_writeable(HOME.'/uploads/smiles')){
+    if (is_writeable(UPLOADS.'/smiles')){
 
         $smile = Smile::where('code', $code)->find_one();
 
@@ -102,7 +102,7 @@ case 'load':
                 $handle -> image_max_height = setting('smilemaxweight'); // px
                 $handle -> image_min_width = setting('smileminweight');   // px
                 $handle -> image_min_height = setting('smileminweight');  // px
-                $handle -> process(HOME.'/uploads/smiles/');
+                $handle -> process(UPLOADS.'/smiles/');
 
                 if ($handle -> processed) {
 
@@ -206,14 +206,14 @@ case 'del':
 
     if ($uid == $_SESSION['token']) {
         if (! empty($del)) {
-            if (is_writeable(HOME.'/uploads/smiles')){
+            if (is_writeable(UPLOADS.'/smiles')){
 
                 $arr_smiles = Smile::select('name')->where_id_in($del)->find_many();
 
                 if (count($arr_smiles)>0){
                     foreach ($arr_smiles as $delfile) {
-                        if (file_exists(HOME.'/uploads/smiles/'.$delfile['name'])) {
-                            unlink(HOME.'/uploads/smiles/'.$delfile['name']);
+                        if (file_exists(UPLOADS.'/smiles/'.$delfile['name'])) {
+                            unlink(UPLOADS.'/smiles/'.$delfile['name']);
                         }
                     }
                 }

@@ -549,8 +549,8 @@ if (isAdmin()) {
 
                     // ------ Удаление загруженных файлов -------//
                     foreach($del as $topicId){
-                        removeDir(HOME.'/uploads/forum/'.$topicId);
-                        array_map('unlink', glob(HOME.'/uploads/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
+                        removeDir(UPLOADS.'/forum/'.$topicId);
+                        array_map('unlink', glob(UPLOADS.'/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
 
                         // Выбирает files.id только если они есть в posts
                         $delPosts = Post::where('topic_id', $topicId)

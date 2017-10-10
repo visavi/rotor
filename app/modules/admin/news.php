@@ -94,10 +94,10 @@ case 'edit':
         echo '<input type="text" name="title" size="50" maxlength="50" value="'.$datanews['title'].'"><br>';
         echo '<textarea id="markItUp" cols="25" rows="10" name="msg">'.$datanews['text'].'</textarea><br>';
 
-        if (!empty($datanews['image']) && file_exists(HOME.'/uploads/news/'.$datanews['image'])){
+        if (!empty($datanews['image']) && file_exists(UPLOADS.'/news/'.$datanews['image'])){
 
             echo '<a href="/uploads/news/'.$datanews['image'].'">'.resizeImage('uploads/news/', $datanews['image'], 75, ['alt' => $datanews['title']]).'</a><br>';
-            echo '<b>'.$datanews['image'].'</b> ('.formatFileSize(HOME.'/uploads/news/'.$datanews['image']).')<br><br>';
+            echo '<b>'.$datanews['image'].'</b> ('.formatFileSize(UPLOADS.'/news/'.$datanews['image']).')<br><br>';
         }
 
         echo 'Прикрепить картинку:<br><input type="file" name="image"><br><br>';
@@ -152,7 +152,7 @@ case 'change':
                     deleteImage('uploads/news/', $datanews['image']);
                 }
 
-                $handle -> process(HOME.'/uploads/news/');
+                $handle -> process(UPLOADS.'/news/');
 
                 if ($handle -> processed) {
 
@@ -232,7 +232,7 @@ case 'addnews':
         $handle = uploadImage($_FILES['image'], setting('filesize'), setting('fileupfoto'), $lastid);
         if ($handle) {
 
-            $handle -> process(HOME.'/uploads/news/');
+            $handle -> process(UPLOADS.'/news/');
 
             if ($handle -> processed) {
                 DB::update("UPDATE `news` SET `image`=? WHERE `id`=? LIMIT 1;", [$handle -> file_dst_name, $lastid]);
@@ -289,7 +289,7 @@ case 'del':
 
     if ($token == $_SESSION['token']) {
         if (!empty($del)) {
-            if (is_writeable(HOME.'/uploads/news')){
+            if (is_writeable(UPLOADS.'/news')){
 
                 $del = implode(',', $del);
 

@@ -105,12 +105,12 @@ case 'waiting':
             echo '<div>';
             echo 'Категория: '.$data['name'].'<br>';
             if (!empty($data['link'])) {
-                echo 'Файл: '.$data['link'].' ('.formatFileSize(HOME.'/uploads/files/'.$data['link']).')<br>';
+                echo 'Файл: '.$data['link'].' ('.formatFileSize(UPLOADS.'/files/'.$data['link']).')<br>';
             } else {
                 echo 'Файл: <span style="color:#ff0000">Не загружен</span><br>';
             }
             if (!empty($data['screen'])) {
-                echo 'Скрин: '.$data['screen'].' ('.formatFileSize(HOME.'/uploads/files/'.$data['screen']).')<br>';
+                echo 'Скрин: '.$data['screen'].' ('.formatFileSize(UPLOADS.'/files/'.$data['screen']).')<br>';
             } else {
                 echo 'Скрин: <span style="color:#ff0000">Не загружен</span><br>';
             }
@@ -240,7 +240,7 @@ case 'view':
 
                     } else {
 
-                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(HOME.'/uploads/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
+                        echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(UPLOADS.'/files/'.$folder.$new['link']).') (<a href="/load/add?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
 
                         $ext = getExtension($new['link']);
                         if ($ext != 'jpg' && $ext != 'jpeg' && $ext != 'gif' && $ext != 'png') {
@@ -255,7 +255,7 @@ case 'view':
                                 echo 'Требуемый размер скриншота: от 100 до '.setting('screenupsize').' px</div><br><br>';
 
                             } else {
-                                echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                                echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/load/add?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
                                 echo resizeImage('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                             }
                         }
@@ -410,7 +410,7 @@ case 'loadfile':
         if ($down['user'] == getUser('login')) {
             if (empty($down['active'])) {
                 if (empty($down['link'])) {
-                    if (is_writeable(HOME.'/uploads/files/'.$folder)) {
+                    if (is_writeable(UPLOADS.'/files/'.$folder)) {
                     if (isset($_FILES['loadfile']) && is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
 
                         $filename = check(strtolower($_FILES['loadfile']['name']));
@@ -426,10 +426,10 @@ case 'loadfile':
                                         $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
                                         if (empty($downlink)) {
 
-                                            move_uploaded_file($_FILES['loadfile']['tmp_name'], HOME.'/uploads/files/'.$folder.$filename);
-                                            @chmod(HOME.'/uploads/files/'.$folder.$filename, 0666);
+                                            move_uploaded_file($_FILES['loadfile']['tmp_name'], UPLOADS.'/files/'.$folder.$filename);
+                                            @chmod(UPLOADS.'/files/'.$folder.$filename, 0666);
 
-                                            copyrightArchive(HOME.'/uploads/files/'.$folder.$filename);
+                                            copyrightArchive(UPLOADS.'/files/'.$folder.$filename);
 
                                             DB::update("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
@@ -532,7 +532,7 @@ case 'loadscreen':
                         if ($handle) {
                             $folder = $down['folder'] ? $down['folder'].'/' : '';
 
-                            $handle -> process(HOME.'/uploads/screen/'.$folder);
+                            $handle -> process(UPLOADS.'/screen/'.$folder);
                             if ($handle -> processed) {
 
                                 DB::update("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$handle -> file_dst_name, $id]);
@@ -578,8 +578,8 @@ case 'delfile':
             if (empty($link['active'])) {
                 $folder = $link['folder'] ? $link['folder'].'/' : '';
 
-                if (!empty($link['link']) && file_exists(HOME.'/uploads/files/'.$folder.$link['link'])) {
-                    unlink(HOME.'/uploads/files/'.$folder.$link['link']);
+                if (!empty($link['link']) && file_exists(UPLOADS.'/files/'.$folder.$link['link'])) {
+                    unlink(UPLOADS.'/files/'.$folder.$link['link']);
                 }
 
                 deleteImage('uploads/files/'.$folder, $link['link']);

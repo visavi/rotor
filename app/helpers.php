@@ -104,8 +104,8 @@ function deleteImage($dir, $image)
         unlink(HOME.'/'.$dir.$image);
     }
 
-    if (file_exists(HOME.'/uploads/thumbnail/'.$path)) {
-        unlink(HOME.'/uploads/thumbnail/'.$path);
+    if (file_exists(UPLOADS.'/thumbnail/'.$path)) {
+        unlink(UPLOADS.'/thumbnail/'.$path);
     }
 }
 
@@ -564,7 +564,7 @@ function userAvatar(User $user)
         return '<img src="/assets/img/images/avatar_guest.png" alt=""> ';
     }
 
-    if ($user->avatar && file_exists(HOME.'/uploads/avatars/'.$user->avatar)) {
+    if ($user->avatar && file_exists(UPLOADS.'/avatars/'.$user->avatar)) {
         return '<a href="/user/'.$user->login.'"><img src="/uploads/avatars/'.$user->avatar.'" alt=""></a> ';
     }
 
@@ -1380,7 +1380,7 @@ function recentFiles($show = 5)
     if ($files->isNotEmpty()) {
         foreach ($files as $file){
 
-            $filesize = $file['link'] ? formatFileSize(HOME.'/uploads/files/'.$file['link']) : 0;
+            $filesize = $file['link'] ? formatFileSize(UPLOADS.'/files/'.$file['link']) : 0;
             echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
         }
     }
@@ -1576,7 +1576,7 @@ function resizeImage($dir, $name, $size, $params = [])
             return '<img src="/'.$dir.$name.'"'.$strParams.'>';
         }
 
-        if (!file_exists(HOME.'/uploads/thumbnail/'.$prename) || filesize(HOME.'/uploads/thumbnail/'.$prename) < 18) {
+        if (!file_exists(UPLOADS.'/thumbnail/'.$prename) || filesize(UPLOADS.'/thumbnail/'.$prename) < 18) {
             $handle = new upload(HOME.'/'.$dir.$name);
 
             if ($handle -> uploaded) {
@@ -1587,7 +1587,7 @@ function resizeImage($dir, $name, $size, $params = [])
                 $handle -> image_y = $size;
                 $handle -> image_x = $size;
                 $handle -> file_overwrite = true;
-                $handle -> process(HOME.'/uploads/thumbnail/');
+                $handle -> process(UPLOADS.'/thumbnail/');
             }
         }
         return '<img src="/uploads/thumbnail/'.$prename.'"'.$strParams.'>';

@@ -6,7 +6,7 @@ use Phinx\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Install extends AbstractCommand
+class CacheClear extends AbstractCommand
 {
     /**
      * {@inheritdoc}
@@ -15,8 +15,8 @@ class Install extends AbstractCommand
     {
         parent::configure();
 
-        $this->setName('install')
-             ->setDescription('Setting permissions on folders');
+        $this->setName('cache:clear')
+             ->setDescription('Flush the application cache');
     }
 
     /**
@@ -28,17 +28,6 @@ class Install extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $storage = glob(STORAGE.'/*', GLOB_ONLYDIR);
-        $uploads = glob(UPLOADS.'/*', GLOB_ONLYDIR);
-
-        $dirs = array_merge($storage, $uploads);
-
-        foreach ($dirs as $dir) {
-            $old = umask(0);
-            chmod ($dir, 0777);
-            umask($old);
-        }
-
-        $output->writeln('<info>Setting permission successfully.</info>');
+        $output->writeln('<info>Cache cleared successfully.</info>');
     }
 }

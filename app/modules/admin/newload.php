@@ -38,12 +38,12 @@ if (isAdmin()) {
                     echo 'Категория: <a href="/load/down?cid='.$data['category_id'].'">'.$data['name'].'</a><br>';
                     echo 'Добавлено: '.profile($data['user']).'<br>';
                     if (!empty($data['link'])) {
-                        echo 'Файл: '.$data['link'].' ('.formatFileSize(HOME.'/uploads/files/'.$data['link']).')<br>';
+                        echo 'Файл: '.$data['link'].' ('.formatFileSize(UPLOADS.'/files/'.$data['link']).')<br>';
                     } else {
                         echo 'Файл: Не загружен<br>';
                     }
                     if (!empty($data['screen'])) {
-                        echo 'Скрин: '.$data['screen'].' ('.formatFileSize(HOME.'/uploads/screen/'.$data['screen']).')<br>';
+                        echo 'Скрин: '.$data['screen'].' ('.formatFileSize(UPLOADS.'/screen/'.$data['screen']).')<br>';
                     } else {
                         echo 'Скрин: Не загружен<br>';
                     }
@@ -84,13 +84,13 @@ if (isAdmin()) {
                         $folder = $new['folder'] ? $new['folder'].'/' : '';
 
                         if (!empty($new['link'])) {
-                            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(HOME.'/uploads/files/'.$folder.$new['link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
+                            echo '<i class="fa fa-download"></i> <b><a href="/uploads/files/'.$folder.$new['link'].'">'.$new['link'].'</a></b> ('.formatFileSize(UPLOADS.'/files/'.$folder.$new['link']).')  (<a href="/admin/newload?act=delfile&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный файл?\')">Удалить</a>)<br>';
                         } else {
                             echo '<i class="fa fa-download"></i> <b>Не загружен</b><br>';
                         }
 
                         if (!empty($new['screen'])) {
-                            echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(HOME.'/uploads/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                            echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
                             echo resizeImage('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                         } else {
                             echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br>';
@@ -204,7 +204,7 @@ if (isAdmin()) {
                                                         $newtitle = DB::run() -> querySingle("SELECT `title` FROM `downs` WHERE `title`=? AND `id`<>? LIMIT 1;", [$title, $id]);
                                                         if (empty($newtitle)) {
 
-                                                            if (!empty($link) && $link != $new['link'] && file_exists(HOME.'/uploads/files/'.$folder.$new['link'])) {
+                                                            if (!empty($link) && $link != $new['link'] && file_exists(UPLOADS.'/files/'.$folder.$new['link'])) {
 
                                                                 $oldext = getExtension($new['link']);
                                                                 $newext = getExtension($link);
@@ -212,12 +212,12 @@ if (isAdmin()) {
                                                                 if ($oldext == $newext) {
 
                                                                     $screen = $new['screen'];
-                                                                    rename(HOME.'/uploads/files/'.$folder.$new['link'], HOME.'/uploads/files/'.$folder.$link);
+                                                                    rename(UPLOADS.'/files/'.$folder.$new['link'], UPLOADS.'/files/'.$folder.$link);
 
-                                                                    if (!empty($new['screen']) && file_exists(HOME.'/uploads/screen/'.$folder.$new['screen'])) {
+                                                                    if (!empty($new['screen']) && file_exists(UPLOADS.'/screen/'.$folder.$new['screen'])) {
 
                                                                         $screen = $link.'.'.getExtension($new['screen']);
-                                                                        rename(HOME.'/uploads/screen/'.$folder.$new['screen'], HOME.'/uploads/screen/'.$screen);
+                                                                        rename(UPLOADS.'/screen/'.$folder.$new['screen'], UPLOADS.'/screen/'.$screen);
                                                                         deleteImage('uploads/screen/'.$folder, $new['screen']);
                                                                     }
                                                                     DB::update("UPDATE `downs` SET `link`=?, `screen`=? WHERE `id`=?;", [$link, $screen, $id]);
@@ -341,8 +341,8 @@ if (isAdmin()) {
             if (!empty($link)) {
                 if (empty($link['active'])) {
 
-                    if (!empty($link['link']) && file_exists(HOME.'/uploads/files/'.$folder.$link['link'])) {
-                        unlink(HOME.'/uploads/files/'.$folder.$link['link']);
+                    if (!empty($link['link']) && file_exists(UPLOADS.'/files/'.$folder.$link['link'])) {
+                        unlink(UPLOADS.'/files/'.$folder.$link['link']);
                     }
 
                     deleteImage('uploads/screen/'.$folder, $link['screen']);
@@ -418,8 +418,8 @@ if (isAdmin()) {
                     foreach ($arr_files as $delfile) {
                         $folder = $delfile['folder'] ? $delfile['folder'].'/' : '';
 
-                        if (!empty($delfile['link']) && file_exists(HOME.'/uploads/files/'.$folder.$delfile['link'])) {
-                            unlink(HOME.'/uploads/files/'.$folder.$delfile['link']);
+                        if (!empty($delfile['link']) && file_exists(UPLOADS.'/files/'.$folder.$delfile['link'])) {
+                            unlink(UPLOADS.'/files/'.$folder.$delfile['link']);
                         }
 
                         deleteImage('uploads/screen/'.$folder, $delfile['screen']);

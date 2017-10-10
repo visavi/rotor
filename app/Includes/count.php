@@ -71,7 +71,7 @@ imagettftext($img, 6, 0, 13, 23, $color2, HOME.'/assets/fonts/font4.ttf', $count
 imagettftext($img, 6, 0, 13, 29, $color2, HOME.'/assets/fonts/font4.ttf', $count['dayhits']);
 imagettftext($img, 12, 0, $pos, 29, $color2, HOME.'/assets/fonts/font7.ttf', $online[1]);
 
-imagepng($img, HOME.'/uploads/counters/counter_new.png');
+imagepng($img, UPLOADS.'/counters/counter_new.png');
 imagedestroy($img);
 
-rename(HOME.'/uploads/counters/counter_new.png', HOME.'/uploads/counters/counter.png');
+rename(UPLOADS.'/counters/counter_new.png', UPLOADS.'/counters/counter.png');

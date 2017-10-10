@@ -108,7 +108,7 @@ case 'index':
 
                 while ($data = $querydown -> fetch()) {
 
-                    $filesize = (!empty($data['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$data['link']) : 0;
+                    $filesize = (!empty($data['link'])) ? formatFileSize(UPLOADS.'/files/'.$folder.$data['link']) : 0;
 
                     echo '<div class="b">';
                     echo '<i class="fa fa-file-o"></i> ';
@@ -202,7 +202,7 @@ case 'view':
             echo '<div class="message">'.bbCode($downs['text']).'</div><br>';
 
             $poster = '';
-            if (!empty($downs['screen']) && file_exists(HOME.'/uploads/screen/'.$folder.$downs['screen'])) {
+            if (!empty($downs['screen']) && file_exists(UPLOADS.'/screen/'.$folder.$downs['screen'])) {
                 $poster = ' poster="/uploads/screen/'.$folder.$downs['screen'].'"';
 
                 if ($ext != 'mp4') {
@@ -227,7 +227,7 @@ case 'view':
             echo 'Добавлено: '.profile($downs['user']).' ('.dateFixed($downs['time']).')<hr>';
 
             // -----------------------------------------------------------//
-            if (!empty($downs['link']) && file_exists(HOME.'/uploads/files/'.$folder.$downs['link'])) {
+            if (!empty($downs['link']) && file_exists(UPLOADS.'/files/'.$folder.$downs['link'])) {
 
                 if ($ext == 'mp3' || $ext == 'mp4') {?>
 
@@ -246,7 +246,7 @@ case 'view':
                     echo '<i class="fa fa-archive"></i> <b><a href="/load/zip?id='.$id.'">Просмотреть архив</a></b><br>';
                 }
 
-                $filesize = (!empty($downs['link'])) ? formatFileSize(HOME.'/uploads/files/'.$folder.$downs['link']) : 0;
+                $filesize = (!empty($downs['link'])) ? formatFileSize(UPLOADS.'/files/'.$folder.$downs['link']) : 0;
 
                 if (getUser()) {
                     echo '<i class="fa fa-download"></i> <b><a href="/load/down?act=load&amp;id='.$id.'">Скачать</a></b>  ('.$filesize.')<br>';

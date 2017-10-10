@@ -52,7 +52,7 @@ class PictureController extends BaseController
                 }
 
                 //-------- Генерируем аватар ----------//
-                $handle->process(HOME.'/uploads/photos/');
+                $handle->process(UPLOADS.'/photos/');
 
                 if ($handle->processed) {
                     $picture = $handle->file_dst_name;

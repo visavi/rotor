@@ -33,7 +33,7 @@ if (isAdmin()) {
                 foreach ($photos as $data) {
                     echo '<div class="b">';
                     echo '<i class="fa fa-picture-o"></i> ';
-                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.formatFileSize(HOME.'/uploads/pictures/'.$data['link']).')<br>';
+                    echo '<b><a href="/gallery?act=view&amp;gid='.$data['id'].'&amp;page='.$page['current'].'">'.$data['title'].'</a></b> ('.formatFileSize(UPLOADS.'/pictures/'.$data['link']).')<br>';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> <a href="/admin/gallery?act=edit&amp;page='.$page['current'].'&amp;gid='.$data['id'].'">Редактировать</a>';
                     echo '</div>';
 
@@ -146,7 +146,7 @@ if (isAdmin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    if (is_writeable(HOME.'/uploads/pictures')) {
+                    if (is_writeable(UPLOADS.'/pictures')) {
                         $querydel = DB::select("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.");");
                         $arr_photo = $querydel -> fetchAll();
 

@@ -37,7 +37,7 @@ case 'image':
 
     echo '<i class="fa fa-eraser fa-2x"></i> <a href="/admin/cache">Файлы</a> / <b>Изображения</b><br><br>';
 
-    $cachefiles = glob(HOME.'/uploads/thumbnail/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+    $cachefiles = glob(UPLOADS.'/thumbnail/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
     $total = count($cachefiles);
 
     $totals = ($total>50 && $view!=1) ? 50 : $total;
@@ -90,7 +90,7 @@ case 'clearimage':
 
     if ($token == $_SESSION['token']) {
 
-        $cachefiles = glob(HOME.'/uploads/thumbnail/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
+        $cachefiles = glob(UPLOADS.'/thumbnail/*.{gif,png,jpg,jpeg}', GLOB_BRACE);
         $total = count($cachefiles);
 
         if (is_array($cachefiles) && $total>0){
