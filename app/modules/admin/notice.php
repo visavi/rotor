@@ -75,7 +75,7 @@ break;
  * Редактирование шаблона
  */
 case 'edit':
-    $notice = Notice::find($id);
+    $notice = Notice::query()->find($id);
     if ($notice) {
 
         if ($notice['protect']) {
@@ -150,7 +150,7 @@ case 'del':
 
     $token = check(Request::input('token'));
 
-    $notice = Notice::find($id);
+    $notice = Notice::query()->find($id);
 
     $validator = new Validator();
     $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')

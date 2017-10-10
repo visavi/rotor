@@ -269,7 +269,7 @@ if (isAdmin([101, 102, 103])) {
 
                                             DB::insert("INSERT INTO `banhist` (`user`, `send`, `type`, `reason`, `term`, `time`) VALUES (?, ?, ?, ?, ?, ?);", [$uz, getUser('login'), 1, $reasonban, $bantotaltime * 60, SITETIME]);
 
-                                            $note = Note::where('user', $uz)->find_one();
+                                            $note = Note::query()->where('user', $uz)->find_one();
 
                                             $record = [
                                                 'user' => $uz,

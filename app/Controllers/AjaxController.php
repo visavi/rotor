@@ -152,7 +152,8 @@ class AjaxController extends BaseController
                 ->delete();
 
             if ($delComments) {
-                $type::where('id', $rid)
+                $type::query()
+                    ->where('id', $rid)
                     ->update([
                         'comments'  => DB::raw('comments - '.$delComments),
                     ]);
@@ -245,7 +246,7 @@ class AjaxController extends BaseController
         $operation = ($vote == '1') ? '+' : '-';
 
         $post->update(['rating' => DB::raw("rating $operation 1")]);
-        $post = $type::find($id);
+        $post = $type::query()->find($id);
 
         echo json_encode([
             'status' => 'success',

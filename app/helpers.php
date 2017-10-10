@@ -1731,7 +1731,7 @@ function removeDir($dir)
 // ----- Функция отправки приватного сообщения -----//
 function sendPrivate($userId, $authorId, $text, $time = SITETIME)
 {
-    if ($user = User::find($userId)) {
+    if ($user = User::query()->find($userId)) {
 
         Inbox::query()->create([
             'user_id'    => $userId,

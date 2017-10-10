@@ -321,9 +321,9 @@ header("Content-type:text/html; charset=utf-8");
                 $registration->status = 'Администратор';
                 $registration->save();
 
-                Setting::where('name', 'login')->update(['value' => $login]);
-                Setting::where('name', 'email')->update(['value' => $email]);
-                Setting::where('name', 'site')->update(['value' => $site]);
+                Setting::query()->where('name', 'login')->update(['value' => $login]);
+                Setting::query()->where('name', 'email')->update(['value' => $email]);
+                Setting::query()->where('name', 'site')->update(['value' => $site]);
 
                 saveSetting();
 

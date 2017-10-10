@@ -114,7 +114,7 @@ if (isAdmin()) {
             if ($uid == $_SESSION['token']) {
                 if (utfStrlen($reply) >= 5 && utfStrlen($reply) < setting('guesttextlength')) {
 
-                    $post = Guest::find($id);
+                    $post = Guest::query()->find($id);
 
                     if ($post) {
 
@@ -173,7 +173,7 @@ if (isAdmin()) {
             if ($uid == $_SESSION['token']) {
                 if (utfStrlen(trim($msg)) >= 5 && utfStrlen($msg) < setting('guesttextlength')) {
 
-                    $post = Guest::find($id);
+                    $post = Guest::query()->find($id);
                     if ($post) {
 
                         $post->text = $msg;
@@ -207,7 +207,7 @@ if (isAdmin()) {
             if ($token == $_SESSION['token']) {
                 if ($postIds) {
 
-                    Guest::whereIn('id', $postIds)->delete();
+                    Guest::query()->whereIn('id', $postIds)->delete();
 
                     setFlash('success', 'Выбранные сообщения успешно удалены!');
                     redirect("/admin/book?page=$page");

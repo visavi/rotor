@@ -69,9 +69,10 @@ class Flood extends BaseModel
             return true;
         }
 
-        self::where('created_at', '<', SITETIME)->delete();
+        self::query()->where('created_at', '<', SITETIME)->delete();
 
-        $flood = self::where('user_id', $userId)
+        $flood = self::query()
+            ->where('user_id', $userId)
             ->where('page', server('PHP_SELF'))
             ->first();
 

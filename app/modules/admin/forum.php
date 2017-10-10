@@ -27,7 +27,8 @@ if (isAdmin()) {
     ############################################################################################
         case 'index':
 
-            $forums = Forum::where('parent_id', 0)
+            $forums = Forum::query()
+                ->where('parent_id', 0)
                 ->with('lastTopic.lastPost.user')
                 ->with('children')
                 ->orderBy('sort')
@@ -254,14 +255,15 @@ if (isAdmin()) {
             if (isAdmin([101])) {
                 if ($token == $_SESSION['token']) {
 
-                    $forum = Forum::where('id', $fid)
+                    $forum = Forum::query()
+                        ->where('id', $fid)
                         ->with('children')
                         ->first();
 
                     if ($forum) {
                         if ($forum->children->isEmpty()) {
 
-                            $topic = Topic::where('forum_id', $fid)->first();
+                            $topic = Topic::query()->where('forum_id', $fid)->first();
                             if (! $topic) {
 
                                 $forum->delete();
@@ -299,7 +301,8 @@ if (isAdmin()) {
                 abort('default', 'Данного раздела не существует!');
             }
 
-            $forum->children = Forum::where('parent_id', $forum->id)
+            $forum->children = Forum::query()
+                ->where('parent_id', $forum->id)
                 ->with('lastTopic.lastPost.user')
                 ->get();
 
@@ -308,13 +311,14 @@ if (isAdmin()) {
 
             echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$forum['title'].'</b><hr>';
 
-            $total = Topic::where('forum_id', $fid)->count();
+            $total = Topic::query()->where('forum_id', $fid)->count();
 
             if ($total > 0) {
 
                 $page = paginate(setting('forumtem'), $total);
 
-                $topics = Topic::where('forum_id', $fid)
+                $topics = Topic::query()
+                    ->where('forum_id', $fid)
                     ->orderBy('locked', 'desc')
                     ->orderBy('updated_at', 'desc')
                     ->limit(setting('forumtem'))
@@ -444,12 +448,13 @@ if (isAdmin()) {
         ############################################################################################
         case 'movetopic':
 
-            $topic = Topic::find($tid);
+            $topic = Topic::query()->find($tid);
 
             if (!empty($topic)) {
                 echo '<i class="fa fa-folder-open"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic->user->login.')<br><br>';
 
-                $forums = Forum::where('parent_id', 0)
+                $forums = Forum::query()
+                    ->where('parent_id', 0)
                     ->with('children')
                     ->orderBy('sort')
                     ->get();
@@ -553,7 +558,8 @@ if (isAdmin()) {
                         array_map('unlink', glob(UPLOADS.'/thumbnail/uploads_forum_'.$topicId.'_*.{jpg,jpeg,png,gif}', GLOB_BRACE));
 
                         // Выбирает files.id только если они есть в posts
-                        $delPosts = Post::where('topic_id', $topicId)
+                        $delPosts = Post::query()
+                            ->where('topic_id', $topicId)
                             ->join('files', function($join){
                                 $join->on('posts.id', '=', 'files.relate_id')
                                     ->where('files.relate_type', '=', Post::class);
@@ -568,12 +574,12 @@ if (isAdmin()) {
                     }
                     // ------ Удаление загруженных файлов -------//
 
-                    $votesIds = Vote::whereIn('topic_id', $del)->pluck('id')->all();
+                    $votesIds = Vote::query()->whereIn('topic_id', $del)->pluck('id')->all();
 
                     if ($votesIds) {
-                        Vote::whereIn('id', $votesIds)->delete();
-                        VoteAnswer::whereIn('vote_id', $votesIds)->delete();
-                        VotePoll::whereIn('vote_id', $votesIds)->delete();
+                        Vote::query()->whereIn('id', $votesIds)->delete();
+                        VoteAnswer::query()->whereIn('vote_id', $votesIds)->delete();
+                        VotePoll::query()->whereIn('vote_id', $votesIds)->delete();
                     }
 
                     $deltopics = DB::run() -> exec("DELETE FROM `topics` WHERE `id` IN (".$delId.");");
@@ -628,12 +634,12 @@ if (isAdmin()) {
                         case 'closed':
                             DB::update("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [1, $tid]);
 
-                            $vote = Vote::where('topic_id', $tid)->first();
+                            $vote = Vote::query()->where('topic_id', $tid)->first();
                             if ($vote) {
                                 $vote->closed = 1;
                                 $vote->save();
 
-                                VotePoll::where('vote_id', $vote['id'])->delete();
+                                VotePoll::query()->where('vote_id', $vote['id'])->delete();
                             }
 
                             setFlash('success', 'Тема успешно закрыта!');
@@ -643,7 +649,7 @@ if (isAdmin()) {
                         case 'open':
                             DB::update("UPDATE `topics` SET `closed`=? WHERE `id`=?;", [0, $tid]);
 
-                            $vote = Vote::where('topic_id', $tid)->first();
+                            $vote = Vote::query()->where('topic_id', $tid)->first();
                             if ($vote) {
                                 $vote->closed = 0;
                                 $vote->save();
@@ -699,7 +705,7 @@ if (isAdmin()) {
                     echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$topic['title'].'</b>';
 
                     if (!empty($topic['moderators'])) {
-                        $moderators = User::whereIn('id', explode(',', $topic['moderators']))->get();
+                        $moderators = User::query()->whereIn('id', explode(',', $topic['moderators']))->get();
 
                         echo '<br>Кураторы темы: ';
                         foreach ($moderators as $mkey => $mval) {
@@ -881,7 +887,7 @@ if (isAdmin()) {
 
             $pid = abs(intval($_GET['pid']));
 
-            $post = Post::where('id', $pid)->with('files')->first();
+            $post = Post::query()->where('id', $pid)->with('files')->first();
 
             if (!empty($post)) {
 

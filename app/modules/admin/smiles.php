@@ -76,7 +76,7 @@ case 'load':
 
     if (is_writeable(UPLOADS.'/smiles')){
 
-        $smile = Smile::where('code', $code)->find_one();
+        $smile = Smile::query()->where('code', $code)->first();
 
         $validator = new Validator();
         $validator->equal($uid, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -139,7 +139,7 @@ break;
  */
 case 'edit':
 
-    $smile = Smile::find_one($id);
+    $smile = Smile::query()->find($id);
 
     if (! empty($smile)) {
         echo '<b><big>Редактирование смайла</big></b><br><br>';
@@ -165,7 +165,7 @@ case 'change':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utfLower($_POST['code'])) : '';
 
-    $smile = Smile::find_one($id);
+    $smile = Smile::query()->find($id);
 
     $checkcode = Smile::select('id')
         ->where('code', $code)

@@ -17,17 +17,17 @@ class GuestTest extends TestCase
 
         $this->assertTrue($guest->save());
 
-        $getGuest = Guest::find($guest->id);
+        $getGuest = Guest::query()->find($guest->id);
         $this->assertEquals($getGuest->text, 'Test text message');
 
         $guest->update(['text' => 'Test simple message']);
 
-        $getGuest = Guest::find($guest->id);
+        $getGuest = Guest::query()->find($guest->id);
         $this->assertEquals($getGuest->text, 'Test simple message');
 
         $guest->delete();
 
-        $getGuest = Guest::find($guest->id);
+        $getGuest = Guest::query()->find($guest->id);
         $this->assertNull($getGuest);
     }
 }
