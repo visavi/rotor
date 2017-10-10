@@ -1,4 +1,7 @@
-
+/storage/antidos/
+/storage/backup/
+/storage/cache/
+/storage/temp/
 /public/uploads/files/
 /public/uploads/screen/
 /public/uploads/loader/
