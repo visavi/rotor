@@ -1289,6 +1289,7 @@ function stripString($str, $words = 20) {
 
 /**
  * Возвращает HTML пользовательской рекламы
+ *
  * @return string Сгенерированный HTML пользовательской рекламы
  */
 function getAdvertUser()
@@ -1353,7 +1354,7 @@ function saveAdvertUser()
 /**
  * Выводит последние фотографии
  *
- * @param  int $show Количество последних фотографий
+ * @param  int $show Количество последних фотографий для вывода
  */
 function recentPhotos($show = 5)
 {
@@ -1378,7 +1379,7 @@ function recentPhotos($show = 5)
 /**
  * Выводит последние темы форума, предварительно закэешировав, если необходимо
  *
- * @param int $show Количество последних тем форума
+ * @param int $show Количество последних тем форума для вывода
  */
 function recentTopics($show = 5)
 {
@@ -1400,7 +1401,7 @@ function recentTopics($show = 5)
 /**
  * Выводит последние темы форума, предварительно закэешировав, если необходимо
  *
- * @param int $show Количество последних файлов в загрузках
+ * @param int $show Количество последних файлов в загрузках для вывода
  */
 function recentFiles($show = 5)
 {
@@ -1426,7 +1427,11 @@ function recentFiles($show = 5)
     }
 }
 
-// ------------- Функция кэширования последних статей в блогах -----------------//
+/**
+ * Выводит последние статьи в блогах, предварительно закэешировав, если необходимо
+ *
+ * @param int $show Количество последних статей в блогах для вывода
+ */
 function recentBlogs($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentblog.dat") < time()-600) {
