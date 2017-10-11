@@ -1063,7 +1063,12 @@ function cryptMail($mail)
     return $output;
 }
 
-// ------------------- Функция подсчета голосований --------------------//
+/**
+ * Возвращает статистику текущих голосований из кэш-файла,
+ * предварительно сформировав этот файл, если он устарел
+ *
+ * @return string Статистика текущий голосований
+ */
 function statVotes()
 {
     if (@filemtime(STORAGE."/temp/statvote.dat") < time()-900) {
@@ -1079,7 +1084,12 @@ function statVotes()
     return file_get_contents(STORAGE."/temp/statvote.dat");
 }
 
-// ------------------- Функция показа даты последней новости --------------------//
+/**
+ * Возвращает дату последней новости из кэш-файла,
+ * предварительно сформировав этот файл, если он устарел
+ *
+ * @return string Дата последней новости или тег span с текстом "Сегодня "
+ */
 function statsNewsDate()
 {
     if (@filemtime(STORAGE."/temp/statnews.dat") < time()-900) {
@@ -1100,7 +1110,9 @@ function statsNewsDate()
     return file_get_contents(STORAGE."/temp/statnews.dat");
 }
 
-// --------------------------- Функция вывода новостей -------------------------//
+/**
+ * Ввыводит HTML для последних новостей
+ */
 function lastNews()
 {
     if (setting('lastnews') > 0) {
@@ -1243,7 +1255,12 @@ function icons($ext)
     return '<i class="fa fa-'.$ico.'"></i>';
 }
 
-// ------------------ Функция смешивания ассоциативного массива --------------------//
+/**
+ * Перемешивает элементы ассоциативного массива, сохраняя ключи
+ *
+ * @param  array &$array Исходный массив, переданный по ссылке
+ * @return bool          Флаг успешного выполнения операции
+ */
 function shuffleAssoc(&$array)
 {
     $keys = array_keys($array);
@@ -1259,12 +1276,21 @@ function shuffleAssoc(&$array)
     return true;
 }
 
-// --------------- Функция обрезки слов -------------------//
+/**
+ * Возвращает обрезанную до заданного количества слов строку
+ *
+ * @param  string  $str   Исходная строка
+ * @param  int     $words Максимальное количество слов в результате
+ * @return string         Обрезанная строка
+ */
 function stripString($str, $words = 20) {
     return implode(' ', array_slice(explode(' ', strip_tags($str)), 0, $words));
 }
 
-// ------------------ Функция вывода пользовательской рекламы --------------------//
+/**
+ * Возвращает HTML пользовательской рекламы
+ * @return string Сгенерированный HTML пользовательской рекламы
+ */
 function getAdvertUser()
 {
     if (!empty(setting('rekusershow'))) {
@@ -1296,7 +1322,9 @@ function getAdvertUser()
     }
 }
 
-// --------------- Функция кэширования пользовательской рекламы -------------------//
+/**
+ * Кэширует в файл HTML ссылок пользовательской рекламы
+ */
 function saveAdvertUser()
 {
     $data = RekUser::query()->where('deleted_at', '>', SITETIME)->get();
@@ -1322,7 +1350,11 @@ function saveAdvertUser()
     file_put_contents(STORAGE."/temp/rekuser.dat", serialize($links), LOCK_EX);
 }
 
-// --------------------------- Функция показа фотографий ---------------------------//
+/**
+ * Выводит последние фотографии
+ *
+ * @param  int $show Количество последних фотографий
+ */
 function recentPhotos($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
@@ -1343,7 +1375,11 @@ function recentPhotos($show = 5)
     }
 }
 
-// --------------- Функция кэширования последних тем форума -------------------//
+/**
+ * Выводит последние темы форума, предварительно закэешировав, если необходимо
+ *
+ * @param int $show Количество последних тем форума
+ */
 function recentTopics($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recenttopics.dat") < time()-180) {
@@ -1361,7 +1397,11 @@ function recentTopics($show = 5)
     }
 }
 
-// ------------- Функция кэширования последних файлов в загрузках -----------------//
+/**
+ * Выводит последние темы форума, предварительно закэешировав, если необходимо
+ *
+ * @param int $show Количество последних файлов в загрузках
+ */
 function recentFiles($show = 5)
 {
     if (@filemtime(STORAGE."/temp/recentfiles.dat") < time()-600) {
