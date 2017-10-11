@@ -149,11 +149,19 @@ blockquote small:before {
 
 .avatar-box {
   height: 48px;
-  display: block;
+  margin-bottom: 10px;
 }
 
 .avatar-box a {
-  border: none;
+  display: block;
+  border: none !important;
+}
+.avatar-box__avatar{
+  float: left;
+}
+.avatar-box__login{
+  float: left;
+  margin-left: 10px;
 }
 
 .avatar {
@@ -161,7 +169,6 @@ blockquote small:before {
   width: 48px;
   line-height: 48px;
   text-align: center;
-  margin-right: 10px;
   float: left;
 }
 
