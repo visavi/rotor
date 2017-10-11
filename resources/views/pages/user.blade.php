@@ -6,7 +6,12 @@
 
 @section('content')
 
-    <h1 class="avatar-box">{!! userAvatar($user) !!} {{ $user['login'] }} <small>#{{ $user['id'] }}</small></h1>
+    <div class="avatar-box">
+        <div class="avatar-box__avatar">{!! userAvatar($user) !!} </div>
+        <h1 class="avatar-box__login">
+            {{ $user['login'] }} <small>#{{ $user['id'] }}</small>
+        </h1>
+    </div>
 
     @if ($user['level'] == 'pended')
         <b><span style="color:#ff0000">Внимание, аккаунт требует подтверждение регистрации!</span></b><br>
