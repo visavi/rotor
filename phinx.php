@@ -11,6 +11,7 @@ return [
             'adapter'   => env('DB_DRIVER'),
             'charset'   => env('DB_CHARSET'),
             'collation' => env('DB_COLLATION'),
+            'port'      => env('DB_PORT'),
             'host'      => env('DB_HOST'),
             'name'      => env('DB_DATABASE'),
             'user'      => env('DB_USERNAME'),

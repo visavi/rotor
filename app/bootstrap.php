@@ -44,6 +44,7 @@ $db = new DB();
 
 $db->addConnection([
     'driver'    => env('DB_DRIVER'),
+    'port'      => env('DB_PORT'),
     'host'      => env('DB_HOST'),
     'database'  => env('DB_DATABASE'),
     'username'  => env('DB_USERNAME'),
