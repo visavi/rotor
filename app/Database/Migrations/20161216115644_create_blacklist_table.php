@@ -10,7 +10,7 @@ class CreateBlacklistTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('blacklist')) {
-            $table = $this->table('blacklist', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('blacklist', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('type', 'boolean')
                 ->addColumn('value', 'string', ['limit' => 100])
                 ->addColumn('user', 'string', ['limit' => 20, 'null' => true])

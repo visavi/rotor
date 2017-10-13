@@ -10,7 +10,7 @@ class CreateGuestTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('guest')) {
-            $table = $this->table('guest', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('guest', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('ip', 'string', ['limit' => 15])

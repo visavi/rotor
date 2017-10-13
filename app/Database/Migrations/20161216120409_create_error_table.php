@@ -11,7 +11,7 @@ class CreateErrorTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('error')) {
-            $table = $this->table('error', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('error', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('num', 'integer', ['limit' => MysqlAdapter::INT_SMALL])
                 ->addColumn('request', 'string', ['null' => true])
                 ->addColumn('referer', 'string', ['null' => true])

@@ -11,7 +11,7 @@ class CreateStatusTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('status')) {
-            $table = $this->table('status', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('status', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('topoint', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
                 ->addColumn('point', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
                 ->addColumn('name', 'string', ['limit' => 50])

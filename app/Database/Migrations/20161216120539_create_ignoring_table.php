@@ -10,7 +10,7 @@ class CreateIgnoringTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('ignoring')) {
-            $table = $this->table('ignoring', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('ignoring', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('name', 'string', ['limit' => 20])
                 ->addColumn('text', 'text', ['null' => true])

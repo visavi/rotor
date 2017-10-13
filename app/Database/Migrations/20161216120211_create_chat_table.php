@@ -10,7 +10,7 @@ class CreateChatTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('chat')) {
-            $table = $this->table('chat', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('chat', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('ip', 'string', ['limit' => 15])

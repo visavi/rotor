@@ -10,7 +10,7 @@ class CreateTransfersTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('transfers')) {
-            $table = $this->table('transfers', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('transfers', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('login', 'string', ['limit' => 20])
                 ->addColumn('text', 'text', ['null' => true])

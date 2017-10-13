@@ -11,7 +11,7 @@ class CreateCounter31Table extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('counter31')) {
-            $table = $this->table('counter31', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('counter31', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('days', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
                 ->addColumn('hosts', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
                 ->addColumn('hits', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])

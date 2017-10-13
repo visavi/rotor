@@ -11,7 +11,7 @@ class CreateLoadsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('loads')) {
-            $table = $this->table('loads', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('loads', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('down', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
                 ->addColumn('ip', 'string', ['limit' => 15])
                 ->addColumn('time', 'integer')

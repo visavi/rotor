@@ -10,7 +10,7 @@ class CreateTrashTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('trash')) {
-            $table = $this->table('trash', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('trash', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('author', 'string', ['limit' => 20])
                 ->addColumn('text', 'text', ['null' => true])

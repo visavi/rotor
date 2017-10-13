@@ -11,7 +11,7 @@ class CreateCatsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('cats')) {
-            $table = $this->table('cats', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('cats', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('sort', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
                 ->addColumn('parent', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false, 'default' => 0])
                 ->addColumn('name', 'string', ['limit' => 100])

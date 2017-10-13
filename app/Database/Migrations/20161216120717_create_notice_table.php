@@ -10,7 +10,7 @@ class CreateNoticeTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('notice')) {
-            $table = $this->table('notice', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('notice', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('name', 'string', ['limit' => 100])
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('user', 'string', ['limit' => 20, 'null' => true])

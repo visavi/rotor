@@ -1,7 +1,9 @@
 <?php
 
-use App\Models\Inbox;
+use App\Classes\Request;
+use App\Models\News;
 use App\Models\Setting;
+use App\Models\User;
 
 ob_start();
 
@@ -93,7 +95,7 @@ header("Content-type:text/html; charset=utf-8");
 </div>
 <div class="site">
 
-    <?php if (empty($_GET['act'])): ?>
+    <?php if (! Request::has('act')): ?>
 
         <h1>Шаг 1 - проверка требований</h1>
         <p>Для установки вам необходимо прописать данные от БД в файл .env</p>
@@ -214,35 +216,36 @@ header("Content-type:text/html; charset=utf-8");
 
             echo '<i class="fa fa-check-circle"></i> '.str_replace('../', '', $dir).' <b> - ' . $file_status . '</b> (chmod ' . $chmod_value . ')<br>';
         }
+?>
+        <br>Дополнительно можете выставить права на директории и файы с шаблонами внутри resources/views<br><br>
 
-        echo '<br>Дополнительно можете выставить права на директории и файы с шаблонами внутри resources/views<br><br>';
+        Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br>
+        Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br><br>
 
-        echo 'Если какой-то пункт выделен красным, необходимо зайти по FTP и выставить CHMOD разрешающую запись<br>';
-        echo 'Некоторые настройки являются рекомендуемыми для полной совместимости, однако скрипт способен работать даже если рекомендуемые настройки не совпадают с текущими.<br><br>';
+        <?php if (empty($error_critical) && empty($chmod_errors)): ?>
+            <i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br><br>
 
-        if (empty($error_critical)  && empty($chmod_errors)) {
-            echo '<i class="fa fa-check-circle"></i> <b><span style="color:#00cc00">Вы можете продолжить установку движка!</span></b><br><br>';
+            <?php if (empty($error_setting)): ?>
+                Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br><br>
+            <?php else: ?>
+                <b><span style="color:#ffa500">У вас имеются предупреждения!</span></b> (Всего: <?= $error_setting ?>)<br>
+                Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br>
+                Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br><br>
+            <?php endif; ?>
 
-            if (empty($error_setting)) {
-                echo 'Все модули и библиотеки присутствуют, настройки корректны, необходимые файлы и папки доступны для записи<br><br>';
-            } else {
-                echo '<b><span style="color:#ffa500">У вас имеются предупреждения!</span></b> (Всего: ' . $error_setting . ')<br>';
-                echo 'Данные предупреждения не являются критическими, но тем не менее для полноценной, стабильной и безопасной работы движка желательно их устранить<br>';
-                echo 'Вы можете продолжить установку скрипта, но нет никаких гарантий, что движок будет работать стабильно<br><br>';
-            }
+            <span style="color:#ff0000">
+                Внимание, кодировка таблиц настраивается в файле .env,<br>
+                По умолчанию база данных должна быть создана в кодировке utf8mb4_unicode_ci
+            </span>
+            <br><br>
 
-            echo '<span style="color:#ff0000">Внимание, база данных должна быть создана в кодировке utf8mb4_unicode_ci</span><br><br>';
+            <p><a style="font-size: 18px" href="?act=status">Проверить статус</a></p><br>
+        <?php else: ?>
+            <b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br>
+            Вы не сможете приступить к установке, пока не устраните все ошибки<br><br>
+        <?php endif; ?>
 
-            echo '<p><a style="font-size: 18px" href="?act=status">Проверить статус</a></p><br>';
-        } else {
-            echo '<b><span style="color:#ff0000">Имеются критические ошибки!</span></b><br>';
-            echo 'Вы не сможете приступить к установке, пока не устраните все ошибки<br><br>';
-        }
-
-        ?>
-
-
-    <?php elseif($_GET['act'] == 'status'): ?>
+    <?php elseif(Request::input('act') == 'status'): ?>
         <h1>Шаг 2 - проверка статуса</h1>
         <pre>
             <span class="inner-pre" style="font-size: 11px">
@@ -251,7 +254,7 @@ header("Content-type:text/html; charset=utf-8");
         </pre>
         <p><a style="font-size: 18px" href="?act=migrate">Выполнить миграции</a></p>
 
-    <?php elseif($_GET['act'] == 'migrate'): ?>
+    <?php elseif(Request::input('act') == 'migrate'): ?>
         <h1>Шаг 3 - выполнение миграций</h1>
         <pre>
             <span class="inner-pre" style="font-size: 11px">
@@ -261,7 +264,7 @@ header("Content-type:text/html; charset=utf-8");
 
         <p><a style="font-size: 18px" href="?act=seed">Заполнить БД</a></p>
 
-    <?php elseif($_GET['act'] == 'seed'): ?>
+    <?php elseif(Request::input('act') == 'seed'): ?>
 
         <h1>Шаг 4 - заполнение БД</h1>
 
@@ -272,7 +275,7 @@ header("Content-type:text/html; charset=utf-8");
         </pre>
 
         <p><a style="font-size: 18px" href="?act=account">Создать администратора</a></p>
-    <?php elseif($_GET['act'] == 'account'): ?>
+    <?php elseif(Request::input('act') == 'account'): ?>
 
         <h1>Шаг 5 - создание администратора</h1>
 
@@ -281,17 +284,17 @@ header("Content-type:text/html; charset=utf-8");
         После окончания инсталляции необходимо удалить директории <b>install</b> и <b>upgrade</b> со всем содержимым навсегда, пароль и остальные данные вы сможете поменять в своем профиле<br><br>
 
         <?php
-            $servername = isset($_SERVER['HTTP_HOST']) ? htmlspecialchars($_SERVER['HTTP_HOST']) : htmlspecialchars($_SERVER['SERVER_NAME']);
-            $servername = 'http://'.$servername;
+            $serverName = server('HTTP_HOST') ? server('HTTP_HOST') : server('SERVER_NAME');
+            $serverName = 'http://'.$serverName;
 
-        $login = isset($_POST['login']) ? htmlspecialchars($_POST['login']) : '';
-        $password = isset($_POST['password']) ? htmlspecialchars($_POST['password']) : '';
-        $password2 = isset($_POST['password2']) ? ($_POST['password2']) : '';
-        $email = isset($_POST['email']) ? strtolower(htmlspecialchars($_POST['email'])) : '';
-        $site = isset($_POST['site']) ? utfLower(htmlspecialchars($_POST['site'])) : $servername;
+            $login     = check(Request::input('login'));
+            $password  = check(Request::input('password'));
+            $password2 = check(Request::input('password2'));
+            $email     = strtolower(check(Request::input('email')));
+            $site      = utfLower(check(Request::input('site', $serverName)));
         ?>
 
-        <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
+        <?php if (Request::isMethod('post')): ?>
             <?php
             if (strlen($login) <= 20 && strlen($login) >= 3) {
             if (preg_match('|^[a-z0-9\-]+$|i', $login)) {
@@ -300,26 +303,26 @@ header("Content-type:text/html; charset=utf-8");
             if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
 
             // Проверка логина на существование
-            $reglogin = DB::run()->querySingle("SELECT `id` FROM `users` WHERE LOWER(`login`)=? LIMIT 1;", [strtolower($login)]);
-            if (!$reglogin) {
+            $checkLogin = User::query()->whereRaw('lower(login) = ?', [strtolower($login)])->count();
+            if (! $checkLogin) {
 
             // Проверка email на существование
-            $regmail = DB::run()->querySingle("SELECT `id` FROM `users` WHERE `email`=? LIMIT 1;", [$email]);
-            if (!$regmail) {
+            $checkMail = User::query()->where('email', $email)->count();
+            if (! $checkMail) {
 
-                $registration = new getUser();
-                $registration->login = $login;
-                $registration->password = password_hash($password, PASSWORD_BCRYPT);
-                $registration->email = $email;
-                $registration->joined = SITETIME;
-                $registration->level = 101;
-                $registration->gender = 1;
-                $registration->themes = 0;
-                $registration->point = 500;
-                $registration->money = 1000000;
-                $registration->info = 'Администратор сайта';
-                $registration->status = 'Администратор';
-                $registration->save();
+                $user = User::query()->create([
+                    'login'    => $login,
+                    'password' => password_hash($password, PASSWORD_BCRYPT),
+                    'email'    => $email,
+                    'joined'   => SITETIME,
+                    'level'    => 'boss',
+                    'gender'   => 1,
+                    'themes'   => 0,
+                    'point'    => 500,
+                    'money'    => 1000000,
+                    'info'     => 'Администратор сайта',
+                    'status'   => 'Босс',
+                ]);
 
                 Setting::query()->where('name', 'login')->update(['value' => $login]);
                 Setting::query()->where('name', 'email')->update(['value' => $email]);
@@ -328,23 +331,18 @@ header("Content-type:text/html; charset=utf-8");
                 saveSetting();
 
                 // -------------- Приват ---------------//
-                $textpriv = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
+                $text = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
-                $inbox = Inbox::create([
-                    'user'   => $login,
-                    'author' => 'Vantuz',
-                    'text'   => $textpriv,
-                    'time'   => SITETIME,
-                ]);
+                sendPrivate($user->id, 0, $text);
 
                 // -------------- Новость ---------------//
                 $textnews = 'Добро пожаловать на демонстрационную страницу движка RotorCMS'.PHP_EOL.'RotorCMS - функционально законченная система управления контентом с открытым кодом написанная на PHP. Она использует базу данных MySQL для хранения содержимого вашего сайта. RotorCMS является гибкой, мощной и интуитивно понятной системой с минимальными требованиями к хостингу, высоким уровнем защиты и является превосходным выбором для построения сайта любой степени сложности'.PHP_EOL.'Главной особенностью RotorCMS является низкая нагрузка на системные ресурсы, даже при очень большой аудитории сайта нагрузка не сервер будет минимальной, и вы не будете испытывать каких-либо проблем с отображением информации.'.PHP_EOL.'Движок RotorCMS вы можете скачать на официальном сайте [url=http://visavi.net]VISAVI.NET[/url]';
 
-                $news = News::create([
-                    'title'  => 'Добро пожаловать!',
-                    'text'  => $textnews,
-                    'author' => $login,
-                    'time' => SITETIME,
+                $news = News::query()->create([
+                    'title'      => 'Добро пожаловать!',
+                    'text'       => $textnews,
+                    'user_id'    => $user->id,
+                    'created_at' => SITETIME,
                 ]);
 
                 redirect('?act=finish');
@@ -394,7 +392,6 @@ header("Content-type:text/html; charset=utf-8");
             <a href="/">Перейти на главную страницу сайта</a><br>
         </p>
         <p style="font-size: 20px">Удалите директории install и upgrade</p>
-
 
     <?php endif; ?>
 

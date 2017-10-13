@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateReadblogTable extends AbstractMigration
+class CreateReadblog2Table extends AbstractMigration
 {
     /**
      * Change Method.

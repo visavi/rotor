@@ -18,7 +18,7 @@ class DeleteTrashTable extends AbstractMigration
     public function down()
     {
         if (! $this->hasTable('trash')) {
-            $table = $this->table('trash', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('trash', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('user_id', 'integer')
                 ->addColumn('author_id', 'integer')
                 ->addColumn('text', 'text', ['null' => true])

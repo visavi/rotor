@@ -18,7 +18,7 @@ class DeleteReadblogTable extends AbstractMigration
     public function down()
     {
         if (! $this->hasTable('readblog')) {
-            $table = $this->table('readblog', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('readblog', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('blog', 'integer', ['signed' => false])
                 ->addColumn('ip', 'string', ['limit' => 15])
                 ->addColumn('time', 'integer')

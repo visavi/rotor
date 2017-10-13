@@ -10,7 +10,7 @@ class CreateReadsTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('reads')) {
-            $table = $this->table('reads', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('reads', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('relate_type', 'string', ['limit' => 20])
                 ->addColumn('relate_id', 'integer')
                 ->addColumn('ip', 'string', ['limit' => 15])

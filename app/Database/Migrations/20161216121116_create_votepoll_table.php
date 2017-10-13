@@ -11,7 +11,7 @@ class CreateVotepollTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('votepoll')) {
-            $table = $this->table('votepoll', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('votepoll', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('vote_id', 'integer', ['limit' => MysqlAdapter::INT_SMALL, 'signed' => false])
                 ->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('time', 'integer')

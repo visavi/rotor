@@ -9,7 +9,7 @@ class CreateQueueTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('queue', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+        $table = $this->table('queue', ['collation' => env('DB_COLLATION')]);
         $table
             ->addColumn('user_id', 'integer')
             ->addColumn('type', 'string', ['limit' => 30])

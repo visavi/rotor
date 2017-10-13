@@ -11,7 +11,7 @@ class CreateFilesForumTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('files_forum')) {
-            $table = $this->table('files_forum', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('files_forum', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('topic_id', 'integer', ['limit' => MysqlAdapter::INT_MEDIUM, 'signed' => false])
                 ->addColumn('post_id', 'integer', ['signed' => false])
                 ->addColumn('hash', 'string', ['limit' => 40])

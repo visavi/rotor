@@ -613,7 +613,7 @@ function userWall(User $user)
  */
 function statsOnline($cache = 30)
 {
-    if (@filemtime(STORAGE."/temp/online.dat") < time()-$cache) {
+    if (@filemtime(STORAGE."/temp/online.dat") < time() - $cache) {
 
         $online[0] = Online::query()->whereNotNull('user_id')->count();
         $online[1] = Online::query()->count();
@@ -648,7 +648,7 @@ function showOnline()
  */
 function statsCounter()
 {
-    if (@filemtime(STORAGE.'/temp/counter.dat') < time()-10) {
+    if (@filemtime(STORAGE.'/temp/counter.dat') < time() - 10) {
         $counts = Counter::query()->first();
         file_put_contents(STORAGE.'/temp/counter.dat', serialize($counts), LOCK_EX);
     }
@@ -777,7 +777,7 @@ function statsIpBanned()
  */
 function statsGallery()
 {
-    if (@filemtime(STORAGE."/temp/statgallery.dat") < time()-900) {
+    if (@filemtime(STORAGE."/temp/statgallery.dat") < time() - 900) {
         $total = Photo::query()->count();
         $totalNew = Photo::query()->where('created_at', '>', SITETIME-86400 * 3)->count();
 
@@ -1071,10 +1071,10 @@ function cryptMail($mail)
  */
 function statVotes()
 {
-    if (@filemtime(STORAGE."/temp/statvote.dat") < time()-900) {
+    if (@filemtime(STORAGE."/temp/statvote.dat") < time() - 900) {
 
         $votes = Vote::query()
-            ->select(DB::raw('count(*) AS cnt'), DB::raw('sum(count) AS sum'))
+            ->selectRaw('count(*) AS cnt, ifnull(sum(count), 0) AS sum')
             ->where('closed', 0)
             ->first();
 
@@ -1092,16 +1092,13 @@ function statVotes()
  */
 function statsNewsDate()
 {
-    if (@filemtime(STORAGE."/temp/statnews.dat") < time()-900) {
+    if (@filemtime(STORAGE."/temp/statnews.dat") < time() - 900) {
         $stat = 0;
 
         $news = News::query()->orderBy('created_at', 'desc')->first();
 
         if ($news) {
             $stat = dateFixed($news['created_at'], "d.m.y");
-            if ($stat == 'Сегодня') {
-                $stat = '<span style="color:#ff0000">Сегодня</span>';
-            }
         }
 
         file_put_contents(STORAGE."/temp/statnews.dat", $stat, LOCK_EX);
@@ -1358,7 +1355,7 @@ function saveAdvertUser()
  */
 function recentPhotos($show = 5)
 {
-    if (@filemtime(STORAGE."/temp/recentphotos.dat") < time()-1800) {
+    if (@filemtime(STORAGE."/temp/recentphotos.dat") < time() - 1800) {
 
         $recent = Photo::query()->orderBy('created_at', 'desc')->limit($show)->get();
 
@@ -1383,7 +1380,7 @@ function recentPhotos($show = 5)
  */
 function recentTopics($show = 5)
 {
-    if (@filemtime(STORAGE."/temp/recenttopics.dat") < time()-180) {
+    if (@filemtime(STORAGE."/temp/recenttopics.dat") < time() - 180) {
         $topics = Topic::query()->orderBy('updated_at', 'desc')->limit($show)->get();
         file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($topics), LOCK_EX);
     }
@@ -1405,7 +1402,7 @@ function recentTopics($show = 5)
  */
 function recentFiles($show = 5)
 {
-    if (@filemtime(STORAGE."/temp/recentfiles.dat") < time()-600) {
+    if (@filemtime(STORAGE."/temp/recentfiles.dat") < time() - 600) {
 
         $files = Down::query()
             ->where('active', 1)
@@ -1434,7 +1431,7 @@ function recentFiles($show = 5)
  */
 function recentBlogs($show = 5)
 {
-    if (@filemtime(STORAGE."/temp/recentblog.dat") < time()-600) {
+    if (@filemtime(STORAGE."/temp/recentblog.dat") < time() - 600) {
         $blogs = Blog::query()
             ->orderBy('created_at', 'desc')
             ->limit($show)
@@ -1455,7 +1452,7 @@ function recentBlogs($show = 5)
 // ------------- Функция вывода количества предложений и пожеланий -------------//
 function statsOffers()
 {
-    if (@filemtime(STORAGE."/temp/offers.dat") < time()-10800) {
+    if (@filemtime(STORAGE."/temp/offers.dat") < time() - 10800) {
 
         $offers   = Offer::query()->where('type', 'offer')->count();
         $problems = Offer::query()->where('type', 'issue')->count();
@@ -1567,7 +1564,7 @@ function counterString($files)
 // ------------- Функция кэширования админских ссылок -------------//
 function cacheAdminLinks($cache=10800)
 {
-    if (@filemtime(STORAGE.'/temp/adminlinks.dat') < time()-$cache) {
+    if (@filemtime(STORAGE.'/temp/adminlinks.dat') < time() - $cache) {
         $files = array_diff(scandir(APP.'/modules/admin/links'), ['.', '..']);
         $links = [];
 

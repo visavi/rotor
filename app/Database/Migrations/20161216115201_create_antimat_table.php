@@ -10,7 +10,7 @@ class CreateAntimatTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('antimat')) {
-            $table = $this->table('antimat', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('antimat', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('string', 'string', ['limit' => 100])
                 ->create();
         }

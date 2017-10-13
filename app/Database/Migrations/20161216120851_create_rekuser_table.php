@@ -10,7 +10,7 @@ class CreateRekuserTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('rekuser')) {
-            $table = $this->table('rekuser', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('rekuser', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('site', 'string', ['limit' => 50])
                 ->addColumn('name', 'string', ['limit' => 50])
                 ->addColumn('color', 'string', ['limit' => 10, 'null' => true])

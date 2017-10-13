@@ -13,8 +13,7 @@ class CreateSettingTable extends AbstractMigration
             $table = $this->table('setting', [
                 'id' => false,
                 'primary_key' => 'name',
-                'engine' => 'MyISAM',
-                'collation' => 'utf8mb4_unicode_ci'
+                'collation' => env('DB_COLLATION')
             ]);
             $table->addColumn('name', 'string', ['limit' => 25])
                 ->addColumn('value', 'string')

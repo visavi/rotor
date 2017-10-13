@@ -2,7 +2,7 @@
 
 use Curl\Curl;
 
-if (@filemtime(STORAGE."/temp/courses.dat") < time()-3600 || @filesize(STORAGE."/temp/courses.dat") == 0) {
+if (@filemtime(STORAGE."/temp/courses.dat") < time() - 3600 || @filesize(STORAGE."/temp/courses.dat") == 0) {
 
     $curl = new Curl();
 

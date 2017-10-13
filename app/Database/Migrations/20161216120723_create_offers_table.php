@@ -11,7 +11,7 @@ class CreateOffersTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('offers')) {
-            $table = $this->table('offers', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('offers', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('type', 'boolean', ['default' => false])
                 ->addColumn('title', 'string', ['limit' => 50])
                 ->addColumn('text', 'text', ['null' => true])

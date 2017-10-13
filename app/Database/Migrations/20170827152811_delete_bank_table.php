@@ -18,7 +18,7 @@ class DeleteBankTable extends AbstractMigration
     public function down()
     {
         if (! $this->hasTable('bank')) {
-            $table = $this->table('bank', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('bank', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('user_id', 'integer')
                 ->addColumn('sum', 'integer', ['signed' => false, 'default' => 0])
                 ->addColumn('oper', 'integer', ['signed' => false, 'default' => 0])

@@ -18,7 +18,7 @@ class DeleteEventsTable extends AbstractMigration
     public function down()
     {
         if (! $this->hasTable('events')) {
-            $table = $this->table('events', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('events', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('title', 'string', ['limit' => 100])
                 ->addColumn('text', 'text', ['null' => true])
                 ->addColumn('author', 'string', ['limit' => 20])

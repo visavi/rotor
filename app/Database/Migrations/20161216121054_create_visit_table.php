@@ -10,7 +10,7 @@ class CreateVisitTable extends AbstractMigration
     public function change()
     {
         if (! $this->hasTable('visit')) {
-            $table = $this->table('visit', ['engine' => 'MyISAM', 'collation' => 'utf8mb4_unicode_ci']);
+            $table = $this->table('visit', ['collation' => env('DB_COLLATION')]);
             $table->addColumn('user', 'string', ['limit' => 20])
                 ->addColumn('self', 'string', ['limit' => 100, 'null' => true])
                 ->addColumn('page', 'string', ['limit' => 100, 'null' => true])
