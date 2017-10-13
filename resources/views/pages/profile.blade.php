@@ -20,22 +20,7 @@
 
             <div class="container-fluid">
                 <div class="row">
-
-                    <div class="col-6 col-md-push-6">
-                        <div class="float-right">
-                            @if ($user->picture && file_exists(UPLOADS.'/photos/'.$user->picture))
-                                <a class="gallery" href="/uploads/photos/{{ getUser('picture') }}">
-                                    {!! resizeImage('uploads/photos/', getUser('picture'), setting('previewsize'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) !!}
-                                </a>
-                                <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
-                            @else
-                                <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото">
-                                <a href="/pictures">Загрузить фото</a>
-                            @endif
-                            </div>
-                        </div>
-
-                    <div class="col-md-6 col-md-pull-6">
+                    <div class="col-md-6">
 
                         <div class="form-group{{ hasError('msg') }}">
                             <label for="inputName">Имя:</label>
@@ -78,6 +63,20 @@
                             <label for="inputBirthday">Дата рождения (дд.мм.гггг):</label>
                             <input class="form-control" id="inputBirthday" name="birthday" maxlength="10" value="{{ getInput('birthday', $user->birthday) }}">
                             {!! textError('birthday') !!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="float-right">
+                            @if ($user->picture && file_exists(UPLOADS.'/photos/'.$user->picture))
+                                <a class="gallery" href="/uploads/photos/{{ getUser('picture') }}">
+                                    {!! resizeImage('uploads/photos/', getUser('picture'), setting('previewsize'), ['alt' => $user->login, 'class' => 'img-fluid rounded']) !!}
+                                </a>
+                                <a href="/pictures">Изменить</a> / <a href="/pictures/delete?token={{ $_SESSION['token'] }}">Удалить</a>
+                            @else
+                                <img class="img-fluid rounded" src="/assets/img/images/photo.jpg" alt="Фото">
+                                <a href="/pictures">Загрузить фото</a>
+                            @endif
                         </div>
                     </div>
 

@@ -25,13 +25,12 @@ class UserController extends BaseController
             abort('default', 'Пользователя с данным логином не существует!');
         }
 
-        $note = Note::query()->where('user_id', $user->id)->first();
+        $note   = Note::query()->where('user_id', $user->id)->first();
         $invite = Invite::query()->where('invite_user_id', $user->id)->first();
 
-        $isAdmin = isAdmin(User::ADMIN);
-        $isModer = isAdmin(User::MODER);
+        $adminGroups = User::ADMIN_GROUPS;
 
-        return view('pages/user', compact('user', 'invite', 'note', 'isAdmin', 'isModer'));
+        return view('pages/user', compact('user', 'invite', 'note', 'adminGroups'));
     }
 
     /**

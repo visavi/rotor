@@ -25,8 +25,8 @@
         </div>
     @endif
 
-    @if ($user['level'] >= 101 && $user['level'] <= 105)
-        <div class="alert alert-info">Должность: <b>{{ userLevel($user['level']) }}</b></div>
+    @if (in_array($user->level, $adminGroups))
+        <div class="alert alert-info">Должность: <b>{{ userLevel($user->level) }}</b></div>
     @endif
 
     <div class="container-fluid">
@@ -87,8 +87,8 @@
                 <a href="/rating/{{ $user->login }}">Репутация: <b>{!! formatNum($user['rating']) !!}</b> (+{{  $user['posrating'] }}/-{{  $user['negrating'] }})</a><br>
 
                 @if (getUser() && getUser('login') != $user['login'])
-                    [ <a href="/user/{{ $user['login'] }}/rating?vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
-                    <a href="/user/{{ $user['login'] }}/rating?vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a> ]<br>
+                    <a href="/user/{{ $user['login'] }}/rating?vote=1"><i class="fa fa-thumbs-up"></i><span style="color:#0099cc"> Плюс</span></a> /
+                    <a href="/user/{{ $user['login'] }}/rating?vote=0"><span style="color:#ff0000">Минус</span> <i class="fa fa-thumbs-down"></i></a><br>
                 @endif
 
             </div>
@@ -144,14 +144,14 @@
                 <i class="fa fa-home"></i> <a href="{{ $user['site'] }}">Перейти на сайт {{ $user['login'] }}</a><br>
             @endif
 
-            @if ($isModer)
+            @if (isAdmin('moder'))
                 @if (!empty(setting('invite')))
                     <i class="fa fa-ban"></i> <a href="/admin/invitations?act=send&amp;user={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">Отправить инвайт</a><br>
                 @endif
             <i class="fa fa-ban"></i> <a href="/admin/ban?act=edit&amp;uz={{ $user['login'] }}">Бан / Разбан</a><br>
             @endif
 
-            @if ($isAdmin)
+            @if (isAdmin('admin'))
                 <i class="fa fa-wrench"></i> <a href="/admin/users?act=edit&amp;uz={{ $user['login'] }}">Редактировать</a><br>
             @endif
         @else
