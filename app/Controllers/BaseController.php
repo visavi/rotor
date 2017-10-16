@@ -57,7 +57,8 @@ Class BaseController
                 }
                 // ------------------------------ Запись логов -------------------------------//
                 $write = time().'|'.server('REQUEST_URI').'|'.server('HTTP_REFERER').'|'.getUserAgent().'|'.getUser('login').'|';
-                writeFiles(STORAGE.'/antidos/'.getClientIp().'.dat', $write."\r\n", 0, 0666);
+                file_put_contents(STORAGE.'/antidos/'.getClientIp().'.dat', $write."\r\n", FILE_APPEND);
+
                 // ----------------------- Автоматическая блокировка ------------------------//
                 if (counterString(STORAGE.'/antidos/'.getClientIp().'.dat') > setting('doslimit')) {
 

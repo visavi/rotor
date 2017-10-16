@@ -1108,7 +1108,9 @@ function statsNewsDate()
 }
 
 /**
- * Ввыводит HTML для последних новостей
+ * Возвращает последние новости
+ *
+ * @return string новость
  */
 function lastNews()
 {
@@ -1532,21 +1534,6 @@ function restatement($mode)
         case 'photo':
             DB::update('update photo set comments = (select count(*) from comments where relate_type=  "'.Photo::class.'" and photo.id = comments.relate_id)');
             break;
-    }
-}
-
-// ------------------------ Функция записи в файл ------------------------//
-function writeFiles($filename, $text, $clear = 0, $chmod = 0)
-{
-
-    if (empty($clear)) {
-        file_put_contents($filename, $text, FILE_APPEND | LOCK_EX);
-    } else {
-        file_put_contents($filename, $text, LOCK_EX);
-    }
-
-    if (!empty($chmod)) {
-        @chmod($filename, $chmod);
     }
 }
 
@@ -2538,6 +2525,23 @@ function setting($key = null)
 
     return isset(Registry::get('setting')[$key]) ? Registry::get('setting')[$key] : null;
 }
+
+/**
+ * Устанавливает настройки сайта
+ *
+ * @param mixed  $setting массив настроек или ключ
+ * @param string $value   значение если передан ключ
+ */
+/*function setSetting($setting, $value = null)
+{
+    if (! is_array($setting)) {
+        $setting[$setting] = $value;
+    }
+
+
+    $setting = array_merge(Registry::get('setting'), $setting);
+    Registry::set('setting', $setting);
+}*/
 
 /**
  * Преобразует путь к сайту независимо от протокола
