@@ -128,6 +128,5 @@ foreach ($files as $file) {
 }
 
 if (isset($setting)) {
-    $setting = array_merge(Registry::get('setting'), $setting);
-    Registry::set('setting', $setting);
+    setSetting($setting);
 }

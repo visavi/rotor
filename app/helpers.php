@@ -2529,19 +2529,13 @@ function setting($key = null)
 /**
  * Устанавливает настройки сайта
  *
- * @param mixed  $setting массив настроек или ключ
- * @param string $value   значение если передан ключ
+ * @param array $setting массив настроек
  */
-/*function setSetting($setting, $value = null)
+function setSetting($setting)
 {
-    if (! is_array($setting)) {
-        $setting[$setting] = $value;
-    }
-
-
     $setting = array_merge(Registry::get('setting'), $setting);
     Registry::set('setting', $setting);
-}*/
+}
 
 /**
  * Преобразует путь к сайту независимо от протокола
