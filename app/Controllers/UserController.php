@@ -294,8 +294,8 @@ class UserController extends BaseController
                     }
 
                     // ----- Уведомление в приват ----//
-                    $textPrivate = textPrivate(1, ['%USERNAME%' => $logs, '%SITENAME%' => setting('home')]);
-                    sendPrivate($user->id, 0, $textPrivate);
+                    $textNotice = textNotice('register', ['%USERNAME%' => $logs, '%SITENAME%' => setting('home')]);
+                    sendPrivate($user->id, 0, $textNotice);
 
                     $subject = 'Регистрация на сайте ' . setting('title');
                     $body = view('mailer.register', compact('subject', 'message', 'activateKey', 'activateLink'), true);

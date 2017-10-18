@@ -1817,19 +1817,19 @@ function sendPrivate($userId, $authorId, $text)
 /**
  * Возвращает приватное сообщение
  *
- * @param  int    $id      ID сообщения
+ * @param  string $type    тип сообщения
  * @param  array  $replace массив заменяемых параметров
  * @return string          сформированный текст
  */
-function textPrivate($id, $replace = [])
+function textNotice($type, $replace = [])
 {
-    $message = Notice::query()->find($id);
+    $message = Notice::query()->where('type', $type)->first();
 
     if (! $message) {
         return 'Отсутствует текст сообщения!';
     }
 
-    foreach ($replace as $key => $val){
+    foreach ($replace as $key => $val) {
         $message->text = str_replace($key, $val, $message->text);
     }
 
