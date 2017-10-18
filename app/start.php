@@ -41,14 +41,14 @@ if (empty($_SESSION['id']) && empty($_SESSION['password'])) {
 
                     Login::query()->create([
                         'user_id' => $user->id,
-                        'ip' => getClientIp(),
-                        'brow' => getUserAgent(),
+                        'ip'      => getIp(),
+                        'brow'    => getBrowser(),
                         'created_at' => SITETIME,
                     ]);
                 }
 
                 $user->update([
-                    'visits' => DB::raw('visits + 1'),
+                    'visits'        => DB::raw('visits + 1'),
                     'timelastlogin' => SITETIME
                 ]);
             }

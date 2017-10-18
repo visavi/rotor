@@ -94,7 +94,7 @@ if (isAdmin()) {
 
                     } else {
 
-                        DB::insert("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [getUser('login'), $msg, getClientIp(), getUserAgent(), SITETIME]);
+                        DB::insert("INSERT INTO `chat` (`user`, `text`, `ip`, `brow`, `time`) VALUES (?, ?, ?, ?, ?);", [getUser('login'), $msg, getIp(), getBrowser(), SITETIME]);
                     }
 
                     DB::update("UPDATE `users` SET `newchat`=? WHERE `login`=? LIMIT 1;", [statsNewChat(), getUser('login')]);

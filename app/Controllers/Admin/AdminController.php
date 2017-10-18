@@ -24,8 +24,8 @@ Class AdminController extends BaseController
             'user_id'    => getUser('id'),
             'request'    => server('REQUEST_URI'),
             'referer'    => server('HTTP_REFERER'),
-            'ip'         => getClientIp(),
-            'brow'       => getUserAgent(),
+            'ip'         => getIp(),
+            'brow'       => getBrowser(),
             'created_at' => SITETIME,
         ]);
 

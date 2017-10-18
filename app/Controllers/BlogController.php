@@ -89,7 +89,7 @@ class BlogController extends BaseController
             $reads = Read::query()
                 ->where('relate_type', Blog::class)
                 ->where('relate_id', $id)
-                ->where('ip', getClientIp())
+                ->where('ip', getIp())
                 ->first();
 
             if (! $reads) {
@@ -103,7 +103,7 @@ class BlogController extends BaseController
                 Read::query()->create([
                     'relate_type' => Blog::class,
                     'relate_id'   => $id,
-                    'ip'          => getClientIp(),
+                    'ip'          => getIp(),
                     'created_at'  => $expiresRead,
                 ]);
 
@@ -323,8 +323,8 @@ class BlogController extends BaseController
                     'text'        => $msg,
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
-                    'ip'          => getClientIp(),
-                    'brow'        => getUserAgent(),
+                    'ip'          => getIp(),
+                    'brow'        => getBrowser(),
                 ]);
 
                 $user = User::query()->where('id', getUser('id'));

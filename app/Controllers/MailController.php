@@ -33,7 +33,7 @@ class MailController extends BaseController
 
             if ($validator->isValid()) {
 
-                $message .= '<br><br>IP: ' . getClientIp() . '<br>Браузер: ' . getUserAgent() . '<br>Отправлено: ' . dateFixed(SITETIME, 'j.m.Y / H:i');
+                $message .= '<br><br>IP: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . dateFixed(SITETIME, 'j.m.Y / H:i');
 
                 $subject = 'Письмо с сайта ' . setting('title');
                 $body = view('mailer.default', compact('subject', 'message'), true);
@@ -85,7 +85,7 @@ class MailController extends BaseController
 
                 //Инструкция по восстановлению пароля на email
                 $subject = 'Восстановление пароля на сайте ' . setting('title');
-                $message = 'Здравствуйте, ' . $user['login'] . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . setting('home') . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getClientIp() . '<br>Браузер: ' . getUserAgent() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
+                $message = 'Здравствуйте, ' . $user['login'] . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . setting('home') . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
 
                 $body = view('mailer.recovery', compact('subject', 'message', 'resetLink'), true);
                 sendMail($user['email'], $subject, $body);

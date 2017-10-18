@@ -70,8 +70,8 @@ class BookController extends BaseController
             Guest::query()->create([
                 'user_id'    => $username,
                 'text'       => $msg,
-                'ip'         => getClientIp(),
-                'brow'       => getUserAgent(),
+                'ip'         => getIp(),
+                'brow'       => getBrowser(),
                 'created_at' => SITETIME,
             ]);
 

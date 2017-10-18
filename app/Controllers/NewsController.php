@@ -89,8 +89,8 @@ class NewsController extends BaseController
                     'text'        => $msg,
                     'user_id'     => getUser('id'),
                     'created_at'  => SITETIME,
-                    'ip'          => getClientIp(),
-                    'brow'        => getUserAgent(),
+                    'ip'          => getIp(),
+                    'brow'        => getBrowser(),
                 ]);
 
                 $user = User::query()->where('id', getUser('id'));

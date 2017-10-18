@@ -146,8 +146,8 @@ class ForumController extends BaseController
                     'user_id'    => getUser('id'),
                     'text'       => $msg,
                     'created_at' => SITETIME,
-                    'ip'         => getClientIp(),
-                    'brow'       => getUserAgent(),
+                    'ip'         => getIp(),
+                    'brow'       => getBrowser(),
                 ]);
 
                 Topic::query()->where('id', $topic->id)->update(['last_post_id' => $post->id]);

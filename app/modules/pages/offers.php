@@ -207,7 +207,7 @@ switch ($action):
 
                                 $msg = antimat($msg);
 
-                                DB::insert("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, getUser('login'), SITETIME, getClientIp(), getUserAgent()]);
+                                DB::insert("INSERT INTO `comments` (relate_type, relate_category_id, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['offer', 0, $id, $msg, getUser('login'), SITETIME, getIp(), getBrowser()]);
 
                                 DB::update("UPDATE `offers` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
 

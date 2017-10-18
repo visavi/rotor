@@ -14,22 +14,22 @@ $newHost = false;
 
 if (getUser()) {
     $online = Online::query()
-        ->where('ip', getClientIp())
+        ->where('ip', getIp())
         ->orWhere('user_id', getUser('id'))
         ->orderByRaw('user_id = ? desc', [getUser('id')])
         ->first();
 
     if ($online) {
         $online->update([
-            'ip'         => getClientIp(),
-            'brow'       => getUserAgent(),
+            'ip'         => getIp(),
+            'brow'       => getBrowser(),
             'updated_at' => SITETIME,
             'user_id'    => getUser('id'),
         ]);
     } else {
         Online::query()->create([
-            'ip'         => getClientIp(),
-            'brow'       => getUserAgent(),
+            'ip'         => getIp(),
+            'brow'       => getBrowser(),
             'updated_at' => SITETIME,
             'user_id'    => getUser('id'),
         ]);
@@ -37,20 +37,20 @@ if (getUser()) {
     }
 } else {
     $online = Online::query()
-        ->where('ip', getClientIp())
+        ->where('ip', getIp())
         ->orderByRaw('user_id IS NULL desc')
         ->first();
 
     if ($online) {
         $online->update([
-            'brow'       => getUserAgent(),
+            'brow'       => getBrowser(),
             'updated_at' => SITETIME,
             'user_id'    => null,
         ]);
     } else {
         Online::query()->create([
-            'ip'         => getClientIp(),
-            'brow'       => getUserAgent(),
+            'ip'         => getIp(),
+            'brow'       => getBrowser(),
             'updated_at' => SITETIME,
         ]);
         $newHost = true;

@@ -846,7 +846,7 @@ class UserController extends BaseController
             ]);
 
             $subject = 'Изменение пароля на сайте '.setting('title');
-            $message = 'Здравствуйте, '.getUser('login').'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.getClientIp().'<br>Браузер: '.getUserAgent().'<br>Время: '.date('j.m.y / H:i', SITETIME);
+            $message = 'Здравствуйте, '.getUser('login').'<br>Вами была произведена операция по изменению пароля<br><br><b>Ваш новый пароль: '.$newpass.'</b><br>Сохраните его в надежном месте<br><br>Данные инициализации:<br>IP: '.getIp().'<br>Браузер: '.getBrowser().'<br>Время: '.date('j.m.y / H:i', SITETIME);
 
             $body = view('mailer.default', compact('subject', 'message'), true);
             sendMail($user->email, $subject, $body);

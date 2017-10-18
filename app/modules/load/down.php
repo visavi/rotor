@@ -322,12 +322,12 @@ case 'load':
                 $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
                 if (file_exists('uploads/files/'.$folder.$downs['link'])) {
-                    $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", [$id, getClientIp()]);
+                    $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", [$id, getIp()]);
                     if (empty($queryloads)) {
                         $expiresloads = SITETIME + 3600 * setting('expiresloads');
 
                         DB::delete("DELETE FROM loads WHERE time<?;", [SITETIME]);
-                        DB::insert("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, getClientIp(), $expiresloads]);
+                        DB::insert("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, getIp(), $expiresloads]);
                         DB::update("UPDATE downs SET loads=loads+1, last_load=? WHERE id=?", [SITETIME, $id]);
                     }
 
@@ -515,7 +515,7 @@ case 'add':
 
                             $msg = antimat($msg);
 
-                            DB::insert("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, getUser('login'), SITETIME, getClientIp(), getUserAgent()]);
+                            DB::insert("INSERT INTO `comments` (relate_type, `relate_category_id`, `relate_id`, `text`, `user`, `time`, `ip`, `brow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", ['down',$downs['category_id'], $id, $msg, getUser('login'), SITETIME, getIp(), getBrowser()]);
 
                             DB::update("UPDATE `downs` SET `comments`=`comments`+1 WHERE `id`=?;", [$id]);
                             DB::update("UPDATE `users` SET `allcomments`=`allcomments`+1, `point`=`point`+1, `money`=`money`+5 WHERE `login`=?", [getUser('login')]);

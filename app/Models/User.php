@@ -28,9 +28,21 @@ class User extends BaseModel
     ];
 
     /**
+     * Администраторы
+     */
+    const USER_GROUPS = [
+        self::BOSS,
+        self::ADMIN,
+        self::MODER,
+        self::MANAGER,
+        self::EDITOR,
+        self::USER,
+    ];
+
+    /**
      * Все пользователи
      */
-    const GROUPS = [
+    const ALL_GROUPS = [
         self::BOSS,
         self::ADMIN,
         self::MODER,
@@ -125,8 +137,8 @@ class User extends BaseModel
 
                     Login::query()->create([
                         'user_id' => $user->id,
-                        'ip' => getClientIp(),
-                        'brow' => getUserAgent(),
+                        'ip' => getIp(),
+                        'brow' => getBrowser(),
                         'created_at' => SITETIME,
                         'type' => 1,
                     ]);

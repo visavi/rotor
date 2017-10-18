@@ -117,7 +117,7 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'screensize', 'value' => 500],
             ['name'  => 'screenupload', 'value' => 2097152],
             ['name'  => 'screenupsize', 'value' => 5000],
-            ['name'  => 'sendmailpacket', 'value' => 20],
+            ['name'  => 'sendmailpacket', 'value' => 3],
             ['name'  => 'sendmoneypoint', 'value' => 150],
             ['name'  => 'sendprivatmailday', 'value' => 3],
             ['name'  => 'showuser', 'value' => 10],

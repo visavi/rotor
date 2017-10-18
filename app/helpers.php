@@ -1175,7 +1175,7 @@ function isAdmin($level = User::EDITOR)
  */
 function access($level)
 {
-    $access = array_flip(User::GROUPS);
+    $access = array_flip(User::ALL_GROUPS);
 
     if (
         getUser()
@@ -1935,8 +1935,8 @@ function abort($code, $message = null)
             'request'    => utfSubstr(server('REQUEST_URI'), 0, 200),
             'referer'    => utfSubstr(server('HTTP_REFERER'), 0, 200),
             'user_id'    => getUser('id'),
-            'ip'         => getClientIp(),
-            'brow'       => getUserAgent(),
+            'ip'         => getIp(),
+            'brow'       => getBrowser(),
             'created_at' => SITETIME,
         ]);
 
@@ -2106,14 +2106,8 @@ function sendMail($to, $subject, $body, $params = [])
         ->setSubject($subject)
         ->setBody($body, 'text/html')
         ->setFrom($params['from'])
-        ->setReturnPath(env('SITE_EMAIL'));
-
-    if (isset($params['subscribe'])) {
-        $message->getHeaders()->addTextHeader('List-Unsubscribe', '<'.env('SITE_EMAIL').'>, <'.setting('home').'/unsubscribe?key='.$params['subscribe'].'>');
-
-        $body = str_replace('<!-- unsubscribe -->', '<br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.setting('home').'/unsubscribe?key='.$params['subscribe'].'">откажитесь от подписки</a></small>', $body);
-        $message->setBody($body, 'text/html');
-    }
+        ->setReturnPath(env('SITE_EMAIL'))
+        ->setBody($body, 'text/html');
 
     if (env('MAIL_DRIVER') == 'smtp') {
         $transport = (new Swift_SmtpTransport(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION')))
@@ -2236,7 +2230,7 @@ function bbCode($text, $parse = true)
  *
  * @return string IP пользователя
  */
-function getClientIp()
+function getIp()
 {
     $ip = Request::ip();
     return $ip == '::1' ? '127.0.0.1' : $ip;
@@ -2248,7 +2242,7 @@ function getClientIp()
  * @param string|null $userAgent
  * @return string браузер и версия браузера
  */
-function getUserAgent($userAgent = null)
+function getBrowser($userAgent = null)
 {
     $browser = new Browser();
     if ($userAgent) {
