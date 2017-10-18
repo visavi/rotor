@@ -113,7 +113,7 @@ function deleteImage($dir, $image)
  * Удаляет записи пользователя из всех таблиц
  *
  * @param  User    $user объект пользователя
- * @return boolean       результат удаления
+ * @return bool          результат удаления
  */
 function deleteUser(User $user)
 {
@@ -1353,7 +1353,7 @@ function saveAdvertUser()
 /**
  * Выводит последние фотографии
  *
- * @param  int $show Количество последних фотографий для вывода
+ * @param  int $show Количество последних фотографий
  */
 function recentPhotos($show = 5)
 {
@@ -1376,9 +1376,9 @@ function recentPhotos($show = 5)
 }
 
 /**
- * Выводит последние темы форума, предварительно закэешировав, если необходимо
+ * Выводит последние темы форума
  *
- * @param int $show Количество последних тем форума для вывода
+ * @param int $show Количество последних тем форума
  */
 function recentTopics($show = 5)
 {
@@ -1398,9 +1398,9 @@ function recentTopics($show = 5)
 }
 
 /**
- * Выводит последние темы форума, предварительно закэешировав, если необходимо
+ * Выводит последние темы форума
  *
- * @param int $show Количество последних файлов в загрузках для вывода
+ * @param int $show Количество последних файлов в загрузках
  */
 function recentFiles($show = 5)
 {
@@ -1427,7 +1427,7 @@ function recentFiles($show = 5)
 }
 
 /**
- * Выводит последние статьи в блогах, предварительно закэешировав, если необходимо
+ * Выводит последние статьи в блогах
  *
  * @param int $show Количество последних статей в блогах для вывода
  */
@@ -1451,7 +1451,11 @@ function recentBlogs($show = 5)
     }
 }
 
-// ------------- Функция вывода количества предложений и пожеланий -------------//
+/**
+ *  Возвращает количество предложений и проблем
+ *
+ * @return string количество предложений и проблем
+ */
 function statsOffers()
 {
     if (@filemtime(STORAGE."/temp/offers.dat") < time() - 10800) {
@@ -1579,7 +1583,103 @@ function showAdminLinks($level = 0)
     }
 }
 
-// ------------- Функция кэширования уменьшенных изображений -------------//
+// ------------- Функция вывода ссылки на анкету -------------//
+/**
+ * Возвращает ссылку на профиль пользователя
+ *
+ * @param  User   $user  объект пользователя
+ * @param  string $color цвет логина
+ * @return string        путь к профилю
+ */
+function profile(User $user, $color = null)
+{
+    if ($user->id){
+        $name = empty($user->name) ? $user->login : $user->name;
+
+        if ($color){
+            return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$name.'</span></a>';
+        } else {
+            return '<a href="/user/'.$user->login.'">'.$name.'</a>';
+        }
+    }
+
+    return setting('guestsuser');
+}
+
+/**
+ * Форматирует вывод числа
+ *
+ * @param  int    $num число
+ * @return string      форматированное число
+ */
+function formatNum($num)
+{
+    if ($num > 0) {
+        return '<span style="color:#00aa00">+'.$num.'</span>';
+    } elseif ($num < 0) {
+        return '<span style="color:#ff0000">'.$num.'</span>';
+    } else {
+        return '<span>0</span>';
+   }
+}
+
+/**
+ * Загружает изображение
+ *
+ * @param  string $file    путь изображения
+ * @param  int    $weight  вес изображения
+ * @param  int    $size    размер изображения
+ * @param  bool   $newName новое имя изображения
+ * @return FileUpload|bool результат загрузки
+ */
+function uploadImage($file, $weight, $size, $newName = false)
+{
+    $handle = new FileUpload($file);
+
+    if ($handle->uploaded) {
+        $handle -> image_resize = true;
+        $handle -> image_ratio = true;
+        $handle -> image_ratio_no_zoom_in = true;
+        $handle -> image_y = setting('screensize');
+        $handle -> image_x = setting('screensize');
+        $handle -> file_overwrite = true;
+
+        if ($handle->file_src_name_ext == 'png' ||
+            $handle->file_src_name_ext == 'bmp') {
+            $handle->image_convert = 'jpg';
+        }
+
+        if ($newName) {
+            $handle -> file_new_name_body = $newName;
+        }
+
+        if (setting('copyfoto')) {
+            $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
+            $handle -> image_watermark_position = 'BR';
+        }
+
+        $handle -> ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
+        $handle -> file_max_size = $weight;  // byte
+        $handle -> image_max_width = $size;  // px
+        $handle -> image_max_height = $size; // px
+        $handle -> image_min_width = 100;    // px
+        $handle -> image_min_height = 100;   // px
+
+        return $handle;
+    }
+
+    return false;
+}
+
+/**
+ * Выполняет уменьшение и кеширование изображений
+ *
+ * @param  string $dir    путь изображения
+ * @param  string $name   имя уменьшенного изображения
+ * @param  int    $size   размер изображения
+ * @param  array  $params параметры изображения
+ * @return string         уменьшенное изображение
+ */
 function resizeImage($dir, $name, $size, $params = [])
 {
     if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
@@ -1625,96 +1725,15 @@ function resizeImage($dir, $name, $size, $params = [])
     return '<img src="/assets/img/images/photo.jpg" alt="nophoto">';
 }
 
-// ------------- Функция вывода ссылки на анкету -------------//
-function profile($user, $color = false)
-{
-    if ($user->id){
-        $name = empty($user->name) ? $user->login : $user->name;
-
-        if ($color){
-            return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$name.'</span></a>';
-        } else {
-            return '<a href="/user/'.$user->login.'">'.$name.'</a>';
-        }
-    }
-
-    return setting('guestsuser');
-}
 
 /**
- * Форматирует вывод числа
+ * Возвращает находится ли пользователь в контакатх
  *
- * @param integer $num
- * @return string
+ * @param  User $user       объект пользователя
+ * @param  User $ignoreUser объект пользователя
+ * @return bool             находится ли в контактах
  */
-function formatNum($num)
-{
-    if ($num > 0) {
-        return '<span style="color:#00aa00">+'.$num.'</span>';
-    } elseif ($num < 0) {
-        return '<span style="color:#ff0000">'.$num.'</span>';
-    } else {
-        return '<span>0</span>';
-   }
-}
-
-// ------------- Добавление пользовательского файла в ZIP-архив -------------//
-function copyrightArchive($filename)
-{
-
-    $readme_file = HOME.'/assets/Visavi_Readme.txt';
-    $ext = getExtension($filename);
-
-    if ($ext == 'zip' && file_exists($readme_file)){
-        $archive = new PclZip($filename);
-        $archive->add($readme_file, PCLZIP_OPT_REMOVE_PATH, dirname($readme_file));
-
-        return true;
-    }
-}
-
-// ------------- Функция загрузки и обработки изображений -------------//
-function uploadImage($file, $weight, $size, $newName = false)
-{
-    $handle = new FileUpload($file);
-
-    if ($handle->uploaded) {
-        $handle -> image_resize = true;
-        $handle -> image_ratio = true;
-        $handle -> image_ratio_no_zoom_in = true;
-        $handle -> image_y = setting('screensize');
-        $handle -> image_x = setting('screensize');
-        $handle -> file_overwrite = true;
-
-        if ($handle->file_src_name_ext == 'png' ||
-            $handle->file_src_name_ext == 'bmp') {
-            $handle->image_convert = 'jpg';
-        }
-
-        if ($newName) {
-            $handle -> file_new_name_body = $newName;
-        }
-
-        if (setting('copyfoto')) {
-            $handle -> image_watermark = HOME.'/assets/img/images/watermark.png';
-            $handle -> image_watermark_position = 'BR';
-        }
-
-        $handle -> ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
-        $handle -> file_max_size = $weight;  // byte
-        $handle -> image_max_width = $size;  // px
-        $handle -> image_max_height = $size; // px
-        $handle -> image_min_width = 100;     // px
-        $handle -> image_min_height = 100;    // px
-
-        return $handle;
-    }
-
-    return false;
-}
-
-// ----- Функция определения входит ли пользователь в контакты -----//
-function isContact($user, $contactUser)
+function isContact(User $user, User $contactUser)
 {
     $isContact = Contact::query()
         ->where('user_id', $user->id)
@@ -1728,8 +1747,14 @@ function isContact($user, $contactUser)
     return false;
 }
 
-// ----- Функция определения входит ли пользователь в игнор -----//
-function isIgnore($user, $ignoreUser)
+/**
+ * Возвращает находится ли пользователь в игноре
+ *
+ * @param  User $user       объект пользователя
+ * @param  User $ignoreUser объект пользователя
+ * @return bool             находится ли в игноре
+ */
+function isIgnore(User $user, User $ignoreUser)
 {
 
     $isIgnore = Ignore::query()
@@ -1744,7 +1769,11 @@ function isIgnore($user, $ignoreUser)
     return false;
 }
 
-// ----- Функция рекурсивного удаления директории -----//
+/**
+ * Удаляет директорию рекурсивно
+ *
+ * @param string $dir
+ */
 function removeDir($dir)
 {
     if (file_exists($dir)){
@@ -1757,8 +1786,15 @@ function removeDir($dir)
     }
 }
 
-// ----- Функция отправки приватного сообщения -----//
-function sendPrivate($userId, $authorId, $text, $time = SITETIME)
+/**
+ * Отправляет приватное сообщение
+ *
+ * @param  int  $userId   ID пользователя получателя
+ * @param  int  $authorId ID пользователя отправителя
+ * @param  int  $text     текст сообщения
+ * @return bool           результат отправки
+ */
+function sendPrivate($userId, $authorId, $text)
 {
     if ($user = User::query()->find($userId)) {
 
@@ -1766,7 +1802,7 @@ function sendPrivate($userId, $authorId, $text, $time = SITETIME)
             'user_id'    => $userId,
             'author_id'  => $authorId,
             'text'       => $text,
-            'created_at' => $time,
+            'created_at' => SITETIME,
         ]);
 
         $user->increment('newprivat');
@@ -1778,7 +1814,13 @@ function sendPrivate($userId, $authorId, $text, $time = SITETIME)
     return false;
 }
 
-// ----- Функция подготовки приватного сообщения -----//
+/**
+ * Возвращает приватное сообщение
+ *
+ * @param  int    $id      ID сообщения
+ * @param  array  $replace массив заменяемых параметров
+ * @return string          сформированный текст
+ */
 function textPrivate($id, $replace = [])
 {
     $message = Notice::query()->find($id);
@@ -1794,20 +1836,26 @@ function textPrivate($id, $replace = [])
     return $message->text;
 }
 
-// ------------ Функция статистики производительности -----------//
+/**
+ * Выводит блок статистики производительности
+ *
+ * @return string статистика производительности
+ */
 function performance()
 {
     if (isAdmin() && setting('performance')){
 
         $queries = env('APP_DEBUG') ? getQueryLog() : [];
-
         return view('app/_performance', compact('queries'));
     }
+
+    return null;
 }
 
 /**
  * Очистка кеш-файлов
- * @return boolean результат выполнения
+ *
+ * @return bool результат выполнения
  */
 function clearCache()
 {
@@ -1847,10 +1895,10 @@ function returnUrl($url = null)
 /**
  * Возвращает подключенный шаблон
  *
- * @param $template
- * @param  array $params массив параметров
- * @param  boolean $return выводить или возвращать код
- * @return string сформированный код
+ * @param  string  $template имя шаблона
+ * @param  array   $params   массив параметров
+ * @param  bool    $return   выводить или возвращать код
+ * @return string            сформированный код
  */
 function view($template, $params = [], $return = false)
 {
@@ -1916,8 +1964,8 @@ function abort($code, $message = null)
 /**
  * Переадресовывает пользователя
  *
- * @param  string  $url адрес переадресации
- * @param  boolean $permanent постоянное перенаправление
+ * @param  string  $url       адрес переадресации
+ * @param  bool    $permanent постоянное перенаправление
  * @return void
  */
 function redirect($url, $permanent = false)
@@ -2031,7 +2079,7 @@ function textError($field)
  * Проверяет является ли email валидным
  *
  * @param  string  $email адрес email
- * @return boolean результат проверки
+ * @return bool           результат проверки
  */
 function isMail($email)
 {
@@ -2045,7 +2093,7 @@ function isMail($email)
  * @param  string  $subject Тема письма
  * @param  string  $body    Текст сообщения
  * @param  array   $params  Дополнительные параметры
- * @return boolean          Результат отправки
+ * @return bool             Результат отправки
  */
 function sendMail($to, $subject, $body, $params = [])
 {
@@ -2154,7 +2202,7 @@ function plural($num, $forms)
  *
  * @param  string $date   дата
  * @param  string $format формат даты
- * @return boolean        результат валидации
+ * @return bool           результат валидации
  */
 function validateDate($date, $format = 'Y-m-d H:i:s')
 {
@@ -2166,7 +2214,7 @@ function validateDate($date, $format = 'Y-m-d H:i:s')
  * Обрабатывает BB-код
  *
  * @param  string  $text  Необработанный текст
- * @param  boolean $parse Обрабатывать или вырезать код
+ * @param  bool    $parse Обрабатывать или вырезать код
  * @return string         Обработанный текст
  */
 function bbCode($text, $parse = true)
@@ -2485,8 +2533,8 @@ function getQueryLog()
 /**
  * Выводит список забаненных ip
  *
- * @param  boolean $save нужно ли сбросить кеш
- * @return array         массив IP
+ * @param  bool $save нужно ли сбросить кеш
+ * @return array      массив IP
  */
 function ipBan($save = false)
 {

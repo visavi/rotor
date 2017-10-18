@@ -429,8 +429,6 @@ case 'loadfile':
                                             move_uploaded_file($_FILES['loadfile']['tmp_name'], UPLOADS.'/files/'.$folder.$filename);
                                             @chmod(UPLOADS.'/files/'.$folder.$filename, 0666);
 
-                                            copyrightArchive(UPLOADS.'/files/'.$folder.$filename);
-
                                             DB::update("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
                                             // Обработка видео
