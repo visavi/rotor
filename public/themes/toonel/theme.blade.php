@@ -96,7 +96,7 @@ header("Content-type:text/html; charset=utf-8");
         <td align="center" colspan="3" class="ftexttd">
             @yield('counter')
             @yield('online')
-            <a href="{{ setting('home') }}">{{ setting('copy') }}</a><br/>
+            <a href="/">{{ setting('copy') }}</a><br/>
         </td>
     </tr>
 

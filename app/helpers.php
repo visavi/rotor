@@ -2580,14 +2580,20 @@ function setSetting($setting)
 }
 
 /**
- * Преобразует путь к сайту независимо от протокола
+ * Возвращает путь к сайту
  *
- * @param  string $link адрес сайта
- * @return string       адрес сайта с протоколом
+ * @param  bool   $parse выводить протокол
+ * @return string        адрес сайта
  */
-function siteLink($link)
+function siteUrl($parse = false)
 {
-    return starts_with($link, '//') ? 'http:' . $link : $link;
+    $url = env('SITE_URL');
+
+    if ($parse) {
+        $url = starts_with($url, '//') ? 'http:' . $url : $url;
+    }
+
+    return $url;
 }
 
 /**
@@ -2596,11 +2602,11 @@ function siteLink($link)
  * @param  string $link ссылка на сайт
  * @return string       имя сайта
  */
-function siteDomain($link)
+function siteDomain($url)
 {
-    $link = strtolower($link);
-    $link = str_replace(['http://www.', 'http://', 'https://', '//'], '', $link);
-    $link = strtok($link, '/?');
+    $url = strtolower($url);
+    $url = str_replace(['http://www.', 'http://', 'https://', '//'], '', $url);
+    $url = strtok($url, '/?');
 
-    return $link;
+    return $url;
 }

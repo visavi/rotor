@@ -262,11 +262,11 @@ class UserController extends BaseController
                 if ($validator->isValid()) {
 
                     // --- Уведомление о регистрации на email ---//
-                    $message = 'Добро пожаловать, ' . $logs . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteLink(setting('home')) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $logs . '</b><br><b>Пароль: ' . $pars . '</b><br><br>';
+                    $message = 'Добро пожаловать, ' . $logs . '<br>Теперь вы зарегистрированный пользователь сайта <a href="' . siteUrl(true) . '">' . setting('title') . '</a> , сохраните ваш пароль и логин в надежном месте, они вам еще пригодятся. <br>Ваши данные для входа на сайт <br><b>Логин: ' . $logs . '</b><br><b>Пароль: ' . $pars . '</b><br><br>';
 
                     if (setting('regkeys')) {
                         $activateKey  = str_random();
-                        $activateLink = siteLink(setting('home')).'/key?code=' . $activateKey;
+                        $activateLink = siteUrl(true).'/key?code=' . $activateKey;
                         $level        = User::PENDED;
                     }
 
@@ -294,7 +294,7 @@ class UserController extends BaseController
                     }
 
                     // ----- Уведомление в приват ----//
-                    $textNotice = textNotice('register', ['%USERNAME%' => $logs, '%SITENAME%' => setting('home')]);
+                    $textNotice = textNotice('register', ['%USERNAME%' => $logs, '%SITENAME%' => siteUrl()]);
                     sendPrivate($user->id, 0, $textNotice);
 
                     $subject = 'Регистрация на сайте ' . setting('title');
@@ -364,7 +364,7 @@ class UserController extends BaseController
      */
     public function logout()
     {
-        $domain = siteDomain(setting('home'));
+        $domain = siteDomain(siteUrl());
 
         $_SESSION = [];
         setcookie('password', '', SITETIME - 3600, '/', $domain, null, true);
@@ -706,7 +706,7 @@ class UserController extends BaseController
             $genkey = str_random(rand(15,20));
 
             $subject = 'Изменение email на сайте '.setting('title');
-            $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteLink(setting('home')).'/account/editmail?key='.$genkey.'">'.siteLink(setting('home')).'/account/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
+            $message = 'Здравствуйте, '.$user->login.'<br>Вами была произведена операция по изменению адреса электронной почты<br><br>Для того, чтобы изменить email, необходимо подтвердить новый адрес почты<br>Перейдите по данной ссылке:<br><br><a href="'.siteUrl(true).'/account/editmail?key='.$genkey.'">'.siteUrl(true).'/account/editmail?key='.$genkey.'</a><br><br>Ссылка будет дейстительной в течение суток до '.date('j.m.y / H:i', SITETIME + 86400).'<br>Для изменения адреса необходимо быть авторизованным на сайте<br>Если это сообщение попало к вам по ошибке или вы не собираетесь менять email, то просто проигнорируйте данное письмо';
 
             $body = view('mailer.default', compact('subject', 'message'), true);
             sendMail($meil, $subject, $body);

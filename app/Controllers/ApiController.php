@@ -58,8 +58,8 @@ class ApiController extends BaseController
             'allprivat' => userMail($user),
             'newprivat' => $user->newprivat,
             'status'    => userStatus($user),
-            'avatar'    => setting('home').'/uploads/avatars/'.$user->avatar,
-            'picture'   => setting('home').'/uploads/photos/'.$user->picture,
+            'avatar'    => siteUrl().'/uploads/avatars/'.$user->avatar,
+            'picture'   => siteUrl().'/uploads/photos/'.$user->picture,
             'rating'    => $user->rating,
             'lastlogin' => $user->timelastlogin,
         ]);
@@ -102,7 +102,7 @@ class ApiController extends BaseController
         $messages = [];
         foreach ($inbox as $data) {
 
-            $data['text'] = str_replace('<img src="/uploads/smiles/', '<img src="'.setting('home').'/uploads/smiles/', bbCode($data['text']));
+            $data['text'] = str_replace('<img src="/uploads/smiles/', '<img src="'.siteUrl().'/uploads/smiles/', bbCode($data['text']));
 
             $messages[] = [
                 'author_id'  => $data->author_id,
@@ -154,7 +154,7 @@ class ApiController extends BaseController
         $messages = [];
         foreach ($posts as $post) {
 
-            $post['text'] = str_replace('<img src="/uploads/smiles/', '<img src="'.setting('home').'/uploads/smiles/', bbCode($post['text']));
+            $post['text'] = str_replace('<img src="/uploads/smiles/', '<img src="'.siteUrl().'/uploads/smiles/', bbCode($post['text']));
 
             $messages[] = [
                 'post_id'    => $post->id,

@@ -76,7 +76,7 @@ class MailController extends BaseController
 
             if ($validator->isValid()) {
                 $resetKey  = str_random();
-                $resetLink = siteLink(setting('home')) . '/recovery/restore?key=' . $resetKey;
+                $resetLink = siteUrl(true) . '/recovery/restore?key=' . $resetKey;
 
                 $user->update([
                     'keypasswd'  => $resetKey,
@@ -85,7 +85,7 @@ class MailController extends BaseController
 
                 //Инструкция по восстановлению пароля на email
                 $subject = 'Восстановление пароля на сайте ' . setting('title');
-                $message = 'Здравствуйте, ' . $user['login'] . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . setting('home') . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
+                $message = 'Здравствуйте, ' . $user['login'] . '<br>Вами была произведена операция по восстановлению пароля на сайте <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><br>Данные отправителя:<br>Ip: ' . getIp() . '<br>Браузер: ' . getBrowser() . '<br>Отправлено: ' . date('j.m.Y / H:i', SITETIME) . '<br><br>Для того чтобы восстановить пароль, вам необходимо нажать на кнопку восстановления<br>Если это письмо попало к вам по ошибке или вы не собираетесь восстанавливать пароль, то просто проигнорируйте его';
 
                 $body = view('mailer.recovery', compact('subject', 'message', 'resetLink'), true);
                 sendMail($user['email'], $subject, $body);
@@ -134,7 +134,7 @@ class MailController extends BaseController
 
             // Восстановление пароля на email
             $subject = 'Восстановление пароля на сайте ' . setting('title');
-            $message = 'Здравствуйте, ' . $user['login'] . '<br>Ваши новые данные для входа на на сайт <a href="' . setting('home') . '">' . setting('title') . '</a><br><b>Логин: ' . $user['login'] . '</b><br><b>Пароль: ' . $newpass . '</b><br><br>Запомните и постарайтесь больше не забывать данные <br>Пароль вы сможете поменять в своем профиле<br>Всего наилучшего!';
+            $message = 'Здравствуйте, ' . $user['login'] . '<br>Ваши новые данные для входа на на сайт <a href="' . siteUrl(true) . '">' . setting('title') . '</a><br><b>Логин: ' . $user['login'] . '</b><br><b>Пароль: ' . $newpass . '</b><br><br>Запомните и постарайтесь больше не забывать данные <br>Пароль вы сможете поменять в своем профиле<br>Всего наилучшего!';
 
             $body = view('mailer.default', compact('subject', 'message'), true);
             sendMail($user['email'], $subject, $body);

@@ -29,7 +29,7 @@ class AddSubscribers extends Task
 
                 $subject = $user->newprivat . ' непрочитанных сообщений (' . setting('title') . ')';
 
-                $message = 'Здравствуйте ' . $user->login . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteLink(setting('home')) . '/private">' . siteLink(setting('home')) . '/private</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.siteLink(setting('home')).'/unsubscribe?key='.$user->subscribe.'">откажитесь от подписки</a></small>';
+                $message = 'Здравствуйте ' . $user->login . '!<br>У вас имеются непрочитанные сообщения (' . $user->newprivat . ' шт.) на сайте ' . setting('title') . '<br>Прочитать свои сообщения вы можете по адресу <a href="' . siteUrl(true) . '/private">' . siteUrl(true) . '/private</a><br><br><small>Если вы не хотите получать эти email, пожалуйста, <a href="'.siteUrl(true).'/unsubscribe?key='.$user->subscribe.'">откажитесь от подписки</a></small>';
 
                 $body = view('mailer.default', compact('subject', 'message'), true);
 

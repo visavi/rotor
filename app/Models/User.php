@@ -91,7 +91,7 @@ class User extends BaseModel
      */
     public static function auth($login, $password, $remember = true)
     {
-        $domain = siteDomain(setting('home'));
+        $domain = siteDomain(siteUrl());
 
         if (!empty($login) && !empty($password)) {
 
@@ -171,7 +171,7 @@ class User extends BaseModel
      */
     public static function socialAuth($token)
     {
-        $domain = siteDomain(setting('home'));
+        $domain = siteDomain(siteUrl());
 
         $curl = new Curl();
         $network = $curl->get('http://ulogin.ru/token.php',

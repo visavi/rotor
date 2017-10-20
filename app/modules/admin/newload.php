@@ -227,7 +227,7 @@ if (isAdmin()) {
                                                             if (!empty($notice) && $notice != $new['notice']) {
                                                                 // ------------------------Уведомление по привату------------------------//
                                                                 if (getUser($new['user'])) {
-                                                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.setting('home').'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
+                                                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] не прошел проверку на добавление'.PHP_EOL.'Причина: '.$notice.PHP_EOL.'Отредактировать описание файла вы можете на [url='.siteUrl().'/load/add?act=view&amp;id='.$id.']этой[/url] странице';
 
                                                                     DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUser('login'), $textpriv, SITETIME]);
 
@@ -301,7 +301,7 @@ if (isAdmin()) {
                                 DB::update("UPDATE `cats` SET `count`=`count`+1 WHERE `id`=?", [$new['category_id']]);
 
                                 if (getUser($new['user'])) {
-                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.setting('home').'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
+                                    $textpriv = 'Уведомеление о проверке файла.'.PHP_EOL.'Ваш файл [b]'.$new['title'].'[/b] успешно прошел проверку и добавлен в архив файлов'.PHP_EOL.'Просмотреть свой файл вы можете на [url='.siteUrl().'/load/down?act=view&amp;id='.$id.']этой[/url] странице';
 
                                     DB::insert("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);", [$new['user'], getUser('login'), $textpriv, SITETIME]);
                                     DB::update("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=?", [$new['user']]);

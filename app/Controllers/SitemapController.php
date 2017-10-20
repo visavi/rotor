@@ -26,7 +26,7 @@ class SitemapController extends BaseController
 
         foreach ($pages as $page) {
             $locs[] = [
-                'loc'     => setting('home') . '/sitemap/' . $page,
+                'loc'     => siteUrl() . '/sitemap/' . $page,
                 'lastmod' => date('c', SITETIME),
             ];
         }
@@ -58,7 +58,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => setting('home') . '/article/' . $blog['id'],
+                'loc'        => siteUrl() . '/article/' . $blog['id'],
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -90,7 +90,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => setting('home') . '/news/' . $news['id'],
+                'loc'        => siteUrl() . '/news/' . $news['id'],
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -113,7 +113,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $topic['updated_at'] + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => setting('home') . '/topic/' . $topic['id'],
+                'loc'        => siteUrl() . '/topic/' . $topic['id'],
                 'lastmod'    => date('c', $topic['updated_at']),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -146,7 +146,7 @@ class SitemapController extends BaseController
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => setting('home') . '/load/down?act=view&id=' . $down['id'],
+                'loc'        => siteUrl() . '/load/down?act=view&id=' . $down['id'],
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',

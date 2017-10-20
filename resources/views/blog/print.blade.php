@@ -12,5 +12,5 @@
 
     <br><br>
 
-    URL: <a href="{{ setting('home') }}/article/{{ $blog->id }}">{{ setting('home') }}/article/{{ $blog->id }}</a>
+    URL: <a href="{{ siteUrl() }}/article/{{ $blog->id }}">{{ siteUrl(true) }}/article/{{ $blog->id }}</a>
 @stop

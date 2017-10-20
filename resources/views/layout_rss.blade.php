@@ -4,12 +4,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>@yield('title') {{ setting('title') }}</title>
-        <link>{{ setting('home') }}/</link>
+        <link>{{ siteUrl() }}/</link>
         <description>Сообщения RSS - {{ setting('title') }}</description>
         <image>
-            <url>{{ setting('home') }}{{ setting('logotip') }}</url>
+            <url>{{ siteUrl() }}{{ setting('logotip') }}</url>
             <title>Сообщения RSS - {{ setting('title') }}</title>
-            <link>{{ setting('home') }}/</link>
+            <link>{{ siteUrl() }}/</link>
         </image>
         <managingEditor>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</managingEditor>
         <webMaster>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</webMaster>

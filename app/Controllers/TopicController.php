@@ -193,7 +193,7 @@ class TopicController extends BaseController
                     $user = User::query()->where('login', $login)->first();
                     if ($user) {
                         if ($user['notify']) {
-                            sendPrivate($user->id, getUser('id'), 'Пользователь ' . getUser('login') . ' ответил вам в теме [url=' . setting('home') . '/topic/' . $topic->id . '/' . $post->id . ']' . $topic->title . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
+                            sendPrivate($user->id, getUser('id'), 'Пользователь ' . getUser('login') . ' ответил вам в теме [url=' . siteUrl() . '/topic/' . $topic->id . '/' . $post->id . ']' . $topic->title . '[/url]' . PHP_EOL . 'Текст сообщения: ' . $msg);
                         }
                     }
                 }

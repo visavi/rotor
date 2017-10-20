@@ -284,14 +284,10 @@ header("Content-type:text/html; charset=utf-8");
         После окончания инсталляции необходимо удалить директории <b>install</b> и <b>upgrade</b> со всем содержимым навсегда, пароль и остальные данные вы сможете поменять в своем профиле<br><br>
 
         <?php
-            $serverName = server('HTTP_HOST') ? server('HTTP_HOST') : server('SERVER_NAME');
-            $serverName = 'http://'.$serverName;
-
             $login     = check(Request::input('login'));
             $password  = check(Request::input('password'));
             $password2 = check(Request::input('password2'));
             $email     = strtolower(check(Request::input('email')));
-            $site      = utfLower(check(Request::input('site', $serverName)));
         ?>
 
         <?php if (Request::isMethod('post')): ?>
@@ -300,7 +296,6 @@ header("Content-type:text/html; charset=utf-8");
             if (preg_match('|^[a-z0-9\-]+$|i', $login)) {
             if ($password == $password2) {
             if (preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email)) {
-            if (preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)?+$#u', $site)) {
 
             // Проверка логина на существование
             $checkLogin = User::query()->whereRaw('lower(login) = ?', [strtolower($login)])->count();
@@ -319,16 +314,10 @@ header("Content-type:text/html; charset=utf-8");
                     'gender'   => 1,
                     'themes'   => 0,
                     'point'    => 500,
-                    'money'    => 1000000,
+                    'money'    => 100000,
                     'info'     => 'Администратор сайта',
                     'status'   => 'Босс',
                 ]);
-
-                Setting::query()->where('name', 'login')->update(['value' => $login]);
-                Setting::query()->where('name', 'email')->update(['value' => $email]);
-                Setting::query()->where('name', 'site')->update(['value' => $site]);
-
-                saveSetting();
 
                 // -------------- Приват ---------------//
                 $text = 'Привет, ' . $login . '! Поздравляем с успешной установкой нашего движка RotorCMS.'.PHP_EOL.'Новые версии, апгрейды, а также множество других дополнений вы найдете на нашем сайте [url=http://visavi.net]VISAVI.NET[/url]';
@@ -347,10 +336,8 @@ header("Content-type:text/html; charset=utf-8");
 
                 redirect('?act=finish');
 
-
             } else {echo '<p style="color: #ff0000">Ошибка! Указанный вами адрес email уже используется в системе!</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Пользователь с данным логином уже зарегистрирован!</p>';}
-            } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес сайта, необходим формата http://my_site.domen</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Неправильный адрес email, необходим формат name@site.domen</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Веденные пароли отличаются друг от друга</p>';}
             } else {echo '<p style="color: #ff0000">Ошибка! Недопустимые символы в логине. Разрешены только знаки латинского алфавита и цифры!</p>';}
@@ -369,8 +356,6 @@ header("Content-type:text/html; charset=utf-8");
                 <input class="form-control" name="password2" type="password" maxlength="50"><br>
                 Адрес email:<br>
                 <input class="form-control" name="email" maxlength="100" value="<?= $email ?>"><br>
-                Адрес сайта:<br>
-                <input name="site" value="<?= $site ?>" maxlength="100"><br><br>
                <button class="btn btn-primary">Создать</button>
             </form>
         </div><br>

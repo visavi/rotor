@@ -20,7 +20,7 @@ case 'index':
     echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
     echo '<a href="/load/active">Проверенные</a><hr>';
 
-    if (setting('home') == 'http://visavi.net') {
+    if (siteUrl() == 'http://visavi.net') {
         echo '<div class="info">';
         echo '<i class="fa fa-question-circle"></i> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br>';
         echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br>';
@@ -637,7 +637,7 @@ break;
  * Правила
  */
 case 'rules':
-    if (setting('home') == 'http://visavi.net') {
+    if (siteUrl() == 'http://visavi.net') {
 
         //show_title('Правила оформления скриптов');
 

@@ -17,11 +17,11 @@ if (!empty($down)) {
         echo '<?xml version="1.0" encoding="utf-8"?>';
         echo '<rss version="2.0"><channel>';
         echo '<title>Комментарии - '.$down['title'].'</title>';
-        echo '<link>'.setting('home').'</link>';
+        echo '<link>'.siteUrl().'</link>';
         echo '<description>Комментарии RSS - '.setting('title').'</description>';
         echo '<image><url>'.setting('logotip').'</url>';
         echo '<title>Комментарии - '.$down['title'].'</title>';
-        echo '<link>'.setting('home').'</link></image>';
+        echo '<link>'.siteUrl().'</link></image>';
         echo '<language>ru</language>';
         echo '<copyright>'.setting('copy').'</copyright>';
         echo '<managingEditor>'.env('SITE_EMAIL').'</managingEditor>';
@@ -32,12 +32,12 @@ if (!empty($down)) {
 
         while ($data = $querycomm -> fetch()) {
             $data['text'] = bbCode($data['text']);
-            $data['text'] = str_replace('/uploads/smiles', setting('home').'/uploads/smiles', $data['text']);
+            $data['text'] = str_replace('/uploads/smiles', siteUrl().'/uploads/smiles', $data['text']);
             $data['text'] = htmlspecialchars($data['text']);
 
-            echo '<item><title>'.$down['title'].'</title><link>'.setting('home').'/load/down?act=comments&amp;id='.$down['id'].'</link>';
+            echo '<item><title>'.$down['title'].'</title><link>'.siteUrl().'/load/down?act=comments&amp;id='.$down['id'].'</link>';
             echo '<description>'.$data['text'].' </description><author>'.$data['user'].'</author>';
-            echo '<pubDate>'.date("r", $data['time']).'</pubDate><category>Комментарии</category><guid>'.setting('home').'/load/down?act=comments&amp;id='.$down['id'].'&amp;pid='.$data['id'].'</guid></item>';
+            echo '<pubDate>'.date("r", $data['time']).'</pubDate><category>Комментарии</category><guid>'.siteUrl().'/load/down?act=comments&amp;id='.$down['id'].'&amp;pid='.$data['id'].'</guid></item>';
         }
 
         echo '</channel></rss>';

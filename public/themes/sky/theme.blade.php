@@ -240,7 +240,7 @@ header("Content-type:text/html; charset=utf-8");
                     <div class="art-Footer-inner">
                         <a href="/news/rss" class="art-rss-tag-icon" title="RSS"></a>
                         <div class="art-Footer-text">
-                        <a href="{{ setting('home') }}">{{  setting('copy') }}</a><br>
+                        <a href="/">{{ setting('copy') }}</a><br>
                         @yield('online')
                         @yield('counter')
                         </div>

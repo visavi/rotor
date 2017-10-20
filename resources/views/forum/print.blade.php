@@ -13,5 +13,5 @@
         <br><br>
     @endforeach
 
-    URL: <a href="{{ setting('home') }}/topic/{{ $topic->id }}">{{ setting('home') }}/topic/{{ $topic->id }}</a>
+    URL: <a href="{{ siteUrl() }}/topic/{{ $topic->id }}">{{ siteUrl(true) }}/topic/{{ $topic->id }}</a>
 @stop

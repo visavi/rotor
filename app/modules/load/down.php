@@ -287,7 +287,7 @@ case 'view':
 
                 if (getUser()) {
                     echo '<br>Скопировать адрес:<br>';
-                    echo '<input name="text" size="40" value="'.setting('home').'/uploads/files/'.$folder.$downs['link'].'"><br>';
+                    echo '<input name="text" size="40" value="'.siteUrl().'/uploads/files/'.$folder.$downs['link'].'"><br>';
                 }
 
                 echo '<br>';
@@ -561,7 +561,7 @@ case 'spam':
 
                 if (empty($queryspam)) {
                     if (Flood::isFlood()) {
-                        DB::insert("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], getUser('login'), $data['user'], $data['text'], $data['time'], SITETIME, setting('home').'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
+                        DB::insert("INSERT INTO `spam` (relate, `idnum`, `user`, `login`, `text`, `time`, `addtime`, `link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [5, $data['id'], getUser('login'), $data['user'], $data['text'], $data['time'], SITETIME, siteUrl().'/load/down?act=comments&amp;id='.$id.'&amp;page='.$page]);
 
                         setFlash('success', 'Жалоба успешно отправлена!');
                         redirect("/load/down?act=comments&id=$id&page=$page");
