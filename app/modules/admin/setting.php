@@ -51,7 +51,6 @@ if (isAdmin([101])) {
                 echo 'Заголовок всех страниц:<br><input name="title" maxlength="100" value="'.$setting['title'].'"><br>';
                 echo 'Подпись вверху:<br><input name="logos" maxlength="100" value="'.$setting['logos'].'"><br>';
                 echo 'Подпись внизу:<br><input name="copy" maxlength="100" value="'.$setting['copy'].'"><br>';
-                echo 'Главная страница сайта:<br><input name="home" maxlength="50" value="'.$setting['home'].'"><br>';
                 echo 'Адрес логотипа:<br><input name="logotip" maxlength="100" value="'.$setting['logotip'].'"><br>';
                 echo 'Время антифлуда (сек):<br><input name="floodstime" maxlength="3" value="'.$setting['floodstime'].'"><br>';
                 echo 'Лимит запросов с IP (0 - Выкл):<br><input name="doslimit" maxlength="3" value="'.$setting['doslimit'].'"><br>';
@@ -143,13 +142,12 @@ if (isAdmin([101])) {
 
             if (getUser('login') == env('SITE_ADMIN')) {
                 if ($uid == $_SESSION['token']) {
-                    if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['home'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
+                    if ($_POST['title'] != "" && $_POST['copy'] != "" && $_POST['logotip'] != "" && $_POST['floodstime'] != "" && $_POST['doslimit'] != "" && $_POST['timezone'] != "" && $_POST['themes'] != "" && $_POST['webthemes'] != "" && $_POST['touchthemes'] != "") {
 
                         $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                         $dbr -> execute(check($_POST['title']), 'title');
                         $dbr -> execute(check($_POST['logos']), 'logos');
                         $dbr -> execute(check($_POST['copy']), 'copy');
-                        $dbr -> execute(check($_POST['home']), 'home');
                         $dbr -> execute(check($_POST['logotip']), 'logotip');
                         $dbr -> execute(intval($_POST['floodstime']), 'floodstime');
                         $dbr -> execute(intval($_POST['doslimit']), 'doslimit');

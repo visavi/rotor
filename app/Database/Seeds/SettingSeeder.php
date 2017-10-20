@@ -65,7 +65,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'fotolist', 'value' => 5],
             ['name'  => 'guestsuser', 'value' => 'Гость'],
             ['name'  => 'guesttextlength', 'value' => 1000],
-            ['name'  => 'home', 'value' => 'http://rotor.ll'],
             ['name'  => 'ignorlist', 'value' => 10],
             ['name'  => 'incount', 'value' => 5],
             ['name'  => 'invite', 'value' => 0],
