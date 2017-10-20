@@ -28,7 +28,8 @@
         "verot/class.upload.php": "dev-master",
         "php-curl-class/php-curl-class": "^7.4",
         "jenssegers/blade": "^1.1",
-        "visavi/cleanup": "^1.1"
+        "visavi/cleanup": "^1.1",
+        "visavi/crontask":  "dev-master"
     },
     "require-dev": {
         "filp/whoops": "^2.1",
