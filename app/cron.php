@@ -6,7 +6,9 @@ require __DIR__.'/bootstrap.php';
 
 $taskList = new TaskList();
 
-$taskList->addTask((new App\Tasks\AddSubscribers())->setExpression('@hourly'));
-$taskList->addTask((new App\Tasks\SendMessages())->setExpression('* * * * *'));
+$taskList->addTasks([
+    (new App\Tasks\AddSubscribers())->setExpression('@hourly'),
+    (new App\Tasks\SendMessages())->setExpression('* * * * *'),
+]);
 
 $taskList->run();
