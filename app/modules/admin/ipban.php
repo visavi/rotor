@@ -16,7 +16,7 @@ if (isAdmin([101, 102])) {
     ##                                    Главная страница                                    ##
     ############################################################################################
         case 'index':
-            echo '<a href="/admin/logs?act=666">История автобанов</a><br>';
+            echo '<a href="/admin/log?code=666">История автобанов</a><br>';
 
             $total = DB::run() -> querySingle("SELECT count(*) FROM `ban`;");
             $page = paginate(setting('ipbanlist'), $total);
