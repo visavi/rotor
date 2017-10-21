@@ -195,6 +195,8 @@ $router->map('GET', '/api/private', 'ApiController@private');
 $router->map('GET',      '/admin', 'Admin\AdminController@index', 'admin');
 $router->map('GET',      '/admin/spam', 'Admin\SpamController@index');
 $router->map('POST',     '/admin/spam/delete', 'Admin\SpamController@delete');
+$router->map('GET',      '/admin/log', 'Admin\LogController@index');
+$router->map('GET',      '/admin/log/clear', 'Admin\LogController@clear');
 
 $router->map('GET|POST', '/admin/book', 'admin/book.php');
 $router->map('GET|POST', '/admin/blog', 'admin/blog.php');
@@ -213,7 +215,6 @@ $router->map('GET|POST', '/admin/banlist', 'admin/banlist.php');
 $router->map('GET|POST', '/admin/ipban', 'admin/ipban.php');
 $router->map('GET|POST', '/admin/adminlist', 'admin/adminlist.php');
 $router->map('GET|POST', '/admin/users', 'admin/users.php');
-$router->map('GET|POST', '/admin/logs', 'admin/logs.php');
 $router->map('GET|POST', '/admin/reglist', 'admin/reglist.php');
 $router->map('GET|POST', '/admin/votes', 'admin/votes.php');
 $router->map('GET|POST', '/admin/antimat', 'admin/antimat.php');

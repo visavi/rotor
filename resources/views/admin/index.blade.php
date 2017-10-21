@@ -39,6 +39,7 @@
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/ipban">IP-бан панель</a> ({{ statsIpBanned() }})<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> ({{ phpversion() }})<br>
         <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> ({{ statsLoad() }})<br>
+        <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/admin/log">Ошибки / Автобаны</a><br>
         {{ showAdminLinks(102) }}
     @endif
 
