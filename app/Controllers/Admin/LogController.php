@@ -5,7 +5,6 @@ namespace App\Controllers\Admin;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Log;
-use App\Models\User;
 
 class LogController extends AdminController
 {

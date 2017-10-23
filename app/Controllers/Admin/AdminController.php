@@ -36,10 +36,10 @@ Class AdminController extends BaseController
      */
     public function index()
     {
-        $isOwner = isAdmin(User::BOSS);
-        $isAdmin = isAdmin(User::ADMIN);
-        $isModer = isAdmin(User::MODER);
+        $existBoss = User::query()
+            ->where('level', User::BOSS)
+            ->count();
 
-        return view('admin/index', compact('isOwner', 'isAdmin', 'isModer'));
+        return view('admin/index', compact('existBoss'));
     }
 }

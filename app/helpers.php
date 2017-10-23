@@ -1552,37 +1552,6 @@ function counterString($files)
     return $count_lines;
 }
 
-// ------------- Функция кэширования админских ссылок -------------//
-function cacheAdminLinks($cache=10800)
-{
-    if (@filemtime(STORAGE.'/temp/adminlinks.dat') < time() - $cache) {
-        $files = array_diff(scandir(APP.'/modules/admin/links'), ['.', '..']);
-        $links = [];
-
-        foreach ($files as $file){
-            $access = intval(preg_replace('/[^\d]+/', '', $file));
-            $links[$access][] = $file;
-        }
-        file_put_contents(STORAGE.'/temp/adminlinks.dat', serialize($links), LOCK_EX);
-    }
-
-    return unserialize(file_get_contents(STORAGE.'/temp/adminlinks.dat'));
-}
-
-// ------------- Функция вывода админских ссылок -------------//
-function showAdminLinks($level = 0)
-{
-    $links = cacheAdminLinks();
-
-    if (!empty($links[$level])){
-        foreach ($links[$level] as $link){
-            if (file_exists(APP.'/modules/admin/links/'.$link)){
-                include_once(APP.'/modules/admin/links/'.$link);
-            }
-        }
-    }
-}
-
 // ------------- Функция вывода ссылки на анкету -------------//
 /**
  * Возвращает ссылку на профиль пользователя
