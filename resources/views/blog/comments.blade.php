@@ -55,7 +55,13 @@
         <div class="form">
             <form action="/article/{{ $blog->id }}/comments" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
+
+                <div class="form-group{{ hasError('msg') }}">
+                    <label for="markItUp">Сообщение:</label>
+                    <textarea class="form-control" id="markItUp" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                    {!! textError('msg') !!}
+                </div>
+
                 <button class="btn btn-success">Написать</button>
             </form>
         </div><br>
