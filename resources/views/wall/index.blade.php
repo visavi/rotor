@@ -51,9 +51,14 @@
         <div class="form">
             <form action="/wall/{{ $user->login }}/create" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                Сообщение:<br>
-                <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
-                <input type="submit" value="Написать">
+
+                <div class="form-group{{ hasError('msg') }}">
+                    <label for="markItUp">Сообщение:</label>
+                    <textarea class="form-control" id="markItUp" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                    {!! textError('msg') !!}
+                </div>
+
+                <button class="btn btn-primary">Написать</button>
             </form>
         </div><br>
 

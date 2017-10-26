@@ -13,7 +13,13 @@
     <div class="form">
         <form method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            <textarea id="markItUp" cols="25" rows="5" name="msg" id="msg">{{ $comment->text }}</textarea><br>
+
+            <div class="form-group{{ hasError('msg') }}">
+                <label for="markItUp">Сообщение:</label>
+                <textarea class="form-control" id="markItUp" rows="5" name="msg" required>{{ getInput('msg', $comment->text) }}</textarea>
+                {!! textError('msg') !!}
+            </div>
+
             <button class="btn btn-success">Редактировать</button>
         </form>
     </div><br>

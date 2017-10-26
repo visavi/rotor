@@ -19,17 +19,27 @@
             <select name="cid">
                 <option value="0">Выберите категорию</option>
                 @foreach ($cats as $key => $value)
-                    <?php $selected = ($cid == $key) ? ' selected="selected"' : ''; ?>
-                    <option value="{{ $key }}"{{ $selected }}>{{ $value }}</option>
+                    <option value="{{ $key }}"{{ $cid == $key ? ' selected' : '' }}>{{ $value }}</option>
                 @endforeach
             </select><br>
 
-            Заголовок:<br>
-            <input name="title" size="50" maxlength="50"><br>
-            Текст:<br>
-            <textarea id="markItUp" cols="25" rows="10" name="text"></textarea><br>
-            Метки:<br>
-            <input name="tags" size="50" maxlength="100"><br>
+            <div class="form-group{{ hasError('title') }}">
+                <label for="inputTitle">Заголовок:</label>
+                <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title') }}" required>
+                {!! textError('title') !!}
+            </div>
+
+            <div class="form-group{{ hasError('text') }}">
+                <label for="markItUp">Текст:</label>
+                <textarea class="form-control" id="markItUp" rows="5" name="text" required>{{ getInput('text') }}</textarea>
+                {!! textError('text') !!}
+            </div>
+
+            <div class="form-group{{ hasError('tags') }}">
+                <label for="inputTags">Метки:</label>
+                <input type="text" class="form-control" id="inputTags" name="tags" maxlength="100" value="{{ getInput('tags') }}" required>
+                {!! textError('tags') !!}
+            </div>
 
             <button class="btn btn-primary">Опубликовать</button>
         </form>

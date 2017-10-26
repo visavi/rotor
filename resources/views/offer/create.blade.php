@@ -19,10 +19,18 @@
                     <option value="issue">Сообщить о проблеме</option>
                 </select><br>
 
-                Заголовок: <br>
-                <input type="text" name="title" maxlength="50"><br>
-                Описание:<br>
-                <textarea id="markItUp" cols="25" rows="5" name="text"></textarea><br>
+                <div class="form-group{{ hasError('title') }}">
+                    <label for="inputTitle">Заголовок:</label>
+                    <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title') }}" required>
+                    {!! textError('title') !!}
+                </div>
+
+                <div class="form-group{{ hasError('text') }}">
+                    <label for="markItUp">Описание:</label>
+                    <textarea class="form-control" id="markItUp" rows="5" name="text" required>{{ getInput('text') }}</textarea>
+                    {!! textError('text') !!}
+                </div>
+
                 <button class="btn btn-primary">Добавить</button>
             </form>
         </div><br>

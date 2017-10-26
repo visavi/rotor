@@ -11,7 +11,13 @@
     <div class="form">
         <form action="/notebook/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            <textarea id="markItUp" cols="25" rows="10" name="msg">{{ $note->text }}</textarea><br>
+
+            <div class="form-group{{ hasError('msg') }}">
+                <label for="markItUp">Запись:</label>
+                <textarea class="form-control" id="markItUp" rows="5" name="msg">{{ getInput('msg', $note->text) }}</textarea>
+                {!! textError('msg') !!}
+            </div>
+
             <button class="btn btn-primary">Сохранить</button>
         </form>
     </div><br>

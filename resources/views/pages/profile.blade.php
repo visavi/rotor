@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-md-6">
 
-                        <div class="form-group{{ hasError('msg') }}">
+                        <div class="form-group{{ hasError('name') }}">
                             <label for="inputName">Имя:</label>
                             <input class="form-control" id="inputName" name="name" maxlength="20" value="{{ getInput('name', $user->name) }}">
                             {!! textError('name') !!}
