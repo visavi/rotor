@@ -110,13 +110,6 @@ class OfferController extends BaseController
                     'created_at' => SITETIME,
                 ]);
 
-                Polling::query()->create([
-                    'relate_type' => Offer::class,
-                    'relate_id'   => $offer->id,
-                    'user_id'     => $user->id,
-                    'created_at'  => SITETIME,
-                ]);
-
                 setFlash('success', 'Запись успешно добавлена!');
                 redirect('/offers/' . $offer->id);
             } else {
