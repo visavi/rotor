@@ -43,6 +43,7 @@ class MailController extends BaseController
                 redirect("/");
 
             } else {
+                setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
