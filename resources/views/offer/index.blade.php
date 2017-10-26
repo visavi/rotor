@@ -27,10 +27,10 @@
     @endif
 
     <br>Сортировать:
-    @if ($sort == 'votes')
+    @if ($sort == 'rating')
         <b>Голоса</b> /
     @else
-        <a href="/offers/{{ $type }}?sort=votes">Голоса</a> /
+        <a href="/offers/{{ $type }}?sort=rating">Голоса</a> /
     @endif
 
     @if ($sort == 'times')
@@ -57,7 +57,7 @@
         @foreach ($offers as $data)
             <div class="b">
                 <i class="fa fa-file-o"></i>
-                <b><a href="/offers/{{ $data->id }}">{{ $data->title }}</a></b> (Голосов: {{ $data->votes }})<br>
+                <b><a href="/offers/{{ $data->id }}">{{ $data->title }}</a></b> (Голосов: {{ $data->rating }})<br>
                 {!! $data->getStatus() !!}
             </div>
 

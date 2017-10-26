@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <h1>{{ $offer->title }} <small>(Голосов: {{ $offer->votes }})</small></h1>
+    <h1>{{ $offer->title }}</h1>
 
     <i class="fa fa-book"></i> <a href="/offers/offer">Предложения</a> /
     <a href="/offers/issue">Проблемы</a>
@@ -18,24 +18,32 @@
 
     <div class="b">
         {!! $offer->getStatus() !!}
+
+        @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id)
+            <div class="float-right">
+                <a title="Редактировать" href="/offers/{{ $offer->id }}/edit"><i class="fa fa-pencil text-muted"></i></a>
+            </div>
+        @endif
     </div>
 
-    @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id) {
-        <div class="right"><a href="/offers/{{ $offer->id }}/edit">Редактировать</a></div>
-    @endif
+    <div>
+        {!! bbCode($offer->text) !!}<br><br>
 
-    <div>{!! bbCode($offer->text) !!}<br><br>
+        Добавлено: {!! profile($offer->user) !!} ({{ dateFixed($offer->created_at) }})<br>
 
-    Добавлено: {!! profile($offer->user) !!} ({{ dateFixed($offer->created_at) }})<br>
+        <div class="js-rating">Рейтинг:
+            @unless (getUser('id') == $offer->user_id)
+                <a class="post-rating-down{{ $offer->vote == '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ App\Models\Offer::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-down"></i></a>
+            @endunless
+            <span>{!! formatNum($offer->rating) !!}</span>
+            @unless (getUser('id') == $offer->user_id)
+                <a class="post-rating-up{{ $offer->vote == '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ App\Models\Offer::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
+            @endunless
+        </div>
 
-    @if ($offer->polling)
-        <b><a class="btn btn-danger" href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-down"></i> Передумал</a></b><br>
-    @else
-        <b><a class="btn btn-success" href="/offers?act=vote&amp;id='.$id.'&amp;uid='.$_SESSION['token'].'"><i class="fa fa-thumbs-up"></i> Согласен</a></b><br>
-    @endif
-
-    <a href="/offers{{ $offer->id }}/comments">Комментарии</a> ({{ $offer->comments }})
-    <a href="/offers{{ $offer->id }}/end">&raquo;</a></div><br>
+        <a href="/offers/{{ $offer->id }}/comments">Комментарии</a> ({{ $offer->comments }})
+        <a href="/offers/{{ $offer->id }}/end">&raquo;</a>
+    </div><br>
 
     @if ($offer->reply)
         <div class="b"><b>Официальный ответ</b></div>

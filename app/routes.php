@@ -116,6 +116,7 @@ $router->map('GET', '/online/[all:action]?', 'OnlineController@index', 'online')
 $router->map('POST', '/ajax/bbcode', 'AjaxController@bbCode');
 $router->map('POST', '/ajax/delcomment', 'AjaxController@delComment');
 $router->map('POST', '/ajax/rating', 'AjaxController@rating');
+$router->map('POST', '/ajax/vote', 'AjaxController@vote');
 $router->map('POST', '/ajax/complaint', 'AjaxController@complaint');
 
 $router->map('GET',  '/wall/[user:login]', 'WallController@index', 'wall');
@@ -165,8 +166,10 @@ $router->map('GET', '/faq', 'PageController@faq');
 $router->map('GET', '/statusfaq', 'PageController@statusfaq');
 $router->map('GET', '/surprise', 'PageController@surprise');
 
-$router->map('GET', '/offers/[offer|issue:type]?', 'OfferController@index');
-$router->map('GET', '/offers/[i:id]', 'OfferController@view');
+$router->map('GET',      '/offers/[offer|issue:type]?', 'OfferController@index');
+$router->map('GET',      '/offers/[i:id]', 'OfferController@view');
+$router->map('GET|POST', '/offers/create', 'OfferController@create');
+$router->map('GET|POST', '/offers/[i:id]/edit', 'OfferController@edit');
 
 $router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
 

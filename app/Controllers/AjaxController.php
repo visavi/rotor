@@ -9,6 +9,7 @@ use App\Models\Comment;
 use App\Models\Guest;
 use App\Models\Inbox;
 use App\Models\News;
+use App\Models\Offer;
 use App\Models\Photo;
 use App\Models\Polling;
 use App\Models\Post;
@@ -178,11 +179,12 @@ class AjaxController extends BaseController
             Blog::class,
             News::class,
             Photo::class,
+            Offer::class,
         ];
 
         $id    = abs(intval(Request::input('id')));
         $type  = Request::input('type');
-        $vote  = intval(Request::input('vote'));
+        $vote  = check(Request::input('vote'));
         $token = check(Request::input('token'));
 
         // Время хранения голосов
@@ -196,7 +198,7 @@ class AjaxController extends BaseController
             exit(json_encode(['status' => 'error', 'message' => 'Invalid token']));
         }
 
-        if (! in_array($vote, [-1, 1])) {
+        if (! in_array($vote, ['+', '-'], true)) {
             exit(json_encode(['status' => 'error', 'message' => 'Invalid rating']));
         }
 
@@ -209,12 +211,13 @@ class AjaxController extends BaseController
             ->where('created_at', '<', SITETIME)
             ->delete();
 
-        $post = $type::query()->where('user_id', '<>', getUser('id'))->find($id);
+        $post = $type::query()
+            ->where('user_id', '<>', getUser('id'))
+            ->where('id', $id)
+            ->first();
+
         if (! $post) {
-            exit(json_encode([
-                'status' => 'error',
-                'message' => 'message not found',
-            ]));
+            exit(json_encode(['status' => 'error', 'message' => 'Record not found']));
         }
 
         $polling = Polling::query()
@@ -226,13 +229,12 @@ class AjaxController extends BaseController
         $cancel = false;
 
         if ($polling) {
-            if ($polling['vote'] == $vote) {
+            if ($polling->vote == $vote) {
                 exit(json_encode(['status' => 'error']));
-            } else {
-
-                $polling->delete();
-                $cancel = true;
             }
+
+            $polling->delete();
+            $cancel = true;
         } else {
             Polling::query()->create([
                 'relate_type' => $type,
@@ -243,10 +245,11 @@ class AjaxController extends BaseController
             ]);
         }
 
-        $operation = ($vote == '1') ? '+' : '-';
-
-        $post->update(['rating' => DB::raw("rating $operation 1")]);
-        $post = $type::query()->find($id);
+        if ($vote === '+') {
+            $post->increment('rating');
+        } else {
+            $post->decrement('rating');
+        }
 
         echo json_encode([
             'status' => 'success',

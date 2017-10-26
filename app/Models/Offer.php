@@ -23,7 +23,7 @@ class Offer extends BaseModel
      */
     public function polling()
     {
-        return $this->morphOne(Polling::class, 'relate');
+        return $this->morphOne(Polling::class, 'relate')->where('user_id', getUser('id'));
     }
 
     /**
@@ -44,7 +44,8 @@ class Offer extends BaseModel
     {
         return $this->hasMany(Comment::class, 'relate_id')
             ->where('relate_type', self::class)
-            ->limit($limit);
+            ->limit($limit)
+            ->with('user');
     }
 
     /**

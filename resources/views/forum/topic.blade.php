@@ -117,11 +117,11 @@
 
                     <div class="js-rating">
                         @unless (getUser('id') == $data->user_id)
-                            <a class="post-rating-down{{ $data->vote == -1 ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
+                            <a class="post-rating-down{{ $data->vote == '-' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="-" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-minus"></i></a>
                         @endunless
                         <span>{!! formatNum($data->rating) !!}</span>
                         @unless (getUser('id') == $data->user_id)
-                            <a class="post-rating-up{{ $data->vote == 1 ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="1" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
+                            <a class="post-rating-up{{ $data->vote == '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $data->id }}" data-type="{{ App\Models\Post::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-plus"></i></a>
                         @endunless
                     </div>
                 </div>
