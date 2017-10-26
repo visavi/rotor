@@ -68,7 +68,7 @@
 
         {{ pagination($page) }}
 
-    @elseif ($forums['closed'])
+    @elseif ($forums->closed)
         {{ showError('В данном разделе запрещено создавать темы!') }}
     @else
         {{ showError('Тем еще нет, будь первым!') }}

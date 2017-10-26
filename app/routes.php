@@ -171,6 +171,8 @@ $router->map('GET',      '/offers/[i:id]', 'OfferController@view');
 $router->map('GET|POST', '/offers/create', 'OfferController@create');
 $router->map('GET|POST', '/offers/[i:id]/edit', 'OfferController@edit');
 $router->map('GET|POST', '/offers/[i:id]/comments', 'OfferController@comments');
+$router->map('GET',      '/offers/[i:id]/end', 'OfferController@end');
+$router->map('GET|POST', '/offers/[i:id]/[i:cid]/edit', 'OfferController@editComment');
 
 $router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
 

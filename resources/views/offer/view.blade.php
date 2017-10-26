@@ -41,9 +41,6 @@
                 <a class="post-rating-up{{ $offer->vote == '+' ? ' active' : '' }}" href="#" onclick="return changeRating(this);" data-id="{{ $offer->id }}" data-type="{{ App\Models\Offer::class }}" data-vote="+" data-token="{{ $_SESSION['token'] }}"><i class="fa fa-thumbs-up"></i></a>
             @endunless
         </div>
-
-        <a href="/offers/{{ $offer->id }}/comments">Комментарии</a> ({{ $offer->comments }})
-        <a href="/offers/{{ $offer->id }}/end">&raquo;</a>
     </div><br>
 
     @if ($offer->reply)
@@ -54,7 +51,7 @@
         </div><br>
     @endif
 
-    <div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div><br>
+    <div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>
 
     @if ($offer->lastComments->isNotEmpty())
 
@@ -73,7 +70,12 @@
                 @endif
             </div>
         @endforeach
-        <br>
+
+        <div class="act">
+            <b><a href="/offers/{{ $offer->id }}/comments">Все комментарии</a></b> ({{ $offer->comments }})
+            <a href="/offers/{{ $offer->id }}/end">&raquo;</a>
+        </div><br>
+
     @else
         {{ showError('Комментариев еще нет!') }}
     @endif
@@ -81,10 +83,10 @@
     @if (getUser())
         @if (! $offer->closed)
             <div class="form">
-                <form action="/offers?act=addcomm&amp;id={{ $offer->id }}" method="post">
+                <form action="/offers/{{ $offer->id }}/comments" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                     <b>Комментарий:</b><br>
-                    <textarea cols="25" rows="5" name="msg"></textarea><br>
+                    <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
                     <button class="btn btn-primary">Написать</button>
                 </form>
             </div>

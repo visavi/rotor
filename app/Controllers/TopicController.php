@@ -120,7 +120,7 @@ class TopicController extends BaseController
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
             ->notEmpty($topic, ['msg' => 'Выбранная вами тема не существует, возможно она была удалена!'])
-            ->empty($topic['closed'], ['msg' => 'Запрещено писать в закрытую тему!'])
+            ->empty($topic->closed, ['msg' => 'Запрещено писать в закрытую тему!'])
             ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' сек!'])
             ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинное или короткое сообщение!']);
 
@@ -288,7 +288,7 @@ class TopicController extends BaseController
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
             ->true(getUser(), 'Для закрытия тем необходимо авторизоваться')
             ->notEmpty($del, 'Отстутствуют выбранные сообщения для удаления!')
-            ->empty($topic['closed'], 'Редактирование невозможно. Данная тема закрыта!')
+            ->empty($topic->closed, 'Редактирование невозможно. Данная тема закрыта!')
             ->equal($isModer, true, 'Удалять сообщения могут только кураторы темы!');
 
         if ($validator->isValid()) {
@@ -335,7 +335,7 @@ class TopicController extends BaseController
             ->gte(getUser('point'), setting('editforumpoint'), 'Для закрытия тем вам необходимо набрать ' . plural(setting('editforumpoint'), setting('scorename')) . '!')
             ->notEmpty($topic, 'Выбранная вами тема не существует, возможно она была удалена!')
             ->equal($topic['user_id'], getUser('id'), 'Вы не автор данной темы!')
-            ->empty($topic['closed'], 'Данная тема уже закрыта!');
+            ->empty($topic->closed, 'Данная тема уже закрыта!');
 
         if ($validator->isValid()) {
 
@@ -381,7 +381,7 @@ class TopicController extends BaseController
             abort('default', 'Изменение невозможно, вы не автор данной темы!');
         }
 
-        if ($topic['closed']) {
+        if ($topic->closed) {
             abort('default', ' Изменение невозможно, данная тема закрыта!');
         }
 
@@ -454,7 +454,7 @@ class TopicController extends BaseController
             abort('default', 'Данного сообщения не существует!');
         }
 
-        if ($post['closed']) {
+        if ($post->closed) {
             abort('default', 'Редактирование невозможно, данная тема закрыта!');
         }
 
@@ -540,7 +540,7 @@ class TopicController extends BaseController
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!');
 
-        if ($vote['closed']) {
+        if ($vote->closed) {
             $validator->addError('Данное голосование закрыто!');
         }
 

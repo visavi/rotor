@@ -29,9 +29,7 @@
     </div><br>
 
     @if ($comments->isNotEmpty())
-        <div class="act">
-            <i class="fa fa-comment"></i> <b>Последние комментарии</b>
-        </div>
+        <div class="b"><i class="fa fa-comment"></i> <b>Последние комментарии</b></div>
 
         @foreach ($comments as $comm)
             <div class="b">

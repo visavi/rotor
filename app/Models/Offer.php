@@ -44,8 +44,9 @@ class Offer extends BaseModel
     {
         return $this->hasMany(Comment::class, 'relate_id')
             ->where('relate_type', self::class)
-            ->limit($limit)
-            ->with('user');
+            ->orderBy('created_at')
+            ->with('user')
+            ->limit($limit);
     }
 
     /**

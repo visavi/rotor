@@ -28,7 +28,7 @@
                         @endif
 
                         @if (getUser('id') == $data->user->id && $data->created_at + 600 > SITETIME)
-                            <a href="/article/{{ $offer->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
+                            <a href="/offers/{{ $offer->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
                         @endif
 
                         @if (isAdmin())
@@ -57,7 +57,7 @@
     @if (getUser())
         @if (empty($offer->closed))
             <div class="form">
-                <form action="/offers{{ $offer->id }}/comments" method="post">
+                <form action="/offers/{{ $offer->id }}/comments" method="post">
                     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                     <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
                     <button class="btn btn-success">Написать</button>

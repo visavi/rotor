@@ -15,7 +15,6 @@ use App\Models\Polling;
 use App\Models\Post;
 use App\Models\Spam;
 use App\Models\Wall;
-use foo\bar;
 
 class AjaxController extends BaseController
 {

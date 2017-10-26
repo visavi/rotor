@@ -100,7 +100,7 @@ class ForumController extends BaseController
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->notEmpty($forum, ['fid' => 'Раздела для новой темы не существует!'])
-                ->empty($forum['closed'], ['fid' => 'В данном разделе запрещено создавать темы!'])
+                ->empty($forum->closed, ['fid' => 'В данном разделе запрещено создавать темы!'])
                 ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается cоздавать темы раз в '.Flood::getPeriod().' сек!'])
                 ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название темы!'])
                 ->length($msg, 5, setting('forumtextlength'), ['msg' => 'Слишком длинный или короткий текст сообщения!']);

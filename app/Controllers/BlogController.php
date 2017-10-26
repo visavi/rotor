@@ -304,17 +304,19 @@ class BlogController extends BaseController
         }
 
         if (Request::isMethod('post')) {
+
             $token = check(Request::input('token'));
-            $msg = check(Request::input('msg'));
+            $msg   = check(Request::input('msg'));
 
             $validator = new Validator();
             $validator
-                ->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
+                ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое название!'])
-                ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!']);
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!'])
+                ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять комментарии раз в ' . Flood::getPeriod() . ' секунд!']);
 
             if ($validator->isValid()) {
+
                 $msg = antimat($msg);
 
                 Comment::query()->create([
@@ -327,16 +329,13 @@ class BlogController extends BaseController
                     'brow'        => getBrowser(),
                 ]);
 
-                $user = User::query()->where('id', getUser('id'));
-                $user->update([
+                getUser()->update([
                     'allcomments' => DB::raw('allcomments + 1'),
                     'point'       => DB::raw('point + 1'),
                     'money'       => DB::raw('money + 5'),
                 ]);
 
-                $blog->update([
-                    'comments' => DB::raw('comments + 1'),
-                ]);
+                $blog->increment('comments');
 
                 setFlash('success', 'Комментарий успешно добавлен!');
                 redirect('/article/' . $blog->id . '/end');
@@ -371,7 +370,7 @@ class BlogController extends BaseController
     {
         $page = abs(intval(Request::input('page', 1)));
 
-        if (!getUser()) {
+        if (! getUser()) {
             abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
         }
 
@@ -381,7 +380,7 @@ class BlogController extends BaseController
             ->where('user_id', getUser('id'))
             ->first();
 
-        if (!$comment) {
+        if (! $comment) {
             abort('default', 'Комментарий удален или вы не автор этого комментария!');
         }
 
@@ -422,7 +421,6 @@ class BlogController extends BaseController
      */
     public function end($id)
     {
-
         $blog = Blog::query()->find($id);
 
         if (empty($blog)) {
