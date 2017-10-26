@@ -15,7 +15,7 @@ use App\Models\Polling;
 use App\Models\Post;
 use App\Models\Spam;
 use App\Models\Wall;
-use Illuminate\Database\Capsule\Manager as DB;
+use foo\bar;
 
 class AjaxController extends BaseController
 {
@@ -52,7 +52,7 @@ class AjaxController extends BaseController
         $path  = null;
         $data  = false;
         $id    = abs(intval(Request::input('id')));
-        $type  = Request::input('type');
+        $type  = check(Request::input('type'));
         $page  = check(Request::input('page'));
         $token = check(Request::input('token'));
 
@@ -79,6 +79,14 @@ class AjaxController extends BaseController
                     ->where('id', $id)
                     ->first();
                 $path = '/gallery/'.$data->relate_id.'/comments?page='.$page;
+                break;
+
+            case Offer::class:
+                $data = Comment::query()
+                    ->where('relate_type', $type)
+                    ->where('id', $id)
+                    ->first();
+                $path = '/offers/'.$data->relate_id.'/comments?page='.$page;
                 break;
 
             case Guest::class:
@@ -153,11 +161,7 @@ class AjaxController extends BaseController
                 ->delete();
 
             if ($delComments) {
-                $type::query()
-                    ->where('id', $rid)
-                    ->update([
-                        'comments'  => DB::raw('comments - '.$delComments),
-                    ]);
+                $type::query()->find($rid)->decrement('comments');
             }
 
             echo json_encode(['status' => 'success']);
@@ -183,7 +187,7 @@ class AjaxController extends BaseController
         ];
 
         $id    = abs(intval(Request::input('id')));
-        $type  = Request::input('type');
+        $type  = check(Request::input('type'));
         $vote  = check(Request::input('vote'));
         $token = check(Request::input('token'));
 

@@ -8,7 +8,8 @@
 
     <h1>{{ $offer->title }}</h1>
 
-    <i class="fa fa-book"></i> <a href="/offers/offer">Предложения</a> /
+    <i class="fa fa-book"></i>
+    <a href="/offers/offer">Предложения</a> /
     <a href="/offers/issue">Проблемы</a>
 
     @if (isAdmin('admin'))

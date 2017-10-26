@@ -170,6 +170,7 @@ $router->map('GET',      '/offers/[offer|issue:type]?', 'OfferController@index')
 $router->map('GET',      '/offers/[i:id]', 'OfferController@view');
 $router->map('GET|POST', '/offers/create', 'OfferController@create');
 $router->map('GET|POST', '/offers/[i:id]/edit', 'OfferController@edit');
+$router->map('GET|POST', '/offers/[i:id]/comments', 'OfferController@comments');
 
 $router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
 

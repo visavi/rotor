@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\Comment;
 use App\Models\Flood;
 use App\Models\Offer;
 use App\Models\Polling;
@@ -179,5 +180,39 @@ class OfferController extends BaseController
         }
 
         return view('offer/edit', compact('offer'));
+    }
+
+    /**
+     * Комментарии
+     */
+    public function comments($id)
+    {
+        $offer = Offer::query()->find($id);
+
+        if (! $offer) {
+            abort('default', 'Данного предложения или проблемы не существует!');
+        }
+
+        if (Request::isMethod('post')) {
+
+        }
+
+        $total = Comment::query()
+            ->where('relate_type', Offer::class)
+            ->where('relate_id', $id)
+            ->count();
+
+        $page = paginate(setting('postcommoffers'), $total);
+
+
+        $comments = Comment::query()
+            ->where('relate_type', Offer::class)
+            ->where('relate_id', $id)
+            ->orderBy('created_at')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
+
+        return view('offer/comments', compact('offer', 'comments', 'page'));
     }
 }

@@ -235,12 +235,10 @@ function check($msg)
             $msg[$key] = check($val);
         }
     } else {
-        $msg = htmlspecialchars($msg);
-        $search = ['|', '\'', '$', '\\', "\0", "\x00", "\x1A", chr(226) . chr(128) . chr(174)];
-        $replace = ['&#124;', '&#39;', '&#36;', '&#92;', '', '', '', ''];
+        $msg =  htmlspecialchars($msg, ENT_QUOTES);
+        $search = [chr(0), "\x00", "\x1A", chr(226) . chr(128) . chr(174)];
 
-        $msg = str_replace($search, $replace, $msg);
-        $msg = stripslashes(trim($msg));
+        $msg = trim(str_replace($search, [], $msg));
     }
 
     return $msg;

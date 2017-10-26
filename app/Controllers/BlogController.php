@@ -297,9 +297,9 @@ class BlogController extends BaseController
      */
     public function comments($id)
     {
-        $blog = Blog::query()->where('id', $id)->first();
+        $blog = Blog::query()->find($id);
 
-        if (!$blog) {
+        if (! $blog) {
             abort('default', 'Данной статьи не существует!');
         }
 
@@ -358,7 +358,7 @@ class BlogController extends BaseController
             ->where('relate_id', $id)
             ->orderBy('created_at')
             ->offset($page['offset'])
-            ->limit(setting('blogcomm'))
+            ->limit($page['limit'])
             ->get();
 
         return view('blog/comments', compact('blog', 'comments', 'page'));
