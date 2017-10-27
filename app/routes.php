@@ -3,6 +3,7 @@
 $router = new AltoRouter();
 
 $router->addMatchTypes(['user' => '[0-9A-Za-z-_]++']);
+$router->addMatchTypes(['letter'=> '[0-9a-z]']);
 
 $router->map('GET',      '/', 'HomeController@index', 'home');
 $router->map('GET',      '/captcha', 'HomeController@captcha', 'captcha');
@@ -98,6 +99,10 @@ $router->map('POST',     '/account/editstatus', 'UserController@editStatus');
 $router->map('POST',     '/account/editpassword', 'UserController@editPassword');
 $router->map('POST',     '/account/apikey', 'UserController@apikey');
 
+$router->map('GET',      '/searchuser', 'User\SearchController@index');
+$router->map('GET',      '/searchuser/[letter:letter]', 'User\SearchController@sort');
+$router->map('GET|POST', '/searchuser/search', 'User\SearchController@search');
+
 $router->map('GET',  '/rating/[user:login]/[received|gave:action]?', 'RatingController@received');
 $router->map('POST', '/rating/delete', 'RatingController@delete');
 
@@ -173,8 +178,6 @@ $router->map('GET|POST', '/offers/[i:id]/edit', 'OfferController@edit');
 $router->map('GET|POST', '/offers/[i:id]/comments', 'OfferController@comments');
 $router->map('GET',      '/offers/[i:id]/end', 'OfferController@end');
 $router->map('GET|POST', '/offers/[i:id]/[i:cid]/edit', 'OfferController@editComment');
-
-$router->map('GET|POST', '/searchuser', 'pages/searchuser.php');
 
 $router->map('GET|POST', '/pictures', 'PictureController@index');
 $router->map('GET',      '/pictures/delete', 'PictureController@delete');
