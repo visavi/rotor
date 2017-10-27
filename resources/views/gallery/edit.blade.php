@@ -11,11 +11,20 @@
     <div class="form">
         <form action="/gallery/{{ $photo->id }}/edit?page={{ $page }}" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            Название: <br><input name="title" value="{{ $photo->title }}"><br>
-            Подпись к фото: <br><textarea cols="25" rows="5" name="text">{{ $photo->text }}</textarea><br>
+
+            <div class="form-group{{ hasError('title') }}">
+                <label for="inputTitle">Название:</label>
+                <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $photo->title) }}" required>
+                {!! textError('title') !!}
+            </div>
+
+            <div class="form-group{{ hasError('text') }}">
+                <label for="markItUp">Подпись к фото:</label>
+                <textarea class="form-control" id="markItUp" rows="5" name="text">{{ getInput('text', $photo->text) }}</textarea>
+                {!! textError('text') !!}
+            </div>
 
             Закрыть комментарии:
-
             <input name="closed" type="checkbox" value="1"{{ $checked }}><br>
 
             <button class="btn btn-success">Изменить</button>

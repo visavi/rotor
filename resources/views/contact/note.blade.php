@@ -11,9 +11,14 @@
     <div class="form">
         <form method="post" action="/contact/note/{{ $contact->id }}">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            Заметка:<br>
-            <textarea cols="25" rows="5" name="msg" id="markItUp">{{ $contact->text }}</textarea><br>
-            <input value="Редактировать" type="submit">
+
+            <div class="form-group{{ hasError('msg') }}">
+                <label for="markItUp">Заметка:</label>
+                <textarea class="form-control" id="markItUp" rows="5" name="msg">{{ getInput('msg', $contact->text) }}</textarea>
+                {!! textError('msg') !!}
+            </div>
+
+            <button class="btn btn-primary">Редактировать</button>
         </form>
     </div>
     <br>

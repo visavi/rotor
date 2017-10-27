@@ -29,7 +29,7 @@
         @foreach ($logs as $data)
             <div class="b">
                 <i class="fa fa-file-o"></i>
-                <b>{{ $data->request }} </b> ({{ dateFixed($data->created_at) }})
+                <b>{{ $data->request }}</b> ({{ dateFixed($data->created_at) }})
             </div>
             <div>
                 Referer: {{ $data->referer ?: 'Не определено' }}<br>

@@ -14,8 +14,13 @@
         @if (setting('addbansend') == 1 && $banhist->explain == 1)
             <div class="form">
                 <form method="post" action="/ban">
-                    Объяснение:<br>
-                    <textarea id="markItUp" cols="25" rows="5" name="msg"></textarea><br>
+
+                  <div class="form-group{{ hasError('msg') }}">
+                      <label for="markItUp">Объяснение:</label>
+                      <textarea class="form-control" id="markItUp" rows="5" name="msg" required>{{ getInput('msg') }}</textarea>
+                      {!! textError('msg') !!}
+                  </div>
+
                     <button class="btn btn-primary">Отправить</button>
                 </form>
             </div><br>

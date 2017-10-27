@@ -14,10 +14,21 @@
             Тип:<br>
             <select name="type">
                 <option value="offer"{{ $offer->type == 'offer' ? ' selected' : '' }}>Предложение</option>
-                <option value="issue"{{ $offer->type == 'issue' ? ' selected' : ''}}>Проблема</option>
+                <option value="issue"{{ $offer->type == 'issue' ? ' selected' : '' }}>Проблема</option>
             </select><br>
-            Заголовок: <br><input type="text" name="title" value="{{ $offer->title }}"><br>
-            Описание: <br><textarea id="markItUp" cols="25" rows="5" name="text">{{ $offer->text }}</textarea><br>
+
+            <div class="form-group{{ hasError('title') }}">
+                <label for="inputTitle">Заголовок:</label>
+                <input type="text" class="form-control" id="inputTitle" name="title" maxlength="50" value="{{ getInput('title', $offer->title) }}" required>
+                {!! textError('title') !!}
+            </div>
+
+            <div class="form-group{{ hasError('text') }}">
+                <label for="markItUp">Описание:</label>
+                <textarea class="form-control" id="markItUp" rows="5" name="text" required>{{ getInput('text', $offer->text) }}</textarea>
+                {!! textError('text') !!}
+            </div>
+
             <button class="btn btn-primary">Изменить</button>
         </form>
     </div><br>

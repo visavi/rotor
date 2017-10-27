@@ -21,14 +21,20 @@
             <form action="/private/send?user={{ $user->login }}" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-
-                <label for="markItUp">Сообщение:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required></textarea>
+                <div class="form-group{{ hasError('msg') }}">
+                    <label for="markItUp">Сообщение:</label>
+                    <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg') }}</textarea>
+                    {!! textError('msg') !!}
+                </div>
 
                 @if (getUser('point') < setting('privatprotect'))
-                    Проверочный код:<br>
-                    <img src="/captcha" alt=""><br>
-                    <input name="protect" size="6" maxlength="6"><br>
+                    <div class="form-group{{ hasError('protect') }}">
+                        <label for="inputProtect">Проверочный код:</label><br>
+                        <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;" alt=""><br>
+
+                        <input type="text" class="form-control" id="inputProtect" name="protect" maxlength="6" required>
+                        {!! textError('protect') !!}
+                    </div>
                 @endif
 
                 <button class="btn btn-primary">Отправить</button>
@@ -41,9 +47,11 @@
             <form action="/private/send" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-
-                <label for="inputLogin">Логин:</label>
-                <input class="form-control" name="user" id="inputLogin" maxlength="20" value="{{ getInput('user') }}">
+                <div class="form-group{{ hasError('user') }}">
+                    <label for="inputLogin">Логин:</label>
+                    <input type="text" class="form-control" id="inputLogin" name="user" maxlength="20" value="{{ getInput('user') }}" required>
+                    {!! textError('user') !!}
+                </div>
 
                 @if ($contacts->isNotEmpty())
                     <label for="inputContact">Или выберите из списка</label>
@@ -57,16 +65,20 @@
                     </select><br>
                 @endif
 
-
-                <label for="markItUp">Сообщение:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения"
-                          required>{{ getInput('msg') }}</textarea>
-
+                <div class="form-group{{ hasError('msg') }}">
+                    <label for="markItUp">Сообщение:</label>
+                    <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg') }}</textarea>
+                    {!! textError('msg') !!}
+                </div>
 
                 @if (getUser('point') < setting('privatprotect'))
-                    Проверочный код:<br>
-                    <img src="/captcha" alt=""><br>
-                    <input name="protect" size="6" maxlength="6"><br>
+                    <div class="form-group{{ hasError('protect') }}">
+                        <label for="inputProtect">Проверочный код:</label><br>
+                        <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;" alt=""><br>
+
+                        <input type="text" class="form-control" id="inputProtect" name="protect" maxlength="6" required>
+                        {!! textError('protect') !!}
+                    </div>
                 @endif
 
                 <button class="btn btn-primary">Отправить</button>
@@ -76,10 +88,8 @@
         Введите логин или выберите пользователя из своего контакт-листа<br>
     @endif
 
-
     <i class="fa fa-arrow-circle-up"></i> <a href="/private">К письмам</a><br>
     <i class="fa fa-search"></i> <a href="/searchuser">Поиск контактов</a><br>
     <i class="fa fa-envelope"></i> <a href="/private/send">Написать письмо</a><br>
     <i class="fa fa-address-book"></i> <a href="/contact">Контакт</a> / <a href="/ignore">Игнор</a><br>
-
 @stop

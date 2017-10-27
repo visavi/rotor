@@ -49,7 +49,7 @@
                     <i class="fa fa-pencil"></i>
                 </span>
 
-                <input class="form-control" name="word" placeholder="Введите слово" required>
+                <input type="text" class="form-control" name="word" placeholder="Введите слово" required>
 
                 <span class="input-group-btn">
                     <button class="btn btn-primary">Добавить</button>
