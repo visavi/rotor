@@ -13,11 +13,16 @@
             <form action="/offers/create" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-                Я хотел бы...<br>
-                <select name="type">
-                    <option value="offer">Предложить идею</option>
-                    <option value="issue">Сообщить о проблеме</option>
-                </select><br>
+                <?php $inputType = getInput('type'); ?>
+
+                <div class="form-group{{ hasError('type') }}">
+                    <label for="inputType">Я хотел бы...</label>
+                    <select class="form-control" id="inputType" name="type">
+                        <option value="offer"{!! $inputType == 'offer' ? ' selected="selected"' : '' !!}>Предложить идею</option>
+                        <option value="issue"{!! $inputType == 'issue' ? ' selected="selected"' : '' !!}>Сообщить о проблеме</option>
+                    </select>
+                    {!! textError('type') !!}
+                </div>
 
                 <div class="form-group{{ hasError('title') }}">
                     <label for="inputTitle">Заголовок:</label>
