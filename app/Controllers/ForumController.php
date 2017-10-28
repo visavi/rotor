@@ -298,10 +298,12 @@ class ForumController extends BaseController
 
                     if (empty($_SESSION['forumfindres']) || $forumfind != $_SESSION['forumfind']) {
 
-                        $searchsec = ($section > 0) ? "forum_id = " . $section . " AND" : '';
+                        $searchsec = ($section > 0) ? "topics.forum_id = " . $section . " AND" : '';
                         $searchper = ($period > 0) ? "created_at > " . (SITETIME - ($period * 24 * 60 * 60)) . " AND" : '';
 
-                        $result = Post::select('id')
+                        $result = Post::query()
+                            ->select('posts.id')
+                            ->leftJoin('topics', 'posts.topic_id', 'topics.id')
                             ->whereRaw($searchsec . ' ' . $searchper . ' MATCH (`text`) AGAINST (? IN BOOLEAN MODE)', [$findme])
                             ->limit(100)
                             ->pluck('id')
