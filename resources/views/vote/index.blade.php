@@ -6,7 +6,14 @@
 
 @section('content')
 
+    @if (getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/votes/create">Создать голосование</a><br>
+        </div>
+    @endif
+
     <h1>Голосования</h1>
+    <br>
 
     @if ($votes->isNotEmpty())
         @foreach ($votes as $vote)
@@ -15,7 +22,7 @@
                 <b><a href="/votes/{{ $vote['id'] }}">{{ $vote['title'] }}</a></b>
             </div>
             <div>
-                @if ($vote->topic)
+                @if ($vote->topic->id)
                     Тема: <a href="/topic/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
                 @endif
 

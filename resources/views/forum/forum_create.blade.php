@@ -62,9 +62,9 @@
 
                     <?php $answers = array_diff((array) getInput('answer'), ['']) ?>
 
-                    @for ($i=0; $i<10; $i++)
+                    @for ($i = 0; $i < 10; $i++)
                         <label for="inputAnswer{{ $i }}">Ответ {{ $i + 1 }}</label>
-                        <input type="text" name="answer[]" class="form-control" id="inputAnswer{{ $i }}" value="{{ isset($answers[$i]) ? $answers[$i] : '' }}" maxlength="50">
+                        <input type="text" name="answer[]" class="form-control" id="inputAnswer{{ $i }}" value="{{ $answers[$i] ?? '' }}" maxlength="50">
                     @endfor
                     {!! textError('answer') !!}
                 </div>

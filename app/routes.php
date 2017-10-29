@@ -137,6 +137,7 @@ $router->map('GET|POST', '/votes/[i:id]', 'VoteController@view');
 $router->map('GET',      '/votes/[i:id]/voters', 'VoteController@voters');
 $router->map('GET',      '/votes/history', 'VoteController@history');
 $router->map('GET',      '/votes/history/[i:id]', 'VoteController@viewHistory');
+$router->map('GET|POST', '/votes/create', 'VoteController@create');
 
 $router->map('GET|POST', '/ignore', 'IgnoreController@index');
 $router->map('GET|POST', '/ignore/note/[i:id]', 'IgnoreController@note');

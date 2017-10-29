@@ -179,4 +179,58 @@ class VoteController extends BaseController
 
         return view('vote/view_history', compact('vote'));
     }
+
+    /**
+     * Создание голосования
+     */
+    public function create()
+    {
+        if (Request::isMethod('post')) {
+
+            $token    = check(Request::input('token'));
+            $question = check(Request::input('question'));
+            $answers  = check(Request::input('answer'));
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($question, 5, 100, ['question' => 'Слишком длинный или короткий текст вопроса!']);
+
+            $answers = array_unique(array_diff($answers, ['']));
+
+            foreach ($answers as $answer) {
+                if (utfStrlen($answer) > 50) {
+                    $validator->addError(['answer' => 'Длина вариантов ответа не должна быть более 50 символов!']);
+                    break;
+                }
+            }
+
+            $validator->between(count($answers), 2, 10, ['answer' => 'Недостаточное количество вариантов ответов!']);
+
+            if ($validator->isValid()) {
+
+                $vote = Vote::query()->create([
+                    'title'      => $question,
+                    'created_at' => SITETIME,
+                ]);
+
+                $prepareAnswers = [];
+                foreach ($answers as $answer) {
+                    $prepareAnswers[] = [
+                        'vote_id' => $vote->id,
+                        'answer'  => $answer
+                    ];
+                }
+
+                VoteAnswer::query()->insert($prepareAnswers);
+
+                setFlash('success', 'Голосование успешно создано!');
+                redirect('/votes/' . $vote->id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('vote/create');
+    }
 }
