@@ -184,7 +184,7 @@ class PhotoController extends BaseController
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
                 ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткое название!'])
                 ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять сообщения раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->empty($photo->closed, 'Комментирование данной фотографии запрещено!');
+                ->empty($photo->closed, ['msg' => 'Комментирование данной фотографии запрещено!']);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

@@ -76,9 +76,9 @@ class NewsController extends BaseController
             $validator = new Validator();
             $validator->true(getUser(), 'Чтобы добавить комментарий необходимо авторизоваться')
                 ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->equal(Flood::isFlood(), true, 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!')
-                ->length($msg, 5, 1000, 'Слишком длинный или короткий комментарий!')
-                ->empty($news['closed'], 'Комментирование данной новости запрещено!');
+                ->equal(Flood::isFlood(), true, ['msg' => 'Антифлуд! Разрешается комментировать раз в ' . Flood::getPeriod() . ' сек!'])
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!'])
+                ->empty($news['closed'], ['msg' => 'Комментирование данной новости запрещено!']);
 
             if ($validator->isValid()) {
                 $msg = antimat($msg);

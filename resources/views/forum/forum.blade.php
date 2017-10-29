@@ -6,6 +6,12 @@
 
 @section('content')
 
+    @if (getUser() && empty($forum['closed']))
+        <div class="float-right">
+            <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
+        </div>
+    @endif
+
     <h1>{{ $forum->title }}</h1>
 
     <a href="/forum">Форум</a>
@@ -18,12 +24,6 @@
 
     @if (isAdmin())
         / <a href="/admin/forum?act=forum&amp;fid={{  $forum->id  }}&amp;page={{ $page['current'] }}">Управление</a>
-    @endif
-
-    @if (getUser() && empty($forum['closed']))
-        <div class="float-right">
-            <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
-        </div>
     @endif
 
     <hr>

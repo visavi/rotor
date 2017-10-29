@@ -164,7 +164,7 @@ class BlogController extends BaseController
                 ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->notEmpty($category, ['cid' => 'Раздела для статьи не существует!']);
+                ->notEmpty($category, ['cid' => 'Категории для статьи не существует!']);
 
             if ($validator->isValid()) {
 
@@ -258,7 +258,7 @@ class BlogController extends BaseController
                 ->length($text, 100, setting('maxblogpost'), ['text' => 'Слишком длинный или короткий текст статьи!'])
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
-                ->notEmpty($category, ['cid' => 'Раздела для новой статьи не существует!']);
+                ->notEmpty($category, ['cid' => 'Категории для новой статьи не существует!']);
 
             if ($validator->isValid()) {
 

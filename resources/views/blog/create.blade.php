@@ -15,13 +15,18 @@
     <div class="form next">
         <form action="/blog/create" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            Категория*:<br>
-            <select name="cid">
-                <option value="0">Выберите категорию</option>
-                @foreach ($cats as $key => $value)
-                    <option value="{{ $key }}"{{ $cid == $key ? ' selected' : '' }}>{{ $value }}</option>
-                @endforeach
-            </select><br>
+
+            <div class="form-group{{ hasError('cid') }}">
+                <label for="inputCategory">Категория</label>
+                <select class="form-control" id="inputCategory" name="cid">
+                    <option value="0">Выберите категорию</option>
+                    @foreach ($cats as $key => $value)
+                        <option value="{{ $key }}"{{ $cid == $key ? ' selected' : '' }}>{{ $value }}</option>
+                    @endforeach
+
+                </select>
+                {!! textError('cid') !!}
+            </div>
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="inputTitle">Заголовок:</label>
