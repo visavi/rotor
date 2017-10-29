@@ -33,7 +33,7 @@
             </div>
 
             <label>
-                <input name="bold" class="js-bold" type="checkbox" value="1" {{ (getInput('bold') == 1 ? ' checked' : '') }}> Жирность
+                <input name="bold" class="js-bold" type="checkbox" value="1" {{ getInput('bold') == 1 ? ' checked' : '' }}> Жирность
             </label>
 
             <div class="form-group{{ hasError('protect') }}">

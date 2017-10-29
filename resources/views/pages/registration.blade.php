@@ -76,10 +76,11 @@
             <label for="inputGender">Пол:</label>
             <div class="form-group{{ hasError('gender') }}">
 
-                <input type="radio" name="gender" id="inputGenderMale" value="1"{{ (!getInput('gender') || getInput('gender') == 1 ? ' checked' : '') }}>
+                <?php $inputGender = getInput('gender', 1); ?>
+                <input type="radio" name="gender" id="inputGenderMale" value="1"{{ $inputGender == 1 ? ' checked' : '' }}>
                 <label for="inputGenderMale">Мужской</label>
 
-                <input type="radio" name="gender" id="inputGenderFemale" value="2"{{ (getInput('gender') == 2 ? ' checked' : '') }}>
+                <input type="radio" name="gender" id="inputGenderFemale" value="2"{{ $inputGender == 2 ? ' checked' : '' }}>
                 <label for="inputGenderFemale">Женский</label>
                 {!! textError('gender') !!}
             </div>
