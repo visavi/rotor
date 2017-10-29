@@ -8,22 +8,16 @@
 
     <h1>{{ $photo->title }}</h1>
 
-    @if ($photo)
-
-    <?php
-    $links = [
-        ['url' => '/admin/gallery?act=edit&amp;gid='.$photo->id, 'label' => 'Редактировать', 'show' => isAdmin()],
-        ['url' => '/admin/gallery?act=del&amp;del='.$photo->id.'&amp;uid='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => isAdmin()],
-        ['url' => '/gallery/'.$photo->id.'/edit', 'label' => 'Редактировать', 'show' => (($photo->user == getUser('login')) && !isAdmin())],
-        ['url' => '/gallery/'.$photo->id.'/delete?token='.$_SESSION['token'], 'label' => 'Удалить', 'params' => ['onclick' => "return confirm('Вы подтверждаете удаление изображения?')"], 'show' => (($photo->user == getUser('login')) && !isAdmin())],
-    ];
-    ?>
-
     <ol class="breadcrumb">
-        <?php foreach ($links as $link): ?>
-            <?php if (isset($link['show']) && $link['show'] == false) continue; ?>
-            <li class="breadcrumb-item"><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></li>
-        <?php endforeach; ?>
+        @if (isAdmin())
+            <li class="breadcrumb-item"><a href="/admin/gallery?act=edit&amp;gid={{ $photo->id }}">Редактировать</a></li>
+            <li class="breadcrumb-item"><a href="/admin/gallery?act=del&amp;del={{ $photo->id }}&amp;uid={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a></li>
+        @endif
+
+        @if ($photo->user->id == getUser('id') && ! isAdmin())
+            <li class="breadcrumb-item"><a href="/gallery/{{ $photo->id }}/edit">Редактировать</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/{{ $photo->id }}/delete?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы подтверждаете удаление изображения?')">Удалить</a></li>
+        @endif
     </ol>
 
     <div>
@@ -63,11 +57,7 @@
             @endif
         </div>
     @endif
+
     <i class="fa fa-arrow-circle-up"></i> <a href="/gallery/album/{{ $photo->user->login }}">В альбом</a><br>
-
-    @else
-        {{ showError('Ошибка! Данного изображения нет в базе') }}
-    @endif
-
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>
 @stop

@@ -6,24 +6,31 @@
 
 @section('content')
 
+    @if (getUser())
+        <div class="float-right">
+            <a class="btn btn-success" href="/gallery/create">Добавить фото</a><br>
+        </div>
+    @endif
+
     <h1>Галерея сайта</h1>
 
-<?php
-
-$links = [
-    ['url' => '/gallery/album/'.getUser('login'), 'label' => 'Мои альбом', 'show' => getUser()],
-    ['url' => '/gallery/comments/'.getUser('login'), 'label' => 'Мои комментарии', 'show' => getUser()],
-    ['url' => '/gallery/albums', 'label' => 'Все альбомы'],
-    ['url' => '/gallery/comments', 'label' => 'Все комментарии'],
-    ['url' => '/admin/gallery?page='.$page['current'], 'label' => 'Управление', 'show' => isAdmin()],
-];
-?>
+    <br>
     <ol class="breadcrumb">
-        <?php foreach ($links as $link): ?>
-            <?php if (isset($link['show']) && $link['show'] == false) continue; ?>
-            <li class="breadcrumb-item"><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></li>
-        <?php endforeach; ?>
+
+        @if (getUser())
+            <li class="breadcrumb-item"><a href="/gallery/album/{{ getUser('login') }}">Мои альбом</a></li>
+            <li class="breadcrumb-item"><a href="/gallery/comments/{{ getUser('login') }}">Мои комментарии</a></li>
+        @endif
+
+        <li class="breadcrumb-item"><a href="/gallery/albums">Все альбомы</a></li>
+        <li class="breadcrumb-item"><a href="/gallery/comments">Все комментарии</a></li>
+        <li class="breadcrumb-item"><a href="/gallery/top">Топ фото</a></li>
+
+        @if (isAdmin())
+                <li class="breadcrumb-item"><a href="/admin/gallery?page={{ $page['current'] }}">Управление</a></li>
+        @endif
     </ol>
+
     @if ($photos->isNotEmpty())
         @foreach ($photos as $data)
 
@@ -52,17 +59,4 @@ $links = [
     @else
         {{ showError('Фотографий нет, будь первым!') }}
     @endif
-
-    <?php
-    $links = [
-        ['url' => '/gallery/top', 'label' => 'Топ фото'],
-        ['url' => '/gallery/create', 'label' => 'Добавить фото'],
-    ];
-    ?>
-    <ol class="breadcrumb">
-        <?php foreach ($links as $link): ?>
-            <?php if (isset($link['show']) && $link['show'] == false) continue; ?>
-            <li class="breadcrumb-item"><a href="<?= $link['url'] ?>"><?= $link['label'] ?></a></li>
-        <?php endforeach; ?>
-    </ol>
 @stop
