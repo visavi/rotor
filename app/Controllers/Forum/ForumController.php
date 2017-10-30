@@ -39,16 +39,11 @@ class ForumController extends BaseController
      */
     public function forum($fid)
     {
-        $forum = Forum::with('parent')->find($fid);
+        $forum = Forum::query()->with('parent', 'children.lastTopic.lastPost.user')->find($fid);
 
         if (! $forum) {
             abort('default', 'Данного раздела не существует!');
         }
-
-        $forum->children = Forum::query()
-            ->where('parent_id', $forum->id)
-            ->with('lastTopic.lastPost.user')
-            ->get();
 
         $total = Topic::query()->where('forum_id', $fid)->count();
 
@@ -58,8 +53,8 @@ class ForumController extends BaseController
             ->where('forum_id', $fid)
             ->orderBy('locked', 'desc')
             ->orderBy('updated_at', 'desc')
-            ->limit(setting('forumtem'))
             ->offset($page['offset'])
+            ->limit($page['limit'])
             ->with('lastPost.user')
             ->get();
 

@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @if (getUser() && empty($forum['closed']))
+    @if (getUser() && ! $forum->closed)
         <div class="float-right">
             <a class="btn btn-success" href="/forum/create?fid={{ $forum->id }}">Создать тему</a>
         </div>
@@ -28,13 +28,13 @@
 
     <hr>
 
-    @if (!$forum->children->isEmpty() && $page['current'] == 1)
+    @if ($forum->children->isNotEmpty() && $page['current'] == 1)
         <div class="act">
 
         @foreach ($forum->children as $child)
 
             <div class="b"><i class="fa fa-file-text-o fa-lg text-muted"></i>
-            <b><a href="/forum/{{ $child['id'] }}">{{ $child['title'] }}</a></b> ({{ $child->topics }}/{{ $child->posts }})</div>
+            <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b> ({{ $child->topics }}/{{ $child->posts }})</div>
 
             @if ($child->lastTopic)
                 <div>

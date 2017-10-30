@@ -27,25 +27,25 @@
     @endif
 
     <br>Сортировать:
-    @if ($sort == 'rating')
+    @if ($order == 'rating')
         <b>Голоса</b> /
     @else
         <a href="/offers/{{ $type }}?sort=rating">Голоса</a> /
     @endif
 
-    @if ($sort == 'times')
+    @if ($order == 'created_at')
         <b>Дата</b> /
     @else
-        <a href="/offers/{{ $type }}?sort=times">Дата</a> /
+        <a href="/offers/{{ $type }}?sort=time">Дата</a> /
     @endif
 
-    @if ($sort == 'status')
+    @if ($order == 'status')
         <b>Статус</b> /
     @else
         <a href="/offers/{{ $type }}?sort=status">Статус</a> /
     @endif
 
-    @if ($sort == 'comments')
+    @if ($order == 'comments')
         <b>Комментарии</b>
     @else
         <a href="/offers/{{ $type }}?sort=comments">Комментарии</a>

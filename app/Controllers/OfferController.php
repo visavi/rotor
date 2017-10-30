@@ -18,7 +18,7 @@ class OfferController extends BaseController
     {
         $otherType = $type == 'offer' ? 'issue' : 'offer';
 
-        $sort = check(Request::input('sort', 'rating'));
+        $sort = check(Request::input('sort'));
 
         $total = Offer::query()->where('type', $type)->count();
         $page = paginate(setting('postoffers'), $total);
@@ -26,7 +26,7 @@ class OfferController extends BaseController
         $page['otherTotal'] = Offer::query()->where('type', $otherType)->count();
 
         switch ($sort) {
-            case 'times':
+            case 'time':
                 $order = 'created_at';
                 break;
             case 'status':
@@ -47,7 +47,7 @@ class OfferController extends BaseController
             ->with('user')
             ->get();
 
-        return view('offer/index', compact('offers', 'page', 'sort', 'type'));
+        return view('offer/index', compact('offers', 'page', 'order', 'type'));
     }
 
     /**
@@ -190,7 +190,7 @@ class OfferController extends BaseController
         $offer = Offer::query()->find($id);
 
         if (! $offer) {
-            abort('default', 'Данного предложения или проблемы не существует!');
+            abort(404, 'Данного предложения или проблемы не существует!');
         }
 
         if (Request::isMethod('post')) {
@@ -308,7 +308,7 @@ class OfferController extends BaseController
     {
         $offer = Offer::query()->find($id);
 
-        if (empty($offer)) {
+        if (! $offer) {
             abort(404, 'Данного предложения или проблемы не существует!');
         }
 

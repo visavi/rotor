@@ -300,7 +300,7 @@ class BlogController extends BaseController
         $blog = Blog::query()->find($id);
 
         if (! $blog) {
-            abort('default', 'Данной статьи не существует!');
+            abort(404, 'Данной статьи не существует!');
         }
 
         if (Request::isMethod('post')) {
@@ -423,7 +423,7 @@ class BlogController extends BaseController
     {
         $blog = Blog::query()->find($id);
 
-        if (empty($blog)) {
+        if (! $blog) {
             abort(404, 'Выбранная вами статья не существует, возможно она была удалена!');
         }
 
@@ -443,8 +443,8 @@ class BlogController extends BaseController
     {
         $blog = Blog::query()->find($id);
 
-        if (empty($blog)) {
-            abort('default', 'Данной статьи не существует!');
+        if (! $blog) {
+            abort(404, 'Данной статьи не существует!');
         }
 
         $blog['text'] = preg_replace('|\[nextpage\](<br * /?>)*|', '', $blog['text']);
