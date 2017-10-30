@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Forum;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Controllers\BaseController;
 use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;

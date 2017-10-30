@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\User;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Controllers\BaseController;
 use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\ChangeMail;

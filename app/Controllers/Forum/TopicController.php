@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Forum;
 
+use App\Controllers\BaseController;
 use App\Models\File;
 use App\Models\Post;
 use App\Models\Bookmark;
