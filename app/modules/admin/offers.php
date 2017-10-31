@@ -159,14 +159,14 @@ if (isAdmin([101, 102])) {
                 echo '<select name="status">';
 
                 foreach ($arrstatus as $k => $v) {
-                    $selected = ($k == $queryoff['status']) ? ' selected="selected"' : '';
+                    $selected = ($k == $queryoff['status']) ? ' selected' : '';
 
                     echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
                 }
                 echo '</select><br>';
 
                 echo 'Закрыть комментарии: ';
-                $checked = ($queryoff['closed'] == 1) ? ' checked="checked"' : '';
+                $checked = ($queryoff['closed'] == 1) ? ' checked' : '';
                 echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
                 echo '<input type="submit" value="Отправить"></form></div><br>';
@@ -232,9 +232,9 @@ if (isAdmin([101, 102])) {
 
                 echo 'Тип:<br>';
                 echo '<select name="types">';
-                $selected = ($queryoff['type'] == 0) ? ' selected="selected"' : '';
+                $selected = ($queryoff['type'] == 0) ? ' selected' : '';
                 echo '<option value="0"'.$selected.'>Предложение</option>';
-                $selected = ($queryoff['type'] == 1) ? ' selected="selected"' : '';
+                $selected = ($queryoff['type'] == 1) ? ' selected' : '';
                 echo '<option value="1"'.$selected.'>Проблема</option>';
                 echo '</select><br>';
 
@@ -242,7 +242,7 @@ if (isAdmin([101, 102])) {
                 echo 'Описание: <br><textarea cols="25" rows="5" name="text">'.$queryoff['text'].'</textarea><br>';
 
                 echo 'Закрыть комментарии: ';
-                $checked = ($queryoff['closed'] == 1) ? ' checked="checked"' : '';
+                $checked = ($queryoff['closed'] == 1) ? ' checked' : '';
                 echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
                 echo '<input type="submit" value="Изменить"></form></div><br>';

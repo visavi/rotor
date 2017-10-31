@@ -137,11 +137,11 @@ if (isAdmin([101, 102, 103])) {
                         echo '<form method="post" action="/admin/ban?act=changeban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">';
                         echo 'Время бана:<br><input name="bantime" value="'.$file_time.'"><br>';
 
-                        $checked = ($type == 'min') ? ' checked="checked"' : '';
+                        $checked = ($type == 'min') ? ' checked' : '';
                         echo '<input name="bantype" type="radio" value="min"'.$checked.'> Минут<br>';
-                        $checked = ($type == 'chas') ? ' checked="checked"' : '';
+                        $checked = ($type == 'chas') ? ' checked' : '';
                         echo '<input name="bantype" type="radio" value="chas"'.$checked.'> Часов<br>';
-                        $checked = ($type == 'sut') ? ' checked="checked"' : '';
+                        $checked = ($type == 'sut') ? ' checked' : '';
                         echo '<input name="bantype" type="radio" value="sut"'.$checked.'> Суток<br>';
 
                         echo 'Причина бана:<br>';

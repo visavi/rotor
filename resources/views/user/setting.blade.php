@@ -18,49 +18,57 @@
         <form method="post" action="setting">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-            Wap-тема по умолчанию:<br>
-            <select name="themes">
-                <option value="0">Автоматически</option>
+            <div class="form-group{{ hasError('themes') }}">
+                <label for="themes">Тема:</label>
 
-                @foreach ($setting['themes'] as $theme)
-                    <?php $selected = (getUser('themes') == basename($theme)) ? ' selected="selected"' : ''; ?>
-                    echo '<option value="{{ basename($theme) }}"{{ $selected }}>{{ basename($theme) }}</option>
-                @endforeach
-            </select>
-            <br>
+                <select class="form-control" name="themes" id="themes">
+                    <option value="0">Автоматически</option>
 
-            Язык:<br>
-            <select name="lang">
-                @foreach ($setting['languages'] as $lang) {
-                    <?php $selected = (getUser('lang') == basename($lang)) ? ' selected="selected"' : ''; ?>
-                    <option value="{{ basename($lang) }}"{{ $selected }}>{{ $setting['langShort'][basename($lang)] }}</option>
-                @endforeach
-            </select><br>
+                    @foreach ($setting['themes'] as $theme)
+                        <option value="{{ basename($theme) }}"{{ getUser('themes') == basename($theme) ? 'selected' : '' }}>{{ basename($theme) }}</option>
+                    @endforeach
+                </select>
 
-            Временной сдвиг:<br>
-            <select name="timezone">';
-                @foreach($setting['timezones'] as $timezone)
-                    <?php $selected = (getUser('timezone') == $timezone) ? ' selected="selected"' : ''; ?>
-                    <option value="{{ $timezone }}"{{ $selected }}>{{ $timezone }}</option>
-                @endforeach
-            </select> - {{ dateFixed(SITETIME, 'H:i') }}<br>
+                {!! textError('themes') !!}
+            </div>
 
-            <?php $checked = (getUser('notify') == 1) ? ' checked="checked"' : ''; ?>
+            <div class="form-group{{ hasError('lang') }}">
+                <label for="lang">Язык:</label>
+
+                <select class="form-control" name="lang" id="lang">
+                    @foreach ($setting['languages'] as $lang)
+                        <option value="{{ basename($lang) }}"{{ getUser('lang') == basename($lang) ? 'selected' : '' }}>{{ $setting['langShort'][basename($lang)] }}</option>
+                    @endforeach
+                </select>
+
+                {!! textError('lang') !!}
+            </div>
+
+            <div class="form-group{{ hasError('timezone') }}">
+                <label for="timezone">Временной сдвиг {{ dateFixed(SITETIME, 'H:i') }}:</label>
+
+                <select class="form-control" name="timezone" id="timezone">';
+                    @foreach($setting['timezones'] as $timezone)
+                        <option value="{{ $timezone }}"{{ getUser('timezone') == $timezone ? ' selected' : '' }}>{{ $timezone }}</option>
+                    @endforeach
+                </select>
+
+                {!! textError('timezone') !!}
+            </div>
+
             <div class="checkbox">
                 <label data-toggle="tooltip" title="Уведомления об ответах будут приходить в личные сообщения">
-                    <input name="notify" type="checkbox" value="1"{{ $checked }}> Получать уведомления об ответах
+                    <input name="notify" type="checkbox" value="1"{{ getUser('notify') ? ' checked' : '' }}> Получать уведомления об ответах
                 </label>
             </div>
 
-            <?php $checked = (! empty(getUser('subscribe'))) ? ' checked="checked"' : ''; ?>
             <div class="checkbox">
                 <label data-toggle="tooltip" title="Получение информационных писем с сайта на email">
-                    <input name="subscribe" type="checkbox" value="1"{{ $checked }}> Получать информационные письма
+                    <input name="subscribe" type="checkbox" value="1"{{ getUser('subscribe') ? ' checked' : '' }}> Получать информационные письма
                 </label>
             </div>
 
             <button class="btn btn-primary">Изменить</button>
-        </form></div><br>
-
-    * Значение всех полей (max.50)<br><br>
+        </form>
+    </div>
 @stop

@@ -2427,19 +2427,19 @@ function progressBar($percent, $title = false)
 /**
  * Инициализирует языковую локализацию
  *
- * @param  string $locale
  * @param  string $fallback
  * @return \Illuminate\Translation\Translator
  */
-function translator($locale = 'ru', $fallback = 'en')
+function translator($fallback = 'en')
 {
     $translator = new \Illuminate\Translation\Translator(
         new \Illuminate\Translation\FileLoader(
             new \Illuminate\Filesystem\Filesystem(),
             RESOURCES.'/lang'
         ),
-        $locale
+        setting('lang')
     );
+
     $translator->setFallback($fallback);
 
     return $translator;

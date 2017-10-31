@@ -81,7 +81,7 @@ if (isAdmin()) {
                 echo 'Подпись к фото: <br><textarea cols="25" rows="5" name="text">'.$photo['text'].'</textarea><br>';
 
                 echo 'Закрыть комментарии: ';
-                $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
+                $checked = ($photo['closed'] == 1) ? ' checked' : '';
                 echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
                 echo '<input type="submit" value="Изменить"></form></div><br>';

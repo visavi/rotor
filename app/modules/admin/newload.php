@@ -116,14 +116,14 @@ if (isAdmin()) {
                         echo '<select name="cid">';
 
                         foreach ($output[0] as $key => $data) {
-                            $selected = $new['category_id'] == $data['id'] ? ' selected="selected"' : '';
-                            $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+                            $selected = $new['category_id'] == $data['id'] ? ' selected' : '';
+                            $disabled = ! empty($data['closed']) ? ' disabled' : '';
                             echo '<option value="'.$data['id'].'"'.$selected.$disabled.'>'.$data['name'].'</option>';
 
                             if (isset($output[$key])) {
                                 foreach($output[$key] as $datasub) {
-                                    $selected = ($new['category_id'] == $datasub['id']) ? ' selected="selected"' : '';
-                                    $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+                                    $selected = ($new['category_id'] == $datasub['id']) ? ' selected' : '';
+                                    $disabled = ! empty($datasub['closed']) ? ' disabled' : '';
                                     echo '<option value="'.$datasub['id'].'"'.$selected.$disabled.'>– '.$datasub['name'].'</option>';
                                 }
                             }
@@ -149,7 +149,7 @@ if (isAdmin()) {
                         echo '<textarea cols="25" rows="5" name="notice">'.$new['notice'].'</textarea><br>';
 
                         echo 'Файл проверен: ';
-                        $checked = ($new['app'] == 1) ? ' checked="checked"' : '';
+                        $checked = ($new['app'] == 1) ? ' checked' : '';
                         echo '<input name="app" type="checkbox" value="1"'.$checked.'><br><br>';
 
                         echo '<input value="Изменить" type="submit"></form></div><br>';

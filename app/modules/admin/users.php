@@ -132,7 +132,7 @@ if (isAdmin([101, 102])) {
                         echo 'Уровень доступа:<br>';
                         echo '<select name="level">';
                         foreach ($arr_access as $value) {
-                            $selected = ($user['level'] == $value) ? ' selected="selected"' : '';
+                            $selected = ($user['level'] == $value) ? ' selected' : '';
                             echo '<option value="'.$value.'"'.$selected.'>'.userLevel($value).'</option>';
                         }
                         echo '</select><br>';
@@ -171,9 +171,9 @@ if (isAdmin([101, 102])) {
 
                     echo 'Пол:<br>';
                     echo '<select name="gender">';
-                    $selected = ($user['gender'] == 1) ? ' selected="selected"' : '';
+                    $selected = ($user['gender'] == 1) ? ' selected' : '';
                     echo '<option value="1"'.$selected.'>Мужской</option>';
-                    $selected = ($user['gender'] == 2) ? ' selected="selected"' : '';
+                    $selected = ($user['gender'] == 2) ? ' selected' : '';
                     echo '<option value="2"'.$selected.'>Женский</option>';
                     echo '</select><br>';
 

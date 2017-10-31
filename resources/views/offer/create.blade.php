@@ -18,8 +18,8 @@
                 <div class="form-group{{ hasError('type') }}">
                     <label for="inputType">Я хотел бы...</label>
                     <select class="form-control" id="inputType" name="type">
-                        <option value="offer"{!! $inputType == 'offer' ? ' selected="selected"' : '' !!}>Предложить идею</option>
-                        <option value="issue"{!! $inputType == 'issue' ? ' selected="selected"' : '' !!}>Сообщить о проблеме</option>
+                        <option value="offer"{!! $inputType == 'offer' ? ' selected' : '' !!}>Предложить идею</option>
+                        <option value="issue"{!! $inputType == 'issue' ? ' selected' : '' !!}>Сообщить о проблеме</option>
                     </select>
                     {!! textError('type') !!}
                 </div>

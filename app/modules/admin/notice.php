@@ -89,7 +89,7 @@ case 'edit':
         echo '<input type="text" name="name" maxlength="100" size="50" value="'.$notice['name'].'"><br>';
         echo '<textarea id="markItUp" cols="35" rows="20" name="text">'.$notice['text'].'</textarea><br>';
 
-        $checked = $notice['protect'] ? ' checked="checked"' : '';
+        $checked = $notice['protect'] ? ' checked' : '';
 
         echo '<input name="protect" id="protect" type="checkbox" value="1" '.$checked.'> <label for="protect">Системный шаблон</label><br>';
 

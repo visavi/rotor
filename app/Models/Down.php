@@ -17,4 +17,12 @@ class Down extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает категорию загрузок
+     */
+    public function category()
+    {
+        return $this->belongsTo(Cats::class, 'category_id')->withDefault();
+    }
 }

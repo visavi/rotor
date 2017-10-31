@@ -64,7 +64,7 @@ if (isAdmin([101])) {
                 $globthemes = glob(HOME."/themes/*", GLOB_ONLYDIR);
 
                 foreach ($globthemes as $wapthemes) {
-                    $selected = (basename($wapthemes) == $setting['themes']) ? ' selected="selected"' : '';
+                    $selected = (basename($wapthemes) == $setting['themes']) ? ' selected' : '';
 
                     echo '<option value="'.basename($wapthemes).'"'.$selected.'>'.basename($wapthemes).'</option>';
                 }
@@ -79,7 +79,7 @@ if (isAdmin([101])) {
                 echo '<option value="0">Выключить</option>';
 
                 foreach ($globthemes as $webthemes) {
-                    $selected = (basename($webthemes) == $setting['webthemes']) ? ' selected="selected"' : '';
+                    $selected = (basename($webthemes) == $setting['webthemes']) ? ' selected' : '';
 
                     echo '<option value="'.basename($webthemes).'"'.$selected.'>'.basename($webthemes).'</option>';
                 }
@@ -94,7 +94,7 @@ if (isAdmin([101])) {
                 echo '<option value="0">Выключить</option>';
 
                 foreach ($globthemes as $touchthemes) {
-                    $selected = (basename($touchthemes) == $setting['touchthemes']) ? ' selected="selected"' : '';
+                    $selected = (basename($touchthemes) == $setting['touchthemes']) ? ' selected' : '';
 
                     echo '<option value="'.basename($touchthemes).'"'.$selected.'>'.basename($touchthemes).'</option>';
                 }
@@ -105,20 +105,20 @@ if (isAdmin([101])) {
                 $statsite = [0 => 'Сайт открыт', 1 => 'Закрыто для гостей', 2 => 'Закрыто для всех'];
 
                 foreach($statsite as $k => $v) {
-                    $selected = ($k == $setting['closedsite']) ? ' selected="selected"' : '';
+                    $selected = ($k == $setting['closedsite']) ? ' selected' : '';
 
                     echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
                 }
                 echo '</select><br>';
 
                 echo 'Подтверждение регистрации:<br>';
-                $checked = $setting['regkeys'] ? ' checked="checked"' : '';
+                $checked = $setting['regkeys'] ? ' checked' : '';
                 echo '<input name="regkeys" id="regkeys" type="checkbox" value="1"'.$checked.'> <label for="openreg">Включить подтверждение</label><br>';
 
-                $checked = $setting['openreg'] ? ' checked="checked"' : '';
+                $checked = $setting['openreg'] ? ' checked' : '';
                 echo '<input name="openreg" id="openreg" type="checkbox" value="1"'.$checked.'> <label for="openreg">Разрешить регистрацию</label><br>';
 
-                $checked = $setting['invite'] ? ' checked="checked"' : '';
+                $checked = $setting['invite'] ? ' checked' : '';
                 echo '<input name="invite" id="invite" type="checkbox" value="1"'.$checked.' title="Для регистрация необходимо ввести специальный пригласительный ключ"> <label for="invite">Регистрация по приглашениям</label><br>';
 
                 echo '<input value="Изменить" type="submit"></form></div><br>';
@@ -245,16 +245,16 @@ if (isAdmin([101])) {
             $incounters = ['Выключить', 'Хосты | Хосты всего', 'Хиты | Хиты всего', 'Хиты | Хосты', 'Хиты всего | Хосты всего', 'Графический'];
 
             foreach($incounters as $k => $v) {
-                $selected = ($k == $setting['incount']) ? ' selected="selected"' : '';
+                $selected = ($k == $setting['incount']) ? ' selected' : '';
 
                 echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
             }
             echo '</select><br>';
 
-            $checked = ($setting['performance'] == 1) ? ' checked="checked"' : '';
+            $checked = ($setting['performance'] == 1) ? ' checked' : '';
             echo '<input name="performance" type="checkbox" value="1"'.$checked.'> Производительность<br>';
 
-            $checked = ($setting['onlines'] == 1) ? ' checked="checked"' : '';
+            $checked = ($setting['onlines'] == 1) ? ' checked' : '';
             echo '<input name="onlines" type="checkbox" value="1"'.$checked.'> Онлайн<br>';
 
             echo 'Время подсчета онлайн (минут):<br><input name="timeonline" maxlength="5" value="'.round($setting['timeonline'] / 60).'" title="На сколько минут запоминать IP пользователя"><br>';
@@ -313,7 +313,7 @@ if (isAdmin([101])) {
             echo '<select name="lastnews">';
 
             foreach ($innews as $k => $v) {
-                $selected = ($k == $setting['lastnews']) ? ' selected="selected"' : '';
+                $selected = ($k == $setting['lastnews']) ? ' selected' : '';
 
                 echo '<option value="'.$k.'"'.$selected.'>'.$v.'</option>';
             }
@@ -322,10 +322,10 @@ if (isAdmin([101])) {
             echo 'Новостей на страницу:<br><input name="postnews" maxlength="2" value="'.$setting['postnews'].'" title="Сколько новостей выводить на 1 страницу (По умолчанию: 10)"><br>';
 
             echo '<hr><b>Гостевая</b><br>';
-            $checked = ($setting['bookadds'] == 1) ? ' checked="checked"' : '';
+            $checked = ($setting['bookadds'] == 1) ? ' checked' : '';
             echo '<input name="bookadds" id="bookadds" type="checkbox" value="1"'.$checked.' title="Разрешить гостям писать в гостевой"> <label for="bookadds">Допуск гостей</label><br>';
 
-            $checked = ($setting['bookscores'] == 1) ? ' checked="checked"' : '';
+            $checked = ($setting['bookscores'] == 1) ? ' checked' : '';
             echo '<input name="bookscores" id="bookscores" type="checkbox" value="1"'.$checked.' title="При добавлении сообщений в гостевую начисляются баллы"> <label for="bookscores">Начисление баллов</label><br>';
 
             echo 'Сообщений в гостевой на стр.:<br><input name="bookpost" maxlength="2" value="'.$setting['bookpost'].'" title="Сколько сообщений выводить на 1 страницу (По умолчанию: 10)"><br>';
@@ -520,7 +520,7 @@ if (isAdmin([101])) {
             echo 'Максимальный размер скриншота (px):<br><input name="screenupsize" maxlength="6" value="'.$setting['screenupsize'].'"><br>';
             echo 'Допустимые расширения файлов:<br><textarea cols="25" rows="5" name="allowextload">'.$setting['allowextload'].'</textarea><br>';
 
-            $checked = ($setting['downupload'] == 1) ? ' checked="checked"' : '';
+            $checked = ($setting['downupload'] == 1) ? ' checked' : '';
             echo '<input name="downupload" type="checkbox" value="1"'.$checked.'> Разрешать загружать файлы пользователям<br>';
 
             echo '<input value="Изменить" type="submit"></form></div><br>';
@@ -711,7 +711,7 @@ if (isAdmin([101])) {
             echo '<form method="post" action="/admin/setting?act=editeight&amp;uid='.$_SESSION['token'].'">';
 
 
-            $checked = ($setting['errorlog'] == 1) ? ' checked="checked"' : '';
+            $checked = ($setting['errorlog'] == 1) ? ' checked' : '';
             echo '<input name="errorlog" type="checkbox" value="1"'.$checked.'> Включить запись логов<br>';
 
             echo 'Время хранения логов (Суток):<br><input name="maxlogdat" maxlength="3" value="'.$setting['maxlogdat'].'"><br>';
@@ -724,7 +724,7 @@ if (isAdmin([101])) {
             echo 'Статусы пользователей:<br><input name="statusname" maxlength="100" value="'.$setting['statusname'].'"><br>';
             echo 'Статус по умолчанию:<br><input name="statusdef" maxlength="20" value="'.$setting['statusdef'].'"><br>';
 
-            $checked = ($setting['addbansend'] == 1) ? ' checked="checked"' : '';
+            $checked = ($setting['addbansend'] == 1) ? ' checked' : '';
             echo '<input name="addbansend" type="checkbox" value="1"'.$checked.'> Объяснение из бана<br>';
 
             echo 'Curl прокси (ip:port):<br><input name="proxy" maxlength="50" value="'.$setting['proxy'].'"><br>';
@@ -852,10 +852,10 @@ if (isAdmin([101])) {
 
             echo 'Амплитуда колебаний символов [0-10]:<br><input name="captcha_offset" maxlength="2" value="'.$setting['captcha_offset'].'"><br>';
 
-            $checked = ($setting['captcha_distortion']) ? ' checked="checked"' : '';
+            $checked = ($setting['captcha_distortion']) ? ' checked' : '';
             echo '<input name="captcha_distortion" type="checkbox" value="1"'.$checked.'> Искажение<br>';
 
-            $checked = ($setting['captcha_interpolation']) ? ' checked="checked"' : '';
+            $checked = ($setting['captcha_interpolation']) ? ' checked' : '';
             echo '<input name="captcha_interpolation" type="checkbox" value="1"'.$checked.'> Размытие<br>';
 
             echo '<input value="Изменить" type="submit"></form></div><br>';
@@ -1040,7 +1040,7 @@ if (isAdmin([101])) {
 
             echo 'Размер скриншотов (px):<br><input name="previewsize" maxlength="3" value="'.$setting['previewsize'].'"><br>';
 
-            $checked = ($setting['copyfoto'] == 1) ? ' checked="checked"' : '';
+            $checked = ($setting['copyfoto'] == 1) ? ' checked' : '';
             echo '<input name="copyfoto" type="checkbox" value="1"'.$checked.'> Наложение копирайта<br>';
             echo '<img src="/assets/img/images/watermark.png" alt="watermark" title="'.siteUrl().'/assets/img/images/watermark.png"><br>';
 

@@ -91,7 +91,7 @@ if (isAdmin()) {
                 echo '<input name="color" type="text" maxlength="7" value="'.$data['color'].'"><br>';
 
                 echo 'Жирность: ';
-                $checked = ($data['bold'] == 1) ? ' checked="checked"' : '';
+                $checked = ($data['bold'] == 1) ? ' checked' : '';
                 echo '<input name="bold" type="checkbox" value="1"'.$checked.'><br>';
 
                 echo '<br><input type="submit" value="Изменить"></form></div><br>';

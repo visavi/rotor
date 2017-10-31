@@ -620,14 +620,17 @@ class UserController extends BaseController
             $token     = check(Request::input('token'));
             $themes    = check(Request::input('themes'));
             $timezone  = check(Request::input('timezone', 0));
+            $lang      = check(Request::input('lang'));
             $notify    = Request::has('notify') ? 1 : 0;
             $subscribe = Request::has('subscribe') ? str_random(32) : null;
 
             $validator = new Validator();
             $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-                ->regex($themes, '|^[a-z0-9_\-]+$|i', 'Недопустимое название темы!')
-                ->true((file_exists(HOME.'/themes/'.$themes) || empty($themes)), 'Данная тема не установлен на сайте!')
-                ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!');
+                ->regex($themes, '|^[a-z0-9_\-]+$|i', ['themes' => 'Недопустимое название темы!'])
+                ->true((file_exists(HOME.'/themes/'.$themes) || empty($themes)), ['themes' => 'Данная тема не установлена на сайте!'])
+                ->regex($lang, '|^[a-z]+$|', ['lang' => 'Недопустимое название языка!'])
+                ->true((file_exists(RESOURCES.'/lang/'.$lang) || empty($lang)), ['lang' => 'Данный язык не установлен на сайте!'])
+                ->regex($timezone, '|^[\-\+]{0,1}[0-9]{1,2}$|', ['timezone' => 'Недопустимое значение временного сдвига. (Допустимый диапазон -12 — +12 часов)!']);
 
             if ($validator->isValid()) {
 
@@ -636,12 +639,13 @@ class UserController extends BaseController
                     'timezone'  => $timezone,
                     'notify'    => $notify,
                     'subscribe' => $subscribe,
+                    'lang'      => $lang,
                 ]);
 
                 setFlash('success', 'Настройки успешно изменены!');
                 redirect("/setting");
-
             } else {
+                setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }
@@ -651,7 +655,7 @@ class UserController extends BaseController
 
         $setting['langShort'] = [
             'ru' => 'русский',
-            'en' => 'English',
+            'en' => 'english',
         ];
 
         $setting['timezones'] = range(-12, 12);

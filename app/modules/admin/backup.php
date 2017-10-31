@@ -80,7 +80,7 @@ if (isAdmin([101])) {
                 echo 'Степень сжатия:<br>';
                 echo '<select name="level">';
                 foreach($level as $key => $val) {
-                    $selected = ($key == 7) ? ' selected="selected"' : '';
+                    $selected = ($key == 7) ? ' selected' : '';
                     echo '<option value="'.$key.'"'.$selected.'>'.$val.'</option>';
                 }
                 echo '</select><br>';

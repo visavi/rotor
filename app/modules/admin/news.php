@@ -103,11 +103,11 @@ case 'edit':
         echo 'Прикрепить картинку:<br><input type="file" name="image"><br><br>';
 
         echo 'Закрыть комментарии: ';
-        $checked = ($datanews['closed'] == 1) ? ' checked="checked"' : '';
+        $checked = ($datanews['closed'] == 1) ? ' checked' : '';
         echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
         echo 'Показывать на главной: ';
-        $checked = ($datanews['top'] == 1) ? ' checked="checked"' : '';
+        $checked = ($datanews['top'] == 1) ? ' checked' : '';
         echo '<input name="top" type="checkbox" value="1"'.$checked.'><br>';
 
         echo '<br><input type="submit" value="Изменить"></form></div><br>';

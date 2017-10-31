@@ -74,6 +74,7 @@ if ($user = checkAuth()) {
     Registry::set('user', $user);
 
     $setting['themes'] = $user->themes;
+    $setting['lang']   = $user->lang;
 
     // Забанен
     if ($user->level == User::BANNED) {
@@ -120,6 +121,10 @@ if (! getUser() || empty($setting['themes'])) {
 
 if (empty($setting['themes']) || ! file_exists(HOME.'/themes/'.$setting['themes'])) {
     $setting['themes'] = 'default';
+}
+
+if (empty($setting['lang']) || ! file_exists(RESOURCES.'/lang/'.$setting['lang'])) {
+    $setting['themes'] = 'ru';
 }
 
 $files = glob(APP.'/plugins/*.php');

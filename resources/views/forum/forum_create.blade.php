@@ -16,11 +16,11 @@
                 <select class="form-control" id="inputForum" name="fid">
 
                     @foreach ($forums as $data)
-                        <option value="{{ $data->id }}"{!! ($fid == $data->id) ? ' selected="selected"' : '' !!}{!! !empty($data->closed) ? ' disabled="disabled"' : '' !!}>{{ $data->title }}</option>
+                        <option value="{{ $data->id }}"{!! ($fid == $data->id) ? ' selected' : '' !!}{!! !empty($data->closed) ? ' disabled' : '' !!}>{{ $data->title }}</option>
 
                         @if (!$data->children->isEmpty())
                             @foreach($data->children as $datasub)
-                                <option value="{{ $datasub->id }}"{!! $fid == $datasub->id ? ' selected="selected"' : '' !!}{!! !empty($datasub->closed) ? ' disabled="disabled"' : '' !!}>– {{ $datasub->title }}</option>
+                                <option value="{{ $datasub->id }}"{!! $fid == $datasub->id ? ' selected' : '' !!}{!! !empty($datasub->closed) ? ' disabled' : '' !!}>– {{ $datasub->title }}</option>
                             @endforeach
                         @endif
                     @endforeach
@@ -42,7 +42,7 @@
             </div>
 
             <?php $checkVote = getInput('vote') ? true : false; ?>
-            <?php $checked = $checkVote ? ' checked="checked"' : ''; ?>
+            <?php $checked = $checkVote ? ' checked' : ''; ?>
             <?php $display = $checkVote ? '' : ' style="display: none"'; ?>
 
             <label>

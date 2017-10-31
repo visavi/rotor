@@ -170,7 +170,7 @@ if (isAdmin()) {
 
                     foreach ($section as $data) {
                         if ($fid != $data['id']) {
-                            $selected = ($forums['parent_id'] == $data['id']) ? ' selected="selected"' : '';
+                            $selected = ($forums['parent_id'] == $data['id']) ? ' selected' : '';
                             echo '<option value="'.$data['id'].'"'.$selected.'>'.$data['title'].'</option>';
                         }
                     }
@@ -183,7 +183,7 @@ if (isAdmin()) {
                     echo '<input type="text" name="order" maxlength="2" value="'.$forums['sort'].'"><br>';
 
                     echo 'Закрыть форум: ';
-                    $checked = ($forums['closed'] == 1) ? ' checked="checked"' : '';
+                    $checked = ($forums['closed'] == 1) ? ' checked' : '';
                     echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
                     echo '<input type="submit" value="Изменить"></form></div><br>';
@@ -388,11 +388,11 @@ if (isAdmin()) {
                 echo '<textarea id="markItUp" cols="25" rows="5" name="note">'.$topics['note'].'</textarea><br>';
 
                 echo 'Закрепить тему: ';
-                $checked = ($topics['locked'] == 1) ? ' checked="checked"' : '';
+                $checked = ($topics['locked'] == 1) ? ' checked' : '';
                 echo '<input name="locked" type="checkbox" value="1"'.$checked.'><br>';
 
                 echo 'Закрыть тему: ';
-                $checked = ($topics['closed'] == 1) ? ' checked="checked"' : '';
+                $checked = ($topics['closed'] == 1) ? ' checked' : '';
                 echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
                 echo '<br><input type="submit" value="Изменить"></form></div><br>';
@@ -470,14 +470,14 @@ if (isAdmin()) {
 
                     foreach ($forums as $forum) {
                         if ($topic['forum_id'] != $forum['id']) {
-                            $disabled = ! empty($forum['closed']) ? ' disabled="disabled"' : '';
+                            $disabled = ! empty($forum['closed']) ? ' disabled' : '';
                             echo '<option value="'.$forum['id'].'"'.$disabled.'>'.$forum['title'].'</option>';
                         }
 
                         if ($forum->children->isNotEmpty()) {
                             foreach($forum->children as $datasub) {
                                 if ($topic['forum_id'] != $datasub['id']) {
-                                    $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+                                    $disabled = ! empty($datasub['closed']) ? ' disabled' : '';
                                     echo '<option value="'.$datasub['id'].'"'.$disabled.'>– '.$datasub['title'].'</option>';
                                 }
                             }

@@ -111,12 +111,12 @@ case 'newimport':
                     echo '<option value="0">Выберите категорию</option>';
 
                     foreach ($output[0] as $key => $data) {
-                        $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+                        $disabled = ! empty($data['closed']) ? ' disabled' : '';
                         echo '<option value="'.$data['id'].'"'.$disabled.'>'.$data['name'].'</option>';
 
                         if (isset($output[$key])) {
                             foreach($output[$key] as $datasub) {
-                                $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+                                $disabled = ! empty($datasub['closed']) ? ' disabled' : '';
                                 echo '<option value="'.$datasub['id'].'"'.$disabled.'>– '.$datasub['name'].'</option>';
                             }
                         }
@@ -265,14 +265,14 @@ case 'newfile':
         echo '<option value="0">Выберите категорию</option>';
 
         foreach ($output[0] as $key => $data) {
-            $selected = $cid == $data['id'] ? ' selected="selected"' : '';
-            $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+            $selected = $cid == $data['id'] ? ' selected' : '';
+            $disabled = ! empty($data['closed']) ? ' disabled' : '';
             echo '<option value="'.$data['id'].'"'.$selected.$disabled.'>'.$data['name'].'</option>';
 
             if (isset($output[$key])) {
                 foreach($output[$key] as $datasub) {
-                    $selected = $cid == $datasub['id'] ? ' selected="selected"' : '';
-                    $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+                    $selected = $cid == $datasub['id'] ? ' selected' : '';
+                    $disabled = ! empty($datasub['closed']) ? ' disabled' : '';
                     echo '<option value="'.$datasub['id'].'"'.$selected.$disabled.'>– '.$datasub['name'].'</option>';
                 }
             }
@@ -446,7 +446,7 @@ case 'editcats':
 
             foreach ($section as $data) {
                 if ($cid != $data['id']) {
-                    $selected = ($downs['parent'] == $data['id']) ? ' selected="selected"' : '';
+                    $selected = ($downs['parent'] == $data['id']) ? ' selected' : '';
                     echo '<option value="'.$data['id'].'"'.$selected.'>'.$data['name'].'</option>';
                 }
             }
@@ -461,7 +461,7 @@ case 'editcats':
             echo 'При создании директории, загруженные ранее файлы будут автоматически перемещены<br><br>';
 
             echo 'Закрыть раздел: ';
-            $checked = ($downs['closed'] == 1) ? ' checked="checked"' : '';
+            $checked = ($downs['closed'] == 1) ? ' checked' : '';
             echo '<input name="closed" type="checkbox" value="1"'.$checked.'><br>';
 
             echo '<input type="submit" value="Изменить"></form></div><br>';
@@ -1187,14 +1187,14 @@ case 'movedown':
 
             foreach ($output[0] as $key => $data) {
                 if ($downs['category_id'] != $data['id']) {
-                    $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+                    $disabled = ! empty($data['closed']) ? ' disabled' : '';
                     echo '<option value="'.$data['id'].'"'.$disabled.'>'.$data['name'].'</option>';
                 }
 
                 if (isset($output[$key])) {
                     foreach($output[$key] as $datasub) {
                         if ($downs['category_id'] != $datasub['id']) {
-                            $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+                            $disabled = ! empty($datasub['closed']) ? ' disabled' : '';
                             echo '<option value="'.$datasub['id'].'"'.$disabled.'>– '.$datasub['name'].'</option>';
                         }
                     }

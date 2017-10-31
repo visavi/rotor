@@ -46,14 +46,14 @@ case 'index':
         echo '<option value="0">Выберите категорию</option>';
 
         foreach ($output[0] as $key => $data) {
-            $selected = $cid == $data['id'] ? ' selected="selected"' : '';
-            $disabled = ! empty($data['closed']) ? ' disabled="disabled"' : '';
+            $selected = $cid == $data['id'] ? ' selected' : '';
+            $disabled = ! empty($data['closed']) ? ' disabled' : '';
             echo '<option value="'.$data['id'].'"'.$selected.$disabled.'>'.$data['name'].'</option>';
 
             if (isset($output[$key])) {
                 foreach($output[$key] as $datasub) {
-                    $selected = ($cid == $datasub['id']) ? ' selected="selected"' : '';
-                    $disabled = ! empty($datasub['closed']) ? ' disabled="disabled"' : '';
+                    $selected = ($cid == $datasub['id']) ? ' selected' : '';
+                    $disabled = ! empty($datasub['closed']) ? ' disabled' : '';
                     echo '<option value="'.$datasub['id'].'"'.$selected.$disabled.'>– '.$datasub['name'].'</option>';
                 }
             }
@@ -279,12 +279,12 @@ case 'view':
                     echo '<select name="cid">';
 
                     foreach ($output[0] as $key => $data) {
-                        $selected = ($new['id'] == $data['id']) ? ' selected="selected"' : '';
+                        $selected = ($new['id'] == $data['id']) ? ' selected' : '';
                         echo '<option value="'.$data['id'].'"'.$selected.'>'.$data['name'].'</option>';
 
                         if (isset($output[$key])) {
                             foreach($output[$key] as $datasub) {
-                                $selected = ($new['id'] == $datasub['id']) ? ' selected="selected"' : '';
+                                $selected = ($new['id'] == $datasub['id']) ? ' selected' : '';
                                 echo '<option value="'.$datasub['id'].'"'.$selected.'>– '.$datasub['name'].'</option>';
                             }
                         }

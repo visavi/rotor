@@ -158,7 +158,7 @@ class PhotoController extends BaseController
             }
         }
 
-        $checked = ($photo['closed'] == 1) ? ' checked="checked"' : '';
+        $checked = ($photo['closed'] == 1) ? ' checked' : '';
 
         return view('gallery/edit', compact('photo', 'checked', 'page'));
     }
