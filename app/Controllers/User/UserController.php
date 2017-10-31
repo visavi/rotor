@@ -284,6 +284,7 @@ class UserController extends BaseController
                         'timelastlogin' => SITETIME,
                         'confirmregkey' => $activateKey,
                         'subscribe'     => str_random(32),
+                        'lang'          => setting('lang'),
                     ]);
 
                     // Активация пригласительного ключа

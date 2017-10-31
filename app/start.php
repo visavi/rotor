@@ -124,7 +124,7 @@ if (empty($setting['themes']) || ! file_exists(HOME.'/themes/'.$setting['themes'
 }
 
 if (empty($setting['lang']) || ! file_exists(RESOURCES.'/lang/'.$setting['lang'])) {
-    $setting['themes'] = 'ru';
+    $setting['lang'] = 'ru';
 }
 
 $files = glob(APP.'/plugins/*.php');
