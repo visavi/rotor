@@ -6,12 +6,6 @@ use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\Banhist;
-use App\Models\BlackList;
-use App\Models\ChangeMail;
-use App\Models\Invite;
-use App\Models\Note;
-use App\Models\Online;
-use App\Models\Rating;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 
