@@ -159,13 +159,13 @@ $router->map('GET|POST', '/reklama/create', 'RekUserController@create');
 
 $router->map('GET', '/authlog', 'LoginController@index');
 
-$router->map('GET',      '/adminlist', 'UserController@adminlist');
-$router->map('GET|POST', '/userlist', 'UserController@userlist');
-$router->map('GET|POST', '/authoritylist', 'UserController@authoritylist');
-$router->map('GET|POST', '/ratinglist', 'UserController@ratinglist');
-$router->map('GET|POST', '/ban', 'UserController@ban');
-$router->map('GET',      '/banhist', 'UserController@banhist');
-$router->map('GET|POST', '/unban', 'UserController@unban');
+$router->map('GET',      '/adminlist', 'User\ListController@adminlist');
+$router->map('GET|POST', '/userlist', 'User\ListController@userlist');
+$router->map('GET|POST', '/authoritylist', 'User\ListController@authoritylist');
+$router->map('GET|POST', '/ratinglist', 'User\ListController@ratinglist');
+$router->map('GET|POST', '/ban', 'User\BanController@ban');
+$router->map('GET',      '/banhist', 'User\BanController@banhist');
+$router->map('GET|POST', '/unban', 'User\BanController@unban');
 $router->map('GET|POST', '/who', 'UserController@who');
 
 $router->map('GET', '/faq', 'PageController@faq');

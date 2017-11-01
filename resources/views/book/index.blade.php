@@ -8,12 +8,12 @@
 
     <h1>{{ trans('book.header') }}</h1>
 
-    <a href="/rules">Правила</a> /
-    <a href="/smiles">Смайлы</a> /
-    <a href="/tags">Теги</a>
+    <a href="/rules">{{ trans('common.rules') }}</a> /
+    <a href="/smiles">{{ trans('common.smiles') }}</a> /
+    <a href="/tags">{{ trans('common.tags') }}</a>
 
     @if (isAdmin())
-        / <a href="/admin/book?page={{ $page['current'] }}">Управление</a>
+        / <a href="/admin/book?page={{ $page['current'] }}">{{ trans('common.management') }}</a>
     @endif
     <hr>
 
@@ -25,17 +25,16 @@
 
                     @if (getUser() && getUser('id') != $data->user_id)
                         <div class="float-right">
-                            <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
-                            <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+                            <a href="#" onclick="return postReply(this)" data-toggle="tooltip" title="{{ trans('common.reply') }}"><i class="fa fa-reply text-muted"></i></a>
+                            <a href="#" onclick="return postQuote(this)" data-toggle="tooltip" title="{{ trans('common.quote') }}"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guest::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Guest::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" data-toggle="tooltip" title="{{ trans('common.complain') }}"><i class="fa fa-bell text-muted"></i></a>
                         </div>
-
                     @endif
 
                     @if (getUser() && getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME)
                         <div class="float-right">
-                            <a href="/book/edit/{{ $data->id }}" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                            <a href="/book/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil text-muted"></i></a>
                         </div>
                     @endif
 
@@ -52,7 +51,7 @@
                 <div class="message">{!! bbCode($data->text) !!}</div>
 
                 @if ($data->edit_user_id)
-                    <small><i class="fa fa-exclamation-circle text-danger"></i> Отредактировано: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
+                    <small><i class="fa fa-exclamation-circle text-danger"></i> {{ trans('book.edited') }}: {{ $data->editUser->login }} ({{ dateFixed($data->updated_at) }})</small><br>
                 @endif
 
                 @if (isAdmin())
@@ -60,7 +59,7 @@
                 @endif
 
                 @if ($data->reply))
-                    <br><span style="color:#ff0000">Ответ: {!! bbCode($data->reply) !!}</span>
+                    <br><span style="color:#ff0000">{{ trans('book.answer') }}: {!! bbCode($data->reply) !!}</span>
                 @endif
             </div>
         @endforeach
@@ -68,7 +67,7 @@
         {{ pagination($page) }}
 
     @else
-        {{ showError('Сообщений нет, будь первым!') }}
+        {{ showError(trans('book.empty_messages')) }}
     @endif
 
     @if (getUser())
@@ -76,12 +75,12 @@
             <form action="book/add" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="markItUp">Сообщение:</label>
-                    <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg') }}</textarea>
+                    <label for="markItUp">{{ trans('book.message') }}:</label>
+                    <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="{{ trans('book.message_text') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 
-                <button class="btn btn-primary">Написать</button>
+                <button class="btn btn-primary">{{ trans('book.write') }}</button>
             </form>
         </div><br>
 
@@ -92,23 +91,23 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">
-                    <label for="inputText">Сообщение:</label>
-                    <textarea class="form-control" id="inputText" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg') }}</textarea>
+                    <label for="inputText">{{ trans('book.message') }}:</label>
+                    <textarea class="form-control" id="inputText" rows="5" name="msg" placeholder="{{ trans('book.message_text') }}" required>{{ getInput('msg') }}</textarea>
                     {!! textError('msg') !!}
                 </div>
 
                 <div class="form-group{{ hasError('protect') }}">
-                    <label for="inputProtect">Проверочный код:</label>
+                    <label for="inputProtect">{{ trans('common.verification_code') }}:</label>
                     <img src="/captcha" id="captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;">
                     <input class="form-control" name="protect" id="inputProtect" maxlength="6" required>
                     {!! textError('protect') !!}
                 </div>
 
-                <button class="btn btn-primary">Написать</button>
+                <button class="btn btn-primary">{{ trans('book.write') }}</button>
             </form>
         </div><br>
 
     @else
-        {{ showError('Для добавления сообщения необходимо авторизоваться') }}
+        {{ showError(trans('book.not_authorized')) }}
     @endif
 @stop

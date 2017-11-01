@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    Редактирование сообщения
+    {{ trans('book.title_edit') }}
 @stop
 
 @section('content')
-    <h1>Редактирование сообщения</h1>
+    <h1>{{ trans('book.title_edit') }}</h1>
 
     <i class="fa fa-pencil text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->time) }})<br><br>
 
@@ -14,14 +14,14 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('msg') }}">
-                <label for="markItUp">Сообщение:</label>
-                <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="Текст сообщения" required>{{ getInput('msg', $post->text) }}</textarea>
+                <label for="markItUp">{{ trans('book.message') }}:</label>
+                <textarea class="form-control" id="markItUp" rows="5" name="msg" placeholder="{{ trans('book.message_text') }}" required>{{ getInput('msg', $post->text) }}</textarea>
                 {!! textError('msg') !!}
             </div>
 
-            <button class="btn btn-primary">Редактировать</button>
+            <button class="btn btn-primary">{{ trans('book.edit') }}</button>
         </form>
     </div><br>
 
-    <i class="fa fa-arrow-circle-left"></i> <a href="/book">Вернуться</a><br>
+    <i class="fa fa-arrow-circle-left"></i> <a href="/book">{{ trans('book.return') }}</a><br>
 @stop
