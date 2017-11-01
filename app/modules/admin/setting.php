@@ -512,7 +512,7 @@ if (isAdmin([101])) {
             echo 'Файлов в загрузках:<br><input name="downlist" maxlength="2" value="'.$setting['downlist'].'"><br>';
             echo 'Комментариев в загрузках:<br><input name="downcomm" maxlength="2" value="'.$setting['downcomm'].'"><br>';
             echo 'Хранение скачиваний (часов):<br><input name="expiresloads" maxlength="3" value="'.$setting['expiresloads'].'"><br>';
-            echo 'Хранение голосований (часов):<br><input name="expiresrated" maxlength="3" value="'.$setting['expiresrated'].'"><br>';
+
             echo 'Просмотр архивов на стр.:<br><input name="ziplist" maxlength="2" value="'.$setting['ziplist'].'"><br>';
             echo 'Максимальный вес файла (Mb):<br><input name="fileupload" maxlength="6" value="'.round($setting['fileupload'] / 1024 / 1024).'"><br>';
 
@@ -536,12 +536,11 @@ if (isAdmin([101])) {
             $downupload = (empty($_POST['downupload'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['downlist'] != "" && $_POST['downcomm'] != "" && $_POST['expiresloads'] != "" && $_POST['expiresrated'] != "" && $_POST['ziplist'] != "" && $_POST['fileupload'] != "" && $_POST['screenupload'] != "" && $_POST['screenupsize'] != "" && $_POST['allowextload'] != "") {
+                if ($_POST['downlist'] != "" && $_POST['downcomm'] != "" && $_POST['expiresloads'] != "" && $_POST['ziplist'] != "" && $_POST['fileupload'] != "" && $_POST['screenupload'] != "" && $_POST['screenupsize'] != "" && $_POST['allowextload'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['downlist']), 'downlist');
                     $dbr -> execute(intval($_POST['downcomm']), 'downcomm');
                     $dbr -> execute(intval($_POST['expiresloads']), 'expiresloads');
-                    $dbr -> execute(intval($_POST['expiresrated']), 'expiresrated');
                     $dbr -> execute(intval($_POST['ziplist']), 'ziplist');
                     $dbr -> execute(intval($_POST['fileupload'] * 1024 * 1024), 'fileupload');
                     $dbr -> execute(intval($_POST['screenupload'] * 1024 * 1024), 'screenupload');

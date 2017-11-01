@@ -128,7 +128,7 @@ case 'save':
             'updated_at' => SITETIME,
         ];
 
-        $notice = Notice::updateOrCreate(
+        $notice = Notice::query()->updateOrCreate(
             ['id' => $id],
             $note
         );

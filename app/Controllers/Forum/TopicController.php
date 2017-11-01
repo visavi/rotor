@@ -283,7 +283,11 @@ class TopicController extends BaseController
 
         $topic = Topic::query()->find($tid);
 
-        $isModer = in_array(getUser('id'), explode(',', $topic['moderators']), true) ? true : false;
+        if ( $topic) {
+            abort(404, 'Данного темы не существует!');
+        }
+
+        $isModer = in_array(getUser('id'), explode(',', $topic->moderators), true) ? true : false;
 
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
@@ -305,7 +309,6 @@ class TopicController extends BaseController
                     $file->delete();
                     deleteImage('uploads/forum/', $topic->id . '/' . $file->hash);
                 }
-
             }
 
             $delPosts = Post::query()->whereIn('id', $del)->delete();

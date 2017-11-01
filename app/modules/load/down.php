@@ -55,62 +55,6 @@ case 'load':
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
-############################################################################################
-##                                       Оценка файла                                     ##
-############################################################################################
-case 'vote':
-
-    $uid = check($_GET['uid']);
-    if (isset($_POST['score'])) {
-        $score = abs(intval($_POST['score']));
-    } else {
-        $score = 0;
-    }
-
-    if (getUser()) {
-        if ($uid == $_SESSION['token']) {
-            if ($score > 0 && $score <= 5) {
-                $downs = DB::run() -> queryFetch("SELECT * FROM `downs` WHERE `id`=? LIMIT 1;", [$id]);
-
-                if (!empty($downs)) {
-                    if (!empty($downs['active'])) {
-                        if (getUser('login') != $downs['user']) {
-                            $queryrated = DB::run() -> querySingle("SELECT `id` FROM `pollings` WHERE relate_type=? AND `relate_id`=? AND `user`=? LIMIT 1;", ['down', $id, getUser('login')]);
-
-                            if (empty($queryrated)) {
-                                $expiresrated = SITETIME + 3600 * setting('expiresrated');
-
-                                DB::delete("DELETE FROM `pollings` WHERE relate_type=? AND `time`<?;", ['down', SITETIME]);
-                                DB::insert("INSERT INTO `pollings` (relate_type, `relate_id`, `user`, `time`) VALUES (?, ?, ?, ?);", ['down', $id, getUser('login'), $expiresrated]);
-                                DB::update("UPDATE `downs` SET `rating`=`rating`+?, `rated`=`rated`+1 WHERE `id`=?", [$score, $id]);
-
-                                echo '<b>Спасибо! Ваша оценка "'.$score.'" принята!</b><br>';
-                                echo 'Всего оценивало: '.($downs['rated'] + 1).'<br>';
-                                echo 'Средняя оценка: '.round(($downs['rating'] + $score) / ($downs['rated'] + 1), 1).'<br><br>';
-                            } else {
-                                showError('Ошибка! Вы уже оценивали данный файл!');
-                            }
-                        } else {
-                            showError('Ошибка! Нельзя голосовать за свой файл!');
-                        }
-                    } else {
-                        showError('Ошибка! Данный файл еще не проверен модератором!');
-                    }
-                } else {
-                    showError('Ошибка! Данного файла не существует!');
-                }
-            } else {
-                showError('Ошибка! Необходимо поставить оценку от 1 до 5 включительно!');
-            }
-        } else {
-            showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
-        }
-    } else {
-        showError('Вы не авторизованы, для голосования за файлы, необходимо');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
-break;
 
 ############################################################################################
 ##                                        Комментарии                                     ##

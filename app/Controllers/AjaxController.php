@@ -191,7 +191,7 @@ class AjaxController extends BaseController
         $token = check(Request::input('token'));
 
         // Время хранения голосов
-        $expiresRating = SITETIME + 3600 * 24 * 30;
+        $expiresRating = SITETIME + 3600 * 24 * 365;
 
         if (! getUser()) {
             exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));

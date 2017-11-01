@@ -72,7 +72,7 @@
 
     @if (getUser())
         <div class="form">
-            <form action="book/add" method="post">
+            <form action="/book/add" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
                 <div class="form-group{{ hasError('msg') }}">
                     <label for="markItUp">{{ trans('book.message') }}:</label>
@@ -87,7 +87,7 @@
     @elseif (setting('bookadds') == 1)
 
         <div class="form">
-            <form action="book/add" method="post">
+            <form action="/book/add" method="post">
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('msg') }}">

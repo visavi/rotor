@@ -91,20 +91,26 @@
         Всего скачиваний: <b>{{ $down->loads }}</b><br>
 
         @if (getUser())
-            <form class="form-inline" action="/down/{{ $down->id }}/vote/" method="post">
-                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-                <select class="form-control" name="score">
-                    <option value="5">Отлично</option>
-                    <option value="4">Хорошо</option>
-                    <option value="3">Нормально</option>
-                    <option value="2">Плохо</option>
-                    <option value="1">Отстой</option>
-                </select>
+
+            <label for="score">Проверочный код:</label><br>
+            <form class="form-inline" action="/down/{{ $down->id }}/vote" method="post">
+                <input type="hidden" id="score" name="token" value="{{ $_SESSION['token'] }}">
+
+                <div class="form-group{{ hasError('score') }}">
+                    <select class="form-control" name="score">
+                        <option value="5" {{ $down->vote == 5 ? ' selected' : '' }}>Отлично</option>
+                        <option value="4" {{ $down->vote == 4 ? ' selected' : '' }}>Хорошо</option>
+                        <option value="3" {{ $down->vote == 3 ? ' selected' : '' }}>Нормально</option>
+                        <option value="2" {{ $down->vote == 2 ? ' selected' : '' }}>Плохо</option>
+                        <option value="1" {{ $down->vote == 1 ? ' selected' : '' }}>Отстой</option>
+                    </select>
+                    {!! textError('protect') !!}
+                </div>
                 <button class="btn btn-primary">Оценить</button>
             </form>
 
-            <br><label for="text">Скопировать адрес:</label><br>
-            <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $folder }}{{ $down->link }}"><br>
+            {{--<br><label for="text">Скопировать адрес:</label><br>
+            <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $folder }}{{ $down->link }}"><br>--}}
         @endif
     @else
         {{ showError('Файл еще не загружен!') }}

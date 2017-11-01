@@ -188,6 +188,7 @@ $router->map('GET|POST', '/files/[*:action]?', 'FileController', 'files');
 $router->map('GET',      '/load', 'Load\LoadController@index');
 $router->map('GET',      '/load/[i:id]', 'Load\LoadController@load');
 $router->map('GET',      '/down/[i:id]', 'Load\DownController@index');
+$router->map('POST',     '/down/[i:id]/vote', 'Load\DownController@vote');
 
 $router->map('GET|POST', '/load/active', 'load/active.php');
 $router->map('GET|POST', '/load/add', 'load/add.php');
