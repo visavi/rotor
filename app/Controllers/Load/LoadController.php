@@ -26,7 +26,7 @@ class LoadController extends BaseController
 
         $new = Down::query()
             ->where('active', 1)
-            ->where('created_at', '>', SITETIME-3600 * 120)
+            ->where('created_at', '>', SITETIME - 3600 * 120)
             ->count();
 
         return view('load/index', compact('cats', 'new'));

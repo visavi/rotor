@@ -190,9 +190,6 @@ class AjaxController extends BaseController
         $vote  = check(Request::input('vote'));
         $token = check(Request::input('token'));
 
-        // Время хранения голосов
-        $expiresRating = SITETIME + 3600 * 24 * 365;
-
         if (! getUser()) {
             exit(json_encode(['status' => 'error', 'message' => 'Not authorized']));
         }
@@ -208,11 +205,6 @@ class AjaxController extends BaseController
         if (! in_array($type, $types, true)) {
             exit(json_encode(['status' => 'error', 'message' => 'Type invalid']));
         }
-
-        Polling::query()
-            ->where('relate_type', $type)
-            ->where('created_at', '<', SITETIME)
-            ->delete();
 
         $post = $type::query()
             ->where('user_id', '<>', getUser('id'))
@@ -244,7 +236,7 @@ class AjaxController extends BaseController
                 'relate_id'   => $id,
                 'user_id'     => getUser('id'),
                 'vote'        => $vote,
-                'created_at'  => $expiresRating,
+                'created_at'  => SITETIME,
             ]);
         }
 

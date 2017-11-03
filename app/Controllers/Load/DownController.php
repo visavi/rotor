@@ -66,14 +66,6 @@ class DownController extends BaseController
 
         if ($validator->isValid()) {
 
-            $expiresRating = SITETIME + 3600 * 24 * 365;
-
-            Polling::query()
-                ->where('relate_type', Down::class)
-                ->where('created_at', '<', SITETIME)
-                ->delete();
-
-
             $polling = Polling::query()
                 ->where('relate_type', Down::class)
                 ->where('relate_id', $down->id)
@@ -86,7 +78,7 @@ class DownController extends BaseController
 
                 $polling->update([
                     'vote'        => $score,
-                    'created_at'  => $expiresRating
+                    'created_at'  => SITETIME
                 ]);
 
             } else {
@@ -95,7 +87,7 @@ class DownController extends BaseController
                     'relate_id'   => $down->id,
                     'user_id'     => getUser('id'),
                     'vote'        => $score,
-                    'created_at'  => $expiresRating,
+                    'created_at'  => SITETIME,
                 ]);
 
                 $down->update([

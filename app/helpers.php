@@ -777,7 +777,7 @@ function statsGallery()
 {
     if (@filemtime(STORAGE."/temp/statgallery.dat") < time() - 900) {
         $total = Photo::query()->count();
-        $totalNew = Photo::query()->where('created_at', '>', SITETIME-86400 * 3)->count();
+        $totalNew = Photo::query()->where('created_at', '>', SITETIME - 86400 * 3)->count();
 
         if ($totalNew) {
             $stat = $total.'/+'.$totalNew;
