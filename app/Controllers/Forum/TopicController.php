@@ -284,7 +284,7 @@ class TopicController extends BaseController
         $topic = Topic::query()->find($tid);
 
         if ( $topic) {
-            abort(404, 'Данного темы не существует!');
+            abort(404, 'Данной темы не существует!');
         }
 
         $isModer = in_array(getUser('id'), explode(',', $topic->moderators), true) ? true : false;
