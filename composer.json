@@ -26,7 +26,7 @@
         "vlucas/phpdotenv": "^2.4",
         "robmorgan/phinx": "^0.9",
         "verot/class.upload.php": "dev-master",
-        "php-curl-class/php-curl-class": "^7.4",
+        "php-curl-class/php-curl-class": "^8.0",
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.1",
         "visavi/crontask":  "^1.1"
