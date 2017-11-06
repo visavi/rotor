@@ -53,9 +53,9 @@ use Jenssegers\Blade\Blade;
 function makeTime($time)
 {
     if ($time < 3600) {
-        $time = sprintf("%02d:%02d", (int)($time / 60) % 60, $time % 60);
+        $time = sprintf("%02d:%02d", ($time / 60) % 60, $time % 60);
     } else {
-        $time = sprintf("%02d:%02d:%02d", (int)($time / 3600) % 24, (int)($time / 60) % 60, $time % 60);
+        $time = sprintf("%02d:%02d:%02d", ($time / 3600) % 24, ($time / 60) % 60, $time % 60);
     }
 
     return $time;
