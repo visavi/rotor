@@ -6,6 +6,7 @@ use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Rating;
 use App\Models\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class RatingController extends BaseController
 {
@@ -17,8 +18,96 @@ class RatingController extends BaseController
         parent::__construct();
 
         if (! getUser()) {
-            abort(403, 'Для просмотра истории небходимо авторизоваться!');
+            abort(403, 'Для изменения или просмотра рейтинга небходимо авторизоваться!');
         }
+    }
+
+    /**
+     * Изменение рейтинга
+     */
+    public function index($login)
+    {
+        $user = User::query()->where('login', $login)->first();
+
+        if (! $user) {
+            abort('default', 'Данного пользователя не существует!');
+        }
+
+        if (getUser('id') == $user->id) {
+            abort('default', 'Запрещено изменять репутацию самому себе!');
+        }
+
+        if (getUser('point') < setting('editratingpoint')) {
+            abort('default', 'Для изменения репутации необходимо набрать '.plural(setting('editratingpoint'), setting('scorename')).'!');
+        }
+
+        // Голосовать за того же пользователя можно через 90 дней
+        $getRating = Rating::query()
+            ->where('user_id', getUser('id'))
+            ->where('recipient_id', $user->id)
+            ->where('created_at', '>', SITETIME - 3600 * 24 * 90)
+            ->first();
+
+        if ($getRating) {
+            abort('default', 'Вы уже изменяли репутацию этому пользователю!');
+        }
+
+        $vote = Request::input('vote') ? 1 : 0;
+
+        if (Request::isMethod('post')) {
+
+            $token = check(Request::input('token'));
+            $text  = check(Request::input('text'));
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($text, 5, 250, ['text' => 'Слишком длинный или короткий комментарий!']);
+
+            if (getUser('rating') < 10 && empty($vote)) {
+                $validator->addError('Уменьшать репутацию могут только пользователи с рейтингом 10 или выше!');
+            }
+
+            if ($validator->isValid()) {
+
+                $text = antimat($text);
+
+                Rating::query()->create([
+                    'user_id'      => getUser('id'),
+                    'recipient_id' => $user->id,
+                    'text'         => $text,
+                    'vote'         => $vote,
+                    'created_at'   => SITETIME,
+                ]);
+
+                if ($vote == 1) {
+                    $text = 'Пользователь [b]' . getUser('login') . '[/b] поставил вам плюс! (Ваш рейтинг: ' . ($user['rating'] + 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+
+                    $user->update([
+                        'rating'    => DB::raw('posrating - negrating + 1'),
+                        'posrating' => DB::raw('posrating + 1'),
+                    ]);
+
+                } else {
+
+                    $text = 'Пользователь [b]' . getUser('login') . '[/b] поставил вам минус! (Ваш рейтинг: ' . ($user['rating'] - 1) . ')' . PHP_EOL . 'Комментарий: ' . $text;
+
+                    $user->update([
+                        'rating'    => DB::raw('posrating - negrating - 1'),
+                        'negrating' => DB::raw('negrating + 1'),
+                    ]);
+                }
+
+                sendPrivate($user->id, getUser('id'), $text);
+
+                setFlash('success', 'Репутация успешно изменена!');
+                redirect('/user/'.$user->login);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('rating/index', compact('user', 'vote'));
     }
 
     /**
@@ -32,13 +121,18 @@ class RatingController extends BaseController
             abort('default', 'Данного пользователя не существует!');
         }
 
+        $total = Rating::query()->where('recipient_id', $user->id)->count();
+        $page = paginate(setting('ratinglist'), $total);
+
         $ratings = Rating::query()
             ->where('recipient_id', $user->id)
             ->orderBy('created_at', 'desc')
+            ->limit($page['limit'])
+            ->offset($page['offset'])
             ->with('user')
             ->get();
 
-        return view('pages/rathistory', compact('ratings', 'user'));
+        return view('rating/rathistory', compact('ratings', 'user', 'page'));
     }
 
     /**
@@ -52,13 +146,18 @@ class RatingController extends BaseController
             abort('default', 'Данного пользователя не существует!');
         }
 
+        $total = Rating::query()->where('user_id', $user->id)->count();
+        $page = paginate(setting('ratinglist'), $total);
+
         $ratings = Rating::query()
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
+            ->limit($page['limit'])
+            ->offset($page['offset'])
             ->with('recipient')
             ->get();
 
-        return view('pages/rathistory_gave', compact('ratings', 'user'));
+        return view('rating/rathistory_gave', compact('ratings', 'user', 'page'));
     }
 
     /**

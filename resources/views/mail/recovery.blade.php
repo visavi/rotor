@@ -10,12 +10,23 @@
 
     <div class="form">
         <form method="post" action="/recovery">
-            Логин или email:<br>
-            <input name="user" value="{{ $cookieLogin }}" maxlength="100"><br>
-            Проверочный код:<br>
-            <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;" alt=""><br>
-            <input name="protect" size="6" maxlength="6"><br>
-            <br><input value="Восстановить" type="submit"></form>
+
+            <div class="form-group{{ hasError('user') }}">
+                <label for="inputUser">Логин или email:</label>
+                <input class="form-control" name="user" id="inputUser" value="{{ getInput('user', $cookieLogin) }}" maxlength="100" required>
+                {!! textError('user') !!}
+            </div>
+
+            <div class="form-group{{ hasError('protect') }}">
+                <label for="inputProtect">Проверочный код:</label><br>
+                <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" alt="" style="cursor: pointer;" alt=""><br>
+
+                <input type="text" class="form-control" id="inputProtect" name="protect" maxlength="6" required>
+                {!! textError('protect') !!}
+            </div>
+
+            <button class="btn btn-primary">Восстановить</button>
+        </form>
     </div><br>
 
     Письмо с инструкцией по восстановлению пароля будет выслано на email указанный в профиле<br>

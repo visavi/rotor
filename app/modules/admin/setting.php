@@ -648,6 +648,7 @@ if (isAdmin([101])) {
             echo 'Сохраняется постов на стене сообщений:<br><input name="wallmaxpost" maxlength="3" value="'.$setting['wallmaxpost'].'"><br>';
             echo 'История авторизаций:<br><input name="loginauthlist" maxlength="3" value="'.$setting['loginauthlist'].'"><br>';
             echo 'Денежные операции:<br><input name="listtransfers" maxlength="3" value="'.$setting['listtransfers'].'"><br>';
+            echo 'Голосов в истории рейтинга:<br><input name="ratinglist" maxlength="3" value="'.$setting['ratinglist'].'"><br>';
             echo '<input value="Изменить" type="submit"></form></div><br>';
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';
@@ -661,7 +662,7 @@ if (isAdmin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "" && $_POST['listtransfers'] != "") {
+                if ($_POST['userlist'] != "" && $_POST['showuser'] != "" && $_POST['lastusers'] != "" && $_POST['onlinelist'] != "" && $_POST['smilelist'] != "" && $_POST['avtorlist'] != "" && $_POST['lifelist'] != "" && $_POST['banlist'] != "" && $_POST['listbanhist'] != "" && $_POST['usersearch'] != "" && $_POST['ipbanlist'] != "" && $_POST['loglist'] != "" && $_POST['blacklist'] != "" && $_POST['reglist'] != "" && $_POST['listinvite'] != "" && $_POST['wallpost'] != "" && $_POST['wallmaxpost'] != "" && $_POST['loginauthlist'] != "" && $_POST['listtransfers'] != ""&& $_POST['ratinglist'] != "") {
 
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['userlist']), 'userlist');
@@ -683,6 +684,7 @@ if (isAdmin([101])) {
                     $dbr -> execute(intval($_POST['wallmaxpost']), 'wallmaxpost');
                     $dbr -> execute(intval($_POST['loginauthlist']), 'loginauthlist');
                     $dbr -> execute(intval($_POST['listtransfers']), 'listtransfers');
+                    $dbr -> execute(intval($_POST['ratinglist']), 'ratinglist');
 
                     saveSetting();
 

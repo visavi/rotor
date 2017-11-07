@@ -21,7 +21,7 @@ class BookController extends BaseController
 
         $posts = Guest::query()
             ->orderBy('created_at', 'desc')
-            ->limit(setting('bookpost'))
+            ->limit($page['limit'])
             ->offset($page['offset'])
             ->with('user', 'editUser')
             ->get();

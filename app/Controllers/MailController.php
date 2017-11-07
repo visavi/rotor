@@ -72,8 +72,8 @@ class MailController extends BaseController
             }
 
             $validator = new Validator();
-            $validator->equal($protect, $_SESSION['protect'], 'Проверочное число не совпало с данными на картинке!')
-                ->lte($user['timepasswd'], SITETIME, 'Восстанавливать пароль можно не чаще чем раз в 12 часов!');
+            $validator->equal($protect, $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+                ->lte($user['timepasswd'], SITETIME, ['user' => 'Восстанавливать пароль можно не чаще чем раз в 12 часов!']);
 
             if ($validator->isValid()) {
                 $resetKey  = str_random();
@@ -94,6 +94,7 @@ class MailController extends BaseController
                 setFlash('success', 'Восстановление пароля инициализировано!');
                 redirect('/recovery');
             } else {
+                setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
             }
         }

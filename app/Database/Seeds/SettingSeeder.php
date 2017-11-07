@@ -102,6 +102,7 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'privatpost', 'value' => 10],
             ['name'  => 'privatprotect', 'value' => 50],
             ['name'  => 'proxy', 'value' => ''],
+            ['name'  => 'ratinglist', 'value' => 20],
             ['name'  => 'registermoney', 'value' => 1000],
             ['name'  => 'regkeys', 'value' => 1],
             ['name'  => 'reglist', 'value' => 10],

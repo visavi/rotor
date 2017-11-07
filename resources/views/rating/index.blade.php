@@ -8,8 +8,6 @@
 
     <h1>Изменения репутации пользователя {{ $user->login }}</h1>
 
-    <div class="b">{!! userAvatar($user) !!} <b>{{ $user->login }} </b></div>
-
     <div class="form">
         <form method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
