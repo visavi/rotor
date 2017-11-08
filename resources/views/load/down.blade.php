@@ -98,10 +98,10 @@
 
             <label for="score">Проверочный код:</label><br>
             <form class="form-inline" action="/down/{{ $down->id }}/vote" method="post">
-                <input type="hidden" id="score" name="token" value="{{ $_SESSION['token'] }}">
+                <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 <div class="form-group{{ hasError('score') }}">
-                    <select class="form-control" name="score">
+                    <select class="form-control" id="score" name="score">
                         <option value="5" {{ $down->vote == 5 ? ' selected' : '' }}>Отлично</option>
                         <option value="4" {{ $down->vote == 4 ? ' selected' : '' }}>Хорошо</option>
                         <option value="3" {{ $down->vote == 3 ? ' selected' : '' }}>Нормально</option>

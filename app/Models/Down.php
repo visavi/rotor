@@ -27,9 +27,8 @@ class Down extends BaseModel
     }
 
     /**
-     * Возвращает логин пользователя
+     * Возвращает директорию категории
      *
-     * @param string $value
      * @return string
      */
     public function getFolderAttribute()
