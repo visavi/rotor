@@ -14,9 +14,9 @@ $news = News::query()->where('created_at', '>', $startMonth)->get();
 
 if ($news->isNotEmpty()) {
     foreach ($news as $data) {
-        $curDay           = dateFixed($data['created_at'], 'j');
+        $curDay           = dateFixed($data->created_at, 'j');
         $newsDays[]       = $curDay;
-        $newsIds[$curDay] = $data['id'];
+        $newsIds[$curDay] = $data->id;
     }
 }
 

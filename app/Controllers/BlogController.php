@@ -384,7 +384,7 @@ class BlogController extends BaseController
             abort('default', 'Комментарий удален или вы не автор этого комментария!');
         }
 
-        if ($comment['created_at'] + 600 < SITETIME) {
+        if ($comment->created_at + 600 < SITETIME) {
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 

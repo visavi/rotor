@@ -5,7 +5,9 @@ namespace App\Controllers\Load;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
+use App\Models\Comment;
 use App\Models\Down;
+use App\Models\Flood;
 use App\Models\Load;
 use App\Models\Polling;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -145,5 +147,147 @@ class DownController extends BaseController
             setFlash('danger', $validator->getErrors());
             redirect('/down/' . $down->id);
         }
+    }
+
+    /**
+     * Комментарии
+     */
+    public function comments($id)
+    {
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
+        }
+
+        if (! $down->active) {
+            abort('default', 'Данный файл еще не проверен модератором!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token = check(Request::input('token'));
+            $msg   = check(Request::input('msg'));
+
+            $validator = new Validator();
+            $validator
+                ->true(getUser(), 'Для добавления комментария необходимо авторизоваться!')
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинное или короткий комментарий!'])
+                ->true(Flood::isFlood(), ['msg' => 'Антифлуд! Разрешается отправлять комментарии раз в ' . Flood::getPeriod() . ' секунд!']);
+
+            if ($validator->isValid()) {
+
+                $msg = antimat($msg);
+
+                Comment::query()->create([
+                    'relate_type' => Down::class,
+                    'relate_id'   => $down->id,
+                    'text'        => $msg,
+                    'user_id'     => getUser('id'),
+                    'created_at'  => SITETIME,
+                    'ip'          => getIp(),
+                    'brow'        => getBrowser(),
+                ]);
+
+                $down->increment('comments');
+
+                setFlash('success', 'Комментарий успешно добавлен!');
+                redirect('/down/' . $down->id . '/end');
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        $total = Comment::query()
+            ->where('relate_type', Down::class)
+            ->where('relate_id', $id)
+            ->count();
+
+        $page = paginate(setting('downcomm'), $total);
+
+        $comments = Comment::query()
+            ->where('relate_type', Down::class)
+            ->where('relate_id', $id)
+            ->orderBy('created_at')
+            ->offset($page['offset'])
+            ->limit($page['limit'])
+            ->get();
+
+        return view('load/comments', compact('down', 'comments', 'page'));
+    }
+
+    /**
+     * Подготовка к редактированию комментария
+     */
+    public function editComment($id, $cid)
+    {
+        $page = abs(intval(Request::input('page', 1)));
+
+        if (! getUser()) {
+            abort(403, 'Для редактирования комментариев небходимо авторизоваться!');
+        }
+
+        $comment = Comment::query()
+            ->where('relate_type', Down::class)
+            ->where('id', $cid)
+            ->where('user_id', getUser('id'))
+            ->first();
+
+        if (! $comment) {
+            abort('default', 'Комментарий удален или вы не автор этого комментария!');
+        }
+
+        if ($comment->created_at + 600 < SITETIME) {
+            abort('default', 'Редактирование невозможно, прошло более 10 минут!');
+        }
+
+        if (Request::isMethod('post')) {
+            $token = check(Request::input('token'));
+            $msg   = check(Request::input('msg'));
+            $page  = abs(intval(Request::input('page', 1)));
+
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($msg, 5, 1000, ['msg' => 'Слишком длинный или короткий комментарий!']);
+
+            if ($validator->isValid()) {
+                $msg = antimat($msg);
+
+                $comment->update([
+                    'text' => $msg,
+                ]);
+
+                setFlash('success', 'Комментарий успешно отредактирован!');
+                redirect('/down/' . $id . '/comments?page=' . $page);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('load/editcomment', compact('comment', 'page'));
+    }
+
+    /**
+     * Переадресация на последнюю страницу
+     */
+    public function end($id)
+    {
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
+        }
+
+        $total = Comment::query()
+            ->where('relate_type', Down::class)
+            ->where('relate_id', $down->id)
+            ->count();
+
+        $end = ceil($total / setting('downcomm'));
+        redirect('/down/' . $down->id . '/comments?page=' . $end);
     }
 }

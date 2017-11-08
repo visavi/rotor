@@ -6,6 +6,7 @@ use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Blog;
 use App\Models\Comment;
+use App\Models\Down;
 use App\Models\Guest;
 use App\Models\Inbox;
 use App\Models\News;
@@ -105,6 +106,14 @@ class AjaxController extends BaseController
             case Wall::class:
                 $data = $type::query()->find($id);
                 $path = '/wall/'.$data->user->login.'?page='.$page;
+                break;
+
+            case Down::class:
+                $data = Comment::query()
+                    ->where('relate_type', $type)
+                    ->where('id', $id)
+                    ->first();
+                $path = '/down/'.$data->relate_id.'?page='.$page;
                 break;
         endswitch;
 

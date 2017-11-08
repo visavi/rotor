@@ -37,7 +37,7 @@ class SitemapController extends BaseController
     /**
      * Генерируем блоги
      */
-    public function blog()
+    public function blogs()
     {
         $blogs = Blog::query()
             ->select('blogs.*', DB::raw('MAX(c.created_at) as last_time'))
@@ -52,13 +52,13 @@ class SitemapController extends BaseController
         $locs = [];
         foreach ($blogs as $blog) {
 
-            $changeTime = ($blog['last_time'] > $blog['created_at']) ? $blog['last_time'] : $blog['created_at'];
+            $changeTime = ($blog->last_time > $blog->created_at) ? $blog->last_time : $blog->created_at;
 
             // Обновлено менее 1 месяца
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl() . '/article/' . $blog['id'],
+                'loc'        => siteUrl() . '/article/' . $blog->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -84,13 +84,13 @@ class SitemapController extends BaseController
         $locs = [];
         foreach ($newses as $news) {
 
-            $changeTime = ($news['last_time'] > $news['created_at']) ? $news['last_time'] : $news['created_at'];
+            $changeTime = ($news->last_time > $news->created_at) ? $news->last_time : $news->created_at;
 
             // Обновлено менее 1 месяца
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl() . '/news/' . $news['id'],
+                'loc'        => siteUrl() . '/news/' . $news->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
@@ -110,11 +110,11 @@ class SitemapController extends BaseController
         foreach ($topics as $topic) {
 
             // Обновлено менее 1 месяца
-            $new = (SITETIME < $topic['updated_at'] + 3600 * 24 * 30) ? true : false;
+            $new = (SITETIME < $topic->updated_at + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl() . '/topic/' . $topic['id'],
-                'lastmod'    => date('c', $topic['updated_at']),
+                'loc'        => siteUrl() . '/topic/' . $topic->id,
+                'lastmod'    => date('c', $topic->updated_at),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',
             ];
@@ -140,13 +140,13 @@ class SitemapController extends BaseController
         $locs = [];
         foreach ($downs as $down) {
 
-            $changeTime = ($down['last_time'] > $down['time']) ? $down['last_time'] : $down['time'];
+            $changeTime = ($down->last_time > $down->created_at) ? $down->last_time : $down->created_at;
 
             // Обновлено менее 1 месяца
             $new = (SITETIME < $changeTime + 3600 * 24 * 30) ? true : false;
 
             $locs[] = [
-                'loc'        => siteUrl() . '/load/down?act=view&id=' . $down['id'],
+                'loc'        => siteUrl() . '/down/' . $down->id,
                 'lastmod'    => date('c', $changeTime),
                 'changefreq' => $new ? 'weekly' : 'monthly',
                 'priority'   => $new ? '1.0' : '0.5',

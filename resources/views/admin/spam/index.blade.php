@@ -35,7 +35,7 @@
 
                         <div class="float-right">
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
+                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
                             @endif
                         </div>
                     </div>
@@ -46,7 +46,7 @@
 
                         <div class="float-right">
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
+                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
                             @endif
                         </div>
                     </div>
@@ -54,9 +54,9 @@
 
                 <div>
                     @if ($data['path'])
-                        <a href="{{ $data['path'] }}">Перейти к сообщению</a><br>
+                        <a href="{{ $data->path }}">Перейти к сообщению</a><br>
                     @endif
-                    Жалоба: {!! profile($data->user) !!} ({{ dateFixed($data['created_at']) }})
+                    Жалоба: {!! profile($data->user) !!} ({{ dateFixed($data->created_at) }})
                 </div>
             </div>
         @endforeach

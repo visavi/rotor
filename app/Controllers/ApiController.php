@@ -102,13 +102,13 @@ class ApiController extends BaseController
         $messages = [];
         foreach ($inbox as $data) {
 
-            $data['text'] = str_replace('<img src="/uploads/smiles/', '<img src="'.siteUrl().'/uploads/smiles/', bbCode($data['text']));
+            $data['text'] = str_replace('<img src="/uploads/smiles/', '<img src="'.siteUrl().'/uploads/smiles/', bbCode($data->text));
 
             $messages[] = [
                 'author_id'  => $data->author_id,
                 'login'      => $data->author->login,
-                'text'       => $data['text'],
-                'created_at' => $data['created_at'],
+                'text'       => $data->text,
+                'created_at' => $data->created_at,
             ];
         }
 
@@ -148,7 +148,7 @@ class ApiController extends BaseController
 
         $posts = Post::query()
             ->where('topic_id', $id)
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at')
             ->get();
 
         $messages = [];

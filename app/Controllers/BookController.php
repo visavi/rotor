@@ -99,7 +99,7 @@ class BookController extends BaseController
             abort('default', 'Ошибка! Сообщение удалено или вы не автор этого сообщения!');
         }
 
-        if ($post['created_at'] + 600 < SITETIME) {
+        if ($post->created_at + 600 < SITETIME) {
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 

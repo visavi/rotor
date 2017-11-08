@@ -19,8 +19,8 @@
                     Тема: <a href="/topic/{{ $vote->topic->id }}">{{ $vote->topic->title }}</a><br>
                 @endif
 
-                Создано: {{ dateFixed($vote['created_at']) }}<br>
-                Всего голосов: {{ $vote['count'] }}<br>
+                Создано: {{ dateFixed($vote->created_at) }}<br>
+                Всего голосов: {{ $vote->count }}<br>
             </div>
         @endforeach
 

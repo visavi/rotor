@@ -269,7 +269,7 @@ class OfferController extends BaseController
             abort('default', 'Комментарий удален или вы не автор этого комментария!');
         }
 
-        if ($comment['created_at'] + 600 < SITETIME) {
+        if ($comment->created_at + 600 < SITETIME) {
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 
@@ -314,10 +314,10 @@ class OfferController extends BaseController
 
         $total = Comment::query()
             ->where('relate_type', Offer::class)
-            ->where('relate_id', $id)
+            ->where('relate_id', $offer->id)
             ->count();
 
         $end = ceil($total / setting('postcommoffers'));
-        redirect('/offers/' . $id . '/comments?page=' . $end);
+        redirect('/offers/' . $offer->id . '/comments?page=' . $end);
     }
 }

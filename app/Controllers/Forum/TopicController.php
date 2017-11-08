@@ -133,9 +133,9 @@ class TopicController extends BaseController
 
             $msg = antimat($msg);
 
-            if (getUser('id') == $post['user_id'] && $post['created_at'] + 600 > SITETIME && (utfStrlen($msg) + utfStrlen($post['text']) <= setting('forumtextlength'))) {
+            if (getUser('id') == $post->user_id && $post->created_at + 600 > SITETIME && (utfStrlen($msg) + utfStrlen($post->text) <= setting('forumtextlength'))) {
 
-                $newpost = $post['text'] . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post['created_at']) . ' сек.[/size][/i]' . "\n" . $msg;
+                $newpost = $post->text . "\n\n" . '[i][size=1]Добавлено через ' . makeTime(SITETIME - $post->created_at) . ' сек.[/size][/i]' . "\n" . $msg;
 
                 $post->update([
                     'text' => $newpost,
@@ -452,7 +452,7 @@ class TopicController extends BaseController
             ->where('posts.id', $id)
             ->first();
 
-        $isModer = in_array(getUser('id'), explode(',', $post['moderators'], true)) ? true : false;
+        $isModer = in_array(getUser('id'), explode(',', $post->moderators, true)) ? true : false;
 
         if (! $post) {
             abort('default', 'Данного сообщения не существует!');
@@ -462,11 +462,11 @@ class TopicController extends BaseController
             abort('default', 'Редактирование невозможно, данная тема закрыта!');
         }
 
-        if (! $isModer && $post['user_id'] != getUser('id')) {
+        if (! $isModer && $post->user_id != getUser('id')) {
             abort('default', 'Редактировать сообщения может только автор или кураторы темы!');
         }
 
-        if (! $isModer && $post['created_at'] + 600 < SITETIME) {
+        if (! $isModer && $post->created_at + 600 < SITETIME) {
             abort('default', 'Редактирование невозможно, прошло более 10 минут!');
         }
 

@@ -1096,7 +1096,7 @@ function statsNewsDate()
         $news = News::query()->orderBy('created_at', 'desc')->first();
 
         if ($news) {
-            $stat = dateFixed($news['created_at'], "d.m.y");
+            $stat = dateFixed($news->created_at, "d.m.y");
         }
 
         file_put_contents(STORAGE."/temp/statnews.dat", $stat, LOCK_EX);
@@ -1124,12 +1124,12 @@ function lastNews()
 
         if ($total > 0) {
             foreach ($news as $data) {
-                $data['text'] = str_replace('[cut]', '', $data['text']);
-                echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data['id'].'">'.$data['title'].'</a> ('.$data['comments'].') <i class="fa fa-caret-down news-title"></i><br>';
+                $data['text'] = str_replace('[cut]', '', $data->text);
+                echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data->id.'">'.$data->title.'</a> ('.$data->comments.') <i class="fa fa-caret-down news-title"></i><br>';
 
-                echo '<div class="news-text" style="display: none;">'.bbCode($data['text']).'<br>';
-                echo '<a href="/news/'.$data['id'].'/comments">Комментарии</a> ';
-                echo '<a href="/news/'.$data['id'].'/end">&raquo;</a></div>';
+                echo '<div class="news-text" style="display: none;">'.bbCode($data->text).'<br>';
+                echo '<a href="/news/'.$data->id.'/comments">Комментарии</a> ';
+                echo '<a href="/news/'.$data->id.'/end">&raquo;</a></div>';
             }
         }
     }
@@ -1146,7 +1146,7 @@ function checkAuth()
 
         $user = User::query()->find($_SESSION['id']);
 
-        if ($user && $_SESSION['password'] == md5(env('APP_KEY').$user['password'])) {
+        if ($user && $_SESSION['password'] == md5(env('APP_KEY').$user->password)) {
             return $user;
         }
     }
@@ -1332,12 +1332,12 @@ function saveAdvertUser()
     if ($data->isNotEmpty()) {
         foreach ($data as $val) {
             if ($val['color']) {
-                $val['name'] = '<span style="color:'.$val['color'].'">'.$val['name'].'</span>';
+                $val['name'] = '<span style="color:'.$val->color.'">'.$val->name.'</span>';
             }
 
-            $link = '<a href="'.$val['site'].'" target="_blank" rel="nofollow">'.$val['name'].'</a>';
+            $link = '<a href="'.$val->site.'" target="_blank" rel="nofollow">'.$val->name.'</a>';
 
-            if ($val['bold']) {
+            if ($val->bold) {
                 $link = '<b>'.$link.'</b>';
             }
 

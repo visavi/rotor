@@ -20,19 +20,19 @@
                         <i class="fa fa-thumbs-up text-success"></i>
                     @endif
 
-                    <b>{!! profile($data->user) !!}</b> ({{ dateFixed($data['created_at']) }})
+                    <b>{!! profile($data->user) !!}</b> ({{ dateFixed($data->created_at) }})
 
                     <div class="float-right">
                         @if (isAdmin())
-                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data['id'] }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
+                            <a href="#" onclick="return deleteRating(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
                         @endif
                     </div>
                 </div>
                 <div>
                     Комментарий:
 
-                    @if ($data['text'])
-                        {!! bbCode($data['text']) !!}
+                    @if ($data->text)
+                        {!! bbCode($data->text) !!}
                     @else
                         Отсутствует
                     @endif

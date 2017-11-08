@@ -119,4 +119,6 @@
     @else
         {{ showError('Файл еще не загружен!') }}
     @endif
+
+    <i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>
 @stop

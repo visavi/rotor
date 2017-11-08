@@ -33,18 +33,18 @@
 
         @foreach ($comments as $comm)
             <div class="b">
-                <div class="img">{!! userAvatar($comm['user']) !!}</div>
+                <div class="img">{!! userAvatar($comm->user) !!}</div>
 
-                <b>{!! profile($comm['user']) !!}</b>
-                <small> ({{ dateFixed($comm['created_at']) }})</small><br>
-                {!! userStatus($comm['user']) !!} {!! userOnline($comm['user']) !!}
+                <b>{!! profile($comm->user) !!}</b>
+                <small> ({{ dateFixed($comm->created_at) }})</small><br>
+                {!! userStatus($comm->user) !!} {!! userOnline($comm->user) !!}
             </div>
 
             <div>
-                {!! bbCode($comm['text']) !!}<br>
+                {!! bbCode($comm->text) !!}<br>
 
                 @if (isAdmin())
-                 <span class="data">({{ $comm['brow'] }}, {{ $comm['ip'] }})</span>
+                 <span class="data">({{ $comm->brow }}, {{ $comm->ip }})</span>
                 @endif
             </div>
         @endforeach

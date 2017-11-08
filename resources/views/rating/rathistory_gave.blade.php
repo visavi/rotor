@@ -13,19 +13,19 @@
     @if ($ratings->isNotEmpty())
         @foreach ($ratings as $data)
             <div class="b">
-                @if (empty($data['vote']))
+                @if (empty($data->vote))
                     <i class="fa fa-thumbs-down text-danger"></i>
                 @else
                     <i class="fa fa-thumbs-up text-success"></i>
                 @endif
 
-                <b>{!! profile($data->recipient) !!}</b> ({{ dateFixed($data['created_at']) }})
+                <b>{!! profile($data->recipient) !!}</b> ({{ dateFixed($data->created_at) }})
             </div>
             <div>
                 Комментарий:
 
                 @if ($data['text'])
-                    {!! bbCode($data['text']) !!}
+                    {!! bbCode($data->text) !!}
                 @else
                     Отсутствует
                 @endif
