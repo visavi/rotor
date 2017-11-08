@@ -25,4 +25,15 @@ class Down extends BaseModel
     {
         return $this->belongsTo(Cats::class, 'category_id')->withDefault();
     }
+
+    /**
+     * Возвращает логин пользователя
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getFolderAttribute()
+    {
+        return $this->category->folder ? $this->category->folder.'/' : '';
+    }
 }

@@ -7,54 +7,7 @@ $id = (isset($_GET['id'])) ? abs(intval($_GET['id'])) : 0;
 $sort = (isset($_GET['sort'])) ? check($_GET['sort']) : 'date';
 $page = abs(intval(Request::input('page', 1)));
 
-//show_title('Загрузки');
-
 switch ($action):
-
-
-############################################################################################
-##                                     Скачивание файла                                   ##
-############################################################################################
-case 'load':
-
-    $protect = check(Request::input('protect'));
-
-    if (getUser() || $protect == $_SESSION['protect']) {
-
-        $downs = DB::run() -> queryFetch("SELECT downs.*, folder FROM `downs` LEFT JOIN `cats` ON `downs`.`category_id`=`cats`.`id` WHERE downs.`id`=? LIMIT 1;", [$id]);
-
-        if (!empty($downs)) {
-            if (!empty($downs['active'])) {
-
-                $folder = $downs['folder'] ? $downs['folder'].'/' : '';
-
-                if (file_exists('uploads/files/'.$folder.$downs['link'])) {
-                    $queryloads = DB::run() -> querySingle("SELECT ip FROM loads WHERE down=? AND ip=? LIMIT 1;", [$id, getIp()]);
-                    if (empty($queryloads)) {
-                        $expiresloads = SITETIME + 3600 * setting('expiresloads');
-
-                        DB::delete("DELETE FROM loads WHERE time<?;", [SITETIME]);
-                        DB::insert("INSERT INTO loads (down, ip, time) VALUES (?, ?, ?);", [$id, getIp(), $expiresloads]);
-                        DB::update("UPDATE downs SET loads=loads+1, last_load=? WHERE id=?", [SITETIME, $id]);
-                    }
-
-                    redirect("/uploads/files/".$folder.$downs['link']);
-                } else {
-                    showError('Ошибка! Файла для скачивания не существует!');
-                }
-            } else {
-                showError('Ошибка! Данный файл еще не проверен модератором!');
-            }
-        } else {
-            showError('Ошибка! Данного файла не существует!');
-        }
-    } else {
-        showError('Ошибка! Проверочное число не совпало с данными на картинке!');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/down?act=view&amp;id='.$id.'">Вернуться</a><br>';
-break;
-
 
 ############################################################################################
 ##                                        Комментарии                                     ##

@@ -35,33 +35,33 @@
     @endif
 
     @if (in_array($ext, ['jpg', 'jpeg', 'gif', 'png'])) {
-        <a href="/uploads/files/{{ $folder }}{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/'.$folder, $down->link, setting('previewsize'), ['alt' => $down->title]) }}</a><br>
+        <a href="/uploads/files/{{ $down->folder }}{{ $down->link }}" class="gallery">{{ resizeImage('uploads/files/'.$down->folder, $down->link, setting('previewsize'), ['alt' => $down->title]) }}</a><br>
     @endif
 
     <div class="message">{!! bbCode($down->text) !!}</div><br>
 
     <?php $poster = ''; ?>
-    @if ($down->screen && file_exists(UPLOADS.'/screen/'.$folder.$down->screen))
-        <?php $poster = ' poster="/uploads/screen/'.$folder.$down->screen.'"'; ?>
+    @if ($down->screen && file_exists(UPLOADS.'/screen/'.$down->folder.$down->screen))
+        <?php $poster = ' poster="/uploads/screen/'.$down->folder.$down->screen.'"'; ?>
 
         @if ($ext != 'mp4')
             Скриншот:<br>
-            <a href="/uploads/screen/{{ $folder }}{{ $down->screen }}" class="gallery">{{ resizeImage('uploads/screen/'.$folder, $down->screen, setting('previewsize'), ['alt' => $down->title]) }}</a><br><br>
+            <a href="/uploads/screen/{{ $down->folder }}{{ $down->screen }}" class="gallery">{{ resizeImage('uploads/screen/'.$down->folder, $down->screen, setting('previewsize'), ['alt' => $down->title]) }}</a><br><br>
         @endif
     @endif
 
     Добавлено: {!! profile($down->user) !!} ({{ dateFixed($down->created_at) }})<hr>
 
-    @if ($down->link && file_exists(UPLOADS.'/files/'.$folder.$down->link))
+    @if ($down->link && file_exists(UPLOADS.'/files/'.$down->folder.$down->link))
 
         @if ($ext == 'mp3' || $ext == 'mp4')
 
             @if ($ext == 'mp3')
-                <audio src="/uploads/files/{{ $folder }}{{ $down->link }}"></audio><br/>
+                <audio src="/uploads/files/{{ $down->folder }}{{ $down->link }}"></audio><br/>
             @endif
 
             @if ($ext == 'mp4')
-                <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $folder }}{{ $down->link }}" {!! $poster !!}></video>
+                <video width="640" height="360" style="width: 100%; height: 100%;" src="/uploads/files/{{ $down->folder }}{{ $down->link }}" {!! $poster !!}></video>
             @endif
         @endif
 
@@ -77,9 +77,13 @@
                 <img src="/captcha" onclick="this.src='/captcha?'+Math.random()" class="rounded" style="cursor: pointer;" alt=""><br>
 
             <form class="form-inline" action="/down/{{ $down->id }}/download" method="post">
-                <input class="form-control" id="protect" name="protect" size="6" maxlength="6">
-                <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
+                <div class="form-group{{ hasError('protect') }}">
+                    <input class="form-control" id="protect" name="protect" size="6" maxlength="6" required>
+                    <button class="btn btn-primary">Скачать ({{ $filesize }})</button>
+                </div>
             </form>
+            {!! textError('protect') !!}
+
             <em>Чтобы не вводить код при каждом скачивании, советуем <a href="/register">зарегистрироваться</a></em></div><br>
         @endif
 
@@ -87,10 +91,10 @@
         <a href="/down/{{ $down->id }}/end">&raquo;</a><br>
 
         <br>Рейтинг: {!! ratingVote($rating) !!}<br>
-        Всего голосов: <b>{{ $down->rated }}</b><br><br>
-        Всего скачиваний: <b>{{ $down->loads }}</b><br>
+        Всего голосов: <b>{{ $down->rated }}</b><br>
+        Всего скачиваний: <b>{{ $down->loads }}</b><br><br>
 
-        @if (getUser())
+        @if (getUser() && getUser('id') != $down->user_id)
 
             <label for="score">Проверочный код:</label><br>
             <form class="form-inline" action="/down/{{ $down->id }}/vote" method="post">
@@ -110,7 +114,7 @@
             </form>
 
             {{--<br><label for="text">Скопировать адрес:</label><br>
-            <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $folder }}{{ $down->link }}"><br>--}}
+            <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $down->folder }}{{ $down->link }}"><br>--}}
         @endif
     @else
         {{ showError('Файл еще не загружен!') }}

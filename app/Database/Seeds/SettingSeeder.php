@@ -50,7 +50,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'editstatusmoney', 'value' => 3000],
             ['name'  => 'editstatuspoint', 'value' => 1000],
             ['name'  => 'errorlog', 'value' => 1],
-            ['name'  => 'expiresloads', 'value' => 72],
             ['name'  => 'filesize', 'value' => 5242880],
             ['name'  => 'fileupfoto', 'value' => 3000],
             ['name'  => 'fileupload', 'value' => 33554432],

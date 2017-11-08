@@ -18,23 +18,25 @@
                 <div class="b">
                     <div class="img">{!! userAvatar($data->user) !!}</div>
 
-                    <div class="float-right">
-                        @if (getUser('id') != $data->user_id)
-                            <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
+                    @if (getUser())
+                        <div class="float-right">
+                            @if (getUser('id') != $data->user_id)
+                                <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
 
-                            <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
+                                <a href="#" onclick="return postQuote(this)" title="Цитировать"><i class="fa fa-quote-right text-muted"></i></a>
 
-                            <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Offer::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
-                        @endif
+                                <a href="#" onclick="return sendComplaint(this)" data-type="{{ App\Models\Offer::class }}" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-page="{{ $page['current'] }}" rel="nofollow" title="Жалоба"><i class="fa fa-bell text-muted"></i></a>
+                            @endif
 
-                        @if (getUser('id') == $data->user->id && $data->created_at + 600 > SITETIME)
-                            <a href="/offers/{{ $offer->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
-                        @endif
+                            @if (getUser('id') == $data->user->id && $data->created_at + 600 > SITETIME)
+                                <a href="/offers/{{ $offer->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}"><i class="fa fa-pencil text-muted"></i></a>
+                            @endif
 
-                        @if (isAdmin())
-                            <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Offer::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove text-muted"></i></a>
-                        @endif
-                    </div>
+                            @if (isAdmin())
+                                <a href="#" onclick="return deleteComment(this)" data-rid="{{ $data->relate_id }}" data-id="{{ $data->id }}" data-type="{{ App\Models\Offer::class }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove text-muted"></i></a>
+                            @endif
+                        </div>
+                    @endif
 
                     <b>{!! profile($data->user) !!}</b> <small>({{ dateFixed($data->created_at) }})</small><br>
                     {!! userStatus($data->user) !!} {!! userOnline($data->user) !!}

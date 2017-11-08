@@ -6,6 +6,7 @@ use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
 use App\Models\Down;
+use App\Models\Load;
 use App\Models\Polling;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -36,11 +37,10 @@ class DownController extends BaseController
         }
 
         $ext      = getExtension($down->link);
-        $folder   = $down->category->folder ? $down->category->folder.'/' : '';
-        $filesize = $down->link ? formatFileSize(UPLOADS.'/files/'.$folder.$down->link) : 0;
+        $filesize = $down->link ? formatFileSize(UPLOADS.'/files/'.$down->folder.$down->link) : 0;
         $rating   = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
-        return view('load/down', compact('down', 'ext', 'folder', 'filesize', 'rating'));
+        return view('load/down', compact('down', 'ext', 'filesize', 'rating'));
     }
 
     /**
@@ -60,9 +60,9 @@ class DownController extends BaseController
         $validator = new Validator();
         $validator->equal($token, $_SESSION['token'], ['score' => 'Неверный идентификатор сессии, повторите действие!'])
             ->true(getUser(), ['score' => 'Для голосования необходимо авторизоваться!'])
-            ->between($score, 1, 5, ['score' => 'Необходимо поставить оценку от 1 до 5!'])
-            ->notEmpty($down->active, ['score' => 'Данный файл еще не проверен модератором!']);
-            //->notEqual($down->user_id, getUser('id'), ['score' => 'Нельзя голосовать за свой файл!']);
+            ->between($score, 1, 5, ['score' => 'Необходимо поставить оценку!'])
+            ->notEmpty($down->active, ['score' => 'Данный файл еще не проверен модератором!'])
+            ->notEqual($down->user_id, getUser('id'), ['score' => 'Нельзя голосовать за свой файл!']);
 
         if ($validator->isValid()) {
 
@@ -102,5 +102,48 @@ class DownController extends BaseController
         }
 
         redirect('/down/' . $down->id);
+    }
+
+    /**
+     * Скачивание файла
+     */
+    public function download($id)
+    {
+        $protect = check(Request::input('protect'));
+
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
+        }
+
+        $validator = new Validator();
+        $validator
+            ->true(file_exists(UPLOADS.'/files/'.$down->folder.$down->link), 'Файла для скачивания не существует!')
+            ->true(getUser() || $protect === $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
+            ->notEmpty($down->active, 'Данный файл еще не проверен модератором!');
+
+        if ($validator->isValid()) {
+
+            $load = Load::query()
+                ->where('down_id', $down->id)
+                ->where('ip', getIp())
+                ->first();
+
+            if (! $load) {
+                Load::query()->create([
+                    'down_id'    => $down->id,
+                    'ip'         => getIp(),
+                    'created_at' => SITETIME,
+                ]);
+
+                $down->increment('loads');
+            }
+
+            redirect('/uploads/files/'.$down->folder.$down->link);
+        } else {
+            setFlash('danger', $validator->getErrors());
+            redirect('/down/' . $down->id);
+        }
     }
 }

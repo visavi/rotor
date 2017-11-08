@@ -179,3 +179,7 @@ blockquote small:before {
   color: #fff;
   display: block;
 }
+
+.pagination {
+  padding-top: 20px;
+}

@@ -8,6 +8,7 @@ $taskList = new TaskList();
 
 $taskList->addTasks([
     (new App\Tasks\DeletePollings())->setExpression('@weekly'),
+    (new App\Tasks\DeleteLoads())->setExpression('@weekly'),
     (new App\Tasks\AddSubscribers())->setExpression('@hourly'),
     (new App\Tasks\SendMessages())->setExpression('* * * * *'),
 ]);
