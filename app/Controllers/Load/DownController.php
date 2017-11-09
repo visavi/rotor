@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Load;
 
+use Alchemy\Zippy\Zippy;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
@@ -11,7 +12,6 @@ use App\Models\Flood;
 use App\Models\Load;
 use App\Models\Polling;
 use Illuminate\Database\Capsule\Manager as DB;
-use ZipArchive;
 
 class DownController extends BaseController
 {
@@ -312,7 +312,7 @@ class DownController extends BaseController
         }
 
         try {
-            $zippy = \Alchemy\Zippy\Zippy::load();
+            $zippy   = Zippy::load();
             $archive = $zippy->open(UPLOADS.'/files/'.$down->folder.$down->link);
         } catch (\Alchemy\Zippy\Exception\ExceptionInterface $e) {
             abort('default', 'Не удалось открыть архив! Ошибка: ' . $e->getMessage());
