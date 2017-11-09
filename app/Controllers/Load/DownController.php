@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Load;
 
+use Exception;
 use Alchemy\Zippy\Zippy;
 use App\Classes\Request;
 use App\Classes\Validator;
@@ -314,8 +315,8 @@ class DownController extends BaseController
         try {
             $zippy   = Zippy::load();
             $archive = $zippy->open(UPLOADS.'/files/'.$down->folder.$down->link);
-        } catch (\Alchemy\Zippy\Exception\ExceptionInterface $e) {
-            abort('default', 'Не удалось открыть архив! Ошибка: ' . $e->getMessage());
+        } catch (Exception $e) {
+            abort('default', 'Не удалось открыть архив!');
         }
 
         $page = paginate(setting('ziplist'), $archive->count());
