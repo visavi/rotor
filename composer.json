@@ -20,7 +20,6 @@
         "illuminate/translation": "~5.5",
         "illuminate/database": "~5.5",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "pclzip/pclzip": "^2.8",
         "php-ffmpeg/php-ffmpeg": "~0.9",
         "swiftmailer/swiftmailer": "~6.0",
         "vlucas/phpdotenv": "^2.4",
@@ -29,7 +28,8 @@
         "php-curl-class/php-curl-class": "^8.0",
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.1",
-        "visavi/crontask":  "^1.1"
+        "visavi/crontask":  "^1.1",
+        "alchemy/zippy": "^0.4.8"
     },
     "require-dev": {
         "filp/whoops": "^2.1",

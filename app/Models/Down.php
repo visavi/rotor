@@ -19,6 +19,13 @@ class Down extends BaseModel
     protected $guarded = [];
 
     /**
+     * Список расширений доступных для просмотра в архиве
+     *
+     * @var array
+     */
+    public static $viewExt = ['xml', 'wml', 'asp', 'aspx', 'shtml', 'htm', 'phtml', 'html', 'php', 'htt', 'dat', 'tpl', 'htaccess', 'pl', 'js', 'jsp', 'css', 'txt', 'sql', 'gif', 'png', 'bmp', 'wbmp', 'jpg', 'jpeg', 'env', 'gitignore', 'json', 'yml', 'md'];
+
+    /**
      * Возвращает категорию загрузок
      */
     public function category()
@@ -34,5 +41,15 @@ class Down extends BaseModel
     public function getFolderAttribute()
     {
         return $this->category->folder ? $this->category->folder.'/' : '';
+    }
+
+    /**
+     * Возвращает массив доступных расширений для просмотра в архиве
+     *
+     * @return array
+     */
+    public static function getViewExt()
+    {
+        return self::$viewExt;
     }
 }

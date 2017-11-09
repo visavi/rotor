@@ -11,6 +11,7 @@ use App\Models\Flood;
 use App\Models\Load;
 use App\Models\Polling;
 use Illuminate\Database\Capsule\Manager as DB;
+use ZipArchive;
 
 class DownController extends BaseController
 {
@@ -289,5 +290,50 @@ class DownController extends BaseController
 
         $end = ceil($total / setting('downcomm'));
         redirect('/down/' . $down->id . '/comments?page=' . $end);
+    }
+
+    /**
+     * Просмотр zip архива
+     */
+    public function zip($id)
+    {
+        $down = Down::query()->find($id);
+
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
+        }
+
+        if (! $down->active) {
+            abort('default', 'Данный файл еще не проверен модератором!');
+        }
+
+        if (getExtension($down->link) != 'zip') {
+            abort('default', 'Просматривать можно только ZIP архивы!');
+        }
+
+        try {
+            $zippy = \Alchemy\Zippy\Zippy::load();
+            $archive = $zippy->open(UPLOADS.'/files/'.$down->folder.$down->link);
+        } catch (\Alchemy\Zippy\Exception\ExceptionInterface $e) {
+            abort('default', 'Не удалось открыть архив! Ошибка: ' . $e->getMessage());
+        }
+
+        $page = paginate(setting('ziplist'), $archive->count());
+
+        if ($page['total'] < $page['offset'] + $page['limit']) {
+            $end = $page['total'];
+        } else {
+            $end = $page['offset'] + $page['limit'];
+        }
+
+        $members    = [];
+        $getMembers = $archive->getMembers();
+        $viewExt    = Down::getViewExt();
+
+        for ($i = $page['offset']; $i < $end; $i++) {
+            $members[] = $getMembers[$i];
+        }
+
+        return view('load/zip', compact('down', 'members', 'page', 'viewExt'));
     }
 }

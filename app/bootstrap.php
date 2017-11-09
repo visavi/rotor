@@ -13,7 +13,6 @@ define('HOME', BASEDIR.'/public');
 define('UPLOADS', HOME.'/uploads');
 define('RESOURCES', BASEDIR.'/resources');
 define('STORAGE', BASEDIR.'/storage');
-define('PCLZIP_TEMPORARY_DIR', STORAGE.'/temp/');
 define('SITETIME', time());
 define('VERSION', '7.0');
 

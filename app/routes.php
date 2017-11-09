@@ -193,6 +193,7 @@ $router->map('GET|POST', '/down/[i:id]/download', 'Load\DownController@download'
 $router->map('GET|POST', '/down/[i:id]/comments', 'Load\DownController@comments');
 $router->map('GET',      '/down/[i:id]/end', 'Load\DownController@end');
 $router->map('GET|POST', '/down/[i:id]/[i:cid]/edit', 'Load\DownController@editComment');
+$router->map('GET',      '/down/[i:id]/zip', 'Load\DownController@zip');
 
 $router->map('GET|POST', '/load/active', 'load/active.php');
 $router->map('GET|POST', '/load/add', 'load/add.php');
