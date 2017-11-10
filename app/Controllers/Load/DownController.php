@@ -354,13 +354,13 @@ class DownController extends BaseController
         }
 
         $getFiles = array_values($archive->getAllInfo());
+        $file     = $getFiles[$fid] ?? null;
 
-        if (! isset($getFiles[$fid])) {
+        if (! $file) {
             abort('default', 'Не удалось вывести содержимое файла');
         }
 
-        $file    = $getFiles[$fid];
-        $content = $archive[$file->getPath()];
+        $content = $file->getSize() > 0 ? $archive[$file->getPath()] : null;
 
         return view('load/zip_view', compact('down', 'file', 'content'));
     }
