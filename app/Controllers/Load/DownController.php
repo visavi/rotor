@@ -12,6 +12,7 @@ use App\Models\Flood;
 use App\Models\Load;
 use App\Models\Polling;
 use Illuminate\Database\Capsule\Manager as DB;
+use PhpZip\ZipFile;
 
 class DownController extends BaseController
 {
@@ -312,7 +313,7 @@ class DownController extends BaseController
         }
 
         try {
-            $archive = new \PhpZip\ZipFile();
+            $archive = new ZipFile();
             $archive->openFile(UPLOADS . '/files/' . $down->folder . $down->link);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
@@ -346,20 +347,21 @@ class DownController extends BaseController
         }
 
         try {
-            $archive = new \PhpZip\ZipFile();
+            $archive = new ZipFile();
             $archive->openFile(UPLOADS . '/files/' . $down->folder . $down->link);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }
 
-        $getFiles = $archive->getListFiles();
+        $getFiles = array_values($archive->getAllInfo());
 
         if (! isset($getFiles[$fid])) {
             abort('default', 'Не удалось вывести содержимое файла');
         }
 
-        $content = $archive[$getFiles[$fid]] ?? null;
+        $file    = $getFiles[$fid];
+        $content = $archive[$file->getPath()];
 
-        return view('load/zip_view', compact('down', 'content'));
+        return view('load/zip_view', compact('down', 'file', 'content'));
     }
 }

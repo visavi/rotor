@@ -1,16 +1,18 @@
 @extends('layout')
 
 @section('title')
-    Просмотр архива {{ $down->title }}
+    Просмотр файла {{ $file->getPath() }}
 @stop
 
 @section('content')
-    <h1>Просмотр архива {{ $down->title }}</h1>
+    <h1>Просмотр файла {{ $file->getPath() }}</h1>
+
+    Размер файла: {{ formatSize($file->getSize()) }}<hr>
 
     @if ($content)
         <pre class="prettyprint linenums">{{ $content }}</pre><br>
     @else
-        {{ showError('Файл пустой!') }}
+        {{ showError('Данный файл пустой!') }}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/down/{{ $down->id }}/zip">Вернуться</a><br>
