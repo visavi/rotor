@@ -3,7 +3,6 @@
 namespace App\Controllers\Load;
 
 use Exception;
-use Alchemy\Zippy\Zippy;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Controllers\BaseController;
@@ -41,7 +40,7 @@ class DownController extends BaseController
         }
 
         $ext      = getExtension($down->link);
-        $filesize = $down->link ? formatFileSize(UPLOADS.'/files/'.$down->folder.$down->link) : 0;
+        $filesize = $down->link ? formatFileSize(UPLOADS . '/files/' . $down->folder . $down->link) : 0;
         $rating   = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
         return view('load/down', compact('down', 'ext', 'filesize', 'rating'));
@@ -62,7 +61,8 @@ class DownController extends BaseController
         }
 
         $validator = new Validator();
-        $validator->equal($token, $_SESSION['token'], ['score' => 'Неверный идентификатор сессии, повторите действие!'])
+        $validator
+            ->equal($token, $_SESSION['token'], ['score' => 'Неверный идентификатор сессии, повторите действие!'])
             ->true(getUser(), ['score' => 'Для голосования необходимо авторизоваться!'])
             ->between($score, 1, 5, ['score' => 'Необходимо поставить оценку!'])
             ->notEmpty($down->active, ['score' => 'Данный файл еще не проверен модератором!'])
@@ -81,8 +81,8 @@ class DownController extends BaseController
                 $down->increment('rating', $score - $polling->vote);
 
                 $polling->update([
-                    'vote'        => $score,
-                    'created_at'  => SITETIME
+                    'vote'       => $score,
+                    'created_at' => SITETIME
                 ]);
 
             } else {
@@ -123,7 +123,7 @@ class DownController extends BaseController
 
         $validator = new Validator();
         $validator
-            ->true(file_exists(UPLOADS.'/files/'.$down->folder.$down->link), 'Файла для скачивания не существует!')
+            ->true(file_exists(UPLOADS . '/files/' . $down->folder . $down->link), 'Файла для скачивания не существует!')
             ->true(getUser() || $protect === $_SESSION['protect'], ['protect' => 'Проверочное число не совпало с данными на картинке!'])
             ->notEmpty($down->active, 'Данный файл еще не проверен модератором!');
 
@@ -144,7 +144,7 @@ class DownController extends BaseController
                 $down->increment('loads');
             }
 
-            redirect('/uploads/files/'.$down->folder.$down->link);
+            redirect('/uploads/files/' . $down->folder . $down->link);
         } else {
             setFlash('danger', $validator->getErrors());
             redirect('/down/' . $down->id);
@@ -299,7 +299,6 @@ class DownController extends BaseController
     public function zip($id)
     {
         $down = Down::query()->find($id);
-
         if (! $down) {
             abort(404, 'Данного файла не существует!');
         }
@@ -313,28 +312,54 @@ class DownController extends BaseController
         }
 
         try {
-            $zippy   = Zippy::load();
-            $archive = $zippy->open(UPLOADS.'/files/'.$down->folder.$down->link);
+            $archive = new \PhpZip\ZipFile();
+            $archive->openFile(UPLOADS . '/files/' . $down->folder . $down->link);
         } catch (Exception $e) {
             abort('default', 'Не удалось открыть архив!');
         }
 
         $page = paginate(setting('ziplist'), $archive->count());
+        $getFiles = array_values($archive->getAllInfo());
 
-        if ($page['total'] < $page['offset'] + $page['limit']) {
-            $end = $page['total'];
-        } else {
-            $end = $page['offset'] + $page['limit'];
+        $viewExt = Down::getViewExt();
+        $files = array_slice($getFiles, $page['offset'], $page['limit'], true);
+
+        return view('load/zip', compact('down', 'files', 'page', 'viewExt', 'archive'));
+    }
+
+    /**
+     * Просмотр файла в zip архиве
+     */
+    public function zipView($id, $fid)
+    {
+        $down = Down::query()->find($id);
+        if (! $down) {
+            abort(404, 'Данного файла не существует!');
         }
 
-        $members    = [];
-        $getMembers = $archive->getMembers();
-        $viewExt    = Down::getViewExt();
-
-        for ($i = $page['offset']; $i < $end; $i++) {
-            $members[] = $getMembers[$i];
+        if (! $down->active) {
+            abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        return view('load/zip', compact('down', 'members', 'page', 'viewExt'));
+        if (getExtension($down->link) != 'zip') {
+            abort('default', 'Просматривать можно только ZIP архивы!');
+        }
+
+        try {
+            $archive = new \PhpZip\ZipFile();
+            $archive->openFile(UPLOADS . '/files/' . $down->folder . $down->link);
+        } catch (Exception $e) {
+            abort('default', 'Не удалось открыть архив!');
+        }
+
+        $getFiles = $archive->getListFiles();
+
+        if (! isset($getFiles[$fid])) {
+            abort('default', 'Не удалось вывести содержимое файла');
+        }
+
+        $content = $archive[$getFiles[$fid]] ?? null;
+
+        return view('load/zip_view', compact('down', 'content'));
     }
 }

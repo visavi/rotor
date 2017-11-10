@@ -29,7 +29,7 @@
         "jenssegers/blade": "^1.1",
         "visavi/cleanup": "^1.1",
         "visavi/crontask":  "^1.1",
-        "alchemy/zippy": "^0.4.8"
+        "nelexa/zip": "^3.0"
     },
     "require-dev": {
         "filp/whoops": "^2.1",

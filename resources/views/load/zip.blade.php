@@ -9,23 +9,23 @@
 
     Всего файлов: {{ $page['total'] }}<hr>
 
-    @if ($members)
-        @foreach ($members as $member)
+    @if ($files)
+        @foreach ($files as $key => $file)
 
-            @if ($member->isDir())
+            @if ($file->isFolder())
                 <i class="fa fa-folder-open-o"></i>
-                <b>Директория {{ substr($member->getLocation(), 0, -1) }}</b><br>
+                <b>Директория {{ rtrim($file->getPath(), '/') }}</b><br>
             @else
-                <?php $ext = getExtension($member->getLocation()); ?>
+                <?php $ext = getExtension($file->getPath()) ?>
 
                 {!! icons($ext) !!}
 
                 @if (in_array($ext, $viewExt))
-                    <a href="#">{{ $member->getLocation() }}</a>
+                    <a href="/down/{{ $down->id }}/{{ $key }}/zip">{{ $file->getPath() }}</a>
                 @else
-                    {{ $member->getLocation() }}
+                    {{ $file->getPath() }}
                 @endif
-                {{ formatSize($member->getSize()) }}<br>
+                ({{ formatSize($file->getSize()) }})<br>
             @endif
 
         @endforeach
