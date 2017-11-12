@@ -494,10 +494,10 @@ function makeCalendar($month, $year)
                 $row[] = $n;
                 $notEmpty = true;
             } else {
-                $row[] = "";
+                $row[] = '';
             }
         }
-        if (!$notEmpty) break;
+        if (! $notEmpty) break;
         $cal[] = $row;
     }
     return $cal;
