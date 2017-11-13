@@ -360,7 +360,7 @@ class DownController extends BaseController
             abort('default', 'Не удалось вывести содержимое файла');
         }
 
-        $content = $file->getSize() > 0 ? $archive[$file->getPath()] : null;
+        $content = $archive[$file->getPath()];
 
         return view('load/zip_view', compact('down', 'file', 'content'));
     }

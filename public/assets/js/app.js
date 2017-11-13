@@ -101,11 +101,12 @@ function postQuote(el)
 
     var field = $("#markItUp");
     var post = $(el).closest('.post');
-    var author = post.find('b').text();
-    var date = post.find('small').text();
-    var message = post.find('.message').text();
+    var top = post.find('.b');
+    var author = top.find('b').text();
+    var date = top.find('small').text();
 
-    console.log(message);
+    var text = post.find('.message').clone();
+    var message = text.find("blockquote").remove().end().text();
 
     separ = field.val().length ? '\n' : '';
     field.focus().val(field.val() + separ + '[quote=' + author + ' ' + date + ']' + $.trim(message) + '[/quote]\n');
