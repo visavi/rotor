@@ -494,10 +494,10 @@ function makeCalendar($month, $year)
                 $row[] = $n;
                 $notEmpty = true;
             } else {
-                $row[] = "";
+                $row[] = '';
             }
         }
-        if (!$notEmpty) break;
+        if (! $notEmpty) break;
         $cal[] = $row;
     }
     return $cal;
@@ -1467,43 +1467,6 @@ function statsOffers()
     return file_get_contents(STORAGE."/temp/offers.dat");
 }
 
-// ------------------------- Функция открытия файла ------------------------//
-function fn_open($name, $mode, $method, $level) {
-    if ($method == 2) {
-        $name = "{$name}.bz2";
-        return bzopen($name, $mode);
-    } elseif ($method == 1) {
-        $name = "{$name}.gz";
-        return gzopen($name, "{$mode}b{$level}");
-    } else {
-        return fopen($name, "{$mode}b");
-    }
-}
-
-// ------------------------- Функция записи в файл ------------------------//
-function fn_write($fp, $str, $method) {
-    if ($method == 2) {
-        bzwrite($fp, $str);
-    } elseif ($method == 1) {
-        gzwrite($fp, $str);
-    } else {
-        fwrite($fp, $str);
-    }
-}
-
-// ------------------------- Функция закрытия файла ------------------------//
-function fn_close($fp, $method) {
-    if ($method == 2) {
-        bzclose($fp);
-    } elseif ($method == 1) {
-        gzclose($fp);
-    } else {
-        fflush($fp);
-        fclose($fp);
-    }
-}
-
-// ------------------ Функция пересчета сообщений и комментарий ---------------//
 /**
  * Пересчитывает счетчики
  *
