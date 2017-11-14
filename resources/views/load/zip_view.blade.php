@@ -1,11 +1,11 @@
 @extends('layout')
 
 @section('title')
-    Просмотр файла {{ $file->getPath() }}
+    Просмотр файла {{ $file->getName() }}
 @stop
 
 @section('content')
-    <h1>Просмотр файла {{ $file->getPath() }}</h1>
+    <h1>Просмотр файла {{ $file->getName() }}</h1>
 
     Размер файла: {{ formatSize($file->getSize()) }}<hr>
 

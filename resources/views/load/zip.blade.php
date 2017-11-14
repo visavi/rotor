@@ -14,17 +14,18 @@
 
             @if ($file->isFolder())
                 <i class="fa fa-folder-open-o"></i>
-                <b>Директория {{ rtrim($file->getPath(), '/') }}</b><br>
+                <b>Директория {{ rtrim($file->getName(), '/') }}</b><br>
             @else
-                <?php $ext = getExtension($file->getPath()) ?>
+                <?php $ext = getExtension($file->getName()) ?>
 
                 {!! icons($ext) !!}
 
                 @if (in_array($ext, $viewExt))
-                    <a href="/down/{{ $down->id }}/{{ $key }}/zip">{{ $file->getPath() }}</a>
+                    <a href="/down/{{ $down->id }}/{{ $key }}/zip">{{ $file->getName() }}</a>
                 @else
-                    {{ $file->getPath() }}
+                    {{ $file->getName() }}
                 @endif
+
                 ({{ formatSize($file->getSize()) }})<br>
             @endif
 

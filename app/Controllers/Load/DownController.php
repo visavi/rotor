@@ -360,15 +360,15 @@ class DownController extends BaseController
             abort('default', 'Не удалось вывести содержимое файла');
         }
 
-        $content = $archive[$file->getPath()];
+        $content = $archive[$file->getName()];
 
-        if (preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $file->getPath()) && $file->getSize() > 0) {
+        if (preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $file->getName()) && $file->getSize() > 0) {
 
-            $ext = getExtension($file->getPath());
+            $ext = getExtension($file->getName());
 
             header('Content-type: image/' . $ext);
             header('Content-Length: ' . strlen($content));
-            header('Content-Disposition: inline; filename="' . $file->getPath() . '";');
+            header('Content-Disposition: inline; filename="' . $file->getName() . '";');
             exit($content);
         }
 
