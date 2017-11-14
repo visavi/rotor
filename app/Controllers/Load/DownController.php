@@ -362,6 +362,20 @@ class DownController extends BaseController
 
         $content = $archive[$file->getPath()];
 
+        if (preg_match("/\.(gif|png|bmp|jpg|jpeg)$/", $file->getPath()) && $file->getSize() > 0) {
+
+            $ext = getExtension($file->getPath());
+
+            header('Content-type: image/' . $ext);
+            header('Content-Length: ' . strlen($content));
+            header('Content-Disposition: inline; filename="' . $file->getPath() . '";');
+            exit($content);
+        }
+
+        if (! isUtf($content)) {
+            $content = winToUtf($content);
+        }
+
         return view('load/zip_view', compact('down', 'file', 'content'));
     }
 }

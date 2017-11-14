@@ -17,4 +17,3 @@ class DeletePollings extends Task
             ->delete();
     }
 }
-
