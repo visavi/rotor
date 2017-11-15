@@ -158,7 +158,7 @@ class BlogController extends BaseController
                 ->notEmpty($category, ['cid' => 'Категории для статьи не существует!']);
 
             if ($category) {
-                $validator->empty($category->closed, ['fid' => 'В данном разделе запрещено создавать статьи!']);
+                $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
             }
 
             if ($validator->isValid()) {
@@ -258,7 +258,7 @@ class BlogController extends BaseController
                 ->notEmpty($category, ['cid' => 'Категории для новой статьи не существует!']);
 
             if ($category) {
-                $validator->empty($category->closed, ['fid' => 'В данном разделе запрещено создавать статьи!']);
+                $validator->empty($category->closed, ['cid' => 'В данном разделе запрещено создавать статьи!']);
             }
 
             if ($validator->isValid()) {
