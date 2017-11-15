@@ -138,7 +138,7 @@
                 {!! bbCode($data->text) !!}
             </div>
 
-            @if (!$data->files->isEmpty())
+            @if ($data->files->isNotEmpty())
                 <div class="hiding"><i class="fa fa-paperclip"></i> <b>Прикрепленные файлы:</b><br>
                 @foreach ($data->files as $file)
                     <?php $ext = getExtension($file->hash); ?>
