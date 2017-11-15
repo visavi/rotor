@@ -15,12 +15,26 @@
     <div class="form next">
         <form action="/article/{{ $blog->id }}/edit" method="post">
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
-            Раздел:<br>
-            <select name="cid">
-                @foreach ($cats as $key => $value)
-                    <option value="{{ $key }}"{{ $blog->category_id == $key ? ' selected' : '' }}>{{ $value }}</option>
-                @endforeach
-            </select><br>
+
+            <div class="form-group{{ hasError('cid') }}">
+                <label for="inputCategory">Раздел</label>
+
+                <?php $inputCategory = getInput('cid', $blog->category_id); ?>
+                <select class="form-control" id="inputCategory" name="cid">
+
+                    @foreach ($cats as $data)
+                        <option value="{{ $data->id }}"{!! ($inputCategory == $data->id) ? ' selected' : '' !!}{!! !empty($data->closed) ? ' disabled' : '' !!}>{{ $data->name }}</option>
+
+                        @if ($data->children->isNotEmpty())
+                            @foreach($data->children as $datasub)
+                                <option value="{{ $datasub->id }}"{!! $inputCategory == $datasub->id ? ' selected' : '' !!}{!! !empty($datasub->closed) ? ' disabled' : '' !!}>– {{ $datasub->name }}</option>
+                            @endforeach
+                        @endif
+                    @endforeach
+
+                </select>
+                {!! textError('cid') !!}
+            </div>
 
             <div class="form-group{{ hasError('title') }}">
                 <label for="inputTitle">Заголовок:</label>

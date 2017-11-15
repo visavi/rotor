@@ -23,9 +23,9 @@
     @foreach ($cats as $category)
         <div class="b">
             <i class="fa fa-folder-open"></i>
-            <b><a href="/load/{{ $category['id'] }}">{{ $category['name'] }}</a></b>
+            <b><a href="/load/{{ $category->id }}">{{ $category->name }}</a></b>
             @if ($category->new)
-                ({{ $category->count }}/<span style="color:#ff0000">+{{ $category->new->count }})</span><br>
+                ({{ $category->count }}/<span style="color:#ff0000">+{{ $category->new->count }}</span>)<br>
             @else
                 ({{ $category->count }})<br>
             @endif
@@ -34,7 +34,7 @@
         <div>
             @if ($category->children->isNotEmpty())
                 @foreach ($category->children as $child)
-                    <i class="fa fa-angle-right"></i> <b><a href="/load/{{ $child['id'] }}">{{ $child['name'] }}</a></b>
+                    <i class="fa fa-angle-right"></i> <b><a href="/load/{{ $child->id }}">{{ $child['name'] }}</a></b>
                     @if ($child->new)
                         ({{ $child->count }}/<span style="color:#ff0000">+{{ $child->new->count }})</span><br>
                     @else

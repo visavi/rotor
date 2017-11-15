@@ -15,13 +15,29 @@
     Новые: <a href="/blog/new/articles">статьи</a>, <a href="/blog/new/comments">комментарии</a><hr>
 
     @foreach ($blogs as $key => $data)
-        <i class="fa fa-folder-open"></i> <b><a href="/blog/{{ $data->id }}">{{ $data->name }}</a></b>
 
-        @if ($data->new)
-            ({{ $data->count }}/+{{ $data->new->count }})<br>
-        @else
-            ({{ $data->count }})<br>
-        @endif
+        <div class="b">
+            <i class="fa fa-folder-open"></i> <b><a href="/blog/{{ $data->id }}">{{ $data->name }}</a></b>
+
+            @if ($data->new)
+                ({{ $data->count }}/<span style="color:#ff0000">+{{ $data->new->count }}</span>)<br>
+            @else
+                ({{ $data->count }})<br>
+            @endif
+        </div>
+
+        <div>
+            @if ($data->children->isNotEmpty())
+                @foreach ($data->children as $child)
+                    <i class="fa fa-angle-right"></i> <b><a href="/blog/{{ $child->id }}">{{ $child['name'] }}</a></b>
+                    @if ($child->new)
+                        ({{ $child->count }}/<span style="color:#ff0000">+{{ $child->new->count }})</span><br>
+                    @else
+                        ({{ $child->count }})<br>
+                    @endif
+                @endforeach
+            @endif
+        </div>
     @endforeach
 
     <br>

@@ -18,7 +18,7 @@
                     @foreach ($forums as $data)
                         <option value="{{ $data->id }}"{!! ($fid == $data->id) ? ' selected' : '' !!}{!! !empty($data->closed) ? ' disabled' : '' !!}>{{ $data->title }}</option>
 
-                        @if (!$data->children->isEmpty())
+                        @if ($data->children->isNotEmpty())
                             @foreach($data->children as $datasub)
                                 <option value="{{ $datasub->id }}"{!! $fid == $datasub->id ? ' selected' : '' !!}{!! !empty($datasub->closed) ? ' disabled' : '' !!}>– {{ $datasub->title }}</option>
                             @endforeach

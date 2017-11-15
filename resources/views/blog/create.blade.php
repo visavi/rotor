@@ -17,11 +17,19 @@
             <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
             <div class="form-group{{ hasError('cid') }}">
-                <label for="inputCategory">Категория</label>
+                <label for="inputCategory">Раздел</label>
+
+                <?php $inputCategory = getInput('cid', $cid); ?>
                 <select class="form-control" id="inputCategory" name="cid">
-                    <option value="0">Выберите категорию</option>
-                    @foreach ($cats as $key => $value)
-                        <option value="{{ $key }}"{{ $cid == $key ? ' selected' : '' }}>{{ $value }}</option>
+
+                    @foreach ($cats as $data)
+                        <option value="{{ $data->id }}"{!! ($inputCategory == $data->id) ? ' selected' : '' !!}{!! !empty($data->closed) ? ' disabled' : '' !!}>{{ $data->name }}</option>
+
+                        @if ($data->children->isNotEmpty())
+                            @foreach($data->children as $datasub)
+                                <option value="{{ $datasub->id }}"{!! $inputCategory == $datasub->id ? ' selected' : '' !!}{!! !empty($datasub->closed) ? ' disabled' : '' !!}>– {{ $datasub->name }}</option>
+                            @endforeach
+                        @endif
                     @endforeach
 
                 </select>

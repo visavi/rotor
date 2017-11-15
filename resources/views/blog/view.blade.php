@@ -14,18 +14,29 @@
 
 @section('content')
 
-    <h1>{{ $blog->title }} <small>(Оценка: {!! formatNum($blog->rating) !!})</small></h1>
-
-    <a href="/blog">Блоги</a> / <a href="/blog/{{ $blog->category_id }}">{{ $blog->name }}</a> / <a href="/article/{{ $blog->id }}/print">Печать</a> / <a href="/article/{{ $blog->id }}/rss">RSS-лента</a>
-
     @if ($blog->user->id == getUser('id'))
-         / <a href="/article/{{ $blog->id }}/edit">Изменить</a>
+        <div class="float-right">
+            <a class="btn btn-success" href="/article/{{ $blog->id }}/edit">Изменить</a>
+        </div>
     @endif
 
-    <br>
+    <h1>{{ $blog->title }} <small>(Оценка: {!! formatNum($blog->rating) !!})</small></h1><br>
+
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
+
+        @if ($blog->category->parent)
+            <li class="breadcrumb-item"><a href="/blog/{{ $blog->category->parent->id }}">{{ $blog->category->parent->name }}</a></li>
+        @endif
+
+        <li class="breadcrumb-item"><a href="/blog/{{ $blog->category_id }}">{{ $blog->category->name }}</a></li>
+        <li class="breadcrumb-item active">{{ $blog->title }}</li>
+        <li class="breadcrumb-item"><a href="/blog/{{ $blog->id }}/print">Печать</a></li>
+        <li class="breadcrumb-item"><a href="/blog/{{ $blog->id }}/rss">RSS-лента</a></li>
+    </ol>
 
     @if (isAdmin())
-        <br> <a href="/admin/blog?act=editblog&amp;cid={{ $blog->category_id }}&amp;id={{ $blog->id }}">Редактировать</a> /
+        <a href="/admin/blog?act=editblog&amp;cid={{ $blog->category_id }}&amp;id={{ $blog->id }}">Редактировать</a> /
         <a href="/admin/blog?act=moveblog&amp;cid={{ $blog->category_id }}&amp;id={{ $blog->id }}">Переместить</a> /
         <a href="/admin/blog?act=delblog&amp;cid={{ $blog->category_id }}&amp;del={{ $blog->id }}&amp;uid={{ $_SESSION['token'] }}" onclick="return confirm('Вы действительно хотите удалить данную статью?')">Удалить</a>
     @endif

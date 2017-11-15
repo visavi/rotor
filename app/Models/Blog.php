@@ -40,6 +40,6 @@ class Blog extends BaseModel
      */
     public function category()
     {
-        return $this->belongsTo(Load::class, 'category_id')->withDefault();
+        return $this->belongsTo(Category::class, 'category_id')->withDefault();
     }
 }

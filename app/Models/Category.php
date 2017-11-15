@@ -21,6 +21,22 @@ class Category extends BaseModel
     protected $guarded = [];
 
     /**
+     * Возвращает связь родительской категории
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    /**
+     * Возвращает связь подкатегорий
+     */
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id')->orderBy('sort');
+    }
+
+    /**
      * Возвращает количество статей за последние 3 дня
      *
      * @return mixed

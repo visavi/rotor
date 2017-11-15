@@ -20,10 +20,10 @@ class BlogController extends BaseController
     public function index()
     {
         $blogs = Category::query()
+            ->where('parent_id', 0)
             ->orderBy('sort')
-            ->with('new')
-            ->get()
-            ->all();
+            ->with('children', 'new', 'children.new')
+            ->get();
 
         if (! $blogs) {
             abort('default', 'Разделы блогов еще не созданы!');
@@ -37,7 +37,7 @@ class BlogController extends BaseController
      */
     public function blog($cid)
     {
-        $category = Category::query()->find($cid);
+        $category = Category::query()->with('parent')->find($cid);
 
         if (! $category) {
             abort('default', 'Данного раздела не существует!');
@@ -64,16 +64,14 @@ class BlogController extends BaseController
     public function view($id)
     {
         $blog = Blog::query()
-            ->select('blogs.*', 'categories.name', 'pollings.vote')
+            ->select('blogs.*', 'pollings.vote')
             ->where('blogs.id', $id)
-            ->leftJoin('categories', function ($join) {
-                $join->on('blogs.category_id', '=', 'categories.id');
-            })
             ->leftJoin('pollings', function ($join) {
                 $join->on('blogs.id', '=', 'pollings.relate_id')
                     ->where('pollings.relate_type', Blog::class)
                     ->where('pollings.user_id', getUser('id'));
             })
+            ->with('category.parent')
             ->first();
 
         if (! $blog) {
@@ -159,6 +157,10 @@ class BlogController extends BaseController
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
                 ->notEmpty($category, ['cid' => 'Категории для статьи не существует!']);
 
+            if ($category) {
+                $validator->empty($category->closed, ['fid' => 'В данном разделе запрещено создавать статьи!']);
+            }
+
             if ($validator->isValid()) {
 
                 // Обновление счетчиков
@@ -183,9 +185,10 @@ class BlogController extends BaseController
         }
 
         $cats = Category::query()
-            ->select('id', 'name')
-            ->pluck('name', 'id')
-            ->all();
+            ->where('parent_id', 0)
+            ->with('children')
+            ->orderBy('sort')
+            ->get();
 
         return view('blog/edit', compact('blog', 'cats'));
     }
@@ -227,9 +230,10 @@ class BlogController extends BaseController
         }
 
         $cats = Category::query()
-            ->select('id', 'name')
-            ->pluck('name', 'id')
-            ->all();
+            ->where('parent_id', 0)
+            ->with('children')
+            ->orderBy('sort')
+            ->get();
 
         if (! $cats) {
             abort('default', 'Разделы блогов еще не созданы!');
@@ -252,6 +256,10 @@ class BlogController extends BaseController
                 ->length($tags, 2, 50, ['tags' => 'Слишком длинные или короткие метки статьи!'])
                 ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять статьи раз в ' . Flood::getPeriod() . ' секунд!'])
                 ->notEmpty($category, ['cid' => 'Категории для новой статьи не существует!']);
+
+            if ($category) {
+                $validator->empty($category->closed, ['fid' => 'В данном разделе запрещено создавать статьи!']);
+            }
 
             if ($validator->isValid()) {
 

@@ -12,15 +12,23 @@
         </div>
     @endif
 
-    <h1>{{ $category->name }} <small>(Статей: {{ $category->count }})</small></h1>
-    <a href="/blog">Блоги</a>
+    <h1>{{ $category->name }} <small>(Статей: {{ $category->count }})</small></h1><br>
 
-    @if (isAdmin())
-        / <a href="/admin/blog?act=blog&amp;cid={{ $category->id }}&amp;page={{ $page['current'] }}">Управление</a>
-    @endif
-    <hr>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/blog">Блоги</a></li>
 
-    @if ($blogs)
+        @if ($category->parent)
+            <li class="breadcrumb-item"><a href="/blog/{{ $category->parent->id }}">{{ $category->parent->name }}</a></li>
+        @endif
+
+        <li class="breadcrumb-item active">{{ $category->name }}</li>
+
+        @if (isAdmin())
+            <li class="breadcrumb-item"><a href="/admin/blog?act=blog&amp;cid={{ $category->id }}&amp;page={{ $page['current'] }}">Управление</a></li>
+        @endif
+    </ol>
+
+    @if ($blogs->isNotEmpty())
         @foreach ($blogs as $data)
             <div class="b">
                 <i class="fa fa-pencil"></i>
@@ -42,5 +50,5 @@
     <a href="/blog/top">Топ статей</a> /
     <a href="/blog/tags">Облако тегов</a> /
     <a href="/blog/search">Поиск</a> /
-    <a href="/blog/blogs">Все статьи</a> /
+    <a href="/blog/blogs">Все статьи</a>
 @stop
