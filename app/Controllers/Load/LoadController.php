@@ -4,8 +4,8 @@ namespace App\Controllers\Load;
 
 use App\Classes\Request;
 use App\Controllers\BaseController;
-use App\Models\Cats;
 use App\Models\Down;
+use App\Models\Load;
 
 class LoadController extends BaseController
 {
@@ -14,7 +14,7 @@ class LoadController extends BaseController
      */
     public function index()
     {
-        $cats = Cats::query()
+        $cats = Load::query()
             ->where('parent_id', 0)
             ->with('children', 'new', 'children.new')
             ->orderBy('sort')
@@ -37,7 +37,7 @@ class LoadController extends BaseController
      */
     public function load($id)
     {
-        $category = Cats::query()->with('parent')->find($id);
+        $category = Load::query()->with('parent')->find($id);
 
         if (! $category) {
             abort(404, 'Данной категории не существует!');

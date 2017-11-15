@@ -10,7 +10,7 @@ use App\Models\Banhist;
 use App\Models\BlackList;
 use App\Models\Blog;
 use App\Models\Bookmark;
-use App\Models\Cats;
+use App\Models\Load;
 use App\Models\Chat;
 use App\Models\Comment;
 use App\Models\Contact;
@@ -1014,7 +1014,7 @@ function statsLoad()
 {
     if (@filemtime(STORAGE."/temp/statload.dat") < time() - 900) {
 
-        $totalLoads = Cats::query()->sum('count');
+        $totalLoads = Load::query()->sum('count');
 
         $totalNew = Down::query()->where('active', 1)
             ->where('created_at', '>', SITETIME - 86400 * 5)
@@ -1483,12 +1483,12 @@ function restatement($mode)
             break;
 
         case 'blog':
-            DB::update('update catsblog set count = (select count(*) from blogs where catsblog.id = blogs.category_id)');
+            DB::update('update categories set count = (select count(*) from blogs where categories.id = blogs.category_id)');
             DB::update('update blogs set comments = (select count(*) from comments where relate_type = "'.Blog::class.'" and blogs.id = comments.relate_id)');
             break;
 
         case 'load':
-            DB::update('update cats set count = (select count(*) from downs where cats.id = downs.category_id and active = ?)', [1]);
+            DB::update('update loads set count = (select count(*) from downs where loads.id = downs.category_id and active = ?)', [1]);
             DB::update('update downs set comments = (select count(*) from comments where relate_type = "'.Down::class.'" and downs.id = comments.relate_id)');
             break;
 

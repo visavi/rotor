@@ -9,7 +9,7 @@ use App\Controllers\BaseController;
 use App\Models\Comment;
 use App\Models\Down;
 use App\Models\Flood;
-use App\Models\Load;
+use App\Models\Read;
 use App\Models\Polling;
 use Illuminate\Database\Capsule\Manager as DB;
 use PhpZip\ZipFile;
@@ -130,16 +130,18 @@ class DownController extends BaseController
 
         if ($validator->isValid()) {
 
-            $load = Load::query()
-                ->where('down_id', $down->id)
+            $reads = Read::query()
+                ->where('relate_type', Down::class)
+                ->where('relate_id', $down->id)
                 ->where('ip', getIp())
                 ->first();
 
-            if (! $load) {
-                Load::query()->create([
-                    'down_id'    => $down->id,
-                    'ip'         => getIp(),
-                    'created_at' => SITETIME,
+            if (! $reads) {
+                Read::query()->create([
+                    'relate_type' => Down::class,
+                    'relate_id'   => $down->id,
+                    'ip'          => getIp(),
+                    'created_at'  => SITETIME,
                 ]);
 
                 $down->increment('loads');

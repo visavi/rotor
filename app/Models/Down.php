@@ -30,7 +30,7 @@ class Down extends BaseModel
      */
     public function category()
     {
-        return $this->belongsTo(Cats::class, 'category_id')->withDefault();
+        return $this->belongsTo(Load::class, 'category_id')->withDefault();
     }
 
     /**

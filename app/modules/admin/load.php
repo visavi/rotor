@@ -322,7 +322,7 @@ case 'addfile':
                     if (utfStrlen($author) <= 50) {
                         if (utfStrlen($site) <= 50) {
                             if (empty($site) || preg_match('#^https?://([а-яa-z0-9_\-\.])+(\.([а-яa-z0-9\/])+)+$#u', $site)) {
-                                $downs = Category::query()->find($cid);
+                                $downs = Load::query()->find($cid);
                                 if (!empty($downs)) {
                                     if (empty($downs['closed'])) {
                                         $downtitle = DB::run() -> querySingle("SELECT `title` FROM `downs` WHERE `title`=? LIMIT 1;", [$title]);

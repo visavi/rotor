@@ -2,15 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 class Category extends BaseModel
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'cats';
-
     /**
      * Indicates if the model should be timestamped.
      *
@@ -25,4 +20,16 @@ class Category extends BaseModel
      */
     protected $guarded = [];
 
+    /**
+     * Возвращает количество статей за последние 3 дня
+     *
+     * @return mixed
+     */
+    public function new()
+    {
+        return $this->hasOne(Blog::class, 'category_id')
+            ->select('category_id', DB::raw('count(*) as count'))
+            ->where('created_at', '>', SITETIME - 86400 * 3)
+            ->groupBy('category_id');
+    }
 }

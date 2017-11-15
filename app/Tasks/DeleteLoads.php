@@ -2,17 +2,17 @@
 
 namespace App\Tasks;
 
-use App\Models\Load;
+use App\Models\Read;
 use Crontask\Tasks\Task;
 
-class DeleteLoads extends Task
+class DeleteReads extends Task
 {
     /**
-     * Удаляет старые записи скачиваний
+     * Удаляет старые записи статистики просмотров и скачиваний
      */
     public function run()
     {
-        Load::query()
+        Read::query()
             ->where('created_at', '>', SITETIME - 3600 * 24 * 90)
             ->delete();
     }
