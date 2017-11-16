@@ -713,7 +713,6 @@ if (isAdmin([101])) {
             $checked = ($setting['errorlog'] == 1) ? ' checked' : '';
             echo '<input name="errorlog" type="checkbox" value="1"'.$checked.'> Включить запись логов<br>';
 
-            echo 'Время хранения логов (Суток):<br><input name="maxlogdat" maxlength="3" value="'.$setting['maxlogdat'].'"><br>';
             echo 'Ключевые слова (keywords):<br><input name="keywords" maxlength="250" value="'.$setting['keywords'].'"><br>';
             echo 'Краткое описание (description):<br><input name="description" maxlength="250" value="'.$setting['description'].'"><br>';
             echo 'Не сканируемые расширения (через запятую):<br><input name="nocheck" maxlength="100" value="'.$setting['nocheck'].'"><br>';
@@ -743,9 +742,8 @@ if (isAdmin([101])) {
             $addbansend = (empty($_POST['addbansend'])) ? 0 : 1;
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['maxlogdat'] != "" && $_POST['keywords'] != "" && $_POST['description'] != "" && $_POST['nocheck'] != "" && $_POST['maxbantime'] != "" && $_POST['moneyname'] != "" && $_POST['scorename'] != "" && $_POST['statusname'] != "" && $_POST['statusdef'] != "") {
+                if ($_POST['keywords'] != "" && $_POST['description'] != "" && $_POST['nocheck'] != "" && $_POST['maxbantime'] != "" && $_POST['moneyname'] != "" && $_POST['scorename'] != "" && $_POST['statusname'] != "" && $_POST['statusdef'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                    $dbr -> execute(intval($_POST['maxlogdat']), 'maxlogdat');
                     $dbr -> execute(check($_POST['keywords']), 'keywords');
                     $dbr -> execute(check($_POST['description']), 'description');
                     $dbr -> execute(check($_POST['nocheck']), 'nocheck');

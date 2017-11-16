@@ -17,7 +17,7 @@ Class AdminController extends BaseController
         }
 
         Admlog::query()
-            ->where('created_at', '<', SITETIME - 3600 * 24 * setting('maxlogdat'))
+            ->where('created_at', '<', SITETIME - 3600 * 24 * 10)
             ->delete();
 
         Admlog::query()->create([

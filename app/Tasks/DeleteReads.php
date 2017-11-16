@@ -13,7 +13,7 @@ class DeleteReads extends Task
     public function run()
     {
         Read::query()
-            ->where('created_at', '>', SITETIME - 3600 * 24 * 90)
+            ->where('created_at', '<', SITETIME - 3600 * 24 * 90)
             ->delete();
     }
 }

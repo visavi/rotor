@@ -56,7 +56,7 @@ class HomeController extends BaseController
             }
         }
 
-        view('pages/banip', compact('ban'));
+        return view('pages/banip', compact('ban'));
     }
 
     /**

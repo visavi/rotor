@@ -1869,26 +1869,19 @@ function abort($code, $message = null)
             'brow'       => getBrowser(),
             'created_at' => SITETIME,
         ]);
-
-        Log::query()
-            ->where('code', $code)
-            ->where('created_at', '<', SITETIME - 3600 * 24 * setting('maxlogdat'))
-            ->delete();
     }
 
     if (Request::ajax()) {
         header($_SERVER['SERVER_PROTOCOL'].' 200 OK');
 
-        json_encode([
+        exit(json_encode([
             'status' => 'error',
             'message' => $message,
-        ]);
-    } else {
-        $referer = Request::header('referer') ?? null;
-        view('errors/'.$code, compact('message', 'referer'));
+        ]));
     }
 
-    exit();
+    $referer = Request::header('referer') ?? null;
+    return view('errors/'.$code, compact('message', 'referer'));
 }
 
 /**
