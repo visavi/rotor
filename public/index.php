@@ -1,12 +1,11 @@
 <?php
 /**
- * RotorCMS - Content management system
+ * Rotor - Content management system
  *
- * @package  Rotor
- * @author   Vantuz <admin@visavi.net>
- * @site     http://visavi.net
- * @skype    vantuzilla
- * @phone    +79167407574
+ * @package   Rotor
+ * @author    Vantuz <admin@visavi.net>
+ * @link      http://visavi.net
+ * @copyright 2005-2018
  */
 
 include_once __DIR__.'/../app/start.php';
