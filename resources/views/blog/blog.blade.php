@@ -44,7 +44,7 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Статей еще нет, будь первым!') }}
+        {!! showError('Статей еще нет, будь первым!') !!}
     @endif
 
     <a href="/blog/top">Топ статей</a> /

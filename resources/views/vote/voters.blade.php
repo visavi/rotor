@@ -15,7 +15,7 @@
             {!! $voter->user->getGender() !!} {!! profile($voter->user) !!} ({{ dateFixed($voter->created_at) }})<br>
         @endforeach
     @else
-        {{ showError('В голосовании никто не участвовал!') }}
+        {!! showError('В голосовании никто не участвовал!') !!}
     @endif
     <br>
     <i class="fa fa-arrow-circle-left"></i> <a href="/votes/{{ $vote->id }}">Вернуться</a><br>

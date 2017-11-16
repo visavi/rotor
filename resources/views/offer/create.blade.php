@@ -41,7 +41,7 @@
         </div><br>
 
     @else
-        {{ showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.plural(setting('addofferspoint'), setting('scorename')).'!') }}
+        {!! showError('Ошибка! Для добавления предложения или проблемы вам необходимо набрать '.plural(setting('addofferspoint'), setting('scorename')).'!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/offers">Вернуться</a><br>

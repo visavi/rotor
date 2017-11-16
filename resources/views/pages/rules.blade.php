@@ -11,6 +11,6 @@
     @if ($rules)
         {!! bbCode($rules['text']) !!}<br>
     @else
-        {{ showError('Правила сайта еще не установлены!') }}
+        {!! showError('Правила сайта еще не установлены!') !!}
     @endif
 @stop

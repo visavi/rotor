@@ -37,7 +37,7 @@
         <br>
 
     @else
-        {{ showError('Слов еще нет!') }}
+        {!! showError('Слов еще нет!') !!}
     @endif
 
     <div class="form">

@@ -53,7 +53,7 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Нет сообщений') }}
+        {!! showError('Нет сообщений') !!}
     @endif
 
     @if (getUser())
@@ -77,10 +77,10 @@
             <a href="/tags">Теги</a><br><br>
 
         @else
-            {{ showError('Комментирование данной записи закрыто!') }}
+            {!! showError('Комментирование данной записи закрыто!') !!}
         @endif
     @else
-        {{ showError('Для добавления сообщения необходимо авторизоваться') }}
+        {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
     @endif
 
     <i class="fa fa-arrow-circle-up"></i> <a href="/offers">К записям</a><br>

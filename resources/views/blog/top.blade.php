@@ -39,6 +39,6 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Опубликованных статей еще нет!') }}
+        {!! showError('Опубликованных статей еще нет!') !!}
     @endif
 @stop

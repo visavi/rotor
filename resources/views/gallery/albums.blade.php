@@ -20,7 +20,7 @@
 
         Всего альбомов: <b>{{ $page['total'] }}</b><br><br>
     @else
-        {{ showError('Альбомов еще нет!') }}
+        {!! showError('Альбомов еще нет!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>

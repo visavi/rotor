@@ -35,6 +35,6 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Закладок еще нет!') }}
+        {!! showError('Закладок еще нет!') !!}
     @endif
 @stop

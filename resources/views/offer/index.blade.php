@@ -71,6 +71,6 @@
 
         Всего записей: <b>{{ $page['total'] }}</b><br><br>
     @else
-        {{ showError('Записей еще нет!') }}
+        {!! showError('Записей еще нет!') !!}
     @endif
 @stop

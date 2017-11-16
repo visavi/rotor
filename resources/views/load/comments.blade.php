@@ -51,7 +51,7 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Нет сообщений') }}
+        {!! showError('Нет сообщений') !!}
     @endif
 
     @if (getUser())
@@ -73,7 +73,7 @@
         <a href="/smiles">Смайлы</a> /
         <a href="/tags">Теги</a><br><br>
     @else
-        {{ showError('Для добавления сообщения необходимо авторизоваться') }}
+        {!! showError('Для добавления сообщения необходимо авторизоваться') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/down/{{ $down->id }}">Вернуться</a><br>

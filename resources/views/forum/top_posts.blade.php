@@ -29,6 +29,6 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Сообщений еще нет!') }}
+        {!! showError('Сообщений еще нет!') !!}
     @endif
 @stop

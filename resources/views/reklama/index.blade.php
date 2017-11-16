@@ -34,7 +34,7 @@
 
         Всего ссылок: <b>{{ $page['total'] }}</b><br><br>
     @else
-        {{ showError('В данный момент рекламных ссылок еще нет!') }}
+        {!! showError('В данный момент рекламных ссылок еще нет!') !!}
     @endif
 
     <i class="fa fa-money"></i> <a href="/reklama/create">Купить рекламу</a><br>

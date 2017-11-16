@@ -25,6 +25,6 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Созданных тем еще нет!') }}
+        {!! showError('Созданных тем еще нет!') !!}
     @endif
 @stop

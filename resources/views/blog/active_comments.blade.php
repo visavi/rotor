@@ -37,6 +37,6 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Комментарии не найдены!') }}
+        {!! showError('Комментарии не найдены!') !!}
     @endif
 @stop

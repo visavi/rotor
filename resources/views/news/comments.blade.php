@@ -56,7 +56,7 @@
     @if (! $news->closed)
 
         @if ($comments->isEmpty())
-            {{ showError('Комментариев еще нет!') }}
+            {!! showError('Комментариев еще нет!') !!}
         @endif
 
         @if (getUser())

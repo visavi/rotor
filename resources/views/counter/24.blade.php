@@ -18,7 +18,7 @@
         <br>
         <?php include_once(APP.'/Includes/counter24.php') ?>
     @else
-        {{ showError('Статистика за текущие сутки еще не обновилась!') }}
+        {!! showError('Статистика за текущие сутки еще не обновилась!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/counter">Вернуться</a><br>

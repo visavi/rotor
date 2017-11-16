@@ -88,12 +88,12 @@
         {!! pagination($page) !!}
     @else
         @if (! $category->closed)
-            {{ showError('В данной категории еще нет файлов!') }}
+            {!! showError('В данной категории еще нет файлов!') !!}
         @endif
     @endif
 
     @if ($category->closed)
-        {{ showError('В данной категории запрещена загрузка файлов!') }}
+        {!! showError('В данной категории запрещена загрузка файлов!') !!}
     @endif
 
     <a href="/load/top">Топ файлов</a> /

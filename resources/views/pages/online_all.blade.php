@@ -32,7 +32,7 @@
         @endforeach
         {!! pagination($page) !!}
     @else
-        {{ showError('На сайте никого нет!') }}
+        {!! showError('На сайте никого нет!') !!}
     @endif
 
     <i class="fa fa-users"></i> <a href="/online">Скрыть гостей</a><br>

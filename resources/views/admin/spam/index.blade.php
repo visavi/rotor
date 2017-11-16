@@ -63,7 +63,7 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Жалоб еще нет!') }}
+        {!! showError('Жалоб еще нет!') !!}
     @endif
 
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>

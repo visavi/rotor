@@ -26,7 +26,7 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Голосований в архиве еще нет!') }}
+        {!! showError('Голосований в архиве еще нет!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-up"></i> <a href="/votes">К голосованиям</a><br>

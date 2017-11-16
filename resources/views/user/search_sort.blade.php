@@ -21,7 +21,7 @@
         Найдено совпадений: {{ $page['total'] }}<br><br>
 
     @else
-        {{ showError('Совпадений не найдено!') }}
+        {!! showError('Совпадений не найдено!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br>

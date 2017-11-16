@@ -117,7 +117,7 @@
             <input class="form-control" name="text" id="text" value="{{ siteUrl(true) }}/uploads/files/{{ $down->folder }}{{ $down->link }}"><br>--}}
         @endif
     @else
-        {{ showError('Файл еще не загружен!') }}
+        {!! showError('Файл еще не загружен!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-up"></i> <a href="/load">Категории</a><br>

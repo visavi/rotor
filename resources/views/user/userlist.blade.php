@@ -44,7 +44,7 @@
 
         Всего пользователей: <b>{{ $page['total'] }}</b><br><br>
     @else
-        {{ showError('Пользователей еще нет!') }}
+        {!! showError('Пользователей еще нет!') !!}
     @endif
 
     <i class="fa fa-users"></i> <a href="/who">Новички</a><br>

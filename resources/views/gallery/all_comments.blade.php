@@ -33,7 +33,7 @@
         {!! pagination($page) !!}
 
     @else
-        {{ showError('Комментариев еще нет!') }}
+        {!! showError('Комментариев еще нет!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>

@@ -47,7 +47,7 @@
         @endif
 
     @else
-        {{ showError('Записей еще нет!') }}
+        {!! showError('Записей еще нет!') !!}
     @endif
 
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>

@@ -18,7 +18,7 @@
 
         Последнее изменение: {{ dateFixed($note->created_at) }}<br><br>
     @else
-        {{ showError('Запись пустая или отсутствует!') }}
+        {!! showError('Запись пустая или отсутствует!') !!}
     @endif
 
     <i class="fa fa-pencil"></i> <a href="/notebook/edit">Редактировать</a><br>

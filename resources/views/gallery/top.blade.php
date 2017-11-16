@@ -44,7 +44,7 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Загруженных фотографий еще нет!') }}
+        {!! showError('Загруженных фотографий еще нет!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/gallery">В галерею</a><br>

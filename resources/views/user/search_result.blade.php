@@ -16,7 +16,7 @@
 
         <br>Найдено совпадений: <b>{{ $users->count() }}</b><br><br>
     @else
-        {{ showError('По вашему запросу ничего не найдено') }}
+        {!! showError('По вашему запросу ничего не найдено') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/searchuser">Вернуться</a><br>

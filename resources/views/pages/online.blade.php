@@ -27,7 +27,7 @@
         @endforeach
         {!! pagination($page) !!}
     @else
-        {{ showError('Авторизованных пользователей нет!') }}
+        {!! showError('Авторизованных пользователей нет!') !!}
     @endif
 
     <i class="fa fa-users"></i> <a href="/online/all">Показать гостей</a><br>

@@ -43,6 +43,6 @@
             </div><br>
         @endif
     @else
-        {{ showError('Администрации еще нет!') }}
+        {!! showError('Администрации еще нет!') !!}
     @endif
 @stop

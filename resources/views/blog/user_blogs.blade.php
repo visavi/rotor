@@ -18,7 +18,7 @@
 
         Всего пользователей: <b>{{ $page['total'] }}</b><br><br>
     @else
-        {{ showError('Статей еще нет!') }}
+        {!! showError('Статей еще нет!') !!}
     @endif
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/blog">К блогам</a><br>

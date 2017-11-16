@@ -41,7 +41,7 @@
 
         {!! pagination($page) !!}
     @else
-        {{ showError('Новостей еще нет!') }}
+        {!! showError('Новостей еще нет!') !!}
     @endif
 
     <i class="fa fa-rss"></i> <a href="/news/rss">RSS подписка</a><br>
