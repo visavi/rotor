@@ -85,7 +85,7 @@
             <a href="/down/{{ $data->id }}/end">&raquo;</a></div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         @if (! $category->closed)
             {{ showError('В данной категории еще нет файлов!') }}

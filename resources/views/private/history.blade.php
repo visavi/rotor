@@ -23,7 +23,7 @@
             <div>{!! bbCode($data->text) !!}</div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
     @else
         {{ showError('История переписки отсутствует!') }}

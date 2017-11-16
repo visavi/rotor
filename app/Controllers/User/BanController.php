@@ -64,7 +64,7 @@ class BanController extends BaseController
                 ]);
 
                 setFlash('success', 'Объяснение успешно отправлено!');
-                redirect("/ban");
+                redirect('/ban');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -110,7 +110,7 @@ class BanController extends BaseController
                 setFlash('danger', 'У вас нет нарушений, не прошло еще 30 суток или недостаточная сумма на счете');
             }
 
-            redirect("/unban");
+            redirect('/unban');
         }
 
         return view('user/unban', compact('user', 'daytime'));

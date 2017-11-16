@@ -13,7 +13,7 @@
             <img src="/uploads/smiles/{{ $smile['name'] }}" alt=""> — <b>{{ $smile['code'] }}</b><br>
         @endforeach
 
-        {{  pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего cмайлов: <b>{{ $page['total'] }}</b><br><br>
     @else

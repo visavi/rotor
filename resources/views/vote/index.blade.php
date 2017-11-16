@@ -31,7 +31,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Открытых голосований еще нет!') }}
     @endif

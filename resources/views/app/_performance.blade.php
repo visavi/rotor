@@ -11,7 +11,7 @@
 </ul>
 
 @if ($queries)
-<pre class="text-left prettyprint linenums">
+<pre class="text-left prettyprint linenums pre-scrollable">
 @foreach ($queries as $key=> $query)
 {{ $query['query'] }} ({{ number_format($query['time'] /1000, 5) }} сек.)
 @endforeach

@@ -24,7 +24,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Голосований в архиве еще нет!') }}
     @endif

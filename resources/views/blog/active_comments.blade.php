@@ -35,7 +35,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Комментарии не найдены!') }}
     @endif

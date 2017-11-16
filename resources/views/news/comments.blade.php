@@ -50,7 +50,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @endif
 
     @if (! $news->closed)

@@ -42,7 +42,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Статей еще нет, будь первым!') }}
     @endif

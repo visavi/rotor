@@ -60,13 +60,13 @@
             </div>
             <div>
                 @if ($topic->lastPost)
-                    {{ $topic->pagination($topic) }}
+                    {!! $topic->pagination() !!}
                     Сообщение: {{ $topic->lastPost->user->login }} ({{ dateFixed($topic->lastPost->created_at) }})
                 @endif
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
     @elseif ($forums->closed)
         {{ showError('В данном разделе запрещено создавать темы!') }}

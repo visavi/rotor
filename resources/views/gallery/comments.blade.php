@@ -49,7 +49,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @endif
 
     @if (empty($photo->closed))

@@ -166,7 +166,7 @@ $router->map('GET|POST', '/ratinglist', 'User\ListController@ratinglist');
 $router->map('GET|POST', '/ban', 'User\BanController@ban');
 $router->map('GET',      '/banhist', 'User\BanController@banhist');
 $router->map('GET|POST', '/unban', 'User\BanController@unban');
-$router->map('GET|POST', '/who', 'UserController@who');
+$router->map('GET|POST', '/who', 'User\UserController@who');
 
 $router->map('GET', '/faq', 'PageController@faq');
 $router->map('GET', '/statusfaq', 'PageController@statusfaq');

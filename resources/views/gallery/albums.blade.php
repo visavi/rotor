@@ -16,7 +16,7 @@
 
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего альбомов: <b>{{ $page['total'] }}</b><br><br>
     @else

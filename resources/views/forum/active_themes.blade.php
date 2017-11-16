@@ -17,11 +17,11 @@
         </div>
 
         <div>
-            {{ $data->pagination() }}
+            {!! $data->pagination() !!}
             Форум: <a href="/forum/{{ $data->forum->id }}">{{ $data->forum->title }}</a><br>
             Автор: {{ $data->user->login }} / Посл.: {{ $data->lastPost->user->login }} ({{ dateFixed($data->lastPost->created_at) }})
         </div>
     @endforeach
 
-    {{ pagination($page) }}
+    {!! pagination($page) !!}
 @stop

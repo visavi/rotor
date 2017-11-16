@@ -16,7 +16,7 @@
         @endforeach
 
         <br>
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Найдено совпадений: {{ $page['total'] }}<br><br>
 

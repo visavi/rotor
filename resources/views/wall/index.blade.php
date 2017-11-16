@@ -41,7 +41,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Записок еще нет!') }}
     @endif

@@ -42,7 +42,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Загруженных фотографий еще нет!') }}
     @endif

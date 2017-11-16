@@ -22,7 +22,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Опубликованных статей еще нет!') }}
     @endif

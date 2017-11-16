@@ -30,7 +30,7 @@
                 </div>
             @endif
         @endforeach
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('На сайте никого нет!') }}
     @endif

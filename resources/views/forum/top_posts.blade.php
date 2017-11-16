@@ -27,7 +27,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Сообщений еще нет!') }}
     @endif

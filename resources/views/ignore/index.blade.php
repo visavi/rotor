@@ -35,7 +35,7 @@
             <br><input type="submit" value="Удалить выбранное">
         </form>
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего в игноре: <b>{{ $page['total'] }}</b><br>
     @else

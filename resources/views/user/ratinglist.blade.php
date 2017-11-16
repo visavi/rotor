@@ -30,7 +30,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         <div class="form">
             <b>Поиск пользователя:</b><br>

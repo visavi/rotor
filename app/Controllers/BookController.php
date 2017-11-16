@@ -81,7 +81,7 @@ class BookController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect("/book");
+        redirect('/book');
     }
 
     /**

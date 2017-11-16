@@ -61,7 +61,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Жалоб еще нет!') }}
     @endif

@@ -39,7 +39,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего действий: <b>{{ $page['total'] }}</b><br><br>
     @else

@@ -25,7 +25,7 @@
                 </div>
             @endif
         @endforeach
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Авторизованных пользователей нет!') }}
     @endif

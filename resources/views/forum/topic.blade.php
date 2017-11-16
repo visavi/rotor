@@ -174,7 +174,7 @@
         </form>
     @endif
 
-    {{ pagination($page) }}
+    {!! pagination($page) !!}
 
     @if (getUser())
         @if (empty($topic->closed))

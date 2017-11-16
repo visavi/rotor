@@ -216,7 +216,7 @@ class BBCode
         //Чтобы bb-код и смайлы не работали внутри тега [code]
         $match[1] = strtr($match[1], [':' => '&#58;', '[' => '&#91;']);
 
-        return '<pre class="prettyprint linenums">'.$match[1].'</pre>';
+        return '<pre class="prettyprint linenums pre-scrollable">'.$match[1].'</pre>';
     }
 
     /**

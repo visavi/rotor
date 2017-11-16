@@ -64,7 +64,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
     @else
         {{ showError(trans('book.empty_messages')) }}

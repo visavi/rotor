@@ -16,13 +16,13 @@
             <b><a href="/topic/{{ $topic->id }}">{{ $topic->title }}</a></b> ({{ $topic->posts }})
         </div>
         <div>
-            {{ $topic->pagination() }}
+            {!! $topic->pagination() !!}
             Раздел: <a href="/topic/{{ $topic->forum->id }}">{{ $topic->forum->title }}</a><br>
             Сообщение: {{ $topic->lastPost->user->login }} ({{ dateFixed($topic->lastPost->created_at) }})
         </div>
     @endforeach
 
-    {{ pagination($page) }}
+    {!! pagination($page) !!}
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/forum/search">Вернуться</a>
 @stop

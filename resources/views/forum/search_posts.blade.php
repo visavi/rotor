@@ -23,7 +23,7 @@
 
     @endforeach
 
-    {{ pagination($page) }}
+    {!! pagination($page) !!}
 
     <i class="fa fa-arrow-circle-left"></i> <a href="/forum/search">Вернуться</a>
 @stop

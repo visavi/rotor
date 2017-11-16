@@ -114,7 +114,7 @@ class RekUserController extends BaseController
                 saveAdvertUser();
 
                 setFlash('success', 'Рекламная ссылка успешно размещена');
-                redirect("/reklama");
+                redirect('/reklama');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());

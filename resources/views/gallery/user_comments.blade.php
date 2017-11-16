@@ -30,7 +30,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
     @else
         {{ showError('Комментариев еще нет!') }}

@@ -112,7 +112,7 @@ class IgnoreController extends BaseController
                 ]);
 
                 setFlash('success', 'Заметка успешно отредактирована!');
-                redirect("/ignore");
+                redirect('/ignore');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -147,6 +147,6 @@ class IgnoreController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect("/ignore?page=$page");
+        redirect('/ignore?page=' . $page);
     }
 }

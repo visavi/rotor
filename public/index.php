@@ -25,7 +25,7 @@ if ($router['target'] && is_callable($router['target'])) {
     $action     = $router['params']['action'] ?? $target[1];
     $controller = 'App\\Controllers\\'.$target[0];
 
-    call_user_func_array([new $controller, $action], $router['params']);
+    echo call_user_func_array([new $controller, $action], $router['params']);
 } else {
     abort(404);
 }

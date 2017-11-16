@@ -32,7 +32,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{  showError('В истории еще ничего нет!') }}
     @endif

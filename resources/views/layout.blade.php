@@ -29,19 +29,19 @@
 @stop
 
 @section('advertUser')
-    {{ getAdvertUser() }}
+    {!! getAdvertUser() !!}
 @stop
 
 @section('counter')
-    {{ showCounter() }}
+    {!! showCounter() !!}
 @stop
 
 @section('online')
-    {{ showOnline() }}
+    {!! showOnline() !!}
 @stop
 
 @section('performance')
-    {{ performance() }}
+    {!! performance() !!}
 @stop
 
 @section('layout')

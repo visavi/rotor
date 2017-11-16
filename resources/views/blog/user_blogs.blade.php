@@ -14,7 +14,7 @@
             <b><a href="/blog/active/articles?user={{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} cтатей / {{ $data->comments }} комм.)<br>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего пользователей: <b>{{ $page['total'] }}</b><br><br>
     @else

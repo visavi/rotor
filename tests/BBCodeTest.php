@@ -12,7 +12,7 @@ class BBCodeTest extends TestCase
         $text      = '[code]<?php var_dump([1,2,4]);[/code]';
         $parseText = bbCode($text);
 
-        $this->assertEquals($parseText, '<pre class="prettyprint linenums"><?php var_dump(&#91;1,2,4]);</pre>');
+        $this->assertEquals($parseText, '<pre class="prettyprint linenums pre-scrollable"><?php var_dump(&#91;1,2,4]);</pre>');
     }
 
     /**

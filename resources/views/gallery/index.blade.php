@@ -52,7 +52,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего фотографий: <b>{{ $page['total'] }}</b><br><br>
 

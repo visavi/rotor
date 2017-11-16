@@ -38,7 +38,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего записей: <b>{{ $page['total'] }}</b><br><br>
 

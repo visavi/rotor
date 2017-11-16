@@ -21,7 +21,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего статей: <b>{{ $page['total'] }}</b><br>
     @else

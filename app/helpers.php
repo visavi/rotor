@@ -1827,18 +1827,13 @@ function returnUrl($url = null)
  *
  * @param  string  $template имя шаблона
  * @param  array   $params   массив параметров
- * @param  bool    $return   выводить или возвращать код
  * @return string            сформированный код
  */
-function view($template, $params = [], $return = false)
+function view($template, $params = [])
 {
     $blade = new Blade([RESOURCES.'/views', HOME.'/themes'], STORAGE.'/cache');
 
-    if ($return) {
-        return $blade->render($template, $params);
-    } else {
-        echo $blade->render($template, $params);
-    }
+    return $blade->render($template, $params);
 }
 
 /**
@@ -1878,10 +1873,10 @@ function abort($code, $message = null)
             'status' => 'error',
             'message' => $message,
         ]));
+    } else {
+        $referer = Request::header('referer') ?? null;
+        exit(view('errors/'.$code, compact('message', 'referer')));
     }
-
-    $referer = Request::header('referer') ?? null;
-    return view('errors/'.$code, compact('message', 'referer'));
 }
 
 /**

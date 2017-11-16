@@ -39,7 +39,7 @@
             </div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Новостей еще нет!') }}
     @endif

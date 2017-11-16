@@ -31,7 +31,7 @@
 
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('В данном архиве нет файлов!') }}
     @endif

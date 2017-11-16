@@ -67,7 +67,7 @@
             <a href="/offers/{{ $data['id'] }}/end">&raquo;</a></div>
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего записей: <b>{{ $page['total'] }}</b><br><br>
     @else

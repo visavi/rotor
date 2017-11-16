@@ -112,7 +112,7 @@ class ContactController extends BaseController
                 ]);
 
                 setFlash('success', 'Заметка успешно отредактирована!');
-                redirect("/contact");
+                redirect('/contact');
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());
@@ -147,6 +147,6 @@ class ContactController extends BaseController
             setFlash('danger', $validator->getErrors());
         }
 
-        redirect("/contact?page=$page");
+        redirect('/contact?page='.$page);
     }
 }

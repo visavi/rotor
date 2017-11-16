@@ -513,7 +513,7 @@ class PhotoController extends BaseController
             redirect('/gallery/' . $gid . '/comments?page=' . $end);
         } else {
             setFlash('success', 'Комментариев к данному изображению не существует!');
-            redirect("/gallery/comments");
+            redirect('/gallery/comments');
         }
     }
 }

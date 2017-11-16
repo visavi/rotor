@@ -1058,40 +1058,6 @@ h1 small {
     font-size: 80%;
 }
 
-ol, ul
-{
-    color: #26444B;
-    margin:1em 0 1em 2em;
-    padding:0;
-    font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
-    font-size: 11px;
-}
-
-li ol, li ul
-{
-    margin:0.5em 0 0.5em 2em;
-    padding:0;
-}
-
-li
-{
-    margin:0.2em 0;
-    padding:0;
-}
-
-ul
-{
-    list-style-type: none;
-}
-
-ol
-{
-    list-style-position:inside;
-
-}
-
-
-
 .art-Post li
 {
     //padding:0px 0 0px 10px;

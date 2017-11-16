@@ -30,7 +30,7 @@
             @endif
         @endforeach
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего ссылок: <b>{{ $page['total'] }}</b><br><br>
     @else

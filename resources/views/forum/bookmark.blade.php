@@ -22,7 +22,7 @@
                 </div>
 
                 <div>
-                    {{ $topic->topic->pagination() }}
+                    {!! $topic->topic->pagination() !!}
                     Автор: {{ $topic->topic->user->login }} /
                     Посл.: {{ $topic->topic->lastPost->user->login }}
                     ({{ dateFixed($topic->topic->lastPost->created_at) }})
@@ -33,7 +33,7 @@
             <input type="submit" value="Удалить выбранное">
         </form>
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
     @else
         {{ showError('Закладок еще нет!') }}
     @endif

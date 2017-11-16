@@ -33,5 +33,5 @@
         </div>
     @endforeach
 
-    {{ pagination($page) }}
+    {!! pagination($page) !!}
 @stop

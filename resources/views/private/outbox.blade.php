@@ -34,7 +34,7 @@
 
             <br><input type="submit" value="Удалить выбранное"></form>
 
-        {{ pagination($page) }}
+        {!! pagination($page) !!}
 
         Всего писем: <b>{{ $page['total'] }}</b><br>
         Объем ящика: <b>{{ setting('limitmail') }}</b><br><br>
