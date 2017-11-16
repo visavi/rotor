@@ -36,7 +36,7 @@
                 @foreach ($category->children as $child)
                     <i class="fa fa-angle-right"></i> <b><a href="/load/{{ $child->id }}">{{ $child['name'] }}</a></b>
                     @if ($child->new)
-                        ({{ $child->count }}/<span style="color:#ff0000">+{{ $child->new->count }})</span><br>
+                        ({{ $child->count }}/<span style="color:#ff0000">+{{ $child->new->count }}</span>)<br>
                     @else
                         ({{ $child->count }})<br>
                     @endif
