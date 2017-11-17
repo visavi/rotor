@@ -26,7 +26,7 @@ if (!empty($down)) {
         echo '<copyright>'.setting('copy').'</copyright>';
         echo '<managingEditor>'.env('SITE_EMAIL').'</managingEditor>';
         echo '<webMaster>'.env('SITE_EMAIL').'</webMaster>';
-        echo '<lastBuildDate>'.date("r", SITETIME).'</lastBuildDate>';
+        echo '<lastBuildDate>'.date('r', SITETIME).'</lastBuildDate>';
 
         $querycomm = DB::select("SELECT * FROM `comments` WHERE relate_type=? AND `relate_id`=? ORDER BY `time` DESC LIMIT 15;", ['down', $id]);
 
@@ -37,7 +37,7 @@ if (!empty($down)) {
 
             echo '<item><title>'.$down['title'].'</title><link>'.siteUrl().'/load/down?act=comments&amp;id='.$down['id'].'</link>';
             echo '<description>'.$data['text'].' </description><author>'.$data['user'].'</author>';
-            echo '<pubDate>'.date("r", $data['time']).'</pubDate><category>Комментарии</category><guid>'.siteUrl().'/load/down?act=comments&amp;id='.$down['id'].'&amp;pid='.$data['id'].'</guid></item>';
+            echo '<pubDate>'.date('r', $data['time']).'</pubDate><category>Комментарии</category><guid>'.siteUrl().'/load/down?act=comments&amp;id='.$down['id'].'&amp;pid='.$data['id'].'</guid></item>';
         }
 
         echo '</channel></rss>';

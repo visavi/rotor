@@ -1,23 +1,24 @@
 @extends('layout_rss')
 
 @section('title')
-    {{ $topic->title }}
+    {{ $down->title }}
 @stop
 
 @section('content')
 
-    @foreach ($posts as $data)
+    @foreach ($down->lastComments as $data)
         <?php $data->text = bbCode($data->text); ?>
         <?php $data->text = str_replace('/uploads/smiles', siteUrl().'/uploads/smiles', $data->text); ?>
 
         <item>
             <title>{{ $data->text }}</title>
-            <link>{{ siteUrl() }}/topic/{{ $topic->id }}/{{ $data->id }}</link>
-            <description>{{ $topic->title }} </description>
+            <link>{{ siteUrl() }}/down/{{ $down->id }}/comments</link>
+            <description>{{ $down->title }}</description>
             <author>{{ $data->user->login }}</author>
             <pubDate>{{ date('r', $data->created_at) }}</pubDate>
-            <category>Сообщения</category>
-            <guid>{{ siteUrl() }}/topic/{{ $topic->id }}/{{  $data->id }}</guid>
+            <category>Комментарии</category>
+            <guid>{{ siteUrl() }}/down/{{ $down->id }}/comments?pid={{ $data->id }}</guid>
         </item>
     @endforeach
 @stop
+

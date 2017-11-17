@@ -15,7 +15,7 @@
             <link>{{ siteUrl() }}/article/{{ $blog->id }}</link>
             <description>{{ $blog->text }}</description>
             <author>{{ $blog->user->login }}</author>
-            <pubDate>{{ date("r", $blog->created_at) }}</pubDate>
+            <pubDate>{{ date('r', $blog->created_at) }}</pubDate>
             <category>Блоги</category>
             <guid>{{ siteUrl() }}/article/{{ $blog->id }}</guid>
         </item>

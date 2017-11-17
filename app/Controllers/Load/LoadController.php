@@ -72,4 +72,21 @@ class LoadController extends BaseController
 
         return view('load/load', compact('category', 'downs', 'page', 'order'));
     }
+
+    /**
+     * RSS всех файлов
+     */
+    public function rss()
+    {
+        $downs = Down::query()
+            ->orderBy('created_at', 'desc')
+            ->limit(15)
+            ->get();
+
+        if ($downs->isEmpty()) {
+            abort('default', 'Блоги не найдены!');
+        }
+
+        return view('load/rss', compact('downs'));
+    }
 }

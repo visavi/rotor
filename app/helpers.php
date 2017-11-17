@@ -1408,6 +1408,7 @@ function recentFiles($show = 5)
             ->where('active', 1)
             ->orderBy('created_at', 'desc')
             ->limit($show)
+            ->with('category')
             ->get();
 
         file_put_contents(STORAGE."/temp/recentfiles.dat", serialize($files), LOCK_EX);
@@ -1418,8 +1419,8 @@ function recentFiles($show = 5)
     if ($files->isNotEmpty()) {
         foreach ($files as $file){
 
-            $filesize = $file['link'] ? formatFileSize(UPLOADS.'/files/'.$file['link']) : 0;
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/load/down?act=view&amp;id='.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
+            $filesize = $file['link'] ? formatFileSize(UPLOADS.'/files/'.$file->folder.$file->link) : 0;
+            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
         }
     }
 }

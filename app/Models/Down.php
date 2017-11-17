@@ -34,6 +34,19 @@ class Down extends BaseModel
     }
 
     /**
+     * Возвращает последнии комментарии к файлу
+     *
+     * @param int $limit
+     * @return mixed
+     */
+    public function lastComments($limit = 15)
+    {
+        return $this->hasMany(Comment::class, 'relate_id')
+            ->where('relate_type', self::class)
+            ->limit($limit);
+    }
+
+    /**
      * Возвращает директорию категории
      *
      * @return string

@@ -186,6 +186,7 @@ $router->map('GET',      '/pictures/delete', 'PictureController@delete');
 $router->map('GET|POST', '/files/[*:action]?', 'FileController', 'files');
 
 $router->map('GET',      '/load', 'Load\LoadController@index');
+$router->map('GET',      '/load/rss', 'Load\LoadController@rss');
 $router->map('GET',      '/load/[i:id]', 'Load\LoadController@load');
 $router->map('GET',      '/down/[i:id]', 'Load\DownController@index');
 $router->map('POST',     '/down/[i:id]/vote', 'Load\DownController@vote');
@@ -193,18 +194,16 @@ $router->map('GET|POST', '/down/[i:id]/download', 'Load\DownController@download'
 $router->map('GET|POST', '/down/[i:id]/comments', 'Load\DownController@comments');
 $router->map('GET',      '/down/[i:id]/end', 'Load\DownController@end');
 $router->map('GET|POST', '/down/[i:id]/[i:cid]/edit', 'Load\DownController@editComment');
+$router->map('GET',      '/down/[i:id]/rss', 'Load\DownController@rss');
 $router->map('GET',      '/down/[i:id]/zip', 'Load\DownController@zip');
 $router->map('GET',      '/down/[i:id]/[i:fid]/zip', 'Load\DownController@zipView');
 
 $router->map('GET|POST', '/load/active', 'load/active.php');
 $router->map('GET|POST', '/load/add', 'load/add.php');
-$router->map('GET|POST', '/load/down', 'load/down.php');
 $router->map('GET|POST', '/load/fresh', 'load/fresh.php');
 $router->map('GET|POST', '/load/new', 'load/new.php');
-$router->map('GET|POST', '/load/rss', 'load/rss.php');
 $router->map('GET|POST', '/load/search', 'load/search.php');
 $router->map('GET|POST', '/load/top', 'load/top.php');
-$router->map('GET|POST', '/load/zip', 'load/zip.php');
 
 $router->map('GET', '/api', 'ApiController@index');
 $router->map('GET', '/api/user', 'ApiController@user');

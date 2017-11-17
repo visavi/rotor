@@ -19,7 +19,7 @@ pre.prettyprint code {
 }
 
 pre.prettyprint, code.prettyprint {
-  overflow: auto;
+  max-width:100%;overflow-x: scroll;
   word-wrap: normal;
   tab-size: 2;
   display: block;

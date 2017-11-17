@@ -48,5 +48,6 @@
     <br>
     <a href="/load/top">Топ файлов</a> /
     <a href="/load/search">Поиск</a> /
-    <a href="/load/add">Добавить файл</a><br>
+    <a href="/load/add">Добавить файл</a> /
+    <a href="/down/rss">RSS</a><br>
 @stop

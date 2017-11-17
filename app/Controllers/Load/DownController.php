@@ -380,4 +380,18 @@ class DownController extends BaseController
 
         return view('load/zip_view', compact('down', 'file', 'content'));
     }
+
+    /**
+     * RSS комментариев
+     */
+    public function rss($id)
+    {
+        $down = Down::query()->where('id', $id)->with('lastComments')->first();
+
+        if (! $down) {
+            abort('default', 'Данного файла не существует!');
+        }
+
+        return view('load/rss_comments', compact('down'));
+    }
 }

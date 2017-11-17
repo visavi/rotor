@@ -15,7 +15,7 @@
             <link>{{ siteUrl() }}/article/{{ $blog->id }}/comments</link>
             <description>{{ $blog->title }}</description>
             <author>{{ $data->user->login }}</author>
-            <pubDate>{{ date("r", $data->created_at) }}</pubDate>
+            <pubDate>{{ date('r', $data->created_at) }}</pubDate>
             <category>Комментарии</category>
             <guid>{{ siteUrl() }}/article/{{ $blog->id }}/comments?pid={{ $data->id }}</guid>
         </item>

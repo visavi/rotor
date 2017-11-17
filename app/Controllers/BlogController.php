@@ -477,7 +477,7 @@ class BlogController extends BaseController
     {
         $blog = Blog::query()->where('id', $id)->with('lastComments')->first();
 
-        if (!$blog) {
+        if (! $blog) {
             abort('default', 'Статья не найдена!');
         }
 

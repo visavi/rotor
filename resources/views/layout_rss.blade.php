@@ -13,7 +13,7 @@
         </image>
         <managingEditor>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</managingEditor>
         <webMaster>{{ env('SITE_EMAIL') }} ({{ env('SITE_ADMIN') }})</webMaster>
-        <lastBuildDate>{{ date("r", SITETIME) }}</lastBuildDate>
+        <lastBuildDate>{{ date('r', SITETIME) }}</lastBuildDate>
 
             @yield('content')
 
