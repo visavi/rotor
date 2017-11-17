@@ -31,8 +31,8 @@
 
         <li class="breadcrumb-item"><a href="/blog/{{ $blog->category_id }}">{{ $blog->category->name }}</a></li>
         <li class="breadcrumb-item active">{{ $blog->title }}</li>
-        <li class="breadcrumb-item"><a href="/blog/{{ $blog->id }}/print">Печать</a></li>
-        <li class="breadcrumb-item"><a href="/blog/{{ $blog->id }}/rss">RSS-лента</a></li>
+        <li class="breadcrumb-item"><a href="/article/{{ $blog->id }}/print">Печать</a></li>
+        <li class="breadcrumb-item"><a href="/article/{{ $blog->id }}/rss">RSS-лента</a></li>
     </ol>
 
     @if (isAdmin())
@@ -48,9 +48,7 @@
 
     Автор статьи: {!! profile($blog->user) !!} ({{ dateFixed($blog->created_at) }})<br>
 
-    <i class="fa fa-tag"></i> {!! $tags !!}
-
-    <hr>
+    <i class="fa fa-tag"></i> {!! $tags !!}<hr>
 
     <div class="js-rating">Рейтинг:
         @unless (getUser('id') == $blog->user_id)
