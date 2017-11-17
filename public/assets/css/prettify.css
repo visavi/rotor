@@ -19,7 +19,7 @@ pre.prettyprint code {
 }
 
 pre.prettyprint, code.prettyprint {
-  max-width:100%;overflow-x: scroll;
+  overflow: auto;
   word-wrap: normal;
   tab-size: 2;
   display: block;
@@ -44,7 +44,6 @@ pre.prettyprint, code.prettyprint {
 }
 
 .prettyprint ol.linenums li {
-  padding-left: 10px;
   color: #bebec5;
   line-height: 18px;
   text-shadow: 0 1px 0 #fff;
