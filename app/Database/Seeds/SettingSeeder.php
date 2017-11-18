@@ -102,7 +102,7 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'proxy', 'value' => ''],
             ['name'  => 'ratinglist', 'value' => 20],
             ['name'  => 'registermoney', 'value' => 1000],
-            ['name'  => 'regkeys', 'value' => 1],
+            ['name'  => 'regkeys', 'value' => 0],
             ['name'  => 'reglist', 'value' => 10],
             ['name'  => 'rekuseroptprice', 'value' => 100],
             ['name'  => 'rekuserpost', 'value' => 10],

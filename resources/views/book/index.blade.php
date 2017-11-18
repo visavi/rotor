@@ -67,7 +67,7 @@
         {!! pagination($page) !!}
 
     @else
-        {{ showError(trans('book.empty_messages')) }}
+        {!! showError(trans('book.empty_messages')) !!}
     @endif
 
     @if (getUser())
@@ -108,6 +108,6 @@
         </div><br>
 
     @else
-        {{ showError(trans('book.not_authorized')) }}
+        {!! showError(trans('book.not_authorized')) !!}
     @endif
 @stop
