@@ -104,17 +104,6 @@ try_files $uri $uri/ =404
 try_files $uri $uri/ /index.php?$query_string;
 ```
 
-Секция location ~ \.php$ должна быть примерно такого вида
-
-```
-try_files $uri /index.php =404;
-fastcgi_split_path_info ^(.+\.php)(/.+)$;
-fastcgi_pass unix:/run/php/php7.0-fpm.sock;
-fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-fastcgi_index index.php;
-include fastcgi.conf;
-```
-
 ### Запуск без Nginx
 
 В случае отсутствия сервера Nginx на локальной машине достаточно использовать встроенный сервер PHP через консоль. Для поднятия сервера и доступа к системе нужно:
