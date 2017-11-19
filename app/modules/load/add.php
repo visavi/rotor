@@ -12,73 +12,7 @@ switch ($action):
 /**
  * Главная страница
  */
-case 'index':
 
-    //show_title('Публикация нового файла');
-
-    echo '<i class="fa fa-book"></i> <b>Публикация</b> / ';
-    echo '<a href="/load/add?act=waiting">Ожидающие</a> / ';
-    echo '<a href="/load/active">Проверенные</a><hr>';
-
-    if (siteUrl() == 'http://visavi.net') {
-        echo '<div class="info">';
-        echo '<i class="fa fa-question-circle"></i> Перед публикацией скрипта настоятельно рекомендуем ознакомиться с <a href="/load/add?act=rules&amp;cid='.$cid.'">правилами оформления скриптов</a><br>';
-        echo 'Чем лучше вы оформите свой скрипт, тем быстрее он будет опубликован и добавлен в общий каталог</div><br>';
-    }
-
-    $querydown = DB::select("SELECT * FROM `cats` ORDER BY `sort` ASC;");
-    $downs = $querydown -> fetchAll();
-
-    if (count($downs) > 0) {
-        echo '<div class="form">';
-        echo '<form action="/load/add?act=add&amp;uid='.$_SESSION['token'].'" method="post">';
-        echo 'Категория*:<br>';
-
-        $output = [];
-
-        foreach ($downs as $row) {
-            $i = $row['id'];
-            $p = $row['parent'];
-            $output[$p][$i] = $row;
-        }
-
-        echo '<select name="cid">';
-        echo '<option value="0">Выберите категорию</option>';
-
-        foreach ($output[0] as $key => $data) {
-            $selected = $cid == $data['id'] ? ' selected' : '';
-            $disabled = ! empty($data['closed']) ? ' disabled' : '';
-            echo '<option value="'.$data['id'].'"'.$selected.$disabled.'>'.$data['name'].'</option>';
-
-            if (isset($output[$key])) {
-                foreach($output[$key] as $datasub) {
-                    $selected = ($cid == $datasub['id']) ? ' selected' : '';
-                    $disabled = ! empty($datasub['closed']) ? ' disabled' : '';
-                    echo '<option value="'.$datasub['id'].'"'.$selected.$disabled.'>– '.$datasub['name'].'</option>';
-                }
-            }
-        }
-
-        echo '</select><br>';
-
-        echo 'Название*:<br>';
-        echo '<input type="text" name="title" size="50" maxlength="50"><br>';
-        echo 'Описание*:<br>';
-        echo '<textarea cols="25" rows="10" name="text"></textarea><br>';
-        echo 'Автор файла:<br>';
-        echo '<input type="text" name="author" maxlength="50"><br>';
-        echo 'Сайт автора:<br>';
-        echo '<input type="text" name="site" maxlength="50" value="http://"><br>';
-
-        echo '<input value="Продолжить" type="submit"></form></div><br>';
-
-        echo 'Все поля отмеченные знаком *, обязательны для заполнения<br>';
-        echo 'Файл и скриншот вы сможете загрузить после добавления описания<br>';
-        echo 'Если вы ошиблись в названии или описании файла, вы всегда можете его отредактировать<br><br>';
-    } else {
-        showError('Категории файлов еще не созданы!');
-    }
-break;
 
 /**
  * Просмотр ожидающих модерации

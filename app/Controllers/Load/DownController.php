@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Load;
 
+use App\Models\Load;
 use Exception;
 use App\Classes\Request;
 use App\Classes\Validator;
@@ -45,6 +46,34 @@ class DownController extends BaseController
         $rating   = $down->rated ? round($down->rating / $down->rated, 1) : 0;
 
         return view('load/down', compact('down', 'ext', 'filesize', 'rating'));
+    }
+
+    /**
+     * Создание загрузки
+     */
+    public function create()
+    {
+        $cid = abs(intval(Request::input('cid')));
+
+        if (! setting('downupload')) {
+            abort('default', 'Загрузка файлов запрещена администрацией сайта!');
+        }
+
+        if (! $user = getUser()) {
+            abort(403);
+        }
+
+        $loads = Load::query()
+            ->where('parent_id', 0)
+            ->with('children')
+            ->orderBy('sort')
+            ->get();
+
+        if ($loads->isEmpty()) {
+            abort('default', 'Разделы загрузок еще не созданы!');
+        }
+
+        return view('load/create', compact('loads', 'cid'));
     }
 
     /**

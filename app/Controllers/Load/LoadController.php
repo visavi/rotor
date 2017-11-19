@@ -20,7 +20,7 @@ class LoadController extends BaseController
             ->orderBy('sort')
             ->get();
 
-        if (empty(count($cats))) {
+        if ($cats->isEmpty()) {
             abort('default', 'Разделы загрузок еще не созданы!');
         }
 

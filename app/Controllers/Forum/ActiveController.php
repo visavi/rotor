@@ -9,7 +9,7 @@ use App\Models\Post;
 use App\Models\Topic;
 use App\Models\User;
 
-class ForumActiveController extends BaseController
+class ActiveController extends BaseController
 {
     public $user;
 

@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\Post;
 use App\Models\Topic;
 
-class ForumNewController extends BaseController
+class NewController extends BaseController
 {
     /**
      * Вывод тем
