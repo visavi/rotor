@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Classes\BBCode;
@@ -74,10 +75,10 @@ function dateFixed($timestamp, $format = "d.m.y / H:i")
         $timestamp = SITETIME;
     }
 
-    $shift = getUser('timezone') * 3600;
+    $shift     = getUser('timezone') * 3600;
     $dateStamp = date($format, $timestamp + $shift);
 
-    $today = date("d.m.y", SITETIME + $shift);
+    $today     = date("d.m.y", SITETIME + $shift);
     $yesterday = date("d.m.y", strtotime("-1 day", SITETIME + $shift));
 
     $dateStamp = str_replace($today, 'Сегодня', $dateStamp);
@@ -85,9 +86,8 @@ function dateFixed($timestamp, $format = "d.m.y / H:i")
 
     $search = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     $replace = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
-    $dateStamp = str_replace($search, $replace, $dateStamp);
 
-    return $dateStamp;
+    return str_replace($search, $replace, $dateStamp);
 }
 
 /**
@@ -504,25 +504,6 @@ function makeCalendar($month, $year)
 }
 
 /**
- * Кеширует количество писем пользователей
- *
- * @param int $time время кеширования
- */
-function saveUserMail($time = 0)
-{
-    if (empty($time) || @filemtime(STORAGE."/temp/usermail.dat") < time() - $time) {
-
-        $messages = Inbox::query()
-            ->select('user_id', DB::raw('count(*) as total'))
-            ->groupBy('user_id')
-            ->pluck('total', 'user_id')
-            ->all();
-
-        file_put_contents(STORAGE."/temp/usermail.dat", serialize($messages), LOCK_EX);
-    }
-}
-
-/**
  * Возвращает количество писем пользователя
  *
  * @param  User $user объект пользователя
@@ -530,9 +511,7 @@ function saveUserMail($time = 0)
  */
 function userMail(User $user)
 {
-    saveUserMail(3600);
-    $userMails = unserialize(file_get_contents(STORAGE."/temp/usermail.dat"));
-    return $userMails[$user->id] ?? 0;
+    return Inbox::query()->where('user_id', $user->id)->count();
 }
 
 /**
@@ -1737,7 +1716,6 @@ function sendPrivate($userId, $authorId, $text)
         ]);
 
         $user->increment('newprivat');
-        saveUserMail();
 
         return true;
     }

@@ -145,7 +145,6 @@ class PrivateController extends BaseController
                 ]);
 
                 DB::delete("DELETE FROM `outbox` WHERE `recipient_id`=? AND `created_at` < (SELECT MIN(`created_at`) FROM (SELECT `created_at` FROM `outbox` WHERE `recipient_id`=? ORDER BY `created_at` DESC LIMIT " . setting('limitoutmail') . ") AS del);", [getUser('id'), getUser('id')]);
-                saveUserMail(60);
 
                 setFlash('success', 'Ваше письмо успешно отправлено!');
                 redirect('/private');
@@ -191,7 +190,6 @@ class PrivateController extends BaseController
                     ->where('user_id', getUser('id'))
                     ->whereIn('id', $del)
                     ->delete();
-                saveUserMail(60);
             }
 
             setFlash('success', 'Выбранные сообщения успешно удалены!');
@@ -222,7 +220,6 @@ class PrivateController extends BaseController
                 Outbox::query()->where('user_id', getUser('id'))->delete();
             } else {
                 Inbox::query()->where('user_id', getUser('id'))->delete();
-                saveUserMail(60);
             }
 
             setFlash('success', 'Ящик успешно очищен!');
