@@ -37,7 +37,7 @@ class DownController extends BaseController
             abort(404, 'Данная загрузка не найдена!');
         }
 
-        if (! $down->active && $down->user_id == getUser('id')) {
+        if (! $down->active && $down->user_id != getUser('id')) {
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
@@ -71,6 +71,49 @@ class DownController extends BaseController
 
         if ($loads->isEmpty()) {
             abort('default', 'Разделы загрузок еще не созданы!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $token      = check(Request::input('token'));
+            $category   = check(Request::input('category'));
+            $title      = check(Request::input('title'));
+            $text       = check(Request::input('text'));
+
+            $category = Load::query()->find($category);
+
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->length($title, 5, 50, ['title' => 'Слишком длинное или короткое название!'])
+                ->length($text, 50, 5000, ['text' => 'Слишком длинный или короткий текст описания!'])
+                ->true(Flood::isFlood(), ['text' => 'Антифлуд! Разрешается добавлять файлы раз в ' . Flood::getPeriod() . ' секунд!'])
+                ->notEmpty($category, ['category' => 'Категории для данного файла не существует!']);
+
+            if ($category) {
+                $validator->empty($category->closed, ['category' => 'В данный раздел запрещено загружать файлы!']);
+            }
+
+            $downCount = Down::query()->where('title', $title)->count();
+            $validator->false($downCount, ['title' => 'Файл с аналогичный названием уже имеется в загрузках!']);
+
+            if ($validator->isValid()) {
+
+                $down = Down::query()->create([
+                    'category_id' => $category->id,
+                    'title'       => $title,
+                    'text'        => $text,
+                    'link'        => '',
+                    'user_id'     => $user->id,
+                    'created_at'  => SITETIME,
+                ]);
+
+                setFlash('success', 'Файл успешно загружен!');
+                redirect('/down/' . $down->id);
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
         }
 
         return view('load/create', compact('loads', 'cid'));

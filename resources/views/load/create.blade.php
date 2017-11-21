@@ -14,14 +14,14 @@
         <li class="breadcrumb-item"><a href="/load/add?act=waiting">Ожидающие</a></li>
         <li class="breadcrumb-item"><a href="/load/active">Проверенные</a></li>
     </ol>
-    
+
     <form action="/down/create" method="post">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
-        <div class="form-group{{ hasError('cid') }}">
-            <label for="inputCid">Категория</label>
+        <div class="form-group{{ hasError('category') }}">
+            <label for="inputCategory">Категория</label>
 
-            <select class="form-control" id="inputCid" name="cid">
+            <select class="form-control" id="inputCategory" name="category">
                 @foreach ($loads as $data)
 
                     <option value="{{ $data->id }}"{!! ($cid == $data->id) ? ' selected' : '' !!}{!! !empty($data->closed) ? ' disabled' : '' !!}>{{ $data->name }}</option>
@@ -34,7 +34,7 @@
                 @endforeach
 
             </select>
-            {!! textError('cid') !!}
+            {!! textError('category') !!}
         </div>
 
         <div class="form-group{{ hasError('title') }}">
@@ -45,7 +45,7 @@
 
         <div class="form-group{{ hasError('text') }}">
             <label for="markItUp">Описание:</label>
-            <textarea class="form-control" id="markItUp" rows="10" name="text" required>{{ getInput('msg') }}</textarea>
+            <textarea class="form-control" id="markItUp" rows="10" name="text" required>{{ getInput('text') }}</textarea>
             {!! textError('text') !!}
         </div>
 
