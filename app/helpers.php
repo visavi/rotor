@@ -1008,20 +1008,13 @@ function statsLoad()
 }
 
 /**
- * Возвращает количество файлов на одобрении
+ * Возвращает количество новых файлов
  *
  * @return string количество файлов
  */
 function statsNewLoad()
 {
-    $totalNew = Down::query()->where('active', 0)
-        ->count();
-
-    $totalApprove = Down::query()->where('active', 0)
-        ->where('approved', 1)
-        ->count();
-
-    return ($totalApprove) ? $totalNew.'/+'.$totalApprove : $totalNew;
+    return Down::query()->where('active', 0)->count();
 }
 
 /**
