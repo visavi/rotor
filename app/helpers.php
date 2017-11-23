@@ -1293,7 +1293,9 @@ function getAdvertUser()
 }
 
 /**
- * Кэширует в файл HTML ссылок пользовательской рекламы
+ * Кэширует ссылки пользовательской рекламы
+ *
+ * @return string Список ссылок
  */
 function saveAdvertUser()
 {
@@ -1323,7 +1325,8 @@ function saveAdvertUser()
 /**
  * Выводит последние фотографии
  *
- * @param  int $show Количество последних фотографий
+ * @param  int    $show Количество последних фотографий
+ * @return string       Список фотографий
  */
 function recentPhotos($show = 5)
 {
@@ -1348,7 +1351,8 @@ function recentPhotos($show = 5)
 /**
  * Выводит последние темы форума
  *
- * @param int $show Количество последних тем форума
+ * @param int     $show Количество последних тем форума
+ * @return string       Список тем
  */
 function recentTopics($show = 5)
 {
@@ -1368,9 +1372,10 @@ function recentTopics($show = 5)
 }
 
 /**
- * Выводит последние темы форума
+ * Выводит последние файлы в загрузках
  *
- * @param int $show Количество последних файлов в загрузках
+ * @param  int    $show Количество последних файлов в загрузках
+ * @return string       Список файлов
  */
 function recentFiles($show = 5)
 {
@@ -1400,7 +1405,8 @@ function recentFiles($show = 5)
 /**
  * Выводит последние статьи в блогах
  *
- * @param int $show Количество последних статей в блогах для вывода
+ * @param  int    $show Количество последних статей в блогах
+ * @return string       Список статей
  */
 function recentBlogs($show = 5)
 {

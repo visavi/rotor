@@ -15,7 +15,7 @@
         <li class="breadcrumb-item"><a href="/load/active">Проверенные</a></li>
     </ol>
 
-    <form action="/down/create" method="post">
+    <form action="/down/create" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
         <div class="form-group{{ hasError('category') }}">
@@ -48,6 +48,18 @@
             <textarea class="form-control" id="markItUp" rows="10" name="text" required>{{ getInput('text') }}</textarea>
             {!! textError('text') !!}
         </div>
+
+        <label class="btn btn-sm btn-secondary" for="inputFile">
+            <input id="inputFile" type="file" name="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
+            Выбрать файл
+        </label>
+        <span class="badge badge-info" id="upload-file-info"></span>
+
+        <div class="info">
+            Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
+            Допустимые расширения: {{ str_replace(',', ', ', setting('allowextload')) }}
+        </div><br>
+
 
         <button class="btn btn-primary">Загрузить</button>
     </form>

@@ -23,7 +23,7 @@
                     <input id="inputPhoto" type="file" name="photo"  style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
                     Прикрепить фото
                 </label>
-                <span class='label label-info' id="upload-file-info"></span>
+                <span class="badge badge-info" id="upload-file-info"></span>
             </div>
             <button class="btn btn-primary">Загрузить</button>
         </form>

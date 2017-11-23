@@ -192,13 +192,13 @@
                         <div class="js-attach-form" style="display: none;">
 
                             <label class="btn btn-sm btn-secondary" for="inputFile">
-                                <input id="inputFile" type="file" name="file"  style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
+                                <input id="inputFile" type="file" name="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
                                 Выбрать файл
                             </label>
-                            <span class='label label-info' id="upload-file-info"></span>
+                            <span class="badge badge-info" id="upload-file-info"></span>
 
                             <div class="info">
-                                Максимальный вес файла: <b>{{ round(setting('forumloadsize')/1024) }}</b> Kb<br>
+                                Максимальный вес файла: <b>{{ round(setting('forumloadsize') / 1024 / 1024) }}</b> Mb<br>
                                 Допустимые расширения: {{ str_replace(',', ', ', setting('forumextload')) }}
                             </div><br>
                         </div>

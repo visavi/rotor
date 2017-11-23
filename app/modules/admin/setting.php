@@ -397,7 +397,6 @@ if (isAdmin([101])) {
             echo '<b>Галерея</b><br>';
             echo 'Kол-во фото на стр.:<br><input name="fotolist" maxlength="2" value="'.$setting['fotolist'].'"><br>';
             echo 'Комментариев на страницу в галерее:<br><input name="postgallery" maxlength="3" value="'.$setting['postgallery'].'"><br>';
-            echo 'Хранение голосований (часов):<br><input name="photoexprated" maxlength="3" value="'.$setting['photoexprated'].'"><br>';
             echo 'Группы в галереях:<br><input name="photogroup" maxlength="2" value="'.$setting['photogroup'].'"><br>';
 
             echo '<input value="Изменить" type="submit"></form></div><br>';
@@ -412,7 +411,7 @@ if (isAdmin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if ($_POST['forumpost'] != "" && $_POST['forumtem'] != "" && $_POST['forumtextlength'] != "" && $_POST['forumloadsize'] != "" && $_POST['forumextload'] != "" && $_POST['forumloadpoints'] != "" && $_POST['fotolist'] != "" && $_POST['postgallery'] != "" && $_POST['photoexprated'] != "" && $_POST['photogroup'] != "") {
+                if ($_POST['forumpost'] != "" && $_POST['forumtem'] != "" && $_POST['forumtextlength'] != "" && $_POST['forumloadsize'] != "" && $_POST['forumextload'] != "" && $_POST['forumloadpoints'] != "" && $_POST['fotolist'] != "" && $_POST['postgallery'] != "" && $_POST['photogroup'] != "") {
                     $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
                     $dbr -> execute(intval($_POST['forumpost']), 'forumpost');
                     $dbr -> execute(intval($_POST['forumtem']), 'forumtem');
@@ -422,7 +421,6 @@ if (isAdmin([101])) {
                     $dbr -> execute(intval($_POST['forumloadpoints']), 'forumloadpoints');
                     $dbr -> execute(intval($_POST['fotolist']), 'fotolist');
                     $dbr -> execute(intval($_POST['postgallery']), 'postgallery');
-                    $dbr -> execute(intval($_POST['photoexprated']), 'photoexprated');
                     $dbr -> execute(intval($_POST['photogroup']), 'photogroup');
 
                     saveSetting();

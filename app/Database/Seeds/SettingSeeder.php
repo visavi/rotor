@@ -1,4 +1,4 @@
--<?php
+<?php
 
 use Phinx\Seed\AbstractSeed;
 
@@ -90,7 +90,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'onlines', 'value' => 1],
             ['name'  => 'openreg', 'value' => 1],
             ['name'  => 'performance', 'value' => 1],
-            ['name'  => 'photoexprated', 'value' => 72],
             ['name'  => 'photogroup', 'value' => 10],
             ['name'  => 'postcommoffers', 'value' => 10],
             ['name'  => 'postgallery', 'value' => 10],
