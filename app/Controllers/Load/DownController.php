@@ -79,6 +79,7 @@ class DownController extends BaseController
             $category   = check(Request::input('category'));
             $title      = check(Request::input('title'));
             $text       = check(Request::input('text'));
+            $file       = Request::file('file');
 
             $category = Load::query()->find($category);
 
@@ -92,18 +93,29 @@ class DownController extends BaseController
 
             if ($category) {
                 $validator->empty($category->closed, ['category' => 'В данный раздел запрещено загружать файлы!']);
+
+                $downCount = Down::query()->where('title', $title)->count();
+                $validator->false($downCount, ['title' => 'Файл с аналогичный названием уже имеется в загрузках!']);
+
+                $validator->true(is_writeable(UPLOADS . '/files/' . $category->folder), ['file' => 'Не установлены атрибуты доступа на дирекоторию с файлами!']);
+
+                $validator->true($file->isValid(), ['file' => 'Не удалось загрузить файл!']);
+
+                $validator->in($file->getClientOriginalExtension(), explode(',', setting('allowextload')), ['file' => 'Недопустимое расширение файла!']);
+
+                $validator->lt($file->getClientSize(), setting('fileupload'), ['file' => 'Ошибка! Максимальный размер загружаемого файла '.formatSize(setting('fileupload')).'!']);
             }
 
-            $downCount = Down::query()->where('title', $title)->count();
-            $validator->false($downCount, ['title' => 'Файл с аналогичный названием уже имеется в загрузках!']);
-
             if ($validator->isValid()) {
+
+                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(UPLOADS . '/files/' . $category->folder, $fileName);
 
                 $down = Down::query()->create([
                     'category_id' => $category->id,
                     'title'       => $title,
                     'text'        => $text,
-                    'link'        => '',
+                    'link'        => $fileName,
                     'user_id'     => $user->id,
                     'created_at'  => SITETIME,
                 ]);

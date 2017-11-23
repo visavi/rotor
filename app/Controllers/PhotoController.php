@@ -82,7 +82,7 @@ class PhotoController extends BaseController
                 uniqid()
             );
 
-            if (!$handle) {
+            if (! $handle) {
                 $validator->addError(['photo' => 'Не удалось загрузить фотографию!']);
             }
 
@@ -90,14 +90,15 @@ class PhotoController extends BaseController
 
                 $handle->process(HOME . '/uploads/pictures/');
                 if ($handle->processed) {
-                    $photo = new Photo();
-                    $photo->user_id = getUser('id');
-                    $photo->title = $title;
-                    $photo->text = antimat($text);
-                    $photo->link = $handle->file_dst_name;
-                    $photo->created_at = SITETIME;
-                    $photo->closed = $closed;
-                    $photo->save();
+
+                    $photo = Photo::query()->create([
+                        'user_id'    => getUser('id'),
+                        'title'      => $title,
+                        'text'       => antimat($text),
+                        'link'       => $handle->file_dst_name,
+                        'created_at' => SITETIME,
+                        'closed'     => $closed,
+                    ]);
 
                     setFlash('success', 'Фотография успешно загружена!');
                     redirect('/gallery/' . $photo->id);

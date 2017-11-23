@@ -245,40 +245,14 @@ case 'edit':
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
 
-/**
- * Загрузка файла
- */
+
 case 'loadfile':
-    //show_title('Загрузка файла');
 
-    $down = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
-
-    $folder = $down['folder'] ? $down['folder'].'/' : '';
-
-    if (!empty($down)) {
-        if ($down['user'] == getUser('login')) {
-            if (empty($down['active'])) {
-                if (empty($down['link'])) {
-                    if (is_writeable(UPLOADS.'/files/'.$folder)) {
-                    if (isset($_FILES['loadfile']) && is_uploaded_file($_FILES['loadfile']['tmp_name'])) {
 
                         $filename = check(strtolower($_FILES['loadfile']['name']));
                         $isVideo  = strstr($_FILES['loadfile']['type'], "video/") ? true : false;
 
-                        if (strlen($filename) <= 50) {
-                            if (preg_match('|^[a-z0-9_\.\-]+$|i', $filename)) {
 
-                                $ext = getExtension($filename);
-
-                                if (in_array($ext, explode(',', setting('allowextload')), true)) {
-                                    if ($_FILES['loadfile']['size'] > 0 && $_FILES['loadfile']['size'] <= setting('fileupload')) {
-                                        $downlink = DB::run() -> querySingle("SELECT `link` FROM `downs` WHERE `link`=? LIMIT 1;", [$filename]);
-                                        if (empty($downlink)) {
-
-                                            move_uploaded_file($_FILES['loadfile']['tmp_name'], UPLOADS.'/files/'.$folder.$filename);
-                                            @chmod(UPLOADS.'/files/'.$folder.$filename, 0666);
-
-                                            DB::update("UPDATE `downs` SET `link`=? WHERE `id`=?;", [$filename, $id]);
 
                                             // Обработка видео
                                             if ($isVideo && env('FFMPEG_ENABLED')) {
@@ -320,42 +294,6 @@ case 'loadfile':
                                                 }
                                             }
 
-                                            setFlash('success', 'Файл успешно загружен!');
-                                            redirect("/load/add?act=view&id=$id");
-
-                                        } else {
-                                            showError('Ошибка! Файл '.$filename.' уже имеется в общих файлах!');
-                                        }
-                                    } else {
-                                        showError('Ошибка! Максимальный размер загружаемого файла '.formatSize(setting('fileupload')).'!');
-                                    }
-                                } else {
-                                    showError('Ошибка! Недопустимое расширение файла!');
-                                }
-                            } else {
-                                showError('Ошибка! В названии файла присутствуют недопустимые символы!');
-                            }
-                        } else {
-                            showError('Ошибка! Слишком длинное имя файла (не более 50 символов)!');
-                        }
-                    } else {
-                        showError('Ошибка! Не удалось загрузить файл!');
-                    }
-                    } else {
-                        showError('Ошибка! Директория для файлов недоступна для записи!');
-                    }
-                } else {
-                    showError('Ошибка! Файл уже загружен!');
-                }
-            } else {
-                showError('Ошибка! Данный файл уже проверен модератором!');
-            }
-        } else {
-            showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
-        }
-    } else {
-        showError('Данного файла не существует!');
-    }
 
     echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
 break;
