@@ -10,4 +10,4 @@
 
 include_once __DIR__.'/../app/start.php';
 
-App\Classes\Application::init()->run();
+App\Classes\Application::run();
