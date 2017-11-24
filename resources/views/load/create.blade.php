@@ -50,19 +50,28 @@
         </div>
 
         <label class="btn btn-sm btn-secondary" for="inputFile">
-            <input id="inputFile" type="file" name="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val().replace('C:\\fakepath\\', ''));">
-            Выбрать файл
+            <input id="inputFile" type="file" name="file" onchange="$('#upload-file-info').html(this.files[0].name);" hidden>
+            Файл&hellip;
         </label>
         <span class="badge badge-info" id="upload-file-info"></span>
+        <br>
 
-        <div class="info">
-            Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
-            Допустимые расширения: {{ str_replace(',', ', ', setting('allowextload')) }}
-        </div><br>
-
+        <label class="btn btn-sm btn-secondary" for="inputScreen">
+            <input id="inputScreen" type="file" name="screen[]" onchange="$('#upload-screen-info').html(
+            (this.files.length == 1) ? this.files[0].name : 'Файлов: ' + this.files.length)" hidden multiple>
+            Скриншот&hellip;
+        </label>
+        <span class="badge badge-info" id="upload-screen-info"></span>
+        <br>
 
         <button class="btn btn-primary">Загрузить</button>
     </form>
+
+    <div class="info">
+        Максимальный вес файла: <b>{{ round(setting('fileupload') / 1024 / 1024) }}</b> Mb<br>
+        Допустимые расширения файла: {{ str_replace(',', ', ', setting('allowextload')) }}<br>
+        Допустимые расширения скриншотов: jpg,jpeg,gif,png
+    </div><br>
 
     <div>
         Файл и скриншот вы сможете загрузить после добавления описания<br>

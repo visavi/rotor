@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Load;
 
+use App\Models\File;
 use App\Models\Load;
 use Exception;
 use App\Classes\Request;
@@ -80,6 +81,7 @@ class DownController extends BaseController
             $title      = check(Request::input('title'));
             $text       = check(Request::input('text'));
             $file       = Request::file('file');
+            $screens    = Request::file('screen');
 
             $category = Load::query()->find($category);
 
@@ -97,13 +99,12 @@ class DownController extends BaseController
                 $downCount = Down::query()->where('title', $title)->count();
                 $validator->false($downCount, ['title' => 'Файл с аналогичный названием уже имеется в загрузках!']);
 
-                $validator->true(is_writeable(UPLOADS . '/files/' . $category->folder), ['file' => 'Не установлены атрибуты доступа на дирекоторию с файлами!']);
-
-                $validator->true($file->isValid(), ['file' => 'Не удалось загрузить файл!']);
-
-                $validator->in($file->getClientOriginalExtension(), explode(',', setting('allowextload')), ['file' => 'Недопустимое расширение файла!']);
-
-                $validator->lt($file->getClientSize(), setting('fileupload'), ['file' => 'Ошибка! Максимальный размер загружаемого файла '.formatSize(setting('fileupload')).'!']);
+                if ($file) {
+                    $validator->true(is_writeable(UPLOADS . '/files/' . $category->folder), ['file' => 'Не установлены атрибуты доступа на дирекоторию с файлами!']);
+                    $validator->true($file->isValid(), ['file' => 'Не удалось загрузить файл!']);
+                    $validator->in($file->getClientOriginalExtension(), explode(',', setting('allowextload')), ['file' => 'Недопустимое расширение файла!']);
+                    $validator->lt($file->getClientSize(), setting('fileupload'), ['file' => 'Ошибка! Максимальный размер загружаемого файла ' . formatSize(setting('fileupload')) . '!']);
+                }
             }
 
             if ($validator->isValid()) {
@@ -119,6 +120,21 @@ class DownController extends BaseController
                     'user_id'     => $user->id,
                     'created_at'  => SITETIME,
                 ]);
+
+                foreach ($screens as $key => $screen) {
+
+                    $screenName = uniqid() . '.' . $screen->getClientOriginalExtension();
+                    $screen->move(UPLOADS . '/screen/' . $category->folder, $screenName);
+                    File::query()->create([
+                        'relate_type' => Down::class,
+                        'relate_id'   => $down->id,
+                        'hash'        => $screenName,
+                        'name'        => 'Скриншот ' . ($key + 1),
+                        'size'        => $screen->getClientSize(),
+                        'user_id'     => $user->id,
+                        'created_at'  => SITETIME,
+                    ]);
+                }
 
                 setFlash('success', 'Файл успешно загружен!');
                 redirect('/down/' . $down->id);

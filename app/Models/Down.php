@@ -47,6 +47,14 @@ class Down extends BaseModel
     }
 
     /**
+     * Возвращает загруженные файлы
+     */
+    public function files()
+    {
+        return $this->morphMany(File::class, 'relate');
+    }
+
+    /**
      * Возвращает директорию категории
      *
      * @return string

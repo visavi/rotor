@@ -7,24 +7,25 @@ use Illuminate\Http\Request as HttpRequest;
 /**
  * Class Request
  *
- * @method static array|string input(string $key, string|array $default = null)
- * @method static array|string post(string $key = null, string|array $default = null)
- * @method static array all(array|mixed $keys = null)
- * @method static array only(array|mixed $keys)
+ * @method static mixed input(string $key, mixed $default = null)
+ * @method static mixed post(string $key = null, mixed $default = null)
+ * @method static array file(string $key = null, mixed $default = null)
+ * @method static array all(mixed $keys = null)
+ * @method static array only(mixed $keys)
  * @method static array keys()
  * @method static bool is(...$patterns)
  * @method static bool isMethod(string $method)
  * @method static bool isEmptyString(string $key)
- * @method static bool filled(string|array $key)
+ * @method static bool filled(mixed $key)
  * @method static bool ajax()
- * @method static bool has(string|array  $key)
+ * @method static bool has(mixed  $key)
  * @method static bool hasAny(...$keys)
- * @method static bool exists(string|array $key)
- * @method static array except(array|mixed $keys)
- * @method static array|string query(string|array $key = null, string|array $default = null)
+ * @method static bool exists(mixed $key)
+ * @method static array except(mixed $keys)
+ * @method static mixed query(mixed $key = null, mixed $default = null)
  * @method static string ip()
  * @method static string path()
- * @method static array|string server(string $key = null, string|array $default = null)
+ * @method static mixed server(string $key = null, mixed $default = null)
  */
 class Request
 {

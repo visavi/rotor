@@ -40,6 +40,13 @@
 
     <div class="message">{!! bbCode($down->text) !!}</div><br>
 
+    @if ($down->files->isNotEmpty())
+        @foreach ($down->files as $screen)
+            <a href="/uploads/screen/{{ $down->folder }}{{ $screen->hash }}" class="gallery">{!! resizeImage('uploads/screen/'.$down->folder, $screen->hash, setting('previewsize'), ['alt' => $down->title]) !!}</a>
+        @endforeach
+    @endif
+    <br>
+
     <?php $poster = ''; ?>
     @if ($down->screen && file_exists(UPLOADS.'/screen/'.$down->folder.$down->screen))
         <?php $poster = ' poster="/uploads/screen/'.$down->folder.$down->screen.'"'; ?>
