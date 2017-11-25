@@ -592,8 +592,8 @@ function statsOnline($cache = 30)
 {
     if (@filemtime(STORAGE."/temp/online.dat") < time() - $cache) {
 
-        $online[0] = Online::query()->whereNotNull('user_id')->count();
-        $online[1] = Online::query()->count();
+        $online[] = Online::query()->whereNotNull('user_id')->count();
+        $online[] = Online::query()->count();
 
         include_once(APP.'/Includes/count.php');
 
@@ -611,8 +611,7 @@ function statsOnline($cache = 30)
 function showOnline()
 {
     if (setting('onlines') == 1) {
-        $online = statsOnline();
-        return view('app/_online', compact('online'));
+        return view('app/_online', ['online' => statsOnline()]);
     }
 
     return null;
@@ -643,9 +642,7 @@ function showCounter()
     include_once (APP.'/Includes/counters.php');
 
     if (setting('incount') > 0) {
-        $count = statsCounter();
-
-        return view('app/_counter', compact('count'));
+        return view('app/_counter', ['count' => statsCounter()]);
     }
 
     return null;
@@ -660,7 +657,7 @@ function statsUsers()
 {
     if (@filemtime(STORAGE.'/temp/statusers.dat') < time() - 3600) {
 
-        $startMonth = mktime(0, 0, 0, dateFixed(SITETIME, "n"), 1);
+        $startMonth = mktime(0, 0, 0, dateFixed(SITETIME, 'n'), 1);
 
         $total = User::query()->count();
         $new   = User::query()->where('joined', '>', $startMonth)->count();
@@ -826,7 +823,7 @@ function statsSmiles()
 function statsChecker()
 {
     if (file_exists(STORAGE."/temp/checker.dat")) {
-        return dateFixed(filemtime(STORAGE."/temp/checker.dat"), "j.m.y");
+        return dateFixed(filemtime(STORAGE."/temp/checker.dat"), 'j.m.y');
     } else {
         return 0;
     }
