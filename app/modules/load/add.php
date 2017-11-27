@@ -299,59 +299,6 @@ case 'loadfile':
 break;
 
 /**
- * Загрузка скриншота
- */
-case 'loadscreen':
-    //show_title('Загрузка скриншота');
-
-    $down = DB::run() -> queryFetch("SELECT `d`.*, `c`.`folder` FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id`=? LIMIT 1;", [$id]);
-
-    if (!empty($down)) {
-        if ($down['user'] == getUser('login')) {
-            if (empty($down['active'])) {
-                if (empty($down['screen'])) {
-                    if (is_uploaded_file($_FILES['screen']['tmp_name'])) {
-
-                        // ------------------------------------------------------//
-                        $handle = uploadImage($_FILES['screen'], setting('screenupload'), setting('screenupsize'),  $down['link']);
-                        if ($handle) {
-                            $folder = $down['folder'] ? $down['folder'].'/' : '';
-
-                            $handle -> process(UPLOADS.'/screen/'.$folder);
-                            if ($handle -> processed) {
-
-                                DB::update("UPDATE `downs` SET `screen`=? WHERE `id`=?;", [$handle -> file_dst_name, $id]);
-                                $handle -> clean();
-
-                                setFlash('success', 'Скриншот успешно загружен!');
-                                redirect("/load/add?act=view&id=$id");
-
-                            } else {
-                                showError($handle -> error);
-                            }
-                        } else {
-                            showError('Ошибка! Не удалось загрузить изображение!');
-                        }
-                    } else {
-                        showError('Ошибка! Вы не загрузили скриншот!');
-                    }
-                } else {
-                    showError('Ошибка! Скриншот уже загружен!');
-                }
-            } else {
-                showError('Ошибка! Данный файл уже проверен модератором!');
-            }
-        } else {
-            showError('Ошибка! Изменение невозможно, вы не автор данного файла!');
-        }
-    } else {
-        showError('Данного файла не существует!');
-    }
-
-    echo '<i class="fa fa-arrow-circle-left"></i> <a href="/load/add?act=view&amp;id='.$id.'">Вернуться</a><br>';
-break;
-
-/**
  * Удаление файла
  */
 case 'delfile':

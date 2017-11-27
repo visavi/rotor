@@ -76,12 +76,12 @@ class DownController extends BaseController
 
         if (Request::isMethod('post')) {
 
-            $token      = check(Request::input('token'));
-            $category   = check(Request::input('category'));
-            $title      = check(Request::input('title'));
-            $text       = check(Request::input('text'));
-            $file       = Request::file('file');
-            $screens    = Request::file('screen');
+            $token    = check(Request::input('token'));
+            $category = check(Request::input('category'));
+            $title    = check(Request::input('title'));
+            $text     = check(Request::input('text'));
+            $file     = Request::file('file');
+            $screens  = Request::file('screen');
 
             $category = Load::query()->find($category);
 
@@ -98,14 +98,32 @@ class DownController extends BaseController
 
                 $downCount = Down::query()->where('title', $title)->count();
                 $validator->false($downCount, ['title' => 'Файл с аналогичный названием уже имеется в загрузках!']);
+            }
 
+            if ($validator->isValid()) {
                 if ($file) {
-                    $validator->true(is_writeable(UPLOADS . '/files/' . $category->folder), ['file' => 'Не установлены атрибуты доступа на дирекоторию с файлами!']);
                     $validator->true($file->isValid(), ['file' => 'Не удалось загрузить файл!']);
                     $validator->in($file->getClientOriginalExtension(), explode(',', setting('allowextload')), ['file' => 'Недопустимое расширение файла!']);
                     $validator->lt($file->getClientSize(), setting('fileupload'), ['file' => 'Ошибка! Максимальный размер загружаемого файла ' . formatSize(setting('fileupload')) . '!']);
                 }
+
+                if ($screens) {
+                    $validator->lte(count($screens), 10, ['screen' => 'Разрешено загружать не более 10 скриншотов']);
+
+                    foreach ($screens as $screen) {
+                        $handle = uploadImage($screen, setting('screenupload'), setting('screenupsize'),  uniqid());
+
+                        $validator->true($handle, ['screen' => $handle->error]);
+                        //$validator->true($screen->isValid(), ['screen' => 'Не удалось загрузить скриншот!']);
+                        //$validator->in($screen->getClientOriginalExtension(), ['jpg', 'jpeg', 'png', 'gif'], ['screen' => 'Недопустимое расширение скриншота!']);
+                        //$validator->lte($screen->getClientSize(), setting('screenupload'), ['screen' => 'Ошибка! Максимальный размер загружаемого скриншота' . formatSize(setting('screenupload')) . '!']);
+
+                    }
+                }
             }
+
+var_dump($validator->getErrors(), formatSize(setting('screenupload')));
+            exit;
 
             if ($validator->isValid()) {
 
