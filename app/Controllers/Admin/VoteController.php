@@ -95,6 +95,8 @@ class VoteController extends AdminController
             }
         }
 
-        return view('admin/vote/edit', compact('vote'));
+        $getAnswers = $vote->answers->pluck('answer', 'id')->all();
+
+        return view('admin/vote/edit', compact('vote', 'getAnswers'));
     }
 }
