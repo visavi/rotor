@@ -1530,6 +1530,23 @@ function formatNum($num)
 }
 
 /**
+ * Конвертирует объект в массив
+ *
+ * @param Illuminate\Http\UploadedFile $file
+ * @return array
+ */
+function convertToFile(Illuminate\Http\UploadedFile $file)
+{
+    return [
+        'name'     => $file->getClientOriginalName(),
+        'type'     => $file->getMimeType(),
+        'tmp_name' => $file->getPathname(),
+        'error'    => $file->getError(),
+        'size'     => $file->getClientSize(),
+    ];
+}
+
+/**
  * Загружает изображение
  *
  * @param  string $file    путь изображения
@@ -1540,6 +1557,10 @@ function formatNum($num)
  */
 function uploadImage($file, $weight, $size, $newName = false)
 {
+    if (is_object($file)) {
+        $file = convertToFile($file);
+    }
+
     $handle = new FileUpload($file);
 
     if ($handle->uploaded) {
