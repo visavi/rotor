@@ -56,14 +56,11 @@
         <span class="badge badge-info" id="upload-file-info"></span>
         <br>
 
-        <label class="btn btn-sm btn-secondary" for="inputScreen">
-            <input id="inputScreen" type="file" name="screen[]" onchange="$('#upload-screen-info').html(
-            (this.files.length == 1) ? this.files[0].name : 'Файлов: ' + this.files.length)" hidden multiple>
-            Скриншот&hellip;
+        <label for="inputScreen">
+            <input onchange="return submitImage(this);" id="inputScreen" type="file" name="screen">
         </label>
-        <span class="badge badge-info" id="upload-screen-info"></span>
         <br>
-
+        <div class="js-image"></div>
         <button class="btn btn-primary">Загрузить</button>
     </form>
 

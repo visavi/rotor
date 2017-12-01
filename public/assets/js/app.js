@@ -139,7 +139,7 @@ function sendComplaint(el)
                     page: $(el).data('page'),
                     token: $(el).data('token')
                 },
-                dataType: 'JSON', type: 'POST', url: '/ajax/complaint',
+                dataType: 'json', type: 'POST', url: '/ajax/complaint',
                 success: function(data) {
 
                     $(el).replaceWith('<i class="fa fa-bell-slash-o text-muted"></i>');
@@ -156,6 +156,7 @@ function sendComplaint(el)
             });
         }
     });
+
     return false;
 }
 
@@ -164,7 +165,7 @@ function bookmark(el)
 {
     $.ajax({
         data: {tid: $(el).data('tid'), token: $(el).data('token')},
-        dataType: 'JSON', type: 'POST', url: '/forum/bookmark/perform',
+        dataType: 'json', type: 'POST', url: '/forum/bookmark/perform',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -183,6 +184,7 @@ function bookmark(el)
             }
         }
     });
+
     return false;
 }
 
@@ -191,7 +193,7 @@ function deletePost(el)
 {
     $.ajax({
         data: {tid: $(el).data('tid'), token: $(el).data('token')},
-        dataType: 'JSON', type: 'POST', url: '/forum/active/delete',
+        dataType: 'json', type: 'POST', url: '/forum/active/delete',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -222,7 +224,7 @@ function deleteComment(el)
                     type: $(el).data('type'),
                     token: $(el).data('token')
                 },
-                dataType: 'JSON', type: 'POST', url: '/ajax/delcomment',
+                dataType: 'json', type: 'POST', url: '/ajax/delcomment',
                 success: function(data) {
 
                     if (data.status === 'error'){
@@ -239,6 +241,7 @@ function deleteComment(el)
             });
         }
     });
+
     return false;
 }
 
@@ -252,7 +255,7 @@ function changeRating(el)
             vote: $(el).data('vote'),
             token: $(el).data('token')
         },
-        dataType: 'JSON',
+        dataType: 'json',
         type: 'POST',
         url: '/ajax/rating',
         success: function(data) {
@@ -273,6 +276,7 @@ function changeRating(el)
             }
         }
     });
+
     return false;
 }
 
@@ -283,7 +287,7 @@ function deleteRating(el)
 {
     $.ajax({
         data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
-        dataType: 'JSON', type: 'POST', url: '/rating/delete',
+        dataType: 'json', type: 'POST', url: '/rating/delete',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -309,7 +313,7 @@ function deleteSpam(el)
 {
     $.ajax({
         data: {id: $(el).data('id'), token: $(el).data('token')},
-        dataType: 'JSON', type: 'POST', url: '/admin/spam/delete',
+        dataType: 'json', type: 'POST', url: '/admin/spam/delete',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -335,7 +339,7 @@ function deleteWall(el)
 {
     $.ajax({
         data: {id: $(el).data('id'), login: $(el).data('login'), token: $(el).data('token')},
-        dataType: 'JSON', type: 'POST', url: '/wall/' + $(el).data('login') + '/delete',
+        dataType: 'json', type: 'POST', url: '/wall/' + $(el).data('login') + '/delete',
         success: function(data) {
 
             if (data.status === 'error'){
@@ -358,6 +362,31 @@ function deleteWall(el)
 function showVoteForm()
 {
     $('.js-vote-form').toggle();
+
+    return false;
+}
+
+/* Загрузка изображения */
+function submitImage(el)
+{
+    var form = new FormData();
+    form.append('image', el.files[0]);
+
+    $.ajax({
+        data: form,
+        type: 'post',
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        url: '/ajax/image',
+        success: function(data) {
+            notify('success', 'Запись успешно удалена');
+            $('.js-image').html($(data));
+
+        }
+    });
+
+    console.log(data);
 
     return false;
 }

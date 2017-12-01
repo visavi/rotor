@@ -261,4 +261,17 @@ class AjaxController extends BaseController
             'rating' => formatNum($post['rating'])
         ]);
     }
+
+    /**
+     * Загрузка фотографии
+     */
+    public function uploadImage()
+    {
+        $image = Request::file('image');
+
+        echo sprintf('<img src="data:image/png;base64,%s" />', base64_encode(file_get_contents($image->getPathname())));
+
+        exit(json_encode(['status' => 'success']));
+
+    }
 }

@@ -123,6 +123,7 @@ $router->map('POST', '/ajax/delcomment', 'AjaxController@delComment');
 $router->map('POST', '/ajax/rating', 'AjaxController@rating');
 $router->map('POST', '/ajax/vote', 'AjaxController@vote');
 $router->map('POST', '/ajax/complaint', 'AjaxController@complaint');
+$router->map('POST', '/ajax/image', 'AjaxController@uploadImage');
 
 $router->map('GET',  '/wall/[user:login]', 'WallController@index', 'wall');
 $router->map('POST', '/wall/[user:login]/create', 'WallController@create');
