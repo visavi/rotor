@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Antimat;
+use App\Models\User;
 
 class AntimatController extends AdminController
 {
@@ -15,7 +16,7 @@ class AntimatController extends AdminController
     {
         parent::__construct();
 
-        if (! isAdmin('moder')) {
+        if (! isAdmin(User::MODER)) {
             abort(403, 'Доступ запрещен!');
         }
     }

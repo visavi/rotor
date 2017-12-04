@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Classes\Request;
 use App\Classes\Validator;
 use App\Models\Log;
+use App\Models\User;
 
 class LogController extends AdminController
 {
@@ -15,7 +16,7 @@ class LogController extends AdminController
     {
         parent::__construct();
 
-        if (! isAdmin('admin')) {
+        if (! isAdmin(User::BOSS)) {
             abort(403, 'Доступ запрещен!');
         }
     }

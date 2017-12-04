@@ -220,6 +220,9 @@ $router->map('GET',      '/admin/log/clear', 'Admin\LogController@clear');
 $router->map('GET|POST', '/admin/antimat', 'Admin\AntimatController@index');
 $router->map('GET',      '/admin/antimat/[delete|clear:action]', 'Admin\AntimatController');
 
+$router->map('GET',      '/admin/rules', 'Admin\RulesController@index');
+
+
 $router->map('GET|POST', '/admin/book', 'admin/book.php');
 $router->map('GET|POST', '/admin/blog', 'admin/blog.php');
 $router->map('GET|POST', '/admin/chat', 'admin/chat.php');

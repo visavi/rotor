@@ -13,7 +13,7 @@ Class AdminController extends BaseController
         parent::__construct();
 
         if (! isAdmin()) {
-            abort('403', 'Доступ запрещен!');
+            abort(403, 'Доступ запрещен!');
         }
 
         Admlog::query()
