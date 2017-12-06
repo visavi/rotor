@@ -245,7 +245,6 @@ $routes = [
     ['GET|POST', '/admin/votes', 'admin/votes.php'],
     ['GET|POST', '/admin/invitations', 'admin/invitations.php'],
     ['GET|POST', '/admin/transfers', 'admin/transfers.php'],
-    ['GET|POST', '/admin/rules', 'admin/rules.php'],
     ['GET|POST', '/admin/users', 'admin/users.php'],
     ['GET|POST', '/admin/phpinfo', 'admin/phpinfo.php'],
     ['GET|POST', '/admin/blacklist', 'admin/blacklist.php'],
@@ -266,4 +265,6 @@ $routes = [
     }],
 ];
 
-App\Classes\Registry::set('router', $router->addRoutes($routes));
+$router->addRoutes($routes);
+
+App\Classes\Registry::set('router', $router);
