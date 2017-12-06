@@ -4,6 +4,7 @@ body {
     color : #5c5c5c;
     font-family : Verdana, Arial, Helvetica, sans-serif;
     background: #f0f0f0 url(../img/back.gif) repeat-x scroll;
+    line-height: 1.3;
 }
 
 h1 {

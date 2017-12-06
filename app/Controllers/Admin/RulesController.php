@@ -4,10 +4,14 @@ namespace App\Controllers\Admin;
 
 use App\Classes\Request;
 use App\Classes\Validator;
+use App\Models\Rule;
 use App\Models\User;
 
 class RulesController extends AdminController
 {
+    /**
+     * Конструктор
+     */
     public function __construct()
     {
         parent::__construct();
@@ -17,12 +21,22 @@ class RulesController extends AdminController
         }
     }
 
-
     /**
      * Главная страница
      */
     public function index()
     {
-        echo 'Правила';
+        $rules = Rule::query()->first();
+
+        $replace = [
+            '%SITENAME%' => setting('title'),
+            '%MAXBAN%'   => round(setting('maxbantime') / 1440),
+        ];
+
+        if ($rules) {
+            $rules->text = str_replace(array_keys($replace), $replace, $rules->text);
+        }
+
+        return view('admin/rules/index', compact('rules'));
     }
 }

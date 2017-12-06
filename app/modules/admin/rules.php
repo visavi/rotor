@@ -16,17 +16,6 @@ if (isAdmin([101, 102])) {
     ############################################################################################
         case 'index':
 
-            $rules = DB::run() -> queryFetch("SELECT * FROM `rules`;");
-
-            if (!empty($rules)) {
-                $rules['text'] = str_replace(['%SITENAME%', '%MAXBAN%'], [setting('title'), round(setting('maxbantime') / 1440)], $rules['text']);
-
-                echo bbCode($rules['text']).'<hr>';
-
-                echo 'Последнее изменение: '.dateFixed($rules['time']).'<br><br>';
-            } else {
-                showError('Правила сайта еще не установлены!');
-            }
 
             echo '<i class="fa fa-pencil"></i> <a href="/admin/rules?act=edit">Редактировать</a><br>';
         break;
