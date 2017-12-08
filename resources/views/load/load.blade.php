@@ -58,7 +58,7 @@
         <div class="act">
             @foreach ($category->children as $child)
                 <div class="b">
-                    <i class="fa fa-folderpen"></i>
+                    <i class="fa fa-folder-open"></i>
                     <b><a href="/load/{{ $child->id }}">{{ $child->name }}</a></b> ({{ $child->count }})</div>
             @endforeach
         </div>

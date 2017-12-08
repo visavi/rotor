@@ -32,7 +32,7 @@ if (isAdmin()) {
 
             if (count($blogs) > 0) {
                 foreach($blogs as $data) {
-                    echo '<i class="fa fa-folderpen"></i> ';
+                    echo '<i class="fa fa-folder-open"></i> ';
                     echo '<b>'.$data['sort'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ('.$data['count'].')<br>';
 
                     if (isAdmin([101])) {
@@ -239,7 +239,7 @@ if (isAdmin()) {
             if (!empty($cats)) {
                 //setting('newtitle') = $cats['name'];
 
-                echo '<i class="fa fa-folderpen"></i> <b>'.$cats['name'].'</b> (Статей: '.$cats['count'].')';
+                echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Статей: '.$cats['count'].')';
                 echo ' (<a href="/blog/blog?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
                 echo '<hr>';
 

@@ -28,7 +28,7 @@ case 'index':
         }
 
         foreach($output[0] as $key => $data) {
-            echo '<i class="fa fa-folderpen"></i> ';
+            echo '<i class="fa fa-folder-open"></i> ';
             echo $data['sort'].'. <b><a href="/admin/load?act=down&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ';
 
             $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
@@ -687,7 +687,7 @@ case 'down':
     if ($cats > 0) {
         //setting('newtitle') = $cats['name'];
 
-        echo '<i class="fa fa-folderpen"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
+        echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
         echo ' (<a href="/load/down?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
         echo '<hr>';
 
@@ -696,7 +696,7 @@ case 'down':
 
         if (count($sub) > 0 && $page == 1) {
             foreach($sub as $subdata) {
-                echo '<div class="b"><i class="fa fa-folderpen"></i> ';
+                echo '<div class="b"><i class="fa fa-folder-open"></i> ';
                 echo '<b><a href="/admin/load?act=down&amp;cid='.$subdata['id'].'">'.$subdata['name'].'</a></b> ('.$subdata['count'].')</div>';
             }
             echo '<hr>';

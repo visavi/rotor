@@ -16,13 +16,13 @@
     <hr>
 
     <div class="b">
-        <i class="fa fa-folderpen"></i>
+        <i class="fa fa-folder-open"></i>
         <b><a href="/load/fresh">Свежие загрузки</a></b> ({{ $new }})<br>
     </div>
 
     @foreach ($cats as $category)
         <div class="b">
-            <i class="fa fa-folderpen"></i>
+            <i class="fa fa-folder-open"></i>
             <b><a href="/load/{{ $category->id }}">{{ $category->name }}</a></b>
             @if ($category->new)
                 ({{ $category->count }}/<span style="color:#ff0000">+{{ $category->new->count }}</span>)<br>

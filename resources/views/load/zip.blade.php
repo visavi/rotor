@@ -13,7 +13,7 @@
         @foreach ($files as $key => $file)
 
             @if ($file->isFolder())
-                <i class="fa fa-folderpen"></i>
+                <i class="fa fa-folder-open"></i>
                 <b>Директория {{ rtrim($file->getName(), '/') }}</b><br>
             @else
                 <?php $ext = getExtension($file->getName()) ?>
