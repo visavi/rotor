@@ -4,7 +4,7 @@
 
 <h1>Последняя активность</h1>
 
-<div class="b"><i class="fa fa-forumbee fa-lg text-muted"></i> <b>Последние темы</b></div>
+<div class="b"><i class="fab fa-forumbee fa-lg text-muted"></i> <b>Последние темы</b></div>
 {{ recentTopics() }}
 
 <div class="b"><i class="fa fa-download fa-lg text-muted"></i> <b>Последние файлы</b></div>

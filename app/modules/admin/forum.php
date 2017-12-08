@@ -309,7 +309,7 @@ if (isAdmin()) {
             echo '<a href="/admin/forum">Форум</a> / ';
             echo '<a href="/forum/'.$fid.'?page='.$page.'">Обзор раздела</a><br><br>';
 
-            echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$forum['title'].'</b><hr>';
+            echo '<i class="fab fa-forumbee fa-lg text-muted"></i> <b>'.$forum['title'].'</b><hr>';
 
             $total = Topic::query()->where('forum_id', $fid)->count();
 
@@ -702,7 +702,7 @@ if (isAdmin()) {
                     echo '<a href="/admin/forum?act=forum&amp;fid='.$topic['forum_id'].'">'.$topic['forum_title'].'</a> / ';
                     echo '<a href="/topic/'.$tid.'?page='.$page.'">Обзор темы</a><br><br>';
 
-                    echo '<i class="fa fa-forumbee fa-lg text-muted"></i> <b>'.$topic['title'].'</b>';
+                    echo '<i class="fab fa-forumbee fa-lg text-muted"></i> <b>'.$topic['title'].'</b>';
 
                     if (!empty($topic['moderators'])) {
                         $moderators = User::query()->whereIn('id', explode(',', $topic['moderators']))->get();

@@ -21,7 +21,7 @@
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
 
     <div class="b">
-        <i class="fa fa-forumbee fa-lg text-muted"></i>
+        <i class="fab fa-forumbee fa-lg text-muted"></i>
         <b><a href="/forum">Форум</a></b> ({{  statsForum() }})
     </div>
     {{ recentTopics() }}
@@ -49,7 +49,7 @@
     <i class="far fa-circle fa-lg text-muted"></i> <a href="/page/stat">Информация</a><br>
 
     <div class="b">
-        <i class="fa fa-comment fa-lg text-muted"></i> <b>Курсы валют</b>
+        <i class="fa fa-chart-line fa-lg text-muted"></i> <b>Курсы валют</b>
     </div>
     <?php include_once(APP.'/Includes/courses.php') ?>
 
