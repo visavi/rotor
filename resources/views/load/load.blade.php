@@ -58,7 +58,7 @@
         <div class="act">
             @foreach ($category->children as $child)
                 <div class="b">
-                    <i class="fa fa-folder-open"></i>
+                    <i class="fa fa-folderpen"></i>
                     <b><a href="/load/{{ $child->id }}">{{ $child->name }}</a></b> ({{ $child->count }})</div>
             @endforeach
         </div>
@@ -72,7 +72,7 @@
             <?php $filesize = $data->link ? formatFileSize(UPLOADS.'/files/'.$folder.$data->link) : 0; ?>
 
             <div class="b">
-                <i class="fa fa-file-o"></i>
+                <i class="fa fa-file"></i>
                 <b><a href="/down/{{ $data->id }}">{{ $data->title }}</a></b> ({{ $filesize }})</div>
             <div>
 

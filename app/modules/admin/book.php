@@ -88,7 +88,7 @@ if (isAdmin()) {
             if ($post) {
                 echo '<b>Добавление ответа</b><br><br>';
 
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> '.userStatus($post->user) . userOnline($post->user).' <small>('.dateFixed($post['created_at']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil-alt"></i> <b>'.profile($post->user).'</b> '.userStatus($post->user) . userOnline($post->user).' <small>('.dateFixed($post['created_at']).')</small></div>';
                 echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
                 echo '<div class="form">';
@@ -148,7 +148,7 @@ if (isAdmin()) {
 
                 echo '<b>Редактирование сообщения</b><br><br>';
 
-                echo '<i class="fa fa-pencil"></i> <b>'.$post->user->login.'</b> <small>('.dateFixed($post['created_at']).')</small><br><br>';
+                echo '<i class="fa fa-pencil-alt"></i> <b>'.$post->user->login.'</b> <small>('.dateFixed($post['created_at']).')</small><br><br>';
 
                 echo '<div class="form">';
                 echo '<form action="/admin/book?act=addedit&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';

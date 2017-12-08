@@ -21,5 +21,5 @@
         {!! showError('Запись пустая или отсутствует!') !!}
     @endif
 
-    <i class="fa fa-pencil"></i> <a href="/notebook/edit">Редактировать</a><br>
+    <i class="fa fa-pencil-alt"></i> <a href="/notebook/edit">Редактировать</a><br>
 @stop

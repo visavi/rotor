@@ -11,7 +11,7 @@
     @if ($albums->isNotEmpty())
         @foreach ($albums as $data)
 
-            <i class="fa fa-picture-o"></i>
+            <i class="fa fa-image"></i>
             <b><a href="/gallery/album/{{ $data->login }}">{{ $data->login }}</a></b> ({{ $data->cnt }} фото / {{ $data->comments }} комм.)<br>
 
         @endforeach

@@ -24,7 +24,7 @@ if (isAdmin([101, 102])) {
                 echo '<b>Статус</b>  — <b>Актив</b><br>';
                 foreach ($status as $statval) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-user-circle-o"></i> ';
+                    echo '<i class="fa fa-user-circle"></i> ';
 
                     if (empty($statval['color'])) {
                         echo '<b>'.$statval['name'].'</b> <small>('.$statval['topoint'].'-'.$statval['point'].')</small><br>';

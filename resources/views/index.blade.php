@@ -10,15 +10,15 @@
 
     <h1>{{ setting('title') }}</h1>
 
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news">Новости сайта</a> ({{ statsNewsDate() }})<br> {{ lastNews() }}
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/news">Новости сайта</a> ({{ statsNewsDate() }})<br> {{ lastNews() }}
 
     <div class="b">
         <i class="fa fa-comment fa-lg text-muted"></i> <b><a href="/page/recent">Общение</a></b>
     </div>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a class="index" href="/book">Гостевая книга</a> ({{  statsGuest() }})<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> ({{ statsGallery() }})<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/votes">Голосования</a> ({{ statVotes()}})<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a class="index" href="/book">Гостевая книга</a> ({{  statsGuest() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/gallery">Фотогалерея</a> ({{ statsGallery() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/votes">Голосования</a> ({{ statVotes()}})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/offers">Предложения / Проблемы</a> ({{ statsOffers() }})<br>
 
     <div class="b">
         <i class="fa fa-forumbee fa-lg text-muted"></i>
@@ -41,12 +41,12 @@
         <i class="fa fa-cog fa-lg text-muted"></i>
         <b><a href="/page">Сервисы сайта</a></b>
     </div>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/files/docs">Документация RotorCMS</a><br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/search">Поиск по сайту</a><br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/mail">Обратная связь</a><br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> ({{  statsUsers() }})<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> ({{ statsAdmins() }})<br>
-    <i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/page/stat">Информация</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/files/docs">Документация RotorCMS</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/search">Поиск по сайту</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/mail">Обратная связь</a><br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/userlist">Список юзеров</a> ({{  statsUsers() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/adminlist">Администрация</a> ({{ statsAdmins() }})<br>
+    <i class="far fa-circle fa-lg text-muted"></i> <a href="/page/stat">Информация</a><br>
 
     <div class="b">
         <i class="fa fa-comment fa-lg text-muted"></i> <b>Курсы валют</b>
@@ -54,7 +54,7 @@
     <?php include_once(APP.'/Includes/courses.php') ?>
 
     <div class="b">
-        <i class="fa fa-calendar fa-lg text-muted"></i> <b>Календарь</b>
+        <i class="fa fa-calendar-alt fa-lg text-muted"></i> <b>Календарь</b>
     </div>
     <?php include_once(APP.'/Includes/calendar.php') ?>
 

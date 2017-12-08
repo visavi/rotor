@@ -29,7 +29,7 @@ case 'files':
 
             $filesize = (!empty($data['link'])) ? formatFileSize(UPLOADS.'/files/'.$folder.$data['link']) : 0;
 
-            echo '<div class="b"><i class="fa fa-file-o"></i> ';
+            echo '<div class="b"><i class="fa fa-file"></i> ';
             echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')</div>';
 
             echo '<div>Категория: <a href="/load/down?cid='.$data['id'].'">'.$data['name'].'</a><br>';

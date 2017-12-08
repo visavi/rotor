@@ -461,8 +461,8 @@ function ratingVote($rating)
 
     $output = '<div class="star-rating fa-lg text-danger">';
     $output .= str_repeat('<i class="fa fa-star"></i>', $full_stars);
-    $output .= str_repeat('<i class="fa fa-star-half-o"></i>', $half_stars);
-    $output .= str_repeat('<i class="fa fa-star-o"></i>', $empty_stars);
+    $output .= str_repeat('<i class="fa fa-star-half"></i>', $half_stars);
+    $output .= str_repeat('<i class="far fa-star"></i>', $empty_stars);
     $output .= '</div>';
 
     return $output;
@@ -1093,7 +1093,7 @@ function lastNews()
         if ($total > 0) {
             foreach ($news as $data) {
                 $data['text'] = str_replace('[cut]', '', $data->text);
-                echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/news/'.$data->id.'">'.$data->title.'</a> ('.$data->comments.') <i class="fa fa-caret-down news-title"></i><br>';
+                echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/news/'.$data->id.'">'.$data->title.'</a> ('.$data->comments.') <i class="fa fa-caret-down news-title"></i><br>';
 
                 echo '<div class="news-text" style="display: none;">'.bbCode($data->text).'<br>';
                 echo '<a href="/news/'.$data->id.'/comments">Комментарии</a> ';
@@ -1165,41 +1165,41 @@ function icons($ext)
 {
     switch ($ext) {
         case 'php':
-            $ico = 'file-code-o';
+            $ico = 'file-code';
             break;
         case 'ppt':
-            $ico = 'file-powerpoint-o';
+            $ico = 'file-powerpoint';
             break;
         case 'doc':
         case 'docx':
-            $ico = 'file-word-o';
+            $ico = 'file-word';
             break;
         case 'xls':
         case 'xlsx':
-            $ico = 'file-excel-o';
+            $ico = 'file-excel';
             break;
         case 'txt':
         case 'css':
         case 'dat':
         case 'html':
         case 'htm':
-            $ico = 'file-text-o';
+            $ico = 'file-alt';
             break;
         case 'wav':
         case 'amr':
         case 'mp3':
         case 'mid':
-            $ico = 'file-audio-o';
+            $ico = 'file-audio';
             break;
         case 'zip':
         case 'rar':
         case '7z':
         case 'gz':
-            $ico = 'file-archive-o';
+            $ico = 'file-archive';
             break;
         case '3gp':
         case 'mp4':
-            $ico = 'file-video-o';
+            $ico = 'file-video';
             break;
         case 'jpg':
         case 'jpeg':
@@ -1207,17 +1207,17 @@ function icons($ext)
         case 'wbmp':
         case 'gif':
         case 'png':
-            $ico = 'file-image-o';
+            $ico = 'file-image';
             break;
         case 'ttf':
             $ico = 'font';
             break;
         case 'pdf':
-            $ico = 'file-pdf-o';
+            $ico = 'file-pdf';
             break;
-        default: $ico = 'file-o';
+        default: $ico = 'file';
     }
-    return '<i class="fa fa-'.$ico.'"></i>';
+    return '<i class="far fa-'.$ico.'"></i>';
 }
 
 /**
@@ -1361,7 +1361,7 @@ function recentTopics($show = 5)
 
     if ($topics->isNotEmpty()) {
         foreach ($topics as $topic) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic->posts.')';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic->posts.')';
             echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br>';
         }
     }
@@ -1393,7 +1393,7 @@ function recentFiles($show = 5)
         foreach ($files as $file){
 
             $filesize = $file['link'] ? formatFileSize(UPLOADS.'/files/'.$file->folder.$file->link) : 0;
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
         }
     }
 }
@@ -1419,7 +1419,7 @@ function recentBlogs($show = 5)
 
     if ($blogs->isNotEmpty()) {
         foreach ($blogs as $blog) {
-            echo '<i class="fa fa-circle-o fa-lg text-muted"></i> <a href="/article/'.$blog->id.'">'.$blog->title.'</a> ('.$blog->comments.')<br>';
+            echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/article/'.$blog->id.'">'.$blog->title.'</a> ('.$blog->comments.')<br>';
         }
     }
 }

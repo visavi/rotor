@@ -34,7 +34,7 @@
 
                     @if (getUser() && getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME)
                         <div class="float-right">
-                            <a href="/book/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil text-muted"></i></a>
+                            <a href="/book/edit/{{ $data->id }}" data-toggle="tooltip" title="{{ trans('common.edit') }}"><i class="fa fa-pencil-alt text-muted"></i></a>
                         </div>
                     @endif
 

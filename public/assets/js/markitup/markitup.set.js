@@ -15,7 +15,7 @@ mySettings = {
 
         {title:'Изображение', name:'<i class="fa fa-image"></i>', className:"bb-image", openWith:'[img][![URL изображения:!:http://]!]', closeWith:'[/img]'},
 
-        {title:'Видео', name:'<i class="fa fa-youtube-play"></i>', className:"bb-youtube", openWith:'[youtube][![Код видео с youtube]!]', closeWith:'[/youtube]'},
+        {title:'Видео', name:'<i class="fab fa-youtube"></i>', className:"bb-youtube", openWith:'[youtube][![Код видео с youtube]!]', closeWith:'[/youtube]'},
         {title:'Цвет', name:'<i class="fa fa-th"></i>', className:"bb-color", openWith:'[color=[![Код цвета]!]]', closeWith:'[/color]',
         dropMenu: [
             {name:'Yellow',	openWith:'[color=#ffd700]', closeWith:'[/color]', className:"col1-1" },
@@ -55,7 +55,7 @@ mySettings = {
 
         {separator:'---------------' },
         {title:'Очистка BB-кода', name:'<i class="fa fa-eraser"></i>', className:"bb-clean", replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } },
-        {title:'Смайл', name:'<i class="fa fa-smile-o"></i>', className:"bb-smile", openWith:' :) ',
+        {title:'Смайл', name:'<i class="fa fa-smile"></i>', className:"bb-smile", openWith:' :) ',
         dropMenu: [
             {name:':)', openWith:' :) ', className:"col1-1" },
             {name:':(', openWith:' :( ', className:"col1-2" },
@@ -83,9 +83,9 @@ mySettings = {
             {name:':heart', openWith:' :heart ', className:"col5-4" },
             {name:':moder', openWith:' :moder ', className:"col5-5" }
         ]},
-        {title:'Разделение страниц', name:'<i class="fa fa-exchange"></i>', className:"bb-nextpage", openWith:'[nextpage]'},
-        {title:'Обрезка страницы', name:'<i class="fa fa-scissors"></i>', className:"bb-cutpage", openWith:'[cut]'},
-        {title:'Просмотр', name:'<i class="fa fa-check-square-o"></i>', className:'bb-preview',  call:'preview'}
+        {title:'Разделение страниц', name:'<i class="fa fa-exchange-alt"></i>', className:"bb-nextpage", openWith:'[nextpage]'},
+        {title:'Обрезка страницы', name:'<i class="fa fa-cut"></i>', className:"bb-cutpage", openWith:'[cut]'},
+        {title:'Просмотр', name:'<i class="fa fa-check-square"></i>', className:'bb-preview',  call:'preview'}
     ]
 };
 
@@ -102,9 +102,9 @@ myHtmlSettings = {
         {title:'Paragraph', name: '<i class="fa fa-paragraph"></i>', className:"bb-paragraph", openWith:'<p(!( class="[![Class]!]")!)>', closeWith:'</p>\n' },
         {title:'Paragraph', name: '<i class="fa fa-table"></i>', className:"bb-table", openWith:'<table(!( class="[![Class]!]")!)>\n	<tr>\n		<td>', closeWith:'</td>\n	</tr>\n</table>' },
         {separator:'---------------' },
-        {title:'Heading 1', name:'<i class="fa fa-header"></i>1', className:"bb-heading1", key:'1', openWith:'<h1(!( class="[![Class]!]")!)>', closeWith:'</h1>', placeHolder:'Введите название...' },
-        {title:'Heading 2', name:'<i class="fa fa-header"></i>2', className:"bb-heading2", key:'2', openWith:'<h2(!( class="[![Class]!]")!)>', closeWith:'</h2>', placeHolder:'Введите название...' },
-        {title:'Heading 3', name:'<i class="fa fa-header"></i>3', className:"bb-heading3", key:'3', openWith:'<h3(!( class="[![Class]!]")!)>', closeWith:'</h3>', placeHolder:'Введите название...' },
+        {title:'Heading 1', name:'<i class="fa fa-heading"></i>1', className:"bb-heading1", key:'1', openWith:'<h1(!( class="[![Class]!]")!)>', closeWith:'</h1>', placeHolder:'Введите название...' },
+        {title:'Heading 2', name:'<i class="fa fa-heading"></i>2', className:"bb-heading2", key:'2', openWith:'<h2(!( class="[![Class]!]")!)>', closeWith:'</h2>', placeHolder:'Введите название...' },
+        {title:'Heading 3', name:'<i class="fa fa-heading"></i>3', className:"bb-heading3", key:'3', openWith:'<h3(!( class="[![Class]!]")!)>', closeWith:'</h3>', placeHolder:'Введите название...' },
         {separator:'---------------' },
         {title:'Жирный текст', name:'<i class="fa fa-bold"></i>', className:"bb-bold", key:'B', openWith:'(!(<strong>|!|<b>)!)', closeWith:'(!(</strong>|!|</b>)!)' },
         {title:'Наклонный текст', name:'<i class="fa fa-italic"></i>', className:"bb-italic", key:'I', openWith:'(!(<em>|!|<i>)!)', closeWith:'(!(</em>|!|</i>)!)' },

@@ -117,7 +117,7 @@
 
     @if (isAdmin())
     <div class="alert alert-success">
-        <i class="fa fa-thumb-tack"></i> <b>Заметка:</b> (<a href="/user/{{ $user['login'] }}/note">Изменить</a>)<br>
+        <i class="fa fa-thumbtack"></i> <b>Заметка:</b> (<a href="/user/{{ $user['login'] }}/note">Изменить</a>)<br>
 
         @if (!empty($note['text']))
             {!! bbCode($note['text']) !!}<br>
@@ -138,7 +138,7 @@
             <a href="/ignore?act=add&amp;uz={{ $user['login'] }}&amp;uid={{ $_SESSION['token'] }}">игнор</a><br>
             <i class="fa fa-envelope"></i> <a href="/private/send?user={{ $user['login'] }}">Отправить сообщение</a><br>
 
-            <i class="fa fa-money"></i> <a href="/transfer?uz={{ $user['login'] }}">Перечислить денег</a><br>
+            <i class="fa fa-money-bill-alt"></i> <a href="/transfer?uz={{ $user['login'] }}">Перечислить денег</a><br>
 
             @if (!empty($user['site']))
                 <i class="fa fa-home"></i> <a href="{{ $user['site'] }}">Перейти на сайт {{ $user['login'] }}</a><br>
@@ -155,7 +155,7 @@
                 <i class="fa fa-wrench"></i> <a href="/admin/users?act=edit&amp;uz={{ $user['login'] }}">Редактировать</a><br>
             @endif
         @else
-        <i class="fa fa-user-circle-o"></i> <a href="/profile">Мой профиль</a><br>
+        <i class="fa fa-user-circle"></i> <a href="/profile">Мой профиль</a><br>
         <i class="fa fa-cog"></i> <a href="/account">Мои данные</a><br>
         <i class="fa fa-wrench"></i> <a href="/setting">Настройки</a><br>
         @endif

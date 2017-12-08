@@ -18,7 +18,7 @@ if (isAdmin([101, 102, 103])) {
             echo '<div>До окончания бана осталось '.formatTime($data['timeban'] - SITETIME).'<br>';
             echo 'Забанил: <b>'.profile($data['loginsendban']).'</b><br>';
             echo 'Причина: '.bbCode($data['reasonban']).'<br>';
-            echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=edit&amp;uz='.$data['login'].'">Редактировать</a></div>';
+            echo '<i class="fa fa-pencil-alt"></i> <a href="/admin/ban?act=edit&amp;uz='.$data['login'].'">Редактировать</a></div>';
         }
 
         pagination($page);

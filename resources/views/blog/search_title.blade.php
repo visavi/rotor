@@ -14,7 +14,7 @@
     @foreach ($blogs as $data)
 
         <div class="b">
-            <i class="fa fa-pencil"></i>
+            <i class="fa fa-pencil-alt"></i>
             <b><a href="/article/{{ $data->id }}">{{ $data->title }}</a></b> ({!! formatNum($data->rating) !!})
         </div>
 

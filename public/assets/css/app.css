@@ -24,6 +24,11 @@ textarea.form-control {
   color: orange;
 }
 
+@font-face {
+  font-family: FontAwesome;
+  src: url('/assets/fonts/fa-solid-900.woff');
+}
+
 blockquote:before {
   content: "\f10d";
   line-height: 1.0em;

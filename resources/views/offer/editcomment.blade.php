@@ -7,7 +7,7 @@
 @section('content')
     <h1>Редактирование комментария</h1>
 
-    <i class="fa fa-pencil"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
+    <i class="fa fa-pencil-alt"></i> <b>{{ $comment->user->login }}</b> <small>({{ dateFixed($comment->created_at) }})</small><br><br>
 
     <div class="form">
         <form action="/offers/{{ $comment->relate_id }}/{{ $comment->id }}/edit?page={{ $page }}" method="post">

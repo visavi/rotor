@@ -22,7 +22,7 @@
 
         @if (in_array($offer->status, ['wait', 'process']) && getUser('id') === $offer->user_id)
             <div class="float-right">
-                <a title="Редактировать" href="/offers/{{ $offer->id }}/edit"><i class="fa fa-pencil text-muted"></i></a>
+                <a title="Редактировать" href="/offers/{{ $offer->id }}/edit"><i class="fa fa-pencil-alt text-muted"></i></a>
             </div>
         @endif
     </div>

@@ -13,7 +13,7 @@
     @foreach ($posts as $post)
 
         <div class="b">
-            <i class="fa fa-file-text-o"></i> <b><a href="/topic/{{ $post->topic_id }}/{{ $post->id }}">{{ $post->topic->title }}</a></b>
+            <i class="fa fa-file-alt"></i> <b><a href="/topic/{{ $post->topic_id }}/{{ $post->id }}">{{ $post->topic->title }}</a></b>
         </div>
 
         <div>{!! bbCode($post->text) !!}<br>

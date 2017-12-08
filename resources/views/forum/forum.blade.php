@@ -33,7 +33,7 @@
 
         @foreach ($forum->children as $child)
 
-            <div class="b"><i class="fa fa-file-text-o fa-lg text-muted"></i>
+            <div class="b"><i class="fa fa-file-alt fa-lg text-muted"></i>
             <b><a href="/forum/{{ $child->id }}">{{ $child->title }}</a></b> ({{ $child->topics }}/{{ $child->posts }})</div>
 
             @if ($child->lastTopic)

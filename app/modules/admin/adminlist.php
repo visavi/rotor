@@ -12,10 +12,10 @@ if (isAdmin([101, 102, 103])) {
 
     if ($total > 0) {
         foreach($arradmin as $value) {
-            echo '<i class="fa fa-user-circle-o"></i> <b>'.profile($value['login']).'</b>  ('.userLevel($value['level']).') '.userOnline($value['login']).'<br>';
+            echo '<i class="fa fa-user-circle"></i> <b>'.profile($value['login']).'</b>  ('.userLevel($value['level']).') '.userOnline($value['login']).'<br>';
 
             if (isAdmin([101])) {
-                echo '<i class="fa fa-pencil"></i> <a href="/admin/users?act=edit&amp;uz='.$value['login'].'">Изменить</a><br>';
+                echo '<i class="fa fa-pencil-alt"></i> <a href="/admin/users?act=edit&amp;uz='.$value['login'].'">Изменить</a><br>';
             }
         }
         echo '<br>Всего в администрации: <b>'.$total.'</b><br><br>';

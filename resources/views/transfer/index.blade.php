@@ -16,7 +16,7 @@
                 <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
                 @if ($user)
-                    <i class="fa fa-money"></i> Перевод для <b>{{ $user->login }}</b>:<br><br>
+                    <i class="fa fa-money-bill-alt"></i> Перевод для <b>{{ $user->login }}</b>:<br><br>
                     <input type="hidden" name="user" value="{{ $user->login }}">
                 @else
                     <div class="form-group{{ hasError('user') }}">

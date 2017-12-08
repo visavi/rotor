@@ -8,7 +8,7 @@
 
     <h1>{{ $vote->title }}</h1>
 
-    <i class="fa fa-bar-chart"></i> Голосов: {{ $vote->count }}<br><br>
+    <i class="fa fa-chart-bar"></i> Голосов: {{ $vote->count }}<br><br>
 
     @if ($voters->isNotEmpty())
         @foreach ($voters as $voter)

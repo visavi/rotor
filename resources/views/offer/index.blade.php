@@ -56,7 +56,7 @@
 
         @foreach ($offers as $data)
             <div class="b">
-                <i class="fa fa-file-o"></i>
+                <i class="fa fa-file"></i>
                 <b><a href="/offers/{{ $data->id }}">{{ $data->title }}</a></b> (Голосов: {{ $data->rating }})<br>
                 {!! $data->getStatus() !!}
             </div>

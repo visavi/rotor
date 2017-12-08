@@ -28,7 +28,7 @@ if (isAdmin([101, 102, 103])) {
             if (count($votes) > 0) {
                 foreach($votes as $valvote) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-bar-chart"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['id'].'">'.$valvote['title'].'</a></b><br>';
+                    echo '<i class="fa fa-chart-bar"></i> <b><a href="/votes?act=poll&amp;id='.$valvote['id'].'">'.$valvote['title'].'</a></b><br>';
                     echo '<a href="/admin/votes?act=edit&amp;id='.$valvote['id'].'">Изменить</a>';
                     echo ' / <a href="/admin/votes?act=action&amp;do=close&amp;id='.$valvote['id'].'&amp;uid='.$_SESSION['token'].'">Закрыть</a>';
 
@@ -46,7 +46,7 @@ if (isAdmin([101, 102, 103])) {
                 showError('Открытых голосований еще нет!');
             }
 
-            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes?act=new">Создать голосование</a><br>';
+            echo '<i class="fa fa-chart-bar"></i> <a href="/admin/votes?act=new">Создать голосование</a><br>';
             echo '<i class="fa fa-briefcase"></i> <a href="/admin/votes?act=history">История голосований</a><br>';
 
             if (isAdmin([101])) {
@@ -116,7 +116,7 @@ if (isAdmin([101, 102, 103])) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=new">Вернуться</a><br>';
-            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">К голосованиям</a><br>';
+            echo '<i class="fa fa-chart-bar"></i> <a href="/admin/votes">К голосованиям</a><br>';
         break;
 
         ############################################################################################
@@ -202,7 +202,7 @@ if (isAdmin([101, 102, 103])) {
             }
 
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/votes?act=edit&amp;id='.$id.'">Вернуться</a><br>';
-            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">К голосованиям</a><br>';
+            echo '<i class="fa fa-chart-bar"></i> <a href="/admin/votes">К голосованиям</a><br>';
         break;
 
         ############################################################################################
@@ -325,7 +325,7 @@ if (isAdmin([101, 102, 103])) {
                 showError('Голосований в архиве еще нет!');
             }
 
-            echo '<i class="fa fa-bar-chart"></i> <a href="/admin/votes">Список голосований</a><br>';
+            echo '<i class="fa fa-chart-bar"></i> <a href="/admin/votes">Список голосований</a><br>';
         break;
 
     endswitch;

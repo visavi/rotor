@@ -17,7 +17,7 @@ if (isAdmin([101, 102])) {
         case 'index':
 
 
-            echo '<i class="fa fa-pencil"></i> <a href="/admin/rules?act=edit">Редактировать</a><br>';
+            echo '<i class="fa fa-pencil-alt"></i> <a href="/admin/rules?act=edit">Редактировать</a><br>';
         break;
 
         ############################################################################################

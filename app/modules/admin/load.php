@@ -28,7 +28,7 @@ case 'index':
         }
 
         foreach($output[0] as $key => $data) {
-            echo '<i class="fa fa-folder-open"></i> ';
+            echo '<i class="fa fa-folderpen"></i> ';
             echo $data['sort'].'. <b><a href="/admin/load?act=down&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ';
 
             $subcnt = (empty($data['subcnt'])) ? '' : '/'.$data['subcnt'];
@@ -70,7 +70,7 @@ case 'index':
         echo '<input type="text" name="name" maxlength="50">';
         echo '<input type="submit" value="Создать раздел"></form></div><br>';
 
-        echo '<i class="fa fa-cloud-upload"></i> <a href="/admin/load?act=newimport">FTP-импорт</a><br>';
+        echo '<i class="fa fa-cloud-upload-alt"></i> <a href="/admin/load?act=newimport">FTP-импорт</a><br>';
         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/load?act=restatement&amp;uid='.$_SESSION['token'].'">Пересчитать</a><br>';
     }
 
@@ -687,7 +687,7 @@ case 'down':
     if ($cats > 0) {
         //setting('newtitle') = $cats['name'];
 
-        echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
+        echo '<i class="fa fa-folderpen"></i> <b>'.$cats['name'].'</b> (Файлов: '.$cats['count'].')';
         echo ' (<a href="/load/down?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
         echo '<hr>';
 
@@ -696,7 +696,7 @@ case 'down':
 
         if (count($sub) > 0 && $page == 1) {
             foreach($sub as $subdata) {
-                echo '<div class="b"><i class="fa fa-folder-open"></i> ';
+                echo '<div class="b"><i class="fa fa-folderpen"></i> ';
                 echo '<b><a href="/admin/load?act=down&amp;cid='.$subdata['id'].'">'.$subdata['name'].'</a></b> ('.$subdata['count'].')</div>';
             }
             echo '<hr>';
@@ -721,7 +721,7 @@ case 'down':
                 $filesize = (!empty($data['link'])) ? formatFileSize(UPLOADS.'/files/'.$folder.$data['link']) : 0;
 
                 echo '<div class="b">';
-                echo '<i class="fa fa-file-o"></i> ';
+                echo '<i class="fa fa-file"></i> ';
                 echo '<b><a href="/load/down?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.$filesize.')<br>';
 
                 if ($is_admin) {
@@ -811,7 +811,7 @@ case 'editdown':
                     echo 'Прикрепить скрин (jpg,jpeg,gif,png):<br><input type="file" name="screen"><br>';
                     echo '<input value="Загрузить" type="submit"></form></div><br>';
                 } else {
-                    echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                    echo '<i class="fa fa-image"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/admin/load?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
                     echo resizeImage('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                 }
             }

@@ -30,7 +30,7 @@
     @if (! $down->active && $down->user_id == getUser('id'))
         <div class="info">
             <b>Внимание!</b> Данная загрузка добавлена, но еще требует модераторской проверки<br>
-            <i class="fa fa-pencil"></i> <a href="/load/add?act=view&amp;id={{ $down->id }}">Перейти к редактированию</a>
+            <i class="fa fa-pencil-alt"></i> <a href="/load/add?act=view&amp;id={{ $down->id }}">Перейти к редактированию</a>
         </div><br>
     @endif
 

@@ -46,9 +46,9 @@ if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
                         echo '<li class="list-group-item">';
                         echo '<div class="float-right">';
 
-                        echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.$file.'&amp;type=dir&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить эту директорию\')"><i class="fa fa-remove"></i></a></div>';
+                        echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.$file.'&amp;type=dir&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить эту директорию\')"><i class="fa fa-times"></i></a></div>';
 
-                        echo '<i class="fa fa-folder-o"></i> <b><a href="/admin/files?path='.$path.$file.'/">'.$file.'</a></b><br>';
+                        echo '<i class="fa fa-folder"></i> <b><a href="/admin/files?path='.$path.$file.'/">'.$file.'</a></b><br>';
                         echo 'Объектов: '.count(array_diff(scandir(RESOURCES.'/views/'.$path.$file), ['.', '..'])).'</li>';
                     } else {
 
@@ -56,9 +56,9 @@ if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
                         $strok = count(file(RESOURCES.'/views/'.$path.$file));
 
                         echo '<li class="list-group-item"><div class="float-right">';
-                        echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.basename($file, '.blade.php').'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-remove"></i></a></div>';
+                        echo '<a href="/admin/files?act=del&amp;path='.$path.'&amp;name='.basename($file, '.blade.php').'&amp;token='.$_SESSION['token'].'" onclick="return confirm(\'Вы действительно хотите удалить этот файл\')"><i class="fa fa-times"></i></a></div>';
 
-                        echo '<i class="fa fa-file-o"></i> ';
+                        echo '<i class="fa fa-file"></i> ';
                         echo '<b><a href="/admin/files?act=edit&amp;path='.$path.'&amp;file='.basename($file, '.blade.php').'">'.$file.'</a></b> (' . $size . ')<br>';
                         echo 'Строк: ' . $strok . ' / ';
                         echo 'Изменен: ' . dateFixed(filemtime(RESOURCES.'/views/'.$path.$file)) . '</li>';
@@ -72,7 +72,7 @@ if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
             if ($path) {
                 echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/files?path='.ltrim(dirname($path), '.').'/">Вернуться</a><br>';
             }
-            echo'<i class="fa fa-file-o"></i> <a href="/admin/files?act=new&amp;path='.$path.'">Создать</a><br>';
+            echo'<i class="fa fa-file"></i> <a href="/admin/files?act=new&amp;path='.$path.'">Создать</a><br>';
         break;
 
         ############################################################################################

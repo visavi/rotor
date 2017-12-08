@@ -43,9 +43,9 @@ class Topic extends BaseModel
         if ($this->closed)
             $icon = 'fa-lock';
         elseif ($this->locked)
-            $icon = 'fa-thumb-tack';
+            $icon = 'fa-thumbtack';
         else
-            $icon = 'fa-folder-open';
+            $icon = 'fa-folderpen';
         return $icon;
     }
 

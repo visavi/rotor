@@ -12,9 +12,9 @@
         @foreach($logins as $data)
             <div class="b">
                 @if ($data->type)
-                    <i class="fa fa-sign-in"></i> <b>Авторизация</b>
+                    <i class="fa fa-sign-in-alt"></i> <b>Авторизация</b>
                 @else
-                    <i class="fa fa-refresh"></i> <b>Автовход</b>
+                    <i class="fa fa-sync"></i> <b>Автовход</b>
                 @endif
 
                 <small>({{ dateFixed($data->created_at) }})</small>

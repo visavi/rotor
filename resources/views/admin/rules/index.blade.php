@@ -20,7 +20,7 @@
         {!! showError('Правила сайта еще не установлены!') !!}
     @endif
 
-    <i class="fa fa-pencil"></i> <a href="/admin/rules/edit">Редактировать</a><br>
+    <i class="fa fa-pencil-alt"></i> <a href="/admin/rules/edit">Редактировать</a><br>
 
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop

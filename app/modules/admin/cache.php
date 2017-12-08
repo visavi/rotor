@@ -18,12 +18,12 @@ case 'index':
     if (is_array($cachefiles) && $total>0){
         foreach ($cachefiles as $file) {
 
-        echo '<i class="fa fa-file-text-o"></i> <b>'.basename($file).'</b>  ('.formatFileSize($file).' / '.dateFixed(filemtime($file)).')<br>';
+        echo '<i class="fa fa-file-alt"></i> <b>'.basename($file).'</b>  ('.formatFileSize($file).' / '.dateFixed(filemtime($file)).')<br>';
         }
 
         echo '<br>Всего файлов: '. $total .'<br><br>';
 
-        echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clear?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
+        echo '<i class="fa fa-trash-alt"></i> <a href="/admin/cache/clear?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
     } else {
         showError('Файлов еще нет!');
     }
@@ -45,7 +45,7 @@ case 'image':
     if (is_array($cachefiles) && $totals>0){
         for ($i=0; $i<$totals; $i++) {
 
-        echo '<i class="fa fa-picture-o"></i> <b>'.basename($cachefiles[$i]).'</b>  ('.formatFileSize($cachefiles[$i]).' / '.dateFixed(filemtime($cachefiles[$i])).')<br>';
+        echo '<i class="fa fa-image"></i> <b>'.basename($cachefiles[$i]).'</b>  ('.formatFileSize($cachefiles[$i]).' / '.dateFixed(filemtime($cachefiles[$i])).')<br>';
         }
 
         if ($total>$totals){
@@ -54,7 +54,7 @@ case 'image':
 
         echo '<br>Всего изображений: '. $total .'<br><br>';
 
-        echo '<i class="fa fa-trash-o"></i> <a href="/admin/cache/clearimage?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
+        echo '<i class="fa fa-trash-alt"></i> <a href="/admin/cache/clearimage?token='.$_SESSION['token'].'">Очистить кэш</a><br>';
     } else {
         showError('Изображений еще нет!');
     }

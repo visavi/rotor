@@ -7,7 +7,7 @@
 @section('content')
     <h1>{{ trans('book.title_edit') }}</h1>
 
-    <i class="fa fa-pencil text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->time) }})<br><br>
+    <i class="fa fa-pencil-alt text-muted"></i> <b>{!! $post->user->login !!}</b> ({{ dateFixed($post->time) }})<br><br>
 
     <div class="form">
         <form action="/book/edit/{{ $post->id }}" method="post">

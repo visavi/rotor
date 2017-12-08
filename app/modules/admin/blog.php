@@ -32,7 +32,7 @@ if (isAdmin()) {
 
             if (count($blogs) > 0) {
                 foreach($blogs as $data) {
-                    echo '<i class="fa fa-folder-open"></i> ';
+                    echo '<i class="fa fa-folderpen"></i> ';
                     echo '<b>'.$data['sort'].'. <a href="/admin/blog?act=blog&amp;cid='.$data['id'].'">'.$data['name'].'</a></b> ('.$data['count'].')<br>';
 
                     if (isAdmin([101])) {
@@ -239,7 +239,7 @@ if (isAdmin()) {
             if (!empty($cats)) {
                 //setting('newtitle') = $cats['name'];
 
-                echo '<i class="fa fa-folder-open"></i> <b>'.$cats['name'].'</b> (Статей: '.$cats['count'].')';
+                echo '<i class="fa fa-folderpen"></i> <b>'.$cats['name'].'</b> (Статей: '.$cats['count'].')';
                 echo ' (<a href="/blog/blog?cid='.$cid.'&amp;page='.$page.'">Обзор</a>)';
                 echo '<hr>';
 
@@ -254,7 +254,7 @@ if (isAdmin()) {
 
                     while ($data = $queryblog -> fetch()) {
 
-                        echo '<div class="b"><i class="fa fa-pencil"></i> ';
+                        echo '<div class="b"><i class="fa fa-pencil-alt"></i> ';
                         echo '<b><a href="/blog/blog?act=view&amp;id='.$data['id'].'">'.$data['title'].'</a></b> ('.formatNum($data['rating']).')<br>';
 
                         echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
@@ -367,7 +367,7 @@ if (isAdmin()) {
             $blogs = DB::run() -> queryFetch("SELECT * FROM `blogs` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($blogs)) {
-                echo '<i class="fa fa-file-o"></i> <b>'.$blogs['title'].'</b><br><br>';
+                echo '<i class="fa fa-file"></i> <b>'.$blogs['title'].'</b><br><br>';
 
                 $querycats = DB::select("SELECT `id`, `name` FROM `catsblog` ORDER BY sort ASC;");
                 $cats = $querycats -> fetchAll();

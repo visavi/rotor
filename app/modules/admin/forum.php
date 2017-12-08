@@ -39,7 +39,7 @@ if (isAdmin()) {
                 echo '<a href="/forum">Обзор форума</a><hr>';
 
                 foreach($forums as $data) {
-                    echo '<div class="b"><i class="fa fa-folder-open"></i> ';
+                    echo '<div class="b"><i class="fa fa-folderpen"></i> ';
                     echo '<b>'.$data['sort'].'. <a href="/admin/forum?act=forum&amp;fid='.$data['id'].'">'.$data['title'].'</a></b> ('.$data['topics'].'/'.$data['posts'].')';
 
                     if (!empty($data['desc'])) {
@@ -451,7 +451,7 @@ if (isAdmin()) {
             $topic = Topic::query()->find($tid);
 
             if (!empty($topic)) {
-                echo '<i class="fa fa-folder-open"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic->user->login.')<br><br>';
+                echo '<i class="fa fa-folderpen"></i> <b>'.$topic['title'].'</b> (Автор темы: '.$topic->user->login.')<br><br>';
 
                 $forums = Forum::query()
                     ->where('parent_id', 0)
@@ -891,7 +891,7 @@ if (isAdmin()) {
 
             if (!empty($post)) {
 
-                echo '<i class="fa fa-pencil"></i> <b>'.profile($post->user).'</b> <small>('.dateFixed($post['created_at']).')</small><br><br>';
+                echo '<i class="fa fa-pencil-alt"></i> <b>'.profile($post->user).'</b> <small>('.dateFixed($post['created_at']).')</small><br><br>';
 
                 echo '<div class="form" id="form">';
                 echo '<form action="/admin/forum?act=addeditpost&amp;tid='.$post['topic_id'].'&amp;pid='.$pid.'&amp;page='.$page.'&amp;token='.$_SESSION['token'].'" method="post">';

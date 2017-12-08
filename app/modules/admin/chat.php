@@ -124,7 +124,7 @@ if (isAdmin()) {
             $post = DB::run() -> queryFetch("SELECT * FROM `chat` WHERE `id`=? LIMIT 1;", [$id]);
 
             if (!empty($post)) {
-                echo '<div class="b"><i class="fa fa-pencil"></i> <b>'.profile($post['user']).'</b> '.userOnline($post['user']).' <small>('.dateFixed($post['time']).')</small></div>';
+                echo '<div class="b"><i class="fa fa-pencil-alt"></i> <b>'.profile($post['user']).'</b> '.userOnline($post['user']).' <small>('.dateFixed($post['time']).')</small></div>';
                 echo '<div>Сообщение: '.bbCode($post['text']).'</div><hr>';
 
                 echo '<div class="form">';
@@ -173,7 +173,7 @@ if (isAdmin()) {
             if (!empty($post)) {
                 if ($post['time'] + 600 > SITETIME) {
 
-                    echo '<i class="fa fa-pencil"></i> <b>'.$post['user'].'</b> <small>('.dateFixed($post['time']).')</small><br><br>';
+                    echo '<i class="fa fa-pencil-alt"></i> <b>'.$post['user'].'</b> <small>('.dateFixed($post['time']).')</small><br><br>';
 
                     echo '<div class="form">';
                     echo '<form action="/admin/chat?act=editpost&amp;id='.$id.'&amp;page='.$page.'&amp;uid='.$_SESSION['token'].'" method="post">';

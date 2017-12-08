@@ -15,7 +15,7 @@
     @if ($news->isNotEmpty())
         @foreach ($news as $data)
             <div class="b">
-                {!! $data->closed == 0 ? '<i class="fa fa-plus-square-o"></i> ' : '<i class="fa fa-minus-square-o"></i>' !!}
+                {!! $data->closed == 0 ? '<i class="fa fa-plus-square"></i> ' : '<i class="fa fa-minus-square"></i>' !!}
                 <b><a href="/news/{{ $data->id }}">{{ $data->title }}</a></b><small> ({{ dateFixed($data->created_at) }})</small>
             </div>
 

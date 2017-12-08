@@ -142,7 +142,7 @@ function sendComplaint(el)
                 dataType: 'json', type: 'POST', url: '/ajax/complaint',
                 success: function(data) {
 
-                    $(el).replaceWith('<i class="fa fa-bell-slash-o text-muted"></i>');
+                    $(el).replaceWith('<i class="fa fa-bell-slash text-muted"></i>');
 
                     if (data.status === 'error'){
                         notify('error', data.message);

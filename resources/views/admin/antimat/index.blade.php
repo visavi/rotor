@@ -29,7 +29,7 @@
 
                 @if (isAdmin('boss'))
                     <span class="float-right">
-                        <i class="fa fa-trash-o"></i> <a href="/admin/antimat/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить все слова?')">Очистить</a>
+                        <i class="fa fa-trash-alt"></i> <a href="/admin/antimat/clear?token={{ $_SESSION['token'] }}" onclick="return confirm('Вы уверены что хотите удалить все слова?')">Очистить</a>
                     </span>
                 @endif
             </div>
@@ -46,7 +46,7 @@
 
             <div class="input-group">
                 <span class="input-group-addon">
-                    <i class="fa fa-pencil"></i>
+                    <i class="fa fa-pencil-alt"></i>
                 </span>
 
                 <input type="text" class="form-control" name="word" placeholder="Введите слово" required>

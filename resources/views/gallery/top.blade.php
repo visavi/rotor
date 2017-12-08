@@ -28,7 +28,7 @@
 
         @foreach ($photos as $data)
             <div class="b">
-                <i class="fa fa-picture-o"></i>
+                <i class="fa fa-image"></i>
                 <b><a href="/gallery/{{ $data->id }}">{{ $data->title }}</a></b> ({{ formatFileSize(UPLOADS.'/pictures/'.$data->link) }}) ({!! formatNum($data->rating) !!})
             </div>
 

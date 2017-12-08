@@ -25,7 +25,7 @@ if (isAdmin([101])) {
 
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> <b>'.profile($data['user']).'</b>';
+                    echo '<i class="fa fa-file"></i> <b>'.profile($data['user']).'</b>';
                     echo ' ('.dateFixed($data['time']).')</div>';
                     echo '<div>Страница: '.$data['request'].'<br>';
                     echo 'Откуда: '.$data['referer'].'<br>';

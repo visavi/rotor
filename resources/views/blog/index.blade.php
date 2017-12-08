@@ -17,7 +17,7 @@
     @foreach ($blogs as $key => $data)
 
         <div class="b">
-            <i class="fa fa-folder-open"></i> <b><a href="/blog/{{ $data->id }}">{{ $data->name }}</a></b>
+            <i class="fa fa-folderpen"></i> <b><a href="/blog/{{ $data->id }}">{{ $data->name }}</a></b>
 
             @if ($data->new)
                 ({{ $data->count }}/<span style="color:#ff0000">+{{ $data->new->count }}</span>)<br>

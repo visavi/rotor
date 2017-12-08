@@ -22,5 +22,5 @@ if ($news->isNotEmpty()) {
 
 $calendar = makeCalendar($date['mon'], $date['year']);
 
-view('app/_calendar', compact('calendar', 'date', 'newsDays', 'newsIds'));
+echo view('app/_calendar', compact('calendar', 'date', 'newsDays', 'newsIds'));
 

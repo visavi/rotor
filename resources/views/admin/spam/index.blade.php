@@ -29,24 +29,24 @@
             <div class="post">
                 @if ($data->relate)
                     <div class="b">
-                        <i class="fa fa-file-o"></i>
+                        <i class="fa fa-file"></i>
                         <b>{!! profile($data->relate->user) !!}</b>
                         <small>({{ dateFixed($data->relate->created_at, "d.m.y / H:i:s") }})</small>
 
                         <div class="float-right">
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
+                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
                             @endif
                         </div>
                     </div>
                     <div>{!! bbCode($data->relate->text) !!}</div>
                 @else
                     <div class="b">
-                        <i class="fa fa-file-o"></i> <b>Сообщение не найдено</b>
+                        <i class="fa fa-file"></i> <b>Сообщение не найдено</b>
 
                         <div class="float-right">
                             @if (isAdmin())
-                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-remove"></i></a>
+                                <a href="#" onclick="return deleteSpam(this)" data-id="{{ $data->id }}" data-token="{{ $_SESSION['token'] }}" data-toggle="tooltip" title="Удалить"><i class="fa fa-times"></i></a>
                             @endif
                         </div>
                     </div>

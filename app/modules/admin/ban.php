@@ -90,7 +90,7 @@ if (isAdmin([101, 102, 103])) {
                         echo '<b><span style="color:#ff0000">Внимание, данный аккаунт заблокирован!</span></b><br>';
                         echo 'До окончания бана: '.formatTime($user['timeban'] - SITETIME).'<br><br>';
 
-                        echo '<i class="fa fa-pencil"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Изменить</a><br>';
+                        echo '<i class="fa fa-pencil-alt"></i> <a href="/admin/ban?act=editban&amp;uz='.$uz.'">Изменить</a><br>';
                         echo '<i class="fa fa-arrow-circle-up"></i> <a href="/admin/ban?act=razban&amp;uz='.$uz.'&amp;uid='.$_SESSION['token'].'">Разбанить</a><hr>';
                     }
                 } else {

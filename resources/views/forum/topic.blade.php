@@ -110,7 +110,7 @@
                         @endif
 
                         @if ((getUser('id') == $data->user_id && $data->created_at + 600 > SITETIME) || $topic->isModer)
-                            <a href="/topic/{{ $topic->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil text-muted"></i></a>
+                            <a href="/topic/{{ $topic->id }}/{{ $data->id }}/edit?page={{ $page['current'] }}" title="Редактировать"><i class="fa fa-pencil-alt text-muted"></i></a>
                             @if ($topic->isModer)
                                 <input type="checkbox" name="del[]" value="{{ $data->id }}">
                             @endif

@@ -18,7 +18,7 @@
     @if ($votes->isNotEmpty())
         @foreach ($votes as $vote)
             <div class="b">
-                <i class="fa fa-bar-chart"></i>
+                <i class="fa fa-chart-bar"></i>
                 <b><a href="/votes/{{ $vote['id'] }}">{{ $vote->title }}</a></b>
             </div>
             <div>

@@ -12,7 +12,7 @@
     @if ($posts->isNotEmpty())
         @foreach ($posts as $data)
             <div class="b">
-                <i class="fa fa-file-text-o"></i> <b><a href="/topic/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
+                <i class="fa fa-file-alt"></i> <b><a href="/topic/{{ $data->topic_id }}/{{ $data->id }}">{{ $data->topic->title }}</a></b>
                 (Рейтинг: {{ $data->rating }})
             </div>
             <div>

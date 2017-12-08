@@ -15,7 +15,7 @@
     @if ($statuses->isNotEmpty())
         @foreach ($statuses as $status)
 
-            <i class="fa fa-user-circle-o"></i>
+            <i class="fa fa-user-circle"></i>
 
             @if ($status->color)
                 <b><span style="color:{{ $status->color }}">{{ $status->name }}</span></b> — {{ plural($status->topoint, setting('scorename')) }}<br>

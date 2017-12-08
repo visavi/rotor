@@ -38,7 +38,7 @@
         Проголосовало: <b>{{ $vote['count'] }}</b><br><br>
 
         @if (! empty($show))
-            <i class="fa fa-bar-chart"></i> <a href="/votes/{{ $vote->id }}">К вариантам</a><br>
+            <i class="fa fa-chart-bar"></i> <a href="/votes/{{ $vote->id }}">К вариантам</a><br>
         @endif
         <i class="fa fa-users"></i> <a href="/votes/{{ $vote->id }}/voters">Проголосовавшие</a><br>
     @endif

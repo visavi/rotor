@@ -50,7 +50,7 @@ if (isAdmin([101, 102])) {
 
                 while ($data = $queryoffers -> fetch()) {
                     echo '<div class="b">';
-                    echo '<i class="fa fa-file-o"></i> ';
+                    echo '<i class="fa fa-file"></i> ';
                     echo '<b><a href="/admin/offers?act=view&amp;type='.$type.'&amp;id='.$data['id'].'">'.$data['title'].'</a></b> (Голосов: '.$data['votes'].')<br>';
 
                     switch ($data['status']) {
@@ -104,7 +104,7 @@ if (isAdmin([101, 102])) {
                 //setting('newtitle') = $queryoff['title'];
 
                 echo '<div class="b">';
-                echo '<i class="fa fa-file-o"></i> ';
+                echo '<i class="fa fa-file"></i> ';
                 echo '<b>'.$queryoff['title'].'</b> (Голосов: '.$queryoff['votes'].')<br>';
 
                 switch ($queryoff['status']) {

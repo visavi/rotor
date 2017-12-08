@@ -30,7 +30,7 @@ if (isAdmin([101, 102])) {
                 while ($data = $queryban -> fetch()) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
-                    echo '<i class="fa fa-file-o"></i> <b>'.$data['ip'].'</b></div>';
+                    echo '<i class="fa fa-file"></i> <b>'.$data['ip'].'</b></div>';
 
                     echo '<div>Добавлено: ';
 

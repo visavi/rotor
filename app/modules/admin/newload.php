@@ -90,10 +90,10 @@ if (isAdmin()) {
                         }
 
                         if (!empty($new['screen'])) {
-                            echo '<i class="fa fa-picture-o"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
+                            echo '<i class="fa fa-image"></i> <b><a href="/uploads/screen/'.$folder.$new['screen'].'">'.$new['screen'].'</a></b> ('.formatFileSize(UPLOADS.'/screen/'.$folder.$new['screen']).') (<a href="/admin/newload?act=delscreen&amp;id='.$id.'" onclick="return confirm(\'Вы действительно хотите удалить данный скриншот?\')">Удалить</a>)<br><br>';
                             echo resizeImage('uploads/screen/'.$folder, $new['screen'], setting('previewsize')).'<br>';
                         } else {
-                            echo '<i class="fa fa-picture-o"></i> <b>Не загружен</b><br>';
+                            echo '<i class="fa fa-image"></i> <b>Не загружен</b><br>';
                         }
 
                         echo '<br><b><big>Редактирование</big></b><br><br>';

@@ -69,7 +69,7 @@ if (isAdmin([101, 102])) {
                     echo '<div class="b">';
                     echo '<input type="checkbox" name="del[]" value="'.$data['id'].'"> ';
 
-                    echo '<i class="fa fa-pencil"></i> <b>'.$data['value'].'</b></div>';
+                    echo '<i class="fa fa-pencil-alt"></i> <b>'.$data['value'].'</b></div>';
                     echo '<div>Добавлено: '.profile($data['user']).'<br>';
                     echo 'Время: '.dateFixed($data['time']).'</div>';
                 }
