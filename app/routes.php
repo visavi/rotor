@@ -15,8 +15,8 @@ $routes = [
     ['POST',     '/book/add', 'BookController@add'],
     ['GET|POST', '/book/edit/[i:id]', 'BookController@edit'],
 
-    ['GET', '/sitemap.xml', 'SitemapController@index'],
-    ['GET', '/sitemap/[a:action].xml', 'SitemapController'],
+    ['GET',      '/sitemap.xml', 'SitemapController@index'],
+    ['GET',      '/sitemap/[a:action].xml', 'SitemapController'],
 
     ['GET',      '/blog', 'BlogController@index', 'blog'],
     ['GET',      '/blog/[i:cid]', 'BlogController@blog'],
@@ -112,23 +112,23 @@ $routes = [
     ['GET',      '/recovery/restore', 'MailController@restore'],
     ['GET|POST', '/unsubscribe', 'MailController@unsubscribe', 'unsubscribe'],
 
-    ['GET', '/menu', 'PageController@menu'],
-    ['GET', '/page/[a:action]?', 'PageController@index'],
-    ['GET', '/tags', 'PageController@tags', 'tags'],
-    ['GET', '/rules', 'PageController@rules', 'rules'],
-    ['GET', '/smiles', 'PageController@smiles', 'smiles'],
-    ['GET', '/online/[all:action]?', 'OnlineController@index', 'online'],
+    ['GET',      '/menu', 'PageController@menu'],
+    ['GET',      '/page/[a:action]?', 'PageController@index'],
+    ['GET',      '/tags', 'PageController@tags', 'tags'],
+    ['GET',      '/rules', 'PageController@rules', 'rules'],
+    ['GET',      '/smiles', 'PageController@smiles', 'smiles'],
+    ['GET',      '/online/[all:action]?', 'OnlineController@index', 'online'],
 
-    ['POST', '/ajax/bbcode', 'AjaxController@bbCode'],
-    ['POST', '/ajax/delcomment', 'AjaxController@delComment'],
-    ['POST', '/ajax/rating', 'AjaxController@rating'],
-    ['POST', '/ajax/vote', 'AjaxController@vote'],
-    ['POST', '/ajax/complaint', 'AjaxController@complaint'],
-    ['POST', '/ajax/image', 'AjaxController@uploadImage'],
+    ['POST',     '/ajax/bbcode', 'AjaxController@bbCode'],
+    ['POST',     '/ajax/delcomment', 'AjaxController@delComment'],
+    ['POST',     '/ajax/rating', 'AjaxController@rating'],
+    ['POST',     '/ajax/vote', 'AjaxController@vote'],
+    ['POST',     '/ajax/complaint', 'AjaxController@complaint'],
+    ['POST',     '/ajax/image', 'AjaxController@uploadImage'],
 
-    ['GET',  '/wall/[user:login]', 'WallController@index', 'wall'],
-    ['POST', '/wall/[user:login]/create', 'WallController@create'],
-    ['POST', '/wall/[user:login]/delete', 'WallController@delete'],
+    ['GET',      '/wall/[user:login]', 'WallController@index', 'wall'],
+    ['POST',     '/wall/[user:login]/create', 'WallController@create'],
+    ['POST',     '/wall/[user:login]/delete', 'WallController@delete'],
 
     ['GET',      '/private/[outbox|history|clear:action]?', 'PrivateController@index'],
     ['POST',     '/private/[delete:action]', 'PrivateController'],
@@ -159,7 +159,7 @@ $routes = [
     ['GET',      '/reklama', 'RekUserController@index'],
     ['GET|POST', '/reklama/create', 'RekUserController@create'],
 
-    ['GET', '/authlog', 'LoginController@index'],
+    ['GET',      '/authlog', 'LoginController@index'],
 
     ['GET',      '/adminlist', 'User\ListController@adminlist'],
     ['GET|POST', '/userlist', 'User\ListController@userlist'],
@@ -170,9 +170,9 @@ $routes = [
     ['GET|POST', '/unban', 'User\BanController@unban'],
     ['GET|POST', '/who', 'User\UserController@who'],
 
-    ['GET', '/faq', 'PageController@faq'],
-    ['GET', '/statusfaq', 'PageController@statusfaq'],
-    ['GET', '/surprise', 'PageController@surprise'],
+    ['GET',      '/faq', 'PageController@faq'],
+    ['GET',      '/statusfaq', 'PageController@statusfaq'],
+    ['GET',      '/surprise', 'PageController@surprise'],
 
     ['GET',      '/offers/[offer|issue:type]?', 'OfferController@index'],
     ['GET',      '/offers/[i:id]', 'OfferController@view'],
@@ -208,10 +208,10 @@ $routes = [
     ['GET|POST', '/load/search', 'load/search.php'],
     ['GET|POST', '/load/top', 'load/top.php'],
 
-    ['GET', '/api', 'ApiController@index'],
-    ['GET', '/api/user', 'ApiController@user'],
-    ['GET', '/api/forum', 'ApiController@forum'],
-    ['GET', '/api/private', 'ApiController@private'],
+    ['GET',      '/api', 'ApiController@index'],
+    ['GET',      '/api/user', 'ApiController@user'],
+    ['GET',      '/api/forum', 'ApiController@forum'],
+    ['GET',      '/api/private', 'ApiController@private'],
 
     ['GET',      '/admin', 'Admin\AdminController@index', 'admin'],
     ['GET',      '/admin/spam', 'Admin\SpamController@index'],
