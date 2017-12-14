@@ -80,8 +80,7 @@ function dateFixed($timestamp, $format = "d.m.y / H:i")
     $today     = date("d.m.y", SITETIME + $shift);
     $yesterday = date("d.m.y", strtotime("-1 day", SITETIME + $shift));
 
-    $dateStamp = str_replace($today, 'Сегодня', $dateStamp);
-    $dateStamp = str_replace($yesterday, 'Вчера', $dateStamp);
+    $dateStamp = str_replace([$today, $yesterday], ['Сегодня', 'Вчера'], $dateStamp);
 
     $search = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     $replace = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
