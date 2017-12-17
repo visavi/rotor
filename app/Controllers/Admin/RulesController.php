@@ -39,4 +39,39 @@ class RulesController extends AdminController
 
         return view('admin/rules/index', compact('rules'));
     }
+
+    /**
+     * Редактирование правил
+     */
+    public function edit()
+    {
+        $rules = Rule::query()->firstOrNew([]);
+
+        if (Request::isMethod('post')) {
+            $token = check(Request::input('token'));
+            $msg   = check(Request::input('msg'));
+
+            $validator = new Validator();
+            $validator
+                ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
+                ->notEmpty($msg, ['msg' => 'Вы не ввели текст с правилами сайта!']);
+
+            if ($validator->isValid()) {
+
+                $rules->fill([
+                    'text'       => $msg,
+                    'created_at' => SITETIME,
+                ])->save();
+
+                setFlash('success', 'Правила успешно изменены!');
+                redirect('/admin/rules');
+
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
+        return view('admin/rules/edit', compact('rules'));
+    }
 }

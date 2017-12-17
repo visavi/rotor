@@ -35,8 +35,8 @@ class Application
      */
     private static function getController($router)
     {
-        $target     = explode('@', $router['target']);
-        $action     = $router['params']['action'] ?? $target[1];
+        $target = explode('@', $router['target']);
+        $action = $router['params']['action'] ?? $target[1];
 
         return ['App\\Controllers\\'.$target[0], $action];
     }
