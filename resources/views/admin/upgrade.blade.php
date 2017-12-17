@@ -8,13 +8,12 @@
 
     <h1>Апгрейд системы</h1>
 
-    <pre>
-        <span class="inner-pre" style="font-size: 11px">
-            <?= $wrap->getMigrate(); ?>
-        </span>
-    </pre>
+    {!! nl2br($wrap->getMigrate()) !!}
 
-    <i class="fa fa-check"></i> <b>Установлена актуальная версия RotorCMS</b><br><br>
+    <br>
+    <div class="alert alert-success">
+        <i class="fa fa-check"></i> <b>Установлена актуальная версия RotorCMS</b>
+    </div>
 
     <i class="fa fa-wrench"></i> <a href="/admin">В админку</a><br>
 @stop
