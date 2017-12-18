@@ -224,6 +224,8 @@ $routes = [
     ['GET',      '/admin/rules', 'Admin\RulesController@index'],
     ['GET|POST', '/admin/rules/edit', 'Admin\RulesController@edit'],
 
+    ['GET|POST', '/admin/upgrade', 'Admin\AdminController@upgrade'],
+
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],

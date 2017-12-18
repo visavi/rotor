@@ -5,6 +5,8 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\Admlog;
 use App\Models\User;
+use Phinx\Console\PhinxApplication;
+use Phinx\Wrapper\TextWrapper;
 
 Class AdminController extends BaseController
 {
@@ -41,5 +43,23 @@ Class AdminController extends BaseController
             ->count();
 
         return view('admin/index', compact('existBoss'));
+    }
+
+    /**
+     * Проверка обновлений
+     */
+    public function upgrade()
+    {
+        $app  = new PhinxApplication();
+        $wrap = new TextWrapper($app);
+
+        $app->setName('RotorCMS by Vantuz - http://visavi.net');
+        $app->setVersion(VERSION);
+
+        $wrap->setOption('configuration', BASEDIR.'/phinx.php');
+        $wrap->setOption('parser', 'php');
+        $wrap->setOption('environment', 'default');
+
+        return view('admin/upgrade', compact('wrap'));
     }
 }
