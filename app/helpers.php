@@ -1819,15 +1819,19 @@ function returnUrl($url = null)
 /**
  * Возвращает подключенный шаблон
  *
- * @param  string  $template имя шаблона
- * @param  array   $params   массив параметров
- * @return string            сформированный код
+ * @param  string $view   имя шаблона
+ * @param  array  $params массив параметров
+ * @return string         сформированный код
  */
-function view($template, $params = [])
+function view($view, $params = [])
 {
-    $blade = new Blade([RESOURCES.'/views', HOME.'/themes'], STORAGE.'/cache');
+    $blade = new Blade([
+        HOME.'/themes/'.setting('themes').'/views',
+        RESOURCES.'/views',
+        HOME.'/themes',
+    ], STORAGE.'/cache');
 
-    return $blade->render($template, $params);
+    return $blade->render($view, $params);
 }
 
 /**
