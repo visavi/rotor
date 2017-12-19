@@ -247,20 +247,15 @@ header("Content-type:text/html; charset=utf-8");
 
     <?php elseif(Request::input('act') == 'status'): ?>
         <h1>Шаг 2 - проверка статуса</h1>
-        <pre>
-            <span class="inner-pre" style="font-size: 11px">
-                <?= $wrap->getStatus(); ?>
-            </span>
-        </pre>
+
+        <?= nl2br($wrap->getStatus()); ?>
+
         <p><a style="font-size: 18px" href="?act=migrate">Выполнить миграции</a></p>
 
     <?php elseif(Request::input('act') == 'migrate'): ?>
         <h1>Шаг 3 - выполнение миграций</h1>
-        <pre>
-            <span class="inner-pre" style="font-size: 11px">
-                <?= $wrap->getMigrate(); ?>
-            </span>
-        </pre>
+
+        <?= nl2br($wrap->getMigrate()); ?>
 
         <p><a style="font-size: 18px" href="?act=seed">Заполнить БД</a></p>
 
@@ -268,11 +263,7 @@ header("Content-type:text/html; charset=utf-8");
 
         <h1>Шаг 4 - заполнение БД</h1>
 
-        <pre>
-            <span class="inner-pre" style="font-size: 11px">
-                <?= $wrap->getSeed(); ?>
-            </span>
-        </pre>
+        <?= nl2br($wrap->getSeed()); ?>
 
         <p><a style="font-size: 18px" href="?act=account">Создать администратора</a></p>
     <?php elseif(Request::input('act') == 'account'): ?>
