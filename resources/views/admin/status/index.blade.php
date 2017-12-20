@@ -38,7 +38,7 @@
         </div><br>
 
     @else
-        {{ showError('Статусы еще не назначены!') }}
+        {!! showError('Статусы еще не назначены!') !!}
     @endif
 
     <i class="fa fa-plus"></i> <a href="/admin/status/create">Создать</a><br>
