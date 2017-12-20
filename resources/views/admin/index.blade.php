@@ -45,7 +45,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/blacklist">Черный список</a> (<?=statsBlacklist()?>)<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/offers">Предложения / Проблемы</a> (<?=statsOffers()?>)<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/smiles">Управление смайлами</a> (<?=statsSmiles()?>)<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">Управление статусами</a><br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/status">Статусы пользователей</a><br>
     @endif
 
     @if (isAdmin('boss'))
