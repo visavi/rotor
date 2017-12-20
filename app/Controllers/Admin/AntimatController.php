@@ -94,7 +94,7 @@ class AntimatController extends AdminController
         $validator = new Validator();
         $validator
             ->equal($token, $_SESSION['token'], 'Неверный идентификатор сессии, повторите действие!')
-            ->true(isAdmin('boss'), 'Очищать список может только владелец!');
+            ->true(isAdmin(User::BOSS), 'Очищать список может только владелец!');
 
         if ($validator->isValid()) {
 

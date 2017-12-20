@@ -220,6 +220,9 @@ $routes = [
     ['GET',      '/admin/log/clear', 'Admin\LogController@clear'],
     ['GET|POST', '/admin/antimat', 'Admin\AntimatController@index'],
     ['GET',      '/admin/antimat/[delete|clear:action]', 'Admin\AntimatController'],
+    ['GET',      '/admin/status', 'Admin\StatusController@index'],
+    ['GET|POST', '/admin/status/[create|edit:action]', 'Admin\StatusController'],
+    ['GET',      '/admin/status/delete', 'Admin\StatusController@delete'],
 
     ['GET',      '/admin/rules', 'Admin\RulesController@index'],
     ['GET|POST', '/admin/rules/edit', 'Admin\RulesController@edit'],
@@ -252,7 +255,6 @@ $routes = [
     ['GET|POST', '/admin/blacklist', 'admin/blacklist.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
     ['GET|POST', '/admin/smiles', 'admin/smiles.php'],
-    ['GET|POST', '/admin/status', 'admin/status.php'],
     ['GET|POST', '/admin/backup', 'admin/backup.php'],
     ['GET|POST', '/admin/checker', 'admin/checker.php'],
     ['GET|POST', '/admin/delivery', 'admin/delivery.php'],
