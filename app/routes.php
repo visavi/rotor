@@ -224,7 +224,8 @@ $routes = [
     ['GET',      '/admin/rules', 'Admin\RulesController@index'],
     ['GET|POST', '/admin/rules/edit', 'Admin\RulesController@edit'],
 
-    ['GET|POST', '/admin/upgrade', 'Admin\AdminController@upgrade'],
+    ['GET',      '/admin/upgrade', 'Admin\AdminController@upgrade'],
+    ['GET',      '/admin/phpinfo', 'Admin\AdminController@phpinfo'],
 
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
@@ -248,7 +249,6 @@ $routes = [
     ['GET|POST', '/admin/invitations', 'admin/invitations.php'],
     ['GET|POST', '/admin/transfers', 'admin/transfers.php'],
     ['GET|POST', '/admin/users', 'admin/users.php'],
-    ['GET|POST', '/admin/phpinfo', 'admin/phpinfo.php'],
     ['GET|POST', '/admin/blacklist', 'admin/blacklist.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
     ['GET|POST', '/admin/smiles', 'admin/smiles.php'],
@@ -260,7 +260,6 @@ $routes = [
     ['GET|POST', '/admin/notice', 'admin/notice.php'],
     ['GET|POST', '/admin/files', 'admin/files.php'],
     ['GET|POST', '/admin/delusers', 'admin/delusers.php'],
-    ['GET',      '/admin/upgrade', 'admin/upgrade.php'],
 
     ['GET', '/search', function() {
         return view('search/index');

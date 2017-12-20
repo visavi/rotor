@@ -7,6 +7,7 @@ use App\Models\Admlog;
 use App\Models\User;
 use Phinx\Console\PhinxApplication;
 use Phinx\Wrapper\TextWrapper;
+use Illuminate\Database\Capsule\Manager as DB;
 
 Class AdminController extends BaseController
 {
@@ -61,5 +62,31 @@ Class AdminController extends BaseController
         $wrap->setOption('environment', 'default');
 
         return view('admin/upgrade', compact('wrap'));
+    }
+
+    /**
+     * Просмотр информации о PHP
+     */
+    public function phpinfo()
+    {
+        if (! isAdmin(User::ADMIN)) {
+            abort(403, 'Доступ запрещен!');
+        }
+
+        $iniInfo = null;
+        $gdInfo  = null;
+
+        if (function_exists('ini_get_all')) {
+            $iniInfo = ini_get_all();
+        }
+
+        if ($gdInfo = gd_info()) {
+            $gdInfo = preg_replace('/[^0-9\.]/', '', $gdInfo['GD Version']);
+        }
+
+        $pdoVersion = DB::selectOne("SELECT VERSION() as version");
+        $pdoVersion = preg_replace('/[^0-9\.]/', '', $pdoVersion->version);
+
+        return view('admin/phpinfo', compact('iniInfo', 'gdInfo', 'pdoVersion'));
     }
 }
