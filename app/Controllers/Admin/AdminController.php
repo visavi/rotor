@@ -31,7 +31,6 @@ Class AdminController extends BaseController
             'brow'       => getBrowser(),
             'created_at' => SITETIME,
         ]);
-
     }
 
     /**
@@ -84,7 +83,7 @@ Class AdminController extends BaseController
             $gdInfo = preg_replace('/[^0-9\.]/', '', $gdInfo['GD Version']);
         }
 
-        $pdoVersion = DB::selectOne("SELECT VERSION() as version");
+        $pdoVersion = DB::selectOne('SELECT VERSION() as version');
         $pdoVersion = preg_replace('/[^0-9\.]/', '', $pdoVersion->version);
 
         return view('admin/phpinfo', compact('iniInfo', 'gdInfo', 'pdoVersion'));

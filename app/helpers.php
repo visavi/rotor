@@ -38,7 +38,6 @@ use App\Models\Smile;
 use App\Models\Spam;
 use App\Models\Topic;
 use App\Models\User;
-use App\Models\Visit;
 use App\Models\Vote;
 use App\Models\Wall;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -47,15 +46,15 @@ use Jenssegers\Blade\Blade;
 /**
  * Форматирует вывод времени из секунд
  *
- * @param  int    $time секунды
+ * @param  string $time секунды
  * @return string       форматированный вывод
  */
 function makeTime($time)
 {
     if ($time < 3600) {
-        $time = sprintf("%02d:%02d", ($time / 60) % 60, $time % 60);
+        $time = sprintf('%02d:%02d', ($time / 60) % 60, $time % 60);
     } else {
-        $time = sprintf("%02d:%02d:%02d", ($time / 3600) % 24, ($time / 60) % 60, $time % 60);
+        $time = sprintf('%02d:%02d:%02d', ($time / 3600) % 24, ($time / 60) % 60, $time % 60);
     }
 
     return $time;
@@ -68,7 +67,7 @@ function makeTime($time)
  * @param  string  $format    формат времени
  * @return string             форматированный вывод
  */
-function dateFixed($timestamp, $format = "d.m.y / H:i")
+function dateFixed($timestamp, $format = 'd.m.y / H:i')
 {
     if (! is_numeric($timestamp)) {
         $timestamp = SITETIME;
@@ -77,8 +76,8 @@ function dateFixed($timestamp, $format = "d.m.y / H:i")
     $shift     = getUser('timezone') * 3600;
     $dateStamp = date($format, $timestamp + $shift);
 
-    $today     = date("d.m.y", SITETIME + $shift);
-    $yesterday = date("d.m.y", strtotime("-1 day", SITETIME + $shift));
+    $today     = date('d.m.y', SITETIME + $shift);
+    $yesterday = date('d.m.y', strtotime('-1 day', SITETIME + $shift));
 
     $dateStamp = str_replace([$today, $yesterday], ['Сегодня', 'Вчера'], $dateStamp);
 
@@ -110,8 +109,9 @@ function deleteImage($dir, $image)
 /**
  * Удаляет записи пользователя из всех таблиц
  *
- * @param  User    $user объект пользователя
+ * @param  User $user объект пользователя
  * @return bool          результат удаления
+ * @throws Exception
  */
 function deleteUser(User $user)
 {
@@ -191,7 +191,7 @@ function utfLower($str)
  */
 function utfSubstr($str, $start, $length = null)
 {
-    if ($length === null) {
+    if (! $length) {
         $length = utfStrlen($str);
     }
 
@@ -253,7 +253,7 @@ function intar($string)
     if (is_array($string)) {
         $newString = array_map('intval', $string);
     } else {
-        $newString = [abs(intval($string))];
+        $newString = [(int) abs($string)];
     }
 
     return $newString;
@@ -262,17 +262,17 @@ function intar($string)
 /**
  * Возвращает размер в человекочитаемом формате
  *
- * @param  int    $fileSize размер в байтах
+ * @param  string $fileSize размер в байтах
  * @return string           размер в читаемом формате
  */
 function formatSize($fileSize)
 {
     if ($fileSize >= 1048576000) {
-        $fileSize = round(($fileSize / 1073741824), 2).' Gb';
+        $fileSize = round($fileSize / 1073741824, 2).' Gb';
     } elseif ($fileSize >= 1024000) {
-        $fileSize = round(($fileSize / 1048576), 2).' Mb';
+        $fileSize = round($fileSize / 1048576, 2).' Mb';
     } elseif ($fileSize >= 1000) {
-        $fileSize = round(($fileSize / 1024), 2).' Kb';
+        $fileSize = round($fileSize / 1024, 2).' Kb';
     } else {
         $fileSize = round($fileSize).' byte';
     }
@@ -290,15 +290,15 @@ function formatFileSize($file)
 {
     if (file_exists($file) && is_file($file)) {
         return formatSize(filesize($file));
-    } else {
-        return 0;
     }
+
+    return 0;
 }
 
 /**
  * Возвращает секунды в человекочитаемом формате
  *
- * @param  int    $fileTime кол. секунд timestamp
+ * @param  string $fileTime кол. секунд timestamp
  * @param  int    $round    кол. символов после запятой
  * @return string           время в читаемом формате
  */
@@ -428,7 +428,7 @@ function userStatus(User $user)
         return setting('statusdef');
     }
 
-    if (is_null($status)) {
+    if (! $status) {
         saveStatus(3600);
         $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
     }
@@ -447,7 +447,7 @@ function saveSetting() {
 /**
  * Возвращает рейтинг в виде звезд
  *
- * @param  int    $rating рейтинг
+ * @param  float  $rating рейтинг
  * @return string         преобразованный рейтинг
  */
 function ratingVote($rating)
@@ -476,9 +476,9 @@ function ratingVote($rating)
  */
 function makeCalendar($month, $year)
 {
-    $wday = date("w", mktime(0, 0, 0, $month, 1, $year));
+    $wday = date('w', mktime(0, 0, 0, $month, 1, $year));
 
-    if ($wday == 0) {
+    if ($wday === 0) {
         $wday = 7;
     }
 
@@ -522,7 +522,7 @@ function defaultAvatar($user)
 {
     $name   = empty($user->name) ? $user->login : $user->name;
     $color  = '#'.substr(dechex(crc32($user->login)), 0, 6);
-    $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');;
+    $letter = mb_strtoupper(utfSubstr($name, 0, 1), 'utf-8');
 
     return '<div class="avatar" style="background:'.$color.'"><a href="/user/'.$user->login.'">'.$letter.'</a></div>';
 }
@@ -588,17 +588,17 @@ function userWall(User $user)
  */
 function statsOnline($cache = 30)
 {
-    if (@filemtime(STORAGE."/temp/online.dat") < time() - $cache) {
+    if (@filemtime(STORAGE.'/temp/online.dat') < time() - $cache) {
 
         $online[] = Online::query()->whereNotNull('user_id')->count();
         $online[] = Online::query()->count();
 
-        include_once(APP.'/Includes/count.php');
+        include_once APP.'/Includes/count.php';
 
-        file_put_contents(STORAGE."/temp/online.dat", serialize($online), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/online.dat', serialize($online), LOCK_EX);
     }
 
-    return unserialize(file_get_contents(STORAGE."/temp/online.dat"));
+    return unserialize(file_get_contents(STORAGE.'/temp/online.dat'));
 }
 
 /**
@@ -608,7 +608,7 @@ function statsOnline($cache = 30)
  */
 function showOnline()
 {
-    if (setting('onlines') == 1) {
+    if (setting('onlines')) {
         return view('app/_online', ['online' => statsOnline()]);
     }
 
@@ -637,7 +637,7 @@ function statsCounter()
  */
 function showCounter()
 {
-    include_once (APP.'/Includes/counters.php');
+    include_once APP.'/Includes/counters.php';
 
     if (setting('incount') > 0) {
         return view('app/_counter', ['count' => statsCounter()]);
@@ -657,13 +657,11 @@ function statsUsers()
 
         $startMonth = mktime(0, 0, 0, dateFixed(SITETIME, 'n'), 1);
 
-        $total = User::query()->count();
-        $new   = User::query()->where('joined', '>', $startMonth)->count();
+        $stat = User::query()->count();
+        $new  = User::query()->where('joined', '>', $startMonth)->count();
 
         if ($new) {
-            $stat = $total.'/+'.$new;
-        } else {
-            $stat = $total;
+            $stat = $stat.'/+'.$new;
         }
 
         file_put_contents(STORAGE.'/temp/statusers.dat', $stat, LOCK_EX);
@@ -749,20 +747,18 @@ function statsIpBanned()
  */
 function statsGallery()
 {
-    if (@filemtime(STORAGE."/temp/statgallery.dat") < time() - 900) {
-        $total = Photo::query()->count();
+    if (@filemtime(STORAGE.'/temp/statgallery.dat') < time() - 900) {
+        $stat     = Photo::query()->count();
         $totalNew = Photo::query()->where('created_at', '>', SITETIME - 86400 * 3)->count();
 
         if ($totalNew) {
-            $stat = $total.'/+'.$totalNew;
-        } else {
-            $stat = $total;
+            $stat = $stat.'/+'.$totalNew;
         }
 
-        file_put_contents(STORAGE."/temp/statgallery.dat", $stat, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statgallery.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statgallery.dat");
+    return file_get_contents(STORAGE.'/temp/statgallery.dat');
 }
 
 /**
@@ -820,11 +816,11 @@ function statsSmiles()
  */
 function statsChecker()
 {
-    if (file_exists(STORAGE."/temp/checker.dat")) {
-        return dateFixed(filemtime(STORAGE."/temp/checker.dat"), 'j.m.y');
-    } else {
-        return 0;
+    if (file_exists(STORAGE.'/temp/checker.dat')) {
+        return dateFixed(filemtime(STORAGE.'/temp/checker.dat'), 'j.m.y');
     }
+
+    return 0;
 }
 
 /**
@@ -852,18 +848,18 @@ function userOnline(User $user)
 
     $online = '<i class="fa fa-asterisk text-danger"></i>';
 
-    if (is_null($visits)) {
-        if (@filemtime(STORAGE."/temp/visit.dat") < time() - 10) {
+    if (! $visits) {
+        if (@filemtime(STORAGE.'/temp/visit.dat') < time() - 10) {
 
             $visits = Online::query()
                 ->whereNotNull('user_id')
                 ->pluck('user_id', 'user_id')
                 ->all();
 
-            file_put_contents(STORAGE."/temp/visit.dat", serialize($visits), LOCK_EX);
+            file_put_contents(STORAGE.'/temp/visit.dat', serialize($visits), LOCK_EX);
         }
 
-        $visits = unserialize(file_get_contents(STORAGE."/temp/visit.dat"));
+        $visits = unserialize(file_get_contents(STORAGE.'/temp/visit.dat'));
     }
 
     if (isset($visits[$user->id])) {
@@ -907,21 +903,19 @@ function photoNavigation($id)
  */
 function statsBlog()
 {
-    if (@filemtime(STORAGE."/temp/statblogblog.dat") < time() - 900) {
+    if (@filemtime(STORAGE.'/temp/statblogblog.dat') < time() - 900) {
 
-        $totalblog = Blog::query()->count();
+        $stat      = Blog::query()->count();
         $totalnew  = Blog::query()->where('created_at', '>', SITETIME - 86400 * 3)->count();
 
         if ($totalnew) {
-            $stat = $totalblog.'/+'.$totalnew;
-        } else {
-            $stat = $totalblog;
+            $stat = $stat.'/+'.$totalnew;
         }
 
-        file_put_contents(STORAGE."/temp/statblog.dat", $stat, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statblog.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statblog.dat");
+    return file_get_contents(STORAGE.'/temp/statblog.dat');
 }
 
 /**
@@ -931,15 +925,15 @@ function statsBlog()
  */
 function statsForum()
 {
-    if (@filemtime(STORAGE."/temp/statforum.dat") < time() - 600) {
+    if (@filemtime(STORAGE.'/temp/statforum.dat') < time() - 600) {
 
         $topics = Topic::query()->count();
         $posts  = Post::query()->count();
 
-        file_put_contents(STORAGE."/temp/statforum.dat", $topics.'/'.$posts, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statforum.dat', $topics.'/'.$posts, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statforum.dat");
+    return file_get_contents(STORAGE.'/temp/statforum.dat');
 }
 
 /**
@@ -949,14 +943,14 @@ function statsForum()
  */
 function statsGuest()
 {
-    if (@filemtime(STORAGE."/temp/statguest.dat") < time() - 600) {
+    if (@filemtime(STORAGE.'/temp/statguest.dat') < time() - 600) {
 
         $total = Guest::query()->count();
 
-        file_put_contents(STORAGE."/temp/statguest.dat", $total, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statguest.dat', $total, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statguest.dat");
+    return file_get_contents(STORAGE.'/temp/statguest.dat');
 }
 
 /**
@@ -986,7 +980,7 @@ function statsNewChat()
  */
 function statsLoad()
 {
-    if (@filemtime(STORAGE."/temp/statload.dat") < time() - 900) {
+    if (@filemtime(STORAGE.'/temp/statload.dat') < time() - 900) {
 
         $totalLoads = Load::query()->sum('count');
 
@@ -994,12 +988,12 @@ function statsLoad()
             ->where('created_at', '>', SITETIME - 86400 * 5)
             ->count();
 
-        $stat = ($totalNew) ? $totalLoads.'/+'.$totalNew : $totalLoads;
+        $stat = $totalNew ? $totalLoads.'/+'.$totalNew : $totalLoads;
 
-        file_put_contents(STORAGE."/temp/statload.dat", $stat, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statload.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statload.dat");
+    return file_get_contents(STORAGE.'/temp/statload.dat');
 }
 
 /**
@@ -1020,11 +1014,13 @@ function statsNewLoad()
  */
 function cryptMail($mail)
 {
-    $output = '';
-    $strlen = strlen($mail);
-    for ($i = 0; $i < $strlen; $i++) {
-        $output .= '&#'.ord($mail[$i]).';';
+    $output  = '';
+    $symbols = str_split($mail);
+
+    foreach ($symbols as $symbol) {
+        $output .= '&#'.ord($symbol).';';
     }
+
     return $output;
 }
 
@@ -1036,17 +1032,17 @@ function cryptMail($mail)
  */
 function statVotes()
 {
-    if (@filemtime(STORAGE."/temp/statvote.dat") < time() - 900) {
+    if (@filemtime(STORAGE.'/temp/statvote.dat') < time() - 900) {
 
         $votes = Vote::query()
             ->selectRaw('count(*) AS cnt, ifnull(sum(count), 0) AS sum')
             ->where('closed', 0)
             ->first();
 
-        file_put_contents(STORAGE."/temp/statvote.dat", $votes['cnt'].'/'.$votes['sum'], LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statvote.dat', $votes->cnt.'/'.$votes->sum, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statvote.dat");
+    return file_get_contents(STORAGE.'/temp/statvote.dat');
 }
 
 /**
@@ -1057,25 +1053,25 @@ function statVotes()
  */
 function statsNewsDate()
 {
-    if (@filemtime(STORAGE."/temp/statnews.dat") < time() - 900) {
+    if (@filemtime(STORAGE.'/temp/statnews.dat') < time() - 900) {
         $stat = 0;
 
         $news = News::query()->orderBy('created_at', 'desc')->first();
 
         if ($news) {
-            $stat = dateFixed($news->created_at, "d.m.y");
+            $stat = dateFixed($news->created_at, 'd.m.y');
         }
 
-        file_put_contents(STORAGE."/temp/statnews.dat", $stat, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/statnews.dat', $stat, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/statnews.dat");
+    return file_get_contents(STORAGE.'/temp/statnews.dat');
 }
 
 /**
  * Возвращает последние новости
  *
- * @return string новость
+ * @return void новость
  */
 function lastNews()
 {
@@ -1109,11 +1105,11 @@ function lastNews()
  */
 function checkAuth()
 {
-    if (isset($_SESSION['id']) && isset($_SESSION['password'])) {
+    if (isset($_SESSION['id'], $_SESSION['password'])) {
 
         $user = User::query()->find($_SESSION['id']);
 
-        if ($user && $_SESSION['password'] == md5(env('APP_KEY').$user->password)) {
+        if ($user && $_SESSION['password'] === md5(env('APP_KEY').$user->password)) {
             return $user;
         }
     }
@@ -1142,16 +1138,7 @@ function access($level)
 {
     $access = array_flip(User::ALL_GROUPS);
 
-    if (
-        getUser()
-        && isset($access[$level])
-        && isset($access[getUser('level')])
-        && $access[getUser('level')] <= $access[$level]
-    ) {
-        return true;
-    }
-
-    return false;
+    return getUser() && isset($access[$level]) && isset($access[getUser('level')]) && $access[getUser('level')] <= $access[$level];
 }
 
 /**
@@ -1258,29 +1245,20 @@ function stripString($str, $words = 20) {
  */
 function getAdvertUser()
 {
-    if (!empty(setting('rekusershow'))) {
-        if (@filemtime(STORAGE."/temp/rekuser.dat") < time() - 1800) {
+    if (setting('rekusershow')) {
+        if (@filemtime(STORAGE.'/temp/rekuser.dat') < time() - 1800) {
             saveAdvertUser();
         }
 
-        $datafile = unserialize(file_get_contents(STORAGE."/temp/rekuser.dat"));
-        $total = count($datafile);
+        $datafile = unserialize(file_get_contents(STORAGE.'/temp/rekuser.dat'));
 
-        if ($total > 0) {
+        if ($datafile) {
 
-            $rekusershow = (setting('rekusershow') > $total) ? $total : setting('rekusershow');
+            $total = count($datafile);
+            $show  = setting('rekusershow') > $total ? $total : setting('rekusershow');
 
-            $quot_rand = array_rand($datafile, $rekusershow);
-
-            if ($rekusershow > 1) {
-                $result = [];
-                for($i = 0; $i < $rekusershow; $i++) {
-                    $result[] = $datafile[$quot_rand[$i]];
-                }
-                $result = implode('<br>', $result);
-            } else {
-                $result = $datafile[$quot_rand];
-            }
+            $links  = array_random($datafile, $show);
+            $result = implode('<br>', $links);
 
             return view('advert/_user', compact('result'));
         }
@@ -1290,7 +1268,7 @@ function getAdvertUser()
 /**
  * Кэширует ссылки пользовательской рекламы
  *
- * @return string Список ссылок
+ * @return void Список ссылок
  */
 function saveAdvertUser()
 {
@@ -1314,29 +1292,29 @@ function saveAdvertUser()
         }
     }
 
-    file_put_contents(STORAGE."/temp/rekuser.dat", serialize($links), LOCK_EX);
+    file_put_contents(STORAGE.'/temp/rekuser.dat', serialize($links), LOCK_EX);
 }
 
 /**
  * Выводит последние фотографии
  *
- * @param  int    $show Количество последних фотографий
- * @return string       Список фотографий
+ * @param  int  $show Количество последних фотографий
+ * @return void       Список фотографий
  */
 function recentPhotos($show = 5)
 {
-    if (@filemtime(STORAGE."/temp/recentphotos.dat") < time() - 1800) {
+    if (@filemtime(STORAGE.'/temp/recentphotos.dat') < time() - 1800) {
 
         $recent = Photo::query()->orderBy('created_at', 'desc')->limit($show)->get();
 
-        file_put_contents(STORAGE."/temp/recentphotos.dat", serialize($recent), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/recentphotos.dat', serialize($recent), LOCK_EX);
     }
 
-    $photos = unserialize(file_get_contents(STORAGE."/temp/recentphotos.dat"));
+    $photos = unserialize(file_get_contents(STORAGE.'/temp/recentphotos.dat'));
 
     if ($photos->isNotEmpty()) {
         foreach ($photos as $data) {
-            echo '<a href="/gallery/'.$data['id'].'">'.resizeImage('uploads/pictures/', $data['link'], setting('previewsize'), ['alt' => $data['title'], 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
+            echo '<a href="/gallery/'.$data['id'].'">'.resizeImage('uploads/pictures/', $data->link, setting('previewsize'), ['alt' => $data->title, 'class' => 'rounded', 'style' => 'width: 100px; height: 100px;']).'</a>';
         }
 
         echo '<br>';
@@ -1346,21 +1324,21 @@ function recentPhotos($show = 5)
 /**
  * Выводит последние темы форума
  *
- * @param int     $show Количество последних тем форума
- * @return string       Список тем
+ * @param  int  $show Количество последних тем форума
+ * @return void       Список тем
  */
 function recentTopics($show = 5)
 {
-    if (@filemtime(STORAGE."/temp/recenttopics.dat") < time() - 180) {
+    if (@filemtime(STORAGE.'/temp/recenttopics.dat') < time() - 180) {
         $topics = Topic::query()->orderBy('updated_at', 'desc')->limit($show)->get();
-        file_put_contents(STORAGE."/temp/recenttopics.dat", serialize($topics), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/recenttopics.dat', serialize($topics), LOCK_EX);
     }
 
-    $topics = unserialize(file_get_contents(STORAGE."/temp/recenttopics.dat"));
+    $topics = unserialize(file_get_contents(STORAGE.'/temp/recenttopics.dat'));
 
     if ($topics->isNotEmpty()) {
         foreach ($topics as $topic) {
-            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/'.$topic['id'].'">'.$topic['title'].'</a> ('.$topic->posts.')';
+            echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/'.$topic->id.'">'.$topic->title.'</a> ('.$topic->posts.')';
             echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br>';
         }
     }
@@ -1369,12 +1347,12 @@ function recentTopics($show = 5)
 /**
  * Выводит последние файлы в загрузках
  *
- * @param  int    $show Количество последних файлов в загрузках
- * @return string       Список файлов
+ * @param  int  $show Количество последних файлов в загрузках
+ * @return void       Список файлов
  */
 function recentFiles($show = 5)
 {
-    if (@filemtime(STORAGE."/temp/recentfiles.dat") < time() - 600) {
+    if (@filemtime(STORAGE.'/temp/recentfiles.dat') < time() - 600) {
 
         $files = Down::query()
             ->where('active', 1)
@@ -1383,14 +1361,13 @@ function recentFiles($show = 5)
             ->with('category')
             ->get();
 
-        file_put_contents(STORAGE."/temp/recentfiles.dat", serialize($files), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/recentfiles.dat', serialize($files), LOCK_EX);
     }
 
-    $files = unserialize(file_get_contents(STORAGE."/temp/recentfiles.dat"));
+    $files = unserialize(file_get_contents(STORAGE.'/temp/recentfiles.dat'));
 
     if ($files->isNotEmpty()) {
         foreach ($files as $file){
-
             $filesize = $file['link'] ? formatFileSize(UPLOADS.'/files/'.$file->folder.$file->link) : 0;
             echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
         }
@@ -1400,21 +1377,21 @@ function recentFiles($show = 5)
 /**
  * Выводит последние статьи в блогах
  *
- * @param  int    $show Количество последних статей в блогах
- * @return string       Список статей
+ * @param  int  $show Количество последних статей в блогах
+ * @return void       Список статей
  */
 function recentBlogs($show = 5)
 {
-    if (@filemtime(STORAGE."/temp/recentblog.dat") < time() - 600) {
+    if (@filemtime(STORAGE.'/temp/recentblog.dat') < time() - 600) {
         $blogs = Blog::query()
             ->orderBy('created_at', 'desc')
             ->limit($show)
             ->get();
 
-        file_put_contents(STORAGE."/temp/recentblog.dat", serialize($blogs), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/recentblog.dat', serialize($blogs), LOCK_EX);
     }
 
-    $blogs = unserialize(file_get_contents(STORAGE."/temp/recentblog.dat"));
+    $blogs = unserialize(file_get_contents(STORAGE.'/temp/recentblog.dat'));
 
     if ($blogs->isNotEmpty()) {
         foreach ($blogs as $blog) {
@@ -1430,15 +1407,15 @@ function recentBlogs($show = 5)
  */
 function statsOffers()
 {
-    if (@filemtime(STORAGE."/temp/offers.dat") < time() - 10800) {
+    if (@filemtime(STORAGE.'/temp/offers.dat') < time() - 10800) {
 
         $offers   = Offer::query()->where('type', 'offer')->count();
         $problems = Offer::query()->where('type', 'issue')->count();
 
-        file_put_contents(STORAGE."/temp/offers.dat", $offers.'/'.$problems, LOCK_EX);
+        file_put_contents(STORAGE.'/temp/offers.dat', $offers.'/'.$problems, LOCK_EX);
     }
 
-    return file_get_contents(STORAGE."/temp/offers.dat");
+    return file_get_contents(STORAGE.'/temp/offers.dat');
 }
 
 /**
@@ -1502,9 +1479,9 @@ function profile(User $user, $color = null)
 
         if ($color){
             return '<a href="/user/'.$user->login.'"><span style="color:'.$color.'">'.$name.'</span></a>';
-        } else {
-            return '<a href="/user/'.$user->login.'">'.$name.'</a>';
         }
+
+        return '<a href="/user/'.$user->login.'">'.$name.'</a>';
     }
 
     return setting('guestsuser');
@@ -1520,11 +1497,13 @@ function formatNum($num)
 {
     if ($num > 0) {
         return '<span style="color:#00aa00">+'.$num.'</span>';
-    } elseif ($num < 0) {
+    }
+
+    if ($num < 0) {
         return '<span style="color:#ff0000">'.$num.'</span>';
-    } else {
-        return '<span>0</span>';
-   }
+    }
+
+    return '<span>0</span>';
 }
 
 /**
@@ -1569,8 +1548,8 @@ function uploadImage($file, $weight, $size, $newName = false)
         $handle -> image_x = setting('screensize');
         $handle -> file_overwrite = true;
 
-        if ($handle->file_src_name_ext == 'png' ||
-            $handle->file_src_name_ext == 'bmp') {
+        if ($handle->file_src_name_ext === 'png' ||
+            $handle->file_src_name_ext === 'bmp') {
             $handle->image_convert = 'jpg';
         }
 
@@ -1583,12 +1562,12 @@ function uploadImage($file, $weight, $size, $newName = false)
             $handle -> image_watermark_position = 'BR';
         }
 
-        $handle -> ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
-        $handle -> file_max_size = $weight;  // byte
-        $handle -> image_max_width = $size;  // px
-        $handle -> image_max_height = $size; // px
-        $handle -> image_min_width = 100;    // px
-        $handle -> image_min_height = 100;   // px
+        $handle->ext_check = ['jpg', 'jpeg', 'gif', 'png', 'bmp'];
+        $handle->file_max_size = $weight;  // byte
+        $handle->image_max_width = $size;  // px
+        $handle->image_max_height = $size; // px
+        $handle->image_min_width = 100;    // px
+        $handle->image_min_height = 100;   // px
 
         return $handle;
     }
@@ -1605,7 +1584,7 @@ function uploadImage($file, $weight, $size, $newName = false)
  * @param  array  $params параметры изображения
  * @return string         уменьшенное изображение
  */
-function resizeImage($dir, $name, $size, $params = [])
+function resizeImage($dir, $name, $size, array $params = [])
 {
     if (!empty($name) && file_exists(HOME.'/'.$dir.$name)){
 
@@ -1654,9 +1633,9 @@ function resizeImage($dir, $name, $size, $params = [])
 /**
  * Возвращает находится ли пользователь в контакатх
  *
- * @param  User $user       объект пользователя
- * @param  User $ignoreUser объект пользователя
- * @return bool             находится ли в контактах
+ * @param  User $user        пользователя
+ * @param  User $contactUser объект пользователя
+ * @return bool              находится ли в контактах
  */
 function isContact(User $user, User $contactUser)
 {
@@ -1745,7 +1724,7 @@ function sendPrivate($userId, $authorId, $text)
  * @param  array  $replace массив заменяемых параметров
  * @return string          сформированный текст
  */
-function textNotice($type, $replace = [])
+function textNotice($type, array $replace = [])
 {
     $message = Notice::query()->where('type', $type)->first();
 
@@ -1813,7 +1792,7 @@ function returnUrl($url = null)
         return false;
     }
     $query = Request::has('return') ? Request::input('return') : Request::path();
-    return '?return='.urlencode(is_null($url) ? $query : $url);
+    return '?return='.urlencode(! $url ? $query : $url);
 }
 
 /**
@@ -1823,7 +1802,7 @@ function returnUrl($url = null)
  * @param  array  $params массив параметров
  * @return string         сформированный код
  */
-function view($view, $params = [])
+function view($view, array $params = [])
 {
     $blade = new Blade([
         HOME.'/themes/'.setting('themes').'/views',
@@ -1843,11 +1822,11 @@ function view($view, $params = [])
  */
 function abort($code, $message = null)
 {
-    if ($code == 403) {
+    if ($code === 403) {
         header($_SERVER['SERVER_PROTOCOL'].' 403 Forbidden');
     }
 
-    if ($code == 404) {
+    if ($code === 404) {
         header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
     }
 
@@ -1871,10 +1850,10 @@ function abort($code, $message = null)
             'status' => 'error',
             'message' => $message,
         ]));
-    } else {
-        $referer = Request::header('referer') ?? null;
-        exit(view('errors/'.$code, compact('message', 'referer')));
     }
+
+    $referer = Request::header('referer') ?? null;
+    exit(view('errors/'.$code, compact('message', 'referer')));
 }
 
 /**
@@ -1992,17 +1971,6 @@ function textError($field)
 }
 
 /**
- * Проверяет является ли email валидным
- *
- * @param  string  $email адрес email
- * @return bool           результат проверки
- */
-function isMail($email)
-{
-    return preg_match('#^([a-z0-9_\-\.])+\@([a-z0-9_\-\.])+(\.([a-z0-9])+)+$#', $email);
-}
-
-/**
  * Отправка уведомления на email
  *
  * @param  mixed   $to      Получатель
@@ -2011,7 +1979,7 @@ function isMail($email)
  * @param  array   $params  Дополнительные параметры
  * @return bool             Результат отправки
  */
-function sendMail($to, $subject, $body, $params = [])
+function sendMail($to, $subject, $body, array $params = [])
 {
     if (empty($params['from'])) {
         $params['from'] = [env('SITE_EMAIL') => env('SITE_ADMIN')];
@@ -2025,7 +1993,7 @@ function sendMail($to, $subject, $body, $params = [])
         ->setReturnPath(env('SITE_EMAIL'))
         ->setBody($body, 'text/html');
 
-    if (env('MAIL_DRIVER') == 'smtp') {
+    if (env('MAIL_DRIVER') === 'smtp') {
         $transport = (new Swift_SmtpTransport(env('MAIL_HOST'), env('MAIL_PORT'), env('MAIL_ENCRYPTION')))
             ->setUsername(env('MAIL_USERNAME'))
             ->setPassword(env('MAIL_PASSWORD'));
@@ -2046,7 +2014,7 @@ function sendMail($to, $subject, $body, $params = [])
  */
 function dateFormat($format, $date = null)
 {
-    $date = (is_null($date)) ? SITETIME : strtotime($date);
+    $date = ! $date ? SITETIME : strtotime($date);
 
     $eng = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     $rus = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
@@ -2081,7 +2049,7 @@ function sizeFormat($filename, $decimals = 1)
     $size   = ['B','kB','MB','GB','TB'];
     $factor = floor((strlen($bytes) - 1) / 3);
     $unit   = $size[$factor] ?? '';
-    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).$unit;
+    return sprintf("%.{$decimals}f", $bytes / (1024 ** $factor)).$unit;
 }
 
 /**
@@ -2097,12 +2065,12 @@ function plural($num, $forms)
         $forms = explode(',', $forms);
     }
 
-    if (count($forms) == 1) {
+    if (count($forms) === 1) {
         return $num.' '.$forms[0];
     }
 
     if ($num % 100 > 10 &&  $num % 100 < 15) return $num.' '.$forms[2];
-    if ($num % 10 == 1) return $num.' '.$forms[0];
+    if ($num % 10 === 1) return $num.' '.$forms[0];
     if ($num % 10 > 1 && $num %10 < 5) return $num.' '.$forms[1];
     return $num.' '.$forms[2];
 }
@@ -2117,7 +2085,7 @@ function plural($num, $forms)
 function validateDate($date, $format = 'Y-m-d H:i:s')
 {
     $d = DateTime::createFromFormat($format, $date);
-    return $d && $d->format($format) == $date;
+    return $d && $d->format($format) === $date;
 }
 
 /**
@@ -2149,7 +2117,7 @@ function bbCode($text, $parse = true)
 function getIp()
 {
     $ip = Request::ip();
-    return $ip == '::1' ? '127.0.0.1' : $ip;
+    return $ip === '::1' ? '127.0.0.1' : $ip;
 }
 
 /**
@@ -2167,7 +2135,7 @@ function getBrowser($userAgent = null)
 
     $brow = $browser->getBrowser();
     $version = implode('.', array_slice(explode('.', $browser->getVersion()), 0, 2));
-    return mb_substr($version == 'unknown' ? $brow : $brow.' '.$version, 0, 25, 'utf-8');
+    return mb_substr($version === 'unknown' ? $brow : $brow.' '.$version, 0, 25, 'utf-8');
 }
 
 /**
@@ -2180,8 +2148,8 @@ function getBrowser($userAgent = null)
 function server($key = null, $default = null)
 {
     $server = Request::server($key, $default);
-    if ($key == 'REQUEST_URI') $server = urldecode($server);
-    if ($key == 'PHP_SELF') $server = current(explode('?', server('REQUEST_URI')));
+    if ($key === 'REQUEST_URI') $server = urldecode($server);
+    if ($key === 'PHP_SELF') $server = current(explode('?', server('REQUEST_URI')));
 
     return check($server);
 }
@@ -2219,9 +2187,9 @@ function getUser($key = null)
     if (Registry::has('user')) {
         if ($key) {
             return Registry::get('user')[$key] ?? null;
-        } else {
-            return Registry::get('user');
         }
+
+        return Registry::get('user');
     }
 
     return null;
@@ -2230,8 +2198,8 @@ function getUser($key = null)
 /**
  * Генерирует постраничную навигация
  *
- * @param  array  $page массив данных
- * @return string       сформированный блок
+ * @param  array $page массив данных
+ * @return void        сформированный блок
  */
 function pagination($page)
 {
@@ -2326,7 +2294,7 @@ function paginate($limit, $total)
         $current = ceil($total / $limit);
     }
 
-    $offset = intval(($current * $limit) - $limit);
+    $offset = (int) ($current * $limit) - $limit;
 
     return compact('current', 'offset', 'limit', 'total');
 }
@@ -2360,8 +2328,8 @@ function imageBase64($path, array $params = [])
 /**
  * Выводит прогресс-бар
  *
- * @param int  $percent
- * @param bool $title
+ * @param  int    $percent
+ * @param  bool   $title
  * @return string
  */
 function progressBar($percent, $title = false)
@@ -2402,7 +2370,7 @@ function translator($fallback = 'en')
  * @param  string  $locale
  * @return string
  */
-function trans($id, $replace = [], $locale = null)
+function trans($id, array $replace = [], $locale = null)
 {
     return translator()->trans($id, $replace, $locale);
 }
@@ -2452,7 +2420,7 @@ function ipBan($save = false)
         $ipBan = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
     } else {
         $ipBan = Ban::query()->pluck('ip')->all();
-        file_put_contents(STORAGE."/temp/ipban.dat", serialize($ipBan), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/ipban.dat', serialize($ipBan), LOCK_EX);
     }
 
     return $ipBan;
@@ -2477,11 +2445,11 @@ function setting($key = null)
         Registry::set('setting', $setting);
     }
 
-    if (empty($key)) {
+    if (! $key) {
         return Registry::get('setting');
     }
 
-    return isset(Registry::get('setting')[$key]) ? Registry::get('setting')[$key] : null;
+    return Registry::get('setting')[$key] ?? null;
 }
 
 /**
@@ -2515,8 +2483,8 @@ function siteUrl($parse = false)
 /**
  * Возвращает имя сайта из ссылки
  *
- * @param  string $link ссылка на сайт
- * @return string       имя сайта
+ * @param  string $url ссылка на сайт
+ * @return string      имя сайта
  */
 function siteDomain($url)
 {
