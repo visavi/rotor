@@ -24,9 +24,15 @@ class CreateTopicsTable extends AbstractMigration
                 ->addColumn('note', 'string', ['null' => true])
                 ->addIndex('forum_id')
                 ->addIndex('last_time')
-                ->addIndex('locked')
-                ->addIndex('title', ['type' => 'fulltext'])
-                ->create();
+                ->addIndex('locked');
+
+            $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
+
+            if(version_compare($mysql['Value'], '5.6.0', '>=')) {
+                $table->addIndex('title', ['type' => 'fulltext']);
+            }
+
+            $table->create();
         }
     }
 }

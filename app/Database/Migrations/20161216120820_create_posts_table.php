@@ -24,9 +24,15 @@ class CreatePostsTable extends AbstractMigration
                 ->addColumn('edit_time', 'integer', ['default' => 0])
                 ->addIndex('forum_id')
                 ->addIndex(['topic_id', 'time'], ['name' => 'topic_time'])
-                ->addIndex('user')
-                ->addIndex('text', ['type' => 'fulltext'])
-                ->create();
+                ->addIndex('user');
+
+            $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
+
+            if(version_compare($mysql['Value'], '5.6.0', '>=')) {
+                $table->addIndex('text', ['type' => 'fulltext']);
+            }
+
+            $table->create();
         }
     }
 }

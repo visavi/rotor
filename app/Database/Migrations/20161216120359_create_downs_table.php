@@ -30,10 +30,16 @@ class CreateDownsTable extends AbstractMigration
                 ->addColumn('notice', 'text', ['null' => true])
                 ->addColumn('active', 'boolean', ['default' => false])
                 ->addIndex('category_id')
-                ->addIndex('time')
-                ->addIndex('text', ['type' => 'fulltext'])
-                ->addIndex('title', ['type' => 'fulltext'])
-                ->create();
+                ->addIndex('time');
+
+            $mysql = $this->query('SHOW VARIABLES LIKE "version"')->fetch();
+
+            if(version_compare($mysql['Value'], '5.6.0', '>=')) {
+                $table->addIndex('text', ['type' => 'fulltext']);
+                $table->addIndex('title', ['type' => 'fulltext']);
+            }
+
+            $table->create();
         }
     }
 }
