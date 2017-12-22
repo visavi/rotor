@@ -433,7 +433,7 @@ function userStatus(User $user)
         $status = json_decode(file_get_contents(STORAGE.'/temp/status.dat'));
     }
 
-    return $status[$user->id] ?? setting('statusdef');
+    return $status->{$user->id} ?? setting('statusdef');
 }
 
 /**
@@ -854,7 +854,7 @@ function userOnline(User $user)
         $visits = json_decode(file_get_contents(STORAGE.'/temp/visit.dat'));
     }
 
-    if (isset($visits[$user->id])) {
+    if (isset($visits->{$user->id})) {
         $online = '<i class="fa fa-asterisk fa-spin text-success"></i>';
     }
 

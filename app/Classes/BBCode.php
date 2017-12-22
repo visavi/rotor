@@ -285,7 +285,7 @@ class BBCode
             $listSmiles = json_decode(file_get_contents(STORAGE.'/temp/smiles.dat'));
         }
 
-        return str_replace($listSmiles['codes'], $listSmiles['names'], $source);
+        return str_replace($listSmiles->codes, $listSmiles->names, $source);
     }
 
     /**

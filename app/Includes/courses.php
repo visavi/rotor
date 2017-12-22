@@ -25,13 +25,13 @@ if (@filemtime(STORAGE."/temp/courses.dat") < time() - 3600 || @filesize(STORAGE
 
 $courses = @json_decode(file_get_contents(STORAGE."/temp/courses.dat"));
 
-if (! empty($courses['USD'])){
+if (! empty($courses->USD)): ?>
 
-    echo '<b>Курсы валют</b> ('.$courses['Date'].')<br>';
-    echo '<b>'.$courses['USD']['nominal'].' '.$courses['USD']['name'].'</b> - '.$courses['USD']['value'].'<br>';
-    echo '<b>'.$courses['EUR']['nominal'].' '.$courses['EUR']['name'].'</b> - '.$courses['EUR']['value'].'<br>';
-    echo '<b>'.$courses['UAH']['nominal'].' '.$courses['UAH']['name'].'</b> - '.$courses['UAH']['value'].'<br>';
+    <b>Курсы валют</b> (<?= $courses->Date ?>)<br>
+    <b><?= $courses->USD->nominal ?> <?= $courses->USD->name ?></b> - <?= $courses->USD->value ?><br>
+    <b><?= $courses->EUR->nominal ?> <?= $courses->EUR->name ?></b> - <?= $courses->EUR->value ?><br>
+    <b><?= $courses->UAH->nominal ?> <?= $courses->UAH->name ?></b> - <?= $courses->UAH->value ?><br>
 
-} else {
-    showError('Ошибка! Не удалось загрузить последние курсы валют!');
-}
+<?php else: ?>
+    <?php showError('Ошибка! Не удалось загрузить последние курсы валют!'); ?>
+<?php endif; ?>
