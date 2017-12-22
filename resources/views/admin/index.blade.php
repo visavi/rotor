@@ -39,7 +39,7 @@
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/news">Новости</a> ({{ statsNews() }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/users">Пользователи</a> ({{ statsUsers() }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/ipban">IP-бан панель</a> ({{ statsIpBanned() }})<br>
-        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> ({{ phpversion() }})<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/phpinfo">PHP-информация</a> ({{ parseVersion(PHP_VERSION) }})<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/load">Загруз-центр</a> ({{ statsLoad() }})<br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/log">Ошибки / Автобаны</a><br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/blacklist">Черный список</a> (<?=statsBlacklist()?>)<br>

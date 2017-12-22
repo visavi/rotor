@@ -8,17 +8,17 @@
 
     <h1>PHP-info</h1>
 
-    PHP version: <b>{{ phpversion() }}</b><br>
+    <span class="badge badge-success">PHP {{ parseVersion(PHP_VERSION) }}</span>
 
     @if (zend_version())
-        Zend version: <b>{{ zend_version() }}</b><br>
+        <span class="badge badge-success">Zend {{ parseVersion(zend_version()) }}</span>
     @endif
 
     @if ($gdInfo)
-        GD Version: <b>{{ $gdInfo }}</b><br>
+        <span class="badge badge-success">GD {{ $gdInfo }}</span>
     @endif
 
-    PDO MySQL: <b>{{ $pdoVersion }}</b><br><br>
+    <span class="badge badge-success">MySQL {{ $mysqlVersion }}</span>
 
     @if ($iniInfo)
 

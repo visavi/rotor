@@ -58,6 +58,11 @@ composer create-project --stability=dev visavi/rotor .
 
 Минимальная версия PHP необходимая для работы движка PHP 7.0 и MySQL 5.5.3
 
+Если версия MySQL ниже 5.5.3, то необходимо в файле .env уставновить
+`DB_COLLATION=utf8_unicode_ci`
+
+Для работы полнотекстового поиска рекомендуется версия MySQL >= 5.6
+
 ### Миграции и заполнение БД
 
 Текущий статус миграции `php rotor status`

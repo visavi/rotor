@@ -2437,10 +2437,11 @@ function setting($key = null)
     if (! Registry::has('setting')) {
 
         if (! file_exists(STORAGE.'/temp/setting.dat')) {
-            $setting = Setting::query()->pluck('value', 'name')->all();
-            file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
+            $settings = Setting::query()->pluck('value', 'name')->all();
+            file_put_contents(STORAGE.'/temp/setting.dat', json_encode($settings), LOCK_EX);
         }
-        $setting = unserialize(file_get_contents(STORAGE.'/temp/setting.dat'));
+
+        $setting = json_decode(file_get_contents(STORAGE.'/temp/setting.dat'), true);
 
         Registry::set('setting', $setting);
     }
@@ -2493,4 +2494,11 @@ function siteDomain($url)
     $url = strtok($url, '/?');
 
     return $url;
+}
+
+function parseVersion($version)
+{
+    $version = explode('.', strtok($version, '-'));
+
+    return $version[0] . '.' . $version[1] . '.' . $version[2] ?? '0';
 }

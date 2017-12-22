@@ -80,12 +80,12 @@ Class AdminController extends BaseController
         }
 
         if ($gdInfo = gd_info()) {
-            $gdInfo = preg_replace('/[^0-9\.]/', '', $gdInfo['GD Version']);
+            $gdInfo = parseVersion($gdInfo['GD Version']);
         }
 
-        $pdoVersion = DB::selectOne('SELECT VERSION() as version');
-        $pdoVersion = preg_replace('/[^0-9\.]/', '', $pdoVersion->version);
+        $mysqlVersion = DB::selectOne('SHOW VARIABLES LIKE "version"');
+        $mysqlVersion = parseVersion($mysqlVersion->Value);
 
-        return view('admin/phpinfo', compact('iniInfo', 'gdInfo', 'pdoVersion'));
+        return view('admin/phpinfo', compact('iniInfo', 'gdInfo', 'mysqlVersion'));
     }
 }

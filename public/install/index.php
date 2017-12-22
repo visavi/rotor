@@ -125,9 +125,9 @@ header("Content-type:text/html; charset=utf-8");
         $error_setting = 0;
 
         if (version_compare(PHP_VERSION, '7.0') > 0) {
-            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . strtok(phpversion(), '-') . ')<br>';
+            echo '<i class="fa fa-plus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#00cc00">ОК</span></b> (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
         } else {
-            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . strtok(phpversion(), '-') . ')<br>';
+            echo '<i class="fa fa-minus-circle"></i> Версия PHP 7.0 и выше: <b><span style="color:#ff0000">Ошибка</span></b>  (Версия ' . parseVersion(PHP_VERSION) . ')<br>';
         $error_critical = 1;
         }
 
