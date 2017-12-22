@@ -410,7 +410,7 @@ function saveStatus($time = 0)
             $statuses[$user['id']] = $user['name'];
         }
 
-        file_put_contents(STORAGE.'/temp/status.dat', serialize($statuses), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/status.dat', json_encode($statuses, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 }
 
@@ -430,18 +430,10 @@ function userStatus(User $user)
 
     if (! $status) {
         saveStatus(3600);
-        $status = unserialize(file_get_contents(STORAGE.'/temp/status.dat'));
+        $status = json_decode(file_get_contents(STORAGE.'/temp/status.dat'));
     }
 
     return $status[$user->id] ?? setting('statusdef');
-}
-
-/**
- * Кеширует настройки сайта
- */
-function saveSetting() {
-    $setting = Setting::query()->pluck('value', 'name')->all();
-    file_put_contents(STORAGE.'/temp/setting.dat', serialize($setting), LOCK_EX);
 }
 
 /**
@@ -595,10 +587,10 @@ function statsOnline($cache = 30)
 
         include_once APP.'/Includes/count.php';
 
-        file_put_contents(STORAGE.'/temp/online.dat', serialize($online), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/online.dat', json_encode($online), LOCK_EX);
     }
 
-    return unserialize(file_get_contents(STORAGE.'/temp/online.dat'));
+    return json_decode(file_get_contents(STORAGE.'/temp/online.dat'));
 }
 
 /**
@@ -624,10 +616,10 @@ function statsCounter()
 {
     if (@filemtime(STORAGE.'/temp/counter.dat') < time() - 10) {
         $counts = Counter::query()->first();
-        file_put_contents(STORAGE.'/temp/counter.dat', serialize($counts), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/counter.dat', json_encode($counts), LOCK_EX);
     }
 
-    return unserialize(file_get_contents(STORAGE.'/temp/counter.dat'));
+    return json_decode(file_get_contents(STORAGE.'/temp/counter.dat'));
 }
 
 /**
@@ -851,15 +843,15 @@ function userOnline(User $user)
     if (! $visits) {
         if (@filemtime(STORAGE.'/temp/visit.dat') < time() - 10) {
 
-            $visits = Online::query()
+            $onlines = Online::query()
                 ->whereNotNull('user_id')
                 ->pluck('user_id', 'user_id')
                 ->all();
 
-            file_put_contents(STORAGE.'/temp/visit.dat', serialize($visits), LOCK_EX);
+            file_put_contents(STORAGE.'/temp/visit.dat', json_encode($onlines), LOCK_EX);
         }
 
-        $visits = unserialize(file_get_contents(STORAGE.'/temp/visit.dat'));
+        $visits = json_decode(file_get_contents(STORAGE.'/temp/visit.dat'));
     }
 
     if (isset($visits[$user->id])) {
@@ -1250,7 +1242,7 @@ function getAdvertUser()
             saveAdvertUser();
         }
 
-        $datafile = unserialize(file_get_contents(STORAGE.'/temp/rekuser.dat'));
+        $datafile = json_decode(file_get_contents(STORAGE.'/temp/rekuser.dat'));
 
         if ($datafile) {
 
@@ -1292,7 +1284,7 @@ function saveAdvertUser()
         }
     }
 
-    file_put_contents(STORAGE.'/temp/rekuser.dat', serialize($links), LOCK_EX);
+    file_put_contents(STORAGE.'/temp/rekuser.dat', json_encode($links, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 /**
@@ -1307,10 +1299,10 @@ function recentPhotos($show = 5)
 
         $recent = Photo::query()->orderBy('created_at', 'desc')->limit($show)->get();
 
-        file_put_contents(STORAGE.'/temp/recentphotos.dat', serialize($recent), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/recentphotos.dat', json_encode($recent, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $photos = unserialize(file_get_contents(STORAGE.'/temp/recentphotos.dat'));
+    $photos = json_decode(file_get_contents(STORAGE.'/temp/recentphotos.dat'));
 
     if ($photos->isNotEmpty()) {
         foreach ($photos as $data) {
@@ -1330,16 +1322,16 @@ function recentPhotos($show = 5)
 function recentTopics($show = 5)
 {
     if (@filemtime(STORAGE.'/temp/recenttopics.dat') < time() - 180) {
-        $topics = Topic::query()->orderBy('updated_at', 'desc')->limit($show)->get();
-        file_put_contents(STORAGE.'/temp/recenttopics.dat', serialize($topics), LOCK_EX);
+        $lastTopics = Topic::query()->orderBy('updated_at', 'desc')->limit($show)->get();
+        file_put_contents(STORAGE.'/temp/recenttopics.dat', json_encode($lastTopics, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $topics = unserialize(file_get_contents(STORAGE.'/temp/recenttopics.dat'));
+    $topics = json_decode(file_get_contents(STORAGE.'/temp/recenttopics.dat'));
 
-    if ($topics->isNotEmpty()) {
+    if ($topics) {
         foreach ($topics as $topic) {
             echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/topic/'.$topic->id.'">'.$topic->title.'</a> ('.$topic->posts.')';
-            echo '<a href="/topic/'.$topic['id'].'/end">&raquo;</a><br>';
+            echo '<a href="/topic/'.$topic->id.'/end">&raquo;</a><br>';
         }
     }
 }
@@ -1354,21 +1346,22 @@ function recentFiles($show = 5)
 {
     if (@filemtime(STORAGE.'/temp/recentfiles.dat') < time() - 600) {
 
-        $files = Down::query()
+        $lastFiles = Down::query()
             ->where('active', 1)
             ->orderBy('created_at', 'desc')
             ->limit($show)
             ->with('category')
             ->get();
 
-        file_put_contents(STORAGE.'/temp/recentfiles.dat', serialize($files), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/recentfiles.dat', json_encode($lastFiles, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $files = unserialize(file_get_contents(STORAGE.'/temp/recentfiles.dat'));
+    $files = json_decode(file_get_contents(STORAGE.'/temp/recentfiles.dat'));
 
-    if ($files->isNotEmpty()) {
+    if ($files) {
         foreach ($files as $file){
-            $filesize = $file['link'] ? formatFileSize(UPLOADS.'/files/'.$file->folder.$file->link) : 0;
+            $folder = $file->category->folder ? $file->category->folder.'/' : null;
+            $filesize = $file->link ? formatFileSize(UPLOADS.'/files/'.$folder.$file->link) : 0;
             echo '<i class="far fa-circle fa-lg text-muted"></i>  <a href="/down/'.$file->id.'">'.$file->title.'</a> ('.$filesize.')<br>';
         }
     }
@@ -1383,17 +1376,17 @@ function recentFiles($show = 5)
 function recentBlogs($show = 5)
 {
     if (@filemtime(STORAGE.'/temp/recentblog.dat') < time() - 600) {
-        $blogs = Blog::query()
+        $lastBlogs = Blog::query()
             ->orderBy('created_at', 'desc')
             ->limit($show)
             ->get();
 
-        file_put_contents(STORAGE.'/temp/recentblog.dat', serialize($blogs), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/recentblog.dat', json_encode($lastBlogs, JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 
-    $blogs = unserialize(file_get_contents(STORAGE.'/temp/recentblog.dat'));
+    $blogs = json_decode(file_get_contents(STORAGE.'/temp/recentblog.dat'));
 
-    if ($blogs->isNotEmpty()) {
+    if ($blogs) {
         foreach ($blogs as $blog) {
             echo '<i class="far fa-circle fa-lg text-muted"></i> <a href="/article/'.$blog->id.'">'.$blog->title.'</a> ('.$blog->comments.')<br>';
         }
@@ -2417,10 +2410,10 @@ function getQueryLog()
 function ipBan($save = false)
 {
     if (! $save && file_exists(STORAGE.'/temp/ipban.dat')) {
-        $ipBan = unserialize(file_get_contents(STORAGE.'/temp/ipban.dat'));
+        $ipBan = json_decode(file_get_contents(STORAGE.'/temp/ipban.dat'));
     } else {
         $ipBan = Ban::query()->pluck('ip')->all();
-        file_put_contents(STORAGE.'/temp/ipban.dat', serialize($ipBan), LOCK_EX);
+        file_put_contents(STORAGE.'/temp/ipban.dat', json_encode($ipBan), LOCK_EX);
     }
 
     return $ipBan;
@@ -2437,8 +2430,7 @@ function setting($key = null)
     if (! Registry::has('setting')) {
 
         if (! file_exists(STORAGE.'/temp/setting.dat')) {
-            $settings = Setting::query()->pluck('value', 'name')->all();
-            file_put_contents(STORAGE.'/temp/setting.dat', json_encode($settings), LOCK_EX);
+            saveSetting();
         }
 
         $setting = json_decode(file_get_contents(STORAGE.'/temp/setting.dat'), true);
@@ -2462,6 +2454,14 @@ function setSetting($setting)
 {
     $setting = array_merge(Registry::get('setting'), $setting);
     Registry::set('setting', $setting);
+}
+
+/**
+ * Кеширует настройки сайта
+ */
+function saveSetting() {
+    $setting = Setting::query()->pluck('value', 'name')->all();
+    file_put_contents(STORAGE.'/temp/setting.dat', json_encode($setting, JSON_UNESCAPED_UNICODE), LOCK_EX);
 }
 
 /**

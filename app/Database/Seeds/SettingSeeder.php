@@ -141,5 +141,7 @@ class SettingSeeder extends AbstractSeed
 
         $table = $this->table('setting');
         $table->insert($data)->save();
+
+        clearCache();
     }
 }
