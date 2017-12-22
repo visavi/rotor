@@ -82,7 +82,7 @@ if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
 
             if ((preg_match('#^([a-z0-9_\-/]+|)$#', $path)) && preg_match('#^[a-z0-9_\-/]+$#', $file)) {
                 if (file_exists(RESOURCES.'/views/'.$path.$file.'.blade.php')) {
-                    if (is_writeable(RESOURCES.'/views/'.$path.$file.'.blade.php')) {
+                    if (is_writable(RESOURCES.'/views/'.$path.$file.'.blade.php')) {
 
                         if (Request::isMethod('post')) {
                             $token = check(Request::input('token'));
@@ -133,7 +133,7 @@ if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
 
             echo '<b>Создание нового файла</b><br><br>';
 
-            if (is_writeable(RESOURCES.'/views/'.$path)) {
+            if (is_writable(RESOURCES.'/views/'.$path)) {
 
                 if (Request::isMethod('post')) {
                     $token = check(Request::input('token'));
@@ -209,7 +209,7 @@ if (isAdmin([101]) && getUser('login') == env('SITE_ADMIN')) {
             $type = check(Request::input('type'));
 
             if ($token == $_SESSION['token']) {
-                if (is_writeable(RESOURCES.'/views/'.$path)) {
+                if (is_writable(RESOURCES.'/views/'.$path)) {
                     if (preg_match('|^[a-z0-9_\-]+$|', $name)) {
 
                         if ($type == 'dir') {

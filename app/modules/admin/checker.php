@@ -60,7 +60,7 @@ if (isAdmin([101])) {
                 $arr = scanFiles('../');
                 $arr['files'] = str_replace('..//', '', $arr['files']);
 
-                $arrnewskan = unserialize(file_get_contents(STORAGE."/temp/checker.dat"));
+                $arrnewskan = json_decode(file_get_contents(STORAGE."/temp/checker.dat"));
 
                 $arr1 = array_diff($arr['files'], $arrnewskan);
                 $arr2 = array_diff($arrnewskan, $arr['files']);
@@ -112,11 +112,11 @@ if (isAdmin([101])) {
             $uid = check($_GET['uid']);
 
             if ($uid == $_SESSION['token']) {
-                if (is_writeable(STORAGE."/temp")) {
+                if (is_writable(STORAGE."/temp")) {
                     $arr = scanFiles('../');
                     $arr['files'] = str_replace('..//', '', $arr['files']);
 
-                    file_put_contents(STORAGE."/temp/checker.dat", serialize($arr['files']), LOCK_EX);
+                    file_put_contents(STORAGE."/temp/checker.dat", json_encode($arr['files']), LOCK_EX);
 
                     setFlash('success', 'Сайт успешно отсканирован!');
                     redirect("/admin/checker");

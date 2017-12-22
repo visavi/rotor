@@ -74,7 +74,7 @@ case 'load':
     $uid = (!empty($_GET['uid'])) ? check($_GET['uid']) : 0;
     $code = (isset($_POST['code'])) ? check(utfLower($_POST['code'])) : '';
 
-    if (is_writeable(UPLOADS.'/smiles')){
+    if (is_writable(UPLOADS.'/smiles')){
 
         $smile = Smile::query()->where('code', $code)->first();
 
@@ -206,7 +206,7 @@ case 'del':
 
     if ($uid == $_SESSION['token']) {
         if (! empty($del)) {
-            if (is_writeable(UPLOADS.'/smiles')){
+            if (is_writable(UPLOADS.'/smiles')){
 
                 $arr_smiles = Smile::select('name')->where_id_in($del)->find_many();
 

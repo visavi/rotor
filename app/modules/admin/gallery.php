@@ -146,7 +146,7 @@ if (isAdmin()) {
                 if (!empty($del)) {
                     $del = implode(',', $del);
 
-                    if (is_writeable(UPLOADS.'/pictures')) {
+                    if (is_writable(UPLOADS.'/pictures')) {
                         $querydel = DB::select("SELECT `id`, `link` FROM `photo` WHERE `id` IN (".$del.");");
                         $arr_photo = $querydel -> fetchAll();
 

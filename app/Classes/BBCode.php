@@ -265,7 +265,8 @@ class BBCode
         if (empty($listSmiles)) {
             if (! file_exists(STORAGE.'/temp/smiles.dat')) {
 
-                $smiles = Smile::select('code', 'name')
+                $smiles = Smile::query()
+                    ->select('code', 'name')
                     ->orderBy(DB::raw('CHAR_LENGTH(code)'), 'desc')
                     ->get()
                     ->toArray();
@@ -278,10 +279,10 @@ class BBCode
                         return str_replace($smile, '<img src="/uploads/smiles/'.$smile.'" alt="'.$smile.'">', $smile);
                     }, $smilesName);
 
-                file_put_contents(STORAGE.'/temp/smiles.dat', serialize(['codes' => $smilesCode, 'names' => $smilesName]));
+                file_put_contents(STORAGE.'/temp/smiles.dat', json_encode(['codes' => $smilesCode, 'names' => $smilesName]));
             }
 
-            $listSmiles = unserialize(file_get_contents(STORAGE.'/temp/smiles.dat'));
+            $listSmiles = json_decode(file_get_contents(STORAGE.'/temp/smiles.dat'));
         }
 
         return str_replace($listSmiles['codes'], $listSmiles['names'], $source);

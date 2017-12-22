@@ -161,7 +161,7 @@ case 'addimport':
 
     if ($uid == $_SESSION['token']) {
         if (!empty($cid)) {
-            if (is_writeable(UPLOADS.'/files')) {
+            if (is_writable(UPLOADS.'/files')) {
                 $total = count($files);
                 if ($total > 0) {
                     $downs = DB::run() -> queryFetch("SELECT * FROM `cats` WHERE `id`=? LIMIT 1;", [$cid]);
@@ -621,7 +621,7 @@ case 'delcats':
 
             if (!empty($downs['id'])) {
                 if (empty($downs['subcnt'])) {
-                    if (is_writeable(UPLOADS.'/files')) {
+                    if (is_writable(UPLOADS.'/files')) {
                         $folder = $downs['folder'] ? $downs['folder'].'/' : '';
 
                         $querydel = DB::select("SELECT `link`, `screen` FROM `downs` WHERE `category_id`=?;", [$cid]);
@@ -1274,7 +1274,7 @@ case 'deldown':
             if ($del > 0) {
                 $del = implode(',', $del);
 
-                if (is_writeable(UPLOADS.'/files')) {
+                if (is_writable(UPLOADS.'/files')) {
 
                     $querydel = DB::select("SELECT * FROM `downs` d LEFT JOIN `cats` c ON `d`.`category_id`=`c`.`id` WHERE d.`id` IN (".$del.");");
                     $arr_script = $querydel -> fetchAll();

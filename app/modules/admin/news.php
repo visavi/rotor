@@ -289,7 +289,7 @@ case 'del':
 
     if ($token == $_SESSION['token']) {
         if (!empty($del)) {
-            if (is_writeable(UPLOADS.'/news')){
+            if (is_writable(UPLOADS.'/news')){
 
                 $del = implode(',', $del);
 

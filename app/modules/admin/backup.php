@@ -108,7 +108,7 @@ if (isAdmin([101])) {
             $method = abs(intval($_POST['method']));
             $level = abs(intval($_POST['level']));
 
-            if (is_writeable(STORAGE.'/backup')) {
+            if (is_writable(STORAGE.'/backup')) {
                 if (!empty($tables)) {
                     $q = DB::run() -> query("SHOW TABLE STATUS;");
                     $chktbl = $q -> fetchAll(PDO::FETCH_COLUMN);

@@ -532,33 +532,31 @@ class BlogController extends BaseController
 
             return view('blog/tags_search', compact('blogs', 'tag', 'page'));
 
-        } else {
-            if (@filemtime(STORAGE."/temp/tagcloud.dat") < time() - 3600) {
-
-                $tags =  Blog::query()
-                    ->select('tags')
-                    ->pluck('tags')
-                    ->all();
-
-                $alltag = implode(',', $tags);
-
-                $dumptags = preg_split('/[\s]*[,][\s]*/s', $alltag);
-                $tags = array_count_values(array_map('utfLower', $dumptags));
-
-                arsort($tags);
-                array_splice($tags, 100);
-                shuffleAssoc($tags);
-
-                file_put_contents(STORAGE."/temp/tagcloud.dat", serialize($tags), LOCK_EX);
-            }
-
-            $tags = unserialize(file_get_contents(STORAGE."/temp/tagcloud.dat"));
-
-            $max = max($tags);
-            $min = min($tags);
-
-            return view('blog/tags', compact('tags', 'max', 'min'));
         }
+
+        if (@filemtime(STORAGE."/temp/tagcloud.dat") < time() - 3600) {
+
+            $allTags =  Blog::query()
+                ->select('tags')
+                ->pluck('tags')
+                ->all();
+
+            $stingTag = implode(',', $allTags);
+
+            $dumptags = preg_split('/[\s]*[,][\s]*/s', $stingTag);
+            $allTags = array_count_values(array_map('utfLower', $dumptags));
+
+            arsort($allTags);
+            array_splice($allTags, 100);
+            shuffleAssoc($allTags);
+
+            file_put_contents(STORAGE."/temp/tagcloud.dat", json_encode($allTags, JSON_UNESCAPED_UNICODE), LOCK_EX);
+        }
+        $tags = json_decode(file_get_contents(STORAGE.'/temp/tagcloud.dat'), true);
+        $max = max($tags);
+        $min = min($tags);
+
+        return view('blog/tags', compact('tags', 'max', 'min'));
     }
 
     /**

@@ -38,7 +38,7 @@ Class BaseController
          * Счетчик запросов
          */
         if (setting('doslimit')) {
-            if (is_writeable(STORAGE.'/antidos')) {
+            if (is_writable(STORAGE.'/antidos')) {
 
                 $dosfiles = glob(STORAGE.'/antidos/*.dat');
                 foreach ($dosfiles as $filename) {

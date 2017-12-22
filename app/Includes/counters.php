@@ -82,7 +82,7 @@ if ($counter->days != $days) {
         array_unshift($hostData, $week[$tekdays] ?? 0);
     }
 
-    file_put_contents(STORAGE.'/temp/counter7.dat', serialize($hostData), LOCK_EX);
+    file_put_contents(STORAGE.'/temp/counter7.dat', json_encode($hostData), LOCK_EX);
 }
 
 // -----------------------------------------------------------//

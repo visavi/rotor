@@ -7,12 +7,12 @@ $arr_week = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
 $count = statsCounter();
 
 if (file_exists(STORAGE.'/temp/counter7.dat')) {
-	$host_data = unserialize(file_get_contents(STORAGE.'/temp/counter7.dat'));
+    $host_data = json_decode(file_get_contents(STORAGE.'/temp/counter7.dat'));
 } else {
-	$host_data = array_fill(0, 6, 0);
+    $host_data = array_fill(0, 6, 0);
 }
 
-array_push($host_data, $count->dayhosts);
+$host_data[] = $count->dayhosts;
 // ----------------------------------------------------------------------//
 $img = imagecreatefrompng(HOME.'/assets/img/images/counter.png');
 $color = imagecolorallocate($img, 0, 0, 0);
@@ -38,7 +38,7 @@ if ($max == 0) $max = 1;
 
 $per_host = [];
 foreach ($host_data as $value) {
-	$per_host[] = $value * 0.90 / $max;
+    $per_host[] = $value * 0.90 / $max;
 }
 
 $coll = 11;
@@ -48,23 +48,23 @@ $y2 = 15;
 $x2 = $x1 + $coll;
 
 foreach ($per_host as $key => $percent) {
-	$week_day++;
+    $week_day++;
 
-	if ($week_day > 6) {
-		$week_day -= 7;
-	}
+    if ($week_day > 6) {
+        $week_day -= 7;
+    }
 
-	$y1 = round($im - $im * $percent + 1);
+    $y1 = round($im - $im * $percent + 1);
 
-	if (!empty($percent)) {
-		$col = imagecolorallocate($img, $colors[$key][0], $colors[$key][1], $colors[$key][2]);
-		imagefilledrectangle($img, $x1-1, $y1, $x2-2, $y2, $col);
-	}
+    if (!empty($percent)) {
+        $col = imagecolorallocate($img, $colors[$key][0], $colors[$key][1], $colors[$key][2]);
+        imagefilledrectangle($img, $x1-1, $y1, $x2-2, $y2, $col);
+    }
 
-	imagettftext($img, 6, 0, $x1, 15, $color, HOME.'/assets/fonts/font.ttf', $arr_week[$week_day]);
+    imagettftext($img, 6, 0, $x1, 15, $color, HOME.'/assets/fonts/font.ttf', $arr_week[$week_day]);
 
-	$x1 += $coll;
-	$x2 += $coll;
+    $x1 += $coll;
+    $x2 += $coll;
 }
 
 imagettftext($img, 6, 0, 13, 23, $color2, HOME.'/assets/fonts/font4.ttf', $count->dayhosts);

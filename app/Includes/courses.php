@@ -9,21 +9,21 @@ if (@filemtime(STORAGE."/temp/courses.dat") < time() - 3600 || @filesize(STORAGE
     if ($xml = $curl->get('http://www.cbr.ru/scripts/XML_daily.asp')){
 
         $courses = [];
-        $courses['Date'] = strval($xml->attributes()->Date);
+        $courses['Date'] = (string) $xml->attributes()->Date;
         foreach ($xml->Valute as $item) {
 
-            $courses[strval($item->CharCode)] = [
-                'name' => strval($item->Name),
-                'value' => strval($item->Value),
-                'nominal' => strval($item->Nominal)
+            $courses[(string) $item->CharCode] = [
+                'name' => (string) $item->Name,
+                'value' => (string) $item->Value,
+                'nominal' => (string) $item->Nominal,
             ];
         }
 
-        file_put_contents(STORAGE."/temp/courses.dat", serialize($courses), LOCK_EX);
+        file_put_contents(STORAGE."/temp/courses.dat", json_encode($courses), LOCK_EX);
     }
 }
 
-$courses = @unserialize(file_get_contents(STORAGE."/temp/courses.dat"));
+$courses = @json_decode(file_get_contents(STORAGE."/temp/courses.dat"));
 
 if (! empty($courses['USD'])){
 
