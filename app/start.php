@@ -107,11 +107,6 @@ if ($user = checkAuth()) {
 $browser_detect = new Mobile_Detect();
 
 if (! getUser() || empty($setting['themes'])) {
-    if (! empty(setting('touchthemes'))) {
-        if ($browser_detect->isTablet()) {
-            $setting['themes'] = setting('touchthemes');
-        }
-    }
     if (! empty(setting('webthemes'))) {
         if (! $browser_detect->isMobile() && ! $browser_detect->isTablet()) {
             $setting['themes'] = setting('webthemes');

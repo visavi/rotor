@@ -26,8 +26,41 @@ class SettingController extends AdminController
      */
     public function index()
     {
+        $act = check(Request::input('act', 'main'));
+
+        if (! in_array($act, Setting::getActions())) {
+            abort('default', 'Недопустимая страница!');
+        }
+
+        if (Request::isMethod('post')) {
+
+            $sets  = check(Request::input('sets'));
+            $token = check(Request::input('token'));
+
+            $validator = new Validator();
+            $validator->equal($token, $_SESSION['token'], ['msg' => 'Неверный идентификатор сессии, повторите действие!'])
+                ->notEmpty($sets, ['sets' => 'Ошибка! Не переданы настройки сайта']);
+
+            foreach ($sets as $name => $value) {
+                $validator->length($sets[$name], 1, 255, ['sets['.$name.']' => 'Поле '. check($name) .' обязательно для заполнения']);
+            }
+
+            if ($validator->isValid()) {
+
+                foreach ($sets as $name => $value) {
+                    Setting::query()->where('name', $name)->update(['value' => $value]);
+                }
+
+                setFlash('success', 'Настройки сайта успешно изменены!');
+                redirect('/admin/setting');
+            } else {
+                setInput(Request::all());
+                setFlash('danger', $validator->getErrors());
+            }
+        }
+
         $settings = Setting::query()->pluck('value', 'name')->all();
 
-        return view('admin/setting/index', compact('settings'));
+        return view('admin/setting/index', compact('settings', 'act'));
     }
 }

@@ -24,4 +24,17 @@ class Setting extends BaseModel
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Возвращает список допустимых страниц
+     *
+     * @return array
+     */
+    public static function getActions()
+    {
+        return [
+            'main',
+            'mail',
+        ];
+    }
 }

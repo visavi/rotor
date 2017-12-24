@@ -49,7 +49,6 @@ class Validator
      * @param  int   $min
      * @param  int   $max
      * @param  mixed $label
-     * @param  bool  $required
      * @return $this
      */
     public function between($input, $min, $max, $label)
@@ -349,9 +348,9 @@ class Validator
     /**
      * Добавляет ошибки в массив
      *
-     * @param  mixed  $error       текст ошибки
+     * @param  mixed  $error текст ошибки
      * @param  string $description
-     * @return array
+     * @return void
      */
     public function addError($error, $description = null)
     {
