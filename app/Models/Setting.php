@@ -26,7 +26,7 @@ class Setting extends BaseModel
     protected $guarded = [];
 
     /**
-     * Возвращает список допустимых страниц
+     * Возвращает список допустимых страниц настроек
      *
      * @return array
      */
@@ -35,6 +35,20 @@ class Setting extends BaseModel
         return [
             'main',
             'mail',
+            'info',
+            'guest',
+            'forum',
+            'bookmark',
+            'load',
+            'blog',
+            'page',
+            'other',
+            'protect',
+            'price',
+            'advert',
+            'image',
+            'smile',
+            'offer',
         ];
     }
 }

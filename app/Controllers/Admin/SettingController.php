@@ -35,6 +35,7 @@ class SettingController extends AdminController
         if (Request::isMethod('post')) {
 
             $sets  = check(Request::input('sets'));
+            $mods  = check(Request::input('mods'));
             $token = check(Request::input('token'));
 
             $validator = new Validator();
@@ -48,11 +49,17 @@ class SettingController extends AdminController
             if ($validator->isValid()) {
 
                 foreach ($sets as $name => $value) {
+                    if (isset($mods[$name])) {
+                        $value *= $mods[$name];
+                    }
+
                     Setting::query()->where('name', $name)->update(['value' => $value]);
                 }
 
+                saveSetting();
+
                 setFlash('success', 'Настройки сайта успешно изменены!');
-                redirect('/admin/setting');
+                redirect('/admin/setting?act=' . $act);
             } else {
                 setInput(Request::all());
                 setFlash('danger', $validator->getErrors());

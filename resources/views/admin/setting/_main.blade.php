@@ -2,44 +2,44 @@
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
     <div class="form-group{{ hasError('sets[title]') }}">
-        <label for="inputTitle">Заголовок всех страниц:</label>
-        <input type="text" class="form-control" id="inputTitle" name="sets[title]" maxlength="100" value="{{ getInput('sets[title]', $settings['title']) }}" required2>
+        <label for="title">Заголовок всех страниц:</label>
+        <input type="text" class="form-control" id="title" name="sets[title]" maxlength="100" value="{{ getInput('sets[title]', $settings['title']) }}" required>
         {!! textError('sets[title]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[logos]') }}">
-        <label for="inputLogos">Подпись вверху:</label>
-        <input type="text" class="form-control" id="inputLogos" name="sets[logos]" maxlength="100" value="{{ getInput('sets[logos]', $settings['logos']) }}" required>
+        <label for="logos">Подпись вверху:</label>
+        <input type="text" class="form-control" id="logos" name="sets[logos]" maxlength="100" value="{{ getInput('sets[logos]', $settings['logos']) }}" required>
         {!! textError('sets[logos]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[copy]') }}">
-        <label for="inputCopy">Подпись внизу:</label>
-        <input type="text" class="form-control" id="inputCopy" name="sets[copy]" maxlength="100" value="{{ getInput('sets[copy]', $settings['copy']) }}" required>
+        <label for="copy">Подпись внизу:</label>
+        <input type="text" class="form-control" id="copy" name="sets[copy]" maxlength="100" value="{{ getInput('sets[copy]', $settings['copy']) }}" required>
         {!! textError('sets[copy]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[logotip]') }}">
-        <label for="inputLogotip">Адрес логотипа:</label>
-        <input type="text" class="form-control" id="inputLogotip" name="sets[logotip]" maxlength="100" value="{{ getInput('sets[logotip]', $settings['logotip']) }}" required>
+        <label for="logotip">Адрес логотипа:</label>
+        <input type="text" class="form-control" id="logotip" name="sets[logotip]" maxlength="100" value="{{ getInput('sets[logotip]', $settings['logotip']) }}" required>
         {!! textError('sets[logotip]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[floodstime]') }}">
-        <label for="inputFloodstime">Время антифлуда (сек):</label>
-        <input type="text" class="form-control" id="inputFloodstime" name="sets[floodstime]" maxlength="3" value="{{ getInput('sets[floodstime]', $settings['floodstime']) }}" required>
+        <label for="floodstime">Время антифлуда (сек):</label>
+        <input type="text" class="form-control" id="floodstime" name="sets[floodstime]" maxlength="3" value="{{ getInput('sets[floodstime]', $settings['floodstime']) }}" required>
         {!! textError('sets[floodstime]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[doslimit]') }}">
-        <label for="inputDoslimit">Лимит запросов с IP (0 - Выкл):</label>
-        <input type="text" class="form-control" id="inputDoslimit" name="sets[doslimit]" maxlength="3" value="{{ getInput('sets[doslimit]', $settings['doslimit']) }}" required>
+        <label for="doslimit">Лимит запросов с IP (0 - Выкл):</label>
+        <input type="text" class="form-control" id="doslimit" name="sets[doslimit]" maxlength="3" value="{{ getInput('sets[doslimit]', $settings['doslimit']) }}" required>
         {!! textError('sets[doslimit]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[timezone]') }}">
-        <label for="inputTimezone">Временная зона:</label>
-        <input type="text" class="form-control" id="inputTimezone" name="sets[timezone]" maxlength="50" value="{{ getInput('sets[timezone]', $settings['timezone']) }}" required>
+        <label for="timezone">Временная зона:</label>
+        <input type="text" class="form-control" id="timezone" name="sets[timezone]" maxlength="50" value="{{ getInput('sets[timezone]', $settings['timezone']) }}" required>
         {!! textError('sets[timezone]') !!}
     </div>
 
@@ -48,8 +48,8 @@
     <?php $inputThemes = getInput('sets[themes]', $settings['themes']); ?>
 
     <div class="form-group{{ hasError('sets[themes]') }}">
-        <label for="inputThemes">Wap-тема:</label>
-        <select class="form-control" id="inputThemes" name="sets[themes]">
+        <label for="themes">Wap-тема:</label>
+        <select class="form-control" id="themes" name="sets[themes]">
 
             @foreach ($themes as $theme)
                 <?php $selected = ($inputThemes == basename($theme)) ? ' selected' : ''; ?>
@@ -63,8 +63,8 @@
     <?php $inputThemes = getInput('sets[webthemes]', $settings['webthemes']); ?>
 
     <div class="form-group{{ hasError('sets[webthemes]') }}">
-        <label for="inputWebthemes">Web-тема:</label>
-        <select class="form-control" id="inputWebthemes" name="sets[webthemes]">
+        <label for="webthemes">Web-тема:</label>
+        <select class="form-control" id="webthemes" name="sets[webthemes]">
             <option value="0">Выключить</option>
 
             @foreach ($themes as $theme)
@@ -80,8 +80,8 @@
     <?php $statsite = ['Сайт открыт', 'Закрыто для гостей', 'Закрыто для всех']; ?>
 
     <div class="form-group{{ hasError('sets[closedsite]') }}">
-        <label for="inputClosedsites">Доступ к сайту:</label>
-        <select class="form-control" id="inputClosedsites" name="sets[closedsite]">
+        <label for="closedsite">Доступ к сайту:</label>
+        <select class="form-control" id="closedsite" name="sets[closedsite]">
 
             @foreach ($statsite as $key => $stat)
                 <?php $selected = ($key == $settings['closedsite']) ? ' selected' : ''; ?>

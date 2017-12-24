@@ -15,7 +15,7 @@
                 <a class="nav-link" href="/admin/setting?act=mail" id="mail">Почта / Рассылка</a>
                 <a class="nav-link" href="/admin/setting?act=info" id="info">Вывод информации</a>
                 <a class="nav-link" href="/admin/setting?act=guest" id="guest">Гостевая / Новости</a>
-                <a class="nav-link" href="/admin/setting?act=forum" id="forum">Форум / Галерея / Объявления</a>
+                <a class="nav-link" href="/admin/setting?act=forum" id="forum">Форум / Галерея</a>
                 <a class="nav-link" href="/admin/setting?act=bookmark" id="bookmark">Закладки / Голосования / Приват</a>
                 <a class="nav-link" href="/admin/setting?act=load" id="load">Загруз-центр</a>
                 <a class="nav-link" href="/admin/setting?act=blog" id="blog">Блоги</a>
