@@ -21,11 +21,13 @@
 
     <div class="form-group{{ hasError('sets[forumloadsize]') }}">
         <label for="forumloadsize">Максимальный вес файла (Mb):</label>
-        <input type="text" class="form-control" id="forumloadsize" name="sets[forumloadsize]" maxlength="2" value="{{ round(getInput('sets[forumloadsize]', $settings['forumloadsize']) / 1024 / 1024) }}" required>
+        <input type="text" class="form-control" id="forumloadsize" name="sets[forumloadsize]" maxlength="2" value="{{ getInput('sets[forumloadsize]', round($settings['forumloadsize'] / 1048576)) }}" required>
         {!! textError('sets[forumloadsize]') !!}
 
         <input type="hidden" value="1048576" name="mods[forumloadsize]">
     </div>
+
+    <p class="text-muted font-italic">Ограничение сервера: {{ ini_get('upload_max_filesize') }}</p>
 
     <div class="form-group{{ hasError('sets[forumextload]') }}">
         <label for="forumextload">Допустимые расширения файлов:</label>
@@ -59,5 +61,3 @@
 
     <button class="btn btn-primary">Сохранить</button>
 </form>
-
-

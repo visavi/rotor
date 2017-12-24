@@ -7,116 +7,6 @@ if (isAdmin([101])) {
 
 
         ############################################################################################
-        ##                     Форма изменения форума, галереи и объявлений                       ##
-        ############################################################################################
-        case 'setfour':
-
-            echo '<b>Настройки форума, галереи и объявлений</b><br><hr>';
-
-            echo '<div class="form">';
-            echo '<form method="post" action="/admin/setting?act=editfour&amp;uid='.$_SESSION['token'].'">';
-            echo '<b>Форум</b><br>';
-
-
-            echo '<input value="Изменить" type="submit"></form></div><br>';
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';
-        break;
-
-        ############################################################################################
-        ##                     Изменение в форуме, галерее и объявлениях                          ##
-        ############################################################################################
-        case 'editfour':
-
-            $uid = check($_GET['uid']);
-
-            if ($uid == $_SESSION['token']) {
-                if ($_POST['forumpost'] != "" && $_POST['forumtem'] != "" && $_POST['forumtextlength'] != "" && $_POST['forumloadsize'] != "" && $_POST['forumextload'] != "" && $_POST['forumloadpoints'] != "" && $_POST['fotolist'] != "" && $_POST['postgallery'] != "" && $_POST['photogroup'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                    $dbr -> execute(intval($_POST['forumpost']), 'forumpost');
-                    $dbr -> execute(intval($_POST['forumtem']), 'forumtem');
-                    $dbr -> execute(intval($_POST['forumtextlength']), 'forumtextlength');
-                    $dbr -> execute(intval($_POST['forumloadsize'] * 1024 * 1024), 'forumloadsize');
-                    $dbr -> execute(check($_POST['forumextload']), 'forumextload');
-                    $dbr -> execute(intval($_POST['forumloadpoints']), 'forumloadpoints');
-                    $dbr -> execute(intval($_POST['fotolist']), 'fotolist');
-                    $dbr -> execute(intval($_POST['postgallery']), 'postgallery');
-                    $dbr -> execute(intval($_POST['photogroup']), 'photogroup');
-
-                    saveSetting();
-
-                    setFlash('success', 'Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setfour");
-
-                } else {
-                    showError('Ошибка! Все поля настроек обязательны для заполнения!');
-                }
-            } else {
-                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setfour">Вернуться</a><br>';
-        break;
-
-        ############################################################################################
-        ##                    Форма изменения закладок, голосований и привата                     ##
-        ############################################################################################
-        case 'setfive':
-
-            echo '<b>Настройки закладок, голосований и привата</b><br><hr>';
-
-            echo '<div class="form">';
-            echo '<form method="post" action="/admin/setting?act=editfive&amp;uid='.$_SESSION['token'].'">';
-
-            echo 'Кол. писем во входящих:<br><input name="limitmail" maxlength="3" value="'.$setting['limitmail'].'"><br>';
-            echo 'Кол. писем в отправленных:<br><input name="limitoutmail" maxlength="3" value="'.$setting['limitoutmail'].'"><br>';
-            echo 'Писем в привате на стр.:<br><input name="privatpost" maxlength="2" value="'.$setting['privatpost'].'"><br>';
-            echo 'Порог выключения защитной картинки:<br><input name="privatprotect" maxlength="4" value="'.$setting['privatprotect'].'"><br>';
-            echo 'Листинг в контакт-листе:<br><input name="contactlist" maxlength="2" value="'.$setting['contactlist'].'"><br>';
-            echo 'Листинг в игнор-листе:<br><input name="ignorlist" maxlength="2" value="'.$setting['ignorlist'].'"><br>';
-            echo 'Максимальное кол. в контакт-листе:<br><input name="limitcontact" maxlength="2" value="'.$setting['limitcontact'].'"><br>';
-            echo 'Максимальное кол. в игнор-листе:<br><input name="limitignore" maxlength="2" value="'.$setting['limitignore'].'"><br>';
-            echo 'Кол-во голосований на стр.:<br><input name="allvotes" maxlength="2" value="'.$setting['allvotes'].'"><br>';
-
-            echo '<input value="Изменить" type="submit"></form></div><br>';
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';
-        break;
-
-        ############################################################################################
-        ##                  Изменение в закладках, голосованиях и привате                         ##
-        ############################################################################################
-        case 'editfive':
-
-            $uid = check($_GET['uid']);
-
-            if ($uid == $_SESSION['token']) {
-                if ($_POST['limitmail'] != "" && $_POST['limitoutmail'] != "" && $_POST['privatpost'] != "" && $_POST['privatprotect'] != "" && $_POST['contactlist'] != "" && $_POST['ignorlist'] != "" && $_POST['limitcontact'] != "" && $_POST['limitignore'] != "" && $_POST['allvotes'] != "") {
-                    $dbr = DB::run() -> prepare("UPDATE `setting` SET `value`=? WHERE `name`=?;");
-                    $dbr -> execute(intval($_POST['limitmail']), 'limitmail');
-                    $dbr -> execute(intval($_POST['limitoutmail']), 'limitoutmail');
-                    $dbr -> execute(intval($_POST['privatpost']), 'privatpost');
-                    $dbr -> execute(intval($_POST['privatprotect']), 'privatprotect');
-                    $dbr -> execute(intval($_POST['contactlist']), 'contactlist');
-                    $dbr -> execute(intval($_POST['ignorlist']), 'ignorlist');
-                    $dbr -> execute(intval($_POST['limitcontact']), 'limitcontact');
-                    $dbr -> execute(intval($_POST['limitignore']), 'limitignore');
-                    $dbr -> execute(intval($_POST['allvotes']), 'allvotes');
-
-                    saveSetting();
-
-                    setFlash('success', 'Настройки сайта успешно изменены!');
-                    redirect("/admin/setting?act=setfive");
-
-                } else {
-                    showError('Ошибка! Все поля настроек обязательны для заполнения!');
-                }
-            } else {
-                showError('Ошибка! Неверный идентификатор сессии, повторите действие!');
-            }
-
-            echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting?act=setfive">Вернуться</a><br>';
-        break;
-
-        ############################################################################################
         ##                             Форма изменения загруз-центра                              ##
         ############################################################################################
         case 'setload':
@@ -126,18 +16,7 @@ if (isAdmin([101])) {
             echo '<div class="form">';
             echo '<form method="post" action="/admin/setting?act=editload&amp;uid='.$_SESSION['token'].'">';
 
-            echo 'Файлов в загрузках:<br><input name="downlist" maxlength="2" value="'.$setting['downlist'].'"><br>';
-            echo 'Комментариев в загрузках:<br><input name="downcomm" maxlength="2" value="'.$setting['downcomm'].'"><br>';
 
-            echo 'Просмотр архивов на стр.:<br><input name="ziplist" maxlength="2" value="'.$setting['ziplist'].'"><br>';
-            echo 'Максимальный вес файла (Mb):<br><input name="fileupload" maxlength="6" value="'.round($setting['fileupload'] / 1024 / 1024).'"><br>';
-
-            echo 'Максимальный вес скриншота (Mb) (Ограничение: '.ini_get('upload_max_filesize').'):<br><input name="screenupload" maxlength="6" value="'.round($setting['screenupload'] / 1024 / 1024).'"><br>';
-            echo 'Максимальный размер скриншота (px):<br><input name="screenupsize" maxlength="6" value="'.$setting['screenupsize'].'"><br>';
-            echo 'Допустимые расширения файлов:<br><textarea cols="25" rows="5" name="allowextload">'.$setting['allowextload'].'</textarea><br>';
-
-            $checked = ($setting['downupload'] == 1) ? ' checked' : '';
-            echo '<input name="downupload" type="checkbox" value="1"'.$checked.'> Разрешать загружать файлы пользователям<br>';
 
             echo '<input value="Изменить" type="submit"></form></div><br>';
             echo '<i class="fa fa-arrow-circle-left"></i> <a href="/admin/setting">Вернуться</a><br>';

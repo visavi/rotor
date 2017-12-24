@@ -35,7 +35,7 @@
 
     <div class="form-group{{ hasError('sets[timeonline]') }}">
         <label for="timeonline">Время подсчета онлайн (минут):</label>
-        <input type="text" class="form-control" id="timeonline" name="sets[timeonline]" maxlength="3" value="{{ round(getInput('sets[timeonline]', $settings['timeonline']) / 60) }}" required>
+        <input type="text" class="form-control" id="timeonline" name="sets[timeonline]" maxlength="3" value="{{ getInput('sets[timeonline]', round($settings['timeonline'] / 60)) }}" required>
         {!! textError('sets[timeonline]') !!}
 
         <input type="hidden" value="60" name="mods[timeonline]">
@@ -47,5 +47,3 @@
 
     <button class="btn btn-primary">Сохранить</button>
 </form>
-
-
