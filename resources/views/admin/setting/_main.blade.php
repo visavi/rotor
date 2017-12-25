@@ -1,3 +1,5 @@
+<h3>Основные настройки</h3>
+
 <form action="/admin/setting" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
@@ -27,13 +29,13 @@
 
     <div class="form-group{{ hasError('sets[floodstime]') }}">
         <label for="floodstime">Время антифлуда (сек):</label>
-        <input type="text" class="form-control" id="floodstime" name="sets[floodstime]" maxlength="3" value="{{ getInput('sets[floodstime]', $settings['floodstime']) }}" required>
+        <input type="number" class="form-control" id="floodstime" name="sets[floodstime]" maxlength="3" value="{{ getInput('sets[floodstime]', $settings['floodstime']) }}" required>
         {!! textError('sets[floodstime]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[doslimit]') }}">
         <label for="doslimit">Лимит запросов с IP (0 - Выкл):</label>
-        <input type="text" class="form-control" id="doslimit" name="sets[doslimit]" maxlength="3" value="{{ getInput('sets[doslimit]', $settings['doslimit']) }}" required>
+        <input type="number" class="form-control" id="doslimit" name="sets[doslimit]" maxlength="3" value="{{ getInput('sets[doslimit]', $settings['doslimit']) }}" required>
         {!! textError('sets[doslimit]') !!}
     </div>
 

@@ -1,3 +1,5 @@
+<h3>Вывод информации</h3>
+
 <form action="/admin/setting?act=info" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
@@ -35,7 +37,7 @@
 
     <div class="form-group{{ hasError('sets[timeonline]') }}">
         <label for="timeonline">Время подсчета онлайн (минут):</label>
-        <input type="text" class="form-control" id="timeonline" name="sets[timeonline]" maxlength="3" value="{{ getInput('sets[timeonline]', round($settings['timeonline'] / 60)) }}" required>
+        <input type="number" class="form-control" id="timeonline" name="sets[timeonline]" maxlength="3" value="{{ getInput('sets[timeonline]', round($settings['timeonline'] / 60)) }}" required>
         {!! textError('sets[timeonline]') !!}
 
         <input type="hidden" value="60" name="mods[timeonline]">

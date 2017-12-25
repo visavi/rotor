@@ -1,27 +1,29 @@
+<h3>Форум / Галерея</h3>
+
 <form action="/admin/setting?act=forum" method="post">
     <input type="hidden" name="token" value="{{ $_SESSION['token'] }}">
 
     <div class="form-group{{ hasError('sets[forumtem]') }}">
         <label for="forumtem">Тем в форуме на стр.:</label>
-        <input type="text" class="form-control" id="forumtem" name="sets[forumtem]" maxlength="2" value="{{ getInput('sets[forumtem]', $settings['forumtem']) }}" required>
+        <input type="number" class="form-control" id="forumtem" name="sets[forumtem]" maxlength="2" value="{{ getInput('sets[forumtem]', $settings['forumtem']) }}" required>
         {!! textError('sets[forumtem]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[forumpost]') }}">
         <label for="forumpost">Сообщений в форуме на стр.:</label>
-        <input type="text" class="form-control" id="forumpost" name="sets[forumpost]" maxlength="2" value="{{ getInput('sets[forumpost]', $settings['forumpost']) }}" required>
+        <input type="number" class="form-control" id="forumpost" name="sets[forumpost]" maxlength="2" value="{{ getInput('sets[forumpost]', $settings['forumpost']) }}" required>
         {!! textError('sets[forumpost]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[forumtextlength]') }}">
         <label for="forumtextlength">Символов в сообщении форума:</label>
-        <input type="text" class="form-control" id="forumtextlength" name="sets[forumtextlength]" maxlength="5" value="{{ getInput('sets[forumtextlength]', $settings['forumtextlength']) }}" required>
+        <input type="number" class="form-control" id="forumtextlength" name="sets[forumtextlength]" maxlength="5" value="{{ getInput('sets[forumtextlength]', $settings['forumtextlength']) }}" required>
         {!! textError('sets[forumtextlength]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[forumloadsize]') }}">
         <label for="forumloadsize">Максимальный вес файла (Mb):</label>
-        <input type="text" class="form-control" id="forumloadsize" name="sets[forumloadsize]" maxlength="2" value="{{ getInput('sets[forumloadsize]', round($settings['forumloadsize'] / 1048576)) }}" required>
+        <input type="number" class="form-control" id="forumloadsize" name="sets[forumloadsize]" maxlength="2" value="{{ getInput('sets[forumloadsize]', round($settings['forumloadsize'] / 1048576)) }}" required>
         {!! textError('sets[forumloadsize]') !!}
 
         <input type="hidden" value="1048576" name="mods[forumloadsize]">
@@ -37,25 +39,25 @@
 
     <div class="form-group{{ hasError('sets[forumloadpoints]') }}">
         <label for="forumloadpoints">Актива для загрузки файлов:</label>
-        <input type="text" class="form-control" id="forumloadpoints" name="sets[forumloadpoints]" maxlength="4" value="{{ getInput('sets[forumloadpoints]', $settings['forumloadpoints']) }}" required>
+        <input type="number" class="form-control" id="forumloadpoints" name="sets[forumloadpoints]" maxlength="4" value="{{ getInput('sets[forumloadpoints]', $settings['forumloadpoints']) }}" required>
         {!! textError('sets[forumloadpoints]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[fotolist]') }}">
         <label for="fotolist">Kол-во фото на стр.</label>
-        <input type="text" class="form-control" id="fotolist" name="sets[fotolist]" maxlength="2" value="{{ getInput('sets[fotolist]', $settings['fotolist']) }}" required>
+        <input type="number" class="form-control" id="fotolist" name="sets[fotolist]" maxlength="2" value="{{ getInput('sets[fotolist]', $settings['fotolist']) }}" required>
         {!! textError('sets[fotolist]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[postgallery]') }}">
         <label for="postgallery">Комментариев на страницу в галерее</label>
-        <input type="text" class="form-control" id="postgallery" name="sets[postgallery]" maxlength="3" value="{{ getInput('sets[postgallery]', $settings['postgallery']) }}" required>
+        <input type="number" class="form-control" id="postgallery" name="sets[postgallery]" maxlength="3" value="{{ getInput('sets[postgallery]', $settings['postgallery']) }}" required>
         {!! textError('sets[postgallery]') !!}
     </div>
 
     <div class="form-group{{ hasError('sets[photogroup]') }}">
         <label for="photogroup">Групп на страницу в галерее:</label>
-        <input type="text" class="form-control" id="photogroup" name="sets[photogroup]" maxlength="2" value="{{ getInput('sets[photogroup]', $settings['photogroup']) }}" required>
+        <input type="number" class="form-control" id="photogroup" name="sets[photogroup]" maxlength="2" value="{{ getInput('sets[photogroup]', $settings['photogroup']) }}" required>
         {!! textError('sets[photogroup]') !!}
     </div>
 
