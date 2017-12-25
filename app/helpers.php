@@ -1755,14 +1755,14 @@ function performance()
  */
 function clearCache()
 {
-    $cachefiles = glob(STORAGE.'/temp/*.dat');
-    $cachefiles = array_diff($cachefiles, [
+    $files = glob(STORAGE.'/temp/*.dat');
+    $files = array_diff($files, [
         STORAGE.'/temp/checker.dat',
         STORAGE.'/temp/counter7.dat'
     ]);
 
-    if (is_array($cachefiles) && count($cachefiles)>0){
-        foreach ($cachefiles as $file) {
+    if ($files){
+        foreach ($files as $file) {
             unlink ($file);
         }
     }
@@ -2192,83 +2192,86 @@ function getUser($key = null)
  * Генерирует постраничную навигация
  *
  * @param  array $page массив данных
- * @return void        сформированный блок
+ * @return string        сформированный блок
  */
 function pagination($page)
 {
-    if ($page['total'] > 0) {
-
-        if (empty($page['crumbs'])) $page['crumbs'] = 3;
-
-        $url = array_except($_GET, 'page');
-        $request = $url ? '&'.http_build_query($url) : null;
-
-        $pages = [];
-        $pg_cnt = ceil($page['total'] / $page['limit']);
-        $idx_fst = max($page['current'] - $page['crumbs'], 1);
-        $idx_lst = min($page['current'] + $page['crumbs'], $pg_cnt);
-
-        if ($page['current'] != 1) {
-            $pages[] = [
-                'page' => $page['current'] - 1,
-                'title' => 'Предыдущая',
-                'name' => '«',
-            ];
-        }
-
-        if ($page['current'] > $page['crumbs'] + 1) {
-            $pages[] = [
-                'page' => 1,
-                'title' => '1 страница',
-                'name' => 1,
-            ];
-            if ($page['current'] != $page['crumbs'] + 2) {
-                $pages[] = [
-                    'separator' => true,
-                    'name' => ' ... ',
-                ];
-            }
-        }
-
-        for ($i = $idx_fst; $i <= $idx_lst; $i++) {
-            if ($i == $page['current']) {
-                $pages[] = [
-                    'current' => true,
-                    'name' => $i,
-                ];
-            } else {
-                $pages[] = [
-                    'page' => $i,
-                    'title' => $i.' страница',
-                    'name' => $i,
-                ];
-            }
-        }
-
-        if ($page['current'] < $pg_cnt - $page['crumbs']) {
-            if ($page['current'] != $pg_cnt - $page['crumbs'] - 1) {
-                $pages[] = [
-                    'separator' => true,
-                    'name' => ' ... ',
-                ];
-            }
-            $pages[] = [
-                'page' => $pg_cnt,
-                'title' => $pg_cnt . ' страница',
-                'name' => $pg_cnt,
-            ];
-        }
-
-        if ($page['current'] != $pg_cnt) {
-            $pages[] = [
-                'page' => $page['current'] + 1,
-                'title' => 'Следующая',
-                'name' => '»',
-            ];
-        }
-
-        return view('app/_pagination', compact('pages', 'request'));
+    if (empty($page['total'])) {
+        return null;
     }
+
+    if (empty($page['crumbs'])) {
+        $page['crumbs'] = 3;
+    }
+
+    $url     = array_except($_GET, 'page');
+    $request = $url ? '&'.http_build_query($url) : null;
+
+    $pages   = [];
+    $pg_cnt  = ceil($page['total'] / $page['limit']);
+    $idx_fst = max($page['current'] - $page['crumbs'], 1);
+    $idx_lst = min($page['current'] + $page['crumbs'], $pg_cnt);
+
+    if ($page['current'] != 1) {
+        $pages[] = [
+            'page'  => $page['current'] - 1,
+            'title' => 'Предыдущая',
+            'name'  => '«',
+        ];
+    }
+
+    if ($page['current'] > $page['crumbs'] + 1) {
+        $pages[] = [
+            'page'  => 1,
+            'title' => '1 страница',
+            'name'  => 1,
+        ];
+        if ($page['current'] != $page['crumbs'] + 2) {
+            $pages[] = [
+                'separator' => true,
+                'name'      => ' ... ',
+            ];
+        }
+    }
+
+    for ($i = $idx_fst; $i <= $idx_lst; $i++) {
+        if ($i == $page['current']) {
+            $pages[] = [
+                'current' => true,
+                'name'    => $i,
+            ];
+        } else {
+            $pages[] = [
+                'page'  => $i,
+                'title' => $i.' страница',
+                'name'  => $i,
+            ];
+        }
+    }
+
+    if ($page['current'] < $pg_cnt - $page['crumbs']) {
+        if ($page['current'] != $pg_cnt - $page['crumbs'] - 1) {
+            $pages[] = [
+                'separator' => true,
+                'name'      => ' ... ',
+            ];
+        }
+        $pages[] = [
+            'page'  => $pg_cnt,
+            'title' => $pg_cnt . ' страница',
+            'name'  => $pg_cnt,
+        ];
+    }
+
+    if ($page['current'] != $pg_cnt) {
+        $pages[] = [
+            'page'  => $page['current'] + 1,
+            'title' => 'Следующая',
+            'name'  => '»',
+        ];
+    }
+
+    return view('app/_pagination', compact('pages', 'request'));
 }
 
 /**
@@ -2280,11 +2283,14 @@ function pagination($page)
  */
 function paginate($limit, $total)
 {
-    $current = Request::input('page');
-    if ($current < 1) $current = 1;
+    $current = (int) Request::input('page');
+
+    if ($current < 1) {
+        $current = 1;
+    }
 
     if ($total && $current * $limit >= $total) {
-        $current = ceil($total / $limit);
+        $current = (int) ceil($total / $limit);
     }
 
     $offset = (int) ($current * $limit) - $limit;

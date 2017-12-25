@@ -231,11 +231,12 @@ $routes = [
     ['GET',      '/admin/phpinfo', 'Admin\AdminController@phpinfo'],
 
     ['GET|POST', '/admin/setting', 'Admin\SettingController@index'],
+    ['GET',      '/admin/cache', 'Admin\CacheController@index'],
+    ['POST',     '/admin/cache/clear', 'Admin\CacheController@clear'],
 
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
-    ['GET',      '/admin/cache/[image|clear|clearimage:action]?', 'admin/cache.php'],
     ['GET|POST', '/admin/forum', 'admin/forum.php'],
     ['GET|POST', '/admin/news', 'admin/news.php'],
     ['GET|POST', '/admin/gallery', 'admin/gallery.php'],
