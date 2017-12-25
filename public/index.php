@@ -11,5 +11,3 @@
 include_once __DIR__.'/../app/start.php';
 
 App\Classes\Application::run();
-
-// setting.photoexprated, setting.touchthemes, blogexpread, blogexprated showuser lastusers lifelist proxy

@@ -123,7 +123,6 @@ class SettingSeeder extends AbstractSeed
             ['name'  => 'timeonline', 'value' => 600],
             ['name'  => 'timezone', 'value' => 'Europe/Moscow'],
             ['name'  => 'title', 'value' => 'RotorCMS'],
-            ['name'  => 'touchthemes', 'value' => 0],
             ['name'  => 'userlist', 'value' => 10],
             ['name'  => 'usersearch', 'value' => 30],
             ['name'  => 'wallmaxpost', 'value' => 100],
