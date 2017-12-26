@@ -3,7 +3,6 @@
 namespace App\Controllers\Admin;
 
 use App\Classes\Request;
-use App\Classes\Validator;
 use App\Models\User;
 
 class CacheController extends AdminController

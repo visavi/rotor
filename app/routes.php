@@ -234,6 +234,10 @@ $routes = [
     ['GET',      '/admin/cache', 'Admin\CacheController@index'],
     ['POST',     '/admin/cache/clear', 'Admin\CacheController@clear'],
 
+    ['GET',      '/admin/backup', 'Admin\BackupController@index'],
+    ['GET|POST', '/admin/backup/create', 'Admin\BackupController@create'],
+    ['GET',      '/admin/backup/delete', 'Admin\BackupController@delete'],
+
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
@@ -257,7 +261,6 @@ $routes = [
     ['GET|POST', '/admin/blacklist', 'admin/blacklist.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
     ['GET|POST', '/admin/smiles', 'admin/smiles.php'],
-    ['GET|POST', '/admin/backup', 'admin/backup.php'],
     ['GET|POST', '/admin/checker', 'admin/checker.php'],
     ['GET|POST', '/admin/delivery', 'admin/delivery.php'],
     ['GET|POST', '/admin/logadmin', 'admin/logadmin.php'],

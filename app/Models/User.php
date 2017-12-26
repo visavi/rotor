@@ -7,7 +7,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class User extends BaseModel
 {
-    const BOSS   =  'boss';    // Владелец
+    const BOSS    = 'boss';    // Владелец
     const ADMIN   = 'admin';   // Админ
     const MODER   = 'moder';   // Модератор
     const MANAGER = 'manager'; // Менеджер
@@ -76,9 +76,9 @@ class User extends BaseModel
     {
         if ($this->gender == 2) {
             return '<i class="fa fa-female fa-lg"></i>';
-        } else {
-            return '<i class="fa fa-male fa-lg"></i>';
         }
+
+        return '<i class="fa fa-male fa-lg"></i>';
     }
 
     /**

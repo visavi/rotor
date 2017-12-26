@@ -439,7 +439,7 @@ class DownController extends BaseController
             abort('default', 'Данный файл еще не проверен модератором!');
         }
 
-        if (getExtension($down->link) != 'zip') {
+        if (getExtension($down->link) !== 'zip') {
             abort('default', 'Просматривать можно только ZIP архивы!');
         }
 
