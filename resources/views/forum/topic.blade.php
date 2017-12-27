@@ -99,7 +99,7 @@
             <div class="post">
             <div class="b" id="post_{{ $data->id }}">
 
-                <div class="float-right">
+                <div class="float-right text-right">
                     @if (getUser())
                         @if (getUser('id') != $data->user_id)
                             <a href="#" onclick="return postReply(this)" title="Ответить"><i class="fa fa-reply text-muted"></i></a>
