@@ -1999,22 +1999,6 @@ function sendMail($to, $subject, $body, array $params = [])
 }
 
 /**
- * Возвращает форматированную дату
- *
- * @param string $format отформатированная дата
- * @param mixed  $date временная метки или дата
- * @return string отформатированная дата
- */
-function dateFormat($format, $date = null)
-{
-    $date = ! $date ? SITETIME : strtotime($date);
-
-    $eng = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    $rus = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
-    return str_replace($eng, $rus, date($format, $date));
-}
-
-/**
  * Возвращает расширение файла
  *
  * @param  string $filename имя файла

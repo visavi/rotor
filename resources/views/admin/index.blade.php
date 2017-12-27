@@ -53,7 +53,7 @@
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/setting">Настройки сайта</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/cache">Очистка кэша</a><br>
         <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/backup">Backup-панель</a><br>
-        <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> (<?=statsChecker()?>)<br>
+        <i class="far fa-circle fa-lg text-muted"></i> <a href="/admin/checker">Сканирование сайта</a> (<?=statsChecker()?>)<br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/delivery">Приват-рассылка</a><br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/logadmin">Логи посещений</a><br>
         <i class="fa fa-circle fa-lg text-muted"></i> <a href="/admin/notice">Шаблоны писем</a><br>
