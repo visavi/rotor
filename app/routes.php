@@ -241,6 +241,8 @@ $routes = [
     ['GET|POST', '/admin/checker', 'Admin\CheckerController@index'],
     ['GET|POST', '/admin/checker/scan', 'Admin\CheckerController@scan'],
 
+    ['GET|POST', '/admin/delivery', 'Admin\DeliveryController@index'],
+
     ['GET|POST', '/admin/book', 'admin/book.php'],
     ['GET|POST', '/admin/blog', 'admin/blog.php'],
     ['GET|POST', '/admin/chat', 'admin/chat.php'],
@@ -264,7 +266,6 @@ $routes = [
     ['GET|POST', '/admin/blacklist', 'admin/blacklist.php'],
     ['GET|POST', '/admin/offers', 'admin/offers.php'],
     ['GET|POST', '/admin/smiles', 'admin/smiles.php'],
-    ['GET|POST', '/admin/delivery', 'admin/delivery.php'],
     ['GET|POST', '/admin/logadmin', 'admin/logadmin.php'],
     ['GET|POST', '/admin/notice', 'admin/notice.php'],
     ['GET|POST', '/admin/files', 'admin/files.php'],
