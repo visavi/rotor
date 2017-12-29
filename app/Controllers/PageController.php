@@ -117,7 +117,7 @@ class PageController extends BaseController
 
         $text = 'Поздравляем с новым '.$currentYear.' годом!'.PHP_EOL.'В качестве сюрприза вы получаете '.PHP_EOL.plural($surprisePoint, setting('scorename')).PHP_EOL.plural($surpriseMoney, setting('moneyname')).PHP_EOL.$surpriseRating.' рейтинга репутации'.PHP_EOL.'Ура!!!';
 
-        sendPrivate($user, 0, $text);
+        sendPrivate($user, null, $text);
 
         Surprise::query()->create([
             'user_id'    => $user->id,
