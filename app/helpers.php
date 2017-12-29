@@ -521,7 +521,7 @@ function userMail(User $user)
  * @param  User   $user логин пользователя
  * @return string       код аватара
  */
-function defaultAvatar($user)
+function defaultAvatar(User $user)
 {
     $name   = empty($user->name) ? $user->login : $user->name;
     $color  = '#'.substr(dechex(crc32($user->login)), 0, 6);
@@ -1697,28 +1697,23 @@ function removeDir($dir)
 /**
  * Отправляет приватное сообщение
  *
- * @param  int  $userId   ID пользователя получателя
- * @param  int  $authorId ID пользователя отправителя
- * @param  int  $text     текст сообщения
- * @return bool           результат отправки
+ * @param  User $user   Получатель
+ * @param  User $author Отправитель
+ * @param  int  $text   текст сообщения
+ * @return bool         результат отправки
  */
-function sendPrivate($userId, $authorId, $text)
+function sendPrivate(User $user, User $author = null, $text)
 {
-    if ($user = User::query()->find($userId)) {
+    Inbox::query()->create([
+        'user_id'    => $user->id,
+        'author_id'  => $author->id ?? null,
+        'text'       => $text,
+        'created_at' => SITETIME,
+    ]);
 
-        Inbox::query()->create([
-            'user_id'    => $userId,
-            'author_id'  => $authorId,
-            'text'       => $text,
-            'created_at' => SITETIME,
-        ]);
+    $user->increment('newprivat');
 
-        $user->increment('newprivat');
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 /**

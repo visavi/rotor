@@ -97,7 +97,7 @@ class RatingController extends BaseController
                     ]);
                 }
 
-                sendPrivate($user->id, getUser('id'), $text);
+                sendPrivate($user, getUser(), $text);
 
                 setFlash('success', 'Репутация успешно изменена!');
                 redirect('/user/'.$user->login);

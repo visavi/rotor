@@ -70,7 +70,7 @@ class TransferController extends BaseController
                 $message = 'Пользователь [b]'.getUser('login').'[/b] перечислил вам '.plural($money, setting('moneyname')).''.PHP_EOL.'Примечание: '.$comment;
 
                 // Уведомление по привату
-                sendPrivate($this->user->id, getUser('id'), $message);
+                sendPrivate($this->user, getUser(), $message);
 
                 // Запись логов
                 Transfer::query()->create([
