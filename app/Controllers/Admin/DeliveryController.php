@@ -68,17 +68,9 @@ class DeliveryController extends AdminController
             if ($validator->isValid()) {
 
                 foreach ($users as $user) {
-var_dump($user->id);
-    /*              $updateusers = DB::run() -> prepare("UPDATE `users` SET `newprivat`=`newprivat`+1 WHERE `login`=? LIMIT 1;");
-                $insertprivat = DB::run() -> prepare("INSERT INTO `inbox` (`user`, `author`, `text`, `time`) VALUES (?, ?, ?, ?);");
-
-                foreach ($arrusers as $uzval){
-                    $updateusers -> execute($uzval);
-                    $insertprivat -> execute($uzval, getUser('login'), $msg, SITETIME);
-                }*/
-
+                    sendPrivate($user->id, 0, $msg);
                 }
-exit;
+
                 setFlash('success', 'Сообщение успешно разослано!');
                 redirect('/admin/delivery');
             } else {
